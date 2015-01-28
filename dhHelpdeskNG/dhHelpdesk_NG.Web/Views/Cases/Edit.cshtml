@@ -144,6 +144,35 @@
         function MakeAsUnread() {
             $.post('/cases/markasunread/', { id: '@Model.case_.Id', customerId: '@Model.case_.Customer_Id' }, function (data) { });
         };
+        
+        //HIDE SHOW
+        $( ".hidebtn" ).on( "click", function() {
+            $( this ).parents( ".notifier-block" ).addClass( "hideshow" );
+        });
+        $( ".showbtn" ).on( "click", function() {
+            $( this ).parents( ".notifier-block" ).removeClass( "hideshow" );
+        });
+
+        $( ".hidebtn" ).on( "click", function() {
+            $( this ).parents( ".computer-block" ).addClass( "hideshow" );
+        });
+        $( ".showbtn" ).on( "click", function() {
+            $( this ).parents( ".computer-block" ).removeClass( "hideshow" );
+        });
+
+        $( ".hidebtn" ).on( "click", function() {
+            $( this ).parents( ".caseinfo-block" ).addClass( "hideshow" );
+        });
+        $( ".showbtn" ).on( "click", function() {
+            $( this ).parents( ".caseinfo-block" ).removeClass( "hideshow" );
+        });
+
+        $( ".hidebtn" ).on( "click", function() {
+            $( this ).parents( ".casehandling-block" ).addClass( "hideshow" );
+        });
+        $( ".showbtn" ).on( "click", function() {
+            $( this ).parents( ".casehandling-block" ).removeClass( "hideshow" );
+        });
     </script>
 }
 
@@ -275,9 +304,9 @@
             </ul>
         </div>
     </div>
-    
+    <div class="editmode">
     @Html.Partial("_Input", Model)
-
+    </div>
     }
     <div id="divMoveCase" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
         @Html.Partial("_MoveCase", Model)

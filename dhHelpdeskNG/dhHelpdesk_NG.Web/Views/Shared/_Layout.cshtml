@@ -91,7 +91,7 @@
                         {
                             <li class="green">
                                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                    <i class="icon-signal icon-white"></i>@Translation.Get("Rapportmeny") <i class="icon-chevron-down icon-white"></i>
+                                    <i class="icon-signal icon-white"></i><span class="mnudisplay">@Translation.Get("Rapportmeny")</span> <i class="icon-chevron-down icon-white"></i>
                                 </a>
                                 <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
                                     @if(model.IsReportVisible())
@@ -122,7 +122,7 @@
                             <li class="purple">
                                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                     <i class="icon-bullhorn icon-white"></i>
-                                    @Translation.Get("Infomeny")
+                                    <span class="mnudisplay">@Translation.Get("Infomeny")</span>
                                     <i class="icon-chevron-down icon-white"></i>
                                 </a>
                                 <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
@@ -172,7 +172,7 @@
                             <li class="pink">
                                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                     <i class="icon-wrench icon-white"></i>
-                                    @Translation.Get("Tilläggsmoduler")
+                                    <span class="mnudisplay">@Translation.Get("Tilläggsmoduler")</span>
                                     <i class="icon-chevron-down icon-white"></i>
                                 </a>
                                 <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
@@ -226,6 +226,7 @@
 
                         <li class="light-blue">
                             <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+                    <div class="versionno">MAJID</div>
                                 <i class="icon-user icon-white"></i>
                                 @if(SessionFacade.CurrentCustomer != null)
                                 {                            

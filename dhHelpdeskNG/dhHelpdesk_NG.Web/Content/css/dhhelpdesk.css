@@ -401,6 +401,13 @@ input[type="text"] {
 		{
 			background-color: #62a8d1;
 		}
+        .versionno {
+            padding: 0;
+            margin-top: -15px;
+            margin-left: -40px;
+            font-size: 11px;
+            float: right;
+        }
 
 			.dh-nav > li.light-blue > a:hover, .dh-nav > li.light-blue > a:focus
 			{
@@ -614,6 +621,13 @@ input[type="text"] {
 		display: block;
 		font-size:11px;
 	}
+
+/***TOP MENU SMALLER*/
+@media (max-width: 1135px) {
+    .mnudisplay {
+        display: none;
+    }
+}
 /******************************DROP DOWN NAV************************************************/
 
 .dropdown-menu {
@@ -1154,7 +1168,7 @@ table th.thpointer {
 
 .tableform {
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .tableform th,
@@ -2983,3 +2997,23 @@ div.DTFC_LeftFootWrapper table {
     margin-left: -50%;
 }
 /** FAQ end */
+
+
+/**HIDE SHOW EDITING CASE****/
+ .newmode .hidebtn, .newmode .showbtn {
+    display: none;
+}
+
+.editmode .showbtn {
+    display: none;
+}
+.editmode .hideshow .showbtn
+ {
+    display: inline-block;
+}
+.editmode .hideshow .hidebtn,
+.editmode .hideshow .displaytr {
+    display: none;
+}
+
+/**END HIDE SHOW EDITING CASE*/
