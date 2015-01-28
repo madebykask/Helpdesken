@@ -12,7 +12,6 @@ var iframeOptions = {
     resizedCallback: function (messageData) {                           // Callback fn when resize is received     
     },
     messageCallback: function (messageData) {                           // Callback fn when message is received
-
         if (messageData.message === 'cancelCase') {
             var elem = $('#case-action-close');
             location.href = elem.attr('href');
@@ -44,18 +43,31 @@ var dhform = function (options) {
 
     (function () {
         if (_this._options.modal == false) {
-            _this.load({ url: _this._options.url });
+            $('#loadContainer').on('click', function (event) {
+                event.preventDefault();
+                _this.load({ url: _this._options.url });
+            });
         } else {
-            $("#openContainer").on("click", function (event) {
+            $('#openContainer').on('click', function (event) {
                 event.preventDefault();
                 _this.loadModal({ url: _this._options.url });
             });
 
             $(document).on('hidden', '#' + _this._modalId, function () {
-                $('#myTab li a.case').click();
+                _this.closeModal();
             })
         }
     })();
+};
+
+dhform.prototype.progress = function () {
+    "use strict";
+    var _this = this;
+
+    $('#loading').fadeOut(300, function () {
+        $(this).remove();
+        _this._formArea.find('iframe').removeClass('hidden2');
+    });
 };
 
 dhform.prototype.load = function (options) {
@@ -73,7 +85,7 @@ dhform.prototype.load = function (options) {
 
     var iframe = _this._formArea.next('iframe');
 
-    if (typeof iframe === "undefined" || iframe.length !== 0) {
+    if (iframe.length !== 0) {
         iframe.remove();
     }
 
@@ -82,16 +94,6 @@ dhform.prototype.load = function (options) {
     $('[id*=test]').load(function () {
         $('#test').iFrameResize(iframeOptions);
         _this.progress();
-    });
-};
-
-dhform.prototype.progress = function () {
-    "use strict";
-    var _this = this;
-
-    $('#loading').fadeOut(300, function () {
-        $(this).remove();
-        _this._formArea.find('iframe').removeClass('hidden2');
     });
 };
 
@@ -130,7 +132,7 @@ dhform.prototype.loadModal = function (options) {
 
     var iframe = _this._formArea.next('iframe');
 
-    if (typeof iframe === "undefined" || iframe.length !== 0) {
+    if (iframe.length !== 0) {
         iframe.remove();
     }
 
@@ -142,7 +144,7 @@ dhform.prototype.loadModal = function (options) {
     });
 };
 
-dhform.prototype.closeModal = function (options) {
+dhform.prototype.closeModal = function () {
     "use strict";
     var _this = this;
 
@@ -150,7 +152,11 @@ dhform.prototype.closeModal = function (options) {
 
     modal.modal("hide");
 
-    if (_this._isChanged === true) {
-        location.reload(false);
-    }
+    window.scrollTo(0, 0);
+    location.reload(true);
+
+    //Not implemented
+    //if (_this._isChanged === true) {
+    //    location.reload(false);
+    //}
 };

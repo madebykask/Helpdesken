@@ -142,9 +142,7 @@
         });
 
         function MakeAsUnread() {
-            $.post('/cases/markasunread/', { id: '@Model.case_.Id', customerId: '@Model.case_.Customer_Id' }, function (data) {
-
-            });
+            $.post('/cases/markasunread/', { id: '@Model.case_.Id', customerId: '@Model.case_.Customer_Id' }, function (data) { });
         };
     </script>
 }
@@ -168,7 +166,7 @@
     {    
     <div class="secnavs fixed">
         <div class="pull-left">
-            <ul class="secnav @((Model.DynamicCase != null && !Model.DynamicCase.Modal) ? "hide": "")">
+            <ul class="secnav">
                 @if(Model.EditMode == Enums.AccessMode.FullAccess)
                 {
                     <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>

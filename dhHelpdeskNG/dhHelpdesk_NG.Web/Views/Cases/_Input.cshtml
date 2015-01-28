@@ -12,8 +12,8 @@
     <div class="content onemenu editcase" id="mm1">
         <div class="container">
             <ul class="nav nav-tabs" id="myTab">
-                <li class="@(((Model.DynamicCase == null) || (Model.DynamicCase != null && Model.DynamicCase.Modal)) ? "active" : "")">
-                    <a id="case-tab" href="#fragment-1" class="case">@Translation.Get("Ärende")
+                <li class="active">
+                    <a id="case-tab" href="#case" class="case">@Translation.Get("Ärende")
                         @if(Model.case_.Id != 0)
                         {@Model.case_.CaseNumber }
                     </a>
@@ -23,8 +23,8 @@
                 {
                     if(!Model.DynamicCase.Modal)
                     {
-                    <li class="active">
-                        <a href="#dh-form-area" class="eform">@(Translation.Get(Model.DynamicCase.FormName))</a>
+                    <li>
+                        <a href="#dh-form-area" id="loadContainer" class="eform">@(Translation.Get(Model.DynamicCase.FormName))</a>
                     </li>
                     }
                     else
@@ -43,7 +43,7 @@
                 }
             </ul>
             <div class="tab-content">
-                <div class="tab-pane tab-pane-border @(((Model.DynamicCase == null) || (Model.DynamicCase != null && Model.DynamicCase.Modal)) ? "active" : "")" id="fragment-1">
+                <div class="tab-pane tab-pane-border active" id="case">
                     <div class="container">
                         @Html.HiddenFor(model => model.case_.Id)
                         @Html.HiddenFor(model => model.case_.CaseGUID)
@@ -1085,7 +1085,7 @@
                 </div>
                 @if(Model.DynamicCase != null && !Model.DynamicCase.Modal)
                 {
-                    <div id="dh-form-area" class="tab-pane tab-pane-border active">
+                    <div id="dh-form-area" class="tab-pane tab-pane-border">
                     </div>
                 }
             </div>
@@ -1401,29 +1401,45 @@
             $("#caseDescriptionPreview").css('visibility', visibility);
         });
 
-        $("#myTab li a").click(function(ev) {
+        @if(Model.DynamicCase != null && !Model.DynamicCase.Modal)
+        {
+         <text>
 
-            if (ev.target.className.indexOf("case") >= 0)
-            {
-                if ($(".secnav").hasClass("hide"))
-                {
+        var tab = $("#myTab li a");
+
+        tab.on('shown', function (e) {
+            window.location.hash = e.target.hash;
+            window.scrollTo(0, 0);
+        });
+
+        tab.click(function(ev) {
+
+            if (ev.target.className.indexOf("case") >= 0) {
+                if ($(".secnav").hasClass("hide")) {
                     $(".secnav").fadeIn(300, function () {
                         $(".secnav").removeClass("hide");
                     });
                 }
+                location.reload(true);
             }
 
-            if (ev.target.className.indexOf("eform") >= 0)
-            {
-                if ($(".secnav").hasClass("hide") == false)
-                {
-                    $(".secnav").fadeOut(300, function () {
-                        $(".secnav").addClass("hide");
+            if (ev.target.className.indexOf("eform") >= 0) {
+                var secnav = $(".secnav");
+                if (secnav.hasClass("hide") == false) {
+                    secnav.fadeOut(300, function () {
+                        secnav.addClass("hide");
                     });
                 }
             }
         });
 
+        // first time
+        if(window.location.hash == '' || window.location.hash == '#dh-form-area') {
+            window.scrollTo(0, 0);
+            tab.eq(1).click();
+        }
 
+        </text>
+        }
     });
 </script>
