@@ -683,6 +683,7 @@
             modelBuilder.Configurations.Add(new UserGroupConfiguration());
             modelBuilder.Configurations.Add(new UserRoleConfiguration());
             modelBuilder.Configurations.Add(new UserWorkingGroupConfiguration());
+            modelBuilder.Configurations.Add(new UsersPasswordHistoryConfiguration());
             modelBuilder.Configurations.Add(new WatchDateCalendarConfiguration());
             modelBuilder.Configurations.Add(new WatchDateCalendarValueConfiguration());
             modelBuilder.Configurations.Add(new WorkingGroupConfiguration());

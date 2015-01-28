@@ -109,6 +109,7 @@
     <Compile Include="EntityConfigurations\SurveyConfiguration.cs" />
     <Compile Include="EntityConfigurations\Users\ModuleConfiguration.cs" />
     <Compile Include="EntityConfigurations\Users\UserModuleConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Users\UsersPasswordHistoryConfiguration.cs" />
     <Compile Include="Enums\Accounts\Headers.cs" />
     <Compile Include="Enums\Accounts\Fields\AccountInformationFields.cs" />
     <Compile Include="Enums\Accounts\Fields\ContactFields.cs" />

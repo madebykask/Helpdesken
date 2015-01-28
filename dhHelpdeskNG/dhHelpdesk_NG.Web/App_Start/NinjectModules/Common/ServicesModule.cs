@@ -5,8 +5,10 @@
     using DH.Helpdesk.Services.Services.Concrete;
     using DH.Helpdesk.Services.Services.Concrete.Licenses;
     using DH.Helpdesk.Services.Services.Concrete.Orders;
+    using DH.Helpdesk.Services.Services.Concrete.Users;
     using DH.Helpdesk.Services.Services.Licenses;
     using DH.Helpdesk.Services.Services.Orders;
+    using DH.Helpdesk.Services.Services.Users;
 
     using Ninject.Modules;
 
@@ -111,6 +113,7 @@
             this.Bind<ICaseSolutionSettingService>().To<CaseSolutionSettingService>();
             this.Bind<ICaseInvoiceSettingsService>().To<CaseInvoiceSettingsService>();
             this.Bind<ICheckListsService>().To<CheckListsService>();
+            this.Bind<IUsersPasswordHistoryService>().To<UsersPasswordHistoryService>();
 
             // Liceneses module services
             this.Bind<IProductsService>().To<ProductsService>();

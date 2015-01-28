@@ -248,6 +248,7 @@
     <Compile Include="Infrastructure\Cases\ICasesCalculator.cs" />
     <Compile Include="Infrastructure\Email\Concrete\CaseMailer.cs" />
     <Compile Include="Infrastructure\Email\ICaseMailer.cs" />
+    <Compile Include="Services\Concrete\Users\UsersPasswordHistoryService.cs" />
     <Compile Include="Services\ISurveyService.cs" />
     <Compile Include="Localization\CultureTranslations.cs" />
     <Compile Include="Infrastructure\ManualDependencyResolver.cs" />
@@ -445,6 +446,7 @@
     <Compile Include="Infrastructure\EmailSendingSettings.cs" />
     <Compile Include="Infrastructure\Concrete\EmailSendingSettingsProvider.cs" />
     <Compile Include="Infrastructure\IEmailSendingSettingsProvider.cs" />
+    <Compile Include="Services\Users\IUsersPasswordHistoryService.cs" />
     <Compile Include="utils\ServiceUtils.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Changes\IUpdateChangeRequestValidator.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Changes\Concrete\UpdateChangeRequestValidator.cs" />
