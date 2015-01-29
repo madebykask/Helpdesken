@@ -126,39 +126,43 @@
                                 IList<Field> cols = new List<Field>();
                                 var toolTip = string.Empty;
                                 var sortOrder = string.Empty;
-
-                                int leadTime;
-                                if (!int.TryParse(dr["LeadTime"].ToString(), out leadTime) || leadTime == 0)
+                                DateTime caseRegistrationDate;
+                                DateTime.TryParse(dr["RegTime"].ToString(), out caseRegistrationDate);
+                                DateTime dtTmp;
+                                DateTime? caseFinishingDate = null;
+                                if (DateTime.TryParse(dr["FinishingDate"].ToString(), out dtTmp))
                                 {
-                                    DateTime date;
-                                    DateTime caseRegistrationDate;
-                                    DateTime.TryParse(dr["RegTime"].ToString(), out caseRegistrationDate);
-                                    DateTime? caseWatchDate = null;
-                                    if (DateTime.TryParse(dr["WatchDate"].ToString(), out date))
-                                    {
-                                        caseWatchDate = date;
-                                    }
-                                    DateTime? caseFinishingDate = null;
-                                    if (DateTime.TryParse(dr["FinishingDate"].ToString(), out date))
-                                    {
-                                        caseFinishingDate = date;
-                                    }
-                                    int caseExternalTime;
-                                    int.TryParse(dr["ExternalTime"].ToString(), out caseExternalTime);
-
-                                    if (userId != -1)
-                                        leadTime = CaseUtils.CalculateLeadTime(
-                                            caseRegistrationDate,
-                                            caseWatchDate,
-                                            caseFinishingDate,
-                                            caseExternalTime,
-                                            workingDayStart,
-                                            workingDayEnd,
-                                            holidays);
-                                    else leadTime = 0;
-
+                                    caseFinishingDate = dtTmp;
+                                }
+                                
+                                DateTime? caseShouldBeFinishedInDate = null;
+                                if (DateTime.TryParse(dr["WatchDate"].ToString(), out dtTmp))
+                                {
+                                    caseShouldBeFinishedInDate = dtTmp;
                                 }
 
+                                int SLAtime;
+                                int.TryParse(dr["SolutionTime"].ToString(), out SLAtime);
+                                int timeOnPause;
+                                int.TryParse(dr["ExternalTime"].ToString(), out timeOnPause);
+                                var timeLeft = CaseUtils.CalculateTimeLeft(
+                                    caseRegistrationDate,
+                                    caseFinishingDate,
+                                    caseShouldBeFinishedInDate,
+                                    workingDayStart,
+                                    workingDayEnd,
+                                    holidays,
+                                    SLAtime * 60,
+                                    timeOnPause);
+
+//                                    if (userId != -1)
+//                                    {
+//                                        leadTime = CaseUtils.CalculateLeadTime(
+//                                            caseRegistrationDate,
+//                                            caseWatchDate,
+//                                            caseFinishingDate,
+                                 
+                               
                                 foreach (var c in csl)
                                 {
                                     Field field = null;
@@ -179,7 +183,7 @@
                                                                                     c.Name,
                                                                                     customerSetting,
                                                                                     pal,
-                                                                                    leadTime,
+                                                                                    timeLeft,
                                                                                     caseTypes,
                                                                                     out translateField,
                                                                                     out dateValue,
@@ -202,7 +206,7 @@
                                                 }
                                                 else
                                                 {
-                                                    toolTip += GetDatareaderValue(dr, i, c.Name, customerSetting, pal, leadTime, caseTypes, out translateField, out dateValue, out fieldType) + Environment.NewLine;
+                                                    toolTip += GetDatareaderValue(dr, i, c.Name, customerSetting, pal, timeLeft, caseTypes, out translateField, out dateValue, out fieldType) + Environment.NewLine;
                                                 }
                                             }
 
@@ -223,8 +227,8 @@
                                 row.CaseIcon = GetCaseIcon(dr);
                                 row.Id = dr.SafeGetInteger("Id"); 
                                 row.Columns = cols;
-                                row.IsUnread = dr.SafeGetInteger("Status") == 1 ? true : false;
-                                row.IsUrgent = CaseIsUrgent(dr.SafeGetDateTime("WatchDate")); 
+                                row.IsUnread = dr.SafeGetInteger("Status") == 1;
+                                row.IsUrgent = timeLeft.HasValue && timeLeft <= 0;
                                 ret.Add(row); 
                             }
                         }
@@ -296,23 +300,23 @@
             return value.Replace("tblProblem.", "tblProblem_");
         }
 
-        private static bool CaseIsUrgent(DateTime watchDate)
-        {
-            if (watchDate == DateTime.MinValue)
-            {
-                return false;
-            }
-
-            watchDate = watchDate.RoundToDay();
-            var today = DateTime.Today.RoundToDay();
-
-            if (today > watchDate)
-            {
-                return true;
-            }
-
-            return false;
-        }
+        /// <summary>
+        /// Resolves is case time limit expired
+        /// </summary>
+        /// <param name="watchDate">field from "tblCase" table</param>
+//        /// <param name="solutionTime">Time value from "tblPriority" table "Solution time"</param>
+//        /// <returns></returns>
+//        private static bool CaseIsUrgent(DateTime watchDate, DateTime solutionTime)
+//        {
+//            var today = DateTime.Today.RoundToDay();
+//            if (watchDate == DateTime.MinValue)
+//            {
+//                return (solutionTime != DateTime.MinValue) && solutionTime.RoundToDay() < today;
+//            }
+//
+//            return watchDate.RoundToDay() < today
+//                       || (solutionTime != DateTime.MinValue && solutionTime.RoundToDay() < today);
+//        }
 
         private static string GetCaseTypeFullPath(
                             CaseTypeOverview[] caseTypes,
@@ -341,8 +345,8 @@
                                 int col, 
                                 string fieldName, 
                                 Setting customerSetting, 
-                                IList<ProductArea> pal, 
-                                int leadTime,
+                                IList<ProductArea> pal,
+                                int? timeLeft,
                                 IEnumerable<CaseTypeOverview> caseTypes,
                                 out bool translateField, 
                                 out DateTime? dateValue, 
@@ -403,8 +407,14 @@
                     translateField = true;
                     break;
                 case "_temporary_.leadtime":
-                    // TODO leadtime calculation
-                    ret = string.Format("{0} h", leadTime.ToString(CultureInfo.InvariantCulture));
+                    if (timeLeft.HasValue)
+                    {
+                        ret = string.Format("{0} h", timeLeft.Value.ToString(CultureInfo.InvariantCulture));
+                    }
+                    else
+                    {
+                        ret = "-";
+                    }
                     break;
                 case "productarea_id":
                     ProductArea p = dr.SafeGetInteger("ProductArea_Id").getProductAreaItem(pal);
@@ -446,15 +456,16 @@
 
             // fields
             sb.Append("select distinct ");
-            //vid avslutade ärenden visas bara första 500, TODO fungerar inte i Oracle 
-            if (f != null && f.CaseProgress == "1")
-                sb.Append(" top 500 ");
 
-	        sb.Append("tblCase.Id ");
-            //sb.Append(", tblCase.CaseGUID");
+            // vid avslutade ärenden visas bara första 500, TODO fungerar inte i Oracle 
+            if (f != null && f.CaseProgress == "1")
+            {
+                sb.Append(" top 500 ");
+            }
+
+            sb.Append("tblCase.Id ");
             sb.Append(", tblCase.CaseNumber");
             sb.Append(", tblCase.Place");
-            //sb.Append(", tblCase.Customer_Id as CustomerInternal_Id");
             sb.Append(", tblCustomer.Name as Customer_Id");
             sb.Append(", tblRegion.Region as Region_Id");
             sb.Append(", tblOU.OU as OU_Id");
@@ -490,10 +501,7 @@
                 sb.Append(
                     ", coalesce(tblUsers4.Surname, '') + ' ' + coalesce(tblUsers4.Firstname, '') as tblProblem_ResponsibleUser_Id");
             }
-            //sb.Append(", tblUsers.UserId as UserId");
-            //sb.Append(", tblStatus.Id as Status_Id");
             sb.Append(", tblStatus.StatusName as Status_Id");
-            //sb.Append(", tblStatus.Id as Status_Id_Value");
             sb.Append(", tblSupplier.Supplier as Supplier_Id");
             string appId = string.Empty;
             try
@@ -503,36 +511,32 @@
             catch (Exception)
             {
             }
+
             if (appId == "true")
+            {
                 sb.Append(", tblStateSecondary.AlternativeStateSecondaryName as StateSecondary_Id");
+            }
             else
+            {
                 sb.Append(", tblStateSecondary.StateSecondary as StateSecondary_Id");
-            //sb.Append(", case when coalesce(tblOrder.Id, 0) = 0 then tblStateSecondary.StateSecondary else cast(tblOrder.Id as varchar(15))  + ' - ' + coalesce(tblStateSecondary.StateSecondary, '') end as StateSecondary_Id ");
-            //sb.Append(", tblStateSecondary.StateSecondary");
-            //sb.Append(", coalesce(tblStateSecondary.IncludeInCaseStatistics, 1) as IncludeInCaseStatistics");
-            //sb.Append(", tblPriority.[Priority]");
+            }
+            
             sb.Append(", tblCase.Priority_Id");
             sb.Append(", tblPriority.PriorityName");
-            //sb.Append(", coalesce(tblPriority.SolutionTime, 0) as SolutionTime");
+            sb.Append(", coalesce(tblPriority.SolutionTime, 0) as SolutionTime");
             sb.Append(", tblCase.WatchDate");
             sb.Append(", tblCaseType.RequireApproving");
             sb.Append(", tblCase.ApprovedDate");
-            //sb.Append(", coalesce(tblOrder.Id, 0) as Order_Id");
-            //sb.Append(", tblOrderState.OrderState as OrderStatus");
-            //sb.Append(", coalesce(tblAccount.Id, 0) as Account_Id");
             sb.Append(", tblCase.ContactBeforeAction");
             sb.Append(", tblCase.SMS");
             sb.Append(", tblCase.Available");
             sb.Append(", tblCase.Cost");
             sb.Append(", tblCase.PlanDate");
-            //sb.Append(", tblCase.ProductAreaSetDate");
-            //sb.Append(", tblSettings.LeadtimeFromProductAreaSetDate");
-            //sb.Append(", tblSettings.DepartmentFormat");
-            //sb.Append(", tblSettings.CaseDateFormat");
             if (customerSetting != null)
             {
                 sb.Append(", tblWorkingGroup.WorkingGroup as WorkingGroup_Id");
             }
+
             sb.Append(", tblCase.ChangeTime");
             sb.Append(", tblCaseType.Id as CaseType_Id");
             sb.Append(", tblCase.RegistrationSource");
@@ -540,7 +544,6 @@
             sb.Append(", tblCase.InventoryType as ComputerType_Id");
             sb.Append(", tblCase.InventoryLocation");
             sb.Append(", tblCategory.Category as Category_Id");
-            //sb.Append(", tblCase.Problem_Id");
             sb.Append(", tblCase.SolutionRate");
             sb.Append(", tblSystem.SystemName as System_Id");
             sb.Append(", tblUrgency.Urgency as Urgency_Id");
@@ -548,13 +551,11 @@
             sb.Append(", tblCase.Verified");
             sb.Append(", tblCase.VerifiedDescription");
             sb.Append(", tblCase.LeadTime");
-            //sb.Append(", coalesce(tblDepartment.HolidayHeader_Id, 1) as HolidayHeader_Id");
             sb.Append(", '0' as [_temporary_.LeadTime] ");
 
-            // tables
+            /// tables and joins
             sb.Append("from tblCase ");
             sb.Append("inner join tblCustomer on tblCase.Customer_Id = tblCustomer.Id "); 
-            //sb.Append("inner join tblSettings on tblCase.Customer_Id = tblSettings.Customer_Id ");  
             sb.Append("inner join tblCustomerUser on tblCase.Customer_Id = tblCustomerUser.Customer_Id ");  
             sb.Append("left outer join tblDepartment on tblDepartment.Id = tblCase.Department_Id ");  
             sb.Append("left outer join tblRegion on tblCase.Region_Id = tblRegion.Id ");  
@@ -584,17 +585,6 @@
             sb.Append("left outer join tblStateSecondary on tblCase.StateSecondary_Id = tblStateSecondary.Id ");  
             sb.Append("left outer join tblPriority on tblCase.Priority_Id = tblPriority.Id ");  
             sb.Append("inner join tblCaseType on tblCase.CaseType_Id = tblCaseType.Id ");  
-
-            //sb.Append("left outer join tblOrder on tblCase.Casenumber = tblOrder.CaseNumber "); 
-            //sb.Append("    and tblOrder.customer_Id = tblCase.Customer_Id ");  
-            //sb.Append("    and tblOrder.Deleted = 0 ");  
-            //sb.Append("    and tblOrder.Id in ");  
-            //sb.Append("            ( "); 
-            //sb.Append("            select max(Id) from tblorder where (CaseNumber = tblCase.caseNumber) "); 
-            //sb.Append("            ) ");  
-
-            //sb.Append("left outer join tblAccount on tblCase.Casenumber = tblAccount.CaseNumber and tblAccount.Deleted = 0 ");  
-            //sb.Append("left outer join tblOrderState on tblOrder.OrderState_Id = tblOrderState.Id ");
             sb.Append("left outer join tblUsers as tblUsers2 on tblCase.[User_Id] = tblUsers2.Id ");
             sb.Append("left outer join tblUsers as tblUsers3 on tblCase.CaseResponsibleUser_Id = tblUsers3.Id "); 
             sb.Append("left outer join tblProblem on tblCase.Problem_Id = tblProblem.Id ");
@@ -619,7 +609,9 @@
 
             sb.Append(sort);
             if (s != null && !s.Ascending)
+            {
                 sb.Append(" desc");
+            }
 
             return sb.ToString();
         }
