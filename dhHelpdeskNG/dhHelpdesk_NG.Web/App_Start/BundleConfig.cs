@@ -185,6 +185,24 @@
             bundles.Add(new ScriptBundle("~/bundles/orderaccounts/order").Include(
                 "~/Content/js/Account/order.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/report").Include(
+                            "~/Areas/Reports/app/js/app.js",
+                            "~/Areas/Reports/app/js/controllers/reportsController.js",
+                            "~/Areas/Reports/app/js/services/reportsService.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/angularjs").Include(
+                            "~/Content/js/lib/angular-1.3.11/angular.min.js",
+                            "~/Content/js/lib/angular-1.3.11/angular-animate.js",
+                            "~/Content/js/lib/angular-1.3.11/angular-aria.min.js",
+                            "~/Content/js/lib/angular-1.3.11/angular-cookies.min.js",
+                            "~/Content/js/lib/angular-1.3.11/angular-loader.min.js",
+                            "~/Content/js/lib/angular-1.3.11/angular-messages.min.js",
+                            "~/Content/js/lib/angular-1.3.11/angular-mocks.js",
+                            "~/Content/js/lib/angular-1.3.11/angular-resource.min.js",
+                            "~/Content/js/lib/angular-1.3.11/angular-route.min.js",
+                            "~/Content/js/lib/angular-1.3.11/angular-sanitize.min.js",
+                            "~/Content/js/lib/angular-1.3.11/angular-scenario.js",
+                            "~/Content/js/lib/angular-1.3.11/angular-touch.min.js"));
         }
     }
 }
