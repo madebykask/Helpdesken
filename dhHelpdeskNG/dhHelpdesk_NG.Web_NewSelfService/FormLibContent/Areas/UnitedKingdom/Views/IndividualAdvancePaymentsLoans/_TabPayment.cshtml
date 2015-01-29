@@ -50,7 +50,7 @@
                         <h4>@Model.Translate("Loan Re-Payment")</h4>
                     </td>
                 </tr>
-                <tr>
+@*                <tr>
                     <td class="tdstrong">@Model.Label("DeductionsType")</td>
                     <td>
                         @Model.Element("DeductionsType")
@@ -62,7 +62,7 @@
                     <td>
                         @Model.Element("DeductionsAmountUnits")
                     </td>
-                </tr>
+                </tr>*@
 @*                <tr>
                     <td class="tdstrong">@Model.Label("DeductionsNetGross")</td>
                     <td>
@@ -81,12 +81,12 @@
                         @Model.Element("1stPayment")
                     </td>
                 </tr>*@
-                <tr>
+@*                <tr>
                     <td class="tdstrong">@Model.Label("PaymentEndsOn")</td>
                     <td>
                         @Model.Element("PaymentEndsOn")
                     </td>
-                </tr>
+                </tr>*@
                 <tr>
                     <td class="tdstrong">@Model.Label("NumberOfInstallments")</td>
                     <td>
@@ -108,7 +108,7 @@
         var startDate = new Date();
         startDate.setHours(0, 0, 0, 0);
 
-        datePaymentDate.datepicker()
+        datePaymentDate.not(".disabled").datepicker()
             .on('changeDate', function (e) {
                 
                 var paymentDate = $('#PaymentDate').val();
@@ -123,6 +123,17 @@
                     noticePaymentDate.hide();
                 }
             });
-    }   
+    }
+
+    $('#PaymentType').change(function () {
+        if (!(document.getElementById('PaymentType').value == 'Personal Loan - IKEA Furniture'))
+        {
+            document.getElementById('PaymentMethod').value = 'By Payroll';
+        }
+        else
+        {
+            document.getElementById('PaymentMethod').value = 'Gift Card';
+        }
+    });
     
 </script>

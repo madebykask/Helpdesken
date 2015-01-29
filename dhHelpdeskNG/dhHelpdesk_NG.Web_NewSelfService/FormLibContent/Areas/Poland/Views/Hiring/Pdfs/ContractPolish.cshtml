@@ -10,8 +10,8 @@
 <html>
 <body>
     <div>
-        <p style="text-align: center; font-family: Verdana; font-size: 11px;"><strong>UMOWA O PRACĘ</strong></p>
-        <p style="text-align: center; font-family: Verdana; font-size: 11px;">
+        <p style="text-align: center; font-family: Verdana; font-size: 11px; line-height:16px;"><strong>UMOWA O PRACĘ</strong></p>
+        <p style="text-align: center; font-family: Verdana; font-size: 11px; line-height:16px;">
             Zawarta w dniu 
              @if(string.IsNullOrEmpty(Model.GetAnswer("ContractPolishConcludedOn")))
              {
@@ -31,10 +31,10 @@
             <br />
             <strong>@Model.Company.PolishEmployer</strong><br />
         </p>
-        <p style="text-align: center; font-family: Verdana; font-size: 11px;">
+        <p style="text-align: center; font-family: Verdana; font-size: 11px; line-height:16px;">
             a
         </p>
-        <p style="text-align: center; font-family: Verdana; font-size: 11px;">
+        <p style="text-align: center; font-family: Verdana; font-size: 11px; line-height:16px;">
             @if(Model.GetAnswer("Prefix") == "Mr")
             { 
                 <text>
@@ -85,10 +85,10 @@
             }
             dalej <strong>Pracownikiem.</strong>
         </p>
-        <p style="text-align: center; font-family: Verdana; font-size: 10px;">
+        <p style="text-align: center; font-family: Verdana; font-size: 10px; line-height:16px;">
             <br />
         </p>
-        <p style="font-family: Verdana; font-size: 10px;">
+        <p style="text-align: justify; font-family: Verdana; font-size: 10px; line-height:16px;">
             <strong>@Model.Company.footerName</strong> zatrudni <strong>Pracownika</strong> na
 
                  @switch(Model.GetAnswer("ContractType"))
@@ -139,10 +139,10 @@
             }
 
         </p>
-        <p style="text-align: center; font-family: Verdana; font-size: 10px;">
+        <p style="text-align: center; font-family: Verdana; font-size: 10px; line-height:16px;">
             <br />
         </p>
-        <p style="font-family: Verdana; font-size: 10px;">
+        <p style="text-align: justify; font-family: Verdana; font-size: 10px; line-height:16px;">
             Wymiar czasu pracy ustala się na <strong>@Model.GetTranslatedAnswer("Extent")</strong>.
             @if(Model.GetAnswer("Extent") == "Part time")
             {
@@ -160,10 +160,10 @@
             }
 
         </p>
-        <p style="text-align: center; font-family: Verdana; font-size: 10px;">
+        <p style="text-align: center; font-family: Verdana; font-size: 10px; line-height:16px;">
             <br />
         </p>
-        <p style="text-align: justify; font-family: Verdana; font-size: 10px;">
+        <p style="text-align: justify; font-family: Verdana; font-size: 10px; line-height:16px;">
             @switch(Model.GetAnswer("MonthlyHourly"))
             {
                 case "monthly": 
@@ -172,18 +172,18 @@
                 @if(string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWordsPolish")))
                 {
 
-                    if(Model.Contract.Company.Key == "OI")
+                    @*if(Model.Contract.Company.Key == "OI")
                     {
                     <text>
                     (słownie: ...............................................................................................złotych).<br />
                        </text>
                     }
                     else
-                    {
+                    {*@
                     <text>
                     (słownie: ..................................................................................................................złotych).<br />
-                       </text>
-                    }
+                    </text>
+                    @*}*@
 
                 }
                 else
@@ -205,18 +205,18 @@
                 @if(string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWordsPolish")))
                 {
 
-                    if(Model.Contract.Company.Key == "OI")
+                    @*if(Model.Contract.Company.Key == "OI")
                     {
                     <text>
                     (słownie: ...............................................................................................złotych).<br />
                        </text>
                     }
                     else
-                    {
+                    {*@
                     <text>
                     (słownie: ..................................................................................................................złotych).<br />
                        </text>
-                    }
+                    @*}*@
 
                 }
                 else
@@ -236,7 +236,7 @@
             }<!-- end of switch-->
         </p>
 
-        <p style="font-family: Verdana; font-size: 10px;">
+        <p style="font-family: Verdana; font-size: 10px; line-height:16px;">
 
                         @functions{
                 public static bool NewDateOver(DateTime? startDate, DateTime? endDate, int months)
@@ -258,7 +258,7 @@
             }
         </p>
 
-        <p style="font-family: Verdana; font-size: 10px;">
+        <p style="font-family: Verdana; font-size: 10px; line-height:16px;">
             @if(Model.GetAnswer("ContractType") == "Replacement contract")
             {
                 <text>
@@ -269,18 +269,18 @@
             }
         </p>
 
-        <p style="text-align: justify; font-family: Verdana; font-size: 10px;">
+        <p style="text-align: justify; font-family: Verdana; font-size: 10px; line-height:16px;">
             @if(Model.GetAnswer("Extent") == "Part time")
             {
                 <text>
-                Dopuszczalna liczba godzin pracy ponad określony w umowie wymiar czasu pracy, których przekroczenie uprawnia Pracownika, oprócz normalnego wynagrodzenia, do dodatku do wynagrodzenia, o którym mowa w art.  <i>151<sup style="font-size: 8px;">1</sup> § 1 Kodeksu</i> pracy wynosi <strong>39 godzin</strong>.
+                Dopuszczalna liczba godzin pracy ponad określony w umowie wymiar czasu pracy, których przekroczenie uprawnia Pracownika, oprócz normalnego wynagrodzenia, do dodatku do wynagrodzenia, o którym mowa w art.  <i>151<sup style="font-size: 8px;">1</sup> § 1 Kodeksu</i> pracy wynosi <strong>39 godzin</strong> tygodniowo.
                 <br />
                 <br />
                 </text>
             }
         </p>
 
-        <p style="text-align: justify; font-family: Verdana; font-size: 10px;">
+        <p style="text-align: justify; font-family: Verdana; font-size: 10px; line-height:16px;">
             Pracownik oświadcza, że egzemplarz niniejszej umowy otrzymał i po zapoznaniu się z jej treścią przyjmuje powyższe warunki pracy i wynagradzania. Pracownik zobowiązuje się do przestrzegania porządku i dyscypliny pracy oraz Regulaminu Pracy i Wynagrodzeń.
         </p>
      

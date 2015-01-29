@@ -2,7 +2,11 @@
 @using ECT.FormLib;
 @using ECT.FormLib.Models;
 
-<div class="tab-pane active" id="servicerequestdetails">
+
+@Html.Partial("../Hiring/_TabServiceRequestDetails", Model)
+
+
+@*<div class="tab-pane active" id="servicerequestdetails">
     <div class="span6">
         <table class="table">
             <tbody>
@@ -12,21 +16,17 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="tdstrong">@Model.Translate("Initiator")</td>
-                    <td>
-                        <input type="text" value="@Model.Contract.Initiator" readonly="readonly"/></td>
-                </tr>
-                <tr>
                     <td class="tdstrong">@Model.Label("NewToIKEA")</td>
                     <td>@Model.Element("NewToIKEA")</td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("ContractStartDate")</td>
                     <td>@Model.Element("ContractStartDate")
-                        <div id="notice_HiringDate" style="display: none;" class="notice">
+
+                        <div id="notice_HiringDate" style="display:none;" class="notice">
                             @Model.Translate("The date you've entered is in the past. Are you sure you want to backdate Hiring date?")
                         </div>
-                        <div id="notice_HiringDateWrong" style="display: none;" class="notice">
+                        <div id="notice_HiringDateWrong" style="display:none;" class="notice">
                             @Model.Translate("The date you've entered doesn't start on the 1st or the 15th of a month.")
                         </div>
                     </td>
@@ -44,14 +44,17 @@
                             @Model.Contract.PriorityName;
                         }
                         else { 
+                            if (@Model.Form != null)
+                            {
                             @Model.Form.PriorityName;
+                        }
                         }
                     </td>
                 </tr>
                 }
                 <tr>
                     <td class="tdstrong">@Model.Label("Co-WorkerID")</td>
-                    <td>@Model.Element("Co-WorkerID")</td>
+                    <td>@Model.Element("Co-WorkerID", false)</td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("GlobalHRID")</td>
@@ -72,6 +75,10 @@
                 <tr>
                     <td class="tdstrong">@Model.Label("LastName")</td>
                     <td>@Model.Element("LastName")</td>
+                </tr>
+                 <tr>
+                    <td class="tdstrong">@Model.Label("PreferedName")</td>
+                    <td>@Model.Element("PreferedName")</td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("Initials")</td>
@@ -102,11 +109,17 @@
                     <td class="tdstrong">@Model.Label("Birthplace")</td>
                     <td>@Model.Element("Birthplace")</td>
                 </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("CountryOfBirth")</td>
+                    <td>@Model.Element("CountryOfBirth")</td>
+                </tr>
+
             </tbody>
         </table>
     </div>
-
+    
     <div class="span6">
+        
         <table class="table">
             <tbody>
                 <tr>
@@ -141,8 +154,12 @@
             </tbody>
         </table>
     </div>
+
+    <input type="hidden" id="CustomerId" value="@Model.CustomerId" />
+    <input type="hidden" id="formGuid" value="@Model.FormGuid" />
 </div>
 <script>
+
     document.getElementById('NewToIKEA').onchange = selectIndexChangeNewToIKEA;
 
     function selectIndexChangeNewToIKEA() {
@@ -152,38 +169,34 @@
         else {
             document.getElementById('GlobalHRID').disabled = false;
         }
-
     }
+
     if (document.getElementById('NewToIKEA').value == 'New Hire') {
         document.getElementById('GlobalHRID').disabled = true;
     }
 
-    if (document.getElementById('NewToIKEA').value == 'International Transfer') {
+    var noticeHiringDate = $('#notice_HiringDate');
+    var noticeHiringDateWrong = $('#notice_HiringDateWrong');
 
-        $(".globalmobility").show();
-    }
-    else {
-        $(".globalmobility").hide();
-    }
-
-    function changedHiringDate() {
-        var noticeHiringDate = $('#notice_HiringDate');
-        var noticeHiringDateWrong = $('#notice_HiringDateWrong');
-        var hiringdate = new Date(document.getElementById('ContractStartDate').value);
-        var startDate = new Date();
-        startDate.setHours(0, 0, 0, 0);
-        if (!(hiringdate.getDate() === 1 || hiringdate.getDate() === 15)) {
+    $('#ContractStartDate').change(function () {
+        var startDate = $('#ContractStartDate').val();
+        var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+        var dstartDate = APIGlobal.DateTime.parseDate(startDate, format);
+        var nowTemp = new Date();
+        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+        noticeHiringDate.hide();
+        noticeHiringDateWrong.hide();
+        if (!(dstartDate.getDate() === 1 || dstartDate.getDate() === 15))
             noticeHiringDateWrong.show();
-        } else {
-            noticeHiringDateWrong.hide();
-        }
-        if (hiringdate.valueOf() < startDate.valueOf()) {
+
+        if (dstartDate.valueOf() < now.valueOf())
             noticeHiringDate.show();
-        } else {
-            noticeHiringDate.hide();
+
+        if (!(dstartDate.getDate() === 1 || dstartDate.getDate() === 15) && (dstartDate.valueOf() < now.valueOf())) {
+            if (!$('#EmploymentCategory').val() == 'Apprentice')
+            { noticeHiringDateWrong.show(); }
+            noticeHiringDate.show();
         }
-    }
+    });
 
-    document.getElementById('ContractStartDate').onchange = changedHiringDate;
-
-</script>
+</script>*@

@@ -68,7 +68,7 @@
               //1
               string text1 = "Your amended contract of employment with IKEA " + CustomPdfPage.IsEmpty(Model.Department.Unit, "Unit") + " will start on " + CustomPdfPage.GetDateInWords("ChangeValidFrom", Model) + ". This counts as part of your continuous service with IKEA which began on ";
 
-              //if (!string.IsNullOrEmpty(Model.GetDocumentAnswer("PreviousContractStartDate")))
+              //if (!string.IsNullOrEmpty(Model.GetDocumentAnswer("PreviousContractStartDate", false)))
               //{
               //    text1 += " " + CustomPdfPage.GetDateInWords("PreviousContractStartDate", Model) + " ";
               //}

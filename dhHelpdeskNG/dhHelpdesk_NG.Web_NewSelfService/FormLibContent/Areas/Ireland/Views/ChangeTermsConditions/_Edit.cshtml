@@ -123,6 +123,80 @@
 
      <script>
 
+         function changeFunctionsCallback() {
+
+
+             //GetXML('predefined_function_jobtitleIE_outs.xml', setLineManagerDefault);
+
+             //setTimeout(function () { GetXML('predefined_function_department_linemanager_outs.xml', setLineManagerAndCostCentre); }, 1);
+
+
+             //setTimeout(function () { GetXML('predefined_function_jobtitleIE_outs.xml', setLineManagerJobTitle); }, 1);
+
+
+             GetXML('predefined_function_jobtitleIE_outs.xml', NarrowDownJobTitle);
+
+             function NarrowDownJobTitle(xml) {
+                 var show = ''
+
+                 var dep = '';
+
+                 if (document.getElementById('NewServiceArea')) {
+                     dep = $("#NewServiceArea option:selected").text();
+                 }
+                 
+                 var jobtitle_value;
+                 jobtitle_value = $('#JobTitle').val();
+
+                 var selectize_tags = $("#JobTitle")[0].selectize
+                 selectize_tags.clearOptions();
+
+
+                 $(xml).find('dependent').each(function () {
+
+
+                     var $sel = $(this);
+                     show = '';
+
+                     var department = $sel.find('selected').text();
+
+                     show = $sel.find('show').text();
+
+
+                     if (department == dep) {
+
+                         if (show != '') {
+
+
+
+
+
+                             var optionsarray = show.split(',');
+                             optionsarray.unshift('');
+
+                             $.each(optionsarray, function (i) {
+                                 selectize_tags.addOption({
+                                     text: optionsarray[i],
+                                     value: optionsarray[i]
+                                 });
+                                 selectize_tags.addItem(optionsarray[i])
+                             });
+
+                             if (jobtitle_value != '')
+                                 selectize_tags.setValue(jobtitle_value);
+                             else
+                                 selectize_tags.setValue('');
+                             return;
+
+
+                             return;
+
+                         }
+                     }
+                 });
+             }
+         }
+
          validate.run($('#actionState').val());
 
          $(document).on('change', '#actionState', function (e) {

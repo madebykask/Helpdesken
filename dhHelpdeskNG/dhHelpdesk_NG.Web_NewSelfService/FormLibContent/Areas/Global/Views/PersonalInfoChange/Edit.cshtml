@@ -5,7 +5,7 @@
 @{
     ViewBag.Title = Model.Translate("Global") + " - " + Model.Translate("Personal information change");
 }
-
+ 
 @section Validation {
 
     @Html.Partial("_Validate", Model)
@@ -15,12 +15,6 @@
 @section Script {
 
     <script>
-
-        $(document).on('change', '#Extent', function (e) {
-            e.preventDefault();
-            if ($(this).val() === 'Full time')
-                $('#Workload').val('100');
-        });
 
         validate.run($('#actionState').val());
 
@@ -36,9 +30,35 @@
             document.getElementById(prefix + "AddressLine1").value = document.getElementById('PermanentAddressLine1').value;
             document.getElementById(prefix + "AddressLine2").value = document.getElementById('PermanentAddressLine2').value;
             document.getElementById(prefix + "PostalCode").value = document.getElementById('PermanentPostalCode').value;
-            document.getElementById(prefix + "City").value = document.getElementById('PermanentCity').value;
-            document.getElementById(prefix + "Country").value = document.getElementById('PermanentCountry').value;
 
+            document.getElementById(prefix + "City").value = document.getElementById('PermanentCity').value;
+            //document.getElementById(prefix + "Country").value = document.getElementById('PermanentCountry').value;
+
+            var value = document.getElementById('PermanentCountry').value;
+
+            if ($('#PermanentCountry')[0].selectize) {
+
+                var selectedText = $('#PermanentCountry')[0].selectize.getItem(value).text();
+
+                if ($('#' + prefix + 'Country')[0].selectize) {
+                    $('#' + prefix + 'Country')[0].selectize.setValue(selectedText);
+                }
+                else {
+                    $('#' + prefix + 'Country').val(selectedText);
+                }
+            }
+            else {
+
+                var selectedText = $('#PermanentCountry').find('option:selected').text();
+                if ($('#' + prefix + 'Country')[0].selectize) {
+                    $('#' + prefix + 'Country')[0].selectize.setValue(selectedText);
+                }
+                else {
+                    var selectedText = $('#PermanentCountry').find('option:selected').text();
+                    $('#' + prefix + 'Country').val(selectedText);
+                }
+            }
+            
         });
 
     </script>

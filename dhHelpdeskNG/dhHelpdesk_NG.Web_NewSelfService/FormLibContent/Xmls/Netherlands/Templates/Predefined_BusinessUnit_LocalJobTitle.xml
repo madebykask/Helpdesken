@@ -64,7 +64,7 @@
     </show>
   </dependent>
   <dependent>
-    <selected>Store Barendrecht 274</selected>
+    <selected>Store Rotterdam Barendrecht 274</selected>
     <show>
       Business Nav,
       Mw Administratie,
@@ -126,7 +126,7 @@
     </show>
   </dependent>
   <dependent>
-    <selected>Store Duiven 272</selected>
+    <selected>Store Arnhem Duiven 272</selected>
     <show>
       Business Nav,
       Mw Administratie,
@@ -622,7 +622,7 @@
     </show>
   </dependent>
   <dependent>
-    <selected>Store Haarlem 378</selected>
+    <selected>Store Amsterdam Haarlem 378</selected>
     <show>
       Business Nav,
       Mw Administratie,
@@ -706,7 +706,7 @@
     </show>
   </dependent>
   <dependent>
-    <selected>E-Commerce (Service Office)</selected>
+    <selected>E-Commerce NL</selected>
     <show>
       E-Commerce manager,
       Business Navigation &amp; Operations Manager,

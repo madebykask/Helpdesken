@@ -19,7 +19,7 @@
   <!-- HRU -->
   <status value="20">
     <visibleTabs>#ServiceRequestDetails,#Complete</visibleTabs>
-    <readOnlyTabs></readOnlyTabs>
+    <readOnlyTabs>#ServiceRequestDetails</readOnlyTabs>
     <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
     <actions>
       <action status="40" internal-val="40" text="Submit Service Request to SSC">

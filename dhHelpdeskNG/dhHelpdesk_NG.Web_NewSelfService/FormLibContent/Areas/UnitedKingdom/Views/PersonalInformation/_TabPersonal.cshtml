@@ -7,9 +7,8 @@
     const string DefaultCountry = "United Kingdom";
 
     var fillOldVal = TempData["oldValues"];
-    var newfill = (List<KeyValuePair<string, string>>)fillOldVal;        
+    var newfill = (List<KeyValuePair<string, string>>)fillOldVal;
 }
-
 <div class="tab-pane" id="Personal">
     <div class="span8">
         <table class="table">
@@ -25,8 +24,12 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="tdstrong">@Model.Label("TelephoneNumber")</td>
+                    <td class="tdstrong" >@Model.Label("TelephoneNumber")</td>
                     <td>@Model.Element("TelephoneNumber")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MobilePhoneNumber")</td>
+                    <td>@Model.Element("MobilePhoneNumber")</td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("ContactEMailAddress")</td>
@@ -194,7 +197,7 @@
                 </tr>
 
 
-                @for (int i = 2; i <= 4; i++)
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
                 {
                     <tr class="familyMember@(i.ToString())" id="familyMember@(i.ToString())">
                         <td class="tdstrong" colspan="2">
@@ -227,13 +230,11 @@
                             @Model.Element("FamilyMemberDateOfBirth" + i.ToString())</td>
                     </tr>
                 }
-
                 <tr id="addFamilyMemberTrr">
                     <td colspan="2">
                         @Model.Element("FamilyMembers")
                         <a id="addFamilyMember" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another family member")</a></td>
                 </tr>
-
                 <!-- Global Mobility Employee Documents -->
                 <tr class="globalmobility-first" >
                     <td class="tdstrong" colspan="2">
@@ -265,7 +266,7 @@
                     <td>@Model.Element("EmployeeDocumentIssuePlaceCountry")</td>
                 </tr>
 
-                @for (int i = 2; i <= 4; i++)
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
                 {
                     <tr class="employeeDocument@(i.ToString()) globalmobility" id="employeeDocument@(i.ToString())">
                         <td class="tdstrong" colspan="2">
@@ -331,7 +332,7 @@
                     <td>@Model.Element("DependantsDateOfBirth")</td>
                 </tr>
 
-                @for (int i = 2; i <= 4; i++)
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
                 {
                     <tr class="dependantFamilyMember@(i.ToString()) globalmobility" id="dependantFamilyMember@(i.ToString())">
                         <td class="tdstrong" colspan="2">
@@ -397,7 +398,7 @@
                     <td>@Model.Element("DependantsDocumentIssuePlaceCountry")</td>
                 </tr>
 
-                @for (int i = 2; i <= 4; i++)
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
                 {
                     <tr class="globalMobilityDependantDocument@(i.ToString()) globalmobility" id="globalMobilityDependantDocument@(i.ToString())">
                         <td class="tdstrong" colspan="2">
@@ -502,10 +503,10 @@
                         <h4>@Model.Translate("Social Insurance")</h4>
                     </td>
                 </tr>
-                <tr>
+@*                <tr>
                     <td class="tdstrong">@Model.Label("SocialInsurance")</td>
                     <td>@Model.Element("SocialInsurance")</td>
-                </tr>
+                </tr>*@
                 <tr>
                     <td class="tdstrong">@Model.Label("NationalInsuranceNumber")</td>
                     <td>@Model.Element("NationalInsuranceNumber")</td>
@@ -601,6 +602,10 @@
                     </td>
                 </tr>
                 <tr>
+                    <td class="tdstrong">@Model.Label("BupaChangeType")</td>
+                    <td>@Model.Element("BupaChangeType")</td>
+                </tr>
+                <tr>
                     <td class="tdstrong">@Model.Label("BupaHealthBenefit")</td>
                     <td>@Model.Element("BupaHealthBenefit")</td>
                 </tr>
@@ -624,12 +629,17 @@
                     <td class="tdstrong">@Model.Label("AdditionalMemberRelationship")</td>
                     <td>@Model.Element("AdditionalMemberRelationship")</td>
                 </tr>
-                                @for (int i = 2; i <= 5; i++)
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
                 {
                     <tr class="bupa@(i.ToString())" id="bupa@(i.ToString())">
                         <td class="tdstrong" colspan="2">
                             <h4>@Model.Translate("Benefits") @i.ToString()</h4>
                         </td>
+                    </tr>
+                    <tr class="bupa@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("BupaChangeType" + i.ToString())</td>
+                        <td>
+                            @Model.Element("BupaChangeType" + i.ToString())</td>
                     </tr>
                     <tr class="bupa@(i.ToString())">
                         <td class="tdstrong">@Model.Label("BupaHealthBenefit" + i.ToString())</td>
@@ -662,7 +672,7 @@
                         <td>
                             @Model.Element("AdditionalMemberRelationship" + i.ToString())</td>
                     </tr>
-                   }
+                }
 
                 <tr id="addBupaTrr">
                     <td colspan="2">
@@ -673,83 +683,84 @@
             </tbody>
         </table>
     </div>
-    <div class="span6">
+   @* <div class="span4">
         <table class="table">
             <tbody>
                
 
             </tbody>
         </table>
-    </div>
-    <input type="hidden" id="CustomerId" value="@Model.CustomerId" />
+    </div>*@
+    <input type="hidden" id="CustomerId" value="@Model.Form.CustomerId" />
+    <input type="hidden" id="MultipleEntrySectionsNr" value="@FormLibConstants.FormField.MultipleEntrySectionsNr" />
 </div>
     
 <script>
-    
+
     function bupa1(value) {
-        
+
         var bupamember = '#BupaMember';
-         $(bupamember).empty();
-         
-         if ($(value).val() == 'BUPA medical') {
-             var o = new Option("", "");
+        $(bupamember).empty();
 
-             $(o).html("");
-             $(bupamember).append(o);
+        if ($(value).val() == 'BUPA medical') {
+            var o = new Option("", "");
 
-
-             var o = new Option("Co-worker", "Co-worker");
-
-             $(o).html("Co-worker");
-             $(bupamember).append(o);
-
-             var o = new Option("Partner", "Partner");
-
-             $(o).html("Partner");
-             $("#BupaMember").append(o);
+            $(o).html("");
+            $(bupamember).append(o);
 
 
-             var o = new Option("Child", "Child");
+            var o = new Option("Co-worker", "Co-worker");
 
-             $(o).html("Child");
-             $(bupamember).append(o);
-         }
+            $(o).html("Co-worker");
+            $(bupamember).append(o);
 
-         if ($(value).val() == 'BUPA dental') {
-             var o = new Option("", "");
+            var o = new Option("Partner", "Partner");
 
-             $(o).html("");
-             $(bupamember).append(o);
+            $(o).html("Partner");
+            $("#BupaMember").append(o);
 
 
-             var o = new Option("Co-worker", "Co-worker");
+            var o = new Option("Child", "Child");
 
-             $(o).html("Co-worker");
-             $(bupamember).append(o);
+            $(o).html("Child");
+            $(bupamember).append(o);
+        }
 
-             var o = new Option("Partner", "Partner");
+        if ($(value).val() == 'BUPA dental') {
+            var o = new Option("", "");
 
-             $(o).html("Partner");
-             $(bupamember).append(o);
-         }
-
-         if ($(value).val() == 'BUPA medical and dental') {
-             var o = new Option("", "");
-
-             $(o).html("");
-             $(bupamember).append(o);
+            $(o).html("");
+            $(bupamember).append(o);
 
 
-             var o = new Option("Co-worker", "Co-worker");
+            var o = new Option("Co-worker", "Co-worker");
 
-             $(o).html("Co-worker");
-             $(bupamember).append(o);
+            $(o).html("Co-worker");
+            $(bupamember).append(o);
 
-             var o = new Option("Partner", "Partner");
+            var o = new Option("Partner", "Partner");
 
-             $(o).html("Partner");
-             $(bupamember).append(o);
-         }
+            $(o).html("Partner");
+            $(bupamember).append(o);
+        }
+
+        if ($(value).val() == 'BUPA medical and dental') {
+            var o = new Option("", "");
+
+            $(o).html("");
+            $(bupamember).append(o);
+
+
+            var o = new Option("Co-worker", "Co-worker");
+
+            $(o).html("Co-worker");
+            $(bupamember).append(o);
+
+            var o = new Option("Partner", "Partner");
+
+            $(o).html("Partner");
+            $(bupamember).append(o);
+        }
     };
     function bupa2(value) {
 
@@ -771,7 +782,7 @@
             var o = new Option("Partner", "Partner");
 
             $(o).html("Partner");
-            $("#BupaMember").append(o);
+            $(bupamember).append(o);
 
 
             var o = new Option("Child", "Child");
@@ -816,7 +827,6 @@
             $(bupamember).append(o);
         }
     };
-
     function bupa3(value) {
 
         var bupamember = '#BupaMember3';
@@ -837,7 +847,7 @@
             var o = new Option("Partner", "Partner");
 
             $(o).html("Partner");
-            $("#BupaMember").append(o);
+            $(bupamember).append(o);
 
 
             var o = new Option("Child", "Child");
@@ -882,7 +892,6 @@
             $(bupamember).append(o);
         }
     };
-
     function bupa4(value) {
 
         var bupamember = '#BupaMember4';
@@ -903,7 +912,7 @@
             var o = new Option("Partner", "Partner");
 
             $(o).html("Partner");
-            $("#BupaMember").append(o);
+            $(bupamember).append(o);
 
 
             var o = new Option("Child", "Child");
@@ -948,7 +957,6 @@
             $(bupamember).append(o);
         }
     };
-
     function bupa5(value) {
 
         var bupamember = '#BupaMember5';
@@ -969,7 +977,7 @@
             var o = new Option("Partner", "Partner");
 
             $(o).html("Partner");
-            $("#BupaMember").append(o);
+            $(bupamember).append(o);
 
 
             var o = new Option("Child", "Child");
@@ -1015,14 +1023,12 @@
         }
     };
 
-
-
     $('#BupaHealthBenefit').change(function () {
         bupa1('#BupaHealthBenefit');
     });
 
     $('#BupaHealthBenefit2').change(function () {
-        
+
         bupa2('#BupaHealthBenefit2');
     });
 
@@ -1056,6 +1062,11 @@
 
         var max = 5;
 
+        //Hide button if we already show all available
+        if (counter >= max) {
+            $('#addBupa').hide();
+        }
+
         var elements = $('[class^=bupa]').find(':text, :radio, :checkbox, select');
 
         var enabled = elements.eq(0).is(':enabled');
@@ -1081,9 +1092,15 @@
             e.preventDefault();
             counter++;
             $('#Bupas').val(counter);
-            if (counter <= max)
+            if (counter <= max) {
                 $('[class=bupa' + counter + ']').show();
-            $('#addBupaTr').hide();
+                $('#addBupaTr').hide();
+
+                //Hide button if we already show all available
+                if (counter >= max) {
+                    $('#addBupa').hide();
+                }
+            }
         });
     };
 
@@ -1092,20 +1109,21 @@
 
             jQuery(".globalmobility-first").hide();
             jQuery("[class*=globalmobility]").hide();
-            jQuery("[class*=globalmobility] input").val("");
+            $("[class*=globalmobility] input:not(input[type=hidden])").val("");
             jQuery("[class*=globalmobility-first]").hide();
             jQuery("[class*=globalmobility] input[type=text][name*='Country']").val('@DefaultCountry');
             jQuery("[class*=globalmobility] select option:not([value])").prop('selected', true);
         } else if (!(value == '@IsTeWorker')) {
             jQuery(".globalmobility-first").show();
-            
         }
+
+        $("[class*=globalmobility-first] input[type=hidden]").val("1");
+
     };
 
     $(function () {
- 
-        bupasection();
 
+        bupasection();
 
         function setTaxInformationBehavior(value) {
             if (value == 'P45 attached') {
@@ -1116,12 +1134,17 @@
             }
         };
 
-        setGlobalMobilityBehavior($('#TECoWorker').val());
+       // setGlobalMobilityBehavior($('#TECoWorker').val());
         setTaxInformationBehavior($('#TaxInformation').val());
 
         $('#TECoWorker').change(function () {
             setGlobalMobilityBehavior($(this).val());
         });
+
+        if ($('#TECoWorker').val() == '@IsTeWorker') {
+            $(".globalmobility-first").hide();
+        }
+
 
         $('#Institution').change(function () {
             var payee = $('#FirstName').val() + " " + $('#LastName').val();

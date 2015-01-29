@@ -17,7 +17,7 @@
         <readOnlyFields></readOnlyFields>
         <actions>
             <action status="30" internal-val="30" text="Submit Complete Service Request to SSC">
-                <validateTabs>#servicerequestdetails,#personal</validateTabs>
+                <validateTabs>#personal</validateTabs>
             </action>
             <action status="99" internal-val="70" text="Cancel Service request"></action>
         </actions>

@@ -4,67 +4,67 @@
 
   <dependent>
     <selected>Advanced</selected>
-    <show1>0,35</show1>
+    <show1>0.35</show1>
     <show2></show2>
     <show3></show3>
   </dependent>
   <dependent>
     <selected>Fork Lift Truck Allowance</selected>
-    <show1>0,92</show1>
+    <show1>0.92</show1>
     <show2></show2>
     <show3></show3>
   </dependent>
   <dependent>
     <selected>Kitchen Skills</selected>
-    <show1>1,48</show1>
+    <show1>1.48</show1>
     <show2></show2>
     <show3></show3>
   </dependent>
   <dependent>
     <selected>Hourly AHP</selected>
-    <show1>0,27</show1>
+    <show1>0.27</show1>
     <show2>Gross</show2>
     <show3></show3>
   </dependent>
   <dependent>
     <selected>Hourly Day</selected>
-    <show1>0,73</show1>
+    <show1>0.73</show1>
     <show2></show2>
     <show3></show3>
   </dependent>
   <dependent>
     <selected>IKEA1 Skills</selected>
-    <show1>0,98</show1>
+    <show1>0.98</show1>
     <show2></show2>
     <show3></show3>
   </dependent>
   <dependent>
     <selected>IKEA2 Skills</selected>
-    <show1>1,48</show1>
+    <show1>1.48</show1>
     <show2></show2>
     <show3></show3>
   </dependent>
   <dependent>
     <selected>Manual Hand</selected>
-    <show1>0,35</show1>
+    <show1>0.35</show1>
     <show2></show2>
     <show3></show3>
   </dependent>
   <dependent>
     <selected>Night Shift</selected>
-    <show1>2,03</show1>
+    <show1>1.80</show1>
     <show2></show2>
     <show3></show3>
   </dependent>
   <dependent>
     <selected>Pallet Resue</selected>
-    <show1>0,17</show1>
+    <show1>0.17</show1>
     <show2></show2>
     <show3></show3>
   </dependent>
   <dependent>
     <selected>Shunter Allow</selected>
-    <show1>0,35</show1>
+    <show1>0.35</show1>
     <show2></show2>
     <show3></show3>
   </dependent>
@@ -100,7 +100,7 @@
   </dependent>
   <dependent>
     <selected>First Aid Allowance</selected>
-    <show1>0.17</show1>
+    <show1>15.00</show1>
     <show2></show2>
     <show3></show3>
   </dependent>
@@ -172,7 +172,7 @@
   </dependent>
   <dependent>
     <selected>Responsibility Allowance</selected>
-    <show1>1.40</show1>
+    <show1></show1>
     <show2></show2>
     <show3></show3>
   </dependent>
@@ -200,5 +200,10 @@
     <show2></show2>
     <show3></show3>
   </dependent>
-  
+  <dependent>
+    <selected>Night Shift (Distribution Only)</selected>
+    <show1>1.80</show1>
+    <show2></show2>
+    <show3></show3>
+  </dependent>
 </predefined>

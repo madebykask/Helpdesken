@@ -2,19 +2,19 @@
 <predefined>
     <name>PSArea</name>
     <dependent>
-        <selected>01 - ECM Retail &amp; Property</selected>
-        <show>01 - Level 1,02 - Level 2,03 - Level 3,04 - Level 4,05 - Level 5,06 - Level 6,07 - Level 7,08 - Level 8,09 - Level 9</show>
+        <selected>ECM Retail &amp; Property</selected>
+        <show>Level 1,Level 2,Level 3,Level 4,Level 5,Level 6,Level 7,Level 8,Level 9,Level dummy hourly,Level dummy monthly</show>
     </dependent>
     <dependent>
-        <selected>02 - ECM DS</selected>
-        <show>04 - Level 4,05 - Level 5,06 - Level 6,07 - Level 7,08 - Level 8,09 - Level 9,3A - Level 3A,3B - Level 3B</show>
+        <selected>ECM DS</selected>
+        <show>Level 3A,Level 3B,Level 4,Level 5,Level 6,Level 7,Level 8,Level 9,Level dummy monthly</show>
     </dependent>
     <dependent>
-        <selected>03 - ECM Trading</selected>
-        <show>01 - Level 1,02 - Level 2,03 - Level 3,04 - Level 4,05 - Level 5,06 - Level 6,07 - Level 7,08 - Level 8</show>
+        <selected>ECM Trading</selected>
+        <show>Level dummy monthly,Level 1,Level 2,Level 3,Level 4,Level 5,Level 6,Level 7,Level 8</show>
     </dependent>
     <dependent>
-        <selected>04 - ECM IICP</selected>
-        <show>09 - Level 9</show>
+        <selected>ECM IICP</selected>
+        <show>Level dummy monthly,Level 1,Level 9,N/A</show>
     </dependent>
 </predefined>

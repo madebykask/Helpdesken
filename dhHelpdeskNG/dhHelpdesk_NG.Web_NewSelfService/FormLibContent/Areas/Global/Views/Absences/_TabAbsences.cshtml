@@ -2,6 +2,7 @@
 @using ECT.FormLib;
 @using ECT.FormLib.Models;
 
+
 <div class="tab-pane" id="Absences">
     <div class="span6">
         <table class="table">
@@ -47,7 +48,7 @@
                 </tr>
 
 
-                 @for(int i = 2; i <= 4; i++)
+                 @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
                 {
                     <tr class="absence@(i.ToString())" id="absence@(i.ToString())">
                         <td class="tdstrong" colspan="2">
@@ -83,17 +84,14 @@
                     </tr>  
                  }
 
-                <tr id="addAbsenceTr">
+                <tr id="addAbsenceTrr">
                     <td colspan="2">
-                        @Model.Element("Absences")
+                        @Model.Element("AbsencesMulti")
                         <a id="addAbsence" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Absence")</a></td>
                 </tr>
 
-
-                
-
                 @* CDS *@
-                <tr>
+               @* <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("CDS")</h4>
                     </td>
@@ -103,53 +101,51 @@
                     <td>
                         @Model.Element("LockCDSAccount")
                     </td>
-                </tr>
+                </tr>*@
                 </tbody>
         </table>
     </div>
-
-@*    @if (Model.GetAnswer("TECoWorker") == "Yes")
-    {
-                 *@<div class="span6">
-           <table class="table">
-             <tbody>
+  
+    <div class="span6">
+ <table class="table">
+    <tbody>
 
                 @* DETAILS ON GLOBAL COMMUTING *@
 
-                <tr>
+                <tr class="globalcommuting-first">
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Details on Global Commuting")</h4>
                     </td>
                 </tr>
-                <tr>
+                <tr class="globalcommuting-first">
                     <td class="tdstrong">@Model.Label("CommutingType")</td>
                     <td>
                         @Model.Element("CommutingType")
                     </td>
                 </tr>    
 
-                <tr>
+                <tr class="globalcommuting-first">
                     <td class="tdstrong">@Model.Label("StartFrom")</td>
                     <td>
                         @Model.Element("StartFrom")
                     </td>
                 </tr>    
 
-                <tr>
+                <tr class="globalcommuting-first">
                     <td class="tdstrong">@Model.Label("EndsOn")</td>
                     <td>
                         @Model.Element("EndsOn")
                     </td>
                 </tr>    
 
-                <tr>
+                <tr class="globalcommuting-first">
                     <td class="tdstrong">@Model.Label("DestinationCountry")</td>
                     <td>
                         @Model.Element("DestinationCountry")
                     </td>
                 </tr>    
 
-                <tr>
+                <tr class="globalcommuting-first">
                     <td class="tdstrong">@Model.Label("TaxRelevant")</td>
                     <td>
                         @Model.Element("TaxRelevant")
@@ -157,40 +153,40 @@
                 </tr>
                 
                 
-                 @for(int i = 2; i <= 4; i++)
+                 @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
                 {
-                    <tr class="detailsonglobalcommuting@(i.ToString())" id="detailsonglobalcommuting@(i.ToString())">
+                    <tr class="detailsonglobalcommuting@(i.ToString()) globalcommuting" id="detailsonglobalcommuting@(i.ToString())">
                         <td class="tdstrong" colspan="2">
                             <h4>@Model.Translate("Details on Global Commuting") @(i.ToString())</h4>
                         </td>
                     </tr>
-                    <tr class="detailsonglobalcommuting@(i.ToString())">
+                    <tr class="detailsonglobalcommuting@(i.ToString()) globalcommuting">
                         <td class="tdstrong">@Model.Label("CommutingType" + i.ToString())</td>
                         <td>
                             @Model.Element("CommutingType" + i.ToString())</td>
                     </tr>
-                     <tr class="detailsonglobalcommuting@(i.ToString())">
+                     <tr class="detailsonglobalcommuting@(i.ToString()) globalcommuting">
                         <td class="tdstrong">@Model.Label("StartFrom" + i.ToString())</td>
                         <td>
                             @Model.Element("StartFrom" + i.ToString())</td>
                     </tr>
-                     <tr class="detailsonglobalcommuting@(i.ToString())">
+                     <tr class="detailsonglobalcommuting@(i.ToString()) globalcommuting">
                         <td class="tdstrong">@Model.Label("EndsOn" + i.ToString())</td>
                         <td>
                             @Model.Element("EndsOn" + i.ToString())</td>
                     </tr>
-                     <tr class="detailsonglobalcommuting@(i.ToString())">
+                     <tr class="detailsonglobalcommuting@(i.ToString()) globalcommuting">
                         <td class="tdstrong">@Model.Label("DestinationCountry" + i.ToString())</td>
                         <td>
                             @Model.Element("DestinationCountry" + i.ToString())</td>
                     </tr>
-                     <tr class="detailsonglobalcommuting@(i.ToString())">
+                     <tr class="detailsonglobalcommuting@(i.ToString()) globalcommuting">
                         <td class="tdstrong">@Model.Label("TaxRelevant" + i.ToString())</td>
                         <td>
                             @Model.Element("TaxRelevant" + i.ToString())</td>
                     </tr>
                  }
-                <tr id="addDetailsOnGlobalCommutingTr">
+                <tr class="globalcommuting-first" id="addDetailsOnGlobalCommutingTrr">
                     <td colspan="2">
                         @Model.Element("DetailsOnGlobalCommutings")
                         <a id="addDetailsOnGlobalCommuting" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Details On Global Commuting")</a></td>
@@ -198,111 +194,205 @@
 
             </tbody>
         </table>
-    </div>
-  @* } *@  
-    
+    </div>  
+    <input type="hidden" id="MultipleEntrySectionsNr" value="@FormLibConstants.FormField.MultipleEntrySectionsNr" /> 
+    @*Set Visibility to 0 to GlobalCommuting if LM *@
+     <input type="hidden" id="GlobalCommutingVisibility" value="@(FormLibUtils.IsSelfService() ? "0" : "1")" />
 </div>
 
 <script>
     
-    var futureNotice = $('#notice_FutureDate');
-    var nowTemp = new Date();
-    var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-
-    var start = $('#date_AbsenceStartFrom').datepicker({
-        onRender: function (date) {
-            return '';
+        function setGlobalCommutingBehavior(value) {
+            if (!(value == 'Yes')) {
+                $("[class*=globalcommuting]").hide();
+                $("[class*=globalcommuting] input:not(input[type=hidden])").val("");                     
+                $("[class*=globalcommuting] select option:not([value])").prop('selected', true);
+            } else {
+                    $(".globalcommuting-first").show();
+            }
+      
+            $("[class*=globalcommuting-first] input[type=hidden]").val("1");
         }
-    }).on('changeDate', function (ev) {
 
-        futureNotice.hide();
+        if ($('#GlobalCommutingVisibility').val() == "1") {
 
-        if (ev.date.valueOf() < now.valueOf())
-            futureNotice.show();
-
-        if (ev.date.valueOf() > end.date.valueOf()) {
-            var newDate = new Date(ev.date);
-            newDate.setDate(newDate.getDate() + 1);
-            end.setValue(newDate);
-            $('#AbsenceEndsOn').val('');
+            if (!($('#TECoWorker').val() == 'Yes')) {
+                $(".globalcommuting-first").hide();
+                $(".globalcommuting").hide();
+            }
         }
-        end.update();
-        start.hide();
-    }).data('datepicker');
-
-    var end = $('#date_AbsenceEndsOn').datepicker({
-        onRender: function (date) {
-            return date.valueOf() <= start.date.valueOf() ? 'disabled' : '';
+        else {
+            $(".globalcommuting-first").hide();
+            $(".globalcommuting").hide();
         }
-    }).on('changeDate', function (ev) {
 
-        end.hide();
-    }).data('datepicker');
-    $('#date_AbsenceEndsOn').on("keydown keypress keyup", false);
+        $('#TECoWorker').change(function () {
 
-    // Absence 2 
-    var start2 = $('#date_AbsenceStartFrom2').datepicker({
-        onRender: function (date) {
-            return '';
-        }
-    }).on('changeDate', function (ev) {
+            if ($('#GlobalCommutingVisibility').val() == "1") {
 
-        futureNotice.hide();
+                setGlobalCommutingBehavior($(this).val());
+            }
+        });
+    
+        var futureNotice = $('#notice_FutureDate');
+        var nowTemp = new Date();
+        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
 
-        if (ev.date.valueOf() < now.valueOf())
-            futureNotice.show();
+        var start = $('#date_AbsenceStartFrom').datepicker({
+            onRender: function (date) {
+                return '';
+            }
+        }).on('changeDate', function (ev) {
 
-        if (ev.date.valueOf() > end2.date.valueOf()) {
-            var newDate = new Date(ev.date);
-            newDate.setDate(newDate.getDate() + 1);
-            end2.setValue(newDate);
-            $('#AbsenceEndsOn2').val('');
-        }
-        end2.update();
-        start.hide();
-    }).data('datepicker');
+            futureNotice.hide();
 
-    var end2 = $('#date_AbsenceEndsOn2').datepicker({
-        onRender: function (date) {
-            return date.valueOf() <= start2.date.valueOf() ? 'disabled' : '';
-        }
-    }).on('changeDate', function (ev) {
+            if (ev.date.valueOf() < now.valueOf())
+                futureNotice.show();
 
-        end2.hide();
-    }).data('datepicker');
-    $('#date_AbsenceEndsOn2').on("keydown keypress keyup", false);
+            if (ev.date.valueOf() > end.date.valueOf()) {
+                var newDate = new Date(ev.date);
+                newDate.setDate(newDate.getDate() + 1);
+                end.setValue(newDate);
+                $('#AbsenceEndsOn').val('');
+            }
+            end.update();
+            start.hide();
+        }).data('datepicker');
 
-    // Absence 3 
-    var start3 = $('#date_AbsenceStartFrom3').datepicker({
-        onRender: function (date) {
-            return '';
-        }
-    }).on('changeDate', function (ev) {
+        var end = $('#date_AbsenceEndsOn').datepicker({
+            onRender: function (date) {
+                return date.valueOf() <= start.date.valueOf() ? 'disabled' : '';
+            }
+        }).on('changeDate', function (ev) {
 
-        futureNotice.hide();
+            end.hide();
+        }).data('datepicker');
+  
+        // Absence 2 
+        var start2 = $('#date_AbsenceStartFrom2').datepicker({
+            onRender: function (date) {
+                return '';
+            }
+        }).on('changeDate', function (ev) {
 
-        if (ev.date.valueOf() < now.valueOf())
-            futureNotice.show();
+            futureNotice.hide();
 
-        if (ev.date.valueOf() > end3.date.valueOf()) {
-            var newDate = new Date(ev.date);
-            newDate.setDate(newDate.getDate() + 1);
-            end3.setValue(newDate);
-            $('#AbsenceEndsOn3').val('');
-        }
-        end2.update();
-        start.hide();
-    }).data('datepicker');
+            if (ev.date.valueOf() < now.valueOf())
+                futureNotice.show();
 
-    var end3 = $('#date_AbsenceEndsOn3').datepicker({
-        onRender: function (date) {
-            return date.valueOf() <= start3.date.valueOf() ? 'disabled' : '';
-        }
-    }).on('changeDate', function (ev) {
+            if (ev.date.valueOf() > end2.date.valueOf()) {
+                var newDate = new Date(ev.date);
+                newDate.setDate(newDate.getDate() + 1);
+                end2.setValue(newDate);
+                $('#AbsenceEndsOn2').val('');
+            }
+            end2.update();
+            start.hide();
+        }).data('datepicker');
 
-        end3.hide();
-    }).data('datepicker');
-    $('#date_AbsenceEndsOn3').on("keydown keypress keyup", false);
+        var end2 = $('#date_AbsenceEndsOn2').datepicker({
+            onRender: function (date) {
+                return date.valueOf() <= start2.date.valueOf() ? 'disabled' : '';
+            }
+        }).on('changeDate', function (ev) {
+
+            end2.hide();
+        }).data('datepicker');    
+
+        // Absence 3 
+        var start3 = $('#date_AbsenceStartFrom3').datepicker({
+            onRender: function (date) {
+                return '';
+            }
+        }).on('changeDate', function (ev) {
+
+            futureNotice.hide();
+
+            if (ev.date.valueOf() < now.valueOf())
+                futureNotice.show();
+
+            if (ev.date.valueOf() > end3.date.valueOf()) {
+                var newDate = new Date(ev.date);
+                newDate.setDate(newDate.getDate() + 1);
+                end3.setValue(newDate);
+                $('#AbsenceEndsOn3').val('');
+            }
+            end2.update();
+            start.hide();
+        }).data('datepicker');
+
+        var end3 = $('#date_AbsenceEndsOn3').datepicker({
+            onRender: function (date) {
+                return date.valueOf() <= start3.date.valueOf() ? 'disabled' : '';
+            }
+        }).on('changeDate', function (ev) {
+
+            end3.hide();
+        }).data('datepicker');  
+
+        // Absence 4 
+        var futureNotice4 = $('#notice_FutureDate4');
+        var start4 = $('#date_AbsenceStartFrom4').not(".disabled").datepicker({
+            onRender: function (date) {
+                return '';
+            }
+        }).on('changeDate', function (ev) {
+
+            futureNotice4.hide();
+
+            if (ev.date.valueOf() < now.valueOf())
+                futureNotice4.show();
+
+            if (ev.date.valueOf() > end4.date.valueOf()) {
+                var newDate = new Date(ev.date);
+                newDate.setDate(newDate.getDate() + 1);
+                end4.setValue(newDate);
+                $('#AbsenceEndsOn4').val('');
+            }
+            end4.update();
+            start.hide();
+        }).data('datepicker');
+
+        var end4 = $('#date_AbsenceEndsOn4').not(".disabled").datepicker({
+            onRender: function (date) {
+                return date.valueOf() <= start4.date.valueOf() ? 'disabled' : '';
+            }
+        }).on('changeDate', function (ev) {
+
+            end4.hide();
+        }).data('datepicker');
+
+        // Absence 5 
+        var futureNotice5 = $('#notice_FutureDate5');
+        var start5 = $('#date_AbsenceStartFrom5').not(".disabled").datepicker({
+            onRender: function (date) {
+                return '';
+            }
+        }).on('changeDate', function (ev) {
+
+            futureNotice5.hide();
+
+            if (ev.date.valueOf() < now.valueOf())
+                futureNotice5.show();
+
+            if (ev.date.valueOf() > end5.date.valueOf()) {
+                var newDate = new Date(ev.date);
+                newDate.setDate(newDate.getDate() + 1);
+                end5.setValue(newDate);
+                $('#AbsenceEndsOn5').val('');
+            }
+            end5.update();
+            start.hide();
+        }).data('datepicker');
+
+        var end5 = $('#date_AbsenceEndsOn5').not(".disabled").datepicker({
+            onRender: function (date) {
+                return date.valueOf() <= start5.date.valueOf() ? 'disabled' : '';
+            }
+        }).on('changeDate', function (ev) {
+
+            end5.hide();
+        }).data('datepicker');
 
 
     

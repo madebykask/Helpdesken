@@ -20,7 +20,7 @@
         </userGroup>
         <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
-        <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
+        <readOnlyFields>Company,BusinessUnit,ServiceArea,Department,NewCompany,NewBusinessUnit</readOnlyFields>
         <actions>
             <action status="20" internal-val="20" text="Submit to HR Unit">
                 <validateTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</validateTabs>
@@ -66,7 +66,7 @@
             <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#globalview,#SSCUseOnly,#attachments</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#SSCUseOnly,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#attachments</readOnlyTabs>
         <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
         <actions>

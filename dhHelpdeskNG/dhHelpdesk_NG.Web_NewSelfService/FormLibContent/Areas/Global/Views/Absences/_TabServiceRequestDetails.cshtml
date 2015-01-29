@@ -92,6 +92,16 @@
             </tbody>
         </table>
     </div>
-    
-    <input type="hidden" id="CustomerId" value="@Model.CustomerId" />
+            <div class="span6">
+        @{
+            Random rnd = new Random();
+            int nr = rnd.Next(1, 14);
+            string filename = "~/FormLibContent/Assets/img/GL/ikea-" + nr + ".png";
+        }
+  
+        <img src="@Url.Content(filename)" />
+    </div>
+    <input type="hidden" id="CustomerId" value="@Model.Form.CustomerId" />
+    <input type="hidden" id="solutiontime" value="@Model.Form.SolutionTime"/>
+    <input type="hidden" id="WatchDate" name="WatchDate" value="@Model.Element("WatchDate")" />
 </div>

@@ -1,0 +1,228 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+<div class="tab-pane" id="OrganisationalAssignment">
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Organisation")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("OrganisationCountry")</td>
+                    <td>South Korea</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Company")</td>
+                    <td>@Model.Element("Company")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("BusinessUnit")</td>
+                    <td>@Model.Element("BusinessUnit")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ServiceArea")</td>
+                    <td>@Model.Element("ServiceArea")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Department")</td>
+                    <td>@Model.Element("Department")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("CostCentre")</td>
+                    <td>@Model.Element("CostCentre")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Costallocation")</td>
+                    <td>@Model.Element("Costallocation")</td>
+                </tr>
+                
+
+                @for (int i = 2; i <= 3; i++)
+                  {
+                    <tr class="costcentres@(i.ToString())">
+                    <td class="tdstrong" colspan="2"><h5>@Model.Translate("Additional Cost Centre " + i.ToString())</h5></td>
+                         </tr>     
+                                  
+                    <tr class="costcentres@(i.ToString())">
+                              <td class="tdstrong">@Model.Label("CostCentre" + i.ToString())</td>
+                              <td>
+                                  @Model.Element("CostCentre" + i.ToString())</td>
+                          </tr>
+                    <tr class="costcentres@(i.ToString())">
+                              <td class="tdstrong">@Model.Label("Costallocation" + i.ToString())</td>
+                              <td>
+                                  @Model.Element("Costallocation" + i.ToString())</td>
+                          </tr>
+                      
+                    
+                }
+                <tr id="addCostcentresTrr">
+                    <td colspan="2">
+                        @Model.Element("MultiCostcentres")
+                        <a id="addCostCentre" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Cost Centre")</a></td>
+                </tr>
+
+
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Job")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PositionTitle")</td>
+                    <td>@Model.Element("PositionTitle")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("JobTitle")</td>
+                    <td>@Model.Element("JobTitle")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ShortSortjobdescription")</td>
+                    <td>@Model.Element("ShortSortjobdescription")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Newposition")</td>
+                    <td>@Model.Element("Newposition")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Reportstolinemanager")</td>
+                    <td>@Model.Element("Reportstolinemanager")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("LocalApprover")</td>
+                    <td>@Model.Element("LocalApprover")</td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+    <div class="span6">
+
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Employment Conditions")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Employmentcategory")</td>
+                    <td>@Model.Element("Employmentcategory")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Contractedhours")</td>
+                    <td>@Model.Element("Contractedhours")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Contracttype")</td>
+                    <td>@Model.Element("Contracttype")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Contractenddate")</td>
+                    <td>@Model.Element("Contractenddate")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Probationperiod")</td>
+                    <td>@Model.Element("Probationperiod")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Probationenddate")</td>
+                    <td>@Model.Element("Probationenddate")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("CDS")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Primarysite")</td>
+                    <td>@Model.Element("Primarysite")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("TECapprover")</td>
+                    <td>@Model.Element("TECapprover")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Helpdesk")</td>
+                    <td>@Model.Element("Helpdesk")</td>
+                </tr>
+
+                 <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Work Address")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("WorkAddressline1")</td>
+                    <td>@Model.Element("WorkAddressline1")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("WorkAddressline2")</td>
+                    <td>@Model.Element("WorkAddressline2")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("WorkAddressline3")</td>
+                    <td>@Model.Element("WorkAddressline3")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("WorkAddressline4")</td>
+                    <td>@Model.Element("WorkAddressline4")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("WorkPostalCode")</td>
+                    <td>@Model.Element("WorkPostalCode")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("WorkCity")</td>
+                    <td>@Model.Element("WorkCity")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("WorkCountry")</td>
+                    <td>@Model.Element("WorkCountry")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("WorkTelephone")</td>
+                    <td>@Model.Element("WorkTelephone")</td>
+                </tr>
+                 <tr>
+                    <td class="tdstrong">@Model.Label("WorkCommunicationtype")</td>
+                    <td>@Model.Element("WorkCommunicationtype")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("WorkCommunicationcontent")</td>
+                    <td>@Model.Element("WorkCommunicationcontent")</td>
+                </tr>
+                @for (int i = 2; i <= 4; i++)
+                {
+                    <tr class="WorkCommunicationType@(i.ToString())" id="WorkCommunicationType@(i.ToString())">
+                        <td class="tdstrong" colspan="2">
+                            <h4>@Model.Translate("Communication") @i.ToString()</h4>
+                        </td>
+                    </tr>
+                    <tr class="WorkCommunicationType@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("WorkCommunicationtype" + i.ToString())</td>
+                        <td>
+                            @Model.Element("WorkCommunicationtype" + i.ToString())
+                        </td>
+                    </tr>
+                      <tr class="WorkCommunicationType@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("WorkCommunicationcontent" + i.ToString())</td>
+                        <td>
+                            @Model.Element("WorkCommunicationcontent" + i.ToString())
+                        </td>
+                    </tr>
+                  }
+                <tr id="addWorkCommunicationtypesTrr">
+                    <td colspan="2">
+                        @Model.Element("WorkCommunicationtypes")
+                        <a id="addWorkCommunicationType" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another communication type")</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+

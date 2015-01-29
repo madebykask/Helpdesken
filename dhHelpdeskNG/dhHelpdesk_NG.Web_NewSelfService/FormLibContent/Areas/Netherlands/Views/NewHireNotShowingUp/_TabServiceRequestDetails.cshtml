@@ -90,12 +90,12 @@
                 </tr>    
                 }     
                 <tr>
-                    <td class="tdstrong"><p>To SSC Administration:</p></td>
+                    <td class="tdstrong"><p>@Model.Translate("To SSC Administration:")</p></td>
                     <td>
                         
-<p>I would like to notify you that unfortunately this co-worker will NOT be joining IKEA.
-Please correct the record in Globalview and other required administration activities to withdraw this co-worker.</p>
-<p>Thank you</p>
+<p>@Model.Translate("I would like to notify you that unfortunately this co-worker will NOT be joining IKEA.")</p>
+<p>@Model.Translate("Please correct the record in Globalview and other required administration activities to withdraw this co-worker.")</p>
+<p>@Model.Translate("Thank you")</p>
                         
 </td>
                 </tr>         
@@ -112,6 +112,6 @@ Please correct the record in Globalview and other required administration activi
         </table>
     </div>
     
-    <input type="hidden" id="CustomerId" value="@Model.CustomerId" />
+    <input type="hidden" id="CustomerId" value="@Model.Form.CustomerId" />
     
 </div>

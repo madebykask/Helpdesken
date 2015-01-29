@@ -11,7 +11,6 @@
     <div class="span8">
         <table class="table">       
             <tbody>
-
                  <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Details")</h4>
@@ -20,9 +19,8 @@
                         <h4>@Model.Translate("Current record")</h4>
                     </td>
                 </tr>
-            
             <tr>
-                <td class="tdstrong">@Model.Label("Co-WorkerGlobalviewID")</td>
+                <td class="tdstrong" >@Model.Label("Co-WorkerGlobalviewID")</td>
                 <td>
                     @Model.Element("Co-WorkerGlobalviewID", false)
                 </td>
@@ -32,7 +30,7 @@
                 <td>
                     @Model.Element("FirstName", false)
                 </td>
-                                    <td>
+                   <td>
                         <input type="hidden" class="oldValue"  id="OLD_FirstName" name="OLD_FirstName" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_FirstName").Select(x => x.Value).FirstOrDefault() : "")"/>
                         <em class="muted" id="emOLD_FirstName">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_FirstName").Select(x => x.Value).FirstOrDefault() : "")</em>
                     </td>
@@ -147,8 +145,8 @@
         </table>
     </div>
 
-
-    <input type="hidden" id="CustomerId" value="@Model.CustomerId" />
+   
+    <input type="hidden" id="CustomerId" value="@Model.Form.CustomerId" />
     <input type="hidden" id="formGuid" value="@Model.FormGuid" />
 
 </div>

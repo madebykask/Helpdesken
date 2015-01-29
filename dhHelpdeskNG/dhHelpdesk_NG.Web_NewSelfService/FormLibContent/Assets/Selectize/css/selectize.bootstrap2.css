@@ -287,8 +287,13 @@
         }
 
     .selectize-dropdown [data-selectable],
-    .selectize-dropdown .optgroup-header {
+    .selectize-dropdown .optgroup-header,
+    .selectize-dropdown [data-disabled]{
         padding: 3px 10px;
+    }
+
+    .selectize-dropdown [data-disabled]{
+        color:#e1e1e1;
     }
 
     .selectize-dropdown .optgroup:first-child .optgroup-header {

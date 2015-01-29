@@ -1,0 +1,65 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+      <!-- Global Mobility Dependants -->
+                <tr class="globalmobility-first">
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Global Mobility - Dependants")</h4>
+                    </td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("DependantFamilyMember")</td>
+                    <td>@Model.Element("DependantFamilyMember")</td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("Accompanying")</td>
+                    <td>@Model.Element("Accompanying")</td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("DependantsLastName")</td>
+                    <td>@Model.Element("DependantsLastName")</td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("DependantsFirstName")</td>
+                    <td>@Model.Element("DependantsFirstName")</td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("DependantsDateOfBirth")</td>
+                    <td>@Model.Element("DependantsDateOfBirth")</td>
+                </tr>
+
+
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
+                {
+                    <tr class="dependantFamilyMember@(i.ToString()) globalmobility" id="dependantFamilyMember@(i.ToString())">
+                        <td class="tdstrong" colspan="2">
+                            <h4>@Model.Translate("Global Mobility - Dependants") @i.ToString()</h4>
+                        </td>
+                    </tr>
+                    <tr class="dependantFamilyMember@(i.ToString()) globalmobility">
+                        <td class="tdstrong">@Model.Label("DependantFamilyMember")</td>
+                        <td>@Model.Element("DependantFamilyMember" + i.ToString())</td>
+                    </tr>
+                    <tr class="dependantFamilyMember@(i.ToString()) globalmobility">
+                        <td class="tdstrong">@Model.Label("Accompanying" + i.ToString())</td>
+                        <td>@Model.Element("Accompanying" + i.ToString())</td>
+                    </tr>
+                    <tr class="dependantFamilyMember@(i.ToString()) globalmobility">
+                        <td class="tdstrong">@Model.Label("DependantsLastName" + i.ToString())</td>
+                        <td>@Model.Element("DependantsLastName" + i.ToString())</td>
+                    </tr>
+                    <tr class="dependantFamilyMember@(i.ToString()) globalmobility">
+                        <td class="tdstrong">@Model.Label("DependantsFirstName" + i.ToString())</td>
+                        <td>@Model.Element("DependantsFirstName" + i.ToString())</td>
+                    </tr>
+                    <tr class="dependantFamilyMember@(i.ToString()) globalmobility ">
+                        <td class="tdstrong">@Model.Label("DependantsDateOfBirth" + i.ToString())</td>
+                        <td>@Model.Element("DependantsDateOfBirth" + i.ToString())</td>
+                    </tr>
+                }
+
+                <tr class="globalmobility-first" id="addDependantFamilyMembersTrr">
+                    <td colspan="2">
+                        @Model.Element("DependantFamilyMembers")
+                        <a id="addDependantFamilyMember" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another global mobility dependant")</a></td>
+                </tr>

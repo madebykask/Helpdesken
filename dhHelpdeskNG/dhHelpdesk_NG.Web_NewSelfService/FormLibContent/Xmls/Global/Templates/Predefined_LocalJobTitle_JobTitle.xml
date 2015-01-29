@@ -1,0 +1,2948 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<predefined>
+  <name>LocalJobTitle</name>
+  <dependent>
+    <selected>Local Name_Accounting Co-worker</selected>
+    <show>Accounting Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Accounting Manager</selected>
+    <show>Accounting Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Accountant Senior</selected>
+    <show>Accountant Senior</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Accounting Co-worker Senior</selected>
+    <show>Accounting Co-worker Senior</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Accounting Team Leader</selected>
+    <show>Accounting Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Accountant General</selected>
+    <show>Accountant General</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Accountant</selected>
+    <show>Accountant</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Accountant Tax</selected>
+    <show>Accountant Tax</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Accounts Payable Manager</selected>
+    <show>Accounts Payable Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Accountant Payable</selected>
+    <show>Accountant Payable</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Accounting Project Manager</selected>
+    <show>Accounting Project Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Accounts Payable Co-worker</selected>
+    <show>Accounts Payable Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Accounts Payable Team Leader</selected>
+    <show>Accounts Payable Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Acquisition Co-worker</selected>
+    <show>Acquisition Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Accounting Assistant Receivable</selected>
+    <show>Accounting Assistant Receivable</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Account Receivable Co-worker</selected>
+    <show>Account Receivable Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Accounts Receivable Manager</selected>
+    <show>Accounts Receivable Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Accounting Store Support Manager</selected>
+    <show>Accounting Store Support Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Activity Coordinator</selected>
+    <show>Activity Coordinator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Activity &amp; Sales Support Specialist</selected>
+    <show>Activity &amp; Sales Support Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Accounting &amp; Treasury Manager</selected>
+    <show>Accounting &amp; Treasury Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Administrator</selected>
+    <show>Administrator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Administration Manager</selected>
+    <show>Administration Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Administrative Specialist</selected>
+    <show>Administrative Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Administrative Sales Manager</selected>
+    <show>Administrative Sales Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Administrative Receivable Accounting Ass</selected>
+    <show>Administrative Receivable Accounting Ass</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Advertising Assistant</selected>
+    <show>Advertising Assistant</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Advertising Manager</selected>
+    <show>Advertising Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Asset Management Analyst</selected>
+    <show>Asset Management Analyst</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Apprentice</selected>
+    <show>Apprentice</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Architect Assistant</selected>
+    <show>Architect Assistant</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Architect Manager</selected>
+    <show>Architect Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Architect</selected>
+    <show>Architect</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Art Director</selected>
+    <show>Art Director</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Assistant</selected>
+    <show>Assistant</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_After Sales Front Line Manager</selected>
+    <show>After Sales Front Line Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Aspirant</selected>
+    <show>Aspirant</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Benefits Manager</selected>
+    <show>Benefits Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Benefits Specialist</selected>
+    <show>Benefits Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Benefits Specialist Senior</selected>
+    <show>Benefits Specialist Senior</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Business Intelligence Analyst</selected>
+    <show>Business Intelligence Analyst</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Business Intelligence Manager</selected>
+    <show>Business Intelligence Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Business Intelligence Analyst Senior</selected>
+    <show>Business Intelligence Analyst Senior</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Business Systems Trainer Senior</selected>
+    <show>Business Systems Trainer Senior</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Business Nav. &amp; Intelligence Manager</selected>
+    <show>Business Nav. &amp; Intelligence Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Build Up Service Specialist</selected>
+    <show>Build Up Service Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Business Analyst</selected>
+    <show>Business Analyst</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Business Administration Manager</selected>
+    <show>Business Administration Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Business Controller</selected>
+    <show>Business Controller</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Business Developer</selected>
+    <show>Business Developer</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Business Development Controller</selected>
+    <show>Business Development Controller</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Business Navigation Analyst</selected>
+    <show>Business Navigation Analyst</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Business Navigator Trainee</selected>
+    <show>Business Navigator Trainee</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Business Navigator I</selected>
+    <show>Business Navigator I</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Business Navigator II</selected>
+    <show>Business Navigator II</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Business Systems Analyst</selected>
+    <show>Business Systems Analyst</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Business Systems analyst Junior</selected>
+    <show>Business Systems analyst Junior</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Business Systems Manager</selected>
+    <show>Business Systems Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Business Systems Analyst Senior</selected>
+    <show>Business Systems Analyst Senior</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Business Systems Team Leader</selected>
+    <show>Business Systems Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Business Support Specialist</selected>
+    <show>Business Support Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Business Systems Trainer</selected>
+    <show>Business Systems Trainer</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Cash Management Co-worker</selected>
+    <show>Cash Management Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Carpenter</selected>
+    <show>Carpenter</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Catalogue Coordinator</selected>
+    <show>Catalogue Coordinator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Catalogue Co-worker</selected>
+    <show>Catalogue Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Catalogue Specialist</selected>
+    <show>Catalogue Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Commercial Activity Leader</selected>
+    <show>Commercial Activity Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Country Communication Manager</selected>
+    <show>Country Communication Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Customer Delivery Coordinator</selected>
+    <show>Customer Delivery Coordinator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Comp. Development Facilitator Senior</selected>
+    <show>Comp. Development Facilitator Senior</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Comp. Dev. Specialist Checkout Services</selected>
+    <show>Comp. Dev. Specialist Checkout Services</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Comp. Development Specialist Com &amp; In</selected>
+    <show>Comp. Development Specialist Com &amp; In</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Comp. Dev. Specialist Customer Service</selected>
+    <show>Comp. Dev. Specialist Customer Service</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Comp. Dev. Specialist Operations</selected>
+    <show>Comp. Dev. Specialist Operations</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Chief Finance Officer</selected>
+    <show>Chief Finance Officer</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Commercial Growth Review Facilitator</selected>
+    <show>Commercial Growth Review Facilitator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Change and implementation manager</selected>
+    <show>Change and implementation manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Country HR Manager</selected>
+    <show>Country HR Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Claims Administrator</selected>
+    <show>Claims Administrator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Claims Administrator - Senior</selected>
+    <show>Claims Administrator - Senior</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Customer Logistics Manager</selected>
+    <show>Customer Logistics Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Customer Logistics Specialist</selected>
+    <show>Customer Logistics Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Commercial Assistant</selected>
+    <show>Commercial Assistant</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Compensation &amp; Benefits Manager</selected>
+    <show>Compensation &amp; Benefits Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Country Learning and Development Leader</selected>
+    <show>Country Learning and Development Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Communication Specialist Senior</selected>
+    <show>Communication Specialist Senior</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Commerciality Manager</selected>
+    <show>Commerciality Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Communicator</selected>
+    <show>Communicator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Competence Developer</selected>
+    <show>Competence Developer</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Competence Center Manager</selected>
+    <show>Competence Center Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Competence Development Manager</selected>
+    <show>Competence Development Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Competence Development Specialist</selected>
+    <show>Competence Development Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Competence Development Facilitator</selected>
+    <show>Competence Development Facilitator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Compensation Manager</selected>
+    <show>Compensation Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Competence Flow Manager</selected>
+    <show>Competence Flow Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Compliance Development Manager</selected>
+    <show>Compliance Development Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Communications Specialist - Senior</selected>
+    <show>Communications Specialist - Senior</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Community Manager</selected>
+    <show>Community Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Deputy Construction Manager</selected>
+    <show>Deputy Construction Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Construction Specialist</selected>
+    <show>Construction Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Controlling Manager</selected>
+    <show>Controlling Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Controlling Team Manager</selected>
+    <show>Controlling Team Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Controller</selected>
+    <show>Controller</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Commercial Planning Manager</selected>
+    <show>Commercial Planning Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Copy Writer</selected>
+    <show>Copy Writer</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Deputy Customer Order Manager</selected>
+    <show>Deputy Customer Order Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Customer Order Manager</selected>
+    <show>Customer Order Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Commercial Review Coordinator</selected>
+    <show>Commercial Review Coordinator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Commercial Review Co-worker</selected>
+    <show>Commercial Review Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Commercial Review Manager</selected>
+    <show>Commercial Review Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Commercial Review Responsible</selected>
+    <show>Commercial Review Responsible</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Corporate Administrator</selected>
+    <show>Corporate Administrator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Corporate Attorney</selected>
+    <show>Corporate Attorney</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Commercial Support Co-worker</selected>
+    <show>Commercial Support Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Commercial Support Manager</selected>
+    <show>Commercial Support Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Commercial Support Specialist</selected>
+    <show>Commercial Support Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Country Sales Manager</selected>
+    <show>Country Sales Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Customer Service Co-worker</selected>
+    <show>Customer Service Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Customer Service Manager</selected>
+    <show>Customer Service Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Customer Service Specialist</selected>
+    <show>Customer Service Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Central Planner</selected>
+    <show>Central Planner</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Co-worker Relations Manager</selected>
+    <show>Co-worker Relations Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Co-worker Relations Specialist</selected>
+    <show>Co-worker Relations Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Digital Marketing Coordinator</selected>
+    <show>Digital Marketing Coordinator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Digital Marketing Specialist</selected>
+    <show>Digital Marketing Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Deputy Interior Designer Specialist</selected>
+    <show>Deputy Interior Designer Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Direct Marketing Manager</selected>
+    <show>Direct Marketing Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Direct Marketing Specialist</selected>
+    <show>Direct Marketing Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Diversity Specialist</selected>
+    <show>Diversity Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Energy Manager</selected>
+    <show>Energy Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Environment Coordinator</selected>
+    <show>Environment Coordinator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Environment Store Support</selected>
+    <show>Environment Store Support</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_External Media Solution Manager</selected>
+    <show>External Media Solution Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Deputy Expansion Manager</selected>
+    <show>Deputy Expansion Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Expansion Manager</selected>
+    <show>Expansion Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Expansion Specialist</selected>
+    <show>Expansion Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Expansion &amp; Facilities Manager</selected>
+    <show>Expansion &amp; Facilities Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Expansion Retail Logistics Manager</selected>
+    <show>Expansion Retail Logistics Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Expansion Retail Logistics Specialist</selected>
+    <show>Expansion Retail Logistics Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Expansion Sales Specialist</selected>
+    <show>Expansion Sales Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Exchange &amp; Returns Manager</selected>
+    <show>Exchange &amp; Returns Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Facility Co-worker</selected>
+    <show>Facility Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Deputy Facility Manager</selected>
+    <show>Deputy Facility Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Family Communication Specialist</selected>
+    <show>Family Communication Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Family Database Specialist</selected>
+    <show>Family Database Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Finance &amp; Administration Manager</selected>
+    <show>Finance &amp; Administration Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Financial Systems &amp; Projects Specialist</selected>
+    <show>Financial Systems &amp; Projects Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Finance Manager</selected>
+    <show>Finance Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Financial Reporting Specialist</selected>
+    <show>Financial Reporting Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Deputy Food &amp; Beverage Manager</selected>
+    <show>Deputy Food &amp; Beverage Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Country IKEA Food Manager</selected>
+    <show>Country IKEA Food Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Country Food Specialist</selected>
+    <show>Country Food Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Front Line Manager</selected>
+    <show>Front Line Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Free Range Specialist</selected>
+    <show>Free Range Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_General Ledger Manager</selected>
+    <show>General Ledger Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_General Ledger Specialist</selected>
+    <show>General Ledger Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_General Ledger Supervisor</selected>
+    <show>General Ledger Supervisor</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_General Ledger Specialist Expansion</selected>
+    <show>General Ledger Specialist Expansion</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Goods Flow Specialist</selected>
+    <show>Goods Flow Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Graduate Student</selected>
+    <show>Graduate Student</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Graphical Specialist</selected>
+    <show>Graphical Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Graphic Purchaser</selected>
+    <show>Graphic Purchaser</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Graphic Communication Manager</selected>
+    <show>Graphic Communication Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Graphic Communication Specialist</selected>
+    <show>Graphic Communication Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Graphic Communication Project Leader</selected>
+    <show>Graphic Communication Project Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Graphic Production Designer</selected>
+    <show>Graphic Production Designer</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Handelsfachwirt</selected>
+    <show>Handelsfachwirt</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Kitchen Production Manager</selected>
+    <show>Kitchen Production Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_HR Co-worker</selected>
+    <show>HR Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Deputy HR Manager</selected>
+    <show>Deputy HR Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_HR Generalist</selected>
+    <show>HR Generalist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_HR Manager</selected>
+    <show>HR Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_HR Specialist</selected>
+    <show>HR Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_HR Team Manager</selected>
+    <show>HR Team Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_HR Law Manager</selected>
+    <show>HR Law Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_HR Manager Assistant</selected>
+    <show>HR Manager Assistant</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_HR Marketing Co-worker</selected>
+    <show>HR Marketing Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_HR Marketing Manager</selected>
+    <show>HR Marketing Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_HRMS Manager</selected>
+    <show>HRMS Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_HRMS Specialist</selected>
+    <show>HRMS Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_HRMS Specialist I</selected>
+    <show>HRMS Specialist I</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_HR Operations Manager</selected>
+    <show>HR Operations Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_HR Service Center Manager</selected>
+    <show>HR Service Center Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_HR Site Manager</selected>
+    <show>HR Site Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Interior Design Specialist Senior</selected>
+    <show>Interior Design Specialist Senior</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_IF Co-worker</selected>
+    <show>IF Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Deputy IF Manager</selected>
+    <show>Deputy IF Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_IF Manager</selected>
+    <show>IF Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_IF Specialist</selected>
+    <show>IF Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_IF Specialist Senior</selected>
+    <show>IF Specialist Senior</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_IF Manager Trainee</selected>
+    <show>IF Manager Trainee</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_IF Specialist I</selected>
+    <show>IF Specialist I</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_IKEA Business Leader</selected>
+    <show>IKEA Business Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Internal Media Solutions Co-worker</selected>
+    <show>Internal Media Solutions Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Internal Audit Manager</selected>
+    <show>Internal Audit Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Internal Auditor - Senior</selected>
+    <show>Internal Auditor - Senior</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Internal Auditor</selected>
+    <show>Internal Auditor</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Interior Designer Manager</selected>
+    <show>Interior Designer Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Interior Designer Specialist</selected>
+    <show>Interior Designer Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Industrial Law Specialist</selected>
+    <show>Industrial Law Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Information &amp; Communication Coordinator</selected>
+    <show>Information &amp; Communication Coordinator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Information Co-worker</selected>
+    <show>Information Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Information &amp; Web Responsible</selected>
+    <show>Information &amp; Web Responsible</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_In-store Bilingual Project Leader</selected>
+    <show>In-store Bilingual Project Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Insurance Manager</selected>
+    <show>Insurance Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Interior Designer</selected>
+    <show>Interior Designer</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Internet Coordinator</selected>
+    <show>Internet Coordinator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Internet Specialist</selected>
+    <show>Internet Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Internal Information Coordinator</selected>
+    <show>Internal Information Coordinator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Internal Information Manager</selected>
+    <show>Internal Information Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Intranet Co-worker</selected>
+    <show>Intranet Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Internship</selected>
+    <show>Internship</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_In Store Logistics Specialist I</selected>
+    <show>In Store Logistics Specialist I</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_In-store Logistics Co-worker</selected>
+    <show>In-store Logistics Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_In-store Logistics Specialist Senior</selected>
+    <show>In-store Logistics Specialist Senior</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_IT Coordinator</selected>
+    <show>IT Coordinator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_IT Manager</selected>
+    <show>IT Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_IT Support</selected>
+    <show>IT Support</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Land Acquisition Manager</selected>
+    <show>Land Acquisition Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Laws &amp; Standards System Administrator</selected>
+    <show>Laws &amp; Standards System Administrator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Laws &amp; Standards Coordinator</selected>
+    <show>Laws &amp; Standards Coordinator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Laws &amp; Standards Manager</selected>
+    <show>Laws &amp; Standards Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Lean Retailing Specialist</selected>
+    <show>Lean Retailing Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Learning &amp; Development Coordinator</selected>
+    <show>Learning &amp; Development Coordinator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Learning &amp; Development Manager</selected>
+    <show>Learning &amp; Development Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Learning &amp; Development Specialist</selected>
+    <show>Learning &amp; Development Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Leadership &amp; Diversity Manager</selected>
+    <show>Leadership &amp; Diversity Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Legal Administrator Senior</selected>
+    <show>Legal Administrator Senior</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Local Advertising Specialist</selected>
+    <show>Local Advertising Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Local Marketing Manager</selected>
+    <show>Local Marketing Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Logistics Coordinator</selected>
+    <show>Logistics Coordinator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Logistics Co-worker</selected>
+    <show>Logistics Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Logistics Manager</selected>
+    <show>Logistics Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Logistics Projects Team Leader</selected>
+    <show>Logistics Projects Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Maintenance Manager</selected>
+    <show>Maintenance Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Marketing Advertising Specialist</selected>
+    <show>Marketing Advertising Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Marketing Catalogue/Brochure Specialist</selected>
+    <show>Marketing Catalogue/Brochure Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Marketing Creative Specialist</selected>
+    <show>Marketing Creative Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Marketing Direct Specialist</selected>
+    <show>Marketing Direct Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Marketing Assistant</selected>
+    <show>Marketing Assistant</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Marketing Co-worker</selected>
+    <show>Marketing Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Marketing Specialist</selected>
+    <show>Marketing Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Marketing Business Partner</selected>
+    <show>Marketing Business Partner</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Marketing PR Specialist</selected>
+    <show>Marketing PR Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Marketing Relationship Manager</selected>
+    <show>Marketing Relationship Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Marketing Research Specialist</selected>
+    <show>Marketing Research Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Marketing Web Specialist</selected>
+    <show>Marketing Web Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Media Specialist</selected>
+    <show>Media Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Meeting &amp; Travel Coordinator</selected>
+    <show>Meeting &amp; Travel Coordinator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Market Hall Planning Manager</selected>
+    <show>Market Hall Planning Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Marketing Research Coordinator</selected>
+    <show>Marketing Research Coordinator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Marketing Research Co-worker</selected>
+    <show>Marketing Research Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Meeting Coordinator</selected>
+    <show>Meeting Coordinator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_National Advertising Specialist</selected>
+    <show>National Advertising Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Office manager</selected>
+    <show>Office manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Office Support</selected>
+    <show>Office Support</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Office Support Administrator</selected>
+    <show>Office Support Administrator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Office Services Co-worker</selected>
+    <show>Office Services Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Office Services Manager</selected>
+    <show>Office Services Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Country Organisational Change Manager</selected>
+    <show>Country Organisational Change Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Country Organisational Change Specialist</selected>
+    <show>Country Organisational Change Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_P3 Roll Out Co-ordinator</selected>
+    <show>P3 Roll Out Co-ordinator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Payroll Manager</selected>
+    <show>Payroll Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_HRSC Payroll Specialist II</selected>
+    <show>HRSC Payroll Specialist II</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Payroll Specialist</selected>
+    <show>Payroll Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Payroll Tax Specialist</selected>
+    <show>Payroll Tax Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_PR Co-worker</selected>
+    <show>PR Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_PR Manager</selected>
+    <show>PR Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_PR Specialist</selected>
+    <show>PR Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_PR &amp; Communication Manager</selected>
+    <show>PR &amp; Communication Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Press Contact Officer</selected>
+    <show>Press Contact Officer</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Deputy Project Development Manager</selected>
+    <show>Deputy Project Development Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Project Development Manager</selected>
+    <show>Project Development Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Project Controller</selected>
+    <show>Project Controller</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Project Developer</selected>
+    <show>Project Developer</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Project Leader</selected>
+    <show>Project Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Project Manager</selected>
+    <show>Project Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Project Specialist</selected>
+    <show>Project Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Project Support</selected>
+    <show>Project Support</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Project Leader I</selected>
+    <show>Project Leader I</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Project Manager I</selected>
+    <show>Project Manager I</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Project Specialist I</selected>
+    <show>Project Specialist I</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Project Support I</selected>
+    <show>Project Support I</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Project Leader II</selected>
+    <show>Project Leader II</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Project Manager II</selected>
+    <show>Project Manager II</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Project Support II</selected>
+    <show>Project Support II</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Project Leader III</selected>
+    <show>Project Leader III</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Property Business Navigator</selected>
+    <show>Property Business Navigator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Project Manager Country RE</selected>
+    <show>Project Manager Country RE</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Project Operations Manager</selected>
+    <show>Project Operations Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Deputy Property Mnager</selected>
+    <show>Deputy Property Mnager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Product Placement Co-worker</selected>
+    <show>Product Placement Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Product Placement Specialist</selected>
+    <show>Product Placement Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Press &amp; PR Coordinator</selected>
+    <show>Press &amp; PR Coordinator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Press &amp; PR Manager</selected>
+    <show>Press &amp; PR Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Product Placement Specialist Senior</selected>
+    <show>Product Placement Specialist Senior</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Product Req &amp; Compliance Specialist</selected>
+    <show>Product Req &amp; Compliance Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_P-tag Specialist</selected>
+    <show>P-tag Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Public Affairs Manager</selected>
+    <show>Public Affairs Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Quality Co-ordinator</selected>
+    <show>Quality Co-ordinator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Range Presentation Manager</selected>
+    <show>Range Presentation Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Real Estate Manager</selected>
+    <show>Real Estate Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Receptionist</selected>
+    <show>Receptionist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Recovery Manager</selected>
+    <show>Recovery Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Receive Payment Manager</selected>
+    <show>Receive Payment Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Recruitment Manager</selected>
+    <show>Recruitment Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Recruitment Specialist</selected>
+    <show>Recruitment Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Regional Marketing Manager</selected>
+    <show>Regional Marketing Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Retail Project Mnager</selected>
+    <show>Retail Project Mnager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Ret. Supply Chain Integration Specialist</selected>
+    <show>Ret. Supply Chain Integration Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Restaurant Specialist</selected>
+    <show>Restaurant Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Retail Manager Assistant</selected>
+    <show>Retail Manager Assistant</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Deputy Retail Manager</selected>
+    <show>Deputy Retail Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Retail Companies Co-worker</selected>
+    <show>Retail Companies Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Retail Operations Manager</selected>
+    <show>Retail Operations Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Deputy Retail Preparation Manager</selected>
+    <show>Deputy Retail Preparation Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Retail Preparation Manager</selected>
+    <show>Retail Preparation Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Retail Preparation Specialist</selected>
+    <show>Retail Preparation Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Retail Preparation Layout &amp; Support</selected>
+    <show>Retail Preparation Layout &amp; Support</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Retail Preparation Store Planner</selected>
+    <show>Retail Preparation Store Planner</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Retail Supply Chain Integration Manager</selected>
+    <show>Retail Supply Chain Integration Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Retail Support Integration Manager</selected>
+    <show>Retail Support Integration Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Range &amp;Purchasing Manager</selected>
+    <show>Range &amp;Purchasing Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Regional Global Accountant</selected>
+    <show>Regional Global Accountant</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Deputy Risk Manager</selected>
+    <show>Deputy Risk Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Roll Out Manager</selected>
+    <show>Roll Out Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Roll Out Team Leader</selected>
+    <show>Roll Out Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Receive Payment Responsible</selected>
+    <show>Receive Payment Responsible</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Risk Management Administrator</selected>
+    <show>Risk Management Administrator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Retail Supply Integration Team Leader</selected>
+    <show>Retail Supply Integration Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Safety Co-worker</selected>
+    <show>Safety Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales Leader I</selected>
+    <show>Sales Leader I</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales Leader II</selected>
+    <show>Sales Leader II</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales Co-worker</selected>
+    <show>Sales Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Deputy Sales Manager</selected>
+    <show>Deputy Sales Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales Navigator</selected>
+    <show>Sales Navigator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales Team Leader</selected>
+    <show>Sales Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales Planner</selected>
+    <show>Sales Planner</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales Planning Manager</selected>
+    <show>Sales Planning Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales Stimulator</selected>
+    <show>Sales Stimulator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Safety &amp; Security Manager</selected>
+    <show>Safety &amp; Security Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Site Construction Coordinator</selected>
+    <show>Site Construction Coordinator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Service Companies Team Manager</selected>
+    <show>Service Companies Team Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Secretary</selected>
+    <show>Secretary</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Security Co-worker</selected>
+    <show>Security Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Security Manager</selected>
+    <show>Security Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Security Specialist</selected>
+    <show>Security Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Social &amp; Environmental Affairs Manager</selected>
+    <show>Social &amp; Environmental Affairs Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Service Co-worker</selected>
+    <show>Service Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Showroom Planning Manager</selected>
+    <show>Showroom Planning Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Site Installations Coordinator</selected>
+    <show>Site Installations Coordinator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_IKEA Business Manager</selected>
+    <show>IKEA Business Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Social &amp; Environmental Coordinator</selected>
+    <show>Social &amp; Environmental Coordinator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Social &amp; Environmental Manager</selected>
+    <show>Social &amp; Environmental Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales &amp; Supply Support Manager</selected>
+    <show>Sales &amp; Supply Support Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Store &amp; Build Up Manager</selected>
+    <show>Store &amp; Build Up Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Store Design Manager</selected>
+    <show>Store Design Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Store Accountant</selected>
+    <show>Store Accountant</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Succession &amp; Recruitment Manager</selected>
+    <show>Succession &amp; Recruitment Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Superuser I</selected>
+    <show>Superuser I</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Superuser II</selected>
+    <show>Superuser II</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Superuser III</selected>
+    <show>Superuser III</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Superuser 3</selected>
+    <show>Superuser 3</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Superuser</selected>
+    <show>Superuser</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Tax Manager</selected>
+    <show>Tax Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Tax Specialist</selected>
+    <show>Tax Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Tax Compliance Specialist</selected>
+    <show>Tax Compliance Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Technical Specialist</selected>
+    <show>Technical Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Temporary Staff</selected>
+    <show>Temporary Staff</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Team Leader</selected>
+    <show>Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Treasury &amp; Consumer Finance Specialist</selected>
+    <show>Treasury &amp; Consumer Finance Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Trainee</selected>
+    <show>Trainee</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Training Responsible</selected>
+    <show>Training Responsible</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Travel Agent</selected>
+    <show>Travel Agent</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Training &amp; Development Co-worker</selected>
+    <show>Training &amp; Development Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Training &amp; Development Manager</selected>
+    <show>Training &amp; Development Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Training &amp; Development Specialist</selected>
+    <show>Training &amp; Development Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Treasurer Assistant</selected>
+    <show>Treasurer Assistant</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Treasurer</selected>
+    <show>Treasurer</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Visual Merchandiser</selected>
+    <show>Visual Merchandiser</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Visual Merchandising Manager</selected>
+    <show>Visual Merchandising Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Visual Merchandising Specialist</selected>
+    <show>Visual Merchandising Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Visual Merchandising Specialist Senior</selected>
+    <show>Visual Merchandising Specialist Senior</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Web Communications Manager</selected>
+    <show>Web Communications Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Web Editor</selected>
+    <show>Web Editor</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Contact Center Co-worker</selected>
+    <show>Contact Center Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Contact Center Manager</selected>
+    <show>Contact Center Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_BA05 and IKEA Business Shopkeeper</selected>
+    <show>BA05 and IKEA Business Shopkeeper</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Certified Kitchen Seller II</selected>
+    <show>Certified Kitchen Seller II</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Shopkeeper 1</selected>
+    <show>Shopkeeper 1</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_First Interior Designer</selected>
+    <show>First Interior Designer</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_First Visual Merchandiser</selected>
+    <show>First Visual Merchandiser</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Shopkeeper II</selected>
+    <show>Shopkeeper II</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Shopkeeper III</selected>
+    <show>Shopkeeper III</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Accounting Team Assistant</selected>
+    <show>Accounting Team Assistant</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Accounting Team Manager</selected>
+    <show>Accounting Team Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Activity &amp; Sales Support Team Manager</selected>
+    <show>Activity &amp; Sales Support Team Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Activity Co-worker</selected>
+    <show>Activity Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Activity Manager</selected>
+    <show>Activity Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Activity Specialist</selected>
+    <show>Activity Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Team Assistant Activities</selected>
+    <show>Team Assistant Activities</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Deputy Administration Manager</selected>
+    <show>Deputy Administration Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_After Sales Manager</selected>
+    <show>After Sales Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_After Sales Team Leader</selected>
+    <show>After Sales Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Shopkeeper BA 01</selected>
+    <show>Shopkeeper BA 01</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Team Assistant BA 01</selected>
+    <show>Team Assistant BA 01</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales Team Leader BA 01</selected>
+    <show>Sales Team Leader BA 01</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Shopkeeper BA 02</selected>
+    <show>Shopkeeper BA 02</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Team Assistant BA 02</selected>
+    <show>Team Assistant BA 02</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales Team Leader BA 02</selected>
+    <show>Sales Team Leader BA 02</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Shopkeeper BA 03</selected>
+    <show>Shopkeeper BA 03</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Team Assistant BA 03</selected>
+    <show>Team Assistant BA 03</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales Team Leader BA 03</selected>
+    <show>Sales Team Leader BA 03</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Shopkeeper BA 04</selected>
+    <show>Shopkeeper BA 04</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales Team Leader BA 04</selected>
+    <show>Sales Team Leader BA 04</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Shopkeeper BA 05</selected>
+    <show>Shopkeeper BA 05</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Team Assistant BA 05</selected>
+    <show>Team Assistant BA 05</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales Team Leader BA 05</selected>
+    <show>Sales Team Leader BA 05</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Shopkeeper BA 06</selected>
+    <show>Shopkeeper BA 06</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Team Assistant BA 06</selected>
+    <show>Team Assistant BA 06</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales Team Leader BA 06</selected>
+    <show>Sales Team Leader BA 06</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Shopkeeper BA 06 &amp; 10</selected>
+    <show>Shopkeeper BA 06 &amp; 10</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Shopkeeper BA 08</selected>
+    <show>Shopkeeper BA 08</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales Team Leader BA 08</selected>
+    <show>Sales Team Leader BA 08</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Shopkeeper BA 09</selected>
+    <show>Shopkeeper BA 09</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Team Assistant BA 09</selected>
+    <show>Team Assistant BA 09</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales Team Leader BA 09</selected>
+    <show>Sales Team Leader BA 09</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Shopkeeper Ba 09 &amp; Act</selected>
+    <show>Shopkeeper Ba 09 &amp; Act</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Shopkeeper BA 10</selected>
+    <show>Shopkeeper BA 10</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales Team Leader BA 10</selected>
+    <show>Sales Team Leader BA 10</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Shopkeeper BA 40</selected>
+    <show>Shopkeeper BA 40</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales Team Leader BA 40</selected>
+    <show>Sales Team Leader BA 40</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_BA40 and Family Shop Keeper</selected>
+    <show>BA40 and Family Shop Keeper</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Shopkeeper BA 50</selected>
+    <show>Shopkeeper BA 50</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales Team Leader BA 50</selected>
+    <show>Sales Team Leader BA 50</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Shopkeeper BA 60</selected>
+    <show>Shopkeeper BA 60</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales Team Leader BA 60</selected>
+    <show>Sales Team Leader BA 60</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Ballroom Co-worker</selected>
+    <show>Ballroom Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Bistro &amp; Swede Team Assistant</selected>
+    <show>Bistro &amp; Swede Team Assistant</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Commercial SFM &amp; Bistro Manager</selected>
+    <show>Commercial SFM &amp; Bistro Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Business Navigator</selected>
+    <show>Business Navigator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Cash Administration Co-worker</selected>
+    <show>Cash Administration Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Cash Administration Manager</selected>
+    <show>Cash Administration Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Cash Administration Team Assistant</selected>
+    <show>Cash Administration Team Assistant</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Cash Administration Team Manager</selected>
+    <show>Cash Administration Team Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Cafe Manager</selected>
+    <show>Cafe Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Carpenter Specialist</selected>
+    <show>Carpenter Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Carts Co-worker</selected>
+    <show>Carts Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Cash Line Co-worker</selected>
+    <show>Cash Line Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Cash Line Manager</selected>
+    <show>Cash Line Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Cash Line Team Manager</selected>
+    <show>Cash Line Team Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Customer Convenience Manager</selected>
+    <show>Customer Convenience Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Customer Convenience Team Leader</selected>
+    <show>Customer Convenience Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Customer Delivery Manager</selected>
+    <show>Customer Delivery Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Certified Kitchen Seller</selected>
+    <show>Certified Kitchen Seller</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Chef</selected>
+    <show>Chef</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Checkout Services Admin. Co-worker</selected>
+    <show>Checkout Services Admin. Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Checkout Services Team Manager</selected>
+    <show>Checkout Services Team Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Checkout Services Co-worker I</selected>
+    <show>Checkout Services Co-worker I</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Cash Line Administration Manager</selected>
+    <show>Cash Line Administration Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Cleaning Services Co-worker</selected>
+    <show>Cleaning Services Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Cleaning Services Manager</selected>
+    <show>Cleaning Services Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Cleaning Services Team Leader</selected>
+    <show>Cleaning Services Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Contact Center Agent</selected>
+    <show>Contact Center Agent</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Checkout Coworker IKEA FOOD</selected>
+    <show>Checkout Coworker IKEA FOOD</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Communication Responsible</selected>
+    <show>Communication Responsible</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Com &amp; In Co-worker</selected>
+    <show>Com &amp; In Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Deputy Com &amp; In Manager</selected>
+    <show>Deputy Com &amp; In Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Com &amp; In Manager</selected>
+    <show>Com &amp; In Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Com &amp; In Team Leader</selected>
+    <show>Com &amp; In Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Com &amp; In Manager Trainee</selected>
+    <show>Com &amp; In Manager Trainee</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Communication Team Assistant</selected>
+    <show>Communication Team Assistant</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Communication Team Manager</selected>
+    <show>Communication Team Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Commercial Responsible</selected>
+    <show>Commercial Responsible</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Controller Specialist</selected>
+    <show>Controller Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Cook / Assistant</selected>
+    <show>Cook / Assistant</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Cook</selected>
+    <show>Cook</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Cook Server</selected>
+    <show>Cook Server</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Cold Preparation / Server</selected>
+    <show>Cold Preparation / Server</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Craftsman Co-worker</selected>
+    <show>Craftsman Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Customer Relations Specialist</selected>
+    <show>Customer Relations Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Deputy Customer Services Manager</selected>
+    <show>Deputy Customer Services Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Customer Services Manager</selected>
+    <show>Customer Services Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Customer Services Team Assistant</selected>
+    <show>Customer Services Team Assistant</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Customer Services Team Manager</selected>
+    <show>Customer Services Team Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Customer Service Co-worker I</selected>
+    <show>Customer Service Co-worker I</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_CSP Manager</selected>
+    <show>CSP Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_CSP Graphic Design Specialist</selected>
+    <show>CSP Graphic Design Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_CSP Graphic Communication Specialist</selected>
+    <show>CSP Graphic Communication Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_CSP Interior Design Manager</selected>
+    <show>CSP Interior Design Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_CSP In-store Logistics Manager</selected>
+    <show>CSP In-store Logistics Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_CSP In-Store Logistics Specialist</selected>
+    <show>CSP In-Store Logistics Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_CSP Info &amp; Communication Specialist</selected>
+    <show>CSP Info &amp; Communication Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_CSP Interior Design Specialist</selected>
+    <show>CSP Interior Design Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_CSP Sales Market Hall/Activity Manager</selected>
+    <show>CSP Sales Market Hall/Activity Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_CSP Sales Showroom/Self Serve Manager</selected>
+    <show>CSP Sales Showroom/Self Serve Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_CSP Visual  Merch. &amp; Activity Manager</selected>
+    <show>CSP Visual  Merch. &amp; Activity Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_CSP Visual Merch &amp; Activity Specialist</selected>
+    <show>CSP Visual Merch &amp; Activity Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Customer Area Manager</selected>
+    <show>Customer Area Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Customer Area Team Leader</selected>
+    <show>Customer Area Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Dishwasher / Attendant</selected>
+    <show>Dishwasher / Attendant</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Doctor</selected>
+    <show>Doctor</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Environmental Co-worker</selected>
+    <show>Environmental Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Environmental Specialist</selected>
+    <show>Environmental Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Exchange &amp; Returns Team Leader</selected>
+    <show>Exchange &amp; Returns Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Facility Team Assistant</selected>
+    <show>Facility Team Assistant</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Facility Team Leader</selected>
+    <show>Facility Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Facility Team Manager</selected>
+    <show>Facility Team Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Family Co-worker</selected>
+    <show>Family Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_IKEA Family Manager</selected>
+    <show>IKEA Family Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Family Specialist</selected>
+    <show>Family Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Food Service Function Support</selected>
+    <show>Food Service Function Support</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Front Line Team Leader</selected>
+    <show>Front Line Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Frontliner</selected>
+    <show>Frontliner</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Full Serve Warehouse Team Leader</selected>
+    <show>Full Serve Warehouse Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Full Serve Co-worker</selected>
+    <show>Full Serve Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Deputy Full Serve Manager</selected>
+    <show>Deputy Full Serve Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Full Serve Manager</selected>
+    <show>Full Serve Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Furniture Builder</selected>
+    <show>Furniture Builder</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Furniture Pick Up Co-worker</selected>
+    <show>Furniture Pick Up Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Shopkeeper Glasshouse</selected>
+    <show>Shopkeeper Glasshouse</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Team Assistant Glasshouse</selected>
+    <show>Team Assistant Glasshouse</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Goods Flow Manager in Flow Trainee</selected>
+    <show>Goods Flow Manager in Flow Trainee</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Goods Flow Manager In Flow</selected>
+    <show>Goods Flow Manager In Flow</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Goods Flow Team Manager</selected>
+    <show>Goods Flow Team Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Goods Delivery Co-worker</selected>
+    <show>Goods Delivery Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Goods Receiving Manager</selected>
+    <show>Goods Receiving Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Goods Receiver Specialist</selected>
+    <show>Goods Receiver Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Goods Receiver IKEA Food</selected>
+    <show>Goods Receiver IKEA Food</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Graphic Designer</selected>
+    <show>Graphic Designer</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Goods Receiving Co-worker</selected>
+    <show>Goods Receiving Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Greeter</selected>
+    <show>Greeter</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Goods Replenishment Co-worker</selected>
+    <show>Goods Replenishment Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Home Assembly Manager</selected>
+    <show>Home Assembly Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Home Delivery Co-worker</selected>
+    <show>Home Delivery Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Home Furnishing Consultant</selected>
+    <show>Home Furnishing Consultant</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_HR Administrator</selected>
+    <show>HR Administrator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_HR Team Assistant</selected>
+    <show>HR Team Assistant</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_HR Site Manager Trainee</selected>
+    <show>HR Site Manager Trainee</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Shopkeeper IKEA Business / Family</selected>
+    <show>Shopkeeper IKEA Business / Family</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales Team Leader IKEA Bus. / Family</selected>
+    <show>Sales Team Leader IKEA Bus. / Family</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_IKEA FOOD Administrator</selected>
+    <show>IKEA FOOD Administrator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_IKEA Food Specialist</selected>
+    <show>IKEA Food Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_IKEA FOOD Team Assistant</selected>
+    <show>IKEA FOOD Team Assistant</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_IF Team Leader</selected>
+    <show>IF Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_IKEA FOOD Co-worker I</selected>
+    <show>IKEA FOOD Co-worker I</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_IF Bistro &amp; Sweden Shop Co-worker</selected>
+    <show>IF Bistro &amp; Sweden Shop Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Commercial SFM &amp; Bistro Team Leader</selected>
+    <show>Commercial SFM &amp; Bistro Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Kitchen Production Specialist</selected>
+    <show>Kitchen Production Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Kitchen Production Team Leader</selected>
+    <show>Kitchen Production Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Ktchen Production Specialist I</selected>
+    <show>Ktchen Production Specialist I</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Commercial Restaurant Team Leader</selected>
+    <show>Commercial Restaurant Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_IF Sales Team Manager</selected>
+    <show>IF Sales Team Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_IKEA Card</selected>
+    <show>IKEA Card</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Information &amp; Communication Specialist</selected>
+    <show>Information &amp; Communication Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Interior Design Manager Trainee</selected>
+    <show>Interior Design Manager Trainee</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Info &amp; Smaland Co-worker</selected>
+    <show>Info &amp; Smaland Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Info &amp; Smaland Manager</selected>
+    <show>Info &amp; Smaland Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Info &amp; Smaland Team Leader</selected>
+    <show>Info &amp; Smaland Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Interior Architect</selected>
+    <show>Interior Architect</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Interior Design Team Assistant</selected>
+    <show>Interior Design Team Assistant</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Interior Design Team Manager</selected>
+    <show>Interior Design Team Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Interior Design Co-worker I</selected>
+    <show>Interior Design Co-worker I</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Intern</selected>
+    <show>Intern</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Inventory Specialist</selected>
+    <show>Inventory Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_In-store Logistics Manager - Store</selected>
+    <show>In-store Logistics Manager - Store</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_IT Co-worker</selected>
+    <show>IT Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_IT Team Assistant</selected>
+    <show>IT Team Assistant</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_IT Team Manager</selected>
+    <show>IT Team Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Kitchen &amp; Dining Co-worker</selected>
+    <show>Kitchen &amp; Dining Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Kitchen &amp; Restaurant Team Leader</selected>
+    <show>Kitchen &amp; Restaurant Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Local Marketing Analyst</selected>
+    <show>Local Marketing Analyst</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Local Marketing Co-worker</selected>
+    <show>Local Marketing Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Logistics Administration Co-worker</selected>
+    <show>Logistics Administration Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Logistics Administration Team Manager</selected>
+    <show>Logistics Administration Team Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Logistics Function Support</selected>
+    <show>Logistics Function Support</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Logistics Co-worker I</selected>
+    <show>Logistics Co-worker I</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Logistics Co-worker II</selected>
+    <show>Logistics Co-worker II</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Logistics Team Assistant</selected>
+    <show>Logistics Team Assistant</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Logistics Team Leader</selected>
+    <show>Logistics Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Logistics Team Manager</selected>
+    <show>Logistics Team Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Logistics Manager Trainee</selected>
+    <show>Logistics Manager Trainee</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Deputy Logistics Warehouse Manager</selected>
+    <show>Deputy Logistics Warehouse Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Maintenance Co-worker</selected>
+    <show>Maintenance Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Marketing Manager</selected>
+    <show>Marketing Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Montera &amp; Dinera &amp; Bistro Manager</selected>
+    <show>Montera &amp; Dinera &amp; Bistro Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Nurse</selected>
+    <show>Nurse</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Operations Manager</selected>
+    <show>Operations Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Operations Manager Trainee</selected>
+    <show>Operations Manager Trainee</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Goods Flow Manager Out Flow</selected>
+    <show>Goods Flow Manager Out Flow</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Planner</selected>
+    <show>Planner</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_P-tag Co-worker</selected>
+    <show>P-tag Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Q-Store Product Quality Technician</selected>
+    <show>Q-Store Product Quality Technician</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Q-Store Quality Manager</selected>
+    <show>Q-Store Quality Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Quality Co-worker</selected>
+    <show>Quality Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Quality Specialist</selected>
+    <show>Quality Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Quality Support</selected>
+    <show>Quality Support</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Range Responsible</selected>
+    <show>Range Responsible</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Range Support</selected>
+    <show>Range Support</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Rebuilding Co-worker</selected>
+    <show>Rebuilding Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Receiving Team Leader</selected>
+    <show>Receiving Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Recovery Co-worker</selected>
+    <show>Recovery Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Recovery Responsible</selected>
+    <show>Recovery Responsible</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Recovery Specialist</selected>
+    <show>Recovery Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Recovery Team Assistant</selected>
+    <show>Recovery Team Assistant</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Recovery Team Leader</selected>
+    <show>Recovery Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Recovery Team Manager</selected>
+    <show>Recovery Team Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Refilling Co-worker</selected>
+    <show>Refilling Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Refilling Manager</selected>
+    <show>Refilling Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Refilling Team Leader</selected>
+    <show>Refilling Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Replenishment Manager</selected>
+    <show>Replenishment Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Replenishment Team Leader</selected>
+    <show>Replenishment Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Team Assistant Sales</selected>
+    <show>Team Assistant Sales</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales Activities Co-worker</selected>
+    <show>Sales Activities Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Safety &amp; Security Co-worker</selected>
+    <show>Safety &amp; Security Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Safety &amp; Security Team Leader</selected>
+    <show>Safety &amp; Security Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales Apprentice</selected>
+    <show>Sales Apprentice</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales Leader</selected>
+    <show>Sales Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales Manager Trainee</selected>
+    <show>Sales Manager Trainee</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales Co-worker II</selected>
+    <show>Sales Co-worker II</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales Co-worker III</selected>
+    <show>Sales Co-worker III</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales Co-worker IV</selected>
+    <show>Sales Co-worker IV</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales External Co-worker</selected>
+    <show>Sales External Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales Manager Furniture</selected>
+    <show>Sales Manager Furniture</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales Function Support</selected>
+    <show>Sales Function Support</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales Manager Market Place</selected>
+    <show>Sales Manager Market Place</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales &amp; Service Expeditor</selected>
+    <show>Sales &amp; Service Expeditor</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales Self Serve Team Leader</selected>
+    <show>Sales Self Serve Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales &amp; Supply Support Manager Trainee</selected>
+    <show>Sales &amp; Supply Support Manager Trainee</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales Support Specialist</selected>
+    <show>Sales Support Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales Space Specialist</selected>
+    <show>Sales Space Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales &amp; Supply Support</selected>
+    <show>Sales &amp; Supply Support</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales &amp; Supply Team Assistant</selected>
+    <show>Sales &amp; Supply Team Assistant</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Security Responsible</selected>
+    <show>Security Responsible</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Shopkeeper Self Serve</selected>
+    <show>Shopkeeper Self Serve</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Self Serve Co-worker</selected>
+    <show>Self Serve Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Self Serve Manager</selected>
+    <show>Self Serve Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Self Serve Team Assistant</selected>
+    <show>Self Serve Team Assistant</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Self Serve Team Manager</selected>
+    <show>Self Serve Team Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Services Function Support</selected>
+    <show>Services Function Support</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Deputy Service Team Leader</selected>
+    <show>Deputy Service Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Services Manager</selected>
+    <show>Services Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Service Team Leader</selected>
+    <show>Service Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Shift Leader</selected>
+    <show>Shift Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Shopkeeper Activities</selected>
+    <show>Shopkeeper Activities</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Deputy Sales Team Leader</selected>
+    <show>Deputy Sales Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_IKEA Business Specialist</selected>
+    <show>IKEA Business Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Safety &amp; Security Function Support</selected>
+    <show>Safety &amp; Security Function Support</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sales &amp; Supply Support Co-worker</selected>
+    <show>Sales &amp; Supply Support Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Staff Scheduler</selected>
+    <show>Staff Scheduler</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Store Manager Assistant</selected>
+    <show>Store Manager Assistant</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Assistant Store Manager</selected>
+    <show>Assistant Store Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Assistant Store Manager Sales</selected>
+    <show>Assistant Store Manager Sales</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Assistant Store Manager Services</selected>
+    <show>Assistant Store Manager Services</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Swedish Food Market Co-worker</selected>
+    <show>Swedish Food Market Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Team Support</selected>
+    <show>Team Support</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Deputy Team Manager</selected>
+    <show>Deputy Team Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Trainer</selected>
+    <show>Trainer</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Visual Merchandising Co-worker</selected>
+    <show>Visual Merchandising Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Visual Merchandising Team Assistant</selected>
+    <show>Visual Merchandising Team Assistant</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Visual Merchandising Team Manager</selected>
+    <show>Visual Merchandising Team Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Work Council Representative</selected>
+    <show>Work Council Representative</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Accounts Payable</selected>
+    <show>Accounts Payable</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Administrator Reception</selected>
+    <show>Administrator Reception</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Assembly co-worker</selected>
+    <show>Assembly co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Business Navigation Manager</selected>
+    <show>Business Navigation Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Business Navigation Team Leader</selected>
+    <show>Business Navigation Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Business Support Team Leader</selected>
+    <show>Business Support Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Canteen Coordinator</selected>
+    <show>Canteen Coordinator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Canteen Co-worker</selected>
+    <show>Canteen Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Cleaner</selected>
+    <show>Cleaner</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Consumables Procurement Co-worker</selected>
+    <show>Consumables Procurement Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Customs Administrator</selected>
+    <show>Customs Administrator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Customs Clerk</selected>
+    <show>Customs Clerk</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Customs Co-worker</selected>
+    <show>Customs Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Customs Specialist</selected>
+    <show>Customs Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Customs Team Leader</selected>
+    <show>Customs Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_DC Handling Material Team Leader</selected>
+    <show>DC Handling Material Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_DC Manager</selected>
+    <show>DC Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_DC Quality Co-worker</selected>
+    <show>DC Quality Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_DC Quality Team Leader</selected>
+    <show>DC Quality Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Delivery Support Manager</selected>
+    <show>Delivery Support Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Delivery Support Team Leader</selected>
+    <show>Delivery Support Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Deputy Delivery Support Manager</selected>
+    <show>Deputy Delivery Support Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Deputy Team Leader</selected>
+    <show>Deputy Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Deviation Claims Administrator</selected>
+    <show>Deviation Claims Administrator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Dispatch-Planner Co-worker</selected>
+    <show>Dispatch-Planner Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Dispatch-Planner Team Leader</selected>
+    <show>Dispatch-Planner Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Distribution Services Systems Manager</selected>
+    <show>Distribution Services Systems Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Driver Manual Palette Jack</selected>
+    <show>Driver Manual Palette Jack</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Environmental Quality Co-worker</selected>
+    <show>Environmental Quality Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Facility Manager</selected>
+    <show>Facility Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Flow Coordinator</selected>
+    <show>Flow Coordinator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Flow Planner</selected>
+    <show>Flow Planner</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Forklift Technician</selected>
+    <show>Forklift Technician</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_General Accountant</selected>
+    <show>General Accountant</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_General Services &amp; HR Assistant</selected>
+    <show>General Services &amp; HR Assistant</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Goods Flow Supply Support</selected>
+    <show>Goods Flow Supply Support</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Handling Material Controller</selected>
+    <show>Handling Material Controller</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Handling Materials Administrator</selected>
+    <show>Handling Materials Administrator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Handling Materials Team Leader</selected>
+    <show>Handling Materials Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Head of Forklift Garage</selected>
+    <show>Head of Forklift Garage</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_HR Training Administrator</selected>
+    <show>HR Training Administrator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Information &amp; Communication Co-worker</selected>
+    <show>Information &amp; Communication Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Internal Communication Manager</selected>
+    <show>Internal Communication Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Inventory Control Manager</selected>
+    <show>Inventory Control Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Inventory Control Team Leader</selected>
+    <show>Inventory Control Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Inventory Co-worker</selected>
+    <show>Inventory Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Office Service Co-worker</selected>
+    <show>Office Service Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Office Service Manager</selected>
+    <show>Office Service Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Operational Support</selected>
+    <show>Operational Support</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Operational Support Co-worker</selected>
+    <show>Operational Support Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Preventative Maintenance Mechanic</selected>
+    <show>Preventative Maintenance Mechanic</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Product Quality Team Leader</selected>
+    <show>Product Quality Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Purchaser</selected>
+    <show>Purchaser</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_QSC Product Quality Coordinator</selected>
+    <show>QSC Product Quality Coordinator</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_QSC Supply Quality Co-worker</selected>
+    <show>QSC Supply Quality Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Quality Team Leader</selected>
+    <show>Quality Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Range System Support</selected>
+    <show>Range System Support</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Risk Manager</selected>
+    <show>Risk Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Security Guard</selected>
+    <show>Security Guard</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Store Quality Technician</selected>
+    <show>Store Quality Technician</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Store Support Co-worker</selected>
+    <show>Store Support Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Supply Quality Co-worker</selected>
+    <show>Supply Quality Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Sustainability Developer</selected>
+    <show>Sustainability Developer</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Technician</selected>
+    <show>Technician</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Transport Business Development Support</selected>
+    <show>Transport Business Development Support</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Truck Driver</selected>
+    <show>Truck Driver</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_User &amp; Maintenance Support</selected>
+    <show>User &amp; Maintenance Support</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Warehouse Co-worker</selected>
+    <show>Warehouse Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Warehouse Co-worker Senior</selected>
+    <show>Warehouse Co-worker Senior</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Warehouse Team Leader</selected>
+    <show>Warehouse Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Warehousing Logistics Manager</selected>
+    <show>Warehousing Logistics Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Warehousing Logistics Team Leader</selected>
+    <show>Warehousing Logistics Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Local Name_Yard Operations Co-worker</selected>
+    <show>Yard Operations Co-worker</show>
+  </dependent>
+  </predefined>

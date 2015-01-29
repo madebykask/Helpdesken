@@ -27,7 +27,7 @@
             <option value ="Yes">Yes</option>
         </options>
       </element>
-      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1">
+      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1" default="Standard">
         <options>
             <option value=""></option>
             <option value ="Urgent">Urgent</option>
@@ -39,7 +39,7 @@
     <!--Basic Termination Details-->
     <tab name="#Basic" label="Basic">
       <element name="BasicTerminationType" type="select" label="Termination Type" mandatory="1">
-        &pre_termination_reason;
+        <!--&pre_termination_reason;-->
         <options>
             <option value=""></option>
             <option value ="Casual Termination">Casual Termination</option>
@@ -71,7 +71,7 @@
             <option value ="Redundancy">Redundancy</option>
             <option value ="Other">Other</option>
         </options>
-        &pre_termination_reason;
+        <!--&pre_termination_reason;-->
       </element>
       <element name="TerminationReason" type="select" label="Termination Reason" mandatory="1">
         <options>
@@ -109,12 +109,14 @@
           <option value="Payment Type 3">Payment Type 3</option>
         </options>
       </element>
-      <element name="Amount" type="text"   label="Amount/Units"></element>
-      <element name="Net_Gross" type="text"   label="Net/Gross"></element>
+      <element name="Amount" type="text"   label="Amount/Units">
+        <mandatoryIfNotEmpty name="PaymentType"></mandatoryIfNotEmpty>
+      </element>
+      <!--<element name="Net_Gross" type="text"   label="Net/Gross"></element>
       <element name="PaymentDate" type="date" format="dd.MM.yyyy"  label="Payment Date:">
         <mandatoryIf name="PaymentType">Payment Type 1,Payment Type 2,Payment Type 3</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
-      </element>
+      </element>-->
       <element name="PaymentType2" type="select" label="Payment Type" >
         <options>
           <option value=""></option>
@@ -123,12 +125,14 @@
           <option value="Payment Type 3">Payment Type 3</option>
         </options>
       </element>
-      <element name="Amount2" type="text"   label="Amount/Units"></element>
-      <element name="Net_Gross2" type="text"   label="Net/Gross"></element>
+      <element name="Amount2" type="text"   label="Amount/Units">
+        <mandatoryIfNotEmpty name="PaymentType2"></mandatoryIfNotEmpty>
+      </element>
+      <!--<element name="Net_Gross2" type="text"   label="Net/Gross"></element>
       <element name="PaymentDate2" type="date" format="dd.MM.yyyy" label="Payment Date:">
         <mandatoryIf name="PaymentType2">Payment Type 1,Payment Type 2,Payment Type 3</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
-      </element>
+      </element>-->
       <element name="PaymentType3" type="select"   label="Payment Type" >
         <options>
           <option value=""></option>
@@ -137,12 +141,38 @@
           <option value="Payment Type 3">Payment Type 3</option>
         </options>
       </element>
-      <element name="Amount3" type="text"   label="Amount/Units"></element>
-      <element name="Net_Gross3" type="text"   label="Net/Gross"></element>
+      <element name="Amount3" type="text"   label="Amount/Units">
+        <mandatoryIfNotEmpty name="PaymentType3"></mandatoryIfNotEmpty>
+      </element>
+      <!--<element name="Net_Gross3" type="text"   label="Net/Gross"></element>
       <element name="PaymentDate3" type="date" format="dd.MM.yyyy" label="Payment Date:">
         <mandatoryIf name="PaymentType3">Payment Type 1,Payment Type 2,Payment Type 3</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
+      </element>-->
+      <element name="PaymentType4" type="select"   label="Payment Type" >
+        <options>
+          <option value=""></option>
+          <option value="Payment Type 1">Payment Type 1</option>
+          <option value="Payment Type 2">Payment Type 2</option>
+          <option value="Payment Type 3">Payment Type 3</option>
+        </options>
       </element>
+      <element name="Amount4" type="text"   label="Amount/Units">
+        <mandatoryIfNotEmpty name="PaymentType4"></mandatoryIfNotEmpty>
+      </element>
+
+      <element name="PaymentType5" type="select"   label="Payment Type" >
+        <options>
+          <option value=""></option>
+          <option value="Payment Type 1">Payment Type 1</option>
+          <option value="Payment Type 2">Payment Type 2</option>
+          <option value="Payment Type 3">Payment Type 3</option>
+        </options>
+      </element>
+      <element name="Amount5" type="text"   label="Amount/Units">
+        <mandatoryIfNotEmpty name="PaymentType5"></mandatoryIfNotEmpty>
+      </element>
+
       <!--Deductions from Termination Payment-->
       <element name="Deductions" type="hidden" default="1"></element>
       <element name="DeductionType" type="select"   label="Deduction Type">
@@ -153,12 +183,14 @@
           <option value="Deduction Type 3">Deduction Type 3</option>
         </options>
       </element>
-      <element name="DeductionAmount" type="text"   label="Amount/Units"></element>
-      <element name="DeductionNet_Gross" type="text"   label="Net/Gross"></element>
+      <element name="DeductionAmount" type="text"   label="Amount/Units">
+        <mandatoryIfNotEmpty name="DeductionType"></mandatoryIfNotEmpty>
+      </element>
+      <!--<element name="DeductionNet_Gross" type="text"   label="Net/Gross"></element>
       <element name="DeductionDate" type="date" format="dd.MM.yyyy" label="Deduction Date:">
         <mandatoryIf name="DeductionType">Deduction Type 1,Deduction Type 2,Deduction Type 3</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
-      </element>
+      </element>-->
       <element name="DeductionType2" type="select"   label="Deduction Type">
         <options>
           <option value=""></option>
@@ -167,12 +199,14 @@
           <option value="Deduction Type 3">Deduction Type 3</option>
         </options>
       </element>
-      <element name="DeductionAmount2" type="text"   label="Amount/Units"></element>
-      <element name="DeductionNet_Gross2" type="text"   label="Net/Gross"></element>
+      <element name="DeductionAmount2" type="text"   label="Amount/Units">
+        <mandatoryIfNotEmpty name="DeductionType2"></mandatoryIfNotEmpty>
+      </element>
+      <!--<element name="DeductionNet_Gross2" type="text"   label="Net/Gross"></element>
       <element name="DeductionDate2" type="date" format="dd.MM.yyyy" label="Deduction Date:">
         <mandatoryIf name="DeductionType2">Deduction Type 1,Deduction Type 2,Deduction Type 3</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
-      </element>
+      </element>-->
       <element name="DeductionType3" type="select"   label="Deduction Type" >
         <options>
           <option value=""></option>
@@ -181,11 +215,37 @@
           <option value="Deduction Type 3">Deduction Type 3</option>
         </options>
       </element>
-      <element name="DeductionAmount3" type="text"   label="Amount/Units"></element>
-      <element name="DeductionNet_Gross3" type="text"   label="Net/Gross"></element>
-      <element name="DeductionDate3" type="date" format="dd.MM.yyyy" label="Deduction Date:">
+      <element name="DeductionAmount3" type="text"   label="Amount/Units">
+        <mandatoryIfNotEmpty name="DeductionType3"></mandatoryIfNotEmpty>
+      </element>
+      <!--<element name="DeductionNet_Gross3" type="text"   label="Net/Gross"></element>-->
+      <!--<element name="DeductionDate3" type="date" format="dd.MM.yyyy" label="Deduction Date:">
         <mandatoryIf name="DeductionType3">Deduction Type 1,Deduction Type 2,Deduction Type 3</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
+      </element>-->
+
+      <element name="DeductionType4" type="select"   label="Deduction Type" >
+        <options>
+          <option value=""></option>
+          <option value="Deduction Type 1">Deduction Type 1</option>
+          <option value="Deduction Type 2">Deduction Type 2</option>
+          <option value="Deduction Type 3">Deduction Type 3</option>
+        </options>
+      </element>
+      <element name="DeductionAmount4" type="text"   label="Amount/Units">
+        <mandatoryIfNotEmpty name="DeductionType4"></mandatoryIfNotEmpty>
+      </element>
+
+      <element name="DeductionType5" type="select"   label="Deduction Type" >
+        <options>
+          <option value=""></option>
+          <option value="Deduction Type 1">Deduction Type 1</option>
+          <option value="Deduction Type 2">Deduction Type 2</option>
+          <option value="Deduction Type 3">Deduction Type 3</option>
+        </options>
+      </element>
+      <element name="DeductionAmount5" type="text"   label="Amount/Units">
+        <mandatoryIfNotEmpty name="DeductionType5"></mandatoryIfNotEmpty>
       </element>
     </tab>    
   </fields>

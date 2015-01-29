@@ -49,16 +49,8 @@
                     $('#' + prefix + 'Country').val(selectedText);
                 }
             }
-
         });
 
-
-
-        $(document).on('change', '#Extent', function (e) {
-            e.preventDefault();
-            if ($(this).val() === 'Full time')
-                $('#Workload').val('100');
-        });
 
         validate.run($('#actionState').val());
 
@@ -66,7 +58,7 @@
             var val = $(this).val();
             validate.run(val);
         });
-
+        
     </script>
 
     @Html.Partial("_Validate", Model)

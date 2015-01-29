@@ -17,14 +17,16 @@
       <element name="Co-WorkerGlobalviewID" type="text" label="Co-Worker Globalview ID" mandatory="1"></element>
       <element name="FirstName" type="text" label="Co-Worker First Name" mandatory="1"></element>
       <element name="LastName" type="text" label="Co-Worker Last Name" mandatory="1"></element>
-      <element name="IKEAEmailAddress" type="text" label="IKEA Email Address" mandatory="1"></element>
+      <element name="IKEAEmailAddress" type="text" label="IKEA Email Address" mandatory="1">
+        <regex inherit="email" message="" pattern=""></regex>
+      </element>
       <element name="IKEANetworkID" type="text" label="IKEA Network ID" mandatory="1"></element>
       <element name="Company" type="text" label="Company"></element>
       <element name="BusinessUnit" type="text" label="Business Unit"></element>
       <element name="ServiceArea" type="text" label="Function"></element>
       <element name="Department" type="text" label="Department"></element>
 
-      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1">
+      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1" default="Standard">
         <options>
           <option value=""></option>
           <option value="Urgent">Urgent</option>
@@ -43,21 +45,24 @@
           <option value="Loan">Loan</option>        
         </options>
       </element>
-      <element type="text" name="PaymentAmount" label="Amount" mandatory="1"></element>
-      <element type="text" name="PaymentCurrency" label="Currency" mandatory="1"></element>
-      <element type="date" name="PaymentDate" label="Payment date" format="dd.MM.yyyy" mandatory="1">
-        <regex inherit="date" pattern="" message=""></regex>
+      <element type="text" name="PaymentAmount" label="Amount" mandatory="1">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
       </element>
+      <!--<element type="text" name="PaymentCurrency" label="Currency" mandatory="1"></element>-->
+     
       <element type="select" name="PaymentMethod" label="Payment Method" mandatory="1">
         <options>
           <option value=""></option>
-          <option value="By Payroll">By Payroll</option>
-          <option value="By Off cycle">By Off cycle</option>
-          <option value="By Manual Payment">By Manual Payment</option>
+          <option value="Payroll">Payroll</option>
+          <option value="Manual Payment">Manual Payment</option>
         </options>
       </element>
+      <element type="date" name="PaymentDate" label="Payment date" format="dd.MM.yyyy" >
+        <regex inherit="date" pattern="" message=""></regex>
+        <mandatoryIf name="PaymentMethod">Manual Payment</mandatoryIf>
+      </element>
 
-      <element type="select" name="DeductionType" label="Deduction Type" >
+      <!--<element type="select" name="DeductionType" label="Deduction Type" >
         <options>
           <option value=""></option>
           <option value="Deduction Type 1">Deduction Type 1</option>
@@ -71,16 +76,20 @@
       </element>
       <element type="text" name="DeductionNetGross" label="Net/Gross" >
         <mandatoryIf name="PaymentType">Loan</mandatoryIf>
-      </element>
-      <element type="select" name="Re-PaymentType" label="Re-Payment Type">
+      </element>-->
+      <element type="select" name="Re-PaymentType" label=" Loan Re-Payment Type">
         <options>
           <option value=""></option>
-          <option value="Intervals in periods">Intervals in periods</option>
-          <option value="Intervals in units">Intervals in units</option>
+          <option value="Instalments">Instalments</option>
+          <option value="Amounts/units">Amounts/units</option>
         </options>
         <mandatoryIf name="PaymentType">Loan</mandatoryIf>
       </element>
-      <element type="date" name="1stPayment" label="1st Payment" format="dd.MM.yyyy">
+      <element type="text" name="Re-PaymentAmountUnits" label="Loan Re-payment Amount/Units">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+        <mandatoryIf name="PaymentType">Loan</mandatoryIf>
+      </element>
+      <element type="date" name="1stPayment" label="Loan re-payments start date" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
         <mandatoryIf name="PaymentType">Loan</mandatoryIf>
       </element>

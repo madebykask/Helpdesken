@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <predefined>
-  <name>PayrollCategory</name>
+  <name>CostCentre</name>
   <dependent>
     <selected>Accounting Assistant - Reconciliation</selected>
     <show1>44</show1>
@@ -311,6 +311,13 @@
   </dependent>
   <dependent>
     <selected>Kitchen Production Manager</selected>
+    <show1>51</show1>
+    <show2>Level 1</show2>
+    <show3>Level 1</show3>
+    <show4>Salaried Management</show4>
+  </dependent>
+  <dependent>
+    <selected>IKEA FAMILY Leader - Store</selected>
     <show1>51</show1>
     <show2>Level 1</show2>
     <show3>Level 1</show3>
@@ -653,7 +660,7 @@
     <show4>Salaried</show4>
   </dependent>
   <dependent>
-    <selected>Visual Merchandise/Activity Manager</selected>
+    <selected>Visual Merchandise / Activity Manager</selected>
     <show1>51</show1>
     <show2>Level 1</show2>
     <show3>Level 1</show3>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<options>
+  <option value=""></option>
+  <option value="Death">Death</option>
+  <option value="Acquisition and loss in same month">Acquisition and loss in same month</option>
+  <option value="Enlist military service">Enlist military service</option>
+  <option value="Oversea work (Full reduction)">Oversea work (Full reduction)</option>
+  <option value="Oversea work (Half reduction)">Oversea work (Half reduction)</option>
+  <option value="Government advised amount">Government advised amount</option>
+  <option value="Cancellation of reduction">Cancellation of reduction</option>
+  <option value="100% Exempted – Medical and Long Term Insurance">100% Exempted – Medical and Long Term Insurance</option>
+  <option value="50% Exempted – Medical and Long Term Insurance">50% Exempted – Medical and Long Term Insurance</option>
+  <option value="Acquisition by request below 18 age">Acquisition by request below 18 age</option>
+  <option value="Transference(business)">Transference(business)</option>
+  <option value="Leaving company">Leaving company</option>
+  <option value="Loss of nationality">Loss of nationality</option>
+  <option value="Being 60 years old">Being 60 years old</option>
+  <option value="Hospitalisation more than 3 months">Hospitalisation more than 3 months</option>
+  <option value="Resumption of payment">Resumption of payment</option>
+  <option value="Leave without pay">Leave without pay</option>
+  <option value="EI - Employee in LOA">EI - Employee in LOA</option>  
+</options>

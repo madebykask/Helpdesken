@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+  <options>
+    <option value="Live together">Live together</option>
+    <option value="House Insurance">House Insurance</option>
+    <option value="Family allowance">Family allowance</option>
+    <option value="Basic OH Pansion">Basic OH Pansion</option>
+    <option value="Medical Expense">Medical Expense</option>
+    <option value="Credit card etc.">Credit card etc.</option>
+  </options> 

@@ -13,7 +13,9 @@
     }
 }
 <tr>
-    <td class="tdstrong">@Model.Label("FileBase")</td>
+    <td class="tdstrong">@Model.Label("FileBase")
+        <br /><small><em>@Model.Translate("Maximum allowed file size: 5 MB")</em></small>
+    </td>
     <td id="container">
         @if(string.IsNullOrEmpty(disabled))
         {
@@ -41,8 +43,8 @@
 
                     @if(string.IsNullOrEmpty(disabled))
                     {
-                <a class="btn btn-mini btn-link btn-delete-file" href="@Url.Action("delete", "files", new { area = "", id = file.Id, caseNumber = Model.Contract.CaseNumber })">
-                    <i class="icon-trash"></i></a>
+                        <a class="btn btn-mini btn-link btn-delete-file" href="@Url.Action("delete", "files", new { area = "", id = file.Id, caseNumber = Model.Contract.CaseNumber })">
+                            <i class="icon-trash"></i></a>
                     }
                 </div>
                 }

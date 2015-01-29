@@ -1,7 +1,6 @@
 ﻿@model ECT.FormLib.Models.FormModel
 @using ECT.FormLib;
 @using ECT.FormLib.Models;
-
 <div class="tab-pane" id="payment">
     <div class="span6">
         <table class="table">
@@ -28,76 +27,7 @@
                         <h4>@Model.Translate("Allowances")</h4>
                     </td>
                 </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("AllowancesType")</td>
-                    <td>
-                        @Model.Element("AllowancesType")
-                    </td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("AllowancesAmountUnits")</td>
-                    <td>
-                        @Model.Element("AllowancesAmountUnits")
-                    </td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("AllowancesNetGross")</td>
-                    <td>
-                        @Model.Element("AllowancesNetGross")
-                    </td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("AllowancesValidFrom")</td>
-                    <td>
-                        @Model.Element("AllowancesValidFrom")
-                    </td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("AllowancesValidTo")</td>
-                    <td>
-                        @Model.Element("AllowancesValidTo")
-                    </td>
-                </tr>
-                
-                @for(int i = 2; i <= 3; i++)
-                {
-                    <tr class="allowance@(i.ToString())" id="allowance@(i.ToString())">
-                        <td class="tdstrong" colspan="2">
-                            <h4>@Model.Translate("Allowances") @i.ToString()</h4>
-                        </td>
-                    </tr>
-                    <tr class="allowance@(i.ToString())">
-                        <td class="tdstrong">@Model.Label("AllowancesType" + i.ToString())</td>
-                        <td>
-                            @Model.Element("AllowancesType" + i.ToString())</td>
-                    </tr>
-                    <tr class="allowance@(i.ToString())">
-                        <td class="tdstrong">@Model.Label("AllowancesAmountUnits" + i.ToString())</td>
-                        <td>
-                            @Model.Element("AllowancesAmountUnits" + i.ToString())</td>
-                    </tr>
-                    <tr class="allowance@(i.ToString())">
-                        <td class="tdstrong">@Model.Label("AllowancesNetGross" + i.ToString())</td>
-                        <td>
-                            @Model.Element("AllowancesNetGross" + i.ToString())</td>
-                    </tr>
-                    <tr class="allowance@(i.ToString())">
-                        <td class="tdstrong">@Model.Label("AllowancesValidFrom" + i.ToString())</td>
-                        <td>
-                            @Model.Element("AllowancesValidFrom" + i.ToString())</td>
-                    </tr>
-                    <tr class="allowance@(i.ToString())">
-                        <td class="tdstrong">@Model.Label("AllowancesValidTo" + i.ToString())</td>
-                        <td>
-                            @Model.Element("AllowancesValidTo" + i.ToString())</td>
-                    </tr>
-                }
-                <tr id="addAllowanceTr">
-                    <td colspan="2">
-                        @Model.Element("Allowances")
-                        <a id="addAllowance" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Allowance")</a></td>
-                </tr>
-
+                @Html.Partial("Sections/_Allowances", Model)
             </tbody>
         </table>
     </div>
@@ -109,78 +39,7 @@
                         <h4>@Model.Translate("Deductions")</h4>
                     </td>
                 </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("DeductionsType")</td>
-                    <td>
-                        @Model.Element("DeductionsType")
-                    </td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("DeductionsAmountUnits")</td>
-                    <td>
-                        @Model.Element("DeductionsAmountUnits")
-                    </td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("DeductionsNetGross")</td>
-                    <td>
-                        @Model.Element("DeductionsNetGross")
-                    </td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("DeductionsValidFrom")</td>
-                    <td>
-                        @Model.Element("DeductionsValidFrom")
-                    </td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("DeductionsValidTo")</td>
-                    <td>
-                        @Model.Element("DeductionsValidTo")
-                    </td>
-                </tr>
-                
-                 @for(int i = 2; i <= 3; i++)
-                {
-                    <tr class="deduction@(i.ToString())" id="deduction@(i.ToString())">
-                        <td class="tdstrong" colspan="2">
-                            <h4>@Model.Translate("Deductions") @i.ToString()</h4>
-                        </td>
-                    </tr>
-                    <tr class="deduction@(i.ToString())">
-                        <td class="tdstrong">@Model.Label("DeductionsType" + i.ToString())</td>
-                        <td>
-                            @Model.Element("DeductionsType" + i.ToString())</td>
-                    </tr>
-                    <tr class="deduction@(i.ToString())">
-                        <td class="tdstrong">@Model.Label("DeductionsAmountUnits" + i.ToString())</td>
-                        <td>
-                            @Model.Element("DeductionsAmountUnits" + i.ToString())</td>
-                    </tr>
-                    <tr class="deduction@(i.ToString())">
-                        <td class="tdstrong">@Model.Label("DeductionsNetGross" + i.ToString())</td>
-                        <td>
-                            @Model.Element("DeductionsNetGross" + i.ToString())</td>
-                    </tr>
-                    <tr class="deduction@(i.ToString())">
-                        <td class="tdstrong">@Model.Label("DeductionsValidFrom" + i.ToString())</td>
-                        <td>
-                            @Model.Element("DeductionsValidFrom" + i.ToString())</td>
-                    </tr>
-                    <tr class="deduction@(i.ToString())">
-                        <td class="tdstrong">@Model.Label("DeductionsValidTo" + i.ToString())</td>
-                        <td>
-                            @Model.Element("DeductionsValidTo" + i.ToString())</td>
-                    </tr>
-                }
-                <tr id="addDeductionTr">
-                    <td colspan="2">
-                        @Model.Element("Deductions")
-                        <a id="addDeduction" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Deduction")</a></td>
-                </tr>
-               
-                
-
+                @Html.Partial("Sections/_Deductions", Model)
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Bonus Eligibility")</h4>
@@ -192,25 +51,23 @@
                         @Model.Element("OneIKEABonusLevel")
                     </td>
                 </tr>
-                
-                <tr class="globalmobility">
+                <tr class="globalmobility-first">
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Global Mobility")</h4>
                     </td>
                 </tr>
-                <tr class="globalmobility">
+                <tr class="globalmobility-first">
                     <td class="tdstrong">@Model.Label("TaxAssignment")</td>
                     <td>
                         @Model.Element("TaxAssignment")
                     </td>
                 </tr>
-                <tr class="globalmobility">
+                <tr class="globalmobility-first">
                     <td class="tdstrong">@Model.Label("SocialInsuranceAssignment")</td>
                     <td>
                         @Model.Element("SocialInsuranceAssignment")
                     </td>
                 </tr>
-                
             </tbody>
         </table>
     </div>
@@ -220,21 +77,37 @@
     // Following script is for hiding global mobility class if NewToIKEA is equal to string 'International Transfer'
     if ('@Model.GetAnswer("NewToIKEA")' == 'International Transfer') {
         var globalmobility = document.getElementsByClassName('globalmobility'), i;
-        for (var i = 0; i < globalmobility.length; i ++) {
+        for (var i = 0; i < globalmobility.length; i++) {
             globalmobility[i].style.display = 'none';
         }
     }
 
-        document.getElementById('AllowancesValidFrom').value = '@Model.GetAnswer("ContractStartDate")';
-        document.getElementById('DeductionsValidFrom').value = '@Model.GetAnswer("ContractStartDate")';
-    
-        for (var i = 2; i <= 3; i++)
-        {
-            var AllowancesValidFrom = "AllowancesValidFrom" + [i].toString();
-            var DeductionsValidFrom = "DeductionsValidFrom" + [i].toString();
-            document.getElementById(AllowancesValidFrom).value = '@Model.GetAnswer("ContractStartDate")';
-            document.getElementById(DeductionsValidFrom).value = '@Model.GetAnswer("ContractStartDate")';
-        }
 
+
+    $('#date_ContractStartDate').not(".disabled").datepicker().on('changeDate', function (e) {
+        SetAllowancesDates();
+        SetDeductionsDates();
+    });
+
+    $('#ContractStartDate').change(function () {
+        SetAllowancesDates();
+        SetDeductionsDates();
+    });
+
+    function SetAllowancesDates() {
+        $('#AllowancesValidFrom').val($('#ContractStartDate').val());
+        $('#AllowancesValidFrom2').val($('#ContractStartDate').val());
+        $('#AllowancesValidFrom3').val($('#ContractStartDate').val());
+        $('#AllowancesValidFrom4').val($('#ContractStartDate').val());
+        $('#AllowancesValidFrom5').val($('#ContractStartDate').val());
+    };
+
+    function SetDeductionsDates() {
+        $('#DeductionsValidFrom').val($('#ContractStartDate').val());
+        $('#DeductionsValidFrom2').val($('#ContractStartDate').val());
+        $('#DeductionsValidFrom3').val($('#ContractStartDate').val());
+        $('#DeductionsValidFrom4').val($('#ContractStartDate').val());
+        $('#DeductionsValidFrom5').val($('#ContractStartDate').val());
+    };
 
 </script>

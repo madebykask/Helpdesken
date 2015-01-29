@@ -49,18 +49,18 @@
                         <h4>@Model.Translate("Loan Re-Payment")</h4>
                     </td>
                 </tr>
-                <tr>
+@*                <tr>
                     <td class="tdstrong">@Model.Label("DeductionsType")</td>
                     <td>
                         @Model.Element("DeductionsType")
                     </td>
-                </tr>
-                <tr>
+                </tr>*@
+@*                <tr>
                     <td class="tdstrong">@Model.Label("DeductionsAmountUnits")</td>
                     <td>
                         @Model.Element("DeductionsAmountUnits")
                     </td>
-                </tr>
+                </tr>*@
 @*                <tr>
                     <td class="tdstrong">@Model.Label("DeductionsNetGross")</td>
                     <td>
@@ -79,12 +79,12 @@
                         @Model.Element("1stPayment")
                     </td>
                 </tr>*@
-                <tr>
+@*                <tr>
                     <td class="tdstrong">@Model.Label("PaymentEndsOn")</td>
                     <td>
                         @Model.Element("PaymentEndsOn")
                     </td>
-                </tr>
+                </tr>*@
                 <tr>
                     <td class="tdstrong">@Model.Label("NumberOfInstallments")</td>
                     <td>
@@ -100,27 +100,39 @@
 
 <script>
     
-    var noticePaymentDate = $('#notice_PaymentDate');
-    var datePaymentDate = $('#date_PaymentDate');
-    if (noticePaymentDate.length > 0 && noticePaymentDate.length > 0) {
-        var startDate = new Date();
-        startDate.setHours(0, 0, 0, 0);
 
-        datePaymentDate.not(".disabled").datepicker()
-            .on('changeDate', function (e) {
-                
-                var paymentDate = $('#PaymentDate').val();
-                var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
-                var dstartDate = APIGlobal.DateTime.parseDate(paymentDate, format);
-                var payRollDate = new Date(dstartDate.getFullYear(), dstartDate.getMonth() + 1, dstartDate.getDate(), 0, 0, 0, 0);
-                $('#1stPayment').val(APIGlobal.DateTime.formatDate(payRollDate, format));
+        
+        
 
-                if (e.date.valueOf() < startDate.valueOf()) {
-                    noticePaymentDate.show();
-                } else {
-                    noticePaymentDate.hide();
-                }
-            });
-    }   
-    
+            
+    $('#date_PaymentDate').not(".disabled").datepicker().on('changeDate', function (e) {
+        paymentdatenotice();
+    });
+
+    $('#PaymentDate').change(function () {
+        paymentdatenotice();
+    });
+
+    function paymentdatenotice()
+    {
+        if (noticePaymentDate.length > 0) {
+            var noticePaymentDate = $('#notice_PaymentDate');
+            var paymentDate = $('#PaymentDate').val();
+            var startDate = new Date();
+            startDate.setHours(0, 0, 0, 0);
+
+            var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+            var dstartDate = APIGlobal.DateTime.parseDate(paymentDate, format);
+
+            if (dstartDate < startDate.valueOf())
+            {
+                noticePaymentDate.show();
+            }
+            else
+            {
+                 noticePaymentDate.hide();
+            }
+        }
+      };
+
 </script>

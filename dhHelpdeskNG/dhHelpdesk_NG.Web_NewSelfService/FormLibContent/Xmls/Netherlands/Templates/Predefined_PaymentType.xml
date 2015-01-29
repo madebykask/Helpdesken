@@ -3,15 +3,11 @@
     <name>PaymentType</name>
     <dependent>
         <selected>Union Membership</selected>
-        <show>
-            Recurring
-        </show>
+        <show>Recurring</show>
     </dependent>
     <dependent>
         <selected>Staff Association membership</selected>
-        <show>
-          Recurring
-        </show>
+        <show>Recurring</show>
     </dependent>
 </predefined>
 

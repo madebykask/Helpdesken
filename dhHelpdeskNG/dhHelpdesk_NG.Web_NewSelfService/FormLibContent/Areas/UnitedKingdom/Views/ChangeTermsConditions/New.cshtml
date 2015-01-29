@@ -334,7 +334,9 @@
                     $('#CrossChargeCostCentre')[0].selectize.disable();
             }
             else {
-                document.getElementById('CostAllocation').disabled = false;
+                if ("@Model.ReadOnlyTab("#Payment")" == 'False' && lockedbyUserGroup == 'False') {
+                    document.getElementById('CostAllocation').disabled = false;
+                }
                 if ($('#CrossChargeCostCentre')[0] != undefined && $('#CrossChargeCostCentre')[0].selectize)
                     $('#CrossChargeCostCentre')[0].selectize.enable();
             }
@@ -343,7 +345,11 @@
         function changeNewBusinessUnitCallback() {
             var selectedText = $('#NewBusinessUnit').find('option:selected').text();
             $('#PrimarySite').val(selectedText);
-        } 
+        }
+
+        
+        
+
 
         //InitIntegration();
         //changeNewCompany(); 

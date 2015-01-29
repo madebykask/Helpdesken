@@ -100,6 +100,7 @@ legend {
     *margin-top: 0;
 }
 
+
 /****************** TOP LOGO ***********************************/
 
 .alignrighttop {
@@ -109,6 +110,8 @@ legend {
 .marginbuttontop {
     margin-top: 30px;
 }
+
+
 
 /****************** TABLES ***********************************/
 td.tdstrong {
@@ -150,6 +153,12 @@ td.tdstrong {
         *margin: -1px 0 0 0;
         *min-height: 10px !important;
     }
+
+    .dateie input.span12 {
+        height: 30px !important;
+    }
+
+
 
 /************** NAV TABS**************************************/
 .nav-tabs {
@@ -1243,8 +1252,93 @@ select {
     width: 320px;
 }
 
+option:disabled {
+    color:#CFCFCF !important;
+    text-decoration: line-through !important;
+    font-style: italic;
+}
+
+#TempFixFormName {
+    margin-left: 10px;
+}
+
+
+
 /*
     .date input {
     width: 279px;
 }*/
 
+/* FOR LineManager*/
+.tab-pane {
+    border:0px solid black !important;
+}
+
+/*For Employee information Case: 51017 Tan*/
+.navbarbgcolorblue {
+    color: #000 !important;
+}
+
+.navbarbgcolorblue {
+    /*height:20px !important;
+    max-height:20px !important;
+    margin:10px;*/
+    
+}
+
+.navbarbgcolorblue {
+    background-color: #F0F0F0 !important;
+    background-image: none !important;
+    color: #000 !important;
+    border-top:1px solid #D8D8D8 !important;
+    
+    filter: none !important;
+}
+
+.navbarbgcolorblue a, .navbarbgcolorlightblue a {
+    color: #fff !important;
+}
+
+
+.navbar-inverse .brand, .navbar-inverse .nav > li > a {
+    text-shadow: none !important;
+}
+
+.navbarbgcolorblue a {
+    color: #000 !important;
+}
+
+.navbarbgcolorblue .nav {
+    width: 1185px;
+}
+ 
+.navbarbgcolorblue .nav > li > a {
+    padding-right: 5px !important;
+}
+
+.employeename, .employeenumber
+{
+     float: right !important;
+}
+
+.statusbar
+{
+    color: #000 !important; 
+    background-color: #D8D8D8; 
+    padding: 7px; 
+    padding-left: 25px; 
+    font-size: 11px; 
+    height: 20px;
+    min-height:20px;
+}
+
+.statusbar ul.nav
+{
+    width: 1165px !important;
+}
+
+.statusbar
+{
+border-top: 1px solid #C0C0C0;
+    border-bottom: 1px solid #C0C0C0;
+}

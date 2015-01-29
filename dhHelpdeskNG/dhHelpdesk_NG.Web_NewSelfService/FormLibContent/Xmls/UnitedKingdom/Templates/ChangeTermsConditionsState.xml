@@ -19,7 +19,7 @@
         </userGroup>
         <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
-        <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
+        <readOnlyFields>Company,BusinessUnit,ServiceArea,Department,NewCompany,NewBusinessUnit</readOnlyFields>
         <actions>
             <action status="20" internal-val="20" text="Submit to HR Unit">
                 <validateTabs>#ServiceRequestDetails,#Payment</validateTabs>
@@ -65,7 +65,7 @@
             <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#globalview,#SSCUseOnly,#attachments</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#SSCUseOnly,#globalview,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
@@ -79,7 +79,7 @@
             <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#globalview,#SSCUseOnly,#attachments</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#SSCUseOnly,#globalview,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
@@ -92,7 +92,7 @@
             <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#globalview,#SSCUseOnly,#attachments</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#SSCUseOnly,#globalview,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>

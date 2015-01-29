@@ -19,29 +19,16 @@
 <html>
 <body>
     <div>
-        <table style="font-family: Verdana; font-size: 11px; width: 100%;" border="0">
+      @*  <table style="font-family: Verdana; font-size: 11px; width: 100%;" border="0">
             <tr style="text-align: right;">
                 <td>@string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:d MMMMMM yyyy}", DateTime.Now)</td>
             </tr>
-        </table>
+        </table>*@
 
-        <p style="text-align: left; font-family: Verdana; font-size: 11px;">
-            <strong>PRIVATE & CONFIDENTIAL</strong><br />
-            @Model.GetDocumentAnswer("FirstName", true) @Model.GetDocumentAnswer("LastName", true)<br />
-            @Model.GetDocumentAnswer("PermanentAddressLine1", true)
-            @if (!string.IsNullOrEmpty(Model.GetDocumentAnswer("PermanentAddressLine2")))
-            {
-                <br />
-                @Model.GetDocumentAnswer("PermanentAddressLine2")
-            }
-            <br />
-            @Model.GetDocumentAnswer("PermanentCity", true)
-            <br />
-            @Model.GetDocumentAnswer("PermanentPostalCode", true)
-            <br />
-            <br />
-            Dear @Model.GetDocumentAnswer("FirstName", true),<br />
-
+        <p style="@UnitedKingdomPdfPage.StyleValue()">
+           @* <strong>PRIVATE & CONFIDENTIAL</strong><br />
+            @Html.Partial("_HeaderAddress", Model)*@
+            Dear @Model.GetDocumentAnswer("FirstName", true),<br /><br />
             I am very pleased to be able to confirm to you our offer of a zero hour contract in the position of @Model.GetDocumentAnswer("JobTitle", true) in the @UnitedKingdomPdfPage.GetServiceAreaText("ServiceArea", Model) at IKEA @CustomPdfPage.IsEmpty(Model.Department.Unit, "Unit"), reporting to the 
 
          @if (Model.GetDocumentAnswer("ManagersJobTitle").ToLower() == "Shopkeeper".ToLower())
@@ -53,11 +40,9 @@
              <text> @Model.GetDocumentAnswer("ManagersJobTitle", true)</text><text>.</text>
          }
 
-            <br />
-            <br />
+            <br /><br />
             The principal Terms and Conditions of your employment will be as follows:
-
-
+            <br /><br />
         </p>
 
         @{
@@ -69,13 +54,14 @@
             //1
             string text1 = "Your amended contract of employment with IKEA " + CustomPdfPage.IsEmpty(Model.Department.Unit, "Unit") + " will start on " + CustomPdfPage.GetDateInWords("ContractStartDate", Model) + ". This counts as part of your continuous service with IKEA which began on ";
 
-            if (!string.IsNullOrEmpty(Model.GetDocumentAnswer("PreviousContractStartDate")))
+
+            if (!string.IsNullOrEmpty(Model.GetAnswer("PreviousContractStartDate")))
             {
-                text1 += " " + CustomPdfPage.GetDateInWords("PreviousContractStartDate", Model) + " ";
+                text1 += " " + CustomPdfPage.GetDateInWords("PreviousContractStartDate", Model) + ".";
             }
             else
             {
-                text1 += " " + CustomPdfPage.GetDateInWords("ContractStartDate", Model) + " ";
+                text1 += " " + CustomPdfPage.GetDateInWords("ContractStartDate", Model) + ".";
             }
             list.Add(new PdfListItem { Text = text1 });
 
@@ -104,33 +90,29 @@
             string AllowancesText = "";
             string AllowancesTextOriginal = "(plus &pound; {0} for location allowance)";
 
+            string MultiNr = "";
 
-            if (Model.GetDocumentAnswer("AllowancesType").ToLower() == "150B - Hourly Location Allow".ToLower())
+
+            for (int i = 1; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
             {
+           
+                if (i > 1)
+                {
+                    MultiNr = i.ToString();
+                }
 
-                //Set mandatory!
-                Model.SetDocumentMandatoryField("AllowancesAmountUnits");
+                if (Model.GetDocumentAnswer("AllowancesType" + MultiNr).ToLower() == "150B - Hourly Location Allow".ToLower())
+                {
 
-                AllowancesText = string.Format(AllowancesTextOriginal, Model.GetDocumentAnswer("AllowancesAmountUnits"));
+                    //Set mandatory!
+                    Model.SetDocumentMandatoryField("AllowancesAmountUnits" + MultiNr);
+
+                    AllowancesText += " " + string.Format(AllowancesTextOriginal, Model.GetDocumentAnswer("AllowancesAmountUnits" + MultiNr));
+                }
             }
 
-            if (Model.GetDocumentAnswer("AllowancesType2").ToLower() == "150B - Hourly Location Allow".ToLower())
-            {
-                //Set mandatory!
-                Model.SetDocumentMandatoryField("AllowancesAmountUnits2");
 
-                AllowancesText = string.Format(AllowancesTextOriginal, Model.GetDocumentAnswer("AllowancesAmountUnits2"));
-            }
-
-            if (Model.GetDocumentAnswer("AllowancesType3").ToLower() == "150B - Hourly Location Allow".ToLower())
-            {
-                //Set mandatory!
-                Model.SetDocumentMandatoryField("AllowancesAmountUnits3");
-
-                AllowancesText = string.Format(AllowancesTextOriginal, Model.GetDocumentAnswer("AllowancesAmountUnits3"));
-            }
-
-            string text7 = "Your starting hourly rate will be &pound;" + Model.GetDocumentAnswer("BasicPayAmount", true) + " per hour " + AllowancesText + " payable monthly in arrears on the last Friday of each month by direct transfer into your Bank or Building Society account. Next review date will be " + CustomPdfPage.GetDateInWords("DateOfNextSalaryReview", Model) + ".";
+            string text7 = "Your starting hourly rate will be &pound;" + Model.GetDocumentAnswer("BasicPayAmount", true) + " per hour" + AllowancesText + " payable monthly in arrears on the last Friday of each month by direct transfer into your Bank or Building Society account. Next review date will be " + CustomPdfPage.GetDateInWords("DateOfNextSalaryReview", Model) + ".";
             list.Add(new PdfListItem { Text = text7 });
 
             //8
@@ -166,30 +148,45 @@
 
         @if (list.Count > 1)
         {
-            for (int i = 0; i < list.Count; i++)
+            <table border="0">
+            @for (int i = 0; i < list.Count; i++)
             { 
-            <br />                                        
-            <p style="text-align: left; font-family: Verdana; font-size: 11px; padding-right: 50px;">@(i + 1). @Html.Raw(list[i].Text)</p>
-                if (list[i].SubList != null && list[i].SubList.Count > 0)
+                <tr>
+                    <td width="5%" valign="top" CELLPADDING=4 style="@UnitedKingdomPdfPage.StyleValue()">@(i + 1). </td>                 
+                    <td width="95%" valign="top" CELLPADDING=4>                                               
+                    <p style="@UnitedKingdomPdfPage.StyleValue()">@Html.Raw(list[i].Text)</p>
+                                                  
+                @if (list[i].SubList != null && list[i].SubList.Count > 0)
                 {
-                    foreach (var item in list[i].SubList)
+                    <table border="0">
+                    @foreach (var item in list[i].SubList)
                     {
-@*<br />*@
-            <p style="text-align: left; font-family: Verdana; font-size: 11px; padding-left: 20px; padding-right: 50px;">&bull; @Html.Raw(item.Text) </p>
+                        <tr>
+                            <td width="2%" valign="top"> &bull;</td> 
+                            <td width="98%" valign="top"><p style="@UnitedKingdomPdfPage.StyleValue()">@Html.Raw(item.Text)</p></td> 
+                       </tr>             
                     }
+                    </table>
                 }
+                     </td>
+                </tr>
             }
+            </table>
         }
         else
         {
             for (int i = 0; i == list.Count - 1; i++)
             {
-            <p style="font-family: Verdana; font-size: 11px;">@Html.Raw(list[i])</p>
+                
+            //<p style="font-family: Verdana; font-size: 11px;">@Html.Raw(list[i])</p>
+            <p style="@UnitedKingdomPdfPage.StyleValue()">@Html.Raw(list[i])</p> 
+                
             }
         }
 
-        <p style="text-align: left; font-family: Verdana; font-size: 11px;">
-            <text><br />This letter, together with the Terms and Conditions Appendix forms the basis of your contract.</text>
+        <br />
+        <p style="@UnitedKingdomPdfPage.StyleValue()">
+           This letter, together with the Terms and Conditions Appendix forms the basis of your contract.
         </p>
         <endpage />
     </div>

@@ -9,7 +9,7 @@
       <action status="30" internal-val="30" text="Submit Service Request to SSC">
         <validateTabs>#ServiceRequestDetails,#Personal</validateTabs>
       </action>
-      <action status="99" internal-val="70" text="Cancel service request"></action>
+      
     </actions>
   </status>
   <!-- HRU -->
@@ -37,7 +37,7 @@
   </status>
   <!-- SSC -->
   <status value="40">
-    <visibleTabs>#ServiceRequestDetails,#Personal,#globalview,#attachments</visibleTabs>
+    <visibleTabs>#ServiceRequestDetails,#Personal,#attachments</visibleTabs>
     <readOnlyTabs>#ServiceRequestDetails,#Personal,#attachments</readOnlyTabs>
     <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
     <actions>
@@ -46,13 +46,13 @@
     </actions>
   </status>
   <status value="60">
-    <visibleTabs>#ServiceRequestDetails,#Personal,#globalview,#attachments</visibleTabs>
-    <readOnlyTabs>#ServiceRequestDetails,#Personal,#globalview,#attachments</readOnlyTabs>
+    <visibleTabs>#ServiceRequestDetails,#Personal,#attachments</visibleTabs>
+    <readOnlyTabs>#ServiceRequestDetails,#Personal,#attachments</readOnlyTabs>
     <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
   </status>
   <status value="70">
-    <visibleTabs>#ServiceRequestDetails,#Personal,#globalview,#attachments</visibleTabs>
-    <readOnlyTabs>#ServiceRequestDetails,#Personal,#globalview,#attachments</readOnlyTabs>
+    <visibleTabs>#ServiceRequestDetails,#Personal,#attachments</visibleTabs>
+    <readOnlyTabs>#ServiceRequestDetails,#Personal,#attachments</readOnlyTabs>
     <readOnlyFields>BusinessUnit,Department</readOnlyFields>
   </status>
 </state>

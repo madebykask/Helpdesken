@@ -1,0 +1,116 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@using System.Collections.Generic;
+
+@{
+    Layout = null;
+    Model.Language = "pl"; 
+}
+<!DOCTYPE html>
+<html>
+<body>
+    <div>
+        <p style="text-align: center; font-family: Verdana; font-size: 10px; ">
+            <br />
+        </p>
+        <p style="text-align: center; font-family: Verdana; font-size: 10px; ">
+            <br />
+        </p>
+        <p style="text-align: center; font-family: Verdana; font-size: 10px;">
+            <br />
+        </p>       
+        <p style="text-align: center; font-family: Verdana; font-size: 10px;">
+            <br />
+        </p>
+       
+        <p style="text-align: right; font-family: Verdana; font-size: 10px;">
+            <strong>@Model.GetTranslatedAnswer("Prefix") @Model.GetAnswer("EmployeeFirstName") @Model.GetAnswer("EmployeeLastName")</strong><br />
+        </p>
+        <p style="text-align: center; font-family: Verdana; font-size: 10px;">
+            <br />
+        </p>
+        <p style="text-align: center; font-family: Verdana; font-size: 10px;">
+            <br />
+        </p>
+       <p style="text-align: center; font-family: Verdana; font-size: 10px;">
+            <br /><br /><br />
+        </p>
+
+        <p style="text-align: center; font-family: Verdana; font-size: 12px;"><strong>ANEKS DO UMOWY O PRACĘ</strong></p>
+        <p style="text-align: center; font-family: Verdana; font-size: 10px;">
+            <br /><br /><br />
+        </p>
+        <p style="text-align: center; font-family: Verdana; font-size: 10px;">
+            <br /><br /><br />
+        </p>
+        <p style="text-align: center; font-family: Verdana; font-size: 10px;">
+            <br />
+        </p>       
+       
+        <p style="text-align:justify; font-family: Verdana; font-size: 10px;">
+
+              @if (string.IsNullOrEmpty(Model.GetAnswer("EffectiveDate"))) 
+                {
+                    <text>
+                    Od dnia .......................... .
+                    </text>
+                }
+                else 
+                { 
+                    <text>
+                    Od dnia <strong>@Model.GetAnswer("EffectiveDate")</strong>
+                    </text>
+                           
+                }
+             
+              @if (!string.IsNullOrEmpty(Model.GetAnswer("EndDate"))) 
+                {
+                    <text>
+                    do dnia <strong>@Model.GetAnswer("EndDate")</strong> r.,
+                    </text>
+                }
+
+            zgodnie z Regulaminem  Wynagrodzeń obowiązującym w firmie IKEA w Polsce (rozdział E, § 11 pkt. 1) 
+            Pracownik będzie otrzymywał zryczałtowany dodatek w wysokości 47,00 pln (brutto) miesięcznie z tytułu sprawowania dodatkowych funkcji poza swoimi obowiązkami:
+            zadania pracownika, będącego członkiem grupy przeciwpożarowej.
+        </p>
+    
+          <p style="text-align: center; font-family: Verdana; font-size: 10px;">
+            <br />
+        </p>
+          <p style="text-align: center; font-family: Verdana; font-size: 10px;">
+            <br />
+        </p>
+@*          <p style="text-align: center; font-family: Verdana; font-size: 10px;">
+            <br />
+        </p>
+        
+        <p style="text-align: center; font-family: Verdana; font-size: 10px;">
+            <br /><br /><br />
+        </p>
+        <p style="text-align: center; font-family: Verdana; font-size: 10px;">
+            <br />
+        </p>
+         <p style="text-align: center; font-family: Verdana; font-size: 10px;">
+            <br />
+        </p>
+        <p style="text-align: center; font-family: Verdana; font-size: 10px;">
+            <br /><br /><br /><br /><br />
+        </p>*@
+      @*  <table cellpadding="0" cellspacing="0" style="font-family: Verdana; font-size: 9px; width: 100%; border-spacing: 0;"  border="0">
+            <tr style="text-align: left;">
+                <td valign="bottom">-----------------------</td>
+                <td valign="bottom" style="padding-left:80px; ">-----------------------</td>                
+            </tr>
+            <tr style="text-align: left;">
+                <td valign="top">(podpis pracownika)</td>
+                <td valign="top" style="padding-left:80px; ">(podpis pracodawcy)</td>
+            </tr>
+        </table>*@
+    </div>
+
+     <endpage/>
+
+</body>
+</html>

@@ -1,23 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <predefined>
-  <name>PayrollCategory</name>
+  <name>CostCentre</name>
   <dependent>
-    <selected>Accounting Assistant</selected>
+    <selected>Accounting Assistant - Reconciliation</selected>
     <show1>44</show1>
     <show2>Level 1</show2>
     <show3>Co-worker</show3>
-  </dependent>
-  <dependent>
-    <selected>Accounting Assistant Reconciliation</selected>
-    <show1>44</show1>
-    <show2>Level 1</show2>
-    <show3>Co-worker</show3>
-  </dependent>
-  <dependent>
-    <selected>Activities Specialist</selected>
-    <show1>49</show1>
-    <show2></show2>
-    <show3></show3>
   </dependent>
   <dependent>
     <selected>Activity Manager</selected>
@@ -56,34 +44,16 @@
     <show3>Level 2</show3>
   </dependent>
   <dependent>
-    <selected>Business Navigator Trainee</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-  </dependent>
-  <dependent>
-    <selected>Buying Process Manager</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-  </dependent>
-  <dependent>
     <selected>Carpenter</selected>
     <show1>46</show1>
     <show2>Level 1</show2>
     <show3>Co-worker</show3>
   </dependent>
   <dependent>
-    <selected>Carpenter Co-worker</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-  </dependent>
-  <dependent>
     <selected>Checkout Services Co-worker</selected>
     <show1></show1>
-    <show2></show2>
-    <show3></show3>
+    <show2>Level 1</show2>
+    <show3>Co-worker</show3>
   </dependent>
   <dependent>
     <selected>Checkout Services Manager</selected>
@@ -116,34 +86,10 @@
     <show3>Level 1</show3>
   </dependent>
   <dependent>
-    <selected>Commercial Restaurant Team Leader</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-  </dependent>
-  <dependent>
     <selected>Commercial SFM &amp; Bistro Manager</selected>
     <show1>49</show1>
     <show2>Level 1</show2>
     <show3>Level 1</show3>
-  </dependent>
-  <dependent>
-    <selected>Commercial SFM &amp; Bistro Team Leader</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-  </dependent>
-  <dependent>
-    <selected>Country Commercial Activity Leader</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-  </dependent>
-  <dependent>
-    <selected>Customer Order Delivery Specialist</selected>
-    <show1>44</show1>
-    <show2></show2>
-    <show3></show3>
   </dependent>
   <dependent>
     <selected>Customer Relations Manager</selected>
@@ -160,8 +106,8 @@
   <dependent>
     <selected>Customer Service Co-worker</selected>
     <show1></show1>
-    <show2></show2>
-    <show3></show3>
+    <show2>Level 1</show2>
+    <show3>Co-worker</show3>
   </dependent>
   <dependent>
     <selected>Customer Services Manager</selected>
@@ -170,8 +116,8 @@
     <show3>Level 1</show3>
   </dependent>
   <dependent>
-    <selected>Customer Services Spec</selected>
-    <show1> </show1>
+    <selected>Customer Services Team Leader</selected>
+    <show1></show1>
     <show2></show2>
     <show3></show3>
   </dependent>
@@ -214,8 +160,8 @@
   <dependent>
     <selected>Goods Flow Co-worker</selected>
     <show1></show1>
-    <show2></show2>
-    <show3></show3>
+    <show2>Level 1</show2>
+    <show3>Co-worker</show3>
   </dependent>
   <dependent>
     <selected>Goods Flow Manager</selected>
@@ -242,13 +188,7 @@
     <show3>Level 1</show3>
   </dependent>
   <dependent>
-    <selected>Graduate Student</selected>
-    <show1> </show1>
-    <show2></show2>
-    <show3></show3>
-  </dependent>
-  <dependent>
-    <selected>Graphic Communication Co-Worker</selected>
+    <selected>Graphic Communication Co-worker</selected>
     <show1>46</show1>
     <show2>Level 1</show2>
     <show3>Co-worker</show3>
@@ -267,9 +207,9 @@
   </dependent>
   <dependent>
     <selected>HR Generalist</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
+    <show1>50</show1>
+    <show2>Level 1</show2>
+    <show3>Level 1</show3>
   </dependent>
   <dependent>
     <selected>HR Manager</selected>
@@ -278,19 +218,13 @@
     <show3>Level 2</show3>
   </dependent>
   <dependent>
-    <selected>IF Chef</selected>
-    <show1> </show1>
-    <show2></show2>
-    <show3></show3>
-  </dependent>
-  <dependent>
     <selected>IKEA Food Co-worker</selected>
     <show1></show1>
-    <show2></show2>
-    <show3></show3>
+    <show2>Level 1</show2>
+    <show3>Co-worker</show3>
   </dependent>
   <dependent>
-    <selected>IKEA FOOD Manager</selected>
+    <selected>IKEA Food Manager</selected>
     <show1>54</show1>
     <show2>Level 2</show2>
     <show3>Level 2</show3>
@@ -301,11 +235,11 @@
     <show2>Level 1</show2>
     <show3>Co-worker</show3>
   </dependent>
-  <dependent>
-    <selected>Info &amp; Smaland Team Leader</selected>
-    <show1> </show1>
-    <show2></show2>
-    <show3></show3>
+    <dependent>
+    <selected>IKEA FAMILY Leader - Store</selected>
+    <show1>51</show1>
+    <show2>Level 1</show2>
+    <show3>Level 1</show3>
   </dependent>
   <dependent>
     <selected>Interior Design Co-worker</selected>
@@ -320,7 +254,7 @@
     <show3>Level 1</show3>
   </dependent>
   <dependent>
-    <selected>ISL Manager </selected>
+    <selected>ISL Manager</selected>
     <show1>55</show1>
     <show2>Level 2</show2>
     <show3>Level 2</show3>
@@ -344,45 +278,21 @@
     <show3>Level 1</show3>
   </dependent>
   <dependent>
-    <selected>Kitchen Production Specialist</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-  </dependent>
-  <dependent>
-    <selected>Kitchen Production Team Leader</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-  </dependent>
-  <dependent>
     <selected>Learning &amp; Development Specialist</selected>
     <show1>52</show1>
     <show2>Level 1</show2>
     <show3>Level 1</show3>
   </dependent>
   <dependent>
-    <selected>Local Facility Management Specialist</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-  </dependent>
-  <dependent>
-    <selected>Local Marketing Leader</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-  </dependent>
-  <dependent>
-    <selected>Local Marketing Leader   Comms</selected>
+    <selected>Local Marketing Leader - Comms</selected>
     <show1>50</show1>
-    <show2></show2>
+    <show2>Level 1</show2>
     <show3>Level 1</show3>
   </dependent>
   <dependent>
     <selected>Local Marketing Leader (Store)</selected>
     <show1>51</show1>
-    <show2></show2>
+    <show2>Level 1</show2>
     <show3>Level 1</show3>
   </dependent>
   <dependent>
@@ -416,19 +326,7 @@
     <show3>Co-worker</show3>
   </dependent>
   <dependent>
-    <selected>Logistics Manager</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-  </dependent>
-  <dependent>
-    <selected>Marketing Manager</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-  </dependent>
-  <dependent>
-    <selected>Project Manager</selected>
+    <selected>Local Marketing Specialist Local Comms</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
@@ -440,18 +338,6 @@
     <show3></show3>
   </dependent>
   <dependent>
-    <selected>Q Store Product Quality Technician</selected>
-    <show1>45</show1>
-    <show2></show2>
-    <show3></show3>
-  </dependent>
-  <dependent>
-    <selected>Q Store Quality Manager</selected>
-    <show1>51</show1>
-    <show2></show2>
-    <show3></show3>
-  </dependent>
-  <dependent>
     <selected>Q-Store Product Quality Technician</selected>
     <show1></show1>
     <show2></show2>
@@ -459,12 +345,6 @@
   </dependent>
   <dependent>
     <selected>Q-Store Quality Manager</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-  </dependent>
-  <dependent>
-    <selected>Quality Co-worker</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
@@ -484,8 +364,8 @@
   <dependent>
     <selected>Recovery Co-worker</selected>
     <show1></show1>
-    <show2></show2>
-    <show3></show3>
+    <show2>Level 1</show2>
+    <show3>Co-worker</show3>
   </dependent>
   <dependent>
     <selected>Recovery Manager</selected>
@@ -506,12 +386,6 @@
     <show3></show3>
   </dependent>
   <dependent>
-    <selected>Risk/Health &amp;Safety CW</selected>
-    <show1> </show1>
-    <show2></show2>
-    <show3></show3>
-  </dependent>
-  <dependent>
     <selected>Safety &amp; Security Co-worker</selected>
     <show1>43</show1>
     <show2>Level 1</show2>
@@ -524,22 +398,10 @@
     <show3>Level 1</show3>
   </dependent>
   <dependent>
-    <selected>Safety &amp; Security Team Leader</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-  </dependent>
-  <dependent>
     <selected>Safety and Security Function Support (Specialist)</selected>
     <show1>48</show1>
     <show2>Level 1</show2>
     <show3>Co-worker</show3>
-  </dependent>
-  <dependent>
-    <selected>Sales &amp; Supply Support Co-worker</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
   </dependent>
   <dependent>
     <selected>Sales &amp; Supply Support Manager</selected>
@@ -556,11 +418,11 @@
   <dependent>
     <selected>Sales Co-worker</selected>
     <show1></show1>
-    <show2></show2>
-    <show3></show3>
+    <show2>Level 1</show2>
+    <show3>Co-worker</show3>
   </dependent>
   <dependent>
-    <selected>Sales External Co worker</selected>
+    <selected>Sales External Co-worker</selected>
     <show1>50</show1>
     <show2>Level 1</show2>
     <show3>Co-worker</show3>
@@ -572,7 +434,7 @@
     <show3>Level 2</show3>
   </dependent>
   <dependent>
-    <selected>Sales Specialist   Training</selected>
+    <selected>Sales Specialist  - Training</selected>
     <show1>45</show1>
     <show2>Level 1</show2>
     <show3>Co-worker</show3>
@@ -594,18 +456,6 @@
     <show1>47</show1>
     <show2>Level 1</show2>
     <show3>Co-worker</show3>
-  </dependent>
-  <dependent>
-    <selected>Services Function Support</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-  </dependent>
-  <dependent>
-    <selected>Shopkeeper</selected>
-    <show1> </show1>
-    <show2></show2>
-    <show3></show3>
   </dependent>
   <dependent>
     <selected>Shopkeeper Sales HFB 18 &amp; 19 (Home Organisation)</selected>
@@ -704,12 +554,6 @@
     <show3>Level 1</show3>
   </dependent>
   <dependent>
-    <selected>Staff Scheduler</selected>
-    <show1>50</show1>
-    <show2>Level 1</show2>
-    <show3>Level 1 </show3>
-  </dependent>
-  <dependent>
     <selected>Store Manager</selected>
     <show1>61</show1>
     <show2>Level 2</show2>
@@ -722,15 +566,16 @@
     <show3>Co-worker</show3>
   </dependent>
   <dependent>
+    <selected>Visual Merchandise / Activity Manager</selected>
+    <show1>51</show1>
+    <show2>Level 1</show2>
+    <show3>Level 1</show3>
+  </dependent>
+  <dependent>
     <selected>Visual Merchandise/Activity Co-worker</selected>
     <show1>46</show1>
     <show2>Level 1</show2>
     <show3>Co-worker</show3>
   </dependent>
-  <dependent>
-    <selected>Visual Merchandise/Activity Manager</selected>
-    <show1>51</show1>
-    <show2>Level 1</show2>
-    <show3>Level 1</show3>
-  </dependent>
+
 </predefined>

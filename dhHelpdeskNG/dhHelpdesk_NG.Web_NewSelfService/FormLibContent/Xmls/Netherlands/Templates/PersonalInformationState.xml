@@ -37,7 +37,7 @@
   </status>
   <!-- SSC -->
   <status value="40">
-    <visibleTabs>#ServiceRequestDetails,#Personal,#globalview,#attachments</visibleTabs>
+    <visibleTabs>#ServiceRequestDetails,#Personal,#attachments</visibleTabs>
     <readOnlyTabs>#ServiceRequestDetails,#Personal</readOnlyTabs>
     <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
     <actions>
@@ -46,13 +46,13 @@
     </actions>
   </status>
   <status value="60">
-    <visibleTabs>#ServiceRequestDetails,#Personal,#globalview,#attachments</visibleTabs>
-    <readOnlyTabs>#ServiceRequestDetails,#Personal,#globalview</readOnlyTabs>
+    <visibleTabs>#ServiceRequestDetails,#Personal,#attachments</visibleTabs>
+    <readOnlyTabs>#ServiceRequestDetails,#Personal</readOnlyTabs>
     <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
   </status>
   <status value="70">
-    <visibleTabs>#ServiceRequestDetails,#Personal,#globalview,#attachments</visibleTabs>
-    <readOnlyTabs>#ServiceRequestDetails,#Personal,#globalview</readOnlyTabs>
+    <visibleTabs>#ServiceRequestDetails,#Personal,#attachments</visibleTabs>
+    <readOnlyTabs>#ServiceRequestDetails,#Personal</readOnlyTabs>
     <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
   </status>
 </state>

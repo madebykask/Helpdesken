@@ -102,35 +102,33 @@
         </table>
     </div>
     
-    <input type="hidden" id="CustomerId" value="@Model.CustomerId" />
+    <input type="hidden" id="CustomerId" value="@Model.Form.CustomerId" />
     
 </div>
-
 <script>
+        var nowTemp = new Date();
+        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
 
-    var nowTemp = new Date();
-    var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+        var noticeOldDate = $('#notice_OldDate');
+        $('#date_ChangeValidFrom').not(".disabled").datepicker({
+            onRender: function (date) {
+                return '';
+            }
+        }).on('changeDate', function (ev) {
 
-    var noticeOldDate = $('#notice_OldDate');
-    $('#date_ChangeValidFrom').not(".disabled").datepicker({
-        onRender: function (date) {
-            return '';
-        }
-    }).on('changeDate', function (ev) {
+            noticeOldDate.hide();
 
-        noticeOldDate.hide();
+            if (ev.date.valueOf() < now.valueOf())
+                noticeOldDate.show();
+        }).data('datepicker');
 
-        if (ev.date.valueOf() < now.valueOf())
-            noticeOldDate.show();
-    }).data('datepicker');
-
-    $('#ChangeValidFrom').change(function () {
-        $('#date_ChangeValidFrom').datepicker("destroy");
-        var validFrom = $('#ChangeValidFrom').val();
-        var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
-        var dvalidFrom = APIGlobal.DateTime.parseDate(validFrom, format);
-        noticeOldDate.hide();
-        if (dvalidFrom.valueOf() < now.valueOf())
-            noticeOldDate.show();
-    });   
+        $('#ChangeValidFrom').change(function () {
+            $('#date_ChangeValidFrom').datepicker("destroy");
+            var validFrom = $('#ChangeValidFrom').val();
+            var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+            var dvalidFrom = APIGlobal.DateTime.parseDate(validFrom, format);
+            noticeOldDate.hide();
+            if (dvalidFrom.valueOf() < now.valueOf())
+                noticeOldDate.show();
+        });
 </script>

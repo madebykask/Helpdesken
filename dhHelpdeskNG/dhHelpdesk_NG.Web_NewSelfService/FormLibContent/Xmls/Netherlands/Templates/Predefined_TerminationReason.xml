@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <predefined>
     <name>TerminationReason</name>
     <dependent>
@@ -10,7 +10,7 @@
     <dependent>
         <selected>Expiry of Contract</selected>
         <show>
-          Expiry of contract,
+          Expiry of Contract,
           International Transfer begins,
           International Transfer ends,
           End of Backpacker Assignment
@@ -46,7 +46,7 @@
         <selected>Other</selected>
         <show>
           Invalidity,
-          Death
+          Death in service
         </show>
   </dependent>
   <dependent>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<predefined>
+  <name>CostCentre</name>
+  <dependent>
+    <selected>BNO - Business Navigation &amp; Operations_BN&amp;Operation Gwangmyeong Store</selected>
+    <show>6210 - Administration</show>
+  </dependent>
+  <dependent>
+    <selected>BNO - Business Navigation &amp; Operations_Facility Gwangmyeong Store</selected>
+    <show>6210 - Administration</show>
+  </dependent>
+  <dependent>
+    <selected>BNO - Business Navigation &amp; Operations_Recovery Gwangmyeong Store</selected>
+    <show>6210 - Administration</show>
+  </dependent>
+  <dependent>
+    <selected>BNO - Business Navigation &amp; Operations_Safty and Security Gwangmyeong Store</selected>
+    <show>6210 - Administration</show>
+  </dependent>
+  <dependent>
+    <selected>Com &amp; In_Comm-in Gwangmyeong Store</selected>
+    <show>6071 - Communic &amp; Interior</show>
+  </dependent>
+  <dependent>
+    <selected>Com &amp; In_Interior Design Gwangmyeong Store</selected>
+    <show>6071 - Communic &amp; Interior</show>
+  </dependent>
+  <dependent>
+    <selected>Com &amp; In_Graphic Communication Gwangmyeong Store</selected>
+    <show>6071 - Communic &amp; Interior</show>
+  </dependent>
+  <dependent>
+    <selected>Com &amp; In_Visual Merchandising Gwangmyeong Store</selected>
+    <show>6071 - Communic &amp; Interior</show>
+  </dependent>
+  <dependent>
+    <selected>CR - Customer Relations_Checkout Services Gwangmyeong Store </selected>
+    <show>6180 - CS Cash</show>
+  </dependent>
+  <dependent>
+    <selected>CR - Customer Relations_Customer Relations Gwangmyeong Store</selected>
+    <show>6190 - Cash Administration</show>
+  </dependent>
+  <dependent>
+    <selected>CR - Customer Relations_After Sales Gwangmyeong Store</selected>
+    <show>6120 - CS After Sales Serv</show>
+  </dependent>
+  <dependent>
+    <selected>CR - Customer Relations_Exchange &amp; Returns Gwangmyeong Store</selected>
+    <show>6120 - CS After Sales Serv</show>
+  </dependent>
+  <dependent>
+    <selected>CR - Customer Relations_Info &amp; Smaland Gwangmyeong Store</selected>
+    <show>9999 - dummy</show>
+  </dependent>
+  <dependent>
+    <selected>HR - Human Resources_Human Resources Gwangmyeong Store</selected>
+    <show>6600 - Human Resource</show>
+  </dependent>
+  <dependent>
+    <selected>IKEA Food_IKEA Food Gwangmyeong Store</selected>
+    <show>3921 - Restaurant Mng</show>
+  </dependent>
+</predefined>

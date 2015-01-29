@@ -16,15 +16,36 @@
             document.getElementById(prefix + "AddressLine1").value = document.getElementById('PermanentAddressLine1').value;
             document.getElementById(prefix + "AddressLine2").value = document.getElementById('PermanentAddressLine2').value;
             document.getElementById(prefix + "PostalCode").value = document.getElementById('PermanentPostalCode').value;
-            document.getElementById(prefix + "City").value = document.getElementById('PermanentCity').value;
-            document.getElementById(prefix + "Country").value = document.getElementById('PermanentCountry').value;
-            alert(document.getElementById(prefix + "Country").value);
-        });
 
-        $(document).on('change', '#Extent', function (e) {
-            e.preventDefault();
-            if ($(this).val() === 'Full time')
-                $('#Workload').val('100');
+            document.getElementById(prefix + "City").value = document.getElementById('PermanentCity').value;
+            //document.getElementById(prefix + "Country").value = document.getElementById('PermanentCountry').value;
+
+            var value = document.getElementById('PermanentCountry').value;
+
+            if ($('#PermanentCountry')[0].selectize) {
+
+                var selectedText = $('#PermanentCountry')[0].selectize.getItem(value).text();
+
+                if ($('#' + prefix + 'Country')[0].selectize) {
+                    $('#' + prefix + 'Country')[0].selectize.setValue(selectedText);
+                }
+                else {
+                    $('#' + prefix + 'Country').val(selectedText);
+                }
+            }
+            else {
+
+                var selectedText = $('#PermanentCountry').find('option:selected').text();
+                if ($('#' + prefix + 'Country')[0].selectize) {
+                    $('#' + prefix + 'Country')[0].selectize.setValue(selectedText);
+                }
+                else {
+                    var selectedText = $('#PermanentCountry').find('option:selected').text();
+                    $('#' + prefix + 'Country').val(selectedText);
+                }
+            }
+
+
         });
 
         validate.run($('#actionState').val());
@@ -75,7 +96,7 @@
         </ul>
         <div class="content">
             <div class="row-fluid">
-                <div class="tab-content">
+                <div class="tab-content overflow-visible">
                     @if(Model.VisibleTab("#servicerequestdetails"))
                     {
                         @Html.Partial("_TabServiceRequestDetails", Model)
@@ -103,6 +124,13 @@
     <input type="hidden" id="activeTab" name="activeTab" value="@Model.ActiveTab" /> 
 }
 
-<script>
-    InitIntegration();
+
+<script type="text/javascript">
+
+    function changeBusinessUnitCallback() {
+        SetHelpDeskDefault();
+        SetPrimarySiteDefault();
+        GetXML('Predefined_BusinessUnit_JobTitle.xml', setJobTitle);
+    }
+
 </script>

@@ -17,9 +17,9 @@
   <numFrom1To100 message="Wrong format, enter 1-100">^[1-9][0-9]?$|^100$</numFrom1To100>
   <email message="E-mail address must contain @">.+\@.+\..+</email>
   <currency message="Wrong format (LLL)">^[a-zA-Z.]{3,3}$</currency>
-  <iban message="Wrong format (IEXXXXXXXXXXXXXXXXXXXX)">IE\d{2}[ ]\d{4}[ ]\d{4}[ ]\d{4}[ ]\d{4}|IE\d{20}</iban>
+  <iban message="Wrong format (IEXXLLLLXXXXXXXXXXXXXX)">^IE\d{2}[A-Z]{4}\d{14}$</iban>
   <bsn message="Wrong format (NNNNNNNNN)">^\D*(?:\d\D*){9,}$</bsn>
-  <timestamp message="Wrong format (HH:MM).">^[0-2][0-9]:[0-5][0-9]$</timestamp>
+  <timestamp message="Wrong format (HH:MM).">^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$</timestamp>
   <bankKey message="Wrong format (NNNNNN).">\d{6}</bankKey>
   <accountNumber message="Wrong format (NNNNNNNN).">\d{8}</accountNumber>
   <pps message="Wrong format (NNNNNNNL).">^\d{7}[a-zA-Z]$</pps>

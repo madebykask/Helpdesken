@@ -1,0 +1,72 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+<!-- Global Mobility Employee Documents -->
+<tr class="globalmobility-first">
+    <td class="tdstrong" colspan="2">
+        <h4>@Model.Translate("Global Mobility - Employee Documents")</h4>
+    </td>
+</tr>
+<tr class="globalmobility-first">
+    <td class="tdstrong">@Model.Label("EmployeeDocumentType")</td>
+    <td>@Model.Element("EmployeeDocumentType")</td>
+</tr>
+<tr class="globalmobility-first">
+    <td class="tdstrong">@Model.Label("EmployeeDocumentCountry")</td>
+    <td>@Model.Element("EmployeeDocumentCountry")</td>
+</tr>
+<tr class="globalmobility-first">
+    <td class="tdstrong">@Model.Label("EmployeeDocumentNo")</td>
+    <td>@Model.Element("EmployeeDocumentNo")</td>
+</tr>
+<tr class="globalmobility-first">
+    <td class="tdstrong">@Model.Label("EmployeeDocumentIssueDate")</td>
+    <td>@Model.Element("EmployeeDocumentIssueDate")</td>
+</tr>
+<tr class="globalmobility-first">
+    <td class="tdstrong">@Model.Label("EmployeeDocumentIssuePlace")</td>
+    <td>@Model.Element("EmployeeDocumentIssuePlace")</td>
+</tr>
+<tr class="globalmobility-first">
+    <td class="tdstrong">@Model.Label("EmployeeDocumentIssuePlaceCountry")</td>
+    <td>@Model.Element("EmployeeDocumentIssuePlaceCountry")</td>
+</tr>
+
+@for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
+{
+    <tr class="employeeDocument@(i.ToString()) globalmobility" id="employeeDocument@(i.ToString())">
+        <td class="tdstrong" colspan="2">
+            <h4>@Model.Translate("Global Mobility - Employee Documents")  @i.ToString()</h4>
+        </td>
+    </tr>
+    <tr class="employeeDocument@(i.ToString()) globalmobility">
+        <td class="tdstrong">@Model.Label("EmployeeDocumentType" + i.ToString())</td>
+        <td>@Model.Element("EmployeeDocumentType" + i.ToString())</td>
+    </tr>
+    <tr class="employeeDocument@(i.ToString()) globalmobility">
+        <td class="tdstrong">@Model.Label("EmployeeDocumentCountry" + i.ToString())</td>
+        <td>@Model.Element("EmployeeDocumentCountry" + i.ToString())</td>
+    </tr>
+    <tr class="employeeDocument@(i.ToString()) globalmobility">
+        <td class="tdstrong">@Model.Label("EmployeeDocumentNo" + i.ToString())</td>
+        <td>@Model.Element("EmployeeDocumentNo" + i.ToString())</td>
+    </tr>
+    <tr class="employeeDocument@(i.ToString()) globalmobility">
+        <td class="tdstrong">@Model.Label("EmployeeDocumentIssueDate" + i.ToString())</td>
+        <td>@Model.Element("EmployeeDocumentIssueDate" + i.ToString())</td>
+    </tr>
+    <tr class="employeeDocument@(i.ToString()) globalmobility">
+        <td class="tdstrong">@Model.Label("EmployeeDocumentIssuePlace" + i.ToString())</td>
+        <td>@Model.Element("EmployeeDocumentIssuePlace" + i.ToString())</td>
+    </tr>
+    <tr class="employeeDocument@(i.ToString()) globalmobility">
+        <td class="tdstrong">@Model.Label("EmployeeDocumentIssuePlaceCountry" + i.ToString())</td>
+        <td>@Model.Element("EmployeeDocumentIssuePlaceCountry" + i.ToString())</td>
+    </tr>
+}
+
+<tr class="globalmobility-first" id="addEmployeeDocumentTrr">
+    <td colspan="2">
+        @Model.Element("EmployeeDocuments")
+        <a id="addEmployeeDocument" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another employee documents")</a></td>
+</tr>

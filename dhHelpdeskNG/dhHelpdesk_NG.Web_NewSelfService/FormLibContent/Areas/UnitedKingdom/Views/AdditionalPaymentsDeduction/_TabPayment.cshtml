@@ -1,7 +1,6 @@
 ﻿@model ECT.FormLib.Models.FormModel
 @using ECT.FormLib;
 @using ECT.FormLib.Models;
-
 <div class="tab-pane" id="Payment">
     <div class="span6">
         <table class="table">
@@ -11,6 +10,12 @@
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Allowances")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AllowancesChangeType")</td>
+                    <td>
+                        @Model.Element("AllowancesChangeType")
                     </td>
                 </tr>
                 <tr>
@@ -29,6 +34,12 @@
                     <td class="tdstrong">@Model.Label("AllowancesAmountUnits")</td>
                     <td>
                         @Model.Element("AllowancesAmountUnits")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AllowancesPaidPer")</td>
+                    <td>
+                        @Model.Element("AllowancesPaidPer")
                     </td>
                 </tr>
 @*                <tr>
@@ -50,7 +61,7 @@
                     </td>
                 </tr>
 
-                @for (int i = 2; i <= 3; i++)
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
                 {
                     <tr class="allowance@(i.ToString())" id="allowance@(i.ToString())">
                         <td class="tdstrong" colspan="2">
@@ -58,10 +69,16 @@
                         </td>
                     </tr>
                     <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AllowancesChangeType" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AllowancesChangeType" + i.ToString())</td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
                         <td class="tdstrong">@Model.Label("AllowancesType" + i.ToString())</td>
                         <td>
                             @Model.Element("AllowancesType" + i.ToString())</td>
-                    </tr>@*
+                    </tr>
+                    @*
                     <tr class="allowance@(i.ToString())">
                         <td class="tdstrong">@Model.Label("AllowancesPaymentType" + i.ToString())</td>
                         <td>
@@ -77,6 +94,11 @@
                         <td>
                             @Model.Element("AllowancesNetGross" + i.ToString())</td>
                     </tr>*@
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AllowancesPaidPer" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AllowancesPaidPer" + i.ToString())</td>
+                    </tr>
                     <tr class="allowance@(i.ToString())">
                         <td class="tdstrong">@Model.Label("AllowancesValidFrom" + i.ToString())</td>
                         <td>
@@ -106,6 +128,12 @@
                     </td>
                 </tr>
                 <tr>
+                    <td class="tdstrong">@Model.Label("DeductionsChangeType")</td>
+                    <td>
+                        @Model.Element("DeductionsChangeType")
+                    </td>
+                </tr>
+                <tr>
                     <td class="tdstrong">@Model.Label("DeductionsType")</td>
                     <td>
                         @Model.Element("DeductionsType")
@@ -121,6 +149,12 @@
                     <td class="tdstrong">@Model.Label("DeductionsAmountUnits")</td>
                     <td>
                         @Model.Element("DeductionsAmountUnits")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("DeductedPer")</td>
+                    <td>
+                        @Model.Element("DeductedPer")
                     </td>
                 </tr>
 @*                <tr>
@@ -142,7 +176,7 @@
                     </td>
                 </tr>
 
-                @for (int i = 2; i <= 3; i++)
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
                 {
                     <tr class="deduction@(i.ToString())" id="deduction@(i.ToString())">
                         <td class="tdstrong" colspan="2">
@@ -150,10 +184,16 @@
                         </td>
                     </tr>
                     <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductionsChangeType" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductionsChangeType" + i.ToString())</td>
+                    </tr>
+                    <tr class="deduction@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DeductionsType" + i.ToString())</td>
                         <td>
                             @Model.Element("DeductionsType" + i.ToString())</td>
-                    </tr>@*
+                    </tr>
+                    @*
                     <tr class="deduction@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DeductionsPaymentType" + i.ToString())</td>
                         <td>
@@ -163,7 +203,13 @@
                         <td class="tdstrong">@Model.Label("DeductionsAmountUnits" + i.ToString())</td>
                         <td>
                             @Model.Element("DeductionsAmountUnits" + i.ToString())</td>
-                    </tr>@*
+                    </tr>
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductedPer" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductedPer" + i.ToString())</td>
+                    </tr>
+                    @*
                     <tr class="deduction@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DeductionsNetGross" + i.ToString())</td>
                         <td>
@@ -189,12 +235,12 @@
             </tbody>
         </table>
     </div>
+    <input type="hidden" id="MultipleEntrySectionsNr" value="@FormLibConstants.FormField.MultipleEntrySectionsNr" />
+
 </div>
 
 
 <script>
-
-
 
     @*  if (document.getElementById('DeductionsValidFrom').value == ''){
                 document.getElementById('DeductionsValidFrom').value = '@Model.GetAnswer("ChangeValidFrom")';
@@ -208,114 +254,69 @@
         }*@
 
     function setPaymentDatePickersBehavior() {
+
+        $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,#date_AllowancesValidFrom4,#date_AllowancesValidFrom5,' +
+        '#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3,#date_DeductionsValidFrom4,#date_DeductionsValidFrom5').not(".disabled").datepicker('destroy');
+
         var startDate = $('#ChangeValidFrom').val();
         var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
         var dStart = APIGlobal.DateTime.parseDate(startDate, format);
         var forcePicker = new Date(dStart.getFullYear(), dStart.getMonth(), dStart.getDate(), 0, 0, 0, 0);
-        $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,' +
-            '#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3').not(".disabled").datepicker(
+        $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,#date_AllowancesValidFrom4,#date_AllowancesValidFrom5,' +
+            '#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3,#date_DeductionsValidFrom4,#date_DeductionsValidFrom5').not(".disabled").datepicker(
         {
             onRender: function (ev) {
                 return ev.valueOf() < forcePicker.valueOf() ? 'disabled' : '';
             },
         });
+
+        ////set value to the datepicker
+        $('#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3,#date_DeductionsValidFrom4,#date_DeductionsValidFrom5').not(".disabled").datepicker("setValue", forcePicker);
+        $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,#date_AllowancesValidFrom4,#date_AllowancesValidFrom5').not(".disabled").datepicker("setValue", forcePicker);
+        $('#date_ChangeValidFrom').datepicker("setValue", startDate);
+
+        $('#AllowancesValidFrom,#AllowancesValidFrom2,#AllowancesValidFrom3,#AllowancesValidFrom4,#AllowancesValidFrom5,' +
+  '#DeductionsValidFrom,#DeductionsValidFrom2,#DeductionsValidFrom3,#DeductionsValidFrom4,#DeductionsValidFrom5').val(startDate);
     }
 
-    setPaymentDatePickersBehavior();
+   // setPaymentDatePickersBehavior();
 
     $('#date_ChangeValidFrom').on('changeDate', function (ev) {
-
-        $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,' +
-        '#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3').not(".disabled").datepicker('destroy');
-
         setPaymentDatePickersBehavior();
-
-        $('#AllowancesValidFrom,#AllowancesValidFrom2,#AllowancesValidFrom3,' +
-        '#DeductionsValidFrom,#DeductionsValidFrom2,#DeductionsValidFrom3').val($('#ChangeValidFrom').val());
     }).data('datepicker');
 
-
     $('#ChangeValidFrom').change(function () {
-        $('#AllowancesValidFrom,#AllowancesValidFrom2,#AllowancesValidFrom3,' +
-       '#DeductionsValidFrom,#DeductionsValidFrom2,#DeductionsValidFrom3').val($('#ChangeValidFrom').val());
+        setPaymentDatePickersBehavior();
     });
 
-    function setDefaultDate(id) {
-        var input = $('#' + id);
+    $('#DeductionsValidFrom,#DeductionsValidFrom2,#DeductionsValidFrom3,#DeductionsValidFrom4,#DeductionsValidFrom5').change(function () {
 
-        if (input.val() == '') {
-            input.val('31.12.9999');
-        }
-    }
+        $('#date_' + $(this).attr("id")).datepicker("setValue", $(this).val());
+    });
 
-    function disableDatePicker(id) {
-        var input = $('#' + id);
-        var datePicker = $('#date_' + id);
+    $('#AllowancesValidFrom,#AllowancesValidFrom2,#AllowancesValidFrom3,#AllowancesValidFrom4,#AllowancesValidFrom5').change(function () {
 
-        datePicker.datepicker("destroy");
-        datePicker.addClass("disabled");
-        input.val("");
-        input.attr('readonly', 'readonly');
-    }
-
-    function enableDatePicker(id) {
-        var input = $('#' + id);
-        var datePicker = $('#date_' + id);
-
-        datePicker.removeClass("disabled");
-        input.removeAttr('readonly', 'readonly');
-        setDefaultDate(id);
-        datePicker.datepicker();
-    }
-
-    function setDatePickerBehavior(id, value) {
-        var input = $('#' + id);
-
-        //if (value == 'One Time') {
-        //    disableDatePicker(id);
-        //} else {
-        //    enableDatePicker(id);
-        //}
-    }
-
-    function setDefaultDatePickerBehavior(id, value) {
-        var input = $('#' + id);
-
-        //if (value == 'One Time') {
-        //    disableDatePicker(id);
-        //} else {
-        //    setDefaultDate(id);
-        //}
-    }
+        $('#date_' + $(this).attr("id")).datepicker("setValue", $(this).val());
+    });
 
     $('#AllowancesType').change(function () {
-        //////////
-        //AllowancesType change function
-        //////////
-
-
-        setAllowanceType();
-
+       setAllowanceType();
     });
 
     $('#AllowancesType2').change(function () {
-        //////////
-        //AllowancesType change function
-        //////////
-
-
         setAllowanceType2();
-
     });
 
     $('#AllowancesType3').change(function () {
-        //////////
-        //AllowancesType change function
-        //////////
-
-
         setAllowanceType3();
+    });
 
+    $('#AllowancesType4').change(function () {
+        setAllowanceType4();
+    });
+
+    $('#AllowancesType5').change(function () {
+        setAllowanceType5();
     });
 
     function setAllowanceTypeXML3(xml) {
@@ -366,49 +367,49 @@
                 if (bus == 'Store Bristol 264') {
 
                     if (document.getElementById('AllowancesAmountUnits3')) {
-                        document.getElementById('AllowancesAmountUnits3').value = '0,10';
+                        document.getElementById('AllowancesAmountUnits3').value = '0.10';
                     }
 
                 }
                 else if (bus == 'Store London Croydon 144') {
 
                     if (document.getElementById('AllowancesAmountUnits3')) {
-                        document.getElementById('AllowancesAmountUnits3').value = '1,28';
+                        document.getElementById('AllowancesAmountUnits3').value = '1.28';
                     }
 
                 }
                 else if (bus == 'Store London Lakeside 262') {
 
                     if (document.getElementById('AllowancesAmountUnits3')) {
-                        document.getElementById('AllowancesAmountUnits3').value = '0,77';
+                        document.getElementById('AllowancesAmountUnits3').value = '0.77';
                     }
 
                 }
                 else if (bus == 'Store Milton Keynes 185') {
 
                     if (document.getElementById('AllowancesAmountUnits3')) {
-                        document.getElementById('AllowancesAmountUnits3').value = '0,35';
+                        document.getElementById('AllowancesAmountUnits3').value = '0.35';
                     }
 
                 }
                 else if (bus == 'Store London Tottenham 255') {
 
                     if (document.getElementById('AllowancesAmountUnits3')) {
-                        document.getElementById('AllowancesAmountUnits3').value = '1,28';
+                        document.getElementById('AllowancesAmountUnits3').value = '1.28';
                     }
 
                 }
                 else if (bus == 'Store London Wembley 141') {
 
                     if (document.getElementById('AllowancesAmountUnits3')) {
-                        document.getElementById('AllowancesAmountUnits3').value = '1,28';
+                        document.getElementById('AllowancesAmountUnits3').value = '1.28';
                     }
 
                 }
                 else if (bus == 'Service Office UK') {
 
                     if (document.getElementById('AllowancesAmountUnits3')) {
-                        document.getElementById('AllowancesAmountUnits3').value = '1,28';
+                        document.getElementById('AllowancesAmountUnits3').value = '1.28';
                     }
 
                 }
@@ -418,49 +419,49 @@
                 if (bus == 'Store Bristol 264') {
 
                     if (document.getElementById('AllowancesAmountUnits3')) {
-                        document.getElementById('AllowancesAmountUnits3').value = '203,10';
+                        document.getElementById('AllowancesAmountUnits3').value = '203.10';
                     }
 
                 }
                 else if (bus == 'Store London Croydon 144') {
 
                     if (document.getElementById('AllowancesAmountUnits3')) {
-                        document.getElementById('AllowancesAmountUnits3').value = '2600,00';
+                        document.getElementById('AllowancesAmountUnits3').value = '2600.00';
                     }
 
                 }
                 else if (bus == 'Store London Lakeside 262') {
 
                     if (document.getElementById('AllowancesAmountUnits3')) {
-                        document.getElementById('AllowancesAmountUnits3').value = '1560,00';
+                        document.getElementById('AllowancesAmountUnits3').value = '1560.00';
                     }
 
                 }
                 else if (bus == 'Store Milton Keynes 185') {
 
                     if (document.getElementById('AllowancesAmountUnits3')) {
-                        document.getElementById('AllowancesAmountUnits3').value = '709,00';
+                        document.getElementById('AllowancesAmountUnits3').value = '709.00';
                     }
 
                 }
                 else if (bus == 'Store London Tottenham 255') {
 
                     if (document.getElementById('AllowancesAmountUnits3')) {
-                        document.getElementById('AllowancesAmountUnits3').value = '2600,00';
+                        document.getElementById('AllowancesAmountUnits3').value = '2600.00';
                     }
 
                 }
                 else if (bus == 'Store London Wembley 141') {
 
                     if (document.getElementById('AllowancesAmountUnits3')) {
-                        document.getElementById('AllowancesAmountUnits3').value = '2600,00';
+                        document.getElementById('AllowancesAmountUnits3').value = '2600.00';
                     }
 
                 }
                 else if (bus == 'Service Office UK') {
 
                     if (document.getElementById('AllowancesAmountUnits3')) {
-                        document.getElementById('AllowancesAmountUnits3').value = '2600,00';
+                        document.getElementById('AllowancesAmountUnits3').value = '2600.00';
                     }
 
                 }
@@ -477,7 +478,7 @@
                                     document.getElementById('AllowancesAmountUnits3').value = show;
                                 }
                                 else {
-                                    document.getElementById('AllowancesAmountUnits3').value = '0,55';
+                                    document.getElementById('AllowancesAmountUnits3').value = '0.55';
                                 }
                             }
                             else if (dep.toString().trim() == 'Fork Lift Truck Allowance') {
@@ -485,16 +486,16 @@
                                     document.getElementById('AllowancesAmountUnits3').value = show;
                                 }
                                 else {
-                                    document.getElementById('AllowancesAmountUnits3').value = '1,72';
+                                    document.getElementById('AllowancesAmountUnits3').value = '1.72';
                                 }
                             }
                             else if (dep.toString().trim() == 'Kitchen Skills - Hourly')
                                 if (bus.toString().trim() == 'Store Edinburgh 265') {
-                                    document.getElementById('AllowancesAmountUnits3').value = '1,00';
+                                    document.getElementById('AllowancesAmountUnits3').value = '1.00';
                                 }
 
                                 else if (bus.toString().trim() == 'Store London Tottenham 255' | bus == 'Store London Wembley 141' | bus == 'Store London Croydon 144' | bus == 'Store London Lakeside 262') {
-                                    document.getElementById('AllowancesAmountUnits3').value = '0,30';
+                                    document.getElementById('AllowancesAmountUnits3').value = '0.30';
                                 }
                                 else {
                                     document.getElementById('AllowancesAmountUnits3').value = show;
@@ -524,7 +525,6 @@
 
         });
     }
-
 
     function setAllowanceTypeXML2(xml)
     {
@@ -575,49 +575,49 @@
                 if (bus == 'Store Bristol 264') {
 
                     if (document.getElementById('AllowancesAmountUnits2')) {
-                        document.getElementById('AllowancesAmountUnits2').value = '0,10';
+                        document.getElementById('AllowancesAmountUnits2').value = '0.10';
                     }
 
                 }
                 else if (bus == 'Store London Croydon 144') {
 
                     if (document.getElementById('AllowancesAmountUnits2')) {
-                        document.getElementById('AllowancesAmountUnits2').value = '1,28';
+                        document.getElementById('AllowancesAmountUnits2').value = '1.28';
                     }
 
                 }
                 else if (bus == 'Store London Lakeside 262') {
 
                     if (document.getElementById('AllowancesAmountUnits2')) {
-                        document.getElementById('AllowancesAmountUnits2').value = '0,77';
+                        document.getElementById('AllowancesAmountUnits2').value = '0.77';
                     }
 
                 }
                 else if (bus == 'Store Milton Keynes 185') {
 
                     if (document.getElementById('AllowancesAmountUnits2')) {
-                        document.getElementById('AllowancesAmountUnits2').value = '0,35';
+                        document.getElementById('AllowancesAmountUnits2').value = '0.35';
                     }
 
                 }
                 else if (bus == 'Store London Tottenham 255') {
 
                     if (document.getElementById('AllowancesAmountUnits2')) {
-                        document.getElementById('AllowancesAmountUnits2').value = '1,28';
+                        document.getElementById('AllowancesAmountUnits2').value = '1.28';
                     }
 
                 }
                 else if (bus == 'Store London Wembley 141') {
 
                     if (document.getElementById('AllowancesAmountUnits2')) {
-                        document.getElementById('AllowancesAmountUnits2').value = '1,28';
+                        document.getElementById('AllowancesAmountUnits2').value = '1.28';
                     }
 
                 }
                 else if (bus == 'Service Office UK') {
 
                     if (document.getElementById('AllowancesAmountUnits2')) {
-                        document.getElementById('AllowancesAmountUnits2').value = '1,28';
+                        document.getElementById('AllowancesAmountUnits2').value = '1.28';
                     }
 
                 }
@@ -627,49 +627,49 @@
                 if (bus == 'Store Bristol 264') {
 
                     if (document.getElementById('AllowancesAmountUnits2')) {
-                        document.getElementById('AllowancesAmountUnits2').value = '203,10';
+                        document.getElementById('AllowancesAmountUnits2').value = '203.10';
                     }
 
                 }
                 else if (bus == 'Store London Croydon 144') {
 
                     if (document.getElementById('AllowancesAmountUnits2')) {
-                        document.getElementById('AllowancesAmountUnits2').value = '2600,00';
+                        document.getElementById('AllowancesAmountUnits2').value = '2600.00';
                     }
 
                 }
                 else if (bus == 'Store London Lakeside 262') {
 
                     if (document.getElementById('AllowancesAmountUnits2')) {
-                        document.getElementById('AllowancesAmountUnits2').value = '1560,00';
+                        document.getElementById('AllowancesAmountUnits2').value = '1560.00';
                     }
 
                 }
                 else if (bus == 'Store Milton Keynes 185') {
 
                     if (document.getElementById('AllowancesAmountUnits2')) {
-                        document.getElementById('AllowancesAmountUnits2').value = '709,00';
+                        document.getElementById('AllowancesAmountUnits2').value = '709.00';
                     }
 
                 }
                 else if (bus == 'Store London Tottenham 255') {
 
                     if (document.getElementById('AllowancesAmountUnits2')) {
-                        document.getElementById('AllowancesAmountUnits2').value = '2600,00';
+                        document.getElementById('AllowancesAmountUnits2').value = '2600.00';
                     }
 
                 }
                 else if (bus == 'Store London Wembley 141') {
 
                     if (document.getElementById('AllowancesAmountUnits2')) {
-                        document.getElementById('AllowancesAmountUnits2').value = '2600,00';
+                        document.getElementById('AllowancesAmountUnits2').value = '2600.00';
                     }
 
                 }
                 else if (bus == 'Service Office UK') {
 
                     if (document.getElementById('AllowancesAmountUnits2')) {
-                        document.getElementById('AllowancesAmountUnits2').value = '2600,00';
+                        document.getElementById('AllowancesAmountUnits2').value = '2600.00';
                     }
 
                 }
@@ -686,7 +686,7 @@
                                     document.getElementById('AllowancesAmountUnits2').value = show;
                                 }
                                 else {
-                                    document.getElementById('AllowancesAmountUnits2').value = '0,55';
+                                    document.getElementById('AllowancesAmountUnits2').value = '0.55';
                                 }
                             }
                             else if (dep.toString().trim() == 'Fork Lift Truck Allowance') {
@@ -694,16 +694,16 @@
                                     document.getElementById('AllowancesAmountUnits2').value = show;
                                 }
                                 else {
-                                    document.getElementById('AllowancesAmountUnits2').value = '1,72';
+                                    document.getElementById('AllowancesAmountUnits2').value = '1.72';
                                 }
                             }
                             else if (dep.toString().trim() == 'Kitchen Skills - Hourly')
                                 if (bus.toString().trim() == 'Store Edinburgh 265') {
-                                    document.getElementById('AllowancesAmountUnits2').value = '1,00';
+                                    document.getElementById('AllowancesAmountUnits2').value = '1.00';
                                 }
 
                                 else if (bus.toString().trim() == 'Store London Tottenham 255' | bus == 'Store London Wembley 141' | bus == 'Store London Croydon 144' | bus == 'Store London Lakeside 262') {
-                                    document.getElementById('AllowancesAmountUnits2').value = '0,30';
+                                    document.getElementById('AllowancesAmountUnits2').value = '0.30';
                                 }
                                 else {
                                     document.getElementById('AllowancesAmountUnits2').value = show;
@@ -776,56 +776,54 @@
             show = $sel.find('show').text();
             //show2 = $sel.find('show2').text();
 
-
-
             if (dep.toString().trim() == 'Location Allowance - Hourly') {
              
                 if (bus == 'Store Bristol 264') {
 
                     if (document.getElementById('AllowancesAmountUnits')) {
-                        document.getElementById('AllowancesAmountUnits').value = '0,10';
+                        document.getElementById('AllowancesAmountUnits').value = '0.10';
                     }
 
                 }
                 else if (bus == 'Store London Croydon 144') {
 
                     if (document.getElementById('AllowancesAmountUnits')) {
-                        document.getElementById('AllowancesAmountUnits').value = '1,28';
+                        document.getElementById('AllowancesAmountUnits').value = '1.28';
                     }
 
                 }
                 else if (bus == 'Store London Lakeside 262') {
 
                     if (document.getElementById('AllowancesAmountUnits')) {
-                        document.getElementById('AllowancesAmountUnits').value = '0,77';
+                        document.getElementById('AllowancesAmountUnits').value = '0.77';
                     }
 
                 }
                 else if (bus == 'Store Milton Keynes 185') {
 
                     if (document.getElementById('AllowancesAmountUnits')) {
-                        document.getElementById('AllowancesAmountUnits').value = '0,35';
+                        document.getElementById('AllowancesAmountUnits').value = '0.35';
                     }
 
                 }
                 else if (bus == 'Store London Tottenham 255') {
 
                     if (document.getElementById('AllowancesAmountUnits')) {
-                        document.getElementById('AllowancesAmountUnits').value = '1,28';
+                        document.getElementById('AllowancesAmountUnits').value = '1.28';
                     }
 
                 }
                 else if (bus == 'Store London Wembley 141') {
 
                     if (document.getElementById('AllowancesAmountUnits')) {
-                        document.getElementById('AllowancesAmountUnits').value = '1,28';
+                        document.getElementById('AllowancesAmountUnits').value = '1.28';
                     }
 
                 }
                 else if (bus == 'Service Office UK') {
 
                     if (document.getElementById('AllowancesAmountUnits')) {
-                        document.getElementById('AllowancesAmountUnits').value = '1,28';
+                        document.getElementById('AllowancesAmountUnits').value = '1.28';
                     }
 
                 }
@@ -835,49 +833,49 @@
                 if (bus == 'Store Bristol 264') {
 
                     if (document.getElementById('AllowancesAmountUnits')) {
-                        document.getElementById('AllowancesAmountUnits').value = '203,10';
+                        document.getElementById('AllowancesAmountUnits').value = '203.10';
                     }
 
                 }
                 else if (bus == 'Store London Croydon 144') {
 
                     if (document.getElementById('AllowancesAmountUnits')) {
-                        document.getElementById('AllowancesAmountUnits').value = '2600,00';
+                        document.getElementById('AllowancesAmountUnits').value = '2600.00';
                     }
 
                 }
                 else if (bus == 'Store London Lakeside 262') {
 
                     if (document.getElementById('AllowancesAmountUnits')) {
-                        document.getElementById('AllowancesAmountUnits').value = '1560,00';
+                        document.getElementById('AllowancesAmountUnits').value = '1560.00';
                     }
 
                 }
                 else if (bus == 'Store Milton Keynes 185') {
 
                     if (document.getElementById('AllowancesAmountUnits')) {
-                        document.getElementById('AllowancesAmountUnits').value = '709,00';
+                        document.getElementById('AllowancesAmountUnits').value = '709.00';
                     }
 
                 }
                 else if (bus == 'Store London Tottenham 255') {
 
                     if (document.getElementById('AllowancesAmountUnits')) {
-                        document.getElementById('AllowancesAmountUnits').value = '2600,00';
+                        document.getElementById('AllowancesAmountUnits').value = '2600.00';
                     }
 
                 }
                 else if (bus == 'Store London Wembley 141') {
 
                     if (document.getElementById('AllowancesAmountUnits')) {
-                        document.getElementById('AllowancesAmountUnits').value = '2600,00';
+                        document.getElementById('AllowancesAmountUnits').value = '2600.00';
                     }
 
                 }
                 else if (bus == 'Service Office UK') {
 
                     if (document.getElementById('AllowancesAmountUnits')) {
-                        document.getElementById('AllowancesAmountUnits').value = '2600,00';
+                        document.getElementById('AllowancesAmountUnits').value = '2600.00';
                     }
 
                 }
@@ -894,7 +892,7 @@
                                     document.getElementById('AllowancesAmountUnits').value = show;
                                 }
                                 else {
-                                    document.getElementById('AllowancesAmountUnits').value = '0,55';
+                                    document.getElementById('AllowancesAmountUnits').value = '0.55';
                                 }
                             }
                             else if (dep.toString().trim() == 'Fork Lift Truck Allowance') {
@@ -902,22 +900,436 @@
                                     document.getElementById('AllowancesAmountUnits').value = show;
                                 }
                                 else {
-                                    document.getElementById('AllowancesAmountUnits').value = '1,72';
+                                    document.getElementById('AllowancesAmountUnits').value = '1.72';
                                 }
                             }
                             else if (dep.toString().trim() == 'Kitchen Skills - Hourly')
                                 if (bus.toString().trim() == 'Store Edinburgh 265') {
-                                    document.getElementById('AllowancesAmountUnits').value = '1,00';
+                                    document.getElementById('AllowancesAmountUnits').value = '1.00';
                                 }
 
                                 else if (bus.toString().trim() == 'Store London Tottenham 255' | bus == 'Store London Wembley 141' | bus == 'Store London Croydon 144' | bus == 'Store London Lakeside 262') {
-                                    document.getElementById('AllowancesAmountUnits').value = '0,30';
+                                    document.getElementById('AllowancesAmountUnits').value = '0.30';
                                 }
                                 else {
                                     document.getElementById('AllowancesAmountUnits').value = show;
                                 }
                             else {
                                 document.getElementById('AllowancesAmountUnits').value = show;
+                            }
+                        }
+
+
+                    }
+
+                    res = '1';
+                }
+
+
+                if (res == 1) {
+                    return;
+                }
+            }
+
+
+            if (res == 1) {
+                return;
+            }
+
+
+        });
+    }
+
+    function setAllowanceTypeXML4(xml) {
+        //////////
+        //Sets allowance type units from predefined_allowancetype_units_outs.XML based on Allowance type
+        //////////
+
+        var show = ''
+        var show2 = ''
+        if (document.getElementById('AllowancesAmountUnits4')) {
+            document.getElementById('AllowancesAmountUnits4').value = '';
+        }
+        if (document.getElementById('AllowancesNetGross4')) {
+            document.getElementById('AllowancesNetGross4').value = '';
+        }
+        var res = '0';
+        var bus = '';
+
+        if (document.getElementById('BusinessUnit')) {
+            //bus = $("#BusinessUnit option:selected").text();
+            bus = document.getElementById('BusinessUnit').value;
+        }
+        var dep = '';
+        if (document.getElementById('AllowancesType4')) {
+            dep = document.getElementById('AllowancesType4').value;
+        }
+        //var bus = $("#BusinessUnit option:selected").text();
+        // alert(bus);
+
+        var d = dep;
+
+        $(xml).find('dependent').each(function () {
+
+
+            var $sel = $(this);
+            show = '';
+            show2 = '';
+
+            var department = $sel.find('selected').text();
+
+            show = $sel.find('show').text();
+            //show2 = $sel.find('show2').text();
+
+
+
+            if (dep.toString().trim() == 'Location Allowance - Hourly') {
+
+                if (bus == 'Store Bristol 264') {
+
+                    if (document.getElementById('AllowancesAmountUnits4')) {
+                        document.getElementById('AllowancesAmountUnits4').value = '0.10';
+                    }
+
+                }
+                else if (bus == 'Store London Croydon 144') {
+
+                    if (document.getElementById('AllowancesAmountUnits4')) {
+                        document.getElementById('AllowancesAmountUnits4').value = '1.28';
+                    }
+
+                }
+                else if (bus == 'Store London Lakeside 262') {
+
+                    if (document.getElementById('AllowancesAmountUnits4')) {
+                        document.getElementById('AllowancesAmountUnits4').value = '0.77';
+                    }
+
+                }
+                else if (bus == 'Store Milton Keynes 185') {
+
+                    if (document.getElementById('AllowancesAmountUnits4')) {
+                        document.getElementById('AllowancesAmountUnits4').value = '0.35';
+                    }
+
+                }
+                else if (bus == 'Store London Tottenham 255') {
+
+                    if (document.getElementById('AllowancesAmountUnits4')) {
+                        document.getElementById('AllowancesAmountUnits4').value = '1.28';
+                    }
+
+                }
+                else if (bus == 'Store London Wembley 141') {
+
+                    if (document.getElementById('AllowancesAmountUnits4')) {
+                        document.getElementById('AllowancesAmountUnits4').value = '1.28';
+                    }
+
+                }
+                else if (bus == 'Service Office UK') {
+
+                    if (document.getElementById('AllowancesAmountUnits4')) {
+                        document.getElementById('AllowancesAmountUnits4').value = '1.28';
+                    }
+
+                }
+            }
+            else if (dep.toString().trim() == 'Location Allowance - Salaried') {
+
+                if (bus == 'Store Bristol 264') {
+
+                    if (document.getElementById('AllowancesAmountUnits4')) {
+                        document.getElementById('AllowancesAmountUnits4').value = '203.10';
+                    }
+
+                }
+                else if (bus == 'Store London Croydon 144') {
+
+                    if (document.getElementById('AllowancesAmountUnits4')) {
+                        document.getElementById('AllowancesAmountUnits4').value = '2600.00';
+                    }
+
+                }
+                else if (bus == 'Store London Lakeside 262') {
+
+                    if (document.getElementById('AllowancesAmountUnits4')) {
+                        document.getElementById('AllowancesAmountUnits4').value = '1560.00';
+                    }
+
+                }
+                else if (bus == 'Store Milton Keynes 185') {
+
+                    if (document.getElementById('AllowancesAmountUnits4')) {
+                        document.getElementById('AllowancesAmountUnits4').value = '709.00';
+                    }
+
+                }
+                else if (bus == 'Store London Tottenham 255') {
+
+                    if (document.getElementById('AllowancesAmountUnits4')) {
+                        document.getElementById('AllowancesAmountUnits4').value = '2600.00';
+                    }
+
+                }
+                else if (bus == 'Store London Wembley 141') {
+
+                    if (document.getElementById('AllowancesAmountUnits4')) {
+                        document.getElementById('AllowancesAmountUnits4').value = '2600.00';
+                    }
+
+                }
+                else if (bus == 'Service Office UK') {
+
+                    if (document.getElementById('AllowancesAmountUnits4')) {
+                        document.getElementById('AllowancesAmountUnits4').value = '2600.00';
+                    }
+
+                }
+            }
+            else {
+
+                if (department.toString().trim() == dep.toString().trim()) {
+
+                    if (show != '') {
+                        if (document.getElementById('AllowancesAmountUnits4')) {
+
+                            if (dep.toString().trim() == 'Advanced') {
+                                if (bus.toString().trim() != 'Peterborough Contact Centre') {
+                                    document.getElementById('AllowancesAmountUnits4').value = show;
+                                }
+                                else {
+                                    document.getElementById('AllowancesAmountUnits4').value = '0.55';
+                                }
+                            }
+                            else if (dep.toString().trim() == 'Fork Lift Truck Allowance') {
+                                if (bus.toString().trim() != 'Store Milton Keynes 185') {
+                                    document.getElementById('AllowancesAmountUnits4').value = show;
+                                }
+                                else {
+                                    document.getElementById('AllowancesAmountUnits4').value = '1.72';
+                                }
+                            }
+                            else if (dep.toString().trim() == 'Kitchen Skills - Hourly')
+                                if (bus.toString().trim() == 'Store Edinburgh 265') {
+                                    document.getElementById('AllowancesAmountUnits4').value = '1.00';
+                                }
+
+                                else if (bus.toString().trim() == 'Store London Tottenham 255' | bus == 'Store London Wembley 141' | bus == 'Store London Croydon 144' | bus == 'Store London Lakeside 262') {
+                                    document.getElementById('AllowancesAmountUnits4').value = '0.30';
+                                }
+                                else {
+                                    document.getElementById('AllowancesAmountUnits4').value = show;
+                                }
+                            else {
+                                document.getElementById('AllowancesAmountUnits4').value = show;
+                            }
+                        }
+
+
+                    }
+
+                    res = '1';
+                }
+
+
+                if (res == 1) {
+                    return;
+                }
+            }
+
+
+            if (res == 1) {
+                return;
+            }
+
+
+        });
+    }
+
+    function setAllowanceTypeXML5(xml) {
+        //////////
+        //Sets allowance type units from predefined_allowancetype_units_outs.XML based on Allowance type
+        //////////
+
+        var show = ''
+        var show2 = ''
+        if (document.getElementById('AllowancesAmountUnits5')) {
+            document.getElementById('AllowancesAmountUnits5').value = '';
+        }
+        if (document.getElementById('AllowancesNetGross5')) {
+            document.getElementById('AllowancesNetGross5').value = '';
+        }
+        var res = '0';
+        var bus = '';
+
+        if (document.getElementById('BusinessUnit')) {
+            //bus = $("#BusinessUnit option:selected").text();
+            bus = document.getElementById('BusinessUnit').value;
+        }
+        var dep = '';
+        if (document.getElementById('AllowancesType5')) {
+            dep = document.getElementById('AllowancesType5').value;
+        }
+        //var bus = $("#BusinessUnit option:selected").text();
+        // alert(bus);
+
+        var d = dep;
+
+        $(xml).find('dependent').each(function () {
+
+
+            var $sel = $(this);
+            show = '';
+            show2 = '';
+
+            var department = $sel.find('selected').text();
+
+            show = $sel.find('show').text();
+            //show2 = $sel.find('show2').text();
+
+
+
+            if (dep.toString().trim() == 'Location Allowance - Hourly') {
+
+                if (bus == 'Store Bristol 264') {
+
+                    if (document.getElementById('AllowancesAmountUnits5')) {
+                        document.getElementById('AllowancesAmountUnits5').value = '0.10';
+                    }
+
+                }
+                else if (bus == 'Store London Croydon 144') {
+
+                    if (document.getElementById('AllowancesAmountUnits5')) {
+                        document.getElementById('AllowancesAmountUnits5').value = '1.28';
+                    }
+
+                }
+                else if (bus == 'Store London Lakeside 262') {
+
+                    if (document.getElementById('AllowancesAmountUnits5')) {
+                        document.getElementById('AllowancesAmountUnits5').value = '0.77';
+                    }
+
+                }
+                else if (bus == 'Store Milton Keynes 185') {
+
+                    if (document.getElementById('AllowancesAmountUnits5')) {
+                        document.getElementById('AllowancesAmountUnits5').value = '0.35';
+                    }
+
+                }
+                else if (bus == 'Store London Tottenham 255') {
+
+                    if (document.getElementById('AllowancesAmountUnits5')) {
+                        document.getElementById('AllowancesAmountUnits5').value = '1.28';
+                    }
+
+                }
+                else if (bus == 'Store London Wembley 141') {
+
+                    if (document.getElementById('AllowancesAmountUnits5')) {
+                        document.getElementById('AllowancesAmountUnits5').value = '1.28';
+                    }
+
+                }
+                else if (bus == 'Service Office UK') {
+
+                    if (document.getElementById('AllowancesAmountUnits5')) {
+                        document.getElementById('AllowancesAmountUnits5').value = '1.28';
+                    }
+
+                }
+            }
+            else if (dep.toString().trim() == 'Location Allowance - Salaried') {
+
+                if (bus == 'Store Bristol 264') {
+
+                    if (document.getElementById('AllowancesAmountUnits5')) {
+                        document.getElementById('AllowancesAmountUnits5').value = '203.10';
+                    }
+
+                }
+                else if (bus == 'Store London Croydon 144') {
+
+                    if (document.getElementById('AllowancesAmountUnits5')) {
+                        document.getElementById('AllowancesAmountUnits5').value = '2600.00';
+                    }
+
+                }
+                else if (bus == 'Store London Lakeside 262') {
+
+                    if (document.getElementById('AllowancesAmountUnits5')) {
+                        document.getElementById('AllowancesAmountUnits5').value = '1560.00';
+                    }
+
+                }
+                else if (bus == 'Store Milton Keynes 185') {
+
+                    if (document.getElementById('AllowancesAmountUnits5')) {
+                        document.getElementById('AllowancesAmountUnits5').value = '709.00';
+                    }
+
+                }
+                else if (bus == 'Store London Tottenham 255') {
+
+                    if (document.getElementById('AllowancesAmountUnits5')) {
+                        document.getElementById('AllowancesAmountUnits5').value = '2600.00';
+                    }
+
+                }
+                else if (bus == 'Store London Wembley 141') {
+
+                    if (document.getElementById('AllowancesAmountUnits5')) {
+                        document.getElementById('AllowancesAmountUnits5').value = '2600.00';
+                    }
+
+                }
+                else if (bus == 'Service Office UK') {
+
+                    if (document.getElementById('AllowancesAmountUnits5')) {
+                        document.getElementById('AllowancesAmountUnits5').value = '2600.00';
+                    }
+
+                }
+            }
+            else {
+
+                if (department.toString().trim() == dep.toString().trim()) {
+
+                    if (show != '') {
+                        if (document.getElementById('AllowancesAmountUnits5')) {
+
+                            if (dep.toString().trim() == 'Advanced') {
+                                if (bus.toString().trim() != 'Peterborough Contact Centre') {
+                                    document.getElementById('AllowancesAmountUnits5').value = show;
+                                }
+                                else {
+                                    document.getElementById('AllowancesAmountUnits5').value = '0.55';
+                                }
+                            }
+                            else if (dep.toString().trim() == 'Fork Lift Truck Allowance') {
+                                if (bus.toString().trim() != 'Store Milton Keynes 185') {
+                                    document.getElementById('AllowancesAmountUnits5').value = show;
+                                }
+                                else {
+                                    document.getElementById('AllowancesAmountUnits5').value = '1.72';
+                                }
+                            }
+                            else if (dep.toString().trim() == 'Kitchen Skills - Hourly')
+                                if (bus.toString().trim() == 'Store Edinburgh 265') {
+                                    document.getElementById('AllowancesAmountUnits5').value = '1.00';
+                                }
+
+                                else if (bus.toString().trim() == 'Store London Tottenham 255' | bus == 'Store London Wembley 141' | bus == 'Store London Croydon 144' | bus == 'Store London Lakeside 262') {
+                                    document.getElementById('AllowancesAmountUnits5').value = '0.30';
+                                }
+                                else {
+                                    document.getElementById('AllowancesAmountUnits5').value = show;
+                                }
+                            else {
+                                document.getElementById('AllowancesAmountUnits5').value = show;
                             }
                         }
 
@@ -1009,11 +1421,55 @@
         });
     }
 
+    function setAllowanceType4() {
+            //////////
+            var path = window.location.protocol + '//';
+            path = path + window.location.host + '/';
 
-    $('#ChangeValidFrom').change(function () {
-        setDatePickerBehavior('AllowancesValidTo');
-    });
-    setDefaultDatePickerBehavior('AllowancesValidTo');
+
+            path = site.baseUrl + '/FormLibContent/Xmls/UnitedKingdom/Templates/predefined_allowancetype_units_outs_additional.xml'
+
+            $.ajax({
+                type: "GET",
+                url: path,
+                dataType: "xml",
+                success: setAllowanceTypeXML4,
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.responseText);
+                    alert(textStatus);
+                    alert(errorThrown);
+                }
+
+            });
+    }
+
+    function setAllowanceType5() {
+        //////////
+        var path = window.location.protocol + '//';
+        path = path + window.location.host + '/';
+
+
+        path = site.baseUrl + '/FormLibContent/Xmls/UnitedKingdom/Templates/predefined_allowancetype_units_outs_additional.xml'
+
+        $.ajax({
+            type: "GET",
+            url: path,
+            dataType: "xml",
+            success: setAllowanceTypeXML5,
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseText);
+                alert(textStatus);
+                alert(errorThrown);
+            }
+
+        });
+    }
+
+
+
+    //$('#ChangeValidFrom').change(function () {
+    //    setDatePickerBehavior('AllowancesValidTo');
+    //});
 
     //$('#AllowancesPaymentType2').change(function () {
     //    setDatePickerBehavior('AllowancesValidTo2', $(this).val());
@@ -1025,10 +1481,10 @@
     //});
     //setDefaultDatePickerBehavior('AllowancesValidTo3', $('#AllowancesPaymentType3').val());
 
-    $('#ChangeValidFrom').change(function () {
-        setDatePickerBehavior('DeductionsValidTo');
-    });
-    setDefaultDatePickerBehavior('DeductionsValidTo');
+    //$('#ChangeValidFrom').change(function () {
+    //    setDatePickerBehavior('DeductionsValidTo');
+    //});
+   // setDefaultDatePickerBehavior('DeductionsValidTo');
 
     //$('#DeductionsPaymentType2').change(function () {
     //    setDatePickerBehavior('DeductionsValidTo2', $(this).val());

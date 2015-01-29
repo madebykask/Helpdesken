@@ -44,8 +44,6 @@
 <show7>Salaried Management</show7>
 </dependent>
 <dependent>
-<selected>Activities Specialist</selected>
-<dependent>
 <selected>Activity Co-worker</selected>
 <show1> </show1>
 <show2> </show2>
@@ -501,10 +499,6 @@
 <show6>Level 2</show6>
 <show7>Salary Senior Management</show7>
 </dependent>
-<dependent>
-<selected>Comm &amp; In Manager</selected>
-<dependent>
-<selected>Commercial Activities Leader</selected>
 <dependent>
 <selected>Commercial Activity Leader</selected>
 <show1>50</show1>
@@ -3286,7 +3280,7 @@
 <show7>Hourly</show7>
 </dependent>
 <dependent>
-<selected>Succession Manager – IKEA Group</selected>
+<selected>Succession Manager ï¿½ IKEA Group</selected>
 <dependent>
 <selected>Supply Support Specialist</selected>
 <show1></show1>
@@ -3459,8 +3453,6 @@
 </dependent>
 <dependent>
 <selected>VAP Manager</selected>
-<dependent>
-<selected>Visual Merchandise / Activity Co-worker</selected>
 <dependent>
 <selected>Visual Merchandise Leader</selected>
 <show1></show1>

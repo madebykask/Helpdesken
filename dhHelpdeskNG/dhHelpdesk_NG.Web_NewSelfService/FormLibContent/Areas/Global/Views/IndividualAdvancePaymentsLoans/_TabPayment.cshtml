@@ -23,22 +23,23 @@
                         @Model.Element("PaymentAmount")
                     </td>
                 </tr>
-                <tr>
+@*                <tr>
                     <td class="tdstrong">@Model.Label("PaymentCurrency")</td>
                     <td>
                         @Model.Element("PaymentCurrency")
                     </td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("PaymentDate")</td>
-                    <td>
-                        @Model.Element("PaymentDate")
-                    </td>
-                </tr>
+                </tr>*@
+
                 <tr>
                     <td class="tdstrong">@Model.Label("PaymentMethod")</td>
                     <td>
                         @Model.Element("PaymentMethod")
+                    </td>
+                </tr>
+                                <tr>
+                    <td class="tdstrong">@Model.Label("PaymentDate")</td>
+                    <td>
+                        @Model.Element("PaymentDate")
                     </td>
                 </tr>
              
@@ -55,27 +56,15 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="tdstrong">@Model.Label("DeductionType")</td>
-                    <td>
-                        @Model.Element("DeductionType")
-                    </td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("DeductionAmountUnits")</td>
-                    <td>
-                        @Model.Element("DeductionAmountUnits")
-                    </td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("DeductionNetGross")</td>
-                    <td>
-                        @Model.Element("DeductionNetGross")
-                    </td>
-                </tr>
-                <tr>
                     <td class="tdstrong">@Model.Label("Re-PaymentType")</td>
                     <td>
                         @Model.Element("Re-PaymentType")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Re-PaymentAmountUnits")</td>
+                    <td>
+                        @Model.Element("Re-PaymentAmountUnits")
                     </td>
                 </tr>
                 <tr>
@@ -90,9 +79,36 @@
     </div>
 </div>
 
-<script>
-    
-    
-      
-    
+<script>           
+    var lockedbyUserGroup = document.getElementById('LockedByUserGroup').getAttribute('status');
+    if ("@Model.ReadOnlyTab("#Payment")" == 'False' && lockedbyUserGroup == 'False') {
+        $(function () {
+
+            function setPaymentDateBehavior(value) {
+                if (value == 'Payroll') {
+                    $('#date_PaymentDate').datepicker("destroy");
+                    $('#date_PaymentDate').addClass("disabled");
+                    $('#PaymentDate').prop('disabled', true);
+                    $('#PaymentDate').val("");
+                }
+                else {
+                    $('#date_PaymentDate').datepicker();
+                    $('#PaymentDate').prop('disabled', false);
+                    $("#PaymentDate").removeClass("disabled");
+                }
+            }
+
+            if ($('#PaymentMethod').val() == 'Payroll') {
+                $('#date_PaymentDate').datepicker("destroy");
+                $('#date_PaymentDate').addClass("disabled");
+                $('#PaymentDate').prop('disabled', true);
+                $('#PaymentDate').val("");
+            }
+
+
+            $('#PaymentMethod').change(function () {
+                setPaymentDateBehavior($(this).val());
+            });
+        });
+    }    
 </script>

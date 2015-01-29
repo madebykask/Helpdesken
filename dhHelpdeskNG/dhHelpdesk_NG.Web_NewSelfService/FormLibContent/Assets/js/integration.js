@@ -8,10 +8,6 @@ function changeCompany() {
     var companyId = $("#Company").val();
     var selectedValue = $("#val_BusinessUnit").val();
 
-    //$('#BusinessUnit').find('option').remove().end().append('<option value=""></option>');
-    //$('#ServiceArea').find('option').remove().end().append('<option value=""></option>');
-    //$('#Department').find('option').remove().end().append('<option value=""></option>');
-
     $('#BusinessUnit').find('option').remove();
     $("#BusinessUnit")[0].add(new Option("", " "));
     $('#ServiceArea').find('option').remove();
@@ -25,15 +21,13 @@ function changeCompany() {
         var url = ajaxInfo.attr('url');
         var customerId = ajaxInfo.attr('customerId');
 
-        if (url != '' && customerId != '' && companyId != '' && (!isNaN(parseFloat(companyId)) && isFinite(companyId))) {
+        if (url && customerId && companyId && (!isNaN(parseFloat(companyId)) && isFinite(companyId))) {
 
             var jqxhr = $.post(url + 'GetBusinessUnits?customerId=' + customerId + '&companyId=' + companyId + "&ie=" + (new Date()).getTime(), function () {
 
             })
                 .done(function (data) {
                     $.each(data, function (i, e) {
-                        //$('#BusinessUnit').append($("<option></option>").attr("value", e.Id).text(e.Name)); 
-
                         $("#BusinessUnit")[0].add(new Option(e.Name, e.Id))
                     });
 
@@ -50,6 +44,10 @@ function changeCompany() {
 
 function changeNewCompany(clear) {
 
+    if ($("#NewCompany option").length == 2) {
+        $("#NewCompany option").eq(1).attr('selected', true);
+    }
+
     var companyId = $("#NewCompany").val();
     var hidden = $("#hidden_NewCompany");
 
@@ -58,10 +56,6 @@ function changeNewCompany(clear) {
 
     var selectedValue = $("#val_NewBusinessUnit").val();
     var oldValue = $('#OLD_NewBusinessUnit').val();
-
-    //$('#NewBusinessUnit').find('option').remove().end().append('<option value=" "></option>');
-    //$('#NewServiceArea').find('option').remove().end().append('<option value=" "></option>');
-    //$('#NewDepartment').find('option').remove().end().append('<option value=" "></option>');
 
     $('#NewBusinessUnit').find('option').remove();
     $("#NewBusinessUnit")[0].add(new Option("", " "));
@@ -76,13 +70,11 @@ function changeNewCompany(clear) {
         var url = ajaxInfo.attr('url');
         var customerId = ajaxInfo.attr('customerId');
 
-        if (url != '' && customerId != '' && companyId != '' && companyId != undefined) {
+        if (url && companyId) {
 
             var jqxhr = $.post(url + 'GetBusinessUnits?customerId=' + customerId + '&companyId=' + companyId + "&ie=" + (new Date()).getTime(), function () { })
                 .done(function (data) {
                     $.each(data, function (i, e) {
-                        //$('#NewBusinessUnit').append($("<option></option>").attr("value", e.Id).text(e.Name));
-
                         $("#NewBusinessUnit")[0].add(new Option(e.Name, e.Id))
                     });
 
@@ -90,16 +82,30 @@ function changeNewCompany(clear) {
                         $('#NewBusinessUnit option').filter(function () {
                             return $(this).text() == oldValue;
                         }).prop('selected', true);
+                        $('#PrimarySite').val(oldValue);
                     }
 
                     if (!clear && selectedValue != '') {
                         $('#NewBusinessUnit').val(selectedValue);
+                        
+                    }
+                  
+                    if ($("#NewBusinessUnit option").length == 2) {
+                        $("#NewBusinessUnit option").eq(1).attr('selected', true);
+                        
+                        //Commented out because it gave complication on IE change t&c. Overwriting default values when saving.
+                        //$("#NewBusinessUnit").change();
+                        
+                        $('#PrimarySite').val($('#NewBusinessUnit').text());
+
                     }
 
                     changeNewBusinessUnit(clear);
                 })
                 .fail(function () { })
                 .always(function () { });
+            
+            
         }
     }
 
@@ -113,9 +119,6 @@ function changeBusinessUnit() {
     var businessUnitId = $("#BusinessUnit").val();
     var selectedValue = $("#val_ServiceArea").val();
 
-    //$('#ServiceArea').find('option').remove().end().append('<option value=""></option>');
-    //$('#Department').find('option').remove().end().append('<option value=""></option>');
-
     $('#ServiceArea').find('option').remove();
     $("#ServiceArea")[0].add(new Option("", " "));
     $('#Department').find('option').remove();
@@ -127,21 +130,26 @@ function changeBusinessUnit() {
 
         var url = ajaxInfo.attr('url');
 
-        if (url != '' && businessUnitId != '') {
+        if (url && businessUnitId && $.trim(businessUnitId) != '') {
 
             var jqxhr = $.post(url + 'GetFunctions?businessUnitId=' + businessUnitId + "&ie=" + (new Date()).getTime(), function () {
 
             })
                 .done(function (data) {
                     $.each(data, function (i, e) {
-                        //$('#ServiceArea').append($("<option></option>").attr("value", e.Id).text(e.Name));
-
-                        $("#ServiceArea")[0].add(new Option(e.Name, e.Id))
+                        // Only adds departments which are active or saved to case before -- AC 2014-10-24
+                        if (e.Status == 1 || e.Id == selectedValue) {
+                            $("#ServiceArea")[0].add(new Option(e.Name, e.Id))
+                        }
                     });
 
                     if (selectedValue != '') {
                         $('#ServiceArea').val(selectedValue);
                         changeFunctions();
+                    }
+
+                    if (typeof (changeBusinessUnitCallback) == "function") {
+                        changeBusinessUnitCallback();
                     }
                 })
                 .fail(function () { })
@@ -153,11 +161,14 @@ function changeBusinessUnit() {
 function changeNewBusinessUnit(clear) {
 
     var businessUnitId = $("#NewBusinessUnit").val();
+
+    var hidden = $("#hidden_NewBusinessUnit");
+
+    if (hidden.length > 0)
+        hidden.val(businessUnitId);
+
     var selectedValue = $("#val_NewServiceArea").val();
     var oldValue = $('#OLD_NewServiceArea').val();
-
-    //$('#NewServiceArea').find('option').remove().end().append('<option value=" "></option>');
-    //$('#NewDepartment').find('option').remove().end().append('<option value=" "></option>');
 
     $('#NewServiceArea').find('option').remove();
     $("#NewServiceArea")[0].add(new Option("", " "));
@@ -169,14 +180,15 @@ function changeNewBusinessUnit(clear) {
 
         var url = ajaxInfo.attr('url');
 
-        if (url != '' && $.trim(businessUnitId) != '') {
+        if (url && businessUnitId && $.trim(businessUnitId) != '') {
 
             var jqxhr = $.post(url + 'GetFunctions?businessUnitId=' + businessUnitId + "&ie=" + (new Date()).getTime(), function () { })
                 .done(function (data) {
                     $.each(data, function (i, e) {
-                        //$('#NewServiceArea').append($("<option></option>").attr("value", e.Id).text(e.Name));
-
-                        $("#NewServiceArea")[0].add(new Option(e.Name, e.Id))
+                        // Only adds departments which are active or saved to case before -- AC 2014-10-24
+                        if (e.Status == 1 || e.Id == selectedValue) {
+                            $("#NewServiceArea")[0].add(new Option(e.Name, e.Id))
+                        }
                     });
 
                     if (clear && oldValue != '') {
@@ -191,6 +203,10 @@ function changeNewBusinessUnit(clear) {
 
                     if ($.trim($("#NewServiceArea").val()) == '') {
                         $("#NewServiceArea").val($("#NewServiceArea option:first").val());
+                    }
+
+                    if (typeof (changeBusinessUnitCallback) == "function") {
+                        changeBusinessUnitCallback();
                     }
 
                     changeNewFunctions(clear);
@@ -210,8 +226,6 @@ function changeFunctions() {
     var serviceAreaId = $("#ServiceArea").val();
     var selectedValue = $("#val_Department").val();
 
-    //$('#Department').find('option').remove().end().append('<option value=""></option>');
-
     $('#Department').find('option').remove();
     $("#Department")[0].add(new Option("", " "));
 
@@ -219,21 +233,27 @@ function changeFunctions() {
     if (ajaxInfo.length > 0) {
 
         var url = ajaxInfo.attr('url');
-
-        if (url != '' && serviceAreaId != '') {
+        
+        if (url && serviceAreaId && $.trim(serviceAreaId) != '') {
 
             var jqxhr = $.post(url + 'GetDepartments?serviceAreaId=' + serviceAreaId + "&ie=" + (new Date()).getTime(), function () {
 
             })
                 .done(function (data) {
                     $.each(data, function (i, e) {
-                        //$('#Department').append($("<option></option>").attr("value", e.Id).text(e.Name));
-
-                        $("#Department")[0].add(new Option(e.Name, e.Id))
+                        // Only adds departments which are active or saved to case before -- AC 2014-10-24
+                        if (e.Status == 1 || e.Id == selectedValue) {
+                            $("#Department")[0].add(new Option(e.Name, e.Id))
+                        }
                     });
 
                     if (selectedValue != '')
                         $('#Department').val(selectedValue);
+
+                    if (typeof (changeFunctionsCallback) == "function")
+                    {
+                        changeFunctionsCallback();
+                    }
                 })
                 .fail(function () { })
                 .always(function () { });
@@ -247,8 +267,6 @@ function changeNewFunctions(clear) {
     var selectedValue = $("#val_NewDepartment").val();
     var oldValue = $('#OLD_NewDepartment').val();
 
-    //$('#NewDepartment').find('option').remove().end().append('<option value=" "></option>');
-
     $('#NewDepartment').find('option').remove();
     $("#NewDepartment")[0].add(new Option("", " "));
 
@@ -257,14 +275,15 @@ function changeNewFunctions(clear) {
 
         var url = ajaxInfo.attr('url');
 
-        if (url != '' && $.trim(serviceAreaId) != '') {
+        if (url && serviceAreaId && $.trim(serviceAreaId) != '') {
 
             var jqxhr = $.post(url + 'GetDepartments?serviceAreaId=' + serviceAreaId + "&ie=" + (new Date()).getTime(), function () { })
                 .done(function (data) {
                     $.each(data, function (i, e) {
-                        //$('#NewDepartment').append($("<option></option>").attr("value", e.Id).text(e.Name));
-
-                        $("#NewDepartment")[0].add(new Option(e.Name, e.Id))
+                        // Only adds departments which are active or saved to case before -- AC 2014-10-24
+                        if (e.Status == 1 || e.Id == selectedValue) {
+                            $("#NewDepartment")[0].add(new Option(e.Name, e.Id))
+                        }
                     });
 
                     if (clear && oldValue != '') {
@@ -279,6 +298,12 @@ function changeNewFunctions(clear) {
                     if ($.trim($("#NewDepartment").val()) == '') {
                         $("#NewDepartment").val($("#NewDepartment option:first").val());
                     }
+
+                    if (typeof (changeFunctionsCallback) == "function") {
+                        changeFunctionsCallback();
+                    }
+
+                    
                 })
                 .fail(function () { })
                 .always(function () { });
@@ -302,6 +327,7 @@ function InitIntegration() {
         businessUnit.change(function () {
             changeBusinessUnit();
         });
+
     }
 
     if (company.length > 0 && company.is("select")) {

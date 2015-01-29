@@ -57,3 +57,14 @@
     </div>
     <input type="hidden" id="activeTab" name="activeTab" value="@Model.ActiveTab" />
 }
+
+<script type="text/javascript">
+
+    function changeBusinessUnitCallback() {
+        SetHelpDeskDefault();
+        //SetPrimarySiteDefault();
+        GetXML('Predefined_BusinessUnit_JobTitle.xml', setJobTitle);
+        GetXML('Predefined_LocalJobTitle_JobTitle.xml', setLocalJobTitle);
+    }
+
+</script>

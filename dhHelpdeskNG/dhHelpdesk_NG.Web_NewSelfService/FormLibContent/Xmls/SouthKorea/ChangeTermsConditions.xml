@@ -1,0 +1,615 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE form [
+  <!ENTITY languages SYSTEM "Templates/Languages.xml">
+  <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
+  <!ENTITY state SYSTEM "Templates/ChangeTermsConditionsState.xml">
+
+  <!ENTITY dat_country SYSTEM "Data/Data_Country.xml">
+  <!ENTITY dat_costcentres SYSTEM "Data/Data_CostCentres.xml">
+  <!ENTITY dat_primarysite SYSTEM "Data/Data_PrimarySite.xml">
+  <!ENTITY dat_jobtitle SYSTEM "Data/Data_JobTitle.xml">
+  <!ENTITY dat_positiontitle SYSTEM "Data/Data_PositionTitle.xml">
+  <!ENTITY dat_linemanagers SYSTEM "Data/Data_LineManager.xml">
+  <!ENTITY dat_allowance SYSTEM "Data/Data_AllowanceType.xml">
+  <!ENTITY dat_deduction SYSTEM "Data/Data_DeductionType.xml">
+  <!ENTITY dat_allowanceChangeType SYSTEM "Data/Data_ChangeType.xml">
+
+
+]>
+
+<form id="229" guid="122574FC-9E3E-4571-BA32-DA4E090DDA81" customerId="32">
+  &languages;
+  &regexs;
+  &state;
+
+  <fields>
+
+    <!--Tab ServiceRequestDetails-->
+    <tab name="#ServiceRequestDetails" label="Service Request Details">
+      <element name="Co-WorkerGlobalviewID" type="text" label="Co-Worker Globalview ID" mandatory="1">
+        <regex inherit="employeeno" pattern="" message=""></regex>
+      </element>
+      <element name="FirstName" type="text" label="Co-Worker First Name" mandatory="1"></element>
+      <element name="LastName" type="text" label="Co-Worker Last Name" mandatory="1"></element>
+      <element name="IKEAEmailAddress" type="text" label="IKEA Email Address">
+        <regex inherit="email" pattern="" message=""></regex>
+      </element>
+      <element name="IKEANetworkID" type="text" label="IKEA Network ID" mandatory="1"></element>
+      <element name="Company" type="text" label="Company"></element>
+      <element name="BusinessUnit" type="text" label="Business Unit"></element>
+      <element name="ServiceArea" type="text" label="Function"></element>
+      <element name="Department" type="text" label="Department"></element>
+      <element name="TypeOfChange" type="select" label="Type of Change" mandatory="1">
+        <options>
+          <option value=""></option>
+          <option value="Change of working hours only">Change of working hours only</option>
+          <option value="Change of basic pay only">Change of basic pay only</option>
+          <option value="Change of employment terms and conditions">Change of employment terms and conditions</option>          
+        </options>
+      </element>      
+      <element name="ChangeValidFrom" type="date" label="Change Valid from:" mandatory="1" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="ChangeValidTo" type="date" label="Change Valid to:" mandatory="1" default="31.12.9999" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1" default="Standard">
+        <options>
+          <option value=""></option>
+          <option value="Urgent">Urgent</option>
+          <option value="Standard">Standard</option>
+        </options>
+      </element>
+
+      <element type="textarea" name="InternalLogNote" label="Comment"></element>
+    </tab>
+
+    <!--Tab OrganisationalAssignment-->
+    <tab name="#OrganisationalAssignment" label="Organisational Assignment" >
+      <element name="OrganisationCountry" label="Organisation Country" type="text" default="South Korea" disabled="1">
+        &dat_country;
+      </element>
+      <element name="NewCompany" label="Company" source="database" type="select">
+      </element>
+      <element name="NewBusinessUnit" source="database" label="Business unit " type="select">
+        <options>
+          <option value=""></option>
+        </options>
+      </element>
+      <element name="NewServiceArea" source="database" label="Function" type="select">
+        <options>
+          <option value=""></option>
+        </options>
+      </element>
+      <element name="NewDepartment" source="database" label="Department " type="select">
+        <options>
+          <option value=""></option>
+        </options>
+      </element>
+      <!--<element name="CostCentre" label="Cost Centre" type="search-select" mandatory="1" default="SOMEDEFAULTVAL" >
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+        &dat_costcentres;
+      </element>
+      <element name="Costallocation" label="Cost allocation %" type="text"  default="100" >
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="AdditionalCostCentre" label="Additional Cost Centre" type="search-select" >
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+        &dat_costcentres;
+        <mandatoryIf name="MANDATORYIFTHIS"></mandatoryIf>
+      </element>
+      <element name="AdditionalCostallocation" label="Additional Cost allocation" type="text" >
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+        <mandatoryIfNotEmpty name="AdditionalCostCentre"></mandatoryIfNotEmpty>
+      </element>-->
+
+      <element type="hidden" name="MultiCostcentres" label="CostCentres" default="1"></element>
+      <element name="CostCentre" label="Cost Centre" type="select" mandatory="1" >
+        &dat_costcentres;
+      </element>
+      <element name="Costallocation" label="Cost allocation %" type="text"  default="100" mandatory="1">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+        <regex inherit="numFrom1To100" pattern="" message=""></regex>
+
+        <groupSum name="Costallocation,Costallocation2,Costallocation3"
+                            message="Cost allocation % (in all the fields) must always equal 100.">100</groupSum>
+      </element>
+      <element name="CostCentre2" label="Cost Centre" type="select" >
+        &dat_costcentres;
+      </element>
+      <element name="Costallocation2" label="Cost allocation %" type="text" >
+        <mandatoryIfNotEmpty name="CostCentre2"></mandatoryIfNotEmpty>
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+        <regex inherit="numFrom1To100" pattern="" message=""></regex>        
+      </element>
+      <element name="CostCentre3" label="Cost Centre" type="select">
+        &dat_costcentres;
+      </element>
+      <element name="Costallocation3" label="Cost allocation %" type="text" >
+        <mandatoryIfNotEmpty name="CostCentre3"></mandatoryIfNotEmpty>
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+        <regex inherit="numFrom1To100" pattern="" message=""></regex>
+      </element>
+
+      <element name="PositionTitle" label="Position Title" type="search-select">
+        &dat_positiontitle;
+      </element>
+      <element name="JobTitle" label="Job Title" type="search-select" >
+        &dat_jobtitle;
+      </element>
+      <element name="ShortSortjobdescription" label="Short Sort job description" type="textarea"></element>
+      <element name="NewPosition" label="New position?" type="select">
+        <options>
+          <option value=""></option>
+          <option value="New Position">New Position</option>
+          <option value="Fill Vacant Position">Fill Vacant Position</option>
+        </options>
+      </element>
+      <element name="ReportsToLineManager" label="Reports to line manager" type="search-select">
+        &dat_linemanagers;
+      </element>
+      <element name="LocalApprover" type="text" label="Local approver">
+        <regex inherit="employeeno" pattern="" message=""></regex>
+      </element>
+      <element name="EmploymentCategory" label="Employment category" type="select">
+        <options>
+          <option value=""></option>
+          <option value="Permanent">Permanent</option>
+          <option value="Temporary">Temporary</option>
+          <option value="Trainee">Trainee</option>
+          <option value="Transferred Employee">Transferred Employee</option>
+        </options>
+      </element>
+      <element name="ContractedHours" label="Contracted hours " type="select">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+        <options>
+          <option value=""></option>
+          <option value="40">40</option>
+          <option value="32">32</option>
+          <option value="28">28</option>
+          <option value="25">25</option>
+          <option value="20">20</option>
+          <option value="16">16</option>
+        </options>
+      </element>
+      <element name="ContractType" label="Contract type" type="select">
+        <options>
+          <option value=""></option>
+          <option value="Part time">Part time</option>
+          <option value="Full Time">Full Time</option>
+        </options>
+      </element>
+      <element name="ContractEndDate" label="Contract end date:" type="date" format="dd.MM.yyyy">
+        <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
+        <mandatoryIf name="EmploymentCategory">Temporary,Transferred Employee</mandatoryIf>
+      </element>
+      <!--<element name="ProbationPeriod" label="Probation period?" type="select" default="Yes" >
+        <options>
+          <option value=""></option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </options>
+      </element>
+      <element name="Probationenddate" label="Probation end date" type="date">
+        <mandatoryIf name="Probationperiod">Yes</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>-->
+      <element name="Primarysite" label="Primary side " type="select" default="SOMEDEFAULTVAL" >
+        &dat_primarysite;
+      </element>
+      <element name="TECapprover" label="TEC approver " type="select" default="SOMEDEFAULTVAL" >
+        &dat_linemanagers;
+      </element>
+      <element name="HelpDesk" label="Help desk" type="text"  default="ICC3 SNG Retail" ></element>
+
+    </tab>
+
+    <!--Tab: Payment Information-->
+    <tab name="#Payment" label="Payment Information">
+      <element name="PayrollCategory" label="Payroll category " type="select" mandatory="1">
+        <options>
+          <option value=""></option>
+          <option value="Exempted">Exempted</option>
+          <option value="Salaried - Monthly">Salaried - Monthly</option>
+          <option value="Salaried - Hourly">Salaried - Hourly</option>
+          <option value="Flex - Monthly">Flex - Monthly</option>
+          <option value="Flex - Hourly">Flex - Hourly</option>
+        </options>
+      </element>
+      <element name="BasicPayAmount" label="Basic pay amount" type="text" mandatory="1">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="PaidPer" label="Paid per:" type="select" mandatory="1">
+        <options>
+          <option value=""></option>
+          <option value="hour">hour</option>
+          <option value="month">month</option>
+          <option value="annum">annum</option>
+        </options>
+      </element>
+      <element type="select" name="BasicPayChangeReason" label="Basic Pay Change Reason">
+        <options>
+          <option value=""></option>
+          <option value="Promotion">Promotion</option>
+          <option value="Collective increase">Collective increase</option>
+          <option value="Individual increase">Individual increase</option>
+          <option value="Seniority">Seniority</option>
+          <option value="Transfer">Transfer</option>
+          <option value="Reclasification">Reclasification</option>
+          <option value="Salary review">Salary review</option>
+          <option value="Salary adjustment">Salary adjustment</option>
+        </options>
+        <!--<mandatoryIf name="ChangeType">ONLY Pay Change</mandatoryIf>-->
+      </element>
+      <!--Allowances-->
+      <element type="hidden" name="Allowances" default="1"></element>
+      <!--1-->
+      <element type="select" name="AllowancesChangeType" label="Change Type">
+        &dat_allowanceChangeType;
+      </element>
+      <element type="select" name="AllowancesType" label="Allowance Type">
+        &dat_allowance;
+        <mandatoryIfNotEmpty name="AllowancesChangeType"></mandatoryIfNotEmpty>
+      </element>
+      <element type="text" name="AllowancesAmountUnits" label="Amount/Units">
+        <regex inherit="unsignednum" message="" pattern=""></regex>
+        <mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="AllowancesChangeType"></mandatoryIfNotEmpty>
+      </element>
+      <element type="select" name="AllowancesPaidPer" label="Paid per" default="month">
+        <mandatoryIfNotEmpty name="AllowancesChangeType"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="AllowancesAmountUnits"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="hour">hour</option>
+          <option value="month">month</option>
+          <option value="annum">annum</option>
+          <option value="one off">one off</option>
+        </options>
+      </element>
+      <element type="date" name="AllowancesValidFrom" label="Valid from:" format="dd.MM.yyyy">
+        <mandatoryIfNotEmpty name="AllowancesChangeType"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="AllowancesAmountUnits"></mandatoryIfNotEmpty>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" name="AllowancesValidTo" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <mandatoryIfNotEmpty name="AllowancesChangeType"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="AllowancesAmountUnits"></mandatoryIfNotEmpty>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <!--2-->
+      <element type="select" name="AllowancesChangeType2" label="Change Type">
+        &dat_allowanceChangeType;
+      </element>
+      <element type="select" name="AllowancesType2" label="Allowance Type" >
+        &dat_allowance;
+        <mandatoryIfNotEmpty name="AllowancesChangeType2"></mandatoryIfNotEmpty>
+      </element>
+      <element type="text" name="AllowancesAmountUnits2" label="Amount/Units" >
+        <regex inherit="unsignednum" message="" pattern=""></regex>
+        <mandatoryIfNotEmpty name="AllowancesChangeType2"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>
+      </element>
+      <element type="select" name="AllowancesPaidPer2" label="Paid per" default="month">
+        <mandatoryIfNotEmpty name="AllowancesChangeType2"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="AllowancesAmountUnits2"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="hour">hour</option>
+          <option value="month">month</option>
+          <option value="annum">annum</option>
+          <option value="one off">one off</option>
+        </options>
+      </element>
+      <element type="date" name="AllowancesValidFrom2" label="Valid from:" format="dd.MM.yyyy">
+        <mandatoryIfNotEmpty name="AllowancesChangeType2"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="AllowancesAmountUnits2"></mandatoryIfNotEmpty>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" name="AllowancesValidTo2" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <mandatoryIfNotEmpty name="AllowancesChangeType2"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="AllowancesAmountUnits2"></mandatoryIfNotEmpty>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <!--3-->
+      <element type="select" name="AllowancesChangeType3" label="Change Type">
+        &dat_allowanceChangeType;
+      </element>
+      <element type="select" name="AllowancesType3" label="Allowance Type" >
+        &dat_allowance;
+        <mandatoryIfNotEmpty name="AllowancesChangeType3"></mandatoryIfNotEmpty>
+      </element>
+      <element type="text" name="AllowancesAmountUnits3" label="Amount/Units" >
+        <regex inherit="unsignednum" message="" pattern=""></regex>
+        <mandatoryIfNotEmpty name="AllowancesChangeType3"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>
+      </element>
+      <element type="select" name="AllowancesPaidPer3" label="Paid per" default="month">
+        <mandatoryIfNotEmpty name="AllowancesChangeType3"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="AllowancesAmountUnits3"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="hour">hour</option>
+          <option value="month">month</option>
+          <option value="annum">annum</option>
+          <option value="one off">one off</option>
+        </options>
+      </element>
+      <element type="date" name="AllowancesValidFrom3" label="Valid from:"  format="dd.MM.yyyy">
+        <mandatoryIfNotEmpty name="AllowancesChangeType3"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="AllowancesAmountUnits3"></mandatoryIfNotEmpty>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" name="AllowancesValidTo3" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <mandatoryIfNotEmpty name="AllowancesChangeType3"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="AllowancesAmountUnits3"></mandatoryIfNotEmpty>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <!--4-->
+      <element type="select" name="AllowancesChangeType4" label="Change Type">
+        &dat_allowanceChangeType;
+      </element>
+      <element type="select" name="AllowancesType4" label="Allowance Type" >
+        &dat_allowance;
+        <mandatoryIfNotEmpty name="AllowancesChangeType4"></mandatoryIfNotEmpty>
+      </element>
+      <element type="text" name="AllowancesAmountUnits4" label="Amount/Units" >
+        <regex inherit="unsignednum" message="" pattern=""></regex>
+        <mandatoryIfNotEmpty name="AllowancesChangeType4"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="AllowancesType4"></mandatoryIfNotEmpty>
+      </element>
+      <element type="select" name="AllowancesPaidPer4" label="Paid per" default="month">
+        <mandatoryIfNotEmpty name="AllowancesChangeType4"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="AllowancesType4"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="AllowancesAmountUnits4"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="hour">hour</option>
+          <option value="month">month</option>
+          <option value="annum">annum</option>
+          <option value="one off">one off</option>
+        </options>
+      </element>
+      <element type="date" name="AllowancesValidFrom4" label="Valid from:"  format="dd.MM.yyyy">
+        <mandatoryIfNotEmpty name="AllowancesChangeType4"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="AllowancesType4"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="AllowancesAmountUnits4"></mandatoryIfNotEmpty>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" name="AllowancesValidTo4" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+        <mandatoryIfNotEmpty name="AllowancesChangeType4"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="AllowancesType4"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="AllowancesAmountUnits4"></mandatoryIfNotEmpty>
+      </element>
+      <!--5-->
+      <element type="select" name="AllowancesChangeType5" label="Change Type">
+        &dat_allowanceChangeType;
+      </element>
+      <element type="select" name="AllowancesType5" label="Allowance Type" >
+        &dat_allowance;
+        <mandatoryIfNotEmpty name="AllowancesChangeType5"></mandatoryIfNotEmpty>
+      </element>
+      <element type="text" name="AllowancesAmountUnits5" label="Amount/Units" >
+        <regex inherit="unsignednum" message="" pattern=""></regex>
+        <mandatoryIfNotEmpty name="AllowancesChangeType5"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="AllowancesType5"></mandatoryIfNotEmpty>
+      </element>
+      <element type="select" name="AllowancesPaidPer5" label="Paid per" default="month">
+        <mandatoryIfNotEmpty name="AllowancesChangeType5"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="AllowancesType5"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="AllowancesAmountUnits5"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="hour">hour</option>
+          <option value="month">month</option>
+          <option value="annum">annum</option>
+          <option value="one off">one off</option>
+        </options>
+      </element>
+      <element type="date" name="AllowancesValidFrom5" label="Valid from:"  format="dd.MM.yyyy">
+        <mandatoryIfNotEmpty name="AllowancesChangeType5"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="AllowancesType5"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="AllowancesAmountUnits5"></mandatoryIfNotEmpty>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" name="AllowancesValidTo5" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+        <mandatoryIfNotEmpty name="AllowancesChangeType5"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="AllowancesType5"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="AllowancesAmountUnits5"></mandatoryIfNotEmpty>
+      </element>
+
+      <!--Deductions-->
+      <element type="hidden" name="Deductions" default="1"></element>
+      <!--1-->
+      <element type="select" name="DeductionsChangeType" label="Change Type" >
+        &dat_allowanceChangeType;
+      </element>
+      <element type="select" name="DeductionsType" label="Deduction Type" >
+        &dat_deduction;
+        <mandatoryIfNotEmpty name="DeductionsChangeType"></mandatoryIfNotEmpty>
+      </element>
+      <element type="text" name="DeductionsAmountUnits" label="Amount/Units" >
+        <mandatoryIfNotEmpty name="DeductionsChangeType"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
+        <regex inherit="unsignednum" message="" pattern=""></regex>
+      </element>
+      <element type="text" name="DeductedPer" label="Deducted per:" default="month">
+        <mandatoryIfNotEmpty name="DeductionsChangeType"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="DeductionsAmountUnits"></mandatoryIfNotEmpty>   
+      </element>
+      <element type="date" name="DeductionsValidFrom" label="Valid from:" format="dd.MM.yyyy">
+        <mandatoryIfNotEmpty name="DeductionsChangeType"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="DeductionsAmountUnits"></mandatoryIfNotEmpty>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" name="DeductionsValidTo" label="Valid to:" default="31.12.9999" format="dd.MM.yyyy">
+        <mandatoryIfNotEmpty name="DeductionsChangeType"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="DeductionsAmountUnits"></mandatoryIfNotEmpty>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <!--2-->
+      <element type="select" name="DeductionsChangeType2" label="Change Type" >
+        &dat_allowanceChangeType;
+      </element>
+      <element type="select" name="DeductionsType2" label="Deduction Type" >
+        &dat_deduction;
+        <mandatoryIfNotEmpty name="DeductionsChangeType2"></mandatoryIfNotEmpty>
+      </element>
+      <element type="text" name="DeductionsAmountUnits2" label="Amount/Units" >
+        <mandatoryIfNotEmpty name="DeductionsChangeType2"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
+        <regex inherit="unsignednum" message="" pattern=""></regex>
+      </element>
+      <element type="text" name="DeductedPer2" label="Deducted per:" default="month">
+        <mandatoryIfNotEmpty name="DeductionsChangeType2"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="DeductionsAmountUnits2"></mandatoryIfNotEmpty>     
+      </element>
+      <element type="date" name="DeductionsValidFrom2" label="Valid from:"  format="dd.MM.yyyy">
+        <mandatoryIfNotEmpty name="DeductionsChangeType2"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="DeductionsAmountUnits2"></mandatoryIfNotEmpty>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" name="DeductionsValidTo2" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <mandatoryIfNotEmpty name="DeductionsChangeType2"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="DeductionsAmountUnits2"></mandatoryIfNotEmpty>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <!--3-->
+      <element type="select" name="DeductionsChangeType3" label="Change Type" >
+        &dat_allowanceChangeType;
+      </element>
+      <element type="select" name="DeductionsType3" label="Deduction Type" >
+        &dat_deduction;
+        <mandatoryIfNotEmpty name="DeductionsChangeType3"></mandatoryIfNotEmpty>
+      </element>
+      <element type="text" name="DeductionsAmountUnits3" label="Amount/Units" >
+        <mandatoryIfNotEmpty name="DeductionsChangeType3"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
+        <regex inherit="unsignednum" message="" pattern=""></regex>
+      </element>
+      <element type="select" name="DeductedPer3" label="Deducted per:" default="month">
+        <mandatoryIfNotEmpty name="DeductionsChangeType3"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="DeductionsAmountUnits3"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="month">month</option>
+        </options>
+      </element>
+      <element type="date" name="DeductionsValidFrom3" label="Valid from:"  format="dd.MM.yyyy">
+        <mandatoryIfNotEmpty name="DeductionsChangeType3"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="DeductionsAmountUnits3"></mandatoryIfNotEmpty>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" name="DeductionsValidTo3" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <mandatoryIfNotEmpty name="DeductionsChangeType3"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="DeductionsAmountUnits3"></mandatoryIfNotEmpty>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <!--4-->
+      <element type="select" name="DeductionsChangeType4" label="Change Type" >
+        &dat_allowanceChangeType;
+      </element>
+      <element type="select" name="DeductionsType4" label="Deduction Type" >
+        &dat_deduction;
+        <mandatoryIfNotEmpty name="DeductionsChangeType4"></mandatoryIfNotEmpty>
+      </element>
+      <element type="text" name="DeductionsAmountUnits4" label="Amount/Units" >
+        <mandatoryIfNotEmpty name="DeductionsChangeType4"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="DeductionsType4"></mandatoryIfNotEmpty>
+        <regex inherit="unsignednum" message="" pattern=""></regex>
+      </element>
+      <element type="text" name="DeductedPer4" label="Deducted per:" default="month">
+        <mandatoryIfNotEmpty name="DeductionsChangeType4"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="DeductionsType4"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="DeductionsAmountUnits4"></mandatoryIfNotEmpty>      
+      </element>
+      <element type="date" name="DeductionsValidFrom4" label="Valid from:"  format="dd.MM.yyyy">
+        <mandatoryIfNotEmpty name="DeductionsChangeType4"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="DeductionsType4"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="DeductionsAmountUnits4"></mandatoryIfNotEmpty>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" name="DeductionsValidTo4" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+        <mandatoryIfNotEmpty name="DeductionsChangeType4"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="DeductionsType4"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="DeductionsAmountUnits4"></mandatoryIfNotEmpty>
+      </element>
+      <!--5-->
+      <element type="select" name="DeductionsChangeType5" label="Change Type" >
+        &dat_allowanceChangeType;
+      </element>
+      <element type="select" name="DeductionsType5" label="Deduction Type" >
+        &dat_deduction;
+        <mandatoryIfNotEmpty name="DeductionsChangeType5"></mandatoryIfNotEmpty>
+      </element>
+      <element type="text" name="DeductionsAmountUnits5" label="Amount/Units" >
+        <mandatoryIfNotEmpty name="DeductionsChangeType5"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="DeductionsType5"></mandatoryIfNotEmpty>
+        <regex inherit="unsignednum" message="" pattern=""></regex>
+      </element>
+      <element type="text" name="DeductedPer5" label="Deducted per:" default="month">
+        <mandatoryIfNotEmpty name="DeductionsChangeType5"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="DeductionsType5"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="DeductionsAmountUnits5"></mandatoryIfNotEmpty>      
+      </element>
+      <element type="date" name="DeductionsValidFrom5" label="Valid from:"  format="dd.MM.yyyy">
+        <mandatoryIfNotEmpty name="DeductionsChangeType5"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="DeductionsType5"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="DeductionsAmountUnits5"></mandatoryIfNotEmpty>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" name="DeductionsValidTo5" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+        <mandatoryIfNotEmpty name="DeductionsChangeType5"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="DeductionsType5"></mandatoryIfNotEmpty>
+        <mandatoryIfNotEmpty name="DeductionsAmountUnits5"></mandatoryIfNotEmpty>
+      </element>
+      <element name="OneIKEABonusLevel" label="One IKEA Bonus Level " type="select">
+        <options>
+          <option value=""></option>
+          <option value="Level 1">Level 1</option>
+          <option value="Level 2">Level 2</option>
+          <option value="Level 3">Level 3</option>
+        </options>
+      </element>
+      
+    </tab>
+
+    <!--Tab: SSC Use Only-->
+    <tab name="#SSCUseOnly" label="SSC use only">
+      <element name="Annualleaveprorata" label="Annual leave pro rata" type="text" ></element>
+      <element name="Annualleaveentitlement" label="Annual leave entitlement" type="select" mandatory="1">
+        <options>
+          <option value=""></option>
+          <option value="160 hours">160 hours</option>
+          <option value="120 hours">120 hours</option>
+          <option value="96 hours">96 hours</option>
+          <option value="80 hours">80 hours</option>
+          <option value="64 hours">64 hours</option>
+        </options>
+      </element>
+    </tab>
+
+  </fields>
+</form>

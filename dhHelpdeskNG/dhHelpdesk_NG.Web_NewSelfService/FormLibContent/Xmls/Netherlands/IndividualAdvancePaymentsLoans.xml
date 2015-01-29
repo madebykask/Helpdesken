@@ -19,18 +19,18 @@
       </element>
       <element name="FirstName" type="text" label="Co-Worker First Name" mandatory="1"></element>
       <element name="LastName" type="text" label="Co-Worker Last Name" mandatory="1"></element>
-      <element name="IKEAEmailAddress" type="text" label="IKEA Email Address" mandatory="1">
+      <element name="IKEAEmailAddress" type="text" label="IKEA Email Address">
         <regex inherit="email" pattern="" message=""></regex>
       </element>
       <element name="IKEANetworkID" type="text" label="IKEA Network ID" mandatory="1">
-        <regex inherit="unsignednum" pattern="" message=""></regex>
+        
       </element>
       <element name="Company" type="text" label="Company"></element>
       <element name="BusinessUnit" type="text" label="Business Unit"></element>
       <element name="ServiceArea" type="text" label="Function"></element>
       <element name="Department" type="text" label="Department"></element>
 
-      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1">
+      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1" default="Standard">
         <options>
           <option value=""></option>
           <option value="Urgent">Urgent</option>
@@ -48,6 +48,8 @@
           <option value="Advance Payment">Advance Payment</option>
           <option value="Holiday Allowance Advance">Holiday Allowance Advance</option>
           <option value="13th month advance">13th month advance</option>
+          <option value="Extra legal holiday hours Advance">Extra legal holiday hours Advance</option>
+          <option value="Saved leave Advance">Saved leave Advance</option>
         </options>
       </element>
       <element type="text" name="PaymentAmount" label="Amount">
@@ -59,11 +61,11 @@
       <element type="date" name="PaymentDate" label="Payment date" format="dd.MM.yyyy" mandatory="1">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <element type="select" name="PaymentMethod" label="Payment Method" mandatory="1" default="By Payroll">
+      <element type="select" name="PaymentMethod" label="Payment Method" mandatory="1" default="By Manual Payment">
         <options>
           <option value=""></option>
-          <option value="By Payroll">By Payroll</option>
-          <option value="By Off cycle">By Off cycle</option>
+          <!--<option value="By Payroll">By Payroll</option>
+          <option value="By Off cycle">By Off cycle</option>-->
           <option value="By Manual Payment">By Manual Payment</option>
         </options>
       </element>

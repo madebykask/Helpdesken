@@ -3,8 +3,14 @@
 @using ECT.FormLib.Models;
 
 <div class="tab-pane" id="Complete">
-    <div class="span12">
+    <div class="span6">
         <table class="table">       
+            <tbody>
+                 <tr>
+                <td class="tdstrong" colspan="2">
+                    <h4>@Model.Translate("Termination Details")</h4>
+                </td>                
+            </tr>  
             <tr>
                 <td class="tdstrong">@Model.Label("CompleteTerminationType")</td>
                 <td>
@@ -51,7 +57,7 @@
                     @Model.Element("PaymentDate")</td>
             </tr>
 
-             @for (int i = 2; i <= 3; i++)
+             @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
              {
                     <tr class="terminationpayments@(i.ToString())" id="allowance@(i.ToString())">
                         <td class="tdstrong" colspan="2">
@@ -79,10 +85,10 @@
                             @Model.Element("PaymentDate" + i.ToString())</td>
                     </tr>                   
                 }
-                <tr id="addTerminationPaymentsTr">
+                <tr id="addTerminationPaymentsTrr">
                     <td colspan="2">
                         @Model.Element("TerminationPayments")
-                        <a id="addTerminationPayments" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another payment")</a></td>
+                        <a id="addTerminationPayment" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another payment")</a></td>
                 </tr>                                                      
 
              <tr>
@@ -100,18 +106,18 @@
                 <td>
                     @Model.Element("DeductionAmount")</td>
             </tr>
-            <tr>
+@*            <tr>
                 <td class="tdstrong">@Model.Label("DeductionNet_Gross")</td>
                 <td>
                     @Model.Element("DeductionNet_Gross")</td>
-            </tr>         
-             <tr>
+            </tr>         *@
+        @*     <tr>
                 <td class="tdstrong">@Model.Label("DeductionDate")</td>
                 <td>
                     @Model.Element("DeductionDate")</td>
-            </tr>   
+            </tr>   *@
 
-             @for (int i = 2; i <= 3; i++)
+             @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
              {
                     <tr class="deduction@(i.ToString())" id="deduction@(i.ToString())">
                          <td class="tdstrong" colspan="2">
@@ -127,23 +133,24 @@
                         <td class="tdstrong">@Model.Label("DeductionAmount" + i.ToString())</td>
                         <td>
                             @Model.Element("DeductionAmount" + i.ToString())</td>
-                    </tr>
+                    </tr>@*
                     <tr class="deduction@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DeductionNet_Gross" + i.ToString())</td>
                         <td>
                             @Model.Element("DeductionNet_Gross" + i.ToString())</td>
-                    </tr>
-                    <tr class="deduction@(i.ToString())">
+                    </tr>*@
+                    @*<tr class="deduction@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DeductionDate" + i.ToString())</td>
                         <td>
                             @Model.Element("DeductionDate" + i.ToString())</td>
-                    </tr>                   
+                    </tr> *@                  
                 }
-                <tr id="addDeductionTr">
+                <tr id="addDeductionTrr">
                     <td colspan="2">
                         @Model.Element("Deductions")
                         <a id="addDeduction" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Deduction")</a></td>
                 </tr>
+                </tbody>       
         </table>
     </div>
 </div>
@@ -152,6 +159,122 @@
     //document.getElementById('PaymentDate').value = document.getElementById('LastDayOfEmployment').value;
     //document.getElementById('DeductionDate').value = document.getElementById('LastDayOfEmployment').value;
 
-    
+    function setValueForTerminationReason() {
+        if (document.getElementById('CompleteTerminationType')) {
+
+
+
+
+            path = '';
+            var path = window.location.protocol + '//';
+            path = path + window.location.host + '/';
+
+
+            path = site.baseUrl + '/FormLibContent/Xmls/Global/Templates/predefined_TerminationReason.xml'
+
+            $.ajax({
+                type: "GET",
+                url: path,
+                dataType: "xml",
+                success: setTerminationReason,
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.responseText);
+                    alert(textStatus);
+                    alert(errorThrown);
+                }
+
+            });
+
+
+
+        }
+    }
+
+    function setTerminationReason(xml) {
+
+        var terminationreasonvalue = $('#TerminationReason').val();
+        var show = ''
+
+        var dep = '';
+        if (document.getElementById('CompleteTerminationType')) {
+            dep = document.getElementById('CompleteTerminationType').value;
+        }
+        var temp = '';
+
+        $(xml).find('dependent').each(function () {
+
+
+            var $sel = $(this);
+
+            show = '';
+
+
+            var department = $sel.find('selected').text();
+
+            show = $sel.find('show').text();
+
+            if (department.toString().trim() == dep.toString().trim()) {
+
+                if (show != '') {
+
+                    var optionsarray = show.split(',');
+                    var seloption = "";
+
+                    $('#TerminationReason')
+                        .find('option')
+                        .remove();
+
+
+
+                    seloption = '<option value="' + temp + '">' + temp + '</option>';
+
+                    $.each(optionsarray, function (i) {
+                        seloption += '<option value="' + optionsarray[i] + '">' + optionsarray[i] + '</option>';
+                    });
+                    $('#TerminationReason').append(seloption);
+
+
+
+
+                    return;
+                }
+
+
+            }
+        });
+        
+        $('#TerminationReason').val(terminationreasonvalue);
+
+        
+        var CompleteVal = $('#CompleteTerminationType').val()
+        var defaultVal;
+
+        switch (CompleteVal) {
+            case "Casual Termination":
+                defaultVal = "Casual Termination";
+                break;
+            case "Resignation":
+                defaultVal = "Resignation";
+                break;
+            case "Redundancy":
+                defaultVal = "Redundancy";
+                break;
+        }
+        
+        if (!defaultVal == "") {
+            $('#TerminationReason').val(defaultVal);
+        }
+
+    }
+
+
+    $('#CompleteTerminationType').change(function () {
+        
+        setValueForTerminationReason();
+    });
+
+    $(function () {
+        setValueForTerminationReason();
+    });
     
 </script>

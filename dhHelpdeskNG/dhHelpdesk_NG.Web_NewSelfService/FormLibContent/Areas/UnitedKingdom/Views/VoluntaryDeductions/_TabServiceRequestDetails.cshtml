@@ -111,10 +111,14 @@
         <img src="@Url.Content(filename)" />
     </div>
 
-    <input type="hidden" id="CustomerId" value="@Model.CustomerId" />
+    <input type="hidden" id="CustomerId" value="@Model.Form.CustomerId" />
 </div>
 
 <script>
+
+
+
+
 
     var nowTemp = new Date();
     var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
@@ -141,4 +145,7 @@
         if (dvalidFrom.valueOf() < now.valueOf())
             noticeOldDate.show();
     });
+
+    
+
 </script>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<options>
+  <option value=""></option>
+  <option value="﻿Jeju-do">﻿Jeju-do</option>
+  <option value="Joellabuk-do">Joellabuk-do</option>
+  <option value="Joellanam-do">Joellanam-do</option>
+  <option value="Chungcheonkgbuk-do">Chungcheonkgbuk-do</option>
+  <option value="Chungcheongnam-do">Chungcheongnam-do</option>
+  <option value="Incheon-si">Incheon-si</option>
+  <option value="Gangwon-do">Gangwon-do</option>
+  <option value="Gwangju-si">Gwangju-si</option>
+  <option value="Gyeonggi-do">Gyeonggi-do</option>
+  <option value="Gyeongsangbuk-do">Gyeongsangbuk-do</option>
+  <option value="Gyeongsangnam-do">Gyeongsangnam-do</option>
+  <option value="Busan-si">Busan-si</option>
+  <option value="Seoul-si">Seoul-si</option>
+  <option value="Daegu-si">Daegu-si</option>
+  <option value="Daejeon-si">Daejeon-si</option>
+  <option value="Ulsan-si">Ulsan-si</option>
+  <option value="Sejong-si">Sejong-si</option>
+  <option value="Unknown">Unknown</option>
+</options>
