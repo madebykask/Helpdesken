@@ -754,7 +754,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                     null,
                     "Line Manager").ToList(); // Take(maxRecords)
 
-                if (LMtype == "" && ConfigurationManager.AppSettings["CurrentApplication"].ToString() == "LineManager")
+                if (LMtype != "" && ConfigurationManager.AppSettings["CurrentApplication"].ToString() == "LineManager")
                 {
                     var dynamicCases = _caseService.GetAllDynamicCases();
                     model.DynamicCases = dynamicCases;
