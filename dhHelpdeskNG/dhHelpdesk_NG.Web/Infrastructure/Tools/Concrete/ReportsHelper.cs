@@ -3,8 +3,13 @@
     using System;
     using System.Collections.Generic;
     using System.Globalization;
+    using System.IO;
     using System.Linq;
+    using System.Text;
     using System.Web.Helpers;
+    using System.Web.UI.DataVisualization.Charting;
+    using System.Xml;
+    using System.Xml.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Reports.Output;
     using DH.Helpdesk.BusinessData.Models.Shared;
@@ -12,6 +17,8 @@
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Domain;
+
+    using Chart = System.Web.Helpers.Chart;
 
     public sealed class ReportsHelper : IReportsHelper
     {
@@ -106,17 +113,104 @@
                 y.Add(items.Count(i => i.RegistrationDate.Day == day));
             }
 
-            var chart = this.CreateChart(800, 100)
+
+            var c = new global::System.Web.UI.DataVisualization.Charting.Chart();
+            c.Width = 1000;
+            c.Height = 300;           
+
+            var serie = new Series();
+            var xArr = x.ToArray();
+            var yArr = y.ToArray();
+            for (int i = 0; i < xArr.Length; i++)
+            {
+                var yVal = yArr[i];
+                var point = new DataPoint(xArr[i], yVal);
+                point.IsValueShownAsLabel = yVal > 0;
+                serie.Points.Add(point);
+            }
+
+            c.Series.Add(serie);
+            var area = new ChartArea();
+            area.AxisX.Interval = 1;
+            area.AxisX.Minimum = 1;
+            area.AxisX.Maximum = days;
+            area.AxisX.Title = "Days";
+            area.AxisY.Interval = 1;
+            area.AxisY.Title = "Registered cases";
+            c.ChartAreas.Add(area);
+
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                byte[] themeContent = Encoding.UTF8.GetBytes(ChartTheme.Green);
+                memoryStream.Write(themeContent, 0, themeContent.Length);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+
+                LoadChartThemeFromFile(c, memoryStream);
+            }
+
+            using (var imagestream = new MemoryStream())
+            {
+                c.SaveImage(imagestream, ChartImageFormat.Png);
+                byte[] imageBytes = imagestream.ToArray();
+
+                var objectId = Guid.NewGuid().ToString();
+                var fileName = string.Format("{0}.png", objectId);
+                this.temporaryFilesCache.AddFile(imageBytes, fileName, objectId);
+                file = new ReportFile(
+                                objectId,
+                                isPrint ? this.GetReportPathFromCache(objectId, fileName) : fileName);
+            }
+            
+
+
+            /*var theme = XDocument.Parse(ChartTheme.Green);
+            var axisX = theme.Descendants("AxisX").FirstOrDefault();
+            if (axisX != null)
+            {
+                axisX.Add(new XAttribute("Interval", "1"));
+                var mg = axisX.Descendants("MajorGrid").FirstOrDefault();
+                if (mg != null)
+                {
+                    mg.Add(new XAttribute("Interval", "1"));
+                }
+            }            
+
+            var chart = this.CreateChart(1000, 300, theme.ToString())
                 .AddSeries(
                         xValue: x,
-                        yValues: y);
+                        yValues: y).SetXAxis("Days", 1, days).SetYAxis("Registered cases");
+
+
             string objectId;
             string fileName;
             this.SaveToCache(chart, out objectId, out fileName);
             file = new ReportFile(
                             objectId,
-                            isPrint ? this.GetReportPathFromCache(objectId, fileName) : fileName);
+                            isPrint ? this.GetReportPathFromCache(objectId, fileName) : fileName);*/
         }
+
+
+        private static void LoadChartThemeFromFile(global::System.Web.UI.DataVisualization.Charting.Chart chart, Stream templateStream)
+        {
+            // workarounds for Chart templating bugs mentioned in: 
+            // http://social.msdn.microsoft.com/Forums/en-US/MSWinWebChart/thread/b50d5b7e-30e2-4948-af7a-370d9be1268a
+            chart.Serializer.Content = global::System.Web.UI.DataVisualization.Charting.SerializationContents.All;
+            chart.Serializer.SerializableContent = String.Empty; // deserialize all content
+            chart.Serializer.IsTemplateMode = true;
+            chart.Serializer.IsResetWhenLoading = false;
+            // loading serializer with stream to avoid bug with template file getting locked in VS 
+
+
+            // The default xml reader used by the serializer does not ignore comments 
+            // Using the IsUnknownAttributeIgnored fixes this, but then it would give no feedback to the user
+            // if member names do not match the spelling and casing of Chart properties. 
+            XmlReader reader = XmlReader.Create(templateStream, new XmlReaderSettings { IgnoreComments = true });
+            chart.Serializer.Load(reader);
+        }
+ 
+
+
+
 
         public void CreateAverageSolutionTimeReport(
             ItemOverview customer,
@@ -189,9 +283,9 @@
             this.temporaryFilesCache.AddFile(chart.GetBytes("png"), fileName, objectId);
         }
 
-        private Chart CreateChart(int width = 1000, int height = 100)
+        private Chart CreateChart(int width = 800, int height = 300, string theme = ChartTheme.Green)
         {
-            return new Chart(width, height);
+            return new Chart(width, height, theme);
         }
     }
 }

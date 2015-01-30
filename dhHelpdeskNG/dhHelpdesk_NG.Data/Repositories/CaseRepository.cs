@@ -417,7 +417,8 @@ namespace DH.Helpdesk.Dal.Repositories
                         where c.Customer_Id == customerId &&
                               (!departmentId.HasValue || c.Department_Id == departmentId) &&
                               (allCaseTypes || caseTypesIds.Contains(c.CaseType_Id)) &&
-                              (!workingGroupId.HasValue || c.WorkingGroup_Id == workingGroupId) &&                              
+                              (!workingGroupId.HasValue || c.WorkingGroup_Id == workingGroupId) &&  
+                              (!administratorId.HasValue || c.Performer_User_Id == administratorId) &&
                               c.RegTime >= perionFrom && c.RegTime <= perionUntil &&
                               c.Deleted == 0
                         select new RegistratedCasesDayItem
