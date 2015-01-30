@@ -106,7 +106,7 @@
                 y.Add(items.Count(i => i.RegistrationDate.Day == day));
             }
 
-            var chart = this.CreateChart()
+            var chart = this.CreateChart(800, 100)
                 .AddSeries(
                         xValue: x,
                         yValues: y);
@@ -189,7 +189,7 @@
             this.temporaryFilesCache.AddFile(chart.GetBytes("png"), fileName, objectId);
         }
 
-        private Chart CreateChart(int width = 500, int height = 400)
+        private Chart CreateChart(int width = 1000, int height = 100)
         {
             return new Chart(width, height);
         }

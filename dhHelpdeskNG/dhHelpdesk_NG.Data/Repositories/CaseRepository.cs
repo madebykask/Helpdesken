@@ -406,15 +406,17 @@ namespace DH.Helpdesk.Dal.Repositories
 
             var query = from c in this.DataContext.Cases
                         join cu in this.DataContext.Customers on c.Customer_Id equals cu.Id
-                        join d in this.DataContext.Departments on c.Department_Id equals d.Id
-                        join ct in this.DataContext.CaseTypes on c.CaseType_Id equals ct.Id
-                        join wg in this.DataContext.WorkingGroups on c.WorkingGroup_Id equals wg.Id
-                        join u in this.DataContext.Users on c.Performer_User_Id equals u.Id
+                        join d in this.DataContext.Departments on c.Department_Id equals d.Id into dgj
+                        join ct in this.DataContext.CaseTypes on c.CaseType_Id equals ct.Id into ctgj
+                        join wg in this.DataContext.WorkingGroups on c.WorkingGroup_Id equals wg.Id into wggj
+                        join u in this.DataContext.Users on c.Performer_User_Id equals u.Id into ugj
+                        from department in dgj.DefaultIfEmpty()
+                        from caseType in ctgj.DefaultIfEmpty()
+                        from workingGroup in wggj.DefaultIfEmpty()
+                        from user in ugj.DefaultIfEmpty()
                         where c.Customer_Id == customerId &&
-                              c.Department_Id.HasValue &&                                
                               (!departmentId.HasValue || c.Department_Id == departmentId) &&
                               (allCaseTypes || caseTypesIds.Contains(c.CaseType_Id)) &&
-                              c.WorkingGroup_Id.HasValue &&
                               (!workingGroupId.HasValue || c.WorkingGroup_Id == workingGroupId) &&                              
                               c.RegTime >= perionFrom && c.RegTime <= perionUntil &&
                               c.Deleted == 0
@@ -422,12 +424,12 @@ namespace DH.Helpdesk.Dal.Repositories
                         {
                             CustomerId = cu.Id,
                             CustomerName = cu.Name,
-                            WorkingGroupId = wg.Id,
-                            WorkingGroupName = wg.WorkingGroupName,
-                            CaseTypeId = ct.Id,
-                            CaseTypeName = ct.Name,
-                            AdministratorId = u.Id,
-                            AdministratorName = u.FirstName + " " + u.SurName, 
+                            WorkingGroupId = workingGroup.Id,
+                            WorkingGroupName = workingGroup.WorkingGroupName,
+                            CaseTypeId = caseType.Id,
+                            CaseTypeName = caseType.Name,
+                            AdministratorId = user.Id,
+                            AdministratorName = user.FirstName + " " + user.SurName, 
                             CaseId = c.Id,
                             RegistrationDate = c.RegTime
                         };

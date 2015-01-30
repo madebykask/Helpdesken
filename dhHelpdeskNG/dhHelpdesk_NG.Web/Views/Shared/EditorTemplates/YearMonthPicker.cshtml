@@ -4,7 +4,7 @@
 
 @{
     var controlId = ViewData["id"];
-    var dateFormat = Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern;
+    var dateFormat = Thread.CurrentThread.CurrentUICulture.DateTimeFormat.YearMonthPattern;
     string formattedDate = null;
 
     if (Model.HasValue)
@@ -16,7 +16,9 @@
 <script type="text/javascript">
     $(function() {
         $('#@controlId').datepicker({
-            format: '@Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern.ToLower()',
+            format: "mm-yyyy",
+            viewMode: "months", 
+            minViewMode: "months",
             autoclose: true
         });
     });

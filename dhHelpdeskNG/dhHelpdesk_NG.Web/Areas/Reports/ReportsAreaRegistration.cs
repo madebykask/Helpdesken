@@ -14,10 +14,10 @@
 
         public override void RegisterArea(AreaRegistrationContext context)
         {
-            context.MapRoute(
+            /*context.MapRoute(
                 "Reports_default",
                 "Reports/{controller}/{action}/{id}",
-                new { area = this.AreaName, action = "Index", id = UrlParameter.Optional });
+                new { area = this.AreaName, action = "Index", id = UrlParameter.Optional });*/
         }
     }
 }

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Web.Mvc;
 
@@ -39,7 +40,8 @@
             SearchData searchData)
         {
             var reports = CreateListField(
-                        searchData.Options.Reports,
+                        //searchData.Options.Reports,
+                        searchData.Options.Reports.Where(r => r.Value == ((int)ReportType.RegistratedCasesDay).ToString(CultureInfo.InvariantCulture)),
                         filter.ReportId);
 
             var instance = new SearchModel(reports);
