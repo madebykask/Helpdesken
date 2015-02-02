@@ -1,7 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 {
     using System;
-    using System.Linq;
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models.Reports;
@@ -14,6 +13,7 @@
     using DH.Helpdesk.Web.Enums;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.ActionFilters;
+    using DH.Helpdesk.Web.Infrastructure.Extensions;
     using DH.Helpdesk.Web.Infrastructure.Mvc;
 
     public sealed class ReportController : UserInteractionController
@@ -73,14 +73,10 @@
                                     int? administrator,
                                     DateTime period)
         {
-            var caseTypeArr = caseTypes != null ? 
-                    caseTypes.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray() : 
-                    new int[0];
-
             var data = this.reportService.GetRegistratedCasesDayData(
                                     this.OperationContext.CustomerId,
                                     department,
-                                    caseTypeArr,
+                                    caseTypes.GetIntValues(),
                                     workingGroup,
                                     administrator,
                                     period);
