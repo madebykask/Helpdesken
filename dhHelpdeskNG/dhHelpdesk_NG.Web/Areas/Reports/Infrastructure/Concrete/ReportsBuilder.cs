@@ -51,16 +51,12 @@
                                AxisX = { Interval = 1, Minimum = 1, Maximum = days, Title = "Days" },
                                AxisY = { Interval = 1, Title = "Registered cases" }
                            };
-            chart.ChartAreas.Add(area);   
-         
-            using (var memoryStream = new MemoryStream())
-            {
-                byte[] themeContent = Encoding.UTF8.GetBytes(DefaultTheme);
-                memoryStream.Write(themeContent, 0, themeContent.Length);
-                memoryStream.Seek(0, SeekOrigin.Begin);
+            chart.ChartAreas.Add(area);
 
-                SetTheme(chart, memoryStream);
-            }
+            var total = string.Format("Number of cases: {0}", data.RegisteredCases.Count);
+            chart.Titles.Add(new Title(total));
+
+            SetTheme(chart, DefaultTheme);
 
             using (var ms = new MemoryStream())
             {
@@ -69,15 +65,22 @@
             }
         }
 
-        private static void SetTheme(System.Web.UI.DataVisualization.Charting.Chart chart, Stream templateStream)
+        private static void SetTheme(System.Web.UI.DataVisualization.Charting.Chart chart, string theme)
         {
-            chart.Serializer.Content = SerializationContents.All;
-            chart.Serializer.SerializableContent = string.Empty;
-            chart.Serializer.IsTemplateMode = true;
-            chart.Serializer.IsResetWhenLoading = false;
+            using (var ms = new MemoryStream())
+            {
+                byte[] themeContent = Encoding.UTF8.GetBytes(theme);
+                ms.Write(themeContent, 0, themeContent.Length);
+                ms.Seek(0, SeekOrigin.Begin);
 
-            XmlReader reader = XmlReader.Create(templateStream, new XmlReaderSettings { IgnoreComments = true });
-            chart.Serializer.Load(reader);
+                chart.Serializer.Content = SerializationContents.All;
+                chart.Serializer.SerializableContent = string.Empty;
+                chart.Serializer.IsTemplateMode = true;
+                chart.Serializer.IsResetWhenLoading = false;
+
+                XmlReader reader = XmlReader.Create(ms, new XmlReaderSettings { IgnoreComments = true });
+                chart.Serializer.Load(reader);                
+            }            
         }
     }
 }
