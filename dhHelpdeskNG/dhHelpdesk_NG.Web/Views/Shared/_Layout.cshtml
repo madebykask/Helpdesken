@@ -17,7 +17,8 @@
     @Scripts.Render("~/bundles/common")
 </head>
 @{
-    var model = Html.MasterModel();        
+    var model = Html.MasterModel();
+    var version = model.GetHelpdeskVersion();
 }
 <body>
     @if(model != null && model.CustomerSetting != null && SessionFacade.CurrentUser != null)
@@ -226,7 +227,7 @@
 
                         <li class="light-blue">
                             <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                    <div class="versionno">MAJID</div>
+                    <div class="versionno"> @version </div>
                                 <i class="icon-user icon-white"></i>
                                 @if(SessionFacade.CurrentCustomer != null)
                                 {                            

@@ -1,13 +1,18 @@
-﻿namespace DH.Helpdesk.Web.Models
-{
-    using System.Collections.Generic;
+﻿using System;
+using System.IO;
+using System.Reflection;
+using System.Collections.Generic;
 
-    using DH.Helpdesk.Common.Extensions.Integer;
+namespace DH.Helpdesk.Web.Models
+{
+    using DH.Helpdesk.Common.Extensions.Integer;    
+    using DH.Helpdesk.Web.Infrastructure;   
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Web.Infrastructure;
 
     public class MasterPageViewModel
     {
+        
+
         public int SelectedCustomerId { get; set; }
 
         public int SelectedLanguageId { get; set; }
@@ -18,9 +23,11 @@
         
         public IList<Language> Languages { get; set; }
 
-        public string GetHelpdeskVersion ()
+        public string GetHelpdeskVersion()
         {
-            return "";
+            Assembly assembly = Assembly.LoadFrom(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin\\DH.Helpdesk.Web.dll"));
+            Version ver = assembly.GetName().Version;            
+            return ver.Major.ToString() + '.' + ver.Minor + '.' + ver.Build.ToString();            
         }
 
         public bool IsAdministrator()
