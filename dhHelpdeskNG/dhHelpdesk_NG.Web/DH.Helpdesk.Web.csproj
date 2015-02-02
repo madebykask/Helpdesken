@@ -365,6 +365,7 @@
     <Content Include="Areas\Reports\app\lib\angularjs\angular-touch.min.js" />
     <Content Include="Areas\Reports\app\lib\angularjs\angular.min.js" />
     <Content Include="Areas\Reports\app\templates\reports.html" />
+    <Content Include="Areas\Reports\Content\js\reports.js" />
     <Content Include="Content\bootstrap-tagsinput.css" />
     <Content Include="Content\css\bootstrap-tagsinput.css" />
     <Content Include="Content\js\Account\order.js" />
@@ -1505,8 +1506,12 @@
     <Content Include="Content\js\lib\angular-1.3.11\version.txt" />
     <Content Include="Content\templates\case-invoice-case-files.tmpl.html" />
     <Compile Include="Areas\Reports\Controllers\ReportController.cs" />
+    <Compile Include="Areas\Reports\Infrastructure\Concrete\ReportsBuilder.cs" />
+    <Compile Include="Areas\Reports\Infrastructure\IReportsBuilder.cs" />
     <Compile Include="Areas\Reports\Infrastructure\ModelFactories\Concrete\ReportModelFactory.cs" />
     <Compile Include="Areas\Reports\Infrastructure\ModelFactories\IReportModelFactory.cs" />
+    <Compile Include="Areas\Reports\Models\Options\RegistratedCasesDayOptionsModel.cs" />
+    <Compile Include="Areas\Reports\Models\Options\ReportsFilterModel.cs" />
     <Compile Include="Areas\Reports\Models\Options\ReportsOptions.cs" />
     <Compile Include="Areas\Reports\ReportsAreaRegistration.cs" />
     <Compile Include="Controllers\AboutController.cs" />
@@ -2472,6 +2477,7 @@
     <Content Include="Content\js\lib\angular-1.3.11\version.json" />
     <Content Include="Areas\Reports\app\.idea\.name" />
     <Content Include="Areas\Reports\app\.idea\app.iml" />
+    <Content Include="Areas\Reports\Views\Report\Options\RegistratedCasesDay.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />

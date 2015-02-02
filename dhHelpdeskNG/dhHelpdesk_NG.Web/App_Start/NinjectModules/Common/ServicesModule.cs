@@ -5,9 +5,11 @@
     using DH.Helpdesk.Services.Services.Concrete;
     using DH.Helpdesk.Services.Services.Concrete.Licenses;
     using DH.Helpdesk.Services.Services.Concrete.Orders;
+    using DH.Helpdesk.Services.Services.Concrete.Reports;
     using DH.Helpdesk.Services.Services.Concrete.Users;
     using DH.Helpdesk.Services.Services.Licenses;
     using DH.Helpdesk.Services.Services.Orders;
+    using DH.Helpdesk.Services.Services.Reports;
     using DH.Helpdesk.Services.Services.Users;
 
     using Ninject.Modules;
@@ -139,6 +141,9 @@
             
             // Survey service
             this.Bind<ISurveyService>().To<SurveyService>();
+
+            // Reports module
+            this.Bind<IReportService>().To<ReportService>();
         }
 
         #endregion

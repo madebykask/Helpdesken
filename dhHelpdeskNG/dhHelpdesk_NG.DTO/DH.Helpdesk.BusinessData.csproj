@@ -331,6 +331,9 @@
     <Compile Include="Models\Questionnaire\Read\QuestionnaireQuestionOverview.cs" />
     <Compile Include="Models\Questionnaire\Write\Answer.cs" />
     <Compile Include="Models\Questionnaire\Write\ParticipantForInsert.cs" />
+    <Compile Include="Models\Reports\Data\RegisteredCaseDay.cs" />
+    <Compile Include="Models\Reports\Data\RegistratedCasesDayData.cs" />
+    <Compile Include="Models\Reports\Options\RegistratedCasesDayOptions.cs" />
     <Compile Include="Models\Reports\Output\CaseSatisfactionReportResponse.cs" />
     <Compile Include="Models\Reports\Output\CaseSatisfactionOptionsResponse.cs" />
     <Compile Include="Models\TextList.cs" />
@@ -867,6 +870,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\PostSharp.4.0.36\tools\PostSharp.targets" Condition="Exists('..\packages\PostSharp.4.0.36\tools\PostSharp.targets')" />
   <Target Name="EnsurePostSharpImported" BeforeTargets="BeforeBuild" Condition="'$(PostSharp30Imported)' == ''">

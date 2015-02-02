@@ -1,11 +1,43 @@
 ﻿@using System.Web.Optimization
+@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Reports.Models.Options.ReportsOptions
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div ng-app="reportsApp">
-    <ng-view />
+<div class="secnavs fixed">
+    <div class="pull-left">
+        <ul class="secnav">
+            <li>
+                <a id="showReport" class="btn">@Translation.Get("Visa")</a>                
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#fragment-1">@Translation.Get("Rapporter")</a>
+            </li>
+        </ul>        
+        <div class="tab-content overflow-visible">
+            <div id="fragment-1" class="tab-pane tab-pane-border active">
+                @using (Ajax.BeginForm("GetReportOptions", "Report", null,
+                    new AjaxOptions { UpdateTargetId = "reportContent" }, new { id = "getReportOptionsForm" }))
+                {
+                    <table class="tableform">    
+                        <tr>
+                            <td class="span3">@Translation.Get("Rapport")</td>
+                            <td>@Html.DropDownListFor(m => m.ReportId, Model.Reports)</td>
+                        </tr>        
+                    </table>        
+                }                
+                <div id="reportContent">
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-@Scripts.Render("~/bundles/angularjs")
 @Scripts.Render("~/bundles/report")

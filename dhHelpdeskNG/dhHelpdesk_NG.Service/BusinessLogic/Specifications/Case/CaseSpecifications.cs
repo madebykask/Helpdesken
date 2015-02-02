@@ -99,5 +99,58 @@
 
             return query;
         }
+
+        public static IQueryable<Case> GetByDepartment(this IQueryable<Case> query, int? departmetId)
+        {
+            if (!departmetId.HasValue)
+            {
+                return query;
+            }
+
+            query = query.Where(c => c.Department_Id == departmetId);
+
+            return query;
+        }
+
+        public static IQueryable<Case> GetByWorkingGroup(this IQueryable<Case> query, int? workingGroupId)
+        {
+            if (!workingGroupId.HasValue)
+            {
+                return query;
+            }
+
+            query = query.Where(c => c.WorkingGroup_Id == workingGroupId);
+
+            return query;
+        }
+
+        public static IQueryable<Case> GetByAdministrator(this IQueryable<Case> query, int? administratorId)
+        {
+            if (!administratorId.HasValue)
+            {
+                return query;
+            }
+
+            query = query.Where(c => c.Performer_User_Id == administratorId);
+
+            return query;
+        }
+
+        public static IQueryable<Case> GetByRegistrationPeriod(
+                                        this IQueryable<Case> query,
+                                        DateTime from,
+                                        DateTime until)
+        {
+            query = query.Where(c => c.RegTime >= from && c.RegTime <= until);
+
+            return query;
+        }
+
+        public static IQueryable<Case> GetNotDeleted(this IQueryable<Case> query)
+        {
+            query = query.Where(c => c.Deleted == 0);
+
+            return query;
+        } 
     }
 }

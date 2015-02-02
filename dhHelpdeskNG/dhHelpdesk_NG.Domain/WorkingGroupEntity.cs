@@ -1,11 +1,12 @@
 ﻿namespace DH.Helpdesk.Domain
 {
     using DH.Helpdesk.Domain.Faq;
+    using DH.Helpdesk.Domain.Interfaces;
 
     using global::System;
     using global::System.Collections.Generic;
 
-    public class WorkingGroupEntity : Entity
+    public class WorkingGroupEntity : Entity, ICustomerEntity
     {
         public WorkingGroupEntity()
         {

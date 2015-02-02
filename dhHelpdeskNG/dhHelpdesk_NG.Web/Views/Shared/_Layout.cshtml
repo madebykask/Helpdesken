@@ -97,7 +97,7 @@
                                 <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
                                     @if(model.IsReportVisible())
                                     {                                        
-                                        <li><a href="@Url.Action("Index", "Reports", new { area = "" })">
+                                        <li><a href="@Url.Action("Index", "Report", new { area = "Reports" })">
                                             <img src="@Url.Content("~/Content/icons/reports.png")" />
                                             @Translation.Get("Rapporter")</a></li>                                    
                                     }
