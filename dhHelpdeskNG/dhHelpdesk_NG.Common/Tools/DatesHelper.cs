@@ -35,6 +35,12 @@ namespace DH.Helpdesk.Common.Tools
             return new DateTime(date.Year, date.Month, date.Day);
         }
 
+        public static DateTime RoundToWorkDateTime(this DateTime date, int workingHour)
+        {
+            return new DateTime(date.Year, date.Month, date.Day, workingHour, 0, 0);
+        }
+
+
         /// <summary>
         /// The round to hour.
         /// </summary>

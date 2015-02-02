@@ -178,16 +178,9 @@ namespace DH.Helpdesk.Dal.Repositories
             var cases = this.DataContext.Cases.Where(x => x.Id == caseId).FirstOrDefault();
             if (cases != null)
             {
-                var workingMinutes = CaseUtils.CalculateTotalWorkingMinutes(
-                                                    cases.ChangeTime, 
-                                                    DateTime.UtcNow,
-                                                    this.workContext.Customer.WorkingDayStart,
-                                                    this.workContext.Customer.WorkingDayEnd,
-                                                    this.workContext.Cache.Holidays);
                 cases.FinishingDate = null;
                 cases.ApprovedBy_User_Id = 0;
                 cases.ApprovedDate = null;
-                cases.ExternalTime = cases.ExternalTime + workingMinutes;
                 cases.LeadTime = 0;
                 cases.ChangeTime = DateTime.UtcNow;
                 this.Update(cases);

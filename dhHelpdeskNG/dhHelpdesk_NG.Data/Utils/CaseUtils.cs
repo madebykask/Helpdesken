@@ -194,26 +194,36 @@ namespace DH.Helpdesk.Dal.Utils
             int prefixTimeMins = 0;
             DateTime tunedStartDate;
             DateTime tunedEndDate;
+            
             if (startDate.Hour <= workingHourBegin)
             {
-                tunedStartDate = startDate;
+                startDate = startDate.RoundToWorkDateTime(workingHourBegin);
+                tunedStartDate = startDate.RoundToWorkDateTime(workingHourBegin);
             }
             else
             {
-                prefixTimeMins += ((workingHourEnd - Math.Min(startDate.Hour, workingHourEnd)) * 60) + startDate.Minute;
-                tunedStartDate = startDate.AddDays(1);
+                prefixTimeMins += ((workingHourEnd - Math.Min(startDate.Hour, workingHourEnd)) * 60)
+                                    + startDate.Minute;
+                tunedStartDate = startDate.RoundToWorkDateTime(workingHourBegin).AddDays(1);
             }
 
             if (endDate.Hour >= workingHourEnd)
             {
-                tunedEndDate = endDate;
-            } 
-            else 
+                endDate = endDate.RoundToWorkDateTime(workingHourEnd);
+                tunedEndDate = endDate.RoundToWorkDateTime(workingHourEnd);
+            }
+            else
             {
-                prefixTimeMins += ((Math.Max(endDate.Hour, workingHourBegin) - workingHourBegin) * 60) + endDate.Minute;
-                tunedEndDate = endDate.AddDays(-1);
+                prefixTimeMins += ((Math.Max(endDate.Hour, workingHourBegin) - workingHourBegin) * 60)
+                                    + endDate.Minute;
+                tunedEndDate = endDate.RoundToWorkDateTime(workingHourEnd).AddDays(-1);
             }
 
+            if (startDate.RoundToDay() == endDate.RoundToDay())
+            {
+                return ((endDate - startDate).Hours * 60) + (endDate - startDate).Minutes;
+            }
+            
             var businessDays = DatesHelper.GetBusinessDays(tunedStartDate.RoundToDay(), tunedEndDate.RoundToDay());
             var workingMinutes = prefixTimeMins + (businessDays * (workingHourEnd - workingHourBegin) * 60);
             return Math.Max(workingMinutes - holidaysMinutes, 0);

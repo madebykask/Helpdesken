@@ -541,9 +541,14 @@
             else
             {
                 c.ChangeTime = DateTime.UtcNow;
-                if (userId == 0) c.ChangeByUser_Id = null;
+                if (userId == 0)
+                {
+                    c.ChangeByUser_Id = null;
+                }
                 else
-                 c.ChangeByUser_Id = userId;
+                {
+                    c.ChangeByUser_Id = userId;
+                }
 
                 this._caseRepository.Update(c);
             }

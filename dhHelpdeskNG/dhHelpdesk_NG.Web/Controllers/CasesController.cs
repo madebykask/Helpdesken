@@ -10,7 +10,8 @@ namespace DH.Helpdesk.Web.Controllers
     using System.Net;
     using System.Web;
     using System.Web.Mvc;
-    using System.Web.Helpers;    
+    using System.Web.Helpers;
+    using System.Web.UI.WebControls.Expressions;
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Case;
@@ -1409,6 +1410,7 @@ namespace DH.Helpdesk.Web.Controllers
                 oldCase = this._caseService.GetDetachedCaseById(case_.Id);
                 var cu = this._customerUserService.GetCustomerSettings(case_.Customer_Id, SessionFacade.CurrentUser.Id);
                 if (cu != null)
+                {
                     if (cu.UserInfoPermission == 0)
                     {
                         // current user are not allowed to see user information, update from old case
@@ -1423,6 +1425,24 @@ namespace DH.Helpdesk.Web.Controllers
                         case_.OU_Id = oldCase.OU_Id;
                         case_.UserCode = oldCase.UserCode;
                     }
+                }
+
+                if (oldCase.StateSecondary_Id.HasValue)
+                {
+                    var caseSubState = this._stateSecondaryService.GetStateSecondary(oldCase.StateSecondary_Id.Value);
+
+                    // calculating time spent in "inactive" state every save
+                    if (caseSubState.IncludeInCaseStatistics == 0)
+                    {
+                        var workingTimeMins = CaseUtils.CalculateTotalWorkingMinutes(
+                        oldCase.ChangeTime,
+                        DateTime.UtcNow,
+                        this.workContext.Customer.WorkingDayStart,
+                        this.workContext.Customer.WorkingDayEnd,
+                        this.workContext.Cache.Holidays);
+                        case_.ExternalTime = oldCase.ExternalTime + workingTimeMins;
+                    }
+                }
             }
 
             // save case and case history

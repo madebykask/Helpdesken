@@ -154,14 +154,6 @@
                                     holidays,
                                     SLAtime * 60,
                                     timeOnPause);
-
-//                                    if (userId != -1)
-//                                    {
-//                                        leadTime = CaseUtils.CalculateLeadTime(
-//                                            caseRegistrationDate,
-//                                            caseWatchDate,
-//                                            caseFinishingDate,
-                                 
                                
                                 foreach (var c in csl)
                                 {
