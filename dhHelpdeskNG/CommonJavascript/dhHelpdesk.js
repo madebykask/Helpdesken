@@ -80,6 +80,7 @@ function CaseCascadingSelectlistChange(id, customerId, postTo, ctl, departmentFi
     }, 'json');
 }
 
+
 function CaseWriteTextToLogNote(value) {
     $('#WriteTextToExternalNote').val(value);
 }
@@ -354,6 +355,13 @@ function CaseInitForm() {
         var val = $(this).attr('value');
         $("#divBreadcrumbs_CaseType").text(getBreadcrumbs(this));
         $("#case__CaseType_Id").val(val).trigger('change');
+    });
+
+    $('#divOU ul.dropdown-menu li a').click(function (e) {
+        e.preventDefault();
+        var val = $(this).attr('value');
+        $("#divBreadcrumbs_OU").text(getBreadcrumbs(this));
+        $("#case__Ou_Id").val(val).trigger('change');
     });
 
     $('#divProductArea ul.dropdown-menu li a').click(function (e) {

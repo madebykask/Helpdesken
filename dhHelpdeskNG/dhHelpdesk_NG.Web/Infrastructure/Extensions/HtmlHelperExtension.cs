@@ -166,6 +166,16 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 return new MvcHtmlString(string.Empty);
         }
 
+        public static MvcHtmlString OUDropdownButtonString(this HtmlHelper helper, IList<OU> ous)
+        {
+            if (ous != null)
+            {
+                return BuildOUDropdownButton(ous);
+            }
+            else
+                return new MvcHtmlString(string.Empty);
+        }
+
         public static MvcHtmlString ProductAreaDropdownButtonString(this HtmlHelper helper, IList<ProductArea> pal)
         {
             if (pal != null)
@@ -606,6 +616,37 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return new MvcHtmlString(htmlOutput);
         }
 
+        private static MvcHtmlString BuildOUDropdownButton(IList<OU> ous)
+        {
+            string htmlOutput = string.Empty;
+
+            foreach (OU ou in ous)
+            {
+                if (ou.IsActive == 1)
+                {
+                    bool hasChild = false;
+                    if (ou.SubOUs != null)
+                        if (ou.SubOUs.Count > 0)
+                            hasChild = true;
+
+                    if (hasChild)
+                        htmlOutput += "<li class='dropdown-submenu'>";
+                    else
+                        htmlOutput += "<li>";
+
+                    htmlOutput += "<a href='#' value=" + ou.Id.ToString() + ">" + Translation.Get(ou.Name, Enums.TranslationSource.TextTranslation) + "</a>";
+                    if (hasChild)
+                    {
+                        htmlOutput += "<ul class='dropdown-menu'>";
+                        htmlOutput += BuildOUDropdownButton(ou.SubOUs.ToList());
+                        htmlOutput += "</ul>";
+                    }
+                    htmlOutput += "</li>";
+                }
+            }
+
+            return new MvcHtmlString(htmlOutput);
+        }
         private static MvcHtmlString BuildFinishingCauseDropdownButton(IList<FinishingCause> causes)
         {
             StringBuilder sb = new StringBuilder();

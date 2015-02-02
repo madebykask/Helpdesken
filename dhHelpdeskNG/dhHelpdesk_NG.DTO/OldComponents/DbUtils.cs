@@ -267,6 +267,18 @@
                 return ret;
             }
 
+            public static string getOUParentPath(this OU o, string separator = " - ")
+            {
+                string ret = string.Empty;
+
+                if (o.Parent_OU_Id == null)
+                    ret += o.Name;
+                else
+                    ret += getOUParentPath(o.Parent, separator) + separator + o.Name;
+
+                return ret;
+            }
+
             public static string getFinishingCauseParentPath(this FinishingCause o, string separator = " - ")
             {
                 string ret = string.Empty;

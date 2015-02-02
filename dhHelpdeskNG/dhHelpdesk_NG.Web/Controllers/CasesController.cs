@@ -587,6 +587,7 @@ namespace DH.Helpdesk.Web.Controllers
                     m.case_.WorkingGroup_Id = null;
                     m.ParantPath_CaseType = ParentPathDefaultValue;
                     m.ParantPath_ProductArea = ParentPathDefaultValue;
+                    m.ParantPath_OU = ParentPathDefaultValue;
                 }
 
                 var caseInvoices = this.invoiceArticleService.GetCaseInvoices(id);
@@ -771,7 +772,22 @@ namespace DH.Helpdesk.Web.Controllers
 
         public JsonResult ChangeDepartment(int? id, int customerId, int departmentFilterFormat)
         {
-            var list = id.HasValue ? this._ouService.GetOuForDepartment(id.GetValueOrDefault()).Select(x => new { id = x.Id, name = x.Name }) : this._ouService.GetOUs(customerId).Select(x => new { id = x.Id, name = x.Name });
+            var prelist =
+            id.HasValue ?
+                this._ouService.GetOUs(customerId)
+                         .Where(e => e.IsActive == 1 && id.GetValueOrDefault() == e.Department_Id)                
+                :
+                this._ouService.GetOUs(customerId);            
+            
+            var unionList = new Dictionary<int,string>();
+            foreach (var ou in prelist)
+            {
+                unionList.Add(ou.Id, ou.Name);
+                foreach (var s in ou.SubOUs.Where(e => e.IsActive == 1))                
+                    unionList.Add(s.Id, ou.Name + " - " + s.Name );                                
+            }
+
+            var list = unionList.Select(x => new { id = x.Key, name = x.Value });
             return this.Json(new { list });
         }
 
@@ -1604,6 +1620,7 @@ namespace DH.Helpdesk.Web.Controllers
                 m.DepartmentFilterFormat = cs.DepartmentFilterFormat;
                 m.ParantPath_CaseType = ParentPathDefaultValue;
                 m.ParantPath_ProductArea = ParentPathDefaultValue;
+                m.ParantPath_OU = ParentPathDefaultValue;
                 m.MinWorkingTime = cs.MinRegWorkingTime != 0 ? cs.MinRegWorkingTime : 30;
                 m.CaseFilesModel = new CaseFilesModel();
                 m.LogFilesModel = new FilesModel();
@@ -1681,8 +1698,17 @@ namespace DH.Helpdesk.Web.Controllers
 
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.OU_Id.ToString()).ShowOnStartPage == 1)
                 {
-                    m.ous = this._ouService.GetOUs(customerId);
+                    m.ous = this._ouService.GetOUs(customerId);                    
                 }
+
+                //if (m.case_.OU_Id != null && m.case_.OU_Id.Value > 0)
+                //{                    
+                //    var o = this._ouService.GetOU(m.case_.OU_Id.Value);
+                //    if (o != null)
+                //    {
+                //        m.ParantPath_OU = o.getOUParentPath();
+                //    }
+                //}
 
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()).ShowOnStartPage == 1)
                 {
