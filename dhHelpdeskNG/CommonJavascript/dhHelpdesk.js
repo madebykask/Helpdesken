@@ -13,6 +13,22 @@ $(".nav-tabs-actions a").unbind("click");
 
 $(".content input:text, .content textarea").eq(0).focus()
 
+
+function ShowToastMessage(message, msgType) {
+    $().toastmessage('showToast', {
+        text: message,
+        sticky: false,
+        position: 'top-center',
+        type: msgType,
+        closeText: '',
+        stayTime: 3000,
+        inEffectDuration: 1000,
+        close: function () {
+            //console.log("toast is closed ...");
+        }
+    });
+}
+
 //Hämtar vald text från droptodwn button
 function getBreadcrumbs(a) {
     var path = $(a).text(), $parent = $(a).parents("li").eq(1).find("a:first");

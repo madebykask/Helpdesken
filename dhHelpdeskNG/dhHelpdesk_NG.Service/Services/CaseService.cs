@@ -528,7 +528,7 @@
             errors = new Dictionary<string, string>();
 
             // unread/status flag update if not case is closed and not changed by adminsitrator 
-            c.Unread = 0;
+            //c.Unread = 0;
             if (c.Performer_User_Id != userId && !c.FinishingDate.HasValue)
                 c.Unread = 1;
 

@@ -76,6 +76,7 @@
                         @Html.HiddenFor(model => model.CaseMailSetting.DontConnectUserToWorkingGroup)
                         @Html.HiddenFor(model => model.CaseFileNames)
                         @Html.HiddenFor(model => model.LogFileNames)
+                        @Html.HiddenFor(model => model.case_.Unread)
                         @Html.Hidden("WriteTextToExternalNote", Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString()))
                         @Html.Hidden("Today", DateTime.Now.ToShortDateString())
                         @Html.Hidden("CurLanguageId", SessionFacade.CurrentLanguageId)

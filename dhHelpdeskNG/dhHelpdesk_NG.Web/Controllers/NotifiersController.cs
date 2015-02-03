@@ -353,7 +353,9 @@
         [HttpGet]
         public ViewResult NewNotifier()
         {
+            
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
+            var inputParams = new Dictionary<string, string>();
 
             var settings =
                 this.notifierFieldSettingRepository.FindDisplayFieldSettingsByCustomerIdAndLanguageId(
@@ -373,9 +375,13 @@
                 domains = this.domainRepository.FindByCustomerId(currentCustomerId);
             }
 
-            if (settings.Department.Show)
+            if (settings.Region.Show)
             {
                 regions = this.regionRepository.FindByCustomerId(currentCustomerId);
+            }
+
+            if (settings.Department.Show)
+            {                
                 departments = this.departmentRepository.FindActiveOverviews(currentCustomerId);
             }
 
@@ -409,7 +415,7 @@
                 divisions,
                 managers,
                 groups,
-                null);
+                inputParams);
 
             return this.View(model);
         }

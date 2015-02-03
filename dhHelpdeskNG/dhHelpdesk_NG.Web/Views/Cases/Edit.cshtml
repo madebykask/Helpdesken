@@ -142,7 +142,13 @@
         });
 
         function MakeAsUnread() {
-            $.post('/cases/markasunread/', { id: '@Model.case_.Id', customerId: '@Model.case_.Customer_Id' }, function (data) { });
+            $.post('/cases/markasunread/', { id: '@Model.case_.Id', customerId: '@Model.case_.Customer_Id' }, function (data) {
+                if (data == "Success")
+                {
+                    $('#case__Unread').val(1);
+                    ShowToastMessage('@Translation.Get("Ärendet har markerats som oläst")', "notice");
+                }
+            });
         };
         
         //HIDE SHOW
