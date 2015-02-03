@@ -12,6 +12,7 @@
     public interface IStateSecondaryService
     {
         IList<StateSecondary> GetStateSecondaries(int customerId);
+        IList<StateSecondary> GetActiveStateSecondaries(int customerId);
         //IList<StateSecondary> GetStateSecondariesSelected(int customerId, string[] reg);
         //IList<StateSecondary> GetStateSecondariesAvailable(int customerId, string[] reg);
 
@@ -51,6 +52,11 @@
         public IList<StateSecondary> GetStateSecondaries(int customerId)
         {
             return this._stateSecondaryRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
+        }
+
+        public IList<StateSecondary> GetActiveStateSecondaries(int customerId)
+        {
+            return this._stateSecondaryRepository.GetMany(x => x.Customer_Id == customerId && x.IsActive == 1).OrderBy(x => x.Name).ToList();
         }
 
         public StateSecondary GetStateSecondary(int id)

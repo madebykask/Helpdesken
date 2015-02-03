@@ -67,15 +67,111 @@
                                 }
                                 @if (Model.CaseFieldSettings.Count() != 0)
                                 {
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Persons_Name.ToString())">
+                                        <td class="span3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
+                                        </td>
+                                        <td class="span9">
+                                            @Html.TextBoxFor(model => model.CaseSolution.PersonsName, new { id = "PersonsName", maxlength = "40"})
+                                        </td>
+                                        <td class="span9">
+                                            @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.PersonsName, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.Persons_Name)
+                                        </td>
+                                    </tr>
+                                }
+                                 @if (Model.CaseFieldSettings.Count() != 0)
+                                {
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString())">
+                                        <td class="span3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
+                                        </td>
+                                        <td class="span9">
+                                            @Html.TextBoxFor(model => model.CaseSolution.PersonsPhone, new { id = "PersonsPhone", maxlength = "40"})
+                                        </td>
+                                        <td class="span9">
+                                            @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.PersonsPhone, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.Persons_Phone)
+                                        </td>
+                                    </tr>
+                                }
+                                 @if (Model.CaseFieldSettings.Count() != 0)
+                                {
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString())">
+                                        <td class="span3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
+                                        </td>
+                                        <td class="span9">
+                                            @Html.TextBoxFor(model => model.CaseSolution.PersonsCellPhone, new { id = "PersonsCellPhone", maxlength = "40"})
+                                        </td>
+                                        <td class="span9">
+                                            @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.PersonsCellPhone, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.Persons_CellPhone)
+                                        </td>
+                                    </tr>
+                                }
+                                @if (Model.CaseFieldSettings.Count() != 0)
+                                {
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Region_Id.ToString())">
+                                        <td class="span3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.Region_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
+                                        </td>
+                                        <td class="span9">
+                                            @Html.DropDownListFor(model => model.CaseSolution.Region_Id, Model.Regions, "", new { id = "Region"})
+                                        </td>
+                                        <td class="span9">
+                                            @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.Region, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.Region_Id)
+                                        </td>
+                                    </tr>
+                                }
+                                @if (Model.CaseFieldSettings.Count() != 0)
+                                {
                                     <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Department_Id.ToString())">
                                         <td class="span3">
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                         </td>
                                         <td class="span9">
+                                            @*<select id="Department" name="model.CaseSolution.Department_Id">
+                                                <option value="">&nbsp;</option>
+                                                @if(Model.departments != null)
+                                                {
+                                                    foreach (var e in Model.departments.Where(e => e.IsActive == 1 || Model.CaseSolution.Department_Id == e.Id).Where(e => Model.CaseSolution.Region_Id == e.Region_Id || !Model.CaseSolution.Region_Id.IntHasValue()))
+                                                    {
+                                                    <option value="@e.Id" @e.Id.IdIsSelected(Model.CaseSolution.Department_Id.ToString())>@e.DepartmentName</option>
+                                                    }
+                                                }
+                                            </select>*@
+
+
                                             @Html.DropDownListFor(model => model.CaseSolution.Department_Id, Model.Departments, "", new { id = "Department"})
                                         </td>
                                         <td class="span9">
                                             @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.Department, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.Department_Id)
+                                        </td>
+                                    </tr>
+                                }
+                                @if (Model.CaseFieldSettings.Count() != 0)
+                                {
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.OU_Id.ToString())">
+                                        <td class="span3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
+                                        </td>
+                                        <td class="span9">
+                                            @Html.DropDownListFor(model => model.CaseSolution.OU_Id, Model.OUs, "", new { id = "OU"})
+                                        </td>
+                                        <td class="span9">
+                                            @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.OU, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.OU_Id)
+                                        </td>
+                                    </tr>
+                                }
+                                 @if (Model.CaseFieldSettings.Count() != 0)
+                                {
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Place.ToString())">
+                                        <td class="span3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.Place.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
+                                        </td>
+                                        <td class="span9">
+                                            @Html.TextBoxFor(model => model.CaseSolution.Place, new { id = "Place", maxlength = "40"})
+                                        </td>
+                                        <td class="span9">
+                                            @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.Place, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.Place)
                                         </td>
                                     </tr>
                                 }
@@ -105,7 +201,66 @@
                                         <input type="hidden" name="CaseSolution.ShowInSelfService" value="False" />                                                                      
                                         &nbsp;@Translation.Get("Visa på självservice", Enums.TranslationSource.TextTranslation)
                                     </td>                                    
-                                </tr>                           
+                                </tr> 
+                                 @if (Model.CaseFieldSettings.Count() != 0)
+                                {
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.UserCode.ToString())">
+                                        <td class="span3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.UserCode.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
+                                        </td>
+                                        <td class="span9">
+                                            @Html.TextBoxFor(model => model.CaseSolution.UserCode, new { id = "UserCode", maxlength = "40"})
+                                        </td>
+                                        <td class="span9">
+                                            @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.Usercode, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.UserCode)
+                                        </td>
+                                    </tr>
+                                }
+                                <tr>
+                                    <th colspan="3" class="header">@Translation.Get("Datorinformation")</th>
+                                </tr> 
+                                 @if (Model.CaseFieldSettings.Count() != 0)
+                                {
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString())">
+                                        <td class="span3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
+                                        </td>
+                                        <td class="span9">
+                                            @Html.TextBoxFor(model => model.CaseSolution.InventoryNumber, new { id = "InventoryNumber", maxlength = "20"})
+                                        </td>
+                                        <td class="span9">
+                                            @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.InventoryNumber, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.InventoryNumber)
+                                        </td>
+                                    </tr>
+                                }   
+                                 @if (Model.CaseFieldSettings.Count() != 0)
+                                {
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString())">
+                                        <td class="span3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
+                                        </td>
+                                        <td class="span9">
+                                            @Html.TextBoxFor(model => model.CaseSolution.InventoryType, new { id = "InventoryType", maxlength = "250"})
+                                        </td>
+                                        <td class="span9">
+                                            @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.InventoryType, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.ComputerType_Id)
+                                        </td>
+                                    </tr>
+                                }   
+                                 @if (Model.CaseFieldSettings.Count() != 0)
+                                {
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString())">
+                                        <td class="span3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
+                                        </td>
+                                        <td class="span9">
+                                            @Html.TextBoxFor(model => model.CaseSolution.InventoryLocation, new { id = "InventoryLocation", maxlength = "250"})
+                                        </td>
+                                        <td class="span9">
+                                            @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.InventoryType, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.InventoryLocation)
+                                        </td>
+                                    </tr>
+                                }                                                  
                                 <tr>
                                     <th colspan="3" class="header">@Translation.Get("Ärendeinformation")</th>
                                 </tr>
@@ -158,6 +313,48 @@
                                         </td>
                                     </tr>
                                 }
+                                 @if (Model.CaseFieldSettings.Count() != 0)
+                                {
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.System_Id.ToString())">
+                                        <td class="span3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.System_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
+                                        </td>
+                                        <td class="span9">
+                                            @Html.DropDownListFor(model => model.CaseSolution.System_Id, Model.Systems, "", new { id = "System"})
+                                        </td>
+                                        <td class="span9">
+                                            @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.System, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.System_Id)
+                                        </td>
+                                    </tr>
+                                }
+                                @if (Model.CaseFieldSettings.Count() != 0)
+                                {
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString())">
+                                        <td class="span3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
+                                        </td>
+                                        <td class="span9">
+                                            @Html.DropDownListFor(model => model.CaseSolution.Urgency_Id, Model.Urgencies, "", new { id = "Urgency"})
+                                        </td>
+                                        <td class="span9">
+                                            @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.Urgency, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.Urgency_Id)
+                                        </td>
+                                    </tr>
+                                }
+                                @if (Model.CaseFieldSettings.Count() != 0)
+                                {
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Impact_Id.ToString())">
+                                        <td class="span3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.Impact_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
+                                        </td>
+                                        <td class="span9">
+                                            @Html.DropDownListFor(model => model.CaseSolution.Impact_Id, Model.Impacts, "", new { id = "Impact"})
+                                        </td>
+                                        <td class="span9">
+                                            @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.Impact, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.Impact_Id)
+                                        </td>
+                                    </tr>
+                                }
                                 @if (Model.CaseFieldSettings.Count() != 0)
                                 {
                                     <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Category_Id.ToString())">
@@ -169,6 +366,34 @@
                                         </td>
                                         <td class="span9">
                                             @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.Category, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.Category_Id)
+                                        </td>
+                                    </tr>
+                                }
+                                 @if (Model.CaseFieldSettings.Count() != 0)
+                                {
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString())">
+                                        <td class="span3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
+                                        </td>
+                                        <td class="span9">
+                                            @Html.TextBoxFor(model => model.CaseSolution.InvoiceNumber, new { id = "InvoiceNumber", maxlength = "50"})
+                                        </td>
+                                        <td class="span9">
+                                            @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.InvoiceNumber, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.InvoiceNumber)
+                                        </td>
+                                    </tr>
+                                }
+                                 @if (Model.CaseFieldSettings.Count() != 0)
+                                {
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString())">
+                                        <td class="span3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
+                                        </td>
+                                        <td class="span9">
+                                            @Html.TextBoxFor(model => model.CaseSolution.ReferenceNumber, new { id = "ReferenceNumber", maxlength = "200"})
+                                        </td>
+                                        <td class="span9">
+                                            @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.ReferenceNumber, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.ReferenceNumber)
                                         </td>
                                     </tr>
                                 }
@@ -250,6 +475,28 @@
                                         @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.Priority, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.Priority_Id)
                                     </td>
                                 </tr>
+                                <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Status_Id.ToString())">
+                                    <td>
+                                        @Translation.Get(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(model => model.CaseSolution.Status_Id, Model.Status, "", new { id = "Status" })
+                                    </td>
+                                    <td class="span9">
+                                        @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.Status, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.Status_Id)
+                                    </td>
+                                </tr>
+                                <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString())">
+                                    <td>
+                                        @Translation.Get(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(model => model.CaseSolution.StateSecondary_Id, Model.StateSecondaries, "", new { id = "StateSecondary" })
+                                    </td>
+                                    <td class="span9">
+                                        @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.StateSecondary, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.StateSecondary_Id)
+                                    </td>
+                                </tr>
                                 <tr>
                                     <td>
                                         @Translation.Get("Projekt", Enums.TranslationSource.TextTranslation)
@@ -261,6 +508,56 @@
                                         @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.Project)
                                     </td>
                                 </tr>
+                                @if (Model.CaseFieldSettings.Count() != 0)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Translation.Get("Verifierad", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td class="checkbox" style="padding-left: 20px">
+                                            <input type="checkbox" name="casesolution.Verified" @(Model.CaseSolution.Verified == 1 ? "checked=checked" : "") value ="1" />
+                                            <input type="hidden" name="casesolution.Verified" value="0" />
+                                        </td>
+                                        <td class="span9">
+                                            @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.Verified)
+                                        </td>
+
+                                    </tr>
+                                } 
+                                 @if (Model.CaseFieldSettings.Count() != 0)
+                                {
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString())">
+                                        <td class="span3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
+                                        </td>
+                                        <td class="span9">
+                                            @Html.TextBoxFor(model => model.CaseSolution.VerifiedDescription, new { id = "VerifiedDescription", maxlength = "200"})
+                                        </td>
+                                        <td class="span9">
+                                            @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.VerifiedDescription, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.VerifiedDescription)
+                                        </td>
+                                    </tr>
+                                } 
+                                 @if (Model.CaseFieldSettings.Count() != 0)
+                                {
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.SolutionRate.ToString())">
+                                        <td>
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.SolutionRate.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
+                                        </td>
+                                        <td>
+                                            <select id="casesolution__SolutionRate" name="CaseSolution.SolutionRate">
+                                                <option value="">&nbsp;</option>
+                                                @for(var i = 10; i < 110; i = i + 10)
+                                                {
+                                                    <option value="@i.ToString()" @i.IdIsSelected(Model.CaseSolution.SolutionRate) >@i.ToString()</option>
+                                                }
+                                            </select>
+                                        </td>
+                                        <td class="span9">
+                                            @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.SolutionRate, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.SolutionRate)
+                                        </td>
+                                    </tr> 
+                                 }  
                                  <tr>
                                     <th colspan="3" class="header">@Translation.Get("Logg")</th>
                                 </tr>

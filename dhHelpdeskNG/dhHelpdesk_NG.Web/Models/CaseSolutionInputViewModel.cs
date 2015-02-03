@@ -66,5 +66,14 @@
         public IList<ProductArea> ProductAreas { get; set; }
         public IList<SelectListItem> Projects { get; set; }
         public IList<SelectListItem> WorkingGroups { get; set; }
+        public IList<SelectListItem> Regions { get; set; }
+        public IList<SelectListItem> OUs { get; set; }
+        public IList<SelectListItem> Systems { get; set; }
+        public IList<SelectListItem> Urgencies { get; set; }
+        public IList<SelectListItem> Impacts { get; set; }
+        public IList<SelectListItem> Status { get; set; }
+        public IList<SelectListItem> StateSecondaries { get; set; }
+
+        //public IList<Department> departments { get; set; }
     }
 }

@@ -1873,6 +1873,25 @@ namespace DH.Helpdesk.Web.Controllers
                         m.CaseLog.TextExternal = caseTemplate.Text_External;
                         m.CaseLog.TextInternal = caseTemplate.Text_Internal;
                         m.CaseLog.FinishingType = caseTemplate.FinishingCause_Id;
+                        m.case_.PersonsName = caseTemplate.PersonsName;
+                        m.case_.PersonsPhone = caseTemplate.PersonsPhone;
+                        m.case_.Region_Id = caseTemplate.Region_Id;
+                        m.case_.OU_Id = caseTemplate.OU_Id;
+                        m.case_.Place = caseTemplate.Place;
+                        m.case_.UserCode = caseTemplate.UserCode;
+                        m.case_.Urgency_Id = caseTemplate.Urgency_Id;
+                        m.case_.Impact_Id = caseTemplate.Impact_Id;
+                        m.case_.InvoiceNumber = caseTemplate.InvoiceNumber;
+                        m.case_.ReferenceNumber = caseTemplate.ReferenceNumber;
+                        m.case_.Status_Id = caseTemplate.Status_Id;
+                        m.case_.StateSecondary_Id = caseTemplate.StateSecondary_Id;
+                        m.case_.Verified = caseTemplate.Verified;
+                        m.case_.VerifiedDescription = caseTemplate.VerifiedDescription;
+                        m.case_.SolutionRate = caseTemplate.SolutionRate;
+                        m.case_.InventoryNumber = caseTemplate.InventoryNumber;
+                        m.case_.InventoryType = caseTemplate.InventoryType;
+                        m.case_.InventoryLocation = caseTemplate.InventoryLocation;
+                        m.case_.System_Id = caseTemplate.System_Id;
                     }
                 } // Load Case Template
 

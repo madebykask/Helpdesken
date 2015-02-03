@@ -63,28 +63,32 @@
                     MvcHtmlString hidden = htmlHelper.Hidden(hiddenName, model.Id);
 
                     SelectList selectList;
-                    if (caseFieldSettings.CaseFieldSettingRequiredCheck(caseFields.ToString()) == 1
-                        || caseSolutionField == CaseSolutionFields.Department)
-                    {
-                        if (model.CaseSolutionMode != CaseSolutionModes.ReadOnly)
-                        {
-                            selectList = ToSelectList(
-                                new CaseSolutionModes(),
-                                ((int)model.CaseSolutionMode).ToString(CultureInfo.InvariantCulture),
-                                true);
-                        }
-                        else
-                        {
-                            selectList = ToSelectList(new CaseSolutionModes(), true);
-                        }
-                    }
-                    else
-                    {
-                        selectList = ToSelectList(
+                    selectList = ToSelectList(
                             model.CaseSolutionMode,
                             ((int)model.CaseSolutionMode).ToString(CultureInfo.InvariantCulture),
                             false);
-                    }
+                    //if (caseFieldSettings.CaseFieldSettingRequiredCheck(caseFields.ToString()) == 1
+                    //    || caseSolutionField == CaseSolutionFields.Department)
+                    //{
+                    //    if (model.CaseSolutionMode != CaseSolutionModes.ReadOnly)
+                    //    {
+                    //        selectList = ToSelectList(
+                    //            new CaseSolutionModes(),
+                    //            ((int)model.CaseSolutionMode).ToString(CultureInfo.InvariantCulture),
+                    //            true);
+                    //    }
+                    //    else
+                    //    {
+                    //        selectList = ToSelectList(new CaseSolutionModes(), true);
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    selectList = ToSelectList(
+                    //        model.CaseSolutionMode,
+                    //        ((int)model.CaseSolutionMode).ToString(CultureInfo.InvariantCulture),
+                    //        false);
+                    //}
 
                     MvcHtmlString dropDown = htmlHelper.DropDownList(dropDownName, selectList);
 
@@ -135,9 +139,11 @@
             switch (enumeration)
             {
                 case CaseSolutionModes.DisplayField:
-                    return Translation.Get("Display Field");
+                    return Translation.Get("Visa fält - redigera");
                 case CaseSolutionModes.ReadOnly:
-                    return Translation.Get("Read Only");
+                    return Translation.Get("Visa fält - skrivskyddat");
+                case CaseSolutionModes.Hide:
+                    return Translation.Get("Dölj fält");
                 default:
                     return Translation.Get(enumeration.ToString());
             }

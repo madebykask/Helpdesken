@@ -30,6 +30,13 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IUserService _userService;
         private readonly IWorkingGroupService _workingGroupService;
         private readonly IDepartmentService _departmentService;
+        private readonly IRegionService _regionService;
+        private readonly IOUService _ouService;
+        private readonly ISystemService _systemService;
+        private readonly IUrgencyService _urgencyService;
+        private readonly IImpactService _impactService;
+        private readonly IStatusService _statusService;
+        private readonly IStateSecondaryService _stateSecondaryService;
 
         private readonly ICaseSolutionSettingService caseSolutionSettingService;
 
@@ -46,7 +53,14 @@ namespace DH.Helpdesk.Web.Controllers
             IWorkingGroupService workingGroupService,
             IDepartmentService departmentService,
             IMasterDataService masterDataService,
-            ICaseSolutionSettingService caseSolutionSettingService)
+            ICaseSolutionSettingService caseSolutionSettingService,
+            IRegionService regionService,
+            IOUService ouService,
+            ISystemService systemService,
+            IUrgencyService urgencyService,
+            IImpactService impactService,
+            IStatusService statusService,
+            IStateSecondaryService stateSecondaryService)
             : base(masterDataService)
         {
             this._caseFieldSettingService = caseFieldSettingService;
@@ -61,6 +75,13 @@ namespace DH.Helpdesk.Web.Controllers
             this._workingGroupService = workingGroupService;
             this._departmentService = departmentService;
             this.caseSolutionSettingService = caseSolutionSettingService;
+            this._regionService = regionService;
+            this._ouService = ouService;
+            this._systemService = systemService;
+            this._urgencyService = urgencyService;
+            this._impactService = impactService;
+            this._statusService = statusService;
+            this._stateSecondaryService = stateSecondaryService;
         }
 
         [HttpPost]
@@ -385,6 +406,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         private CaseSolutionInputViewModel CreateInputViewModel(CaseSolution caseSolution)
         {
+            
             var model = new CaseSolutionInputViewModel
             {
                 CaseSolution = caseSolution,
@@ -442,8 +464,49 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     Text = x.DepartmentName,
                     Value = x.Id.ToString()
-                }).ToList()
+                }).ToList(),
 
+                Regions = this._regionService.GetActiveRegions(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList(),
+
+                OUs = this._ouService.GetOUs(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList(),
+
+                Systems = this._systemService.GetSystems(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                {
+                    Text = x.SystemName,
+                    Value = x.Id.ToString()
+                }).ToList(),
+
+                Urgencies = this._urgencyService.GetUrgencies(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList(),
+
+                Impacts = this._impactService.GetImpacts(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList(),
+
+                Status = this._statusService.GetActiveStatuses(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList(),
+
+                StateSecondaries = this._stateSecondaryService.GetActiveStateSecondaries(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList()
             };
 
             if (model.CaseSolution.Id == 0)
@@ -477,6 +540,11 @@ namespace DH.Helpdesk.Web.Controllers
                 if (c != null)
                     model.ParantPath_ProductArea = c.getProductAreaParentPath();
             }
+
+
+            //var deps = this._departmentService.GetDepartmentsByUserPermissions(SessionFacade.CurrentUser.Id, SessionFacade.CurrentCustomer.Id);
+            //model.departments = deps ?? this._departmentService.GetDepartments(SessionFacade.CurrentCustomer.Id);
+
 
             model.Schedule = 0;
 

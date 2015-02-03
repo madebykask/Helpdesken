@@ -34,6 +34,26 @@ namespace DH.Helpdesk.Domain
         public string TemplatePath { get; set; }
         public bool ShowInSelfService { get; set; }
         public int? OrderNum { get; set; }
+        public string PersonsName { get; set; }
+        public string PersonsPhone { get; set; }
+        public string PersonsCellPhone { get; set; }
+        public int? Region_Id { get; set; }
+        public int? OU_Id { get; set; }
+        public string Place { get; set; }
+        public string UserCode { get; set; }
+        public int? System_Id { get; set; }
+        public int? Urgency_Id { get; set; }
+        public int? Impact_Id { get; set; }
+        public string InvoiceNumber { get; set; }
+        public string ReferenceNumber { get; set; }
+        public int? Status_Id { get; set; }
+        public int? StateSecondary_Id { get; set; }
+        public int Verified { get; set; }
+        public string VerifiedDescription { get; set; }
+        public string SolutionRate { get; set; }
+        public string InventoryNumber { get; set; }
+        public string InventoryType { get; set; }
+        public string InventoryLocation { get; set; }
 
         public virtual CaseSolutionCategory CaseSolutionCategory { get; set; }
         public virtual CaseSolutionSchedule CaseSolutionSchedule { get; set; }

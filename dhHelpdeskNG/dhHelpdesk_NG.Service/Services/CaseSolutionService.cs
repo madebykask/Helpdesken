@@ -314,6 +314,17 @@ namespace DH.Helpdesk.Services.Services
             caseSolution.ReportedBy = caseSolution.ReportedBy ?? string.Empty;
             caseSolution.Text_External = caseSolution.Text_External ?? string.Empty;
             caseSolution.Text_Internal = caseSolution.Text_Internal ?? string.Empty;
+            caseSolution.PersonsName = caseSolution.PersonsName ?? string.Empty;
+            caseSolution.PersonsPhone = caseSolution.PersonsPhone ?? string.Empty;
+            caseSolution.Place = caseSolution.Place ?? string.Empty;
+            caseSolution.UserCode = caseSolution.UserCode ?? string.Empty;
+            caseSolution.InvoiceNumber = caseSolution.InvoiceNumber ?? string.Empty;
+            caseSolution.ReferenceNumber = caseSolution.ReferenceNumber ?? string.Empty;
+            caseSolution.VerifiedDescription = caseSolution.VerifiedDescription ?? string.Empty;
+            caseSolution.SolutionRate = caseSolution.SolutionRate ?? string.Empty;
+            caseSolution.InventoryNumber = caseSolution.InventoryNumber ?? string.Empty;
+            caseSolution.InventoryType = caseSolution.InventoryType ?? string.Empty;
+            caseSolution.InventoryLocation = caseSolution.InventoryLocation ?? string.Empty;
 
             //this.CheckRequiredFields(caseSolution, CaseFieldSetting, out errors);
 
