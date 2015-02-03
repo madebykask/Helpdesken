@@ -211,12 +211,12 @@
                                                             <option value="">&nbsp;</option>
                                                             @if (Model.regions != null)
                                                         @if (Model.regions != null)
+                                                        {
+                                                            foreach (var e in Model.regions.Where(e => e.IsActive == 1 || Model.case_.Region_Id == e.Id))
                                                             {
-                                                                foreach (var e in Model.regions.Where(e => e.IsActive == 1 || Model.case_.Region_Id == e.Id))
-                                                                {
                                                                 <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Region_Id.ToString()) >@e.Name</option>
-                                                                }
                                                             }
+                                                        }
                                                         </select>
                                                      }
                                                      else
@@ -276,18 +276,17 @@
                                                             <option value="">&nbsp;</option>
                                                             @if (Model.ous != null)
                                                             {
-                                                            var curOUs = Model.ous.Where(e => (e.IsActive == 1 || Model.case_.OU_Id == e.Id)
-                                                            foreach(var e in Model.ous.Where(e => e.IsActive == 1 || Model.case_.OU_Id == e.Id).Where(e => Model.case_.Department_Id == e.Department_Id || !Model.case_.Department_Id.IntHasValue()))
-                                                                                             && Model.case_.Department_Id == e.Department_Id || !Model.case_.Department_Id.IntHasValue()).ToList();
-                                                            foreach (var e in curOUs)
-                                                            {                                                                
-                                                               <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.OU_Id.ToString()) >@e.Name</option>
+                                                                var curOUs = Model.ous.Where(e => (e.IsActive == 1 || Model.case_.OU_Id == e.Id)
+                                                                    && Model.case_.Department_Id == e.Department_Id || !Model.case_.Department_Id.IntHasValue()).ToList();                                                                
+                                                                    foreach (var e in curOUs)
+                                                                    {                                                                
+                                                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.OU_Id.ToString()) >@e.Name</option>
                                                                 
-                                                                foreach (var sub in e.SubOUs.Where( s=> s.IsActive == 1 || Model.case_.OU_Id == s.Id))
-                                                                { 
-                                                                   <option value="@sub.Id" @sub.Id.IdIsSelected(Model.case_.OU_Id.ToString()) > @e.Name - @sub.Name</option>
-                                                                }
-                                                                }
+                                                                        foreach (var sub in e.SubOUs.Where(s => s.IsActive == 1 || Model.case_.OU_Id == s.Id))
+                                                                        { 
+                                                                            <option value="@sub.Id" @sub.Id.IdIsSelected(Model.case_.OU_Id.ToString()) > @e.Name - @sub.Name</option>
+                                                                        }
+                                                                    }
                                                             }
                                                         </select>
                                                     }
