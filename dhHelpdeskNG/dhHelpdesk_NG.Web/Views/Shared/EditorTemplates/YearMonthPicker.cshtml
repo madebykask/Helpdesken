@@ -2,6 +2,28 @@
 
 @{
     var controlId = ViewData["id"];
+    if (controlId == null)
+    {
+        throw new ArgumentNullException("id", "id must be specified.");
+    }
+
+    var inputAttributes = (Dictionary<string, object>)ViewData["inputAttributes"];
+    Dictionary<string, object> htmlAttributes;
+    if (inputAttributes != null)
+    {
+        htmlAttributes = new Dictionary<string, object>(inputAttributes.Count + 1);
+
+        foreach (var inputAttribute in inputAttributes)
+        {
+            htmlAttributes.Add(inputAttribute.Key, inputAttribute.Value);
+        }
+    }
+    else
+    {
+        htmlAttributes = new Dictionary<string, object>(1);
+    }
+
+    htmlAttributes.Add("class", "span2");    
 }
 
 <script type="text/javascript">
@@ -19,7 +41,7 @@
 
 <input type="text" style="display: none;" />
 <div id="@controlId" class="input-append date dateie">
-    @Html.TextBox(string.Empty, string.Empty, new { @class = "span2" })
+    @Html.TextBox(string.Empty, string.Empty, htmlAttributes)
     <span class="add-on">
         <i class="icon-calendar"></i>
     </span>

@@ -50,8 +50,10 @@
                                                                      Id = a.Id, 
                                                                      ParentId = a.Parent_ProductArea_Id, 
                                                                      Name = a.Name
-                                                                 }).ToList();
-            productAreasItems.BuildRelations();
+                                                                 })
+                                                                 .OrderBy(a => a.Name)
+                                                                 .ToList()
+                                                                 .BuildRelations();
 
             return new CaseTypeArticleNoOptions(
                             overviews.Where(o => o.Type == "Departments").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToList(),                            

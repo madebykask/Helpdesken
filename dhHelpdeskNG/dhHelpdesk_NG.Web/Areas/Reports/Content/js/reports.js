@@ -95,7 +95,13 @@
                                         'period', period]);
         }
 
-        var buildReport = function() {
+        var buildReport = function () {
+            var form = $('#reportForm');
+            form.validate();
+            if (!form.valid()) {
+                return false;
+            }
+
             my.reportContent.html('<img src="' + getReportHandler() + '" />');
         }
 

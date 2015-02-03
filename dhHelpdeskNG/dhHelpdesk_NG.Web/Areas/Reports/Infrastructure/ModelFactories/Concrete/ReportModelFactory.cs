@@ -5,6 +5,7 @@
     using System.Globalization;
 
     using DH.Helpdesk.BusinessData.Models.Reports;
+    using DH.Helpdesk.BusinessData.Models.Reports.Enums;
     using DH.Helpdesk.BusinessData.Models.Reports.Options;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Web.Areas.Reports.Models.Options;
@@ -22,7 +23,7 @@
                                       ((int)ReportType.RegistratedCasesDay).ToString(CultureInfo.InvariantCulture))/*,
                                   new ItemOverview(
                                       string.Format("{0} - {1}", Translation.Get("Rapport"), Translation.Get("Case Type/Article No")),
-                                      ((int)ReportType.CaseTypeArticleNo).ToString(CultureInfo.InvariantCulture))*/  
+                                      ((int)ReportType.CaseTypeArticleNo).ToString(CultureInfo.InvariantCulture))*/
                               };
 
             return new ReportsOptions(WebMvcHelper.CreateListField(reports, null, false));

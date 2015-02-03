@@ -28,5 +28,15 @@
             var registeredCases = entities.Select(e => new RegisteredCaseDay(e.RegTime)).ToList();
             return new RegistratedCasesDayData(registeredCases);
         }
+
+        public static CaseTypeArticleNoData MapToCaseTypeArticleNoData(
+                                                IQueryable<Case> cases,
+                                                IQueryable<Department> departments,                                                
+                                                IQueryable<WorkingGroupEntity> workingGroups,
+                                                IQueryable<CaseType> caseTypes,
+                                                IQueryable<ProductArea> productAreas)
+        {
+            return new CaseTypeArticleNoData();
+        }
     }
 }

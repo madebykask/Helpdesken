@@ -1,8 +1,10 @@
 ﻿namespace DH.Helpdesk.Services.Services.Reports
 {
     using System;
+    using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models.Reports.Data;
+    using DH.Helpdesk.BusinessData.Models.Reports.Enums;
     using DH.Helpdesk.BusinessData.Models.Reports.Options;
 
     public interface IReportService
@@ -18,5 +20,17 @@
                                     DateTime period);
 
         CaseTypeArticleNoOptions GetCaseTypeArticleNoOptions(int customerId);
+
+        CaseTypeArticleNoData GetCaseTypeArticleNoData(
+                                    int customerId,
+                                    List<int> departmentIds,
+                                    List<int> workingGroupIds,
+                                    List<int> caseTypeIds,
+                                    int? productAreaId,
+                                    DateTime? periodFrom,
+                                    DateTime? periodUntil,
+                                    ShowCases showCases,
+                                    bool isShowCaseTypeDetails,
+                                    bool isShowPercents);
     }
 }

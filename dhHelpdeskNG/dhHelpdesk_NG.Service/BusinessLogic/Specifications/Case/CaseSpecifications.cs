@@ -1,8 +1,10 @@
 ﻿namespace DH.Helpdesk.Services.BusinessLogic.Specifications.Case
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Models.Reports.Enums;
     using DH.Helpdesk.Domain;
 
     public static class CaseSpecifications
@@ -112,6 +114,30 @@
             return query;
         }
 
+        public static IQueryable<Case> GetByDepartments(this IQueryable<Case> query, List<int> departmetIds)
+        {
+            if (departmetIds == null || !departmetIds.Any())
+            {
+                return query;
+            }
+
+            query = query.Where(c => departmetIds.Contains(c.Department_Id.Value));
+
+            return query;
+        }
+
+        public static IQueryable<Case> GetByCaseTypes(this IQueryable<Case> query, List<int> caseTypeIds)
+        {
+            if (caseTypeIds == null || !caseTypeIds.Any())
+            {
+                return query;
+            }
+
+            query = query.Where(c => caseTypeIds.Contains(c.CaseType_Id));
+
+            return query;
+        }
+
         public static IQueryable<Case> GetByWorkingGroup(this IQueryable<Case> query, int? workingGroupId)
         {
             if (!workingGroupId.HasValue)
@@ -120,6 +146,18 @@
             }
 
             query = query.Where(c => c.WorkingGroup_Id == workingGroupId);
+
+            return query;
+        }
+
+        public static IQueryable<Case> GetByWorkingGroups(this IQueryable<Case> query, List<int> workingGroupIds)
+        {
+            if (workingGroupIds == null || !workingGroupIds.Any())
+            {
+                return query;
+            }
+
+            query = query.Where(c => workingGroupIds.Contains(c.WorkingGroup_Id.Value));
 
             return query;
         }
@@ -136,12 +174,32 @@
             return query;
         }
 
+        public static IQueryable<Case> GetByProductArea(this IQueryable<Case> query, int? productAreaId)
+        {
+            if (!productAreaId.HasValue)
+            {
+                return query;
+            }
+
+            query = query.Where(c => c.ProductArea_Id == productAreaId);
+
+            return query;
+        }
+
         public static IQueryable<Case> GetByRegistrationPeriod(
                                         this IQueryable<Case> query,
-                                        DateTime from,
-                                        DateTime until)
+                                        DateTime? from,
+                                        DateTime? until)
         {
-            query = query.Where(c => c.RegTime >= from && c.RegTime <= until);
+            if (from.HasValue)
+            {
+                query = query.Where(c => c.RegTime >= from);
+            }
+
+            if (until.HasValue)
+            {
+                query = query.Where(c => c.RegTime <= until);
+            }
 
             return query;
         }
@@ -149,6 +207,23 @@
         public static IQueryable<Case> GetNotDeleted(this IQueryable<Case> query)
         {
             query = query.Where(c => c.Deleted == 0);
+
+            return query;
+        }
+
+        public static IQueryable<Case> GetInProgress(this IQueryable<Case> query)
+        {
+            query = query.Where(c => c.FinishingDate == null && c.Deleted == 0);
+
+            return query;
+        }
+
+        public static IQueryable<Case> GetByShowCases(this IQueryable<Case> query, ShowCases showCases)
+        {
+            if (showCases == ShowCases.CasesInProgress)
+            {
+                query = query.GetInProgress();
+            }
 
             return query;
         } 

@@ -7,12 +7,19 @@
 
     public static class ProductAreaMapper
     {
-        public static void BuildRelations(this IEnumerable<ProductAreaItem> productAreas)
+        public static List<ProductAreaItem> BuildRelations(this IEnumerable<ProductAreaItem> productAreas)
         {
             foreach (var productArea in productAreas)
             {
+                if (productArea.ParentId.HasValue)
+                {
+                    productArea.Parent = productAreas.FirstOrDefault(a => a.Id == productArea.ParentId);
+                }
+
                 productArea.Children.AddRange(productAreas.Where(a => a.ParentId == productArea.Id));
             }
+
+            return productAreas.Where(a => !a.ParentId.HasValue).ToList();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Areas.Reports.Models.Options
+﻿namespace DH.Helpdesk.BusinessData.Models.Reports.Enums
 {
     public enum ShowCases
     {

@@ -4,6 +4,7 @@
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models.Reports;
+    using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Reports;
     using DH.Helpdesk.Web.Areas.Reports.Infrastructure;
@@ -77,7 +78,7 @@
                                     string caseTypes, 
                                     int? workingGroup, 
                                     int? administrator,
-                                    DateTime period)
+                                    DateTime? period)
         {
             var data = this.reportService.GetRegistratedCasesDayData(
                                     this.OperationContext.CustomerId,
@@ -85,18 +86,30 @@
                                     caseTypes.GetIntValues(),
                                     workingGroup,
                                     administrator,
-                                    period);
+                                    period.RoundToMonthOrGetCurrent());
 
-            var report = this.reportsBuilder.GetRegistratedCasesDayReport(data, period);
+            var report = this.reportsBuilder.GetRegistratedCasesDayReport(data, period.RoundToMonthOrGetCurrent());
 
             return new UnicodeFileContentResult(report, string.Empty);
         }
 
         [HttpPost]
         [BadRequestOnNotValid]
-        public PartialViewResult GetCaseTypeArticleNoReport(CaseTypeArticleNoOptionsModel model)
+        public PartialViewResult GetCaseTypeArticleNoReport(CaseTypeArticleNoOptionsModel options)
         {
-            return this.PartialView();
+            var model = this.reportService.GetCaseTypeArticleNoData(
+                                    this.OperationContext.CustomerId,
+                                    options.DepartmentIds,
+                                    options.WorkingGroupIds,
+                                    options.CaseTypeIds,
+                                    options.ProductAreaId,
+                                    options.PeriodFrom,
+                                    options.PeriodUntil,
+                                    options.ShowCasesId,
+                                    options.IsShowCaseTypeDetails,
+                                    options.IsShowPercents);
+
+            return this.PartialView("Reports/CaseTypeArticleNo", model);
         }
     }
 }

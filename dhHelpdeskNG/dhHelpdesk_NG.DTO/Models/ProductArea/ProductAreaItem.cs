@@ -33,5 +33,7 @@
 
         [NotNull]
         public List<ProductAreaItem> Children { get; set; }
+
+        public ProductAreaItem Parent { get; set; }
     }
 }

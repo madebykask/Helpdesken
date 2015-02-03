@@ -73,5 +73,15 @@ namespace DH.Helpdesk.Common.Tools
 
             return businessDays;
         }
+
+        public static DateTime RoundToMonthOrGetCurrent(this DateTime? date)
+        {
+            if (!date.HasValue)
+            {
+                return DateTime.Today.RoundToMonth();
+            }
+
+            return date.Value.RoundToMonth();
+        }
     }
 }

@@ -5,11 +5,19 @@
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models.ProductArea;
+    using DH.Helpdesk.BusinessData.Models.Reports.Enums;
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
     public sealed class CaseTypeArticleNoOptionsModel
     {
+        public CaseTypeArticleNoOptionsModel()
+        {
+            this.DepartmentIds = new List<int>();
+            this.WorkingGroupIds = new List<int>();
+            this.CaseTypeIds = new List<int>();
+        }
+
         public CaseTypeArticleNoOptionsModel(
                 MultiSelectList departments, 
                 MultiSelectList workingGroups, 
@@ -58,13 +66,11 @@
         [LocalizedDisplay("Produktområde")]
         public int? ProductAreaId { get; set; }
 
-        [LocalizedRequired]
         [LocalizedDisplay("Period från")]
-        public DateTime PeriodFrom { get; set; }
+        public DateTime? PeriodFrom { get; set; }
 
-        [LocalizedRequired]
         [LocalizedDisplay("Period till")]
-        public DateTime PeriodUntil { get; set; }
+        public DateTime? PeriodUntil { get; set; }
 
         [NotNull]
         public SelectList ShowCases { get; private set; }
