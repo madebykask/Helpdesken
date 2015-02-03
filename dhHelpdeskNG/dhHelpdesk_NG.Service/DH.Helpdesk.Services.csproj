@@ -167,9 +167,11 @@
     <Compile Include="BusinessLogic\Mappers\Orders\OrderTypeMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Orders\OrderUpdateMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Problems\ProblemMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\ProductArea\ProductAreaMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Questionnaire\CircularPartMappers.cs" />
     <Compile Include="BusinessLogic\Mappers\Questionnaire\QuestionnaireQuestionResultMappers.cs" />
     <Compile Include="BusinessLogic\Mappers\Reports\ReportsMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\Reports\ReportsOptionsMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Shared\Data\UnionItemOverview.cs" />
     <Compile Include="BusinessLogic\Mappers\Shared\GlobalMappers.cs" />
     <Compile Include="BusinessLogic\Orders\Concrete\HistoriesComparator.cs" />

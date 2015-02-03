@@ -45,6 +45,8 @@
             switch (type) {
                 case dhHelpdesk.reports.reportType.RegistratedCasesDay:
                     return dhHelpdesk.reports.registratedCasesDayReport();
+                case dhHelpdesk.reports.reportType.CaseTypeArticleNo:
+                    return dhHelpdesk.reports.caseTypeArticleNoReport();
                 default:
                     return null;
             }
@@ -98,6 +100,20 @@
         }
 
         that.getReportHandler = getReportHandler;
+        that.buildReport = buildReport;
+
+        return that;
+    }
+
+    dhHelpdesk.reports.caseTypeArticleNoReport = function (spec, my) {
+        my = my || {};
+
+        var that = dhHelpdesk.reports.report(spec, my);
+
+        var buildReport = function() {
+            $('#reportForm').submit();
+        }
+
         that.buildReport = buildReport;
 
         return that;

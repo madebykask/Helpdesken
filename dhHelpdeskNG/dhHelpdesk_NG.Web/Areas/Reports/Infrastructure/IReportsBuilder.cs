@@ -6,6 +6,6 @@
 
     public interface IReportsBuilder
     {
-        byte[] GetRegistratedCasesDayReport(RegistratedCasesDayData data, DateTime period);
+        byte[] GetRegistratedCasesDayReport(RegistratedCasesDayData data, DateTime period, ReportTheme theme = null);
     }
 }

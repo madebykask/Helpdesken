@@ -1,11 +1,12 @@
 ﻿namespace DH.Helpdesk.Domain
 {
+    using DH.Helpdesk.Domain.Interfaces;
     using DH.Helpdesk.Domain.MailTemplates;
 
     using global::System;
     using global::System.Collections.Generic;
 
-    public class ProductArea : Entity
+    public class ProductArea : Entity, ICustomerEntity
     {
         public int Customer_Id { get; set; }
         public int? MailID { get; set; }

@@ -9,6 +9,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
     using System.Web.Routing;
 
     using DH.Helpdesk.BusinessData.Models.Case.Output;
+    using DH.Helpdesk.BusinessData.Models.ProductArea;
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Web.Models;
@@ -184,6 +185,11 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             }
             else
                 return new MvcHtmlString(string.Empty);
+        }
+
+        public static MvcHtmlString ProductAreasList(this HtmlHelper helper, IEnumerable<ProductAreaItem> productAreas)
+        {
+            return productAreas == null ? MvcHtmlString.Empty : BuildProductAreasList(productAreas);
         }
 
         public static MvcHtmlString FinishingCauseDropdownButtonString(this HtmlHelper helper, IList<FinishingCause> causes)
@@ -677,6 +683,30 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             }
 
             return new MvcHtmlString(sb.ToString());
+        }
+
+        private static MvcHtmlString BuildProductAreasList(IEnumerable<ProductAreaItem> productAreas)
+        {
+            var result = new StringBuilder();
+
+            foreach (var productArea in productAreas)
+            {
+                var hasChild = productArea.Children != null && productArea.Children.Any();
+
+                result.Append(hasChild ? "<li class='dropdown-submenu'>" : "<li>");
+
+                result.Append("<a href='#' value=" + productArea.Id + ">" + productArea.Name + "</a>");
+                if (hasChild)
+                {
+                    result.Append("<ul class='dropdown-menu'>");
+                    result.Append(BuildProductAreasList(productArea.Children.OrderBy(p => p.Name).ToList()));
+                    result.Append("</ul>");
+                }
+
+                result.Append("</li>");
+            }
+
+            return MvcHtmlString.Create(result.ToString());
         }
 
         private static MvcHtmlString BuildProcuctAreaDropdownButton(IList<ProductArea> pal)

@@ -56,10 +56,16 @@
             switch ((ReportType)filters.ReportId)
             {
                 case ReportType.RegistratedCasesDay:
-                    var options = this.reportService.GetRegistratedCasesDayOptions(this.OperationContext.CustomerId);
+                    var registratedCasesDayOptions = this.reportService.GetRegistratedCasesDayOptions(this.OperationContext.CustomerId);
                     return this.PartialView(
                                 "Options/RegistratedCasesDay",
-                                this.reportModelFactory.GetRegistratedCasesDayOptionsModel(options));
+                                this.reportModelFactory.GetRegistratedCasesDayOptionsModel(registratedCasesDayOptions));
+
+                case ReportType.CaseTypeArticleNo:
+                    var caseTypeArticleNoOptions = this.reportService.GetCaseTypeArticleNoOptions(this.OperationContext.CustomerId);
+                    return this.PartialView(
+                                "Options/CaseTypeArticleNo",
+                                this.reportModelFactory.GetCaseTypeArticleNoOptionsModel(caseTypeArticleNoOptions));
             }
 
             return null;
@@ -84,6 +90,13 @@
             var report = this.reportsBuilder.GetRegistratedCasesDayReport(data, period);
 
             return new UnicodeFileContentResult(report, string.Empty);
+        }
+
+        [HttpPost]
+        [BadRequestOnNotValid]
+        public PartialViewResult GetCaseTypeArticleNoReport(CaseTypeArticleNoOptionsModel model)
+        {
+            return this.PartialView();
         }
     }
 }

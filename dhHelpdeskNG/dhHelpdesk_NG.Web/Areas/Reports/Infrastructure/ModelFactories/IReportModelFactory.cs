@@ -8,5 +8,7 @@
         ReportsOptions GetReportsOptions();
 
         RegistratedCasesDayOptionsModel GetRegistratedCasesDayOptionsModel(RegistratedCasesDayOptions options);
+
+        CaseTypeArticleNoOptionsModel GetCaseTypeArticleNoOptionsModel(CaseTypeArticleNoOptions options);
     }
 }

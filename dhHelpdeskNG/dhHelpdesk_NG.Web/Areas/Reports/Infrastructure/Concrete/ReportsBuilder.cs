@@ -5,17 +5,15 @@
     using System.IO;
     using System.Linq;
     using System.Text;
-    using System.Web.Helpers;
     using System.Web.UI.DataVisualization.Charting;
     using System.Xml;
 
     using DH.Helpdesk.BusinessData.Models.Reports.Data;
+    using DH.Helpdesk.Web.Infrastructure;
 
     public sealed class ReportsBuilder : IReportsBuilder
     {
-        private const string DefaultTheme = ChartTheme.Green;
-
-        public byte[] GetRegistratedCasesDayReport(RegistratedCasesDayData data, DateTime period)
+        public byte[] GetRegistratedCasesDayReport(RegistratedCasesDayData data, DateTime period, ReportTheme theme = null)
         {
             var days = DateTime.DaysInMonth(period.Year, period.Month);
             var x = new List<int>();
@@ -26,7 +24,7 @@
                 y.Add(data.RegisteredCases.Count(c => c.Date.Day == day));
             }
 
-            var chart = new System.Web.UI.DataVisualization.Charting.Chart
+            var chart = new Chart
                         {
                             Width = 1000, 
                             Height = 300
@@ -48,15 +46,14 @@
             chart.Series.Add(serie);
             var area = new ChartArea
                            {
-                               AxisX = { Interval = 1, Minimum = 1, Maximum = days, Title = "Days" },
-                               AxisY = { Interval = 1, Title = "Registered cases" }
+                               AxisX = { Interval = 1, Minimum = 1, Maximum = days, Title = Translation.Get("days") },
+                               AxisY = { Interval = 1, Minimum = 0, Maximum = numberOfCasesArr.Max(), Title = Translation.Get("Ärenden") }
                            };
             chart.ChartAreas.Add(area);
 
-            var total = string.Format("Number of cases: {0}", data.RegisteredCases.Count);
-            chart.Titles.Add(new Title(total));
+            chart.Titles.Add(new Title(string.Format("{0}: {1}", Translation.Get("Antal ärenden"), data.RegisteredCases.Count)));
 
-            SetTheme(chart, DefaultTheme);
+            SetTheme(chart, theme != null ? theme.Theme : ReportTheme.DefaultTheme.Theme);
 
             using (var ms = new MemoryStream())
             {
@@ -65,7 +62,7 @@
             }
         }
 
-        private static void SetTheme(System.Web.UI.DataVisualization.Charting.Chart chart, string theme)
+        private static void SetTheme(Chart chart, string theme)
         {
             using (var ms = new MemoryStream())
             {

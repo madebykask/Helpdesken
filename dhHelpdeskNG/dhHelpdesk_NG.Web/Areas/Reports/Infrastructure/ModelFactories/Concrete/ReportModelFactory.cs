@@ -19,7 +19,10 @@
                               {
                                   new ItemOverview(
                                       string.Format("{0} - {1}/{2}", Translation.Get("Rapport"), Translation.Get("Registrerade ärenden"), Translation.Get("dag")), 
-                                      ((int)ReportType.RegistratedCasesDay).ToString(CultureInfo.InvariantCulture))
+                                      ((int)ReportType.RegistratedCasesDay).ToString(CultureInfo.InvariantCulture))/*,
+                                  new ItemOverview(
+                                      string.Format("{0} - {1}", Translation.Get("Rapport"), Translation.Get("Case Type/Article No")),
+                                      ((int)ReportType.CaseTypeArticleNo).ToString(CultureInfo.InvariantCulture))*/  
                               };
 
             return new ReportsOptions(WebMvcHelper.CreateListField(reports, null, false));
@@ -39,6 +42,32 @@
                                         workingGroups,
                                         administrators,
                                         period);
+        }
+
+        public CaseTypeArticleNoOptionsModel GetCaseTypeArticleNoOptionsModel(CaseTypeArticleNoOptions options)
+        {
+            var departments = WebMvcHelper.CreateMultiSelectField(options.Departments);
+            var workingGroups = WebMvcHelper.CreateMultiSelectField(options.WorkingGroups);
+            var caseTypes = WebMvcHelper.CreateMultiSelectField(options.CaseTypes);
+            var productAreas = options.ProductAreas;
+            var periodFrom = DateTime.Today.AddYears(-1);
+            var periodUntil = DateTime.Today.AddMonths(-1);
+            var showCases = WebMvcHelper.CreateListField(new[]
+                                                             {
+                                                                 new ItemOverview(Translation.Get("Alla ärenden"), ShowCases.AllCases.ToString()), 
+                                                                 new ItemOverview(Translation.Get("Pågående ärenden"), ShowCases.CasesInProgress.ToString())
+                                                             });
+
+            return new CaseTypeArticleNoOptionsModel(
+                                        departments,
+                                        workingGroups,
+                                        caseTypes,
+                                        productAreas,
+                                        periodFrom,
+                                        periodUntil,
+                                        showCases,
+                                        false,
+                                        true);
         }
     }
 }

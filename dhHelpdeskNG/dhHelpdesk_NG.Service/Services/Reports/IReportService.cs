@@ -16,5 +16,7 @@
                                     int? workingGroupId,
                                     int? administratorId,
                                     DateTime period);
+
+        CaseTypeArticleNoOptions GetCaseTypeArticleNoOptions(int customerId);
     }
 }

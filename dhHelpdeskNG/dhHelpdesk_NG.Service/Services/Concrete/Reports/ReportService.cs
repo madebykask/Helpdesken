@@ -35,7 +35,7 @@
                 var workingGroups = workingGroupRep.GetAll().GetByCustomer(customerId);
                 var administrators = administratorRep.GetAll().GetByCustomer(customerId);
 
-                return ReportsMapper.MapToRegistratedCasesDayOptions(
+                return ReportsOptionsMapper.MapToRegistratedCasesDayOptions(
                                         departments,
                                         caseTypes,
                                         workingGroups,
@@ -81,6 +81,28 @@
                                 caseTypes,
                                 workingGroups,
                                 administrators);
+            }
+        }
+
+        public CaseTypeArticleNoOptions GetCaseTypeArticleNoOptions(int customerId)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var departmentRep = uow.GetRepository<Department>();
+                var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
+                var caseTypeRep = uow.GetRepository<CaseType>();
+                var productAreaRep = uow.GetRepository<ProductArea>();
+
+                var departments = departmentRep.GetAll().GetByCustomer(customerId);
+                var workingGroups = workingGroupRep.GetAll().GetByCustomer(customerId);
+                var caseTypes = caseTypeRep.GetAll().GetByCustomer(customerId);
+                var productAreas = productAreaRep.GetAll().GetByCustomer(customerId);
+
+                return ReportsOptionsMapper.MapToCaseTypeArticleNoOptions(
+                                departments,
+                                workingGroups,
+                                caseTypes,
+                                productAreas);
             }
         }
     }

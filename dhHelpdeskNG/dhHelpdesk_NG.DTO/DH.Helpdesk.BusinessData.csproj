@@ -322,6 +322,7 @@
     <Compile Include="Models\Orders\Order\OrderHistoryFields\SupplierHistoryFields.cs" />
     <Compile Include="Models\Orders\Order\OrderHistoryFields\UserHistoryFields.cs" />
     <Compile Include="Models\Orders\Order\UpdateOrderRequest.cs" />
+    <Compile Include="Models\ProductArea\ProductAreaItem.cs" />
     <Compile Include="Models\Projects\Output\ProjectOverviewSorting.cs" />
     <Compile Include="Models\Questionnaire\Participant.cs" />
     <Compile Include="Models\Questionnaire\Read\CircularOverview.cs" />
@@ -333,6 +334,7 @@
     <Compile Include="Models\Questionnaire\Write\ParticipantForInsert.cs" />
     <Compile Include="Models\Reports\Data\RegisteredCaseDay.cs" />
     <Compile Include="Models\Reports\Data\RegistratedCasesDayData.cs" />
+    <Compile Include="Models\Reports\Options\CaseTypeArticleNoOptions.cs" />
     <Compile Include="Models\Reports\Options\RegistratedCasesDayOptions.cs" />
     <Compile Include="Models\Reports\Output\CaseSatisfactionReportResponse.cs" />
     <Compile Include="Models\Reports\Output\CaseSatisfactionOptionsResponse.cs" />
