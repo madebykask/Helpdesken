@@ -37,6 +37,8 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IImpactService _impactService;
         private readonly IStatusService _statusService;
         private readonly IStateSecondaryService _stateSecondaryService;
+        private readonly ICountryService _countryService;
+        private readonly ISupplierService _supplierService;
 
         private readonly ICaseSolutionSettingService caseSolutionSettingService;
 
@@ -60,7 +62,9 @@ namespace DH.Helpdesk.Web.Controllers
             IUrgencyService urgencyService,
             IImpactService impactService,
             IStatusService statusService,
-            IStateSecondaryService stateSecondaryService)
+            IStateSecondaryService stateSecondaryService,
+            ICountryService countryService,
+            ISupplierService supplierService)
             : base(masterDataService)
         {
             this._caseFieldSettingService = caseFieldSettingService;
@@ -82,6 +86,8 @@ namespace DH.Helpdesk.Web.Controllers
             this._impactService = impactService;
             this._statusService = statusService;
             this._stateSecondaryService = stateSecondaryService;
+            this._countryService = countryService;
+            this._supplierService = supplierService;
         }
 
         [HttpPost]
@@ -411,6 +417,8 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 CaseSolution = caseSolution,
                 CaseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id),
+                Countries = this._countryService.GetCountries(SessionFacade.CurrentCustomer.Id),
+                departments = this._departmentService.GetDepartments(SessionFacade.CurrentCustomer.Id),
                 CsCategories = this._caseSolutionService.GetCaseSolutionCategories(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
@@ -503,6 +511,12 @@ namespace DH.Helpdesk.Web.Controllers
                 }).ToList(),
 
                 StateSecondaries = this._stateSecondaryService.GetActiveStateSecondaries(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList(),
+
+                Suppliers = this._supplierService.GetActiveSuppliers(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()

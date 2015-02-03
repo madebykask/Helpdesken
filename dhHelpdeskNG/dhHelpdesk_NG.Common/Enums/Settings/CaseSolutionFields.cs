@@ -38,5 +38,6 @@
         InventoryNumber = 34,
         InventoryType = 35,
         InventoryLocation = 36,
+        Supplier = 37,
     }
 }

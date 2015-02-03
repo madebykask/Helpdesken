@@ -54,6 +54,7 @@ namespace DH.Helpdesk.Domain
         public string InventoryNumber { get; set; }
         public string InventoryType { get; set; }
         public string InventoryLocation { get; set; }
+        public int? Supplier_Id { get; set; }
 
         public virtual CaseSolutionCategory CaseSolutionCategory { get; set; }
         public virtual CaseSolutionSchedule CaseSolutionSchedule { get; set; }

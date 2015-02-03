@@ -613,7 +613,7 @@
                                             }
                                         </td>
                                     </tr>
-                                    <tr class="displaytr" style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString())">
+                                    <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Supplier_Id, CaseSolutionFields.Supplier)">
                                         <td>
                                             @if (Model.countries != null)
                                             {
@@ -633,32 +633,61 @@
                                         </td> 
                                         }
                                         <td style="float: left;">
-                                            <select id="case__Supplier_Id" name="case_.Supplier_Id">
-                                                <option value="">&nbsp;</option>
-                                                @if (Model.suppliers != null)
-                                                {
-                                                    foreach (var e in Model.suppliers.Where(e => e.IsActive == 1 || Model.case_.Supplier_Id == e.Id).Where(e => Model.CountryId.IntHasValue() && (e.Country_Id == Model.CountryId && e.Country_Id.HasValue)))
+                                            @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Supplier_Id, CaseSolutionFields.Supplier))
+                                            {
+                                                <select id="case__Supplier_Id" name="case_.Supplier_Id">
+                                                    <option value="">&nbsp;</option>
+                                                    @if (Model.suppliers != null)
                                                     {
-                                                    <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Supplier_Id.ToString()) >@e.Name</option>
+                                                        foreach (var e in Model.suppliers.Where(e => e.IsActive == 1 || Model.case_.Supplier_Id == e.Id).Where(e => Model.CountryId.IntHasValue() && (e.Country_Id == Model.CountryId && e.Country_Id.HasValue)))
+                                                        {
+                                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Supplier_Id.ToString()) >@e.Name</option>
+                                                        }
                                                     }
+                                                </select>
+                                            }
+                                            else
+                                            {
+                                                if (!Model.case_.Supplier_Id.HasValue)
+                                                {
+                                                @Html.TextBoxFor(m => m.case_.Supplier_Id, new { @readonly = true })
                                                 }
-                                            </select>
+                                                else
+                                                {
+                                                @Html.TextBoxFor(m => m.suppliers.SingleOrDefault(x => x.Id == Model.case_.Supplier_Id).Name, new { @readonly = true })
+                                                @Html.HiddenFor(x => x.case_.Supplier_Id)
+                                                }
+                                            }
                                         </td>
                                     </tr>
-                                    <tr class="displaytr" style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString())">
+                                    <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.InvoiceNumber, CaseSolutionFields.InvoiceNumber)">
                                         <td>
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.InvoiceNumber, "Fakturanummer")
                                         </td>
                                         <td colspan="2">
-                                            @Html.TextBoxFor(model => model.case_.InvoiceNumber, new { maxlength = "50" })
+                                             @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.InvoiceNumber, CaseSolutionFields.InvoiceNumber))
+                                                {
+                                                        @Html.TextBoxFor(model => model.case_.InvoiceNumber, new { maxlength = "50" })
+                                                }
+                                                else
+                                                {
+                                                        @Html.TextBoxFor(model => model.case_.InvoiceNumber, new { maxlength = "50", @readonly = "readonly" })
+                                                }
                                         </td>
                                     </tr>
-                                    <tr class="displaytr" style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString())">
+                                    <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ReferenceNumber, CaseSolutionFields.ReferenceNumber)">
                                         <td>
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ReferenceNumber, "Referensnummer")
                                         </td>
                                         <td colspan="2">
-                                            @Html.TextBoxFor(model => model.case_.ReferenceNumber, new { maxlength = "200" })
+                                            @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.ReferenceNumber, CaseSolutionFields.ReferenceNumber))
+                                                {
+                                                        @Html.TextBoxFor(model => model.case_.ReferenceNumber, new { maxlength = "200" })
+                                                }
+                                                else
+                                                {
+                                                        @Html.TextBoxFor(model => model.case_.ReferenceNumber, new { maxlength = "200", @readonly = "readonly" })
+                                                }
                                         </td>
                                     </tr>
                                     <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Caption, CaseSolutionFields.Caption)">

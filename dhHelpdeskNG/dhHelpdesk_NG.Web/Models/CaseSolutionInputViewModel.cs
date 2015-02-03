@@ -49,6 +49,7 @@
         public string Finishing_Cause_Path { get; set; }
         public string ParantPath_ProductArea { get; set; }
         public string ParantPath_CaseType { get; set; }
+        public int? CountryId { get; set; }
 
         public CaseSolution CaseSolution { get; set; }
         public UserSearch Users { get; set; }
@@ -60,6 +61,7 @@
         public IList<SelectListItem> CaseWorkingGroups { get; set; }
         public IList<SelectListItem> Categories { get; set; }
         public IList<SelectListItem> Departments { get; set; }
+        public IList<Department> departments { get; set; }
         public IList<FinishingCause> FinishingCauses { get; set; }
         public IList<SelectListItem> PerformerUsers { get; set; }
         public IList<SelectListItem> Priorities { get; set; }
@@ -73,6 +75,8 @@
         public IList<SelectListItem> Impacts { get; set; }
         public IList<SelectListItem> Status { get; set; }
         public IList<SelectListItem> StateSecondaries { get; set; }
+        public IList<Country> Countries { get; set; }
+        public IList<SelectListItem> Suppliers { get; set; }
 
         //public IList<Department> departments { get; set; }
     }

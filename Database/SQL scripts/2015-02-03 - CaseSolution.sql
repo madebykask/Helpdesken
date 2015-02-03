@@ -173,3 +173,17 @@ BEGIN
 	ALTER TABLE [dbo].tblCaseSolution	ADD InventoryLocation NVARCHAR(100) NULL 
 END
 GO
+
+IF COL_LENGTH('dbo.tblCaseSolution','Supplier_Id') IS NULL
+BEGIN
+	ALTER TABLE [dbo].tblCaseSolution	ADD Supplier_Id int NULL 
+
+	ALTER TABLE [dbo].tblCaseSolution ADD 
+			CONSTRAINT [FK_tblCaseSolution_tblSupplier] FOREIGN KEY 
+			(
+				Supplier_Id
+			) REFERENCES [dbo].tblSupplier (
+				[Id]
+			)	
+END
+GO

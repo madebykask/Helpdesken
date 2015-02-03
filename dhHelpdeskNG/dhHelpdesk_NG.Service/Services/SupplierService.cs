@@ -12,6 +12,7 @@
     public interface ISupplierService
     {
         IList<Supplier> GetSuppliers(int customerId);
+        IList<Supplier> GetActiveSuppliers(int customerId);
         IList<Supplier> GetSuppliersByCountry(int customerId, int countryId);
         int? GetDefaultId(int customerId); 
         Supplier GetSupplier(int id);
@@ -48,6 +49,11 @@
         public IList<Supplier> GetSuppliers(int customerId)
         {
             return this._supplierRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
+        }
+
+        public IList<Supplier> GetActiveSuppliers(int customerId)
+        {
+            return this._supplierRepository.GetMany(x => x.Customer_Id == customerId && x.IsActive == 1).OrderBy(x => x.Name).ToList();
         }
 
         public IList<Supplier> GetSuppliersByCountry(int customerId, int countryId)
