@@ -208,27 +208,26 @@
                                                      @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Region_Id, CaseSolutionFields.Region))
                                                      {
                                                         <select id="case__Region_Id" name="case_.Region_Id">
-                                                            <option value="">&nbsp;</option>
+                                                            <option value="">&nbsp;</option>                                                            
                                                             @if (Model.regions != null)
-                                                        @if (Model.regions != null)
-                                                        {
-                                                            foreach (var e in Model.regions.Where(e => e.IsActive == 1 || Model.case_.Region_Id == e.Id))
                                                             {
-                                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Region_Id.ToString()) >@e.Name</option>
+                                                                foreach (var e in Model.regions.Where(e => e.IsActive == 1 || Model.case_.Region_Id == e.Id))
+                                                                {
+                                                                    <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Region_Id.ToString()) >@e.Name</option>
+                                                                }
                                                             }
-                                                        }
                                                         </select>
                                                      }
                                                      else
                                                      {
                                                          if (!Model.case_.Region_Id.HasValue)
                                                          {
-                                                        @Html.TextBoxFor(m => m.case_.Region_Id, new { @readonly = true })
+                                                            @Html.TextBoxFor(m => m.case_.Region_Id, new { @readonly = true })
                                                          }
                                                          else
                                                          {
-                                                        @Html.TextBoxFor(m => m.regions.SingleOrDefault(x => x.Id == Model.case_.Region_Id).Name, new { @readonly = true })
-                                                        @Html.HiddenFor(x => x.case_.Region_Id)
+                                                            @Html.TextBoxFor(m => m.regions.SingleOrDefault(x => x.Id == Model.case_.Region_Id).Name, new { @readonly = true })
+                                                            @Html.HiddenFor(x => x.case_.Region_Id)
                                                          }
                                                      }
                                                 </td>
@@ -276,7 +275,7 @@
                                                             <option value="">&nbsp;</option>
                                                             @if (Model.ous != null)
                                                             {
-                                                                var curOUs = Model.ous.Where(e => (e.IsActive == 1 || Model.case_.OU_Id == e.Id)
+                                                                    var curOUs = Model.ous.Where(e => (e.IsActive == 1 || Model.case_.OU_Id == e.Id)
                                                                     && Model.case_.Department_Id == e.Department_Id || !Model.case_.Department_Id.IntHasValue()).ToList();                                                                
                                                                     foreach (var e in curOUs)
                                                                     {                                                                
