@@ -5,7 +5,7 @@
     using global::System;
     using global::System.Collections.Generic;
 
-    public class CaseType : Entity, ICustomerEntity
+    public class CaseType : Entity, ICustomerEntity, IActiveEntity
     {
         public int AutomaticApproveTime { get; set; }
         public int Customer_Id { get; set; }

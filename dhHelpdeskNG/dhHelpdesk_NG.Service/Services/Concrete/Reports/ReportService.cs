@@ -2,8 +2,10 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Models.Reports.Data;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.RegistratedCasesDay;
     using DH.Helpdesk.BusinessData.Models.Reports.Enums;
     using DH.Helpdesk.BusinessData.Models.Reports.Options;
     using DH.Helpdesk.Common.Tools;
@@ -32,10 +34,10 @@
                 var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
                 var administratorRep = uow.GetRepository<User>();
 
-                var departments = departmentRep.GetAll().GetByCustomer(customerId);
-                var caseTypes = caseTypeRep.GetAll().GetByCustomer(customerId);
-                var workingGroups = workingGroupRep.GetAll().GetByCustomer(customerId);
-                var administrators = administratorRep.GetAll().GetByCustomer(customerId);
+                var departments = departmentRep.GetAll().GetActiveByCustomer(customerId);
+                var caseTypes = caseTypeRep.GetAll().GetActiveByCustomer(customerId);
+                var workingGroups = workingGroupRep.GetAll().GetActiveByCustomer(customerId);
+                var administrators = administratorRep.GetAll().GetActiveByCustomer(customerId);
 
                 return ReportsOptionsMapper.MapToRegistratedCasesDayOptions(
                                         departments,
@@ -72,10 +74,10 @@
                                 .GetByAdministrator(administratorId)
                                 .GetByRegistrationPeriod(from, until)
                                 .GetNotDeleted();
-                var departments = departmentRep.GetAll().GetByCustomer(customerId);
-                var caseTypes = caseTypeRep.GetAll().GetByCustomer(customerId);
-                var workingGroups = workingGroupRep.GetAll().GetByCustomer(customerId);
-                var administrators = administratorRep.GetAll().GetByCustomer(customerId);
+                var departments = departmentRep.GetAll().GetActiveByCustomer(customerId);
+                var caseTypes = caseTypeRep.GetAll().GetActiveByCustomer(customerId);
+                var workingGroups = workingGroupRep.GetAll().GetActiveByCustomer(customerId);
+                var administrators = administratorRep.GetAll().GetActiveByCustomer(customerId);
 
                 return ReportsMapper.MapToRegistratedCasesDayData(
                                 cases,
@@ -95,10 +97,10 @@
                 var caseTypeRep = uow.GetRepository<CaseType>();
                 var productAreaRep = uow.GetRepository<ProductArea>();
 
-                var departments = departmentRep.GetAll().GetByCustomer(customerId);
-                var workingGroups = workingGroupRep.GetAll().GetByCustomer(customerId);
-                var caseTypes = caseTypeRep.GetAll().GetByCustomer(customerId);
-                var productAreas = productAreaRep.GetAll().GetByCustomer(customerId);
+                var departments = departmentRep.GetAll().GetActiveByCustomer(customerId);
+                var workingGroups = workingGroupRep.GetAll().GetActiveByCustomer(customerId);
+                var caseTypes = caseTypeRep.GetAll().GetActiveByCustomer(customerId);
+                var productAreas = productAreaRep.GetAll().GetActiveByCustomer(customerId);
 
                 return ReportsOptionsMapper.MapToCaseTypeArticleNoOptions(
                                 departments,
@@ -128,19 +130,25 @@
                 var caseTypeRep = uow.GetRepository<CaseType>();
                 var productAreaRep = uow.GetRepository<ProductArea>();
 
+                var productAreaIds = new List<int>();
+                if (productAreaId.HasValue)
+                {
+                    LoadProductAreaChildrenIds(productAreaId.Value, productAreaIds, uow);
+                }
+
                 var cases = caseRep.GetAll()
                                 .GetByCustomer(customerId)
                                 .GetByDepartments(departmentIds)
                                 .GetByWorkingGroups(workingGroupIds)
                                 .GetByCaseTypes(caseTypeIds)
-                                .GetByProductArea(productAreaId)
+                                .GetByProductAreas(productAreaIds)
                                 .GetByRegistrationPeriod(periodFrom, periodUntil)
                                 .GetByShowCases(showCases)
                                 .GetNotDeleted();
-                var departments = departmentRep.GetAll().GetByCustomer(customerId);
-                var workingGroups = workingGroupRep.GetAll().GetByCustomer(customerId);
-                var caseTypes = caseTypeRep.GetAll().GetByCustomer(customerId);
-                var productAreas = productAreaRep.GetAll().GetByCustomer(customerId);
+                var departments = departmentRep.GetAll().GetActiveByCustomer(customerId).GetByIds(departmentIds);
+                var workingGroups = workingGroupRep.GetAll().GetActiveByCustomer(customerId).GetByIds(workingGroupIds);
+                var caseTypes = caseTypeRep.GetAll().GetActiveByCustomer(customerId).GetByIds(caseTypeIds);
+                var productAreas = productAreaRep.GetAll().GetActiveByCustomer(customerId).GetByIds(productAreaIds);
 
                 return ReportsMapper.MapToCaseTypeArticleNoData(
                                 cases,
@@ -148,6 +156,21 @@
                                 workingGroups,
                                 caseTypes,
                                 productAreas);
+            }
+        }
+
+        private static void LoadProductAreaChildrenIds(int id, List<int> ids, IUnitOfWork uow)
+        {
+            ids.Add(id);
+            var children = uow
+                            .GetRepository<ProductArea>()
+                            .GetAll()
+                            .Where(a => a.Parent_ProductArea_Id == id)
+                            .ToList();
+
+            foreach (var child in children)
+            {
+                LoadProductAreaChildrenIds(child.Id, ids, uow);
             }
         }
     }

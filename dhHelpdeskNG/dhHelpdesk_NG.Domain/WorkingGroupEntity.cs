@@ -6,7 +6,7 @@
     using global::System;
     using global::System.Collections.Generic;
 
-    public class WorkingGroupEntity : Entity, ICustomerEntity
+    public class WorkingGroupEntity : Entity, ICustomerEntity, IActiveEntity
     {
         public WorkingGroupEntity()
         {

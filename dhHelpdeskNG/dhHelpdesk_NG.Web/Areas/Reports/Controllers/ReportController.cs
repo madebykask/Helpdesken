@@ -97,7 +97,7 @@
         [BadRequestOnNotValid]
         public PartialViewResult GetCaseTypeArticleNoReport(CaseTypeArticleNoOptionsModel options)
         {
-            var model = this.reportService.GetCaseTypeArticleNoData(
+            var data = this.reportService.GetCaseTypeArticleNoData(
                                     this.OperationContext.CustomerId,
                                     options.DepartmentIds,
                                     options.WorkingGroupIds,
@@ -106,6 +106,11 @@
                                     options.PeriodFrom,
                                     options.PeriodUntil,
                                     options.ShowCasesId,
+                                    options.IsShowCaseTypeDetails,
+                                    options.IsShowPercents);
+
+            var model = this.reportModelFactory.GetCaseTypeArticleNoModel(
+                                    data,
                                     options.IsShowCaseTypeDetails,
                                     options.IsShowPercents);
 

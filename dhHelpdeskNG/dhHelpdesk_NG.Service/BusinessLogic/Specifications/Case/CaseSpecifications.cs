@@ -186,6 +186,18 @@
             return query;
         }
 
+        public static IQueryable<Case> GetByProductAreas(this IQueryable<Case> query, List<int> productAreaIds)
+        {
+            if (productAreaIds == null || !productAreaIds.Any())
+            {
+                return query;
+            }
+
+            query = query.Where(c => productAreaIds.Contains(c.ProductArea_Id.Value));
+
+            return query;
+        }
+
         public static IQueryable<Case> GetByRegistrationPeriod(
                                         this IQueryable<Case> query,
                                         DateTime? from,

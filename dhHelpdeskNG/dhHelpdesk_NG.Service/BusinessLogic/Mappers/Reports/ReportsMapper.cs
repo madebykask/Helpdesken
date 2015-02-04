@@ -1,9 +1,13 @@
 ﻿namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Reports
 {
+    using System.Collections.Generic;
     using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Models.Reports.Data;
+    using DH.Helpdesk.BusinessData.Models.ProductArea;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.RegistratedCasesDay;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.ProductArea;
 
     public static class ReportsMapper
     {
@@ -36,7 +40,67 @@
                                                 IQueryable<CaseType> caseTypes,
                                                 IQueryable<ProductArea> productAreas)
         {
-            return new CaseTypeArticleNoData();
+            var caseEntities = (from c in cases
+                            join d in departments on c.Department_Id equals d.Id into dgj
+                            join wg in workingGroups on c.WorkingGroup_Id equals wg.Id into wggj
+                            join ct in caseTypes on c.CaseType_Id equals ct.Id into ctgj
+                            join pa in productAreas on c.ProductArea_Id equals pa.Id into pagj
+                            from department in dgj.DefaultIfEmpty()
+                            from caseType in ctgj.DefaultIfEmpty()
+                            from workingGroup in wggj.DefaultIfEmpty()
+                            from productArea in pagj.DefaultIfEmpty()
+                            select new
+                                       {
+                                           CaseTypeId = c.CaseType_Id,
+                                           ProductAreaId = c.ProductArea_Id
+                                       }).ToList();
+
+            var caseTypesData = caseTypes.Select(t => new CaseTypeData
+                                                             {
+                                                                 Id = t.Id, 
+                                                                 Name = t.Name,
+                                                                 Details = t.RelatedField
+                                                             })
+                                                             .OrderBy(t => t.Name)
+                                                             .ToList();
+
+            var productAreaItems = productAreas.Select(a => new ProductAreaItem
+                                                                {
+                                                                    Id = a.Id,
+                                                                    ParentId = a.Parent_ProductArea_Id,
+                                                                    Name = a.Name
+                                                                })
+                                                                .OrderBy(a => a.Name)
+                                                                .ToList()
+                                                                .BuildLineRelations();
+
+            var productAreasData = new List<ProductAreaData>();
+            foreach (var productAreaItem in productAreaItems)
+            {
+                var casesDatas = new List<CasesData>();
+
+                foreach (var caseTypeData in caseTypesData)
+                {
+                    casesDatas.Add(new CasesData(
+                            caseEntities.Where(c => c.ProductAreaId == productAreaItem.Id && c.CaseTypeId == caseTypeData.Id).Count(),
+                            productAreaItem.Id,
+                            caseTypeData.Id));
+                }
+
+                productAreasData.Add(new ProductAreaData(productAreaItem, casesDatas));
+            }
+
+            foreach (var productArea in productAreasData)
+            {
+                if (productArea.ProductArea.ParentId.HasValue)
+                {
+                    productArea.Parent = productAreasData.FirstOrDefault(a => a.ProductArea.Id == productArea.ProductArea.ParentId);
+                }
+
+                productArea.Children.AddRange(productAreasData.Where(a => a.ProductArea.ParentId == productArea.ProductArea.Id));
+            }
+
+            return new CaseTypeArticleNoData(caseTypesData, productAreasData.Where(a => a.Parent == null).ToList());
         }
     }
 }

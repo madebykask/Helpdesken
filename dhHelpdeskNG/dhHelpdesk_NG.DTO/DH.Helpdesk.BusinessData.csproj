@@ -332,9 +332,12 @@
     <Compile Include="Models\Questionnaire\Read\QuestionnaireQuestionOverview.cs" />
     <Compile Include="Models\Questionnaire\Write\Answer.cs" />
     <Compile Include="Models\Questionnaire\Write\ParticipantForInsert.cs" />
-    <Compile Include="Models\Reports\Data\CaseTypeArticleNoData.cs" />
-    <Compile Include="Models\Reports\Data\RegisteredCaseDay.cs" />
-    <Compile Include="Models\Reports\Data\RegistratedCasesDayData.cs" />
+    <Compile Include="Models\Reports\Data\CaseTypeArticleNo\CasesData.cs" />
+    <Compile Include="Models\Reports\Data\CaseTypeArticleNo\CaseTypeArticleNoData.cs" />
+    <Compile Include="Models\Reports\Data\CaseTypeArticleNo\CaseTypeData.cs" />
+    <Compile Include="Models\Reports\Data\CaseTypeArticleNo\ProductAreaData.cs" />
+    <Compile Include="Models\Reports\Data\RegistratedCasesDay\RegisteredCaseDay.cs" />
+    <Compile Include="Models\Reports\Data\RegistratedCasesDay\RegistratedCasesDayData.cs" />
     <Compile Include="Models\Reports\Enums\ShowCases.cs" />
     <Compile Include="Models\Reports\Options\CaseTypeArticleNoOptions.cs" />
     <Compile Include="Models\Reports\Options\RegistratedCasesDayOptions.cs" />

@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Reports.Data
+﻿namespace DH.Helpdesk.BusinessData.Models.Reports.Data.RegistratedCasesDay
 {
     using System;
 

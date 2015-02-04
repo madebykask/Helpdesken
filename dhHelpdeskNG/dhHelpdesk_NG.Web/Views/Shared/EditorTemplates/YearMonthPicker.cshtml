@@ -1,4 +1,6 @@
-﻿@model DateTime?
+﻿@using System.Globalization
+@using DH.Helpdesk.Common.Extensions.DateTime
+@model DateTime?
 
 @{
     var controlId = ViewData["id"];
@@ -35,7 +37,7 @@
             autoclose: true
         });
 
-        $('#@controlId').datepicker("setDate", new Date());
+        $('#@controlId').datepicker("setDate", new Date(@(Model.HasValue ? Model.Value.ToJavaScriptMilliseconds().ToString(CultureInfo.InvariantCulture) : string.Empty)));
     });
 </script>
 

@@ -6,7 +6,7 @@
     using global::System;
     using global::System.Collections.Generic;
 
-    public class ProductArea : Entity, ICustomerEntity
+    public class ProductArea : Entity, ICustomerEntity, IActiveEntity
     {
         public int Customer_Id { get; set; }
         public int? MailID { get; set; }
