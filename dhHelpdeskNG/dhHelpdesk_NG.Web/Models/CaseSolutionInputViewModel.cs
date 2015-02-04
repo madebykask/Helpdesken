@@ -61,7 +61,6 @@
         public IList<SelectListItem> CaseWorkingGroups { get; set; }
         public IList<SelectListItem> Categories { get; set; }
         public IList<SelectListItem> Departments { get; set; }
-        public IList<Department> departments { get; set; }
         public IList<FinishingCause> FinishingCauses { get; set; }
         public IList<SelectListItem> PerformerUsers { get; set; }
         public IList<SelectListItem> Priorities { get; set; }

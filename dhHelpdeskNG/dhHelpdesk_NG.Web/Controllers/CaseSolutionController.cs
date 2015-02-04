@@ -418,7 +418,6 @@ namespace DH.Helpdesk.Web.Controllers
                 CaseSolution = caseSolution,
                 CaseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id),
                 Countries = this._countryService.GetCountries(SessionFacade.CurrentCustomer.Id),
-                departments = this._departmentService.GetDepartments(SessionFacade.CurrentCustomer.Id),
                 CsCategories = this._caseSolutionService.GetCaseSolutionCategories(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
