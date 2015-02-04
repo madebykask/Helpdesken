@@ -64,6 +64,13 @@
 
         var baseReportsUrl = spec.baseReportsUrl || '/Reports/Report/';
         var reportContent = spec.reportContent || $('#reportContainer');
+        var canPrint = spec.canPrint || false;
+
+        var getCanPrint = function() {
+            return canPrint;
+        }
+
+        that.getCanPrint = getCanPrint;
 
         my.baseReportsUrl = baseReportsUrl;
         my.reportContent = reportContent;
@@ -114,33 +121,60 @@
     dhHelpdesk.reports.caseTypeArticleNoReport = function (spec, my) {
         my = my || {};
 
-        var that = dhHelpdesk.reports.report(spec, my);
+        var that = dhHelpdesk.reports.report({ canPrint: true }, my);
 
-        var buildReport = function() {
+        var buildReport = function () {
+            $('#IsPrint').val(false);
+            var form = $('#reportForm');
+            $.post(form.attr("action"), form.serialize())
+            .done(function (data) {
+                $("#reportContainer").html(data);
+            });
+            return false;
+        }
+
+        var printReport = function () {
+            $('#IsPrint').val(true);
             $('#reportForm').submit();
         }
 
         that.buildReport = buildReport;
+        that.printReport = printReport;
 
         return that;
     }
 
+    var reportType = $("#ReportId");
+    var btnPrint = $('#printReport');
+    var manager = dhHelpdesk.reports.reportsManager();
+
     var onGetReportOptions = function () {
+        var report = manager.getCurrentReport(parseInt(reportType.val()));
+        /*if (report.getCanPrint()) {
+            btnPrint.show();
+        } else {
+            btnPrint.hide();
+        }*/
+        btnPrint.hide();
+
         $("#getReportOptionsForm").submit();
     }
 
-    var reportType = $("#ReportId");
     reportType.change(function () {
         onGetReportOptions();
     });
 
     onGetReportOptions();
 
-    var manager = dhHelpdesk.reports.reportsManager();
-
     $("#showReport").click(function() {
         var report = manager.getCurrentReport(parseInt(reportType.val()));
 
         report.buildReport();
+    });
+
+    btnPrint.click(function () {
+        var report = manager.getCurrentReport(parseInt(reportType.val()));
+
+        report.printReport();
     });
 });

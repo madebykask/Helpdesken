@@ -16,6 +16,7 @@
     using DH.Helpdesk.Web.Infrastructure.ActionFilters;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
     using DH.Helpdesk.Web.Infrastructure.Mvc;
+    using DH.Helpdesk.Web.Infrastructure.Print;
 
     public sealed class ReportController : UserInteractionController
     {
@@ -95,7 +96,7 @@
 
         [HttpPost]
         [BadRequestOnNotValid]
-        public PartialViewResult GetCaseTypeArticleNoReport(CaseTypeArticleNoOptionsModel options)
+        public ActionResult GetCaseTypeArticleNoReport(CaseTypeArticleNoOptionsModel options)
         {
             var data = this.reportService.GetCaseTypeArticleNoData(
                                     this.OperationContext.CustomerId,
@@ -113,6 +114,11 @@
                                     data,
                                     options.IsShowCaseTypeDetails,
                                     options.IsShowPercents);
+
+            if (options.IsPrint)
+            {
+                return new PrintPdfResult(model, "Print/CaseTypeArticleNo");
+            }
 
             return this.PartialView("Reports/CaseTypeArticleNo", model);
         }

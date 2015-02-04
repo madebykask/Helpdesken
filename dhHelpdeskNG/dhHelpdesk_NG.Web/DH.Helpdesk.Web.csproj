@@ -2483,6 +2483,7 @@
     <Content Include="Areas\Reports\Views\Report\Options\RegistratedCasesDay.cshtml" />
     <Content Include="Areas\Reports\Views\Report\Options\CaseTypeArticleNo.cshtml" />
     <Content Include="Areas\Reports\Views\Report\Reports\CaseTypeArticleNo.cshtml" />
+    <Content Include="Areas\Reports\Views\Report\Print\CaseTypeArticleNo.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />

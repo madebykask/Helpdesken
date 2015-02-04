@@ -84,5 +84,7 @@
 
         [LocalizedDisplay("Visa")]
         public bool IsShowPercents { get; set; }
+
+        public bool IsPrint { get; set; }
     }
 }

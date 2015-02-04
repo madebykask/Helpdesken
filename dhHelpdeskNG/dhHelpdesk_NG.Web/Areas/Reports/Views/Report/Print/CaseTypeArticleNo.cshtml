@@ -1,0 +1,83 @@
+﻿@using System.Globalization
+@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Reports.Models.Reports.CaseTypeArticleNoModel
+@{
+    Layout = null;    
+}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>@string.Format("{0} - {1}", Translation.Get("Rapport"), Translation.Get("Case Type/Article No"))</title>
+    </head>
+    <body>
+        @Html.Partial("~/Views/Print/Header.cshtml")        
+        <table>
+            <thead>
+                <tr>
+                    <th>@Translation.Get("Produktområde")</th>
+                    @foreach (var caseType in Model.Data.CaseTypes)
+                    {
+                        <th>@caseType.Name</th>
+                    }
+                    <th>@Translation.Get("Totalt")</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.IsShowCaseTypeDetails)
+                {
+                    <tr>
+                        <td></td>
+                        @foreach (var caseType in Model.Data.CaseTypes)
+                        {
+                            <td>@caseType.Details</td>
+                        }
+                        <td></td>
+                    </tr>
+                }
+                @foreach (var productArea in Model.Data.GetLineProductAreas())
+                {
+                    <tr>
+                        @{
+                            var level = productArea.GetLevel();
+                        }
+                        <td style="@(level > 0 ? string.Format("padding-left: {0}em;", 2 * level) : String.Empty)">@productArea.ProductArea.Name</td>
+                        @for (var i = 0; i < productArea.Cases.Count; i++)
+                        {
+                            var cases = productArea.Cases[i];
+                            <td>@(cases.Number > 0 ?
+                                      (Model.IsShowPercents ? 
+                                           string.Format("{0} ({1}%)", cases.Number, Model.Data.GetTotalPercentsForCaseType(cases, Model.Data.CaseTypes[i])) 
+                                           : cases.Number.ToString(CultureInfo.InvariantCulture)) : string.Empty)</td>
+                        }
+                        @{
+                            var total = productArea.GetTotal();
+                        }
+                        <td>@(total > 0 ?
+                                          (Model.IsShowPercents ? 
+                                               string.Format("{0} ({1}%)", total, Model.Data.GetTotalPercentsForProductArea(productArea)) 
+                                               : total.ToString(CultureInfo.InvariantCulture)) : string.Empty)</td>
+                    </tr>
+                } 
+                <tr>
+                    <td>@Translation.Get("Totalt")</td>
+                    @foreach (var caseType in Model.Data.CaseTypes)
+                    {
+                        var caseTypeTotal = Model.Data.GetTotalForCaseType(caseType);
+                        <td>@(caseTypeTotal > 0 ?
+                                          (Model.IsShowPercents ? 
+                                               string.Format("{0} (100%)", caseTypeTotal) 
+                                               : caseTypeTotal.ToString(CultureInfo.InvariantCulture)) : string.Empty)</td>
+                    }
+                    @{
+                        var totalAll = Model.Data.GetTotal();
+                        <td>@(totalAll > 0 ?
+                                          (Model.IsShowPercents ? 
+                                               string.Format("{0} (100%)", totalAll) 
+                                               : totalAll.ToString(CultureInfo.InvariantCulture)) : string.Empty)</td>
+                    }
+                </tr>           
+            </tbody>
+        </table>
+    </body>
+</html>
