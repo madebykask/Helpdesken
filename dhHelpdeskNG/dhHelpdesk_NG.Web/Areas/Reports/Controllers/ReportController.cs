@@ -27,18 +27,22 @@
 
         private readonly IPrintBuilder printBuilder;
 
+        private readonly IExcelBuilder excelBuilder;
+
         public ReportController(
             IMasterDataService masterDataService, 
             IReportModelFactory reportModelFactory, 
             IReportService reportService, 
             IReportsBuilder reportsBuilder, 
-            IPrintBuilder printBuilder)
+            IPrintBuilder printBuilder, 
+            IExcelBuilder excelBuilder)
             : base(masterDataService)
         {
             this.reportModelFactory = reportModelFactory;
             this.reportService = reportService;
             this.reportsBuilder = reportsBuilder;
             this.printBuilder = printBuilder;
+            this.excelBuilder = excelBuilder;
         }
 
         [HttpGet]
@@ -133,6 +137,15 @@
                                     options.PeriodFrom,
                                     options.PeriodUntil,
                                     options.ShowCasesId);
+
+            if (options.IsExcel)
+            {
+                var excel = this.excelBuilder.GetCaseTypeArticleNoExcel(
+                                    data,
+                                    options.IsShowCaseTypeDetails,
+                                    options.IsShowPercents);
+                return new UnicodeFileContentResult(excel, this.excelBuilder.GetExcelFileName(ReportType.CaseTypeArticleNo));
+            }
 
             var model = this.reportModelFactory.GetCaseTypeArticleNoModel(
                                     data,

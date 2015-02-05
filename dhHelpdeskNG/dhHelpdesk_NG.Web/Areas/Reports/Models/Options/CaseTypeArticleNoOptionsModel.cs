@@ -86,5 +86,7 @@
         public bool IsShowPercents { get; set; }
 
         public bool IsPrint { get; set; }
+
+        public bool IsExcel { get; set; }
     }
 }

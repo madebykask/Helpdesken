@@ -5,6 +5,7 @@
 @using (Html.BeginForm("GetCaseTypeArticleNoReport", "Report", null, FormMethod.Post, new { id = "reportForm" }))
 {
     @Html.HiddenFor(m => m.IsPrint)
+    @Html.HiddenFor(m => m.IsExcel)
     <table class="tableform">    
         <tr>
             <td class="span3">@Translation.Get("Avdelning påverkad")</td>

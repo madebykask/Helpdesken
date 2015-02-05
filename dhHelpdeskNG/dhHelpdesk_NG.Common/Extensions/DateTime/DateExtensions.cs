@@ -50,7 +50,7 @@ namespace DH.Helpdesk.Common.Extensions.DateTime
 
         public static string ToMonthYear(this DateTime date)
         {
-            return date.ToString("MM/yy");
+            return date.ToString("MM-yyyy");
         }
 
         public static long ToJavaScriptMilliseconds(this DateTime dt)

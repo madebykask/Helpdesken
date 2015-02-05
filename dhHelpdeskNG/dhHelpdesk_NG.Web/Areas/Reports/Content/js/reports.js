@@ -65,12 +65,18 @@
         var baseReportsUrl = spec.baseReportsUrl || '/Reports/Report/';
         var reportContent = spec.reportContent || $('#reportContainer');
         var canPrint = spec.canPrint || false;
+        var canExcel = spec.canExcel || false;
 
         var getCanPrint = function() {
             return canPrint;
         }
 
+        var getCanExcel = function() {
+            return canExcel;
+        }
+
         that.getCanPrint = getCanPrint;
+        that.getCanExcel = getCanExcel;
 
         my.baseReportsUrl = baseReportsUrl;
         my.reportContent = reportContent;
@@ -121,10 +127,11 @@
     dhHelpdesk.reports.caseTypeArticleNoReport = function (spec, my) {
         my = my || {};
 
-        var that = dhHelpdesk.reports.report({ canPrint: true }, my);
+        var that = dhHelpdesk.reports.report({ canPrint: true, canExcel: true }, my);
 
         var buildReport = function () {
             $('#IsPrint').val(false);
+            $('#IsExcel').val(false);
             var form = $('#reportForm');
             $.post(form.attr("action"), form.serialize())
             .done(function (data) {
@@ -133,28 +140,45 @@
             return false;
         }
 
+        var excelReport = function () {
+            $('#IsPrint').val(false);
+            $('#IsExcel').val(true);
+            $('#reportForm').submit();
+        }
+
         var printReport = function () {
             $('#IsPrint').val(true);
+            $('#IsExcel').val(false);
             $('#reportForm').submit();
         }
 
         that.buildReport = buildReport;
         that.printReport = printReport;
+        that.excelReport = excelReport;
 
         return that;
     }
 
     var reportType = $("#ReportId");
     var btnPrint = $('#printReport');
+    var btnExcel = $('#excelReport');
     var manager = dhHelpdesk.reports.reportsManager();
 
     var onGetReportOptions = function () {
         var report = manager.getCurrentReport(parseInt(reportType.val()));
+
         if (report.getCanPrint()) {
             btnPrint.show();
         } else {
             btnPrint.hide();
         }
+
+        if (report.getCanExcel()) {
+            btnExcel.show();
+        } else {
+            btnExcel.hide();
+        }
+
 
         $("#getReportOptionsForm").submit();
     }
@@ -173,7 +197,15 @@
 
     btnPrint.click(function () {
         var report = manager.getCurrentReport(parseInt(reportType.val()));
+        if (report.getCanPrint()) {
+            report.printReport();
+        }
+    });
 
-        report.printReport();
+    btnExcel.click(function () {
+        var report = manager.getCurrentReport(parseInt(reportType.val()));
+        if (report.getCanExcel()) {
+            report.excelReport();
+        }
     });
 });

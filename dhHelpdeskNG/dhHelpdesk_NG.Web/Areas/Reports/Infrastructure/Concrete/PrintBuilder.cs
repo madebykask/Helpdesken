@@ -8,6 +8,7 @@
     using DH.Helpdesk.BusinessData.Models.Reports;
     using DH.Helpdesk.BusinessData.Models.Reports.Enums;
     using DH.Helpdesk.BusinessData.Models.Reports.Print;
+    using DH.Helpdesk.Common.Extensions.DateTime;
     using DH.Helpdesk.Web.Areas.Reports.Infrastructure.Extensions;
     using DH.Helpdesk.Web.Areas.Reports.Infrastructure.Utils;
     using DH.Helpdesk.Web.Infrastructure;
@@ -49,10 +50,10 @@
                         data.CaseTypes.ToValuesList(),
                         Translation.Get("Produktområde"), 
                         data.ProductAreas.ToValuesList(),
-                        Translation.Get("Period från"), 
-                        periodFrom.HasValue ? periodFrom.Value.ToShortDateString() : string.Empty,
-                        Translation.Get("Period till"), 
-                        periodUntil.HasValue ? periodUntil.Value.ToShortDateString() : string.Empty,
+                        Translation.Get("Period"), 
+                            string.Format("{0} - {1}", 
+                            periodFrom.HasValue ? periodFrom.Value.ToMonthYear() : string.Empty,
+                            periodUntil.HasValue ? periodUntil.Value.ToMonthYear() : string.Empty),
                         Translation.Get("Visa"), 
                         showCases == ShowCases.AllCases ? Translation.Get("Alla ärenden") : Translation.Get("Pågående ärenden"));
 
