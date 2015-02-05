@@ -180,14 +180,14 @@
                                             @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td class="checkbox" style="padding-left: 20px">
-                                            <input type="checkbox" name="casesolution.NoMailToNotifier" @(Model.CaseSolution.NoMailToNotifier == 1 ? "checked=checked" : "") value ="1" />
-                                            <input type="hidden" name="casesolution.NoMailToNotifier" value="0" />
+                                            <input type="checkbox" name="Casesolution.NoMailToNotifier" @(Model.CaseSolution.NoMailToNotifier == 1 ? "checked=checked" : "") value ="1" />
+                                            <input type="hidden" name="Casesolution.NoMailToNotifier" value="0" />
                                             &nbsp;@Translation.Get("Skicka mail till anmälaren", Enums.TranslationSource.TextTranslation)
 
 
                                         </td>
                                         <td class="span9">
-                                            @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.Email)
+                                            @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.Email, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.Persons_EMail)
                                         </td>
 
                                     </tr>
@@ -255,7 +255,7 @@
                                             @Html.TextBoxFor(model => model.CaseSolution.InventoryLocation, new { id = "InventoryLocation", maxlength = "250"})
                                         </td>
                                         <td class="span9">
-                                            @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.InventoryType, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.InventoryLocation)
+                                            @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.InventoryLocation, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.InventoryLocation)
                                         </td>
                                     </tr>
                                 }                                                  
@@ -520,24 +520,21 @@
                                         @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.Project)
                                     </td>
                                 </tr>
-                                @if (Model.CaseFieldSettings.Count() != 0)
-                                {
+                               
                                     <tr>
                                         <td>
                                             @Translation.Get("Verifierad", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td class="checkbox" style="padding-left: 20px">
-                                            <input type="checkbox" name="casesolution.Verified" @(Model.CaseSolution.Verified == 1 ? "checked=checked" : "") value ="1" />
-                                            <input type="hidden" name="casesolution.Verified" value="0" />
+                                            <input type="checkbox" name="Casesolution.Verified" @(Model.CaseSolution.Verified == 1 ? "checked=checked" : "") value ="1" />
+                                            <input type="hidden" name="Casesolution.Verified" value="0" />
                                         </td>
                                         <td class="span9">
-                                            @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.Verified)
+                                            @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.Verified, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.Verified)
                                         </td>
 
                                     </tr>
-                                } 
-                                 @if (Model.CaseFieldSettings.Count() != 0)
-                                {
+                               
                                     <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString())">
                                         <td class="span3">
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
@@ -549,9 +546,7 @@
                                             @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.VerifiedDescription, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.VerifiedDescription)
                                         </td>
                                     </tr>
-                                } 
-                                 @if (Model.CaseFieldSettings.Count() != 0)
-                                {
+                               
                                     <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.SolutionRate.ToString())">
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.SolutionRate.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
@@ -569,7 +564,7 @@
                                             @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.SolutionRate, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.SolutionRate)
                                         </td>
                                     </tr> 
-                                 }  
+                              
                                  <tr>
                                     <th colspan="3" class="header">@Translation.Get("Logg")</th>
                                 </tr>

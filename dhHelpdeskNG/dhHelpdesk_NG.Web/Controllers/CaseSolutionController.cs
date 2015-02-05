@@ -295,14 +295,14 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(CaseSolutionInputViewModel caseSolutionInputViewModel, CaseSolutionSettingModel[] caseSolutionSettingModels, int PageId)
+        public ActionResult Edit(CaseSolutionInputViewModel caseSolutionInputViewModel, CaseSolutionSettingModel[] CaseSolutionSettingModels, int PageId)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
             IList<CaseFieldSetting> CheckMandatory = null; //_caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id); 
             this.TempData["RequiredFields"] = null;
-            if (caseSolutionSettingModels == null)
+            if (CaseSolutionSettingModels == null)
             {
-                caseSolutionSettingModels = new CaseSolutionSettingModel[0];
+                CaseSolutionSettingModels = new CaseSolutionSettingModel[0];
             }
             var caseSolutionSchedule = this.CreateCaseSolutionSchedule(caseSolutionInputViewModel);
 
@@ -317,7 +317,7 @@ namespace DH.Helpdesk.Web.Controllers
             CaseSettingsSolutionAggregate settingsSolutionAggregate =
                 this.CreateCaseSettingsSolutionAggregate(
                     caseSolutionInputViewModel.CaseSolution.Id,
-                    caseSolutionSettingModels);
+                    CaseSolutionSettingModels);
             this.caseSolutionSettingService.UpdateCaseSolutionSettings(settingsSolutionAggregate);
 
             if (errors.Count == 0)
