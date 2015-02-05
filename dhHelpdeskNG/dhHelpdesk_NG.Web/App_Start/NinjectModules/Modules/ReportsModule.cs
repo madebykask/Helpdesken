@@ -21,6 +21,7 @@
 
             this.Bind<IReportModelFactory>().To<ReportModelFactory>().InSingletonScope();
             this.Bind<IReportsBuilder>().To<ReportsBuilder>().InSingletonScope();
+            this.Bind<IPrintBuilder>().To<PrintBuilder>().InSingletonScope();
         }
     }
 }

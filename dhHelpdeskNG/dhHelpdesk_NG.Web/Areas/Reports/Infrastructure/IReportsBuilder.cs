@@ -2,7 +2,6 @@
 {
     using System;
 
-    using DH.Helpdesk.BusinessData.Models.Reports.Data;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.RegistratedCasesDay;
 
     public interface IReportsBuilder

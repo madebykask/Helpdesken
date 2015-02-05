@@ -1506,11 +1506,16 @@
     <Content Include="Content\js\lib\angular-1.3.11\version.txt" />
     <Content Include="Content\templates\case-invoice-case-files.tmpl.html" />
     <Compile Include="Areas\Reports\Controllers\ReportController.cs" />
+    <Compile Include="Areas\Reports\Infrastructure\Concrete\PrintBuilder.cs" />
     <Compile Include="Areas\Reports\Infrastructure\Concrete\ReportsBuilder.cs" />
+    <Compile Include="Areas\Reports\Infrastructure\Extensions\PrintExtensions.cs" />
+    <Compile Include="Areas\Reports\Infrastructure\IPrintBuilder.cs" />
     <Compile Include="Areas\Reports\Infrastructure\IReportsBuilder.cs" />
     <Compile Include="Areas\Reports\Infrastructure\ModelFactories\Concrete\ReportModelFactory.cs" />
     <Compile Include="Areas\Reports\Infrastructure\ModelFactories\IReportModelFactory.cs" />
+    <Compile Include="Areas\Reports\Infrastructure\ReportPrintEvents.cs" />
     <Compile Include="Areas\Reports\Infrastructure\ReportTheme.cs" />
+    <Compile Include="Areas\Reports\Infrastructure\Utils\ReportUtils.cs" />
     <Compile Include="Areas\Reports\Models\Options\CaseTypeArticleNoOptionsModel.cs" />
     <Compile Include="Areas\Reports\Models\Options\RegistratedCasesDayOptionsModel.cs" />
     <Compile Include="Areas\Reports\Models\Options\ReportsFilterModel.cs" />
@@ -2483,7 +2488,6 @@
     <Content Include="Areas\Reports\Views\Report\Options\RegistratedCasesDay.cshtml" />
     <Content Include="Areas\Reports\Views\Report\Options\CaseTypeArticleNo.cshtml" />
     <Content Include="Areas\Reports\Views\Report\Reports\CaseTypeArticleNo.cshtml" />
-    <Content Include="Areas\Reports\Views\Report\Print\CaseTypeArticleNo.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />

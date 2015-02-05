@@ -8,6 +8,7 @@
     using DH.Helpdesk.BusinessData.Models.Reports.Data.RegistratedCasesDay;
     using DH.Helpdesk.BusinessData.Models.Reports.Enums;
     using DH.Helpdesk.BusinessData.Models.Reports.Options;
+    using DH.Helpdesk.BusinessData.Models.Reports.Print;
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Domain;
@@ -118,13 +119,35 @@
             int? productAreaId,
             DateTime? periodFrom,
             DateTime? periodUntil,
-            ShowCases showCases,
-            bool isShowCaseTypeDetails,
-            bool isShowPercents)
+            ShowCases showCases)
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {
-                var caseRep = uow.GetRepository<Case>();
+                return GetCaseTypeArticleNoData(
+                            customerId,
+                            departmentIds,
+                            workingGroupIds,
+                            caseTypeIds,
+                            productAreaId,
+                            periodFrom,
+                            periodUntil,
+                            showCases,
+                            uow);
+            }
+        }
+
+        public CaseTypeArticleNoPrintData GetCaseTypeArticleNoPrintData(
+            int customerId,
+            List<int> departmentIds,
+            List<int> workingGroupIds,
+            List<int> caseTypeIds,
+            int? productAreaId,
+            DateTime? periodFrom,
+            DateTime? periodUntil,
+            ShowCases showCases)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
                 var departmentRep = uow.GetRepository<Department>();
                 var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
                 var caseTypeRep = uow.GetRepository<CaseType>();
@@ -136,28 +159,76 @@
                     LoadProductAreaChildrenIds(productAreaId.Value, productAreaIds, uow);
                 }
 
-                var cases = caseRep.GetAll()
-                                .GetByCustomer(customerId)
-                                .GetByDepartments(departmentIds)
-                                .GetByWorkingGroups(workingGroupIds)
-                                .GetByCaseTypes(caseTypeIds)
-                                .GetByProductAreas(productAreaIds)
-                                .GetByRegistrationPeriod(periodFrom, periodUntil)
-                                .GetByShowCases(showCases)
-                                .GetNotDeleted();
                 var departments = departmentRep.GetAll().GetActiveByCustomer(customerId).GetByIds(departmentIds);
                 var workingGroups = workingGroupRep.GetAll().GetActiveByCustomer(customerId).GetByIds(workingGroupIds);
                 var caseTypes = caseTypeRep.GetAll().GetActiveByCustomer(customerId).GetByIds(caseTypeIds);
                 var productAreas = productAreaRep.GetAll().GetActiveByCustomer(customerId).GetByIds(productAreaIds);
+                var options = ReportsOptionsMapper.MapToCaseTypeArticleNoOptions(departments, workingGroups, caseTypes, productAreas, true);
 
-                return ReportsMapper.MapToCaseTypeArticleNoData(
-                                cases,
-                                departments,
-                                workingGroups,
-                                caseTypes,
-                                productAreas);
+                var data = GetCaseTypeArticleNoData(
+                            customerId,
+                            departmentIds,
+                            workingGroupIds,
+                            caseTypeIds,
+                            productAreaId,
+                            periodFrom, 
+                            periodUntil,
+                            showCases,
+                            uow);
+
+                return new CaseTypeArticleNoPrintData(
+                            departmentIds != null && departmentIds.Any() ? options.Departments.Select(d => d.Name).ToList() : null,
+                            workingGroupIds != null && workingGroupIds.Any() ? options.WorkingGroups.Select(g => g.Name).ToList() : null,
+                            caseTypeIds != null && caseTypeIds.Any() ? options.CaseTypes.Select(t => t.Name).ToList() : null,
+                            productAreaIds.Any() ? options.ProductAreas.Select(a => a.Name).ToList() : null,
+                            data);
             }
         }
+
+        private static CaseTypeArticleNoData GetCaseTypeArticleNoData(
+            int customerId,
+            List<int> departmentIds,
+            List<int> workingGroupIds,
+            List<int> caseTypeIds,
+            int? productAreaId,
+            DateTime? periodFrom,
+            DateTime? periodUntil,
+            ShowCases showCases,
+            IUnitOfWork uow)
+        {
+            var caseRep = uow.GetRepository<Case>();
+            var departmentRep = uow.GetRepository<Department>();
+            var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
+            var caseTypeRep = uow.GetRepository<CaseType>();
+            var productAreaRep = uow.GetRepository<ProductArea>();
+
+            var productAreaIds = new List<int>();
+            if (productAreaId.HasValue)
+            {
+                LoadProductAreaChildrenIds(productAreaId.Value, productAreaIds, uow);
+            }
+
+            var cases = caseRep.GetAll()
+                            .GetByCustomer(customerId)
+                            .GetByDepartments(departmentIds)
+                            .GetByWorkingGroups(workingGroupIds)
+                            .GetByCaseTypes(caseTypeIds)
+                            .GetByProductAreas(productAreaIds)
+                            .GetByRegistrationPeriod(periodFrom, periodUntil)
+                            .GetByShowCases(showCases)
+                            .GetNotDeleted();
+            var departments = departmentRep.GetAll().GetActiveByCustomer(customerId).GetByIds(departmentIds);
+            var workingGroups = workingGroupRep.GetAll().GetActiveByCustomer(customerId).GetByIds(workingGroupIds);
+            var caseTypes = caseTypeRep.GetAll().GetActiveByCustomer(customerId).GetByIds(caseTypeIds);
+            var productAreas = productAreaRep.GetAll().GetActiveByCustomer(customerId).GetByIds(productAreaIds);
+
+            return ReportsMapper.MapToCaseTypeArticleNoData(
+                            cases,
+                            departments,
+                            workingGroups,
+                            caseTypes,
+                            productAreas);
+        }        
 
         private static void LoadProductAreaChildrenIds(int id, List<int> ids, IUnitOfWork uow)
         {

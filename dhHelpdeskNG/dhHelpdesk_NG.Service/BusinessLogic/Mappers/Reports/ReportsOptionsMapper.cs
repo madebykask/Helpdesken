@@ -36,7 +36,8 @@
                                         IQueryable<Department> departments,                                       
                                         IQueryable<WorkingGroupEntity> workingGroups,
                                         IQueryable<CaseType> caseTypes,
-                                        IQueryable<ProductArea> productAreas)
+                                        IQueryable<ProductArea> productAreas,
+                                        bool productAreaLineRelations = false)
         {
             var overviews = departments.Select(d => new { d.Id, Name = d.DepartmentName, Type = "Departments" }).Union(
                             workingGroups.Select(g => new { g.Id, Name = g.WorkingGroupName, Type = "WorkingGroups" }).Union(
@@ -45,15 +46,15 @@
                             .ThenBy(o => o.Name)
                             .ToList();
 
-            var productAreasItems = productAreas.Select(a => new ProductAreaItem
+            var productAreaEntities = productAreas.Select(a => new ProductAreaItem
                                                                  {
                                                                      Id = a.Id, 
                                                                      ParentId = a.Parent_ProductArea_Id, 
                                                                      Name = a.Name
                                                                  })
                                                                  .OrderBy(a => a.Name)
-                                                                 .ToList()
-                                                                 .BuildRelations();
+                                                                 .ToList();
+            var productAreasItems = productAreaLineRelations ? productAreaEntities.BuildLineRelations() : productAreaEntities.BuildRelations();
 
             return new CaseTypeArticleNoOptions(
                             overviews.Where(o => o.Type == "Departments").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToList(),                            

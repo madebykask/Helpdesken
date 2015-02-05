@@ -150,12 +150,11 @@
 
     var onGetReportOptions = function () {
         var report = manager.getCurrentReport(parseInt(reportType.val()));
-        /*if (report.getCanPrint()) {
+        if (report.getCanPrint()) {
             btnPrint.show();
         } else {
             btnPrint.hide();
-        }*/
-        btnPrint.hide();
+        }
 
         $("#getReportOptionsForm").submit();
     }

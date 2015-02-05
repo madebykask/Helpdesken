@@ -3,11 +3,11 @@
     using System;
     using System.Collections.Generic;
 
-    using DH.Helpdesk.BusinessData.Models.Reports.Data;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.RegistratedCasesDay;
     using DH.Helpdesk.BusinessData.Models.Reports.Enums;
     using DH.Helpdesk.BusinessData.Models.Reports.Options;
+    using DH.Helpdesk.BusinessData.Models.Reports.Print;
 
     public interface IReportService
     {
@@ -31,8 +31,16 @@
                                     int? productAreaId,
                                     DateTime? periodFrom,
                                     DateTime? periodUntil,
-                                    ShowCases showCases,
-                                    bool isShowCaseTypeDetails,
-                                    bool isShowPercents);
+                                    ShowCases showCases);
+
+        CaseTypeArticleNoPrintData GetCaseTypeArticleNoPrintData(
+                                    int customerId,
+                                    List<int> departmentIds,
+                                    List<int> workingGroupIds,
+                                    List<int> caseTypeIds,
+                                    int? productAreaId,
+                                    DateTime? periodFrom,
+                                    DateTime? periodUntil,
+                                    ShowCases showCases);
     }
 }

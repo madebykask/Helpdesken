@@ -77,6 +77,11 @@
             return productAreas;
         }
 
+        public bool HasCaseTypeDetails()
+        {
+            return this.CaseTypes.Any(t => !string.IsNullOrEmpty(t.Details));
+        }
+
         private void AddLineProductAreas(ProductAreaData productArea, List<ProductAreaData> productAreas)
         {
             productAreas.Add(productArea);

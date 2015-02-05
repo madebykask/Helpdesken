@@ -9,6 +9,7 @@
     using DH.Helpdesk.BusinessData.Models.Reports.Enums;
     using DH.Helpdesk.BusinessData.Models.Reports.Options;
     using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.Web.Areas.Reports.Infrastructure.Utils;
     using DH.Helpdesk.Web.Areas.Reports.Models.Options;
     using DH.Helpdesk.Web.Areas.Reports.Models.Reports;
     using DH.Helpdesk.Web.Infrastructure;
@@ -21,10 +22,10 @@
             var reports = new List<ItemOverview>
                               {
                                   new ItemOverview(
-                                      string.Format("{0} - {1}/{2}", Translation.Get("Rapport"), Translation.Get("Registrerade ärenden"), Translation.Get("dag")), 
+                                      ReportUtils.GetReportName(ReportType.RegistratedCasesDay), 
                                       ((int)ReportType.RegistratedCasesDay).ToString(CultureInfo.InvariantCulture)),
                                   new ItemOverview(
-                                      string.Format("{0} - {1}", Translation.Get("Rapport"), Translation.Get("Case Type/Article No")),
+                                      ReportUtils.GetReportName(ReportType.CaseTypeArticleNo),
                                       ((int)ReportType.CaseTypeArticleNo).ToString(CultureInfo.InvariantCulture))
                               };
 

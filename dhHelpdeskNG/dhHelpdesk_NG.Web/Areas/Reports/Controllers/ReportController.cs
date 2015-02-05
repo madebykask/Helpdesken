@@ -16,7 +16,6 @@
     using DH.Helpdesk.Web.Infrastructure.ActionFilters;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
     using DH.Helpdesk.Web.Infrastructure.Mvc;
-    using DH.Helpdesk.Web.Infrastructure.Print;
 
     public sealed class ReportController : UserInteractionController
     {
@@ -26,16 +25,20 @@
 
         private readonly IReportsBuilder reportsBuilder;
 
+        private readonly IPrintBuilder printBuilder;
+
         public ReportController(
             IMasterDataService masterDataService, 
             IReportModelFactory reportModelFactory, 
             IReportService reportService, 
-            IReportsBuilder reportsBuilder)
+            IReportsBuilder reportsBuilder, 
+            IPrintBuilder printBuilder)
             : base(masterDataService)
         {
             this.reportModelFactory = reportModelFactory;
             this.reportService = reportService;
             this.reportsBuilder = reportsBuilder;
+            this.printBuilder = printBuilder;
         }
 
         [HttpGet]
@@ -98,6 +101,29 @@
         [BadRequestOnNotValid]
         public ActionResult GetCaseTypeArticleNoReport(CaseTypeArticleNoOptionsModel options)
         {
+            if (options.IsPrint)
+            {
+                var printData = this.reportService.GetCaseTypeArticleNoPrintData(
+                                    this.OperationContext.CustomerId,
+                                    options.DepartmentIds,
+                                    options.WorkingGroupIds,
+                                    options.CaseTypeIds,
+                                    options.ProductAreaId,
+                                    options.PeriodFrom,
+                                    options.PeriodUntil,
+                                    options.ShowCasesId);
+
+                var print = this.printBuilder.GetCaseTypeArticleNoPrint(
+                                    printData,
+                                    options.PeriodFrom,
+                                    options.PeriodUntil,
+                                    options.ShowCasesId,
+                                    options.IsShowCaseTypeDetails,
+                                    options.IsShowPercents);
+
+                return new UnicodeFileContentResult(print, this.printBuilder.GetPrintFileName(ReportType.CaseTypeArticleNo));
+            }
+
             var data = this.reportService.GetCaseTypeArticleNoData(
                                     this.OperationContext.CustomerId,
                                     options.DepartmentIds,
@@ -106,19 +132,12 @@
                                     options.ProductAreaId,
                                     options.PeriodFrom,
                                     options.PeriodUntil,
-                                    options.ShowCasesId,
-                                    options.IsShowCaseTypeDetails,
-                                    options.IsShowPercents);
+                                    options.ShowCasesId);
 
             var model = this.reportModelFactory.GetCaseTypeArticleNoModel(
                                     data,
                                     options.IsShowCaseTypeDetails,
                                     options.IsShowPercents);
-
-            if (options.IsPrint)
-            {
-                return new PrintPdfResult(model, "Print/CaseTypeArticleNo");
-            }
 
             return this.PartialView("Reports/CaseTypeArticleNo", model);
         }

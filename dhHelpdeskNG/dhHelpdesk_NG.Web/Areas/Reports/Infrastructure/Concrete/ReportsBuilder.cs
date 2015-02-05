@@ -8,7 +8,6 @@
     using System.Web.UI.DataVisualization.Charting;
     using System.Xml;
 
-    using DH.Helpdesk.BusinessData.Models.Reports.Data;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.RegistratedCasesDay;
     using DH.Helpdesk.Web.Infrastructure;
 
