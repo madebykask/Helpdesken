@@ -263,8 +263,9 @@
 
         [HttpGet]
         public ViewResult NewNotifierPopup(string userId, string fName, 
-                                           string email, string phone, string placement, 
-                                           int? regionId, int? departmentId, int? unit)
+                                           string email, string phone, string placement,
+                                           string cellPhone, 
+                                           int? regionId, int? departmentId, int? unitId)
         {
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
             var inputParams = new Dictionary<string,string>();
@@ -290,20 +291,22 @@
             if (settings.Department.Show)
             {                
                 departments = this.departmentRepository.FindActiveOverviews(currentCustomerId);
-                //if (departmentId != null && departmentId > 0)
-                  //  inputParams.Add("DepartmentId", departmentId);
+                if (departmentId != null && departmentId > 0)
+                    inputParams.Add("DepartmentId", departmentId.Value.ToString());
             }
 
             if (settings.Region.Show)
             {
                 regions = this.regionRepository.FindByCustomerId(currentCustomerId);
-                //if (regionId != null && regionId > 0)
-                //  inputParams.Add("RegionId", regionId);
+                if (regionId != null && regionId > 0)
+                  inputParams.Add("RegionId", regionId.Value.ToString());
             }
 
             if (settings.OrganizationUnit.Show)
             {
                 organizationUnits = this.organizationUnitRepository.FindActiveAndShowable();
+                if (unitId != null && unitId > 0)
+                    inputParams.Add("UnitId", unitId.Value.ToString());
             }
 
             if (settings.Division.Show)
@@ -335,6 +338,9 @@
 
             if (!string.IsNullOrEmpty(placement))
                 inputParams.Add("Placement", placement);
+
+            if (!string.IsNullOrEmpty(cellPhone))
+                inputParams.Add("CellPhone", cellPhone);
 
             var model = this.newNotifierModelFactory.Create(
                 settings,

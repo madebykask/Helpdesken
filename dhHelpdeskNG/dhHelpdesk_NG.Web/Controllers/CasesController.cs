@@ -652,6 +652,7 @@ namespace DH.Helpdesk.Web.Controllers
                     var acccessToGroups = this._userService.GetWorkinggroupsForUserAndCustomer(SessionFacade.CurrentUser.Id, customerId);
                     var deps = this._departmentService.GetDepartmentsByUserPermissions(userId, customerId);
 
+                    m.CustomerSettings = this.workContext.Customer.Settings;
                     m.EditMode = EditMode(m, ModuleName.Log, deps, acccessToGroups);
                     AddViewDataValues();
 
@@ -1619,7 +1620,11 @@ namespace DH.Helpdesk.Web.Controllers
             if (caseId != 0)
             {
                 var markCaseAsRead = string.IsNullOrWhiteSpace(redirectFrom);
-                m.case_ = this._caseService.GetCaseById(caseId, markCaseAsRead);
+                m.case_ = this._caseService.GetCaseById(caseId);
+
+                if (m.case_.Unread != 0)
+                    this._caseService.MarkAsUnread(caseId);                
+
                 customerId = customerId == 0 ? m.case_.Customer_Id : customerId;
                 //SessionFacade.CurrentCaseLanguageId = m.case_.RegLanguage_Id;
             }

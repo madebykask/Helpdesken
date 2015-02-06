@@ -403,6 +403,14 @@ function CaseInitForm() {
             params += "&phone=" + $("#case__PersonsPhone").val();
         if ($("#case__Place").val() != '')
             params += "&placement=" + $("#case__Place").val();
+        if ($("#case__PersonsCellphone").val() != '')
+            params += "&cellPhone=" + $("#case__PersonsCellphone").val();
+        if ($("#case__Region_Id").val() != '')
+            params += "&regionId=" + $("#case__Region_Id").val();
+        if ($("#case__Department_Id").val() != '')
+            params += "&departmentId=" + $("#case__Department_Id").val();
+        if ($("#case__Ou_Id").val() != '')
+            params += "&unitId=" + $("#case__Ou_Id").val();
         
         var win = window.open('/Notifiers/NewNotifierPopup' + params, '_blank', 'left=100,top=100,width=990,height=480,toolbar=0,resizable=1,menubar=0,status=0,scrollbars=1');
         //win.onbeforeunload = function () { CaseNewNotifierEvent(win.returnValue); }

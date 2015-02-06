@@ -275,17 +275,17 @@
                                                             <option value="">&nbsp;</option>
                                                             @if (Model.ous != null)
                                                             {
-                                                                    var curOUs = Model.ous.Where(e => (e.IsActive == 1 || Model.case_.OU_Id == e.Id)
-                                                                    && Model.case_.Department_Id == e.Department_Id || !Model.case_.Department_Id.IntHasValue()).ToList();                                                                
-                                                                    foreach (var e in curOUs)
-                                                                    {                                                                
+                                                                var curOUs = Model.ous.Where(e => (e.IsActive == 1 || Model.case_.OU_Id == e.Id)
+                                                                && Model.case_.Department_Id == e.Department_Id || !Model.case_.Department_Id.IntHasValue()).ToList();
+                                                                foreach (var e in curOUs)
+                                                                {                                                                
                                                                         <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.OU_Id.ToString()) >@e.Name</option>
                                                                 
-                                                                        foreach (var sub in e.SubOUs.Where(s => s.IsActive == 1 || Model.case_.OU_Id == s.Id))
-                                                                        { 
+                                                                    foreach (var sub in e.SubOUs.Where(s => s.IsActive == 1 || Model.case_.OU_Id == s.Id))
+                                                                    { 
                                                                             <option value="@sub.Id" @sub.Id.IdIsSelected(Model.case_.OU_Id.ToString()) > @e.Name - @sub.Name</option>
-                                                                        }
                                                                     }
+                                                                }
                                                             }
                                                         </select>
                                                     }
@@ -899,6 +899,11 @@
                                                 <option value="">&nbsp;</option>
                                                 @if (Model.users != null)
                                                 {
+                                                    if (Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString()) == "display:none")
+                                                    {
+                                                        Model.case_.CaseResponsibleUser_Id = null; 
+                                                    }
+                                                    
                                                     foreach (var e in Model.users.Where(e => e.IsActive == 1 && e.Performer == 1 || Model.case_.CaseResponsibleUser_Id == e.Id))
                                                     {
                                                     <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.CaseResponsibleUser_Id.ToString()) >@e.SurName @e.FirstName</option>

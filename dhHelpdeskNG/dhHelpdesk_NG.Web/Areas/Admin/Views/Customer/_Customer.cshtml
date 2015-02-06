@@ -16,7 +16,7 @@
         }
         <tr>
             <td class="span3">
-                @Translation.Get("Kundnummer", Enums.TranslationSource.TextTranslation)
+                @Translation.Get("Kundnummer", Enums.TranslationSource.TextTranslation) <span> &nbsp;*</span>
             </td>
             @if (Model.Customer.Id > 0)
             {
@@ -33,7 +33,7 @@
         </tr>
         <tr>
             <td>
-                @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)
+                @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)<span>&nbsp;*</span>
             </td>
             <td>
                 @Html.TextBoxFor(model => model.Customer.Name, new { maxlength = "50" })
@@ -293,7 +293,29 @@
 @Html.HiddenFor(model => model.Setting.MinRegWorkingTime)
 <script type="text/javascript">
 
-    
+    var validator = $("#target").validate({
+        ignore: "",
+        rules: {
+            "Customer.CustomerID": {
+                required: true  
+            },
+            "Customer.Name": {
+                required: true
+            }
+        },
+        messages: {
+            "Customer.CustomerID": {
+                required: "@Translation.Get("måste anges")"
+            },
+            "Customer.Name": {
+                required: "@Translation.Get("måste anges")"
+            }
+        },        
+        submitHandler: function(form) {
+            form.submit();
+        }
+    });
+
     $("#addUs").click(function () {
         if (document.getElementById("UsAvailable").length != 0 && document.getElementById("UsAvailable").selectedIndex != -1) {
             // Lägg till bild

@@ -204,7 +204,7 @@
                         break;
                     case Module.Statistics:
                         model.StatisticsOverviews = this.statisticsService.GetStatistics(
-                                                                        customersIds, 
+                                                                        customersIds.Take(module.NumberOfRows.Value).ToArray(), 
                                                                         this.workContext.User.UserId);
                         break;
                     case Module.ChangeManagement:
