@@ -17,7 +17,7 @@
             var nullableCustomerId = (int?)customerId;
 
             var anonymus = (from l in query.GetByLanguage(languageId)
-                            join t in templates.GetByCustomer(nullableCustomerId).GetMailIdTemplates(templateId) on
+                            join t in templates.GetByNullableCustomer(nullableCustomerId).GetMailIdTemplates(templateId) on
                                 l.MailTemplate_Id equals t.Id
                             select new { l.Body, l.Subject }).FirstOrDefault();
 

@@ -9,6 +9,7 @@
     using DH.Helpdesk.BusinessData.Models.Reports.Options;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.CaseType;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.ProductArea;
 
     public static class ReportsOptionsMapper
@@ -69,25 +70,36 @@
                                         IQueryable<CaseFieldSetting> fields,
                                         IQueryable<Department> departments,
                                         IQueryable<WorkingGroupEntity> workingGroups,
-                                        IQueryable<CaseType> caseTypes)
+                                        IQueryable<CaseType> caseTypes,
+                                        int languageId)
         {
             var separator = Guid.NewGuid().ToString();
 
-            var overviews = fields.Select(f => new { f.Id, f.Name, Type = "Field" }).Union(
-                            departments.Select(d => new { d.Id, Name = d.DepartmentName, Type = "Department" }).Union(
+            var overviews = departments.Select(d => new { d.Id, Name = d.DepartmentName, Type = "Department" }).Union(
                             workingGroups.Select(g => new { g.Id, Name = g.WorkingGroupName, Type = "WorkingGroup" }).Union(
                             caseTypes.Select(t => new
                                                       {
                                                           t.Id, 
                                                           Name = t.Name + separator + t.Parent_CaseType_Id, 
                                                           Type = "CaseType"
-                                                      }))))
+                                                      })))
                             .OrderBy(o => o.Type)
                             .ThenBy(o => o.Name)
                             .ToList();
 
+            var fs = fields.Select(f => new
+                                   {
+                                       f.Id, 
+                                       Name = f.CaseFieldSettingLanguages.FirstOrDefault(l => l.Language_Id == languageId).Label
+                                   })
+                                   .OrderBy(f => f.Name)
+                                   .ToList()
+                                   .Where(f => !string.IsNullOrEmpty(f.Name))
+                                   .Select(f => new ItemOverview(f.Name, f.Id.ToString(CultureInfo.InvariantCulture)))
+                                   .ToList();
+
             return new ReportGeneratorOptions(
-                            overviews.Where(o => o.Type == "Field").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToList(),
+                            fs,
                             overviews.Where(o => o.Type == "Department").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToList(),
                             overviews.Where(o => o.Type == "WorkingGroup").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToList(),
                             overviews.Where(o => o.Type == "CaseType").Select(
@@ -102,7 +114,7 @@
                                             parentId = parentIdVal;
                                         }
                                         return new CaseTypeItem(o.Id, parentId, name);
-                                    }).ToList());
+                                    }).ToList().BuildRelations());
         }
     }
 }

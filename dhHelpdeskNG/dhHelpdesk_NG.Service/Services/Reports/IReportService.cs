@@ -7,6 +7,7 @@
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseSatisfaction;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.RegistratedCasesDay;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.ReportGenerator;
     using DH.Helpdesk.BusinessData.Models.Reports.Enums;
     using DH.Helpdesk.BusinessData.Models.Reports.Options;
     using DH.Helpdesk.BusinessData.Models.Reports.Print;
@@ -56,5 +57,16 @@
             int[] selectedWorkingGroups);
 
         RegistratedCasesCaseTypeOptionsResponse GetRegistratedCasesCaseTypeOptionsResponse(OperationContext context);
+
+        ReportGeneratorOptions GetReportGeneratorOptions(int customerId, int languageId);
+
+        ReportGeneratorData GetReportGeneratorData(
+                                    int customerId,
+                                    List<int> fieldIds,
+                                    List<int> departmentIds,
+                                    List<int> workingGroupIds,
+                                    int? caseTypeId,
+                                    DateTime? periodFrom,
+                                    DateTime? periodUntil);
     }
 }

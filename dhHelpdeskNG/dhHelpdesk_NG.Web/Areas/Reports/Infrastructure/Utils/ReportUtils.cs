@@ -24,7 +24,12 @@
                     return string.Format(
                         "{0} - {1}",
                         Translation.Get("Rapport"),
-                        Translation.Get("Kundnöjdhet - ärende"));
+                        Translation.Get("Survey"));
+                case ReportType.ReportGenerator:
+                    return string.Format(
+                        "{0} - {1}",
+                        Translation.Get("Rapport"),
+                        Translation.Get("Rapportgenerator"));
                 default:
                     return string.Empty;
             }

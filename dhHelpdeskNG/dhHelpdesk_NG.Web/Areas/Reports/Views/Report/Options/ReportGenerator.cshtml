@@ -1,0 +1,76 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Infrastructure.Extensions
+@model DH.Helpdesk.Web.Areas.Reports.Models.Options.ReportGeneratorOptionsModel
+
+@using (Html.BeginForm("GetReportGeneratorReport", "Report", null, FormMethod.Post, new { id = "reportForm" }))
+{
+    @Html.HiddenFor(m => m.IsExcel)
+    <table class="tableform">    
+        <tr>
+            <td class="span3">@Translation.Get("Fält")</td>
+            <td>
+                @Html.DropDownListFor(m => m.FieldIds, Model.Fields,
+                        new { id = "fields", multiple = "multiple", @class = "multiselect multiselect-search" })
+            </td>
+        </tr>        
+        <tr>
+            <td class="span3">@Translation.Get("Avdelning påverkad")</td>
+            <td>
+                @Html.DropDownListFor(m => m.DepartmentIds, Model.Departments,
+                        new { id = "departments", multiple = "multiple", @class = "multiselect multiselect-search" })
+            </td>
+        </tr>     
+        <tr>
+            <td class="span3">@Translation.Get("Driftgrupp")</td>
+            <td>
+                @Html.DropDownListFor(m => m.WorkingGroupIds, Model.WorkingGroups,
+                        new { id = "workingGroups", multiple = "multiple", @class = "multiselect multiselect-search" })
+            </td>
+        </tr>                   
+        <tr>
+            <td class="span3">@Translation.Get("Ärendetyper")</td>
+            <td>
+                <div id="divCaseType" class="btn-group">
+                    <div class="btn" id="caseTypeText">@Translation.Get("--")</div>
+                    <button class="btn dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">@Translation.Get("--")</a></li>
+                        @Html.CaseTypesList(Model.CaseTypes)
+                    </ul>
+                    @Html.HiddenFor(m => m.CaseTypeId)    
+                </div>            
+            </td>
+        </tr>        
+        <tr>
+            <td class="span3">@Translation.Get("Period från")</td>
+            <td>
+                @Html.EditorFor(m => m.PeriodFrom, "YearMonthPicker", new { id = "periodFrom" })
+            </td>
+        </tr>        
+        <tr>
+            <td class="span3">@Translation.Get("Period till")</td>
+            <td>
+                @Html.EditorFor(m => m.PeriodUntil, "YearMonthPicker", new { id = "periodUntil" })
+            </td>
+        </tr>    
+    </table>        
+}
+<div id="reportContainer">    
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $("#fields").multiselect();
+        $("#departments").multiselect();
+        $("#workingGroups").multiselect();
+
+        $('#divCaseType ul.dropdown-menu li a').click(function (e) {
+            e.preventDefault();
+            var val = $(this).attr('value');
+            $("#caseTypeText").text(getBreadcrumbs(this));
+            $("#CaseTypeId").val(val);
+        });
+    })
+</script>

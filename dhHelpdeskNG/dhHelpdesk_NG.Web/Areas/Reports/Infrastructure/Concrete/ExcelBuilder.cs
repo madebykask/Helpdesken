@@ -5,6 +5,7 @@
     using System.IO;
 
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.ReportGenerator;
     using DH.Helpdesk.BusinessData.Models.Reports.Enums;
     using DH.Helpdesk.Web.Areas.Reports.Infrastructure.Extensions;
     using DH.Helpdesk.Web.Infrastructure;
@@ -101,6 +102,24 @@
                 }
 
                 return excelPackage.GetAsByteArray();
+            }
+        }
+
+        public byte[] GetReportGeneratorExcel(ReportGeneratorData data)
+        {
+            using (var memoryStream = new MemoryStream())
+            using (var excelPackage = new ExcelPackage(memoryStream))
+            {
+                var ws = excelPackage.Workbook.Worksheets.Add("Report");
+                var row = 1;
+                var column = 1;
+
+                for (var i = 1; i <= column; i++)
+                {
+                    ws.Column(i).AutoFit();
+                }
+
+                return excelPackage.GetAsByteArray();                            
             }
         }
     }

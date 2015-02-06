@@ -2,6 +2,7 @@
 {
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.ReportGenerator;
     using DH.Helpdesk.BusinessData.Models.Reports.Options;
     using DH.Helpdesk.Web.Areas.Reports.Models.Options;
     using DH.Helpdesk.Web.Areas.Reports.Models.Reports;
@@ -22,5 +23,9 @@
         CaseSatisfactionOptions CreateCaseSatisfactionOptions(OperationContext context);
 
         CaseSatisfactionReport CreateCaseSatisfactionReport(CaseSatisfactionOptions options, OperationContext context);
+
+        ReportGeneratorOptionsModel GetReportGeneratorOptionsModel(ReportGeneratorOptions options);
+
+        ReportGeneratorModel GetReportGeneratorModel(ReportGeneratorData data);
     }
 }

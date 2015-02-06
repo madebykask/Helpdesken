@@ -76,10 +76,17 @@
                     return this.PartialView(
                                 "Options/CaseTypeArticleNo",
                                 this.reportModelFactory.GetCaseTypeArticleNoOptionsModel(caseTypeArticleNoOptions));
+
                 case ReportType.CaseSatisfaction:
                     return this.PartialView(
                                 "Options/SurveySatisfactionOptions",
                                 this.reportModelFactory.CreateCaseSatisfactionOptions(this.OperationContext));
+
+                case ReportType.ReportGenerator:
+                    var reportGeneratorOptions = this.reportService.GetReportGeneratorOptions(this.OperationContext.CustomerId, this.OperationContext.LanguageId);
+                    return this.PartialView(
+                                "Options/ReportGenerator",
+                                this.reportModelFactory.GetReportGeneratorOptionsModel(reportGeneratorOptions));
             }
 
             return null;
@@ -173,6 +180,30 @@
         {
             var model = this.reportModelFactory.CreateCaseSatisfactionReport(options, this.OperationContext);
             return this.View("Reports/CaseSatisfactionReport", model);
+        }
+
+        [HttpPost]
+        [BadRequestOnNotValid]
+        public ActionResult GetReportGeneratorReport(ReportGeneratorOptionsModel options)
+        {
+            var data = this.reportService.GetReportGeneratorData(
+                                this.OperationContext.CustomerId,
+                                options.FieldIds,
+                                options.DepartmentIds,
+                                options.WorkingGroupIds,
+                                options.CaseTypeId,
+                                options.PeriodFrom,
+                                options.PeriodUntil);
+
+            if (options.IsExcel)
+            {
+                var excel = this.excelBuilder.GetReportGeneratorExcel(data);
+                return new UnicodeFileContentResult(excel, this.excelBuilder.GetExcelFileName(ReportType.ReportGenerator));
+            }
+
+            var model = this.reportModelFactory.GetReportGeneratorModel(data);
+
+            return this.PartialView("Reports/ReportGenerator", model);
         }
     }
 }

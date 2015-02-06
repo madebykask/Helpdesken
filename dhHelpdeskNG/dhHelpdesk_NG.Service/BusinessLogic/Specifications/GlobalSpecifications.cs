@@ -29,7 +29,7 @@
             return query;
         }
 
-        public static IQueryable<T> GetByCustomer<T>(this IQueryable<T> query, int? customerId)
+        public static IQueryable<T> GetByNullableCustomer<T>(this IQueryable<T> query, int? customerId)
             where T : class, INulableCustomerEntity
         {
             query = query.Where(x => customerId == null ? x.Customer_Id == null : x.Customer_Id == customerId);
@@ -198,5 +198,13 @@
 
             return query;
         }
+
+        public static IQueryable<T> GetShowable<T>(this IQueryable<T> query)
+                    where T : class, IStartPageEntity
+        {
+            query = query.Where(x => x.ShowOnStartPage != 0);
+
+            return query;
+        } 
     }
 }

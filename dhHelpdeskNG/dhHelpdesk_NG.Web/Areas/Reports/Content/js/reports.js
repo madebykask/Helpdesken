@@ -49,6 +49,8 @@
                     return dhHelpdesk.reports.caseTypeArticleNoReport();
                 case dhHelpdesk.reports.reportType.CaseSatisfaction:
                     return dhHelpdesk.reports.caseSatisfactionReport();
+                case dhHelpdesk.reports.reportType.ReportGenerator:
+                    return dhHelpdesk.reports.reportGeneratorReport();
                 default:
                     return null;
             }
@@ -69,16 +71,42 @@
         var canPrint = spec.canPrint || false;
         var canExcel = spec.canExcel || false;
 
-        var getCanPrint = function() {
+        var getCanPrint = function () {
             return canPrint;
         }
 
-        var getCanExcel = function() {
+        var getCanExcel = function () {
             return canExcel;
+        }
+
+        var buildReport = function () {
+            $('#IsPrint').val(false);
+            $('#IsExcel').val(false);
+            var form = $('#reportForm');
+            $.post(form.attr("action"), form.serialize())
+            .done(function (data) {
+                $("#reportContainer").html(data);
+            });
+            return false;
+        }
+
+        var excelReport = function () {
+            $('#IsPrint').val(false);
+            $('#IsExcel').val(true);
+            $('#reportForm').submit();
+        }
+
+        var printReport = function () {
+            $('#IsPrint').val(true);
+            $('#IsExcel').val(false);
+            $('#reportForm').submit();
         }
 
         that.getCanPrint = getCanPrint;
         that.getCanExcel = getCanExcel;
+        that.buildReport = buildReport;
+        that.printReport = printReport;
+        that.excelReport = excelReport;
 
         my.baseReportsUrl = baseReportsUrl;
         my.reportContent = reportContent;
@@ -111,12 +139,6 @@
         }
 
         var buildReport = function () {
-            var form = $('#reportForm');
-            form.validate();
-            if (!form.valid()) {
-                return false;
-            }
-
             my.reportContent.html('<img src="' + getReportHandler() + '" />');
         }
 
@@ -131,33 +153,6 @@
 
         var that = dhHelpdesk.reports.report({ canPrint: true, canExcel: true }, my);
 
-        var buildReport = function () {
-            $('#IsPrint').val(false);
-            $('#IsExcel').val(false);
-            var form = $('#reportForm');
-            $.post(form.attr("action"), form.serialize())
-            .done(function (data) {
-                $("#reportContainer").html(data);
-            });
-            return false;
-        }
-
-        var excelReport = function () {
-            $('#IsPrint').val(false);
-            $('#IsExcel').val(true);
-            $('#reportForm').submit();
-        }
-
-        var printReport = function () {
-            $('#IsPrint').val(true);
-            $('#IsExcel').val(false);
-            $('#reportForm').submit();
-        }
-
-        that.buildReport = buildReport;
-        that.printReport = printReport;
-        that.excelReport = excelReport;
-
         return that;
     }
 
@@ -166,28 +161,19 @@
 
         var that = dhHelpdesk.reports.report({ canPrint: true }, my);
 
-        var buildReport = function () {
-            $('#IsPrint').val(false);
-            var form = $('#reportForm');
-            $.post(form.attr("action"), form.serialize())
-            .done(function (data) {
-                $("#reportContainer").html(data);
-            });
-            return false;
-        }
+        return that;
+    }
 
-        var printReport = function () {
-            $('#IsPrint').val(true);
-            $('#reportForm').submit();
-        }
+    dhHelpdesk.reports.reportGeneratorReport = function (spec, my) {
+        my = my || {};
 
-        that.buildReport = buildReport;
-        that.printReport = printReport;
+        var that = dhHelpdesk.reports.report({ canExcel: true }, my);
 
         return that;
     }
 
     var reportType = $("#ReportId");
+    var btnShow = $("#showReport");
     var btnPrint = $('#printReport');
     var btnExcel = $('#excelReport');
     var manager = dhHelpdesk.reports.reportsManager();
@@ -217,9 +203,8 @@
 
     onGetReportOptions();
 
-    $("#showReport").click(function() {
+    btnShow.click(function() {
         var report = manager.getCurrentReport(parseInt(reportType.val()));
-
         report.buildReport();
     });
 

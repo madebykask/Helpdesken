@@ -1,9 +1,11 @@
 ﻿namespace DH.Helpdesk.Domain
 {
+    using DH.Helpdesk.Domain.Interfaces;
+
     using global::System;
     using global::System.Collections.Generic;
 
-    public class CaseFieldSetting : Entity
+    public class CaseFieldSetting : Entity, INulableCustomerEntity, IStartPageEntity
     {
         public int? Customer_Id { get; set; }
         public int FieldSize { get; set; }

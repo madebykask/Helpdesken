@@ -9,6 +9,7 @@
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseSatisfaction;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.RegistratedCasesDay;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.ReportGenerator;
     using DH.Helpdesk.BusinessData.Models.Reports.Enums;
     using DH.Helpdesk.BusinessData.Models.Reports.Options;
     using DH.Helpdesk.BusinessData.Models.Reports.Print;
@@ -202,6 +203,77 @@
 
         #endregion
 
+        #region ReportGenerator
+
+        public ReportGeneratorOptions GetReportGeneratorOptions(int customerId, int languageId)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var fieldRep = uow.GetRepository<CaseFieldSetting>();
+                var departmentRep = uow.GetRepository<Department>();
+                var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
+                var caseTypeRep = uow.GetRepository<CaseType>();
+
+                var fields = fieldRep.GetAll().GetByNullableCustomer(customerId).GetShowable();
+                var departments = departmentRep.GetAll().GetActiveByCustomer(customerId);
+                var workingGroups = workingGroupRep.GetAll().GetActiveByCustomer(customerId);
+                var caseTypes = caseTypeRep.GetAll().GetActiveByCustomer(customerId);
+
+                return ReportsOptionsMapper.MapToReportGeneratorOptions(
+                                            fields,
+                                            departments,
+                                            workingGroups,
+                                            caseTypes,
+                                            languageId);
+            }
+        }
+
+        public ReportGeneratorData GetReportGeneratorData(
+            int customerId,
+            List<int> fieldIds,
+            List<int> departmentIds,
+            List<int> workingGroupIds,
+            int? caseTypeId,
+            DateTime? periodFrom,
+            DateTime? periodUntil)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var caseRep = uow.GetRepository<Case>();
+                var fieldRep = uow.GetRepository<CaseFieldSetting>();
+                var departmentRep = uow.GetRepository<Department>();
+                var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
+                var caseTypeRep = uow.GetRepository<CaseType>();
+
+                var caseTypeIds = new List<int>();
+                if (caseTypeId.HasValue)
+                {
+                    LoadCaseTypeChildrenIds(caseTypeId.Value, caseTypeIds, uow);
+                }
+
+                var cases = caseRep.GetAll()
+                            .GetByCustomer(customerId)
+                            .GetByDepartments(departmentIds)
+                            .GetByWorkingGroups(workingGroupIds)
+                            .GetByCaseTypes(caseTypeIds)
+                            .GetByRegistrationPeriod(periodFrom, periodUntil)
+                            .GetNotDeleted();
+                var fields = fieldRep.GetAll().GetByNullableCustomer(customerId).GetByIds(fieldIds).GetShowable();
+                var departments = departmentRep.GetAll().GetActiveByCustomer(customerId).GetByIds(departmentIds);
+                var workingGroups = workingGroupRep.GetAll().GetActiveByCustomer(customerId).GetByIds(workingGroupIds);
+                var caseTypes = caseTypeRep.GetAll().GetActiveByCustomer(customerId).GetByIds(caseTypeIds);
+
+                return ReportsMapper.MapToReportGeneratorData(
+                                    cases,
+                                    fields,
+                                    departments,
+                                    workingGroups,
+                                    caseTypes);
+            }
+        }
+
+        #endregion
+
         #region CaseSatisfaction
 
         public CaseSatisfactionOptionsResponse GetCaseSatisfactionOptionsResponse(OperationContext context)
@@ -347,6 +419,21 @@
                             .GetRepository<ProductArea>()
                             .GetAll()
                             .Where(a => a.Parent_ProductArea_Id == id)
+                            .ToList();
+
+            foreach (var child in children)
+            {
+                LoadProductAreaChildrenIds(child.Id, ids, uow);
+            }
+        }
+
+        private static void LoadCaseTypeChildrenIds(int id, List<int> ids, IUnitOfWork uow)
+        {
+            ids.Add(id);
+            var children = uow
+                            .GetRepository<CaseType>()
+                            .GetAll()
+                            .Where(a => a.Parent_CaseType_Id == id)
                             .ToList();
 
             foreach (var child in children)

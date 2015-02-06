@@ -340,6 +340,7 @@
     <Compile Include="Models\Reports\Data\CaseTypeArticleNo\ProductAreaData.cs" />
     <Compile Include="Models\Reports\Data\RegistratedCasesDay\RegisteredCaseDay.cs" />
     <Compile Include="Models\Reports\Data\RegistratedCasesDay\RegistratedCasesDayData.cs" />
+    <Compile Include="Models\Reports\Data\ReportGenerator\ReportGeneratorData.cs" />
     <Compile Include="Models\Reports\Enums\ShowCases.cs" />
     <Compile Include="Models\Reports\Options\CaseSatisfactionOptionsResponse.cs" />
     <Compile Include="Models\Reports\Options\CaseTypeArticleNoOptions.cs" />

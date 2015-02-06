@@ -4,10 +4,10 @@
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
-    using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.ReportGenerator;
     using DH.Helpdesk.BusinessData.Models.Reports.Enums;
     using DH.Helpdesk.BusinessData.Models.Reports.Options;
     using DH.Helpdesk.BusinessData.Models.Shared;
@@ -44,7 +44,10 @@
                                       ((int)ReportType.CaseTypeArticleNo).ToString(CultureInfo.InvariantCulture)),
                                   new ItemOverview(
                                       ReportUtils.GetReportName(ReportType.CaseSatisfaction),
-                                      ((int)ReportType.CaseSatisfaction).ToString(CultureInfo.InvariantCulture))
+                                      ((int)ReportType.CaseSatisfaction).ToString(CultureInfo.InvariantCulture))/*,
+                                  new ItemOverview(
+                                      ReportUtils.GetReportName(ReportType.ReportGenerator),
+                                      ((int)ReportType.ReportGenerator).ToString(CultureInfo.InvariantCulture))*/
                               };
 
             return new ReportsOptions(WebMvcHelper.CreateListField(reports.OrderBy(r => r.Name), null, false));
@@ -106,8 +109,8 @@
         public CaseSatisfactionOptions CreateCaseSatisfactionOptions(OperationContext context)
         {
             var response = this.reportsService.GetRegistratedCasesCaseTypeOptionsResponse(context);
-            var workingGroups = CreateMultiSelectField(response.WorkingGroups);
-            var caseTypes = CreateMultiSelectField(response.CaseTypes);
+            var workingGroups = WebMvcHelper.CreateMultiSelectField(response.WorkingGroups);
+            var caseTypes = WebMvcHelper.CreateMultiSelectField(response.CaseTypes);
             var productAreas = response.ProductAreas;
             var today = DateTime.Today;
             var instance = new CaseSatisfactionOptions(caseTypes, workingGroups, productAreas, today.AddYears(-1), today, context.CustomerId);
@@ -129,10 +132,27 @@
             return instance;
         }
 
-        private static MultiSelectList CreateMultiSelectField(
-            IEnumerable<ItemOverview> items)
+        public ReportGeneratorOptionsModel GetReportGeneratorOptionsModel(ReportGeneratorOptions options)
         {
-            return new MultiSelectList(items, "Value", "Name");
+            var fields = WebMvcHelper.CreateMultiSelectField(options.Fields);
+            var departments = WebMvcHelper.CreateMultiSelectField(options.Departments);
+            var workingGroups = WebMvcHelper.CreateMultiSelectField(options.WorkingGroups);
+            var caseTypes = options.CaseTypes;
+            var periodFrom = DateTime.Today.AddMonths(-1);
+            var periodUntil = DateTime.Today;
+
+            return new ReportGeneratorOptionsModel(
+                                    fields,
+                                    departments,
+                                    workingGroups,
+                                    caseTypes,
+                                    periodFrom,
+                                    periodUntil);
+        }
+
+        public ReportGeneratorModel GetReportGeneratorModel(ReportGeneratorData data)
+        {
+            return new ReportGeneratorModel(data);
         }
     }
 }

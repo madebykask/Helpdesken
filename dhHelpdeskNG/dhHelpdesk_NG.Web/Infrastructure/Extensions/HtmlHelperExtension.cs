@@ -9,6 +9,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
     using System.Web.Routing;
 
     using DH.Helpdesk.BusinessData.Models.Case.Output;
+    using DH.Helpdesk.BusinessData.Models.CaseType;
     using DH.Helpdesk.BusinessData.Models.ProductArea;
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.Domain;
@@ -190,6 +191,11 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
         public static MvcHtmlString ProductAreasList(this HtmlHelper helper, IEnumerable<ProductAreaItem> productAreas)
         {
             return productAreas == null ? MvcHtmlString.Empty : BuildProductAreasList(productAreas);
+        }
+
+        public static MvcHtmlString CaseTypesList(this HtmlHelper helper, IEnumerable<CaseTypeItem> caseTypes)
+        {
+            return caseTypes == null ? MvcHtmlString.Empty : BuildCaseTypesList(caseTypes);
         }
 
         public static MvcHtmlString FinishingCauseDropdownButtonString(this HtmlHelper helper, IList<FinishingCause> causes)
@@ -700,6 +706,30 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 {
                     result.Append("<ul class='dropdown-menu'>");
                     result.Append(BuildProductAreasList(productArea.Children.OrderBy(p => p.Name).ToList()));
+                    result.Append("</ul>");
+                }
+
+                result.Append("</li>");
+            }
+
+            return MvcHtmlString.Create(result.ToString());
+        }
+
+        private static MvcHtmlString BuildCaseTypesList(IEnumerable<CaseTypeItem> caseTypes)
+        {
+            var result = new StringBuilder();
+
+            foreach (var caseType in caseTypes)
+            {
+                var hasChild = caseType.Children != null && caseType.Children.Any();
+
+                result.Append(hasChild ? "<li class='dropdown-submenu'>" : "<li>");
+
+                result.Append("<a href='#' value=" + caseType.Id + ">" + caseType.Name + "</a>");
+                if (hasChild)
+                {
+                    result.Append("<ul class='dropdown-menu'>");
+                    result.Append(BuildCaseTypesList(caseType.Children.OrderBy(p => p.Name).ToList()));
                     result.Append("</ul>");
                 }
 

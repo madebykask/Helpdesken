@@ -1505,10 +1505,12 @@
     <Compile Include="Areas\Reports\Models\Options\CaseSatisfactionOptions.cs" />
     <Compile Include="Areas\Reports\Models\Options\CaseTypeArticleNoOptionsModel.cs" />
     <Compile Include="Areas\Reports\Models\Options\RegistratedCasesDayOptionsModel.cs" />
+    <Compile Include="Areas\Reports\Models\Options\ReportGeneratorOptionsModel.cs" />
     <Compile Include="Areas\Reports\Models\Options\ReportsFilterModel.cs" />
     <Compile Include="Areas\Reports\Models\Options\ReportsOptions.cs" />
     <Compile Include="Areas\Reports\Models\Reports\CaseSatisfactionReport.cs" />
     <Compile Include="Areas\Reports\Models\Reports\CaseTypeArticleNoModel.cs" />
+    <Compile Include="Areas\Reports\Models\Reports\ReportGeneratorModel.cs" />
     <Compile Include="Areas\Reports\ReportsAreaRegistration.cs" />
     <Compile Include="Controllers\AboutController.cs" />
     <Compile Include="Controllers\AjaxController.cs" />
@@ -2459,6 +2461,8 @@
     <Content Include="Areas\Reports\Views\Report\Reports\CaseTypeArticleNo.cshtml" />
     <Content Include="Areas\Reports\Views\Report\Options\SurveySatisfactionOptions.cshtml" />
     <Content Include="Areas\Reports\Views\Report\Reports\CaseSatisfactionReport.cshtml" />
+    <Content Include="Areas\Reports\Views\Report\Options\ReportGenerator.cshtml" />
+    <Content Include="Areas\Reports\Views\Report\Reports\ReportGenerator.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />
