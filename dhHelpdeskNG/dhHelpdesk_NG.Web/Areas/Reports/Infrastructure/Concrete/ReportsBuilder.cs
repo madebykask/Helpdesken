@@ -2,17 +2,30 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Text;
+    using System.Web.Helpers;
     using System.Web.UI.DataVisualization.Charting;
     using System.Xml;
 
     using DH.Helpdesk.BusinessData.Models.Reports.Data.RegistratedCasesDay;
+    using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Web.Infrastructure.Tools;
+
+    using Chart = System.Web.UI.DataVisualization.Charting.Chart;
 
     public sealed class ReportsBuilder : IReportsBuilder
     {
+        private readonly ITemporaryFilesCache temporaryFilesCache;
+
+        public ReportsBuilder(ITemporaryFilesCacheFactory temporaryFilesCacheFactory)
+        {
+            this.temporaryFilesCache = temporaryFilesCacheFactory.CreateForModule(ModuleName.Reports);
+        }
+
         public byte[] GetRegistratedCasesDayReport(RegistratedCasesDayData data, DateTime period, ReportTheme theme = null)
         {
             var days = DateTime.DaysInMonth(period.Year, period.Month);
@@ -62,6 +75,42 @@
             }
         }
 
+        public void CreateCaseSatisfactionReport(int goodVotes, int normalVotes, int badVotes, int count, out ReportFile file)
+        {
+            var y = new List<string>
+                        {
+                            goodVotes.ToString(CultureInfo.InvariantCulture), 
+                            normalVotes.ToString(CultureInfo.InvariantCulture), 
+                            badVotes.ToString(CultureInfo.InvariantCulture), 
+                            count.ToString(CultureInfo.InvariantCulture)
+                        };
+            var x = new List<string> { Translation.Get("Good"), Translation.Get("Normal"), Translation.Get("Bad"), Translation.Get("Count") };
+
+            var chart = CreateChart()
+                .AddSeries(
+                        xValue: x,
+                        yValues: y);
+            string objectId;
+            string fileName;
+            this.SaveToCache(chart, out objectId, out fileName);
+            file = new ReportFile(objectId, fileName);
+        }
+
+        public byte[] GetReportImageFromCache(string objectId, string fileName)
+        {
+            return this.temporaryFilesCache.GetFileContent(fileName, objectId);
+        }
+
+        public string GetReportPathFromCache(string objectId, string fileName)
+        {
+            return this.temporaryFilesCache.FindFilePath(fileName, objectId);
+        }
+
+        private static System.Web.Helpers.Chart CreateChart(int width = 800, int height = 300, string theme = ChartTheme.Green)
+        {
+            return new System.Web.Helpers.Chart(width, height, theme);
+        }
+
         private static void SetTheme(Chart chart, string theme)
         {
             using (var ms = new MemoryStream())
@@ -76,8 +125,18 @@
                 chart.Serializer.IsResetWhenLoading = false;
 
                 XmlReader reader = XmlReader.Create(ms, new XmlReaderSettings { IgnoreComments = true });
-                chart.Serializer.Load(reader);                
-            }            
+                chart.Serializer.Load(reader);
+            }
         }
+
+        private void SaveToCache(
+                        System.Web.Helpers.Chart chart,
+                        out string objectId,
+                        out string fileName)
+        {
+            objectId = Guid.NewGuid().ToString();
+            fileName = string.Format("{0}.png", objectId);
+            this.temporaryFilesCache.AddFile(chart.GetBytes("png"), fileName, objectId);
+        }        
     }
 }

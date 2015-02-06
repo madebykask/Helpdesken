@@ -377,8 +377,6 @@
     <Compile Include="Infrastructure\ModelFactories\Invoice\Concrete\InvoiceArticlesModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Invoice\IInvoiceArticlesModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Common\Concrete\ModulesInfoFactory.cs" />
-    <Compile Include="Infrastructure\ModelFactories\Reports\Concrete\ReportsModelFactory.cs" />
-    <Compile Include="Infrastructure\ModelFactories\Reports\IReportsModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\ComputerViewModelBuilder.cs" />
     <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\ConfigurableFieldModelBuilder.cs" />
     <Compile Include="Infrastructure\ModelFactories\Inventory\IComputerViewModelBuilder.cs" />
@@ -391,11 +389,8 @@
     <Compile Include="Infrastructure\Print\PrintPdfEvents.cs" />
     <Compile Include="Infrastructure\Print\PrintPdfResult.cs" />
     <Compile Include="Infrastructure\Print\PrintPdfView.cs" />
-    <Compile Include="Infrastructure\Tools\Concrete\ReportFile.cs" />
-    <Compile Include="Infrastructure\Tools\Concrete\ReportsHelper.cs" />
     <Compile Include="Infrastructure\Tools\Concrete\InvoiceHelper.cs" />
     <Compile Include="Infrastructure\Tools\IInvoiceHelper.cs" />
-    <Compile Include="Infrastructure\Tools\IReportsHelper.cs" />
     <Compile Include="Infrastructure\Tools\MimeHelper.cs" />
     <Compile Include="Infrastructure\Tools\WebMvcHelper.cs" />
     <Compile Include="Infrastructure\Translate\Translator.cs" />
@@ -589,14 +584,6 @@
     <Compile Include="Models\Inventory\SearchModels\ReportsSearchFilter.cs" />
     <Compile Include="Models\Inventory\SearchModels\ReportsSearchViewModel.cs" />
     <Compile Include="Models\Invoice\CaseInvoiceArticlesModel.cs" />
-    <Compile Include="Models\Reports\AverageSolutionTimeOptions.cs" />
-    <Compile Include="Models\Reports\AverageSolutionTimeReport.cs" />
-    <Compile Include="Models\Reports\IndexModel.cs" />
-    <Compile Include="Models\Reports\RegistratedCasesCaseTypeOptions.cs" />
-    <Compile Include="Models\Reports\RegistratedCasesCaseTypeReport.cs" />
-    <Compile Include="Models\Reports\RegistratedCasesDayOptions.cs" />
-    <Compile Include="Models\Reports\RegistratedCasesDayReport.cs" />
-    <Compile Include="Models\Reports\SearchModel.cs" />
     <Compile Include="Models\Shared\ConfigurableContainerModel.cs" />
     <Compile Include="Models\Shared\ConfigurableSearchFieldModel.cs" />
     <Compile Include="Models\Shared\CustomersInfoModel.cs" />

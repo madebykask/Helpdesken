@@ -3,7 +3,7 @@
     using System;
     using System.Web.Mvc;
 
-    using DH.Helpdesk.BusinessData.Models.Reports;
+    using DH.Helpdesk.BusinessData.Models.Reports.Enums;
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Reports;
@@ -16,6 +16,7 @@
     using DH.Helpdesk.Web.Infrastructure.ActionFilters;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
     using DH.Helpdesk.Web.Infrastructure.Mvc;
+    using DH.Helpdesk.Web.Infrastructure.Tools;
 
     public sealed class ReportController : UserInteractionController
     {
@@ -75,6 +76,10 @@
                     return this.PartialView(
                                 "Options/CaseTypeArticleNo",
                                 this.reportModelFactory.GetCaseTypeArticleNoOptionsModel(caseTypeArticleNoOptions));
+                case ReportType.CaseSatisfaction:
+                    return this.PartialView(
+                                "Options/SurveySatisfactionOptions",
+                                this.reportModelFactory.CreateCaseSatisfactionOptions(this.OperationContext));
             }
 
             return null;
@@ -153,6 +158,21 @@
                                     options.IsShowPercents);
 
             return this.PartialView("Reports/CaseTypeArticleNo", model);
+        }
+
+        [HttpGet]
+        public FileContentResult GetReportImage(string objectId, string fileName)
+        {
+            return new FileContentResult(
+                                this.reportsBuilder.GetReportImageFromCache(objectId, fileName),
+                                MimeHelper.GetMimeType(fileName));
+        }
+
+        [HttpPost]
+        public ActionResult CaseSatisfactionReport(CaseSatisfactionOptions options)
+        {
+            var model = this.reportModelFactory.CreateCaseSatisfactionReport(options, this.OperationContext);
+            return this.View("Reports/CaseSatisfactionReport", model);
         }
     }
 }

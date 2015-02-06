@@ -170,9 +170,6 @@
                             "~/Content/js/bootstrap-switch.min.js",
                             "~/Content/js/Notifiers/settings.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/reports").Include(
-                            "~/Content/js/Reports/index.js"));
-
             bundles.Add(new ScriptBundle("~/bundles/orders/index").Include(
                             "~/Content/js/Orders/index.js"));
 

@@ -2,13 +2,17 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseSatisfaction;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.RegistratedCasesDay;
     using DH.Helpdesk.BusinessData.Models.Reports.Enums;
     using DH.Helpdesk.BusinessData.Models.Reports.Options;
     using DH.Helpdesk.BusinessData.Models.Reports.Print;
+    using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Domain;
@@ -21,9 +25,14 @@
     {
         private readonly IUnitOfWorkFactory unitOfWorkFactory;
 
-        public ReportService(IUnitOfWorkFactory unitOfWorkFactory)
+        private readonly ISurveyService sureyService;
+
+        public ReportService(
+                IUnitOfWorkFactory unitOfWorkFactory, 
+                ISurveyService sureyService)
         {
             this.unitOfWorkFactory = unitOfWorkFactory;
+            this.sureyService = sureyService;
         }
 
         public RegistratedCasesDayOptions GetRegistratedCasesDayOptions(int customerId)
@@ -183,6 +192,93 @@
                             productAreaIds.Any() ? options.ProductAreas.Select(a => a.Name).ToList() : null,
                             data);
             }
+        }
+
+        public CaseSatisfactionOptionsResponse GetCaseSatisfactionOptionsResponse(OperationContext context)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
+                var caseTypeRep = uow.GetRepository<CaseType>();
+                var productAreaRep = uow.GetRepository<ProductArea>();
+
+                var workingGroups = workingGroupRep
+                                    .GetAll()
+                                    .GetActiveByCustomer(context.CustomerId)
+                                    .Select(g => new { g.Id, g.WorkingGroupName })
+                                    .ToList()
+                                    .Select(g => new ItemOverview(g.WorkingGroupName, g.Id.ToString(CultureInfo.InvariantCulture)))
+                                    .ToList();
+
+                var caseTypes = caseTypeRep
+                                    .GetAll()
+                                    .GetActiveByCustomer(context.CustomerId)
+                                    .Select(t => new { t.Id, t.Name })
+                                    .ToList()
+                                    .Select(t => new ItemOverview(t.Name, t.Id.ToString(CultureInfo.InvariantCulture)))
+                                    .ToList();
+
+                var productAreas = productAreaRep
+                                    .GetAll()
+                                    .GetActiveByCustomer(context.CustomerId)
+                                    .Select(a => new { a.Id, a.Name })
+                                    .ToList()
+                                    .Select(a => new ProductArea { Name = a.Name, Id = a.Id })
+                                    .ToList();
+
+                return new CaseSatisfactionOptionsResponse(workingGroups, caseTypes, productAreas);
+            }
+        }
+
+        public CaseSatisfactionReportResponse GetCaseSatisfactionResponse(
+            int customerId,
+            DateTime finishingDateFrom,
+            DateTime finishingDateTo,
+            int[] selectedCaseTypes,
+            int? selectedProductArea,
+            int[] selectedWorkingGroups)
+        {
+            var res = this.sureyService.GetSurveyStat(customerId, finishingDateFrom, finishingDateTo, selectedCaseTypes, selectedProductArea, selectedWorkingGroups);
+            return new CaseSatisfactionReportResponse(res.Item1, res.Item2, res.Item3, res.Item4);
+        }
+
+        public RegistratedCasesCaseTypeOptionsResponse GetRegistratedCasesCaseTypeOptionsResponse(OperationContext context)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
+                var caseTypeRep = uow.GetRepository<CaseType>();
+                var productAreaRep = uow.GetRepository<ProductArea>();
+
+                var workingGroups = workingGroupRep
+                                    .GetAll()
+                                    .GetActiveByCustomer(context.CustomerId)
+                                    .Select(g => new { g.Id, g.WorkingGroupName })
+                                    .ToList()
+                                    .Select(g => new ItemOverview(g.WorkingGroupName, g.Id.ToString(CultureInfo.InvariantCulture)))
+                                    .ToList();
+
+                var caseTypes = caseTypeRep
+                                    .GetAll()
+                                    .GetActiveByCustomer(context.CustomerId)
+                                    .Select(t => new { t.Id, t.Name })
+                                    .ToList()
+                                    .Select(t => new ItemOverview(t.Name, t.Id.ToString(CultureInfo.InvariantCulture)))
+                                    .ToList();
+
+                var productAreas = productAreaRep
+                                    .GetAll()
+                                    .GetActiveByCustomer(context.CustomerId)
+                                    .Select(a => new { a.Id, a.Name })
+                                    .ToList()
+                                    .Select(a => new ProductArea { Name = a.Name, Id = a.Id })
+                                    .ToList();
+
+                return new RegistratedCasesCaseTypeOptionsResponse(
+                                                                workingGroups,
+                                                                caseTypes,
+                                                                productAreas);
+            }           
         }
 
         private static CaseTypeArticleNoData GetCaseTypeArticleNoData(

@@ -4,8 +4,8 @@
     using System.Globalization;
     using System.IO;
 
-    using DH.Helpdesk.BusinessData.Models.Reports;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
+    using DH.Helpdesk.BusinessData.Models.Reports.Enums;
     using DH.Helpdesk.Web.Areas.Reports.Infrastructure.Extensions;
     using DH.Helpdesk.Web.Infrastructure;
 

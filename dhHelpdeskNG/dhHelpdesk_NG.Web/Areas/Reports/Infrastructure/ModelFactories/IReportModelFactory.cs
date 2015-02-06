@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Reports.Infrastructure.ModelFactories
 {
+    using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
     using DH.Helpdesk.BusinessData.Models.Reports.Options;
     using DH.Helpdesk.Web.Areas.Reports.Models.Options;
@@ -17,5 +18,9 @@
                                 CaseTypeArticleNoData data, 
                                 bool isShowCaseTypeDetails,
                                 bool isShowPercents);
+
+        CaseSatisfactionOptions CreateCaseSatisfactionOptions(OperationContext context);
+
+        CaseSatisfactionReport CreateCaseSatisfactionReport(CaseSatisfactionOptions options, OperationContext context);
     }
 }

@@ -47,6 +47,8 @@
                     return dhHelpdesk.reports.registratedCasesDayReport();
                 case dhHelpdesk.reports.reportType.CaseTypeArticleNo:
                     return dhHelpdesk.reports.caseTypeArticleNoReport();
+                case dhHelpdesk.reports.reportType.CaseSatisfaction:
+                    return dhHelpdesk.reports.caseSatisfactionReport();
                 default:
                     return null;
             }
@@ -155,6 +157,32 @@
         that.buildReport = buildReport;
         that.printReport = printReport;
         that.excelReport = excelReport;
+
+        return that;
+    }
+
+    dhHelpdesk.reports.caseSatisfactionReport = function (spec, my) {
+        my = my || {};
+
+        var that = dhHelpdesk.reports.report({ canPrint: true }, my);
+
+        var buildReport = function () {
+            $('#IsPrint').val(false);
+            var form = $('#reportForm');
+            $.post(form.attr("action"), form.serialize())
+            .done(function (data) {
+                $("#reportContainer").html(data);
+            });
+            return false;
+        }
+
+        var printReport = function () {
+            $('#IsPrint').val(true);
+            $('#reportForm').submit();
+        }
+
+        that.buildReport = buildReport;
+        that.printReport = printReport;
 
         return that;
     }

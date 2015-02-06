@@ -347,28 +347,6 @@
     <Compile Include="Areas\Admin\Models\SystemInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\UrgencyInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\WorkingGroupInputViewModel.cs" />
-    <Content Include="Areas\Reports\app\.idea\encodings.xml" />
-    <Content Include="Areas\Reports\app\.idea\misc.xml" />
-    <Content Include="Areas\Reports\app\.idea\modules.xml" />
-    <Content Include="Areas\Reports\app\.idea\scopes\scope_settings.xml" />
-    <Content Include="Areas\Reports\app\.idea\vcs.xml" />
-    <Content Include="Areas\Reports\app\.idea\workspace.xml" />
-    <Content Include="Areas\Reports\app\js\app.js" />
-    <Content Include="Areas\Reports\app\js\controllers\reportsController.js" />
-    <Content Include="Areas\Reports\app\js\services\reportsService.js" />
-    <Content Include="Areas\Reports\app\lib\angularjs\angular-animate.js" />
-    <Content Include="Areas\Reports\app\lib\angularjs\angular-aria.min.js" />
-    <Content Include="Areas\Reports\app\lib\angularjs\angular-cookies.min.js" />
-    <Content Include="Areas\Reports\app\lib\angularjs\angular-loader.min.js" />
-    <Content Include="Areas\Reports\app\lib\angularjs\angular-messages.min.js" />
-    <Content Include="Areas\Reports\app\lib\angularjs\angular-mocks.js" />
-    <Content Include="Areas\Reports\app\lib\angularjs\angular-resource.min.js" />
-    <Content Include="Areas\Reports\app\lib\angularjs\angular-route.min.js" />
-    <Content Include="Areas\Reports\app\lib\angularjs\angular-sanitize.min.js" />
-    <Content Include="Areas\Reports\app\lib\angularjs\angular-scenario.js" />
-    <Content Include="Areas\Reports\app\lib\angularjs\angular-touch.min.js" />
-    <Content Include="Areas\Reports\app\lib\angularjs\angular.min.js" />
-    <Content Include="Areas\Reports\app\templates\reports.html" />
     <Content Include="Areas\Reports\Content\js\reports.js" />
     <Content Include="Content\bootstrap-tagsinput.css" />
     <Content Include="Content\css\bootstrap-tagsinput.css" />
@@ -1520,13 +1498,16 @@
     <Compile Include="Areas\Reports\Infrastructure\IReportsBuilder.cs" />
     <Compile Include="Areas\Reports\Infrastructure\ModelFactories\Concrete\ReportModelFactory.cs" />
     <Compile Include="Areas\Reports\Infrastructure\ModelFactories\IReportModelFactory.cs" />
+    <Compile Include="Areas\Reports\Infrastructure\ReportFile.cs" />
     <Compile Include="Areas\Reports\Infrastructure\ReportPrintEvents.cs" />
     <Compile Include="Areas\Reports\Infrastructure\ReportTheme.cs" />
     <Compile Include="Areas\Reports\Infrastructure\Utils\ReportUtils.cs" />
+    <Compile Include="Areas\Reports\Models\Options\CaseSatisfactionOptions.cs" />
     <Compile Include="Areas\Reports\Models\Options\CaseTypeArticleNoOptionsModel.cs" />
     <Compile Include="Areas\Reports\Models\Options\RegistratedCasesDayOptionsModel.cs" />
     <Compile Include="Areas\Reports\Models\Options\ReportsFilterModel.cs" />
     <Compile Include="Areas\Reports\Models\Options\ReportsOptions.cs" />
+    <Compile Include="Areas\Reports\Models\Reports\CaseSatisfactionReport.cs" />
     <Compile Include="Areas\Reports\Models\Reports\CaseTypeArticleNoModel.cs" />
     <Compile Include="Areas\Reports\ReportsAreaRegistration.cs" />
     <Compile Include="Controllers\AboutController.cs" />
@@ -1556,7 +1537,6 @@
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\ProjectsController.cs" />
     <Compile Include="Controllers\QuestionnaireController.cs" />
-    <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Areas\Admin\Controllers\UsersController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
@@ -1699,8 +1679,6 @@
     <Compile Include="Infrastructure\ModelFactories\Invoice\Concrete\InvoiceArticlesModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Invoice\IInvoiceArticlesModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Common\Concrete\ModulesInfoFactory.cs" />
-    <Compile Include="Infrastructure\ModelFactories\Reports\Concrete\ReportsModelFactory.cs" />
-    <Compile Include="Infrastructure\ModelFactories\Reports\IReportsModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\ComputerViewModelBuilder.cs" />
     <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\ConfigurableFieldModelBuilder.cs" />
     <Compile Include="Infrastructure\ModelFactories\Inventory\IComputerViewModelBuilder.cs" />
@@ -1713,12 +1691,9 @@
     <Compile Include="Infrastructure\Print\PrintPdfEvents.cs" />
     <Compile Include="Infrastructure\Print\PrintPdfResult.cs" />
     <Compile Include="Infrastructure\Print\PrintPdfView.cs" />
-    <Compile Include="Infrastructure\Tools\Concrete\ReportFile.cs" />
-    <Compile Include="Infrastructure\Tools\Concrete\ReportsHelper.cs" />
     <Compile Include="Infrastructure\Tools\Concrete\InvoiceHelper.cs" />
     <Compile Include="Infrastructure\Tools\EncryptionHelper.cs" />
     <Compile Include="Infrastructure\Tools\IInvoiceHelper.cs" />
-    <Compile Include="Infrastructure\Tools\IReportsHelper.cs" />
     <Compile Include="Infrastructure\Tools\MimeHelper.cs" />
     <Compile Include="Infrastructure\Tools\WebMvcHelper.cs" />
     <Compile Include="Infrastructure\Translate\Translator.cs" />
@@ -1822,7 +1797,6 @@
     <Compile Include="Infrastructure\LocalizedAttributes\Rules\ModelClientValidationRequiredFromRule.cs" />
     <Compile Include="Models\BulletinBoardInputViewModel.cs" />
     <Compile Include="Models\CalendarInputViewModel.cs" />
-    <Compile Include="Models\CaseSatisfactionReport.cs" />
     <Compile Include="Models\CaseSolutionSettingModel.cs" />
     <Compile Include="Models\Case\CaseFilesModel.cs" />
     <Compile Include="Models\Case\CaseFilterSeachBoxes.cs" />
@@ -1895,15 +1869,6 @@
     <Compile Include="Models\Questionnaire\Output\QuestionViewModel.cs" />
     <Compile Include="Models\Questionnaire\Output\ReportFilter.cs" />
     <Compile Include="Models\Questionnaire\Output\StatisticsViewModel.cs" />
-    <Compile Include="Models\Reports\AverageSolutionTimeOptions.cs" />
-    <Compile Include="Models\Reports\AverageSolutionTimeReport.cs" />
-    <Compile Include="Models\Reports\CaseSatisfactionOptions.cs" />
-    <Compile Include="Models\Reports\IndexModel.cs" />
-    <Compile Include="Models\Reports\RegistratedCasesCaseTypeOptions.cs" />
-    <Compile Include="Models\Reports\RegistratedCasesCaseTypeReport.cs" />
-    <Compile Include="Models\Reports\RegistratedCasesDayOptions.cs" />
-    <Compile Include="Models\Reports\RegistratedCasesDayReport.cs" />
-    <Compile Include="Models\Reports\SearchModel.cs" />
     <Compile Include="Models\Shared\ConfigurableContainerModel.cs" />
     <Compile Include="Models\Shared\ConfigurableSearchFieldModel.cs" />
     <Compile Include="Models\Shared\CustomersInfoModel.cs" />
@@ -2153,7 +2118,6 @@
     <Content Include="Content\js\Orders\order.js" />
     <Content Include="Content\js\Orders\settings.js" />
     <Content Include="Content\js\plupload.full.min.js" />
-    <Content Include="Content\js\Reports\index.js" />
     <Content Include="Content\js\Shared\custom.validation.maxlengthfrom.notrequired.js" />
     <Content Include="Content\js\ui\dh.ui.hierarchylist.js" />
     <Content Include="Content\js\Users\modules.js" />
@@ -2490,11 +2454,11 @@
     <Content Include="Content\js\lib\angular-1.3.11\angular.min.js.map" />
     <Content Include="Content\js\lib\angular-1.3.11\errors.json" />
     <Content Include="Content\js\lib\angular-1.3.11\version.json" />
-    <Content Include="Areas\Reports\app\.idea\.name" />
-    <Content Include="Areas\Reports\app\.idea\app.iml" />
     <Content Include="Areas\Reports\Views\Report\Options\RegistratedCasesDay.cshtml" />
     <Content Include="Areas\Reports\Views\Report\Options\CaseTypeArticleNo.cshtml" />
     <Content Include="Areas\Reports\Views\Report\Reports\CaseTypeArticleNo.cshtml" />
+    <Content Include="Areas\Reports\Views\Report\Options\SurveySatisfactionOptions.cshtml" />
+    <Content Include="Areas\Reports\Views\Report\Reports\CaseSatisfactionReport.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />
@@ -2804,26 +2768,12 @@
     <Content Include="Views\Changes\EditorTemplates\DateAndTimeModel.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\Fields\DateOutOfTable.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\Fields\TimeOutOfTable.cshtml" />
-    <Content Include="Views\Reports\Index.cshtml" />
-    <Content Include="Views\Reports\Reports.cshtml" />
-    <Content Include="Views\Reports\Search.cshtml" />
-    <Content Include="Views\Reports\RegistratedCasesCaseTypeOptions.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\YearMonthPicker.cshtml" />
-    <Content Include="Views\Reports\RegistratedCasesCaseTypeView.cshtml" />
-    <Content Include="Views\Reports\RegistratedCasesCaseTypePrint.cshtml" />
     <Content Include="Areas\Inventory\Views\Workstation\EditorTemplates\ChassisModel.cshtml" />
     <Content Include="Areas\Inventory\Views\Workstation\EditorTemplates\InventoryModel.cshtml" />
     <Content Include="Areas\Inventory\Views\Workstation\EditorTemplates\MemoryFieldsViewModel.cshtml" />
     <Content Include="Areas\Inventory\Views\Workstation\EditorTemplates\OperatingSystemFieldsViewModel.cshtml" />
     <Content Include="Areas\Inventory\Views\Workstation\EditorTemplates\ProccesorFieldsViewModel.cshtml" />
-    <Content Include="Views\Reports\RegistratedCasesDayOptions.cshtml">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Views\Reports\RegistratedCasesDayPrint.cshtml" />
-    <Content Include="Views\Reports\RegistratedCasesDayView.cshtml" />
-    <Content Include="Views\Reports\AverageSolutionTimeOptions.cshtml" />
-    <Content Include="Views\Reports\AverageSolutionTimePrint.cshtml" />
-    <Content Include="Views\Reports\AverageSolutionTimeView.cshtml" />
     <Content Include="Views\Shared\ChangesInfo.cshtml" />
     <Content Include="Views\Error\BusinessLogicError.cshtml" />
     <Content Include="Views\Shared\MyCasesInfo.cshtml" />
@@ -2852,8 +2802,6 @@
     <Content Include="Views\CheckList\_ServiceInput.cshtml" />
     <Content Include="Views\CheckList\New.cshtml" />
     <Content Include="Views\CheckList\_NewServices.cshtml" />
-    <Content Include="Views\Reports\CaseSatisfactionReport.cshtml" />
-    <Content Include="Views\Reports\SurveySatisfactionOptions.cshtml" />
     <Content Include="Views\Survey\Vote.cshtml" />
     <Content Include="Views\Survey\VoteError.cshtml" />
   </ItemGroup>
@@ -3574,8 +3522,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Inventory\Infrastucture\" />
-    <Folder Include="Areas\Reports\app\js\directives\" />
-    <Folder Include="Areas\Reports\app\templates\directives\" />
     <Folder Include="Content\js\lib\angular-1.3.11\i18n\ngLocale\" />
     <Folder Include="Infrastructure\ModelFactories\Problems\Concrete\" />
   </ItemGroup>

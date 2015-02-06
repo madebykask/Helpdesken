@@ -3,6 +3,8 @@
     using System;
     using System.Collections.Generic;
 
+    using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseSatisfaction;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.RegistratedCasesDay;
     using DH.Helpdesk.BusinessData.Models.Reports.Enums;
@@ -42,5 +44,17 @@
                                     DateTime? periodFrom,
                                     DateTime? periodUntil,
                                     ShowCases showCases);
+
+        CaseSatisfactionOptionsResponse GetCaseSatisfactionOptionsResponse(OperationContext context);
+
+        CaseSatisfactionReportResponse GetCaseSatisfactionResponse(
+            int customerId,
+            DateTime finishingDateFrom,
+            DateTime finishingDateTo,
+            int[] selectedCaseTypes,
+            int? selectedProductArea,
+            int[] selectedWorkingGroups);
+
+        RegistratedCasesCaseTypeOptionsResponse GetRegistratedCasesCaseTypeOptionsResponse(OperationContext context);
     }
 }

@@ -7,15 +7,11 @@ namespace DH.Helpdesk.Dal.Repositories
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Case;
-    using DH.Helpdesk.BusinessData.Models.Faq.Output;
-    using DH.Helpdesk.BusinessData.Models.Reports.Output;
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Infrastructure.Context;
-    using DH.Helpdesk.Dal.Utils;
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.BusinessData.Models.SelfService.Case;
     using DH.Helpdesk.BusinessData.Models.User.Input;
     using System;
 
@@ -48,24 +44,7 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </returns>
         CaseOverview GetCaseOverview(int caseId);
 
-        IEnumerable<RegistratedCasesCaseTypeItem> GetRegistratedCasesCaseTypeItems(
-                                                    int customerId,
-                                                    int[] workingGroups,
-                                                    int[] caseTypes,
-                                                    int? productArea,
-                                                    DateTime perionFrom,
-                                                    DateTime perionUntil);
-
-        IEnumerable<RegistratedCasesDayItem> GetRegistratedCasesDayItems(
-                                                    int customerId,
-                                                    int? departmentId,
-                                                    int[] caseTypesIds,
-                                                    int? workingGroupId,
-                                                    int? administratorId,
-                                                    DateTime period);
-
-        MyCase[] GetMyCases(int userId, int? count = null);
-                
+        MyCase[] GetMyCases(int userId, int? count = null);                
     }
 
     public class CaseRepository : RepositoryBase<Case>, ICaseRepository
@@ -342,92 +321,6 @@ namespace DH.Helpdesk.Dal.Repositories
                 CausingTypeId = c.CausingPartId
             })
             .FirstOrDefault();
-        }
-
-        public IEnumerable<RegistratedCasesCaseTypeItem> GetRegistratedCasesCaseTypeItems(
-                                        int customerId,
-                                        int[] workingGroups,
-                                        int[] caseTypes,
-                                        int? productArea,
-                                        DateTime perionFrom,
-                                        DateTime perionUntil)
-        {
-            perionFrom = perionFrom.RoundToMonth();
-            perionUntil = perionUntil.RoundToMonth();
-            var allWorkingGroups = workingGroups == null || !workingGroups.Any();
-            var allCaseTypes = caseTypes == null || !caseTypes.Any();
-
-            var query = from c in this.DataContext.Cases
-                        join cu in this.DataContext.Customers on c.Customer_Id equals cu.Id
-                        join ct in this.DataContext.CaseTypes on c.CaseType_Id equals ct.Id
-                        join wg in this.DataContext.WorkingGroups on c.WorkingGroup_Id equals wg.Id
-                        join pa in this.DataContext.ProductAreas on c.ProductArea_Id equals pa.Id
-                        where c.Customer_Id == customerId &&
-                              c.WorkingGroup_Id.HasValue &&  
-                              (allWorkingGroups || workingGroups.Contains(c.WorkingGroup_Id.Value)) &&
-                              (allCaseTypes || caseTypes.Contains(c.CaseType_Id)) &&
-                              (!productArea.HasValue || c.ProductArea_Id == productArea) &&
-                              c.RegTime >= perionFrom && c.RegTime <= perionUntil &&
-                              c.Deleted == 0
-                        select new RegistratedCasesCaseTypeItem
-                                   {
-                                       CustomerId = cu.Id,
-                                       CustomerName = cu.Name,
-                                       WorkingGroupId = wg.Id,
-                                       WorkingGroupName = wg.WorkingGroupName,
-                                       CaseTypeId = ct.Id,
-                                       CaseTypeName = ct.Name,
-                                       ProductAreadId = pa.Id,
-                                       ProductAreaName = pa.Name,
-                                       CaseId = c.Id,
-                                       RegistrationDate = c.RegTime
-                                   };
-            return query.ToList();
-        }
-
-        public IEnumerable<RegistratedCasesDayItem> GetRegistratedCasesDayItems(
-            int customerId,
-            int? departmentId,
-            int[] caseTypesIds,
-            int? workingGroupId,
-            int? administratorId,
-            DateTime period)
-        {
-            var allCaseTypes = caseTypesIds == null || !caseTypesIds.Any();
-            var perionFrom = period.RoundToMonth();
-            var perionUntil = period.AddMonths(1).RoundToMonth();
-
-            var query = from c in this.DataContext.Cases
-                        join cu in this.DataContext.Customers on c.Customer_Id equals cu.Id
-                        join d in this.DataContext.Departments on c.Department_Id equals d.Id into dgj
-                        join ct in this.DataContext.CaseTypes on c.CaseType_Id equals ct.Id into ctgj
-                        join wg in this.DataContext.WorkingGroups on c.WorkingGroup_Id equals wg.Id into wggj
-                        join u in this.DataContext.Users on c.Performer_User_Id equals u.Id into ugj
-                        from department in dgj.DefaultIfEmpty()
-                        from caseType in ctgj.DefaultIfEmpty()
-                        from workingGroup in wggj.DefaultIfEmpty()
-                        from user in ugj.DefaultIfEmpty()
-                        where c.Customer_Id == customerId &&
-                              (!departmentId.HasValue || c.Department_Id == departmentId) &&
-                              (allCaseTypes || caseTypesIds.Contains(c.CaseType_Id)) &&
-                              (!workingGroupId.HasValue || c.WorkingGroup_Id == workingGroupId) &&  
-                              (!administratorId.HasValue || c.Performer_User_Id == administratorId) &&
-                              c.RegTime >= perionFrom && c.RegTime <= perionUntil &&
-                              c.Deleted == 0
-                        select new RegistratedCasesDayItem
-                        {
-                            CustomerId = cu.Id,
-                            CustomerName = cu.Name,
-                            WorkingGroupId = workingGroup.Id,
-                            WorkingGroupName = workingGroup.WorkingGroupName,
-                            CaseTypeId = caseType.Id,
-                            CaseTypeName = caseType.Name,
-                            AdministratorId = user.Id,
-                            AdministratorName = user.FirstName + " " + user.SurName, 
-                            CaseId = c.Id,
-                            RegistrationDate = c.RegTime
-                        };
-            return query.ToList();
         }
 
         public MyCase[] GetMyCases(int userId, int? count = null)

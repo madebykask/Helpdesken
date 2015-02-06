@@ -1,6 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Reports.Infrastructure.Utils
 {
-    using DH.Helpdesk.BusinessData.Models.Reports;
+    using DH.Helpdesk.BusinessData.Models.Reports.Enums;
     using DH.Helpdesk.Web.Infrastructure;
 
     public static class ReportUtils
@@ -20,6 +20,11 @@
                         "{0} - {1}",
                         Translation.Get("Rapport"),
                         Translation.Get("Case Type/Article No"));
+                case ReportType.CaseSatisfaction:
+                    return string.Format(
+                        "{0} - {1}",
+                        Translation.Get("Rapport"),
+                        Translation.Get("Kundnöjdhet - ärende"));
                 default:
                     return string.Empty;
             }

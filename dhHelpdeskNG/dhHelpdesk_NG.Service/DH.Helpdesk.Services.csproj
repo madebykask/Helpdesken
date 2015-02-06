@@ -355,7 +355,6 @@
     <Compile Include="Services\IActionSettingService.cs" />
     <Compile Include="Services\IInventorySettingsService.cs" />
     <Compile Include="Services\Concrete\InventorySettingsService.cs" />
-    <Compile Include="Services\Concrete\ReportsService.cs" />
     <Compile Include="Services\Concrete\StatisticsService.cs" />
     <Compile Include="Services\ICausingPartService.cs" />
     <Compile Include="Services\IChangeEmailService.cs" />
@@ -387,7 +386,6 @@
     <Compile Include="Services\INotifierService.cs" />
     <Compile Include="Services\IProblemService.cs" />
     <Compile Include="Services\IQestionnaireService.cs" />
-    <Compile Include="Services\IReportsService.cs" />
     <Compile Include="Services\IStatisticsService.cs" />
     <Compile Include="Services\Licenses\IApplicationsService.cs" />
     <Compile Include="Services\Licenses\IComputersService.cs" />

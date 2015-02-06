@@ -33,7 +33,7 @@
         {
             using (var ms = new MemoryStream())
             {
-                var document = new Document(PageSize.A4);
+                var document = new Document(data.Data.CaseTypes.Count <= 7 ? PageSize.A4 : PageSize.A4.Rotate());
                 var writer = PdfWriter.GetInstance(document, ms);
                 writer.PageEvent = new ReportPrintEvents(GetHeader(), null);
                 document.Open();

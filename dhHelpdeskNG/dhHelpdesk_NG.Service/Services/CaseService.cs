@@ -8,7 +8,6 @@
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.BusinessData.Models.Invoice;
-    using DH.Helpdesk.BusinessData.Models.Reports.Output;
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
     using DH.Helpdesk.Dal.Infrastructure;
@@ -74,22 +73,6 @@
         /// The <see cref="CaseOverview"/>.
         /// </returns>
         CaseOverview GetCaseOverview(int caseId);
-
-        IEnumerable<RegistratedCasesCaseTypeItem> GetRegistratedCasesCaseTypeItems(
-                                                int customerId,
-                                                int[] workingGroups,
-                                                int[] caseTypes,
-                                                int? productArea,
-                                                DateTime perionFrom,
-                                                DateTime perionUntil);
-
-        IEnumerable<RegistratedCasesDayItem> GetRegistratedCasesDayItems(
-                                            int customerId,
-                                            int? departmentId,
-                                            int[] caseTypesIds,
-                                            int? workingGroupId,
-                                            int? administratorId,
-                                            DateTime period);
 
         MyCase[] GetMyCases(int userId, int? count = null);
 
@@ -305,40 +288,6 @@
         public CaseOverview GetCaseOverview(int caseId)
         {
             return this._caseRepository.GetCaseOverview(caseId);
-        }
-
-        public IEnumerable<RegistratedCasesCaseTypeItem> GetRegistratedCasesCaseTypeItems(
-            int customerId,
-            int[] workingGroups,
-            int[] caseTypes,
-            int? productArea,
-            DateTime perionFrom,
-            DateTime perionUntil)
-        {
-            return this._caseRepository.GetRegistratedCasesCaseTypeItems(
-                                    customerId,
-                                    workingGroups,
-                                    caseTypes,
-                                    productArea,
-                                    perionFrom,
-                                    perionUntil);
-        }
-
-        public IEnumerable<RegistratedCasesDayItem> GetRegistratedCasesDayItems(
-            int customerId,
-            int? departmentId,
-            int[] caseTypesIds,
-            int? workingGroupId,
-            int? administratorId,
-            DateTime period)
-        {
-            return this._caseRepository.GetRegistratedCasesDayItems(
-                                    customerId,
-                                    departmentId,
-                                    caseTypesIds,
-                                    workingGroupId,
-                                    administratorId,
-                                    period);
         }
 
         public MyCase[] GetMyCases(int userId, int? count = null)
