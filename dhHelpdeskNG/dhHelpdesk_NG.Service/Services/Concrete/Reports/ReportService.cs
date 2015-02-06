@@ -35,6 +35,8 @@
             this.sureyService = sureyService;
         }
 
+        #region RegistratedCasesDay
+
         public RegistratedCasesDayOptions GetRegistratedCasesDayOptions(int customerId)
         {
             using (var uow = this.unitOfWorkFactory.Create())
@@ -97,6 +99,10 @@
                                 administrators);
             }
         }
+
+        #endregion
+
+        #region CaseTypeArticleNo
 
         public CaseTypeArticleNoOptions GetCaseTypeArticleNoOptions(int customerId)
         {
@@ -194,6 +200,10 @@
             }
         }
 
+        #endregion
+
+        #region CaseSatisfaction
+
         public CaseSatisfactionOptionsResponse GetCaseSatisfactionOptionsResponse(OperationContext context)
         {
             using (var uow = this.unitOfWorkFactory.Create())
@@ -281,6 +291,10 @@
             }           
         }
 
+        #endregion
+
+        #region Private members
+
         private static CaseTypeArticleNoData GetCaseTypeArticleNoData(
             int customerId,
             List<int> departmentIds,
@@ -340,5 +354,7 @@
                 LoadProductAreaChildrenIds(child.Id, ids, uow);
             }
         }
+
+        #endregion
     }
 }

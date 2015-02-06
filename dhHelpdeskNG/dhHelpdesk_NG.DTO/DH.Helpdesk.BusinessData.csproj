@@ -138,6 +138,7 @@
     <Compile Include="Models\Accounts\Read\Overview\User.cs" />
     <Compile Include="Models\Accounts\Read\Edit\UserForEdit.cs" />
     <Compile Include="Models\Accounts\Write\AccountForWrite.cs" />
+    <Compile Include="Models\CaseType\CaseTypeItem.cs" />
     <Compile Include="Models\Checklists\Output\ActionsForServiceBM.cs" />
     <Compile Include="Models\Checklists\Output\CheckListBM.cs" />
     <Compile Include="Models\Checklists\Output\ChecklistServiceBM.cs" />
@@ -344,6 +345,7 @@
     <Compile Include="Models\Reports\Options\CaseTypeArticleNoOptions.cs" />
     <Compile Include="Models\Reports\Options\RegistratedCasesCaseTypeOptionsResponse.cs" />
     <Compile Include="Models\Reports\Options\RegistratedCasesDayOptions.cs" />
+    <Compile Include="Models\Reports\Options\ReportGeneratorOptions.cs" />
     <Compile Include="Models\Reports\Print\CaseTypeArticleNoPrintData.cs" />
     <Compile Include="Models\TextList.cs" />
     <Compile Include="Models\Interfaces\IHierarchyItem.cs" />

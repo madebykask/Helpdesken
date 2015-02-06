@@ -133,6 +133,7 @@
     <Compile Include="BusinessLogic\Mappers\BulletinBoards\BulletinBoardMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Calendars\CalendarMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Cases\HolidayMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\CaseType\CaseTypeMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Changes\ChangeMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\CheckLists\CheckListsMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Customers\CaseMapper.cs" />

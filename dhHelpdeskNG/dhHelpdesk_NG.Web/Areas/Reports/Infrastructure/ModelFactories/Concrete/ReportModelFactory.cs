@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Globalization;
+    using System.Linq;
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models;
@@ -46,7 +47,7 @@
                                       ((int)ReportType.CaseSatisfaction).ToString(CultureInfo.InvariantCulture))
                               };
 
-            return new ReportsOptions(WebMvcHelper.CreateListField(reports, null, false));
+            return new ReportsOptions(WebMvcHelper.CreateListField(reports.OrderBy(r => r.Name), null, false));
         }
 
         public RegistratedCasesDayOptionsModel GetRegistratedCasesDayOptionsModel(RegistratedCasesDayOptions options)
