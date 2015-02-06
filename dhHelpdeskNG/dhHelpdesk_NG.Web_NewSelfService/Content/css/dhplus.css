@@ -47,7 +47,7 @@
 }
 
 #lmEmbedded textarea {
-    width: auto;
+    /*width: auto;*/
     min-height: 100px;
 }
 
