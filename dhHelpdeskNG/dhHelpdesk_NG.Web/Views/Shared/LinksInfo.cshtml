@@ -24,7 +24,7 @@
                                         <ul>
                                             @foreach(var categoryGroup in customerGroup.Categories)
                                             {  
-                                                <li><strong>@categoryGroup.CategoryName</strong></li>
+                                                <li><strong>@Translation.Get(categoryGroup.CategoryName, Enums.TranslationSource.TextTranslation)</strong></li>
                                                 <li>
                                                     <ul>
                                                         @foreach(var link in categoryGroup.Links)
