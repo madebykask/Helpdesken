@@ -5,13 +5,16 @@
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models.CaseType;
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
     public sealed class ReportGeneratorOptionsModel
     {
-        public ReportGeneratorOptionsModel()
+        public ReportGeneratorOptionsModel(int recordsOnPage, SortField sortField)
         {
+            this.SortField = sortField;
+            this.RecordsOnPage = recordsOnPage;
             this.FieldIds = new List<int>();
             this.DepartmentIds = new List<int>();
             this.WorkingGroupIds = new List<int>();            
@@ -23,8 +26,12 @@
                 MultiSelectList workingGroups, 
                 List<CaseTypeItem> caseTypes,
                 DateTime periodFrom,
-                DateTime periodUntil)
+                DateTime periodUntil, 
+                int recordsOnPage, 
+                SortField sortField)
         {
+            this.SortField = sortField;
+            this.RecordsOnPage = recordsOnPage;
             this.CaseTypes = caseTypes;
             this.WorkingGroups = workingGroups;
             this.Departments = departments;
@@ -65,6 +72,11 @@
         [LocalizedDisplay("Period till")]
         public DateTime? PeriodUntil { get; set; }
 
-        public bool IsExcel { get; set; }         
+        public bool IsExcel { get; set; }
+
+        [MinValue(0)]
+        public int RecordsOnPage { get; private set; }
+
+        public SortField SortField { get; private set; }
     }
 }

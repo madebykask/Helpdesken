@@ -10,7 +10,7 @@
                 ComputerOverview computer, 
                 CaseInfoOverview caseInfo, 
                 OtherOverview other, 
-                LogOverview log)
+                LogsOverview log)
         {
             this.Log = log;
             this.Other = other;
@@ -36,6 +36,6 @@
         public OtherOverview Other { get; private set; }
 
         [NotNull]
-        public LogOverview Log { get; private set; }
+        public LogsOverview Log { get; private set; }
     }
 }

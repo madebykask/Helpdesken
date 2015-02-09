@@ -7,7 +7,7 @@
         public LogOverview(
             string internalLogNote, 
             string externalLogNote, 
-            string debiting, 
+            bool debiting, 
             string attachedFile,
             string finishingDescription, 
             DateTime? finishingDate, 
@@ -26,7 +26,7 @@
 
         public string ExternalLogNote { get; private set; }
 
-        public string Debiting { get; private set; }
+        public bool Debiting { get; private set; }
 
         public string AttachedFile { get; private set; }
 

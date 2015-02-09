@@ -147,7 +147,9 @@
                                     workingGroups,
                                     caseTypes,
                                     periodFrom,
-                                    periodUntil);
+                                    periodUntil,
+                                    0,
+                                    null);
         }
 
         public ReportGeneratorModel GetReportGeneratorModel(ReportGeneratorData data)

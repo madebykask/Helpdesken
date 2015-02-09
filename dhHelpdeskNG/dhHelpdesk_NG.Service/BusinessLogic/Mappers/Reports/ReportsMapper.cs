@@ -104,12 +104,7 @@
             return new CaseTypeArticleNoData(caseTypesData, productAreasData.Where(a => a.Parent == null).ToList());
         }
 
-        public static ReportGeneratorData MapToReportGeneratorData(
-                                                IQueryable<Case> cases,
-                                                IQueryable<CaseFieldSetting> fields,                                                
-                                                IQueryable<Department> departments,                                                
-                                                IQueryable<WorkingGroupEntity> workingGroups,
-                                                IQueryable<CaseType> caseTypes)
+        public static ReportGeneratorData MapToReportGeneratorData()
         {
             return new ReportGeneratorData();
         }

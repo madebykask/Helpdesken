@@ -11,6 +11,7 @@
     using DH.Helpdesk.BusinessData.Models.Reports.Enums;
     using DH.Helpdesk.BusinessData.Models.Reports.Options;
     using DH.Helpdesk.BusinessData.Models.Reports.Print;
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
 
     public interface IReportService
     {
@@ -67,6 +68,9 @@
                                     List<int> workingGroupIds,
                                     int? caseTypeId,
                                     DateTime? periodFrom,
-                                    DateTime? periodUntil);
+                                    DateTime? periodUntil,
+                                    string text,
+                                    SortField sort,
+                                    int selectCount);
     }
 }

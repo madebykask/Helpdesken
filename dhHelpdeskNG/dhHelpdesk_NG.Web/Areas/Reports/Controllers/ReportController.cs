@@ -193,7 +193,10 @@
                                 options.WorkingGroupIds,
                                 options.CaseTypeId,
                                 options.PeriodFrom,
-                                options.PeriodUntil);
+                                options.PeriodUntil,
+                                string.Empty,
+                                options.SortField,
+                                options.RecordsOnPage);
 
             if (options.IsExcel)
             {

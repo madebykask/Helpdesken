@@ -14,6 +14,7 @@
     using DH.Helpdesk.BusinessData.Models.Reports.Options;
     using DH.Helpdesk.BusinessData.Models.Reports.Print;
     using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Domain;
@@ -235,15 +236,15 @@
             List<int> workingGroupIds,
             int? caseTypeId,
             DateTime? periodFrom,
-            DateTime? periodUntil)
+            DateTime? periodUntil,
+            string text,
+            SortField sort,
+            int selectCount)
         {
-            using (var uow = this.unitOfWorkFactory.Create())
+            using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
             {
                 var caseRep = uow.GetRepository<Case>();
-                var fieldRep = uow.GetRepository<CaseFieldSetting>();
-                var departmentRep = uow.GetRepository<Department>();
-                var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
-                var caseTypeRep = uow.GetRepository<CaseType>();
+                var fieldRep = uow.GetRepository<CaseFieldSetting>();                
 
                 var caseTypeIds = new List<int>();
                 if (caseTypeId.HasValue)
@@ -251,24 +252,18 @@
                     LoadCaseTypeChildrenIds(caseTypeId.Value, caseTypeIds, uow);
                 }
 
-                var cases = caseRep.GetAll()
-                            .GetByCustomer(customerId)
-                            .GetByDepartments(departmentIds)
-                            .GetByWorkingGroups(workingGroupIds)
-                            .GetByCaseTypes(caseTypeIds)
-                            .GetByRegistrationPeriod(periodFrom, periodUntil)
-                            .GetNotDeleted();
-                var fields = fieldRep.GetAll().GetByNullableCustomer(customerId).GetByIds(fieldIds).GetShowable();
-                var departments = departmentRep.GetAll().GetActiveByCustomer(customerId).GetByIds(departmentIds);
-                var workingGroups = workingGroupRep.GetAll().GetActiveByCustomer(customerId).GetByIds(workingGroupIds);
-                var caseTypes = caseTypeRep.GetAll().GetActiveByCustomer(customerId).GetByIds(caseTypeIds);
+                var overviews = caseRep.GetAll().Search(
+                                    customerId,
+                                    departmentIds,
+                                    workingGroupIds,
+                                    caseTypeIds,
+                                    periodFrom,
+                                    periodUntil,
+                                    text,
+                                    sort,
+                                    selectCount);
 
-                return ReportsMapper.MapToReportGeneratorData(
-                                    cases,
-                                    fields,
-                                    departments,
-                                    workingGroups,
-                                    caseTypes);
+                return ReportsMapper.MapToReportGeneratorData();
             }
         }
 

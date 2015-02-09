@@ -148,6 +148,7 @@
     <Compile Include="Models\Case\CaseOverview\ComputerOverview.cs" />
     <Compile Include="Models\Case\CaseOverview\FullCaseOverview.cs" />
     <Compile Include="Models\Case\CaseOverview\LogOverview.cs" />
+    <Compile Include="Models\Case\CaseOverview\LogsOverview.cs" />
     <Compile Include="Models\Case\CaseOverview\OtherOverview.cs" />
     <Compile Include="Models\Case\CaseOverview\UserOverview.cs" />
     <Compile Include="Models\Case\CaseSettingsOverview\CaseInfoSettings.cs" />

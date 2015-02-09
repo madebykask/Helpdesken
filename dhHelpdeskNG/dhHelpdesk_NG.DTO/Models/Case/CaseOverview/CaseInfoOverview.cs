@@ -5,7 +5,7 @@
     public sealed class CaseInfoOverview
     {
         public CaseInfoOverview(
-                string caseNumber, 
+                decimal? caseNumber, 
                 DateTime? registrationDate, 
                 DateTime changeDate, 
                 string registratedBy, 
@@ -21,8 +21,8 @@
                 string caption, 
                 string description, 
                 string other, 
-                string phoneContact, 
-                string sms, 
+                bool phoneContact, 
+                bool sms, 
                 DateTime? agreedDate, 
                 string available, 
                 int cost, 
@@ -52,7 +52,7 @@
             this.Case = caseNumber;
         }
 
-        public string Case { get; private set; }
+        public decimal? Case { get; private set; }
 
         public DateTime? RegistrationDate { get; private set; }
 
@@ -84,9 +84,9 @@
 
         public string Other { get; private set; }
 
-        public string PhoneContact { get; private set; }
+        public bool PhoneContact { get; private set; }
 
-        public string Sms { get; private set; }
+        public bool Sms { get; private set; }
 
         public DateTime? AgreedDate { get; private set; }
 

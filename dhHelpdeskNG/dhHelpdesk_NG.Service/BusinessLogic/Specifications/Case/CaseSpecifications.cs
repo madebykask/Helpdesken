@@ -4,7 +4,10 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Enums.Case.Fields;
     using DH.Helpdesk.BusinessData.Models.Reports.Enums;
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
+    using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Domain;
 
     public static class CaseSpecifications
@@ -238,6 +241,555 @@
             }
 
             return query;
-        } 
+        }
+
+        public static IQueryable<Case> Search(
+                                this IQueryable<Case> query,
+                                int customerId,
+                                List<int> departmentIds,
+                                List<int> workingGroupIds,
+                                List<int> caseTypeIds,
+                                DateTime? periodFrom,
+                                DateTime? periodUntil,
+                                string text,
+                                SortField sort,
+                                int selectCount)
+        {
+            query = query
+                        .GetByCustomer(customerId)
+                        .GetByDepartments(departmentIds)
+                        .GetByWorkingGroups(workingGroupIds)
+                        .GetByCaseTypes(caseTypeIds)
+                        .GetByRegistrationPeriod(periodFrom, periodUntil)
+                        .GetByText(text)
+                        .Sort(sort)
+                        .GetNotDeleted();
+
+            if (selectCount > 0)
+            {
+                query = query.Take(selectCount);
+            }
+
+            return query;
+        }
+
+        public static IQueryable<Case> GetByText(this IQueryable<Case> query, string text)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                return query;
+            }
+
+            var search = text.Trim().ToLower();
+
+            query = query.Where(entity => 
+                        entity.Id.ToString().Trim().ToLower().Contains(search) || 
+                         
+                        // User
+                        entity.ReportedBy.Trim().ToLower().Contains(search) ||
+                        entity.PersonsName.Trim().ToLower().Contains(search) ||
+                        entity.PersonsEmail.Trim().ToLower().Contains(search) ||
+                        entity.PersonsPhone.Trim().ToLower().Contains(search) ||
+                        entity.PersonsCellphone.Trim().ToLower().Contains(search) ||
+                        entity.Customer.Name.Trim().ToLower().Contains(search) ||
+                        entity.Region.Name.Trim().ToLower().Contains(search) ||
+                        entity.Department.DepartmentName.Trim().ToLower().Contains(search) ||
+                        entity.Ou.Name.Trim().ToLower().Contains(search) ||
+                        entity.Place.Trim().ToLower().Contains(search) || 
+                        entity.UserCode.Trim().ToLower().Contains(search) || 
+
+                        // Computer
+                        entity.InventoryNumber.Trim().ToLower().Contains(search) ||
+                        entity.InventoryType.Trim().ToLower().Contains(search) || 
+                        entity.InventoryLocation.Trim().ToLower().Contains(search) ||  
+
+                        // CaseInfo
+                        entity.CaseNumber.ToString().Trim().ToLower().Contains(search) ||
+                        entity.LastChangedByUser.FirstName.Trim().ToLower().Contains(search) ||
+                        entity.LastChangedByUser.SurName.Trim().ToLower().Contains(search) ||
+                        entity.CaseType.Name.Trim().ToLower().Contains(search) ||
+                        entity.ProductArea.Name.Trim().ToLower().Contains(search) ||
+                        entity.System.SystemName.Trim().ToLower().Contains(search) ||
+                        entity.Urgency.Name.Trim().ToLower().Contains(search) ||
+                        entity.Impact.Name.Trim().ToLower().Contains(search) ||
+                        entity.Category.Name.Trim().ToLower().Contains(search) ||
+                        entity.Supplier.Name.Trim().ToLower().Contains(search) ||
+                        entity.InvoiceNumber.Trim().ToLower().Contains(search) ||
+                        entity.ReferenceNumber.Trim().ToLower().Contains(search) ||
+                        entity.Caption.Trim().ToLower().Contains(search) ||
+                        entity.Description.Trim().ToLower().Contains(search) ||
+                        entity.Miscellaneous.Trim().ToLower().Contains(search) ||
+                        entity.Available.Trim().ToLower().Contains(search) ||
+                        entity.Cost.ToString().Trim().ToLower().Contains(search) ||
+                        entity.CaseFiles.Any(f => f.FileName.Trim().ToLower().Contains(search)) ||
+ 
+                        // Other
+                        entity.Workinggroup.WorkingGroupName.Trim().ToLower().Contains(search) ||
+                        entity.CaseResponsibleUser.FirstName.Trim().ToLower().Contains(search) ||
+                        entity.CaseResponsibleUser.SurName.Trim().ToLower().Contains(search) ||
+                        entity.Administrator.FirstName.Trim().ToLower().Contains(search) ||
+                        entity.Administrator.SurName.Trim().ToLower().Contains(search) ||
+                        entity.Priority.Name.Trim().ToLower().Contains(search) ||
+                        entity.Status.Name.Trim().ToLower().Contains(search) ||
+                        entity.StateSecondary.Name.Trim().ToLower().Contains(search) ||
+                        entity.VerifiedDescription.Trim().ToLower().Contains(search) ||
+                        entity.SolutionRate.Trim().ToLower().Contains(search) ||
+                        entity.CausingPart.Name.Trim().ToLower().Contains(search) ||
+ 
+                        // Log
+                        entity.Logs.Any(l => 
+                                l.Text_Internal.Trim().ToLower().Contains(search) ||
+                                l.Text_External.Trim().ToLower().Contains(search) ||
+                                l.FinishingTypeEntity.Name.Trim().ToLower().Contains(search) ||
+                                l.LogFiles.Any(f => f.FileName.Trim().ToLower().Contains(search))));
+
+            return query;
+        }
+
+        #region Sort
+
+        public static IQueryable<Case> Sort(this IQueryable<Case> query, SortField sort)
+        {
+            if (sort == null)
+            {
+                return query;
+            }
+
+            switch (sort.SortBy)
+            {
+                case SortBy.Ascending:
+                    // User
+                    if (sort.Name == UserFields.User)
+                    {
+                        query = query.OrderBy(c => c.ReportedBy);
+                    }
+                    else if (sort.Name == UserFields.Notifier)
+                    {
+                        query = query.OrderBy(c => c.PersonsName);
+                    }
+                    else if (sort.Name == UserFields.Email)
+                    {
+                        query = query.OrderBy(c => c.PersonsEmail);
+                    }
+                    else if (sort.Name == UserFields.Phone)
+                    {
+                        query = query.OrderBy(c => c.PersonsPhone);
+                    }
+                    else if (sort.Name == UserFields.CellPhone)
+                    {
+                        query = query.OrderBy(c => c.PersonsCellphone);
+                    }
+                    else if (sort.Name == UserFields.Customer)
+                    {
+                        query = query.OrderBy(c => c.Customer.Name);
+                    }
+                    else if (sort.Name == UserFields.Region)
+                    {
+                        query = query.OrderBy(c => c.Region.Name);
+                    }
+                    else if (sort.Name == UserFields.Department)
+                    {
+                        query = query.OrderBy(c => c.Department.DepartmentName);
+                    }
+                    else if (sort.Name == UserFields.Unit)
+                    {
+                        query = query.OrderBy(c => c.Ou.Name);
+                    }
+                    else if (sort.Name == UserFields.Place)
+                    {
+                        query = query.OrderBy(c => c.Place);
+                    }
+                    else if (sort.Name == UserFields.OrdererCode)
+                    {
+                        query = query.OrderBy(c => c.UserCode);
+                    }
+
+                    // Computer
+                    if (sort.Name == ComputerFields.PcNumber)
+                    {
+                        query = query.OrderBy(c => c.InventoryNumber);
+                    }
+                    else if (sort.Name == ComputerFields.ComputerType)
+                    {
+                        query = query.OrderBy(c => c.InventoryType);
+                    }
+                    else if (sort.Name == ComputerFields.Place)
+                    {
+                        query = query.OrderBy(c => c.InventoryLocation);
+                    }
+
+                    // CaseInfo
+                    if (sort.Name == CaseInfoFields.Case)
+                    {
+                        query = query.OrderBy(c => c.CaseNumber);
+                    }
+                    else if (sort.Name == CaseInfoFields.RegistrationDate)
+                    {
+                        query = query.OrderBy(c => c.RegTime);
+                    }
+                    else if (sort.Name == CaseInfoFields.ChangeDate)
+                    {
+                        query = query.OrderBy(c => c.ChangeTime);
+                    }
+                    else if (sort.Name == CaseInfoFields.RegistratedBy)
+                    {
+                        query = query.OrderBy(c => c.User.SurName);
+                    }
+                    else if (sort.Name == CaseInfoFields.CaseType)
+                    {
+                        query = query.OrderBy(c => c.CaseType.Name);
+                    }
+                    else if (sort.Name == CaseInfoFields.ProductArea)
+                    {
+                        query = query.OrderBy(c => c.ProductArea.Name);
+                    }
+                    else if (sort.Name == CaseInfoFields.System)
+                    {
+                        query = query.OrderBy(c => c.System.SystemName);
+                    }
+                    else if (sort.Name == CaseInfoFields.UrgentDegree)
+                    {
+                        query = query.OrderBy(c => c.Urgency.Name);
+                    }
+                    else if (sort.Name == CaseInfoFields.Impact)
+                    {
+                        query = query.OrderBy(c => c.Impact.Name);
+                    }
+                    else if (sort.Name == CaseInfoFields.Category)
+                    {
+                        query = query.OrderBy(c => c.Category.Name);
+                    }
+                    else if (sort.Name == CaseInfoFields.Supplier)
+                    {
+                        query = query.OrderBy(c => c.Supplier.Name);
+                    }
+                    else if (sort.Name == CaseInfoFields.InvoiceNumber)
+                    {
+                        query = query.OrderBy(c => c.InvoiceNumber);
+                    }
+                    else if (sort.Name == CaseInfoFields.ReferenceNumber)
+                    {
+                        query = query.OrderBy(c => c.ReferenceNumber);
+                    }
+                    else if (sort.Name == CaseInfoFields.Caption)
+                    {
+                        query = query.OrderBy(c => c.Caption);
+                    }
+                    else if (sort.Name == CaseInfoFields.Description)
+                    {
+                        query = query.OrderBy(c => c.Description);
+                    }
+                    else if (sort.Name == CaseInfoFields.Other)
+                    {
+                        query = query.OrderBy(c => c.Miscellaneous);
+                    }
+                    else if (sort.Name == CaseInfoFields.PhoneContact)
+                    {
+                        query = query.OrderBy(c => c.ContactBeforeAction);
+                    }
+                    else if (sort.Name == CaseInfoFields.Sms)
+                    {
+                        query = query.OrderBy(c => c.SMS);
+                    }
+                    else if (sort.Name == CaseInfoFields.AgreedDate)
+                    {
+                        query = query.OrderBy(c => c.AgreedDate);
+                    }
+                    else if (sort.Name == CaseInfoFields.Available)
+                    {
+                        query = query.OrderBy(c => c.Available);
+                    }
+                    else if (sort.Name == CaseInfoFields.Cost)
+                    {
+                        query = query.OrderBy(c => c.Cost);
+                    }
+                    else if (sort.Name == CaseInfoFields.AttachedFile)
+                    {
+                        query = query.OrderBy(c => c.CaseFiles.Count);
+                    }
+
+                    // Other
+                    if (sort.Name == OtherFields.WorkingGroup)
+                    {
+                        query = query.OrderBy(c => c.Workinggroup.WorkingGroupName);
+                    }
+                    else if (sort.Name == OtherFields.Responsible)
+                    {
+                        query = query.OrderBy(c => c.CaseResponsibleUser.SurName);
+                    }
+                    else if (sort.Name == OtherFields.Administrator)
+                    {
+                        query = query.OrderBy(c => c.Administrator.SurName);
+                    }
+                    else if (sort.Name == OtherFields.Priority)
+                    {
+                        query = query.OrderBy(c => c.Priority.Name);
+                    }
+                    else if (sort.Name == OtherFields.State)
+                    {
+                        query = query.OrderBy(c => c.Status.Name);
+                    }
+                    else if (sort.Name == OtherFields.SubState)
+                    {
+                        query = query.OrderBy(c => c.StateSecondary.Name);
+                    }
+                    else if (sort.Name == OtherFields.PlannedActionDate)
+                    {
+                        query = query.OrderBy(c => c.PlanDate);
+                    }
+                    else if (sort.Name == OtherFields.WatchDate)
+                    {
+                        query = query.OrderBy(c => c.WatchDate);
+                    }
+                    else if (sort.Name == OtherFields.Verified)
+                    {
+                        query = query.OrderBy(c => c.Verified);
+                    }
+                    else if (sort.Name == OtherFields.VerifiedDescription)
+                    {
+                        query = query.OrderBy(c => c.VerifiedDescription);
+                    }
+                    else if (sort.Name == OtherFields.SolutionRate)
+                    {
+                        query = query.OrderBy(c => c.SolutionRate);
+                    }
+                    else if (sort.Name == OtherFields.CausingPart)
+                    {
+                        query = query.OrderBy(c => c.CausingPart.Name);
+                    }
+
+                    // Log
+                    if (sort.Name == LogFields.InternalLogNote ||
+                        sort.Name == LogFields.ExternalLogNote ||
+                        sort.Name == LogFields.Debiting ||
+                        sort.Name == LogFields.AttachedFile ||
+                        sort.Name == LogFields.FinishingDescription ||
+                        sort.Name == LogFields.FinishingDate ||
+                        sort.Name == LogFields.FinishingCause)
+                    {
+                        query = query.OrderBy(c => c.Logs.Count);
+                    }
+
+                    break;
+                case SortBy.Descending:
+                    // User
+                    if (sort.Name == UserFields.User)
+                    {
+                        query = query.OrderByDescending(c => c.ReportedBy);
+                    }
+                    else if (sort.Name == UserFields.Notifier)
+                    {
+                        query = query.OrderByDescending(c => c.PersonsName);
+                    }
+                    else if (sort.Name == UserFields.Email)
+                    {
+                        query = query.OrderByDescending(c => c.PersonsEmail);
+                    }
+                    else if (sort.Name == UserFields.Phone)
+                    {
+                        query = query.OrderByDescending(c => c.PersonsPhone);
+                    }
+                    else if (sort.Name == UserFields.CellPhone)
+                    {
+                        query = query.OrderByDescending(c => c.PersonsCellphone);
+                    }
+                    else if (sort.Name == UserFields.Customer)
+                    {
+                        query = query.OrderByDescending(c => c.Customer.Name);
+                    }
+                    else if (sort.Name == UserFields.Region)
+                    {
+                        query = query.OrderByDescending(c => c.Region.Name);
+                    }
+                    else if (sort.Name == UserFields.Department)
+                    {
+                        query = query.OrderByDescending(c => c.Department.DepartmentName);
+                    }
+                    else if (sort.Name == UserFields.Unit)
+                    {
+                        query = query.OrderByDescending(c => c.Ou.Name);
+                    }
+                    else if (sort.Name == UserFields.Place)
+                    {
+                        query = query.OrderByDescending(c => c.Place);
+                    }
+                    else if (sort.Name == UserFields.OrdererCode)
+                    {
+                        query = query.OrderByDescending(c => c.UserCode);
+                    }
+
+                    // Computer
+                    if (sort.Name == ComputerFields.PcNumber)
+                    {
+                        query = query.OrderByDescending(c => c.InventoryNumber);
+                    }
+                    else if (sort.Name == ComputerFields.ComputerType)
+                    {
+                        query = query.OrderByDescending(c => c.InventoryType);
+                    }
+                    else if (sort.Name == ComputerFields.Place)
+                    {
+                        query = query.OrderByDescending(c => c.InventoryLocation);
+                    }
+
+                    // CaseInfo
+                    if (sort.Name == CaseInfoFields.Case)
+                    {
+                        query = query.OrderByDescending(c => c.CaseNumber);
+                    }
+                    else if (sort.Name == CaseInfoFields.RegistrationDate)
+                    {
+                        query = query.OrderByDescending(c => c.RegTime);
+                    }
+                    else if (sort.Name == CaseInfoFields.ChangeDate)
+                    {
+                        query = query.OrderByDescending(c => c.ChangeTime);
+                    }
+                    else if (sort.Name == CaseInfoFields.RegistratedBy)
+                    {
+                        query = query.OrderByDescending(c => c.User.SurName);
+                    }
+                    else if (sort.Name == CaseInfoFields.CaseType)
+                    {
+                        query = query.OrderByDescending(c => c.CaseType.Name);
+                    }
+                    else if (sort.Name == CaseInfoFields.ProductArea)
+                    {
+                        query = query.OrderByDescending(c => c.ProductArea.Name);
+                    }
+                    else if (sort.Name == CaseInfoFields.System)
+                    {
+                        query = query.OrderByDescending(c => c.System.SystemName);
+                    }
+                    else if (sort.Name == CaseInfoFields.UrgentDegree)
+                    {
+                        query = query.OrderByDescending(c => c.Urgency.Name);
+                    }
+                    else if (sort.Name == CaseInfoFields.Impact)
+                    {
+                        query = query.OrderByDescending(c => c.Impact.Name);
+                    }
+                    else if (sort.Name == CaseInfoFields.Category)
+                    {
+                        query = query.OrderByDescending(c => c.Category.Name);
+                    }
+                    else if (sort.Name == CaseInfoFields.Supplier)
+                    {
+                        query = query.OrderByDescending(c => c.Supplier.Name);
+                    }
+                    else if (sort.Name == CaseInfoFields.InvoiceNumber)
+                    {
+                        query = query.OrderByDescending(c => c.InvoiceNumber);
+                    }
+                    else if (sort.Name == CaseInfoFields.ReferenceNumber)
+                    {
+                        query = query.OrderByDescending(c => c.ReferenceNumber);
+                    }
+                    else if (sort.Name == CaseInfoFields.Caption)
+                    {
+                        query = query.OrderByDescending(c => c.Caption);
+                    }
+                    else if (sort.Name == CaseInfoFields.Description)
+                    {
+                        query = query.OrderByDescending(c => c.Description);
+                    }
+                    else if (sort.Name == CaseInfoFields.Other)
+                    {
+                        query = query.OrderByDescending(c => c.Miscellaneous);
+                    }
+                    else if (sort.Name == CaseInfoFields.PhoneContact)
+                    {
+                        query = query.OrderByDescending(c => c.ContactBeforeAction);
+                    }
+                    else if (sort.Name == CaseInfoFields.Sms)
+                    {
+                        query = query.OrderByDescending(c => c.SMS);
+                    }
+                    else if (sort.Name == CaseInfoFields.AgreedDate)
+                    {
+                        query = query.OrderByDescending(c => c.AgreedDate);
+                    }
+                    else if (sort.Name == CaseInfoFields.Available)
+                    {
+                        query = query.OrderByDescending(c => c.Available);
+                    }
+                    else if (sort.Name == CaseInfoFields.Cost)
+                    {
+                        query = query.OrderByDescending(c => c.Cost);
+                    }
+                    else if (sort.Name == CaseInfoFields.AttachedFile)
+                    {
+                        query = query.OrderByDescending(c => c.CaseFiles.Count);
+                    }
+
+                    // Other
+                    if (sort.Name == OtherFields.WorkingGroup)
+                    {
+                        query = query.OrderByDescending(c => c.Workinggroup.WorkingGroupName);
+                    }
+                    else if (sort.Name == OtherFields.Responsible)
+                    {
+                        query = query.OrderByDescending(c => c.CaseResponsibleUser.SurName);
+                    }
+                    else if (sort.Name == OtherFields.Administrator)
+                    {
+                        query = query.OrderByDescending(c => c.Administrator.SurName);
+                    }
+                    else if (sort.Name == OtherFields.Priority)
+                    {
+                        query = query.OrderByDescending(c => c.Priority.Name);
+                    }
+                    else if (sort.Name == OtherFields.State)
+                    {
+                        query = query.OrderByDescending(c => c.Status.Name);
+                    }
+                    else if (sort.Name == OtherFields.SubState)
+                    {
+                        query = query.OrderByDescending(c => c.StateSecondary.Name);
+                    }
+                    else if (sort.Name == OtherFields.PlannedActionDate)
+                    {
+                        query = query.OrderByDescending(c => c.PlanDate);
+                    }
+                    else if (sort.Name == OtherFields.WatchDate)
+                    {
+                        query = query.OrderByDescending(c => c.WatchDate);
+                    }
+                    else if (sort.Name == OtherFields.Verified)
+                    {
+                        query = query.OrderByDescending(c => c.Verified);
+                    }
+                    else if (sort.Name == OtherFields.VerifiedDescription)
+                    {
+                        query = query.OrderByDescending(c => c.VerifiedDescription);
+                    }
+                    else if (sort.Name == OtherFields.SolutionRate)
+                    {
+                        query = query.OrderByDescending(c => c.SolutionRate);
+                    }
+                    else if (sort.Name == OtherFields.CausingPart)
+                    {
+                        query = query.OrderByDescending(c => c.CausingPart.Name);
+                    }
+
+                    // Log
+                    if (sort.Name == LogFields.InternalLogNote ||
+                        sort.Name == LogFields.ExternalLogNote ||
+                        sort.Name == LogFields.Debiting ||
+                        sort.Name == LogFields.AttachedFile ||
+                        sort.Name == LogFields.FinishingDescription ||
+                        sort.Name == LogFields.FinishingDate ||
+                        sort.Name == LogFields.FinishingCause)
+                    {
+                        query = query.OrderByDescending(c => c.Logs.Count);
+                    }
+
+                    break;
+            }
+
+            return query;
+        }
+
+        #endregion
     }
 }
