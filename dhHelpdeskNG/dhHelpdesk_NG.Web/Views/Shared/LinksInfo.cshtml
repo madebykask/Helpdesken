@@ -35,11 +35,11 @@
                                                                 {
                                                                     if(link.DocumentId == null)
                                                                     {
-                                                                    <a @target href="@Url.Action("new/", "cases", new { customerId = link.CustomerId, templateId = link.CaseSolutionId })">@link.UrlName</a>
+                                                                    <a @target href="@Url.Action("new/", "cases", new { customerId = link.CustomerId, templateId = link.CaseSolutionId })">@Translation.Get(link.UrlName, Enums.TranslationSource.TextTranslation)</a>
                                                                     }
                                                                     else
                                                                     {
-                                                                    <a @target href="@Url.Action("DocumentFile", "Document", new { document = link.DocumentId })">@link.UrlName</a>
+                                                                    <a @target href="@Url.Action("DocumentFile", "Document", new { document = link.DocumentId })">@Translation.Get(link.UrlName, Enums.TranslationSource.TextTranslation)</a>
                                                                     }
                                                                 }
                                                                 else
@@ -50,11 +50,11 @@
                                                                     if(link.OpenInNewWindow)
                                                                     {
                                                                         <a onclick="window.open('@linkUrlAddress', null, 'width=@link.NewWindowWidth,height=@link.NewWindowHeight,resizable=yes,scrollbars=yes');" 
-                                                                            style="cursor:pointer"><i class="icon-play-circle"></i>@link.UrlName</a>
+                                                                            style="cursor:pointer"><i class="icon-play-circle"></i>@Translation.Get(link.UrlName, Enums.TranslationSource.TextTranslation)</a>
                                                                     }
                                                                     else
                                                                     {         
-                                                                    <a href="@linkUrlAddress"><i class="icon-play-circle"></i>@link.UrlName</a>
+                                                                    <a href="@linkUrlAddress"><i class="icon-play-circle"></i>@Translation.Get(link.UrlName, Enums.TranslationSource.TextTranslation)</a>
                                                                     }
                                                                 }
                                                             </li>
