@@ -1307,6 +1307,14 @@ namespace DH.Helpdesk.Web.Controllers
         public RedirectToRouteResult ChangeCurrentLanguage(int languageId)        
         {
             SessionFacade.CurrentLanguageId = languageId;
+
+            var language = _languageService.GetLanguage(languageId);
+
+            if(language != null)
+            {
+                SessionFacade.CurrentLanguageCode = language.LanguageID;
+            }
+
             var prevInfo = this.ExtractPreviousRouteInfo();
             var res = new RedirectToRouteResult(prevInfo);
             return res;

@@ -70,5 +70,20 @@ namespace DH.Helpdesk.BusinessData.Models.Link.Output
         /// Gets or sets document name.
         /// </summary>
         public string DocumentName { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether it should open in new window or not.
+        /// </summary>
+        public bool OpenInNewWindow { get; set; }
+
+        /// <summary>
+        /// Gets or sets a Window Height
+        /// </summary>
+        public int NewWindowHeight { get; set; }
+
+        /// <summary>
+        /// Gets or sets a Window Width
+        /// </summary>
+        public int NewWindowWidth { get; set; }
     }
 }

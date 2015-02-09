@@ -5,7 +5,8 @@
         <div class="box-box span12">
             <div class="box-header portlet-header">
                 <div class="start-tile-img label orange">
-                    <img src="@Url.Content("~/Content/icons/quicklinks.png")" alt="@Translation.Get("Snabblänkar", Enums.TranslationSource.TextTranslation)" /></div>
+                    <img src="@Url.Content("~/Content/icons/quicklinks.png")" alt="@Translation.Get("Snabblänkar", Enums.TranslationSource.TextTranslation)" />
+                </div>
                 <h4>@Translation.Get("Snabblänkar", Enums.TranslationSource.TextTranslation)</h4>
             </div>
             <div class="box-body portlet-content">
@@ -22,33 +23,39 @@
                                     <div class="accordion-inner">
                                         <ul>
                                             @foreach(var categoryGroup in customerGroup.Categories)
-                                            {
-                                                
+                                            {  
                                                 <li><strong>@categoryGroup.CategoryName</strong></li>
-                                               
                                                 <li>
                                                     <ul>
                                                         @foreach(var link in categoryGroup.Links)
                                                         {
+                                                            var target = link.OpenInNewWindow ? "target=\"_blank\"" : "";
                                                             <li>
                                                                 @if(string.IsNullOrEmpty(link.UrlAddress))
                                                                 {
                                                                     if(link.DocumentId == null)
                                                                     {
-                                                                    <a href="@Url.Action("new/", "cases", new { customerId = link.CustomerId, templateId = link.CaseSolutionId })">@link.UrlName</a>
-@*<span>@link.CaseSolutionName</span>*@
+                                                                    <a @target href="@Url.Action("new/", "cases", new { customerId = link.CustomerId, templateId = link.CaseSolutionId })">@link.UrlName</a>
                                                                     }
                                                                     else
                                                                     {
-                                                                    
-                                                                    <a href="@Url.Action("DocumentFile", "Document", new { document = link.DocumentId })">@link.UrlName</a>
+                                                                    <a @target href="@Url.Action("DocumentFile", "Document", new { document = link.DocumentId })">@link.UrlName</a>
                                                                     }
                                                                 }
                                                                 else
                                                                 {
                                                                     var linkUrlAddress = link.UrlAddress;
-                                                                    linkUrlAddress = linkUrlAddress.Replace("[UserId]", SessionFacade.CurrentUser.UserId);
-                                                                    <a href="@linkUrlAddress" target="_blank"><i class="icon-play-circle"></i>@link.UrlName</a>
+                                                                    linkUrlAddress = linkUrlAddress.Replace("[UserId]", SessionFacade.CurrentUser.UserId).Replace("[Language]", SessionFacade.CurrentLanguageCode);
+
+                                                                    if(link.OpenInNewWindow)
+                                                                    {
+                                                                        <a onclick="window.open('@linkUrlAddress', null, 'width=@link.NewWindowWidth,height=@link.NewWindowHeight,resizable=yes,scrollbars=yes');" 
+                                                                            style="cursor:pointer"><i class="icon-play-circle"></i>@link.UrlName</a>
+                                                                    }
+                                                                    else
+                                                                    {         
+                                                                    <a href="@linkUrlAddress"><i class="icon-play-circle"></i>@link.UrlName</a>
+                                                                    }
                                                                 }
                                                             </li>
                                                         }

@@ -14,17 +14,19 @@
     {
         private readonly IUserService userService;
         private readonly ICustomerService customerService;
-
+        private readonly ILanguageService languageService;
         private readonly IUsersPasswordHistoryService usersPasswordHistoryService;
 
         public LoginController(
                 IUserService userService, 
                 ICustomerService customerService, 
-                IUsersPasswordHistoryService usersPasswordHistoryService)
+                IUsersPasswordHistoryService usersPasswordHistoryService,
+                ILanguageService languageService)
         {
             this.userService = userService;
             this.customerService = customerService;
             this.usersPasswordHistoryService = usersPasswordHistoryService;
+            this.languageService = languageService;
         }
 
         public ActionResult Login()
@@ -67,6 +69,14 @@
                     this.Session.Clear();
                     SessionFacade.CurrentUser = user;
                     SessionFacade.CurrentLanguageId = user.LanguageId;
+
+                    var language = this.languageService.GetLanguage(user.LanguageId);
+
+                    if(language !=  null) 
+                    {
+                        SessionFacade.CurrentLanguageCode = language.LanguageID;
+                    }
+
                     var customer = this.customerService.GetCustomer(user.CustomerId);
                     ApplicationFacade.AddLoggedInUser(
                         new LoggedInUsers

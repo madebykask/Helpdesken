@@ -10,6 +10,8 @@ namespace DH.Helpdesk.Domain
         public int? Customer_Id { get; set; }
         public int? Document_Id { get; set; }
         public int OpenInNewWindow { get; set; }
+        public int NewWindowHeight { get; set; }
+        public int NewWindowWidth { get; set; }
         public int ShowOnStartPage { get; set; }
         public int? LinkGroup_Id { get; set; }
         public string URLAddress { get; set; }
