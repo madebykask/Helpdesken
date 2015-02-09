@@ -958,7 +958,8 @@
 
 
             //Get Casetype to copy
-            var caseTypesToCopy = this._caseTypeService.GetCaseTypes(customerToCopy.Id);
+            var caseTypesToCopy = this._caseTypeService.GetCaseTypes(customerToCopy.Id).Where(x=> x.Parent_CaseType_Id == null);
+            
 
             foreach (var ct in caseTypesToCopy)
             {
@@ -976,8 +977,14 @@
                 newCustomerCaseType.Selectable = ct.Selectable;
                 newCustomerCaseType.ITILProcess = 0;
                 newCustomerCaseType.RelatedField = String.Empty;
+                newCustomerCaseType.Parent_CaseType_Id = null;
 
+                
                 this._caseTypeService.SaveCaseType(newCustomerCaseType, out errors);
+
+                // Save sub case types
+                CopyCaseTypeChildren(ct.SubCaseTypes.ToList(), newCustomerToSave.Id, newCustomerCaseType.Id);
+
             };
 
             //Get Category to copy
@@ -1189,6 +1196,35 @@
 
 
             return newCustomerToSave.Id;
+        }
+
+        private void CopyCaseTypeChildren(List<CaseType> caseTypeChildren, int newCustomerId, int parentId)
+        {
+            IDictionary<string, string> errors = new Dictionary<string, string>();
+
+            foreach (var ct in caseTypeChildren)
+            {
+                var newCustomerCaseType = new CaseType() { };
+
+                newCustomerCaseType.Customer_Id = newCustomerId;
+                newCustomerCaseType.Name = ct.Name;
+                newCustomerCaseType.IsDefault = ct.IsDefault;
+                newCustomerCaseType.RequireApproving = ct.RequireApproving;
+                newCustomerCaseType.ShowOnExternalPage = ct.ShowOnExternalPage;
+                newCustomerCaseType.IsEMailDefault = ct.IsEMailDefault;
+                newCustomerCaseType.AutomaticApproveTime = ct.AutomaticApproveTime;
+                newCustomerCaseType.User_Id = ct.User_Id;
+                newCustomerCaseType.IsActive = ct.IsActive;
+                newCustomerCaseType.Selectable = ct.Selectable;
+                newCustomerCaseType.ITILProcess = 0;
+                newCustomerCaseType.RelatedField = String.Empty;
+                newCustomerCaseType.Parent_CaseType_Id = parentId;                
+
+                this._caseTypeService.SaveCaseType(newCustomerCaseType, out errors);
+
+                // Save sub case types
+                CopyCaseTypeChildren(ct.SubCaseTypes.ToList(), newCustomerId, newCustomerCaseType.Id);
+            };
         }
     }
 }

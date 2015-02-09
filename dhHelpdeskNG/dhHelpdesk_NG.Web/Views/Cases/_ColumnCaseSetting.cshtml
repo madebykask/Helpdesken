@@ -107,17 +107,20 @@
                 items: "> tr:not(:first)",                
                 update: function (event, ui) {                    
                     var elements = document.querySelectorAll('.SortableRow');
-                    console.log('Count:' + elements.length.toString());
+                    //console.log('Count:' + elements.length.toString());
                     var newOrder = "";
                     for (var i = 0; i < elements.length; ++i) {
                         var item = elements[i];              
                         newOrder += item.id.toString() + "|" ;                        
-                    }
-                    console.log(newOrder);
-                    $.post('/cases/SortCaseSettingColumn/' + '?customerId=' + '@Model.CustomerId.ToString()' + '&userId=' + '@Model.UserId.ToString()' +
-                                                             '&sortIds=' + newOrder, function (result) {
-                        $("#colsetting_result").html(result);
-                    });
+                    }                   
+                    
+                    $.post('@this.Url.Action("SortCaseSettingColumn")', 
+                        { customerId: '@Model.CustomerId', 
+                            userId: '@Model.UserId',
+                            sortIds: newOrder,                            
+                        }, function (result) {
+                            $("#colsetting_result").html(result);
+                        });                 
                 }                
             });
 

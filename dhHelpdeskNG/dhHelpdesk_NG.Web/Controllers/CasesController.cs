@@ -625,7 +625,7 @@ namespace DH.Helpdesk.Web.Controllers
                     m.LogKey = m.CaseLog.Id.ToString(); 
                     m.customerUserSetting = cu;
                     m.caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(customerId);
-                    m.CaseFieldSettingWithLangauges = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customerId, customer.Language_Id);
+                    m.CaseFieldSettingWithLangauges = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customerId, SessionFacade.CurrentLanguageId);
                     m.finishingCauses = this._finishingCauseService.GetFinishingCauses(customerId);
                     m.case_ = this._caseService.GetCaseById(m.CaseLog.CaseId);
                     m.users = this._userService.GetUsers(customerId);
@@ -1649,7 +1649,7 @@ namespace DH.Helpdesk.Web.Controllers
                 m.CaseIsLockedByUserId = lockedByUserId;
                 m.customerUserSetting = cu;
                 m.caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(customerId);
-                m.CaseFieldSettingWithLangauges = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customerId, customer.Language_Id);
+                m.CaseFieldSettingWithLangauges = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customerId, SessionFacade.CurrentLanguageId);
                 m.DepartmentFilterFormat = cs.DepartmentFilterFormat;
                 m.ParantPath_CaseType = ParentPathDefaultValue;
                 m.ParantPath_ProductArea = ParentPathDefaultValue;
