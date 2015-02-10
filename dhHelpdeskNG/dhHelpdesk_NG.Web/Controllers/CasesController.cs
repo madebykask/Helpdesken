@@ -1905,6 +1905,18 @@ namespace DH.Helpdesk.Web.Controllers
                         m.case_.InventoryType = caseTemplate.InventoryType;
                         m.case_.InventoryLocation = caseTemplate.InventoryLocation;
                         m.case_.System_Id = caseTemplate.System_Id;
+                        m.case_.Currency = caseTemplate.Currency;
+                        m.case_.Cost = caseTemplate.Cost;
+                        m.case_.OtherCost = caseTemplate.OtherCost;
+                        m.case_.Available = caseTemplate.Available;
+                        m.case_.CausingPartId = caseTemplate.FinishingCause_Id;
+                        m.case_.ContactBeforeAction = caseTemplate.ContactBeforeAction;
+                        m.case_.WatchDate = caseTemplate.WatchDate;
+                        m.case_.Project_Id = caseTemplate.Project_Id;
+                        m.case_.Problem_Id = caseTemplate.Problem_Id;
+                        m.case_.Change_Id = caseTemplate.Change_Id;
+                        m.case_.FinishingDate = caseTemplate.FinishingDate;
+                        m.case_.FinishingDescription = caseTemplate.FinishingDescription;
                     }
                 } // Load Case Template
 

@@ -39,5 +39,14 @@
         InventoryType = 35,
         InventoryLocation = 36,
         Supplier = 37,
+        SMS = 38,
+        Available = 39,
+        Cost = 40,
+        ContactBeforeAction = 41,
+        Problem = 42,
+        Change = 43,
+        WatchDate = 44,
+        FinishingDate = 45,
+        FinishingDescription = 46,
     }
 }

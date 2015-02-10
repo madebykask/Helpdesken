@@ -325,6 +325,9 @@ namespace DH.Helpdesk.Services.Services
             caseSolution.InventoryNumber = caseSolution.InventoryNumber ?? string.Empty;
             caseSolution.InventoryType = caseSolution.InventoryType ?? string.Empty;
             caseSolution.InventoryLocation = caseSolution.InventoryLocation ?? string.Empty;
+            caseSolution.Available = caseSolution.Available ?? string.Empty;
+            caseSolution.Currency = caseSolution.Currency ?? string.Empty;
+            
 
             //this.CheckRequiredFields(caseSolution, CaseFieldSetting, out errors);
 

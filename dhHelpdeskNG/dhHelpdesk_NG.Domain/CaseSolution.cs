@@ -2,8 +2,8 @@
 
 namespace DH.Helpdesk.Domain
 {
+    using DH.Helpdesk.Domain.Problems;
     using DH.Helpdesk.Domain.Projects;
-
     using global::System;
 
     public class CaseSolution : Entity
@@ -56,6 +56,16 @@ namespace DH.Helpdesk.Domain
         public string InventoryLocation { get; set; }
         public int? Supplier_Id { get; set; }
         public Guid? FormGUID { get; set; }
+        public string Available { get; set; }
+        public int Cost { get; set; }
+        public int OtherCost { get; set; }
+        public string Currency { get; set; }
+        public int ContactBeforeAction { get; set; }
+        public int? Problem_Id { get; set; }
+        public int? Change_Id { get; set; }
+        public DateTime? WatchDate { get; set; }
+        public DateTime? FinishingDate { get; set; }
+        public string FinishingDescription { get; set; }
 
         public virtual CaseSolutionCategory CaseSolutionCategory { get; set; }
         public virtual CaseSolutionSchedule CaseSolutionSchedule { get; set; }
@@ -69,5 +79,6 @@ namespace DH.Helpdesk.Domain
         public virtual User PerformerUser { get; set; }
         public virtual WorkingGroupEntity CaseWorkingGroup { get; set; }
         public virtual WorkingGroupEntity WorkingGroup { get; set; }
+        //public virtual Problem Problem { get; set; }
     }
 }

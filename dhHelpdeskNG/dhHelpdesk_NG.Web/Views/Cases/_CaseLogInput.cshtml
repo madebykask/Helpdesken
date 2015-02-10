@@ -153,12 +153,19 @@
                 </td>
             </tr>
             
-            <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString())">
+            <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.FinishingDescription, CaseSolutionFields.FinishingDescription)">
                 <td>
-                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.FinishingDescription,"Avslutsbeskrivning")
-                    @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString()).Required == 1)
+                     @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.FinishingDescription, CaseSolutionFields.FinishingDescription))
                     {
-                        <span class="mandatorystar">*</span>
+                        @CaseFieldCaption(GlobalEnums.TranslationCaseFields.FinishingDescription,"Avslutsbeskrivning")
+                        if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString()).Required == 1)
+                        {
+                            <span class="mandatorystar">*</span>
+                        }
+                     }
+                    else
+                    {
+                        @Html.TextAreaFor(model => model.case_.FinishingDescription, new { @readonly = true })
                     }
                 </td>
                 <td>
@@ -186,12 +193,19 @@
                     </div>
                 </td>
             </tr>
-            <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.FinishingDate.ToString())">
+            <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.FinishingDate, CaseSolutionFields.FinishingDate)">
                 <td>
                     @CaseFieldCaption(GlobalEnums.TranslationCaseFields.FinishingDate,"Avslutsdatum")
                 </td>
                 <td>
-                    @Html.EditorFor(m => m.CaseLog.FinishingDate, "DatePicker", new { id = "divCaseLog_FinishingDate" })
+                    @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.FinishingDate, CaseSolutionFields.FinishingDate))
+                    {
+                        @Html.EditorFor(m => m.CaseLog.FinishingDate, "DatePicker", new { id = "divCaseLog_FinishingDate" })
+                    }
+                    else
+                    {
+                        @Html.EditorFor(m => m.case_.FinishingDate, "DateReadOnly")
+                    }
                 </td>
             </tr>
         </table>

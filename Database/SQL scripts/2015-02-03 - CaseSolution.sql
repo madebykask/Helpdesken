@@ -187,3 +187,85 @@ BEGIN
 			)	
 END
 GO
+
+IF COL_LENGTH('dbo.tblCaseSolution','SMS') IS NULL
+BEGIN
+	ALTER TABLE [dbo].tblCaseSolution ADD SMS int not null default 0 
+END
+GO
+
+IF COL_LENGTH('dbo.tblCaseSolution','Available') IS NULL
+BEGIN
+	ALTER TABLE [dbo].tblCaseSolution	ADD Available NVARCHAR(100) NULL 
+END
+GO
+
+IF COL_LENGTH('dbo.tblCaseSolution','Cost') IS NULL
+BEGIN
+	ALTER TABLE [dbo].tblCaseSolution ADD Cost int not null default 0 
+END
+GO
+
+IF COL_LENGTH('dbo.tblCaseSolution','OtherCost') IS NULL
+BEGIN
+	ALTER TABLE [dbo].tblCaseSolution ADD OtherCost int not null default 0 
+END
+GO
+
+IF COL_LENGTH('dbo.tblCaseSolution','Currency') IS NULL
+BEGIN
+	ALTER TABLE [dbo].tblCaseSolution	ADD Currency NVARCHAR(10) NULL 
+END
+GO
+
+IF COL_LENGTH('dbo.tblCaseSolution','ContactBeforeAction') IS NULL
+BEGIN
+	ALTER TABLE [dbo].tblCaseSolution ADD ContactBeforeAction int not null default 0 
+END
+GO
+
+IF COL_LENGTH('dbo.tblCaseSolution','Problem_Id') IS NULL
+BEGIN
+	ALTER TABLE [dbo].tblCaseSolution	ADD Problem_Id int NULL 
+
+	ALTER TABLE [dbo].tblCaseSolution ADD 
+			CONSTRAINT [FK_tblCaseSolution_tblProblem] FOREIGN KEY 
+			(
+				Problem_Id
+			) REFERENCES [dbo].tblProblem (
+				[Id]
+			)	
+END
+GO
+
+IF COL_LENGTH('dbo.tblCaseSolution','Change_Id') IS NULL
+BEGIN
+	ALTER TABLE [dbo].tblCaseSolution	ADD Change_Id int NULL 
+
+	ALTER TABLE [dbo].tblCaseSolution ADD 
+			CONSTRAINT [FK_tblCaseSolution_tblChange] FOREIGN KEY 
+			(
+				Change_Id
+			) REFERENCES [dbo].tblChange (
+				[Id]
+			)	
+END
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'WatchDate' and sysobjects.name = N'tblCaseSolution')
+	begin
+		ALTER TABLE tblCaseSolution ADD WatchDate datetime NULL			
+	end
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'FinishingDate' and sysobjects.name = N'tblCaseSolution')
+	begin
+		ALTER TABLE tblCaseSolution ADD FinishingDate datetime NULL			
+	end
+GO
+
+IF COL_LENGTH('dbo.tblCaseSolution','FinishingDescription') IS NULL
+BEGIN
+	ALTER TABLE [dbo].tblCaseSolution	ADD FinishingDescription NVARCHAR(200) NULL 
+END
+GO
