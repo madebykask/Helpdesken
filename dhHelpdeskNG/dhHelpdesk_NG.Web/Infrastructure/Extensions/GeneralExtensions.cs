@@ -69,7 +69,10 @@
         public static string GetFieldStyle(this CaseInputViewModel model, GlobalEnums.TranslationCaseFields caseFieldName, CaseSolutionFields caseTemplateFieldName)
         {
             bool isGlobalVisibility = model.caseFieldSettings.IsFieldVisible(caseFieldName);
-            bool isLocalVisibility = model.CaseSolutionSettingModels.Single(x => x.CaseSolutionField == caseTemplateFieldName).CaseSolutionMode != CaseSolutionModes.Hide;
+            //bool isLocalVisibility = model.CaseSolutionSettingModels.Single(x => x.CaseSolutionField == caseTemplateFieldName).CaseSolutionMode != CaseSolutionModes.Hide;
+
+            var fieldSetting = model.CaseSolutionSettingModels.FirstOrDefault(x => x.CaseSolutionField == caseTemplateFieldName);
+            bool isLocalVisibility = (fieldSetting == null) ? false : fieldSetting.CaseSolutionMode != CaseSolutionModes.Hide;
 
             if (!isGlobalVisibility || !isLocalVisibility)
             {
@@ -81,7 +84,10 @@
 
         public static string GetFieldStyle(this CaseInputViewModel model, CaseSolutionFields caseTemplateFieldName)
         {
-            bool isLocalVisibility = model.CaseSolutionSettingModels.Single(x => x.CaseSolutionField == caseTemplateFieldName).CaseSolutionMode != CaseSolutionModes.Hide;
+            var fieldSetting = model.CaseSolutionSettingModels.FirstOrDefault(x => x.CaseSolutionField == caseTemplateFieldName);
+            bool isLocalVisibility = (fieldSetting == null) ? false : fieldSetting.CaseSolutionMode != CaseSolutionModes.Hide;
+
+            //bool isLocalVisibility = model.CaseSolutionSettingModels.Single(x => x.CaseSolutionField == caseTemplateFieldName).CaseSolutionMode != CaseSolutionModes.Hide;
 
             return !isLocalVisibility ? "display:none" : string.Empty;
         }
@@ -89,28 +95,36 @@
         public static bool IsReadOnly(this CaseInputViewModel model, GlobalEnums.TranslationCaseFields caseFieldName, CaseSolutionFields caseTemplateFieldName)
         {
             bool isGlobalVisibility = model.caseFieldSettings.IsFieldVisible(caseFieldName);
-            bool isLocalVisibility = model.CaseSolutionSettingModels.Single(x => x.CaseSolutionField == caseTemplateFieldName).CaseSolutionMode != CaseSolutionModes.Hide;
+            //bool isLocalVisibility = model.CaseSolutionSettingModels.Single(x => x.CaseSolutionField == caseTemplateFieldName).CaseSolutionMode != CaseSolutionModes.Hide;
+
+            var fieldSetting = model.CaseSolutionSettingModels.FirstOrDefault(x => x.CaseSolutionField == caseTemplateFieldName);
+            bool isLocalVisibility = (fieldSetting == null) ? false : fieldSetting.CaseSolutionMode != CaseSolutionModes.Hide;           
 
             if (!isGlobalVisibility || !isLocalVisibility)
             {
                 return false;
             }
 
-            bool isReadOnly = model.CaseSolutionSettingModels.Single(x => x.CaseSolutionField == caseTemplateFieldName).CaseSolutionMode == CaseSolutionModes.ReadOnly;
+            //bool isReadOnly = model.CaseSolutionSettingModels.Single(x => x.CaseSolutionField == caseTemplateFieldName).CaseSolutionMode == CaseSolutionModes.ReadOnly;
+            bool isReadOnly = fieldSetting.CaseSolutionMode == CaseSolutionModes.ReadOnly;
 
             return isReadOnly;
         }
 
         public static bool IsReadOnly(this CaseInputViewModel model, CaseSolutionFields caseTemplateFieldName)
         {
-            bool isLocalVisibility = model.CaseSolutionSettingModels.Single(x => x.CaseSolutionField == caseTemplateFieldName).CaseSolutionMode != CaseSolutionModes.Hide;
+            //bool isLocalVisibility = model.CaseSolutionSettingModels.Single(x => x.CaseSolutionField == caseTemplateFieldName).CaseSolutionMode != CaseSolutionModes.Hide;
+
+            var fieldSetting = model.CaseSolutionSettingModels.FirstOrDefault(x => x.CaseSolutionField == caseTemplateFieldName);
+            bool isLocalVisibility = (fieldSetting == null) ? false : fieldSetting.CaseSolutionMode != CaseSolutionModes.Hide;
 
             if (!isLocalVisibility)
             {
                 return false;
             }
 
-            bool isReadOnly = model.CaseSolutionSettingModels.Single(x => x.CaseSolutionField == caseTemplateFieldName).CaseSolutionMode == CaseSolutionModes.ReadOnly;
+            //bool isReadOnly = model.CaseSolutionSettingModels.Single(x => x.CaseSolutionField == caseTemplateFieldName).CaseSolutionMode == CaseSolutionModes.ReadOnly;
+            bool isReadOnly = fieldSetting.CaseSolutionMode == CaseSolutionModes.ReadOnly;
 
             return isReadOnly;
         }
@@ -118,7 +132,10 @@
         public static bool IsRequired(this CaseInputViewModel model, GlobalEnums.TranslationCaseFields caseFieldName, CaseSolutionFields caseTemplateFieldName)
         {
             bool isGlobalVisibility = model.caseFieldSettings.IsFieldVisible(caseFieldName);
-            bool isLocalVisibility = model.CaseSolutionSettingModels.Single(x => x.CaseSolutionField == caseTemplateFieldName).CaseSolutionMode != CaseSolutionModes.Hide;
+            //bool isLocalVisibility = model.CaseSolutionSettingModels.Single(x => x.CaseSolutionField == caseTemplateFieldName).CaseSolutionMode != CaseSolutionModes.Hide;
+
+            var fieldSetting = model.CaseSolutionSettingModels.FirstOrDefault(x => x.CaseSolutionField == caseTemplateFieldName);
+            bool isLocalVisibility = (fieldSetting == null) ? false : fieldSetting.CaseSolutionMode != CaseSolutionModes.Hide;
 
             if (!isGlobalVisibility || !isLocalVisibility)
             {
