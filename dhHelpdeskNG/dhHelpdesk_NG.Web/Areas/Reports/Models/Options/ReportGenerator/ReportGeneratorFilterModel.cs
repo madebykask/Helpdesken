@@ -3,7 +3,9 @@
     using System;
     using System.Collections.Generic;
 
+    using DH.Helpdesk.BusinessData.Enums.Case.Fields;
     using DH.Helpdesk.BusinessData.Models.Shared.Input;
+    using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class ReportGeneratorFilterModel
@@ -57,7 +59,13 @@
 
         public static ReportGeneratorFilterModel CreateDefault()
         {
-            return new ReportGeneratorFilterModel { RecordsOnPage = 100 };
+            return new ReportGeneratorFilterModel
+                       {
+                           SortField = new SortField(CaseInfoFields.Case, SortBy.Ascending),
+                           RecordsOnPage = 100,
+                           PeriodFrom = DateTime.Today.AddMonths(-1),
+                           PeriodUntil = DateTime.Today
+                       };
         }
     }
 }

@@ -79,27 +79,36 @@
             return canExcel;
         }
 
+        var isPrint = $('#IsPrint');
+        var isExcel = $('#IsExcel');
+        var reportForm = $('#reportForm');
+        var showReportLoader = $('#showReportLoader');
+        var reportContainer = $("#reportContainer");
+
         var buildReport = function () {
-            $('#IsPrint').val(false);
-            $('#IsExcel').val(false);
-            var form = $('#reportForm');
-            $.post(form.attr("action"), form.serialize())
+            isPrint.val(false);
+            isExcel.val(false);
+            showReportLoader.show();
+            $.post(reportForm.attr("action"), reportForm.serialize())
             .done(function (data) {
-                $("#reportContainer").html(data);
+                reportContainer.html(data);
+            }).always(function () {
+                showReportLoader.hide();
             });
+
             return false;
         }
 
         var excelReport = function () {
-            $('#IsPrint').val(false);
-            $('#IsExcel').val(true);
-            $('#reportForm').submit();
+            isPrint.val(false);
+            isExcel.val(true);
+            reportForm.submit();
         }
 
         var printReport = function () {
-            $('#IsPrint').val(true);
-            $('#IsExcel').val(false);
-            $('#reportForm').submit();
+            isPrint.val(true);
+            isExcel.val(false);
+            reportForm.submit();
         }
 
         that.getCanPrint = getCanPrint;

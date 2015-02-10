@@ -75,6 +75,8 @@
             $("#CaseTypeId").val(val);
         });
 
+        $('#divCaseType a[value="' + $("#CaseTypeId").val() + '"]').click();
+
         window.sortGrid = function (fieldName) {
             var sortFieldName = $('#sortFieldName').val();
             if (sortFieldName == null || sortFieldName != fieldName) {

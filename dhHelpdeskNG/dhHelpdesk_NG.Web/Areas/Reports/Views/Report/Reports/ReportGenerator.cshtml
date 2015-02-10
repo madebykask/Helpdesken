@@ -33,7 +33,7 @@
     <tbody>
         @foreach (var c in Model.Cases)
         {
-            <tr onclick=" window.location.href = '@Url.Action("Edit", "Cases", new RouteValueDictionary { { "id", c.Id } })' ">
+            <tr onclick=" window.location.href = '@Url.Action("Edit", "Cases", new RouteValueDictionary { { "id", c.Id }, { "area", String.Empty } })' ">
                 @foreach(var value in c.FieldValues)
                 {
                     <td class="tdpointer">@value.Value.GetDisplayValue().ForHtmlView()</td>

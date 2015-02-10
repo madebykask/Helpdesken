@@ -1,5 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Reports.Infrastructure.Extensions
 {
+    using System;
+
     using OfficeOpenXml;
 
     public static class ExcelExtensions
@@ -39,6 +41,30 @@
         public static void SetBold(this ExcelWorksheet worksheet, int row, int column)
         {
             worksheet.Cells[row, column].Style.Font.Bold = true;
+        }
+
+        public static void AutoFit(this ExcelWorksheet worksheet, int columns)
+        {
+            for (var i = 1; i <= columns; i++)
+            {
+                worksheet.Column(i).AutoFit();
+            }
+        }
+
+        public static ExcelWorksheet AddReportWorksheet(this ExcelPackage package)
+        {
+            var ws = package.Workbook.Worksheets.Add("Report");
+            return ws;
+        }
+
+        public static string PrepareForExcel(this string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return string.Empty;
+            }
+
+            return value.Replace("<br/>", Environment.NewLine);
         }
     }
 }

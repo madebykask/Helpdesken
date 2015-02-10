@@ -195,33 +195,41 @@
         [BadRequestOnNotValid]
         public ActionResult GetReportGeneratorReport(ReportGeneratorOptionsModel options)
         {
-            var filters = options != null
-                        ? options.GetFilter()
-                        : SessionFacade.FindPageFilters<ReportGeneratorFilterModel>(PageName.OrdersOrders);
-
-            SessionFacade.SavePageFilters(PageName.OrdersOrders, filters);
-            var data = this.reportService.GetReportGeneratorData(
-                                this.OperationContext.CustomerId,
-                                this.OperationContext.LanguageId,
-                                filters.FieldIds,
-                                filters.DepartmentIds,
-                                filters.WorkingGroupIds,
-                                filters.CaseTypeId,
-                                filters.PeriodFrom,
-                                filters.PeriodUntil,
-                                string.Empty,
-                                filters.SortField,
-                                filters.RecordsOnPage);
-
-            if (options != null && options.IsExcel)
+            try
             {
-                var excel = this.excelBuilder.GetReportGeneratorExcel(data);
-                return new UnicodeFileContentResult(excel, this.excelBuilder.GetExcelFileName(ReportType.ReportGenerator));
+                var filters = options != null
+                                        ? options.GetFilter()
+                                        : SessionFacade.FindPageFilters<ReportGeneratorFilterModel>(PageName.ReportsReportGenerator);
+
+                SessionFacade.SavePageFilters(PageName.ReportsReportGenerator, filters);
+                var data = this.reportService.GetReportGeneratorData(
+                                    this.OperationContext.CustomerId,
+                                    this.OperationContext.LanguageId,
+                                    filters.FieldIds,
+                                    filters.DepartmentIds,
+                                    filters.WorkingGroupIds,
+                                    filters.CaseTypeId,
+                                    filters.PeriodFrom,
+                                    filters.PeriodUntil,
+                                    string.Empty,
+                                    filters.SortField,
+                                    filters.RecordsOnPage);
+
+                var model = this.reportGeneratorModelFactory.GetReportGeneratorModel(data, filters.SortField);
+
+                if (options != null && options.IsExcel)
+                {
+                    var excel = this.excelBuilder.GetReportGeneratorExcel(model);
+                    return new UnicodeFileContentResult(excel, this.excelBuilder.GetExcelFileName(ReportType.ReportGenerator));
+                }
+
+                return this.PartialView("Reports/ReportGenerator", model);
             }
-
-            var model = this.reportGeneratorModelFactory.GetReportGeneratorModel(data, filters.SortField);
-
-            return this.PartialView("Reports/ReportGenerator", model);
+            catch (Exception)
+            {
+                SessionFacade.SavePageFilters(PageName.ReportsReportGenerator, ReportGeneratorFilterModel.CreateDefault());
+                throw;
+            }            
         }
     }
 }

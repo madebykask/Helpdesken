@@ -787,6 +787,11 @@
                     break;
             }
 
+            if (query is IOrderedQueryable)
+            {
+                query = ((IOrderedQueryable<Case>)query).ThenBy(c => c.Logs.Count);                
+            }
+
             return query;
         }
 

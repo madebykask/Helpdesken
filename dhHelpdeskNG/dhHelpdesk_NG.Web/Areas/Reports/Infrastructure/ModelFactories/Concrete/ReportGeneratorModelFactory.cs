@@ -24,6 +24,7 @@
             var departments = WebMvcHelper.CreateMultiSelectField(options.Departments, filters.DepartmentIds);
             var workingGroups = WebMvcHelper.CreateMultiSelectField(options.WorkingGroups, filters.WorkingGroupIds);
             var caseTypes = options.CaseTypes;
+            var caseTypeId = filters.CaseTypeId;
             var periodFrom = filters.PeriodFrom.HasValue ? filters.PeriodFrom.Value : DateTime.Today.AddMonths(-1);
             var periodUntil = filters.PeriodUntil.HasValue ? filters.PeriodUntil.Value : DateTime.Today;
 
@@ -39,6 +40,7 @@
                                     departments,
                                     workingGroups,
                                     caseTypes,
+                                    caseTypeId,
                                     periodFrom,
                                     periodUntil,
                                     filters.RecordsOnPage,
@@ -228,7 +230,7 @@
             var debiting = fields.Logs.Select(l => l.Debiting.BoolToYesNo()).ToArray();
             var attachedFiles = fields.Logs.Select(l => l.AttachedFile).ToArray();
             var finishingDescription = fields.Logs.Select(l => l.FinishingDescription).ToArray();
-            var finishingDate = fields.Logs.Select(l => l.FinishingDate.ToString()).ToArray();
+            var finishingDate = fields.Logs.Select(l => l.FinishingDate.HasValue ? l.FinishingDate.Value.ToShortDateString() : string.Empty).ToArray();
             var finishingCause = fields.Logs.Select(l => l.FinishingCause).ToArray();
 
             FieldSettingsHelper.CreateValueIfNeeded(settings.InternalLogNote, LogFields.InternalLogNote, internalLogNotes, values);

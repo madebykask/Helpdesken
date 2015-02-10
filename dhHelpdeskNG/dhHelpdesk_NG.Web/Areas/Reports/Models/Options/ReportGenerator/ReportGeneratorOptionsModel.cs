@@ -24,6 +24,7 @@
                 MultiSelectList departments, 
                 MultiSelectList workingGroups, 
                 List<CaseTypeItem> caseTypes,
+                int? caseTypeId,
                 DateTime periodFrom,
                 DateTime periodUntil, 
                 int recordsOnPage,
@@ -37,6 +38,7 @@
             this.Fields = fields;
             this.PeriodFrom = periodFrom;
             this.PeriodUntil = periodUntil;
+            this.CaseTypeId = caseTypeId;
         }
 
         [NotNull]
