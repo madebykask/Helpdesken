@@ -66,6 +66,7 @@ namespace DH.Helpdesk.Domain
         public DateTime? WatchDate { get; set; }
         public DateTime? FinishingDate { get; set; }
         public string FinishingDescription { get; set; }
+        public int SMS { get; set; }
 
         public virtual CaseSolutionCategory CaseSolutionCategory { get; set; }
         public virtual CaseSolutionSchedule CaseSolutionSchedule { get; set; }
