@@ -455,9 +455,13 @@ namespace DH.Helpdesk.Web.Controllers
                                     CaseLog caseLog, 
                                     CaseMailSetting caseMailSetting,
                                     bool? updateNotifierInformation,
-                                    string caseInvoiceArticles)
+                                    string caseInvoiceArticles,
+                                    int? templateId)
         {
             int caseId = this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation, caseInvoiceArticles);
+
+            CheckTemplateParameters(templateId, caseId);
+
             return this.RedirectToAction("edit", "cases", new { id = caseId, redirectFrom = "save", uni = updateNotifierInformation });
         }
 
@@ -468,9 +472,13 @@ namespace DH.Helpdesk.Web.Controllers
                                     CaseLog caseLog, 
                                     CaseMailSetting caseMailSetting,
                                     bool? updateNotifierInformation,
-                                    string caseInvoiceArticles)
+                                    string caseInvoiceArticles,
+                                    int? templateId)
         {
-            this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation, caseInvoiceArticles);
+            int caseId = this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation, caseInvoiceArticles);
+
+            CheckTemplateParameters(templateId, caseId);
+
             return this.RedirectToAction("index", "cases", new { customerId = case_.Customer_Id });
         }
 
@@ -481,9 +489,13 @@ namespace DH.Helpdesk.Web.Controllers
                                     CaseLog caseLog,
                                     CaseMailSetting caseMailSetting,
                                     bool? updateNotifierInformation,
-                                    string caseInvoiceArticles)
+                                    string caseInvoiceArticles,
+                                    int? templateId)
         {
-            this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation, caseInvoiceArticles);
+            int caseId = this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation, caseInvoiceArticles);
+
+            CheckTemplateParameters(templateId, caseId);
+
             return this.RedirectToAction("new", "cases", new { customerId = case_.Customer_Id });
         }
 
@@ -1323,6 +1335,21 @@ namespace DH.Helpdesk.Web.Controllers
         #endregion
 
         #region Private Methods and Operators
+
+        private void CheckTemplateParameters(int? templateId, int caseId)
+        {
+            if(templateId.HasValue)
+            {
+                // check template parameters
+                var template = _caseSolutionService.GetCaseSolution(templateId.Value);
+
+                // if formGuid this indicates that we want to initate a form by this guid.
+                if(template.FormGUID.HasValue)
+                {
+                    _caseSolutionService.SaveEmptyForm(template.FormGUID.Value, caseId);
+                }
+            }
+        }
 
         private RouteValueDictionary ExtractPreviousRouteInfo()
         {

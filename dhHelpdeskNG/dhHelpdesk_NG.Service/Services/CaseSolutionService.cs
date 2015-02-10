@@ -29,6 +29,7 @@ namespace DH.Helpdesk.Services.Services
         List<CaseTemplateCategoryNode> GetCaseSolutionCategoryTree(int customerId, int userId);
         void SaveCaseSolution(CaseSolution caseSolution, CaseSolutionSchedule caseSolutionSchedule, IList<CaseFieldSetting> CaseFieldSetting, out IDictionary<string, string> errors);
         void SaveCaseSolutionCategory(CaseSolutionCategory caseSolutionCategory, out IDictionary<string, string> errors);
+        void SaveEmptyForm(Guid formGuid, int caseId);
         void Commit();
     }
 
@@ -39,6 +40,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly ICaseSolutionScheduleRepository _caseSolutionScheduleRepository;
 
         private readonly ICaseSolutionSettingRepository caseSolutionSettingRepository;
+        private readonly IFormRepository _formRepository;
 
         private readonly IUnitOfWork _unitOfWork;
 
@@ -47,12 +49,14 @@ namespace DH.Helpdesk.Services.Services
             ICaseSolutionCategoryRepository caseSolutionCategoryRepository,
             ICaseSolutionScheduleRepository caseSolutionScheduleRepository,
             ICaseSolutionSettingRepository caseSolutionSettingRepository,
+            IFormRepository formRepository,
             IUnitOfWork unitOfWork)
         {
             this._caseSolutionRepository = caseSolutionRepository;
             this._caseSolutionCategoryRepository = caseSolutionCategoryRepository;
             this._caseSolutionScheduleRepository = caseSolutionScheduleRepository;
             this.caseSolutionSettingRepository = caseSolutionSettingRepository;
+            _formRepository = formRepository;
             this._unitOfWork = unitOfWork;
         }
 
@@ -392,7 +396,6 @@ namespace DH.Helpdesk.Services.Services
 
         }
 
-
         public void SaveCaseSolutionCategory(CaseSolutionCategory caseSolutionCategory, out IDictionary<string, string> errors)
         {
             if (caseSolutionCategory == null)
@@ -414,6 +417,11 @@ namespace DH.Helpdesk.Services.Services
 
             if (errors.Count == 0)
                 this.Commit();
+        }
+
+        public void SaveEmptyForm(Guid formGuid, int caseId)
+        {
+            _formRepository.SaveEmptyForm(formGuid, caseId);
         }
 
         public void Commit()
