@@ -63,6 +63,7 @@
 
         ReportGeneratorData GetReportGeneratorData(
                                     int customerId,
+                                    int languageId,
                                     List<int> fieldIds,
                                     List<int> departmentIds,
                                     List<int> workingGroupIds,

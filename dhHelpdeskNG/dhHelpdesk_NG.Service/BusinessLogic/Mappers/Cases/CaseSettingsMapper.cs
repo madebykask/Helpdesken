@@ -187,6 +187,11 @@
 
         private static FieldOverviewSetting CreateFieldSetting(CaseSettingsMapData fieldSetting)
         {
+            if (fieldSetting == null)
+            {
+                return FieldOverviewSetting.CreateUnshowable();
+            }
+
             return new FieldOverviewSetting(fieldSetting.IsShow(), fieldSetting.GetFieldCaption());
         }
     }

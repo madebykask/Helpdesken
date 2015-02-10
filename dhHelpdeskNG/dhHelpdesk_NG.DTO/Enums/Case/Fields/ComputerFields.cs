@@ -1,6 +1,6 @@
 ﻿namespace DH.Helpdesk.BusinessData.Enums.Case.Fields
 {
-    internal static class ComputerFields
+    public static class ComputerFields
     {
         public const string PcNumber = "InventoryNumber";
 

@@ -1,6 +1,6 @@
 ﻿namespace DH.Helpdesk.BusinessData.Enums.Case.Fields
 {
-    internal static class OtherFields
+    public static class OtherFields
     {
         public const string WorkingGroup = "WorkingGroup_Id";
 

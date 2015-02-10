@@ -49,7 +49,7 @@
                                                              l => l.Text_Internal + separator +
                                                                     l.Text_External + separator +                                                                     
                                                                     l.Charge + separator +
-                                                                    l.LogFiles.First().FileName + separator +
+                                                                    l.LogFiles.FirstOrDefault().FileName + separator +
                                                                     l.FinishingDate + separator +
                                                                     l.FinishingTypeEntity.Name),
                                                         c => c.User.FirstName,

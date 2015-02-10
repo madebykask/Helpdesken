@@ -1,6 +1,6 @@
 ﻿namespace DH.Helpdesk.BusinessData.Enums.Case.Fields
 {
-    internal static class CaseInfoFields
+    public static class CaseInfoFields
     {
         public const string Case = "CaseNumber";
 

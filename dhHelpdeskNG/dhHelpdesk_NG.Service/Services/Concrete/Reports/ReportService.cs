@@ -18,6 +18,7 @@
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Cases;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Reports;
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Case;
@@ -231,6 +232,7 @@
 
         public ReportGeneratorData GetReportGeneratorData(
             int customerId,
+            int languageId,
             List<int> fieldIds,
             List<int> departmentIds,
             List<int> workingGroupIds,
@@ -244,7 +246,13 @@
             using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
             {
                 var caseRep = uow.GetRepository<Case>();
-                var fieldRep = uow.GetRepository<CaseFieldSetting>();                
+                var fieldRep = uow.GetRepository<CaseFieldSetting>();
+
+                var settings = fieldRep.GetAll()
+                            .GetByNullableCustomer(customerId)
+                            .GetByIds(fieldIds)
+                            .GetShowable()
+                            .MapToCaseSettings(languageId);
 
                 var caseTypeIds = new List<int>();
                 if (caseTypeId.HasValue)
@@ -261,9 +269,10 @@
                                     periodUntil,
                                     text,
                                     sort,
-                                    selectCount);
+                                    selectCount)
+                                    .MapToCaseOverviews();
 
-                return ReportsMapper.MapToReportGeneratorData();
+                return new ReportGeneratorData(settings, overviews);
             }
         }
 

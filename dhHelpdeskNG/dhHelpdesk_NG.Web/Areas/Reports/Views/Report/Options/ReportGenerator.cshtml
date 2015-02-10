@@ -1,9 +1,11 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Web.Infrastructure.Extensions
-@model DH.Helpdesk.Web.Areas.Reports.Models.Options.ReportGeneratorOptionsModel
+@model DH.Helpdesk.Web.Areas.Reports.Models.Options.ReportGenerator.ReportGeneratorOptionsModel
 
 @using (Html.BeginForm("GetReportGeneratorReport", "Report", null, FormMethod.Post, new { id = "reportForm" }))
 {
+    @Html.HiddenFor(m => m.SortField.Name, new { id = "sortFieldName" })
+    @Html.HiddenFor(m => m.SortField.SortBy, new { id = "sortFieldBy" })
     @Html.HiddenFor(m => m.IsExcel)
     <table class="tableform">    
         <tr>
@@ -72,5 +74,21 @@
             $("#caseTypeText").text(getBreadcrumbs(this));
             $("#CaseTypeId").val(val);
         });
+
+        window.sortGrid = function (fieldName) {
+            var sortFieldName = $('#sortFieldName').val();
+            if (sortFieldName == null || sortFieldName != fieldName) {
+                $('#sortFieldName').val(fieldName);
+                $('#sortFieldBy').val(sortBy.ASCENDING);
+            } else {
+                if ($('#sortFieldBy').val() == sortBy.ASCENDING) {
+                    $('#sortFieldBy').val(sortBy.DESCENDING);
+                } else {
+                    $('#sortFieldBy').val(sortBy.ASCENDING);
+                }
+            }
+
+            $("#showReport").click();
+        };
     })
 </script>

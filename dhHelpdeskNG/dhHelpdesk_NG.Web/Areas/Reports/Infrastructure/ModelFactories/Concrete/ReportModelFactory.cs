@@ -7,7 +7,6 @@
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
-    using DH.Helpdesk.BusinessData.Models.Reports.Data.ReportGenerator;
     using DH.Helpdesk.BusinessData.Models.Reports.Enums;
     using DH.Helpdesk.BusinessData.Models.Reports.Options;
     using DH.Helpdesk.BusinessData.Models.Shared;
@@ -44,10 +43,10 @@
                                       ((int)ReportType.CaseTypeArticleNo).ToString(CultureInfo.InvariantCulture)),
                                   new ItemOverview(
                                       ReportUtils.GetReportName(ReportType.CaseSatisfaction),
-                                      ((int)ReportType.CaseSatisfaction).ToString(CultureInfo.InvariantCulture))/*,
+                                      ((int)ReportType.CaseSatisfaction).ToString(CultureInfo.InvariantCulture)),
                                   new ItemOverview(
                                       ReportUtils.GetReportName(ReportType.ReportGenerator),
-                                      ((int)ReportType.ReportGenerator).ToString(CultureInfo.InvariantCulture))*/
+                                      ((int)ReportType.ReportGenerator).ToString(CultureInfo.InvariantCulture))
                               };
 
             return new ReportsOptions(WebMvcHelper.CreateListField(reports.OrderBy(r => r.Name), null, false));
@@ -130,31 +129,6 @@
             this.reportsBuilder.CreateCaseSatisfactionReport(response.GoodVotes, response.NormalVotes, response.BadVotes, response.Count, out file);
             var instance = new CaseSatisfactionReport(response.GoodVotes, response.NormalVotes, response.BadVotes, response.Count, file);
             return instance;
-        }
-
-        public ReportGeneratorOptionsModel GetReportGeneratorOptionsModel(ReportGeneratorOptions options)
-        {
-            var fields = WebMvcHelper.CreateMultiSelectField(options.Fields);
-            var departments = WebMvcHelper.CreateMultiSelectField(options.Departments);
-            var workingGroups = WebMvcHelper.CreateMultiSelectField(options.WorkingGroups);
-            var caseTypes = options.CaseTypes;
-            var periodFrom = DateTime.Today.AddMonths(-1);
-            var periodUntil = DateTime.Today;
-
-            return new ReportGeneratorOptionsModel(
-                                    fields,
-                                    departments,
-                                    workingGroups,
-                                    caseTypes,
-                                    periodFrom,
-                                    periodUntil,
-                                    0,
-                                    null);
-        }
-
-        public ReportGeneratorModel GetReportGeneratorModel(ReportGeneratorData data)
-        {
-            return new ReportGeneratorModel(data);
         }
     }
 }

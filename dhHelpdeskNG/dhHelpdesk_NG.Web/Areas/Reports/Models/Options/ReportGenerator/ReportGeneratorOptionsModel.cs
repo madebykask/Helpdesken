@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Areas.Reports.Models.Options
+﻿namespace DH.Helpdesk.Web.Areas.Reports.Models.Options.ReportGenerator
 {
     using System;
     using System.Collections.Generic;
@@ -8,13 +8,12 @@
     using DH.Helpdesk.BusinessData.Models.Shared.Input;
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+    using DH.Helpdesk.Web.Models.Shared;
 
     public sealed class ReportGeneratorOptionsModel
     {
-        public ReportGeneratorOptionsModel(int recordsOnPage, SortField sortField)
+        public ReportGeneratorOptionsModel()
         {
-            this.SortField = sortField;
-            this.RecordsOnPage = recordsOnPage;
             this.FieldIds = new List<int>();
             this.DepartmentIds = new List<int>();
             this.WorkingGroupIds = new List<int>();            
@@ -27,8 +26,8 @@
                 List<CaseTypeItem> caseTypes,
                 DateTime periodFrom,
                 DateTime periodUntil, 
-                int recordsOnPage, 
-                SortField sortField)
+                int recordsOnPage,
+                SortFieldModel sortField)
         {
             this.SortField = sortField;
             this.RecordsOnPage = recordsOnPage;
@@ -74,9 +73,31 @@
 
         public bool IsExcel { get; set; }
 
-        [MinValue(0)]
-        public int RecordsOnPage { get; private set; }
+        [LocalizedDisplay("poster per sida")]
+        [LocalizedInteger]
+        [LocalizedMin(0)]
+        public int RecordsOnPage { get; set; }
 
-        public SortField SortField { get; private set; }
+        public SortFieldModel SortField { get; set; }
+
+        public ReportGeneratorFilterModel GetFilter()
+        {
+            SortField sortField = null;
+
+            if (!string.IsNullOrEmpty(this.SortField.Name) && this.SortField.SortBy != null)
+            {
+                sortField = new SortField(this.SortField.Name, this.SortField.SortBy.Value);
+            }
+
+            return new ReportGeneratorFilterModel(
+                        this.FieldIds,
+                        this.DepartmentIds,
+                        this.WorkingGroupIds,
+                        this.CaseTypeId,
+                        this.PeriodFrom,
+                        this.PeriodUntil,
+                        this.RecordsOnPage,
+                        sortField);
+        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace DH.Helpdesk.BusinessData.Enums.Case.Fields
 {
-    internal static class LogFields
+    public static class LogFields
     {
         public const string InternalLogNote = "tblLog.Text_Internal";
 

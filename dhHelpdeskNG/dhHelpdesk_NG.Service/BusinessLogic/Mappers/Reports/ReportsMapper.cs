@@ -6,7 +6,6 @@
     using DH.Helpdesk.BusinessData.Models.ProductArea;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.RegistratedCasesDay;
-    using DH.Helpdesk.BusinessData.Models.Reports.Data.ReportGenerator;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.ProductArea;
 
@@ -102,11 +101,6 @@
             }
 
             return new CaseTypeArticleNoData(caseTypesData, productAreasData.Where(a => a.Parent == null).ToList());
-        }
-
-        public static ReportGeneratorData MapToReportGeneratorData()
-        {
-            return new ReportGeneratorData();
         }
     }
 }

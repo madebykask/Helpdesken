@@ -1496,6 +1496,8 @@
     <Compile Include="Areas\Reports\Infrastructure\IExcelBuilder.cs" />
     <Compile Include="Areas\Reports\Infrastructure\IPrintBuilder.cs" />
     <Compile Include="Areas\Reports\Infrastructure\IReportsBuilder.cs" />
+    <Compile Include="Areas\Reports\Infrastructure\ModelFactories\Concrete\ReportGeneratorModelFactory.cs" />
+    <Compile Include="Areas\Reports\Infrastructure\ModelFactories\IReportGeneratorModelFactory.cs" />
     <Compile Include="Areas\Reports\Infrastructure\ModelFactories\Concrete\ReportModelFactory.cs" />
     <Compile Include="Areas\Reports\Infrastructure\ModelFactories\IReportModelFactory.cs" />
     <Compile Include="Areas\Reports\Infrastructure\ReportFile.cs" />
@@ -1505,12 +1507,14 @@
     <Compile Include="Areas\Reports\Models\Options\CaseSatisfactionOptions.cs" />
     <Compile Include="Areas\Reports\Models\Options\CaseTypeArticleNoOptionsModel.cs" />
     <Compile Include="Areas\Reports\Models\Options\RegistratedCasesDayOptionsModel.cs" />
-    <Compile Include="Areas\Reports\Models\Options\ReportGeneratorOptionsModel.cs" />
+    <Compile Include="Areas\Reports\Models\Options\ReportGenerator\ReportGeneratorFilterModel.cs" />
+    <Compile Include="Areas\Reports\Models\Options\ReportGenerator\ReportGeneratorOptionsModel.cs" />
     <Compile Include="Areas\Reports\Models\Options\ReportsFilterModel.cs" />
     <Compile Include="Areas\Reports\Models\Options\ReportsOptions.cs" />
     <Compile Include="Areas\Reports\Models\Reports\CaseSatisfactionReport.cs" />
     <Compile Include="Areas\Reports\Models\Reports\CaseTypeArticleNoModel.cs" />
-    <Compile Include="Areas\Reports\Models\Reports\ReportGeneratorModel.cs" />
+    <Compile Include="Areas\Reports\Models\Reports\ReportGenerator\CaseOverviewModel.cs" />
+    <Compile Include="Areas\Reports\Models\Reports\ReportGenerator\ReportGeneratorModel.cs" />
     <Compile Include="Areas\Reports\ReportsAreaRegistration.cs" />
     <Compile Include="Controllers\AboutController.cs" />
     <Compile Include="Controllers\AjaxController.cs" />
@@ -1695,6 +1699,7 @@
     <Compile Include="Infrastructure\Print\PrintPdfView.cs" />
     <Compile Include="Infrastructure\Tools\Concrete\InvoiceHelper.cs" />
     <Compile Include="Infrastructure\Tools\EncryptionHelper.cs" />
+    <Compile Include="Infrastructure\Tools\FieldSettingsHelper.cs" />
     <Compile Include="Infrastructure\Tools\IInvoiceHelper.cs" />
     <Compile Include="Infrastructure\Tools\MimeHelper.cs" />
     <Compile Include="Infrastructure\Tools\WebMvcHelper.cs" />

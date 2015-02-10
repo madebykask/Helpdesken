@@ -10,6 +10,7 @@
     using DH.Helpdesk.Web.Areas.Reports.Infrastructure;
     using DH.Helpdesk.Web.Areas.Reports.Infrastructure.ModelFactories;
     using DH.Helpdesk.Web.Areas.Reports.Models.Options;
+    using DH.Helpdesk.Web.Areas.Reports.Models.Options.ReportGenerator;
     using DH.Helpdesk.Web.Controllers;
     using DH.Helpdesk.Web.Enums;
     using DH.Helpdesk.Web.Infrastructure;
@@ -21,6 +22,8 @@
     public sealed class ReportController : UserInteractionController
     {
         private readonly IReportModelFactory reportModelFactory;
+
+        private readonly IReportGeneratorModelFactory reportGeneratorModelFactory;
 
         private readonly IReportService reportService;
 
@@ -36,7 +39,8 @@
             IReportService reportService, 
             IReportsBuilder reportsBuilder, 
             IPrintBuilder printBuilder, 
-            IExcelBuilder excelBuilder)
+            IExcelBuilder excelBuilder, 
+            IReportGeneratorModelFactory reportGeneratorModelFactory)
             : base(masterDataService)
         {
             this.reportModelFactory = reportModelFactory;
@@ -44,6 +48,7 @@
             this.reportsBuilder = reportsBuilder;
             this.printBuilder = printBuilder;
             this.excelBuilder = excelBuilder;
+            this.reportGeneratorModelFactory = reportGeneratorModelFactory;
         }
 
         [HttpGet]
@@ -83,10 +88,14 @@
                                 this.reportModelFactory.CreateCaseSatisfactionOptions(this.OperationContext));
 
                 case ReportType.ReportGenerator:
+                    var reportGeneratorFilters = SessionFacade.FindPageFilters<ReportGeneratorFilterModel>(PageName.ReportsReportGenerator)
+                                                 ?? ReportGeneratorFilterModel.CreateDefault();
+
+                    SessionFacade.SavePageFilters(PageName.ReportsReportGenerator, reportGeneratorFilters);
                     var reportGeneratorOptions = this.reportService.GetReportGeneratorOptions(this.OperationContext.CustomerId, this.OperationContext.LanguageId);
                     return this.PartialView(
                                 "Options/ReportGenerator",
-                                this.reportModelFactory.GetReportGeneratorOptionsModel(reportGeneratorOptions));
+                                this.reportGeneratorModelFactory.GetReportGeneratorOptionsModel(reportGeneratorOptions, reportGeneratorFilters));
             }
 
             return null;
@@ -186,25 +195,31 @@
         [BadRequestOnNotValid]
         public ActionResult GetReportGeneratorReport(ReportGeneratorOptionsModel options)
         {
+            var filters = options != null
+                        ? options.GetFilter()
+                        : SessionFacade.FindPageFilters<ReportGeneratorFilterModel>(PageName.OrdersOrders);
+
+            SessionFacade.SavePageFilters(PageName.OrdersOrders, filters);
             var data = this.reportService.GetReportGeneratorData(
                                 this.OperationContext.CustomerId,
-                                options.FieldIds,
-                                options.DepartmentIds,
-                                options.WorkingGroupIds,
-                                options.CaseTypeId,
-                                options.PeriodFrom,
-                                options.PeriodUntil,
+                                this.OperationContext.LanguageId,
+                                filters.FieldIds,
+                                filters.DepartmentIds,
+                                filters.WorkingGroupIds,
+                                filters.CaseTypeId,
+                                filters.PeriodFrom,
+                                filters.PeriodUntil,
                                 string.Empty,
-                                options.SortField,
-                                options.RecordsOnPage);
+                                filters.SortField,
+                                filters.RecordsOnPage);
 
-            if (options.IsExcel)
+            if (options != null && options.IsExcel)
             {
                 var excel = this.excelBuilder.GetReportGeneratorExcel(data);
                 return new UnicodeFileContentResult(excel, this.excelBuilder.GetExcelFileName(ReportType.ReportGenerator));
             }
 
-            var model = this.reportModelFactory.GetReportGeneratorModel(data);
+            var model = this.reportGeneratorModelFactory.GetReportGeneratorModel(data, filters.SortField);
 
             return this.PartialView("Reports/ReportGenerator", model);
         }

@@ -12,6 +12,7 @@
         public override void Load()
         {
             this.Bind<IReportModelFactory>().To<ReportModelFactory>().InSingletonScope();
+            this.Bind<IReportGeneratorModelFactory>().To<ReportGeneratorModelFactory>().InSingletonScope();
             this.Bind<IReportsBuilder>().To<ReportsBuilder>().InSingletonScope();
             this.Bind<IPrintBuilder>().To<PrintBuilder>().InSingletonScope();
             this.Bind<IExcelBuilder>().To<ExcelBuilder>().InSingletonScope();
