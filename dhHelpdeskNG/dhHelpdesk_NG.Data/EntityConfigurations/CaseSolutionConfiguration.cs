@@ -97,6 +97,7 @@
             this.Property(x => x.TemplatePath).IsOptional();
             this.Property(x => x.ShowInSelfService).IsRequired();
             this.Property(x => x.OrderNum).IsOptional();
+            this.Property(x => x.FormGUID).IsOptional();
 
             this.ToTable("tblcasesolution");
         }
