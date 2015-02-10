@@ -27,7 +27,7 @@ namespace DH.Helpdesk.Web.Models
         {
             Assembly assembly = Assembly.LoadFrom(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin\\DH.Helpdesk.Web.dll"));
             Version ver = assembly.GetName().Version;            
-            return ver.Major.ToString() + '.' + ver.Minor + '.' + ver.Build.ToString();            
+            return string.Format("{0}.{1}.{2}.{3}", ver.Major, ver.Minor, ver.Build, ver.Revision);            
         }
 
         public bool IsAdministrator()
