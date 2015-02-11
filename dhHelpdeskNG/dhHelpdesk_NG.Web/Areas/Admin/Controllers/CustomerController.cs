@@ -367,14 +367,14 @@
 
             #region Generals
 
-            var usSelected = customer.Users ?? new List<User>();
+            var usSelected = customer.Id != 0 ? this._userService.GetCustomerActiveUsers(customer.Id) : new List<User>();
             var usAvailable = new List<User>();
 
             if (customer.Id != 0)
             {
-                foreach (var us in this._userService.GetUsers())
+                foreach (var us in this._userService.GetActiveUsers())
                 {
-                    if (!usSelected.Contains(us))
+                    if (!usSelected.Select(u => u.Id).Contains(us.Id))
                         usAvailable.Add(us);
                 }
             }

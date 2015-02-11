@@ -35,6 +35,15 @@
                 .Where(u => u.Email != string.Empty);
 
             return query;
+        }
+
+        public static IQueryable<User> GetOrderedByName(this IQueryable<User> query)
+        {
+            query = query
+                    .OrderBy(u => u.SurName)
+                    .ThenBy(u => u.FirstName);
+
+            return query;
         } 
     }
 }

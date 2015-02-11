@@ -13,11 +13,17 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.BusinessData.Models.User.Input;
     using DH.Helpdesk.Common.Extensions.String;
-    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Accounts;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Users;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications;
     using DH.Helpdesk.Services.Localization;
+
+    using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
+
+    using DH.Helpdesk.Services.BusinessLogic.Specifications.User;
 
     public interface IUserService
     {
@@ -109,6 +115,10 @@ namespace DH.Helpdesk.Services.Services
         List<ItemOverview> FindActiveOverviews(int customerId);
 
         ItemOverview FindActiveOverview(int userId);
+
+        List<User> GetActiveUsers();
+
+        List<User> GetCustomerActiveUsers(int customerId);
     }
 
     public class UserService : IUserService
@@ -129,6 +139,8 @@ namespace DH.Helpdesk.Services.Services
         private readonly IModuleRepository _moduleRepository;
         private readonly IUserModuleRepository _userModuleRepository;
 
+        private readonly IUnitOfWorkFactory unitOfWorkFactory;
+
         public UserService(
             IAccountActivityRepository accountActivityRepository,
             ICustomerRepository customerRepository,
@@ -144,7 +156,8 @@ namespace DH.Helpdesk.Services.Services
             ILogProgramRepository logprogramRepository,
             ICaseSettingRepository casesettingRepository,
             IModuleRepository moduleRepository,
-            IUserModuleRepository userModuleRepository)
+            IUserModuleRepository userModuleRepository, 
+            IUnitOfWorkFactory unitOfWorkFactory)
         {
             this._accountActivityRepository = accountActivityRepository;
             this._customerRepository = customerRepository;
@@ -161,6 +174,7 @@ namespace DH.Helpdesk.Services.Services
             this._casesettingRepository = casesettingRepository;
             _moduleRepository = moduleRepository;
             _userModuleRepository = userModuleRepository;
+            this.unitOfWorkFactory = unitOfWorkFactory;
         }
 
 
@@ -725,6 +739,37 @@ namespace DH.Helpdesk.Services.Services
         public ItemOverview FindActiveOverview(int userId)
         {
             return this._userRepository.FindActiveOverview(userId);
+        }
+
+        public List<User> GetActiveUsers()
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var userRep = uow.GetRepository<User>();
+
+                var users = userRep.GetAll()
+                        .GetActive()
+                        .GetOrderedByName()
+                        .ToList();
+
+                return users;
+            }
+        }
+
+        public List<User> GetCustomerActiveUsers(int customerId)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var customerRep = uow.GetRepository<Customer>();
+                var customerUserRep = uow.GetRepository<CustomerUser>();
+                var userRep = uow.GetRepository<User>();
+
+                var customers = customerRep.GetAll().GetById(customerId);
+                var customerUsers = customerUserRep.GetAll();
+                var users = userRep.GetAll().GetActive();
+
+                return UsersMapper.MapToCustomerUsers(customers, users, customerUsers);
+            }
         }
 
         /// <summary>

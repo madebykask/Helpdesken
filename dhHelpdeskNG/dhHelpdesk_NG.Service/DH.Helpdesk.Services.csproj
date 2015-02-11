@@ -178,6 +178,7 @@
     <Compile Include="BusinessLogic\Mappers\Reports\ReportsOptionsMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Shared\Data\UnionItemOverview.cs" />
     <Compile Include="BusinessLogic\Mappers\Shared\GlobalMappers.cs" />
+    <Compile Include="BusinessLogic\Mappers\Users\UsersMapper.cs" />
     <Compile Include="BusinessLogic\Orders\Concrete\HistoriesComparator.cs" />
     <Compile Include="BusinessLogic\Orders\Concrete\OrdersLogic.cs" />
     <Compile Include="BusinessLogic\Orders\IHistoriesComparator.cs" />
