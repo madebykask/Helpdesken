@@ -8,6 +8,7 @@
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseSatisfaction;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeFinishedCases;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.RegistratedCasesDay;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.ReportGenerator;
     using DH.Helpdesk.BusinessData.Models.Reports.Enums;
@@ -15,6 +16,7 @@
     using DH.Helpdesk.BusinessData.Models.Reports.Print;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.BusinessData.Models.Shared.Input;
+    using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Domain;
@@ -383,6 +385,47 @@
                                                                 caseTypes,
                                                                 productAreas);
             }           
+        }
+
+        #endregion
+
+        #region LeadtimeFinishedCases
+
+        public LeadtimeFinishedCasesOptions GetLeadtimeFinishedCasesOptions(int customerId)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var departmentRep = uow.GetRepository<Department>();
+                var caseTypeRep = uow.GetRepository<CaseType>();
+                var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
+
+                var departments = departmentRep.GetAll().GetActiveByCustomer(customerId);
+                var caseTypes = caseTypeRep.GetAll().GetActiveByCustomer(customerId);
+                var workingGroups = workingGroupRep.GetAll().GetActiveByCustomer(customerId);
+
+                return ReportsOptionsMapper.MapToLeadtimeFinishedCasesOptions(departments, caseTypes, workingGroups);
+            }
+        }
+
+        public LeadtimeFinishedCasesData GetLeadtimeFinishedCasesData(
+            int customerId,
+            List<int> departmentIds,
+            int? caseTypeId,
+            List<int> workingGroupIds,
+            GlobalEnums.RegistrationSource registrationSource,
+            DateTime? periodFrom,
+            DateTime? periodUntil,
+            int leadTime,
+            bool isShowDetails)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var departmentRep = uow.GetRepository<Department>();
+                var caseTypeRep = uow.GetRepository<CaseType>();
+                var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
+
+                return new LeadtimeFinishedCasesData();
+            }
         }
 
         #endregion

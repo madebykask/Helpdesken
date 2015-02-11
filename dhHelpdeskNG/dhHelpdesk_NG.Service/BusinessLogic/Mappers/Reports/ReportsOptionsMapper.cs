@@ -131,5 +131,42 @@
                                         return new CaseTypeItem(o.Id, parentId, name);
                                     }).ToList().BuildRelations());
         }
+
+        public static LeadtimeFinishedCasesOptions MapToLeadtimeFinishedCasesOptions(
+                                                        IQueryable<Department> departments,
+                                                        IQueryable<CaseType> caseTypes,
+                                                        IQueryable<WorkingGroupEntity> workingGroups)
+        {
+            var separator = Guid.NewGuid().ToString();
+
+            var overviews = departments.Select(d => new { d.Id, Name = d.DepartmentName, Type = "Department" }).Union(
+                            workingGroups.Select(g => new { g.Id, Name = g.WorkingGroupName, Type = "WorkingGroup" }).Union(
+                            caseTypes.Select(t => new
+                            {
+                                t.Id,
+                                Name = t.Name + separator + t.Parent_CaseType_Id,
+                                Type = "CaseType"
+                            })))
+                            .OrderBy(o => o.Type)
+                            .ThenBy(o => o.Name)
+                            .ToList();
+
+            return new LeadtimeFinishedCasesOptions(
+                            overviews.Where(o => o.Type == "Department").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToList(),                                        
+                            overviews.Where(o => o.Type == "CaseType").Select(
+                                o =>
+                                {
+                                    var values = o.Name.Split(new[] { separator }, StringSplitOptions.RemoveEmptyEntries);
+                                    string name = values[0];
+                                    int? parentId = null;
+                                    int parentIdVal;
+                                    if (values.Length > 1 && int.TryParse(values[1], out parentIdVal))
+                                    {
+                                        parentId = parentIdVal;
+                                    }
+                                    return new CaseTypeItem(o.Id, parentId, name);
+                                }).ToList().BuildRelations(),
+                                overviews.Where(o => o.Type == "WorkingGroup").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToList());
+        }
     }
 }

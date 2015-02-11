@@ -4,6 +4,7 @@
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeFinishedCases;
     using DH.Helpdesk.BusinessData.Models.Reports.Enums;
     using DH.Helpdesk.BusinessData.Models.Reports.Options;
     using DH.Helpdesk.Web.Areas.Reports.Models.Options;
@@ -25,5 +26,11 @@
         CaseSatisfactionOptions CreateCaseSatisfactionOptions(OperationContext context);
 
         CaseSatisfactionReport CreateCaseSatisfactionReport(CaseSatisfactionOptions options, OperationContext context);
+
+        LeadtimeFinishedCasesOptionsModel GetLeadtimeFinishedCasesOptionsModel(LeadtimeFinishedCasesOptions options);
+
+        LeadtimeFinishedCasesModel GetLeadtimeFinishedCasesModel(
+                                LeadtimeFinishedCasesData data,
+                                bool isShowDetails);
     }
 }

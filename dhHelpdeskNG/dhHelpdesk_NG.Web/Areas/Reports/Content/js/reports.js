@@ -51,6 +51,8 @@
                     return dhHelpdesk.reports.caseSatisfactionReport();
                 case dhHelpdesk.reports.reportType.ReportGenerator:
                     return dhHelpdesk.reports.reportGeneratorReport();
+                case dhHelpdesk.reports.reportType.LeadtimeFinishedCases:
+                    return dhHelpdesk.reports.leadtimeFinishedCases();
                 default:
                     return null;
             }
@@ -177,6 +179,14 @@
         my = my || {};
 
         var that = dhHelpdesk.reports.report({ canExcel: true }, my);
+
+        return that;
+    }
+
+    dhHelpdesk.reports.leadtimeFinishedCases = function (spec, my) {
+        my = my || {};
+
+        var that = dhHelpdesk.reports.report({ }, my);
 
         return that;
     }

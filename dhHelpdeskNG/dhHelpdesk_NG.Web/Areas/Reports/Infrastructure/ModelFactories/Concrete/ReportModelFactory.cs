@@ -7,9 +7,11 @@
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeFinishedCases;
     using DH.Helpdesk.BusinessData.Models.Reports.Enums;
     using DH.Helpdesk.BusinessData.Models.Reports.Options;
     using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.Services.Services.Reports;
     using DH.Helpdesk.Web.Areas.Reports.Infrastructure.Utils;
     using DH.Helpdesk.Web.Areas.Reports.Models.Options;
@@ -39,6 +41,7 @@
                                 ReportType.CaseTypeArticleNo,
                                 ReportType.CaseSatisfaction,
                                 ReportType.ReportGenerator
+                                , ReportType.LeadtimeFinishedCases
                             };
 
             // It's a new report, so we need to add it to the tblReport table
@@ -130,6 +133,48 @@
             this.reportsBuilder.CreateCaseSatisfactionReport(response.GoodVotes, response.NormalVotes, response.BadVotes, response.Count, out file);
             var instance = new CaseSatisfactionReport(response.GoodVotes, response.NormalVotes, response.BadVotes, response.Count, file);
             return instance;
+        }
+
+        public LeadtimeFinishedCasesOptionsModel GetLeadtimeFinishedCasesOptionsModel(LeadtimeFinishedCasesOptions options)
+        {
+            var departments = WebMvcHelper.CreateMultiSelectField(options.Departments);
+            var caseTypes = options.CaseTypes;
+            var workingGroups = WebMvcHelper.CreateMultiSelectField(options.WorkingGroups);
+            var registrationSources = WebMvcHelper.CreateListField(
+                                                        new[]
+                                                        {
+                                                            new ItemOverview(string.Empty, ((int)GlobalEnums.RegistrationSource.Empty).ToString(CultureInfo.InvariantCulture)), 
+                                                            new ItemOverview(Translation.Get("Handläggare"), ((int)GlobalEnums.RegistrationSource.Case).ToString(CultureInfo.InvariantCulture)), 
+                                                            new ItemOverview(Translation.Get("Självservice"), ((int)GlobalEnums.RegistrationSource.SelfService).ToString(CultureInfo.InvariantCulture)), 
+                                                            new ItemOverview(Translation.Get("E-post"), ((int)GlobalEnums.RegistrationSource.Mail).ToString(CultureInfo.InvariantCulture))
+                                                        }, 
+                                                        null, 
+                                                        false);
+            var periodFrom = DateTime.Today.AddYears(-1);
+            var periodUntil = DateTime.Today;
+            var lts = new List<ItemOverview>();
+            for (var i = 1; i <= 10; i++)
+            {
+                lts.Add(new ItemOverview(i.ToString(CultureInfo.InvariantCulture), i.ToString(CultureInfo.InvariantCulture)));
+            }
+
+            var leadTimes = WebMvcHelper.CreateListField(lts, 5, false);
+
+            return new LeadtimeFinishedCasesOptionsModel(
+                                departments, 
+                                caseTypes, 
+                                null, 
+                                workingGroups, 
+                                registrationSources,
+                                periodFrom,
+                                periodUntil,
+                                leadTimes,
+                                false);
+        }
+
+        public LeadtimeFinishedCasesModel GetLeadtimeFinishedCasesModel(LeadtimeFinishedCasesData data, bool isShowDetails)
+        {
+            return new LeadtimeFinishedCasesModel();
         }
     }
 }

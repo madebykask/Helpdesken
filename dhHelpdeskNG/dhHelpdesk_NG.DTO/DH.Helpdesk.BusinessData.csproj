@@ -356,12 +356,14 @@
     <Compile Include="Models\Reports\Data\CaseTypeArticleNo\CaseTypeArticleNoData.cs" />
     <Compile Include="Models\Reports\Data\CaseTypeArticleNo\CaseTypeData.cs" />
     <Compile Include="Models\Reports\Data\CaseTypeArticleNo\ProductAreaData.cs" />
+    <Compile Include="Models\Reports\Data\LeadtimeFinishedCases\LeadtimeFinishedCasesData.cs" />
     <Compile Include="Models\Reports\Data\RegistratedCasesDay\RegisteredCaseDay.cs" />
     <Compile Include="Models\Reports\Data\RegistratedCasesDay\RegistratedCasesDayData.cs" />
     <Compile Include="Models\Reports\Data\ReportGenerator\ReportGeneratorData.cs" />
     <Compile Include="Models\Reports\Enums\ShowCases.cs" />
     <Compile Include="Models\Reports\Options\CaseSatisfactionOptionsResponse.cs" />
     <Compile Include="Models\Reports\Options\CaseTypeArticleNoOptions.cs" />
+    <Compile Include="Models\Reports\Options\LeadtimeFinishedCasesOptions.cs" />
     <Compile Include="Models\Reports\Options\RegistratedCasesCaseTypeOptionsResponse.cs" />
     <Compile Include="Models\Reports\Options\RegistratedCasesDayOptions.cs" />
     <Compile Include="Models\Reports\Options\ReportGeneratorOptions.cs" />

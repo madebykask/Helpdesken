@@ -4,6 +4,7 @@
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models.Reports.Enums;
+    using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Reports;
@@ -101,6 +102,12 @@
                     return this.PartialView(
                                 "Options/ReportGenerator",
                                 this.reportGeneratorModelFactory.GetReportGeneratorOptionsModel(reportGeneratorOptions, reportGeneratorFilters));
+
+                case ReportType.LeadtimeFinishedCases:
+                    var leadtimeFinishedCases = this.reportService.GetLeadtimeFinishedCasesOptions(this.OperationContext.CustomerId);
+                    return this.PartialView(
+                                "Options/LeadtimeFinishedCases",
+                                this.reportModelFactory.GetLeadtimeFinishedCasesOptionsModel(leadtimeFinishedCases));
             }
 
             return null;
@@ -235,6 +242,26 @@
                 SessionFacade.SavePageFilters(PageName.ReportsReportGenerator, ReportGeneratorFilterModel.CreateDefault());
                 throw;
             }            
+        }
+
+        [HttpPost]
+        [BadRequestOnNotValid]
+        public PartialViewResult GetLeadtimeFinishedCasesReport(LeadtimeFinishedCasesOptionsModel options)
+        {
+            var data = this.reportService.GetLeadtimeFinishedCasesData(
+                                            this.OperationContext.CustomerId,
+                                            options.DepartmentIds,
+                                            options.CaseTypeId,
+                                            options.WorkingGroupIds,
+                                            (GlobalEnums.RegistrationSource)options.RegistrationSourceId,
+                                            options.PeriodFrom,
+                                            options.PeriodUntil,
+                                            options.LeadTimeId,
+                                            options.IsShowDetails);
+
+            var model = this.reportModelFactory.GetLeadtimeFinishedCasesModel(data, options.IsShowDetails);
+
+            return this.PartialView("Reports/LeadtimeFinishedCases", model);
         }
     }
 }
