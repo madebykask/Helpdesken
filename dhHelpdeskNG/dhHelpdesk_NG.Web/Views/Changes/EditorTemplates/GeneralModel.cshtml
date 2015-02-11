@@ -78,7 +78,8 @@
     {
         <tr>
             <td class="span3">
-                @Html.LabelFor(m => m.CreatedDate)
+                @Translation.Get("Skapad datum")
+                @*@Html.LabelFor(m => m.CreatedDate)*@
             </td>
             <td class="span9">
                 @Html.DisplayFor(m => m.CreatedDate)
@@ -86,11 +87,12 @@
         </tr>
         <tr>
             <td class="span3">
-                @Html.LabelFor(m => m.ChangedDate)
+                @Translation.Get("Ändringsdatum")
+                @*@Html.LabelFor(m => m.ChangedDate)*@
             </td>
             <td class="span9">
                 @Html.DisplayTextFor(m => m.ChangedDate)
-                @Translation.Get(" by ")
+                @Translation.Get("av")
                 @(Model.ChangedByUser != null ? Model.ChangedByUser.FirstName + " " + Model.ChangedByUser.LastName : Translation.Get("Unknown user"))
             </td>
         </tr>

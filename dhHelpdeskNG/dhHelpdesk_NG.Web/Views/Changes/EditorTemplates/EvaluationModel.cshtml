@@ -11,7 +11,7 @@
                 <label>@Html.FieldCaption(Model.AttachedFiles)</label>
             </td>    
             <td class="span9">
-                <a href="#evaluation_files_uploader_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Upload")</a>
+                <a href="#evaluation_files_uploader_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till")</a>
                 <div id="evaluation_files_uploader_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -21,7 +21,7 @@
                         <div id="evaluation_files_uploader"></div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Close")</button>
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Stäng")</button>
                     </div>
                 </div>
             </td>    
@@ -47,7 +47,7 @@
         </tr>
         <tr>
             <td class="span3">
-                <label>@Translation.Get("Log Note")</label>
+                <label>@Translation.Get("Loggpost")</label>
             </td>
             <td class="span9">
                 @Html.TextAreaFor(m => m.Logs.Value.Text)
@@ -59,7 +59,7 @@
                 @Html.Partial("_SendToDialog", Model.Logs.Value.SendToDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "evaluation_send_to_dialog" }, { "Callback", "fillEvaluationSendLogNoteToEmailsTextArea" } }))
                 @Html.TextAreaFor(m => m.Logs.Value.Emails, new { id = "evaluation_send_to_emails_textarea", @readonly = "readonly" })
                 <a id="evaluation_send_to_button" class="btn">
-                    @Translation.Get("Send to...")
+                    @Translation.Get("Skicka till")
                 </a>
             </td>
         </tr>

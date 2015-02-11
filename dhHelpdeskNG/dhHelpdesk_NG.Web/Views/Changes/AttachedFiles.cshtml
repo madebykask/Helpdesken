@@ -6,11 +6,11 @@
 }
 
 <div id="@filesContainerId">
-    @if (!Model.Files.Any())
+    @*@if (!Model.Files.Any())
     {
         @Translation.Get("No Uploaded Files", Enums.TranslationSource.TextTranslation)
         return;
-    }
+    }*@
     <table>
         @foreach (var file in Model.Files)
         {
@@ -20,7 +20,7 @@
                 </td>
                 <td>
                     <a onclick="deleteFile('@Model.Area', '@file', '@filesContainerId')" class="btn">
-                        @Translation.Get("Delete", Enums.TranslationSource.TextTranslation)
+                        @Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)
                     </a>
                 </td>
             </tr>

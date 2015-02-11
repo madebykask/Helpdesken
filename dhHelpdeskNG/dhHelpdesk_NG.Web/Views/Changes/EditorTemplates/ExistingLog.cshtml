@@ -16,7 +16,7 @@
         </tr>
         <tr>
             <td class="span3">
-                <label>@Translation.Get("Log Note")</label>
+                <label>@Translation.Get("Loggpost")</label>
             </td>
             <td class="span9">
                 @Html.TextAreaFor(m => m.Logs.Value.Text)
@@ -28,7 +28,7 @@
                 @Html.Partial("_SendToDialog", Model.Logs.Value.SendToDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "log_send_to_dialog" }, { "Callback", "fillLogSendLogNoteToEmailsTextArea" } }))
                 @Html.TextAreaFor(m => m.Logs.Value.Emails, new { id = "log_send_to_emails_textarea", @readonly = "readonly" })
                 <a id="log_send_to_button" class="btn">
-                    @Translation.Get("Send to...")
+                    @Translation.Get("Skicka till")
                 </a>
             </td>
         </tr>

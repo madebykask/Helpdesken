@@ -16,7 +16,8 @@
     }
     <tr>
         <td class="span3">
-            @Html.LabelFor(m => m.RelatedChanges)
+            @Translation.Get("Relaterade ändringar")
+            @*@Html.LabelFor(m => m.RelatedChanges)*@
         </td>
         <td class="span9">
             @Html.DropDownListFor(m => m.RelatedChangeIds, Model.RelatedChanges, new { @class = "chosen-select", multiple = "multiple", data_placeholder = Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation) })
@@ -37,7 +38,8 @@
     {
         <tr>
             <td class="span3">
-                <label>@Html.FieldCaption(Model.Responsibles)</label>
+                 @Translation.Get("Anmälare")
+                @*<label>@Html.FieldCaption(Model.Responsibles)</label>*@
             </td>
             <td class="span9">
                 @Html.DropDownListFor(m => m.ResponsibleId, Model.Responsibles.Value)
@@ -51,7 +53,8 @@
     {
         <tr>
             <td class="span3">
-                @Html.LabelFor(m => m.Currencies)
+                @Translation.Get("Valuta")
+                @*@Html.LabelFor(m => m.Currencies)*@
             </td>
             <td class="span9">
                 @Html.DropDownListFor(m => m.CurrencyId, Model.Currencies.Value)
@@ -71,7 +74,7 @@
                 <label>@Html.FieldCaption(Model.AttachedFiles)</label>
             </td>    
             <td c8lass="span9">
-                <a href="#analyze_files_uploader_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Upload")</a>
+                <a href="#analyze_files_uploader_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till")</a>
                 <div id="analyze_files_uploader_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
