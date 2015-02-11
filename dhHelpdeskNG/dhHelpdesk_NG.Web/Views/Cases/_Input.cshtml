@@ -333,20 +333,23 @@
                                                     }
                                                 </td>
                                             </tr>
-                                            <tr class="displaytr">
+                                            <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.UpdateNotifierInformation, CaseSolutionFields.UpdateNotifierInformation)">
                                                 <td class="span3">
                                                     @Translation.Get("Spara användaruppgifter", SessionFacade.CurrentLanguageId)
                                                 </td>
                                                 <td class="span4">
-                                                    @Html.CheckBoxFor(m => m.UpdateNotifierInformation, new { @class = "switchcheckbox" })
-                                                </td>
+                                                    @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.UpdateNotifierInformation, CaseSolutionFields.UpdateNotifierInformation))
+                                                    {
+                                                        @Html.CheckBoxFor(m => m.UpdateNotifierInformation, new { @class = "switchcheckbox" })
+                                                    }
+                                                 </td>   
                                             </tr>
                                         </table>
                                     </div>
                                 </div>
                             </div>
                         }
-                        <div style="@Model.caseFieldSettings.displayComputerInfoHtml()" class="computer-block hideshow">
+                        <div style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.InventoryNumber, CaseSolutionFields.InventoryNumber)"  class="computer-block hideshow">
                             <h4><a href="#" class="showbtn"><i class="icon-plus-sign"></i></a><a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a> @Translation.Get("Datorinformation")</h4>
                             <div class="row">
                                 <div class="span12">
@@ -963,9 +966,9 @@
                                                 {
                                                     if (Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString()) == "display:none")
                                                     {
-                                                        Model.case_.CaseResponsibleUser_Id = null; 
+                                                        Model.case_.CaseResponsibleUser_Id = null;
                                                     }
-                                                    
+
                                                     foreach (var e in Model.users.Where(e => e.IsActive == 1 && e.Performer == 1 || Model.case_.CaseResponsibleUser_Id == e.Id))
                                                     {
                                                     <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.CaseResponsibleUser_Id.ToString()) >@e.SurName @e.FirstName</option>
@@ -1203,7 +1206,7 @@
                                             </td>
                                             <td>
                                                 @if (!Model.IsReadOnly(CaseSolutionFields.Change))
-                                                 {
+                                                {
                                                     <select id="case__Change_Id" name="case_.Change_Id">
                                                         <option value="">&nbsp;</option>
                                                         @foreach (var e in Model.changes)
@@ -1212,18 +1215,18 @@
                                                         }
                                                     </select>
                                                 }
-                                                 else
-                                                 {
-                                                     if (!Model.case_.Change_Id.HasValue)
-                                                     {
+                                                else
+                                                {
+                                                    if (!Model.case_.Change_Id.HasValue)
+                                                    {
                                                         @Html.TextBoxFor(m => m.case_.Change_Id, new { @readonly = true })
-                                                     }
-                                                     else
-                                                     {
+                                                    }
+                                                    else
+                                                    {
                                                         @Html.TextBoxFor(m => m.changes.SingleOrDefault(x => x.Id == Model.case_.Change_Id).ChangeTitle, new { @readonly = true })
                                                         @Html.HiddenFor(x => x.case_.Change_Id)
-                                                     }
-                                                 }
+                                                    }
+                                                }
                                             </td>
                                         </tr>
                                         }

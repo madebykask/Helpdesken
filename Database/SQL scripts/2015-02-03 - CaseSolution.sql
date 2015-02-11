@@ -269,3 +269,9 @@ BEGIN
 	ALTER TABLE [dbo].tblCaseSolution	ADD FinishingDescription NVARCHAR(200) NULL 
 END
 GO
+
+IF COL_LENGTH('dbo.tblCaseSolution','UpdateNotifierInformation') IS NULL
+BEGIN
+	ALTER TABLE [dbo].tblCaseSolution ADD UpdateNotifierInformation int null 
+END
+GO

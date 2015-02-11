@@ -48,5 +48,6 @@
         WatchDate = 44,
         FinishingDate = 45,
         FinishingDescription = 46,
+        UpdateNotifierInformation = 47,
     }
 }

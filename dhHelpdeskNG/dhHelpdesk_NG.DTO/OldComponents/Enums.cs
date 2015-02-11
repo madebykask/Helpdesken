@@ -95,7 +95,8 @@
             WorkingGroup_Id = 52,
             _temporary_LeadTime = 53,
             CausingPart = 54,
-            ClosingReason = 55
+            ClosingReason = 55,
+            UpdateNotifierInformation = 56
         }
 
     }

@@ -214,6 +214,18 @@
                                     </tr>
                                  }
                                 <tr>
+                                    <td class="span3">
+                                        @Translation.Get("Spara användaruppgifter", SessionFacade.CurrentLanguageId)
+                                    </td>
+                                    <td class="span4">
+                                        <input type="checkbox" name="CaseSolution.UpdateNotifierInformation" @(Model.CaseSolution.UpdateNotifierInformation == 1 ? "checked=checked" : "") value="1" class="switchcheckbox" />
+                                            <input type="hidden" name="CaseSolution.UpdateNotifierInformation" value="0" />
+                                    </td>
+                                    <td class="span9">
+                                            @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.UpdateNotifierInformation, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.UpdateNotifierInformation)
+                                        </td>
+                                </tr>
+                                <tr>
                                     <th colspan="3" class="header">@Translation.Get("Datorinformation")</th>
                                 </tr> 
                                  @if (Model.CaseFieldSettings.Count() != 0)

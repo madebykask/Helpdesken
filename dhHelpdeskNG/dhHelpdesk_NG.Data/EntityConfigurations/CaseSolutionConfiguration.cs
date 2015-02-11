@@ -130,6 +130,7 @@
             this.Property(x => x.WatchDate);
             this.Property(x => x.FinishingDate);
             this.Property(x => x.FinishingDescription);
+            this.Property(x => x.UpdateNotifierInformation).IsOptional();
 
             this.ToTable("tblcasesolution");
         }
