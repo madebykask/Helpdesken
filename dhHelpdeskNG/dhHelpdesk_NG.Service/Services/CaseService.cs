@@ -57,6 +57,7 @@
         void SendCaseEmail(int caseId, CaseMailSetting cms, int caseHistoryId, Case oldCase = null, CaseLog log = null, List<CaseFileDto> logFiles = null);
         void UpdateFollowUpDate(int caseId, DateTime? time);
         void MarkAsUnread(int caseId);
+        void MarkAsRead(int caseId);
         void SendSelfServiceCaseLogEmail(int caseId, CaseMailSetting cms, int caseHistoryId, CaseLog log, List<CaseFileDto> logFiles = null);
         void Activate(int caseId, int userId, string adUser, out IDictionary<string, string> errors);
         IList<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, UserOverview user);
@@ -329,6 +330,11 @@
         public void MarkAsUnread(int caseId)
         {
             this._caseRepository.MarkCaseAsUnread(caseId);
+        }
+
+        public void MarkAsRead(int caseId)
+        {
+            this._caseRepository.MarkCaseAsRead(caseId);
         }
 
         public IList<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, UserOverview user)

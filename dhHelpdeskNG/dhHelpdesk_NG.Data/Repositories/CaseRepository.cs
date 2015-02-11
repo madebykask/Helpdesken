@@ -30,6 +30,7 @@ namespace DH.Helpdesk.Dal.Repositories
         void UpdateFollowUpDate(int caseId, DateTime? time);
         void Activate(int caseId);
         void MarkCaseAsUnread(int id);
+        void MarkCaseAsRead(int id);
         IEnumerable<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, UserOverview user);
         IEnumerable<CaseOverview> GetCaseOverviews(int[] customers);
 
@@ -202,7 +203,7 @@ namespace DH.Helpdesk.Dal.Repositories
         public void MarkCaseAsUnread(int id)
         {
             SetCaseUnreadFlag(id, 1);
-        }
+        }      
 
         public IEnumerable<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, UserOverview user)
         {
@@ -375,7 +376,7 @@ namespace DH.Helpdesk.Dal.Repositories
                                 .ToArray();
         }
         
-        private void MarkCaseAsRead(int id)
+        public void MarkCaseAsRead(int id)
         {
             SetCaseUnreadFlag(id);
         }

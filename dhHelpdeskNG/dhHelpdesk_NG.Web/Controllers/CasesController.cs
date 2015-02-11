@@ -509,7 +509,7 @@ namespace DH.Helpdesk.Web.Controllers
                                     string caseInvoiceArticles)
         {
             int caseId = this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation, caseInvoiceArticles);
-            return this.RedirectToAction("edit", "cases", new { id = caseId, redirectFrom = "save", uni = updateNotifierInformation });
+            return this.RedirectToAction("edit", "cases", new { id = caseId, redirectFrom = "save", uni = updateNotifierInformation, updateState = false });
         }
 
         [HttpPost]
@@ -538,7 +538,7 @@ namespace DH.Helpdesk.Web.Controllers
             return this.RedirectToAction("new", "cases", new { customerId = case_.Customer_Id });
         }
 
-        public ActionResult Edit(int id, string redirectFrom = "", int? moveToCustomerId = null, bool? uni = null)
+        public ActionResult Edit(int id, string redirectFrom = "", int? moveToCustomerId = null, bool? uni = null, bool updateState = true)
         {
             CaseInputViewModel m = null;
 
@@ -558,7 +558,7 @@ namespace DH.Helpdesk.Web.Controllers
                 }
 
                 int customerId = moveToCustomerId.HasValue ? moveToCustomerId.Value : 0;
-                m = this.GetCaseInputViewModel(userId, customerId, id, lockedByUserId, redirectFrom, null, null);
+                m = this.GetCaseInputViewModel(userId, customerId, id, lockedByUserId, redirectFrom, null, null, updateState);
                 if (uni.HasValue)
                 {
                     m.UpdateNotifierInformation = uni.Value;                    
@@ -1648,7 +1648,9 @@ namespace DH.Helpdesk.Web.Controllers
         /// <returns>
         /// The <see cref="CaseInputViewModel"/>.
         /// </returns>
-        private CaseInputViewModel GetCaseInputViewModel(int userId, int customerId, int caseId, int lockedByUserId = 0, string redirectFrom = "", int? templateId = null, int? copyFromCaseId = null)
+        private CaseInputViewModel GetCaseInputViewModel(int userId, int customerId, int caseId, int lockedByUserId = 0, 
+                                                         string redirectFrom = "", int? templateId = null, 
+                                                         int? copyFromCaseId = null, bool updateState = true)
         {
             var m = new CaseInputViewModel();
             SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
@@ -1657,8 +1659,8 @@ namespace DH.Helpdesk.Web.Controllers
                 var markCaseAsRead = string.IsNullOrWhiteSpace(redirectFrom);
                 m.case_ = this._caseService.GetCaseById(caseId);
 
-                if (m.case_.Unread != 0)
-                    this._caseService.MarkAsUnread(caseId);                
+                if (m.case_.Unread != 0 && updateState)
+                    this._caseService.MarkAsRead(caseId);                
 
                 customerId = customerId == 0 ? m.case_.Customer_Id : customerId;
                 //SessionFacade.CurrentCaseLanguageId = m.case_.RegLanguage_Id;
