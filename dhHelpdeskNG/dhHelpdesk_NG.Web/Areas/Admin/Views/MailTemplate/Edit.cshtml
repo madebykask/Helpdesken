@@ -12,7 +12,9 @@
             <ul class="secnav">
                 <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", new { }, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
                                 @*//Model.MailTemplateLanguage.MailTemplate.IsStandard == 1? :*@
-                <li>@Html.ActionLink(Translation.Get((Model.MailTemplateLanguage.MailTemplate != null && Model.MailTemplateLanguage.MailTemplate.IsStandard == 1?"Rensa":"Ta bort"),
+                <li>@Html.ActionLink(Translation.Get(
+                        ((Model.MailTemplateLanguage.MailTemplate_Id == 0) || 
+                         (Model.MailTemplateLanguage.MailTemplate != null && Model.MailTemplateLanguage.MailTemplate.IsStandard == 1)?"Rensa":"Ta bort"),
                     Enums.TranslationSource.TextTranslation), "delete",
                     new { id = Model.MailTemplateLanguage.MailTemplate_Id, languageid = Model.MailTemplateLanguage.Language_Id, customerId = Model.Customer.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) })</li>
                 

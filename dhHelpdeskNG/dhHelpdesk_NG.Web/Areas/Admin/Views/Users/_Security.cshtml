@@ -271,3 +271,21 @@
         </tr>
     </table>
 </div>
+
+<script type="text/javascript">
+
+    $("#addCs").click(function () {
+        $("#CsAvailable option:selected").remove().appendTo("#CsSelected");
+        $("#CsAvailable").get(0).selectedIndex = -1;
+        $("#CsSelected").get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $("#removeCs").click(function () {
+        $("#CsSelected option:selected").remove().appendTo("#CsAvailable");
+        $("#CsAvailable").get(0).selectedIndex = -1;
+        $("#CsSelected").get(0).selectedIndex = -1;
+        return false;
+    });
+
+</script>

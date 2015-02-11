@@ -230,7 +230,7 @@
                         <ul class="dropdown-menu">
                             <li>
                                 <a href="#" onclick="MakeAsUnread();">
-                                    @Translation.Get("Ärendet har markerats som oläst", Enums.TranslationSource.TextTranslation)
+                                    @Translation.Get("Markera ärendet som oläst", Enums.TranslationSource.TextTranslation)
                                 </a>
                             </li>
                             @if(SessionFacade.CurrentUser.ActivateCasePermission == 1 && Model.case_.FinishingDate.HasValue)
