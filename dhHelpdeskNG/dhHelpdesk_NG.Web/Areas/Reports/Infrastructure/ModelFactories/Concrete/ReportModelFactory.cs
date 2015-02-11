@@ -31,25 +31,26 @@
             this.reportsBuilder = reportsBuilder;
         }
 
-        public ReportsOptions GetReportsOptions()
+        public ReportsOptions GetReportsOptions(List<ReportType> reports)
         {
-            var reports = new List<ItemOverview>
-                              {
-                                  new ItemOverview(
-                                      ReportUtils.GetReportName(ReportType.RegistratedCasesDay), 
-                                      ((int)ReportType.RegistratedCasesDay).ToString(CultureInfo.InvariantCulture)),
-                                  new ItemOverview(
-                                      ReportUtils.GetReportName(ReportType.CaseTypeArticleNo),
-                                      ((int)ReportType.CaseTypeArticleNo).ToString(CultureInfo.InvariantCulture)),
-                                  new ItemOverview(
-                                      ReportUtils.GetReportName(ReportType.CaseSatisfaction),
-                                      ((int)ReportType.CaseSatisfaction).ToString(CultureInfo.InvariantCulture)),
-                                  new ItemOverview(
-                                      ReportUtils.GetReportName(ReportType.ReportGenerator),
-                                      ((int)ReportType.ReportGenerator).ToString(CultureInfo.InvariantCulture))
-                              };
+            var ready = new List<ReportType>
+                            {
+                                ReportType.RegistratedCasesDay,
+                                ReportType.CaseTypeArticleNo,
+                                ReportType.CaseSatisfaction,
+                                ReportType.ReportGenerator
+                            };
 
-            return new ReportsOptions(WebMvcHelper.CreateListField(reports.OrderBy(r => r.Name), null, false));
+            // It's a new report, so we need to add it to the tblReport table
+            reports.Add(ReportType.CaseSatisfaction);
+
+            var items = reports
+                        .Where(ready.Contains)
+                        .Select(r => 
+                            new ItemOverview(ReportUtils.GetReportName(r), ((int)r).ToString(CultureInfo.InvariantCulture)))
+                            .ToList();
+
+            return new ReportsOptions(WebMvcHelper.CreateListField(items, null, false));
         }
 
         public RegistratedCasesDayOptionsModel GetRegistratedCasesDayOptionsModel(RegistratedCasesDayOptions options)

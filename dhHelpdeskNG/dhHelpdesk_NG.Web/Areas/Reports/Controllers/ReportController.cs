@@ -54,7 +54,8 @@
         [HttpGet]
         public ActionResult Index()
         {
-            var model = this.reportModelFactory.GetReportsOptions();
+            var reports = this.reportService.GetAvailableCustomerReports(this.OperationContext.CustomerId);
+            var model = this.reportModelFactory.GetReportsOptions(reports);
             return this.View(model);
         }
 

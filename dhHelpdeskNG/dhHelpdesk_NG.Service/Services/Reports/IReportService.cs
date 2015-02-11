@@ -15,6 +15,8 @@
 
     public interface IReportService
     {
+        List<ReportType> GetAvailableCustomerReports(int customerId);
+
         RegistratedCasesDayOptions GetRegistratedCasesDayOptions(int customerId);
 
         RegistratedCasesDayData GetRegistratedCasesDayData(

@@ -38,6 +38,24 @@
             this.sureyService = sureyService;
         }
 
+        #region Reports
+
+        public List<ReportType> GetAvailableCustomerReports(int customerId)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var customerRep = uow.GetRepository<Customer>();
+                var reportCustomerRep = uow.GetRepository<ReportCustomer>();
+
+                var customers = customerRep.GetAll().GetById(customerId);
+                var reports = reportCustomerRep.GetAll();
+
+                return ReportsOptionsMapper.MapToCustomerAvailableReports(customers, reports);
+            }
+        }
+
+        #endregion
+
         #region RegistratedCasesDay
 
         public RegistratedCasesDayOptions GetRegistratedCasesDayOptions(int customerId)

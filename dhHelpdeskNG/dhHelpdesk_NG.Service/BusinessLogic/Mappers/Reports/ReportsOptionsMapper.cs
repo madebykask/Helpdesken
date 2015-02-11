@@ -1,11 +1,13 @@
 ﻿namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Reports
 {
     using System;
+    using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.CaseType;
     using DH.Helpdesk.BusinessData.Models.ProductArea;
+    using DH.Helpdesk.BusinessData.Models.Reports.Enums;
     using DH.Helpdesk.BusinessData.Models.Reports.Options;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Domain;
@@ -14,6 +16,19 @@
 
     public static class ReportsOptionsMapper
     {
+        public static List<ReportType> MapToCustomerAvailableReports(
+                                        IQueryable<Customer> customers,
+                                        IQueryable<ReportCustomer> reports)
+        {
+            var entities = (from rc in reports
+                           join c in customers on rc.Customer_Id equals c.Id
+                           where rc.ShowOnPage != 0
+                           select new { rc.Report_Id })
+                           .ToList();
+
+            return entities.Select(r => (ReportType)r.Report_Id).ToList();
+        } 
+
         public static RegistratedCasesDayOptions MapToRegistratedCasesDayOptions(
                                        IQueryable<Department> departments,
                                        IQueryable<CaseType> caseTypes,
@@ -90,12 +105,12 @@
             var fs = fields.Select(f => new
                                    {
                                        f.Id, 
-                                       Name = f.CaseFieldSettingLanguages.FirstOrDefault(l => l.Language_Id == languageId).Label
+                                       Caption = f.CaseFieldSettingLanguages.FirstOrDefault(l => l.Language_Id == languageId).Label,
+                                       FieldName = f.Name
                                    })
-                                   .OrderBy(f => f.Name)
                                    .ToList()
-                                   .Where(f => !string.IsNullOrEmpty(f.Name))
-                                   .Select(f => new ItemOverview(f.Name, f.Id.ToString(CultureInfo.InvariantCulture)))
+                                   .Select(f => new ItemOverview(!string.IsNullOrEmpty(f.Caption) ? f.Caption : f.FieldName, f.Id.ToString(CultureInfo.InvariantCulture)))
+                                   .OrderBy(f => f.Name)
                                    .ToList();
 
             return new ReportGeneratorOptions(
