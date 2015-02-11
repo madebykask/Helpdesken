@@ -41,7 +41,7 @@
                                 ReportType.CaseTypeArticleNo,
                                 ReportType.CaseSatisfaction,
                                 ReportType.ReportGenerator
-                                , ReportType.LeadtimeFinishedCases
+//                                , ReportType.LeadtimeFinishedCases
                             };
 
             // It's a new report, so we need to add it to the tblReport table
