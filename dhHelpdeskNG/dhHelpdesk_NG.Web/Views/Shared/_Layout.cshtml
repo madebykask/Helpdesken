@@ -18,11 +18,11 @@
 </head>
 @{
     var model = Html.MasterModel();
-    var version = model.GetHelpdeskVersion();
 }
 <body>
     @if(model != null && model.CustomerSetting != null && SessionFacade.CurrentUser != null)
-    {    
+    {   
+        
         <div class="navbar fixed">
             <div class="navbar-container">
                 <a href="/">
@@ -323,7 +323,7 @@
         </div>
     }
     @RenderBody()
-    <div class="footerdhhd"><img src="@Url.Content("~/Content/img/dh_solutions_version.png")" /> version @version</div>
+    <div class="footerdhhd"><img src="@Url.Content("~/Content/img/dh_solutions_version.png")" />@Translation.Get("version")&nbsp;@ApplicationFacade.Version;</div>
     @RenderSection("Dialogs", false)
     @Scripts.Render("~/bundles/dhhelpdesk")
     @RenderSection("Scripts", false)

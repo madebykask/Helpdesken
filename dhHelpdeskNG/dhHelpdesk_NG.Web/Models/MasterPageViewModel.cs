@@ -11,8 +11,6 @@ namespace DH.Helpdesk.Web.Models
 
     public class MasterPageViewModel
     {
-        
-
         public int SelectedCustomerId { get; set; }
 
         public int SelectedLanguageId { get; set; }
@@ -22,13 +20,6 @@ namespace DH.Helpdesk.Web.Models
         public IList<Customer> Customers { get; set; }
         
         public IList<Language> Languages { get; set; }
-
-        public string GetHelpdeskVersion()
-        {
-            Assembly assembly = Assembly.LoadFrom(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin\\DH.Helpdesk.Web.dll"));
-            Version ver = assembly.GetName().Version;            
-            return string.Format("{0}.{1}.{2}.{3}", ver.Major, ver.Minor, ver.Build, ver.Revision);            
-        }
 
         public bool IsAdministrator()
         {

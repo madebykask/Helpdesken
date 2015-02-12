@@ -2463,6 +2463,10 @@ body.login {
 	color: #fff;
 	font-size:11px;
 }
+.signin-bottom p 
+{
+    margin-bottom: 0;
+}
 
 .signin-bottom a, .signin-bottom a:hover
 {
