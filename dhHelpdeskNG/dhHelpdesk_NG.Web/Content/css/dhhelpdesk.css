@@ -69,6 +69,15 @@ a, a:hover, a:focus {
   margin-left: 20px;
 }
 
+.footerdhhd {
+    margin:20px 0 20px 30px;
+    color:#666;
+    font-style:italic;
+    font-size:12px;
+}
+.footerdhhd img {
+    margin-top:-4px;
+}
 /************************FORM INPUT SELECT WIDTH*******************************************/
 select
 {
@@ -401,13 +410,6 @@ input[type="text"] {
 		{
 			background-color: #62a8d1;
 		}
-        .versionno {
-            padding: 0;
-            margin-top: -15px;
-            margin-left: -40px;
-            font-size: 11px;
-            float: right;
-        }
 
 			.dh-nav > li.light-blue > a:hover, .dh-nav > li.light-blue > a:focus
 			{
@@ -3000,7 +3002,7 @@ div.DTFC_LeftFootWrapper table {
 
 
 /**HIDE SHOW EDITING CASE****/
- .newmode .hidebtn, .newmode .showbtn {
+ /*.newmode .hidebtn, .newmode .showbtn {
     display: none;
 }
 
@@ -3014,6 +3016,26 @@ div.DTFC_LeftFootWrapper table {
 .editmode .hideshow .hidebtn,
 .editmode .hideshow .displaytr {
     display: none;
+}*/
+
+/**TEMPORARY SOLUTION****/
+ .newmode .hidebtn, .newmode .showbtn {
+    display: none;
 }
+
+.editmode .showbtn {
+    display: none;
+}
+.editmode .hideshow .showbtn
+ {
+    display: none;
+}
+.editmode .hideshow .hidebtn {
+    display: none;
+}
+.editmode .hideshow .displaytr {
+    /*display: none;*/
+}
+/*****END TEMPORARY SOLUTION******/
 
 /**END HIDE SHOW EDITING CASE*/

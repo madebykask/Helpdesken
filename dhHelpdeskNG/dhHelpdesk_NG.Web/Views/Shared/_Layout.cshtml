@@ -227,7 +227,6 @@
 
                         <li class="light-blue">
                             <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                    <div class="versionno"> @version </div>
                                 <i class="icon-user icon-white"></i>
                                 @if(SessionFacade.CurrentCustomer != null)
                                 {                            
@@ -324,6 +323,7 @@
         </div>
     }
     @RenderBody()
+    <div class="footerdhhd"><img src="@Url.Content("~/Content/img/dh_solutions_version.png")" /> version @version</div>
     @RenderSection("Dialogs", false)
     @Scripts.Render("~/bundles/dhhelpdesk")
     @RenderSection("Scripts", false)

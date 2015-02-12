@@ -350,6 +350,7 @@
     <Content Include="Areas\Reports\Content\js\reports.js" />
     <Content Include="Content\bootstrap-tagsinput.css" />
     <Content Include="Content\css\bootstrap-tagsinput.css" />
+    <Content Include="Content\img\dh_solutions_version.png" />
     <Content Include="Content\js\Account\order.js" />
     <Content Include="Content\js\bootstrap-tagsinput.js" />
     <Content Include="Content\bundles\chosen-sprite%402x.png" />
