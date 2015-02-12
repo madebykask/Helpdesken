@@ -96,5 +96,7 @@ namespace DH.Helpdesk.Web.Models.Case
         public string ClosingReasonPath { get; set; }
 
         public CaseColumnsSettingsModel ColumnSettingModel { get; set; }        
+
+        public string InitiatorName { get; set; }
     }
 }

@@ -44,5 +44,7 @@
         public IList<FinishingCause> ClosingReasons { get; set; }
 
         public bool IsClearFilters { get; set; }
+
+        public string InitiatorName { get; set; }
     }    
 }

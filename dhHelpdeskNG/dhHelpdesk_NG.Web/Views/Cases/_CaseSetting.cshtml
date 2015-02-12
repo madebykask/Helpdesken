@@ -25,6 +25,27 @@
                                     </th>                                     
                                 </tr>
                             </thead>
+                            @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Persons_Name.ToString()) == 1) 
+                            { 
+                                <tr>
+                                    <td class="span3">                                        
+                                        @{
+                                            var lbl = Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.Persons_Name.ToString());
+                                            if (string.IsNullOrEmpty(lbl))
+                                            {
+                                                lbl = Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
+                                            }
+                                         }
+                                        @lbl:
+                                    </td>
+                                    <td>
+                                        @Html.CheckBoxFor(m => Model.RegionCheck, new { @class = "switchcheckbox" })                                   
+                                    </td>                            
+                                    <td colspan="2">
+                                        @Html.TextBoxFor(m => Model.InitiatorName)
+                                    </td>                                                        
+                                </tr>
+                            }
                             @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Region_Id.ToString()) == 1) 
                             { 
                                 <tr>
