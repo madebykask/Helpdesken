@@ -372,7 +372,14 @@ namespace DH.Helpdesk.Services.Services
             user.Password = user.Password ?? string.Empty;
 
             errors = new Dictionary<string, string>();
-                        
+
+            var hasDublicate = this.GetUsers()
+                            .Any(u => u.UserID.EqualWith(user.UserID));
+            if (hasDublicate)
+            {
+                errors.Add("User.UserID", Translator.Translate("Det här användarnamnet är upptaget. Var vänlig använd något annat."));
+            }
+
             if (string.IsNullOrEmpty(user.SurName + user.FirstName + user.UserID))
                 errors.Add("User.SurName" + "User.FirstName" + "User.UserID", "Du måste ange ett för- och efternamn, samt ett Id");
 
@@ -513,11 +520,11 @@ namespace DH.Helpdesk.Services.Services
 
             errors = new Dictionary<string, string>();
 
-            var hasDublicate = this.GetUsers(user.Customer_Id)
+            var hasDublicate = this.GetUsers()
                             .Any(u => u.UserID.EqualWith(user.UserID));
             if (hasDublicate)
             {
-                errors.Add("User.UserID", "User must have unique ID.");
+                errors.Add("User.UserID", Translator.Translate("Det här användarnamnet är upptaget. Var vänlig använd något annat."));
             }
 
             user.Address = user.Address ?? string.Empty;

@@ -309,12 +309,17 @@
                 if (errors.Count == 0)
                 {
                     if (!string.IsNullOrEmpty(err))
-                       this.TempData.Add("AlertMessage", err);   
+                        this.TempData.Add("AlertMessage", err);
 
                     return this.RedirectToAction("index", "users");
                 }
-
-                
+                else
+                {
+                    foreach (var error in errors)
+                    {
+                        ModelState.AddModelError(error.Key, error.Value);
+                    }
+                }
                 var model = this.CreateInputViewModel(userToSave);
 
                 return this.View(model);
@@ -443,6 +448,10 @@
             {
                 //return this.RedirectToAction("edit", "users", new { id = id });
                 return this.RedirectToAction("index", "users");
+            }
+            else
+            {
+                TempData["PreventError"] = errors.FirstOrDefault().Value;
             }
 
             var copyModel = this.CreateInputViewModel(copy);
