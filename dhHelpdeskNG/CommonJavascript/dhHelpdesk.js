@@ -13,6 +13,22 @@ $(".nav-tabs-actions a").unbind("click");
 
 $(".content input:text, .content textarea").eq(0).focus()
 
+
+function ShowToastMessage(message, msgType) {
+    $().toastmessage('showToast', {
+        text: message,
+        sticky: false,
+        position: 'top-center',
+        type: msgType,
+        closeText: '',
+        stayTime: 3000,
+        inEffectDuration: 1000,
+        close: function () {
+            //console.log("toast is closed ...");
+        }
+    });
+}
+
 //Hämtar vald text från droptodwn button
 function getBreadcrumbs(a) {
     var path = $(a).text(), $parent = $(a).parents("li").eq(1).find("a:first");
@@ -79,6 +95,7 @@ function CaseCascadingSelectlistChange(id, customerId, postTo, ctl, departmentFi
         }
     }, 'json');
 }
+
 
 function CaseWriteTextToLogNote(value) {
     $('#WriteTextToExternalNote').val(value);
@@ -356,6 +373,13 @@ function CaseInitForm() {
         $("#case__CaseType_Id").val(val).trigger('change');
     });
 
+    $('#divOU ul.dropdown-menu li a').click(function (e) {
+        e.preventDefault();
+        var val = $(this).attr('value');
+        $("#divBreadcrumbs_OU").text(getBreadcrumbs(this));
+        $("#case__Ou_Id").val(val).trigger('change');
+    });
+
     $('#divProductArea ul.dropdown-menu li a').click(function (e) {
         e.preventDefault();
         var val = $(this).attr('value');
@@ -379,6 +403,14 @@ function CaseInitForm() {
             params += "&phone=" + $("#case__PersonsPhone").val();
         if ($("#case__Place").val() != '')
             params += "&placement=" + $("#case__Place").val();
+        if ($("#case__PersonsCellphone").val() != '')
+            params += "&cellPhone=" + $("#case__PersonsCellphone").val();
+        if ($("#case__Region_Id").val() != '')
+            params += "&regionId=" + $("#case__Region_Id").val();
+        if ($("#case__Department_Id").val() != '')
+            params += "&departmentId=" + $("#case__Department_Id").val();
+        if ($("#case__Ou_Id").val() != '')
+            params += "&unitId=" + $("#case__Ou_Id").val();
         
         var win = window.open('/Notifiers/NewNotifierPopup' + params, '_blank', 'left=100,top=100,width=990,height=480,toolbar=0,resizable=1,menubar=0,status=0,scrollbars=1');
         //win.onbeforeunload = function () { CaseNewNotifierEvent(win.returnValue); }
@@ -487,6 +519,9 @@ function CaseInitForm() {
                     $(".plupload_buttons").css("display", "inline");
                     $(".plupload_upload_status").css("display", "inline");                    
                     up.refresh();
+
+                    // Raise event about uploaded file
+                    $(document).trigger("OnUploadCaseFile", [up, file]);
                 }
             },
             init: {
@@ -893,6 +928,9 @@ function bindDeleteCaseFileBehaviorToDeleteButtons() {
             fileNames = fileNames.replace("|" + fileName.trim(), "");
             fileNames = fileNames.replace(fileName.trim() + "|", "");            
             $('#CaseFileNames').val(fileNames);
+
+            // Raise event about deleted file
+            $(document).trigger("OnDeleteCaseFile", [key, fileName]);
         });
     });
 }

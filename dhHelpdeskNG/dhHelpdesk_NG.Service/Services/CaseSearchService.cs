@@ -27,19 +27,21 @@
 
     public class CaseSearchService : ICaseSearchService
     {
-        private readonly ICaseSearchRepository _caseSearchRepository;
-        private readonly IProductAreaService _productAreaService;
-        private readonly IGlobalSettingService _globalSettingService;
-        private readonly ISettingService _settingService;
-        private readonly IUserService _userService;
+        private readonly ICaseSearchRepository caseSearchRepository;
+        private readonly IProductAreaService productAreaService;
+        private readonly IGlobalSettingService globalSettingService;
+        private readonly ISettingService settingService;
 
-        public CaseSearchService(ICaseSearchRepository caseSearchRepository, IProductAreaService productAreaService, IGlobalSettingService globalSettingService, ISettingService settingService, IUserService userService)
+        public CaseSearchService(
+            ICaseSearchRepository caseSearchRepository, 
+            IProductAreaService productAreaService, 
+            IGlobalSettingService globalSettingService, 
+            ISettingService settingService)
         {
-            this._caseSearchRepository = caseSearchRepository;
-            this._globalSettingService = globalSettingService;
-            this._settingService = settingService;
-            this._productAreaService = productAreaService;
-            this._userService = userService;
+            this.caseSearchRepository = caseSearchRepository;
+            this.globalSettingService = globalSettingService;
+            this.settingService = settingService;
+            this.productAreaService = productAreaService;
         }
 
         public IList<CaseSearchResult> Search(
@@ -63,10 +65,10 @@
             // ärenden som tillhör barn till föräldrer ska visas om vi filtrerar på föräldern
             if (int.TryParse(csf.ProductArea, out productAreaId))
             {
-                csf.ProductArea = this._productAreaService.GetProductAreaWithChildren(productAreaId, ", ", "Id");
+                csf.ProductArea = this.productAreaService.GetProductAreaWithChildren(productAreaId, ", ", "Id");
             }
 
-            return this._caseSearchRepository.Search(
+            return this.caseSearchRepository.Search(
                                                 csf, 
                                                 csl, 
                                                 userId, 
@@ -74,14 +76,13 @@
                                                 showNotAssignedWorkingGroups, 
                                                 userGroupId, 
                                                 restrictedCasePermission, 
-                                                this._globalSettingService.GetGlobalSettings().FirstOrDefault(), 
-                                                this._settingService.GetCustomerSetting(f.CustomerId), 
+                                                this.globalSettingService.GetGlobalSettings().FirstOrDefault(), 
+                                                this.settingService.GetCustomerSetting(f.CustomerId), 
                                                 s,
                                                 workingDayStart,
                                                 workingDayEnd,
                                                 holidays,
                                                 applicationId);
         }
-
     }
 }

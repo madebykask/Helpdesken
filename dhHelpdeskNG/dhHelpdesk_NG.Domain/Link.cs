@@ -10,6 +10,8 @@ namespace DH.Helpdesk.Domain
         public int? Customer_Id { get; set; }
         public int? Document_Id { get; set; }
         public int OpenInNewWindow { get; set; }
+        public int NewWindowHeight { get; set; }
+        public int NewWindowWidth { get; set; }
         public int ShowOnStartPage { get; set; }
         public int? LinkGroup_Id { get; set; }
         public string URLAddress { get; set; }
@@ -17,12 +19,14 @@ namespace DH.Helpdesk.Domain
         public string SortOrder { get; set; }
         public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }
+        public int? CaseSolution_Id { get; set; }
 
 
         public virtual Customer Customer { get; set; }
         public virtual Document Document { get; set; }
         public virtual ICollection<User> Us { get; set; }
         public virtual LinkGroup LinkGroup { get; set; }
+        public virtual CaseSolution CaseSolution { get; set; }
 
     }
 }

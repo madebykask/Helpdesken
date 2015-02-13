@@ -132,7 +132,11 @@
     <Compile Include="BusinessLogic\Mappers\Accounts\MapperData\AccountSettingsMapperForProcessing.cs" />
     <Compile Include="BusinessLogic\Mappers\BulletinBoards\BulletinBoardMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Calendars\CalendarMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\Cases\CaseOverviewMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\Cases\CaseSettingsMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\Cases\Data\CaseSettingsMapData.cs" />
     <Compile Include="BusinessLogic\Mappers\Cases\HolidayMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\CaseType\CaseTypeMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Changes\ChangeMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\CheckLists\CheckListsMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Customers\CaseMapper.cs" />
@@ -159,6 +163,7 @@
     <Compile Include="BusinessLogic\Mappers\Orders\OrderFieldSettingsMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Orders\OrderFieldSettingsOverviewMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Orders\OrderHistoryMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\Orders\OrderHistoryOverviewMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Orders\OrderLogMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Orders\OrderMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Orders\OrderOverviewMapper.cs" />
@@ -166,10 +171,18 @@
     <Compile Include="BusinessLogic\Mappers\Orders\OrderTypeMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Orders\OrderUpdateMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Problems\ProblemMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\ProductArea\ProductAreaMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Questionnaire\CircularPartMappers.cs" />
     <Compile Include="BusinessLogic\Mappers\Questionnaire\QuestionnaireQuestionResultMappers.cs" />
+    <Compile Include="BusinessLogic\Mappers\Reports\ReportsMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\Reports\ReportsOptionsMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Shared\Data\UnionItemOverview.cs" />
     <Compile Include="BusinessLogic\Mappers\Shared\GlobalMappers.cs" />
+    <Compile Include="BusinessLogic\Mappers\Users\UsersMapper.cs" />
+    <Compile Include="BusinessLogic\Orders\Concrete\HistoriesComparator.cs" />
+    <Compile Include="BusinessLogic\Orders\Concrete\OrdersLogic.cs" />
+    <Compile Include="BusinessLogic\Orders\IHistoriesComparator.cs" />
+    <Compile Include="BusinessLogic\Orders\IOrdersLogic.cs" />
     <Compile Include="BusinessLogic\Specifications\Accounts\AccountFieldSettingsSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Accounts\AccountSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\BulletinBoards\BulletinBoardsSpecifications.cs" />
@@ -194,7 +207,9 @@
     <Compile Include="BusinessLogic\Specifications\Licenses\LicenseSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Licenses\ProductSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Links\LinkSpecifications.cs" />
+    <Compile Include="BusinessLogic\Specifications\Orders\OrderEmailLogSpecificatons.cs" />
     <Compile Include="BusinessLogic\Specifications\Orders\OrderFieldSettingsSpecifications.cs" />
+    <Compile Include="BusinessLogic\Specifications\Orders\OrderHistorySpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Orders\OrderLogSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Orders\OrderPropertySpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Orders\OrderSpecifications.cs" />
@@ -241,6 +256,8 @@
     <Compile Include="Infrastructure\Cases\ICasesCalculator.cs" />
     <Compile Include="Infrastructure\Email\Concrete\CaseMailer.cs" />
     <Compile Include="Infrastructure\Email\ICaseMailer.cs" />
+    <Compile Include="Services\Concrete\Reports\ReportService.cs" />
+    <Compile Include="Services\Concrete\Users\UsersPasswordHistoryService.cs" />
     <Compile Include="Services\ISurveyService.cs" />
     <Compile Include="Localization\CultureTranslations.cs" />
     <Compile Include="Infrastructure\ManualDependencyResolver.cs" />
@@ -343,7 +360,6 @@
     <Compile Include="Services\IActionSettingService.cs" />
     <Compile Include="Services\IInventorySettingsService.cs" />
     <Compile Include="Services\Concrete\InventorySettingsService.cs" />
-    <Compile Include="Services\Concrete\ReportsService.cs" />
     <Compile Include="Services\Concrete\StatisticsService.cs" />
     <Compile Include="Services\ICausingPartService.cs" />
     <Compile Include="Services\IChangeEmailService.cs" />
@@ -375,7 +391,6 @@
     <Compile Include="Services\INotifierService.cs" />
     <Compile Include="Services\IProblemService.cs" />
     <Compile Include="Services\IQestionnaireService.cs" />
-    <Compile Include="Services\IReportsService.cs" />
     <Compile Include="Services\IStatisticsService.cs" />
     <Compile Include="Services\Licenses\IApplicationsService.cs" />
     <Compile Include="Services\Licenses\IComputersService.cs" />
@@ -424,6 +439,7 @@
     <Compile Include="Services\Concrete\ProjectService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\RegionService.cs" />
+    <Compile Include="Services\Reports\IReportService.cs" />
     <Compile Include="Services\RoomService.cs" />
     <Compile Include="Services\SettingService.cs" />
     <Compile Include="Services\StandardTextService.cs" />
@@ -438,6 +454,7 @@
     <Compile Include="Infrastructure\EmailSendingSettings.cs" />
     <Compile Include="Infrastructure\Concrete\EmailSendingSettingsProvider.cs" />
     <Compile Include="Infrastructure\IEmailSendingSettingsProvider.cs" />
+    <Compile Include="Services\Users\IUsersPasswordHistoryService.cs" />
     <Compile Include="utils\ServiceUtils.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Changes\IUpdateChangeRequestValidator.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Changes\Concrete\UpdateChangeRequestValidator.cs" />

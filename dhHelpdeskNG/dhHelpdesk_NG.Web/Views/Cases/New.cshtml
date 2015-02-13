@@ -3,15 +3,15 @@
 @using DH.Helpdesk.Web.Infrastructure
 
 @section Scripts {
-<script type="text/javascript">
+    <script type="text/javascript">
 
-    $(document).ready(function() {
-        CaseInitForm();
-    });
-    
-    $("#case__RegLanguage_Id").change(function () {
+        $(document).ready(function () {
+            CaseInitForm();
+        });
 
-        var ci = '@Model.NewModeParams.customerId';
+        $("#case__RegLanguage_Id").change(function () {
+
+            var ci = '@Model.NewModeParams.customerId';
         var cfc = '@Model.NewModeParams.copyFromCaseId';
         var ti = '@Model.NewModeParams.templateId';
         var cli = $('#case__RegLanguage_Id').val();
@@ -26,16 +26,16 @@
 
         //location.href = '/Cases/new?customerId=' + ci + p2 + p3 + '&caseLanguageId=' + cli;       
     });
-</script>
+    </script>
 }
 
 @Html.Partial("_Plupload")
 @{ var t = new ViewDataDictionary();
-   t.Add("isJS","true");
- }
-@if (Model != null)
+   t.Add("isJS", "true");
+}
+@if(Model != null)
 {
-    using (Html.BeginForm("new", "cases", null, FormMethod.Post, new { id = "target" }))
+    using(Html.BeginForm("new", "cases", null, FormMethod.Post, new { id = "target" }))
     {        
     <div class="secnavs fixed">
         <div class="pull-left">
@@ -45,13 +45,16 @@
                 <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "NewCaseAndAddCase();return false;", @class = "btn" })</li>
                 <li class="secspace"></li>
                 <li>@Html.ActionLink(Translation.Get("Stäng", Enums.TranslationSource.TextTranslation), "index", new { customerId = @Model.case_.Customer_Id }, new { @class = "btn" })</li>
-                <li id="btnCaseTemplate">                                       
+                <li id="btnCaseTemplate">
                     @Html.Partial("_CaseTemplateTree", Model.CaseTemplateTreeButton, t)
-                </li>                
+                </li>
             </ul>
         </div>
-    </div>    
-    @Html.Partial("_Input", Model)
+    </div>
+    <div class="newmode">
+        @Html.Partial("_Input", Model)
+        @Html.Hidden("templateId", Model.NewModeParams.templateId);
+    </div>
     }
 }
 

@@ -51,7 +51,7 @@
                                                 {
                                                     ActiveCases = query.Where(c => c.FinishingDate == null).Count(),
                                                     EndedCases = query.Where(c => c.FinishingDate != null).Count(),
-                                                    InRestCases = query.Where(c => c.FinishingDate == null && c.StateSecondary_Id != null).Count(),
+                                                    InRestCases = query.Where(c => c.FinishingDate == null && c.StateSecondary_Id != null && c.StateSecondary.IncludeInCaseStatistics == 0 && c.Deleted == 0).Count(),
                                                     MyCases = (from c in query
                                                                join p in problems on c.Problem equals p into gj
                                                                from cp in gj.DefaultIfEmpty()

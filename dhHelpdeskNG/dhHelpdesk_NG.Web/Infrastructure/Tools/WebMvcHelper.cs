@@ -37,6 +37,12 @@
         }
 
         public static MultiSelectList CreateMultiSelectField(
+            IEnumerable<ItemOverview> items)
+        {
+            return CreateMultiSelectField(items, null);
+        }
+
+        public static MultiSelectList CreateMultiSelectField(
             IEnumerable<ItemOverview> items,
             IEnumerable<int> selectedValues)
         {

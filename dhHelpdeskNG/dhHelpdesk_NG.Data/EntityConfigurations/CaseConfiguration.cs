@@ -1,6 +1,5 @@
 ﻿namespace DH.Helpdesk.Dal.EntityConfigurations
 {
-    using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.ModelConfiguration;
 
@@ -132,26 +131,51 @@
             this.Property(x => x.ChangeTime).IsRequired();
             this.Property(x => x.RegTime).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            this.Property(x => x.User_Id).IsRequired();
-            this.Property(x => x.OU_Id).IsOptional();
+            this.HasRequired(x => x.User)
+                .WithMany()
+                .HasForeignKey(x => x.User_Id)
+                .WillCascadeOnDelete(false);
+            this.HasOptional(x => x.Ou)
+                .WithMany()
+                .HasForeignKey(x => x.OU_Id)
+                .WillCascadeOnDelete(false);
             this.Property(x => x.CaseType_Id).IsOptional();
             this.Property(x => x.ProductArea_Id).IsOptional();
-            this.Property(x => x.System_Id).IsOptional();
+            this.HasOptional(x => x.System)
+                .WithMany()
+                .HasForeignKey(x => x.System_Id)
+                .WillCascadeOnDelete(false);
             this.Property(x => x.Urgency_Id).IsOptional();
-            this.Property(x => x.Impact_Id).IsOptional();
+            this.HasOptional(x => x.Impact)
+                .WithMany()
+                .HasForeignKey(x => x.Impact_Id)
+                .WillCascadeOnDelete(false);
             this.Property(x => x.Category_Id).IsOptional();
             this.Property(x => x.Problem_Id).IsOptional();
             this.Property(x => x.Project_Id).IsOptional();
             this.Property(x => x.Change_Id).IsOptional();
-            this.Property(x => x.Supplier_Id).IsOptional();
+            this.HasOptional(x => x.Supplier)
+                .WithMany()
+                .HasForeignKey(x => x.Supplier_Id)
+                .WillCascadeOnDelete(false);
             this.Property(x => x.WorkingGroup_Id).IsOptional();
-            this.Property(x => x.CaseResponsibleUser_Id).IsOptional();
-            this.Property(x => x.Status_Id).IsOptional();
+            this.HasOptional(x => x.CaseResponsibleUser)
+                .WithMany()
+                .HasForeignKey(x => x.CaseResponsibleUser_Id)
+                .WillCascadeOnDelete(false);
+            this.HasOptional(x => x.Status)
+                .WithMany()
+                .HasForeignKey(x => x.Status_Id)
+                .WillCascadeOnDelete(false);
             this.Property(x => x.StateSecondary_Id).IsOptional();
             this.Property(x => x.ChangeByUser_Id).IsOptional();
             this.Property(x => x.Unread).IsRequired().HasColumnName("Status");
             this.Property(x => x.CausingPartId).IsOptional();
             this.Property(x => x.DefaultOwnerWG_Id).IsOptional();
+
+            this.HasMany(x => x.Logs)
+                .WithRequired(x => x.Case)
+                .HasForeignKey(x => x.Case_Id);
 
             this.ToTable("tblcase");
         }

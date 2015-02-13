@@ -14,26 +14,15 @@
 <html>
 <body>
     <div>
-       <table style="font-family: Verdana; font-size: 11px; width: 100%;" border="0">
+   @*    <table style="@IrelandPdfPage.StyleValue() width: 100%;" border="0">
             <tr style="text-align: right;">
                 <td>@string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:d MMMMMM yyyy}", DateTime.Now)</td>
             </tr>
-        </table>
+        </table>*@
 
-         <p style="text-align: left; font-family: Verdana; font-size: 11px;"><strong>Private & Confidential</strong><br />
-        @Model.GetDocumentAnswer("FirstName",true) @Model.GetDocumentAnswer("LastName",true)<br />
-        @Model.GetDocumentAnswer("PermanentAddressLine1",true)
-        @if (!string.IsNullOrEmpty(Model.GetDocumentAnswer("PermanentAddressLine2", false)))
-         {
-        <br />
-        @Model.GetDocumentAnswer("PermanentAddressLine2",false)
-         }
-        <br />
-        @Model.GetDocumentAnswer("PermanentCity",true)
-        <br />
-        @Model.GetDocumentAnswer("PermanentPostalCode",true)
-        <br />
-        <br />
+      <p style="@IrelandPdfPage.StyleValue()">
+             @*<strong>Private & Confidential</strong><br />
+             @Html.Partial("_HeaderAddress", Model)*@
         Dear @Model.GetDocumentAnswer("FirstName",true),<br /><br /> 
         @if ((Model.GetDocumentAnswer("AllowancesType" + Model.MultiNr)).ToLower() == "Fork Lift Truck Allowance".ToLower())
         {
@@ -59,12 +48,10 @@
             <br /><br />
             <text>This will be effective from @Model.GetDocumentAnswer("AllowancesValidFrom" + Model.MultiNr,true).</text>
         }
-        
-        
+                
         <br />
         <br />
-        All other Terms and Conditions remain the same. IKEA reserves the right to vary terms and conditions of employment subject to consultation and reasonable notice.
-       
+        All other Terms and Conditions remain the same. IKEA reserves the right to vary terms and conditions of employment subject to consultation and reasonable notice.       
         </p>
 
         <endpage />

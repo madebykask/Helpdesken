@@ -5,6 +5,11 @@
 
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.Web.Models.Case;
+    using DH.Helpdesk.BusinessData.Models.Projects.Output;
+    using DH.Helpdesk.BusinessData.Models.Problem.Output;
+    using DH.Helpdesk.Domain.Changes;
 
     public class CaseSolutionIndexViewModel
     {
@@ -49,6 +54,7 @@
         public string Finishing_Cause_Path { get; set; }
         public string ParantPath_ProductArea { get; set; }
         public string ParantPath_CaseType { get; set; }
+        public int? CountryId { get; set; }
 
         public CaseSolution CaseSolution { get; set; }
         public UserSearch Users { get; set; }
@@ -64,7 +70,25 @@
         public IList<SelectListItem> PerformerUsers { get; set; }
         public IList<SelectListItem> Priorities { get; set; }
         public IList<ProductArea> ProductAreas { get; set; }
-        public IList<SelectListItem> Projects { get; set; }
+        public IList<SelectListItem> projects { get; set; }
+        //public IList<ProjectOverview> Projects { get; set; }
         public IList<SelectListItem> WorkingGroups { get; set; }
+        public IList<SelectListItem> Regions { get; set; }
+        public IList<SelectListItem> OUs { get; set; }
+        public IList<SelectListItem> Systems { get; set; }
+        public IList<SelectListItem> Urgencies { get; set; }
+        public IList<SelectListItem> Impacts { get; set; }
+        public IList<SelectListItem> Status { get; set; }
+        public IList<SelectListItem> StateSecondaries { get; set; }
+        public IList<Country> Countries { get; set; }
+        public IList<SelectListItem> Suppliers { get; set; }
+        public IList<Currency> currencies { get; set; }
+        public IList<SelectListItem> problems{ get; set; }
+        public IList<SelectListItem> changes { get; set; }
+
+        public Infrastructure.Enums.AccessMode EditMode { get; set; }
+        public CaseFilesModel CaseFilesModel { get; set; }
+
+        //public IList<Department> departments { get; set; }
     }
 }

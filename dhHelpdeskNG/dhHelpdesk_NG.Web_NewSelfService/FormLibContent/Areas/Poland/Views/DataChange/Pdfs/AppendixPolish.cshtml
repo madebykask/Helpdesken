@@ -138,15 +138,15 @@
                          " </strong> PLN brutto " + "(słownie: " + Model.GetAnswer("BasicPayInWordsPolish") + ").<br />");
             }
 
-            if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("7") && Model.GetAnswer("MonthlyHourly") == "monthly"
-                && string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWordsPolish")) && Model.Contract.Company.Key == "OI")
-            {
-                list.Add(" Pracownik będzie otrzymywał wynagrodzenie zasadnicze wg stawki <strong>" + Model.GetTranslatedAnswer("MonthlyHourly") + "</strong>w wysokości <strong>" + Model.GetAnswer("BasicPay") +
-                    " </strong> PLN brutto " + "(słownie: .......................................................................................................).<br />");
-            }
+            //if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("7") && Model.GetAnswer("MonthlyHourly") == "monthly"
+            //    && string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWordsPolish")) && Model.Contract.Company.Key == "OI")
+            //{
+            //    list.Add(" Pracownik będzie otrzymywał wynagrodzenie zasadnicze wg stawki <strong>" + Model.GetTranslatedAnswer("MonthlyHourly") + "</strong>w wysokości <strong>" + Model.GetAnswer("BasicPay") +
+            //        " </strong> PLN brutto " + "(słownie: .......................................................................................................).<br />");
+            //}
 
             if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("7") && Model.GetAnswer("MonthlyHourly") == "monthly"
-                && string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWordsPolish")) &&  Model.Contract.Company.Key != "OI")
+                && string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWordsPolish"))) //&&  Model.Contract.Company.Key != "OI"
             {
                 list.Add(" Pracownik będzie otrzymywał wynagrodzenie zasadnicze wg stawki <strong>" + Model.GetTranslatedAnswer("MonthlyHourly") + "</strong>w wysokości <strong>" + Model.GetAnswer("BasicPay") +
                     " </strong> PLN brutto " + "(słownie: .........................................................................................................................).<br />");
@@ -160,16 +160,16 @@
                          "</strong> PLN brutto " + " <strong> za godzinę </strong> (słownie: " + Model.GetAnswer("BasicPayInWordsPolish") + ").<br />");
             }
 
-            if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("7") && Model.GetAnswer("MonthlyHourly") == "hourly"
-                && string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWordsPolish")) && Model.Contract.Company.Key == "OI")
-            {
-                list.Add(" Pracownik będzie otrzymywał wynagrodzenie zasadnicze wg stawki <strong>" + Model.GetTranslatedAnswer("MonthlyHourly") + "</strong> w wysokości  <strong>" + Model.GetAnswer("BasicPay") +
-                         "</strong> PLN brutto " + " <strong> za godzinę </strong> (słownie: .......................................................................................................).<br />");
-            }
+            //if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("7") && Model.GetAnswer("MonthlyHourly") == "hourly"
+            //    && string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWordsPolish")) && Model.Contract.Company.Key == "OI")
+            //{
+            //    list.Add(" Pracownik będzie otrzymywał wynagrodzenie zasadnicze wg stawki <strong>" + Model.GetTranslatedAnswer("MonthlyHourly") + "</strong> w wysokości  <strong>" + Model.GetAnswer("BasicPay") +
+            //             "</strong> PLN brutto " + " <strong> za godzinę </strong> (słownie: .......................................................................................................).<br />");
+            //}
 
 
             if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("7") && Model.GetAnswer("MonthlyHourly") == "hourly"
-                && string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWordsPolish")) && Model.Contract.Company.Key != "OI")
+                && string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWordsPolish"))) //&& Model.Contract.Company.Key != "OI"
             {
                 list.Add(" Pracownik będzie otrzymywał wynagrodzenie zasadnicze wg stawki <strong>" + Model.GetTranslatedAnswer("MonthlyHourly") + "</strong> w wysokości  <strong>" + Model.GetAnswer("BasicPay") +
                          "</strong> PLN brutto " + " <strong> za godzinę </strong> (słownie: .........................................................................................................................).<br />");
@@ -187,46 +187,78 @@
                 list.Add(" Miejsce pracy ustala się na <strong>" + a + "</strong>" + " i <strong>" + Model.Translate(Model.GetAnswer("AdditionalPlaceOfWork")) + "</strong>.");
             }
 
+            //if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("8")
+            //    && Model.GetTranslatedAnswer("FunctionAllowance") == "1045-Dodatek funkcyjny" && Model.Contract.Company.Key == "OI")
+            //{
+            //    list.Add("Pracownik będzie otrzymywał dodatek funkcyjny wg stawki miesięcznej w wysokości <strong>" + Model.GetAnswer("FunctionAllowanceAmount") + " PLN brutto</strong><br />"
+            //              + "(słownie: .......................................................................................................).<br />");
+            //}
+
+            
+            string inWords = "(słownie: .........................................................................................................................).<br />";
+            string text = "Pracownik będzie otrzymywał dodatek funkcyjny wg stawki miesięcznej w wysokości <strong>";
+            
             if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("8")
-                && Model.GetTranslatedAnswer("FunctionAllowance") == "1045-Dodatek funkcyjny" && Model.Contract.Company.Key == "OI")
+               && Model.GetTranslatedAnswer("FunctionAllowance") == "1045-Dodatek funkcyjny") //&& Model.Contract.Company.Key != "OI"
             {
-                list.Add("Pracownik będzie otrzymywał dodatek funkcyjny wg stawki miesięcznej w wysokości <strong>" + Model.GetAnswer("FunctionAllowanceAmount") + " PLN brutto</strong><br />"
-                          + "(słownie: .......................................................................................................).<br />");
+                if (string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWordsPolish1")))
+                {
+                    list.Add(text + Model.GetAnswer("FunctionAllowanceAmount") + " PLN brutto</strong><br />"
+                          + inWords);
+                }
+                else
+                {
+                    list.Add(text + Model.GetAnswer("FunctionAllowanceAmount") + " PLN brutto.</strong><br />"
+                          + "(słownie: " + Model.GetAnswer("BasicPayInWordsPolish1") + ").");
+                }
+                
             }
 
-            if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("8")
-               && Model.GetTranslatedAnswer("FunctionAllowance") == "1045-Dodatek funkcyjny" && Model.Contract.Company.Key != "OI")
-            {
-                list.Add("Pracownik będzie otrzymywał dodatek funkcyjny wg stawki miesięcznej w wysokości <strong>" + Model.GetAnswer("FunctionAllowanceAmount") + " PLN brutto</strong><br />"
-                          + "(słownie: .........................................................................................................................).<br />");
-            }
+            //if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("8")
+            //    && Model.GetTranslatedAnswer("FunctionAllowance2") == "1045-Dodatek funkcyjny" && Model.Contract.Company.Key == "OI")
+            //{
+            //    list.Add("Pracownik będzie otrzymywał dodatek funkcyjny wg stawki miesięcznej w wysokości <strong>" + Model.GetAnswer("FunctionAllowanceAmount2") + " PLN brutto</strong><br />"
+            //              + "(słownie: .......................................................................................................).<br />");
+            //}
 
             if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("8")
-                && Model.GetTranslatedAnswer("FunctionAllowance2") == "1045-Dodatek funkcyjny" && Model.Contract.Company.Key == "OI")
+               && Model.GetTranslatedAnswer("FunctionAllowance2") == "1045-Dodatek funkcyjny") //&& Model.Contract.Company.Key != "OI"
             {
-                list.Add("Pracownik będzie otrzymywał dodatek funkcyjny wg stawki miesięcznej w wysokości <strong>" + Model.GetAnswer("FunctionAllowanceAmount2") + " PLN brutto</strong><br />"
-                          + "(słownie: .......................................................................................................).<br />");
+                if (string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWordsPolish2")))
+                 {
+                    list.Add(text + Model.GetAnswer("FunctionAllowanceAmount2") + " PLN brutto</strong><br />"
+                          + inWords);
+                }
+
+                else
+                {
+                    list.Add(text + Model.GetAnswer("FunctionAllowanceAmount2") + " PLN brutto.</strong><br />"
+                          + "(słownie: " + Model.GetAnswer("BasicPayInWordsPolish2") + ").");
+                }
+                
             }
 
-            if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("8")
-               && Model.GetTranslatedAnswer("FunctionAllowance2") == "1045-Dodatek funkcyjny" && Model.Contract.Company.Key != "OI")
-            {
-                list.Add("Pracownik będzie otrzymywał dodatek funkcyjny wg stawki miesięcznej w wysokości <strong>" + Model.GetAnswer("FunctionAllowanceAmount2") + "PLN brutto</strong><br />"
-                          + "(słownie: .........................................................................................................................).<br />");
-            }
+            //if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("8")
+            //   && Model.GetTranslatedAnswer("FunctionAllowance3") == "1045-Dodatek funkcyjny" && Model.Contract.Company.Key == "OI")
+            //{
+            //    list.Add("Pracownik będzie otrzymywał dodatek funkcyjny wg stawki miesięcznej w wysokości <strong>" + Model.GetAnswer("FunctionAllowanceAmount3") + " PLN brutto</strong><br />"
+            //              + "(słownie: .......................................................................................................).<br />");
+            //}
 
             if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("8")
-               && Model.GetTranslatedAnswer("FunctionAllowance3") == "1045-Dodatek funkcyjny" && Model.Contract.Company.Key == "OI")
+               && Model.GetTranslatedAnswer("FunctionAllowance3") == "1045-Dodatek funkcyjny" ) // && Model.Contract.Company.Key != "OI"
             {
-                list.Add("Pracownik będzie otrzymywał dodatek funkcyjny wg stawki miesięcznej w wysokości <strong>" + Model.GetAnswer("FunctionAllowanceAmount3") + " PLN brutto</strong><br />"
-                          + "(słownie: .......................................................................................................).<br />");
-            }
-
-            if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("8")
-               && Model.GetTranslatedAnswer("FunctionAllowance3") == "1045-Dodatek funkcyjny" && Model.Contract.Company.Key != "OI")
-            {
-                list.Add("Pracownik będzie otrzymywał dodatek funkcyjny wg stawki miesięcznej w wysokości <strong>" + Model.GetAnswer("FunctionAllowanceAmount3") + " PLN brutto</strong><br />"
-                          + "(słownie: .........................................................................................................................).<br />");
+                
+                if (string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWordsPolish3")))
+                 {
+                    list.Add(text + Model.GetAnswer("FunctionAllowanceAmount3") + " PLN brutto</strong><br />"
+                          + inWords);                
+                 }
+                 else
+                 {
+                     list.Add(text + Model.GetAnswer("FunctionAllowanceAmount3") + " PLN brutto.</strong><br />"
+                           + "(słownie: " + Model.GetAnswer("BasicPayInWordsPolish3") + ").");
+                 }
             }
         }
 

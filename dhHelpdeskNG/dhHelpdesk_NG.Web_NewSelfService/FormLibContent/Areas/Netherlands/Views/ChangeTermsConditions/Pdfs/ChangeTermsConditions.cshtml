@@ -89,10 +89,10 @@
             }
 
             //1a
-            // **** Applicable if additionally OA10 is "New Position for VAP store?" for units OA3: Store Amsterdam 088 or Store Heerlen 089 or Store Barendrecht 274
+            // **** Applicable if additionally OA10 is "New Position for VAP store?" for units OA3: Store Amsterdam 088 or Store Heerlen 089 or Store Rotterdam Barendrecht 274
             if (Model.GetDocumentAnswer("NewPosition").ToLower() == "New Position for VAP store?".ToLower())
             {
-                if (Model.GetDocumentAnswer("NewBusinessUnit").ToLower() == "Store Amsterdam 088".ToLower() | Model.GetDocumentAnswer("NewBusinessUnit").ToLower() == "Store Heerlen 089".ToLower() | Model.GetDocumentAnswer("NewBusinessUnit").ToLower() == "Store Barendrecht 274".ToLower())
+                if (Model.GetDocumentAnswer("NewBusinessUnit").ToLower() == "Store Amsterdam 088".ToLower() | Model.GetDocumentAnswer("NewBusinessUnit").ToLower() == "Store Heerlen 089".ToLower() | Model.GetDocumentAnswer("NewBusinessUnit").ToLower() == "Store Rotterdam Barendrecht 274".ToLower())
                 {
 
                     string text1a = "De bovenstaande functie is specifiek voor de vestiging " + Model.GetDocumentAnswer("NewBusinessUnit", true) + " en valt buiten de kaders van het functiegebouw van IKEA B.V. Op het moment dat VAPS constructie van IKEA " + Model.GetDocumentAnswer("NewBusinessUnit") + " vervalt en IKEA " + Model.GetDocumentAnswer("NewBusinessUnit") + " weer een reguliere vestiging wordt, zal dit consequenties hebben voor deze functie. Met jou zal dan moeten worden gesproken over herplaatsing in een andere functie behorende bij het functiegebouw van IKEA B.V.";

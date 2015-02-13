@@ -17,11 +17,11 @@
             </element>
             <element name="FirstName" type="text" label="Co-Worker First Name" mandatory="1"></element>
             <element name="LastName" type="text" label="Co-Worker Last name" mandatory="1"></element>
-            <element name="IKEAEmailAddress" type="text" label="IKEA Email Address" mandatory="1">
+            <element name="IKEAEmailAddress" type="text" label="IKEA Email Address">
                 <regex inherit="email" message="" pattern=""></regex>
             </element>
             <element name="IKEANetworkID" type="text"  label="IKEA Network ID" mandatory="1">
-                <regex inherit="unsignednum" message="" pattern=""></regex>
+                <!--<regex inherit="unsignednum" message="" pattern=""></regex>-->
             </element>
           <element name="Company" type="text" label="Company"></element>
             <element name="BusinessUnit" type="text" label="Business Unit"></element>
@@ -33,7 +33,7 @@
                   <option value ="Yes">Yes</option>
                 </options>
             </element>
-            <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1">
+            <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1" default="Standard">
                 <options>
                     <option value=""></option>
                     <option value ="Urgent">Urgent</option>
@@ -74,20 +74,20 @@
             <element name="LockCDSAccountFrom" type="date" format="dd.MM.yyyy" mandatory="1" label="Lock CDS Account from:">
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
-            <element name="Co-WorkerBeenEmployedFor2Months" type="select" label="Co-worker been employed for more than two months?" mandatory="1" default="Yes">
+            <!--<element name="Co-WorkerBeenEmployedFor2Months" type="select" label="Co-worker been employed for more than two months?" mandatory="1" default="Yes">
                 <options>
                     <option value=""></option>
                     <option value="Yes">Yes</option>
                     <option value="No">No</option>
                 </options>
-            </element>
-            <element name="UsingCompanyFitness" type="select" label="Using Company Fitness?" mandatory="1" default="No">
+            </element>-->
+            <!--<element name="UsingCompanyFitness" type="select" label="Using Company Fitness?" mandatory="1" default="No">
                 <options>
                     <option value=""></option>
                     <option value="Yes">Yes</option>
                     <option value="No">No</option>
                 </options>
-            </element>
+            </element>-->
         </tab>
         <tab name="#Complete" label="Complete">
             <element name="CompleteTerminationType" type="select" label="Termination Type" mandatory="1">
@@ -121,20 +121,19 @@
                     <option value ="Resignation">Resignation</option>
                     <option value ="Redundancy">Redundancy</option>
                     <option value ="Invalidity">Invalidity</option>
-                    <option value ="Death">Death</option>
+                    <option value ="Death in service">Death in service</option>
                     <option value ="Termination in probation period by employee">Termination in probation period by employee</option>
                     <option value ="Termination in probation period by employer">Termination in probation period by employer</option>
-                    <option value ="Mutual cancelation agreement">Mutual cancelation agreement</option>
                 </options>
             </element>
-            <element name="TerminationPaymentMethod" type="select" label="Termination Payment Method" mandatory="1">
+            <!--<element name="TerminationPaymentMethod" type="select" label="Termination Payment Method" mandatory="1">
                 <options>
 
                     <option value ="By Payroll">By Payroll</option>
                     <option value ="By Off cycle">By Off cycle</option>
                     <option value ="By Manual Payment">By Manual Payment</option>
                 </options>
-            </element>
+            </element>-->
 
         </tab>
     </fields>

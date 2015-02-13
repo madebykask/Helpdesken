@@ -36,7 +36,7 @@
             <visibleTabs>#ServiceRequestDetails,#Basic</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#Basic</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#Basic,#Complete,#documents,#attachments</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Basic,#Complete,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
       <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
         <actions>
@@ -56,7 +56,7 @@
             <visibleTabs>#ServiceRequestDetails,#Basic</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#Basic</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#Basic,#Complete,#documents,#attachments</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Basic,#Complete,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Basic,#Complete</readOnlyTabs>
       <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
         <actions>
@@ -71,7 +71,7 @@
             <visibleTabs>#ServiceRequestDetails,#Basic</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#Basic</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#Basic,#Complete,#documents,#globalview,#attachments</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Basic,#Complete,#globalview,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Basic,#Complete</readOnlyTabs>
       <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
         <actions>
@@ -84,7 +84,7 @@
             <visibleTabs>#ServiceRequestDetails,#Basic</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#Basic</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#Basic,#Complete,#documents,#globalview,#attachments</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Basic,#Complete,#globalview,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Basic,#Complete</readOnlyTabs>
       <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
         <actions>

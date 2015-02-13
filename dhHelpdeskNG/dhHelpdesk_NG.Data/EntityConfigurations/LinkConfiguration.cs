@@ -22,6 +22,11 @@
                 .HasForeignKey(x => x.Document_Id)
                 .WillCascadeOnDelete(false);
 
+            this.HasOptional(x => x.CaseSolution)
+                .WithMany()
+                .HasForeignKey(x => x.CaseSolution_Id)
+                .WillCascadeOnDelete(false);
+
             HasOptional(x => x.LinkGroup)
                 .WithMany()
                 .HasForeignKey(x => x.LinkGroup_Id)
@@ -40,12 +45,15 @@
             this.Property(x => x.Customer_Id).IsOptional();
             this.Property(x => x.Document_Id).IsOptional();
             this.Property(x => x.OpenInNewWindow).IsRequired();
+            this.Property(x => x.NewWindowHeight).IsRequired();
+            this.Property(x => x.NewWindowWidth).IsRequired();
             this.Property(x => x.ShowOnStartPage).IsRequired();
             this.Property(x => x.URLAddress).IsRequired().HasMaxLength(300);
             this.Property(x => x.URLName).IsRequired().HasMaxLength(50);
             this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             //Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            this.Property(x => x.CaseSolution_Id).IsOptional();
 
             this.ToTable("tbllink");
         }

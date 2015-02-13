@@ -7,29 +7,21 @@
     public string GetContract(string allowanceNr)
     {
         string allowanceType = Model.GetDocumentAnswer("AllowancesType" + allowanceNr).Trim().ToLower();
+        string allowanceChangeType = Model.GetDocumentAnswer("AllowancesChangeType" + allowanceNr).Trim().ToLower();
 
 
-
+        if (allowanceChangeType == "Stop".ToLower() && (allowanceType == "Power Stacker".ToLower() || allowanceType == "Fork Lift Truck Allowance".ToLower()))
+        {
+            return "StopAllowancesDoc";
+        }
+        
         if (allowanceType == "Fork Lift Truck Allowance".ToLower() | allowanceType == "Power Stacker".ToLower())
         {
             return "AllowancesDoc";
         }
 
         return "";
-         
-        
-        //switch (allowanceType)
-        //{
-        //    case "fork lift truck":
-        //        return "AllowancesDoc";
-        //    case "100f salary flt skills":
-        //        return "AllowancesDoc";
-        //    case "power stacker":
-        //        return "AllowancesDoc";
-        //    default:
-        //        return "";
-        //}
-       
+      
     }
 
     public string PrintText()
@@ -52,7 +44,7 @@
                 </tr>
             </thead>
             <tbody>
-            @if (!string.IsNullOrEmpty(GetContract("")) | !string.IsNullOrEmpty(GetContract("2")) | !string.IsNullOrEmpty(GetContract("3")))
+            @if (!string.IsNullOrEmpty(GetContract("")) | !string.IsNullOrEmpty(GetContract("2")) | !string.IsNullOrEmpty(GetContract("3")) | !string.IsNullOrEmpty(GetContract("4")) | !string.IsNullOrEmpty(GetContract("5")))
             {
             
                 for (int i = 1; i <= int.Parse(Model.GetAnswer("Allowances")); i++)

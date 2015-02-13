@@ -37,7 +37,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("URL adress", Enums.TranslationSource.TextTranslation)<span class="mandatorystar">*</span>
+                                        @Translation.Get("URL adress", Enums.TranslationSource.TextTranslation)@*<span class="mandatorystar">*</span>*@
                                     </td>
                                     <td>
                                         @Html.TextAreaFor(model => model.Link.URLAddress)
@@ -49,6 +49,14 @@
                                     </td>
                                     <td>
                                         @Html.DropDownListFor(model => model.Link.Document_Id, Model.Documents, "")
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Ärendemall", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(model => model.Link.CaseSolution_Id, Model.CaseSolutions, "")
                                     </td>
                                 </tr>
                                 <tr>

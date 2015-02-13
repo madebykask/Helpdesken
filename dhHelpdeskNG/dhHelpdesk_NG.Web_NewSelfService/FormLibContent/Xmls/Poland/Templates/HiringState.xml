@@ -20,7 +20,6 @@
             </action>
             <action status="50" text="Full service request"> 
                 <validateTabs>#contract,#employment,#payment,#personal</validateTabs>
-                <!--validateFields>FathersFirstName,MothersFirstName,MothersBirthName,PlaceOfBirth,Nationality,Gender,NIP,Phone,EmergencyFirstName,EmergencyLastName,EmergencyRelationship,EmergencyStreet,EmergencyStreetNumber,EmergencyCity,EmergencyPostCode,EmergencyCountryCode,EmergencyRegion,EmergencyPhone,IdentityDocument,IdentityCardNo,IdentityCardIssueAuthority,IdentityCardIssueDate</validateFields-->
             </action>
             <action status="99" text="Cancel service request"></action>
         </actions>
@@ -32,6 +31,7 @@
         <actions>
             <action status="30" text="Approve"></action>
             <action status="10" text="Reject"></action>
+            <action status="98" internal-val="10" text="Send back to requestor"></action>
             <action status="99" text="Cancel service request"></action>
         </actions>
     </status>
@@ -44,6 +44,7 @@
                 <validateTabs></validateTabs>
                 <validateFields>EmployeeNumber</validateFields>
             </action>
+            <action status="98" internal-val="10" text="Send back to requestor"></action>
             <action status="99" text="Cancel service request"></action>
         </actions>
     </status>
@@ -54,6 +55,7 @@
         <actions>
             <action status="40" text="Quality ok"></action>
             <action status="30" text="Quality not ok"></action>
+            <action status="98" internal-val="10" text="Send back to requestor"></action>
             <action status="99" text="Cancel service request"></action>
         </actions>
     </status>
@@ -64,7 +66,6 @@
         <actions>
             <action status="50" text="Submit for full service request">
                 <validateTabs>#employment,#employment,#payment,#personal</validateTabs>
-                <!-->validateFields>FathersFirstName,MothersFirstName,MothersBirthName,PlaceOfBirth,Nationality,Gender,NIP,Phone,EmergencyFirstName,EmergencyLastName,EmergencyRelationship,EmergencyStreet,EmergencyStreetNumber,EmergencyCity,EmergencyPostCode,EmergencyCountryCode,EmergencyRegion,EmergencyPhone,IdentityDocument,IdentityCardNo,IdentityCardIssueAuthority,IdentityCardIssueDate</validateFields-->
             </action>
             <action status="99" text="Cancel service request"></action>
         </actions>
@@ -76,6 +77,7 @@
         <actions>
             <action status="60" text="Approve"></action>
             <action status="10" text="Reject"></action>
+            <action status="98" internal-val="10" text="Send back to requestor"></action>
             <action status="99" text="Cancel service request"></action>
         </actions>
     </status>
@@ -88,6 +90,7 @@
                 <validateTabs></validateTabs>
                 <validateFields>EmployeeNumber</validateFields>
             </action>
+            <action status="98" internal-val="10" text="Send back to requestor"></action>
             <action status="99" text="Cancel service request"></action>
         </actions>
     </status>
@@ -98,6 +101,7 @@
         <actions>
             <action status="70" text="Quality ok"></action>
             <action status="60" text="Quality not ok"></action>
+            <action status="98" internal-val="10" text="Send back to requestor"></action>
             <action status="99" text="Cancel service request"></action>
         </actions>
     </status>

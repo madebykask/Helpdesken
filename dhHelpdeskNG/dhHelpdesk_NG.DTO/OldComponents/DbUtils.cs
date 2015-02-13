@@ -9,6 +9,8 @@
 
     namespace DH.Helpdesk.BusinessData.Utils
     {
+        using global::System.Linq;
+
         public static class DataReaderHelper
         {
             public static byte[] SafeGetVarBinary(this IDataReader reader, string colName)
@@ -152,6 +154,18 @@
                     return string.Empty;
             }
 
+            public static int[] ToIds(this string ids)
+            {
+                if (string.IsNullOrEmpty(ids))
+                {
+                    return new int[0];
+                }
+
+                return ids.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries)
+                        .Select(int.Parse)
+                        .ToArray();
+            }
+
             public static string createDBsearchstring(this string value)
             {
                 string ret = string.Empty;
@@ -263,6 +277,18 @@
                     ret += o.Name;
                 else
                     ret += getCaseTypeParentPath(o.ParentCaseType, separator) + separator + o.Name;
+
+                return ret;
+            }
+
+            public static string getOUParentPath(this OU o, string separator = " - ")
+            {
+                string ret = string.Empty;
+
+                if (o.Parent_OU_Id == null)
+                    ret += o.Name;
+                else
+                    ret += getOUParentPath(o.Parent, separator) + separator + o.Name;
 
                 return ret;
             }

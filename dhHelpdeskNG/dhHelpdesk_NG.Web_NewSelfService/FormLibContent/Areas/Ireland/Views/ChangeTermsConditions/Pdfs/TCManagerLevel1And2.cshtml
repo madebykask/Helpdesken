@@ -18,13 +18,13 @@
 </head>
 <body>
     <div>
-        <table style="font-family: Verdana; font-size: 11px; width: 100%;" border="0">
+        <table style="@IrelandPdfPage.StyleValue() width: 100%;" border="0">
             <tr style="text-align: right;">
                 <td>@string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:d MMMMMM yyyy}", DateTime.Now)
                 </td>
             </tr>
         </table>
-        <p style="text-align: left; font-family: Verdana; font-size: 11px;">
+        <p style="@IrelandPdfPage.StyleValue()">
             <strong>Private & Confidential</strong><br />
             @Model.GetDocumentAnswer(FormLibConstants.FormField.FirstName, true) @Model.GetDocumentAnswer(FormLibConstants.FormField.LastName, true)<br />
             @Model.GetDocumentAnswer(FormLibConstants.FormField.PermanentAddressLine1, true)

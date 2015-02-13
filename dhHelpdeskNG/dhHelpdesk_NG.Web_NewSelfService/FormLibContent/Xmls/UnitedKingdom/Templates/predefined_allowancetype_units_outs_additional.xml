@@ -27,7 +27,7 @@
   </dependent>
   <dependent>
     <selected>First Aid Allowance</selected>
-    <show>0.17</show>
+    <show>15.00</show>
   </dependent>
   <dependent>
     <selected>Fork Lift Truck Allowance</selected>
@@ -39,11 +39,11 @@
   </dependent>
   <dependent>
     <selected>Hourly AHP</selected>
-    <show>0,27</show>
+    <show>0.27</show>
   </dependent>
   <dependent>
     <selected>Hourly Day</selected>
-    <show>0,73</show>
+    <show>0.73</show>
   </dependent>
   <dependent>
     <selected>Housing Allowance</selected>
@@ -51,11 +51,11 @@
   </dependent>
   <dependent>
     <selected>IKEA1 Skills</selected>
-    <show>0,98</show>
+    <show>0.98</show>
   </dependent>
   <dependent>
     <selected>IKEA2 Skills</selected>
-    <show>1,48</show>
+    <show>1.48</show>
   </dependent>
   <dependent>
     <selected>Kitchen Skills</selected>
@@ -71,7 +71,7 @@
   </dependent>
   <dependent>
     <selected>Manual Hand</selected>
-    <show>0,35</show>
+    <show>0.35</show>
   </dependent>
   <dependent>
     <selected>Mortgage Subsidy</selected>
@@ -79,7 +79,7 @@
   </dependent>
   <dependent>
     <selected>Night Shift</selected>
-    <show>2,03</show>
+    <show>2.03</show>
   </dependent>
   <dependent>
     <selected>NTG Double Housing</selected>
@@ -99,7 +99,7 @@
   </dependent>
   <dependent>
     <selected>Pallet Resue</selected>
-    <show>0,17</show>
+    <show>0.17</show>
   </dependent>
   <dependent>
     <selected>Relocation Allowance</selected>
@@ -111,7 +111,7 @@
   </dependent>
   <dependent>
     <selected>Responsibility Allowance</selected>
-    <show>1.40</show>
+    <show></show>
   </dependent>
   <dependent>
     <selected>Salary Day Ann Allow</selected>
@@ -127,10 +127,14 @@
   </dependent>
   <dependent>
     <selected>Shunter Allow</selected>
-    <show>0,35</show>
+    <show>0.35</show>
   </dependent>
   <dependent>
     <selected>Stand By Allowance</selected>
     <show></show>
+  </dependent>
+  <dependent>
+    <selected>Night Shift (Distribution Only)</selected>
+    <show>1.80</show>
   </dependent>
 </predefined>

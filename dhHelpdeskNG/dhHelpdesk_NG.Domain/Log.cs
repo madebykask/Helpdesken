@@ -31,5 +31,9 @@
         //public virtual FinishingCause FinishingCause { get; set; }
         public virtual User User { get; set; }
         public virtual ICollection<LogFile> LogFiles { get; set; }
+
+        public virtual Case Case { get; set; }
+
+        public virtual FinishingCause FinishingTypeEntity { get; set; }
     }
 }

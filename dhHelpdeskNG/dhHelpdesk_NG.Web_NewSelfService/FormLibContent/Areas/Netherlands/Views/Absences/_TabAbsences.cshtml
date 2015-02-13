@@ -51,7 +51,7 @@
                 </tr>
 
 
-                @for (int i = 2; i <= 4; i++)
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
                 {
                     <tr class="absence@(i.ToString())" id="absence@(i.ToString())">
                         <td class="tdstrong" colspan="2">
@@ -95,8 +95,7 @@
                     </tr>  
                 }
 
-
-                <tr id="addAbsenceTr">
+                <tr id="addAbsenceTrr">
                     <td colspan="2">
                         @Model.Element("AbsencesMulti")
                         <a id="addAbsence" class="btn btn-link btn-mini pull-right">@Model.Translate("I want to add another Absence")</a></td>
@@ -141,12 +140,12 @@
                 </tr>
                 
                 
-                <tr>
+ @*               <tr>
                     <td class="tdstrong">@Model.Label("AbsenceLongerThan2Months")</td>
                     <td>
                         @Model.Element("AbsenceLongerThan2Months")
                     </td>
-                </tr>
+                </tr>*@
 
                 @* CDS *@
                 <tr>
@@ -163,11 +162,11 @@
             </tbody>
         </table>
     </div>
-
+    <input type="hidden" id="MultipleEntrySectionsNr" value="@FormLibConstants.FormField.MultipleEntrySectionsNr" />
 </div>
 
 <script>
-    //Absense date validity
+    //Absence date validity
     var oldNotice = $('#notice_OldDate');
     var futureNotice = $('#notice_futureDate');
     var nowTemp = new Date();
@@ -295,7 +294,7 @@
             end3.setValue(newDate);
             $('#AbsenceEndsOn3').val('');
         }
-        end2.update();
+        end3.update();
         start.hide();
     }).data('datepicker');
     $('#AbsenceStartFrom3').change(function () {
@@ -326,4 +325,106 @@
             futureNotice3.show();
     });
 
+    // Absence 4 date validity
+    var oldNotice4 = $('#notice_OldDate4');
+    var futureNotice4 = $('#notice_futureDate4');
+    var start4 = $('#date_AbsenceStartFrom4').not(".disabled").datepicker({
+        onRender: function (date) {
+            return '';
+        }
+    }).on('changeDate', function (ev) {
+
+        oldNotice4.hide();
+
+        if (ev.date.valueOf() < now.valueOf())
+            oldNotice4.show();
+
+        if (ev.date.valueOf() > end4.date.valueOf()) {
+            var newDate = new Date(ev.date);
+            newDate.setDate(newDate.getDate() + 1);
+            end4.setValue(newDate);
+            $('#AbsenceEndsOn4').val('');
+        }
+        end4.update();
+        start.hide();
+    }).data('datepicker');
+    $('#AbsenceStartFrom4').change(function () {
+        var absenceStartFrom = $('#AbsenceStartFrom4').val();
+        var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+        var dabsenceStartFrom = APIGlobal.DateTime.parseDate(absenceStartFrom, format);
+        oldNotice4.hide();
+        if (dabsenceStartFrom.valueOf() < now.valueOf())
+            oldNotice4.show();
+    });
+
+    var end4 = $('#date_AbsenceEndsOn4').not(".disabled").datepicker({
+        onRender: function (date) {
+            return date.valueOf() <= start4.date.valueOf() ? 'disabled' : '';
+        }
+    }).on('changeDate', function (ev) {
+
+        end4.hide();
+    }).data('datepicker');
+    $('#AbsenceEndsOn4').change(function () {
+        var absenceEndsOn = $('#AbsenceEndsOn4').val();
+        var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+        var dabsenceEndsOn = APIGlobal.DateTime.parseDate(absenceEndsOn, format);
+        var absenceStartFrom = $('#AbsenceStartFrom4').val();
+        var dabsenceStartFrom = APIGlobal.DateTime.parseDate(absenceStartFrom, format);
+        futureNotice4.hide();
+        if (dabsenceEndsOn.valueOf() < dabsenceStartFrom.valueOf())
+            futureNotice4.show();
+    });
+
+
+    // Absence 5 date validity
+    var oldNotice5 = $('#notice_OldDate5');
+    var futureNotice5 = $('#notice_futureDate5');
+    var start5 = $('#date_AbsenceStartFrom5').not(".disabled").datepicker({
+        onRender: function (date) {
+            return '';
+        }
+    }).on('changeDate', function (ev) {
+
+        oldNotice5.hide();
+
+        if (ev.date.valueOf() < now.valueOf())
+            oldNotice5.show();
+
+        if (ev.date.valueOf() > end5.date.valueOf()) {
+            var newDate = new Date(ev.date);
+            newDate.setDate(newDate.getDate() + 1);
+            end5.setValue(newDate);
+            $('#AbsenceEndsOn5').val('');
+        }
+        end5.update();
+        start.hide();
+    }).data('datepicker');
+    $('#AbsenceStartFrom5').change(function () {
+        var absenceStartFrom = $('#AbsenceStartFrom5').val();
+        var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+        var dabsenceStartFrom = APIGlobal.DateTime.parseDate(absenceStartFrom, format);
+        oldNotice5.hide();
+        if (dabsenceStartFrom.valueOf() < now.valueOf())
+            oldNotice5.show();
+    });
+
+    var end5 = $('#date_AbsenceEndsOn5').not(".disabled").datepicker({
+        onRender: function (date) {
+            return date.valueOf() <= start5.date.valueOf() ? 'disabled' : '';
+        }
+    }).on('changeDate', function (ev) {
+        end5.hide();
+    }).data('datepicker');
+
+    $('#AbsenceEndsOn5').change(function () {
+        var absenceEndsOn = $('#AbsenceEndsOn5').val();
+        var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+        var dabsenceEndsOn = APIGlobal.DateTime.parseDate(absenceEndsOn, format);
+        var absenceStartFrom = $('#AbsenceStartFrom5').val();
+        var dabsenceStartFrom = APIGlobal.DateTime.parseDate(absenceStartFrom, format);
+        futureNotice5.hide();
+        if (dabsenceEndsOn.valueOf() < dabsenceStartFrom.valueOf())
+            futureNotice5.show();
+    });
 </script>

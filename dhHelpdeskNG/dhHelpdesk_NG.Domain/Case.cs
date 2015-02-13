@@ -106,15 +106,25 @@
         public virtual ICollection<CaseInvoiceRow> CaseInvoiceRows { get; set; }
         public virtual ICollection<CaseQuestionHeader> CaseQuestionHeaders { get; set; }
 
-        /// <summary>
-        /// Gets or sets the region.
-        /// </summary>
+        public virtual User User { get; set; }
+
         public virtual Region Region { get; set; }
 
-        /// <summary>
-        /// Gets or sets the causing type.
-        /// </summary>
         public virtual CausingPart CausingPart { get; set; }
+
+        public virtual OU Ou { get; set; }
+
+        public virtual System System { get; set; }
+
+        public virtual Impact Impact { get; set; }
+
+        public virtual Supplier Supplier { get; set; }
+
+        public virtual User CaseResponsibleUser { get; set; }
+
+        public virtual Status Status { get; set; }
+
+        public virtual ICollection<Log> Logs { get; set; }
 
         public bool IsClosed()
         {

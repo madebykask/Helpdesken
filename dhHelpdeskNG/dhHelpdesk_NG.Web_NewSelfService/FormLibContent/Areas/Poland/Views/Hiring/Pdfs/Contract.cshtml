@@ -4,15 +4,24 @@
 
 @{
     Layout = null;
-}
+    }  
+@*@functions{
+    public string TakeJobtiteIds (string jobTitle)
+    {
+        string jTToPrint;
+        jTToPrint = jobTitle.FindMinusCharachter
+        
+        
+    }
+}*@
 <!DOCTYPE html>
 <html>
 
 <body>
     <div>
         
-        <p style="text-align: center;font-family:Verdana; font-size:10px;"><strong>CONTRACT OF EMPLOYMENT</strong></p>
-        <p style="text-align: center;font-family:Verdana; font-size:10px;">
+        <p style="text-align: center;font-family:Verdana; font-size:10px; line-height:16px;"><strong>CONTRACT OF EMPLOYMENT</strong></p>
+        <p style="text-align: center;font-family:Verdana; font-size:10px; line-height:16px;">
             Concluded on 
             @if (string.IsNullOrEmpty(Model.GetAnswer("ContractConcludedOn")))
             {
@@ -29,10 +38,10 @@
            between<strong> @Model.Company.footerName</strong><br /> seated in Janki, 
             Pl. Szwedzki 3; 05 – 090 Raszyn, represented by<br /> <strong>@Model.Company.EmployerName </strong><br />Hereinafter referred to as <strong>Employer</strong><br />
         </p>
-        <p style="text-align: center;font-family:Verdana; font-size:10px;">
+        <p style="text-align: center;font-family:Verdana; font-size:10px; line-height:16px;">
             and 
         </p>
-        <p style="text-align: center;font-family:Verdana; font-size:10px;">
+        <p style="text-align: center;font-family:Verdana; font-size:10px; line-height:16px;">
            @Model.GetAnswer("Prefix")<strong> @Model.GetAnswer("EmployeeFirstName") @Model.GetAnswer("EmployeeLastName")</strong><br />
             Residing:  
             @if (string.IsNullOrEmpty(Model.GetAnswer("HouseNumber")) )
@@ -47,10 +56,10 @@
             <strong> @Model.GetAnswer("PostCode") @Model.GetAnswer("City")</strong><br />
             Hereinafter referred to as <strong>Employee</strong>
         </p>
-        <p style="text-align: center;font-family:Verdana; font-size:9px;">
+        <p style="text-align: center;font-family:Verdana; font-size:9px; line-height:16px;">
            <br />
         </p>
-        <p style="text-align: justify;font-family:Verdana; font-size:10px;">  
+        <p style="text-align: justify;font-family:Verdana; font-size:10px; line-height:16px;">  
 
                     @switch (Model.GetAnswer("ContractType"))
                     {
@@ -92,7 +101,7 @@
                    The period of employment shall commence on <strong>@Model.GetAnswer("EffectiveDate") </strong>and terminate on <strong>@Model.GetAnswer("EndDate")</strong>.<br />
                    </text>
                }
-            The Employer shall employ Employee as <strong>@Model.GetAnswer("JobTitle")</strong>.<br />
+            The Employer shall employ Employee as <strong>@Model.GetAnswer("JobTitle").FindDashCharachter()</strong>.<br />
             
                 @if (string.IsNullOrEmpty(Model.GetAnswer("AdditionalPlaceOfWork")))
                 {  
@@ -108,7 +117,7 @@
                 }   
         </p>
         <br />
-        <p style="font-family:Verdana; font-size:10px;">
+        <p style="font-family:Verdana; font-size:10px; line-height:16px;">
            
             @if (Model.GetAnswer("Extent") == "Part time")
                {
@@ -126,10 +135,10 @@
             
            The Employee is obliged to start work as of <strong>@Model.GetAnswer("FirstDayAtWork")</strong>.
         </p>
-        <p style="font-family:Verdana; font-size:9px;">
+        <p style="font-family:Verdana; font-size:9px; line-height:16px;">
             <br />
         </p>
-        <p style="text-align:justify;font-family:Verdana; font-size:10px;padding-top:4em;">
+        <p style="text-align:justify;font-family:Verdana; font-size:10px;padding-top:4em; line-height:16px;">
              @switch (Model.GetAnswer("MonthlyHourly"))
              {
                 case "monthly": 
@@ -139,18 +148,18 @@
                     @if (string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWords")))
                     {
                     
-                            if (Model.Contract.Company.Key == "OI")
+                           @* if (Model.Contract.Company.Key == "OI")
                              {
                                <text>                        
                                (in words: ........................................................................................................).<br />
                                </text>
                              }
                              else
-                             {
+                             {*@
                                <text>                        
                                (in words: .........................................................................................................................).<br />
                                </text>
-                             }  
+                             @*}*@  
                    
                     } 
                     else
@@ -172,18 +181,18 @@
                     @if (string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWords")))
                     {
                     
-                            if (Model.Contract.Company.Key == "OI")
+                           @* if (Model.Contract.Company.Key == "OI")
                              {
                                <text>                        
                                (in words: ........................................................................................................).<br />
                                </text>
                              }
                              else
-                             {
+                             {*@
                                <text>                        
                                (in words: .........................................................................................................................).<br />
                                </text>
-                             }  
+                             @*} *@ 
                    
                     } 
                     else
@@ -201,7 +210,7 @@
             }<!-- end of switch-->    
         </p>
 
-        <p style="text-align:justify; font-family:Verdana; font-size:10px;">
+        <p style="text-align:justify; font-family:Verdana; font-size:10px; line-height:16px;">
 
             @functions{
                 public static bool NewDateOver(DateTime? startDate, DateTime? endDate, int months)
@@ -224,7 +233,7 @@
             }               
         </p>
 
-        <p style="text-align:justify; font-family:Verdana; font-size:10px;">
+        <p style="text-align:justify; font-family:Verdana; font-size:10px; line-height:16px;">
            @if(Model.GetAnswer("ContractType") == "Replacement contract")
            {
                 <text>
@@ -234,7 +243,7 @@
             }        
         </p>
 
-        <p style="text-align:justify;font-family:Verdana; font-size:10px;margin-top:50px;"> 
+        <p style="text-align:justify;font-family:Verdana; font-size:10px;margin-top:50px; line-height:16px;"> 
            @if(Model.GetAnswer("Extent") == "Part time")
            {
                 <text>
@@ -244,11 +253,11 @@
               }
         </p>
       
-        <p style="font-family:Verdana; font-size:10px;margin-top:10px;padding-top:50px;">
+        <p style="font-family:Verdana; font-size:10px;margin-top:10px;padding-top:50px; line-height:16px;">
             All issues not stated in this agreement are covered in applicable Labour Code.
             <br /><br />
         </p>                                   
-        <p style= "text-align:justify;font-family:Verdana; font-size:10px; padding-top : 15px;">
+        <p style= "text-align:justify;font-family:Verdana; font-size:10px; padding-top : 15px; line-height:16px;">
             This contract is drawn up in duplicate, one copy for the Employer and one for the Employee. <br />
             The Employee certifies to have received a copy of this contract and after familiarising with its content – accepts above mentioned conditions of job and remuneration. 
             <br />
@@ -374,17 +383,17 @@
              break;
              case "Replacement contract": 
              <text> 
-             <p style="font-family:Verdana; font-size:10px;">
-               5  .  As an employee of <strong>@Model.Company.footerName</strong> you’re not a member of any trade union.<br />
+             <p style="text-align:justify; font-family:Verdana; font-size:10px;">
+               5  .  As an employee of <strong>@Model.Company.footerName</strong> you are not covered by any collective agreement.<br />
              </p>
              </text>
              break;
          }<!-- end of switch-->
-        <p style="font-family:Verdana; font-size:10px;">
+        <p style="text-align:justify; font-family:Verdana; font-size:10px;">
             @if (Model.GetAnswer("ContractType") != "Replacement contract")
             {
                 <text>
-                 6  .  As an employee of <strong>@Model.Company.footerName</strong> you’re not a member of any trade union.<br />
+                 6  .  As an employee of <strong>@Model.Company.footerName</strong> you are not covered by any collective agreement.<br />
                 </text>
             }
          <br />

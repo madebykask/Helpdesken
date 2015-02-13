@@ -16,6 +16,7 @@
 </head>
 <body>
     <div>
+        @* ---Moved to UnitedkingdomPdfPage Class
         <table style="font-family: Verdana; font-size: 11px; width: 100%;" border="0">
             <tr style="text-align: right;">
                 <td>@string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:d MMMMMM yyyy}", DateTime.Now)</td>
@@ -23,29 +24,12 @@
         </table>
         <p style="text-align: left; font-family: Verdana; font-size: 11px;">
             <strong>Private & Confidential</strong><br />
-            @Model.GetDocumentAnswer("FirstName", true) @Model.GetDocumentAnswer("LastName", true)<br />
-            @Model.GetDocumentAnswer("PermanentAddressLine1", true)
-            @if (!string.IsNullOrEmpty(Model.GetDocumentAnswer("PermanentAddressLine2")))
-            {
-                <br />
-                @Model.GetDocumentAnswer("PermanentAddressLine2")
-            }
+                       @Html.Partial("_HeaderAddress", Model)
+            <br />
+            <br />
+            <br />*@
 
-            @if (!string.IsNullOrEmpty(Model.GetDocumentAnswer("PermanentAddressLine3")))
-            {
-                <br />
-                @Model.GetDocumentAnswer("PermanentAddressLine3")
-            }
-
-            <br />
-            @Model.GetDocumentAnswer("PermanentCity", true)
-            <br />
-            @Model.GetDocumentAnswer("PermanentPostalCode", true)
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
+        <p style="@UnitedKingdomPdfPage.StyleValue()">
             Dear @Model.GetDocumentAnswer("FirstName", true),<br />
             <br />
             Congratulations and thank you for telling me that you will be adopting a child. I am writing to you about your adoption leave and pay.
@@ -56,9 +40,9 @@
             You have told me you intend to return to work. Based upon your chosen start date for Ordinary Adoption Leave, which you have given as @Model.GetDocumentAnswer("AbsenceStartFrom" + Model.MultiNr, true), you will return to work on @Model.GetDocumentAnswer("AbsenceEndsOn" + Model.MultiNr, true).<br />
             <br />
             Should you want to change the date on which your leave starts, you must, if at all possible, give at least 28 days notice before your proposed new start date and at the latest by 
-            @if (!string.IsNullOrEmpty(Model.GetDocumentAnswer(FormLibConstants.FormField.AbsenceStartFrom, true)))
+            @if (!string.IsNullOrEmpty(Model.GetAnswer(FormLibConstants.FormField.AbsenceStartFrom + Model.MultiNr)))
             {
-                <text>@DateTime.ParseExact(Model.GetDocumentAnswer(FormLibConstants.FormField.AbsenceStartFrom, true), "dd.MM.yyyy", CultureInfo.InvariantCulture).AddDays(-28).ToString("dd.MM.yyyy")</text>
+                <text>@DateTime.ParseExact(Model.GetDocumentAnswer(FormLibConstants.FormField.AbsenceStartFrom + Model.MultiNr, true), "dd.MM.yyyy", CultureInfo.InvariantCulture).AddDays(-28).ToString("dd.MM.yyyy")</text>
             }.
             <br />
             <br />
@@ -66,28 +50,28 @@
             <br />
             <br />
 
-            @if (Model.GetDocumentAnswer("Seniority").ToLower() == "26 weeks - 1 year".ToLower() | Model.GetDocumentAnswer("Seniority").ToLower() == "1 - 2 years".ToLower() | Model.GetDocumentAnswer("Seniority").ToLower() == "Over 2 years".ToLower())
+            @if (Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "26 weeks - 1 year".ToLower() | Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "1 - 2 years".ToLower() | Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "Over 2 years".ToLower())
             {
                 <text>As we discussed you are eligible for 39 weeks Statutory Adoption Pay (SAP).</text>
                 <text><br />
                 <br /></text>
             }
 
-            @if (Model.GetDocumentAnswer("Seniority").ToLower() == "Under 26 weeks".ToLower())
+            @if (Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "Under 26 weeks".ToLower())
             {
                 <text>As we discussed you are not eligible for Statutory Adoption Pay.</text>
                 <text><br />
                 <br /></text>
             }
 
-            @if (Model.GetDocumentAnswer("Seniority").ToLower() == "1 - 2 years".ToLower())
+            @if (Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "1 - 2 years".ToLower())
             {
                 <text>As you have a year's continuous service at the matching week, IKEA will enhance your initial 6 weeks of SAP from 90% to 100% and allow a gradual return to the workplace.</text>
                 <text><br />
                 <br /></text>
             }
 
-            @if (Model.GetDocumentAnswer("Seniority").ToLower() == "Over 2 years".ToLower())
+            @if (Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "Over 2 years".ToLower())
             {
                 <text>As you have two year’s service at the matching week IKEA, will pay you an additional 12 weeks at 50% pay based on contractual hours. Your SMP payment is included in this 50%.</text>
                 <text><br />
@@ -99,17 +83,17 @@
             <text><br />
                 <br /></text>
 
-            @if (Model.GetDocumentAnswer("Seniority").ToLower() == "1 - 2 years".ToLower() | Model.GetDocumentAnswer("Seniority").ToLower() == "Over 2 years".ToLower())
+            @if (Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "1 - 2 years".ToLower() | Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "Over 2 years".ToLower())
             {
                  
-                <text>Your Adoption pay will be &pound;@Model.GetDocumentAnswer("AdoptionPay", true).</text>
+                <text>Your Adoption pay will be &pound;@Model.GetDocumentAnswer("AdoptionPay" + Model.MultiNr, true).</text>
                 <text><br />
                 <br /></text>
             }
 
 
 
-            @if (Model.GetDocumentAnswer("Seniority").ToLower() == "Under 26 weeks".ToLower())
+            @if (Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "Under 26 weeks".ToLower())
             {
                 <text>The SAP1 form (enclosed) explains why you do not qualify for Statutory Adoption Pay and if you speak to your Jobcentre Plus you may be entitled to income support.</text>
                 <text><br />
@@ -117,7 +101,7 @@
             }
 
 
-            @if (Model.GetDocumentAnswer("Seniority").ToLower() == "1 - 2 years".ToLower() | Model.GetDocumentAnswer("Seniority").ToLower() == "Over 2 years".ToLower())
+            @if (Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "1 - 2 years".ToLower() | Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "Over 2 years".ToLower())
             {
                 <text>
                 We have discussed your gradual return and you wish to take the option of:

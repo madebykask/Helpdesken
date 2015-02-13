@@ -23,12 +23,12 @@
                         @Model.Element("DeductionsAmountUnits")
                     </td>
                 </tr>
-                <tr>
+    @*            <tr>
                     <td class="tdstrong">@Model.Label("DeductionsNetGross")</td>
                     <td>
                         @Model.Element("DeductionsNetGross")
                     </td>
-                </tr>
+                </tr>*@
                 <tr>
                     <td class="tdstrong">@Model.Label("DeductionsValidFrom")</td>
                     <td>
@@ -42,7 +42,7 @@
                     </td>
                 </tr>
                 
-                 @for(int i = 2; i <= 3; i++)
+                 @for(int i = 2; i <= 5; i++)
                 {
                     <tr class="deduction@(i.ToString())" id="deduction@(i.ToString())">
                         <td class="tdstrong" colspan="2">
@@ -58,12 +58,12 @@
                         <td class="tdstrong">@Model.Label("DeductionsAmountUnits" + i.ToString())</td>
                         <td>
                             @Model.Element("DeductionsAmountUnits" + i.ToString())</td>
-                    </tr>
+                    </tr>@*
                     <tr class="deduction@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DeductionsNetGross" + i.ToString())</td>
                         <td>
                             @Model.Element("DeductionsNetGross" + i.ToString())</td>
-                    </tr>
+                    </tr>*@
                     <tr class="deduction@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DeductionsValidFrom" + i.ToString())</td>
                         <td>
@@ -75,7 +75,7 @@
                             @Model.Element("DeductionsValidTo" + i.ToString())</td>
                     </tr>
                 }
-                <tr id="addDeductionTr">
+                <tr id="addDeductionTrr">
                     <td colspan="2">
                         @Model.Element("Deductions")
                         <a id="addDeduction" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Deduction")</a></td>
@@ -94,15 +94,6 @@
     
        
         
-        if (document.getElementById('DeductionsValidFrom').value == ''){
-            document.getElementById('DeductionsValidFrom').value = '@Model.GetAnswer("ChangeValidFrom")';
-            for (var i = 2; i <= 3; i++) {
-            
-                var DeductionsValidFrom = "DeductionsValidFrom" + [i].toString();
-            
-                document.getElementById(DeductionsValidFrom).value = '@Model.GetAnswer("ChangeValidFrom")';
-                
-            }
-        }
+
     
 </script>

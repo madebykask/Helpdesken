@@ -12,7 +12,12 @@
 
         public bool Show { get; private set; }
 
-        [NotNullAndEmpty]
+        [NotNull]
         public string Caption { get; private set; }
+
+        public static FieldOverviewSetting CreateUnshowable()
+        {
+            return new FieldOverviewSetting(false, string.Empty);
+        }
     }
 }

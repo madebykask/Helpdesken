@@ -17,6 +17,7 @@
 </head>
 <body>
     <div>
+     @* ---Moved to UnitedkingdomPdfPage Class  
         <table style="font-family: Verdana; font-size: 11px; width: 100%;" border="0">
             <tr style="text-align: right;">
                 <td>@string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:d MMMMMM yyyy}", DateTime.Now)</td>
@@ -24,27 +25,11 @@
         </table>
         <p style="text-align: left; font-family: Verdana; font-size: 11px;">
             <strong>Private & Confidential</strong><br />
-            @Model.GetDocumentAnswer("FirstName", true) @Model.GetDocumentAnswer("LastName", true)<br />
-            @Model.GetDocumentAnswer("PermanentAddressLine1", true)
-            @if (!string.IsNullOrEmpty(Model.GetDocumentAnswer("PermanentAddressLine2")))
-            {
-                <br />
-                @Model.GetDocumentAnswer("PermanentAddressLine2")
-            }
-            @if (!string.IsNullOrEmpty(Model.GetDocumentAnswer("PermanentAddressLine3")))
-            {
-                <br />
-                @Model.GetDocumentAnswer("PermanentAddressLine3")
-            }
-            <br />
-            @Model.GetDocumentAnswer("PermanentCity", true)
-            <br />
-            @Model.GetDocumentAnswer("PermanentPostalCode", true)
+            @Html.Partial("_HeaderAddress", Model)
             <br />
             <br />
-            <br />
-            <br />
-            <br />
+            <br />*@
+        <p style="@UnitedKingdomPdfPage.StyleValue()">
             Dear @Model.GetDocumentAnswer("FirstName", true),<br />
             <br />
             Thank you for giving me your notification of pregnancy form and your MATB1. I am now in a position to confirm your entitlement to maternity pay and maternity leave.
@@ -67,7 +52,7 @@
              <br />
             <br />
             <strong>Maternity Pay</strong><br />
-            @if (Model.GetDocumentAnswer("Seniority").ToLower() == "Under 26 weeks".ToLower())
+            @if (Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "Under 26 weeks".ToLower())
             {
                 <text>As you have less than 26 weeks service at your 15th week before your expected week of childbirth, unfortunately you do not qualify for SMP. You therefore should make a claim for Maternity Allowance, please contact your local Jobcentre Plus. A SMP1 form will be issued by the HR Unit.</text>
                 <text><br />
@@ -75,28 +60,28 @@
             }
 
 
-            @if (Model.GetDocumentAnswer("Seniority").ToLower() == "26 weeks - 1 year".ToLower())
+            @if (Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "26 weeks - 1 year".ToLower())
             {
                 <text>As you have less than one year’s service at your 15th week before your expected week of childbirth.</text>
                 <text><br />
                 <br /></text>
             }
 
-            @if (Model.GetDocumentAnswer("Seniority").ToLower() == "1 - 2 years".ToLower())
+            @if (Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "1 - 2 years".ToLower())
             {
                 <text>As you have more than one year’s service at your 15th week before your expected week of childbirth.</text>
                 <text><br />
                 <br /></text>
             }
 
-            @if (Model.GetDocumentAnswer("Seniority").ToLower() == "Over 2 years".ToLower())
+            @if (Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "Over 2 years".ToLower())
             {
                 <text>As you have more than two year’s service at your 15th week before your expected week of childbirth.</text>
                 <text><br />
                 <br /></text>
             }
 
-            @if (Model.GetDocumentAnswer("Seniority").ToLower() != "Under 26 weeks".ToLower() && !string.IsNullOrEmpty(Model.GetDocumentAnswer("Seniority").ToLower()))
+            @if (Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() != "Under 26 weeks".ToLower() && !string.IsNullOrEmpty(Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower()))
             {
                  
                 <text>Statutory Maternity Pay is 90% of your average weekly earnings for the first six weeks of your Maternity Pay Period. This IKEA enhances to 100% of your normal weekly earnings, this is calculated by taking your average weekly earnings over the 8 week period before the qualifying week which equates to &pound;@Model.GetDocumentAnswer("AveragePay", true).</text>
@@ -105,35 +90,35 @@
             }
 
 
-            @if (Model.GetDocumentAnswer("Seniority").ToLower() == "Over 2 years".ToLower())
+            @if (Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "Over 2 years".ToLower())
             {
                 <text>The next 12 weeks IKEA will enhance your maternity pay up to 50% of your contractual weekly pay if this is greater than the Statutory Maternity pay.</text>
                 <text><br />
                 <br /></text>
             }
 
-            @if (Model.GetDocumentAnswer("Seniority").ToLower() == "26 weeks - 1 year".ToLower())
+            @if (Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "26 weeks - 1 year".ToLower())
             {
                 <text>The lower rate of Statutory Maternity Pay or your average weekly earnings whichever is lowest is then paid for an additional 33 weeks.</text>
                 <text><br />
                 <br /></text>
             }
 
-            @if (Model.GetDocumentAnswer("Seniority").ToLower() == "1 - 2 years".ToLower())
+            @if (Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "1 - 2 years".ToLower())
             {
                 <text>The lower rate of Statutory Maternity Pay or your average weekly earnings whichever is lowest is then paid for an additional 33 weeks.</text>
                 <text><br />
                 <br /></text>
             }
 
-            @if (Model.GetDocumentAnswer("Seniority").ToLower() == "Over 2 years".ToLower())
+            @if (Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "Over 2 years".ToLower())
             {
                 <text>The lower rate of Statutory Maternity Pay or your average weekly earnings whichever is lowest is then paid for an additional 21 weeks.</text>
                 <text><br />
                 <br /></text>
             }
 
-            @if (Model.GetDocumentAnswer("Seniority").ToLower() != "Under 26 weeks".ToLower() && !string.IsNullOrEmpty(Model.GetDocumentAnswer("Seniority").ToLower()))
+            @if (Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() != "Under 26 weeks".ToLower() && !string.IsNullOrEmpty(Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower()))
             {
                    
                 <text>This is currently &pound;@Model.GetDocumentAnswer("LowerRate", true). SMP payments will stop if you decide to return to work while you are still entitled to receive SMP this excludes your 10 K.I.T. (keep in touch) days.</text>
@@ -144,7 +129,7 @@
                 <br /></text>
             }
 
-            @if (Model.GetDocumentAnswer("Seniority").ToLower() == "1 - 2 years".ToLower() | Model.GetDocumentAnswer("Seniority").ToLower() == "Over 2 years".ToLower())
+            @if (Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "1 - 2 years".ToLower() | Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "Over 2 years".ToLower())
             {
                 <text>In addition you are entitled to enhanced return to work benefit which you can choose from the following two options:<br />
                 <br />
@@ -162,7 +147,7 @@
             <text><br />
                 <br /></text>
 
-            @if (Model.GetDocumentAnswer("Seniority").ToLower() == "Under 26 weeks".ToLower())
+            @if (Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "Under 26 weeks".ToLower())
             {
                 <text>Returning after additional leave you are entitled to return to the same job you occupied before commencing maternity leave, if this is possible.  However if this is not reasonably practicable IKEA will offer a suitable alternative job on terms and conditions that are no less favorable than would have applied if you had not been absent.</text>
                 <text><br />

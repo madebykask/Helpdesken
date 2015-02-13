@@ -1,0 +1,117 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+<div class="tab-pane active" id="ServiceRequestDetails">
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Details")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("NewtoIKEA")</td>
+                    <td>@Model.Element("NewtoIKEA")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Contractstartdate")</td>
+                    <td>@Model.Element("Contractstartdate")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("JoinKRIKEAdate")</td>
+                    <td>@Model.Element("JoinKRIKEAdate")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("JoinIKEAGlobal")</td>
+                    <td>@Model.Element("JoinIKEAGlobal")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Servicerequestpriority")</td>
+                    <td>@Model.Element("Servicerequestpriority")</td>
+                </tr>
+                @if (!FormLibUtils.IsSelfService())
+                {
+                    <tr>
+                        <td class="tdstrong">@Model.Translate("SLA")</td>
+                        <td>
+                            @if (Model.Contract.CaseNumber != null)
+                            {
+                                @Model.Contract.PriorityName;
+                            }
+                            else if (Model.Form != null)
+                            { 
+                                @Model.Form.PriorityName;
+                            }
+                        </td>
+                    </tr>  
+                }
+                <tr>
+                    <td class="tdstrong">@Model.Label("Co-workerID")</td>
+                    <td>@Model.Element("Co-workerID")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("GlobalHRID")</td>
+                    <td>@Model.Element("GlobalHRID")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Title")</td>
+                    <td>@Model.Element("Title")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Firstname")</td>
+                    <td>@Model.Element("Firstname")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("FirstnameinEnglish")</td>
+                    <td>@Model.Element("FirstnameinEnglish")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Lastname")</td>
+                    <td>@Model.Element("Lastname")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("LastnameinEnglish")</td>
+                    <td>@Model.Element("LastnameinEnglish")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("NickName")</td>
+                    <td>@Model.Element("NickName")</td>
+                </tr>
+
+                <tr>
+                    <td class="tdstrong">@Model.Label("Dateofbirth")</td>
+                    <td>@Model.Element("Dateofbirth")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Maritalstatus")</td>
+                    <td>@Model.Element("Maritalstatus")</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="span6">
+
+        <table class="table">
+            <tbody>
+               
+
+            </tbody>
+        </table>
+    </div>
+
+    <div class="span6">
+
+        <table class="table">
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <input type="hidden" id="CustomerId" value="@Model.Form.CustomerId" />
+    <input type="hidden" id="AllCoWorker" value="1" />
+    <input type="hidden" id="formGuid" value="@Model.FormGuid" />
+</div>
+
+

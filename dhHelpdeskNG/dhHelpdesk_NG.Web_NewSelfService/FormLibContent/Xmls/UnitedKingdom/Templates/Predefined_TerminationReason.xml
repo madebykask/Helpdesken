@@ -25,7 +25,7 @@
 
   <dependent>
     <selected>Other</selected>
-    <show>Invalidity,Death,AWOL,Unsuccesful probation,Mutual agreement</show>
+    <show>Invalidity,Death,AWOL,Unsuccesful probation,Mutual agreement,International transfer begins</show>
   </dependent>
 </predefined>
 

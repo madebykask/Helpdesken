@@ -1124,9 +1124,7 @@
     <Content Include="FormLibContent\Assets\Selectize\less\selectize.legacy.less" />
     <Content Include="FormLibContent\Assets\Selectize\less\selectize.less" />
     <Content Include="Content\img-profile\vssver2.scc" />
-    <Content Include="Content\css\vssver2.scc" />
     <Content Include="Content\js\vssver2.scc" />
-    <Content Include="Content\vssver2.scc" />
     <Content Include="Content\img-profile\MyHR - Global User Guide for Line Managers.pdf" />
     <Content Include="Content\img-profile\Pay query form.xlsm" />
     <None Include="Properties\PublishProfiles\DH Dev.pubxml" />

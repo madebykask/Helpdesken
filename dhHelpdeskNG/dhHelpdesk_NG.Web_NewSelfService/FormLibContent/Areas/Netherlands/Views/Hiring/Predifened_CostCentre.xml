@@ -2582,7 +2582,7 @@
     <show>7010</show>
   </dependent>
   <dependent>
-    <selected>STORE Barendrecht 274</selected>
+    <selected>Store Rotterdam Barendrecht 274</selected>
     <show>7010, 6073, 6631</show>
   </dependent>
   <dependent>
@@ -2590,7 +2590,7 @@
     <show>7010</show>
   </dependent>
   <dependent>
-    <selected>STORE Duiven 272</selected>
+    <selected>Store Arnhem Duiven 272</selected>
     <show>7010, 6631</show>
   </dependent>
   <dependent>
@@ -2602,7 +2602,7 @@
     <show>7010, 3320</show>
   </dependent>
   <dependent>
-    <selected>STORE Haarlem 378</selected>
+    <selected>Store Amsterdam Haarlem 378</selected>
     <show>7010, 6631</show>
   </dependent>
   <dependent>

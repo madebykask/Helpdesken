@@ -37,21 +37,15 @@
     <add key="Application.DefaultCulture" value="sv" />
     <add key="ClientValidationEnabled" value="true" />
     <add key="UnobtrusiveJavaScriptEnabled" value="true" />
-    <add key="InitFromSelfService" value="true" />
+    <add key="InitFromSelfService" value="false" />
     <add key="InitFromSelfServiceWorkflowInitValue" value="10" />
     <add key="log4net.Internal.Debug" value="true" />
     <add key="SmtpServer" value="localhost" />
     <add key="SmtpPort" value="25" />
   </appSettings>
-  <system.diagnostics>
-    <trace autoflush="true">
-      <listeners>
-        <add name="textWriterTraceListener" type="System.Diagnostics.TextWriterTraceListener" initializeData="c:\temp\log4net.txt" />
-      </listeners>
-    </trace>
-  </system.diagnostics>
+
   <system.web>
-    <compilation debug="false" targetFramework="4.0">
+    <compilation debug="true" targetFramework="4.0">
       <assemblies>
         <add assembly="System.Web.Abstractions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35" />
         <add assembly="System.Web.Helpers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35" />
@@ -63,7 +57,7 @@
     <authentication mode="Forms">
       <forms loginUrl="~/Login/Login" timeout="2880" defaultUrl="~/" />
     </authentication>
-    <customErrors mode="RemoteOnly" />
+    <customErrors mode="Off" />
     <pages>
       <namespaces>
         <add namespace="System.Web.Helpers" />
@@ -85,15 +79,8 @@
         <!-- for iis 7 >. 50 mb in bytes -->
         <requestLimits maxAllowedContentLength="5242880" />
       </requestFiltering>
-    </security>
-  <handlers>
-      <remove name="ExtensionlessUrlHandler-ISAPI-4.0_32bit" />
-      <remove name="ExtensionlessUrlHandler-ISAPI-4.0_64bit" />
-      <remove name="ExtensionlessUrlHandler-Integrated-4.0" />
-      <add name="ExtensionlessUrlHandler-ISAPI-4.0_32bit" path="*." verb="GET,HEAD,POST,DEBUG,PUT,DELETE,PATCH,OPTIONS" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework\v4.0.30319\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv4.0,bitness32" responseBufferLimit="0" />
-      <add name="ExtensionlessUrlHandler-ISAPI-4.0_64bit" path="*." verb="GET,HEAD,POST,DEBUG,PUT,DELETE,PATCH,OPTIONS" modules="IsapiModule" scriptProcessor="%windir%\Microsoft.NET\Framework64\v4.0.30319\aspnet_isapi.dll" preCondition="classicMode,runtimeVersionv4.0,bitness64" responseBufferLimit="0" />
-      <add name="ExtensionlessUrlHandler-Integrated-4.0" path="*." verb="GET,HEAD,POST,DEBUG,PUT,DELETE,PATCH,OPTIONS" type="System.Web.Handlers.TransferRequestHandler" preCondition="integratedMode,runtimeVersionv4.0" />
-    </handlers></system.webServer>
+    </security> 
+  </system.webServer>
   <runtime>
     <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
       <dependentAssembly>

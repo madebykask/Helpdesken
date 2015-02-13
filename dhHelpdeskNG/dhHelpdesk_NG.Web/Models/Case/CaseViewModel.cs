@@ -32,6 +32,7 @@
         public string LogKey { get; set; }
         public string ParantPath_CaseType { get; set; }
         public string ParantPath_ProductArea { get; set; }
+        public string ParantPath_OU { get; set; }
         public int DepartmentFilterFormat { get; set; }
         public int? CountryId { get; set; }
         public int ShowInvoiceFields { get; set; }
@@ -114,6 +115,8 @@
         ////public List<CategoryWithSubcategories> CategoryWithSubcategories { get; set; }
         //public EditingFaqModel EditFaqModel { get; set; }
         public CaseTemplateTreeModel CaseTemplateTreeButton { get; set; }
+
+        public DynamicCase DynamicCase { get; set; }
     }
 
     public class CaseIndexViewModel

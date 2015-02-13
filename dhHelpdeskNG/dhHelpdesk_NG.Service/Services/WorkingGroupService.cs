@@ -38,6 +38,9 @@
         IEnumerable<ItemOverview> GetOverviews(int customerId);
 
         IEnumerable<ItemOverview> GetOverviews(int customerId, IEnumerable<int> workingGroupsIds);
+
+        bool CaseHasWorkingGroup(int customerId, int workingGroupId);
+
     }
 
     public class WorkingGroupService : IWorkingGroupService
@@ -177,6 +180,11 @@
             }
 
             return DeleteMessage.Error;
+        }
+
+        public bool CaseHasWorkingGroup(int customerId, int workingGroupId)
+        {
+            return this.workingGroupRepository.CaseHasWorkingGroup(customerId, workingGroupId);
         }
 
         public void SaveWorkingGroup(WorkingGroupEntity workingGroup, out IDictionary<string, string> errors)

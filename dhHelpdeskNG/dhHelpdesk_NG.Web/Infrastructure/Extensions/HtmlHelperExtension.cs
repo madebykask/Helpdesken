@@ -9,6 +9,8 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
     using System.Web.Routing;
 
     using DH.Helpdesk.BusinessData.Models.Case.Output;
+    using DH.Helpdesk.BusinessData.Models.CaseType;
+    using DH.Helpdesk.BusinessData.Models.ProductArea;
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Web.Models;
@@ -166,6 +168,16 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 return new MvcHtmlString(string.Empty);
         }
 
+        public static MvcHtmlString OUDropdownButtonString(this HtmlHelper helper, IList<OU> ous)
+        {
+            if (ous != null)
+            {
+                return BuildOUDropdownButton(ous);
+            }
+            else
+                return new MvcHtmlString(string.Empty);
+        }
+
         public static MvcHtmlString ProductAreaDropdownButtonString(this HtmlHelper helper, IList<ProductArea> pal)
         {
             if (pal != null)
@@ -174,6 +186,16 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             }
             else
                 return new MvcHtmlString(string.Empty);
+        }
+
+        public static MvcHtmlString ProductAreasList(this HtmlHelper helper, IEnumerable<ProductAreaItem> productAreas)
+        {
+            return productAreas == null ? MvcHtmlString.Empty : BuildProductAreasList(productAreas);
+        }
+
+        public static MvcHtmlString CaseTypesList(this HtmlHelper helper, IEnumerable<CaseTypeItem> caseTypes)
+        {
+            return caseTypes == null ? MvcHtmlString.Empty : BuildCaseTypesList(caseTypes);
         }
 
         public static MvcHtmlString FinishingCauseDropdownButtonString(this HtmlHelper helper, IList<FinishingCause> causes)
@@ -606,6 +628,37 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return new MvcHtmlString(htmlOutput);
         }
 
+        private static MvcHtmlString BuildOUDropdownButton(IList<OU> ous)
+        {
+            string htmlOutput = string.Empty;
+
+            foreach (OU ou in ous)
+            {
+                if (ou.IsActive == 1)
+                {
+                    bool hasChild = false;
+                    if (ou.SubOUs != null)
+                        if (ou.SubOUs.Count > 0)
+                            hasChild = true;
+
+                    if (hasChild)
+                        htmlOutput += "<li class='dropdown-submenu'>";
+                    else
+                        htmlOutput += "<li>";
+
+                    htmlOutput += "<a href='#' value=" + ou.Id.ToString() + ">" + Translation.Get(ou.Name, Enums.TranslationSource.TextTranslation) + "</a>";
+                    if (hasChild)
+                    {
+                        htmlOutput += "<ul class='dropdown-menu'>";
+                        htmlOutput += BuildOUDropdownButton(ou.SubOUs.ToList());
+                        htmlOutput += "</ul>";
+                    }
+                    htmlOutput += "</li>";
+                }
+            }
+
+            return new MvcHtmlString(htmlOutput);
+        }
         private static MvcHtmlString BuildFinishingCauseDropdownButton(IList<FinishingCause> causes)
         {
             StringBuilder sb = new StringBuilder();
@@ -636,6 +689,54 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             }
 
             return new MvcHtmlString(sb.ToString());
+        }
+
+        private static MvcHtmlString BuildProductAreasList(IEnumerable<ProductAreaItem> productAreas)
+        {
+            var result = new StringBuilder();
+
+            foreach (var productArea in productAreas)
+            {
+                var hasChild = productArea.Children != null && productArea.Children.Any();
+
+                result.Append(hasChild ? "<li class='dropdown-submenu'>" : "<li>");
+
+                result.Append("<a href='#' value=" + productArea.Id + ">" + productArea.Name + "</a>");
+                if (hasChild)
+                {
+                    result.Append("<ul class='dropdown-menu'>");
+                    result.Append(BuildProductAreasList(productArea.Children.OrderBy(p => p.Name).ToList()));
+                    result.Append("</ul>");
+                }
+
+                result.Append("</li>");
+            }
+
+            return MvcHtmlString.Create(result.ToString());
+        }
+
+        private static MvcHtmlString BuildCaseTypesList(IEnumerable<CaseTypeItem> caseTypes)
+        {
+            var result = new StringBuilder();
+
+            foreach (var caseType in caseTypes)
+            {
+                var hasChild = caseType.Children != null && caseType.Children.Any();
+
+                result.Append(hasChild ? "<li class='dropdown-submenu'>" : "<li>");
+
+                result.Append("<a href='#' value=" + caseType.Id + ">" + caseType.Name + "</a>");
+                if (hasChild)
+                {
+                    result.Append("<ul class='dropdown-menu'>");
+                    result.Append(BuildCaseTypesList(caseType.Children.OrderBy(p => p.Name).ToList()));
+                    result.Append("</ul>");
+                }
+
+                result.Append("</li>");
+            }
+
+            return MvcHtmlString.Create(result.ToString());
         }
 
         private static MvcHtmlString BuildProcuctAreaDropdownButton(IList<ProductArea> pal)

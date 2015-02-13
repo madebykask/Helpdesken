@@ -36,7 +36,68 @@
             IList<CaseFieldSetting> caseFieldSettings,
             GlobalEnums.TranslationCaseFields caseFields)
         {
-            /// code removed until http://redmine.fastdev.se/issues/9876 will be started
+            string prefix = ExpressionHelper.GetExpressionText(expression);
+            ModelMetadata metadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
+            var models = (IList<CaseSolutionSettingModel>)metadata.Model;
+
+            for (int i = 0; i < models.Count; i++)
+            {
+                CaseSolutionSettingModel model = models[i];
+                if (model.CaseSolutionField == caseSolutionField)
+                {
+                    string idPropertyName =
+                        Common.Tools.ReflectionHelper.GetPropertyName<CaseSolutionSettingOverview>(x => x.Id);
+
+                    string modePropertyName =
+                        Common.Tools.ReflectionHelper.GetPropertyName<CaseSolutionSettingOverview>(
+                            x => x.CaseSolutionMode);
+
+                    string fieldNamePropertyName =
+                        Common.Tools.ReflectionHelper.GetPropertyName<CaseSolutionSettingOverview>(
+                            x => x.CaseSolutionField);
+
+                    string hiddenName = GetInputName(prefix, i, idPropertyName);
+                    string dropDownName = GetInputName(prefix, i, modePropertyName);
+                    string hiddenFieldName = GetInputName(prefix, i, fieldNamePropertyName);
+
+                    MvcHtmlString hidden = htmlHelper.Hidden(hiddenName, model.Id);
+
+                    SelectList selectList;
+                    selectList = ToSelectList(
+                            model.CaseSolutionMode,
+                            ((int)model.CaseSolutionMode).ToString(CultureInfo.InvariantCulture),
+                            false);
+                    //if (caseFieldSettings.CaseFieldSettingRequiredCheck(caseFields.ToString()) == 1
+                    //    || caseSolutionField == CaseSolutionFields.Department)
+                    //{
+                    //    if (model.CaseSolutionMode != CaseSolutionModes.ReadOnly)
+                    //    {
+                    //        selectList = ToSelectList(
+                    //            new CaseSolutionModes(),
+                    //            ((int)model.CaseSolutionMode).ToString(CultureInfo.InvariantCulture),
+                    //            true);
+                    //    }
+                    //    else
+                    //    {
+                    //        selectList = ToSelectList(new CaseSolutionModes(), true);
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    selectList = ToSelectList(
+                    //        model.CaseSolutionMode,
+                    //        ((int)model.CaseSolutionMode).ToString(CultureInfo.InvariantCulture),
+                    //        false);
+                    //}
+
+                    MvcHtmlString dropDown = htmlHelper.DropDownList(dropDownName, selectList);
+
+                    MvcHtmlString hiddenForFieldName = htmlHelper.Hidden(hiddenFieldName, model.CaseSolutionField);
+
+                    return MvcHtmlString.Create(hidden + dropDown.ToString() + hiddenForFieldName);
+                }
+            }
+
             return new MvcHtmlString(string.Empty);
         }
 
@@ -78,9 +139,11 @@
             switch (enumeration)
             {
                 case CaseSolutionModes.DisplayField:
-                    return Translation.Get("Display Field");
+                    return Translation.Get("Visa fält - redigera");
                 case CaseSolutionModes.ReadOnly:
-                    return Translation.Get("Read Only");
+                    return Translation.Get("Visa fält - skrivskyddat");
+                case CaseSolutionModes.Hide:
+                    return Translation.Get("Dölj fält");
                 default:
                     return Translation.Get(enumeration.ToString());
             }

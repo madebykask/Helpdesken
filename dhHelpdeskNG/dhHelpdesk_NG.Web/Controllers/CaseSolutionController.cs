@@ -16,6 +16,7 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Models;
+    using DH.Helpdesk.Web.Models.Case;
 
     public class CaseSolutionController : UserInteractionController
     {
@@ -30,6 +31,20 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IUserService _userService;
         private readonly IWorkingGroupService _workingGroupService;
         private readonly IDepartmentService _departmentService;
+        private readonly IRegionService _regionService;
+        private readonly IOUService _ouService;
+        private readonly ISystemService _systemService;
+        private readonly IUrgencyService _urgencyService;
+        private readonly IImpactService _impactService;
+        private readonly IStatusService _statusService;
+        private readonly IStateSecondaryService _stateSecondaryService;
+        private readonly ICountryService _countryService;
+        private readonly ISupplierService _supplierService;
+        private readonly ICurrencyService _currencyService;
+        private readonly ICustomerUserService _customerUserService;
+        private readonly ISettingService _settingService;
+        private readonly IProblemService _problemService;
+        private readonly IChangeService _changeService;
 
         private readonly ICaseSolutionSettingService caseSolutionSettingService;
 
@@ -46,7 +61,21 @@ namespace DH.Helpdesk.Web.Controllers
             IWorkingGroupService workingGroupService,
             IDepartmentService departmentService,
             IMasterDataService masterDataService,
-            ICaseSolutionSettingService caseSolutionSettingService)
+            ICaseSolutionSettingService caseSolutionSettingService,
+            IRegionService regionService,
+            IOUService ouService,
+            ISystemService systemService,
+            IUrgencyService urgencyService,
+            IImpactService impactService,
+            IStatusService statusService,
+            IStateSecondaryService stateSecondaryService,
+            ICountryService countryService,
+            ISupplierService supplierService,
+            ICurrencyService currencyService,
+            ICustomerUserService customerUserService,
+            ISettingService settingService,
+            IProblemService problemService,
+            IChangeService changeService)
             : base(masterDataService)
         {
             this._caseFieldSettingService = caseFieldSettingService;
@@ -61,6 +90,20 @@ namespace DH.Helpdesk.Web.Controllers
             this._workingGroupService = workingGroupService;
             this._departmentService = departmentService;
             this.caseSolutionSettingService = caseSolutionSettingService;
+            this._regionService = regionService;
+            this._ouService = ouService;
+            this._systemService = systemService;
+            this._urgencyService = urgencyService;
+            this._impactService = impactService;
+            this._statusService = statusService;
+            this._stateSecondaryService = stateSecondaryService;
+            this._countryService = countryService;
+            this._supplierService = supplierService;
+            this._currencyService = currencyService;
+            this._customerUserService = customerUserService;
+            this._settingService = settingService;
+            this._problemService = problemService;
+            this._changeService = changeService;
         }
 
         [HttpPost]
@@ -268,14 +311,14 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(CaseSolutionInputViewModel caseSolutionInputViewModel, CaseSolutionSettingModel[] caseSolutionSettingModels, int PageId)
+        public ActionResult Edit(CaseSolutionInputViewModel caseSolutionInputViewModel, CaseSolutionSettingModel[] CaseSolutionSettingModels, int PageId)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
             IList<CaseFieldSetting> CheckMandatory = null; //_caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id); 
             this.TempData["RequiredFields"] = null;
-            if (caseSolutionSettingModels == null)
+            if (CaseSolutionSettingModels == null)
             {
-                caseSolutionSettingModels = new CaseSolutionSettingModel[0];
+                CaseSolutionSettingModels = new CaseSolutionSettingModel[0];
             }
             var caseSolutionSchedule = this.CreateCaseSolutionSchedule(caseSolutionInputViewModel);
 
@@ -290,7 +333,7 @@ namespace DH.Helpdesk.Web.Controllers
             CaseSettingsSolutionAggregate settingsSolutionAggregate =
                 this.CreateCaseSettingsSolutionAggregate(
                     caseSolutionInputViewModel.CaseSolution.Id,
-                    caseSolutionSettingModels);
+                    CaseSolutionSettingModels);
             this.caseSolutionSettingService.UpdateCaseSolutionSettings(settingsSolutionAggregate);
 
             if (errors.Count == 0)
@@ -385,10 +428,14 @@ namespace DH.Helpdesk.Web.Controllers
 
         private CaseSolutionInputViewModel CreateInputViewModel(CaseSolution caseSolution)
         {
+            var cs = this._settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
+
             var model = new CaseSolutionInputViewModel
             {
                 CaseSolution = caseSolution,
                 CaseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id),
+                Countries = this._countryService.GetCountries(SessionFacade.CurrentCustomer.Id),
+                currencies = this._currencyService.GetCurrencies(),
                 CsCategories = this._caseSolutionService.GetCaseSolutionCategories(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
@@ -426,12 +473,6 @@ namespace DH.Helpdesk.Web.Controllers
 
                 ProductAreas = this._productAreaService.GetProductAreas(SessionFacade.CurrentCustomer.Id),
 
-                Projects = this._projectService.GetCustomerProjects(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString()
-                }).ToList(),
-
                 WorkingGroups = this._workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.WorkingGroupName,
@@ -442,8 +483,55 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     Text = x.DepartmentName,
                     Value = x.Id.ToString()
-                }).ToList()
+                }).ToList(),
 
+                Regions = this._regionService.GetActiveRegions(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList(),
+
+                OUs = this._ouService.GetOUs(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList(),
+
+                Systems = this._systemService.GetSystems(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                {
+                    Text = x.SystemName,
+                    Value = x.Id.ToString()
+                }).ToList(),
+
+                Urgencies = this._urgencyService.GetUrgencies(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList(),
+
+                Impacts = this._impactService.GetImpacts(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList(),
+
+                Status = this._statusService.GetActiveStatuses(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList(),
+
+                StateSecondaries = this._stateSecondaryService.GetActiveStateSecondaries(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList(),
+
+                Suppliers = this._supplierService.GetActiveSuppliers(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList()
             };
 
             if (model.CaseSolution.Id == 0)
@@ -478,6 +566,37 @@ namespace DH.Helpdesk.Web.Controllers
                     model.ParantPath_ProductArea = c.getProductAreaParentPath();
             }
 
+            if (cs.ModuleProject == 1)
+            {
+                model.projects = this._projectService.GetCustomerProjects(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList();
+ 
+            }
+
+            if (cs.ModuleProblem == 1)
+            {
+                model.problems = this._problemService.GetCustomerProblems(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList();
+            }
+
+            if (cs.ModuleChangeManagement == 1)
+            {
+                model.changes = this._changeService.GetChanges(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                {
+                    Text = x.ChangeTitle,
+                    Value = x.Id.ToString()
+                }).ToList();
+            }
+            //var deps = this._departmentService.GetDepartmentsByUserPermissions(SessionFacade.CurrentUser.Id, SessionFacade.CurrentCustomer.Id);
+            //model.departments = deps ?? this._departmentService.GetDepartments(SessionFacade.CurrentCustomer.Id);
+
+           
             model.Schedule = 0;
 
             var schedule = this._caseSolutionService.GetCaseSolutionSchedule(caseSolution.Id);
@@ -516,7 +635,7 @@ namespace DH.Helpdesk.Web.Controllers
                     model.ScheduleMonthlyWeekday = int.Parse(model.ScheduleDays.Substring(pos + 1, 1));
                 }
             }
-
+           
             ReadOnlyCollection<CaseSolutionSettingOverview> settingOverviews =
                     this.caseSolutionSettingService.GetCaseSolutionSettingOverviews(model.CaseSolution.Id);
 
@@ -524,6 +643,8 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 model.CaseSolutionSettingModels = CaseSolutionSettingModel.CreateModel(settingOverviews);
             }
+
+            model.CaseFilesModel = new CaseFilesModel();
 
             return model;
         }

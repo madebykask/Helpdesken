@@ -64,7 +64,7 @@
     </show>
   </dependent>
   <dependent>
-    <selected>Store Barendrecht 274</selected>
+    <selected>Store Rotterdam Barendrecht 274</selected>
     <show>
       Business Navigator,
       Administrator,
@@ -126,7 +126,7 @@
     </show>
   </dependent>
   <dependent>
-    <selected>Store Duiven 272</selected>
+    <selected>Store Arnhem Duiven 272</selected>
     <show>
       Business Navigator,
       Administrator,
@@ -436,7 +436,7 @@
     </show>
   </dependent>
   <dependent>
-    <selected>Store Haarlem 378</selected>
+    <selected>Store Amsterdam Haarlem 378</selected>
     <show>
       Business Navigator,
       Administrator,
@@ -706,7 +706,7 @@
     </show>
   </dependent>
   <dependent>
-    <selected>E-Commerce (Service Office)</selected>
+    <selected>E-Commerce NL</selected>
     <show>
       eCommerce Manager,
       eCommerce BN Operations Manager,

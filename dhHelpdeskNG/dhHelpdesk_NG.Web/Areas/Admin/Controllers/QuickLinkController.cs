@@ -14,12 +14,14 @@
         private readonly ILinkService _linkService;
         private readonly ICustomerService _customerService;
         private readonly IUserService _userService;
+        private readonly ICaseSolutionService _casesolutionService;
 
         public QuickLinkController(
             IDocumentService documentService,
             ILinkService linkService,
             ICustomerService customerService,
             IUserService userService,
+            ICaseSolutionService casesolutionService,
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
@@ -27,6 +29,7 @@
             this._linkService = linkService;
             this._customerService = customerService;
             this._userService = userService;
+            this._casesolutionService = casesolutionService;
         }
 
         public ActionResult Index(int customerId)
@@ -121,6 +124,11 @@
                 Link = link,
                 Customer = customer,
                 Documents = this._documentService.GetDocuments(customer.Id).Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList(),
+                CaseSolutions = this._casesolutionService.GetCaseSolutions(customer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()

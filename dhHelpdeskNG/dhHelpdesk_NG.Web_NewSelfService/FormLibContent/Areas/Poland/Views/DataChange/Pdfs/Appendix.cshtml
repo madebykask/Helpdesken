@@ -156,16 +156,16 @@
                     Model.GetAnswer("BasicPay") + "</strong>" + " (in words: " + Model.GetAnswer("BasicPayInWords") + ").<br />" ); 
             }
             
-           if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("7") && Model.GetAnswer("MonthlyHourly") == "monthly" &&
-               string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWords")) && Model.Contract.Company.Key == "OI") 
-                    {
+           //if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("7") && Model.GetAnswer("MonthlyHourly") == "monthly" &&
+           //    string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWords")) && Model.Contract.Company.Key == "OI") 
+           //         {
                     
-                         list.Add("Employee will receive a<strong> " + Model.GetAnswer("MonthlyHourly") + " </strong>gross salary of PLN <strong>" +
-                         Model.GetAnswer("BasicPay") + "</strong> <br/>" + "(in words: .......................................................................................................).<br />");                 
-                     }
+           //              list.Add("Employee will receive a<strong> " + Model.GetAnswer("MonthlyHourly") + " </strong>gross salary of PLN <strong>" +
+           //              Model.GetAnswer("BasicPay") + "</strong> <br/>" + "(in words: .......................................................................................................).<br />");                 
+           //          }
                      
             if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("7") && Model.GetAnswer("MonthlyHourly") == "monthly" &&
-             string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWords")) && Model.Contract.Company.Key != "OI") 
+             string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWords"))) //&& Model.Contract.Company.Key != "OI"
                      {
 
                          list.Add("Employee will receive a<strong> " + Model.GetAnswer("MonthlyHourly") + " </strong>gross salary of PLN <strong>" +
@@ -180,15 +180,15 @@
                           " per hour</strong> "+ " (in words:" + Model.GetAnswer("BasicPayInWords")+").<br />");
             }
             
-            if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("7") && Model.GetAnswer("MonthlyHourly") == "hourly"
-                 && string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWords")) && Model.Contract.Company.Key == "OI")
-                {
-                    list.Add("Employee will receive a<strong> " + Model.GetAnswer("MonthlyHourly") + " </strong> gross salary of PLN <strong>" + Model.GetAnswer("BasicPay") +
-                         " per hour</strong> <br/>" + "(in words: .......................................................................................................).<br />");                 
-                }
+            //if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("7") && Model.GetAnswer("MonthlyHourly") == "hourly"
+            //     && string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWords")) && Model.Contract.Company.Key == "OI")
+            //    {
+            //        list.Add("Employee will receive a<strong> " + Model.GetAnswer("MonthlyHourly") + " </strong> gross salary of PLN <strong>" + Model.GetAnswer("BasicPay") +
+            //             " per hour</strong> <br/>" + "(in words: .......................................................................................................).<br />");                 
+            //    }
                 
             if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("7") && Model.GetAnswer("MonthlyHourly") == "hourly"
-                && string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWords")) && Model.Contract.Company.Key != "OI")
+                && string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWords"))) // && Model.Contract.Company.Key != "OI"
                      {
                          list.Add("Employee will receive a<strong> " + Model.GetAnswer("MonthlyHourly") + " </strong> gross salary of PLN <strong>" + Model.GetAnswer("BasicPay") +
                                   " per hour</strong> <br/>" + "(in words: .........................................................................................................................).<br />");                 
@@ -204,46 +204,80 @@
                 list.Add("Place of Work will be <strong>" + Model.GetOptionText("EmployeeUnit", Model.GetAnswer("EmployeeUnit")) + "</strong>" + " and <strong>" + Model.GetAnswer("AdditionalPlaceOfWork") + "</strong>.");
             }
 
-            if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("8") 
-                && Model.GetAnswer("FunctionAllowance") == "1045 - Functional supplement" && Model.Contract.Company.Key == "OI") 
-            {
-                list.Add("Employee will receive a monthly gross Function allowance of <strong> PLN " + Model.GetAnswer("FunctionAllowanceAmount") + " </strong>.<br />"
-                          + "(in words: .......................................................................................................).<br />");
-            }
-
-            if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("8")
-                && Model.GetAnswer("FunctionAllowance") == "1045 - Functional supplement" && Model.Contract.Company.Key != "OI")
-            {
-                list.Add("Employee will receive a monthly gross Function allowance of <strong> PLN " + Model.GetAnswer("FunctionAllowanceAmount") + " </strong>.<br />"
-                          + "(in words: .........................................................................................................................).<br />");
-            }            
             
+            // Not Needed any more as we have changed margin for Inter Ikea documents
+            //if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("8") 
+            //    && Model.GetAnswer("FunctionAllowance") == "1045 - Functional supplement" && Model.Contract.Company.Key == "OI") 
+            //{
+            //    list.Add("Employee will receive a monthly gross Function allowance of <strong> PLN " + Model.GetAnswer("FunctionAllowanceAmount") + " </strong>.<br />"
+            //              + "(in words: .......................................................................................................).<br />");
+            //}
+
+            string inWords = "(in words: .........................................................................................................................).<br />"; 
+            string text =   "Employee will receive a monthly gross Function allowance of <strong> PLN ";   
+                               
             if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("8")
-                && Model.GetAnswer("FunctionAllowance2") == "1045 - Functional supplement" && Model.Contract.Company.Key == "OI")
+                && Model.GetAnswer("FunctionAllowance") == "1045 - Functional supplement") // && Model.Contract.Company.Key != "OI"
             {
-                list.Add("Employee will receive a monthly gross Function allowance of <strong> PLN " + Model.GetAnswer("FunctionAllowanceAmount2") + " </strong>.<br />"
-                          + "(in words: .......................................................................................................).<br />");
+                if (string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWordsEnglish1")))
+                {
+                    list.Add( text + Model.GetAnswer("FunctionAllowanceAmount") + "</strong>.<br />"
+                           + inWords );
+                }
+                else
+                {
+                    list.Add( text + Model.GetAnswer("FunctionAllowanceAmount") + "</strong>.<br />"
+                          + "(in words: " + Model.GetAnswer("BasicPayInWordsEnglish1") + ").");
+                }
             }
 
-            if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("8")
-                && Model.GetAnswer("FunctionAllowance2") == "1045 - Functional supplement" && Model.Contract.Company.Key != "OI")
-            {
-                list.Add("Employee will receive a monthly gross Function allowance of <strong> PLN " + Model.GetAnswer("FunctionAllowanceAmount2") + " </strong>.<br />"
-                          + "(in words: .........................................................................................................................).<br />");
-            }         
+            // Not Needed any more as we have changed margin for Inter Ikea documents
+            
+            //if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("8")
+            //    && Model.GetAnswer("FunctionAllowance2") == "1045 - Functional supplement" && Model.Contract.Company.Key == "OI")
+            //{
+            //    list.Add("Employee will receive a monthly gross Function allowance of <strong> PLN " + Model.GetAnswer("FunctionAllowanceAmount2") + " </strong>.<br />"
+            //              + "(in words: .......................................................................................................).<br />");
+            //}
 
             if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("8")
-              && Model.GetAnswer("FunctionAllowance3") == "1045 - Functional supplement" && Model.Contract.Company.Key == "OI")
+                && Model.GetAnswer("FunctionAllowance2") == "1045 - Functional supplement") // && Model.Contract.Company.Key != "OI"
             {
-                list.Add("Employee will receive a monthly gross Function allowance of <strong> PLN " + Model.GetAnswer("FunctionAllowanceAmount3") + " </strong>.<br />"
-                          + "(in words: .......................................................................................................).<br />");
+                 if (string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWordsEnglish2")))
+                 {
+                    list.Add( text + Model.GetAnswer("FunctionAllowanceAmount2") + "</strong>.<br />"
+                              + inWords);
+                 }
+                 else
+                 {
+                     list.Add(text + Model.GetAnswer("FunctionAllowanceAmount2") + "</strong>.<br />"
+                           + "(in words: " + Model.GetAnswer("BasicPayInWordsEnglish2") + ").");
+                 }
             }
 
+            // Not Needed any more as we have changed margin for Inter Ikea documents
+            
+            //if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("8")
+            //  && Model.GetAnswer("FunctionAllowance3") == "1045 - Functional supplement" && Model.Contract.Company.Key == "OI")
+            //{
+            //    list.Add("Employee will receive a monthly gross Function allowance of <strong> PLN " + Model.GetAnswer("FunctionAllowanceAmount3") + " </strong>.<br />"
+            //              + "(in words: .......................................................................................................).<br />");
+            //}
+
             if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("8")
-                 && Model.GetAnswer("FunctionAllowance3") == "1045 - Functional supplement" && Model.Contract.Company.Key != "OI")
+                 && Model.GetAnswer("FunctionAllowance3") == "1045 - Functional supplement") //&& Model.Contract.Company.Key != "OI"
             {
-                list.Add("Employee will receive a monthly gross Function allowance of <strong> PLN " + Model.GetAnswer("FunctionAllowanceAmount3") + " </strong>.<br />"
-                          + "(in words: .........................................................................................................................).<br />");
+                 if (string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWordsEnglish3")))
+                 {
+                    list.Add( text + Model.GetAnswer("FunctionAllowanceAmount3") + "</strong>.<br />"
+                              + inWords);
+                 }
+                 else
+                 {
+                     list.Add(text + Model.GetAnswer("FunctionAllowanceAmount3") + "</strong>.<br />"
+                            + "(in words: " + Model.GetAnswer("BasicPayInWordsEnglish3") + ").");
+                 }
+                
             }
  
         }

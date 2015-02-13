@@ -32,10 +32,11 @@
                 },
                 "User.Email": {
                     required: true
-                },
-                "User.Customer_Id": {
-                    required: true
                 }
+                //,
+                //"User.Customer_Id": {
+                //    required: true
+                //}
             },
             messages: {
                 "User.UserID": {
@@ -49,10 +50,11 @@
                 },
                 "User.Email": {
                     required: "@Translation.Get("Du måste ange en e-post adress", Enums.TranslationSource.TextTranslation)"
-                },
+                }
+                @*,
                 "User.Customer_Id": {
                     required: "@Translation.Get("Du måste ange en standardkund", Enums.TranslationSource.TextTranslation)"
-                }
+                }*@
            },
             submitHandler: function (form) {
                 submitForm();

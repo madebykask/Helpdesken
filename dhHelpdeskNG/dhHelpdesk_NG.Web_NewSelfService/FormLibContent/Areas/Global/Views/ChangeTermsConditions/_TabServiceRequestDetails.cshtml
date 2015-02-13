@@ -56,11 +56,27 @@
                     </td>
                 </tr>
                 <tr>
+                    <td class="tdstrong">@Model.Label("Company")</td>
+                    <td>@Model.Element("Company")</td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_Company" name="OLD_Company" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_Company").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_Company">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_Company").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>
+                <tr>
                     <td class="tdstrong">@Model.Label("BusinessUnit")</td>
                     <td>@Model.Element("BusinessUnit")</td>
                     <td>
                         <input type="hidden" class="oldValue" id="OLD_BusinessUnit" name="OLD_BusinessUnit" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_BusinessUnit").Select(x => x.Value).FirstOrDefault() : "")"/>
                         <em class="muted" id="emOLD_BusinessUnit">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_BusinessUnit").Select(x => x.Value).FirstOrDefault() : "")</em>                        
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ServiceArea")</td>
+                    <td>@Model.Element("ServiceArea")</td>
+                    <td>
+                         <input type="hidden" class="oldValue"  id="OLD_ServiceArea" name="OLD_ServiceArea" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_ServiceArea").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_ServiceArea">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_ServiceArea").Select(x => x.Value).FirstOrDefault() : "")</em>
                     </td>
                 </tr>
                 <tr>
@@ -71,11 +87,11 @@
                         <em class="muted" id="emOLD_Department">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_Department").Select(x => x.Value).FirstOrDefault() : "")</em>                        
                     </td>
                 </tr>
-                <tr>
+              @*  <tr>
                     <td class="tdstrong">@Model.Label("ChangeType")</td>
                     <td>@Model.Element("ChangeType")</td>
                     <td></td>
-                </tr>
+                </tr>*@
                 <tr>
                     <td class="tdstrong">@Model.Label("ChangeValidFrom")</td>
                     <td>@Model.Element("ChangeValidFrom")</td>
@@ -105,7 +121,7 @@
                     </td>
                 </tr>
                 }
-                <tr>
+                @*<tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Permanent Address")</h4>
                     </td>
@@ -120,15 +136,15 @@
                         <input type="hidden" class="oldValue" id="OLD_PermanentAddressLine1" name="OLD_PermanentAddressLine1" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentAddressLine1").Select(x => x.Value).FirstOrDefault() : "")"/>
                         <em class="muted" id="emOLD_PermanentAddressLine1">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentAddressLine1").Select(x => x.Value).FirstOrDefault() : "")</em>                        
                     </td>
-                </tr>
-                <tr>
+                </tr>*@
+               @* <tr>
                     <td class="tdstrong">@Model.Label("PermanentAddressLine2")</td>
                     <td>@Model.Element("PermanentAddressLine2")</td>
                     <td>
                         <input type="hidden" class="oldValue" id="OLD_PermanentAddressLine2" name="OLD_PermanentAddressLine2" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentAddressLine2").Select(x => x.Value).FirstOrDefault() : "")"/>
                         <em class="muted" id="emOLD_PermanentAddressLine2">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentAddressLine2").Select(x => x.Value).FirstOrDefault() : "")</em>                        
                     </td>
-                </tr>
+                </tr>*@
                 @*                <tr>
                     <td class="tdstrong">@Model.Label("PermanentAddressLin3")</td>
                     <td>@Model.Element("PermanentAddressLin3")</td>
@@ -137,35 +153,38 @@
                         <em class="muted" id="emOLD_PermanentAddressLine3">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentAddressLin3").Select(x => x.Value).FirstOrDefault() : "")</em>                        
                     </td>
                 </tr>*@
-                <tr>
+                @*<tr>
                     <td class="tdstrong">@Model.Label("PermanentPostalCode")</td>
                     <td>@Model.Element("PermanentPostalCode")</td>
                     <td>
                         <input type="hidden" class="oldValue" id="OLD_PermanentPostalCode" name="OLD_PermanentPostalCode" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentPostalCode").Select(x => x.Value).FirstOrDefault() : "")"/>
                         <em class="muted" id="emOLD_PermanentPostalCode">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentPostalCode").Select(x => x.Value).FirstOrDefault() : "")</em>                        
                     </td>
-                </tr>
-                <tr>
+                </tr>*@
+                @*<tr>
                     <td class="tdstrong">@Model.Label("PermanentCity")</td>
                     <td>@Model.Element("PermanentCity")</td>
                     <td>
                         <input type="hidden" class="oldValue" id="OLD_PermanentCity" name="OLD_PermanentCity" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentCity").Select(x => x.Value).FirstOrDefault() : "")"/>
                         <em class="muted" id="emOLD_PermanentCity">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentCity").Select(x => x.Value).FirstOrDefault() : "")</em>                        
                     </td>
-                </tr>
-                <tr>
+                </tr>*@
+                @*<tr>
                     <td class="tdstrong">@Model.Label("PermanentCountry")</td>
                     <td>@Model.Element("PermanentCountry")</td>
                     <td>
                         <input type="hidden" class="oldValue" id="OLD_PermanentCountry" name="OLD_PermanentCountry" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentCountry").Select(x => x.Value).FirstOrDefault() : "")"/>
                         <em class="muted" id="emOLD_PermanentCountry">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentCountry").Select(x => x.Value).FirstOrDefault() : "")</em>                        
                     </td>
-                </tr>
+                </tr>*@
             </tbody>
         </table>
     </div>
 
-    <input type="hidden" id="CustomerId" value="@Model.CustomerId" />
+    <input type="hidden" id="CustomerId" value="@Model.Form.CustomerId" />
+    <input type="hidden" id="WatchDate" name="WatchDate" value="@Model.Element("WatchDate")" />
     <input type="hidden" id="formGuid" value="@Model.FormGuid" />
-
+    <input type="hidden" id="MultipleEntrySectionsNr" value="@FormLibConstants.FormField.MultipleEntrySectionsNr" />
+    <input type="hidden" id="CalculateWatchDate" name="CalculateWatchDate" value="1" />
 </div>
+

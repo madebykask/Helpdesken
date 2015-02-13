@@ -12,6 +12,7 @@
     public interface IStatusService
     {
         IList<Status> GetStatuses(int customerId);
+        IList<Status> GetActiveStatuses(int customerId);
         int? GetDefaultId(int customerId); 
         Status GetStatus(int id);
         DeleteMessage DeleteStatus(int id);
@@ -47,6 +48,11 @@
         public IList<Status> GetStatuses(int customerId)
         {
             return this._statusRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
+        }
+
+        public IList<Status> GetActiveStatuses(int customerId)
+        {
+            return this._statusRepository.GetMany(x => x.Customer_Id == customerId && x.IsActive == 1).OrderBy(x => x.Name).ToList();
         }
 
         public int? GetDefaultId(int customerId)

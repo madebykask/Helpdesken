@@ -46,7 +46,7 @@ namespace DH.Helpdesk.Dal.Utils
         /// The holidays.
         /// </param>
         /// <returns>
-        /// The <see cref="int"/>.
+        /// The time left in hours
         /// </returns>
         public static int CalculateLeadTime(
                                                 DateTime caseRegistrationDate,
@@ -83,28 +83,150 @@ namespace DH.Helpdesk.Dal.Utils
             return (workingMinutes - caseExternalTime) / 60;
         }
 
+        /// <summary>
+        /// Calcualtes time in hours left before case should be closed
+        /// </summary>
+        /// <param name="caseRegistrationDate"></param>
+        /// <param name="caseFinishingDate"></param>
+        /// <param name="caseShouldBeFinishedInDate">Date when case should be finished</param>
+        /// <param name="workingDayStart"></param>
+        /// <param name="workingDayEnd"></param>
+        /// <param name="holidays"></param>
+        /// <param name="SLAtime">time in miuntues</param>
+        /// <param name="timeSpent">already spent time </param>
+        /// <param name="timeOnPause">time in minutes when case was "on Hold"</param>
+        /// <returns>Time in hours. Can be null if no caseFinishingDate is null</returns>
+        public static int? CalculateTimeLeft(
+            DateTime caseRegistrationDate, 
+            DateTime? caseFinishingDate,
+            DateTime? caseShouldBeFinishedInDate,
+            int workingDayStart,
+            int workingDayEnd,
+            IEnumerable<HolidayOverview> holidays,
+            int SLAtime = 0,
+            int timeOnPause = 0)
+        {
+            if (caseFinishingDate.HasValue)
+            {
+                return null;
+            }
+           
+            if (caseShouldBeFinishedInDate.HasValue)
+            {
+                /// caseShouldBeFinishedInDate has time like 00:00:00,
+                /// but we need to know exactly the latest time of that day
+                var caseShoudlBeFinishedWithTime = caseShouldBeFinishedInDate.Value.AddHours(workingDayEnd);
+                var now = DateTime.UtcNow;
+                int workingTimeLeft;
+                if (caseShoudlBeFinishedWithTime > now)
+                {
+                    workingTimeLeft = CalculateTotalWorkingMinutes(
+                        now,
+                        caseShoudlBeFinishedWithTime,
+                        workingDayStart,
+                        workingDayEnd,
+                        holidays);
+                }
+                else
+                {
+                    workingTimeLeft = -CalculateTotalWorkingMinutes(
+                       caseShoudlBeFinishedWithTime,
+                       now,
+                       workingDayStart,
+                       workingDayEnd,
+                       holidays);
+                }
+                
+                return workingTimeLeft / 60;
+            }
+
+            if (SLAtime == 0)
+            {
+                return null;
+            }
+            
+            var timeSpent = CalculateTotalWorkingMinutes(
+                                caseRegistrationDate,
+                                DateTime.UtcNow,
+                                workingDayStart,
+                                workingDayEnd,
+                                holidays);
+            SLAtime = SLAtime - timeSpent + timeOnPause;
+            return SLAtime / 60;
+        }
+
+        /// <summary>
+        /// Calculates working time in minutes for specified interval. Takes in account working hours and holidays and weekends (only Saturday and Sunday)
+        /// </summary>
+        /// <param name="startDate">time in UTC</param>
+        /// <param name="endDate">time in UTC</param>
+        /// <param name="workingHourBegin">hour when working day starts at (ie 8)</param>
+        /// <param name="workingHourEnd">hour when working day ends (ie 17)</param>
+        /// <param name="holidays"></param>
+        /// <returns></returns>
         public static int CalculateTotalWorkingMinutes(
                                 DateTime startDate,
                                 DateTime endDate,
-                                int workingDayStart,
-                                int workingDayEnd,
+                                int workingHourBegin,
+                                int workingHourEnd,
                                 IEnumerable<HolidayOverview> holidays)
         {
-            int holidaysMinutes = holidays != null ? holidays
-                .Where(holiday => startDate.RoundToDay() <= holiday.HolidayDate.RoundToDay() &&
-                        holiday.HolidayDate.RoundToDay() <= endDate.RoundToDay() &&
-                        holiday.HolidayDate.DayOfWeek != DayOfWeek.Saturday &&
-                        holiday.HolidayDate.DayOfWeek != DayOfWeek.Sunday)
-                        .Sum(holiday => (holiday.TimeUntil - holiday.TimeFrom) * 60) : 0;
+            if (workingHourEnd <= workingHourBegin)
+            {
+                throw new Exception("Bad parameters workingHourBegin or workingHourEnd");
+            }
 
-            var businessDays = DatesHelper.GetBusinessDays(startDate, endDate);
+            if (startDate >= endDate)
+            {
+                return 0;
+            }
 
-            var workingMinutes = businessDays > 1 ?
-                businessDays * (workingDayEnd - workingDayStart) * 60 : 
-                (int)(endDate - startDate).TotalMinutes;                
+            int holidaysMinutes = holidays != null
+                                      ? holidays.Where(
+                                          holiday =>
+                                          startDate.RoundToDay() <= holiday.HolidayDate.RoundToDay()
+                                          && holiday.HolidayDate.RoundToDay() <= endDate.RoundToDay()
+                                          && holiday.HolidayDate.DayOfWeek != DayOfWeek.Saturday
+                                          && holiday.HolidayDate.DayOfWeek != DayOfWeek.Sunday)
+                                            .Sum(holiday => (holiday.TimeUntil - holiday.TimeFrom) * 60)
+                                      : 0;
 
-            return workingMinutes > holidaysMinutes ? 
-                workingMinutes - holidaysMinutes : 0;
+            int prefixTimeMins = 0;
+            DateTime tunedStartDate;
+            DateTime tunedEndDate;
+            
+            if (startDate.Hour <= workingHourBegin)
+            {
+                startDate = startDate.RoundToWorkDateTime(workingHourBegin);
+                tunedStartDate = startDate.RoundToWorkDateTime(workingHourBegin);
+            }
+            else
+            {
+                prefixTimeMins += ((workingHourEnd - Math.Min(startDate.Hour, workingHourEnd)) * 60)
+                                    + startDate.Minute;
+                tunedStartDate = startDate.RoundToWorkDateTime(workingHourBegin).AddDays(1);
+            }
+
+            if (endDate.Hour >= workingHourEnd)
+            {
+                endDate = endDate.RoundToWorkDateTime(workingHourEnd);
+                tunedEndDate = endDate.RoundToWorkDateTime(workingHourEnd);
+            }
+            else
+            {
+                prefixTimeMins += ((Math.Max(endDate.Hour, workingHourBegin) - workingHourBegin) * 60)
+                                    + endDate.Minute;
+                tunedEndDate = endDate.RoundToWorkDateTime(workingHourEnd).AddDays(-1);
+            }
+
+            if (startDate.RoundToDay() == endDate.RoundToDay())
+            {
+                return ((endDate - startDate).Hours * 60) + (endDate - startDate).Minutes;
+            }
+            
+            var businessDays = DatesHelper.GetBusinessDays(tunedStartDate.RoundToDay(), tunedEndDate.RoundToDay());
+            var workingMinutes = prefixTimeMins + (businessDays * (workingHourEnd - workingHourBegin) * 60);
+            return Math.Max(workingMinutes - holidaysMinutes, 0);
         }
     }
 }

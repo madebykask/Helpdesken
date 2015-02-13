@@ -30,7 +30,7 @@
                 var computersRep = uow.GetRepository<Computer>();
 
                 var computers = computersRep.GetAll()
-                    .GetByCustomer((int?)customerId);
+                    .GetByNullableCustomer(customerId);
 
                 var overviews = applicationRepository.GetAll()
                                 .GetOnlyConnectedCustomerApplications(customerId, onlyConnected)

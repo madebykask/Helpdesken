@@ -14,6 +14,9 @@
     @Styles.Render("~/img-profile/css")    
     @Scripts.Render("~/bundles/common/admin")
 </head>
+@{
+    var model = Html.MasterModel();
+}
 <body>
 @if (SessionFacade.CurrentUser != null)
 {    
@@ -81,6 +84,7 @@
         </div>
     </div>
     @RenderBody()
+    @Html.Partial("_Version")
     @RenderSection("Dialogs", false)
     @Scripts.Render("~/bundles/dhhelpdesk")
     @RenderSection("Scripts", false)

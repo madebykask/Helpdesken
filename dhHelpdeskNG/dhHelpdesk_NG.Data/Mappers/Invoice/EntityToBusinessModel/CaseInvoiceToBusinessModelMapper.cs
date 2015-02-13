@@ -13,12 +13,16 @@
 
         private readonly IEntityToBusinessModelMapper<InvoiceArticleEntity, InvoiceArticle> articleMapper;
 
+        private readonly IEntityToBusinessModelMapper<CaseInvoiceOrderFileEntity, CaseInvoiceOrderFile> filesMapper;
+
         public CaseInvoiceToBusinessModelMapper(
             IEntityToBusinessModelMapper<Case, CaseOverview> caseMapper, 
-            IEntityToBusinessModelMapper<InvoiceArticleEntity, InvoiceArticle> articleMapper)
+            IEntityToBusinessModelMapper<InvoiceArticleEntity, InvoiceArticle> articleMapper, 
+            IEntityToBusinessModelMapper<CaseInvoiceOrderFileEntity, CaseInvoiceOrderFile> filesMapper)
         {
             this.caseMapper = caseMapper;
             this.articleMapper = articleMapper;
+            this.filesMapper = filesMapper;
         }
 
         public CaseInvoice Map(CaseInvoiceEntity entity)
@@ -51,7 +55,8 @@
                                                     a.Amount,
                                                     a.Ppu,
                                                     a.Position,
-                                                    a.IsInvoiced)).ToArray()))
+                                                    a.IsInvoiced)).ToArray(),
+                                                    o.Files.Select(f => this.filesMapper.Map(f)).OrderBy(f => f.FileName).ToArray()))
                                 .OrderBy(o => o.Number).ToArray());
         }
     }

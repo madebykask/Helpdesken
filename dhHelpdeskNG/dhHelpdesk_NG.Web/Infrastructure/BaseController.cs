@@ -76,7 +76,8 @@
                 } 
                 else
                 {
-                    this.Response.Redirect(redirectToUrl);
+                    //this.Response.Redirect(redirectToUrl);                    
+                    filterContext.Result = new RedirectResult(redirectToUrl);
                 }
             }
 

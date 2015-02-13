@@ -15,6 +15,8 @@
             var prefix = $(this).attr('data-prefix');
             document.getElementById(prefix + "AddressLine1").value = document.getElementById('PermanentAddressLine1').value;
             document.getElementById(prefix + "AddressLine2").value = document.getElementById('PermanentAddressLine2').value;
+
+
             document.getElementById(prefix + "City").value = document.getElementById('PermanentCity').value;
             //document.getElementById(prefix + "Country").value = document.getElementById('PermanentCountry').value;
 
@@ -43,22 +45,9 @@
                 }
             }
 
+            var selectedTextPostal = $('#PermanentPostalCode').find('option:selected').text();
+            $('#' + prefix + 'PostalCode').val(selectedTextPostal);
 
-            document.getElementById(prefix + "PostalCode").value = document.getElementById('PermanentPostalCode').value;
-
-        });
-
-
-        //$('#TECoWorker').change(function () {
-        //    $(".globalmobility").show();
-        //    if ($(this).val() == 'No')
-        //        $(".globalmobility").hide();
-        //});
-
-        $(document).on('change', '#Extent', function (e) {
-            e.preventDefault();
-            if ($(this).val() === 'Full time')
-                $('#Workload').val('100');
         });
 
         validate.run($('#actionState').val());
@@ -67,8 +56,6 @@
             var val = $(this).val();
             validate.run(val);
         });
-
-
     </script>
 
     @Html.Partial("_Validate", Model)

@@ -10,8 +10,10 @@ namespace DH.Helpdesk.Web.Controllers
     using System.Net;
     using System.Web;
     using System.Web.Mvc;
-    using System.Web.Helpers;    
+    using System.Web.Helpers;
+    using System.Web.UI.WebControls.Expressions;
 
+    using DH.Helpdesk.BusinessData.Enums.Case;
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models.FinishingCause;
@@ -206,7 +208,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         #region Public Methods and Operators
 
-        public ActionResult Index(int? customerId, bool? clearFilters = false, string customFilter = "")
+        public ActionResult Index(int? customerId, bool? clearFilters = false, CasesCustomFilter customFilter = CasesCustomFilter.None)
         {                        
             if (clearFilters == true)
             {
@@ -354,23 +356,25 @@ namespace DH.Helpdesk.Web.Controllers
 
                     switch (customFilter)
                     {
-                        case "MyCases":
+                        case CasesCustomFilter.MyCases:
                             sm.caseSearchFilter.UserPerformer = SessionFacade.CurrentUser.Id.ToString();                            
                             sm.caseSearchFilter.CaseProgress = "2";                            
-                            break;                        
-                        case "UnreadCases":
+                            break;
+                        case CasesCustomFilter.UnreadCases:
                             sm.caseSearchFilter.CaseProgress = "4";
                             sm.caseSearchFilter.UserPerformer = "";                            
                             break;
-                        case "HoldCases":                            
+                        case CasesCustomFilter.HoldCases:                            
                             sm.caseSearchFilter.CaseProgress = "3";
                             sm.caseSearchFilter.UserPerformer = "";                            
                             break;
-                        case "InProcessCases":                            
+                        case CasesCustomFilter.InProcessCases:                            
                             sm.caseSearchFilter.CaseProgress = "2";
                             sm.caseSearchFilter.UserPerformer = "";                           
-                            break;                        
+                            break;    
                     }
+
+                    sm.caseSearchFilter.CustomFilter = customFilter;
 
                     fd.caseSearchFilter = sm.caseSearchFilter;
                     fd.CaseClosingDateEndFilter = sm.caseSearchFilter.CaseClosingDateEndFilter;
@@ -454,9 +458,13 @@ namespace DH.Helpdesk.Web.Controllers
                                     CaseLog caseLog, 
                                     CaseMailSetting caseMailSetting,
                                     bool? updateNotifierInformation,
-                                    string caseInvoiceArticles)
+                                    string caseInvoiceArticles,
+                                    int? templateId)
         {
             int caseId = this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation, caseInvoiceArticles);
+
+            CheckTemplateParameters(templateId, caseId);
+
             return this.RedirectToAction("edit", "cases", new { id = caseId, redirectFrom = "save", uni = updateNotifierInformation });
         }
 
@@ -467,9 +475,13 @@ namespace DH.Helpdesk.Web.Controllers
                                     CaseLog caseLog, 
                                     CaseMailSetting caseMailSetting,
                                     bool? updateNotifierInformation,
-                                    string caseInvoiceArticles)
+                                    string caseInvoiceArticles,
+                                    int? templateId)
         {
-            this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation, caseInvoiceArticles);
+            int caseId = this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation, caseInvoiceArticles);
+
+            CheckTemplateParameters(templateId, caseId);
+
             return this.RedirectToAction("index", "cases", new { customerId = case_.Customer_Id });
         }
 
@@ -480,9 +492,13 @@ namespace DH.Helpdesk.Web.Controllers
                                     CaseLog caseLog,
                                     CaseMailSetting caseMailSetting,
                                     bool? updateNotifierInformation,
-                                    string caseInvoiceArticles)
+                                    string caseInvoiceArticles,
+                                    int? templateId)
         {
-            this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation, caseInvoiceArticles);
+            int caseId = this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation, caseInvoiceArticles);
+
+            CheckTemplateParameters(templateId, caseId);
+
             return this.RedirectToAction("new", "cases", new { customerId = case_.Customer_Id });
         }
 
@@ -496,7 +512,7 @@ namespace DH.Helpdesk.Web.Controllers
                                     string caseInvoiceArticles)
         {
             int caseId = this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation, caseInvoiceArticles);
-            return this.RedirectToAction("edit", "cases", new { id = caseId, redirectFrom = "save", uni = updateNotifierInformation });
+            return this.RedirectToAction("edit", "cases", new { id = caseId, redirectFrom = "save", uni = updateNotifierInformation, updateState = false });
         }
 
         [HttpPost]
@@ -525,7 +541,7 @@ namespace DH.Helpdesk.Web.Controllers
             return this.RedirectToAction("new", "cases", new { customerId = case_.Customer_Id });
         }
 
-        public ActionResult Edit(int id, string redirectFrom = "", int? moveToCustomerId = null, bool? uni = null)
+        public ActionResult Edit(int id, string redirectFrom = "", int? moveToCustomerId = null, bool? uni = null, bool updateState = true)
         {
             CaseInputViewModel m = null;
 
@@ -545,7 +561,7 @@ namespace DH.Helpdesk.Web.Controllers
                 }
 
                 int customerId = moveToCustomerId.HasValue ? moveToCustomerId.Value : 0;
-                m = this.GetCaseInputViewModel(userId, customerId, id, lockedByUserId, redirectFrom, null, null);
+                m = this.GetCaseInputViewModel(userId, customerId, id, lockedByUserId, redirectFrom, null, null, updateState);
                 if (uni.HasValue)
                 {
                     m.UpdateNotifierInformation = uni.Value;                    
@@ -587,6 +603,7 @@ namespace DH.Helpdesk.Web.Controllers
                     m.case_.WorkingGroup_Id = null;
                     m.ParantPath_CaseType = ParentPathDefaultValue;
                     m.ParantPath_ProductArea = ParentPathDefaultValue;
+                    m.ParantPath_OU = ParentPathDefaultValue;
                 }
 
                 var caseInvoices = this.invoiceArticleService.GetCaseInvoices(id);
@@ -623,7 +640,7 @@ namespace DH.Helpdesk.Web.Controllers
                     m.LogKey = m.CaseLog.Id.ToString(); 
                     m.customerUserSetting = cu;
                     m.caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(customerId);
-                    m.CaseFieldSettingWithLangauges = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customerId, customer.Language_Id);
+                    m.CaseFieldSettingWithLangauges = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customerId, SessionFacade.CurrentLanguageId);
                     m.finishingCauses = this._finishingCauseService.GetFinishingCauses(customerId);
                     m.case_ = this._caseService.GetCaseById(m.CaseLog.CaseId);
                     m.users = this._userService.GetUsers(customerId);
@@ -650,6 +667,7 @@ namespace DH.Helpdesk.Web.Controllers
                     var acccessToGroups = this._userService.GetWorkinggroupsForUserAndCustomer(SessionFacade.CurrentUser.Id, customerId);
                     var deps = this._departmentService.GetDepartmentsByUserPermissions(userId, customerId);
 
+                    m.CustomerSettings = this.workContext.Customer.Settings;
                     m.EditMode = EditMode(m, ModuleName.Log, deps, acccessToGroups);
                     AddViewDataValues();
 
@@ -771,7 +789,22 @@ namespace DH.Helpdesk.Web.Controllers
 
         public JsonResult ChangeDepartment(int? id, int customerId, int departmentFilterFormat)
         {
-            var list = id.HasValue ? this._ouService.GetOuForDepartment(id.GetValueOrDefault()).Select(x => new { id = x.Id, name = x.Name }) : this._ouService.GetOUs(customerId).Select(x => new { id = x.Id, name = x.Name });
+            var prelist =
+            id.HasValue ?
+                this._ouService.GetOUs(customerId)
+                         .Where(e => e.IsActive == 1 && id.GetValueOrDefault() == e.Department_Id)                
+                :
+                this._ouService.GetOUs(customerId);            
+            
+            var unionList = new Dictionary<int,string>();
+            foreach (var ou in prelist)
+            {
+                unionList.Add(ou.Id, ou.Name);
+                foreach (var s in ou.SubOUs.Where(e => e.IsActive == 1))                
+                    unionList.Add(s.Id, ou.Name + " - " + s.Name );                                
+            }
+
+            var list = unionList.Select(x => new { id = x.Key, name = x.Value });
             return this.Json(new { list });
         }
 
@@ -1289,6 +1322,14 @@ namespace DH.Helpdesk.Web.Controllers
         public RedirectToRouteResult ChangeCurrentLanguage(int languageId)        
         {
             SessionFacade.CurrentLanguageId = languageId;
+
+            var language = _languageService.GetLanguage(languageId);
+
+            if(language != null)
+            {
+                SessionFacade.CurrentLanguageCode = language.LanguageID;
+            }
+
             var prevInfo = this.ExtractPreviousRouteInfo();
             var res = new RedirectToRouteResult(prevInfo);
             return res;
@@ -1297,6 +1338,21 @@ namespace DH.Helpdesk.Web.Controllers
         #endregion
 
         #region Private Methods and Operators
+
+        private void CheckTemplateParameters(int? templateId, int caseId)
+        {
+            if(templateId.HasValue)
+            {
+                // check template parameters
+                var template = _caseSolutionService.GetCaseSolution(templateId.Value);
+
+                // if formGuid this indicates that we want to initate a form by this guid.
+                if(template.FormGUID.HasValue)
+                {
+                    _caseSolutionService.SaveEmptyForm(template.FormGUID.Value, caseId);
+                }
+            }
+        }
 
         private RouteValueDictionary ExtractPreviousRouteInfo()
         {
@@ -1393,6 +1449,7 @@ namespace DH.Helpdesk.Web.Controllers
                 oldCase = this._caseService.GetDetachedCaseById(case_.Id);
                 var cu = this._customerUserService.GetCustomerSettings(case_.Customer_Id, SessionFacade.CurrentUser.Id);
                 if (cu != null)
+                {
                     if (cu.UserInfoPermission == 0)
                     {
                         // current user are not allowed to see user information, update from old case
@@ -1407,6 +1464,24 @@ namespace DH.Helpdesk.Web.Controllers
                         case_.OU_Id = oldCase.OU_Id;
                         case_.UserCode = oldCase.UserCode;
                     }
+                }
+
+                if (oldCase.StateSecondary_Id.HasValue)
+                {
+                    var caseSubState = this._stateSecondaryService.GetStateSecondary(oldCase.StateSecondary_Id.Value);
+
+                    // calculating time spent in "inactive" state every save
+                    if (caseSubState.IncludeInCaseStatistics == 0)
+                    {
+                        var workingTimeMins = CaseUtils.CalculateTotalWorkingMinutes(
+                        oldCase.ChangeTime,
+                        DateTime.UtcNow,
+                        this.workContext.Customer.WorkingDayStart,
+                        this.workContext.Customer.WorkingDayEnd,
+                        this.workContext.Cache.Holidays);
+                        case_.ExternalTime = oldCase.ExternalTime + workingTimeMins;
+                    }
+                }
             }
 
             // save case and case history
@@ -1576,14 +1651,20 @@ namespace DH.Helpdesk.Web.Controllers
         /// <returns>
         /// The <see cref="CaseInputViewModel"/>.
         /// </returns>
-        private CaseInputViewModel GetCaseInputViewModel(int userId, int customerId, int caseId, int lockedByUserId = 0, string redirectFrom = "", int? templateId = null, int? copyFromCaseId = null)
+        private CaseInputViewModel GetCaseInputViewModel(int userId, int customerId, int caseId, int lockedByUserId = 0, 
+                                                         string redirectFrom = "", int? templateId = null, 
+                                                         int? copyFromCaseId = null, bool updateState = true)
         {
             var m = new CaseInputViewModel();
             SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
             if (caseId != 0)
             {
                 var markCaseAsRead = string.IsNullOrWhiteSpace(redirectFrom);
-                m.case_ = this._caseService.GetCaseById(caseId, markCaseAsRead);
+                m.case_ = this._caseService.GetCaseById(caseId);
+
+                if (m.case_.Unread != 0 && updateState)
+                    this._caseService.MarkAsRead(caseId);                
+
                 customerId = customerId == 0 ? m.case_.Customer_Id : customerId;
                 //SessionFacade.CurrentCaseLanguageId = m.case_.RegLanguage_Id;
             }
@@ -1600,10 +1681,11 @@ namespace DH.Helpdesk.Web.Controllers
                 m.CaseIsLockedByUserId = lockedByUserId;
                 m.customerUserSetting = cu;
                 m.caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(customerId);
-                m.CaseFieldSettingWithLangauges = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customerId, customer.Language_Id);
+                m.CaseFieldSettingWithLangauges = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customerId, SessionFacade.CurrentLanguageId);
                 m.DepartmentFilterFormat = cs.DepartmentFilterFormat;
                 m.ParantPath_CaseType = ParentPathDefaultValue;
                 m.ParantPath_ProductArea = ParentPathDefaultValue;
+                m.ParantPath_OU = ParentPathDefaultValue;
                 m.MinWorkingTime = cs.MinRegWorkingTime != 0 ? cs.MinRegWorkingTime : 30;
                 m.CaseFilesModel = new CaseFilesModel();
                 m.LogFilesModel = new FilesModel();
@@ -1681,8 +1763,17 @@ namespace DH.Helpdesk.Web.Controllers
 
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.OU_Id.ToString()).ShowOnStartPage == 1)
                 {
-                    m.ous = this._ouService.GetOUs(customerId);
+                    m.ous = this._ouService.GetOUs(customerId);                    
                 }
+
+                //if (m.case_.OU_Id != null && m.case_.OU_Id.Value > 0)
+                //{                    
+                //    var o = this._ouService.GetOU(m.case_.OU_Id.Value);
+                //    if (o != null)
+                //    {
+                //        m.ParantPath_OU = o.getOUParentPath();
+                //    }
+                //}
 
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()).ShowOnStartPage == 1)
                 {
@@ -1750,7 +1841,7 @@ namespace DH.Helpdesk.Web.Controllers
                 m.standardTexts = this._standardTextService.GetStandardTexts(customerId);
                 m.Languages = this._languageService.GetActiveLanguages();
 
-                if (cs.DontConnectUserToWorkingGroup == 0 && m.case_.WorkingGroup_Id > 0)
+                if (cs.DontConnectUserToWorkingGroup == 0 && m.case_.WorkingGroup_Id > 0 && m.case_.Id != 0)
                 {
                     m.performers = this._userService.GetUsersForWorkingGroup(customerId, m.case_.WorkingGroup_Id.Value);                    
                 }
@@ -1827,6 +1918,37 @@ namespace DH.Helpdesk.Web.Controllers
                         m.CaseLog.TextExternal = caseTemplate.Text_External;
                         m.CaseLog.TextInternal = caseTemplate.Text_Internal;
                         m.CaseLog.FinishingType = caseTemplate.FinishingCause_Id;
+                        m.case_.PersonsName = caseTemplate.PersonsName;
+                        m.case_.PersonsPhone = caseTemplate.PersonsPhone;
+                        m.case_.Region_Id = caseTemplate.Region_Id;
+                        m.case_.OU_Id = caseTemplate.OU_Id;
+                        m.case_.Place = caseTemplate.Place;
+                        m.case_.UserCode = caseTemplate.UserCode;
+                        m.case_.Urgency_Id = caseTemplate.Urgency_Id;
+                        m.case_.Impact_Id = caseTemplate.Impact_Id;
+                        m.case_.InvoiceNumber = caseTemplate.InvoiceNumber;
+                        m.case_.ReferenceNumber = caseTemplate.ReferenceNumber;
+                        m.case_.Status_Id = caseTemplate.Status_Id;
+                        m.case_.StateSecondary_Id = caseTemplate.StateSecondary_Id;
+                        m.case_.Verified = caseTemplate.Verified;
+                        m.case_.VerifiedDescription = caseTemplate.VerifiedDescription;
+                        m.case_.SolutionRate = caseTemplate.SolutionRate;
+                        m.case_.InventoryNumber = caseTemplate.InventoryNumber;
+                        m.case_.InventoryType = caseTemplate.InventoryType;
+                        m.case_.InventoryLocation = caseTemplate.InventoryLocation;
+                        m.case_.System_Id = caseTemplate.System_Id;
+                        m.case_.Currency = caseTemplate.Currency;
+                        m.case_.Cost = caseTemplate.Cost;
+                        m.case_.OtherCost = caseTemplate.OtherCost;
+                        m.case_.Available = caseTemplate.Available;
+                        m.case_.CausingPartId = caseTemplate.FinishingCause_Id;
+                        m.case_.ContactBeforeAction = caseTemplate.ContactBeforeAction;
+                        m.case_.WatchDate = caseTemplate.WatchDate;
+                        m.case_.Project_Id = caseTemplate.Project_Id;
+                        m.case_.Problem_Id = caseTemplate.Problem_Id;
+                        m.case_.Change_Id = caseTemplate.Change_Id;
+                        m.case_.FinishingDate = caseTemplate.FinishingDate;
+                        m.case_.FinishingDescription = caseTemplate.FinishingDescription;
                     }
                 } // Load Case Template
 
@@ -1902,6 +2024,16 @@ namespace DH.Helpdesk.Web.Controllers
                 //}
 
                 m.CustomerSettings = this.workContext.Customer.Settings;
+                m.DynamicCase = _caseService.GetDynamicCase(m.case_.Id);
+
+                if(m.DynamicCase != null)
+                {
+                    var l = m.Languages.Where(x => x.Id == SessionFacade.CurrentLanguageId).FirstOrDefault();
+                    m.DynamicCase.FormPath = m.DynamicCase.FormPath.Replace("[CaseId]"
+                        , m.case_.Id.ToString()).Replace("[UserId]", SessionFacade.CurrentUser.UserId.ToString()).Replace("[Language]", l.LanguageId);
+                    //m.DynamicCase.FormPath += "&clearcache=1";
+                    //m.DynamicCase.FormPath += "&apa=" + (DateTime.Now.ToString("yyyyMMddHHmmssfff"));
+                }
             }
 
             m.CaseTemplateTreeButton = GetCaseTemplateTreeModel(customerId, userId);

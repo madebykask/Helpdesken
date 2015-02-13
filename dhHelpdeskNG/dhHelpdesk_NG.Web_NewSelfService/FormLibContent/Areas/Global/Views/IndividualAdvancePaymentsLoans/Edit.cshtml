@@ -3,7 +3,7 @@
 @using ECT.FormLib.Models;
 
 @{
-    ViewBag.Title = Model.Translate("Global") + " - " + Model.Translate("Service Request Details");
+    ViewBag.Title = Model.Translate("Global") + " - " + Model.Translate("Individual Advance Payments & Loans");
 }
 
 @section Validation {
@@ -15,12 +15,6 @@
 @section Script {
 
     <script>
-
-        $(document).on('change', '#Extent', function (e) {
-            e.preventDefault();
-            if ($(this).val() === 'Full time')
-                $('#Workload').val('100');
-        });
 
         validate.run($('#actionState').val());
 

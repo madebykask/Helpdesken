@@ -17,29 +17,18 @@
 </head>
 <body>
     <div>
-        <table style="font-family: Verdana; font-size: 11px; width: 100%;" border="0">
+      @*  <table style="@IrelandPdfPage.StyleValue() width: 100%;" border="0">
             <tr style="text-align: right;">
                 <td>@string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:d MMMMMM yyyy}", DateTime.Now)</td>
             </tr>
-        </table>
-        <p style="text-align: left; font-family: Verdana; font-size: 11px;">
-            <strong>Private & Confidential</strong><br />
-            @Model.GetDocumentAnswer("FirstName", true) @Model.GetDocumentAnswer("LastName", true)<br />
-            @Model.GetDocumentAnswer("PermanentAddressLine1", true)
-            @if (!string.IsNullOrEmpty(Model.GetDocumentAnswer("PermanentAddressLine2")))
-            {
-                <br />
-                @Model.GetDocumentAnswer("PermanentAddressLine2")
-            }
-            <br />
-            @Model.GetDocumentAnswer("PermanentCity", true)
-            <br />
-            @Model.GetDocumentAnswer("PermanentPostalCode", true)
+        </table>*@
+        <p style="@IrelandPdfPage.StyleValue()">
+            @*<strong>Private & Confidential</strong><br />
+            @Html.Partial("_HeaderAddress", Model)
             <br />
             <br />
-            <br />
-            <br />
-            <br />
+            <br />*@
+
             Dear @Model.GetDocumentAnswer("FirstName", true),<br />
             <br />
             Congratulations and thank you for telling me that you will be adopting a child. I am writing to you about your adoption leave and pay.
@@ -51,23 +40,24 @@
             <br />
             <br />
             Should you want to change the date on which your leave starts you must, if at all possible, give at least 28 days notice before your proposed new start date and at the latest by 
-            @if(!string.IsNullOrEmpty(Model.GetDocumentAnswer(FormLibConstants.FormField.AbsenceStartFrom, true)))
+            @if (!string.IsNullOrEmpty(Model.GetAnswer(FormLibConstants.FormField.AbsenceStartFrom + Model.MultiNr)))
             {
-                 <text>@DateTime.ParseExact(Model.GetDocumentAnswer(FormLibConstants.FormField.AbsenceStartFrom, true), "dd.MM.yyyy", CultureInfo.InvariantCulture).AddDays(-28).ToString("dd.MM.yyyy")</text>
+                <text>@DateTime.ParseExact(Model.GetDocumentAnswer(FormLibConstants.FormField.AbsenceStartFrom + Model.MultiNr, true), "dd.MM.yyyy", CultureInfo.InvariantCulture).AddDays(-28).ToString("dd.MM.yyyy")</text>
             }.
             <br />
             <br />
             In addition please be aware if you decide to return to work before the date we have agreed, you must give at least 28 days notice.
-            <br /><br />
+            <br />
+            <br />
 
-            @if (Model.GetDocumentAnswer("Seniority").ToLower() == "1 - 2 years".ToLower())
+            @if (Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "1 - 2 years".ToLower())
             {
                 <text>As we discussed, you are eligible for 13 weeks payment from IKEA based on your average weekly earnings.</text>
                 <text><br />
                 <br /></text>
             }
 
-            @if (Model.GetDocumentAnswer("Seniority").ToLower() == "Over 2 years".ToLower())
+            @if (Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "Over 2 years".ToLower())
             {
                 <text>As we discussed, you are eligible for 19 weeks payment from IKEA based on your average weekly earnings.</text>
                    
@@ -76,22 +66,22 @@
 
             }
 
-            @if (Model.GetDocumentAnswer("Seniority").ToLower() == "1 - 2 years".ToLower() | Model.GetDocumentAnswer("Seniority").ToLower() == "Over 2 years".ToLower())
+            @if (Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "1 - 2 years".ToLower() | Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "Over 2 years".ToLower())
             {
-                <text>Your Adoption pay will be &euro; @Model.GetDocumentAnswer("AdoptionPay", true) per week.</text>
+                <text>Your Adoption pay will be &euro; @Model.GetDocumentAnswer("AdoptionPay"+ Model.MultiNr, true) per week.</text>
                   
                 <text><br />
                 <br /></text>
             }
 
-            @if (Model.GetDocumentAnswer("Seniority").ToLower() == "Under 26 weeks".ToLower())
+            @if (Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "Under 26 weeks".ToLower())
             {
                 <text>The SAP1 form (enclosed) explains why you do not qualify for Statutory Adoption Pay and if you speak to your Incapacity Benefits Branch you may be entitled to income support.</text>
                 <text><br />
                 <br /></text>
             }
 
-            @if (Model.GetDocumentAnswer("Seniority").ToLower() == "1 - 2 years".ToLower() | Model.GetDocumentAnswer("Seniority").ToLower() == "Over 2 years".ToLower())
+            @if (Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "1 - 2 years".ToLower() | Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "Over 2 years".ToLower())
             {
                 <text>As you have more than one year continuous service as at the 4th week before the expected week of placement, IKEA offers you an additional benefit:<br />
                 <br />

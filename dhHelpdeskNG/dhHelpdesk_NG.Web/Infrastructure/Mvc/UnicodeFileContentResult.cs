@@ -9,7 +9,7 @@
 
     public sealed class UnicodeFileContentResult : ActionResult
     {
-        public UnicodeFileContentResult(byte[] file, string fileName)
+        public UnicodeFileContentResult(byte[] file, string fileName, bool isInline = false)
         {
             if (file == null)
             {
@@ -18,11 +18,14 @@
 
             this.File = file;
             this.FileName = fileName;
+            this.IsInline = isInline;
         }
 
         public byte[] File { get; private set; }
 
         public string FileName { get; private set; }
+
+        public bool IsInline { get; private set; }
 
         public override void ExecuteResult(ControllerContext context)
         {
@@ -31,9 +34,13 @@
             var response = context.HttpContext.Response;
 
             response.Clear();
-            response.AddHeader(
-                "Content-Disposition", 
-                string.Format("attachment; filename={0}", request.Browser.Browser.ToUpper() == "IE" ? HttpUtility.UrlEncode(this.FileName, encoding) : this.FileName));
+            if (!this.IsInline)
+            {
+                response.AddHeader(
+                    "Content-Disposition",
+                    string.Format("attachment; filename={0}", request.Browser.Browser.ToUpper() == "IE" ? HttpUtility.UrlEncode(this.FileName, encoding) : this.FileName));                
+            }
+
             response.ContentType = MimeHelper.GetMimeType(this.FileName);
             response.Charset = encoding.WebName;
             response.HeaderEncoding = encoding;

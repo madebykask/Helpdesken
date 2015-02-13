@@ -16,6 +16,7 @@
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Orders;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Orders;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Orders;
+    using DH.Helpdesk.Services.BusinessLogic.Orders;
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Common;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Orders;
@@ -42,7 +43,9 @@
 
         private readonly IUpdateOrderRequestValidator updateOrderRequestValidator;
 
-        private readonly List<IBusinessModelAuditor<UpdateOrderRequest, OrderAuditData>> orderAuditors; 
+        private readonly List<IBusinessModelAuditor<UpdateOrderRequest, OrderAuditData>> orderAuditors;
+
+        private readonly IOrdersLogic ordersLogic;
 
         public OrdersService(
                 IUnitOfWorkFactory unitOfWorkFactory, 
@@ -54,7 +57,8 @@
                 IEmailGroupRepository emailGroupRepository, 
                 IOrderRestorer orderRestorer, 
                 IUpdateOrderRequestValidator updateOrderRequestValidator, 
-                List<IBusinessModelAuditor<UpdateOrderRequest, OrderAuditData>> orderAuditors)
+                List<IBusinessModelAuditor<UpdateOrderRequest, OrderAuditData>> orderAuditors, 
+                IOrdersLogic ordersLogic)
         {
             this.unitOfWorkFactory = unitOfWorkFactory;
             this.orderFieldSettingsService = orderFieldSettingsService;
@@ -66,6 +70,7 @@
             this.orderRestorer = orderRestorer;
             this.updateOrderRequestValidator = updateOrderRequestValidator;
             this.orderAuditors = orderAuditors;
+            this.ordersLogic = ordersLogic;
         }
 
         public OrdersFilterData GetOrdersFilterData(int customerId)
@@ -129,15 +134,30 @@
             using (var uow = this.unitOfWorkFactory.Create())
             {
                 var ordersRep = uow.GetRepository<Order>();
+                var orderHistoryRep = uow.GetRepository<OrderHistoryEntity>();
+                var orderLogRep = uow.GetRepository<OrderLog>();
+                var orderEmailLogRep = uow.GetRepository<OrderEMailLog>();
+
                 var order = ordersRep.GetAll()
                                 .GetById(orderId)
                                 .MapToFullOrderEditFields();
 
-                var history = new List<HistoriesDifference>();
-                var data = new OrderEditData(order, history);
-
                 var settings = this.orderFieldSettingsService.GetOrderEditSettings(customerId, order.OrderTypeId, uow);
                 var options = this.GetEditOptions(customerId, order.OrderTypeId, settings, uow);
+
+                var histories = orderHistoryRep.GetAll()
+                                .GetByOrder(orderId)
+                                .MapToOverviews();
+                var historyIds = histories.Select(i => i.Id).ToArray();
+                var logOverviews = orderLogRep.GetAll()
+                                .GetByHistoryIds(historyIds)
+                                .MapToOverviews();
+                var emailLogs = orderEmailLogRep.GetAll()
+                                .GetByHistoryIds(historyIds)
+                                .MapToOverviews();
+                var historyDifferences = this.ordersLogic.AnalyzeHistoriesDifferences(histories, logOverviews, emailLogs, settings);
+
+                var data = new OrderEditData(order, historyDifferences);
 
                 return new FindOrderResponse(data, settings, options);
             }

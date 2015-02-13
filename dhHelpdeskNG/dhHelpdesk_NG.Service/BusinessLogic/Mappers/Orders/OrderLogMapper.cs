@@ -50,5 +50,13 @@
                         LogNote = model.Text
                     };
         }
+
+        public static List<LogOverview> MapToOverviews(this IQueryable<OrderLog> query)
+        {
+            var entities = query.Select(l => new { l.OrderHistoryId, l.LogNote })
+                            .ToList();
+
+            return entities.Where(l => l.OrderHistoryId.HasValue).Select(l => new LogOverview(l.OrderHistoryId.Value, l.LogNote)).ToList();
+        } 
     }
 }

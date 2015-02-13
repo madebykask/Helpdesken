@@ -50,5 +50,40 @@ namespace DH.Helpdesk.BusinessData.Models.Link.Output
         public bool ShowOnStartPage { get; set; }
 
         public string SortOrder { get; set; }
+
+        /// <summary>
+        /// Gets or sets the casesolution id.
+        /// </summary>
+        public int? CaseSolutionId { get; set; }
+
+        /// <summary>
+        /// Gets or sets Casesolution name.
+        /// </summary>
+        public string CaseSolutionName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the document id.
+        /// </summary>
+        public int? DocumentId { get; set; }
+
+        /// <summary>
+        /// Gets or sets document name.
+        /// </summary>
+        public string DocumentName { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether it should open in new window or not.
+        /// </summary>
+        public bool OpenInNewWindow { get; set; }
+
+        /// <summary>
+        /// Gets or sets a Window Height
+        /// </summary>
+        public int NewWindowHeight { get; set; }
+
+        /// <summary>
+        /// Gets or sets a Window Width
+        /// </summary>
+        public int NewWindowWidth { get; set; }
     }
 }

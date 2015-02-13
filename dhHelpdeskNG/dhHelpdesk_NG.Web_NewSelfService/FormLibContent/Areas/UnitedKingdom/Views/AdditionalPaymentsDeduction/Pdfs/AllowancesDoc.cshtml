@@ -12,34 +12,18 @@
 <html>
 <body>
     <div>
-        <table style="font-family: Verdana; font-size: 11px; width: 100%;" border="0">
+        @*<table style="font-family: Verdana; font-size: 11px; width: 100%;" border="0">
             <tr style="text-align: right;">
                 <td>@string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:d MMMMMM yyyy}", DateTime.Now)</td>
             </tr>
         </table>
         <p style="text-align: left; font-family: Verdana; font-size: 11px;">
             <strong>Private & Confidential</strong><br />
-            @Model.GetDocumentAnswer("FirstName", true) @Model.GetDocumentAnswer("LastName", true)<br />
-            @Model.GetDocumentAnswer("PermanentAddressLine1", true)
-            @if (!string.IsNullOrEmpty(Model.GetDocumentAnswer("PermanentAddressLine2", false)))
-            {
-                <br />
-                @Model.GetDocumentAnswer("PermanentAddressLine2", false)
-            }
-            @if (!string.IsNullOrEmpty(Model.GetDocumentAnswer("PermanentAddressLine3", false)))
-            {
-                <br />
-                @Model.GetDocumentAnswer("PermanentAddressLine3", false)
-            }
-            <br />
-            @Model.GetDocumentAnswer("PermanentCity", true)
-            <br />
-            @Model.GetDocumentAnswer("PermanentPostalCode", true)
-            <br />
-            <br />
+            @Html.Partial("_HeaderAddress", Model)*@
+        <p style="@UnitedKingdomPdfPage.StyleValue()">
             Dear @Model.GetDocumentAnswer("FirstName", true),<br />
             <br />
-            @if ((Model.GetDocumentAnswer("AllowancesType" + Model.MultiNr)).ToLower() == "First Aid Allowance - Salaried".ToLower())
+            @if ((Model.GetDocumentAnswer("AllowancesType" + Model.MultiNr)).ToLower() == "First Aid Allowance - Salaried".ToLower() || (Model.GetDocumentAnswer("AllowancesType" + Model.MultiNr)).ToLower() == "First Aid Allowance".ToLower())
             {
                 <text>Congratulations on completing your First Aid Training.</text>
                 <br />
@@ -119,7 +103,7 @@
                 <br />
             }
 
-            @if ((Model.GetDocumentAnswer("AllowancesType" + Model.MultiNr)).ToLower() == "Responsibility Allowance - Hourly".ToLower() && Model.GetAnswer("AllowancesAmountUnits" + Model.MultiNr) != "0")
+            @if ((Model.GetDocumentAnswer("AllowancesType" + Model.MultiNr)).ToLower() == "Responsibility Allowance - Hourly".ToLower()  && Model.GetAnswer("AllowancesAmountUnits" + Model.MultiNr) != "0")
             {
                 <text>We are pleased to confirm that you will receive a Responsibility allowance of &pound;@Model.GetDocumentAnswer("AllowancesAmountUnits" + Model.MultiNr, true) per hour.</text>
                 <br />
@@ -132,7 +116,7 @@
                 <br />
             }
 
-            @if ((Model.GetDocumentAnswer("AllowancesType" + Model.MultiNr)).ToLower() == "Responsibility Allowance - Salaried".ToLower() && Model.GetAnswer("AllowancesAmountUnits" + Model.MultiNr) != "0")
+            @if ((Model.GetDocumentAnswer("AllowancesType" + Model.MultiNr)).ToLower() == "Responsibility Allowance - Salaried".ToLower() || (Model.GetDocumentAnswer("AllowancesType" + Model.MultiNr)).ToLower() == "Responsibility Allowance".ToLower() && Model.GetAnswer("AllowancesAmountUnits" + Model.MultiNr) != "0")
             {
                 <text>We are pleased to confirm that you will receive a Responsibility allowance of &pound;@Model.GetDocumentAnswer("AllowancesAmountUnits" + Model.MultiNr, true) per month.</text>
                 <br />
@@ -149,14 +133,13 @@
 @*Applicable only if PM1 - Allowances type is: Responsibility Allowance, and the PM2/Amount/Units field equals 0*@
             @if ((Model.GetDocumentAnswer("AllowancesType" + Model.MultiNr)).ToLower().StartsWith("Responsibility Allowance".ToLower()) && Model.GetAnswer("AllowancesAmountUnits" + Model.MultiNr) == "0")
             {
-                <text>We are writing to confirm that you will no longer receive a responsibility allowance.</text>
+                <text>We are writing to confirm that you will no longer receive a @Model.GetDocumentAnswer("AllowancesType" + Model.MultiNr).</text>
                 <br />
                 <br />
                 <text>This allowance will cease from @Model.GetDocumentAnswer("AllowancesValidFrom" + Model.MultiNr, true).</text>
                 <br />
                 <br />
             }
-
 
             All other Terms and Conditions remain the same. IKEA reserves the right to vary terms and conditions of employment subject to consultation and reasonable notice.
         </p>

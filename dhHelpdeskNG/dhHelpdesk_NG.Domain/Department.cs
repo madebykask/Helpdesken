@@ -5,7 +5,7 @@
     using global::System;
     using global::System.Collections.Generic;
 
-    public class Department : Entity, ICustomerEntity
+    public class Department : Entity, ICustomerEntity, IActiveEntity
     {
         public int AccountancyAmount { get; set; }
         public int Charge { get; set; }

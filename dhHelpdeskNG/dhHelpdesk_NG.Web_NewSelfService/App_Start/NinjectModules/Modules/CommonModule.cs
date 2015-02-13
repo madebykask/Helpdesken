@@ -103,6 +103,14 @@ namespace DH.Helpdesk.NewSelfService.NinjectModules.Modules
                 .InSingletonScope();
 
 
+            this.Bind<IEntityToBusinessModelMapper<CaseInvoiceOrderFileEntity, CaseInvoiceOrderFile>>()
+                .To<CaseInvoiceOrderFileToBusinessModelMapper>()
+                .InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<CaseInvoiceOrderFile, CaseInvoiceOrderFileEntity>>()
+                .To<CaseInvoiceOrderFileToEntityMapper>()
+                .InSingletonScope();
+
         }
     }
 }

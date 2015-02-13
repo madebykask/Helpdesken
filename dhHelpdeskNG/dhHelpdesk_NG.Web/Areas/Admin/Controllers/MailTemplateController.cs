@@ -184,6 +184,10 @@
                // return new HttpNotFoundResult("No mail template found...");
 
             var model = this.CreateInputViewModel(mailTemplateLanguage, customer, languageId, ordertypeId, accountactivityId);
+            
+            // 1 to 99  System case template
+            if (id <= 99)
+                model.IsStandardTemplate = true;
             return this.View(model);
 
             
@@ -449,6 +453,7 @@
         {
             var model = new MailTemplateInputViewModel
             {
+                IsStandardTemplate = false,
                 MailTemplateLanguage = mailTemplateLanguage,
                 Customer = customer,
                 CaseFieldSettingWithLangauges = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customer.Id, languageId),

@@ -56,7 +56,7 @@
 
             var place = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Place, (inputParams.ContainsKey("Placement") ? inputParams["Placement"] : null));
             var phone = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Phone, (inputParams.ContainsKey("Phone") ? inputParams["Phone"] : null));
-            var cellPhone = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.CellPhone, null);
+            var cellPhone = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.CellPhone, (inputParams.ContainsKey("CellPhone") ? inputParams["CellPhone"] : null));
             var email = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Email, (inputParams.ContainsKey("Email") ? inputParams["Email"] : null));
             var code = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Code, null);
 
@@ -76,7 +76,7 @@
             {
                 var regionItems = regions.Select(r => new KeyValuePair<string, string>(r.Value, r.Name)).ToList();
 
-                region = this.notifierInputFieldModelFactory.CreateDropDownModel(settings.Region, regionItems, null);
+                region = this.notifierInputFieldModelFactory.CreateDropDownModel(settings.Region, regionItems, (inputParams.ContainsKey("RegionId") ? inputParams["RegionId"] : null));
             }
             else
             {
@@ -91,7 +91,7 @@
                 department = this.notifierInputFieldModelFactory.CreateDropDownModel(
                     settings.Department,
                     departmentItems,
-                    null);
+                    (inputParams.ContainsKey("DepartmentId") ? inputParams["DepartmentId"] : null));
             }
             else
             {
@@ -110,7 +110,7 @@
                 organizationUnit = this.notifierInputFieldModelFactory.CreateDropDownModel(
                     settings.OrganizationUnit,
                     organizationUnitItems,
-                    null);
+                    (inputParams.ContainsKey("UnitId") ? inputParams["UnitId"] : null));
             }
             else
             {

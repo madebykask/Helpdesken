@@ -1,0 +1,180 @@
+﻿namespace DH.Helpdesk.Web.Areas.Reports.Infrastructure.ModelFactories.Concrete
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+
+    using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeFinishedCases;
+    using DH.Helpdesk.BusinessData.Models.Reports.Enums;
+    using DH.Helpdesk.BusinessData.Models.Reports.Options;
+    using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.BusinessData.OldComponents;
+    using DH.Helpdesk.Services.Services.Reports;
+    using DH.Helpdesk.Web.Areas.Reports.Infrastructure.Utils;
+    using DH.Helpdesk.Web.Areas.Reports.Models.Options;
+    using DH.Helpdesk.Web.Areas.Reports.Models.Reports;
+    using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Web.Infrastructure.Tools;
+
+    public sealed class ReportModelFactory : IReportModelFactory
+    {
+        private readonly IReportService reportsService;
+
+        private readonly IReportsBuilder reportsBuilder;
+
+        public ReportModelFactory(
+                IReportService reportsService, 
+                IReportsBuilder reportsBuilder)
+        {
+            this.reportsService = reportsService;
+            this.reportsBuilder = reportsBuilder;
+        }
+
+        public ReportsOptions GetReportsOptions(List<ReportType> reports)
+        {
+            var ready = new List<ReportType>
+                            {
+                                ReportType.RegistratedCasesDay,
+                                ReportType.CaseTypeArticleNo,
+                                ReportType.CaseSatisfaction,
+                                ReportType.ReportGenerator
+//                                , ReportType.LeadtimeFinishedCases
+                            };
+
+            // It's a new report, so we need to add it to the tblReport table
+            reports.Add(ReportType.CaseSatisfaction);
+
+            var items = reports
+                        .Where(ready.Contains)
+                        .Select(r => 
+                            new ItemOverview(ReportUtils.GetReportName(r), ((int)r).ToString(CultureInfo.InvariantCulture)))
+                            .ToList();
+
+            return new ReportsOptions(WebMvcHelper.CreateListField(items, null, false));
+        }
+
+        public RegistratedCasesDayOptionsModel GetRegistratedCasesDayOptionsModel(RegistratedCasesDayOptions options)
+        {
+            var departments = WebMvcHelper.CreateListField(options.Departments);
+            var caseTypes = WebMvcHelper.CreateMultiSelectField(options.CaseTypes);
+            var workingGroups = WebMvcHelper.CreateListField(options.WorkingGroups);
+            var administrators = WebMvcHelper.CreateListField(options.Administrators);
+            var period = DateTime.Today;
+
+            return new RegistratedCasesDayOptionsModel(
+                                        departments,
+                                        caseTypes,
+                                        workingGroups,
+                                        administrators,
+                                        period);
+        }
+
+        public CaseTypeArticleNoOptionsModel GetCaseTypeArticleNoOptionsModel(CaseTypeArticleNoOptions options)
+        {
+            var departments = WebMvcHelper.CreateMultiSelectField(options.Departments);
+            var workingGroups = WebMvcHelper.CreateMultiSelectField(options.WorkingGroups);
+            var caseTypes = WebMvcHelper.CreateMultiSelectField(options.CaseTypes);
+            var productAreas = options.ProductAreas;
+            var periodFrom = DateTime.Today.AddYears(-1);
+            var periodUntil = DateTime.Today.AddMonths(-1);
+            var showCases = WebMvcHelper.CreateListField(
+                                                        new[]
+                                                        {
+                                                            new ItemOverview(Translation.Get("Alla ärenden"), ShowCases.AllCases.ToString()), 
+                                                            new ItemOverview(Translation.Get("Pågående ärenden"), ShowCases.CasesInProgress.ToString())
+                                                        }, 
+                                                        null, 
+                                                        false);
+
+            return new CaseTypeArticleNoOptionsModel(
+                                        departments,
+                                        workingGroups,
+                                        caseTypes,
+                                        productAreas,
+                                        periodFrom,
+                                        periodUntil,
+                                        showCases,
+                                        false,
+                                        true);
+        }
+
+        public CaseTypeArticleNoModel GetCaseTypeArticleNoModel(
+            CaseTypeArticleNoData data,
+            bool isShowCaseTypeDetails,
+            bool isShowPercents)
+        {
+            return new CaseTypeArticleNoModel(data, isShowCaseTypeDetails, isShowPercents);
+        }
+
+        public CaseSatisfactionOptions CreateCaseSatisfactionOptions(OperationContext context)
+        {
+            var response = this.reportsService.GetRegistratedCasesCaseTypeOptionsResponse(context);
+            var workingGroups = WebMvcHelper.CreateMultiSelectField(response.WorkingGroups);
+            var caseTypes = WebMvcHelper.CreateMultiSelectField(response.CaseTypes);
+            var productAreas = response.ProductAreas;
+            var today = DateTime.Today;
+            var instance = new CaseSatisfactionOptions(caseTypes, workingGroups, productAreas, today.AddYears(-1), today, context.CustomerId);
+            return instance;
+        }
+
+        public CaseSatisfactionReport CreateCaseSatisfactionReport(CaseSatisfactionOptions options, OperationContext context)
+        {
+            var response = this.reportsService.GetCaseSatisfactionResponse(
+                context.CustomerId,
+                options.PeriodFrom,
+                options.PeriodUntil,
+                options.CaseTypeIds.ToArray(),
+                options.ProductAreaId,
+                options.WorkingGroupIds.ToArray());
+            ReportFile file;
+            this.reportsBuilder.CreateCaseSatisfactionReport(response.GoodVotes, response.NormalVotes, response.BadVotes, response.Count, out file);
+            var instance = new CaseSatisfactionReport(response.GoodVotes, response.NormalVotes, response.BadVotes, response.Count, file);
+            return instance;
+        }
+
+        public LeadtimeFinishedCasesOptionsModel GetLeadtimeFinishedCasesOptionsModel(LeadtimeFinishedCasesOptions options)
+        {
+            var departments = WebMvcHelper.CreateMultiSelectField(options.Departments);
+            var caseTypes = options.CaseTypes;
+            var workingGroups = WebMvcHelper.CreateMultiSelectField(options.WorkingGroups);
+            var registrationSources = WebMvcHelper.CreateListField(
+                                                        new[]
+                                                        {
+                                                            new ItemOverview(string.Empty, ((int)GlobalEnums.RegistrationSource.Empty).ToString(CultureInfo.InvariantCulture)), 
+                                                            new ItemOverview(Translation.Get("Handläggare"), ((int)GlobalEnums.RegistrationSource.Case).ToString(CultureInfo.InvariantCulture)), 
+                                                            new ItemOverview(Translation.Get("Självservice"), ((int)GlobalEnums.RegistrationSource.SelfService).ToString(CultureInfo.InvariantCulture)), 
+                                                            new ItemOverview(Translation.Get("E-post"), ((int)GlobalEnums.RegistrationSource.Mail).ToString(CultureInfo.InvariantCulture))
+                                                        }, 
+                                                        null, 
+                                                        false);
+            var periodFrom = DateTime.Today.AddYears(-1);
+            var periodUntil = DateTime.Today;
+            var lts = new List<ItemOverview>();
+            for (var i = 1; i <= 10; i++)
+            {
+                lts.Add(new ItemOverview(i.ToString(CultureInfo.InvariantCulture), i.ToString(CultureInfo.InvariantCulture)));
+            }
+
+            var leadTimes = WebMvcHelper.CreateListField(lts, 5, false);
+
+            return new LeadtimeFinishedCasesOptionsModel(
+                                departments, 
+                                caseTypes, 
+                                null, 
+                                workingGroups, 
+                                registrationSources,
+                                periodFrom,
+                                periodUntil,
+                                leadTimes,
+                                false);
+        }
+
+        public LeadtimeFinishedCasesModel GetLeadtimeFinishedCasesModel(LeadtimeFinishedCasesData data, bool isShowDetails)
+        {
+            return new LeadtimeFinishedCasesModel();
+        }
+    }
+}

@@ -118,7 +118,7 @@
                 </td>
                 <td>@Html.DisplayFor(x => item.EndDate, "Date")
                 </td>
-                <td>@Html.DisplayFor(x => item.Description)
+                <td>@item.Description.ForHtmlView()
                 </td>
             </tr>
         }

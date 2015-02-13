@@ -4,16 +4,18 @@
 <table class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
-            <th>
-                @Html.LabelFor(m => m.Logs.FirstOrDefault().DateAndTime)
-            </th>
-            <th>
-                @Html.LabelFor(m => m.Logs.FirstOrDefault().RegisteredBy)
-            </th>
-            <th>
+            <td>
+                @Translation.Get("Datum och tid")
+               @* @Html.LabelFor(m => m.Logs.FirstOrDefault().DateAndTime)*@
+            </td>
+            <td>
+                @Translation.Get("Registrerad av")
+                @*@Html.LabelFor(m => m.Logs.FirstOrDefault().RegisteredBy)*@
+            </td>
+            <td>
                 @Html.LabelFor(m => m.Logs.FirstOrDefault().Text)
-            </th>
-            <th></th>
+            </td>
+            <td></td>
         </tr>
     </thead>
     <tbody>

@@ -6,81 +6,194 @@
    t.Add("isJS", "true");
 }
 
+@section Styles {
+
+    @if(Model.DynamicCase != null)
+    {
+        <style type="text/css">
+            .tab-content {
+                overflow: hidden !important;
+            }
+
+            #dh-form-area.tab-pane-border {
+                padding: 0px !important;
+            }
+
+            .hidden2 {
+                visibility: hidden;
+            }
+
+            .hide {
+                display: none;
+            }
+
+            #openContainer {
+                cursor: pointer;
+            }
+
+            #dh-modal-form-area {
+                padding: 0;
+                margin: 0;
+            }
+
+                #dh-modal-form-area #loading {
+                    position: absolute;
+                    left: 0;
+                    top: 20px;
+                    right: 0;
+                    bottom: 0;
+                    margin: auto;
+                }
+        </style>
+    }
+}
+
 @section Scripts {
+
     <script type="text/javascript">
         $(document).ready(function () {
+
             CaseInitForm();
 
-            var hasNotInvoicedArticles = function() {
+            var dc = function(text) {
+                return $("<div>" + text + "<div>");
+            };
+
+            var confirmDialog = function(d, onOk, onCancel) {
+                return d.dialog({
+                    title: '@Translation.Get("Meddelande")',
+                    buttons: [
+                        {
+                            text: '@Translation.Get("OK")',
+                            click: function() {
+                                onOk();
+                                d.dialog("close");
+                            }
+                        },
+                        {
+                            text: '@Translation.Get("Avbryt")',
+                            click: function() {
+                                onCancel();
+                                d.dialog("close");
+                            }
+                        }
+                    ],
+                    modal: true
+                });
+            };
+
+            var messageDialog= function(d) {
+                return d.dialog({
+                    title: '@Translation.Get("Meddelande")',
+                    buttons: [
+                        {
+                            text: '@Translation.Get("Stäng")',
+                            click: function() {
+                                d.dialog("close");
+                            }
+                        }
+                    ],
+                    modal: true
+                });
+            };
+
+            var hasNotInvoicedArticles = function () {
                 return typeof dhHelpdesk.CaseArticles !== "undefined" &&
                     dhHelpdesk.CaseArticles.HasNotInvoicedArticles();
             }
 
-            var invoiceArticlesBeforeClose = function() {
-                return hasNotInvoicedArticles() &&
-                    !confirm('@Translation.Get("Are you sure you want to close the case without sending your selected articles to invoicing?")');
+            var invoiceArticlesBeforeClose = function (onOk, onCancel) {
+                if (!hasNotInvoicedArticles()) {
+                    onOk();
+                    return;
+                }
+
+                confirmDialog(dc('@Translation.Get("Are you sure you want to close the case without sending your selected articles to invoicing?")'),
+                    onOk, onCancel);                
             }
 
-            var openInvoiceWindow = function() {
+            var openInvoiceWindow = function () {
                 dhHelpdesk.CaseArticles.OpenInvoiceWindow('@Translation.Get("Please send selected articles for invoicing or delete them in order to close the case.")');
             }
 
-            $("#case-action-save-and-close").click(function() {
-                if (invoiceArticlesBeforeClose()) {
-                    openInvoiceWindow();
-                    return false;
-                }
-
-                EditCaseAndClose();
-                return false;
+            $("#case-action-save-and-close").click(function (e) {
+                e.preventDefault();
+                invoiceArticlesBeforeClose(EditCaseAndClose, openInvoiceWindow);
             });
 
-            $("#case-action-save-and-new").click(function () {
-                if (invoiceArticlesBeforeClose()) {
-                    openInvoiceWindow();
-                    return false;
-                }
+            $("#case-action-save-and-new").click(function (e) {
+                e.preventDefault();
+                invoiceArticlesBeforeClose(EditCaseAndAddCase, openInvoiceWindow);
+            });
 
-                EditCaseAndAddCase();
-                return false;
+            $("#case-action-close").click(function (e) {
+                e.preventDefault();
+                var targetUrl = $(this).attr("href");
+                invoiceArticlesBeforeClose(function (){ window.location.href = targetUrl; }, openInvoiceWindow);
             });
 
             $("#case-action-delete").click(function () {
                 if (hasNotInvoicedArticles()) {
-                    alert('@Translation.Get("You may not delete a case with selected articles in the order section. Please review your orders.")');
+                    messageDialog(dc('@Translation.Get("You may not delete a case with selected articles in the order section. Please review your orders.")'));
                     return false;
                 }
-                return true;
-            });
-
-            $("#case-action-close").click(function () {
-                if (invoiceArticlesBeforeClose()) {
-                    openInvoiceWindow();
-                    return false;
-                }
-
                 return true;
             });
         });
 
         function MakeAsUnread() {
-            $.post('/cases/markasunread/', { id: '@Model.case_.Id', customerId: '@Model.case_.Customer_Id'}, function (data) {
-
+            $.post('/cases/markasunread/', { id: '@Model.case_.Id', customerId: '@Model.case_.Customer_Id' }, function (data) {
+                if (data == "Success")
+                {
+                    $('#case__Unread').val(1);
+                    ShowToastMessage('@Translation.Get("Ärendet har markerats som oläst")', "notice");
+                }
             });
         };
+        
+        //HIDE SHOW
+        $( ".hidebtn" ).on( "click", function() {
+            $( this ).parents( ".notifier-block" ).addClass( "hideshow" );
+        });
+        $( ".showbtn" ).on( "click", function() {
+            $( this ).parents( ".notifier-block" ).removeClass( "hideshow" );
+        });
+
+        $( ".hidebtn" ).on( "click", function() {
+            $( this ).parents( ".computer-block" ).addClass( "hideshow" );
+        });
+        $( ".showbtn" ).on( "click", function() {
+            $( this ).parents( ".computer-block" ).removeClass( "hideshow" );
+        });
+
+        $( ".hidebtn" ).on( "click", function() {
+            $( this ).parents( ".caseinfo-block" ).addClass( "hideshow" );
+        });
+        $( ".showbtn" ).on( "click", function() {
+            $( this ).parents( ".caseinfo-block" ).removeClass( "hideshow" );
+        });
+
+        $( ".hidebtn" ).on( "click", function() {
+            $( this ).parents( ".casehandling-block" ).addClass( "hideshow" );
+        });
+        $( ".showbtn" ).on( "click", function() {
+            $( this ).parents( ".casehandling-block" ).removeClass( "hideshow" );
+        });
     </script>
 }
 
-@*@System.Web.Optimization.Scripts.Render(DH.Helpdesk.Web.BundleConfig.ScriptNames.Container)
+@if(Model.DynamicCase != null)
+{
+    @System.Web.Optimization.Scripts.Render(DH.Helpdesk.Web.BundleConfig.ScriptNames.DynamicCase)
 
-<script type="text/javascript">
-    $(function () {
-        var currentPage = new dhform({ url: '@Url.Action("Index", "Cases")', modal: false });
-    });
-</script>*@
+    <script type="text/javascript">
+        $(function () {
+            var currentpage = new dhform({ url: '@Model.DynamicCase.FormPath', modal: @Model.DynamicCase.Modal.ToJavaScriptBool() });
+        });
+    </script>
+}
 
 @Html.Partial("_Plupload")
-
 
 @if(Html.MasterModel() != null && SessionFacade.CurrentUser != null && Model != null)
 {
@@ -95,18 +208,18 @@
                     <li>@Html.ActionLink(Translation.Get("Spara och stäng", Enums.TranslationSource.TextTranslation), null, null, new { @class = "btn", id = "case-action-save-and-close" })</li>
                     <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation), null, null, new { @class = "btn", id = "case-action-save-and-new" })</li>
                     <li class="secspace"></li>                    
-                    if (SessionFacade.CurrentUser.DeleteCasePermission == 1)
+                    if(SessionFacade.CurrentUser.DeleteCasePermission == 1)
                     {                            
                     <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "DeleteCase",
                          new { caseId = @Model.case_.Id, customerId = @Model.case_.Customer_Id }, new
                          {
                              @class = "btn deleteDialog",
-                             id = "case-action-delete", 
+                             id = "case-action-delete",
                              deleteDialogText = Translation.Get("Är du säker på att du vill radera detta ärende", Enums.TranslationSource.TextTranslation) + '?'
                          })</li>
                     }
                 }
-                <li>@Html.ActionLink(Translation.Get("Stäng", Enums.TranslationSource.TextTranslation), "Index", new { customerId = @Model.case_.Customer_Id }, new { @class = "btn", id = "case-action-close"  })</li>
+                <li>@Html.ActionLink(Translation.Get("Stäng", Enums.TranslationSource.TextTranslation), "Index", new { customerId = @Model.case_.Customer_Id }, new { @class = "btn", id = "case-action-close" })</li>
 
                 <li>
                     <div id="divActionMenu" class="btn-group">
@@ -197,8 +310,9 @@
             </ul>
         </div>
     </div>
-    
+    <div class="editmode">
     @Html.Partial("_Input", Model)
+    </div>
     }
     <div id="divMoveCase" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
         @Html.Partial("_MoveCase", Model)
@@ -210,4 +324,3 @@
         @Html.Partial("_CopyCase", Model)
     </div>        
 }
-

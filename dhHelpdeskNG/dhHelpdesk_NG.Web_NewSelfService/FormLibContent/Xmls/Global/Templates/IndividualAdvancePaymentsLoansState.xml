@@ -25,7 +25,7 @@
   </status>
   <!-- SSC -->
   <status value="30">
-    <visibleTabs>#ServiceRequestDetails,#Paymen,#attachmentst</visibleTabs>
+    <visibleTabs>#ServiceRequestDetails,#Payment,#attachmentst</visibleTabs>
     <readOnlyTabs>#ServiceRequestDetails,#Payment,#attachments</readOnlyTabs>
     <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
     <actions>

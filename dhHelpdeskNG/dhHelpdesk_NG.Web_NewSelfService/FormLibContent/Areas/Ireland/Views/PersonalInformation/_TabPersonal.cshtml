@@ -20,6 +20,10 @@
                     <td class="tdstrong">@Model.Label("TelephoneNumber")</td>
                     <td>@Model.Element("TelephoneNumber")</td>
                 </tr>
+                                <tr>
+                    <td class="tdstrong">@Model.Label("MobilePhoneNumber")</td>
+                    <td>@Model.Element("MobilePhoneNumber")</td>
+                </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("ContactEMailAddress")</td>
                     <td>@Model.Element("ContactEMailAddress")</td>
@@ -151,7 +155,7 @@
                 </tr>
 
 
-                @for (int i = 2; i <= 4; i++)
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
                 {
                     <tr class="familyMember@(i.ToString())" id="familyMember@(i.ToString())">
                         <td class="tdstrong" colspan="2">
@@ -222,7 +226,7 @@
                     <td>@Model.Element("EmployeeDocumentIssuePlaceCountry")</td>
                 </tr>
 
-                @for (int i = 2; i <= 4; i++)
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
                 {
                     <tr class="employeeDocument@(i.ToString()) globalmobility" id="employeeDocument@(i.ToString())">
                         <td class="tdstrong" colspan="2">
@@ -288,7 +292,7 @@
                     <td>@Model.Element("DependantsDateOfBirth")</td>
                 </tr>
 
-                @for (int i = 2; i <= 4; i++)
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
                 {
                     <tr class="dependantFamilyMember@(i.ToString()) globalmobility" id="dependantFamilyMember@(i.ToString())">
                         <td class="tdstrong" colspan="2">
@@ -354,7 +358,7 @@
                     <td>@Model.Element("DependantsDocumentIssuePlaceCountry")</td>
                 </tr>
 
-                @for (int i = 2; i <= 4; i++)
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
                 {
                     <tr class="globalMobilityDependantDocument@(i.ToString()) globalmobility" id="globalMobilityDependantDocument@(i.ToString())">
                         <td class="tdstrong" colspan="2">
@@ -545,6 +549,8 @@
             </tbody>
         </table>
     </div>
+    <input type="hidden" id="MultipleEntrySectionsNr" value="@FormLibConstants.FormField.MultipleEntrySectionsNr" />
+
 </div>
 
 <script>
@@ -554,13 +560,16 @@
         function setGlobalMobilityBehavior(value) {
             if (value == '@IsTeWorker') {
                 $("[class*=globalmobility]").hide();
-                $("[class*=globalmobility] input").val("");
-                $("[class*=globalmobility]").hide();
+                $("[class*=globalmobility] input:not(input[type=hidden])").val("");
                 $("[class*=globalmobility] input[type=text][name*='Country']").val('@DefaultCountry');
                 $("[class*=globalmobility] select option:not([value])").prop('selected', true);
             } else {
                 $(".globalmobility-first").show();
             }
+
+            $("[class*=globalmobility-first] input[type=hidden]").val("1");
+           
+
         }
 
         function setTaxInformationBehavior(value) {

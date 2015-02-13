@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 
 <state status="0">
     <status value="0">
@@ -52,7 +52,7 @@
     </status>
     <!-- SSC -->
     <status value="40">
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#documents,#globalview</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#globalview</visibleTabs>
         <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
@@ -62,7 +62,7 @@
     </status>
     <!-- SSC -->
     <status value="50">
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#documents,#globalview</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#globalview</visibleTabs>
         <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
@@ -71,14 +71,14 @@
         </actions>
     </status>
     <status value="60">
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#documents</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</visibleTabs>
         <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
         </actions>
     </status>
     <status value="70">
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#documents</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</visibleTabs>
         <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
     </status>

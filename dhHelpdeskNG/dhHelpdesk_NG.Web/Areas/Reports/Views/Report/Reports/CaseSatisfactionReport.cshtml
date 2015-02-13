@@ -1,0 +1,18 @@
+﻿@model DH.Helpdesk.Web.Areas.Reports.Models.Reports.CaseSatisfactionReport
+           
+@{
+    Layout = null;
+
+    if (Model.File == null)
+    {
+        @Html.Partial("Empty")
+        return;
+    }
+}
+<div class="content">
+    <h2>Case satisfaction report</h2>
+    <div>
+        <img src="@Url.Action("GetReportImage", "Report", new { objectId = Model.File.ObjectId, fileName = Model.File.FileName })" />      
+    </div>
+</div>
+

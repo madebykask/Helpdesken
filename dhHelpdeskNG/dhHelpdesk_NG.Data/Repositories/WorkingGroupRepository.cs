@@ -29,6 +29,8 @@ namespace DH.Helpdesk.Dal.Repositories
         IEnumerable<ItemOverview> GetOverviews(int customerId);
 
         IEnumerable<ItemOverview> GetOverviews(int customerId, IEnumerable<int> workingGroupsIds);
+
+        bool CaseHasWorkingGroup(int customerId, int workingGroupId);
     }
 
     public sealed class WorkingGroupRepository : RepositoryBase<WorkingGroupEntity>, IWorkingGroupRepository
@@ -131,6 +133,17 @@ namespace DH.Helpdesk.Dal.Repositories
                     .ToList();
 
             return entities.Select(g => new ItemOverview(g.Name, g.Value.ToString(CultureInfo.InvariantCulture)));            
+        }
+
+        public bool CaseHasWorkingGroup(int customerId, int workingGroupId)
+        {
+            var caseCount =
+                this.DataContext.Cases.Where(c => c.Customer_Id == customerId && c.WorkingGroup_Id == workingGroupId && c.FinishingDate == null).Count();
+
+            if (caseCount > 0)
+                return true;
+            else
+                return false;
         }
 
         private IQueryable<WorkingGroupEntity> FindByCustomerIdCore(int customerId)

@@ -1,10 +1,13 @@
-﻿namespace DH.Helpdesk.Web.Models
-{
-    using System.Collections.Generic;
+﻿using System;
+using System.IO;
+using System.Reflection;
+using System.Collections.Generic;
 
-    using DH.Helpdesk.Common.Extensions.Integer;
+namespace DH.Helpdesk.Web.Models
+{
+    using DH.Helpdesk.Common.Extensions.Integer;    
+    using DH.Helpdesk.Web.Infrastructure;   
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Web.Infrastructure;
 
     public class MasterPageViewModel
     {
@@ -17,11 +20,6 @@
         public IList<Customer> Customers { get; set; }
         
         public IList<Language> Languages { get; set; }
-
-        public string GetHelpdeskVersion ()
-        {
-            return "";
-        }
 
         public bool IsAdministrator()
         {

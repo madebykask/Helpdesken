@@ -38,6 +38,8 @@
 
         private const string _CURRENT_LANGUAGE = "CURRENT_LANGUAGE";
 
+        private const string _CURRENT_LANGUAGE_CODE = "CURRENT_LANGUAGE_CODE";
+
         private const string _CURRENT_OPERATIONLOG_SEARCH = "CURRENT_OPERATIONLOG_SEARCH";
 
         private const string _CURRENT_USER = "CURRENT_USER";
@@ -312,6 +314,25 @@
                 else
                 {
                     HttpContext.Current.Response.Cookies[_CURRENT_LANGUAGE].Value = value.ToString();
+                }
+            }
+        }
+
+        public static string CurrentLanguageCode
+        {
+            get
+            {
+                return (string)HttpContext.Current.Session[_CURRENT_LANGUAGE_CODE];
+            }
+            set
+            {
+                if(HttpContext.Current.Session[_CURRENT_LANGUAGE_CODE] == null)
+                {
+                    HttpContext.Current.Session.Add(_CURRENT_LANGUAGE_CODE, value);
+                }
+                else
+                {
+                    HttpContext.Current.Session[_CURRENT_LANGUAGE_CODE] = value;
                 }
             }
         }

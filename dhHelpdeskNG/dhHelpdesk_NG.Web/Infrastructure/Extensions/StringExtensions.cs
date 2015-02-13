@@ -344,5 +344,15 @@
 
             return MvcHtmlString.Create(str.Replace(Environment.NewLine, "<br />"));
         }
+
+        public static int[] GetIntValues(this string str)
+        {
+            if (string.IsNullOrEmpty(str))
+            {
+                return new int[0];   
+            }
+
+            return str.Split(new[] { ",", ";" }, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
+        }
     }
 }

@@ -226,7 +226,12 @@
         $('#ContractedHours').change(function () {
             var value = $(this).val();
 
-            if (value >= 16 && value <= 38) {
+            // if Contracted Hours less than 38 – Employment Category default value "Part time"; 
+            //if Contracted Hours equals 39 – Employment Category default value "Full time"; 
+            //if Contract Type "Zero hours" – Contracted Hours default value “0”, available for all companies except for Distribution
+
+
+            if (value <= 38) {
                 $('#EmploymentCategory option[value="' + '@PartTime' + '"]').prop('selected', true);
             }
             else if (value == 39) {
@@ -237,7 +242,7 @@
                 $('#EmploymentCategory option:not([value])').prop('selected', true);
             }
         });
-
+    });
 
         $('#Company').change(function () {
             var value = $(this).val();
@@ -254,79 +259,207 @@
             //$('#TECApprover').val($(this).val());
         });
 
-        //$('#NewBusinessUnit').change(function () {
-        //    $('#PrimarySite').val($(this).val());
-        //});
+        $('#NewDepartment').change(function () {
+            //////////
+            //Change function for Department
+            //////////
 
-        @*        function selectIndexChangeProbationPeriod() {
-            if ((this.options[this.selectedIndex].value == 'Not Applicable') || (this.options[this.selectedIndex].value == 'No')) {
-                document.getElementById('ProbationEndDate').disabled = true;
-            } else {
-                document.getElementById('ProbationEndDate').disabled = false;
+            //GetXML('predefined_costcentre_department_outs.xml', setCostCentre);
+
+
+            ////Line manager department
+            //GetXML('predefined_linemanager_department_outs.xml', setLineManager);
+
+
+            ////Line manager job title
+            //GetXML('predefined_department_jobtitle_IE_outs.xml', setLineManagerJobTitle);
+
+
+            ////Department /Tec approver
+            //GetXML('predefined_department_tecapprover_outs.xml', setTecApprover);
+
+
+
+            ////Line manager jobtitle
+            //GetXML('predefined_department_jobtitle_IE_outs.xml', setLineManagerJob);
+
+
+
+
+            GetXML('predefined_function_department_linemanager_outs.xml', setLineManagerAndCostCentre);
+
+            setTimeout(function () { GetXML('predefined_linemanager_department_outs.xml', setLineManagerJob); }, 30);
+
+            //Department /Tec approver
+            GetXML('predefined_department_tecapprover_outs.xml', setTecApprover);
+
+
+
+        });
+        function setLineManagerAndCostCentre(xml) {
+            
+            //////////
+            //setLineManager:
+            //Sets Line manager and cost centre from predefined_function_department_linemanager_outs.XML and selected department
+            //////////
+
+            var show1 = '' //Cost Centre
+            var show2 = '' //Line manager
+
+            if (document.getElementById('ReportsToLineManager')) {
+                $('#ReportsToLineManager')[0].selectize.setValue('');
             }
+            if (document.getElementById('HomeCostCentre')) {
+                $('#HomeCostCentre')[0].selectize.setValue('');
+            }
+
+            if (document.getElementById('ManagerJobTitle')) {
+                $('#ManagerJobTitle')[0].selectize.setValue('');
+            }
+            var func = '';
+            if (document.getElementById('NewServiceArea')) {
+                func = $("#NewServiceArea option:selected").text();
+            }
+            var dep = '';
+            if (document.getElementById('NewDepartment')) {
+                dep = $("#NewDepartment option:selected").text();
+            }
+            var resvar = '';
+            resvar = func + '_' + dep;
+
+
+            $(xml).find('dependent').each(function () {
+                
+                var $sel = $(this);
+                show1 = '';
+                show2 = '';
+
+                var department = $sel.find('selected').text();
+
+                show1 = $sel.find('show1').text();
+                show2 = $sel.find('show2').text();
+
+                //alert(res);
+
+
+                if (department == resvar) {
+
+
+
+                    if (show1 != '') {
+                        var n = show1.indexOf(",");
+
+                        if (n == -1) {
+                            //document.getElementById('HomeCostCentre').value = show1;
+                            $('#HomeCostCentre')[0].selectize.setValue(show1);
+                        }
+                        else {
+                            var res = show1.substring(0, n);
+                            //document.getElementById('HomeCostCentre').value = res;
+                            //alert(res);
+
+                            $('#HomeCostCentre')[0].selectize.setValue(res);
+                        }
+                        if (show1.indexOf("3560") > -1) {
+                            $('#HomeCostCentre')[0].selectize.setValue(show1);
+                        }
+                    }
+
+
+                    if (show2 != '') {
+                        var n = show2.indexOf(",");
+
+                        if (n == -1) {
+                            //document.getElementById('HomeCostCentre').value = show1;
+                            $('#ReportsToLineManager')[0].selectize.setValue(show2);
+                        }
+                        else {
+                            var res = show2.substring(0, n);
+                            //document.getElementById('HomeCostCentre').value = res;
+                            //alert(res);
+
+                            $('#ReportsToLineManager')[0].selectize.setValue(res);
+                        }
+                    }
+                }
+            });
         }
 
-        document.getElementById('ProbationPeriod').onchange = selectIndexChangeProbationPeriod;
-    });
-
-    $('#ProbationPeriod').change(function () {
-        setProbationEndDate($(this).val());
-    });
-
-    function setProbationEndDate(value) {
-        var probationEndDate = $('#ProbationEndDate');
-
-        if (value == '@DefaultProbationPeriod') {
-            var sStart = $('#ChangeValidFrom').val();
-            var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
-            var dStart = APIGlobal.DateTime.parseDate(sStart, format);
-
-            var endDate = new Date(dStart.getFullYear(), dStart.getMonth() + 6, dStart.getDate(), 0, 0, 0, 0);
-            var visibleDate = APIGlobal.DateTime.formatDate(endDate, format);
-            probationEndDate.val(visibleDate.toString());
-        }
-        else {
-            probationEndDate.val("");
-        }
-    };
 
 
-    $('#date_ChangeValidFrom').not('disabled').datepicker().on('changeDate', function (ev) {
+        $('#NewBusinessUnit').change(function () {
+            //////////
+            //Sets Primary site to Business Unit
+            //////////
+            //alert();
 
-        setProbationEndDate($('#ProbationPeriod').val());
-    });
+            setTecApprover();
+            setPayrollCategory();
+            setBasicPayAmount();
+            //setAllowanceType2();
+            //setAllowanceType();
+            //setAllowanceType3();
+            //setAllowanceType4();
+            //setAllowanceType5();
 
+            var value = $(this).val();
+            if ($('#NewBusinessUnit')[0].selectize) {
+                var selectedText = $('#NewBusinessUnit')[0].selectize.getItem(value).text();
 
-    $('#ProbationPeriod').change(function () {
-        //////////
-        //Probation period change function
-        //////////
-        setProbationEndDate($(this).val());
-    });*@
+                if ($('#PrimarySite')[0].selectize) {
+                    $('#PrimarySite')[0].selectize.setValue(selectedText);
+                }
+                else {
+                    $('#PrimarySite').val(selectedText);
+                }
+            }
+            else {
+                var selectedText = $('#NewBusinessUnit').find('option:selected').text();
+                if ($('#PrimarySite')[0].selectize) {
+                    $('#PrimarySite')[0].selectize.setValue(selectedText);
+                }
+                else {
+                    var selectedText = $('#NewBusinessUnit').find('option:selected').text();
+                    $('#PrimarySite').val(selectedText);
+                }
+            }
 
-        //$('#Country').change(function () {
+            if (this.options[this.selectedIndex].innerHTML == 'Store Dublin 038') {
+                var val1 = 'Business Navigation & Operations Manager';
+                $('#TECApprover')[0].selectize.setValue(val1);
+                //document.getElementById('TECApprover').value = 'Business Navigation &amp; Operations Manager';
+            }
 
-        //    alert(test);
-
-        //});
+        });
 
         $('#NewServiceArea').change(function () {
 
             //Line manager job title
-            path = '';
+            GetXML('predefined_function_jobtitleIE_outs.xml', setLineManagerDefault);
+
+            setTimeout(function () { GetXML('predefined_function_department_linemanager_outs.xml', setLineManagerAndCostCentre); }, 1);
+
+
+            setTimeout(function () { GetXML('predefined_function_jobtitleIE_outs.xml', setLineManagerJobTitle); }, 1);
+
+
+        });
+
+        function GetXML(xmlFile, url) {
+            //////////
+            //Gets XML File
+            //////////
+
             var path = window.location.protocol + '//';
             path = path + window.location.host + '/';
 
-
-
-            path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/predefined_function_jobtitleIE_outs.xml'
-
+            path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/' + xmlFile
 
             $.ajax({
                 type: "GET",
                 url: path,
                 dataType: "xml",
-                success: setLineManagerDefault,
+                success: url,
                 error: function (jqXHR, textStatus, errorThrown) {
                     alert(jqXHR.responseText);
                     alert(textStatus);
@@ -336,8 +469,69 @@
             });
 
 
-
+        }
+        $('#ReportsToLineManager').change(function () {
+            setTimeout(function () { GetXML('predefined_linemanager_department_outs.xml', setLineManagerJob); }, 3);
         });
+
+
+        function addPayScaleOnPayroll() {
+            //////////
+            //Add deduction types on selected payroll category
+            //////////
+            //DONE IN CHANGE
+
+            GetXML('predefined_payroll_payscale_Change_outs.xml', addPayScaleOnPayrollXML);
+
+
+        }
+
+
+        function addDeductionTypes() {
+            //////////
+            //Add deduction types on selected payroll category
+            //////////
+            GetXML('Predefined_PayrollCategory_DeductionType.xml', addDeductionTypesFunction);
+        }
+
+
+        function addAllowanceTypes() {
+            //////////
+            //Add deduction types on selected payroll category
+            //////////
+            GetXML('Predefined_PayrollCategory_AllowancesType.xml', addAllowanceTypesFunction);
+        }
+
+        //function setAllowanceType5() {
+        //    GetXML('predefined_allowancetype_units_payment_IE_outs.xml', setAllowanceTypeXML5);
+        //}
+
+        //function setAllowanceType4() {
+        //    GetXML('predefined_allowancetype_units_payment_IE_outs.xml', setAllowanceTypeXML4);
+        //}
+
+
+        //function setAllowanceType3() {
+        //    GetXML('predefined_allowancetype_units_payment_IE_outs.xml', setAllowanceTypeXML3);
+        //}
+
+        //function setAllowanceType2() {
+        //    GetXML('predefined_allowancetype_units_payment_IE_outs.xml', setAllowanceTypeXML2);
+        //}
+
+
+        //function setAllowanceType() {
+
+        //    GetXML('predefined_allowancetype_units_payment_IE_outs.xml', setAllowanceTypeXML);
+
+
+        //}
+
+        function setDefaultPayroll(xml) {
+
+            GetXML('predefined_payroll_category_IE_outs.xml', setDefaultPayrollXML);
+
+        }
 
         function setLineManagerDefault(xml) {
             //////////
@@ -349,9 +543,11 @@
 
             var dep = '';
 
-            if (document.getElementById('ServiceArea')) {
+            if (document.getElementById('NewServiceArea')) {
                 dep = $("#NewServiceArea option:selected").text();
             }
+            var jobtitle_value;
+            jobtitle_value = $('#JobTitle').val();
 
             var selectize_tags = $("#JobTitle")[0].selectize
             selectize_tags.clearOptions();
@@ -387,7 +583,11 @@
                             selectize_tags.addItem(optionsarray[i])
                         });
 
-                        $('#JobTitle')[0].selectize.setValue('');
+                        if (jobtitle_value != '')
+                            selectize_tags.setValue(jobtitle_value);
+                        else
+                            selectize_tags.setValue('');
+                        return;
 
 
                         return;
@@ -397,7 +597,6 @@
             });
 
             $('#JobTitle').on('change', function () {
-
                 setDefaultPayroll();
                 addPayScaleOnPayroll();
                 setPayrollCategory();
@@ -405,28 +604,7 @@
             });
         }
 
-        function setDefaultPayroll(xml) {
 
-            var path = window.location.protocol + '//';
-            path = path + window.location.host + '/';
-
-            path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/predefined_payroll_category_IE_outs.xml'
-
-
-            $.ajax({
-                type: "GET",
-                url: path,
-                dataType: "xml",
-                success: setDefaultPayrollXML,
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert(jqXHR.responseText);
-                    alert(textStatus);
-                    alert(errorThrown);
-                }
-
-            });
-
-        }
         function setDefaultPayrollXML(xml) {
             //////////
             //Sets PayScaleGroup, OneIKEABonusLevel, BenefitLevel from predefined_payroll_category_outs.XML and selected Job title and payroll category
@@ -486,72 +664,148 @@
 
                 }
             });
-
             addPayScaleOnPayroll();
 
             setPayrollCategory();
 
             setBasicPayAmount();
         }
-        function setAllowanceType() {
-            var path = window.location.protocol + '//';
-            path = path + window.location.host + '/';
 
-            path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/predefined_allowancetype_units_payment_IE_outs.xml'
+        function setAllowanceTypeXML5(xml) {
+                //////////
+                //Sets allowance type units from predefined_allowancetype_units_outs.XML based on Allowance type
+                //////////
 
-            $.ajax({
-                type: "GET",
-                url: path,
-                dataType: "xml",
-                success: setAllowanceTypeXML,
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert(jqXHR.responseText);
-                    alert(textStatus);
-                    alert(errorThrown);
+                var show = ''
+                var show2 = ''
+
+                if (document.getElementById('AllowancesAmountUnits5')) {
+                    document.getElementById('AllowancesAmountUnits5').value = '';
+                }
+                if (document.getElementById('AllowancesNetGross5')) {
+                    document.getElementById('AllowancesNetGross5').value = '';
                 }
 
-            });
-        }
+                var res = '0';
 
-        function setAllowanceType2() {
-            var path = window.location.protocol + '//';
-            path = path + window.location.host + '/';
-
-            path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/predefined_allowancetype_units_payment_IE_outs.xml'
-
-            $.ajax({
-                type: "GET",
-                url: path,
-                dataType: "xml",
-                success: setAllowanceTypeXML2,
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert(jqXHR.responseText);
-                    alert(textStatus);
-                    alert(errorThrown);
+                var dep = '';
+                if (document.getElementById('AllowancesType5')) {
+                    dep = document.getElementById('AllowancesType5').value;
                 }
 
-            });
-        }
+                $(xml).find('dependent').each(function () {
 
-        function setAllowanceType3() {
-            var path = window.location.protocol + '//';
-            path = path + window.location.host + '/';
 
-            path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/predefined_allowancetype_units_payment_IE_outs.xml'
+                    var $sel = $(this);
+                    show = '';
+                    show2 = '';
 
-            $.ajax({
-                type: "GET",
-                url: path,
-                dataType: "xml",
-                success: setAllowanceTypeXML3,
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert(jqXHR.responseText);
-                    alert(textStatus);
-                    alert(errorThrown);
-                }
+                    var department = $sel.find('selected').text();
 
-            });
-        }
+                    show = $sel.find('show').text();
+                    show2 = $sel.find('show2').text();
+
+                    if (department.toString().trim() == dep.toString().trim()) {
+
+                        if (show != '') {
+                            if (document.getElementById('AllowancesAmountUnits5')) {
+                                document.getElementById('AllowancesAmountUnits5').value = show;
+                            }
+
+                            res = '1';
+                        }
+
+                        if (show2 != '') {
+                            var n = show2.indexOf(",");
+                            if (n == -1) {
+                                if (document.getElementById('AllowancesNetGross5')) {
+                                    document.getElementById('AllowancesNetGross5').value = show2;
+                                }
+                            }
+                            else {
+                                var res = show2.substring(0, n);
+                                if (document.getElementById('AllowancesNetGross5')) {
+                                    document.getElementById('AllowancesNetGross5').value = res;
+                                }
+                            }
+                            res = '1';
+                        }
+
+
+                        if (res == 1) {
+                            return;
+                        }
+                    }
+                });
+            }
+
+        function setAllowanceTypeXML4(xml) {
+               //////////
+               //Sets allowance type units from predefined_allowancetype_units_outs.XML based on Allowance type
+               //////////
+
+               var show = ''
+               var show2 = ''
+
+               if (document.getElementById('AllowancesAmountUnits4')) {
+                   document.getElementById('AllowancesAmountUnits4').value = '';
+               }
+               if (document.getElementById('AllowancesNetGross4')) {
+                   document.getElementById('AllowancesNetGross4').value = '';
+               }
+
+               var res = '0';
+
+               var dep = '';
+               if (document.getElementById('AllowancesType4')) {
+                   dep = document.getElementById('AllowancesType4').value;
+               }
+
+               $(xml).find('dependent').each(function () {
+
+
+                   var $sel = $(this);
+                   show = '';
+                   show2 = '';
+
+                   var department = $sel.find('selected').text();
+
+                   show = $sel.find('show').text();
+                   show2 = $sel.find('show2').text();
+
+                   if (department.toString().trim() == dep.toString().trim()) {
+
+                       if (show != '') {
+                           if (document.getElementById('AllowancesAmountUnits4')) {
+                               document.getElementById('AllowancesAmountUnits4').value = show;
+                           }
+
+                           res = '1';
+                       }
+
+                       if (show2 != '') {
+                           var n = show2.indexOf(",");
+                           if (n == -1) {
+                               if (document.getElementById('AllowancesNetGross4')) {
+                                   document.getElementById('AllowancesNetGross4').value = show2;
+                               }
+                           }
+                           else {
+                               var res = show2.substring(0, n);
+                               if (document.getElementById('AllowancesNetGross4')) {
+                                   document.getElementById('AllowancesNetGross4').value = res;
+                               }
+                           }
+                           res = '1';
+                       }
+
+
+                       if (res == 1) {
+                           return;
+                       }
+                   }
+               });
+           }
 
         function setAllowanceTypeXML3(xml) {
             //////////
@@ -687,7 +941,9 @@
             });
         }
 
-        function setAllowanceTypeXML(xml) {
+        function setAllowanceTypeXML(xml)
+        {
+
             //////////
             //Sets allowance type units from predefined_allowancetype_units_outs.XML based on Allowance type
             //////////
@@ -729,6 +985,7 @@
                 if (department.toString().trim() == dep.toString().trim()) {
 
                     if (show != '') {
+                        
                         if (document.getElementById('AllowancesAmountUnits')) {
                             document.getElementById('AllowancesAmountUnits').value = show;
                         }
@@ -760,31 +1017,7 @@
         }
 
         $('#ReportsToLineManager').change(function () {
-            //////////
-            //ReportsToLineManager change function
-            //////////
-            //var value = $(this).val();
 
-            //if ($('#ReportsToLineManager')[0].selectize) {
-            //    var selectedText = $('#ReportsToLineManager')[0].selectize.getItem(value).text();
-
-            //    if ($('#TECApprover')[0].selectize) {
-            //        $('#TECApprover')[0].selectize.setValue(selectedText);
-            //    }
-            //    else {
-            //        $('#TECApprover').val(selectedText);
-            //    }
-            //}
-            //else {
-            //    var selectedText = $('#ReportsToLineManager').find('option:selected').text();
-            //    if ($('#TECApprover')[0].selectize) {
-            //        $('#TECApprover')[0].selectize.setValue(selectedText);
-            //    }
-            //    else {
-            //        var selectedText = $('#ReportsToLineManager').find('option:selected').text();
-            //        $('#TECApprover').val(selectedText);
-            //    }
-            //}
         });
 
 
@@ -830,6 +1063,13 @@
                           .find('option')
                           .remove();
 
+                        $('#AllowancesType4')
+                          .find('option')
+                          .remove();
+
+                        $('#AllowancesType5')
+                          .find('option')
+                          .remove();
 
                         seloption = '<option value="' + temp + '">' + temp + '</option>';
 
@@ -839,7 +1079,8 @@
                         $('#AllowancesType').append(seloption);
                         $('#AllowancesType2').append(seloption);
                         $('#AllowancesType3').append(seloption);
-
+                        $('#AllowancesType4').append(seloption);
+                        $('#AllowancesType5').append(seloption);
 
 
                         return;
@@ -852,28 +1093,7 @@
         }
 
 
-        function addAllowanceTypes() {
-            //////////
-            //Add deduction types on selected payroll category
-            //////////
 
-            var path = window.location.protocol + '//';
-            path = path + window.location.host + '/';
-
-            path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/Predefined_PayrollCategory_AllowancesType.xml'
-
-            $.ajax({
-                type: "GET",
-                url: path,
-                dataType: "xml",
-                success: addAllowanceTypesFunction,
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert(jqXHR.responseText);
-                    alert(textStatus);
-                    alert(errorThrown);
-                }
-            });
-        }
 
 
 
@@ -920,6 +1140,14 @@
                           .find('option')
                           .remove();
 
+                        $('#DeductionsType4')
+                          .find('option')
+                          .remove();
+
+                        $('#DeductionsType5')
+                          .find('option')
+                          .remove();
+
 
                         seloption = '<option value="' + temp + '">' + temp + '</option>';
 
@@ -929,6 +1157,8 @@
                         $('#DeductionsType').append(seloption);
                         $('#DeductionsType2').append(seloption);
                         $('#DeductionsType3').append(seloption);
+                        $('#DeductionsType4').append(seloption);
+                        $('#DeductionsType5').append(seloption);
 
                         return;
                     }
@@ -937,58 +1167,8 @@
 
         }
 
-        function addDeductionTypes() {
-            //////////
-            //Add deduction types on selected payroll category
-            //////////
-
-            var path = window.location.protocol + '//';
-            path = path + window.location.host + '/';
-
-            path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/Predefined_PayrollCategory_DeductionType.xml'
-
-            $.ajax({
-                type: "GET",
-                url: path,
-                dataType: "xml",
-                success: addDeductionTypesFunction,
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert(jqXHR.responseText);
-                    alert(textStatus);
-                    alert(errorThrown);
-                }
-            });
-        }
 
 
-
-        function addPayScaleOnPayroll() {
-            //////////
-            //Add deduction types on selected payroll category
-            //////////
-            //DONE IN CHANGE
-
-            var path = window.location.protocol + '//';
-            path = path + window.location.host + '/';
-
-
-            path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/predefined_payroll_payscale_Change_outs.xml'
-
-            $.ajax({
-                type: "GET",
-                url: path,
-                dataType: "xml",
-                success: addPayScaleOnPayrollXML,
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert(jqXHR.responseText);
-                    alert(textStatus);
-                    alert(errorThrown);
-                }
-
-            });
-
-
-        }
 
 
         function addPayScaleOnPayrollXML(xml) {
@@ -1093,12 +1273,12 @@
 
                 if (grp.toString().trim() == 'STARTER') {
                     if (document.getElementById('BasicPayAmount')) {
-                        document.getElementById('BasicPayAmount').value = '9,77'
+                        document.getElementById('BasicPayAmount').value = '9.77'
                     }
                 }
                 else if (grp.toString().trim() == 'FOUNDATION') {
                     if (document.getElementById('BasicPayAmount')) {
-                        document.getElementById('BasicPayAmount').value = '10,99'
+                        document.getElementById('BasicPayAmount').value = '10.99'
                     }
                 }
                 else if (grp.toString().trim() == 'ADVANCED') {
@@ -1133,11 +1313,11 @@
 
 
             if (sal.toString().trim() == 'Salaried' | sal.toString().trim() == 'Salaried Management' | sal.toString().trim() == 'Salaried Senior Management') {
-                document.getElementById('AllowancesAmountUnits').value = '';
+                //TAN //Commented this out because the AllowanceAmountsUnits where cleared on save. CaseNumber:?
+              //document.getElementById('AllowancesAmountUnits').value = '';
 
                 var path = window.location.protocol + '//';
                 path = path + window.location.host + '/';
-
 
                 path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/predefined_payroll_category_IE_outs.xml'
 
@@ -1168,13 +1348,10 @@
                 if (document.getElementById('PayScaleGroup')) {
 
                     document.getElementById('PayScaleGroup').value = 'STARTER';
-
                 }
 
                 var path = window.location.protocol + '//';
                 path = path + window.location.host + '/';
-
-
 
                 path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/predefined_payroll_category_IE_outs.xml'
 
@@ -1343,7 +1520,11 @@
                         }
                         res = '1';
                     }
-
+                    else {
+                        if (document.getElementById('PayScaleGroup')) {
+                            document.getElementById('PayScaleGroup').value = '';
+                        }
+                    }
                     //alert(show2);
                     if (show2 != '') {
                         var n = show2.indexOf(",");
@@ -1398,124 +1579,6 @@
             });
         }
 
-        $('#NewDepartment').change(function () {
-            //////////
-            //Change function for Department
-            //////////
-
-
-
-            //Cost centre department
-            var path = window.location.protocol + '//';
-            path = path + window.location.host + '/';
-
-            path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/predefined_costcentre_department_outs.xml'
-
-            $.ajax({
-                type: "GET",
-                url: path,
-                dataType: "xml",
-                success: setCostCentre,
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert(jqXHR.responseText);
-                    alert(textStatus);
-                    alert(errorThrown);
-                }
-
-            });
-
-
-            //Line manager department
-            path = '';
-            var path = window.location.protocol + '//';
-            path = path + window.location.host + '/';
-
-
-            path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/predefined_linemanager_department_outs.xml'
-            $.ajax({
-                type: "GET",
-                url: path,
-                dataType: "xml",
-                success: setLineManager,
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert(jqXHR.responseText);
-                    alert(textStatus);
-                    alert(errorThrown);
-                }
-
-            });
-
-
-            //Line manager job title
-            path = '';
-            var path = window.location.protocol + '//';
-            path = path + window.location.host + '/';
-
-
-            //path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/predefined_linemanager_jobtitle_outs.xml'
-            path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/predefined_department_jobtitle_IE_outs.xml'
-            $.ajax({
-                type: "GET",
-                url: path,
-                dataType: "xml",
-                success: setLineManagerJobTitle,
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert(jqXHR.responseText);
-                    alert(textStatus);
-                    alert(errorThrown);
-                }
-
-            });
-
-
-
-
-
-
-            //Department /Tec approver
-            path = '';
-            var path = window.location.protocol + '//';
-            path = path + window.location.host + '/';
-
-
-
-            path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/predefined_department_tecapprover_outs.xml'
-            $.ajax({
-                type: "GET",
-                url: path,
-                dataType: "xml",
-                success: setTecApprover,
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert(jqXHR.responseText);
-                    alert(textStatus);
-                    alert(errorThrown);
-                }
-
-            });
-
-            //Line manager jobtitle
-            path = '';
-            var path = window.location.protocol + '//';
-            path = path + window.location.host + '/';
-
-
-            path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/predefined_department_jobtitle_IE_outs.xml'
-
-            $.ajax({
-                type: "GET",
-                url: path,
-                dataType: "xml",
-                success: setLineManagerJob,
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert(jqXHR.responseText);
-                    alert(textStatus);
-                    alert(errorThrown);
-                }
-
-            });
-
-
-        });
 
 
         function setLineManagerJob(xml) {
@@ -1527,10 +1590,12 @@
             var show = ''
 
             var dep = '';
-            if (document.getElementById('NewDepartment')) {
-                dep = $("#NewDepartment option:selected").text();
+            if (document.getElementById('ReportsToLineManager')) {
+                dep = $("#ReportsToLineManager").val();
+
             }
 
+            $('#ManagersJobTitle')[0].selectize.setValue('');
 
             $(xml).find('dependent').each(function () {
 
@@ -1557,6 +1622,7 @@
                         }
                         return;
                     }
+
                 }
             });
 
@@ -1566,55 +1632,61 @@
             //////////
             //Sets Tec Approver from predefined_department_tecapprover_outs.XML and selected department
             //////////
-            var show = ''
 
 
-            var dep = '';
-            if (document.getElementById('NewDepartment')) {
-                dep = $("#NewDepartment option:selected").text();
-            }
-            if (document.getElementById('TECApprover')) {
-                $('#TECApprover')[0].selectize.setValue('');
-            }
-            $(xml).find('dependent').each(function () {
+            /////
+            // COMMENTED OUT, DEFAULTS VALUE IN XML INSTEAD AND USER CAN CHOSE OTHER VALUE MANUALLY
 
 
-                var $sel = $(this);
-                show = '';
 
-                var department = $sel.find('selected').text();
+            //var show = ''
 
-                show = $sel.find('show').text();
+            //var dep = '';
+            //if (document.getElementById('NewDepartment')) {
+            //    dep = $("#NewDepartment option:selected").text();
+            //}
+            //if (document.getElementById('TECApprover')) {
+            //    $('#TECApprover')[0].selectize.setValue('');
+            //}
+            //$(xml).find('dependent').each(function () {
 
-                if (department == dep) {
 
-                    if (show != '') {
-                        var n = show.indexOf(",");
+            //    var $sel = $(this);
+            //    show = '';
 
-                        if (n == -1) {
-                            if (document.getElementById('TECApprover')) {
-                                $('#TECApprover')[0].selectize.setValue(show);
-                            }
-                        }
-                        else {
-                            var res = show.substring(0, n);
-                            if (document.getElementById('TECApprover')) {
-                                $('#TECApprover')[0].selectize.setValue(res);
-                            }
-                        }
-                        return;
-                    }
-                    else {
-                        if (document.getElementById('ReportsToLineManager')) {
-                            if (document.getElementById('ReportsToLineManager').value != '');
-                            {
-                                var test = document.getElementById('ReportsToLineManager').value;
-                                $('#TECApprover')[0].selectize.setValue(test);
-                            }
-                        }
-                    }
-                }
-            });
+            //    var department = $sel.find('selected').text();
+
+            //    show = $sel.find('show').text();
+
+            //    if (department == dep) {
+
+            //        if (show != '') {
+            //            var n = show.indexOf(",");
+
+            //            if (n == -1) {
+            //                if (document.getElementById('TECApprover')) {
+            //                    $('#TECApprover')[0].selectize.setValue(show);
+            //                }
+            //            }
+            //            else {
+            //                var res = show.substring(0, n);
+            //                if (document.getElementById('TECApprover')) {
+            //                    $('#TECApprover')[0].selectize.setValue(res);
+            //                }
+            //            }
+            //            return;
+            //        }
+            //        else {
+            //            if (document.getElementById('ReportsToLineManager')) {
+            //                if (document.getElementById('ReportsToLineManager').value != '');
+            //                {
+            //                    var test = document.getElementById('ReportsToLineManager').value;
+            //                    $('#TECApprover')[0].selectize.setValue(test);
+            //                }
+            //            }
+            //        }
+            //    }
+            //});
         }
 
         function setLineManagerJobTitle(xml) {
@@ -1629,7 +1701,7 @@
             }
             var dep = '';
 
-            if (document.getElementById('Department')) {
+            if (document.getElementById('NewDepartment')) {
                 dep = $("#NewDepartment option:selected").text();
             }
 
@@ -1761,49 +1833,6 @@
         }
 
 
-
-        $('#NewBusinessUnit').change(function () {
-            //////////
-            //Sets Primary site to Business Unit
-            //////////
-            //alert();
-
-            setTecApprover();
-            setPayrollCategory();
-            setBasicPayAmount();
-            setAllowanceType2();
-            setAllowanceType();
-            setAllowanceType3();
-
-            var value = $(this).val();
-            if ($('#NewBusinessUnit')[0].selectize) {
-                var selectedText = $('#NewBusinessUnit')[0].selectize.getItem(value).text();
-
-                if ($('#PrimarySite')[0].selectize) {
-                    $('#PrimarySite')[0].selectize.setValue(selectedText);
-                }
-                else {
-                    $('#PrimarySite').val(selectedText);
-                }
-            }
-            else {
-                var selectedText = $('#NewBusinessUnit').find('option:selected').text();
-                if ($('#PrimarySite')[0].selectize) {
-                    $('#PrimarySite')[0].selectize.setValue(selectedText);
-                }
-                else {
-                    var selectedText = $('#NewBusinessUnit').find('option:selected').text();
-                    $('#PrimarySite').val(selectedText);
-                }
-            }
-
-            if (this.options[this.selectedIndex].innerHTML == 'Store Dublin 038') {
-                var val1 = 'Business Navigation & Operations Manager';
-                $('#TECApprover')[0].selectize.setValue(val1);
-                //document.getElementById('TECApprover').value = 'Business Navigation &amp; Operations Manager';
-            }
-
-        });
-    })
+    
 
 </script>

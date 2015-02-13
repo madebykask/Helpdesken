@@ -488,6 +488,8 @@
         public DbSet<CaseInvoiceArticleEntity> CaseInvoiceArticles { get; set; } 
 
         public DbSet<CaseInvoiceOrderEntity> CaseInvoiceOrders { get; set; }
+
+        public DbSet<CaseInvoiceOrderFileEntity> CaseInvoiceOrderFiles { get; set; }
  
         public DbSet<CaseInvoiceEntity> CaseInvoices { get; set; } 
 
@@ -681,6 +683,7 @@
             modelBuilder.Configurations.Add(new UserGroupConfiguration());
             modelBuilder.Configurations.Add(new UserRoleConfiguration());
             modelBuilder.Configurations.Add(new UserWorkingGroupConfiguration());
+            modelBuilder.Configurations.Add(new UsersPasswordHistoryConfiguration());
             modelBuilder.Configurations.Add(new WatchDateCalendarConfiguration());
             modelBuilder.Configurations.Add(new WatchDateCalendarValueConfiguration());
             modelBuilder.Configurations.Add(new WorkingGroupConfiguration());
@@ -720,6 +723,7 @@
             modelBuilder.Configurations.Add(new InvoiceArticleConfiguration());
             modelBuilder.Configurations.Add(new CaseInvoiceArticleConfiguration());
             modelBuilder.Configurations.Add(new CaseInvoiceOrderConfiguration());
+            modelBuilder.Configurations.Add(new CaseInvoiceOrderFileConfiguration());
             modelBuilder.Configurations.Add(new TextTypeConfiguration());
             modelBuilder.Configurations.Add(new CaseInvoiceConfiguration());
             modelBuilder.Configurations.Add(new CaseInvoiceSettingsConfiguration());

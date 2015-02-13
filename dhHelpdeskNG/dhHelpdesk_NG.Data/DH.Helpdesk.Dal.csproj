@@ -89,6 +89,7 @@
     <Compile Include="EntityConfigurations\Invoice\CaseInvoiceArticleConfiguration.cs" />
     <Compile Include="EntityConfigurations\Invoice\CaseInvoiceConfiguration.cs" />
     <Compile Include="EntityConfigurations\Invoice\CaseInvoiceOrderConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Invoice\CaseInvoiceOrderFileConfiguration.cs" />
     <Compile Include="EntityConfigurations\Invoice\CaseInvoiceSettingsConfiguration.cs" />
     <Compile Include="EntityConfigurations\Invoice\InvoiceArticleConfiguration.cs" />
     <Compile Include="EntityConfigurations\Invoice\InvoiceArticleUnitConfiguration.cs" />
@@ -108,6 +109,7 @@
     <Compile Include="EntityConfigurations\SurveyConfiguration.cs" />
     <Compile Include="EntityConfigurations\Users\ModuleConfiguration.cs" />
     <Compile Include="EntityConfigurations\Users\UserModuleConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Users\UsersPasswordHistoryConfiguration.cs" />
     <Compile Include="Enums\Accounts\Headers.cs" />
     <Compile Include="Enums\Accounts\Fields\AccountInformationFields.cs" />
     <Compile Include="Enums\Accounts\Fields\ContactFields.cs" />
@@ -206,12 +208,14 @@
     <Compile Include="Mappers\Inventory\EntityToBusinessModel\Printer\PrinterFieldSettingsToPrinterOverviewSettingsMapper.cs" />
     <Compile Include="Mappers\Inventory\EntityToBusinessModel\Server\ServerFieldSettingsToServerOverviewSettingsMapper.cs" />
     <Compile Include="Mappers\Invoice\BusinessModelToEntity\CaseInvoiceArticleToEntityMapper.cs" />
+    <Compile Include="Mappers\Invoice\BusinessModelToEntity\CaseInvoiceOrderFileToEntityMapper.cs" />
     <Compile Include="Mappers\Invoice\BusinessModelToEntity\CaseInvoiceOrderToEntityMapper.cs" />
     <Compile Include="Mappers\Invoice\BusinessModelToEntity\CaseInvoiceSettingsToEntityMapper.cs" />
     <Compile Include="Mappers\Invoice\BusinessModelToEntity\CaseInvoiceToEntityMapper.cs" />
     <Compile Include="Mappers\Invoice\BusinessModelToEntity\InvoiceArticleToEntityMapper.cs" />
     <Compile Include="Mappers\Invoice\BusinessModelToEntity\InvoiceArticleUnitToEntityMapper.cs" />
     <Compile Include="Mappers\Invoice\EntityToBusinessModel\CaseInvoiceArticleToBusinessModelMapper.cs" />
+    <Compile Include="Mappers\Invoice\EntityToBusinessModel\CaseInvoiceOrderFileToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Invoice\EntityToBusinessModel\CaseInvoiceOrderToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Invoice\EntityToBusinessModel\CaseInvoiceSettingsToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Invoice\EntityToBusinessModel\CaseInvoiceToBusinessModelMapper.cs" />

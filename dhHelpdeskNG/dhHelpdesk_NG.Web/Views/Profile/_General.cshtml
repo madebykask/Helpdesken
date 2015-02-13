@@ -23,7 +23,7 @@
                 @Translation.Get("Förnamn", Enums.TranslationSource.TextTranslation) <span class="mandatorystar">*</span>
             </td>
             <td>
-                @Html.TextBoxFor(model => model.User.FirstName, new { maxlength = "20" })
+                @Html.TextBoxFor(model => model.User.FirstName, new { maxlength = "20" })                
             </td>
         </tr>
         <tr>
@@ -147,7 +147,34 @@
         @Html.Partial("_ChangePassword", Model)
     </div>
 </div>
+
 <script type="text/javascript">
+   
+    var validator = $("#target").validate({
+        ignore: "",
+        rules: {
+            "User.FirstName": {
+                required: true
+            },
+            "User.SurName": {
+                required: true
+            },
+            "User.Email": {
+                required: true
+            }
+        },
+        invalidHandler: function (form, validator) {            
+            
+
+            var errors = validator.numberOfInvalids();
+            if (errors) {
+                var message = 'Please fill required fields!';                  
+                ShowToastMessage(message, "error");
+            } 
+            //$('#fragment-1').class("active");
+
+        }
+    });
 
     function ChangePassword() {
 
@@ -164,7 +191,7 @@
             } else {
                 $.post('/profile/EditUserPassword/', { id: $('#id_user').val(), newPassword: $('#NewPassword').val(), confirmPassword: $('#ConfirmPassword').val() }, function (data) {                    
                     var e = '@passChangeText';                    
-                    ShowToastMessage(e, "Alert");
+                    ShowToastMessage(e, "alert");
 
                     $('#NewPassword').val('');
                     $('#ConfirmPassword').val('');

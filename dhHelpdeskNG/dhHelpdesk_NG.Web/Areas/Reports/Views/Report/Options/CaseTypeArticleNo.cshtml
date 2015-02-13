@@ -1,0 +1,97 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Infrastructure.Extensions
+@model DH.Helpdesk.Web.Areas.Reports.Models.Options.CaseTypeArticleNoOptionsModel
+
+@using (Html.BeginForm("GetCaseTypeArticleNoReport", "Report", null, FormMethod.Post, new { id = "reportForm" }))
+{
+    @Html.HiddenFor(m => m.IsPrint)
+    @Html.HiddenFor(m => m.IsExcel)
+    <table class="tableform">    
+        <tr>
+            <td class="span3">@Translation.Get("Avdelning påverkad")</td>
+            <td>
+                @Html.DropDownListFor(m => m.DepartmentIds, Model.Departments,
+                        new { id = "departments", multiple = "multiple", @class = "multiselect multiselect-search" })
+            </td>
+        </tr>     
+        <tr>
+            <td class="span3">@Translation.Get("Driftgrupp")</td>
+            <td>
+                @Html.DropDownListFor(m => m.WorkingGroupIds, Model.WorkingGroups,
+                        new { id = "workingGroups", multiple = "multiple", @class = "multiselect multiselect-search" })
+            </td>
+        </tr>                   
+        <tr>
+            <td class="span3">@Translation.Get("Ärendetyp")</td>
+            <td>
+                @Html.DropDownListFor(m => m.CaseTypeIds, Model.CaseTypes,
+                        new { id = "caseTypes", multiple = "multiple", @class = "multiselect multiselect-search" })
+            </td>
+        </tr>        
+        <tr>
+            <td class="span3">@Translation.Get("Produktområde")</td>
+            <td>
+                <div id="divProductArea" class="btn-group">
+                    <div class="btn" id="productAreaText">@Translation.Get("--")</div>
+                    <button class="btn dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">@Translation.Get("--")</a></li>
+                        @Html.ProductAreasList(Model.ProductAreas)
+                    </ul>
+                    @Html.HiddenFor(m => m.ProductAreaId)    
+                </div>            
+            </td>
+        </tr>        
+        <tr>
+            <td class="span3">@Translation.Get("Period från")</td>
+            <td>
+                @Html.EditorFor(m => m.PeriodFrom, "YearMonthPicker", new { id = "periodFrom" })
+            </td>
+        </tr>        
+        <tr>
+            <td class="span3">@Translation.Get("Period till")</td>
+            <td>
+                @Html.EditorFor(m => m.PeriodUntil, "YearMonthPicker", new { id = "periodUntil" })
+            </td>
+        </tr>    
+        <tr>
+            <td class="span3">@Translation.Get("Visa")</td>
+            <td>
+                @Html.DropDownListFor(m => m.ShowCasesId, Model.ShowCases)
+            </td>
+        </tr>        
+        <tr>
+            <td class="span3">@Html.LabelFor(m => m.IsShowCaseTypeDetails, Translation.Get("Visa detaljerad rapport per ärendetyp"))</td>
+            <td>                
+                @Html.CheckBoxFor(m => m.IsShowCaseTypeDetails)
+            </td>
+        </tr>      
+        <tr>
+            <td class="span3">
+                @Html.LabelFor(m => m.IsShowPercents, Translation.Get("Visa") + " (%)")                
+            </td>
+            <td>                
+                @Html.CheckBoxFor(m => m.IsShowPercents)
+            </td>
+        </tr>            
+    </table>        
+}
+<div id="reportContainer">    
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        $("#departments").multiselect();
+        $("#workingGroups").multiselect();
+        $("#caseTypes").multiselect();
+
+        $('#divProductArea ul.dropdown-menu li a').click(function (e) {
+            e.preventDefault();
+            var val = $(this).attr('value');
+            $("#productAreaText").text(getBreadcrumbs(this));
+            $("#ProductAreaId").val(val);
+        });
+    })
+</script>

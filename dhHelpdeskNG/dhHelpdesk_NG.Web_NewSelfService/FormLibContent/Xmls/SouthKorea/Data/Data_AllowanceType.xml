@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+  <options>
+    <option value=""></option>
+    <option value="Meal allowance">Meal allowance</option>
+    <option value="Childcare allowance">Childcare allowance</option>
+    <option value="Partner allowance">Partner allowance</option>
+    <option value="Life Balance allowance">Life Balance allowance</option>
+    <option value="Phone allowance">Phone allowance</option>
+    <option value="Car allowance">Car allowance</option>
+    <option value="Relocation allowance">Relocation allowance</option>
+    <option value="Household goods allowance">Household goods allowance</option>
+    <option value="Housing allowance">Housing allowance</option>
+    <option value="Tax reinbursment">Tax reinbursment</option>
+    <option value="Special allowance">Special allowance</option>
+    <option value="IIP">IIP</option>
+    <option value="Healthcare insurance">Healthcare insurance</option>
+    <option value="Benefits(monetary)">Benefits(monetary)</option>
+    <option value="Dagis Care">Dagis Care</option>
+    <option value="Tuition Fee">Tuition Fee</option>
+    <option value="Pension">Pension</option>
+    <option value="Pension accrual">Pension accrual</option>
+  </options> 

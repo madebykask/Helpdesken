@@ -3,7 +3,7 @@
   <name>AllowanceTypeUnit</name>
   <dependent>
     <selected>Advanced Hrly</selected>
-    <show>0,65</show>
+    <show>0.65</show>
     <show2></show2>
   </dependent>
   <dependent>
@@ -28,7 +28,7 @@
   </dependent>
   <dependent>
     <selected>Fork Lift Truck Allowance</selected>
-    <show>2,00</show>
+    <show>2.00</show>
     <show2></show2>
   </dependent>
   <dependent>
@@ -58,7 +58,7 @@
   </dependent>
   <dependent>
     <selected>Night Shift</selected>
-    <show>2,50</show>
+    <show>2.50</show>
     <show2></show2>
   </dependent>
   <dependent>
@@ -83,7 +83,7 @@
   </dependent>
   <dependent>
     <selected>Power Stacker</selected>
-    <show>1,00</show>
+    <show>1.00</show>
   </dependent>
   <dependent>
     <selected>Redundancy</selected>

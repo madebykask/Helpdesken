@@ -11,7 +11,7 @@
             <action status="31" internal-val="30" init-form-guid="80ec586d-a1ac-4ea3-a161-b929749690ec" text="Submit Basic Service Request to SSC">
                 <validateTabs>#ServiceRequestDetails,#Basic</validateTabs>
             </action>
-            <action status="99" internal-val="70" text="Cancel Service request"></action>
+            
         </actions>
     </status>
     <!-- LM -->

@@ -35,6 +35,12 @@ namespace DH.Helpdesk.Common.Tools
             return new DateTime(date.Year, date.Month, date.Day);
         }
 
+        public static DateTime RoundToWorkDateTime(this DateTime date, int workingHour)
+        {
+            return new DateTime(date.Year, date.Month, date.Day, workingHour, 0, 0);
+        }
+
+
         /// <summary>
         /// The round to hour.
         /// </summary>
@@ -66,6 +72,16 @@ namespace DH.Helpdesk.Common.Tools
             }
 
             return businessDays;
+        }
+
+        public static DateTime RoundToMonthOrGetCurrent(this DateTime? date)
+        {
+            if (!date.HasValue)
+            {
+                return DateTime.Today.RoundToMonth();
+            }
+
+            return date.Value.RoundToMonth();
         }
     }
 }

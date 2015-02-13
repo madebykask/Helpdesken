@@ -17,6 +17,8 @@ namespace DH.Helpdesk.Common.Extensions.DateTime
     /// </summary>
     public static class DateExtensions
     {
+        private static readonly long DatetimeMinTimeTicks = (new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).Ticks;
+
         /// <summary>
         /// The to formatted date.
         /// </summary>
@@ -48,7 +50,12 @@ namespace DH.Helpdesk.Common.Extensions.DateTime
 
         public static string ToMonthYear(this DateTime date)
         {
-            return date.ToString("MM/yy");
+            return date.ToString("MM-yyyy");
+        }
+
+        public static long ToJavaScriptMilliseconds(this DateTime dt)
+        {
+            return (long)((dt.ToUniversalTime().Ticks - DatetimeMinTimeTicks) / 10000);
         }
     }
 }

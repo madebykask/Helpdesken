@@ -74,7 +74,7 @@
     </status>
     <status value="60">
         <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#documents,#globalview,#SSCUseOnly,#attachments</visibleTabs>
-        <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</readOnlyTabs>
+        <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#SSCUseOnly</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
         </actions>

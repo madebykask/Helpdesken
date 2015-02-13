@@ -32,6 +32,8 @@
 
         public static readonly string DocumentsDocumentsList = "DocumentsDocumentsList";
 
+        public static readonly string ReportsReportGenerator = "ReportsReportGenerator";
+
         #endregion
     }
 }

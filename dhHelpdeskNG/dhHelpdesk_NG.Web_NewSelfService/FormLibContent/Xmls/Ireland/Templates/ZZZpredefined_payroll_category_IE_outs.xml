@@ -666,11 +666,4 @@
     <show3>Co-worker</show3>
     <show4>Salaried</show4>
   </dependent>
-  <dependent>
-    <selected>Visual Merchandsie / Activity Co-worker</selected>
-    <show1>46</show1>
-    <show2>Co-worker</show2>
-    <show3>Level 1</show3>
-    <show4>Salaried</show4>
-  </dependent>
-</predefined>
+  </predefined>

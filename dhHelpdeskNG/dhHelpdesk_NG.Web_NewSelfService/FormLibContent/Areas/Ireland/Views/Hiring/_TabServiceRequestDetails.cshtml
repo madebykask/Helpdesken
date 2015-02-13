@@ -12,12 +12,6 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="tdstrong">@Model.Translate("Initiator")</td>
-                    <td>
-                        <input type="text" value="@Model.Contract.Initiator" readonly="readonly"/></td>
-                </tr>
-                
-                <tr>
                     <td class="tdstrong">@Model.Label("NewToIKEA")</td>
                     <td>@Model.Element("NewToIKEA")</td>
                 </tr>
@@ -32,7 +26,7 @@
                 </tr>
                <tr>
                     <td class="tdstrong">@Model.Label("InductionDate")</td>
-                    <td>@Model.Element("InductionDate")</td>
+                    <td>@Model.Element("InductionDate")</td> 
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("InductionStartTime")</td>
@@ -144,91 +138,90 @@
             </tbody>
         </table>
     </div>
-    <input type="hidden" id="CustomerId" value="@Model.CustomerId" />
+    <input type="hidden" id="CustomerId" value="@Model.Form.CustomerId" />
+    <input type="hidden" id="AllCoWorker" value="1" />
+    <input type="hidden" id="formGuid" value="@Model.FormGuid" />
 </div>
 <script>
-
-    setPreviousContractStartDate();
-
-    var dateHiringDate = $('#date_ContractStartDate');
-    if (dateHiringDate.length > 0) {
-
-        dateHiringDate.not(".disabled").datepicker()
-            .on('changeDate', function (e) {
-                if (document.getElementById('InductionDate')) {
-                    $('#InductionDate').val($('#ContractStartDate').val());
-                }
-            });
-    }
-
-
-    document.getElementById('NewToIKEA').onchange = selectIndexChangeNewToIKEA;
-
-    function setPreviousContractStartDate() {
-        if (document.getElementById('NewToIKEA').options[document.getElementById('NewToIKEA').selectedIndex].value != 'International Transfer') {
-            $('#date_PreviousContractStartDate').datepicker("destroy");
-            $('#date_PreviousContractStartDate').addClass("disabled");
-            $('#PreviousContractStartDate').prop('disabled', true);
-            $('#PreviousContractStartDate').val("");
-        }
-        else {
-            $('#date_PreviousContractStartDate').datepicker();
-            $('#PreviousContractStartDate').prop('disabled', false);
-            $("#PreviousContractStartDate").removeClass("disabled");
-        }
-    }
-
-    function selectIndexChangeNewToIKEA() {
-        if (this.options[this.selectedIndex].value == 'New Hire') {
-            document.getElementById('GlobalHRID').disabled = true;
-            document.getElementById('Co-WorkerID').disabled = true;
-        }
-        else {
-            document.getElementById('GlobalHRID').disabled = false;
-            document.getElementById('Co-WorkerID').disabled = false;
-        }
-
-        if (this.options[this.selectedIndex].value != 'International Transfer') {
-            $('#date_PreviousContractStartDate').datepicker("destroy");
-            $('#date_PreviousContractStartDate').addClass("disabled");
-            $('#PreviousContractStartDate').prop('disabled', true);
-            $('#PreviousContractStartDate').val("");
-        }
-        else {
-            $('#date_PreviousContractStartDate').datepicker();
-            $('#PreviousContractStartDate').prop('disabled', false);
-            $("#PreviousContractStartDate").removeClass("disabled");
-        }
-
-    }
-    if (document.getElementById('NewToIKEA').value == 'New Hire') {
-        document.getElementById('GlobalHRID').disabled = true;
-    }
-
-    var noticeHiringDate = $('#notice_HiringDate');
-    var noticeHiringDateWrong = $('#notice_HiringDateWrong');
-
-    $('#ContractStartDate').change(function () {
-
-        $('#InductionDate').val($('#ContractStartDate').val());
-
-        var startDate = $('#ContractStartDate').val();
+    var lockedbyUserGroup = document.getElementById('LockedByUserGroup').getAttribute('status');
+    if ("@Model.ReadOnlyTab("#servicerequestdetails")" == 'False' && lockedbyUserGroup == 'False') {
         
-        var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
-        var dstartDate = APIGlobal.DateTime.parseDate(startDate, format);
-        var nowTemp = new Date();
-        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-        noticeHiringDate.hide();
-        noticeHiringDateWrong.hide();
-       
-        if (dstartDate.valueOf() < now.valueOf())
-            noticeHiringDate.show();
-    });
+        var dateHiringDate = $('#date_ContractStartDate');
+        if (dateHiringDate.length > 0) {
 
-    function Payee() {
-        document.getElementById('Payee').value = (document.getElementById('FirstName').value + " " + document.getElementById('LastName').value);
+            dateHiringDate.not(".disabled").datepicker()
+                .on('changeDate', function (e) {
+                    if (document.getElementById('InductionDate')) {
+                        $('#InductionDate').val($('#ContractStartDate').val());
+                    }
+                });
+        }
+
+
+        function selectIndexChangeNewToIKEA() {
+            //////
+            // AC - 2014-09-22
+
+            if ($('#NewToIKEA').val() == 'New Hire') {
+                document.getElementById('GlobalHRID').disabled = true;
+                document.getElementById('Co-WorkerID').disabled = true;
+
+
+
+                $('#date_PreviousContractStartDate').datepicker("destroy");
+                $('#date_PreviousContractStartDate').addClass("disabled");
+                $('#PreviousContractStartDate').prop('disabled', true);
+                $('#PreviousContractStartDate').val("");
+
+            }
+            else if ($('#NewToIKEA').val() == 'International Transfer') {
+                document.getElementById('Co-WorkerID').disabled = false;
+                document.getElementById('GlobalHRID').disabled = false;
+
+                $('#date_PreviousContractStartDate').datepicker();
+                $('#PreviousContractStartDate').prop('disabled', false);
+                $("#PreviousContractStartDate").removeClass("disabled");
+            }
+            else {
+                document.getElementById('Co-WorkerID').disabled = false;
+                document.getElementById('GlobalHRID').disabled = false;
+                $('#date_PreviousContractStartDate').datepicker("destroy");
+                $('#date_PreviousContractStartDate').addClass("disabled");
+                $('#PreviousContractStartDate').prop('disabled', true);
+                $('#PreviousContractStartDate').val("");
+            }
+        }
+
+        $("#NewToIKEA").change(function () {
+            selectIndexChangeNewToIKEA();
+        });
+        selectIndexChangeNewToIKEA();
+
+        var noticeHiringDate = $('#notice_HiringDate');
+        var noticeHiringDateWrong = $('#notice_HiringDateWrong');
+
+        $('#ContractStartDate').change(function () {
+
+            $('#InductionDate').val($('#ContractStartDate').val());
+
+            var startDate = $('#ContractStartDate').val();
+
+            var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+            var dstartDate = APIGlobal.DateTime.parseDate(startDate, format);
+            var nowTemp = new Date();
+            var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+            noticeHiringDate.hide();
+            noticeHiringDateWrong.hide();
+
+            if (dstartDate.valueOf() < now.valueOf())
+                noticeHiringDate.show();
+        });
+
+        function Payee() {
+            document.getElementById('Payee').value = (document.getElementById('FirstName').value + " " + document.getElementById('LastName').value);
+        }
+
+        $('#FirstName').change(function () { Payee(); });
+        $('#LastName').change(function () { Payee(); });
     }
-
-    $('#FirstName').change(function () { Payee(); });
-    $('#LastName').change(function () { Payee(); });
 </script>

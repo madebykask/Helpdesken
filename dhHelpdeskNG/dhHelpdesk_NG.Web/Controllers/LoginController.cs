@@ -5,19 +5,28 @@
     using System.Web.Mvc;
     using System.Web.Security;
 
-    using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Services.Services.Users;
     using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Web.Infrastructure.Tools;
 
     public class LoginController : Controller
     {
         private readonly IUserService userService;
         private readonly ICustomerService customerService;
+        private readonly ILanguageService languageService;
+        private readonly IUsersPasswordHistoryService usersPasswordHistoryService;
 
-        public LoginController(IUserService userService, ICustomerService customerService)
+        public LoginController(
+                IUserService userService, 
+                ICustomerService customerService, 
+                IUsersPasswordHistoryService usersPasswordHistoryService,
+                ILanguageService languageService)
         {
             this.userService = userService;
             this.customerService = customerService;
+            this.usersPasswordHistoryService = usersPasswordHistoryService;
+            this.languageService = languageService;
         }
 
         public ActionResult Login()
@@ -60,6 +69,14 @@
                     this.Session.Clear();
                     SessionFacade.CurrentUser = user;
                     SessionFacade.CurrentLanguageId = user.LanguageId;
+
+                    var language = this.languageService.GetLanguage(user.LanguageId);
+
+                    if(language !=  null) 
+                    {
+                        SessionFacade.CurrentLanguageCode = language.LanguageID;
+                    }
+
                     var customer = this.customerService.GetCustomer(user.CustomerId);
                     ApplicationFacade.AddLoggedInUser(
                         new LoggedInUsers
@@ -72,6 +89,8 @@
                                 LoggedOnLastTime = DateTime.UtcNow,
                                 SessionId = Session.SessionID
                             });
+
+                    this.usersPasswordHistoryService.SaveHistory(user.Id, EncryptionHelper.GetMd5Hash(password));
 
                     this.RedirectFromLoginPage(userName, decodedUrl);
                 }

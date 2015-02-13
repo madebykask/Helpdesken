@@ -114,6 +114,7 @@
     <Compile Include="Computers\ComputerLog.cs" />
     <Compile Include="Computers\ComputerModel.cs" />
     <Compile Include="Computers\ComputerType.cs" />
+    <Compile Include="Interfaces\IActiveEntity.cs" />
     <Compile Include="Interfaces\ICustomerEntity.cs" />
     <Compile Include="Interfaces\IDatedEntity.cs" />
     <Compile Include="Interfaces\IGuidEntity.cs" />
@@ -122,6 +123,7 @@
     <Compile Include="Interfaces\INulableCustomerEntity.cs" />
     <Compile Include="Interfaces\IOptionalCustomerEntity.cs" />
     <Compile Include="Interfaces\IStartPageEntity.cs" />
+    <Compile Include="Invoice\CaseInvoiceOrderFileEntity.cs" />
     <Compile Include="Invoice\CaseInvoiceSettingsEntity.cs" />
     <Compile Include="Orders\OrderHistoryEntity.cs" />
     <Compile Include="Orders\OrderPropertyEntity.cs" />

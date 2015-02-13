@@ -2,8 +2,8 @@
 
 namespace DH.Helpdesk.Domain
 {
+    using DH.Helpdesk.Domain.Problems;
     using DH.Helpdesk.Domain.Projects;
-
     using global::System;
 
     public class CaseSolution : Entity
@@ -34,6 +34,40 @@ namespace DH.Helpdesk.Domain
         public string TemplatePath { get; set; }
         public bool ShowInSelfService { get; set; }
         public int? OrderNum { get; set; }
+        public string PersonsName { get; set; }
+        public string PersonsPhone { get; set; }
+        public string PersonsCellPhone { get; set; }
+        public int? Region_Id { get; set; }
+        public int? OU_Id { get; set; }
+        public string Place { get; set; }
+        public string UserCode { get; set; }
+        public int? System_Id { get; set; }
+        public int? Urgency_Id { get; set; }
+        public int? Impact_Id { get; set; }
+        public string InvoiceNumber { get; set; }
+        public string ReferenceNumber { get; set; }
+        public int? Status_Id { get; set; }
+        public int? StateSecondary_Id { get; set; }
+        public int Verified { get; set; }
+        public string VerifiedDescription { get; set; }
+        public string SolutionRate { get; set; }
+        public string InventoryNumber { get; set; }
+        public string InventoryType { get; set; }
+        public string InventoryLocation { get; set; }
+        public int? Supplier_Id { get; set; }
+        public Guid? FormGUID { get; set; }
+        public string Available { get; set; }
+        public int Cost { get; set; }
+        public int OtherCost { get; set; }
+        public string Currency { get; set; }
+        public int ContactBeforeAction { get; set; }
+        public int? Problem_Id { get; set; }
+        public int? Change_Id { get; set; }
+        public DateTime? WatchDate { get; set; }
+        public DateTime? FinishingDate { get; set; }
+        public string FinishingDescription { get; set; }
+        public int SMS { get; set; }
+        public int? UpdateNotifierInformation { get; set; }
 
         public virtual CaseSolutionCategory CaseSolutionCategory { get; set; }
         public virtual CaseSolutionSchedule CaseSolutionSchedule { get; set; }
@@ -47,5 +81,6 @@ namespace DH.Helpdesk.Domain
         public virtual User PerformerUser { get; set; }
         public virtual WorkingGroupEntity CaseWorkingGroup { get; set; }
         public virtual WorkingGroupEntity WorkingGroup { get; set; }
+        //public virtual Problem Problem { get; set; }
     }
 }

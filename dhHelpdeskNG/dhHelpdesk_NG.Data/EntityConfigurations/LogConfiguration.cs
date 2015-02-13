@@ -56,6 +56,13 @@
             this.Property(l => l.ChangeTime).IsRequired();
             this.Property(l => l.RegUser).IsRequired();
 
+            this.HasOptional(l => l.FinishingTypeEntity)
+                .WithMany()
+                .HasForeignKey(l => l.FinishingType);
+
+            this.HasMany(l => l.LogFiles)
+                .WithRequired(f => f.Log);
+
             this.Property(l => l.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             this.ToTable("tblLog");

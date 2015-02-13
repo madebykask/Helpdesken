@@ -125,7 +125,7 @@
                                         <a href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.Caption)</a>
                                     </td>
                                     @*<td>
-                                        <a href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.Description)</a>
+                                        <a href="@Url.Action("edit", "casesolution", new { id = item.Id })">@item.Description.ForHtmlView()</a>
                                     </td>*@
                                     <td>
                                         <a href="@Url.Action("edit", "casesolution", new { id = item.Id })">

@@ -5,8 +5,12 @@
     using DH.Helpdesk.Services.Services.Concrete;
     using DH.Helpdesk.Services.Services.Concrete.Licenses;
     using DH.Helpdesk.Services.Services.Concrete.Orders;
+    using DH.Helpdesk.Services.Services.Concrete.Reports;
+    using DH.Helpdesk.Services.Services.Concrete.Users;
     using DH.Helpdesk.Services.Services.Licenses;
     using DH.Helpdesk.Services.Services.Orders;
+    using DH.Helpdesk.Services.Services.Reports;
+    using DH.Helpdesk.Services.Services.Users;
 
     using Ninject.Modules;
 
@@ -102,7 +106,6 @@
             this.Bind<IWorkingGroupService>().To<WorkingGroupService>();
             this.Bind<ICausingPartService>().To<CausingPartService>();
             this.Bind<IEmailService>().To<EmailService>().InSingletonScope();
-            this.Bind<IReportsService>().To<ReportsService>();
             this.Bind<IComputerModulesService>().To<ComputerModulesService>();
             this.Bind<IInventorySettingsService>().To<InventorySettingsService>();
             this.Bind<IPlaceService>().To<PlaceService>();
@@ -111,6 +114,7 @@
             this.Bind<ICaseSolutionSettingService>().To<CaseSolutionSettingService>();
             this.Bind<ICaseInvoiceSettingsService>().To<CaseInvoiceSettingsService>();
             this.Bind<ICheckListsService>().To<CheckListsService>();
+            this.Bind<IUsersPasswordHistoryService>().To<UsersPasswordHistoryService>();
 
             // Liceneses module services
             this.Bind<IProductsService>().To<ProductsService>();
@@ -136,6 +140,9 @@
             
             // Survey service
             this.Bind<ISurveyService>().To<SurveyService>();
+
+            // Reports module
+            this.Bind<IReportService>().To<ReportService>();
         }
 
         #endregion

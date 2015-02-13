@@ -2,9 +2,13 @@
 @using ECT.FormLib;
 @using ECT.FormLib.Models;
 
+@{
+    var url = Url.CurrentController() + "typeahead";
+}
+
 @using(Html.BeginForm("edit", "IndividualAdvancePaymentsLoans", new { id = Model.Contract.Id }, FormMethod.Post, new { area = "Global", novalidate = "novalidate" }))
 {   
-    <span style="display: none;" id="narrowDownInit"></span>
+    <span style="display: none;" id="narrowDownInit" url="@url"></span>
     @Html.Partial("_GlobalNavRev", Model)
     <div class="container containeralignright">
         @Html.Partial("_CurrentUser")

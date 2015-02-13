@@ -1,0 +1,16 @@
+﻿<div title="{{:getTitle()}}">
+    <table class='width100 table table-striped table-hover'>
+        <tbody>
+            {{for getFiles()}}
+            <tr>
+                <td>
+                    <input type="checkbox" value="{{:getEncodedFileName()}}"/>
+                </td>
+                <td>
+                    <a href="/invoice/casefile/?id={{>#parent.parent.data.getCaseId()}}&fileName={{:getEncodedFileName()}}">{{:getFileName()}}</a>
+                </td>
+            </tr>
+            {{/for}}            
+        </tbody>
+    </table>        
+</div>

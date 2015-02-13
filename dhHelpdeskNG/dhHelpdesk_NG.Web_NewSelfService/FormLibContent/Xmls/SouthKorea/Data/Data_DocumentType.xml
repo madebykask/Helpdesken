@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+  <options>
+    <option value=""></option>
+    <option value="Visa">Visa</option>
+    <option value="Passport">Passport</option>
+  <option value="Residence permit">Residence permit</option>
+    <option value="Work permit">Work permit</option>
+    <option value="Tax registration">Tax registration</option>
+    <option value="Insurance and Social Security">Insurance and Social Security</option>
+    <option value="TE Medical Form">TE Medical Form</option>
+    <option value="TE Dental Form">TE Dental Form</option>
+    <option value="Acc Child Medical Form">Acc Child Medical Form</option>
+    <option value="Acc Child Dental Form">Acc Child Dental Form</option>
+    <option value="Acc Partner Medical Form">Acc Partner Medical Form</option>
+    <option value="Acc Partner Dental Form">Acc Partner Dental Form</option>
+    <option value="School information">School information</option>
+    <option value="Korean language lesson">Korean language lesson</option>
+    <option value="Culture Training">Culture Training</option>
+    
+  </options> 

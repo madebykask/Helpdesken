@@ -3,7 +3,7 @@
 @using ECT.FormLib.Models;
 
 <div class="tab-pane" id="Basic">
-    <div class="span12">
+    <div class="span6">
         <table class="table">       
             <tr>
                 <td class="tdstrong">@Model.Label("BasicTerminationType")</td>
@@ -32,13 +32,17 @@
 </div>
 
 <script>
-    
 
-    function selectIndexChangeTerminationType() {
-        document.getElementById('CompleteTerminationType').value = document.getElementById('BasicTerminationType').value;
-        
-    }
+    $('#BasicTerminationType').change(function () {
+        if (document.getElementById('CompleteTerminationType')) {
+            document.getElementById('CompleteTerminationType').value = document.getElementById('BasicTerminationType').value;
+        }
+        setValueForTerminationReason();
+    });
 
-    document.getElementById('BasicTerminationType').onchange = selectIndexChangeTerminationType;
+    $('#LastDayOfEmployment').change(function(){
+        $('#LockCDSAccountFrom').val($('#LastDayOfEmployment').val());
+    });
+
 
 </script>

@@ -16,25 +16,25 @@
     </element>
     <element value="7">BasicPay,BasicPayInWordsPolish,BasicPayInWords,MonthlyHourly,ContractType,ECMCompensationProgram,PSArea,PSGroup,CollectiveScaleSalary</element>
     <element value="8">
-        OneIKEABonusType,FunctionAllowance,FunctionAllowanceAmount,FunctionAllowanceGrossNett,ContractType,
-        #Allowance,
-        FunctionAllowance2,FunctionAllowanceAmount2,FunctionAllowanceGrossNett2,
-        #Allowance,
-        FunctionAllowance3,FunctionAllowanceAmount3,FunctionAllowanceGrossNett3,
-        #Recuring payments and deducations,
-        RecurringPaymentsAndDeductions,RecurringPaymentsAndDeductionsAmount,RecurringPaymentsAndDeductionsGrossNett,
-        #Recuring payments and deducations,
-        RecurringPaymentsAndDeductions2,RecurringPaymentsAndDeductionsAmount2,RecurringPaymentsAndDeductionsGrossNett2,
-        #Recuring payments and deducations,
-        RecurringPaymentsAndDeductions3,RecurringPaymentsAndDeductionsAmount3,RecurringPaymentsAndDeductionsGrossNett3,
-        #Additional payments,
-        AdditionalPayment,AdditionalPaymentAmount,AdditionalPaymentGrossNett,
-        #Additional payments,
-        AdditionalPayment2,AdditionalPaymentAmount2,AdditionalPaymentGrossNett2,
-        #Additional payments,
-        AdditionalPayment3,AdditionalPaymentAmount3,AdditionalPaymentGrossNett3,
-        #,
-        PensionerStatus
+      OneIKEABonusType,FunctionAllowance,FunctionAllowanceAmount,BasicPayInWordsPolish1,BasicPayInWordsEnglish1,FunctionAllowanceGrossNett,ContractType,
+      #Allowance,
+      FunctionAllowance2,FunctionAllowanceAmount2,BasicPayInWordsPolish2,BasicPayInWordsEnglish2,FunctionAllowanceGrossNett2,
+      #Allowance,
+      FunctionAllowance3,FunctionAllowanceAmount3,BasicPayInWordsPolish3,BasicPayInWordsEnglish3,FunctionAllowanceGrossNett3,
+      #Recuring payments and deducations,
+      RecurringPaymentsAndDeductions,RecurringPaymentsAndDeductionsAmount,RecurringPaymentsAndDeductionsGrossNett,
+      #Recuring payments and deducations,
+      RecurringPaymentsAndDeductions2,RecurringPaymentsAndDeductionsAmount2,RecurringPaymentsAndDeductionsGrossNett2,
+      #Recuring payments and deducations,
+      RecurringPaymentsAndDeductions3,RecurringPaymentsAndDeductionsAmount3,RecurringPaymentsAndDeductionsGrossNett3,
+      #Additional payments,
+      AdditionalPayment,AdditionalPaymentAmount,AdditionalPaymentGrossNett,
+      #Additional payments,
+      AdditionalPayment2,AdditionalPaymentAmount2,AdditionalPaymentGrossNett2,
+      #Additional payments,
+      AdditionalPayment3,AdditionalPaymentAmount3,AdditionalPaymentGrossNett3,
+      #,
+      PensionerStatus
     </element>
     <element value="9">ReasonForNameChange,NewLastName,NewFirstName</element>
     <element value="10">CommunicationLanguage,Nationality,Gender,PESEL,NIP</element>
@@ -81,4 +81,6 @@
     </element>
     <element value="23">TaxOfficeLocation</element>
     <element value="24">HealthInsuranceLocation,PensionerStatus,DisabilityScale</element>
+    <element value="25">Function</element>
+
 </dependencies>

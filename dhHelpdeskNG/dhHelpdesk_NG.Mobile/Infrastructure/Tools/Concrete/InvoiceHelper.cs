@@ -52,7 +52,8 @@
                                             a.Amount,
                                             a.Ppu,
                                             a.Position,
-                                            a.IsInvoiced)).ToArray())).ToArray());
+                                            a.IsInvoiced)).ToArray(),
+                                            o.Files.Select(f => new CaseInvoiceOrderFile(f.Id, f.OrderId, f.FileName, f.CreatedDate)).ToArray())).ToArray());
             if (caseOverview != null)
             {
                 foreach (var order in invoice.Orders)
@@ -119,6 +120,23 @@
             public DateTime Date { get; set; }
 
             public CaseInvoiceArticleData[] Articles { get; set; }
+
+            public CaseInvoiceOrderFileData[] Files { get; set; }
+        }
+
+        private class CaseInvoiceOrderFileData
+        {
+            public CaseInvoiceOrderFileData()
+            {
+            }
+
+            public int Id { get; set; }
+
+            public int OrderId { get; set; }
+
+            public string FileName { get; set; }
+
+            public DateTime CreatedDate { get; set; }
         }
 
         private class CaseInvoiceArticleData

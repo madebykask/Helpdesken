@@ -30,6 +30,9 @@
                             <th>
                                 @Translation.Get("Dokument", Enums.TranslationSource.TextTranslation)
                             </th>
+                            <th>
+                                @Translation.Get("Ärendemall", Enums.TranslationSource.TextTranslation)
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -46,6 +49,12 @@
                                     @if (item.Document != null)
                                     {
                                         <a href="@Url.Action("edit", "quicklink", new { area = "admin", id = item.Id })">@Translation.Get(item.Document.Name, Enums.TranslationSource.TextTranslation)</a>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.CaseSolution != null)
+                                    {
+                                        <a href="@Url.Action("edit", "quicklink", new { area = "admin", id = item.Id })">@Translation.Get(item.CaseSolution.Name, Enums.TranslationSource.TextTranslation)</a>
                                     }
                                 </td>
                             </tr>

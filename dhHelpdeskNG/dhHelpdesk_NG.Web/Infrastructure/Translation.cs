@@ -14,8 +14,11 @@
                     try
                     {
                         var translation = SessionFacade.TextTranslation.Where(x => x.TextToTranslate.ToLower() == translate.ToLower()).FirstOrDefault();
-                        if (translation != null)
-                            translate = translation.TextTranslations.Where(x => x.Language_Id == SessionFacade.CurrentLanguageId).FirstOrDefault().TextTranslated ?? translate;
+                        if(translation != null)
+                        {
+                            var text = translation.TextTranslations.Where(x => x.Language_Id == SessionFacade.CurrentLanguageId).FirstOrDefault().TextTranslated;
+                            translate = !string.IsNullOrEmpty(text) ? text : translate;
+                        }
                     }
                     catch
                     {

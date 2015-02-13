@@ -8,7 +8,7 @@
             <action status="30" internal-val="30" text="Submit Service Request to SSC">
                 <validateTabs>#ServiceRequestDetails,#Absences</validateTabs>
             </action>
-            <action status="99" internal-val="70" text="Cancel service request"></action>
+            
         </actions>
     </status>
     <!--LM-->

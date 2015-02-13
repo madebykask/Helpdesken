@@ -5,19 +5,24 @@
     <thead>
         <tr>
             <th>
-                @Html.LabelFor(m => m.HistoryRecords.First().DateAndTime)
+                @Translation.Get("Datum och tid")
+               @* @Html.LabelFor(m => m.HistoryRecords.First().DateAndTime)*@
             </th>
             <th>
-                @Html.LabelFor(m => m.HistoryRecords.First().RegisteredBy)
+                @Translation.Get("Registrerad av")
+               @* @Html.LabelFor(m => m.HistoryRecords.First().RegisteredBy)*@
             </th>
             <th>
-                @Html.LabelFor(m => m.HistoryRecords.First().Log)
+                @Translation.Get("Logg")
+                @*@Html.LabelFor(m => m.HistoryRecords.First().Log)*@
             </th>
             <th>
-                @Html.LabelFor(m => m.HistoryRecords.First().FieldsDifferences)
+                @Translation.Get("Historik")
+                @*@Html.LabelFor(m => m.HistoryRecords.First().FieldsDifferences)*@
             </th>
             <th>
-                @Html.LabelFor(m => m.HistoryRecords.First().Emails)
+                @Translation.Get("E-post")
+                @*@Html.LabelFor(m => m.HistoryRecords.First().Emails)*@
             </th>
         </tr>
     </thead>

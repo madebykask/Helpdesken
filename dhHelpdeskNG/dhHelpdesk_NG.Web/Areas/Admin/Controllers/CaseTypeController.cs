@@ -48,6 +48,7 @@
             }
 
             var caseType = new CaseType { Customer_Id = customer.Id, Parent_CaseType_Id = parentId, IsActive = 1};
+            caseType.Selectable = 1;
             var model = this.CreateInputViewModel(caseType, customer);
 
             return this.View(model);
@@ -74,7 +75,7 @@
 
             if (caseType == null)
                 return new HttpNotFoundResult("No case type found...");
-
+            
             var customer = this._customerService.GetCustomer(caseType.Customer_Id);
             var model = this.CreateInputViewModel(caseType, customer);
 

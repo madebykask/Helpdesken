@@ -6,7 +6,7 @@
     {
         public struct ScriptNames
         {
-            public const string Container = "~/bundles/container";
+            public const string DynamicCase = "~/bundles/dynamic-case";
         }
 
         public static void RegisterBundles(BundleCollection bundles)
@@ -31,8 +31,9 @@
                             "~/Content/themes/base/minified/jquery-ui.min.css",
                             "~/Content/js/jquery.plupload.queue/css/jquery.plupload.queue.css"));
 
-            bundles.Add(new ScriptBundle(ScriptNames.Container).Include(
-                  "~/Content/js/Container/init.js"));
+            bundles.Add(new ScriptBundle(ScriptNames.DynamicCase).Include(
+                            "~/Content/js/DynamicCase/iframeResizer.js",
+                            "~/Content/js/DynamicCase/container.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/common").Include(
                             "~/Content/js/jquery-1.8.3.min.js",
@@ -122,8 +123,10 @@
             bundles.Add(new ScriptBundle("~/bundles/invoices").Include(
                             "~/Content/js/Invoice/invoice.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/cases/edit").Include(
-                            "~/Content/js/Cases/edit.logic.js",
+            bundles.Add(new ScriptBundle("~/bundles/cases/index").Include("~/Content/js/Cases/index.logic.js"));
+            bundles.Add(
+                new ScriptBundle("~/bundles/cases/edit").Include(
+                    "~/Content/js/Cases/edit.logic.js",
                             "~/Content/js/Cases/case.templates.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/casetemplates/edit").Include(
@@ -169,9 +172,6 @@
                             "~/Content/js/bootstrap-switch.min.js",
                             "~/Content/js/Notifiers/settings.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/reports").Include(
-                            "~/Content/js/Reports/index.js"));
-
             bundles.Add(new ScriptBundle("~/bundles/orders/index").Include(
                             "~/Content/js/Orders/index.js"));
 
@@ -184,6 +184,22 @@
             bundles.Add(new ScriptBundle("~/bundles/orderaccounts/order").Include(
                 "~/Content/js/Account/order.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/report").Include(
+                            "~/Areas/Reports/Content/js/reports.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/angularjs").Include(
+                            "~/Content/js/lib/angular-1.3.11/angular.min.js",
+                            "~/Content/js/lib/angular-1.3.11/angular-animate.js",
+                            "~/Content/js/lib/angular-1.3.11/angular-aria.min.js",
+                            "~/Content/js/lib/angular-1.3.11/angular-cookies.min.js",
+                            "~/Content/js/lib/angular-1.3.11/angular-loader.min.js",
+                            "~/Content/js/lib/angular-1.3.11/angular-messages.min.js",
+                            "~/Content/js/lib/angular-1.3.11/angular-mocks.js",
+                            "~/Content/js/lib/angular-1.3.11/angular-resource.min.js",
+                            "~/Content/js/lib/angular-1.3.11/angular-route.min.js",
+                            "~/Content/js/lib/angular-1.3.11/angular-sanitize.min.js",
+                            "~/Content/js/lib/angular-1.3.11/angular-scenario.js",
+                            "~/Content/js/lib/angular-1.3.11/angular-touch.min.js"));
         }
     }
 }

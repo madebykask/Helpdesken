@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Services.BusinessLogic.Specifications
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     using DH.Helpdesk.Dal.Infrastructure.Context;
@@ -28,7 +29,7 @@
             return query;
         }
 
-        public static IQueryable<T> GetByCustomer<T>(this IQueryable<T> query, int? customerId)
+        public static IQueryable<T> GetByNullableCustomer<T>(this IQueryable<T> query, int? customerId)
             where T : class, INulableCustomerEntity
         {
             query = query.Where(x => customerId == null ? x.Customer_Id == null : x.Customer_Id == customerId);
@@ -36,9 +37,22 @@
             return query;
         }
 
-        public static IQueryable<T> GetById<T>(this IQueryable<T> query, int id) where T : Entity
+        public static IQueryable<T> GetById<T>(this IQueryable<T> query, int? id) where T : Entity
         {
-            query = query.Where(x => x.Id == id);
+            if (id.HasValue)
+            {
+                query = query.Where(x => x.Id == id);
+            }
+
+            return query;
+        }
+
+        public static IQueryable<T> GetByIds<T>(this IQueryable<T> query, List<int> ids) where T : Entity
+        {
+            if (ids != null && ids.Any())
+            {
+                query = query.Where(x => ids.Contains(x.Id));                
+            }
 
             return query;
         }
@@ -168,5 +182,29 @@
 
             return query;
         }  
+
+        public static IQueryable<T> GetActive<T>(this IQueryable<T> query)
+            where T : class, IActiveEntity
+        {
+            query = query.Where(x => x.IsActive != 0);
+
+            return query;
+        }
+
+        public static IQueryable<T> GetActiveByCustomer<T>(this IQueryable<T> query, int customerId)
+                    where T : class, ICustomerEntity, IActiveEntity
+        {
+            query = query.Where(x => x.Customer_Id == customerId).GetActive();
+
+            return query;
+        }
+
+        public static IQueryable<T> GetShowable<T>(this IQueryable<T> query)
+                    where T : class, IStartPageEntity
+        {
+            query = query.Where(x => x.ShowOnStartPage != 0);
+
+            return query;
+        } 
     }
 }

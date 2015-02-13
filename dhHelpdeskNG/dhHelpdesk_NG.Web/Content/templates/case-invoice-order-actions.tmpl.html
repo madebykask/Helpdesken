@@ -1,0 +1,9 @@
+﻿{{if get_creditOrderEnabled()}}
+
+<button id="actions-credit-order">{{:get_creditOrderTitle()}}</button>
+
+{{else}}
+
+<button id="actions-credit-order" style="display: none;">{{:get_creditOrderTitle()}}</button>
+
+{{/if}}

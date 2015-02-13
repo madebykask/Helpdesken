@@ -93,19 +93,19 @@
         </table>
     </div>
     
-    <div class="span6">        
+@*    <div class="span6">        
         <table class="table">
             <tbody>
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Permanent Address")</h4>
                     </td>
-                </tr>                
+                </tr>                *@
               @*  <tr>
                     <td class="tdstrong">@Model.Label("AddressType")</td>
                     <td>@Model.Element("AddressType")</td>
                 </tr>*@
-                <tr>
+@*                <tr>
                     <td class="tdstrong">@Model.Label("PermanentAddressLine1")</td>
                     <td>@Model.Element("PermanentAddressLine1")</td>
                 </tr>
@@ -124,7 +124,7 @@
                 <tr>
                     <td class="tdstrong">@Model.Label("PermanentCity")</td>
                     <td>@Model.Element("PermanentCity")</td>
-                </tr>                                
+                </tr>                                *@
                  @*<tr>
                     <td class="tdstrong">@Model.Label("PermanentCountry")</td>
                     <td>@Model.Element("PermanentCountry")</td>
@@ -207,11 +207,11 @@
                     <td class="tdstrong">@Model.Label("EmergencyContactRelationship")</td>
                     <td>@Model.Element("EmergencyContactRelationship")</td>
                 </tr>                *@
-            </tbody>
+@*            </tbody>
         </table>
-    </div>
+    </div>*@
     
-    <input type="hidden" id="CustomerId" value="@Model.CustomerId" />
+    <input type="hidden" id="CustomerId" value="@Model.Form.CustomerId" />
     <input type="hidden" id="formGuid" value="@Model.FormGuid" />
     
 </div>

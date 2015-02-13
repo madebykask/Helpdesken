@@ -69,6 +69,15 @@ a, a:hover, a:focus {
   margin-left: 20px;
 }
 
+.footerdhhd {
+    margin:20px 0 20px 30px;
+    color:#666;
+    font-style:italic;
+    font-size:12px;
+}
+.footerdhhd img {
+    margin-top:-4px;
+}
 /************************FORM INPUT SELECT WIDTH*******************************************/
 select
 {
@@ -181,8 +190,10 @@ input[type="text"] {
 		text-shadow: none;
 		padding-top: 10px;
 		padding-bottom: 10px;
-		width:116px !important;
+		width:116px;
 		height:25px;
+        max-width:20%;
+        
 	}
 
 		.navbar .navbar-brand:hover, .navbar .navbar-brand:focus
@@ -612,6 +623,13 @@ input[type="text"] {
 		display: block;
 		font-size:11px;
 	}
+
+/***TOP MENU SMALLER*/
+@media (max-width: 1135px) {
+    .mnudisplay {
+        display: none;
+    }
+}
 /******************************DROP DOWN NAV************************************************/
 
 .dropdown-menu {
@@ -1152,7 +1170,7 @@ table th.thpointer {
 
 .tableform {
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .tableform th,
@@ -1428,7 +1446,8 @@ table th.thpointer {
 }
 .box-post div.label.purple
 {
-	background:#53378a;
+	/*background:#53378a;*/
+    background:#7858b8;
     color:#fff;
 }
 .box-post div.captionrow
@@ -1752,7 +1771,7 @@ td.td-bottom-multiselect .btn-group {
     }
 
     .graph.finished {
-        background: #d96326;
+        background: #7858b8;
     }
 
     .graph.inrest {
@@ -1789,7 +1808,8 @@ td.td-bottom-multiselect .btn-group {
     }
 
     .start-tile-img.purple {
-        background: #53378a;
+        /*background: #53378a;*/
+        background:#7858b8;
     }
 
 .column {
@@ -2443,6 +2463,10 @@ body.login {
 	color: #fff;
 	font-size:11px;
 }
+.signin-bottom p 
+{
+    margin-bottom: 0;
+}
 
 .signin-bottom a, .signin-bottom a:hover
 {
@@ -2979,3 +3003,43 @@ div.DTFC_LeftFootWrapper table {
     margin-left: -50%;
 }
 /** FAQ end */
+
+
+/**HIDE SHOW EDITING CASE****/
+ /*.newmode .hidebtn, .newmode .showbtn {
+    display: none;
+}
+
+.editmode .showbtn {
+    display: none;
+}
+.editmode .hideshow .showbtn
+ {
+    display: inline-block;
+}
+.editmode .hideshow .hidebtn,
+.editmode .hideshow .displaytr {
+    display: none;
+}*/
+
+/**TEMPORARY SOLUTION****/
+ .newmode .hidebtn, .newmode .showbtn {
+    display: none;
+}
+
+.editmode .showbtn {
+    display: none;
+}
+.editmode .hideshow .showbtn
+ {
+    display: none;
+}
+.editmode .hideshow .hidebtn {
+    display: none;
+}
+.editmode .hideshow .displaytr {
+    /*display: none;*/
+}
+/*****END TEMPORARY SOLUTION******/
+
+/**END HIDE SHOW EDITING CASE*/

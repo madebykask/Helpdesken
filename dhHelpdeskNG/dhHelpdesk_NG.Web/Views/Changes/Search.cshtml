@@ -82,7 +82,8 @@
         </tr>
         <tr>
             <td class="span3">
-                @Html.LabelFor(m => m.RecordsOnPage)
+                @Translation.Get("Antal per sida")
+                @*@Html.LabelFor(m => m.RecordsOnPage)*@
             </td>
             <td>
                 @Html.TextBoxFor(m => m.RecordsOnPage)

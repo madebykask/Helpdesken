@@ -15,16 +15,7 @@
                                </th>
                                 <th>
                                     @Translation.Get("Kolumn", Enums.TranslationSource.TextTranslation)
-                                </th>
-                                @*<th>
-                                    @Translation.Get("Rad", Enums.TranslationSource.TextTranslation)
-                                </th>*@
-                                 @*<th>
-                                    @Translation.Get("Min längd", Enums.TranslationSource.TextTranslation)
-                                </th>
-                               <th>
-                                    @Translation.Get("Ordning", Enums.TranslationSource.TextTranslation)
-                                </th>*@
+                                </th>                                
                                 <th>&nbsp;
                                 </th>
                             </tr>
@@ -39,8 +30,7 @@
                                         <input type="hidden" style="width: 80px;" name="colOrderValue" id="colOrderValue" value="99" />
                                         <input type="hidden" style="width: 80px;" name="minWidthValue" id="minWidthValue" value="100" />
 
-                                        <select  id="labellist">
-                                            @*<option></option>*@
+                                        <select  id="labellist">                                            
                                              @foreach (var cfs in Model.CaseFieldSettingLanguages)
                                                 {
                                                     if (cfs.Name != "Filename" && cfs.Name != "text_internal" && cfs.Name != "tblLog.Text_External" && cfs.Name != "tblLog.Text_Internal" && cfs.Name != "tblLog.Charge" && cfs.Name != "tblLog.Filename")
@@ -49,22 +39,7 @@
                                                     }
                                                 }
                                         </select>
-                                    </td>          
-                                   @* <td>
-                                        <select  id="linelist">                                            
-                                            @foreach (var line in Model.LineList)
-                                            {
-                                                <option id="line" value="@line.Value">@line.Text</option>
-                                            }
-                                        </select>
-                                    </td> *@
-                   
-                                   @* <td id="_minWidth">
-                                        
-                                    </td>*@
-                                    @*<td id="_colOrder">
-                                        
-                                    </td>*@
+                                    </td>                                           
                                     <td>
                                         <input class="btn btn-success" type="button" value="@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)" id="AddRow" 
                                                onclick="addCaseSettingRow()" onmouseover="javascript:this.style.cursor='move'; javascript:this.style.cursor='pointer';"/>
@@ -80,43 +55,28 @@
                                     <tr id="@uc.Id" class="SortableRow" style="cursor:move">                                        
                                         @if (Model.UserColumns != null)
                                         {
+                                            var findCaption = false;
                                             <td style="cursor:move">                                        
                                    
                                             </td>
                                             <td style="cursor:move">
                                                 @Html.HiddenFor(model => uc.ColOrder)
-                                                @Html.HiddenFor(model => uc.MinWidth)                                                
-
-                                                @*<select id="_dellabellist" disabled="disabled">    *@                                                
+                                                @Html.HiddenFor(model => uc.MinWidth)                                                                                                
+                                                
                                                 @foreach (var cfs in Model.CaseFieldSettingLanguages)
                                                 {
                                                     if (cfs.Name.ToUpper() == uc.Name.ToUpper())
-                                                    {  
-                                                        //Html.Label((string.IsNullOrEmpty(cfs.Label) ? Translation.Get(cfs.Name, Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id) : cfs.Label))  
-                                                        
+                                                    {                                                                                                                  
                                                         <label style="cursor:move" for="subCategoryName">@(string.IsNullOrEmpty(cfs.Label) ? Translation.Get(cfs.Name, Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id) : cfs.Label)</label>
-                                                            //@Html.DisplayText("MMM") //cfs.Label                                                                                                               
-                                                    }
+                                                        findCaption = true;                                                     
+                                                    }                                                    
                                                 }
-                                                @*    <option value="@cfs.Id" @(cfs.Name.ToUpper() == uc.Name.ToUpper() ? "selected=selected" : "")>@(string.IsNullOrEmpty(cfs.Label)? Translation.Get(cfs.Name, Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id): cfs.Label)</option>
-                                                *@                                                    
-                                                @*</select>*@
+                                                @if (!findCaption)
+                                                {
+                                                    <label style="cursor:move" for="subCategoryName"> @Translation.Get(uc.Name, Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id) </label>
+                                                }                                                
                                             </td> 
-                                        }
-                                        @*<td>
-                                            <select  id="dellinelist" name="rows">                                                
-                                                @foreach (var line in Model.LineList)
-                                                {                                            
-                                                    <option id="lines" value="@line.Value" @(line.Value == uc.Line.ToString() ? "selected=selected" : "")>@line.Text</option>
-                                                }
-                                            </select>
-                                        </td>
-                                        <td>                                            
-                                                                                       
-                                        </td>
-                                        <td>
-                                            
-                                        </td>*@
+                                        }                                        
                                         <td>
                                             @Html.HiddenFor(model => uc.Id)
                                             @Html.HiddenFor(model => uc.Name)
@@ -145,20 +105,22 @@
         $("#customerCaseSum tbody").sortable(
             {                
                 items: "> tr:not(:first)",                
-                update: function (event, ui) {
-                    //var elements = document.getElementsByClassName('SortableRow');
+                update: function (event, ui) {                    
                     var elements = document.querySelectorAll('.SortableRow');
-                    console.log('Count:' + elements.length.toString());
+                    //console.log('Count:' + elements.length.toString());
                     var newOrder = "";
                     for (var i = 0; i < elements.length; ++i) {
                         var item = elements[i];              
                         newOrder += item.id.toString() + "|" ;                        
-                    }
-                    console.log(newOrder);
-                    $.post('/cases/SortCaseSettingColumn/' + '?customerId=' + '@Model.CustomerId.ToString()' + '&userId=' + '@Model.UserId.ToString()' +
-                                                             '&sortIds=' + newOrder, function (result) {
-                        $("#colsetting_result").html(result);
-                    });
+                    }                   
+                    
+                    $.post('@this.Url.Action("SortCaseSettingColumn")', 
+                        { customerId: '@Model.CustomerId', 
+                            userId: '@Model.UserId',
+                            sortIds: newOrder,                            
+                        }, function (result) {
+                            $("#colsetting_result").html(result);
+                        });                 
                 }                
             });
 
@@ -169,7 +131,7 @@
     function addCaseSettingRow() {                       
         $.post('/cases/AddCaseSettingColumn/' + '?customerId=' + '@Model.CustomerId.ToString()' + '&userId=' + '@Model.UserId.ToString()' + 
             '&labellist=' + $("#labellist").val() + '&linelist=1' + //+ $("#linelist").val() +
-            '&minWidthValue=' + $("#minWidthValue").val() + '&colOrderValue=' + $("#colOrderValue").val() + '&userGroup= 4 ' , function (result) {
+            '&minWidthValue=' + $("#minWidthValue").val() + '&colOrderValue=' + $("#colOrderValue").val() + '&userGroup=4 ' , function (result) {
                 $("#colsetting_result").html(result);
            });
     }

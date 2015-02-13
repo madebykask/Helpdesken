@@ -37,7 +37,7 @@
 
         if (model.GetDocumentAnswer(allowancesType).ToLower() == "Night Shift".ToLower())
         {
-            return "In addition you will receive a night allowance of &euro; " + model.GetDocumentAnswer(allowancesAmountUnits,true) + " per hour for hours worked between 24.00 and 07.00 (subject to working a minimum of three hours during this period)";
+            return "In addition you will receive a night allowance of &euro; " + model.GetDocumentAnswer(allowancesAmountUnits, true) + " per hour for hours worked between 24.00 and 07.00 (subject to working a minimum of three hours during this period)";
         }
 
         //if (model.GetDocumentAnswer(allowancesType).ToLower() == "Power Stacker".ToLower())
@@ -53,29 +53,14 @@
 <html>
 <body>
     <div>
-        <table style="font-family: Verdana; font-size: 11px; width: 100%;" border="0">
+        @*<table style="@IrelandPdfPage.StyleValue() width: 100%;" border="0">
             <tr style="text-align: right;">
                 <td>@string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:d MMMMMM yyyy}", DateTime.Now)</td>
             </tr>
-        </table>
-        <p style="text-align: left; font-family: Verdana; font-size: 11px;">
-            @Model.GetDocumentAnswer("FirstName", true) @Model.GetDocumentAnswer("LastName", true)<br />
-            @Model.GetDocumentAnswer("PermanentAddressLine1", true)
-            @if (!string.IsNullOrEmpty(Model.GetDocumentAnswer("PermanentAddressLine2")))
-            {
-                <br />
-                @Model.GetDocumentAnswer("PermanentAddressLine2")
-            }
-            <br />
-            @Model.GetDocumentAnswer("PermanentCity", true)
-            <br />
-            @Model.GetDocumentAnswer("PermanentPostalCode", true)
-            <br />
-            <br />
-            @*@Model.GetDocumentAnswer("PermanentPostalCode")
-        <br />*@
-
-            Dear @Model.GetDocumentAnswer("FirstName", true),<br />
+        </table>*@
+        <p style="@IrelandPdfPage.StyleValue()">
+           @* @Html.Partial("_HeaderAddress", Model)*@
+            Dear @Model.GetDocumentAnswer("FirstName", true),<br /><br />
 
             I am very pleased to be able to confirm to you our offer of the position of @Model.GetDocumentAnswer("JobTitle", true) in our @IrelandPdfPage.GetServiceAreaText("ServiceArea", Model) at IKEA @CustomPdfPage.IsEmpty(Model.Department.Unit, "Unit") reporting to the 
         
@@ -90,13 +75,11 @@
             <br />
             <br />
             The principal Terms and Conditions of your employment will be as follows:
-
             <br />
             <br />
-
             Your first day of employment with IKEA Ireland Ltd. will be on the @CustomPdfPage.GetDateInWords("ContractStartDate", Model). Please report to your place of work: IKEA Dublin, St. Margaret’s Road, Ballymun Dublin 11, at @CustomPdfPage.GetAmPm("InductionStartTime", Model)  for @CustomPdfPage.GetLengthOfInductionInDaysText("LengthOfInductionInDays", Model) introduction finishing at @CustomPdfPage.GetAmPm("InductionEndTime", Model).
-      
-
+            <br />
+            <br />
         </p>
         @{
             var list = new List<PdfListItem>();
@@ -148,42 +131,28 @@
                 text5 += "<br />";
             }
 
-            string allowancesText2 = GetAllowancesText("AllowancesType2", "AllowancesAmountUnits2", Model);
-            if (!string.IsNullOrEmpty(allowancesText2))
+            for (int i = 2; i <= int.Parse(Model.GetAnswer(FormLibConstants.FormField.Allowances)); i++)
             {
 
-                if (!text5.EndsWith("<br />"))
+                string allowancesText2 = GetAllowancesText("AllowancesType" + i.ToString(), "AllowancesAmountUnits" + i.ToString(), Model);
+                if (!string.IsNullOrEmpty(allowancesText2))
                 {
+
+                    if (!text5.EndsWith("<br />"))
+                    {
+                        text5 += "<br />";
+                    }
+
+                    //set mandatory for contract
+                    Model.SetDocumentMandatoryField("AllowancesAmountUnits" + i.ToString());
+
+                    //2
+                    text5 += "<br />";
+                    text5 += allowancesText2;
                     text5 += "<br />";
                 }
-
-                //set mandatory for contract
-                Model.SetDocumentMandatoryField("AllowancesAmountUnits2");
-
-                //2
-                text5 += "<br />";
-                text5 += allowancesText2;
-                text5 += "<br />";
             }
-
-            string allowancesText3 = GetAllowancesText("AllowancesType3", "AllowancesAmountUnits3", Model);
-            if (!string.IsNullOrEmpty(allowancesText3))
-            {
-
-                if (!text5.EndsWith("<br />"))
-                {
-                    text5 += "<br />";
-                }
-
-                //set mandatory for contract
-                Model.SetDocumentMandatoryField("AllowancesAmountUnits3");
-
-                //3
-                text5 += "<br />";
-                text5 += allowancesText3;
-                text5 += "<br />";
-            }
-
+          
             list.Add(new PdfListItem { Text = text5 });
 
             string text6 = "You will be entitled to Private Medical Health (LAYA) for yourself paid for by IKEA. You will also receive Dental Insurance cover paid for by IKEA for yourself.";
@@ -224,7 +193,7 @@
 
 
             //12
-            string text12 = "In order to comply with the Employment Permits Acts 2003 and 2006, this offer is made on the condition that you are legally entitled to work in Ireland and that you provide proof of this on or prior to your first day at work. Please bring one of the original documents listed below:";
+            string text12 = "In order to comply with the Employment Permits Acts 2003 and 2006, this offer is made on the condition that you are legally entitled to work in Ireland and that you provide proof of this on or prior to your first day at work. Please bring one of the original documents listed below:<br/><br/>";
 
             list.Add(new PdfListItem { Text = text12 });
 
@@ -274,41 +243,57 @@
 
         @if (list.Count > 1)
         {
-            for (int i = 0; i < list.Count; i++)
-            { 
-            <br />                                        
-            <p style="text-align: left; font-family: Verdana; font-size: 11px; padding-right: 50px;">@(i + 1). @Html.Raw(list[i].Text)</p>
-                if (list[i].SubList != null && list[i].SubList.Count > 0)
-                {
-                    foreach (var item in list[i].SubList)
-                    {
-@*<br />*@
-            <p style="text-align: left; font-family: Verdana; font-size: 11px; padding-left: 20px; padding-right: 50px;">&bull; @Html.Raw(item.Text) </p>
-                    }
-                }
+            <table border="0">
+                @for (int i = 0; i < list.Count; i++)
+                { 
+                
+                     <tr>
+                        <td width="5%" valign="top" CELLPADDING=4 style="@IrelandPdfPage.StyleValue()">@(i + 1). </td>                 
+                        <td width="95%" valign="top" CELLPADDING=4>
+                            <p style="@IrelandPdfPage.StyleValue()">@Html.Raw(list[i].Text)</p>   
 
-                if (list[i].SubList2 != null && list[i].SubList2.Count > 0)
-                {
-                    foreach (var item in list[i].SubList2)
+                    @if (list[i].SubList != null && list[i].SubList.Count > 0)
                     {
-              
-            <p style="text-align: left; font-family: Verdana; font-size: 11px; padding-left: 20px; padding-right: 50px;">@Html.Raw(item.Text) </p>
-                     
+                        
+                        <table border="0">
+                        @foreach (var item in list[i].SubList)
+                        {   
+                            <tr>
+                                <td width="3%" valign="top" CELLPADDING=0> &bull;</td> 
+                                <td width="97%" valign="top" CELLPADDING=0><p style="@IrelandPdfPage.StyleValue()">@Html.Raw(item.Text)</p></td> 
+                            </tr>                  
+                        }
+                        </table>
                     }
+
+                            </td>
+                     </tr> 
+                    if (list[i].SubList2 != null && list[i].SubList2.Count > 0)
+                    {
+                        foreach (var item in list[i].SubList2)
+                        {              
+                            <tr>
+                                <td width="95%" valign="top" CELLPADDING=4 colspan="2">
+                                  <p style="@IrelandPdfPage.StyleValue()">@Html.Raw(item.Text)</p> 
+                                </td>
+                            </tr>                     
+                        }
+                    }
+
                 }
-            }
+            </table>
         }
         else
         {
             for (int i = 0; i == list.Count - 1; i++)
             {
-            <p style="font-family: Verdana; font-size: 11px;">@Html.Raw(list[i])</p>
+            <p style="@IrelandPdfPage.StyleValue()">@Html.Raw(list[i])</p>
             }
         }
 
-        <p style="text-align: left; font-family: Verdana; font-size: 11px;">
-            <text> <br /> This letter, together with the Terms and Conditions Appendix and Section 1 of the Co-worker handbook forms the basis of your contract.
-          </text>
+        <br />
+        <p style="@IrelandPdfPage.StyleValue()">
+           This letter, together with the Terms and Conditions Appendix and Section 1 of the Co-worker handbook forms the basis of your contract.          
         </p>
         <endpage />
     </div>

@@ -1,4 +1,6 @@
 ﻿
+@using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings
+@using CasesFieldsTypes = DH.Helpdesk.Common.Enums.Cases
 @using DH.Helpdesk.Common.Extensions.DateTime
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @model DH.Helpdesk.Web.Models.Case.CaseSearchResultModel
@@ -16,24 +18,8 @@
                     foreach (var c in Model.caseSettings)
                     {
                         var colName = "";
-                        //if (c.Name == "_temporary_.LeadTime")
-                        //{
-                        //    colName = Translation.Get("Tid kvar", Enums.TranslationSource.TextTranslation, c.Customer_Id);
-                        //}
-                        //else
-                        //if (c.Name == "tblProblem.ResponsibleUser_Id")
-                        //{
-                        //    colName = Translation.Get("Problem", Enums.TranslationSource.TextTranslation, c.Customer_Id);
-                        //}
-                        //else
-                        //{
-                            colName = Translation.Get(c.Name, Enums.TranslationSource.CaseTranslation, c.Customer_Id.Value);
-                        //}
-                        
-                        if (colName == null)
-                        {
-                            colName = c.Name;
-                        }
+                        colName = Translation.Get(c.Name, Enums.TranslationSource.CaseTranslation, c.Customer_Id??0) ?? c.Name;
+
                         <th onclick="sortCases('@c.Name')" class="thpointer" >
                             @colName <i class="@c.Name.SetCaseSortIcon()"></i>                                
                         </th>                        
@@ -55,12 +41,12 @@
                     @foreach (var c in r.Columns)
                     {       
                     <td>
-                        @if (c.FieldType == 1)
+                        @if (c.FieldType == CasesFieldsTypes.FieldTypes.Date)
                         {
                             <!-- date -->
                             <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">@Html.DisplayFor(m => c.DateTimeValue, "Date")</a>
                         }
-                        else if (c.FieldType == 2)                                                        
+                        else if (c.FieldType == CasesFieldsTypes.FieldTypes.Time)                                                        
                         {
                             <!-- dateTime -->
                             <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">@(c.DateTimeValue.HasValue ? c.DateTimeValue.Value.ToLocalTime().ToFormattedDateTime() : string.Empty)</a>
@@ -74,7 +60,7 @@
                             }
                             else    
                             {
-                                <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">@c.StringValue</a>
+                                <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">@c.StringValue.ForHtmlView()</a>
                             }
                         }
                     </td>

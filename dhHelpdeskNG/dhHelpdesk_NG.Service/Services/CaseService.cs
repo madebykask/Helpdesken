@@ -8,7 +8,6 @@
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.BusinessData.Models.Invoice;
-    using DH.Helpdesk.BusinessData.Models.Reports.Output;
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
     using DH.Helpdesk.Dal.Infrastructure;
@@ -43,6 +42,7 @@
         EmailLog GetEMailLogByGUID(Guid GUID);             
         IList<CaseHistory> GetCaseHistoryByCaseId(int caseId);
         List<DynamicCase> GetAllDynamicCases();
+        DynamicCase GetDynamicCase(int id);
 
         int SaveCase(
             Case cases, 
@@ -57,6 +57,7 @@
         void SendCaseEmail(int caseId, CaseMailSetting cms, int caseHistoryId, Case oldCase = null, CaseLog log = null, List<CaseFileDto> logFiles = null);
         void UpdateFollowUpDate(int caseId, DateTime? time);
         void MarkAsUnread(int caseId);
+        void MarkAsRead(int caseId);
         void SendSelfServiceCaseLogEmail(int caseId, CaseMailSetting cms, int caseHistoryId, CaseLog log, List<CaseFileDto> logFiles = null);
         void Activate(int caseId, int userId, string adUser, out IDictionary<string, string> errors);
         IList<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, UserOverview user);
@@ -73,22 +74,6 @@
         /// The <see cref="CaseOverview"/>.
         /// </returns>
         CaseOverview GetCaseOverview(int caseId);
-
-        IEnumerable<RegistratedCasesCaseTypeItem> GetRegistratedCasesCaseTypeItems(
-                                                int customerId,
-                                                int[] workingGroups,
-                                                int[] caseTypes,
-                                                int? productArea,
-                                                DateTime perionFrom,
-                                                DateTime perionUntil);
-
-        IEnumerable<RegistratedCasesDayItem> GetRegistratedCasesDayItems(
-                                            int customerId,
-                                            int? departmentId,
-                                            int[] caseTypesIds,
-                                            int? workingGroupId,
-                                            int? administratorId,
-                                            DateTime period);
 
         MyCase[] GetMyCases(int userId, int? count = null);
 
@@ -205,6 +190,11 @@
             return _caseRepository.GetAllDynamicCases();
         }
 
+        public DynamicCase GetDynamicCase(int id)
+        {
+            return _caseRepository.GetDynamicCase(id);
+        }
+
         public Guid Delete(int id)
         {
             Guid ret = Guid.Empty; 
@@ -301,40 +291,6 @@
             return this._caseRepository.GetCaseOverview(caseId);
         }
 
-        public IEnumerable<RegistratedCasesCaseTypeItem> GetRegistratedCasesCaseTypeItems(
-            int customerId,
-            int[] workingGroups,
-            int[] caseTypes,
-            int? productArea,
-            DateTime perionFrom,
-            DateTime perionUntil)
-        {
-            return this._caseRepository.GetRegistratedCasesCaseTypeItems(
-                                    customerId,
-                                    workingGroups,
-                                    caseTypes,
-                                    productArea,
-                                    perionFrom,
-                                    perionUntil);
-        }
-
-        public IEnumerable<RegistratedCasesDayItem> GetRegistratedCasesDayItems(
-            int customerId,
-            int? departmentId,
-            int[] caseTypesIds,
-            int? workingGroupId,
-            int? administratorId,
-            DateTime period)
-        {
-            return this._caseRepository.GetRegistratedCasesDayItems(
-                                    customerId,
-                                    departmentId,
-                                    caseTypesIds,
-                                    workingGroupId,
-                                    administratorId,
-                                    period);
-        }
-
         public MyCase[] GetMyCases(int userId, int? count = null)
         {
             return this._caseRepository.GetMyCases(userId, count);
@@ -374,6 +330,11 @@
         public void MarkAsUnread(int caseId)
         {
             this._caseRepository.MarkCaseAsUnread(caseId);
+        }
+
+        public void MarkAsRead(int caseId)
+        {
+            this._caseRepository.MarkCaseAsRead(caseId);
         }
 
         public IList<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, UserOverview user)
@@ -522,7 +483,7 @@
             errors = new Dictionary<string, string>();
 
             // unread/status flag update if not case is closed and not changed by adminsitrator 
-            c.Unread = 0;
+            //c.Unread = 0;
             if (c.Performer_User_Id != userId && !c.FinishingDate.HasValue)
                 c.Unread = 1;
 
@@ -535,9 +496,14 @@
             else
             {
                 c.ChangeTime = DateTime.UtcNow;
-                if (userId == 0) c.ChangeByUser_Id = null;
+                if (userId == 0)
+                {
+                    c.ChangeByUser_Id = null;
+                }
                 else
-                 c.ChangeByUser_Id = userId;
+                {
+                    c.ChangeByUser_Id = userId;
+                }
 
                 this._caseRepository.Update(c);
             }

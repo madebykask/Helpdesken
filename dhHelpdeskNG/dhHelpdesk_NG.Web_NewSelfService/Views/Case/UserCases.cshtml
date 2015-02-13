@@ -69,7 +69,7 @@
                                                 var dynamicUrl = "";
                                                 if (Model.DynamicCases != null && Model.DynamicCases.Any())
                                                 {
-                                                    Model.DynamicCases.Where(w => w.CaseId == r.Id).Select(d => "~/" + d.FormPath).FirstOrDefault();
+                                                   dynamicUrl = Model.DynamicCases.Where(w => w.CaseId == r.Id).Select(d => "~/" + d.FormPath).FirstOrDefault();
                                                 }
 
                                                 <tr>

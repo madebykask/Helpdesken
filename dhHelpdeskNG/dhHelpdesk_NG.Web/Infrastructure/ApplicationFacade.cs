@@ -5,6 +5,9 @@ using System.Web;
 
 namespace DH.Helpdesk.Web.Infrastructure
 {
+    using System.Diagnostics;
+    using System.Reflection;
+
     public class UserCaseInfo
     {
         public int UserId { get; set; }
@@ -31,6 +34,15 @@ namespace DH.Helpdesk.Web.Infrastructure
     {
         private const string _USER_CASE_INFO = "USER_CASE_INFO";
         private const string _USER_LOGGED_IN = "USER_LOGGED_IN";
+
+        static ApplicationFacade()
+        {
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            Version ver = assembly.GetName().Version;            
+            Version = string.Format("{0}.{1}.{2}.{3}", ver.Major, ver.Minor, ver.Build, ver.Revision);
+        }
+
+        public static string Version { get; private set; }
 
         public static IList<UserCaseInfo> UserCaseInfo
         {
@@ -159,5 +171,6 @@ namespace DH.Helpdesk.Web.Infrastructure
             if (loggedInUsers != null)
                 LoggedInUsers.Remove(loggedInUsers);
         }
+        
     }
 }

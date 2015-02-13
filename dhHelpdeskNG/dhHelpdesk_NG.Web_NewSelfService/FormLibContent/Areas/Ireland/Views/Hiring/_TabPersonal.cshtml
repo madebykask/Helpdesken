@@ -2,7 +2,6 @@
 @using ECT.FormLib;
 @using ECT.FormLib.Models;
 
-
 @{
     const string IsTeWorker = "International Transfer";
     const string DefaultCountry = "Ireland";
@@ -20,6 +19,10 @@
                 <tr>
                     <td class="tdstrong">@Model.Label("TelephoneNumber")</td>
                     <td>@Model.Element("TelephoneNumber")</td>
+                </tr>
+                                <tr>
+                    <td class="tdstrong">@Model.Label("MobilePhoneNumber")</td>
+                    <td>@Model.Element("MobilePhoneNumber")</td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("ContactEMailAddress")</td>
@@ -124,7 +127,7 @@
                 </tr>
 
 
-                @for (int i = 2; i <= 3; i++)
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
                 {
                     <tr class="familyMember@(i.ToString())" id="familyMember@(i.ToString())">
                         <td class="tdstrong" colspan="2">
@@ -199,7 +202,7 @@
                     <td>@Model.Element("EmployeeDocumentIssuePlaceCountry")</td>
                 </tr>
 
-                @for (int i = 2; i <= 4; i++)
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
                 {
                     <tr class="employeeDocument@(i.ToString()) globalmobility" id="employeeDocument@(i.ToString())">
                         <td class="tdstrong" colspan="2">
@@ -234,7 +237,7 @@
 
                 <tr class="globalmobility-first" id="addEmployeeDocumentTrr">
                     <td colspan="2">
-                        @Model.Element("EmployeeDocuments")
+                      @Model.Element("EmployeeDocuments")
                         <a id="addEmployeeDocument" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another employee documents")</a></td>
                 </tr>
 
@@ -265,7 +268,7 @@
                     <td>@Model.Element("DependantsDateOfBirth")</td>
                 </tr>
 
-                @for (int i = 2; i <= 4; i++)
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
                 {
                     <tr class="dependantFamilyMember@(i.ToString()) globalmobility" id="dependantFamilyMember@(i.ToString())">
                         <td class="tdstrong" colspan="2">
@@ -331,7 +334,7 @@
                     <td>@Model.Element("DependantsDocumentIssuePlaceCountry")</td>
                 </tr>
 
-                @for (int i = 2; i <= 4; i++)
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
                 {
                     <tr class="globalMobilityDependantDocument@(i.ToString()) globalmobility" id="globalMobilityDependantDocument@(i.ToString())">
                         <td class="tdstrong" colspan="2">
@@ -413,51 +416,6 @@
                     <td class="tdstrong">@Model.Label("PaymentCurrency")</td>
                     <td>@Model.Element("PaymentCurrency")</td>
                 </tr>
-
-                @*<tr class="SecondBank">
-                    <td class="tdstrong">@Model.Label("BankType2")</td>
-                    <td>@Model.Element("BankType2")</td>
-                </tr>
-                <tr class="SecondBank">
-                    <td class="tdstrong" colspan="2">
-                        <h4>@Model.Translate("Second Bank Account Details")</h4>
-                    </td>
-                </tr>
-                <tr class="SecondBank">
-                    <td class="tdstrong">@Model.Label("Payee2")</td>
-                    <td>@Model.Element("Payee2")</td>
-                </tr>
-                @*<tr class="SecondBank">
-                    <td class="tdstrong">@Model.Label("BankCountry2")</td>
-                    <td>@Model.Element("BankCountry2")</td>
-                </tr>
-                <tr class="SecondBank">
-                    <td class="tdstrong">@Model.Label("BankKey2")</td>
-                    <td>@Model.Element("BankKey2")</td>
-                </tr>
-                <tr class="SecondBank">
-                    <td class="tdstrong">@Model.Label("AccountNumber2")</td>
-                    <td>@Model.Element("AccountNumber2")</td>
-                </tr>
-                <tr class="SecondBank">
-                    <td class="tdstrong">@Model.Label("IBAN2")</td>
-                    <td>@Model.Element("IBAN2")</td>
-                </tr>
-                <tr class="SecondBank">
-                    <td class="tdstrong">@Model.Label("PaymentCurrency2")</td>
-                    <td>@Model.Element("PaymentCurrency2")</td>
-                </tr>
-                <tr id="addBankButton">
-                    <td colspan="2">
-                        <a id="addBank" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Bank")</a></td>
-                </tr>
-               
-                <tr>
-                    <td class="tdstrong">@Model.Label("OtherBankPercentageOrAmount")</td>
-                    <td>@Model.Element("OtherBankPercentageOrAmount")</td>
-                </tr>
-                 *@
-
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Fiscal Data")</h4>
@@ -545,15 +503,18 @@
     $(function () {
 
         function setGlobalMobilityBehavior(value) {
+
             if (!(value == '@IsTeWorker')) {
                 $("[class*=globalmobility]").hide();
-                $("[class*=globalmobility] input").val("");
-                $("[class*=globalmobility]").hide();
+                $("[class*=globalmobility] input:not(input[type=hidden])").val("");
                 $("[class*=globalmobility] input[type=text][name*='Country']").val('@DefaultCountry');
                 $("[class*=globalmobility] select option:not([value])").prop('selected', true);
             } else {
                 $(".globalmobility-first").show();
             }
+
+            $("[class*=globalmobility-first] input[type=hidden]").val("1");
+
         }
 
             if (!($('#NewToIKEA').val() == '@IsTeWorker')) {
@@ -566,29 +527,6 @@
             });
         });
 
-    @*    if ('@Model.GetAnswer("NewToIKEA")' == 'New Hire') {
-
-        $(".globalmobility").hide();
-
-    }
-
-    if (!('@Model.GetAnswer("IBAN2")' == "")) {
-        $(".SecondBank").show();
-        $("#addBankButton").hide();
-    }
-    else {
-        $(".SecondBank").hide();
-    }
-
-    document.getElementById('addBank').onclick = function () {
-        $(".SecondBank").show();
-        $("#addBankButton").hide();
-
-    };
-
-
-    document.getElementById('Payee').value = $('#FirstName').val() + ' ' + $('#LastName').val();
-    document.getElementById('Payee2').value = $('#FirstName').val() + ' ' + $('#LastName').val();*@
 
     $('#ContractStartDate').change(function () {
         var startDate = $('#DocumentValidUntil').val();
