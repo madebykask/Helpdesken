@@ -323,7 +323,7 @@
         </div>
     }
     @RenderBody()
-    <div class="footerdhhd"><img src="@Url.Content("~/Content/img/dh_solutions_version.png")" />@Translation.Get("version")&nbsp;@ApplicationFacade.Version;</div>
+    @Html.Partial("_Version")
     @RenderSection("Dialogs", false)
     @Scripts.Render("~/bundles/dhhelpdesk")
     @RenderSection("Scripts", false)

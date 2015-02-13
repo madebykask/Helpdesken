@@ -2819,6 +2819,7 @@
     <Content Include="Views\CheckList\_NewServices.cshtml" />
     <Content Include="Views\Survey\Vote.cshtml" />
     <Content Include="Views\Survey\VoteError.cshtml" />
+    <Content Include="Views\Shared\_Version.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
