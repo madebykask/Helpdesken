@@ -14,6 +14,7 @@ namespace DH.Helpdesk.Dal.Repositories
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.BusinessData.Models.User.Input;
     using System;
+    using System.Configuration;
 
     #region CASE
 
@@ -87,6 +88,11 @@ namespace DH.Helpdesk.Dal.Repositories
         public DynamicCase GetDynamicCase(int id)
         {
             var externalSite = this.DataContext.GlobalSettings.FirstOrDefault().ExternalSite;
+
+            if(!string.IsNullOrEmpty(ConfigurationManager.AppSettings["plus:ExternalSite"]))
+            {
+                externalSite = ConfigurationManager.AppSettings["plus:ExternalSite"];
+            }
 
             if(string.IsNullOrEmpty(externalSite))
                 externalSite = "";
