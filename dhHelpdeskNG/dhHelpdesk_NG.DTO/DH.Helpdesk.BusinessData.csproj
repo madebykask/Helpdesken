@@ -64,6 +64,7 @@
     <Compile Include="Enums\Accounts\Fields\OtherFields.cs" />
     <Compile Include="Enums\Accounts\Fields\ProgramFields.cs" />
     <Compile Include="Enums\Accounts\Fields\UserFields.cs" />
+    <Compile Include="Enums\Case\CasesCustomFilter.cs" />
     <Compile Include="Enums\Case\Fields\CaseInfoFields.cs" />
     <Compile Include="Enums\Case\Fields\ComputerFields.cs" />
     <Compile Include="Enums\Case\Fields\LogFields.cs" />

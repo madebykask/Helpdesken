@@ -9,6 +9,7 @@
     using System.Linq;
     using System.Text;
 
+    using DH.Helpdesk.BusinessData.Enums.Case;
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.BusinessData.Models.Holiday.Output;
@@ -841,9 +842,15 @@
             // department / avdelning
             if (!string.IsNullOrWhiteSpace(f.Department))
                 sb.Append(" and (tblCase.Department_Id in (" + f.Department.SafeForSqlInject() + "))");
+            
             // användare / user
-            if (!string.IsNullOrWhiteSpace(f.User))
+            // http://redmine.fastdev.se/issues/10422
+            if (!string.IsNullOrWhiteSpace(f.User) && f.CustomFilter != CasesCustomFilter.MyCases
+                && !f.UserPerformer.ToIds().Contains(userId))
+            {
                 sb.Append(" and (tblCase.User_Id in (" + f.User.SafeForSqlInject() + "))");
+            }
+            
             // region
             if (!string.IsNullOrWhiteSpace(f.Region ))
                 sb.Append(" and (tblDepartment.Region_Id in (" + f.Region.SafeForSqlInject() + "))");

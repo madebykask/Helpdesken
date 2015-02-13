@@ -9,6 +9,8 @@
 
     namespace DH.Helpdesk.BusinessData.Utils
     {
+        using global::System.Linq;
+
         public static class DataReaderHelper
         {
             public static byte[] SafeGetVarBinary(this IDataReader reader, string colName)
@@ -150,6 +152,18 @@
                     return valueToCheck.Replace("'", string.Empty);
                 else
                     return string.Empty;
+            }
+
+            public static int[] ToIds(this string ids)
+            {
+                if (string.IsNullOrEmpty(ids))
+                {
+                    return new int[0];
+                }
+
+                return ids.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries)
+                        .Select(int.Parse)
+                        .ToArray();
             }
 
             public static string createDBsearchstring(this string value)

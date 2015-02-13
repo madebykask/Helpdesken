@@ -4,6 +4,8 @@ namespace DH.Helpdesk.BusinessData.Models.Case
     using System;
     using System.Collections.Generic;
 
+    using DH.Helpdesk.BusinessData.Enums.Case;
+
     public class CaseSearchFilter 
     {
         public int CustomerId { get; set; }
@@ -46,6 +48,8 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
         public string LMCaseList { get; set; }
 
+        public CasesCustomFilter CustomFilter { get; set; }
+
         public CaseSearchFilter Copy(CaseSearchFilter o)
         {
             var r = new CaseSearchFilter();
@@ -79,6 +83,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
             r.CaseClosingDateEndFilter = o.CaseClosingDateEndFilter;
             r.CaseClosingReasonFilter = o.CaseClosingReasonFilter;
             r.ParentPathClosingReason = o.ParentPathClosingReason;
+            r.CustomFilter = o.CustomFilter;
                    
             return r;
         }

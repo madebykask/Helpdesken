@@ -13,6 +13,7 @@ namespace DH.Helpdesk.Web.Controllers
     using System.Web.Helpers;
     using System.Web.UI.WebControls.Expressions;
 
+    using DH.Helpdesk.BusinessData.Enums.Case;
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models.FinishingCause;
@@ -207,7 +208,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         #region Public Methods and Operators
 
-        public ActionResult Index(int? customerId, bool? clearFilters = false, string customFilter = "")
+        public ActionResult Index(int? customerId, bool? clearFilters = false, CasesCustomFilter customFilter = CasesCustomFilter.None)
         {                        
             if (clearFilters == true)
             {
@@ -355,23 +356,25 @@ namespace DH.Helpdesk.Web.Controllers
 
                     switch (customFilter)
                     {
-                        case "MyCases":
+                        case CasesCustomFilter.MyCases:
                             sm.caseSearchFilter.UserPerformer = SessionFacade.CurrentUser.Id.ToString();                            
                             sm.caseSearchFilter.CaseProgress = "2";                            
-                            break;                        
-                        case "UnreadCases":
+                            break;
+                        case CasesCustomFilter.UnreadCases:
                             sm.caseSearchFilter.CaseProgress = "4";
                             sm.caseSearchFilter.UserPerformer = "";                            
                             break;
-                        case "HoldCases":                            
+                        case CasesCustomFilter.HoldCases:                            
                             sm.caseSearchFilter.CaseProgress = "3";
                             sm.caseSearchFilter.UserPerformer = "";                            
                             break;
-                        case "InProcessCases":                            
+                        case CasesCustomFilter.InProcessCases:                            
                             sm.caseSearchFilter.CaseProgress = "2";
                             sm.caseSearchFilter.UserPerformer = "";                           
-                            break;                        
+                            break;    
                     }
+
+                    sm.caseSearchFilter.CustomFilter = customFilter;
 
                     fd.caseSearchFilter = sm.caseSearchFilter;
                     fd.CaseClosingDateEndFilter = sm.caseSearchFilter.CaseClosingDateEndFilter;
