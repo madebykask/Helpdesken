@@ -26,7 +26,8 @@
                                         @Translation.Get("Språk", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @Html.DropDownListFor(model => model.MailTemplateLanguage.Language_Id, Model.Languages, new { id = "LanguageId", onchange = "changeLanguageList(this.options[this.selectedIndex].value);" })
+                                        @Html.DropDownListFor(model => model.MailTemplateLanguage.Language_Id, Model.Languages,
+                                                              new { id = "LanguageId", onchange = "changeLanguageList(this.options[this.selectedIndex].value);" })
                                     </td>
                                 </tr>
                                 @if (Model.MailTemplateLanguage.MailTemplate_Id != 0) 

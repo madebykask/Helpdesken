@@ -87,7 +87,7 @@
                 alertMessage = "";
             }
              */ 
-
+            
             return this.View(model);
         }
 
@@ -198,7 +198,7 @@
             var model = this.CreateInputViewModel(userInputViewModel.User);
             foreach (var error in errors)
             {
-                ModelState.AddModelError(error.Key, error.Value);
+                ModelState.AddModelError(error.Key, Translation.Get(error.Value));
             }
             return this.View(model);
         }
@@ -317,7 +317,7 @@
                 {
                     foreach (var error in errors)
                     {
-                        ModelState.AddModelError(error.Key, error.Value);
+                        ModelState.AddModelError(error.Key, Translation.Get(error.Value));
                     }
                 }
                 var model = this.CreateInputViewModel(userToSave);

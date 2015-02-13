@@ -35,6 +35,7 @@
 
     public class MailTemplateInputViewModel
     {
+        public bool IsStandardTemplate { get; set; }
         public MailTemplateEntity MailTemplate { get; set; }
         public MailTemplateLanguageEntity MailTemplateLanguage { get; set; }
         public Customer Customer { get; set; }

@@ -16,10 +16,20 @@ $(function () {
 
         var action = $(this).attr("href");
         var text = $(this).attr("deleteDialogText");
+        var btnType = $(this).attr("buttonTypes");
 
-        var txtDelete = $("#DeleteDialogDeleteButtonText").val();
-        var txtCancel = $("#DeleteDialogCancelButtonText").val();
+        var txtDelete = "";
+        var txtCancel = "";
 
+        if (btnType == 'YesNo') {
+            txtDelete = $("#DeleteDialogYesButtonText").val();
+            txtCancel = $("#DeleteDialogNoButtonText").val();
+        }
+        else {
+            txtDelete = $("#DeleteDialogDeleteButtonText").val();
+            txtCancel = $("#DeleteDialogCancelButtonText").val();
+        }
+        
         var NewDialog = $('<div id="myModal" class="modal fade">\
                                         <div class="modal-dialog">\
                                             <form method="post" id="deleteDialogForm" class="modal-content">\

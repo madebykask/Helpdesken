@@ -377,7 +377,7 @@ namespace DH.Helpdesk.Services.Services
                             .Any(u => u.UserID.EqualWith(user.UserID));
             if (hasDublicate)
             {
-                errors.Add("User.UserID", Translator.Translate("Det här användarnamnet är upptaget. Var vänlig använd något annat."));
+                errors.Add("User.UserID", "Det här användarnamnet är upptaget. Var vänlig använd något annat.");
             }
 
             if (string.IsNullOrEmpty(user.SurName + user.FirstName + user.UserID))
@@ -425,7 +425,7 @@ namespace DH.Helpdesk.Services.Services
 
             if (!user.Cs.Any(it => it.Id == user.Customer_Id))
             {
-                errors.Add("User.Customer_Id", Translator.Translate("Du måste ange ett standartkund"));
+                errors.Add("User.Customer_Id", "Du måste ange ett standartkund");
             }
 
             if (user.Id == 0)
@@ -524,7 +524,7 @@ namespace DH.Helpdesk.Services.Services
                             .Any(u => u.UserID.EqualWith(user.UserID));
             if (hasDublicate)
             {
-                errors.Add("User.UserID", Translator.Translate("Det här användarnamnet är upptaget. Var vänlig använd något annat."));
+                errors.Add("User.UserID", "Det här användarnamnet är upptaget. Var vänlig använd något annat.");
             }
 
             user.Address = user.Address ?? string.Empty;
@@ -587,7 +587,7 @@ namespace DH.Helpdesk.Services.Services
 
             if (!user.Cs.Any(it => it.Id == user.Customer_Id))
             {
-                errors.Add("User.Customer_Id", Translator.Translate("Du måste ange en standardkund"));
+                errors.Add("User.Customer_Id", "Du måste ange en standardkund");
             }
 
             if (user.UserWorkingGroups != null)
