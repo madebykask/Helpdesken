@@ -47,7 +47,7 @@
 
         public IList<Department> GetDepartments(int customerId, int isActive = 1)
         {
-            return this._departmentRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.DepartmentName).ToList();
+            return this._departmentRepository.GetMany(x => x.Customer_Id == customerId && x.IsActive != 0).OrderBy(x => x.DepartmentName).ToList();
         }
 
         public IList<Department> GetDepartmentsByUserPermissions(int userId, int customerId)
