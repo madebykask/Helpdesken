@@ -34,7 +34,7 @@
         </tr>
         <tr>
             <td>
-                @Translation.Get("Standardkund", Enums.TranslationSource.TextTranslation)
+                @Translation.Get("Standardkund", Enums.TranslationSource.TextTranslation) * 
             </td>
             <td>
                 @Html.DropDownListFor(model => model.User.Customer_Id, Model.CsSelected, "", new {})

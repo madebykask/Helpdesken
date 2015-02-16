@@ -3,7 +3,7 @@
 <table class="table table-striped table-bordered table-hover">
     @foreach (var item in Model.AccountActivities)
     {
-        <tr><td>@Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation): <a href="@Url.Action("edit", "mailtemplate", new { area = "admin", id = 70, customerId = Model.Customer.Id, languageId = 2, accountactivityId= item.Id })">@Translation.Get("Beställning", Enums.TranslationSource.TextTranslation) @Translation.Get("Kontoaktivitet", Enums.TranslationSource.TextTranslation) - @Html.DisplayFor(modelItem => item.Name)</a>
+        <tr><td>@Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation): <a href="@Url.Action("edit", "mailtemplate", new { area = "admin", id = 70, customerId = Model.Customer.Id, languageId = SessionFacade.CurrentLanguageId, accountactivityId= item.Id })">@Translation.Get("Beställning", Enums.TranslationSource.TextTranslation) @Translation.Get("Kontoaktivitet", Enums.TranslationSource.TextTranslation) - @Html.DisplayFor(modelItem => item.Name)</a>
         </td></tr>
     }
 </table>
