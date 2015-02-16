@@ -26,6 +26,7 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Dal.Utils;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services.Exceptions;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.Configuration;
@@ -1588,8 +1589,11 @@ namespace DH.Helpdesk.Web.Controllers
                 ISearch s = new Search();
                 var f = new CaseSearchFilter();
                 m = new CaseSearchModel();
-
                 var cu = this._customerUserService.GetCustomerSettings(customerId, userId);
+                if (cu == null)
+                {
+                    throw new Exception("It looks that something has happened with your session. Refresh page to fix it.");
+                }
 
                 f.CustomerId = customerId;
                 f.UserId = userId;

@@ -220,8 +220,8 @@ namespace DH.Helpdesk.Dal.Utils
             }
 
             if (startDate.RoundToDay() == endDate.RoundToDay())
-            {
-                return ((endDate - startDate).Hours * 60) + (endDate - startDate).Minutes;
+            {                
+                return Convert.ToInt32(Math.Ceiling((endDate - startDate).TotalMinutes));
             }
             
             var businessDays = DatesHelper.GetBusinessDays(tunedStartDate.RoundToDay(), tunedEndDate.RoundToDay());
