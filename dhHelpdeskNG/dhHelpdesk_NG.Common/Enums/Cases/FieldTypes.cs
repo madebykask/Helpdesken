@@ -6,6 +6,8 @@
 
         Date = 1,
 
-        Time = 2
+        Time = 2,
+
+        NullableHours = 3
     }
 }

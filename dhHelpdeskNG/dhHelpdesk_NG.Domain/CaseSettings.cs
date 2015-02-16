@@ -6,8 +6,14 @@
     {
         public int? Customer_Id { get; set; }
         public int ColOrder { get; set; }
+        
+        /// <summary>
+        /// Used in ver.4. We have to process data only if it is 1
+        /// </summary>
         public int Line { get; set; }
+
         public int MinWidth { get; set; }
+
         public int? User_Id { get; set; }
         public int UserGroup { get; set; }
         public string Name { get; set; }

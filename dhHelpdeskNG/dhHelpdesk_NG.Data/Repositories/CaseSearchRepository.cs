@@ -43,6 +43,9 @@
 
     public class CaseSearchRepository : ICaseSearchRepository
     {
+        private const string TimeLeftColumn = "_temporary_.LeadTime";
+        private const string TimeLeftColumnLower = "_temporary_.leadtime";
+
         private readonly ICustomerUserRepository _customerUserRepository;
 
         private readonly IProductAreaRepository _productAreaRepository;
@@ -276,12 +279,33 @@
         private IList<CaseSearchResult> SortSearchResult(IList<CaseSearchResult> csr, ISearch s)
         {
             //tid kvar samt produktområde kan inte sorteras i databasen
-            if (string.Compare(s.SortBy, "ProductArea_Id", true, CultureInfo.InvariantCulture) == 0 || string.Compare(s.SortBy, "_temporary_.LeadTime", true, CultureInfo.InvariantCulture) == 0)
+            if (string.Compare(s.SortBy, "ProductArea_Id", true, CultureInfo.InvariantCulture) == 0)
             {
-                if (s.Ascending) 
+                if (s.Ascending)
+                {
                     return csr.OrderBy(x => x.SortOrder).ToList();
+                }
                 return csr.OrderByDescending(x => x.SortOrder).ToList();
             }
+            else if (string.Compare(s.SortBy, TimeLeftColumn, true, CultureInfo.InvariantCulture) == 0)
+            {
+                /// we have to sort this field on "integer" manner
+                var indx = 0;
+                var structToSort = csr.Select(
+                    it =>
+                        {
+                            int intVal;
+                            int? val = int.TryParse(it.SortOrder, out intVal) ? (int?)intVal : null;
+                            return new { index = indx++, val };
+                        });
+                if (s.Ascending)
+                {
+                    return structToSort.OrderBy(it => it.val).Select(it => csr[it.index]).ToList();
+                }
+
+                return structToSort.OrderByDescending(it => it.val).Select(it => csr[it.index]).ToList();
+            }
+
             return csr;
         }
 
@@ -344,7 +368,6 @@
 
             fieldType = FieldTypes.String;
             dateValue = null;
-
             switch (fieldName.ToLower())
             {
                 case "regtime":
@@ -393,15 +416,9 @@
                     ret = dr.SafeGetIntegerAsYesNo(col, true);
                     translateField = true;
                     break;
-                case "_temporary_.leadtime":
-                    if (timeLeft.HasValue)
-                    {
-                        ret = string.Format("{0} h", timeLeft.Value.ToString(CultureInfo.InvariantCulture));
-                    }
-                    else
-                    {
-                        ret = "-";
-                    }
+                case TimeLeftColumnLower:
+                    fieldType = FieldTypes.NullableHours;
+                    ret = timeLeft.ToString();
                     break;
                 case "productarea_id":
                     ProductArea p = dr.SafeGetInteger("ProductArea_Id").getProductAreaItem(pal);
@@ -537,7 +554,7 @@
             columns.Add("tblCase.Verified");
             columns.Add("tblCase.VerifiedDescription");
             columns.Add("tblCase.LeadTime");
-            columns.Add("'0' as [_temporary_.LeadTime]");
+            columns.Add(string.Format("'0' as [{0}]", TimeLeftColumn));
             columns.Add("tblStateSecondary.IncludeInCaseStatistics");
             sql.Add(string.Join(",", columns));
 
@@ -811,11 +828,20 @@
                     sb.Append(" and (coalesce(tblCase.WorkingGroup_Id, 0) in (" + f.WorkingGroup.SafeForSqlInject() + ")) ");
             }
 
+            // http://redmine.fastdev.se/issues/10422
+            if (f.CustomFilter == CasesCustomFilter.MyCases)
+            {
+                sb.AppendFormat(
+                    " AND ([tblCase].[Performer_User_Id] IN ({0}) OR [tblCase].[CaseResponsibleUser_Id] IN ({0}) OR [tblProblem].[ResponsibleUser_Id] IN ({0})) ", 
+                    userId.ToString(CultureInfo.InvariantCulture).SafeForSqlInject());
+            }
+
             // performer/utförare
             if (!string.IsNullOrWhiteSpace(f.UserPerformer))
             {
-                sb.Append(" and (tblCase.Performer_User_Id in (" + f.UserPerformer.SafeForSqlInject() + ") or tblCase.CaseResponsibleUser_Id in (" + f.UserPerformer.SafeForSqlInject() + ")  or tblProblem.ResponsibleUser_Id IN (" + f.UserPerformer.SafeForSqlInject() + "))");
+                sb.Append(" and (tblCase.Performer_User_Id in (" + f.UserPerformer.SafeForSqlInject() + ")) ");
             }
+
             // ansvarig
             if (!string.IsNullOrWhiteSpace(f.UserResponsible))
                 sb.Append(" and (tblCase.CaseResponsibleUser_Id in (" + f.UserResponsible.SafeForSqlInject() + "))"); 
@@ -843,10 +869,8 @@
             if (!string.IsNullOrWhiteSpace(f.Department))
                 sb.Append(" and (tblCase.Department_Id in (" + f.Department.SafeForSqlInject() + "))");
             
-            // användare / user
-            // http://redmine.fastdev.se/issues/10422
-            if (!string.IsNullOrWhiteSpace(f.User) && f.CustomFilter != CasesCustomFilter.MyCases
-                && !f.UserPerformer.ToIds().Contains(userId))
+            // användare / user            
+            if (!string.IsNullOrWhiteSpace(f.User))
             {
                 sb.Append(" and (tblCase.User_Id in (" + f.User.SafeForSqlInject() + "))");
             }

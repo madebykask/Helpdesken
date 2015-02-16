@@ -40,30 +40,36 @@
                     <!-- valbara kolumner -->
                     @foreach (var c in r.Columns)
                     {       
-                    <td>
-                        @if (c.FieldType == CasesFieldsTypes.FieldTypes.Date)
-                        {
-                            <!-- date -->
-                            <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">@Html.DisplayFor(m => c.DateTimeValue, "Date")</a>
-                        }
-                        else if (c.FieldType == CasesFieldsTypes.FieldTypes.Time)                                                        
-                        {
-                            <!-- dateTime -->
-                            <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">@(c.DateTimeValue.HasValue ? c.DateTimeValue.Value.ToLocalTime().ToFormattedDateTime() : string.Empty)</a>
-                        }
-                        else    
-                        {
-                            if (c.TranslateThis)
+                        <td>
+                            <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">
+                            @if (c.FieldType == CasesFieldsTypes.FieldTypes.Date)
                             {
-                                <!-- string -->
-                                <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">@Translation.Get(c.StringValue, Enums.TranslationSource.TextTranslation)</a>
+                                <!-- date -->
+                                @Html.DisplayFor(m => c.DateTimeValue, "Date")
                             }
-                            else    
+                            else if (c.FieldType == CasesFieldsTypes.FieldTypes.Time)                                                        
                             {
-                                <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">@c.StringValue.ForHtmlView()</a>
+                                <!-- dateTime -->
+                                @(c.DateTimeValue.HasValue ? c.DateTimeValue.Value.ToLocalTime().ToFormattedDateTime() : string.Empty)
                             }
-                        }
-                    </td>
+                            else if (c.FieldType == CasesFieldsTypes.FieldTypes.NullableHours)
+                            {
+                                <!-- Hours left -->
+                                @(string.IsNullOrEmpty(c.StringValue) ? " - " : string.Format("{0} h", c.StringValue))
+                            } else 
+                            {
+                                if (c.TranslateThis)
+                                {
+                                    <!-- string -->
+                                    @Translation.Get(c.StringValue)
+                                }
+                                else    
+                                {
+                                    @c.StringValue.ForHtmlView()
+                                }
+                            }
+                            </a>
+                        </td>
                     }    
                 </tr>                
                 }

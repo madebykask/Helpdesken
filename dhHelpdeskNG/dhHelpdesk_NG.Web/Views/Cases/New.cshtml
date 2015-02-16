@@ -12,20 +12,20 @@
         $("#case__RegLanguage_Id").change(function () {
 
             var ci = '@Model.NewModeParams.customerId';
-        var cfc = '@Model.NewModeParams.copyFromCaseId';
-        var ti = '@Model.NewModeParams.templateId';
-        var cli = $('#case__RegLanguage_Id').val();
+            var cfc = '@Model.NewModeParams.copyFromCaseId';
+            var ti = '@Model.NewModeParams.templateId';
+            var cli = $('#case__RegLanguage_Id').val();
 
-        var p2 = "";
-        if (ti != '')
-            p2 = "&templateId=" + ti;
+            var p2 = "";
+            if (ti != '')
+                p2 = "&templateId=" + ti;
 
-        var p3 = "";
-        if (cfc != '')
-            p3 = "&copyFromCaseId=" + cfc
+            var p3 = "";
+            if (cfc != '')
+                p3 = "&copyFromCaseId=" + cfc
 
-        //location.href = '/Cases/new?customerId=' + ci + p2 + p3 + '&caseLanguageId=' + cli;       
-    });
+            //location.href = '/Cases/new?customerId=' + ci + p2 + p3 + '&caseLanguageId=' + cli;       
+        });
     </script>
 }
 
@@ -37,24 +37,27 @@
 {
     using(Html.BeginForm("new", "cases", null, FormMethod.Post, new { id = "target" }))
     {        
-    <div class="secnavs fixed">
-        <div class="pull-left">
-            <ul class="secnav">
-                <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
-                <li>@Html.ActionLink(Translation.Get("Spara och stäng", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "NewCaseAndClose();return false;", @class = "btn" })</li>
-                <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "NewCaseAndAddCase();return false;", @class = "btn" })</li>
-                <li class="secspace"></li>
-                <li>@Html.ActionLink(Translation.Get("Stäng", Enums.TranslationSource.TextTranslation), "index", new { customerId = @Model.case_.Customer_Id }, new { @class = "btn" })</li>
-                <li id="btnCaseTemplate">
-                    @Html.Partial("_CaseTemplateTree", Model.CaseTemplateTreeButton, t)
-                </li>
-            </ul>
+        <div class="secnavs fixed">
+            <div class="pull-left">
+                <ul class="secnav">
+                    <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
+                    <li>@Html.ActionLink(Translation.Get("Spara och stäng", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "NewCaseAndClose();return false;", @class = "btn" })</li>
+                    <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "NewCaseAndAddCase();return false;", @class = "btn" })</li>
+                    <li class="secspace"></li>
+                    <li>@Html.ActionLink(Translation.Get("Stäng", Enums.TranslationSource.TextTranslation), "index", new { customerId = @Model.case_.Customer_Id }, new { @class = "btn" })</li>
+                    <li id="btnCaseTemplate">
+                        @Html.Partial("_CaseTemplateTree", Model.CaseTemplateTreeButton, t)
+                    </li>
+                </ul>
+                <div id="requiredFieldsMessage" class="validation-message" style="display: none;">
+                    <span>@Translation.Get("The case could not be saved because one or more mandatory fields were not filled in, please check the case.")</span>
+                </div>    
+            </div>
         </div>
-    </div>
-    <div class="newmode">
-        @Html.Partial("_Input", Model)
-        @Html.Hidden("templateId", Model.NewModeParams.templateId);
-    </div>
+        <div class="newmode">
+            @Html.Partial("_Input", Model)
+            @Html.Hidden("templateId", Model.NewModeParams.templateId);
+        </div>
     }
 }
 
