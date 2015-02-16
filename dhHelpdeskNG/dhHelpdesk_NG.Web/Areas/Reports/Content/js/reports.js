@@ -88,6 +88,11 @@
         var reportContainer = $("#reportContainer");
 
         var buildReport = function () {
+            reportForm.validate();
+            if (!reportForm.valid()) {
+                return false;
+            }
+
             isPrint.val(false);
             isExcel.val(false);
             showReportLoader.show();

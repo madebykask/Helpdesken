@@ -83,5 +83,15 @@ namespace DH.Helpdesk.Common.Tools
 
             return date.Value.RoundToMonth();
         }
+
+        public static bool HoursLessEqualDays(this int hours, int days)
+        {
+            return hours <= days * 24;
+        }
+
+        public static bool HoursGreaterDays(this int hours, int days)
+        {
+            return hours > days * 24;
+        }
     }
 }

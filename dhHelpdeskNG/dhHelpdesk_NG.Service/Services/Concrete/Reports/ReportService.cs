@@ -420,11 +420,34 @@
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {
+                var casesRep = uow.GetRepository<Case>();
                 var departmentRep = uow.GetRepository<Department>();
                 var caseTypeRep = uow.GetRepository<CaseType>();
                 var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
 
-                return new LeadtimeFinishedCasesData();
+                var cases =
+                    casesRep.GetAll()
+                        .GetByCustomer(customerId)
+                        .GetByDepartments(departmentIds)
+                        .GetByCaseType(caseTypeId)
+                        .GetByWorkingGroups(workingGroupIds)
+                        .GetByRegistrationSource(registrationSource)
+                        .GetByRegistrationPeriod(periodFrom, periodUntil)
+                        .GetFinished()
+                        .GetNotDeleted();                
+                var departments = departmentRep.GetAll().GetActiveByCustomer(customerId);
+                var caseTypes = caseTypeRep.GetAll().GetActiveByCustomer(customerId);
+                var workingGroups = workingGroupRep.GetAll().GetActiveByCustomer(customerId);
+
+                return ReportsMapper.MapToLeadtimeFinishedCasesData(
+                            cases,
+                            departments,
+                            caseTypes,
+                            workingGroups,
+                            periodFrom,
+                            periodUntil,
+                            leadTime,
+                            isShowDetails);
             }
         }
 

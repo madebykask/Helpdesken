@@ -1,11 +1,14 @@
 ﻿namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Reports
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.ProductArea;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeFinishedCases;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.RegistratedCasesDay;
+    using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.ProductArea;
 
@@ -101,6 +104,36 @@
             }
 
             return new CaseTypeArticleNoData(caseTypesData, productAreasData.Where(a => a.Parent == null).ToList());
+        }
+
+        public static LeadtimeFinishedCasesData MapToLeadtimeFinishedCasesData(
+                                                IQueryable<Case> cases,
+                                                IQueryable<Department> departments,      
+                                                IQueryable<CaseType> caseTypes,                              
+                                                IQueryable<WorkingGroupEntity> workingGroups,
+                                                DateTime? periodFrom,
+                                                DateTime? periodUntil,
+                                                int leadTime,
+                                                bool isShowDetails)
+        {
+            var entities = (from c in cases
+                                join d in departments on c.Department_Id equals d.Id into dgj
+                                join wg in workingGroups on c.WorkingGroup_Id equals wg.Id into wggj
+                                join ct in caseTypes on c.CaseType_Id equals ct.Id into ctgj
+                                from department in dgj.DefaultIfEmpty()
+                                from caseType in ctgj.DefaultIfEmpty()
+                                from workingGroup in wggj.DefaultIfEmpty()
+                                select new
+                                {
+                                    c.FinishingDate,
+                                    c.LeadTime
+                                }).ToList();
+
+            var numberOfCases = entities.Count;
+            var numberOfCasesShorterEqual = entities.Count(e => e.LeadTime.HoursLessEqualDays(leadTime));
+            var numberOfCasesLonger = entities.Count(e => e.LeadTime.HoursGreaterDays(leadTime));
+
+            return new LeadtimeFinishedCasesData();
         }
     }
 }
