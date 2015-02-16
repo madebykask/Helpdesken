@@ -374,7 +374,7 @@ namespace DH.Helpdesk.Services.Services
             errors = new Dictionary<string, string>();
 
             var hasDublicate = this.GetUsers()
-                            .Any(u => u.UserID.EqualWith(user.UserID));
+                            .Any(u => u.UserID.EqualWith(user.UserID) && u.Id != user.Id);
             if (hasDublicate)
             {
                 errors.Add("User.UserID", "Det här användarnamnet är upptaget. Var vänlig använd något annat.");

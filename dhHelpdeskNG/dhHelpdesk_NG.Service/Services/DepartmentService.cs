@@ -5,9 +5,13 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Department;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications;
+
+    using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
 
     public interface IDepartmentService
     {
@@ -29,12 +33,16 @@
         private readonly IDepartmentRepository _departmentRepository;
         private readonly IUnitOfWork _unitOfWork;
 
+        private readonly IUnitOfWorkFactory unitOfWorkFactory;
+
         public DepartmentService(
             IDepartmentRepository departmentRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork, 
+            IUnitOfWorkFactory unitOfWorkFactory)
         {
             this._departmentRepository = departmentRepository;
             this._unitOfWork = unitOfWork;
+            this.unitOfWorkFactory = unitOfWorkFactory;
         }
 
         public IList<Department> GetDepartments(int customerId, int isActive = 1)
@@ -44,8 +52,24 @@
 
         public IList<Department> GetDepartmentsByUserPermissions(int userId, int customerId)
         {
-            var query =this._departmentRepository.GetDepartmentsByUserPermissions(userId, customerId);
-            return query != null ? query.ToList() : null;
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var usersRep = uow.GetRepository<User>();
+                var customersRep = uow.GetRepository<Customer>();
+                var departmentsRep = uow.GetRepository<Department>();
+                var userDepartmentsRep = uow.GetRepository<DepartmentUser>();
+
+                var users = usersRep.GetAll().GetById(userId);
+                var customers = customersRep.GetAll().GetById(customerId);
+                var departments = departmentsRep.GetAll().GetActiveByCustomer(customerId);
+                var userDepartments = userDepartmentsRep.GetAll();
+
+                return DepartmentMapper.MapToUserDepartments(
+                                        users,
+                                        customers,
+                                        departments,
+                                        userDepartments);
+            }
         }
                 
         public Department GetDepartment(int id)

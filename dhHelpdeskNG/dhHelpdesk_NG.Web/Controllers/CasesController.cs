@@ -251,12 +251,12 @@ namespace DH.Helpdesk.Web.Controllers
                     if (fd.customerSetting.DepartmentFilterFormat == 1)
                         fd.filterCountry = this._countryService.GetCountries(cusId);
 
-                    //avdelningar per användare, är den tom så visa alla som kopplade till kunden
+                    // avdelningar per användare, är den tom så visa alla som kopplade till kunden
                     fd.filterDepartment = this._departmentService.GetDepartmentsByUserPermissions(userId, cusId);
-                    if (fd.filterDepartment == null)
+                    if (!fd.filterDepartment.Any())
+                    {
                         fd.filterDepartment = this._departmentService.GetDepartments(cusId);
-                    else if (fd.filterDepartment.Count == 0)
-                        fd.filterDepartment = this._departmentService.GetDepartments(cusId);
+                    }
 
                     //användare
                     if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseUserFilter))
@@ -744,7 +744,11 @@ namespace DH.Helpdesk.Web.Controllers
 
         public JsonResult ChangeRegion(int? id, int customerId, int departmentFilterFormat)
         {
-            var dep = this._departmentService.GetDepartmentsByUserPermissions(SessionFacade.CurrentUser.Id, customerId) ?? this._departmentService.GetDepartments(customerId);
+            var dep = this._departmentService.GetDepartmentsByUserPermissions(SessionFacade.CurrentUser.Id, customerId);
+            if (!dep.Any())
+            {
+                dep = this._departmentService.GetDepartments(customerId);
+            }
 
             if (id.HasValue)
                 dep = dep.Where(x => x.Region_Id == id).ToList();
@@ -1837,7 +1841,7 @@ namespace DH.Helpdesk.Web.Controllers
                 m.users = this._userService.GetUsers(customerId);
                 m.projects = this._projectService.GetCustomerProjects(customerId);
                 var deps = this._departmentService.GetDepartmentsByUserPermissions(userId, customerId);
-                m.departments = deps ?? this._departmentService.GetDepartments(customerId);
+                m.departments = deps.Any() ? deps : this._departmentService.GetDepartments(customerId);
                 m.standardTexts = this._standardTextService.GetStandardTexts(customerId);
                 m.Languages = this._languageService.GetActiveLanguages();
 
