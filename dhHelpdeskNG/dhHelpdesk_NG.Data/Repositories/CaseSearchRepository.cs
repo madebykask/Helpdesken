@@ -811,11 +811,20 @@
                     sb.Append(" and (coalesce(tblCase.WorkingGroup_Id, 0) in (" + f.WorkingGroup.SafeForSqlInject() + ")) ");
             }
 
+            // http://redmine.fastdev.se/issues/10422
+            if (f.CustomFilter == CasesCustomFilter.MyCases)
+            {
+                sb.AppendFormat(
+                    " AND ([tblCase].[Performer_User_Id] IN ({0}) OR [tblCase].[CaseResponsibleUser_Id] IN ({0}) OR [tblProblem].[ResponsibleUser_Id] IN ({0})) ", 
+                    userId.ToString(CultureInfo.InvariantCulture).SafeForSqlInject());
+            }
+
             // performer/utförare
             if (!string.IsNullOrWhiteSpace(f.UserPerformer))
             {
-                sb.Append(" and (tblCase.Performer_User_Id in (" + f.UserPerformer.SafeForSqlInject() + ") or tblCase.CaseResponsibleUser_Id in (" + f.UserPerformer.SafeForSqlInject() + ")  or tblProblem.ResponsibleUser_Id IN (" + f.UserPerformer.SafeForSqlInject() + "))");
+                sb.Append(" and (tblCase.Performer_User_Id in (" + f.UserPerformer.SafeForSqlInject() + ")) ");
             }
+
             // ansvarig
             if (!string.IsNullOrWhiteSpace(f.UserResponsible))
                 sb.Append(" and (tblCase.CaseResponsibleUser_Id in (" + f.UserResponsible.SafeForSqlInject() + "))"); 
@@ -843,10 +852,8 @@
             if (!string.IsNullOrWhiteSpace(f.Department))
                 sb.Append(" and (tblCase.Department_Id in (" + f.Department.SafeForSqlInject() + "))");
             
-            // användare / user
-            // http://redmine.fastdev.se/issues/10422
-            if (!string.IsNullOrWhiteSpace(f.User) && f.CustomFilter != CasesCustomFilter.MyCases
-                && !f.UserPerformer.ToIds().Contains(userId))
+            // användare / user            
+            if (!string.IsNullOrWhiteSpace(f.User))
             {
                 sb.Append(" and (tblCase.User_Id in (" + f.User.SafeForSqlInject() + "))");
             }

@@ -351,26 +351,24 @@ namespace DH.Helpdesk.Web.Controllers
                         if (c != null)
                             sm.caseSearchFilter.ParantPath_CaseType = c.getCaseTypeParentPath();
                     }
-
                     
-
                     switch (customFilter)
                     {
                         case CasesCustomFilter.MyCases:
-                            sm.caseSearchFilter.UserPerformer = SessionFacade.CurrentUser.Id.ToString();                            
+                            sm.caseSearchFilter.UserPerformer = string.Empty;                            
                             sm.caseSearchFilter.CaseProgress = "2";                            
                             break;
                         case CasesCustomFilter.UnreadCases:
                             sm.caseSearchFilter.CaseProgress = "4";
-                            sm.caseSearchFilter.UserPerformer = "";                            
+                            sm.caseSearchFilter.UserPerformer = string.Empty;                            
                             break;
                         case CasesCustomFilter.HoldCases:                            
                             sm.caseSearchFilter.CaseProgress = "3";
-                            sm.caseSearchFilter.UserPerformer = "";                            
+                            sm.caseSearchFilter.UserPerformer = string.Empty;                            
                             break;
                         case CasesCustomFilter.InProcessCases:                            
                             sm.caseSearchFilter.CaseProgress = "2";
-                            sm.caseSearchFilter.UserPerformer = "";                           
+                            sm.caseSearchFilter.UserPerformer = string.Empty;                           
                             break;    
                     }
 
