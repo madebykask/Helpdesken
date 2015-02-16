@@ -4,6 +4,11 @@
     ViewBag.Title = "Edit";
     string accountactivityid = Request.QueryString["accountactivityId"];
     string ordertypeid = Request.QueryString["ordertypeId"];
+    
+    var routeValues = new RouteValueDictionary();
+    
+        
+                                         
 }
 @using (Html.BeginForm("edit", "mailTemplate", new { customerId = Model.Customer.Id, area = "admin" }, FormMethod.Post, new { id = "target" }))
 {
@@ -14,16 +19,17 @@
                 <li>@Html.ActionLink(
                                      Translation.Get((Model.IsStandardTemplate?"Rensa":"Ta bort"),
                                                      Enums.TranslationSource.TextTranslation), "delete",
-                                     new { id = Model.MailTemplateLanguage.MailTemplate_Id, 
-                                           languageid = Model.MailTemplateLanguage.Language_Id, 
-                                           customerId = Model.Customer.Id 
-                                         }, 
+                                                    new { id = Model.MailTemplateLanguage.MailTemplate.Id, 
+                                                          languageid = Model.MailTemplateLanguage.Language_Id,                                            
+                                                          customerId = Model.Customer.Id
+                                                        }, 
                                      new { @class = "btn deleteDialog", 
                                            deleteDialogText = Translation.Get((Model.IsStandardTemplate? "Är du säker på att du vill rensa denna mall":
                                                                                                          "Är du säker på att du vill ta bort denna mall"), 
                                                                               Enums.TranslationSource.TextTranslation) + "?"
                                            ,
-                                           buttonTypes = "YesNo"                              
+                                           buttonTypes = "YesNo",
+                                           id = "DelBtn"                              
                                          })
                 </li>
                 
@@ -34,7 +40,7 @@
     <input type="hidden" id="customerId" name="customerId" value="@Model.Customer.Id" />
     <input type="hidden" id="mailTemplateLanguageId" name="mailTemplateLanguageId" value="@Model.MailTemplateLanguage.MailTemplate_Id" />
     <input type="hidden" id="languageId" name="languageId" value="@Model.MailTemplateLanguage.Language_Id" />
-    <input type="hidden" id="mailTemplateId" name="mailTemplateId" value="@Model.MailTemplateLanguage.MailTemplate_Id" />
+    <input type="hidden" id="mailTemplateId" name="mailTemplateId" value="@Model.MailTemplateLanguage.MailTemplate.Id" />
     <input type="hidden" id="accountactivityId" name="accountactivityId" value="@accountactivityid" />
     <input type="hidden" id="ordertypeId" name="ordertypeId" value="@ordertypeid" />
     <input type="hidden" id="mailId" name="mailId" value="@Model.MailTemplateLanguage.MailTemplate.MailID" />
@@ -50,6 +56,10 @@
         changeLanguageList('@SessionFacade.CurrentLanguageId');
 
         function changeLanguageList(id) {
+            var actionLink = '/admin/mailtemplate/delete/' + '@Model.MailTemplateLanguage.MailTemplate.Id.ToString()' +
+                                                        '?customerId=' + '@Model.Customer.Id.ToString()' +
+                                                        '&languageid=' + id.toString();
+            $('#DelBtn').prop('href', actionLink);
             var list = $("#languageList");
             list.html("");
             if (id != "") {
@@ -57,7 +67,7 @@
                     list.html(result);
                 });
             }
-        }
+        }    
     </script>
 }
 

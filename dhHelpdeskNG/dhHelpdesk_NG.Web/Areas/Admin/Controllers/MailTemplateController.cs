@@ -10,6 +10,7 @@
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
     using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.BusinessData.Models;
 
     public class MailTemplateController : BaseAdminController
     {
@@ -426,11 +427,22 @@
             });
             #endregion
 
+            var mailTemplates = new List<MailTemplateList>();
+            var languages = _languageService.GetActiveLanguages();
+            foreach (var lang in languages)
+            {
+                mailTemplates.AddRange(this._mailTemplateService
+                                           .GetMailTemplates(customer.Id, lang.Id)
+                                           .Where(x=> !mailTemplates.Select(m=> m.MailID)
+                                                                    .Contains(x.MailID))
+                                           .ToList());                
+            }
+
             var model = new MailTemplateIndexViewModel
             {
                 Customer = customer,
                 AccountActivities = this._accountActivityService.GetAccountActivities(customer.Id),
-                MailTemplates = this._mailTemplateService.GetMailTemplates(customer.Id, customer.Language_Id),
+                MailTemplates = mailTemplates,
                 OrderTypes = this._orderTypeService.GetOrderTypesForMailTemplate(customer.Id),
                 Settings = customersettings,
                 ParentOrderTypes = this._orderTypeService.GetParentOrderTypesForMailTemplateIndexPage(customer.Id).Select(x => new SelectListItem
