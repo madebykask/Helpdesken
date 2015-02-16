@@ -43,6 +43,9 @@
 
     public class CaseSearchRepository : ICaseSearchRepository
     {
+        private const string TimeLeftColumn = "_temporary_.LeadTime";
+        private const string TimeLeftColumnLower = "_temporary_.leadtime";
+
         private readonly ICustomerUserRepository _customerUserRepository;
 
         private readonly IProductAreaRepository _productAreaRepository;
@@ -276,12 +279,33 @@
         private IList<CaseSearchResult> SortSearchResult(IList<CaseSearchResult> csr, ISearch s)
         {
             //tid kvar samt produktområde kan inte sorteras i databasen
-            if (string.Compare(s.SortBy, "ProductArea_Id", true, CultureInfo.InvariantCulture) == 0 || string.Compare(s.SortBy, "_temporary_.LeadTime", true, CultureInfo.InvariantCulture) == 0)
+            if (string.Compare(s.SortBy, "ProductArea_Id", true, CultureInfo.InvariantCulture) == 0)
             {
-                if (s.Ascending) 
+                if (s.Ascending)
+                {
                     return csr.OrderBy(x => x.SortOrder).ToList();
+                }
                 return csr.OrderByDescending(x => x.SortOrder).ToList();
             }
+            else if (string.Compare(s.SortBy, TimeLeftColumn, true, CultureInfo.InvariantCulture) == 0)
+            {
+                /// we have to sort this field on "integer" manner
+                var indx = 0;
+                var structToSort = csr.Select(
+                    it =>
+                        {
+                            int intVal;
+                            int? val = int.TryParse(it.SortOrder, out intVal) ? (int?)intVal : null;
+                            return new { index = indx++, val };
+                        });
+                if (s.Ascending)
+                {
+                    return structToSort.OrderBy(it => it.val).Select(it => csr[it.index]).ToList();
+                }
+
+                return structToSort.OrderByDescending(it => it.val).Select(it => csr[it.index]).ToList();
+            }
+
             return csr;
         }
 
@@ -344,7 +368,6 @@
 
             fieldType = FieldTypes.String;
             dateValue = null;
-
             switch (fieldName.ToLower())
             {
                 case "regtime":
@@ -393,15 +416,9 @@
                     ret = dr.SafeGetIntegerAsYesNo(col, true);
                     translateField = true;
                     break;
-                case "_temporary_.leadtime":
-                    if (timeLeft.HasValue)
-                    {
-                        ret = string.Format("{0} h", timeLeft.Value.ToString(CultureInfo.InvariantCulture));
-                    }
-                    else
-                    {
-                        ret = "-";
-                    }
+                case TimeLeftColumnLower:
+                    fieldType = FieldTypes.NullableHours;
+                    ret = timeLeft.ToString();
                     break;
                 case "productarea_id":
                     ProductArea p = dr.SafeGetInteger("ProductArea_Id").getProductAreaItem(pal);
@@ -537,7 +554,7 @@
             columns.Add("tblCase.Verified");
             columns.Add("tblCase.VerifiedDescription");
             columns.Add("tblCase.LeadTime");
-            columns.Add("'0' as [_temporary_.LeadTime]");
+            columns.Add(string.Format("'0' as [{0}]", TimeLeftColumn));
             columns.Add("tblStateSecondary.IncludeInCaseStatistics");
             sql.Add(string.Join(",", columns));
 
