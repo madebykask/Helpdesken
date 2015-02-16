@@ -15,4 +15,13 @@ $(function () {
     } else {
         langEl.hide();
     }
+
+    // http://redmine.fastdev.se/issues/10554
+    $('#target').submit(function () {
+        if (!$(this).valid()) {
+            $('#requiredFieldsMessage').show();
+        } else {
+            $('#requiredFieldsMessage').hide();
+        }
+    });
 });

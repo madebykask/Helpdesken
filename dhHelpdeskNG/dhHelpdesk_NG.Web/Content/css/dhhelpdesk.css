@@ -3043,3 +3043,13 @@ div.DTFC_LeftFootWrapper table {
 /*****END TEMPORARY SOLUTION******/
 
 /**END HIDE SHOW EDITING CASE*/
+
+/*CASE VALIDATION MESSAGE*/
+.validation-message {
+    margin: 0 20px 0 20px;
+}
+
+.validation-message span {
+    color: red;
+}
+/*END CASE VALIDATION MESSAGE*/

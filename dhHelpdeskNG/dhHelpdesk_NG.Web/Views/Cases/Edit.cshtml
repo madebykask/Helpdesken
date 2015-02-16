@@ -210,13 +210,13 @@
                     <li class="secspace"></li>                    
                     if(SessionFacade.CurrentUser.DeleteCasePermission == 1)
                     {                            
-                    <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "DeleteCase",
-                         new { caseId = @Model.case_.Id, customerId = @Model.case_.Customer_Id }, new
-                         {
-                             @class = "btn deleteDialog",
-                             id = "case-action-delete",
-                             deleteDialogText = Translation.Get("Är du säker på att du vill radera detta ärende", Enums.TranslationSource.TextTranslation) + '?'
-                         })</li>
+                        <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "DeleteCase",
+                                new { caseId = @Model.case_.Id, customerId = @Model.case_.Customer_Id }, new
+                                                                                                             {
+                                                                                                                 @class = "btn deleteDialog",
+                                                                                                                 id = "case-action-delete",
+                                                                                                                 deleteDialogText = Translation.Get("Är du säker på att du vill radera detta ärende", Enums.TranslationSource.TextTranslation) + '?'
+                                                                                                             })</li>
                     }
                 }
                 <li>@Html.ActionLink(Translation.Get("Stäng", Enums.TranslationSource.TextTranslation), "Index", new { customerId = @Model.case_.Customer_Id }, new { @class = "btn", id = "case-action-close" })</li>
@@ -241,25 +241,25 @@
                             {
                                 if(SessionFacade.CurrentUser.MoveCasePermission == 1)
                                 {                                
-                                <li><a data-toggle="modal" href="#divMoveCase">@Translation.Get("Flytta", Enums.TranslationSource.TextTranslation)</a></li>
-                                <!-- TODO special jцnkцpings kommun
+                                    <li><a data-toggle="modal" href="#divMoveCase">@Translation.Get("Flytta", Enums.TranslationSource.TextTranslation)</a></li>
+                                    <!-- TODO special jцnkцpings kommun
                                         <li><a href="#" >@Translation.Get("Flytta ärende till annan site", Enums.TranslationSource.TextTranslation)</a></li>
                                         -->
                                 }
                                 if(SessionFacade.CurrentUser.CopyCasePermission == 1)
                                 {     
-                                <li><a data-toggle="modal" href="#divCopyCase">@Translation.Get("Kopiera", Enums.TranslationSource.TextTranslation)</a></li>@*                           
+                                    <li><a data-toggle="modal" href="#divCopyCase">@Translation.Get("Kopiera", Enums.TranslationSource.TextTranslation)</a></li>@*                           
                                 <li><a href="/cases/copy/@Model.case_.Id?customerId=@Model.case_.Customer_Id" >@Translation.Get("Kopiera", Enums.TranslationSource.TextTranslation)</a></li>*@
                                 }
                                 if(SessionFacade.CurrentUser.FollowUpPermission == 1)
                                 {
                                     if(Model.case_.FollowUpDate.HasValue)
                                     {
-                                <li><a href="/cases/followupRemove/@Model.case_.Id" >@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</a></li>
+                                        <li><a href="/cases/followupRemove/@Model.case_.Id" >@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</a></li>
                                     }
                                     else
                                     {
-                                <li><a href="/cases/followup/@Model.case_.Id" >@Translation.Get("Follow up", Enums.TranslationSource.TextTranslation)</a></li>
+                                        <li><a href="/cases/followup/@Model.case_.Id" >@Translation.Get("Follow up", Enums.TranslationSource.TextTranslation)</a></li>
                                     }
                                 }
                             
@@ -287,6 +287,9 @@
                 </li>
 
             </ul>
+            <div id="requiredFieldsMessage" class="validation-message" style="display: none;">
+                <span>@Translation.Get("The case could not been saved because mandatory field(s) are not filled in, please check the case.")</span>
+            </div>    
         </div>
         <div class="pull-right">
             <ul class="secnav">
