@@ -652,6 +652,17 @@
                                         </td>
                                     </tr>
                                  }
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.CausingPart.ToString())">
+                                    <td>
+                                        @Translation.Get(GlobalEnums.TranslationCaseFields.CausingPart.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(model => model.CaseSolution.CausingPartId, Model.CausingParts, "", new { id = "CausingPart" })
+                                    </td>
+                                    <td class="span9">
+                                        @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.CausingPart, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.CausingPart)
+                                    </td>
+                                </tr>
                                  @if (Model.changes != null)
                                  {
                                        <tr>
@@ -675,6 +686,17 @@
                                         </td>
                                     </tr>
                                  }
+                                    <tr >
+                                        <td>
+                                            @Translation.Get("Planerad åtgärdsdatum", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td>                                      
+                                                @Html.EditorFor(model => Model.CaseSolution.WatchDate, "DatePicker", new { id = "PlanDate" }) 
+                                        </td>
+                                        <td class="span9">
+                                            @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.PlanDate, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.PlanDate)
+                                        </td>
+                                    </tr>
                                     <tr >
                                         <td>
                                             @Translation.Get("Bevakningsdatum", Enums.TranslationSource.TextTranslation)

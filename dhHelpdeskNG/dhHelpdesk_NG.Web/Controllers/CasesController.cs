@@ -412,7 +412,7 @@ namespace DH.Helpdesk.Web.Controllers
             return this.View(m);
         }
 
-        public ActionResult New(int customerId, int? templateId, int? copyFromCaseId, int? caseLanguageId)
+        public ActionResult New(int customerId, int? templateId, int? copyFromCaseId, int? caseLanguageId, int? templateistrue)
         {
             CaseInputViewModel m = null;
           
@@ -425,7 +425,7 @@ namespace DH.Helpdesk.Web.Controllers
                 if (SessionFacade.CurrentUser.CreateCasePermission == 1)
                 {
                     var userId = SessionFacade.CurrentUser.Id;
-                    m = this.GetCaseInputViewModel(userId, customerId, 0, 0, "", templateId, copyFromCaseId);
+                    m = this.GetCaseInputViewModel(userId, customerId, 0, 0, "", templateId, copyFromCaseId, false, templateistrue);
 
                     var caseParam = new NewCaseParams
                     {
@@ -1659,7 +1659,7 @@ namespace DH.Helpdesk.Web.Controllers
         /// </returns>
         private CaseInputViewModel GetCaseInputViewModel(int userId, int customerId, int caseId, int lockedByUserId = 0, 
                                                          string redirectFrom = "", int? templateId = null, 
-                                                         int? copyFromCaseId = null, bool updateState = true)
+                                                         int? copyFromCaseId = null, bool updateState = true, int? templateistrue = 0)
         {
             var m = new CaseInputViewModel();
             SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
@@ -1905,6 +1905,10 @@ namespace DH.Helpdesk.Web.Controllers
                         {
                             m.case_.Performer_User_Id = caseTemplate.PerformerUser_Id.Value;
                         }
+                        else
+                        {
+                            m.case_.Performer_User_Id = 0;
+                        }
 
                         if (caseTemplate.Category_Id != null)
                         {
@@ -1955,6 +1959,11 @@ namespace DH.Helpdesk.Web.Controllers
                         m.case_.Change_Id = caseTemplate.Change_Id;
                         m.case_.FinishingDate = caseTemplate.FinishingDate;
                         m.case_.FinishingDescription = caseTemplate.FinishingDescription;
+                        m.case_.CausingPartId = caseTemplate.CausingPartId;
+                        m.case_.PlanDate = caseTemplate.PlanDate;
+
+                        // This is used for hide fields(which are not in casetemplate) in new case input
+                        m.templateistrue = templateistrue;
                     }
                 } // Load Case Template
 

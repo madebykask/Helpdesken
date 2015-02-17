@@ -19,7 +19,8 @@
         @Translation.Get("Kommunikation")
     }
 </h4>
-
+@if (Model.templateistrue != 1)
+{
 <div class="secnavs secnavmarg">
     <div class="pull-left">
         <ul class="secnav">
@@ -74,6 +75,7 @@
         </ul>
     </div>
 </div>
+}
 <div class="row">
     <div class="span12">
         <table class="tableform">
@@ -123,6 +125,8 @@
                         @Html.TextAreaFor(model => model.CaseLog.TextInternal, new { style = "height:105px;", @readonly = true })
                     }
                 </td>
+                @if(Model.templateistrue != 1)
+                {
                 <td>
                     <div class="checkbox">
                         @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutLog)
@@ -132,27 +136,30 @@
                         @Html.TextAreaFor(model => model.CaseLog.EmailRecepientsInternalLog, new { @readonly = "readonly" })
                     </div>
                 </td>
-            </tr>            
-            @if (Model.CaseLog.Id == 0)
-            {                                        
-                <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString())">
+                }                
+            </tr> 
+             @if(Model.templateistrue != 1) 
+             {          
+                if (Model.CaseLog.Id == 0)
+                {                                        
+                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString())">
+                        <td>
+                            @CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Filename,"Bifogad fil")
+                        </td>
+                        <td>
+                            <a href="#upload_logfiles_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentCaseLanguageId)</a>
+                        </td>
+                    </tr>                
+                }            
+                <tr>
+                    <td class="span3"></td>
                     <td>
-                        @CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Filename,"Bifogad fil")
+                        <div id="divCaseLogFiles">
+                            @Html.Partial("_CaseLogFiles", Model.LogFilesModel)
+                        </div>
                     </td>
-                    <td>
-                        <a href="#upload_logfiles_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentCaseLanguageId)</a>
-                    </td>
-                </tr>                
-            }            
-            <tr>
-                <td class="span3"></td>
-                <td>
-                    <div id="divCaseLogFiles">
-                        @Html.Partial("_CaseLogFiles", Model.LogFilesModel)
-                    </div>
-                </td>
-            </tr>
-            
+                </tr>
+             }
             <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.FinishingDescription, CaseSolutionFields.FinishingDescription)">
                 <td>
                      @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.FinishingDescription, CaseSolutionFields.FinishingDescription))

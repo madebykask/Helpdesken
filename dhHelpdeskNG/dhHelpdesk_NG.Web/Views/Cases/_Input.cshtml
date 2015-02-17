@@ -118,7 +118,15 @@
                                                     @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Persons_Name, "Anmälare")
                                                 </td>
                                                 <td>
-                                                    @Html.TextBoxFor(model => model.case_.PersonsName, new { maxlength = "50" })
+                                                    @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Persons_Name, CaseSolutionFields.PersonsName))
+                                                    {
+                                                        @Html.TextBoxFor(model => model.case_.PersonsName, new { maxlength = "50" })
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.TextBoxFor(model => model.case_.PersonsName, new { maxlength = "50", @readonly = "readonly" })
+                                                    }
+                                                    
                                                 </td>
 
                                             </tr>
@@ -1153,7 +1161,7 @@
                                         </tr>
                                         }
                                     }
-                                    <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.CausingPart, CaseSolutionFields.FinishingCause)">
+                                    <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.CausingPart, CaseSolutionFields.CausingPart)">
                                         <td>
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.CausingPart, "Orsak")
                                         </td>
@@ -1205,12 +1213,24 @@
                                         </tr>
                                         }
                                     }
-                                    <tr class="displaytr" style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.PlanDate.ToString())">
+                                    <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.PlanDate, CaseSolutionFields.PlanDate)">
                                         <td>
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.PlanDate, "Planerad åtgärdsdatum")
                                         </td>
                                         <td>
-                                            @Html.EditorFor(m => m.case_.PlanDate, "DatePicker", new { id = "divCase__PlanDate" })
+                                            @*@Html.EditorFor(m => m.case_.PlanDate, "DatePicker", new { id = "divCase__PlanDate" })*@
+
+                                            @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.PlanDate, CaseSolutionFields.PlanDate))
+                                            {
+                                                                                             
+                                               @Html.EditorFor(m => m.case_.PlanDate, "DatePicker", new { id = "divCase__PlanDate" }) 
+                                               
+                                            }
+                                            else
+                                            {
+                                                @Html.EditorFor(m => m.case_.PlanDate, "DateReadOnly")
+                                            }
+
                                         </td>
                                     </tr>
                                     <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.WatchDate, CaseSolutionFields.WatchDate)">

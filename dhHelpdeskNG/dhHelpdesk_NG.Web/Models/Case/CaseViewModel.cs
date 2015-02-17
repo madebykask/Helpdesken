@@ -117,6 +117,9 @@
         public CaseTemplateTreeModel CaseTemplateTreeButton { get; set; }
 
         public DynamicCase DynamicCase { get; set; }
+
+        public int? templateistrue { get; set; }
+
     }
 
     public class CaseIndexViewModel
