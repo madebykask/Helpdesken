@@ -1167,7 +1167,7 @@
                                         </td>
                                         <td class="span1" style="float: left;">
                                             @Html.HiddenFor(model => model.case_.CausingPartId, new { ModelId = "causing-type" })
-                                            @if(!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.CausingPart, CaseSolutionFields.FinishingCause))
+                                            @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.CausingPart, CaseSolutionFields.CausingPart))
                                             {
                                                 @Html.CausingPartList(Model.case_.Customer_Id, Model.case_.CausingPartId, "causing-type")
                                             }
