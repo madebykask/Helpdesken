@@ -49,7 +49,7 @@
 
         public IList<Language> GetLanguages()
         {
-            return this._languageRepository.GetAll().OrderBy(x => x.Name).ToList();
+            return this._languageRepository.GetAll().Where(x => x.IsActive == 1).OrderBy(x => x.Name).ToList();
         }
 
         public IList<Language> GetLanguagesForGlobalSettings()
