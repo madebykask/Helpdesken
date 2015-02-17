@@ -232,6 +232,24 @@
             return query;
         }
 
+        public static IQueryable<Case> GetByFinishingPeriod(
+                                        this IQueryable<Case> query,
+                                        DateTime? from,
+                                        DateTime? until)
+        {
+            if (from.HasValue)
+            {
+                query = query.Where(c => c.FinishingDate >= from);
+            }
+
+            if (until.HasValue)
+            {
+                query = query.Where(c => c.FinishingDate <= until);
+            }
+
+            return query;
+        }
+
         public static IQueryable<Case> GetNotDeleted(this IQueryable<Case> query)
         {
             query = query.Where(c => c.Deleted == 0);

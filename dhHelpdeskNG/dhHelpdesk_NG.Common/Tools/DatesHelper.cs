@@ -42,7 +42,6 @@ namespace DH.Helpdesk.Common.Tools
             return new DateTime(date.Year, date.Month, date.Day, workingHour, 0, 0);
         }
 
-
         /// <summary>
         /// The round to hour.
         /// </summary>
@@ -101,14 +100,19 @@ namespace DH.Helpdesk.Common.Tools
             return hours < days * 24;
         }
 
-        public static bool IsHoursEqualDays(this int hours, int days)
+        public static bool IsHoursGreaterEqualDays(this int hours, int days)
         {
-            return hours.IsHoursGreaterDays(days - 1) && hours.IsHoursLessDays(days);
+            return hours >= days * 24;
         }
 
         public static bool IsHoursGreaterDays(this int hours, int days)
         {
             return hours > days * 24;
+        }
+
+        public static bool IsHoursEqualDays(this int hours, int days)
+        {
+            return hours.IsHoursGreaterEqualDays(days) && hours.IsHoursLessDays(days + 1);
         }
     }
 }

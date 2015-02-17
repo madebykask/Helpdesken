@@ -425,14 +425,13 @@
                 var caseTypeRep = uow.GetRepository<CaseType>();
                 var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
 
-                var cases =
-                    casesRep.GetAll()
+                var cases = casesRep.GetAll()
                         .GetByCustomer(customerId)
                         .GetByDepartments(departmentIds)
                         .GetByCaseType(caseTypeId)
                         .GetByWorkingGroups(workingGroupIds)
                         .GetByRegistrationSource(registrationSource)
-                        .GetByRegistrationPeriod(periodFrom, periodUntil)
+                        .GetByFinishingPeriod(periodFrom, periodUntil.HasValue ? periodUntil.Value.AddMonths(1) : (DateTime?)null)
                         .GetFinished()
                         .GetNotDeleted();                
                 var departments = departmentRep.GetAll().GetActiveByCustomer(customerId);

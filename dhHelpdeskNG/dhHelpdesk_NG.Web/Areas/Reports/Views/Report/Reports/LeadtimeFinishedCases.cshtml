@@ -19,31 +19,33 @@
         </tr>
     </tbody>
 </table>
-<table class="table table-striped table-bordered table-hover">
-    <thead>
-        <tr>
-            <th>@Translation.Get("År")</th>            
-            <th>@Translation.Get("Månad")</th>            
-            <th>@Translation.Get("Ärenden")</th>            
-            <th>@string.Format("{0} <= {1} {2}", Translation.Get("Ledtid"), Model.Data.LeadTime, Translation.Get("dagar"))</th>            
-            <th>@string.Format("{0} > {1} {2}", Translation.Get("Ledtid"), Model.Data.LeadTime, Translation.Get("dagar"))</th>            
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var leadTime in Model.Data.CasesByLeadTime)
-        {
-            <tr>
-                <td>@leadTime.FinishDate.ToYearString()</td>
-                <td>@leadTime.FinishDate.ToMonthString()</td>
-                <td>@leadTime.NumberOfCases</td>
-                <td>@(leadTime.NumberOfCasesShorterEqual > 0 ? string.Format("{0} ({1} %)", leadTime.NumberOfCasesShorterEqual, leadTime.GetShorterEqualPercents()) : leadTime.NumberOfCasesShorterEqual.ToString(CultureInfo.InvariantCulture))</td>
-                <td>@(leadTime.NumberOfCasesLonger > 0 ? string.Format("{0} ({1} %)", leadTime.NumberOfCasesLonger, leadTime.GetLongerPercents()) : leadTime.NumberOfCasesLonger.ToString(CultureInfo.InvariantCulture))</td>
-            </tr>                
-        }
-    </tbody>
-</table>
 @if (Model.IsShowDetails)
 {
+    <br/>
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>@Translation.Get("År")</th>            
+                <th>@Translation.Get("Månad")</th>            
+                <th>@Translation.Get("Ärenden")</th>            
+                <th>@string.Format("{0} <= {1} {2}", Translation.Get("Ledtid"), Model.Data.LeadTime, Translation.Get("dagar"))</th>            
+                <th>@string.Format("{0} > {1} {2}", Translation.Get("Ledtid"), Model.Data.LeadTime, Translation.Get("dagar"))</th>            
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var leadTime in Model.Data.CasesByLeadTime)
+            {
+                <tr>
+                    <td>@leadTime.FinishDate.ToYearString()</td>
+                    <td>@leadTime.FinishDate.ToMonthString()</td>
+                    <td>@leadTime.NumberOfCases</td>
+                    <td>@(leadTime.NumberOfCasesShorterEqual > 0 ? string.Format("{0} ({1} %)", leadTime.NumberOfCasesShorterEqual, leadTime.GetShorterEqualPercents()) : leadTime.NumberOfCasesShorterEqual.ToString(CultureInfo.InvariantCulture))</td>
+                    <td>@(leadTime.NumberOfCasesLonger > 0 ? string.Format("{0} ({1} %)", leadTime.NumberOfCasesLonger, leadTime.GetLongerPercents()) : leadTime.NumberOfCasesLonger.ToString(CultureInfo.InvariantCulture))</td>
+                </tr>                
+            }
+        </tbody>
+    </table>
+    <br/>
     <table class="table table-striped table-bordered table-hover">
         <thead>
             <tr>
