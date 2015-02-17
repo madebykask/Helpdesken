@@ -260,7 +260,10 @@
                                         this IQueryable<Case> query,
                                         GlobalEnums.RegistrationSource registrationSource)
         {
-            query = query.Where(c => c.RegistrationSource == (int)registrationSource);
+            if (registrationSource != GlobalEnums.RegistrationSource.Empty)
+            {
+                query = query.Where(c => c.RegistrationSource == (int)registrationSource);                
+            }
 
             return query;
         }

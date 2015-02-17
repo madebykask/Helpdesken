@@ -130,10 +130,61 @@
                                 }).ToList();
 
             var numberOfCases = entities.Count;
-            var numberOfCasesShorterEqual = entities.Count(e => e.LeadTime.HoursLessEqualDays(leadTime));
-            var numberOfCasesLonger = entities.Count(e => e.LeadTime.HoursGreaterDays(leadTime));
+            var numberOfCasesShorterEqual = entities.Count(e => e.LeadTime.IsHoursLessEqualDays(leadTime));
+            var numberOfCasesLonger = entities.Count(e => e.LeadTime.IsHoursGreaterDays(leadTime));
+            var casesByLeadTime = new List<FinishedCasesLeadTime>();
+            var casesByLeadTimes = new List<FinishedCasesLeadTimes>();
+            if (!periodFrom.HasValue)
+            {
+                periodFrom = DateTime.Today.AddYears(-1);
+            }
 
-            return new LeadtimeFinishedCasesData();
+            if (!periodUntil.HasValue)
+            {
+                periodUntil = DateTime.Today;
+            }
+
+            periodFrom = periodFrom.RoundToMonthOrGetCurrent();
+            periodUntil = periodUntil.RoundToMonthOrGetCurrent();
+
+            while (periodFrom <= periodUntil)
+            {
+                var casesLeadTime = entities.Where(e => e.FinishingDate.Value.RoundToMonth() == periodFrom).ToList();
+                casesByLeadTime.Add(new FinishedCasesLeadTime(
+                                        periodFrom.Value,
+                                        casesLeadTime.Count,
+                                        casesLeadTime.Count(e => e.LeadTime.IsHoursLessEqualDays(leadTime)),
+                                        casesLeadTime.Count(e => e.LeadTime.IsHoursGreaterDays(leadTime))));
+                if (isShowDetails)
+                {
+                    var numberOfCasesLeadTime = new List<int>
+                                                    {
+                                                        casesLeadTime.Count(e => e.LeadTime.IsHoursLessDay())                    
+                                                    };
+                    int i;
+                    for (i = 1; i <= 10; i++)
+                    {
+                        numberOfCasesLeadTime.Add(casesLeadTime.Count(e => e.LeadTime.IsHoursEqualDays(i)));
+                    }
+
+                    numberOfCasesLeadTime.Add(casesLeadTime.Count(e => e.LeadTime.IsHoursGreaterDays(i)));
+
+                    casesByLeadTimes.Add(new FinishedCasesLeadTimes(
+                                        periodFrom.Value,
+                                        casesLeadTime.Count,
+                                        numberOfCasesLeadTime));
+                }
+
+                periodFrom = periodFrom.Value.AddMonths(1);
+            }
+
+            return new LeadtimeFinishedCasesData(
+                                leadTime,
+                                numberOfCases,
+                                numberOfCasesShorterEqual,
+                                numberOfCasesLonger,
+                                casesByLeadTime,
+                                casesByLeadTimes);
         }
     }
 }

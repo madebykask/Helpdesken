@@ -40,8 +40,8 @@
                                 ReportType.RegistratedCasesDay,
                                 ReportType.CaseTypeArticleNo,
                                 ReportType.CaseSatisfaction,
-                                ReportType.ReportGenerator
-//                                , ReportType.LeadtimeFinishedCases
+                                ReportType.ReportGenerator,
+                                ReportType.LeadtimeFinishedCases
                             };
 
             // It's a new report, so we need to add it to the tblReport table
@@ -147,8 +147,8 @@
                                                             new ItemOverview(Translation.Get("Handläggare"), ((int)GlobalEnums.RegistrationSource.Case).ToString(CultureInfo.InvariantCulture)), 
                                                             new ItemOverview(Translation.Get("Självservice"), ((int)GlobalEnums.RegistrationSource.SelfService).ToString(CultureInfo.InvariantCulture)), 
                                                             new ItemOverview(Translation.Get("E-post"), ((int)GlobalEnums.RegistrationSource.Mail).ToString(CultureInfo.InvariantCulture))
-                                                        }, 
-                                                        null, 
+                                                        },
+                                                        null,
                                                         false);
             var periodFrom = DateTime.Today.AddYears(-1);
             var periodUntil = DateTime.Today;
@@ -174,7 +174,7 @@
 
         public LeadtimeFinishedCasesModel GetLeadtimeFinishedCasesModel(LeadtimeFinishedCasesData data, bool isShowDetails)
         {
-            return new LeadtimeFinishedCasesModel();
+            return new LeadtimeFinishedCasesModel(data, isShowDetails);
         }
     }
 }

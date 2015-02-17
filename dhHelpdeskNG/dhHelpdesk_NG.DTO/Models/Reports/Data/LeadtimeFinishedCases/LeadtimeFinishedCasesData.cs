@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeFinishedCases
 {
+    using System;
     using System.Collections.Generic;
 
     using DH.Helpdesk.Common.ValidationAttributes;
@@ -45,6 +46,26 @@
         public List<FinishedCasesLeadTime> CasesByLeadTime { get; private set; } 
 
         [NotNull]
-        public List<FinishedCasesLeadTimes> CasesByLeadTimes { get; private set; } 
+        public List<FinishedCasesLeadTimes> CasesByLeadTimes { get; private set; }
+
+        public double GetShorterEqualPercents(int digits = 2)
+        {
+            if (this.NumberOfCases == 0)
+            {
+                return 0;
+            }
+
+            return Math.Round(((double)this.NumberOfCasesShorterEqual / this.NumberOfCases) * 100, digits);
+        }
+
+        public double GetLongerPercents(int digits = 2)
+        {
+            if (this.NumberOfCases == 0)
+            {
+                return 0;
+            }
+
+            return Math.Round(((double)this.NumberOfCasesLonger / this.NumberOfCases) * 100, digits);
+        }
     }
 }

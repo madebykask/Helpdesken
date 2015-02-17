@@ -28,5 +28,25 @@
 
         [MinValue(0)]
         public int NumberOfCasesLonger { get; private set; }
+
+        public double GetShorterEqualPercents(int digits = 2)
+        {
+            if (this.NumberOfCases == 0)
+            {
+                return 0;
+            }
+
+            return Math.Round(((double)this.NumberOfCasesShorterEqual / this.NumberOfCases) * 100, digits);
+        }
+
+        public double GetLongerPercents(int digits = 2)
+        {
+            if (this.NumberOfCases == 0)
+            {
+                return 0;
+            }
+
+            return Math.Round(((double)this.NumberOfCasesLonger / this.NumberOfCases) * 100, digits);
+        }
     }
 }

@@ -1702,6 +1702,7 @@
     <Compile Include="Infrastructure\Print\PrintPdfResult.cs" />
     <Compile Include="Infrastructure\Print\PrintPdfView.cs" />
     <Compile Include="Infrastructure\Tools\Concrete\InvoiceHelper.cs" />
+    <Compile Include="Infrastructure\Tools\DateTimeHelper.cs" />
     <Compile Include="Infrastructure\Tools\EncryptionHelper.cs" />
     <Compile Include="Infrastructure\Tools\FieldSettingsHelper.cs" />
     <Compile Include="Infrastructure\Tools\IInvoiceHelper.cs" />
