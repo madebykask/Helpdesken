@@ -1962,6 +1962,9 @@ namespace DH.Helpdesk.Web.Controllers
                         m.case_.CausingPartId = caseTemplate.CausingPartId;
                         m.case_.PlanDate = caseTemplate.PlanDate;
 
+                        //To get the right users for perfomers when creating a case from a template
+                        m.performers = this._userService.GetUsersForWorkingGroup(customerId, m.case_.WorkingGroup_Id.Value);
+
                         // This is used for hide fields(which are not in casetemplate) in new case input
                         m.templateistrue = templateistrue;
                     }
