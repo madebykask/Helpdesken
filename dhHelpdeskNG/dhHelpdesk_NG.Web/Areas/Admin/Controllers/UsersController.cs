@@ -2,8 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Web.Mvc;
+
+    using DH.Helpdesk.BusinessData.Enums.Users;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Accounts;
     using DH.Helpdesk.Services.Services;
@@ -582,17 +585,17 @@
 
             #region SelectListItems
 
-            List<SelectListItem> lis = new List<SelectListItem>();
+            var lis = new List<SelectListItem>();
             lis.Add(new SelectListItem()
             {
-                Text = "Start",
-                Value = "1",
+                Text = Translation.Get("Start"),
+                Value = ((int)StartPage.Start).ToString(CultureInfo.InvariantCulture),
                 Selected = false
             });
             lis.Add(new SelectListItem()
             {
-                Text = "Ärendeöversikt",
-                Value = "0",
+                Text = Translation.Get("Ärendeöversikt"),
+                Value = ((int)StartPage.CaseSummary).ToString(CultureInfo.InvariantCulture),
                 Selected = false
             });
 

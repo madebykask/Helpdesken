@@ -375,8 +375,8 @@ namespace DH.Helpdesk.Dal.Repositories
                         x.SurName,
                         x.Phone,
                         x.Email,
-                        x.UserWorkingGroups)
-                    ).SingleOrDefault();
+                        x.UserWorkingGroups,
+                        x.StartPage)).SingleOrDefault();
             return u;
         }
     }

@@ -1,5 +1,4 @@
 ﻿@using System.Web.Optimization
-@using DH.Helpdesk.Web.Infrastructure
 @{
     ViewBag.Title = "Login";
     Layout = null;
@@ -16,30 +15,33 @@
 </head>
 <body class="login">
     
-<div class="form-signin">
-        <form id="frmLogin" name="frmLogin" method="post" action="">
+    <div class="form-signin">
+        @using (Html.BeginForm("Login", "Login", null, FormMethod.Post, new { id = "frmLogin", name = "frmLogin" }))
+        {
+            @Html.Hidden("returnUrl", Request.QueryString["returnUrl"])
             <div class="form-signin-heading">&nbsp;</div>
-            @if (TempData["LoginFailed"] != null)
+            if (TempData["LoginFailed"] != null)
             {
                 <div class="alert alert-error">
-                        @TempData["LoginFailed"]; 
+                    @TempData["LoginFailed"]; 
                 </div>
             }
-            Username:<br />
+
+            @(Translation.Get("Username") + ":")<br />
             <input type="text" maxlength="50" name="txtUid" id="txtUid" class="input-block-level" placeholder="Username" />
             <br />
-            Password:<br />
+            @(Translation.Get("Password") + ":")<br />
             <input type="password" maxlength="50" name="txtPwd" id="txtPwd" class="input-block-level" placeholder="Password" />
             <!--
-            @Translation.Get("Logga in med", Enums.TranslationSource.TextTranslation):<br />
-            <select name="checkInWith" id="checkInWith" class="input-block-level">
-                <option value="0">@Translation.Get("Lokalt konto", Enums.TranslationSource.TextTranslation)</option>
-                <option value="1">@Translation.Get("Nätverkskonto", Enums.TranslationSource.TextTranslation)</option>
-            </select>
-            -->
+                @Translation.Get("Logga in med"):<br />
+                <select name="checkInWith" id="checkInWith" class="input-block-level">
+                    <option value="0">@Translation.Get("Lokalt konto")</option>
+                    <option value="1">@Translation.Get("Nätverkskonto")</option>
+                </select>
+                -->
             <br />
-            <input type="submit" value="Login" name="btnLogin" id="btnLogin" class="btn btn-large btn-success" style="width:100%;" />
-        </form>
+            <input type="submit" value="Login" name="btnLogin" id="btnLogin" class="btn btn-large btn-success" style="width:100%;" />            
+        }
     </div>
     <div class="signin-bottom">
         <p><img src="@Url.Content("~/Content/img/dhhelpdesk.png")" /></p>

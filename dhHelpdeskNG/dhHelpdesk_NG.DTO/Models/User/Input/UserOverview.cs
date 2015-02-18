@@ -1,44 +1,46 @@
-using System.Collections.Generic;
-using DH.Helpdesk.Domain;
-
 namespace DH.Helpdesk.BusinessData.Models.User.Input
 {
+    using System.Collections.Generic;
+
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Domain;
 
     public class UserOverview
     {
         public UserOverview(
-            int id
-            , string userId
-            , int customerId
-            , int languageId
-            , int userGroupId
-            , int followUpPermission
-            , int restrictedCasePermission
-            , int showNotAssignedWorkingGroups
-            , int createCasePermission
-            , int copyCasePermission
-            , int orderPermission
-            , int caseSolutionPermission
-            , int deleteCasePermission
-            , int deleteAttachedFilePermission
-            , int moveCasePermission
-            , int activateCasePermission
-            , int reportPermission
-            , int closeCasePermission
-            , int calendarPermission
-            , int fAQPermission
-            , int bulletinBoardPermission
-            , int setPriorityPermission
-            , int invoicePermission
-            , int dataSecurityPermission
-            , int refreshContent
-            , string firstName
-            , string surName
-            , string phone
-            , string email
-            , ICollection<UserWorkingGroup> wgs)
+            int id,
+            string userId,
+            int customerId,
+            int languageId,
+            int userGroupId,
+            int followUpPermission,
+            int restrictedCasePermission,
+            int showNotAssignedWorkingGroups,
+            int createCasePermission,
+            int copyCasePermission,
+            int orderPermission,
+            int caseSolutionPermission,
+            int deleteCasePermission,
+            int deleteAttachedFilePermission,
+            int moveCasePermission,
+            int activateCasePermission,
+            int reportPermission,
+            int closeCasePermission,
+            int calendarPermission,
+            int faqPermission,
+            int bulletinBoardPermission,
+            int setPriorityPermission,
+            int invoicePermission,
+            int dataSecurityPermission,
+            int refreshContent,
+            string firstName,
+            string surName,
+            string phone,
+            string email,
+            ICollection<UserWorkingGroup> wgs,
+            int startPage)
         {
+            this.StartPage = startPage;
             this.Id = id;
             this.UserId = userId;
             this.CustomerId = customerId;
@@ -58,7 +60,7 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             this.ReportPermission = reportPermission;
             this.CloseCasePermission = closeCasePermission;
             this.CalendarPermission = calendarPermission;
-            this.FAQPermission = fAQPermission;
+            this.FAQPermission = faqPermission;
             this.FollowUpPermission = followUpPermission;
             this.BulletinBoardPermission = bulletinBoardPermission;
             this.SetPriorityPermission = setPriorityPermission;
@@ -69,7 +71,7 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             this.SurName = surName;
             this.Phone = phone;
             this.Email = email;
-            UserWorkingGroups = wgs;
+            this.UserWorkingGroups = wgs;
         }
 
         [IsId]
@@ -135,5 +137,7 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
         public string Email { get; set; }
 
         public ICollection<UserWorkingGroup> UserWorkingGroups { get; set; }
+
+        public int StartPage { get; private set; }
     }
 }
