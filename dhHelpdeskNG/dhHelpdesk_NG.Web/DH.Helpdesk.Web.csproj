@@ -269,6 +269,7 @@
     <Compile Include="Areas\Admin\Controllers\QuickLinkController.cs" />
     <Compile Include="Areas\Admin\Controllers\RegionController.cs" />
     <Compile Include="Areas\Admin\Controllers\RoomController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SelfServiceSettingController.cs" />
     <Compile Include="Areas\Admin\Controllers\SettingsController.cs" />
     <Compile Include="Areas\Admin\Controllers\StandardTextController.cs" />
     <Compile Include="Areas\Admin\Controllers\StartController.cs" />
@@ -298,6 +299,8 @@
     <Compile Include="Areas\Admin\Models\ContractCategoryIndexViewModel.cs" />
     <Compile Include="Areas\Admin\Models\AccountActivityIndexViewModel.cs" />
     <Compile Include="Areas\Admin\Models\BuildingViewModels.cs" />
+    <Compile Include="Areas\Admin\Models\SelfServiceRegMessageViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\SelfServiceIndexViewModel.cs" />
     <Compile Include="Areas\Admin\Models\InfoTextViewModels.cs" />
     <Compile Include="Areas\Admin\Models\Invoice\CaseInvoiceSettingsModel.cs" />
     <Compile Include="Areas\Admin\Models\StandardTextViewModels.cs" />
@@ -2477,6 +2480,8 @@
     <Content Include="Areas\Reports\Views\Report\Reports\ReportGenerator.cshtml" />
     <Content Include="Areas\Reports\Views\Report\Options\LeadtimeFinishedCases.cshtml" />
     <Content Include="Areas\Reports\Views\Report\Reports\LeadtimeFinishedCases.cshtml" />
+    <Content Include="Areas\Admin\Views\SelfServiceSetting\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\SelfServiceSetting\EditRegMessage.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />

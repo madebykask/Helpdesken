@@ -1,0 +1,100 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Admin.Models.SelfServiceIndexViewModel
+@{
+    ViewBag.Title = "Edit";
+}
+
+@using (Html.BeginForm("Edit", "SelfServiceSetting", new { id = Model.Customer.Id }, FormMethod.Post, new { id = "target" }))
+{
+    <div class="secnavs fixed">
+           <div class="secnavs fixed">
+            <div class="pull-left">
+                <ul class="secnav">
+                    <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "Edit", new { id = Model.Customer.Id }, new { onclick = "submitForm();return false;", @class = "btn" })</li>                
+                </ul>
+            </div>
+            @Html.Partial("_MasterDataPanel", Model.Customer)
+        </div>
+    </div>
+    <input type="hidden" id="customerId" value="@Model.Customer.Id" />
+    
+    <div class="content">
+        <div class="container">
+            <ul class="nav nav-tabs" id="myTab">
+                <li class="active"><a href="#fragment-1">@Translation.Get("Självservice", Enums.TranslationSource.TextTranslation)</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane tab-pane-border active" id="fragment-1">
+                    <h4>@Translation.Get("Modules", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="formContainer">
+                        <table class="tableform">
+                            <tr>
+                                <td class="span3">
+                                    @Translation.Get("Visa på självservice", Enums.TranslationSource.TextTranslation)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <input type="checkbox" name="customer.ShowDocumentsOnExternalPage" @(Model.Customer.ShowDocumentsOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
+                                    <input type="hidden" name="customer.ShowDocumentsOnExternalPage" value="0" />
+                                    &nbsp; &nbsp; @Translation.Get("Visa Documents på självservice", Enums.TranslationSource.TextTranslation)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <input type="checkbox" name="customer.ShowFAQOnExternalPage" @(Model.Customer.ShowFAQOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
+                                    <input type="hidden" name="customer.ShowFAQOnExternalPage" value="0" />
+                                    &nbsp; &nbsp; @Translation.Get("Visa FAQ på självservice", Enums.TranslationSource.TextTranslation)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <input type="checkbox" name="customer.ShowBulletinBoardOnExtPage" @(Model.Customer.ShowBulletinBoardOnExtPage == 1 ? "checked=checked" : "") value="1"/>
+                                    <input type="hidden" name="customer.ShowBulletinBoardOnExtPage" value="0" />
+                                    &nbsp; &nbsp; @Translation.Get("Visa anslagstavlan på självservice", Enums.TranslationSource.TextTranslation)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <input type="checkbox" name="customer.ShowDashboardOnExternalPage" @(Model.Customer.ShowDashboardOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
+                                    <input type="hidden" name="customer.ShowDashboardOnExternalPage" value="0" />
+                                    &nbsp; &nbsp; @Translation.Get("Visa Dashboard på självservice", Enums.TranslationSource.TextTranslation)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <input type="checkbox" name="customer.PasswordRequiredOnExternalPage" @(Model.Customer.PasswordRequiredOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
+                                    <input type="hidden" name="customer.PasswordRequiredOnExternalPage" value="0" />
+                                    &nbsp; &nbsp; @Translation.Get("Självservice kräver lösenord", Enums.TranslationSource.TextTranslation)
+                                </td>
+                            </tr>
+                            @*<tr>
+                                <td style="vertical-align: top">
+                                    @Translation.Get("Meddelande", Enums.TranslationSource.TextTranslation)
+                                </td>
+                                <td>
+                                    @Html.TextAreaFor(model => model.Customer.RegistrationMessage, new { style = "width:600px; height:150px;", maxlength = "1000" })
+                                </td>
+                            </tr>*@
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script type="text/javascript">
+
+        function submitForm() {
+            $("#target").submit();
+        }
+
+    </script>
+}

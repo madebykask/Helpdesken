@@ -277,8 +277,9 @@
             else
                 this._customerRepository.Update(customer);
 
+            if (setting != null)
+               this._settingService.SaveSettingForCustomerEdit(setting, out errors);
 
-            this._settingService.SaveSettingForCustomerEdit(setting, out errors);
 
             if(errors.Count == 0)
                 this.Commit();

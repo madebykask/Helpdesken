@@ -71,6 +71,7 @@
             this.Property(x => x.RegTime).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             this.Property(x => x.CommunicateWithNotifier).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+            this.Property(x => x.ShowDocumentsOnExternalPage).IsRequired();
 
             this.ToTable("tblcustomer");
         }

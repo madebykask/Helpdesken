@@ -1,0 +1,57 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Common.Enums;
+@model DH.Helpdesk.Web.Areas.Admin.Models.SelfServiceRegMessageViewModel
+@{
+    ViewBag.Title = "EditRegMessage";
+}
+
+@using (Html.BeginForm("EditRegMessage", "SelfServiceSetting", new { id = Model.Customer.Id }, FormMethod.Post, new { id = "target" }))
+{
+    <div class="secnavs fixed">
+           <div class="secnavs fixed">
+            <div class="pull-left">
+                <ul class="secnav">
+                    <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "EditRegMessage", new { id = Model.Customer.Id }, new { onclick = "submitForm();return false;", @class = "btn" })</li>                
+                    <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", "InfoText", new { customerId = Model.Customer.Id, infoTextType = InfoTextTypes.SelfService }, new { @class = "btn" })</li>
+                </ul>
+            </div>
+            @Html.Partial("_MasterDataPanel", Model.Customer)
+        </div>
+    </div>
+    <input type="hidden" id="customerId" value="@Model.Customer.Id" />
+    
+    <div class="content">
+        <div class="container">
+            <ul class="nav nav-tabs" id="myTab">
+                <li class="active"><a href="#fragment-1">@Translation.Get("Självservice", Enums.TranslationSource.TextTranslation)</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane tab-pane-border active" id="fragment-1">
+                    <h4>@Translation.Get("Registration Message", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="formContainer">
+                        <table class="tableform">                            
+                            <tr>
+                                <td style="vertical-align: top">
+                                    @Translation.Get("Meddelande", Enums.TranslationSource.TextTranslation)
+                                </td>
+                                <td>
+                                    @Html.TextAreaFor(model => model.Customer.RegistrationMessage, new { style = "width:600px; height:150px;", maxlength = "1000" })
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script type="text/javascript">
+
+        function submitForm() {
+            $("#target").submit();
+        }
+
+    </script>
+}

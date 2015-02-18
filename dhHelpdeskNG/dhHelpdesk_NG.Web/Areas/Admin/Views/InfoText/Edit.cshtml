@@ -15,7 +15,8 @@
         <div class="pull-left">
             <ul class="secnav">
                 <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", new { }, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
-                <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", new { customerId = Model.InfoTextShowViewModel.Customer.Id }, new { @class = "btn" })</li>
+                <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", new { customerId = Model.InfoTextShowViewModel.Customer.Id, 
+                                                                                                                        infoTextType = Model.InfoTextShowViewModel.InfoTextType }, new { @class = "btn" })</li>
             </ul>
         </div>
     </div>
@@ -24,6 +25,8 @@
     <div class="container">
         <input type="hidden" id="customerId" name="customerId" value="@Model.Customer.Id" />
         <input type="hidden" id="infoTypeId" name="infoTypeId" value="@Model.InfoTextShowViewModel.InfoText.Type" />
+        <input type="hidden" id="infoTextType" name="infoTextType" value="@Model.InfoTextShowViewModel.InfoTextType" />
+
         <ul class="nav nav-tabs" id="myTab">
             <li class="active"><a href="#fragment-1">@Translation.Get("Informationstext", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li>
         </ul>
@@ -93,7 +96,9 @@
             var list = $("#languageList");
             list.html("");
             if (id != "") {
-                $.get('/InfoText/UpdateLanguageList/' + id + '?customerId=' + $("#customerId").val() + '&infoTypeId=' + $("#infoTypeId").val(), function (result) {
+                $.get('/InfoText/UpdateLanguageList/' + id + '?customerId=' + $("#customerId").val() +
+                                                      '&infoTypeId=' + $("#infoTypeId").val() + 
+                                                      '&infoTextType=' + $("#infoTextType").val(), function (result) {
                     list.html(result);
                 });
             }

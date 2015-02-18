@@ -1,5 +1,7 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Web.Infrastructure.Extensions
+@using DH.Helpdesk.Common.Enums;
+
 @model DH.Helpdesk.Domain.Customer
 <li><a href="@Url.Action("index", "customer", new { area = "admin" })">@Translation.Get("Välj kund", Enums.TranslationSource.TextTranslation)</a></li>
 <li class="dropdown-submenu">
@@ -152,18 +154,51 @@
     </ul>
 </li>
 <li class="line"></li>
+
 <li class="dropdown-submenu">
     <a href="#">
         @Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)
     </a>
     <ul class="dropdown-menu">
-        <li class="@Html.ActiveTab(new string[] { "infotext" })"><a href="@Url.Action("index", "infotext", new { customerId = Model.Id, languageId = 0 })">@Translation.Get("Informationstext", Enums.TranslationSource.TextTranslation)</a></li>
+        <li class="@Html.ActiveTab(new string[] { "infotext" })">
+            <a href="@Url.Action("index", "infotext", new { customerId = Model.Id, languageId = 0, infoTextType = InfoTextTypes.Helpdesk})">
+                @Translation.Get("Informationstext", Enums.TranslationSource.TextTranslation)
+            </a>
+        </li>
         <li class="line"></li>
-        <li class="@Html.ActiveTab(new string[] { "quicklink" })"><a href="@Url.Action("index", "quicklink", new { customerId = Model.Id })">@Translation.Get("Snabblänkar", Enums.TranslationSource.TextTranslation)</a></li>
-        <!--<li class="@Html.ActiveTab(new string[] { "currency" })"><a href="@Url.Action("index", "currency", new { customerId = Model.Id })">@Translation.Get("Valuta", Enums.TranslationSource.TextTranslation)</a></li>
-        <li class="line"></li>-->
-        <li class="@Html.ActiveTab(new string[] { "program" })"><a href="@Url.Action("index", "program", new { customerId = Model.Id })">@Translation.Get("Program", Enums.TranslationSource.TextTranslation)</a></li>
+        <li class="@Html.ActiveTab(new string[] { "quicklink" })">
+            <a href="@Url.Action("index", "quicklink", new { customerId = Model.Id })">
+                @Translation.Get("Snabblänkar", Enums.TranslationSource.TextTranslation)
+            </a>
+        </li>
+        <li class="@Html.ActiveTab(new string[] { "program" })">
+            <a href="@Url.Action("index", "program", new { customerId = Model.Id })">
+                @Translation.Get("Program", Enums.TranslationSource.TextTranslation)
+            </a>
+        </li>
+        @*<li class="@Html.ActiveTab(new string[] { "currency" })"><a href="@Url.Action("index", "currency", new { customerId = Model.Id })">@Translation.Get("Valuta", Enums.TranslationSource.TextTranslation)</a></li>
+        <li class="line"></li>*@
+        
     </ul>
 </li>
 <li class="line"></li>
+<li class="dropdown-submenu">
+    <a href="#">
+        @Translation.Get("Självservice", Enums.TranslationSource.TextTranslation)
+    </a>
+    <ul class="dropdown-menu">
+        <li class="@Html.ActiveTab(new string[] { "selfservicesetting" })">
+            <a href="@Url.Action("index", "SelfServiceSetting", new { customerId = Model.Id, languageId = 0 })">
+               @Translation.Get("Setting", Enums.TranslationSource.TextTranslation)
+            </a>
+        </li>
+        <li class="line"></li>
+        <li class="@Html.ActiveTab(new string[] { "selfservicemessages" })">
+            <a href="@Url.Action("index", "infotext", new { customerId = Model.Id, languageId = 0, infoTextType = InfoTextTypes.SelfService })">
+                @Translation.Get("Messages", Enums.TranslationSource.TextTranslation)
+            </a>
+        </li>
+    </ul>
+</li>
 
+<li class="line"></li>

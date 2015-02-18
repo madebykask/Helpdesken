@@ -294,11 +294,7 @@
         {
             var customerToSave = this._customerService.GetCustomer(id);
             customerToSave.OrderPermission = this.returnOrderPermissionForSave(id, vmodel);
-            customerToSave.OverwriteFromMasterDirectory = vmodel.Customer.OverwriteFromMasterDirectory;
-            customerToSave.PasswordRequiredOnExternalPage = vmodel.Customer.PasswordRequiredOnExternalPage;
-            customerToSave.ShowBulletinBoardOnExtPage = vmodel.Customer.ShowBulletinBoardOnExtPage;
-            customerToSave.ShowDashboardOnExternalPage = vmodel.Customer.ShowDashboardOnExternalPage;
-            customerToSave.ShowFAQOnExternalPage = vmodel.Customer.ShowFAQOnExternalPage;
+            customerToSave.OverwriteFromMasterDirectory = vmodel.Customer.OverwriteFromMasterDirectory;            
             customerToSave.CommunicateWithNotifier = vmodel.Customer.CommunicateWithNotifier;
 
             var b = this.TryUpdateModel(customerToSave, "customer");
