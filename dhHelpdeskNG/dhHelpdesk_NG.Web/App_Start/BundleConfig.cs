@@ -200,6 +200,9 @@
                             "~/Content/js/lib/angular-1.3.11/angular-sanitize.min.js",
                             "~/Content/js/lib/angular-1.3.11/angular-scenario.js",
                             "~/Content/js/lib/angular-1.3.11/angular-touch.min.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/admin/users").Include(
+                            "~/Areas/Admin/Content/js/Users/user.js"));
         }
     }
 }

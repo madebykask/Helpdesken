@@ -1,4 +1,5 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
+﻿@using System.Web.Optimization
+@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Admin.Models.UserInputViewModel
 @{
     ViewBag.Title = "Edit";
@@ -76,3 +77,5 @@
             });
         });
 </script>
+
+@Scripts.Render("~/bundles/admin/users")
