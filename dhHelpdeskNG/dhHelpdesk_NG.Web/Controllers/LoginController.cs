@@ -8,7 +8,6 @@
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Users;
     using DH.Helpdesk.Web.Infrastructure;
-    using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions;
     using DH.Helpdesk.Web.Infrastructure.Tools;
 
     public class LoginController : Controller
@@ -71,7 +70,7 @@
                     }
 
                     if (!string.IsNullOrEmpty(redirectTo) 
-                        && redirectTo.Contains("login"))
+                        && redirectTo.ToLower().Contains("login"))
                     {
                         redirectTo = Root;
                     }

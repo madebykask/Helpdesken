@@ -21,9 +21,15 @@
 
         public string AbsolutePathToRelative(string path)
         {
-            var uri = new UriBuilder(path);
-
-            return uri.Path;
+            try
+            {
+                var uri = new UriBuilder(path);
+                return uri.Path;
+            }
+            catch (Exception)
+            {
+                return string.Empty;
+            }
         }
     }
 }
