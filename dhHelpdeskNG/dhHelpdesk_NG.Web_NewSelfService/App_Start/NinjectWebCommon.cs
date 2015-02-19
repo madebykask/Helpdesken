@@ -178,8 +178,8 @@ namespace DH.Helpdesk.NewSelfService
             kernel.Bind<IBulletinBoardRepository>().To<BulletinBoardRepository>();
             kernel.Bind<ICaseSolutionSettingRepository>().To<CaseSolutionSettingRepository>();
             kernel.Bind<IDocumentRepository>().To<DocumentRepository>();
-            kernel.Bind<IDocumentCategoryRepository>().To<DocumentCategoryRepository>();            
-
+            kernel.Bind<IDocumentCategoryRepository>().To<DocumentCategoryRepository>();
+            kernel.Bind<IFormRepository>().To<FormRepository>();
             
                                        
             // Service             

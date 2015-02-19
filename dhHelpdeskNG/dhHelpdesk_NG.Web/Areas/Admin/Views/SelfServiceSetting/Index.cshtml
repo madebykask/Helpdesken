@@ -25,22 +25,14 @@
             </ul>
             <div class="tab-content">
                 <div class="tab-pane tab-pane-border active" id="fragment-1">
-                    <h4>@Translation.Get("Modules", Enums.TranslationSource.TextTranslation)</h4>
+                    <h4>@Translation.Get("Setting", Enums.TranslationSource.TextTranslation)</h4>
                     <div class="formContainer">
                         <table class="tableform">
                             <tr>
                                 <td class="span3">
                                     @Translation.Get("Visa på självservice", Enums.TranslationSource.TextTranslation)
                                 </td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>
-                                    <input type="checkbox" name="customer.ShowDocumentsOnExternalPage" @(Model.Customer.ShowDocumentsOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
-                                    <input type="hidden" name="customer.ShowDocumentsOnExternalPage" value="0" />
-                                    &nbsp; &nbsp; @Translation.Get("Visa Documents på självservice", Enums.TranslationSource.TextTranslation)
-                                </td>
-                            </tr>
+                            </tr>                            
                             <tr>
                                 <td></td>
                                 <td>
@@ -73,14 +65,40 @@
                                     &nbsp; &nbsp; @Translation.Get("Självservice kräver lösenord", Enums.TranslationSource.TextTranslation)
                                 </td>
                             </tr>
-                            @*<tr>
-                                <td style="vertical-align: top">
-                                    @Translation.Get("Meddelande", Enums.TranslationSource.TextTranslation)
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <input type="checkbox" id="chkDoc" name="customer.ShowDocumentsOnExternalPage" @(Model.Customer.ShowDocumentsOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
+                                    <input type="hidden" name="customer.ShowDocumentsOnExternalPage" value="0" />
+                                    &nbsp; &nbsp; @Translation.Get("Visa Documents på självservice", Enums.TranslationSource.TextTranslation)
+                                </td>
+                            </tr>
+                            <tr id="docCategories">
+                                <td>
+                                    @Translation.Get("Dokument", Enums.TranslationSource.TextTranslation) @Translation.Get("Kategorier", Enums.TranslationSource.TextTranslation)
                                 </td>
                                 <td>
-                                    @Html.TextAreaFor(model => model.Customer.RegistrationMessage, new { style = "width:600px; height:150px;", maxlength = "1000" })
-                                </td>
-                            </tr>*@
+                                    <table>
+                                        <tr>                                           
+                                            <td>@Translation.Get("Tillgängliga", Enums.TranslationSource.TextTranslation)</td>
+                                            <td></td>
+                                            <td>@Translation.Get("Valda", Enums.TranslationSource.TextTranslation)</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                @Html.ListBox("AvailableCategories", Model.AvailableCategories, new { style = "width: 280px; height: 120px" })
+                                            </td>
+                                            <td style="vertical-align:middle">
+                                                <input type="button" value="&lt;" class="btn" id="removeCat" />
+                                                <input type="button" value="&gt;" class="btn" id="addCat" />
+                                            </td>
+                                            <td>
+                                                @Html.ListBox("SelectedCategories", Model.SelectedCategories, new { style = "width: 280px; height: 120px" })
+                                            </td>
+                                        </tr>
+                                    </table>                                    
+                                </td>                                
+                            </tr>                            
                         </table>
                     </div>
                 </div>
@@ -92,7 +110,37 @@
 @section Scripts {
     <script type="text/javascript">
 
+        if ('@Model.Customer.ShowDocumentsOnExternalPage' == 1)
+            $('#docCategories').show()
+        else
+            $('#docCategories').hide();
+
+        $('#chkDoc').click(function () {
+            if ($('#chkDoc').attr('checked')) {
+                $('#docCategories').show();
+            }
+            else {
+                $('#docCategories').hide();
+            }
+
+        });
+
+        $("#addCat").click(function () {
+            $("#AvailableCategories option:selected").remove().appendTo("#SelectedCategories");
+            $("#AvailableCategories").get(0).selectedIndex = -1;
+            $("#SelectedCategories").get(0).selectedIndex = -1;
+            return false;
+        });
+
+        $("#removeCat").click(function () {
+            $("#SelectedCategories option:selected").remove().appendTo("#AvailableCategories");
+            $("#AvailableCategories").get(0).selectedIndex = -1;
+            $("#SelectedCategories").get(0).selectedIndex = -1;
+            return false;
+        });
+
         function submitForm() {
+            $("#SelectedCategories option").attr("selected", "selected");
             $("#target").submit();
         }
 

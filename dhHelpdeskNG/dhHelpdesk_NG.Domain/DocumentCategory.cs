@@ -11,6 +11,7 @@
         public string Name { get; set; }
         public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }
+        public bool ShowOnExternalPage { get; set; }
 
         public virtual Customer Customer { get; set; }
         public virtual User CreatedByUser { get; set; }

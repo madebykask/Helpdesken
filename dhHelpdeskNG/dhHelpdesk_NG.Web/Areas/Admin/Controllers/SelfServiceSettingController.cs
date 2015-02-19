@@ -17,17 +17,20 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private readonly ICustomerService _customerService;
         private readonly ICaseFieldSettingService _caseFieldSettingService;
         private readonly ISettingService _settingService;
+        private readonly IDocumentService _documentService;
 
         public SelfServiceSettingController(
                 ICustomerService customerService,
                 ICaseFieldSettingService caseFieldSettingService,
                 ISettingService settingService,
+                IDocumentService documentService,
                 IMasterDataService masterDataService)
             : base(masterDataService)
         {
             this._customerService = customerService;
             this._caseFieldSettingService = caseFieldSettingService;
             this._settingService = settingService;
+            this._documentService = documentService;
         }
         //
         // GET: /Admin/SelfServiceSetting/
@@ -36,16 +39,31 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         {
             var customer = _customerService.GetCustomer(customerId);
 
+            var allCategories = _documentService.GetDocumentCategories(customerId);
+            var availableCats = allCategories.Where(c=> c.ShowOnExternalPage == false).Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList();
+
+            var selectedCats = allCategories.Where(c => c.ShowOnExternalPage).Select(x => new SelectListItem
+            {
+                Text = x.Name,
+                Value = x.Id.ToString()
+            }).ToList();
+
             var model = new SelfServiceIndexViewModel()
                 {
-                    Customer = customer
+                    Customer = customer,
+                    AvailableCategories = availableCats,
+                    SelectedCategories = selectedCats
                 };
 
             return View(model);
         }
 
         [HttpPost]
-        public ActionResult Edit(int id, SelfServiceIndexViewModel vmodel)
+        public ActionResult Edit(int id, SelfServiceIndexViewModel vmodel, int[] SelectedCategories)
         {
             var customerToSave = this._customerService.GetCustomer(id);
             customerToSave.PasswordRequiredOnExternalPage = vmodel.Customer.PasswordRequiredOnExternalPage;
@@ -54,9 +72,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             customerToSave.ShowFAQOnExternalPage = vmodel.Customer.ShowFAQOnExternalPage;
             customerToSave.ShowDocumentsOnExternalPage = vmodel.Customer.ShowDocumentsOnExternalPage;
 
-            var setting = this._settingService.GetCustomerSetting(id);
-
-            var CaseFieldSettingLanguages = this._caseFieldSettingService.GetCaseFieldSettingLanguages();
+            var setting = this._settingService.GetCustomerSetting(id);            
 
             if (customerToSave == null)
                 throw new Exception("No customer found...");
@@ -65,12 +81,40 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             this._customerService.SaveEditCustomer(customerToSave, setting, null, customerToSave.Language_Id, out errors);
 
+            var allCategories = _documentService.GetDocumentCategories(id);
+
+            foreach (var cat in allCategories)
+            {
+                if (SelectedCategories != null && SelectedCategories.Contains(cat.Id))
+                    cat.ShowOnExternalPage = true;
+                else
+                    cat.ShowOnExternalPage = false;
+
+                _documentService.SaveDocumentCategory(cat, out errors);
+            }
+
             if (errors.Count == 0)
                 return this.RedirectToAction("Index", "SelfServiceSetting", new { customerId = id });
 
+            
+
+            var availableCats = allCategories.Where(c => c.ShowOnExternalPage == false).Select(x => new SelectListItem
+            {
+                Text = x.Name,
+                Value = x.Id.ToString()
+            }).ToList();
+
+            var selectedCats = allCategories.Where(c => c.ShowOnExternalPage).Select(x => new SelectListItem
+            {
+                Text = x.Name,
+                Value = x.Id.ToString()
+            }).ToList();
+
             var model = new SelfServiceIndexViewModel()
             {
-                Customer = customerToSave
+                Customer = customerToSave,
+                AvailableCategories = availableCats,
+                SelectedCategories = selectedCats
             };
 
             return this.View(model);
@@ -83,7 +127,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             var model = new SelfServiceRegMessageViewModel()
             {
-                Customer = customer
+                Customer = customer                
             };
 
             return View(model);
@@ -116,8 +160,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             return this.View(model);
         }
-
-        
 
         
     }
