@@ -37,8 +37,9 @@ namespace DH.Helpdesk.Common.Tools
 
         public static DateTime RoundToWorkDateTime(this DateTime date, int workingHour)
         {
-            // quick and dirty fix for working hours 0 - 24
+            // quick and dirty fix for working hours [0 - 23]
             workingHour = Math.Min(workingHour, 23);
+            workingHour = Math.Max(workingHour, 0);
             return new DateTime(date.Year, date.Month, date.Day, workingHour, 0, 0);
         }
 

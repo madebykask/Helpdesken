@@ -122,7 +122,7 @@
                         cmd.CommandText = sql;
 
                         var dr = cmd.ExecuteReader();
-                        if (dr.HasRows)
+                        if (dr != null && dr.HasRows)
                         {
                             while (dr.Read())
                             {
@@ -228,7 +228,6 @@
 
                                     cols.Add(field);
                                 }
-
                                 row.SortOrder = sortOrder; 
                                 row.Tooltip = toolTip; 
                                 row.CaseIcon = GetCaseIcon(dr);
@@ -239,11 +238,8 @@
                                 ret.Add(row); 
                             }
                         }
+
                         dr.Close(); 
-                    }
-                    catch (Exception ex)
-                    {
-                        throw (ex);
                     }
                     finally
                     {

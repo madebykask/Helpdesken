@@ -236,6 +236,7 @@
 
             if (parameters.SortField != null)
             {
+                #region Sorting
                 switch (parameters.SortField.SortBy)
                 {
                     case SortBy.Ascending:
@@ -631,6 +632,7 @@
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
+                #endregion
             }
 
             searchRequest = searchRequest.Take(parameters.SelectCount);

@@ -93,7 +93,6 @@ namespace DH.Helpdesk.Dal.Utils
         /// <param name="workingDayEnd"></param>
         /// <param name="holidays"></param>
         /// <param name="SLAtime">time in miuntues</param>
-        /// <param name="timeSpent">already spent time </param>
         /// <param name="timeOnPause">time in minutes when case was "on Hold"</param>
         /// <returns>Time in hours. Can be null if no caseFinishingDate is null</returns>
         public static int? CalculateTimeLeft(
