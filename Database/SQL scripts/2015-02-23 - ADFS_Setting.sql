@@ -9,10 +9,8 @@ begin
 	[AttrSurName] [nvarchar](50) NULL,
 	[AttrEmail] [nvarchar](50) NULL,
 	[SaveSSOLog] [bit] NOT NULL
-	) ON [PRIMARY]
-
-	GO
+	) ON [PRIMARY]	
 
 	ALTER TABLE [dbo].[tblADFSSetting] ADD  CONSTRAINT [DF_tblADFSSetting_SaveSSOLog]  DEFAULT ((1)) FOR [SaveSSOLog]
-	Go
+	
 end
