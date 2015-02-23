@@ -145,6 +145,7 @@
     <Compile Include="Models\Accounts\Read\Overview\User.cs" />
     <Compile Include="Models\Accounts\Read\Edit\UserForEdit.cs" />
     <Compile Include="Models\Accounts\Write\AccountForWrite.cs" />
+    <Compile Include="Models\ADFS\Input\ADFSSetting.cs" />
     <Compile Include="Models\CaseType\CaseTypeItem.cs" />
     <Compile Include="Models\Case\CaseOverview\CaseInfoOverview.cs" />
     <Compile Include="Models\Case\CaseOverview\ComputerOverview.cs" />
@@ -754,7 +755,7 @@
     <Compile Include="Models\Questionnaire\Output\QuestionnaireQuestionsOverview.cs" />
     <Compile Include="Models\Reports\Enums\ReportType.cs" />
     <Compile Include="Models\SelfService\Case\SelfServiceCaseOverview.cs" />
-    <Compile Include="Models\SSO\Input\NewSSOLog.cs" />
+    <Compile Include="Models\ADFS\Input\NewSSOLog.cs" />
     <Compile Include="Models\Statistics\Output\StatisticsOverview.cs" />
     <Compile Include="Models\Changes\Input\SearchParameters.cs" />
     <Compile Include="Models\Changes\Output\ChangeEditOptions.cs" />

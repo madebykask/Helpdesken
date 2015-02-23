@@ -60,6 +60,7 @@
     <Compile Include="Enums\CircularStateId.cs" />
     <Compile Include="Enums\ActionObject.cs" />
     <Compile Include="Enums\CircularStates.cs" />
+    <Compile Include="Enums\LoginMode.cs" />
     <Compile Include="Enums\InfoTextTypes.cs" />
     <Compile Include="Enums\LanquageNameId.cs" />
     <Compile Include="Enums\Settings\CaseSolutionFields.cs" />

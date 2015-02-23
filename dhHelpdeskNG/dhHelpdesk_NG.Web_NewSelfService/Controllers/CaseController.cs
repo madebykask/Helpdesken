@@ -87,9 +87,8 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                               IWorkingGroupService workingGroupService,
                               IStateSecondaryService stateSecondaryService,
                               ILogFileService logFileService,
-                              ICaseSolutionService caseSolutionService,
-                              ISSOService ssoService)
-            : base(masterDataService, ssoService, caseSolutionService)
+                              ICaseSolutionService caseSolutionService)
+            : base(masterDataService, caseSolutionService)
         {
             this._caseService = caseService;
             this._logService = logService;

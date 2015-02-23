@@ -7,6 +7,8 @@
     using DH.Helpdesk.BusinessData.Models.User.Input;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.BusinessData.Models.ADFS.Input;
+    using DH.Helpdesk.Dal.Repositories.ADFS;
 
     public interface IMasterDataService
     {
@@ -21,6 +23,10 @@
         Language GetLanguage(int id);
         UserOverview GetUserForLogin(string userid);
         void ClearCache();
+        void SaveSSOLog(NewSSOLog SSOLog);
+        void SaveADFSSetting(ADFSSetting adfsSetting);
+        ADFSSetting GetADFSSetting();
+        
     }
 
     public class MasterDataService : IMasterDataService
@@ -32,6 +38,7 @@
         private readonly ITextRepository _textRepository;
         private readonly IUserRepository _userRepository;
         private readonly ICacheProvider _cache;
+        private readonly IADFSRepository _adfsRepository;        
 
         public MasterDataService(
             ICustomerRepository customerRepository,
@@ -40,7 +47,8 @@
             ITextRepository textRepository,
             IUserRepository userRepository,
             ICaseFieldSettingLanguageRepository caseFieldSettingLanguageRepository,
-            ICacheProvider cache)
+            ICacheProvider cache,
+            IADFSRepository adfsRepository)
         {
             this._customerRepository = customerRepository;
             this._languageRepository = languageRepository;
@@ -49,6 +57,7 @@
             this._userRepository = userRepository;
             this._caseFieldSettingLanguageRepository = caseFieldSettingLanguageRepository; 
             this._cache = cache;
+            this._adfsRepository = adfsRepository;
         }
 
         public IList<Customer> GetCustomers(int userId)
@@ -137,6 +146,23 @@
             this._cache.Invalidate("text");
             this._cache.Invalidate("language");
             this._cache.Invalidate("casetranslation");
+        }
+
+        public void SaveSSOLog(NewSSOLog SSOLog)
+        {
+            this._adfsRepository.SaveSSOLog(SSOLog);
+            this._adfsRepository.Commit();
+        }
+
+        public void SaveADFSSetting(ADFSSetting adfsSetting)
+        {
+            this._adfsRepository.SaveADFSSetting(adfsSetting);
+            this._adfsRepository.Commit();
+        }
+
+        public ADFSSetting GetADFSSetting()
+        {
+            return this._adfsRepository.GetADFSSetting();
         }
     }
 }

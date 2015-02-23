@@ -9,9 +9,8 @@
     public class HomeController : BaseController
     {                
         public HomeController( IMasterDataService masterDataService,           
-                               ICaseSolutionService caseSolutionService,
-                               ISSOService ssoService
-                              ):base(masterDataService, ssoService, caseSolutionService)
+                               ICaseSolutionService caseSolutionService                               
+                              ):base(masterDataService, caseSolutionService)
             
         {
             //this._customerService = customerService;

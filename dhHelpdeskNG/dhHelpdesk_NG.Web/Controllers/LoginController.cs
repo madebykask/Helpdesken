@@ -9,6 +9,7 @@
     using DH.Helpdesk.Services.Services.Users;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.Tools;
+    using DH.Helpdesk.Common.Enums;
 
     public class LoginController : Controller
     {
@@ -39,13 +40,13 @@
         {
             this.Session.Clear();
             ApplicationFacade.RemoveLoggedInUser(Session.SessionID);
-            FormsAuthentication.SignOut();
+            FormsAuthentication.SignOut();            
             return this.View("Login");
         }
 
         [HttpGet]
         public ViewResult Login()
-        {
+        {            
             return this.View();
         } 
 
@@ -78,6 +79,7 @@
                     this.Session.Clear();
                     SessionFacade.CurrentUser = user;
                     SessionFacade.CurrentLanguageId = user.LanguageId;
+                    SessionFacade.CurrentLoginMode = LoginMode.Application;
 
                     var language = this.languageService.GetLanguage(user.LanguageId);
 

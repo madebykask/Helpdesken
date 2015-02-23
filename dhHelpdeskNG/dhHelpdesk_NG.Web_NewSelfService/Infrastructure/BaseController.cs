@@ -12,7 +12,7 @@
     using DH.Helpdesk.NewSelfService.Models;
     using DH.Helpdesk.Common.Types;
     using System.Security.Claims;
-    using DH.Helpdesk.BusinessData.Models.SSO.Input;
+    using DH.Helpdesk.BusinessData.Models.ADFS.Input;
     using System.Configuration;
     using DH.Helpdesk.Services.Services.Concrete;
     using DH.Helpdesk.NewSelfService.WebServices;
@@ -27,18 +27,15 @@
 
     public class BaseController : Controller
     {
-        private readonly IMasterDataService _masterDataService;
-        private readonly ISSOService _ssoService;
+        private readonly IMasterDataService _masterDataService;        
         private readonly ICaseSolutionService _caseSolutionService;
 
 
         public BaseController(
-            IMasterDataService masterDataService,
-            ISSOService ssoService,
+            IMasterDataService masterDataService,            
             ICaseSolutionService caseSolutionService)
         {
-            this._masterDataService = masterDataService;
-            this._ssoService = ssoService;
+            this._masterDataService = masterDataService;            
             this._caseSolutionService = caseSolutionService;
         }
 
@@ -144,7 +141,7 @@
                     };
 
                     if (ConfigurationManager.AppSettings["SSOLog"].ToString().ToLower() == "true" && string.IsNullOrEmpty(SessionFacade.CurrentSystemUser))
-                        _ssoService.SaveSSOLog(ssoLog);
+                        _masterDataService.SaveSSOLog(ssoLog);
 
                     if (string.IsNullOrEmpty(userIdentity.UserId))
                     {

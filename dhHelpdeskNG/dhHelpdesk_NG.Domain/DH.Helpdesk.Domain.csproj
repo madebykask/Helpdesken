@@ -63,6 +63,7 @@
     <Compile Include="Accounts\AccountFieldSettings.cs" />
     <Compile Include="Accounts\AccountType.cs" />
     <Compile Include="ActionSetting\ActionSetting.cs" />
+    <Compile Include="ADFS\ADFSSettingEntity.cs" />
     <Compile Include="Application.cs" />
     <Compile Include="Building.cs" />
     <Compile Include="BulletinBoard.cs" />
@@ -205,7 +206,7 @@
     <Compile Include="LocalAdmin.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="LogFile.cs" />
-    <Compile Include="SSO\SSOLogEntity.cs" />
+    <Compile Include="ADFS\SSOLogEntity.cs" />
     <Compile Include="Users\ModuleEntity.cs" />
     <Compile Include="Users\UserModuleEntity.cs" />
     <Compile Include="WorkstationModules\LogicalDrive.cs" />
