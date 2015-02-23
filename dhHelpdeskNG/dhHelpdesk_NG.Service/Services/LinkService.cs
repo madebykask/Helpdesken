@@ -80,7 +80,7 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<LinkGroup> GetLinkGroups(int customerId)
         {
-            return this._linkGroupRepository.GetAll().OrderBy(x => x.LinkGroupName).ToList();
+            return this._linkGroupRepository.GetAll().Where(it => it.Customer_Id == customerId).OrderBy(x => x.LinkGroupName).ToList();
         }
 
         public Link GetLink(int id)
