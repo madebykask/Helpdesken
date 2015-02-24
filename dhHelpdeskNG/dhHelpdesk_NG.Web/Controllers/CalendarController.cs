@@ -13,6 +13,7 @@ namespace DH.Helpdesk.Web.Controllers
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
+    using System.Web.UI.WebControls;
 
     using DH.Helpdesk.BusinessData.Models.Calendar.Output;
     using DH.Helpdesk.Domain;
@@ -23,6 +24,7 @@ namespace DH.Helpdesk.Web.Controllers
     /// <summary>
     /// The calendar controller.
     /// </summary>
+    [CustomAuthorize(UserPermsissions = "CalendarPermission", Roles = "3,4")]
     public class CalendarController : BaseController
     {
         /// <summary>

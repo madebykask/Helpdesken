@@ -1,0 +1,12 @@
+﻿@model dynamic
+@{
+    ViewBag.Title = "Access denied";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="content error-page">
+    <div class="tab-pane-border">
+        <h2>Access denied</h2>
+        <p>You dont have access to this part of service. Ask for your administrator to give this rights.</p>
+        <button class="btn btn-success" onclick="window.history.back()">Return to previous page</button>
+    </div>
+</div>

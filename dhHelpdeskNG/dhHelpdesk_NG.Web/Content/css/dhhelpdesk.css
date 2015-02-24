@@ -78,6 +78,19 @@ a, a:hover, a:focus {
 .footerdhhd img {
     margin-top:-4px;
 }
+
+/************************  Content Error page *******************************************/
+.content.error-page 
+{
+    margin-top: 64px;
+}
+    .content.error-page h2,
+    .content.error-page p
+        {
+        margin: 10px 0;
+    }
+
+
 /************************FORM INPUT SELECT WIDTH*******************************************/
 select
 {

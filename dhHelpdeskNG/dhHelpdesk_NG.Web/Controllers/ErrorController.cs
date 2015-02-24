@@ -26,5 +26,10 @@
         {
             return this.View();
         }
+
+        public ViewResult Unathorized()
+        {
+            return this.View();
+        }
     }
 }

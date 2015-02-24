@@ -75,6 +75,11 @@
                             "~/Content/js/bootstrap-multiselect.js",
                             "~/Content/js/bootstrap-datepicker.js",
                             "~/Content/js/bootstrap-tagsinput.js",
+#if DEBUG
+                            "~/Content/js/jquery.validate.js",
+#else 
+                            "~/Content/js/jquery.validate.js",
+#endif
                             "~/Content/js/jquery.validate.min.js",
                             "~/Content/js/plupload.full.min.js",
                             "~/Content/js/jquery.plupload.queue/jquery.plupload.queue.js",
