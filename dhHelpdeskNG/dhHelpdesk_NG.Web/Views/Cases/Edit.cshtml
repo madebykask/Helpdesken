@@ -8,7 +8,7 @@
 
 @section Styles {
 
-    @if(Model.DynamicCase != null)
+    @if(Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
     {
         <style type="text/css">
             .tab-content {
@@ -182,7 +182,7 @@
     </script>
 }
 
-@if(Model.DynamicCase != null)
+@if(Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
 {
     @System.Web.Optimization.Scripts.Render(DH.Helpdesk.Web.BundleConfig.ScriptNames.DynamicCase)
 
