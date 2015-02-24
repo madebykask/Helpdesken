@@ -136,7 +136,7 @@
                 WorkingGroup = workinggroup,
                 Customer = customer,
                 UsersForWorkingGroup = this._workingGroupService.GetUsersForWorkingGroup(workinggroup.Id),
-                StateSecondaries = this._stateSecondaryService.GetStateSecondaries(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                StateSecondaries = this._stateSecondaryService.GetStateSecondaries(customer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
