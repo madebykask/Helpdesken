@@ -304,7 +304,7 @@
         {
             if (filterContext.HttpContext.User.Identity.IsAuthenticated)
             {
-                filterContext.Result = new RedirectResult("Error/Unathorized");
+                filterContext.Result = new RedirectResult("~/Error/Unathorized");
             }
             else
             {

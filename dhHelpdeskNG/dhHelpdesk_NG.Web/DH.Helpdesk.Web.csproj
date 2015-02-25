@@ -303,6 +303,7 @@
     <Compile Include="Areas\Admin\Models\ContractCategoryIndexViewModel.cs" />
     <Compile Include="Areas\Admin\Models\AccountActivityIndexViewModel.cs" />
     <Compile Include="Areas\Admin\Models\BuildingViewModels.cs" />
+    <Compile Include="Areas\Admin\Models\SDepartment.cs" />
     <Compile Include="Areas\Admin\Models\SelfServiceRegMessageViewModel.cs" />
     <Compile Include="Areas\Admin\Models\SelfServiceIndexViewModel.cs" />
     <Compile Include="Areas\Admin\Models\InfoTextViewModels.cs" />

@@ -113,10 +113,10 @@
 
         private OUInputViewModel CreateInputViewModel(OU ou, Customer customer)
         {
-            var ous = this._ouService.GetOUs(customer.Id).Where(it => it.Id != ou.Id).ToList();
+            var ous = this._ouService.GetOUs(customer.Id).ToList();
             var departments = this._departmentService.GetDepartments(customer.Id);
             
-            var model = new OUInputViewModel(ous, ou.Parent_OU_Id ?? 0)
+            var model = new OUInputViewModel(ous, ou.Id, ou.Parent_OU_Id??0)
             {
                 OU = ou, 
                 Customer = customer,
@@ -128,7 +128,8 @@
                 Departments = departments.Where(x => x.IsActive == 1).Select(x => new SelectListItem
                 {
                     Text = x.DepartmentName,
-                    Value = x.Id.ToString()
+                    Value = x.Id.ToString(),
+                    Selected = ou.Department_Id.HasValue && x.Id == ou.Department_Id
                 }).ToList(),
                 SDepartments = departments.Select(x => new SDepartment
                 {
