@@ -314,7 +314,8 @@
                     if (!string.IsNullOrEmpty(err))
                         this.TempData.Add("AlertMessage", err);
 
-                    return this.RedirectToAction("index", "users");
+                    //return this.RedirectToAction("index", "users");
+                    return this.RedirectToAction("edit", "users", new { id = id });
                 }
                 else
                 {
@@ -449,7 +450,7 @@
 
             if (errors.Count == 0)
             {
-                //return this.RedirectToAction("edit", "users", new { id = id });
+               // return this.RedirectToAction("edit", "users", new { id = id });
                 return this.RedirectToAction("index", "users");
             }
             else

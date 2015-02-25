@@ -1966,6 +1966,8 @@ namespace DH.Helpdesk.Web.Controllers
                         m.case_.CausingPartId = caseTemplate.CausingPartId;
                         m.case_.PlanDate = caseTemplate.PlanDate;
 
+                        m.CaseTemplateName = caseTemplate.Name;
+
                         //To get the right users for perfomers when creating a case from a template
                         if (m.case_.WorkingGroup_Id.HasValue)
                             m.performers = this._userService.GetUsersForWorkingGroup(customerId, m.case_.WorkingGroup_Id.Value);

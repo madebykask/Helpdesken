@@ -120,6 +120,8 @@
 
         public int? templateistrue { get; set; }
 
+        public string CaseTemplateName { get; set; }
+
     }
 
     public class CaseIndexViewModel
