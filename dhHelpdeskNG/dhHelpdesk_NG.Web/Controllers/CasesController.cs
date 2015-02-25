@@ -1752,6 +1752,8 @@ namespace DH.Helpdesk.Web.Controllers
                                                     RequestExtension.GetAbsoluteUrl(), 
                                                     cs.DontConnectUserToWorkingGroup);
 
+                m.CaseMailSetting.DontSendMailToNotifier = !SessionFacade.CurrentCustomer.CommunicateWithNotifier.ToBool();
+
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()).ShowOnStartPage == 1)
                 {
                     m.caseTypes = this._caseTypeService.GetCaseTypes(customerId);
@@ -1963,7 +1965,8 @@ namespace DH.Helpdesk.Web.Controllers
                         m.case_.PlanDate = caseTemplate.PlanDate;
 
                         //To get the right users for perfomers when creating a case from a template
-                        m.performers = this._userService.GetUsersForWorkingGroup(customerId, m.case_.WorkingGroup_Id.Value);
+                        if (m.case_.WorkingGroup_Id.HasValue)
+                            m.performers = this._userService.GetUsersForWorkingGroup(customerId, m.case_.WorkingGroup_Id.Value);
 
                         // This is used for hide fields(which are not in casetemplate) in new case input
                         m.templateistrue = templateistrue;
@@ -2008,6 +2011,8 @@ namespace DH.Helpdesk.Web.Controllers
                 }
 
                 // check state secondary info
+                m.CaseLog.SendMailAboutCaseToNotifier = SessionFacade.CurrentCustomer.CommunicateWithNotifier.ToBool();
+
                 m.Disable_SendMailAboutCaseToNotifier = false;
                 if (m.case_.StateSecondary_Id > 0)
                 {

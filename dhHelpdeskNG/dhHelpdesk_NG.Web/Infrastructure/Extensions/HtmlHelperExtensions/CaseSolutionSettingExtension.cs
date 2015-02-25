@@ -90,11 +90,12 @@
                     //        false);
                     //}
 
-                    MvcHtmlString dropDown = htmlHelper.DropDownList(dropDownName, selectList);
+                    MvcHtmlString dropDown = htmlHelper.DropDownList(dropDownName, selectList, new { ElementClass = "OptionDropDown", ElementName = model.CaseSolutionField });
 
                     MvcHtmlString hiddenForFieldName = htmlHelper.Hidden(hiddenFieldName, model.CaseSolutionField);
 
-                    return MvcHtmlString.Create(hidden + dropDown.ToString() + hiddenForFieldName);
+                    //return MvcHtmlString.Create(hidden + dropDown.ToString() + hiddenForFieldName);
+                    return MvcHtmlString.Create(dropDown.ToString());
                 }
             }
 
