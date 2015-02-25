@@ -291,7 +291,10 @@
                                     OU_Id = cu.OU_Id, 
                                     Region_Id = k.Region_Id, 
                                     UserCode = cu.UserCode, 
-                                    UserId = (cu.UserId != null ? cu.UserId : string.Empty) 
+                                    UserId = (cu.UserId != null ? cu.UserId : string.Empty),
+                                    RegionName = k.Region.Name,
+                                    DepartmentName = cu.Department.DepartmentName,
+                                    OUName = cu.OU.Name
                                 };
 
             return query.OrderBy(x => x.FirstName).ThenBy(x => x.SurName).ToList();

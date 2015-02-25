@@ -182,39 +182,39 @@
                                                 FieldTypes fieldType;
                                                 DateTime? dateValue;
                                                 bool translateField;
-                                                if (c.Line == 1)
+                                                //if (c.Line == 1)
+                                                //{
+                                                var value = GetDatareaderValue(
+                                                                                dr,
+                                                                                i,
+                                                                                c.Name,
+                                                                                customerSetting,
+                                                                                pal,
+                                                                                timeLeft,
+                                                                                caseTypes,
+                                                                                out translateField,
+                                                                                out dateValue,
+                                                                                out fieldType);
+                                                field = new Field
+                                                            {
+                                                                StringValue = value,
+                                                                TranslateThis = translateField,
+                                                                DateTimeValue = dateValue,
+                                                                FieldType = fieldType
+                                                            };
+                                                if (string.Compare(
+                                                    s.SortBy,
+                                                    c.Name,
+                                                    true,
+                                                    CultureInfo.InvariantCulture) == 0)
                                                 {
-                                                    var value = GetDatareaderValue(
-                                                                                    dr,
-                                                                                    i,
-                                                                                    c.Name,
-                                                                                    customerSetting,
-                                                                                    pal,
-                                                                                    timeLeft,
-                                                                                    caseTypes,
-                                                                                    out translateField,
-                                                                                    out dateValue,
-                                                                                    out fieldType);
-                                                    field = new Field
-                                                                {
-                                                                    StringValue = value,
-                                                                    TranslateThis = translateField,
-                                                                    DateTimeValue = dateValue,
-                                                                    FieldType = fieldType
-                                                                };
-                                                    if (string.Compare(
-                                                        s.SortBy,
-                                                        c.Name,
-                                                        true,
-                                                        CultureInfo.InvariantCulture) == 0)
-                                                    {
-                                                        sortOrder = value;
-                                                    }
+                                                    sortOrder = value;
                                                 }
-                                                else
-                                                {
-                                                    toolTip += GetDatareaderValue(dr, i, c.Name, customerSetting, pal, timeLeft, caseTypes, out translateField, out dateValue, out fieldType) + Environment.NewLine;
-                                                }
+                                                //}
+                                                //else
+                                                //{
+                                                //    toolTip += GetDatareaderValue(dr, i, c.Name, customerSetting, pal, timeLeft, caseTypes, out translateField, out dateValue, out fieldType) + Environment.NewLine;
+                                                //}
                                             }
 
                                             break; 

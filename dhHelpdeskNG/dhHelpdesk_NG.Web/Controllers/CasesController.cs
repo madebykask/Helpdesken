@@ -1414,6 +1414,9 @@ namespace DH.Helpdesk.Web.Controllers
                     bool? updateNotifierInformation,
                     string caseInvoiceArticles)
         {
+            case_.Ou = null;
+            case_.Department = null;
+            case_.Region = null;
             bool edit = case_.Id == 0 ? false : true;
             IDictionary<string, string> errors;
 
