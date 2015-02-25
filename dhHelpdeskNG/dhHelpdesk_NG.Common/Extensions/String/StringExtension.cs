@@ -199,7 +199,8 @@ namespace DH.Helpdesk.Common.Extensions.String
                     case "statesecondary_id": str = "Sub status"; break;
                     case "status_id": str = "Status"; break;
                     case "supplier_id": str = "Supplier"; break;
-                    case "tbllog_charge": str = "System"; break;
+                    case "system_id": str = "System"; break;
+                    case "tbllog_charge": str = "Charge"; break;
                     case "tbllog_filename": str = "Attached file"; break;
                     case "tbllog_text_external": str = "External log note"; break;
                     case "tbllog_text_internal": str = "Internal log note"; break;

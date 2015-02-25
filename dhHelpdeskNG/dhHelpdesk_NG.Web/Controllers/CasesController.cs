@@ -1663,12 +1663,15 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var m = new CaseInputViewModel();
             SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
+            var acccessToGroups = this._userService.GetWorkinggroupsForUserAndCustomer(SessionFacade.CurrentUser.Id, customerId);
+            var deps = this._departmentService.GetDepartmentsByUserPermissions(userId, customerId);
             if (caseId != 0)
             {
                 var markCaseAsRead = string.IsNullOrWhiteSpace(redirectFrom);
                 m.case_ = this._caseService.GetCaseById(caseId);
 
-                if (m.case_.Unread != 0 && updateState)
+                var editMode = this.EditMode(m, ModuleName.Cases, deps, acccessToGroups);
+                if (m.case_.Unread != 0 && updateState && editMode == Enums.AccessMode.FullAccess)
                     this._caseService.MarkAsRead(caseId);                
 
                 customerId = customerId == 0 ? m.case_.Customer_Id : customerId;
@@ -1843,8 +1846,7 @@ namespace DH.Helpdesk.Web.Controllers
                 m.problems = this._problemService.GetCustomerProblems(customerId);
                 m.currencies = this._currencyService.GetCurrencies();
                 m.users = this._userService.GetUsers(customerId);
-                m.projects = this._projectService.GetCustomerProjects(customerId);
-                var deps = this._departmentService.GetDepartmentsByUserPermissions(userId, customerId);
+                m.projects = this._projectService.GetCustomerProjects(customerId);                
                 m.departments = deps.Any() ? deps : this._departmentService.GetDepartments(customerId);
                 m.standardTexts = this._standardTextService.GetStandardTexts(customerId);
                 m.Languages = this._languageService.GetActiveLanguages();
@@ -2022,7 +2024,7 @@ namespace DH.Helpdesk.Web.Controllers
                     }                    
                 }
 
-                var acccessToGroups = this._userService.GetWorkinggroupsForUserAndCustomer(SessionFacade.CurrentUser.Id, customerId);
+                
                 m.EditMode = this.EditMode(m, ModuleName.Cases, deps, acccessToGroups);
 
                 if (m.case_.Id == 0)  // new mode
