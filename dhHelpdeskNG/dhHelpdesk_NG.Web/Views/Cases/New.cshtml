@@ -40,14 +40,23 @@
         <div class="secnavs fixed">
             <div class="pull-left">
                 <ul class="secnav">
-                    <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
+                    @if (Model.templateistrue != 1)
+                    {
+                        <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
+                    }
                     <li>@Html.ActionLink(Translation.Get("Spara och stäng", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "NewCaseAndClose();return false;", @class = "btn" })</li>
-                    <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "NewCaseAndAddCase();return false;", @class = "btn" })</li>
-                    <li class="secspace"></li>
+                    @if (Model.templateistrue != 1)
+                    {
+                        <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "NewCaseAndAddCase();return false;", @class = "btn" })</li>
+                    }
+                        <li class="secspace"></li>
                     <li>@Html.ActionLink(Translation.Get("Stäng", Enums.TranslationSource.TextTranslation), "index", new { customerId = @Model.case_.Customer_Id }, new { @class = "btn" })</li>
-                    <li id="btnCaseTemplate">
-                        @Html.Partial("_CaseTemplateTree", Model.CaseTemplateTreeButton, t)
-                    </li>
+                     @if (Model.templateistrue != 1)
+                    {
+                        <li id="btnCaseTemplate">
+                            @Html.Partial("_CaseTemplateTree", Model.CaseTemplateTreeButton, t)
+                        </li>
+                     }
                 </ul>
                 <div id="requiredFieldsMessage" class="validation-message" style="display: none;">
                     <span>@Translation.Get("The case could not be saved because one or more mandatory fields were not filled in, please check the case.")</span>
