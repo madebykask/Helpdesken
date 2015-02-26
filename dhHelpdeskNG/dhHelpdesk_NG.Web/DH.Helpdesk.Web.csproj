@@ -15,7 +15,7 @@
     <AssemblyName>DH.Helpdesk.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <SccProjectName>
     </SccProjectName>
     <SccLocalPath>
@@ -31,9 +31,12 @@
     <OldToolsVersion>4.0</OldToolsVersion>
     <IISExpressSSLPort>
     </IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
-    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
+    <IISExpressAnonymousAuthentication>
+    </IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>
+    </IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode>
+    </IISExpressUseClassicPipelineMode>
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
     <DontImportPostSharp>True</DontImportPostSharp>
     <TargetFrameworkProfile />
@@ -211,6 +214,7 @@
     <Compile Include="App_Start\NinjectModules\Common\UserModule.cs" />
     <Compile Include="App_Start\NinjectModules\Common\WorkContextModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\AccountModule.cs" />
+    <Compile Include="App_Start\NinjectModules\Modules\AdminModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\CasesModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\ChangesModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\EmailModule.cs" />
@@ -1799,7 +1803,6 @@
     <Compile Include="Infrastructure\ModelFactories\Projects\IUpdatedProjectViewModelFactory.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtension.cs" />
     <Compile Include="Infrastructure\Extensions\IntegerExtensions.cs" />
-    <Compile Include="Infrastructure\Permission.cs" />
     <Compile Include="Infrastructure\SessionFacade.cs" />
     <Compile Include="Infrastructure\Extensions\StringExtensions.cs" />
     <Compile Include="Infrastructure\Session\ActiveTab.cs" />

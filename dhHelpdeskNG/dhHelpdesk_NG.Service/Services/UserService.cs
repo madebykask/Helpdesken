@@ -9,14 +9,17 @@ namespace DH.Helpdesk.Services.Services
     using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Enums.Admin.Users;
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.BusinessData.Models.User.Input;
     using DH.Helpdesk.Common.Extensions.String;
+    using DH.Helpdesk.Dal.Infrastructure.Translate;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Accounts;
+    using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Users;
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
     using DH.Helpdesk.Services.Localization;
@@ -24,6 +27,8 @@ namespace DH.Helpdesk.Services.Services
     using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
 
     using DH.Helpdesk.Services.BusinessLogic.Specifications.User;
+
+    using UserGroup = DH.Helpdesk.Domain.UserGroup;
 
     public interface IUserService
     {
@@ -141,6 +146,10 @@ namespace DH.Helpdesk.Services.Services
 
         private readonly IUnitOfWorkFactory unitOfWorkFactory;
 
+        private readonly IUserPermissionsChecker userPermissionsChecker;
+
+        private readonly ITranslator translator;
+
         public UserService(
             IAccountActivityRepository accountActivityRepository,
             ICustomerRepository customerRepository,
@@ -157,7 +166,9 @@ namespace DH.Helpdesk.Services.Services
             ICaseSettingRepository casesettingRepository,
             IModuleRepository moduleRepository,
             IUserModuleRepository userModuleRepository, 
-            IUnitOfWorkFactory unitOfWorkFactory)
+            IUnitOfWorkFactory unitOfWorkFactory, 
+            IUserPermissionsChecker userPermissionsChecker, 
+            ITranslator translator)
         {
             this._accountActivityRepository = accountActivityRepository;
             this._customerRepository = customerRepository;
@@ -175,6 +186,8 @@ namespace DH.Helpdesk.Services.Services
             _moduleRepository = moduleRepository;
             _userModuleRepository = userModuleRepository;
             this.unitOfWorkFactory = unitOfWorkFactory;
+            this.userPermissionsChecker = userPermissionsChecker;
+            this.translator = translator;
         }
 
 
@@ -373,6 +386,12 @@ namespace DH.Helpdesk.Services.Services
 
             errors = new Dictionary<string, string>();
 
+            List<UserPermission> wrongPermissions;
+            if (!this.userPermissionsChecker.CheckPermissions(user, out wrongPermissions))
+            {
+                errors.Add("User permissions", this.translator.Translate("There are wrong permissions for this user group."));
+            }
+
             var hasDublicate = this.GetUsers()
                             .Any(u => u.UserID.EqualWith(user.UserID) && u.Id != user.Id);
             if (hasDublicate)
@@ -519,6 +538,12 @@ namespace DH.Helpdesk.Services.Services
             }
 
             errors = new Dictionary<string, string>();
+
+            List<UserPermission> wrongPermissions;
+            if (!this.userPermissionsChecker.CheckPermissions(user, out wrongPermissions))
+            {
+                errors.Add("User permissions", this.translator.Translate("There are wrong permissions for this user group."));
+            }
 
             var hasDublicate = this.GetUsers()
                             .Any(u => u.UserID.EqualWith(user.UserID));

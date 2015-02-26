@@ -41,7 +41,7 @@ $(function () {
     dhHelpdesk.admin.users.userGroup = {
         user: 1,
         administrator: 2,
-        customAdministrator: 3,
+        customerAdministrator: 3,
         systemAdministrator: 4
     }
 
@@ -149,20 +149,62 @@ $(function () {
             return userGroup;
         }
 
-        var setUserGroup = function(ug) {
+        var setUserGroup = function (ug, sp) {
             userGroup = ug;
+
+            var setPermissions = sp || true;
 
             switch (ug) {
                 case dhHelpdesk.admin.users.userGroup.user:
                     walkPermissions(function (permission) {
                         permission.setAccess(false);
-                        permission.setHasPermission(permission.getType() == dhHelpdesk.admin.users.permissionType.createCasePermission);
+
+                        if (setPermissions) {
+                            var hasPermission = permission.getType() == dhHelpdesk.admin.users.permissionType.createCasePermission;
+                            permission.setHasPermission(hasPermission);
+                        }
+
+                        return true;
+                    });
+                    break;
+                case dhHelpdesk.admin.users.userGroup.administrator:
+                    walkPermissions(function (permission) {
+                        var type = permission.getType();
+                        
+                        var hasAccess = type != dhHelpdesk.admin.users.permissionType.faqPermission;
+                        permission.setAccess(hasAccess);
+
+                        if (setPermissions) {
+                            var hasPermission = type != dhHelpdesk.admin.users.permissionType.faqPermission;
+                            permission.setHasPermission(hasPermission);
+                        }
+
+                        return true;
+                    });
+                    break;
+                case dhHelpdesk.admin.users.userGroup.customerAdministrator:
+                case dhHelpdesk.admin.users.userGroup.systemAdministrator:
+                    walkPermissions(function (permission) {
+                        var type = permission.getType();
+
+                        var hasAccess = type != dhHelpdesk.admin.users.permissionType.faqPermission;
+                        permission.setAccess(hasAccess);
+
+                        if (setPermissions) {
+                            permission.setHasPermission(true);
+                        }
+
                         return true;
                     });
                     break;
                 default:
                     walkPermissions(function (permission) {
-                        permission.setAccess(true);
+                        permission.setAccess(false);
+
+                        if (setPermissions) {
+                            permission.setHasPermission(false);
+                        }
+
                         return true;
                     });
                     break;
@@ -203,11 +245,11 @@ $(function () {
         that.getOrderPermissions = getOrderPermissions;
 
         var uge = my.element.find('[data-field="userGroup"]');
-        var onChangeUserGroup = function () {
+        var onChangeUserGroup = function (setPermissions) {
             var ug = parseInt(uge.val());
-            setUserGroup(ug);
+            setUserGroup(ug, setPermissions);
         }
-        onChangeUserGroup();
+        onChangeUserGroup(false);
         uge.change(onChangeUserGroup);
 
         return that;

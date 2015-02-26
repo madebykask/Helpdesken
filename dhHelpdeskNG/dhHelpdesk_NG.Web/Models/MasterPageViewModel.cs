@@ -1,13 +1,12 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
-using System.Collections.Generic;
-
-namespace DH.Helpdesk.Web.Models
+﻿namespace DH.Helpdesk.Web.Models
 {
-    using DH.Helpdesk.Common.Extensions.Integer;    
-    using DH.Helpdesk.Web.Infrastructure;   
+    using System.Collections.Generic;
+
+    using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Web.Infrastructure;
+
+    using UserGroup = DH.Helpdesk.BusinessData.Enums.Admin.Users.UserGroup;
 
     public class MasterPageViewModel
     {
@@ -31,12 +30,12 @@ namespace DH.Helpdesk.Web.Models
 
         public bool IsAdministrator()
         {
-            return SessionFacade.CurrentUser.UserGroupId > (int)Enums.Permissions.System_User;
+            return SessionFacade.CurrentUser.UserGroupId > (int)UserGroup.User;
         }
 
         public bool IsCustomerOrSystemAdministrator()
         {
-            return SessionFacade.CurrentUser.UserGroupId > (int)Enums.Permissions.Administrator;
+            return SessionFacade.CurrentUser.UserGroupId > (int)UserGroup.Administrator;
         }
 
         public bool IsCaseVisible()
@@ -156,12 +155,12 @@ namespace DH.Helpdesk.Web.Models
                 this.IsInventoryVisible() ||
                 this.IsLicenseVisible();
 
-            //this.IsOrderVisible() ||
-            //this.IsAccountVisible() ||
+            /*this.IsOrderVisible() ||
+            this.IsAccountVisible() ||
                             
-            //this.IsPlanningVisible() ||                
-            //this.IsQuestionVisible() ||                                                
-            //this.IsComputerUserVisible();
+            this.IsPlanningVisible() ||                
+            this.IsQuestionVisible() ||                                                
+            this.IsComputerUserVisible();*/
         }
 
         public bool IsModulesVisible()
