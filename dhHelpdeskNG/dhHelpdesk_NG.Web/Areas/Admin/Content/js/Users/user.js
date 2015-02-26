@@ -12,6 +12,32 @@ $(function () {
         window.dhHelpdesk.admin.users = {};
     }
 
+    dhHelpdesk.admin.users.utils = {
+        showMessage: function (message, type) {
+            $().toastmessage('showToast', {
+                text: dhHelpdesk.admin.users.utils.replaceAll(message, '|', '<br />'),
+                sticky: true,
+                position: 'top-center',
+                type: type || 'notice',
+                closeText: '',
+                stayTime: 10000,
+                inEffectDuration: 1000,
+                width: 700
+            });
+        },
+
+        showWarning: function(message) {
+            dhHelpdesk.admin.users.utils.showMessage(message, 'warning');
+        },
+
+        replaceAll: function (string, omit, place, prevstring) {
+            if (prevstring && string === prevstring)
+                return string;
+            prevstring = string.replace(omit, place);
+            return dhHelpdesk.admin.users.utils.replaceAll(prevstring, omit, place, string);
+        }
+    }
+
     dhHelpdesk.admin.users.userGroup = {
         user: 1,
         administrator: 2,

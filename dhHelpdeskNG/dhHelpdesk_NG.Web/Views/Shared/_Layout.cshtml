@@ -275,11 +275,11 @@
                                                 <li>
                                                     @if(lang.Id == SessionFacade.CurrentLanguageId)
                                                     {
-                                                        <a href="@Url.Action("ChangeCurrentLanguage", "cases", new { languageId = lang.Id, area = "" })" >@lang.Name  <i class="icon-ok"></i></a>
+                                                        <a href="@Url.Action("ChangeCurrentLanguage", "cases", new { languageId = lang.Id, area = "" })" >@Translation.Get(lang.Name, model.UsersDefaultLanguage)  <i class="icon-ok"></i></a>
                                                     }
                                                     else
                                                     {
-                                                        <a href="@Url.Action("ChangeCurrentLanguage", "cases", new { languageId = lang.Id, area = "" })">@lang.Name </a>
+                                                        <a href="@Url.Action("ChangeCurrentLanguage", "cases", new { languageId = lang.Id, area = "" })">@Translation.Get(lang.Name, model.UsersDefaultLanguage) </a>
                                                     }
                                                 </li>
                                             }

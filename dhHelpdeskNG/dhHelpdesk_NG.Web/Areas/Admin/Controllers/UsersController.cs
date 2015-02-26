@@ -9,6 +9,7 @@
     using DH.Helpdesk.BusinessData.Enums.Users;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Accounts;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Users;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
     using DH.Helpdesk.Web.Infrastructure;
@@ -306,15 +307,18 @@
                     }
                 }
                 
-                                              
                 this._userService.SaveEditUser(userToSave, AAsSelected, CsSelected, OTsSelected, Departments, UserWorkingGroups, out errors);
 
                 if (errors.Count == 0)
                 {
                     if (!string.IsNullOrEmpty(err))
-                        this.TempData.Add("AlertMessage", err);
+                    {
+                        this.TempData["AlertMessage"] = err;
+                    }
 
-                    //return this.RedirectToAction("index", "users");
+                    // Save changes into the current session
+                    SessionFacade.CurrentUser = UsersMapper.MapToOverview(userToSave);
+
                     return this.RedirectToAction("edit", "users", new { id = id });
                 }
                 else

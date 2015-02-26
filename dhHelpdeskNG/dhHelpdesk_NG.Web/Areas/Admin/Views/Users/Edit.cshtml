@@ -1,5 +1,4 @@
 ﻿@using System.Web.Optimization
-@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Admin.Models.UserInputViewModel
 @{
     ViewBag.Title = "Edit";
@@ -11,16 +10,16 @@
 <div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
-            <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", new { id = Model.User.Id }, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
+            <li>@Html.ActionLink(Translation.Get("Spara"), "edit", new { id = Model.User.Id }, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
             @if (Model.User.UserGroup_Id > 2)
             {
-                <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "delete", new { id = Model.User.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) })</li>
+                <li>@Html.ActionLink(Translation.Get("Ta bort"), "delete", new { id = Model.User.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post") })</li>
             }
             @if (copy !=  "1")
             {
-                <li>@Html.ActionLink(Translation.Get("Kopiera", Enums.TranslationSource.TextTranslation), "edit", new { id = Model.User.Id, copy = 1 }, new { @class = "btn" })</li>
+                <li>@Html.ActionLink(Translation.Get("Kopiera"), "edit", new { id = Model.User.Id, copy = 1 }, new { @class = "btn" })</li>
             }
-            <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", null, new { @class = "btn" })</li>
+            <li>@Html.ActionLink(Translation.Get("Avbryt"), "index", null, new { @class = "btn" })</li>
         </ul>
     </div>
 </div>
@@ -28,9 +27,11 @@
 
 }
 @section Scripts {
+    @Scripts.Render("~/bundles/admin/users")
+
     <script type="text/javascript">
 
-        $(function () {
+        $(function() {
 
             var validator = $("#target").validate({
                 rules: {
@@ -50,32 +51,37 @@
                     //"User.Customer_Id": {
                     //    required: true
                     //}
-                    
+
                 },
                 messages: {
                     "User.UserID": {
-                        required: "@Translation.Get("Du måste ange ett Användar ID", Enums.TranslationSource.TextTranslation)"
+                        required: "@Translation.Get("Du måste ange ett Användar ID")"
                     },
                     "User.FirstName": {
-                        required: "@Translation.Get("Du måste ange ett namn", Enums.TranslationSource.TextTranslation)"
+                        required: "@Translation.Get("Du måste ange ett namn")"
                     },
                     "User.SurName": {
-                        required: "@Translation.Get("Du måste ange ett namn", Enums.TranslationSource.TextTranslation)"
+                        required: "@Translation.Get("Du måste ange ett namn")"
                     },
                     "User.Email": {
-                        required: "@Translation.Get("Du måste ange en e-post adress", Enums.TranslationSource.TextTranslation)"
+                        required: "@Translation.Get("Du måste ange en e-post adress")"
                     }
                     @*,
                     "User.Customer_Id": {
                         required: "@Translation.Get("Du måste ange en standardkund", Enums.TranslationSource.TextTranslation)"
                     }*@
                 },
-                submitHandler: function (form) {
+                submitHandler: function(form) {
                     submitForm();
                     form.submit();
                 }
             });
-        });
-</script>
 
-@Scripts.Render("~/bundles/admin/users")
+            var message = '@TempData["AlertMessage"]';
+            if (message != '') {
+                dhHelpdesk.admin.users.utils.showWarning(message);
+            }
+        });
+    </script>
+}
+    
