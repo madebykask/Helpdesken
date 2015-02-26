@@ -317,7 +317,7 @@
                     }
 
                     // Save changes into the current session
-                    SessionFacade.CurrentUser = UsersMapper.MapToOverview(userToSave);
+                    //SessionFacade.CurrentUser = UsersMapper.MapToOverview(userToSave);
 
                     return this.RedirectToAction("edit", "users", new { id = id });
                 }
