@@ -10,11 +10,15 @@
 
     public sealed class IndexModelFactory : IIndexModelFactory
     {
-        public IndexModel Create(List<CategoryWithSubcategories> categories, int? selectedCategoryId, List<FaqOverview> firstCategoryFaqs)
+        public IndexModel Create(
+            List<CategoryWithSubcategories> categories, 
+            int? selectedCategoryId, 
+            List<FaqOverview> firstCategoryFaqs,
+            bool userHasFaqAdminPermission)
         {
             if (categories == null)
             {
-                return new IndexModel(new TreeContent(new List<TreeItem>(), null), new List<FaqOverviewModel>());
+                return new IndexModel(new TreeContent(new List<TreeItem>(), null), new List<FaqOverviewModel>(), userHasFaqAdminPermission);
             }
 
             var categoryTreeItems = categories.Select(this.CategoryToTreeItem).ToList();
@@ -27,7 +31,7 @@
                     f => new FaqOverviewModel(f.Id, f.CreatedDate, f.Text))
                                  .ToList();
 
-            return new IndexModel(categoriesTreeContent, firstCategoryFaqModels);
+            return new IndexModel(categoriesTreeContent, firstCategoryFaqModels, userHasFaqAdminPermission);
         }
 
         private TreeItem CategoryToTreeItem(CategoryWithSubcategories categoryWithSubcategories)

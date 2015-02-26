@@ -7,8 +7,9 @@
 
     public sealed class IndexModel
     {
-        public IndexModel(TreeContent categories, List<FaqOverviewModel> firstCategoryFaqs)
+        public IndexModel(TreeContent categories, List<FaqOverviewModel> firstCategoryFaqs, bool userHasFaqAdminPermission)
         {
+            this.UserHasFaqAdminPermission = userHasFaqAdminPermission;
             if (categories == null)
             {
                 throw new ArgumentNullException("categories", "Value cannot be null.");
@@ -26,5 +27,7 @@
         public List<FaqOverviewModel> FirstCategoryFaqs { get; private set; }
 
         public TreeContent Categories { get; private set; }
+
+        public bool UserHasFaqAdminPermission { get; private set; }
     }
 }

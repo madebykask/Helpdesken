@@ -7,7 +7,6 @@
     using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Domain;
 
-    using Enumerable = System.Linq.Enumerable;
     using UserGroup = DH.Helpdesk.BusinessData.Enums.Admin.Users.UserGroup;
 
     public sealed class UserPermissionsChecker : IUserPermissionsChecker
@@ -128,7 +127,7 @@
                         wrongPermissions.Add(UserPermission.CreateCasePermission);
                     }
 
-                    wrongPermissions.AddRange(Enumerable.Where(permissions, permission => permission != UserPermission.CreateCasePermission));
+                    wrongPermissions.AddRange(permissions.Where(p => p != UserPermission.CreateCasePermission));
 
                     break;
                 case UserGroup.Administrator:
@@ -151,7 +150,7 @@
                     break;
             }
 
-            return wrongPermissions.Any();
+            return !wrongPermissions.Any();
         }
     }
 }

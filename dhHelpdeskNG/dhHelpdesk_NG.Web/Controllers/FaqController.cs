@@ -7,12 +7,15 @@
     using System.Web;
     using System.Web.Mvc;
 
+    using DH.Helpdesk.BusinessData.Enums.Admin.Users;
     using DH.Helpdesk.BusinessData.Models.Faq.Input;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Faq;
+    using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Users;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.ActionFilters;
@@ -46,6 +49,8 @@
 
         private readonly IWorkingGroupRepository workingGroupRepository;
 
+        private readonly IUserPermissionsChecker userPermissionsChecker;
+
         #endregion
 
         #region Public Methods and Operators
@@ -60,7 +65,8 @@
             IIndexModelFactory indexModelFactory,
             INewFaqModelFactory newFaqModelFactory,
             ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory,
-            IWorkingGroupRepository workingGroupRepository)
+            IWorkingGroupRepository workingGroupRepository, 
+            IUserPermissionsChecker userPermissionsChecker)
             : base(masterDataService)
         {
             this.editFaqModelFactory = editFaqModelFactory;
@@ -71,6 +77,7 @@
             this.indexModelFactory = indexModelFactory;
             this.newFaqModelFactory = newFaqModelFactory;
             this.workingGroupRepository = workingGroupRepository;
+            this.userPermissionsChecker = userPermissionsChecker;
 
             this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Faq);
         }
@@ -252,10 +259,12 @@
             var categoriesWithSubcategories =
                 this.faqCategoryRepository.FindCategoriesWithSubcategoriesByCustomerId(currentCustomerId);
 
+            var userHasFaqAdminPermission = this.userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.FaqPermission);
+
             IndexModel model;
             if (!categoriesWithSubcategories.Any())
             {
-                model = this.indexModelFactory.Create(null, null, null);
+                model = this.indexModelFactory.Create(null, null, null, userHasFaqAdminPermission);
                 return this.View(model);
             }
 
@@ -269,9 +278,7 @@
                 firstCategoryId = int.Parse(SessionFacade.TemporaryValue);
 
             var faqs = this.faqService.FindOverviewsByCategoryId(firstCategoryId);
-            model = this.indexModelFactory.Create(categoriesWithSubcategories, firstCategoryId, faqs);
-
-            
+            model = this.indexModelFactory.Create(categoriesWithSubcategories, firstCategoryId, faqs, userHasFaqAdminPermission);            
 
             return this.View(model);
         }

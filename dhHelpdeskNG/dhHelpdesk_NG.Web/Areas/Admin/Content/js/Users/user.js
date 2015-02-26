@@ -152,7 +152,7 @@ $(function () {
         var setUserGroup = function (ug, sp) {
             userGroup = ug;
 
-            var setPermissions = sp || true;
+            var setPermissions = sp !== 'undefined' ? sp : true;
 
             switch (ug) {
                 case dhHelpdesk.admin.users.userGroup.user:

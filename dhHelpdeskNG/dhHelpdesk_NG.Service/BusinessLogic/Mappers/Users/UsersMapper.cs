@@ -24,6 +24,44 @@
             return entities;
         }
 
+        public static User MapToUser(UserOverview overview)
+        {
+            return new User 
+            {
+                Id = overview.Id,
+                UserID = overview.UserId,
+                Customer_Id = overview.CustomerId,
+                Language_Id = overview.LanguageId,
+                UserGroup_Id = overview.UserGroupId,
+                FollowUpPermission = overview.FollowUpPermission,
+                RestrictedCasePermission = overview.RestrictedCasePermission,
+                ShowNotAssignedWorkingGroups = overview.ShowNotAssignedWorkingGroups,
+                CreateCasePermission = overview.CreateCasePermission,
+                CopyCasePermission = overview.CopyCasePermission,
+                OrderPermission = overview.OrderPermission,
+                CaseSolutionPermission = overview.CaseSolutionPermission,
+                DeleteCasePermission = overview.DeleteCasePermission,
+                DeleteAttachedFilePermission = overview.DeleteAttachedFilePermission,
+                MoveCasePermission = overview.MoveCasePermission,
+                ActivateCasePermission = overview.ActivateCasePermission,
+                ReportPermission = overview.ReportPermission,
+                CloseCasePermission = overview.CloseCasePermission,
+                CalendarPermission = overview.CalendarPermission,
+                FAQPermission = overview.FAQPermission,
+                BulletinBoardPermission = overview.BulletinBoardPermission,
+                SetPriorityPermission = overview.SetPriorityPermission,
+                InvoicePermission = overview.InvoicePermission,
+                DataSecurityPermission = overview.DataSecurityPermission,
+                RefreshContent = overview.RefreshContent,
+                FirstName = overview.FirstName,
+                SurName = overview.SurName,
+                Phone = overview.Phone,
+                Email = overview.Email,
+                UserWorkingGroups = overview.UserWorkingGroups,
+                StartPage = overview.StartPage
+            };
+        }
+
         public static UserOverview MapToOverview(User user)
         {
             return new UserOverview(
