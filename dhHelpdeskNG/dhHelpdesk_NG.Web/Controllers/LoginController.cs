@@ -9,41 +9,52 @@
     using DH.Helpdesk.Services.Services.Users;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.Tools;
+    using DH.Helpdesk.Common.Enums;
 
     public class LoginController : Controller
     {
+        private const string Root = "/";
         private readonly IUserService userService;
         private readonly ICustomerService customerService;
         private readonly ILanguageService languageService;
         private readonly IUsersPasswordHistoryService usersPasswordHistoryService;
 
+        private readonly IRouteResolver routeResolver;
+
         public LoginController(
                 IUserService userService, 
                 ICustomerService customerService, 
                 IUsersPasswordHistoryService usersPasswordHistoryService,
-                ILanguageService languageService)
+                ILanguageService languageService, 
+                IRouteResolver routeResolver)
         {
             this.userService = userService;
             this.customerService = customerService;
             this.usersPasswordHistoryService = usersPasswordHistoryService;
             this.languageService = languageService;
+            this.routeResolver = routeResolver;
         }
 
-        public ActionResult Login()
+        [HttpGet]
+        public ActionResult Logout()
         {
             this.Session.Clear();
             ApplicationFacade.RemoveLoggedInUser(Session.SessionID);
-            FormsAuthentication.SignOut();
-            return this.View();
+            FormsAuthentication.SignOut();            
+            return this.View("Login");
         }
 
+        [HttpGet]
+        public ViewResult Login()
+        {            
+            return this.View();
+        } 
+
         [HttpPost]
-        public ActionResult Login(FormCollection coll)
+        public ActionResult Login(FormCollection coll, string returnUrl)
         {
-            string userName = coll["txtUid"].ToString().Trim();
-            string password = coll["txtPwd"].ToString().Trim();
-            string returnUrl = Request.QueryString["returnUrl"];
-            string decodedUrl = "/";
+            string userName = coll["txtUid"].Trim();
+            string password = coll["txtPwd"].Trim();
 
             if (this.IsValidLoginArgument(userName, password))
             {
@@ -51,28 +62,28 @@
 
                 if (user != null)
                 {
-                    if (!string.IsNullOrEmpty(returnUrl))
+                    var redirectTo = string.Empty;
+                    if (!string.IsNullOrEmpty(returnUrl) 
+                        && Url.IsLocalUrl(returnUrl)
+                        && this.routeResolver.AbsolutePathToRelative(returnUrl) != Root)
                     {
-                        decodedUrl = Server.UrlDecode(returnUrl);
+                        redirectTo = Server.UrlDecode(returnUrl);
                     }
 
-                    if (!Url.IsLocalUrl(decodedUrl))
+                    if (!string.IsNullOrEmpty(redirectTo) 
+                        && redirectTo.ToLower().Contains("login"))
                     {
-                        decodedUrl = "/";
-                    }
-
-                    if (decodedUrl.Contains("login"))
-                    {
-                        decodedUrl = "/";
+                        redirectTo = Root;
                     }
 
                     this.Session.Clear();
                     SessionFacade.CurrentUser = user;
                     SessionFacade.CurrentLanguageId = user.LanguageId;
+                    SessionFacade.CurrentLoginMode = LoginMode.Application;
 
                     var language = this.languageService.GetLanguage(user.LanguageId);
 
-                    if(language !=  null) 
+                    if (language != null) 
                     {
                         SessionFacade.CurrentLanguageCode = language.LanguageID;
                     }
@@ -92,7 +103,7 @@
 
                     this.usersPasswordHistoryService.SaveHistory(user.Id, EncryptionHelper.GetMd5Hash(password));
 
-                    this.RedirectFromLoginPage(userName, decodedUrl);
+                    this.RedirectFromLoginPage(userName, redirectTo, user.StartPage);
                 }
                 else
                 {
@@ -110,20 +121,17 @@
         }
 
         [NonAction]
-        private void RedirectFromLoginPage(string userName, string returnURL)
+        private void RedirectFromLoginPage(string userName, string returnUrl, int startPage)
         {
-            FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1, userName, DateTime.Now, DateTime.Now.AddDays(10), false, SessionFacade.CurrentUser.ToString());
+            var ticket = new FormsAuthenticationTicket(1, userName, DateTime.Now, DateTime.Now.AddDays(10), false, SessionFacade.CurrentUser.ToString());
 
             string encryptedTicket = FormsAuthentication.Encrypt(ticket);
 
-            HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
+            var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
 
             this.Response.Cookies.Add(cookie);
 
-            if(!string.IsNullOrEmpty(returnURL))
-                this.Response.Redirect(returnURL);
-            else
-                this.Response.Redirect(FormsAuthentication.DefaultUrl);
+            this.Response.Redirect(!string.IsNullOrEmpty(returnUrl) ? returnUrl : this.routeResolver.ResolveStartPage(this.Url, startPage));
         }
     }
 }

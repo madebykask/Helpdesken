@@ -275,3 +275,15 @@ BEGIN
 	ALTER TABLE [dbo].tblCaseSolution ADD UpdateNotifierInformation int null 
 END
 GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'PlanDate' and sysobjects.name = N'tblCaseSolution')
+	begin
+		ALTER TABLE tblCaseSolution ADD PlanDate datetime NULL			
+	end
+GO
+
+IF COL_LENGTH('dbo.tblCaseSolution','CausingPartId') IS NULL
+BEGIN
+	ALTER TABLE [dbo].tblCaseSolution ADD CausingPartId int null
+END
+GO

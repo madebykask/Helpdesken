@@ -96,7 +96,10 @@
             _temporary_LeadTime = 53,
             CausingPart = 54,
             ClosingReason = 55,
-            UpdateNotifierInformation = 56
+            UpdateNotifierInformation = 56,
+            Change = 57, 
+            Project = 58,
+            Problem = 59
         }
 
     }

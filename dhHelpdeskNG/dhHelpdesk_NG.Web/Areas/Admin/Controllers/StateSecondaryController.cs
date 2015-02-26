@@ -136,8 +136,9 @@
 
         private StateSecondaryInputViewModel CreateInputViewModel(StateSecondary statesecondary, Customer customer)
         {
+            var ReminderMaxDaysCount = 31;
             List<SelectListItem> sl = new List<SelectListItem>();
-            for (int i = 0; i < 31; i++)
+            for (int i = 0; i < ReminderMaxDaysCount; i++)
             {
                 sl.Add(new SelectListItem
                 {
@@ -151,7 +152,7 @@
                 StateSecondary = statesecondary,
                 Customer = customer,
                 ReminderDays = sl,
-                WorkingGroups = this._workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                WorkingGroups = this._workingGroupService.GetWorkingGroups(customer.Id).Select(x => new SelectListItem
                 {
                     Text = x.WorkingGroupName,
                     Value = x.Id.ToString()

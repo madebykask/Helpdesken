@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DH.Helpdesk.Domain.SSO
+namespace DH.Helpdesk.Domain.ADFS
 {
     using global::System;
 

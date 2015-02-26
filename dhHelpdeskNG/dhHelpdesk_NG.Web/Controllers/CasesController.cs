@@ -26,6 +26,7 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Dal.Utils;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services.Exceptions;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.Configuration;
@@ -411,7 +412,7 @@ namespace DH.Helpdesk.Web.Controllers
             return this.View(m);
         }
 
-        public ActionResult New(int customerId, int? templateId, int? copyFromCaseId, int? caseLanguageId)
+        public ActionResult New(int customerId, int? templateId, int? copyFromCaseId, int? caseLanguageId, int? templateistrue)
         {
             CaseInputViewModel m = null;
           
@@ -424,7 +425,7 @@ namespace DH.Helpdesk.Web.Controllers
                 if (SessionFacade.CurrentUser.CreateCasePermission == 1)
                 {
                     var userId = SessionFacade.CurrentUser.Id;
-                    m = this.GetCaseInputViewModel(userId, customerId, 0, 0, "", templateId, copyFromCaseId);
+                    m = this.GetCaseInputViewModel(userId, customerId, 0, 0, "", templateId, copyFromCaseId, false, templateistrue);
 
                     var caseParam = new NewCaseParams
                     {
@@ -1413,6 +1414,9 @@ namespace DH.Helpdesk.Web.Controllers
                     bool? updateNotifierInformation,
                     string caseInvoiceArticles)
         {
+            case_.Ou = null;
+            case_.Department = null;
+            case_.Region = null;
             bool edit = case_.Id == 0 ? false : true;
             IDictionary<string, string> errors;
 
@@ -1588,8 +1592,11 @@ namespace DH.Helpdesk.Web.Controllers
                 ISearch s = new Search();
                 var f = new CaseSearchFilter();
                 m = new CaseSearchModel();
-
                 var cu = this._customerUserService.GetCustomerSettings(customerId, userId);
+                if (cu == null)
+                {
+                    throw new Exception("It looks that something has happened with your session. Refresh page to fix it.");
+                }
 
                 f.CustomerId = customerId;
                 f.UserId = userId;
@@ -1655,16 +1662,19 @@ namespace DH.Helpdesk.Web.Controllers
         /// </returns>
         private CaseInputViewModel GetCaseInputViewModel(int userId, int customerId, int caseId, int lockedByUserId = 0, 
                                                          string redirectFrom = "", int? templateId = null, 
-                                                         int? copyFromCaseId = null, bool updateState = true)
+                                                         int? copyFromCaseId = null, bool updateState = true, int? templateistrue = 0)
         {
             var m = new CaseInputViewModel();
             SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
+            var acccessToGroups = this._userService.GetWorkinggroupsForUserAndCustomer(SessionFacade.CurrentUser.Id, customerId);
+            var deps = this._departmentService.GetDepartmentsByUserPermissions(userId, customerId);
             if (caseId != 0)
             {
                 var markCaseAsRead = string.IsNullOrWhiteSpace(redirectFrom);
                 m.case_ = this._caseService.GetCaseById(caseId);
 
-                if (m.case_.Unread != 0 && updateState)
+                var editMode = this.EditMode(m, ModuleName.Cases, deps, acccessToGroups);
+                if (m.case_.Unread != 0 && updateState && editMode == Enums.AccessMode.FullAccess)
                     this._caseService.MarkAsRead(caseId);                
 
                 customerId = customerId == 0 ? m.case_.Customer_Id : customerId;
@@ -1747,6 +1757,8 @@ namespace DH.Helpdesk.Web.Controllers
                                                     customer.HelpdeskEmail, 
                                                     RequestExtension.GetAbsoluteUrl(), 
                                                     cs.DontConnectUserToWorkingGroup);
+
+                m.CaseMailSetting.DontSendMailToNotifier = !SessionFacade.CurrentCustomer.CommunicateWithNotifier.ToBool();
 
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()).ShowOnStartPage == 1)
                 {
@@ -1837,8 +1849,7 @@ namespace DH.Helpdesk.Web.Controllers
                 m.problems = this._problemService.GetCustomerProblems(customerId);
                 m.currencies = this._currencyService.GetCurrencies();
                 m.users = this._userService.GetUsers(customerId);
-                m.projects = this._projectService.GetCustomerProjects(customerId);
-                var deps = this._departmentService.GetDepartmentsByUserPermissions(userId, customerId);
+                m.projects = this._projectService.GetCustomerProjects(customerId);                
                 m.departments = deps.Any() ? deps : this._departmentService.GetDepartments(customerId);
                 m.standardTexts = this._standardTextService.GetStandardTexts(customerId);
                 m.Languages = this._languageService.GetActiveLanguages();
@@ -1901,6 +1912,10 @@ namespace DH.Helpdesk.Web.Controllers
                         {
                             m.case_.Performer_User_Id = caseTemplate.PerformerUser_Id.Value;
                         }
+                        else
+                        {
+                            m.case_.Performer_User_Id = 0;
+                        }
 
                         if (caseTemplate.Category_Id != null)
                         {
@@ -1951,6 +1966,17 @@ namespace DH.Helpdesk.Web.Controllers
                         m.case_.Change_Id = caseTemplate.Change_Id;
                         m.case_.FinishingDate = caseTemplate.FinishingDate;
                         m.case_.FinishingDescription = caseTemplate.FinishingDescription;
+                        m.case_.CausingPartId = caseTemplate.CausingPartId;
+                        m.case_.PlanDate = caseTemplate.PlanDate;
+
+                        m.CaseTemplateName = caseTemplate.Name;
+
+                        //To get the right users for perfomers when creating a case from a template
+                        if (m.case_.WorkingGroup_Id.HasValue)
+                            m.performers = this._userService.GetUsersForWorkingGroup(customerId, m.case_.WorkingGroup_Id.Value);
+
+                        // This is used for hide fields(which are not in casetemplate) in new case input
+                        m.templateistrue = templateistrue;
                     }
                 } // Load Case Template
 
@@ -1992,6 +2018,8 @@ namespace DH.Helpdesk.Web.Controllers
                 }
 
                 // check state secondary info
+                m.CaseLog.SendMailAboutCaseToNotifier = SessionFacade.CurrentCustomer.CommunicateWithNotifier.ToBool();
+
                 m.Disable_SendMailAboutCaseToNotifier = false;
                 if (m.case_.StateSecondary_Id > 0)
                 {
@@ -2001,7 +2029,7 @@ namespace DH.Helpdesk.Web.Controllers
                     }                    
                 }
 
-                var acccessToGroups = this._userService.GetWorkinggroupsForUserAndCustomer(SessionFacade.CurrentUser.Id, customerId);
+                
                 m.EditMode = this.EditMode(m, ModuleName.Cases, deps, acccessToGroups);
 
                 if (m.case_.Id == 0)  // new mode

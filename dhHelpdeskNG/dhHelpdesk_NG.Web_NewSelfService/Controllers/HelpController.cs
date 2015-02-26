@@ -17,10 +17,9 @@ namespace DH.Helpdesk.NewSelfService.Controllers
       
         public HelpController(IMasterDataService masterDataService,
                                      ICustomerService customerService,
-                                     ICaseSolutionService caseSolutionService,
-                                     ISSOService ssoService
+                                     ICaseSolutionService caseSolutionService                                     
                                   )
-            : base(masterDataService, ssoService, caseSolutionService)
+            : base(masterDataService, caseSolutionService)
         {
             this._customerService = customerService;
         }

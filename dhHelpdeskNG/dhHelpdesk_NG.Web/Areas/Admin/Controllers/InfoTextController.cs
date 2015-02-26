@@ -9,6 +9,7 @@
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
     using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Common.Enums;
 
     public class InfoTextController : BaseAdminController
     {
@@ -28,16 +29,17 @@
             this._languageService = languageService;
         }
 
-        public ActionResult Index(int customerId)
+        public ActionResult Index(int customerId, InfoTextTypes infoTextType)
         {
             var customer = this._customerService.GetCustomer(customerId);
             var infoTexts = this._infoService.GetInfoTexts(customer.Id, customer.Language_Id);
-
-            var model = new InfoTextIndexViewModel { InfoTexts = infoTexts, Customer = customer };
+            
+            var model = new InfoTextIndexViewModel { InfoTexts = infoTexts, Customer = customer, InfoTextType = infoTextType };            
+            
             return this.View(model);
         }
 
-        public ActionResult Edit(int infoTypeId, int customerId, int languageId)
+        public ActionResult Edit(int infoTypeId, int customerId, int languageId, InfoTextTypes infoTextType)
         {
             var customer = this._customerService.GetCustomer(customerId);
             var infoText = this._infoService.GetInfoText(infoTypeId, customer.Id, languageId);
@@ -47,8 +49,8 @@
                 infoText = new InfoText { Customer_Id = customerId, Type = infoTypeId, Id = 0, Language_Id = languageId, Name = string.Empty };
                 //return new HttpNotFoundResult("No information text found");
 
-            var model = this.InfoTextInputViewModel(customer);
-            model.InfoTextShowViewModel = this.InfoTextShowViewModel(infoText, customer, languageId);
+            var model = this.InfoTextInputViewModel(customer, infoTextType);
+            model.InfoTextShowViewModel = this.InfoTextShowViewModel(infoText, customer, languageId, infoTextType);
 
             return this.View(model);
             
@@ -56,7 +58,7 @@
 
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult Edit(InfoText infoText, int customerId, int languageId, int infoTypeId)
+        public ActionResult Edit(InfoText infoText, int customerId, int languageId, int infoTypeId, InfoTextTypes infoTextType)
         {
 
             var customer = this._customerService.GetCustomer(customerId);
@@ -73,10 +75,10 @@
             this._infoService.SaveInfoText(infoText, out errors);
 
             if (errors.Count == 0)
-                return this.RedirectToAction("edit", "infotext", new { infoTypeId = infoTypeId, customerId = customerId, languageId = languageId });
+                return this.RedirectToAction("edit", "infotext", new { infoTypeId = infoTypeId, customerId = customerId, languageId = languageId, infoTextType = infoTextType});
                 //return this.RedirectToAction("index", "infotext", new { customerId = customer.Id });
 
-            var model = this.InfoTextInputViewModel(customer);
+            var model = this.InfoTextInputViewModel(customer, infoTextType);
             return this.View(model);
           
             
@@ -98,7 +100,7 @@
             return model;
         }
 
-        private InfoTextInputViewModel InfoTextInputViewModel(Customer customer)
+        private InfoTextInputViewModel InfoTextInputViewModel(Customer customer, InfoTextTypes infoTextType)
         {
             if (customer.Id == 0)
             {
@@ -111,6 +113,7 @@
             {
                 InfoTextShowViewModel = new InfoTextShowViewModel(),
                 Customer = customer,
+                InfoTextType = infoTextType,
                 Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
                 {
                     Text = Translation.Get(x.Name, Enums.TranslationSource.TextTranslation),
@@ -122,19 +125,20 @@
             return model;
         }
 
-        private InfoTextShowViewModel InfoTextShowViewModel(InfoText infoText, Customer customer, int languageId)
+        private InfoTextShowViewModel InfoTextShowViewModel(InfoText infoText, Customer customer, int languageId, InfoTextTypes infoTextType)
         {
             var model = new InfoTextShowViewModel
             {
                 InfoText = infoText,
-                Customer = customer
+                Customer = customer,    
+                InfoTextType = infoTextType
             };
 
             return model;
         }
 
         [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")]
-        public string UpdateLanguageList(int id, int customerId, int infoTypeId)
+        public string UpdateLanguageList(int id, int customerId, int infoTypeId, InfoTextTypes infoTextType)
         {
 
             var customer = this._customerService.GetCustomer(customerId);
@@ -142,7 +146,7 @@
 
             var infoText = new InfoText() { };
 
-            var model = this.InfoTextShowViewModel(infoText, customer, id);
+            var model = this.InfoTextShowViewModel(infoText, customer, id, infoTextType);
 
             model.InfoText = infoTextToUpdate;
             model.Customer = customer;

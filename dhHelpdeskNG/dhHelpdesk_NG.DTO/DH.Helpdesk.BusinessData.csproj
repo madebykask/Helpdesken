@@ -131,6 +131,7 @@
     <Compile Include="Enums\Orders\OrderEmailTemplate.cs" />
     <Compile Include="Enums\Orders\Subtopic.cs" />
     <Compile Include="Enums\Projects\ProjectFields.cs" />
+    <Compile Include="Enums\Users\StartPage.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\ModelEdit\HeadersFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Overview\AccountFieldsSettingsOverviewWithActivity.cs" />
     <Compile Include="Models\Accounts\Read\Overview\AccountInformation.cs" />
@@ -144,6 +145,7 @@
     <Compile Include="Models\Accounts\Read\Overview\User.cs" />
     <Compile Include="Models\Accounts\Read\Edit\UserForEdit.cs" />
     <Compile Include="Models\Accounts\Write\AccountForWrite.cs" />
+    <Compile Include="Models\ADFS\Input\ADFSSetting.cs" />
     <Compile Include="Models\CaseType\CaseTypeItem.cs" />
     <Compile Include="Models\Case\CaseOverview\CaseInfoOverview.cs" />
     <Compile Include="Models\Case\CaseOverview\ComputerOverview.cs" />
@@ -357,6 +359,8 @@
     <Compile Include="Models\Reports\Data\CaseTypeArticleNo\CaseTypeArticleNoData.cs" />
     <Compile Include="Models\Reports\Data\CaseTypeArticleNo\CaseTypeData.cs" />
     <Compile Include="Models\Reports\Data\CaseTypeArticleNo\ProductAreaData.cs" />
+    <Compile Include="Models\Reports\Data\LeadtimeFinishedCases\FinishedCasesLeadTime.cs" />
+    <Compile Include="Models\Reports\Data\LeadtimeFinishedCases\FinishedCasesLeadTimes.cs" />
     <Compile Include="Models\Reports\Data\LeadtimeFinishedCases\LeadtimeFinishedCasesData.cs" />
     <Compile Include="Models\Reports\Data\RegistratedCasesDay\RegisteredCaseDay.cs" />
     <Compile Include="Models\Reports\Data\RegistratedCasesDay\RegistratedCasesDayData.cs" />
@@ -751,7 +755,7 @@
     <Compile Include="Models\Questionnaire\Output\QuestionnaireQuestionsOverview.cs" />
     <Compile Include="Models\Reports\Enums\ReportType.cs" />
     <Compile Include="Models\SelfService\Case\SelfServiceCaseOverview.cs" />
-    <Compile Include="Models\SSO\Input\NewSSOLog.cs" />
+    <Compile Include="Models\ADFS\Input\NewSSOLog.cs" />
     <Compile Include="Models\Statistics\Output\StatisticsOverview.cs" />
     <Compile Include="Models\Changes\Input\SearchParameters.cs" />
     <Compile Include="Models\Changes\Output\ChangeEditOptions.cs" />

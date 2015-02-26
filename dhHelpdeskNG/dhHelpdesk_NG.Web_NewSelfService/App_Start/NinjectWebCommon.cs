@@ -26,8 +26,8 @@ namespace DH.Helpdesk.NewSelfService
     using DH.Helpdesk.Dal.Repositories.Users.Concrete;
     using DH.Helpdesk.Dal.Repositories.WorkstationModules;
     using DH.Helpdesk.Dal.Repositories.WorkstationModules.Concrete;
-    using DH.Helpdesk.Dal.Repositories.SSO;
-    using DH.Helpdesk.Dal.Repositories.SSO.Concrete;
+    using DH.Helpdesk.Dal.Repositories.ADFS;
+    using DH.Helpdesk.Dal.Repositories.ADFS.Concrete;
     using DH.Helpdesk.NewSelfService.Infrastructure.WorkContext;
     using DH.Helpdesk.NewSelfService.Infrastructure.WorkContext.Concrete;
     using DH.Helpdesk.NewSelfService.NinjectModules.Modules;
@@ -173,14 +173,13 @@ namespace DH.Helpdesk.NewSelfService
             kernel.Bind<IActionSettingRepository>().To<ActionSettingRepository>();
             kernel.Bind<IInvoiceArticleUnitRepository>().To<InvoiceArticleUnitRepository>();
             kernel.Bind<IInvoiceArticleRepository>().To<InvoiceArticleRepository>();
-            kernel.Bind<ICaseInvoiceArticleRepository>().To<CaseInvoiceArticleRepository>();
-            kernel.Bind<ISSORepository>().To<SSORepository>();
+            kernel.Bind<ICaseInvoiceArticleRepository>().To<CaseInvoiceArticleRepository>();            
             kernel.Bind<IBulletinBoardRepository>().To<BulletinBoardRepository>();
             kernel.Bind<ICaseSolutionSettingRepository>().To<CaseSolutionSettingRepository>();
             kernel.Bind<IDocumentRepository>().To<DocumentRepository>();
-            kernel.Bind<IDocumentCategoryRepository>().To<DocumentCategoryRepository>();            
-
-            
+            kernel.Bind<IDocumentCategoryRepository>().To<DocumentCategoryRepository>();
+            kernel.Bind<IFormRepository>().To<FormRepository>();
+            kernel.Bind<IADFSRepository>().To<ADFSRepository>();
                                        
             // Service             
             kernel.Bind<IMasterDataService>().To<MasterDataService>();            
@@ -220,8 +219,7 @@ namespace DH.Helpdesk.NewSelfService
             kernel.Bind<IStateSecondaryService>().To<StateSecondaryService>();
             kernel.Bind<ICaseSolutionService>().To<CaseSolutionService>();
             kernel.Bind<IActionSettingService>().To<ActionSettingService>();
-            kernel.Bind<IInvoiceArticleService>().To<InvoiceArticleService>();
-            kernel.Bind<ISSOService>().To<SSOService>();
+            kernel.Bind<IInvoiceArticleService>().To<InvoiceArticleService>();            
             kernel.Bind<IAMAPIService>().To<AMAPIService>();
             kernel.Bind<IBulletinBoardService>().To<BulletinBoardService>();
             kernel.Bind<ICaseSolutionSettingService>().To<CaseSolutionSettingService>();

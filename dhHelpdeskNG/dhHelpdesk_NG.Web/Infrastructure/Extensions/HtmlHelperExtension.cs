@@ -922,7 +922,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                     sb.Append("<li>");
 
                 if (f.IsRootTemplate)
-                    sb.Append("<a href='#' onclick = 'LoadTemplate(" + f.CategoryId.ToString()  + ")'" + customerId.ToString() + "&templateId=" + f.CategoryId.ToString() + "' value=" + f.CategoryId.ToString() + ">" +
+                    sb.Append("<a href='#' onclick = 'LoadTemplate(" + f.CategoryId.ToString()  + ")'" + customerId.ToString() + "&templateId=" + f.CategoryId.ToString() + "&templateistrue=1" + "' value=" + f.CategoryId.ToString() + ">" +
                            Translation.Get(f.CategoryName, Enums.TranslationSource.TextTranslation) + "</a>");
                 else
                     sb.Append("<a href='#' value=" + f.CategoryId.ToString() + ">" +
@@ -958,10 +958,10 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                     sb.Append("<li>");
 
                 if (f.IsRootTemplate)
-                    sb.Append("<a href='cases/new/?customerId=" + customerId.ToString() + "&templateId=" + f.CategoryId.ToString() + "' value=" + f.CategoryId.ToString() + ">" +
+                    sb.Append("<a href='cases/new/?customerId=" + customerId.ToString() + "&templateId=" + f.CategoryId.ToString() + "&templateistrue=1" + "' value=" + f.CategoryId.ToString() + ">" +
                            Translation.Get(f.CategoryName, Enums.TranslationSource.TextTranslation) + "</a>");
-                else                
-                   sb.Append("<a href='#' value=" + f.CategoryId.ToString() + ">" +
+                else
+                    sb.Append("<a href='#' value=" + f.CategoryId.ToString() + ">" +
                            Translation.Get(f.CategoryName, Enums.TranslationSource.TextTranslation) + "</a>");
 
                 if (hasChild)
@@ -984,7 +984,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             foreach (CaseTemplateNode f in caseTemplate)
             {
                 sb.Append("<li>");
-                sb.Append("<a href='cases/new/?customerId=" + customerId.ToString() + "&templateId=" + f.CaseTemplateId.ToString() + "' value=" + f.CaseTemplateId.ToString() + ">" +
+                sb.Append("<a href='cases/new/?customerId=" + customerId.ToString() + "&templateId=" + f.CaseTemplateId.ToString() + "&templateistrue=1" + "' value=" + f.CaseTemplateId.ToString() + ">" +
                           Translation.Get(f.CaseTemplateName, Enums.TranslationSource.TextTranslation) + "</a>");                
                 sb.Append("</li>");
             }

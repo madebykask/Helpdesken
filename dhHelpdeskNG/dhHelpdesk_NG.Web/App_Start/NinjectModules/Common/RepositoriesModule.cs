@@ -1,6 +1,8 @@
 ﻿namespace DH.Helpdesk.Web.NinjectModules.Common
 {
     using DH.Helpdesk.Dal.Repositories;
+    using DH.Helpdesk.Dal.Repositories.ADFS;
+    using DH.Helpdesk.Dal.Repositories.ADFS.Concrete;
     using DH.Helpdesk.Dal.Repositories.Cases;
     using DH.Helpdesk.Dal.Repositories.Cases.Concrete;
     using DH.Helpdesk.Dal.Repositories.Changes;
@@ -256,12 +258,11 @@
             this.Bind<IInvoiceArticleRepository>().To<InvoiceArticleRepository>();
             this.Bind<ICaseInvoiceArticleRepository>().To<CaseInvoiceArticleRepository>();
             this.Bind<ICaseInvoiceSettingsRepository>().To<CaseInvoiceSettingsRepository>();
-
             this.Bind<IOperationLogEMailLogRepository>().To<OperationLogEMailLogRepository>();
-
             this.Bind<ICaseSolutionSettingRepository>().To<CaseSolutionSettingRepository>();
-
             this.Bind<IModulesRepository>().To<ModulesRepository>();
+            this.Bind<IADFSRepository>().To<ADFSRepository>();
+            
         }
 
         #endregion

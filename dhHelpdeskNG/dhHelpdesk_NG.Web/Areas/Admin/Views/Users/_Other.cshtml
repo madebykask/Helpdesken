@@ -40,7 +40,7 @@
                 @Translation.Get("Startsida", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
-                @Html.DropDownListFor(model => model.User.StartPage, Model.StartPageShowList, "", new { style = "width: auto;" })
+                @Html.DropDownListFor(model => model.User.StartPage, Model.StartPageShowList, new { style = "width: auto;" })
             </td>
         </tr>
         <tr>

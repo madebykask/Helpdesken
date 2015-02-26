@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using DH.Helpdesk.BusinessData.Models.SSO.Input;
+using DH.Helpdesk.BusinessData.Models.ADFS.Input;
 using DH.Helpdesk.Common.Types;
 
 namespace DH.Helpdesk.NewSelfService.Controllers
@@ -22,16 +22,14 @@ namespace DH.Helpdesk.NewSelfService.Controllers
     
     public class StartController : BaseController
     {
-        private readonly ICustomerService _customerService;        
-        private readonly ISSOService _ssoService;
+        private readonly ICustomerService _customerService;                
         private readonly IBulletinBoardService _bulletinBoardService;
 
         public StartController(IMasterDataService masterDataService,
                                ICustomerService customerService,
-                               ICaseSolutionService caseSolutionService,
-                               ISSOService ssoService,
+                               ICaseSolutionService caseSolutionService,                               
                                IBulletinBoardService bulletinBoardService
-                              ):base(masterDataService, ssoService, caseSolutionService)
+                              ):base(masterDataService, caseSolutionService)
         {
             
             this._customerService = customerService;

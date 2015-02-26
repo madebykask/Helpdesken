@@ -2,10 +2,14 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Web.Mvc;
+
+    using DH.Helpdesk.BusinessData.Enums.Users;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Accounts;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Users;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
     using DH.Helpdesk.Web.Infrastructure;
@@ -303,15 +307,19 @@
                     }
                 }
                 
-                                              
                 this._userService.SaveEditUser(userToSave, AAsSelected, CsSelected, OTsSelected, Departments, UserWorkingGroups, out errors);
 
                 if (errors.Count == 0)
                 {
                     if (!string.IsNullOrEmpty(err))
-                        this.TempData.Add("AlertMessage", err);
+                    {
+                        this.TempData["AlertMessage"] = err;
+                    }
 
-                    return this.RedirectToAction("index", "users");
+                    // Save changes into the current session
+                    SessionFacade.CurrentUser = UsersMapper.MapToOverview(userToSave);
+
+                    return this.RedirectToAction("edit", "users", new { id = id });
                 }
                 else
                 {
@@ -446,7 +454,7 @@
 
             if (errors.Count == 0)
             {
-                //return this.RedirectToAction("edit", "users", new { id = id });
+               // return this.RedirectToAction("edit", "users", new { id = id });
                 return this.RedirectToAction("index", "users");
             }
             else
@@ -582,17 +590,17 @@
 
             #region SelectListItems
 
-            List<SelectListItem> lis = new List<SelectListItem>();
+            var lis = new List<SelectListItem>();
             lis.Add(new SelectListItem()
             {
-                Text = "Start",
-                Value = "1",
+                Text = Translation.Get("Start"),
+                Value = ((int)StartPage.Start).ToString(CultureInfo.InvariantCulture),
                 Selected = false
             });
             lis.Add(new SelectListItem()
             {
-                Text = "Ärendeöversikt",
-                Value = "0",
+                Text = Translation.Get("Ärendeöversikt"),
+                Value = ((int)StartPage.CaseSummary).ToString(CultureInfo.InvariantCulture),
                 Selected = false
             });
 

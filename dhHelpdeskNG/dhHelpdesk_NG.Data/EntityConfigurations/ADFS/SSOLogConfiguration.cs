@@ -1,10 +1,10 @@
-﻿namespace DH.Helpdesk.Dal.EntityConfigurations.SSO
+﻿namespace DH.Helpdesk.Dal.EntityConfigurations.ADFS
 {
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.ModelConfiguration;
 
-    using DH.Helpdesk.Domain.SSO;
+    using DH.Helpdesk.Domain.ADFS;
 
     internal sealed class SSOLogConfiguration : EntityTypeConfiguration<SSOLogEntity>
     {

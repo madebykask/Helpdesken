@@ -10,22 +10,17 @@
     }
 
     var inputAttributes = (Dictionary<string, object>)ViewData["inputAttributes"];
-    Dictionary<string, object> htmlAttributes;
+    var htmlAttributes = new Dictionary<string, object>();
     if (inputAttributes != null)
     {
-        htmlAttributes = new Dictionary<string, object>(inputAttributes.Count + 1);
-
         foreach (var inputAttribute in inputAttributes)
         {
             htmlAttributes.Add(inputAttribute.Key, inputAttribute.Value);
         }
     }
-    else
-    {
-        htmlAttributes = new Dictionary<string, object>(1);
-    }
 
-    htmlAttributes.Add("class", "span2");    
+    htmlAttributes.Add("class", "span2");
+    htmlAttributes.Add("data-dh-is-required", ViewData["required"] != null);
 }
 
 <script type="text/javascript">

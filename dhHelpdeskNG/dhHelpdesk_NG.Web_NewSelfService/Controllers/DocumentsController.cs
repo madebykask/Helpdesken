@@ -22,9 +22,8 @@ namespace DH.Helpdesk.NewSelfService.Controllers
         public DocumentsController(IMasterDataService masterDataService,
                                    ICustomerService customerService,
                                    ICaseSolutionService caseSolutionService,
-                                   IDocumentService documentsService,
-                                   ISSOService ssoService)
-                : base(masterDataService, ssoService, caseSolutionService)
+                                   IDocumentService documentsService)
+                : base(masterDataService, caseSolutionService)
         {
              this._customerService = customerService;
              this._documentsService = documentsService;

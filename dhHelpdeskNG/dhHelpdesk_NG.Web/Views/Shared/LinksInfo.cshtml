@@ -35,7 +35,7 @@
                                                                 {
                                                                     if(link.DocumentId == null)
                                                                     {
-                                                                    <a @target href="@Url.Action("new/", "cases", new { customerId = link.CustomerId, templateId = link.CaseSolutionId })">@Translation.Get(link.UrlName, Enums.TranslationSource.TextTranslation)</a>
+                                                                    <a @target href="@Url.Action("new/", "cases", new { customerId = link.CustomerId, templateId = link.CaseSolutionId, templateistrue = 1 })">@Translation.Get(link.UrlName, Enums.TranslationSource.TextTranslation)</a>
                                                                     }
                                                                     else
                                                                     {

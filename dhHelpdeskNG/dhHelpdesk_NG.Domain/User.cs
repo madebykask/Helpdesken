@@ -13,6 +13,10 @@
         public int AllocateCaseMail { get; set; }
         public int AllocateCaseSMS { get; set; }
         public int BulletinBoardPermission { get; set; }
+
+        /// <summary>
+        /// Allows user to manage events in calendar    
+        /// </summary>
         public int CalendarPermission { get; set; }
         public int CaseInfoMail { get; set; }
         public int CaseSolutionPermission { get; set; }

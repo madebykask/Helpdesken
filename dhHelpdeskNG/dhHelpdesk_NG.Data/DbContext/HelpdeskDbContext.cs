@@ -24,7 +24,7 @@
     using DH.Helpdesk.Dal.EntityConfigurations.Servers;
     using DH.Helpdesk.Dal.EntityConfigurations.Users;
     using DH.Helpdesk.Dal.EntityConfigurations.WorkstationModules;
-    using DH.Helpdesk.Dal.EntityConfigurations.SSO;
+    using DH.Helpdesk.Dal.EntityConfigurations.ADFS;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Accounts;
@@ -42,9 +42,10 @@
     using DH.Helpdesk.Domain.Servers;
     using DH.Helpdesk.Domain.Users;
     using DH.Helpdesk.Domain.WorkstationModules;
-    using DH.Helpdesk.Domain.SSO;
+    using DH.Helpdesk.Domain.ADFS;
 
     using OperatingSystemConfiguration = DH.Helpdesk.Dal.EntityConfigurations.OperatingSystemConfiguration;
+    
 
     public class HelpdeskDbContext : DbContext, IDbContext
     {
@@ -76,6 +77,8 @@
         public DbSet<Account> Accounts { get; set; }
 
         public DbSet<ActionSettingEntity> ActionSetting { get; set; }
+
+        public DbSet<ADFSSettingEntity> ADFSSetting { get; set; }
 
         public DbSet<Application> Applications { get; set; }
 
@@ -543,9 +546,9 @@
             modelBuilder.Configurations.Add(new AccountActivityGroupConfiguration());
             modelBuilder.Configurations.Add(new AccountFieldSettingsConfiguration());
             modelBuilder.Configurations.Add(new AccountTypeConfiguration());
-            modelBuilder.Configurations.Add(new AccountEMailLogConfiguration());
-            modelBuilder.Configurations.Add(new EmploymentTypeConfiguration());
+            modelBuilder.Configurations.Add(new AccountEMailLogConfiguration());            
             modelBuilder.Configurations.Add(new ActionSettingConfiguration());
+            modelBuilder.Configurations.Add(new ADFSSettingConfiguration());
             modelBuilder.Configurations.Add(new BuildingConfiguration());
             modelBuilder.Configurations.Add(new BulletinBoardConfiguration());
             modelBuilder.Configurations.Add(new CalendarConfiguration());
@@ -601,6 +604,7 @@
             modelBuilder.Configurations.Add(new DomainConfiguration());
             modelBuilder.Configurations.Add(new EMailGroupConfiguration());
             modelBuilder.Configurations.Add(new EmailLogConfiguration());
+            modelBuilder.Configurations.Add(new EmploymentTypeConfiguration());
             modelBuilder.Configurations.Add(new FaqCategoryConfiguration());
             modelBuilder.Configurations.Add(new FaqConfiguration());
             modelBuilder.Configurations.Add(new FaqFileConfiguration());

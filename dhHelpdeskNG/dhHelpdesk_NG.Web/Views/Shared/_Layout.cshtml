@@ -275,11 +275,11 @@
                                                 <li>
                                                     @if(lang.Id == SessionFacade.CurrentLanguageId)
                                                     {
-                                                        <a href="@Url.Action("ChangeCurrentLanguage", "cases", new { languageId = lang.Id, area = "" })" >@lang.Name  <i class="icon-ok"></i></a>
+                                                        <a href="@Url.Action("ChangeCurrentLanguage", "cases", new { languageId = lang.Id, area = "" })" >@Translation.Get(lang.Name, model.UsersDefaultLanguage)  <i class="icon-ok"></i></a>
                                                     }
                                                     else
                                                     {
-                                                        <a href="@Url.Action("ChangeCurrentLanguage", "cases", new { languageId = lang.Id, area = "" })">@lang.Name </a>
+                                                        <a href="@Url.Action("ChangeCurrentLanguage", "cases", new { languageId = lang.Id, area = "" })">@Translation.Get(lang.Name, model.UsersDefaultLanguage) </a>
                                                     }
                                                 </li>
                                             }
@@ -310,7 +310,7 @@
                                 </li>
                                 <li class="divider"></li>
                                 <li>
-                                    <a href="@Url.Action("login", "login", new { area = "" })">
+                                    <a href="@Url.Action("Logout", "Login", new { area = "" })">
                                         <i class="icon-off"></i>
                                         @Translation.Get("Logga ut")
                                     </a>

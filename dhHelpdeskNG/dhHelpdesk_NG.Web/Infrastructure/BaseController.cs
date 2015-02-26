@@ -4,17 +4,27 @@
     using System.IO;
     using System.Web;
     using System.Web.Mvc;
+    using System.Linq;
 
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
     using DH.Helpdesk.Web.Models;
+    using System.Configuration;
+    using System.Security.Claims;
+    using DH.Helpdesk.Web.Enums;
+    using DH.Helpdesk.Common.Types;
+    using DH.Helpdesk.BusinessData.Models.ADFS.Input;
+    using DH.Helpdesk.Services.Services.Concrete;
+    using DH.Helpdesk.BusinessData.Models.User.Input;
+    using DH.Helpdesk.Common.Enums;
 
     [CustomAuthorize]
     public class BaseController : Controller
     {
         #region Fields
 
-        private readonly IMasterDataService _masterDataService;
+        private readonly IMasterDataService _masterDataService;               
+                
 
         #endregion
 
@@ -22,7 +32,7 @@
 
         public BaseController(IMasterDataService masterDataService)
         {
-            this._masterDataService = masterDataService;
+            this._masterDataService = masterDataService;            
         }
 
         #endregion
@@ -52,11 +62,27 @@
         protected override void OnAuthorization(AuthorizationContext filterContext)
             //called when a process requests authorization or authorization occurs before login and before OnActionExecuting + index + OnActionExecuted 
         {
-            var redirectToUrl = "~/login/login?returnUrl=" + filterContext.HttpContext.Request.Url;
+            var redirectToUrl = "~/login/login?returnUrl=" + filterContext.HttpContext.Request.Url;            
+            var curUserId = "";
+
+            if (string.IsNullOrEmpty(SessionFacade.CurrentLoginMode))
+               SessionFacade.CurrentLoginMode = GetCurrentLoginMode();
+            
 
             if (SessionFacade.CurrentUser == null)
-            {
-                var user = this._masterDataService.GetUserForLogin(this.User.Identity.Name);
+            {                                
+                switch (SessionFacade.CurrentLoginMode)
+                {
+                   case LoginMode.Application:
+                        curUserId = this.User.Identity.Name;
+                        break;
+                        
+                   case LoginMode.SSO:                        
+                        curUserId = GetSSOUserId();                            
+                        break;                   
+                }
+
+                var user = this._masterDataService.GetUserForLogin(curUserId);
                 if (user != null)
                 {
                     /// here we have user session expired before auth session expiration
@@ -73,13 +99,14 @@
                             LoggedOnLastTime = DateTime.UtcNow,
                             SessionId = this.Session.SessionID
                         });
-                } 
+                }
                 else
                 {
-                    //this.Response.Redirect(redirectToUrl);                    
                     filterContext.Result = new RedirectResult(redirectToUrl);
                 }
-            }
+
+                
+            } // if User Session = Null
 
             base.OnAuthorization(filterContext);
 
@@ -138,6 +165,75 @@
             }
         }
 
+        private string GetCurrentLoginMode()
+        {                        
+            if (ConfigurationManager.AppSettings["LoginMode"] == null)
+                return LoginMode.Application;
+            else
+                return ConfigurationManager.AppSettings["LoginMode"];                       
+        }
+
+        private string GetSSOUserId()
+        {
+            var userId = "";            
+            var adfsSetting = _masterDataService.GetADFSSetting();
+
+            ClaimsPrincipal principal = User as ClaimsPrincipal;            
+            string claimData = "";
+            bool isFirst = true;
+            var userIdentity = new UserIdentity();
+            
+            foreach (Claim claim in principal.Claims)
+            {
+                var claimTypeArray = claim.Type.Split('/');
+                var pureType = claimTypeArray.LastOrDefault();
+                var value = claim.Value;
+
+                if (isFirst)
+                    claimData = "[" + ((pureType != null) ? pureType.ToString() : "Undefined") + ": " + value.ToString() + "]";
+                else
+                    claimData = claimData + " , [" + ((pureType != null) ? pureType.ToString() : "Undefined") + ": " + value.ToString() + "]";
+
+                isFirst = false;
+
+                if (pureType != null)
+                {                                        
+                    if (pureType.Replace(" ", "").ToLower() == adfsSetting.AttrDomain.ToString().Replace(" ", "").ToLower())
+                        userIdentity.Domain = value;
+
+                    if (pureType.Replace(" ", "").ToLower() == adfsSetting.AttrUserId.ToString().Replace(" ", "").ToLower())
+                        userIdentity.UserId = value;                   
+                }
+            }                          
+
+            if (adfsSetting.SaveSSOLog)
+            {
+                var ssoLog = new NewSSOLog()
+                {
+                    ApplicationId = adfsSetting.ApplicationId,
+                    NetworkId = principal.Identity.Name,
+                    ClaimData = claimData,
+                    CreatedDate = DateTime.Now
+                };
+                
+                _masterDataService.SaveSSOLog(ssoLog);
+            }
+
+            if (string.IsNullOrEmpty(userIdentity.UserId))
+            {
+                this.Session.Clear();
+                ApplicationFacade.RemoveLoggedInUser(Session.SessionID);                
+            }
+            else
+            {
+                userId = userIdentity.UserId;
+                SessionFacade.CurrentUserIdentity = userIdentity;                                                            
+            }
+
+            return userId;
+            //var redirectToUrl = "" + filterContext.HttpContext.Request.Url;                        
+        }
+
         private void SessionCheck(ActionExecutingContext filterContext)
         {
             if (SessionFacade.CurrentUser != null)
@@ -187,7 +283,34 @@
 
     public class CustomAuthorize : AuthorizeAttribute
     {
+        private string userPermission;
+
+        public string UserPermsissions
+        {
+            get
+            {
+                return this.userPermission ?? string.Empty;
+            }
+
+            set
+            {
+                this.userPermission = value;
+            }
+        }
+
         #region Methods
+
+        protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
+        {
+            if (filterContext.HttpContext.User.Identity.IsAuthenticated)
+            {
+                filterContext.Result = new RedirectResult("~/Error/Unathorized");
+            }
+            else
+            {
+                base.HandleUnauthorizedRequest(filterContext);
+            }
+        }
 
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
@@ -207,18 +330,38 @@
                 return false;
             }
 
-            if (this.Roles == string.Empty)
+            if (this.Roles != string.Empty)
+            {
+                foreach (string userRole in this.Roles.Split(','))
+                {
+                    if (GeneralExtensions.UserHasRole(SessionFacade.CurrentUser, userRole))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            if (this.UserPermsissions != string.Empty)
+            {
+                foreach (string userPermission in this.UserPermsissions.Split(','))
+                {
+                    if (GeneralExtensions.UserHasPermission(SessionFacade.CurrentUser, userPermission))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            /// NO any specific ACL politic is set
+            if (this.Roles == string.Empty && this.UserPermsissions == string.Empty)
             {
                 return true;
             }
-
-            foreach (string userRole in this.Roles.Split(','))
-            {
-                if (GeneralExtensions.UserHasRole(SessionFacade.CurrentUser, userRole))
-                {
-                    return true;
-                }
-            }
+            
 
             return false;
         }

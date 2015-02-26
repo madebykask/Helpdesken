@@ -7,6 +7,7 @@
     using DH.Helpdesk.BusinessData.Enums.Case.Fields;
     using DH.Helpdesk.BusinessData.Models.Reports.Enums;
     using DH.Helpdesk.BusinessData.Models.Shared.Input;
+    using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Domain;
 
@@ -129,6 +130,18 @@
             return query;
         }
 
+        public static IQueryable<Case> GetByCaseType(this IQueryable<Case> query, int? caseTypeId)
+        {
+            if (!caseTypeId.HasValue)
+            {
+                return query;
+            }
+
+            query = query.Where(c => c.CaseType_Id == caseTypeId);
+
+            return query;
+        }
+
         public static IQueryable<Case> GetByCaseTypes(this IQueryable<Case> query, List<int> caseTypeIds)
         {
             if (caseTypeIds == null || !caseTypeIds.Any())
@@ -219,6 +232,24 @@
             return query;
         }
 
+        public static IQueryable<Case> GetByFinishingPeriod(
+                                        this IQueryable<Case> query,
+                                        DateTime? from,
+                                        DateTime? until)
+        {
+            if (from.HasValue)
+            {
+                query = query.Where(c => c.FinishingDate >= from);
+            }
+
+            if (until.HasValue)
+            {
+                query = query.Where(c => c.FinishingDate <= until);
+            }
+
+            return query;
+        }
+
         public static IQueryable<Case> GetNotDeleted(this IQueryable<Case> query)
         {
             query = query.Where(c => c.Deleted == 0);
@@ -242,6 +273,25 @@
 
             return query;
         }
+
+        public static IQueryable<Case> GetByRegistrationSource(
+                                        this IQueryable<Case> query,
+                                        GlobalEnums.RegistrationSource registrationSource)
+        {
+            if (registrationSource != GlobalEnums.RegistrationSource.Empty)
+            {
+                query = query.Where(c => c.RegistrationSource == (int)registrationSource);                
+            }
+
+            return query;
+        }
+
+        public static IQueryable<Case> GetFinished(this IQueryable<Case> query)
+        {
+            query = query.Where(c => c.FinishingDate.HasValue);
+
+            return query;
+        } 
 
         public static IQueryable<Case> Search(
                                 this IQueryable<Case> query,

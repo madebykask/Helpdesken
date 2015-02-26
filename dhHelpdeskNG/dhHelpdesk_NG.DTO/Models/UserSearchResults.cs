@@ -18,5 +18,9 @@
         public int? Region_Id { get; set; }
         public int? Department_Id { get; set; }
         public int? OU_Id { get; set; }
+        public string RegionName { get; set; }
+        public string DepartmentName { get; set; }
+        public string OUName { get; set; }
+
     }
 }

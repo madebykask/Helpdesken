@@ -277,11 +277,14 @@
             else
                 this._customerRepository.Update(customer);
 
-
-            this._settingService.SaveSettingForCustomerEdit(setting, out errors);
-
-            if(errors.Count == 0)
+            if (errors.Count == 0)
                 this.Commit();
+
+            if (setting != null)
+               this._settingService.SaveSettingForCustomerEdit(setting, out errors);
+
+
+            
         }
 
         public void SaveCaseFieldSettingsForCustomer(int customerId, int languageId, IEnumerable<CaseFieldSettingsWithLanguage> caseFieldSettingWithLanguages, List<CaseFieldSetting> caseFieldSettings, out IDictionary<string, string> errors)

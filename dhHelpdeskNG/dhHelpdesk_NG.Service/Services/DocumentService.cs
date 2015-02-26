@@ -142,7 +142,7 @@ namespace DH.Helpdesk.Services.Services
         /// The result.
         /// </returns>
         List<CategoryWithSubCategory> FindCategoriesWithSubcategoriesByCustomerId(int customerId);
-
+        
         /// <summary>
         /// The commit.
         /// </summary>

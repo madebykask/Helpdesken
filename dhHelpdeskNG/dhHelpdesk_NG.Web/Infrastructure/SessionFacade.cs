@@ -11,6 +11,8 @@
     using DH.Helpdesk.Domain.Computers;
     using DH.Helpdesk.Web.Infrastructure.Session;
     using DH.Helpdesk.Web.Models;
+    using DH.Helpdesk.Web.Enums;
+    using DH.Helpdesk.Common.Types;
 
     public static class SessionFacade
     {
@@ -53,6 +55,10 @@
         private const string _CURRENT_CASE_LANGUAGE_ID = "CURRENT_CASE_LANGUAGE_ID";
 
         private const string _TEMPORARY_VALUE = "TEMPORARY_VALUE";
+
+        private const string _CURRENT_LOGIN_Mode = "CURRENT_LOGIN_Mode";
+
+        private const string _CURRENT_USER_IDENTITY = "CURRENT_USER_IDENTITY";
 
         #endregion
 
@@ -380,6 +386,46 @@
                 {
                     HttpContext.Current.Session[_CURRENT_USER] = value;
                 }
+            }
+        }
+
+        public static string CurrentLoginMode
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_CURRENT_LOGIN_Mode] == null)
+                {
+                    return null;
+                }
+                return (string) HttpContext.Current.Session[_CURRENT_LOGIN_Mode];
+            }
+            set
+            {
+                if (HttpContext.Current.Session[_CURRENT_LOGIN_Mode] == null)
+                {
+                    HttpContext.Current.Session.Add(_CURRENT_LOGIN_Mode, value);
+                }
+                else
+                {
+                    HttpContext.Current.Session[_CURRENT_LOGIN_Mode] = value;
+                }
+            }
+        }
+
+        public static UserIdentity CurrentUserIdentity
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_CURRENT_USER_IDENTITY] == null)
+                    return null;
+                return (UserIdentity)HttpContext.Current.Session[_CURRENT_USER_IDENTITY];
+            }
+            set
+            {
+                if (HttpContext.Current.Session[_CURRENT_USER_IDENTITY] == null)
+                    HttpContext.Current.Session.Add(_CURRENT_USER_IDENTITY, value);
+                else
+                    HttpContext.Current.Session[_CURRENT_USER_IDENTITY] = value;
             }
         }
 

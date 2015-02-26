@@ -45,6 +45,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ISettingService _settingService;
         private readonly IProblemService _problemService;
         private readonly IChangeService _changeService;
+        private readonly ICausingPartService _causingPartService;
 
         private readonly ICaseSolutionSettingService caseSolutionSettingService;
 
@@ -75,7 +76,8 @@ namespace DH.Helpdesk.Web.Controllers
             ICustomerUserService customerUserService,
             ISettingService settingService,
             IProblemService problemService,
-            IChangeService changeService)
+            IChangeService changeService,
+            ICausingPartService causingPartService)
             : base(masterDataService)
         {
             this._caseFieldSettingService = caseFieldSettingService;
@@ -104,6 +106,7 @@ namespace DH.Helpdesk.Web.Controllers
             this._settingService = settingService;
             this._problemService = problemService;
             this._changeService = changeService;
+            this._causingPartService = causingPartService;
         }
 
         [HttpPost]
@@ -528,6 +531,12 @@ namespace DH.Helpdesk.Web.Controllers
                 }).ToList(),
 
                 Suppliers = this._supplierService.GetActiveSuppliers(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList(),
+
+                CausingParts = this._causingPartService.GetActiveCausingParts(SessionFacade.CurrentCustomer.Id).Where(x => x.ParentId == null).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()

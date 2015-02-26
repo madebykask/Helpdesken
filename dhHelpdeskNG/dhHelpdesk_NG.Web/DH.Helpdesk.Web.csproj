@@ -29,10 +29,11 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
-    <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication />
-    <IISExpressWindowsAuthentication />
-    <IISExpressUseClassicPipelineMode />
+    <IISExpressSSLPort>
+    </IISExpressSSLPort>
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
     <DontImportPostSharp>True</DontImportPostSharp>
     <TargetFrameworkProfile />
@@ -115,6 +116,9 @@
     </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data.Linq" />
+    <Reference Include="System.IdentityModel.Tokens.ValidatingIssuerNameRegistry">
+      <HintPath>..\packages\System.IdentityModel.Tokens.ValidatingIssuerNameRegistry.4.5.1\lib\net45\System.IdentityModel.Tokens.ValidatingIssuerNameRegistry.dll</HintPath>
+    </Reference>
     <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.dll</HintPath>
     </Reference>
@@ -269,6 +273,7 @@
     <Compile Include="Areas\Admin\Controllers\QuickLinkController.cs" />
     <Compile Include="Areas\Admin\Controllers\RegionController.cs" />
     <Compile Include="Areas\Admin\Controllers\RoomController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SelfServiceSettingController.cs" />
     <Compile Include="Areas\Admin\Controllers\SettingsController.cs" />
     <Compile Include="Areas\Admin\Controllers\StandardTextController.cs" />
     <Compile Include="Areas\Admin\Controllers\StartController.cs" />
@@ -298,6 +303,9 @@
     <Compile Include="Areas\Admin\Models\ContractCategoryIndexViewModel.cs" />
     <Compile Include="Areas\Admin\Models\AccountActivityIndexViewModel.cs" />
     <Compile Include="Areas\Admin\Models\BuildingViewModels.cs" />
+    <Compile Include="Areas\Admin\Models\SDepartment.cs" />
+    <Compile Include="Areas\Admin\Models\SelfServiceRegMessageViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\SelfServiceIndexViewModel.cs" />
     <Compile Include="Areas\Admin\Models\InfoTextViewModels.cs" />
     <Compile Include="Areas\Admin\Models\Invoice\CaseInvoiceSettingsModel.cs" />
     <Compile Include="Areas\Admin\Models\StandardTextViewModels.cs" />
@@ -347,6 +355,7 @@
     <Compile Include="Areas\Admin\Models\SystemInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\UrgencyInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\WorkingGroupInputViewModel.cs" />
+    <Content Include="Areas\Admin\Content\js\Users\user.js" />
     <Content Include="Areas\Reports\Content\js\reports.js" />
     <Content Include="Content\bootstrap-tagsinput.css" />
     <Content Include="Content\css\bootstrap-tagsinput.css" />
@@ -1702,9 +1711,12 @@
     <Compile Include="Infrastructure\Print\PrintPdfResult.cs" />
     <Compile Include="Infrastructure\Print\PrintPdfView.cs" />
     <Compile Include="Infrastructure\Tools\Concrete\InvoiceHelper.cs" />
+    <Compile Include="Infrastructure\Tools\Concrete\RouteResolver.cs" />
+    <Compile Include="Infrastructure\Tools\DateTimeHelper.cs" />
     <Compile Include="Infrastructure\Tools\EncryptionHelper.cs" />
     <Compile Include="Infrastructure\Tools\FieldSettingsHelper.cs" />
     <Compile Include="Infrastructure\Tools\IInvoiceHelper.cs" />
+    <Compile Include="Infrastructure\Tools\IRouteResolver.cs" />
     <Compile Include="Infrastructure\Tools\MimeHelper.cs" />
     <Compile Include="Infrastructure\Tools\WebMvcHelper.cs" />
     <Compile Include="Infrastructure\Translate\Translator.cs" />
@@ -2474,6 +2486,8 @@
     <Content Include="Areas\Reports\Views\Report\Reports\ReportGenerator.cshtml" />
     <Content Include="Areas\Reports\Views\Report\Options\LeadtimeFinishedCases.cshtml" />
     <Content Include="Areas\Reports\Views\Report\Reports\LeadtimeFinishedCases.cshtml" />
+    <Content Include="Areas\Admin\Views\SelfServiceSetting\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\SelfServiceSetting\EditRegMessage.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />
@@ -2820,6 +2834,7 @@
     <Content Include="Views\Survey\Vote.cshtml" />
     <Content Include="Views\Survey\VoteError.cshtml" />
     <Content Include="Views\Shared\_Version.cshtml" />
+    <Content Include="Views\Error\Unathorized.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
@@ -3628,7 +3643,16 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>57747</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:57747/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
     </VisualStudio>

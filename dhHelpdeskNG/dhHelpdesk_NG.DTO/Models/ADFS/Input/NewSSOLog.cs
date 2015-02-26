@@ -1,5 +1,5 @@
 ﻿using System;
-namespace DH.Helpdesk.BusinessData.Models.SSO.Input
+namespace DH.Helpdesk.BusinessData.Models.ADFS.Input
 {
     public sealed class NewSSOLog
     {

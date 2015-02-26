@@ -1,4 +1,5 @@
 ﻿@using Microsoft.Ajax.Utilities
+@using DH.Helpdesk.Common.Enums.Cases;
 @model DH.Helpdesk.NewSelfService.Models.Case.UserCasesModel         
 
 <div id="search_result">
@@ -82,7 +83,7 @@
                                                     @foreach (var c in r.Columns)
                                                     {                                                        
                                                         <td>
-                                                            @if (c.FieldType == 1)
+                                                            @if (c.FieldType == FieldTypes.Date)
                                                             {
                                                                 <!-- date -->
                                                                 if (string.IsNullOrEmpty(dynamicUrl))
@@ -94,7 +95,7 @@
                                                                     <a href="@Url.Content(dynamicUrl.SetUrlParameters(r.Id))">@Html.DisplayFor(m => c.DateTimeValue, "Date")</a>
                                                                 }
                                                             }
-                                                            else if (c.FieldType == 2)
+                                                            else if (c.FieldType == FieldTypes.Time)
                                                             {
                                                                 <!-- dateTime -->
                                                                 if (string.IsNullOrEmpty(dynamicUrl))

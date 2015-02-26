@@ -25,6 +25,11 @@
             return bolRet;
         }
 
+        public static bool UserHasPermission(UserOverview user, string permissionName)
+        {
+            return user != null && (int)user.GetType().GetProperty(permissionName).GetValue(user) == 1;
+        }
+
         public static string ReturnSelectedValueCaseSolution(int id, IEnumerable<CaseSolutionSchedule> css)
         {
             string strRet = "";

@@ -122,7 +122,7 @@
                         cmd.CommandText = sql;
 
                         var dr = cmd.ExecuteReader();
-                        if (dr.HasRows)
+                        if (dr != null && dr.HasRows)
                         {
                             while (dr.Read())
                             {
@@ -182,39 +182,39 @@
                                                 FieldTypes fieldType;
                                                 DateTime? dateValue;
                                                 bool translateField;
-                                                if (c.Line == 1)
+                                                //if (c.Line == 1)
+                                                //{
+                                                var value = GetDatareaderValue(
+                                                                                dr,
+                                                                                i,
+                                                                                c.Name,
+                                                                                customerSetting,
+                                                                                pal,
+                                                                                timeLeft,
+                                                                                caseTypes,
+                                                                                out translateField,
+                                                                                out dateValue,
+                                                                                out fieldType);
+                                                field = new Field
+                                                            {
+                                                                StringValue = value,
+                                                                TranslateThis = translateField,
+                                                                DateTimeValue = dateValue,
+                                                                FieldType = fieldType
+                                                            };
+                                                if (string.Compare(
+                                                    s.SortBy,
+                                                    c.Name,
+                                                    true,
+                                                    CultureInfo.InvariantCulture) == 0)
                                                 {
-                                                    var value = GetDatareaderValue(
-                                                                                    dr,
-                                                                                    i,
-                                                                                    c.Name,
-                                                                                    customerSetting,
-                                                                                    pal,
-                                                                                    timeLeft,
-                                                                                    caseTypes,
-                                                                                    out translateField,
-                                                                                    out dateValue,
-                                                                                    out fieldType);
-                                                    field = new Field
-                                                                {
-                                                                    StringValue = value,
-                                                                    TranslateThis = translateField,
-                                                                    DateTimeValue = dateValue,
-                                                                    FieldType = fieldType
-                                                                };
-                                                    if (string.Compare(
-                                                        s.SortBy,
-                                                        c.Name,
-                                                        true,
-                                                        CultureInfo.InvariantCulture) == 0)
-                                                    {
-                                                        sortOrder = value;
-                                                    }
+                                                    sortOrder = value;
                                                 }
-                                                else
-                                                {
-                                                    toolTip += GetDatareaderValue(dr, i, c.Name, customerSetting, pal, timeLeft, caseTypes, out translateField, out dateValue, out fieldType) + Environment.NewLine;
-                                                }
+                                                //}
+                                                //else
+                                                //{
+                                                //    toolTip += GetDatareaderValue(dr, i, c.Name, customerSetting, pal, timeLeft, caseTypes, out translateField, out dateValue, out fieldType) + Environment.NewLine;
+                                                //}
                                             }
 
                                             break; 
@@ -228,7 +228,6 @@
 
                                     cols.Add(field);
                                 }
-
                                 row.SortOrder = sortOrder; 
                                 row.Tooltip = toolTip; 
                                 row.CaseIcon = GetCaseIcon(dr);
@@ -239,11 +238,8 @@
                                 ret.Add(row); 
                             }
                         }
+
                         dr.Close(); 
-                    }
-                    catch (Exception ex)
-                    {
-                        throw (ex);
                     }
                     finally
                     {

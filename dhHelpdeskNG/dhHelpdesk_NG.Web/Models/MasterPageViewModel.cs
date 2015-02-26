@@ -21,6 +21,14 @@ namespace DH.Helpdesk.Web.Models
         
         public IList<Language> Languages { get; set; }
 
+        public int UsersDefaultLanguage
+        {
+            get
+            {
+                return SessionFacade.CurrentUser.LanguageId;
+            }
+        }   
+
         public bool IsAdministrator()
         {
             return SessionFacade.CurrentUser.UserGroupId > (int)Enums.Permissions.System_User;
@@ -140,9 +148,6 @@ namespace DH.Helpdesk.Web.Models
         {
             return this.CustomerSetting.ModuleComputerUser.ToBool() && this.IsAdministrator();
         }
-
-
-   
 
         public bool IsSettingsModulesVisible()
         {

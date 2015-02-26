@@ -121,56 +121,7 @@
         </table>
    
 </div>
-<h4>@Translation.Get("Självservice", Enums.TranslationSource.TextTranslation)</h4>
-<div class="formContainer">
-    <table class="tableform">
-        <tr>
-            <td class="span3">
-                @Translation.Get("Visa på självservice", Enums.TranslationSource.TextTranslation)
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                <input type="checkbox" name="customer.ShowFAQOnExternalPage" @(Model.Customer.ShowFAQOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
-                <input type="hidden" name="customer.ShowFAQOnExternalPage" value="0" />
-                &nbsp; &nbsp; @Translation.Get("Visa FAQ på självservice", Enums.TranslationSource.TextTranslation)
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                <input type="checkbox" name="customer.ShowBulletinBoardOnExtPage" @(Model.Customer.ShowBulletinBoardOnExtPage == 1 ? "checked=checked" : "") value="1"/>
-                <input type="hidden" name="customer.ShowBulletinBoardOnExtPage" value="0" />
-                &nbsp; &nbsp; @Translation.Get("Visa anslagstavlan på självservice", Enums.TranslationSource.TextTranslation)
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                <input type="checkbox" name="customer.ShowDashboardOnExternalPage" @(Model.Customer.ShowDashboardOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
-                <input type="hidden" name="customer.ShowDashboardOnExternalPage" value="0" />
-                &nbsp; &nbsp; @Translation.Get("Visa Dashboard på självservice", Enums.TranslationSource.TextTranslation)
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                <input type="checkbox" name="customer.PasswordRequiredOnExternalPage" @(Model.Customer.PasswordRequiredOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
-                <input type="hidden" name="customer.PasswordRequiredOnExternalPage" value="0" />
-                &nbsp; &nbsp; @Translation.Get("Självservice kräver lösenord", Enums.TranslationSource.TextTranslation)
-            </td>
-        </tr>
-        <tr>
-            <td style="vertical-align:top">
-                @Translation.Get("Meddelande", Enums.TranslationSource.TextTranslation)
-            </td>
-            <td>
-                @Html.TextAreaFor(model => model.Customer.RegistrationMessage, new { style = "width:600px; height:150px;", maxlength = "1000" })
-            </td>
-        </tr>
-    </table>
-</div>
+
 <h4>@Translation.Get("Beställning", Enums.TranslationSource.TextTranslation)</h4>
 <div class="formContainer">
     <table class="tableform">
@@ -305,10 +256,10 @@
         },
         messages: {
             "Customer.CustomerID": {
-                required: "@Translation.Get("måste anges")"
+                required: "@Translation.Get("Måste anges")"
             },
             "Customer.Name": {
-                required: "@Translation.Get("måste anges")"
+                required: "@Translation.Get("Måste anges")"
             }
         },        
         submitHandler: function(form) {

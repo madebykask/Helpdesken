@@ -344,7 +344,6 @@
     <Compile Include="Services\Concrete\Licenses\ProductsService.cs" />
     <Compile Include="Services\Concrete\Licenses\VendorsService.cs" />
     <Compile Include="Services\Concrete\MailTemplateService.cs" />
-    <Compile Include="Services\Concrete\SSOService.cs" />
     <Compile Include="Services\Concrete\InvoiceArticleService.cs" />
     <Compile Include="Services\Concrete\IOrganizationService.cs" />
     <Compile Include="Services\Concrete\IPlaceService.cs" />
@@ -356,7 +355,6 @@
     <Compile Include="Services\IOrderAccountService.cs" />
     <Compile Include="Services\IOrderAccountSettingsProxyService.cs" />
     <Compile Include="Services\IOrderAccountSettingsService.cs" />
-    <Compile Include="Services\ISSOService.cs" />
     <Compile Include="Services\IActionSettingService.cs" />
     <Compile Include="Services\IInventorySettingsService.cs" />
     <Compile Include="Services\Concrete\InventorySettingsService.cs" />

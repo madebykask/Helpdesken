@@ -37,11 +37,11 @@ namespace DH.Helpdesk.Common.Tools
 
         public static DateTime RoundToWorkDateTime(this DateTime date, int workingHour)
         {
-            // quick and dirty fix for working hours 0 - 24
+            // quick and dirty fix for working hours [0 - 23]
             workingHour = Math.Min(workingHour, 23);
+            workingHour = Math.Max(workingHour, 0);
             return new DateTime(date.Year, date.Month, date.Day, workingHour, 0, 0);
         }
-
 
         /// <summary>
         /// The round to hour.
@@ -84,6 +84,36 @@ namespace DH.Helpdesk.Common.Tools
             }
 
             return date.Value.RoundToMonth();
+        }
+
+        public static bool IsHoursLessDay(this int hours)
+        {
+            return hours < 24;
+        }
+
+        public static bool IsHoursLessEqualDays(this int hours, int days)
+        {
+            return hours <= days * 24;
+        }
+
+        public static bool IsHoursLessDays(this int hours, int days)
+        {
+            return hours < days * 24;
+        }
+
+        public static bool IsHoursGreaterEqualDays(this int hours, int days)
+        {
+            return hours >= days * 24;
+        }
+
+        public static bool IsHoursGreaterDays(this int hours, int days)
+        {
+            return hours > days * 24;
+        }
+
+        public static bool IsHoursEqualDays(this int hours, int days)
+        {
+            return hours.IsHoursGreaterEqualDays(days) && hours.IsHoursLessDays(days + 1);
         }
     }
 }

@@ -708,8 +708,12 @@ function GetComputerUserSearchOptions() {
                                     , usercode: item.UserCode
                                     , cellphone: item.CellPhone
                                     , regionid: item.Region_Id
+                                    , regionname: item.RegionName
                                     , departmentid: item.Department_Id
+                                    , departmentname: item.DepartmentName
                                     , ouid: item.OU_Id
+                                    , ouname: item.OUName
+                                    
                         };
                         return JSON.stringify(aItem);
                     });
@@ -761,8 +765,11 @@ function GetComputerUserSearchOptions() {
             $('#case__Place').val(item.place);
             $('#case__UserCode').val(item.usercode);
             $('#case__Region_Id').val(item.regionid);
+            $('#RegionName').val(item.regionname);
             $('#case__Department_Id').val(item.departmentid);
+            $('#DepartmentName').val(item.departmentname);
             $('#case__Ou_Id').val(item.ouid);
+            $('#OUName').val(item.ouname);
 
             return item.num;
         }

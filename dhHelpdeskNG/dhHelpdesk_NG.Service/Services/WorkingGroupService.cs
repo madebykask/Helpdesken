@@ -98,14 +98,8 @@
         /// </returns>
         public IList<WorkingGroupEntity> GetWorkingGroups(int customerId)
         {
-            /*var userGroups = this.workContext.User.UserWorkingGroups
-                                .Select(u => u.WorkingGroup_Id)
-                                .ToArray();
-            var isAll = !userGroups.Any();*/
-
             return this.workingGroupRepository
                     .GetMany(x => x.Customer_Id == customerId && x.IsActive == 1)
-                    /*.Where(g => isAll || userGroups.Contains(g.Id))*/
                     .OrderBy(x => x.WorkingGroupName).ToList();
         }
 

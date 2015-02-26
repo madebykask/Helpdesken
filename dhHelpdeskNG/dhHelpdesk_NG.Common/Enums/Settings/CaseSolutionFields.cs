@@ -49,5 +49,8 @@
         FinishingDate = 45,
         FinishingDescription = 46,
         UpdateNotifierInformation = 47,
+        PlanDate = 48,
+        CausingPart = 49,
+        FileName = 50
     }
 }

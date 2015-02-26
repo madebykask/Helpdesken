@@ -103,13 +103,14 @@ namespace DH.Helpdesk.Dal.Repositories
             var query = from f in this.DataContext.Forms
                         join ff in this.DataContext.FormField on f.Id equals ff.Form_Id
                         join ffv in this.DataContext.FormFieldValue on ff.Id equals ffv.FormField_Id
-                        where f.ExternalPage == 1 && ffv.Case_Id == id
+                        where ffv.Case_Id == id
                         select new DynamicCase
                         {
                             CaseId = ffv.Case_Id,
                             FormPath = externalSite + f.FormPath,
                             FormName = f.FormName,
-                            Modal = f.Modal
+                            Modal = f.Modal,
+                            ExternalPage = f.ExternalPage == 1 ? true : false
                         };
 
             return query.FirstOrDefault();

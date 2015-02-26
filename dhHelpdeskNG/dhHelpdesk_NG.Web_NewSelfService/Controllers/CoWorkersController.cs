@@ -21,9 +21,8 @@ namespace DH.Helpdesk.NewSelfService.Controllers
 
         public CoWorkersController(IMasterDataService masterDataService,
                                    ICustomerService customerService,
-                                   ICaseSolutionService caseSolutionService,
-                                   ISSOService ssoService
-                                  ):base(masterDataService, ssoService, caseSolutionService)
+                                   ICaseSolutionService caseSolutionService                                   
+                                  ):base(masterDataService, caseSolutionService)
         {
             this._customerService = customerService;            
         }

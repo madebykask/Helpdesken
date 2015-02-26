@@ -51,6 +51,7 @@
             this.Bind<IUnitOfWorkFactory>().To<UnitOfWorkFactory>().InRequestScope();
 
             this.Bind<IMailTemplateFormatterNew>().To<MailTemplateFormatterNew>().InRequestScope();
+            this.Bind<IRouteResolver>().To<RouteResolver>().InSingletonScope();
         }
 
         #endregion

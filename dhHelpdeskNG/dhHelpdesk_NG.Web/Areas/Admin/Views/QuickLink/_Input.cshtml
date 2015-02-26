@@ -21,20 +21,23 @@
                             <table class="tableform">
                                 <tr>
                                     <td class="span3">
-                                       URL @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)<span class="mandatorystar">*</span>
+                                        URL @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)<span class="mandatorystar">*</span>
                                     </td>
                                     <td class="span9">
                                         @Html.TextBoxFor(model => model.Link.URLName, new { maxlength = "50" })
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td>
-                                        @Translation.Get("Grupp", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                    <td>
-                                        @Html.DropDownListFor(model => model.Link.LinkGroup_Id, Model.LinkGroups, "" )
-                                    </td>
-                                </tr>
+                                @if (Model.LinkGroups.Any())
+                                {
+                                    <tr>
+                                        <td>
+                                            @Translation.Get("Grupp", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td>
+                                            @Html.DropDownListFor(model => model.Link.LinkGroup_Id, Model.LinkGroups, "")
+                                        </td>
+                                    </tr>
+                                }
                                 <tr>
                                     <td>
                                         @Translation.Get("URL adress", Enums.TranslationSource.TextTranslation)@*<span class="mandatorystar">*</span>*@
