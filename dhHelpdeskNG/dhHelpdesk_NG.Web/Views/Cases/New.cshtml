@@ -44,7 +44,9 @@
                     {
                         <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
                     }
+
                     <li>@Html.ActionLink(Translation.Get("Spara och stäng", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "NewCaseAndClose();return false;", @class = "btn" })</li>
+
                     @if (Model.templateistrue != 1)
                     {
                         <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "NewCaseAndAddCase();return false;", @class = "btn" })</li>
