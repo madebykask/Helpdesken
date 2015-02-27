@@ -31,7 +31,7 @@
                 permissions.Add(UserPermission.Performer);
             }
 
-            if (!user.CreateCasePermission.ToBool())
+            if (user.CreateCasePermission.ToBool())
             {
                 permissions.Add(UserPermission.CreateCasePermission);
             }

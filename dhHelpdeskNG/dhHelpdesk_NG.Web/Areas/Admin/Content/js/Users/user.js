@@ -83,6 +83,8 @@ $(function () {
 
         var type = spec.type || '';
         var hasPermission = spec.hasPermission || my.element.prop('checked');
+        var hidden = $(document).find('[name="' + my.element.attr('name') + '"]');
+        hidden.val(hasPermission ? 1 : 0);
 
         var getHasPermission = function() {
             return hasPermission;
@@ -91,6 +93,7 @@ $(function () {
         var setHasPermission = function(p) {
             hasPermission = p;
             my.element.prop('checked', p);
+            hidden.val(hasPermission ? 1 : 0);
         }
 
         var getType = function() {
@@ -108,6 +111,7 @@ $(function () {
 
         my.element.click(function() {
             hasPermission = my.element.prop('checked');
+            hidden.val(hasPermission ? 1 : 0);
         });
 
         return that;
