@@ -334,15 +334,20 @@
                                                     }
                                                 </td>
                                             </tr>
-                                            <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.UpdateNotifierInformation, CaseSolutionFields.UpdateNotifierInformation)">
+                                            <tr class="displaytr" style="@Model.GetCaseTemplateFieldStyle(GlobalEnums.TranslationCaseFields.UpdateNotifierInformation, CaseSolutionFields.UpdateNotifierInformation)">
                                                 <td class="span3">
                                                     @Translation.Get("Spara användaruppgifter", SessionFacade.CurrentLanguageId)
                                                 </td>
                                                 <td class="span4">
-                                                    @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.UpdateNotifierInformation, CaseSolutionFields.UpdateNotifierInformation))
+                                                    @if(Model.IsReadOnly(CaseSolutionFields.UpdateNotifierInformation))
                                                     {
-                                                        @Html.CheckBoxFor(m => m.UpdateNotifierInformation, new { @class = "switchcheckbox" })
+                                                        @Html.CheckBoxFor(m => Model.UpdateNotifierInformation, new { @class = "switchcheckbox", @readonly = "readonly"});
                                                     }
+                                                    else
+                                                    {
+                                                        @Html.CheckBoxFor(m => Model.UpdateNotifierInformation, new { @class = "switchcheckbox" }) 
+                                                    }                                
+                                                    
                                                  </td>   
                                             </tr>
                                         </table>

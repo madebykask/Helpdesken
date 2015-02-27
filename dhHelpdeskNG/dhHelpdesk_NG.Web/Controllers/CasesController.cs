@@ -1922,6 +1922,8 @@ namespace DH.Helpdesk.Web.Controllers
                             m.case_.Category_Id = caseTemplate.Category_Id.Value;
                         }
 
+                        if (caseTemplate.UpdateNotifierInformation.HasValue)
+                           m.UpdateNotifierInformation = caseTemplate.UpdateNotifierInformation.Value.ToBool(); 
                         m.case_.ReportedBy = caseTemplate.ReportedBy;
                         m.case_.Department_Id = caseTemplate.Department_Id;
                         m.CaseMailSetting.DontSendMailToNotifier = caseTemplate.NoMailToNotifier.ToBool();
