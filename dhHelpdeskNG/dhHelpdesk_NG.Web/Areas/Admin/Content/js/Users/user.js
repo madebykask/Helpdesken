@@ -83,6 +83,7 @@ $(function () {
 
         var type = spec.type || '';
         var hasPermission = spec.hasPermission || my.element.prop('checked');
+        var isHasAccess = spec.isHasAccess || true;
         var hidden = $(document).find('[name="' + my.element.attr('name') + '"]');
         hidden.val(hasPermission ? 1 : 0);
 
@@ -100,14 +101,20 @@ $(function () {
             return type;
         }
 
-        var setAccess = function(isHasAccess) {
+        var setAccess = function (hasAccess) {
+            isHasAccess = hasAccess;
             my.element.prop('disabled', !isHasAccess);
+        }
+
+        var getIsHasAccess = function() {
+            return isHasAccess;
         }
 
         that.getType = getType;
         that.getHasPermission = getHasPermission;
         that.setHasPermission = setHasPermission;
         that.setAccess = setAccess;
+        that.getIsHasAccess = getIsHasAccess;
 
         my.element.click(function() {
             hasPermission = my.element.prop('checked');
@@ -163,7 +170,7 @@ $(function () {
                     walkPermissions(function (permission) {
                         permission.setAccess(false);
 
-                        if (setPermissions) {
+                        if (setPermissions || !permission.getIsHasAccess()) {
                             var hasPermission = permission.getType() == dhHelpdesk.admin.users.permissionType.createCasePermission;
                             permission.setHasPermission(hasPermission);
                         }
@@ -178,7 +185,7 @@ $(function () {
                         var hasAccess = type != dhHelpdesk.admin.users.permissionType.faqPermission;
                         permission.setAccess(hasAccess);
 
-                        if (setPermissions) {
+                        if (setPermissions || !permission.getIsHasAccess()) {
                             var hasPermission = type != dhHelpdesk.admin.users.permissionType.faqPermission;
                             permission.setHasPermission(hasPermission);
                         }
@@ -194,7 +201,7 @@ $(function () {
                         var hasAccess = type != dhHelpdesk.admin.users.permissionType.faqPermission;
                         permission.setAccess(hasAccess);
 
-                        if (setPermissions) {
+                        if (setPermissions || !permission.getIsHasAccess()) {
                             permission.setHasPermission(true);
                         }
 
@@ -205,7 +212,7 @@ $(function () {
                     walkPermissions(function (permission) {
                         permission.setAccess(false);
 
-                        if (setPermissions) {
+                        if (setPermissions || !permission.getIsHasAccess()) {
                             permission.setHasPermission(false);
                         }
 
