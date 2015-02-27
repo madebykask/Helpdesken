@@ -13,13 +13,19 @@
     {
         public bool UserHasPermission(User user, UserPermission permission)
         {
-            return this.UserHasPermissions(user, new List<UserPermission> { permission });
+            return this.UserHasAllPermissions(user, new List<UserPermission> { permission });
         }
 
-        public bool UserHasPermissions(User user, List<UserPermission> permissions)
+        public bool UserHasAllPermissions(User user, List<UserPermission> permissions)
         {
             var userPermissions = this.GetUserPermissions(user);
             return permissions.All(userPermissions.Contains);
+        }
+
+        public bool UserHasAnyPermissions(User user, List<UserPermission> permissions)
+        {
+            var userPermissions = this.GetUserPermissions(user);
+            return permissions.Any(userPermissions.Contains);
         }
 
         public List<UserPermission> GetUserPermissions(User user)

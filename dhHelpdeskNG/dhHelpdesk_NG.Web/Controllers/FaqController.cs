@@ -19,6 +19,7 @@
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.ActionFilters;
+    using DH.Helpdesk.Web.Infrastructure.Attributes;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Faq;
     using DH.Helpdesk.Web.Infrastructure.Tools;
     using DH.Helpdesk.Web.Models.Faq.Input;
@@ -83,18 +84,21 @@
         }
 
         [HttpPost]
+        [UserPermissions(UserPermission.FaqPermission)]
         public void DeleteCategory(int id)
         {
             this.faqService.DeleteCategory(id);
         }
 
         [HttpPost]
+        [UserPermissions(UserPermission.FaqPermission)]
         public void DeleteFaq(int id)
         {
             this.faqService.DeleteFaq(id);
         }
 
         [HttpPost]
+        [UserPermissions(UserPermission.FaqPermission)]
         public void DeleteFile(string faqId, string fileName)
         {
             if (GuidHelper.IsGuid(faqId))
@@ -129,12 +133,15 @@
 
             var hasFaqs = this.faqRepository.AnyFaqWithCategoryId(id);
             var hasSubcategories = this.faqCategoryRepository.CategoryHasSubcategories(id);
-            var model = new EditCategoryModel(category.Id, category.Name, hasFaqs, hasSubcategories);
+
+            var userHasFaqAdminPermission = this.userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.FaqPermission);
+            var model = new EditCategoryModel(category.Id, category.Name, hasFaqs, hasSubcategories, userHasFaqAdminPermission);
             return this.View(model);
         }
 
         [HttpPost]
         [BadRequestOnNotValid]
+        [UserPermissions(UserPermission.FaqPermission)]
         public RedirectToRouteResult EditCategory(EditCategoryInputModel model)
         {
             this.faqCategoryRepository.UpdateNameById(model.Id, model.Name);
@@ -168,7 +175,9 @@
                 workingGroups = this.workingGroupRepository.FindActiveOverviews(faq.CustomerId).OrderBy(w=> w.Name).ToList();
             }
 
-            var model = this.editFaqModelFactory.Create(faq, categoriesWithSubcategories, fileNames, workingGroups);
+            var userHasFaqAdminPermission = this.userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.FaqPermission);
+
+            var model = this.editFaqModelFactory.Create(faq, categoriesWithSubcategories, fileNames, workingGroups, userHasFaqAdminPermission);
             ViewData["FN"] = GetFAQFileNames(faq.Id.ToString());
 
             return this.View(model);
@@ -176,6 +185,7 @@
 
         [HttpPost, ValidateInput(false)]
         //[BadRequestOnNotValid]
+        [UserPermissions(UserPermission.FaqPermission)]
         public RedirectToRouteResult EditFaq(EditFaqInputModel model)
         {
             var updatedFaq = new ExistingFaq(
@@ -286,12 +296,14 @@
         [HttpGet]
         public ViewResult NewCategory(int? parentCategoryId)
         {
-            var model = new NewCategoryModel(parentCategoryId);
+            var userHasFaqAdminPermission = this.userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.FaqPermission);
+            var model = new NewCategoryModel(parentCategoryId, userHasFaqAdminPermission);
             return this.View(model);
         }
 
         [HttpPost]
         [BadRequestOnNotValid]
+        [UserPermissions(UserPermission.FaqPermission)]
         public RedirectToRouteResult NewCategory(NewCategoryInputModel model)
         {
             var newCategory = new NewCategory(
@@ -313,7 +325,9 @@
                 this.faqCategoryRepository.FindCategoriesWithSubcategoriesByCustomerId(currentCustomerId);
 
             var workingGroups = this.workingGroupRepository.FindActiveOverviews(currentCustomerId).OrderBy(w=> w.Name).ToList();
-            var model = this.newFaqModelFactory.Create(Guid.NewGuid().ToString(), categoriesWithSubcategories, categoryId, workingGroups);
+
+            var userHasFaqAdminPermission = this.userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.FaqPermission);
+            var model = this.newFaqModelFactory.Create(Guid.NewGuid().ToString(), categoriesWithSubcategories, categoryId, workingGroups, userHasFaqAdminPermission);
             ViewData["FN"] = GetFAQFileNames(model.TemporaryId);
 
             return this.View(model);
@@ -321,6 +335,7 @@
 
         [HttpPost, ValidateInput(false)]
         //[BadRequestOnNotValid]
+        [UserPermissions(UserPermission.FaqPermission)]
         public RedirectToRouteResult NewFaq(NewFaqInputModel model)
         {
             var currentDateTime = DateTime.Now;
@@ -361,7 +376,8 @@
             }
             else
             {
-                var model = this.newFaqModelFactory.Create(Guid.NewGuid().ToString(), categoriesWithSubcategories, categoriesWithSubcategories.First().Id, workingGroups);
+                var userHasFaqAdminPermission = this.userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.FaqPermission);
+                var model = this.newFaqModelFactory.Create(Guid.NewGuid().ToString(), categoriesWithSubcategories, categoriesWithSubcategories.First().Id, workingGroups, userHasFaqAdminPermission);
                 ViewData["FN"] = GetFAQFileNames(model.TemporaryId);
                 return this.View(model);
             }
@@ -411,6 +427,7 @@
 
         [HttpPost]
         [BadRequestOnNotValid]
+        [UserPermissions(UserPermission.FaqPermission)]
         public void UploadFile(string faqId, string name)
         {
             var uploadedFile = this.Request.Files[0];

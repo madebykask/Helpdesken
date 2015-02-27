@@ -4,11 +4,15 @@
 
     using DH.Helpdesk.BusinessData.Models.Faq.Output;
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Web.Models.Faq.Output;
 
     public interface IEditFaqModelFactory
     {
-        EditFaqModel Create(Faq faq, List<CategoryWithSubcategories> categories, List<string> fileNames, List<ItemOverview> workingGroups);
+        EditFaqModel Create(
+            Faq faq, 
+            List<CategoryWithSubcategories> categories, 
+            List<string> fileNames, 
+            List<ItemOverview> workingGroups,
+            bool userHasFaqAdminPermission);
     }
 }

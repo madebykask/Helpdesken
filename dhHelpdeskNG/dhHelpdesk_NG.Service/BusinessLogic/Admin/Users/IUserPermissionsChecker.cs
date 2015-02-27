@@ -9,7 +9,9 @@
     {
         bool UserHasPermission(User user, UserPermission permission);
 
-        bool UserHasPermissions(User user, List<UserPermission> permissions);
+        bool UserHasAllPermissions(User user, List<UserPermission> permissions);
+
+        bool UserHasAnyPermissions(User user, List<UserPermission> permissions);
 
         List<UserPermission> GetUserPermissions(User user); 
 

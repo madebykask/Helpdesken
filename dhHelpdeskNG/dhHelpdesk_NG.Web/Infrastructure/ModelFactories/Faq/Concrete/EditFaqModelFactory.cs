@@ -6,13 +6,17 @@
 
     using DH.Helpdesk.BusinessData.Models.Faq.Output;
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
     using DH.Helpdesk.Web.Models.Faq.Output;
 
     public sealed class EditFaqModelFactory : IEditFaqModelFactory
     {
-        public EditFaqModel Create(Faq faq, List<CategoryWithSubcategories> categories, List<string> fileNames, List<ItemOverview> workingGroups)
+        public EditFaqModel Create(
+            Faq faq, 
+            List<CategoryWithSubcategories> categories, 
+            List<string> fileNames, 
+            List<ItemOverview> workingGroups,
+            bool userHasFaqAdminPermission)
         {
             var categoryDropDownItems = categories.Select(this.CategoryToDropDownItem).ToList();
 
@@ -43,7 +47,8 @@
                 faq.UrlTwo,
                 workingGroupDropDownContent,
                 faq.InformationIsAvailableForNotifiers,
-                faq.ShowOnStartPage);
+                faq.ShowOnStartPage,
+                userHasFaqAdminPermission);
         }
 
         private DropDownWithSubmenusItem CategoryToDropDownItem(CategoryWithSubcategories categoryWithSubcategories)

@@ -4,8 +4,9 @@
 
     public sealed class EditCategoryModel
     {
-        public EditCategoryModel(int id, string name, bool hasFaqs, bool hasSubcategories)
+        public EditCategoryModel(int id, string name, bool hasFaqs, bool hasSubcategories, bool userHasFaqAdminPermission)
         {
+            this.UserHasFaqAdminPermission = userHasFaqAdminPermission;
             if (id <= 0)
             {
                 throw new ArgumentOutOfRangeException("id", "Must be more than zero.");
@@ -29,5 +30,7 @@
         public bool HasFaqs { get; private set; }
 
         public bool HasSubcategories { get; private set; }
+
+        public bool UserHasFaqAdminPermission { get; private set; }
     }
 }
