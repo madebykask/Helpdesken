@@ -278,7 +278,7 @@
                                                 <td class="span4">
                                                         @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.OU_Id, CaseSolutionFields.OU))
                                                         {
-                                                           @Html.TextBox("OUName", Model.ous.Where(w=> w.Id == Model.case_.OU_Id).Select(o=> o.Name).SingleOrDefault(), new { id = "OUName", @readonly = true })
+                                                           @Html.TextBox("OUName", Model.ous.Where(w => w.Id == Model.case_.OU_Id).Select(o => o.Name).SingleOrDefault(), new { id = "OUName", @readonly = true })
                                                            @Html.HiddenFor(m => Model.case_.OU_Id) 
                                                         }
                                                         else
@@ -1025,7 +1025,8 @@
                                                     {
                                                         foreach (var e in Model.priorities.Where(e => e.IsActive == 1 || Model.case_.Priority_Id == e.Id))
                                                         {
-                                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Priority_Id.ToString()) >@Translation.Get(e.Name)</option>
+                                                             <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Priority_Id.ToString()) >@e.Name</option>
+                                                            @*<option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Priority_Id.ToString()) >@Translation.Get(e.Name)</option>*@
                                                         }
                                                     }
                                                 </select>
@@ -1057,7 +1058,8 @@
                                                         {
                                                             foreach (var e in Model.statuses.Where(e => e.IsActive == 1 || Model.case_.Status_Id == e.Id))
                                                             {
-                                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Status_Id.ToString())>@Translation.Get(e.Name)</option>
+                                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Status_Id.ToString())>@e.Name</option>
+                                                            @*<option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Status_Id.ToString())>@Translation.Get(e.Name)</option>*@
                                                             }
                                                         }
                                                     </select>
@@ -1089,7 +1091,7 @@
                                                     {
                                                         foreach (var e in Model.stateSecondaries.Where(e => e.IsActive == 1 || Model.case_.StateSecondary_Id == e.Id))
                                                         {
-                                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.StateSecondary_Id.ToString()) >@Translation.Get(e.Name)</option>
+                                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.StateSecondary_Id.ToString()) >@e.Name</option>
                                                         }
                                                     }
                                                 </select>
