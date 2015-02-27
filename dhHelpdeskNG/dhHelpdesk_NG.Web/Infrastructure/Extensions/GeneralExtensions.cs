@@ -87,6 +87,21 @@
             return string.Empty;
         }
 
+        public static string GetCaseTemplateFieldStyle(this CaseInputViewModel model, GlobalEnums.TranslationCaseFields caseFieldName, CaseSolutionFields caseTemplateFieldName)
+        {
+            //bool isGlobalVisibility = model.caseFieldSettings.IsFieldVisible(caseFieldName);
+            
+            var fieldSetting = model.CaseSolutionSettingModels.FirstOrDefault(x => x.CaseSolutionField == caseTemplateFieldName);
+            bool isLocalVisibility = (fieldSetting == null) ? false : fieldSetting.CaseSolutionMode != CaseSolutionModes.Hide;
+
+            if (!isLocalVisibility)
+            {
+                return "display:none";
+            }
+
+            return string.Empty;
+        }
+
         public static string GetFieldStyle(this CaseInputViewModel model, CaseSolutionFields caseTemplateFieldName)
         {
             var fieldSetting = model.CaseSolutionSettingModels.FirstOrDefault(x => x.CaseSolutionField == caseTemplateFieldName);
@@ -115,6 +130,7 @@
 
             return isReadOnly;
         }
+
 
         public static bool IsReadOnly(this CaseInputViewModel model, CaseSolutionFields caseTemplateFieldName)
         {
