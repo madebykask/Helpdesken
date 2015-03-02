@@ -52,11 +52,24 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 Value = x.Id.ToString()
             }).ToList();
 
+            var selectedNum = 0;
+            if (customer.ShowFAQOnExternalStartPage.HasValue)
+              selectedNum = customer.ShowFAQOnExternalStartPage.Value;
+
+            var nums = new List<int> { 1, 5, 10, 50, 100, 1000 };            
+            var numbers = nums.Select(x => new SelectListItem
+            {
+                Text = x.ToString(),
+                Value = x.ToString(),
+                Selected = (x == selectedNum)
+            }).ToList();
+
             var model = new SelfServiceIndexViewModel()
                 {
                     Customer = customer,
                     AvailableCategories = availableCats,
-                    SelectedCategories = selectedCats
+                    SelectedCategories = selectedCats,
+                    StartPageFAQNums = numbers
                 };
 
             return View(model);
@@ -71,6 +84,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             customerToSave.ShowDashboardOnExternalPage = vmodel.Customer.ShowDashboardOnExternalPage;
             customerToSave.ShowFAQOnExternalPage = vmodel.Customer.ShowFAQOnExternalPage;
             customerToSave.ShowDocumentsOnExternalPage = vmodel.Customer.ShowDocumentsOnExternalPage;
+            customerToSave.ShowFAQOnExternalStartPage = vmodel.Customer.ShowFAQOnExternalStartPage;
 
             var setting = this._settingService.GetCustomerSetting(id);            
 

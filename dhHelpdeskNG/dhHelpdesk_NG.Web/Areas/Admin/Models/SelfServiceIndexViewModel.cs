@@ -8,6 +8,8 @@
     {
         public Customer Customer { get; set; }
 
+        public IList<SelectListItem> StartPageFAQNums { get; set; }
+
         public IList<SelectListItem> AvailableCategories { get; set; }
 
         public IList<SelectListItem> SelectedCategories { get; set; }
