@@ -116,7 +116,7 @@
             var caseTypes = WebMvcHelper.CreateMultiSelectField(response.CaseTypes);
             var productAreas = response.ProductAreas;
             var today = DateTime.Today;
-            var instance = new CaseSatisfactionOptions(caseTypes, workingGroups, productAreas, today.AddYears(-1), today, context.CustomerId);
+            var instance = new CaseSatisfactionOptions(workingGroups, caseTypes, productAreas, today.AddYears(-1), today, context.CustomerId);
             return instance;
         }
 

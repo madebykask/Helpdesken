@@ -371,6 +371,7 @@
     <Compile Include="Models\Reports\Enums\ShowCases.cs" />
     <Compile Include="Models\Reports\Options\CaseSatisfactionOptionsResponse.cs" />
     <Compile Include="Models\Reports\Options\CaseTypeArticleNoOptions.cs" />
+    <Compile Include="Models\Reports\Options\LeadtimeActiveCasesOptions.cs" />
     <Compile Include="Models\Reports\Options\LeadtimeFinishedCasesOptions.cs" />
     <Compile Include="Models\Reports\Options\RegistratedCasesCaseTypeOptionsResponse.cs" />
     <Compile Include="Models\Reports\Options\RegistratedCasesDayOptions.cs" />

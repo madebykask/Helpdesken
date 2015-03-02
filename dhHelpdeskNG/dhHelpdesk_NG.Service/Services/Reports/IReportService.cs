@@ -90,5 +90,7 @@
                                     DateTime? periodUntil,
                                     int leadTime,
                                     bool isShowDetails);
+
+        LeadtimeActiveCasesOptions GetLeadtimeActiveCasesOptions(int customerId);
     }
 }

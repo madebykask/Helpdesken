@@ -176,6 +176,7 @@
     <Compile Include="BusinessLogic\Mappers\ProductArea\ProductAreaMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Questionnaire\CircularPartMappers.cs" />
     <Compile Include="BusinessLogic\Mappers\Questionnaire\QuestionnaireQuestionResultMappers.cs" />
+    <Compile Include="BusinessLogic\Mappers\Reports\Data\ReportOptions.cs" />
     <Compile Include="BusinessLogic\Mappers\Reports\ReportsMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Reports\ReportsOptionsMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Shared\Data\UnionItemOverview.cs" />

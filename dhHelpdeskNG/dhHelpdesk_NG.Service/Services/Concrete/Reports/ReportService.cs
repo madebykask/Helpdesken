@@ -452,6 +452,24 @@
 
         #endregion
 
+        #region LeadtimeActiveCases
+
+        public LeadtimeActiveCasesOptions GetLeadtimeActiveCasesOptions(int customerId)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var departmentRep = uow.GetRepository<Department>();
+                var caseTypeRep = uow.GetRepository<CaseType>();
+
+                var departments = departmentRep.GetAll().GetActiveByCustomer(customerId);
+                var caseTypes = caseTypeRep.GetAll().GetActiveByCustomer(customerId);
+
+                return ReportsOptionsMapper.MapToLeadtimeActiveCasesOptions(departments, caseTypes);
+            }
+        }
+
+        #endregion
+
         #region Private members
 
         private static CaseTypeArticleNoData GetCaseTypeArticleNoData(
