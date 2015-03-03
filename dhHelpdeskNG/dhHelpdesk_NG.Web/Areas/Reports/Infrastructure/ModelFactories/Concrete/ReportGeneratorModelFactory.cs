@@ -226,7 +226,7 @@
         private static void CreateLogValues(LogSettings settings, LogsOverview fields, List<NewGridRowCellValueModel> values)
         {
             var internalLogNotes = fields.Logs.Select(l => l.InternalLogNote).ToArray();
-            var externalLogNotes = fields.Logs.Select(l => l.InternalLogNote).ToArray();
+            var externalLogNotes = fields.Logs.Select(l => l.ExternalLogNote).ToArray();
             var debiting = fields.Logs.Select(l => l.Debiting.BoolToYesNo()).ToArray();
             var attachedFiles = fields.Logs.Select(l => l.AttachedFile).ToArray();
             var finishingDescription = fields.Logs.Select(l => l.FinishingDescription).ToArray();

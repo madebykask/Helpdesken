@@ -45,15 +45,22 @@
                                                          c => c.CaseResponsibleUser.FirstName,
                                                          c => c.CaseResponsibleUser.SurName,
                                                          c => c.Status.Name,
-                                                         c => c.Logs.Select(
+                                                         c => c.User.FirstName,
+                                                         c => c.User.SurName,
+                                                         // http://redmine.fastdev.se/issues/10639
+                                                         /*c => c.Logs.Select(
                                                              l => l.Text_Internal + separator +
                                                                     l.Text_External + separator +                                                                     
                                                                     l.Charge + separator +
                                                                     l.LogFiles.FirstOrDefault().FileName + separator +
                                                                     l.FinishingDate + separator +
-                                                                    l.FinishingTypeEntity.Name),
-                                                        c => c.User.FirstName,
-                                                        c => c.User.SurName
+                                                                    l.FinishingTypeEntity.Name)*/
+                                                         c => c.Logs.Select(l => l.Text_Internal),
+                                                         c => c.Logs.Select(l => l.Text_External),
+                                                         c => c.Logs.Select(l => l.Charge),
+                                                         c => c.Logs.Select(l => l.LogFiles.FirstOrDefault().FileName),
+                                                         c => c.Logs.Select(l => l.FinishingDate),
+                                                         c => c.Logs.Select(l => l.FinishingTypeEntity.Name)
                                                      })
                                                      .ToList();
 
@@ -84,39 +91,69 @@
                         caseEntity.Supplier = new Supplier { Name = e.f21 };
                         caseEntity.CaseResponsibleUser = new User { FirstName = e.f22, SurName = e.f23 };
                         caseEntity.Status = new Status { Name = e.f24 };
-                        caseEntity.Logs = ((List<string>)e.f25).Select(
+                        caseEntity.User = new User { FirstName = e.f25, SurName = e.f26 };
+
+                        // http://redmine.fastdev.se/issues/10639
+                        /*caseEntity.Logs = ((List<string>)e.f27).Select(
                             l =>
+                            {
+                                var values = l.Split(new[] { separator }, StringSplitOptions.None);
+                                var internalLogNote = values[0];
+                                var externalLogNote = values[1];
+                                var charge = int.Parse(values[2]);
+                                var files = new List<LogFile>();
+                                if (!string.IsNullOrEmpty(values[3]))
                                 {
-                                    var values = l.Split(new[] { separator }, StringSplitOptions.None);
-                                    var internalLogNote = values[0];
-                                    var externalLogNote = values[1];
-                                    var charge = int.Parse(values[2]);
-                                    var files = new List<LogFile>();
-                                    if (!string.IsNullOrEmpty(values[3]))
-                                    {
-                                        files.Add(new LogFile { FileName = values[3] });
-                                    }
+                                    files.Add(new LogFile { FileName = values[3] });
+                                }
 
-                                    DateTime? finishingDate = null;
-                                    DateTime finishingDateVal;
-                                    if (DateTime.TryParse(values[4], out finishingDateVal))
-                                    {
-                                        finishingDate = finishingDateVal;
-                                    }
+                                DateTime? finishingDate = null;
+                                DateTime finishingDateVal;
+                                if (DateTime.TryParse(values[4], out finishingDateVal))
+                                {
+                                    finishingDate = finishingDateVal;
+                                }
 
-                                    var finishingType = new FinishingCause { Name = values[5] };
+                                var finishingType = new FinishingCause { Name = values[5] };
 
-                                    return new Log
-                                               {
-                                                   Text_Internal = internalLogNote,
-                                                   Text_External = externalLogNote,
-                                                   Charge = charge,
-                                                   LogFiles = files,
-                                                   FinishingDate = finishingDate,
-                                                   FinishingTypeEntity = finishingType
-                                               };
-                                }).ToList();
-                        caseEntity.User = new User { FirstName = e.f26, SurName = e.f27 };
+                                return new Log
+                                {
+                                    Text_Internal = internalLogNote,
+                                    Text_External = externalLogNote,
+                                    Charge = charge,
+                                    LogFiles = files,
+                                    FinishingDate = finishingDate,
+                                    FinishingTypeEntity = finishingType
+                                };
+                            }).ToList();*/
+
+                        caseEntity.Logs = new List<Log>();
+                        var internalLogNotes = (List<string>)e.f27;
+                        var externalLogNotes = (List<string>)e.f28;
+                        var charges = (List<int>)e.f29;
+                        var files = (List<string>)e.f30;
+                        var finishingDates = (List<DateTime?>)e.f31;
+                        var finishingTypes = (List<string>)e.f32;
+                        for (var i = 0; i < internalLogNotes.Count; i++)
+                        {
+                            var logFiles = new List<LogFile>();
+                            if (!string.IsNullOrEmpty(files[i]))
+                            {
+                                logFiles.Add(new LogFile { FileName = files[i] });
+                            }
+
+                            var finishingType = new FinishingCause { Name = finishingTypes[i] };
+
+                            caseEntity.Logs.Add(new Log
+                                                    {
+                                                        Text_Internal = internalLogNotes[i],
+                                                        Text_External = externalLogNotes[i],
+                                                        Charge = charges[i],
+                                                        LogFiles = logFiles,
+                                                        FinishingDate = finishingDates[i],
+                                                        FinishingTypeEntity = finishingType
+                                                    });
+                        }
 
                         return CreateFullOverview(caseEntity);
                     }).ToList();

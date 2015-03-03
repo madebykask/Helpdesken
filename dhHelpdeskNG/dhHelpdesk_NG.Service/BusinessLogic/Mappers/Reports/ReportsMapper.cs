@@ -193,7 +193,10 @@
         public static LeadtimeActiveCasesData MapToLeadtimeActiveCasesData(
                                                 IQueryable<Case> cases,
                                                 IQueryable<Department> departments,      
-                                                IQueryable<CaseType> caseTypes)
+                                                IQueryable<CaseType> caseTypes,
+                                                int highHours,
+                                                int mediumDays,
+                                                int lowDays)
         {
             var entities = (from c in cases
                                 join d in departments on c.Department_Id equals d.Id into dgj
@@ -202,7 +205,7 @@
                                 from caseType in ctgj.DefaultIfEmpty()
                                 select new
                                 {
-                                    c.FinishingDate,
+                                    c.WatchDate,
                                     c.LeadTime
                                 }).ToList();
 

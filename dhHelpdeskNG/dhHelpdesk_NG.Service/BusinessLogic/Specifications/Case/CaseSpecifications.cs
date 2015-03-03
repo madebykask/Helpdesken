@@ -300,6 +300,13 @@
             return query;
         } 
 
+        public static IQueryable<Case> GetWaitingForWatch(this IQueryable<Case> query)
+        {
+            query = query.Where(c => c.WatchDate.HasValue);
+
+            return query;
+        } 
+
         public static IQueryable<Case> Search(
                                 this IQueryable<Case> query,
                                 int customerId,

@@ -97,6 +97,9 @@
         LeadtimeActiveCasesData GetLeadtimeActiveCasesData(
                                     int customerId,
                                     List<int> departmentIds,
-                                    int? caseTypeId);
+                                    int? caseTypeId,
+                                    int highHours,
+                                    int mediumDays,
+                                    int lowDays);
     }
 }

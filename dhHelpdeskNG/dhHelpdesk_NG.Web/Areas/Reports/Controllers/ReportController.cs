@@ -277,7 +277,10 @@
             var data = this.reportService.GetLeadtimeActiveCasesData(
                                             this.OperationContext.CustomerId,
                                             options.DepartmentIds,
-                                            options.CaseTypeId);
+                                            options.CaseTypeId,
+                                            2, 
+                                            2, 
+                                            5);
 
             var model = this.reportModelFactory.GetLeadtimeActiveCasesModel(data);
 

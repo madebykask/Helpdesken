@@ -469,7 +469,13 @@
             }
         }
 
-        public LeadtimeActiveCasesData GetLeadtimeActiveCasesData(int customerId, List<int> departmentIds, int? caseTypeId)
+        public LeadtimeActiveCasesData GetLeadtimeActiveCasesData(
+                        int customerId, 
+                        List<int> departmentIds, 
+                        int? caseTypeId,
+                        int highHours,
+                        int mediumDays,
+                        int lowDays)
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {
@@ -482,11 +488,18 @@
                         .GetByDepartments(departmentIds)
                         .GetByCaseType(caseTypeId)
                         .GetActive()
+                        .GetWaitingForWatch()
                         .GetNotDeleted();
                 var departments = departmentRep.GetAll().GetActiveByCustomer(customerId);
                 var caseTypes = caseTypeRep.GetAll().GetActiveByCustomer(customerId);
 
-                return ReportsMapper.MapToLeadtimeActiveCasesData(cases, departments, caseTypes);
+                return ReportsMapper.MapToLeadtimeActiveCasesData(
+                                    cases, 
+                                    departments, 
+                                    caseTypes,
+                                    highHours,
+                                    mediumDays,
+                                    lowDays);
             }
         }
 
