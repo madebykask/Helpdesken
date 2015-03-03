@@ -163,7 +163,7 @@
                             "~/Content/js/Inventory/settings.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/notifiers/notifier").Include(
-                            "~/Content/js/Notifiers/notifier.js"));
+                            "~/Content/js/Notifiers/edit.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/notifiers/index").Include(
                             "~/Content/js/bootstrap-switch.min.js",

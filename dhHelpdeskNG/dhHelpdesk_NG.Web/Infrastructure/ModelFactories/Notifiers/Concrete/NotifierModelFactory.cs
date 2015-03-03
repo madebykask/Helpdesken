@@ -7,7 +7,6 @@
     using DH.Helpdesk.BusinessData.Models.Notifiers;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.NotifierOverview;
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Web.Models.Notifiers;
     using DH.Helpdesk.Web.Models.Notifiers.ConfigurableFields;
 
@@ -27,7 +26,6 @@
             List<ItemOverview> domains,
             List<ItemOverview> regions,
             List<ItemOverview> departments,
-            List<ItemOverview> organizationUnits,
             List<ItemOverview> divisions,
             List<ItemOverview> managers,
             List<ItemOverview> groups)
@@ -137,27 +135,6 @@
 
             var unit = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Unit, notifier.Unit);
 
-            DropDownFieldModel organizationUnit;
-
-            if (organizationUnits != null)
-            {
-                var organizationUnitItems =
-                    organizationUnits.Select(u => new KeyValuePair<string, string>(u.Value, u.Name)).ToList();
-
-                var organizationUnitValue = notifier.OrganizationUnitId.HasValue
-                    ? notifier.OrganizationUnitId.Value.ToString(CultureInfo.InvariantCulture)
-                    : null;
-
-                organizationUnit = this.notifierInputFieldModelFactory.CreateDropDownModel(
-                    settings.OrganizationUnit,
-                    organizationUnitItems,
-                    organizationUnitValue);
-            }
-            else
-            {
-                organizationUnit = new DropDownFieldModel(false);
-            }
-
             DropDownFieldModel division;
 
             if (divisions != null)
@@ -265,7 +242,6 @@
                 region,
                 department,
                 unit,
-                organizationUnit,
                 division,
                 manager,
                 group,

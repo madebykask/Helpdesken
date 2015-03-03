@@ -15,7 +15,7 @@
     <AssemblyName>DH.Helpdesk.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <SccProjectName>
     </SccProjectName>
     <SccLocalPath>
@@ -1501,6 +1501,7 @@
     <Content Include="Content\js\lib\angular-1.3.11\i18n\angular-locale_zu-za.js" />
     <Content Include="Content\js\lib\angular-1.3.11\i18n\angular-locale_zu.js" />
     <Content Include="Content\js\lib\angular-1.3.11\version.txt" />
+    <Content Include="Content\js\Notifiers\edit.js" />
     <Content Include="Content\templates\case-invoice-case-files.tmpl.html" />
     <Compile Include="Areas\Reports\Controllers\ReportController.cs" />
     <Compile Include="Areas\Reports\Infrastructure\Concrete\ExcelBuilder.cs" />
@@ -2562,7 +2563,6 @@
     <Content Include="Areas\Admin\Views\CustomerCaseFieldSettings\_Input.cshtml" />
     <Content Include="Areas\Admin\Views\CustomerCaseFieldSettings\Edit.cshtml" />
     <Content Include="Content\js\Notifiers\index.js" />
-    <Content Include="Content\js\Notifiers\notifier.js" />
     <Content Include="Content\js\Notifiers\notifiers.js" />
     <Content Include="Views\Faq\CategoryEditing.cshtml" />
     <Content Include="Views\Faq\EditCategory.cshtml" />

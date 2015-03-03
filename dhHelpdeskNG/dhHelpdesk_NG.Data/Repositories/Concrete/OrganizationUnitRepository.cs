@@ -34,6 +34,11 @@
                     u => new ItemOverview(u.Name, u.Id.ToString(CultureInfo.InvariantCulture))).OrderBy(x => x.Name).ToList();
         }
 
+        public IEnumerable<OU> GetActiveAndShowable()
+        {
+            return this.DataContext.OUs.Where(u => u.IsActive != 0 && u.Show != 0);
+        }
+
         #endregion
     }
 }
