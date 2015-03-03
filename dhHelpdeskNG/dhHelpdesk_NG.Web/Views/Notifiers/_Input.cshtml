@@ -60,4 +60,27 @@
         </div>
     </div>
 </div>
-          
+
+
+<script type="text/javascript">
+
+    $("#DepartmentErrorMessage").hide();
+
+    
+    $("#department_dropdown").change(function () {
+        if ('@Model.Department.Required' && $('#department_dropdown').val() == "") {
+            $("#DepartmentErrorMessage").show();
+        }
+        else {
+            $("#DepartmentErrorMessage").hide();
+        }
+    });
+
+    $("#target").submit(function (event) {
+        if ('@Model.Department.Required' && $('#department_dropdown').val() == "") {
+            $("#DepartmentErrorMessage").show();
+            return false;
+        }
+        
+    });
+</script>          

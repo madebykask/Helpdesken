@@ -22,7 +22,7 @@
                 {
                     <tr>
                         <td class="span3">
-                            @Translation.Get(Model.Region.Caption, Enums.TranslationSource.TextTranslation)
+                            @(Translation.Get(Model.Region.Caption, Enums.TranslationSource.TextTranslation) + (Model.Region.Required ? "*" : string.Empty))
                         </td>
                         <td>
                             @Html.DropDown("region_dropdown", "RegionId", !Model.Region.Required, Model.Region.Value)
@@ -38,7 +38,7 @@
                         </td>
                         <td>
                             <div id="department_dropdown_container">
-                                @Html.Partial("DepartmentDropDown", Model.Department.Value, new ViewDataDictionary { { "Required", false } })
+                                @Html.Partial("DepartmentDropDown", Model.Department.Value, new ViewDataDictionary { { "Required", true } })
                             </div>
                         </td>
                     </tr>

@@ -1720,7 +1720,7 @@ input[type="checkbox"],
   margin-bottom: 5px;
 }
 
-    .secnav input[type="submit"].btn {
+    .secnav input[type="submit"].btn, .secnav input[type="button"].btn {
         margin-bottom: 0px;
     }
 
