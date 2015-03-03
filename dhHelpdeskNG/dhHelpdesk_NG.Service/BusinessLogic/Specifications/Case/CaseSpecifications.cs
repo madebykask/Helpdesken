@@ -293,6 +293,13 @@
             return query;
         } 
 
+        public static IQueryable<Case> GetActive(this IQueryable<Case> query)
+        {
+            query = query.Where(c => !c.FinishingDate.HasValue);
+
+            return query;
+        } 
+
         public static IQueryable<Case> Search(
                                 this IQueryable<Case> query,
                                 int customerId,

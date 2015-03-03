@@ -1521,6 +1521,7 @@
     <Compile Include="Areas\Reports\Infrastructure\Utils\ReportUtils.cs" />
     <Compile Include="Areas\Reports\Models\Options\CaseSatisfactionOptions.cs" />
     <Compile Include="Areas\Reports\Models\Options\CaseTypeArticleNoOptionsModel.cs" />
+    <Compile Include="Areas\Reports\Models\Options\LeadtimeActiveCasesOptionsModel.cs" />
     <Compile Include="Areas\Reports\Models\Options\LeadtimeFinishedCasesOptionsModel.cs" />
     <Compile Include="Areas\Reports\Models\Options\RegistratedCasesDayOptionsModel.cs" />
     <Compile Include="Areas\Reports\Models\Options\ReportGenerator\ReportGeneratorFilterModel.cs" />
@@ -1529,6 +1530,7 @@
     <Compile Include="Areas\Reports\Models\Options\ReportsOptions.cs" />
     <Compile Include="Areas\Reports\Models\Reports\CaseSatisfactionReport.cs" />
     <Compile Include="Areas\Reports\Models\Reports\CaseTypeArticleNoModel.cs" />
+    <Compile Include="Areas\Reports\Models\Reports\LeadtimeActiveCasesModel.cs" />
     <Compile Include="Areas\Reports\Models\Reports\LeadtimeFinishedCasesModel.cs" />
     <Compile Include="Areas\Reports\Models\Reports\ReportGenerator\CaseOverviewModel.cs" />
     <Compile Include="Areas\Reports\Models\Reports\ReportGenerator\ReportGeneratorModel.cs" />
@@ -2492,6 +2494,8 @@
     <Content Include="Areas\Reports\Views\Report\Reports\LeadtimeFinishedCases.cshtml" />
     <Content Include="Areas\Admin\Views\SelfServiceSetting\Index.cshtml" />
     <Content Include="Areas\Admin\Views\SelfServiceSetting\EditRegMessage.cshtml" />
+    <Content Include="Areas\Reports\Views\Report\Options\LeadtimeActiveCases.cshtml" />
+    <Content Include="Areas\Reports\Views\Report\Reports\LeadtimeActiveCases.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />

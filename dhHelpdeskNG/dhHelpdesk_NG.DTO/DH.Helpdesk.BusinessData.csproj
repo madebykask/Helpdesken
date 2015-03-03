@@ -362,6 +362,7 @@
     <Compile Include="Models\Reports\Data\CaseTypeArticleNo\CaseTypeArticleNoData.cs" />
     <Compile Include="Models\Reports\Data\CaseTypeArticleNo\CaseTypeData.cs" />
     <Compile Include="Models\Reports\Data\CaseTypeArticleNo\ProductAreaData.cs" />
+    <Compile Include="Models\Reports\Data\LeadtimeActiveCases\LeadtimeActiveCasesData.cs" />
     <Compile Include="Models\Reports\Data\LeadtimeFinishedCases\FinishedCasesLeadTime.cs" />
     <Compile Include="Models\Reports\Data\LeadtimeFinishedCases\FinishedCasesLeadTimes.cs" />
     <Compile Include="Models\Reports\Data\LeadtimeFinishedCases\LeadtimeFinishedCasesData.cs" />

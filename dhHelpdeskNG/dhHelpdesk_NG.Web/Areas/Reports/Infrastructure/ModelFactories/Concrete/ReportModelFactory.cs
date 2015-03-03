@@ -7,6 +7,7 @@
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeActiveCases;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeFinishedCases;
     using DH.Helpdesk.BusinessData.Models.Reports.Enums;
     using DH.Helpdesk.BusinessData.Models.Reports.Options;
@@ -42,6 +43,7 @@
                                 ReportType.CaseSatisfaction,
                                 ReportType.ReportGenerator,
                                 ReportType.LeadtimeFinishedCases
+//                                , ReportType.LeadtimeActiveCases
                             };
 
             // It's a new report, so we need to add it to the tblReport table
@@ -175,6 +177,22 @@
         public LeadtimeFinishedCasesModel GetLeadtimeFinishedCasesModel(LeadtimeFinishedCasesData data, bool isShowDetails)
         {
             return new LeadtimeFinishedCasesModel(data, isShowDetails);
+        }
+
+        public LeadtimeActiveCasesOptionsModel GetLeadtimeActiveCasesOptionsModel(LeadtimeActiveCasesOptions options)
+        {
+            var departments = WebMvcHelper.CreateMultiSelectField(options.Departments);
+            var caseTypes = options.CaseTypes;
+
+            return new LeadtimeActiveCasesOptionsModel(
+                                departments,
+                                caseTypes,
+                                null);
+        }
+
+        public LeadtimeActiveCasesModel GetLeadtimeActiveCasesModel(LeadtimeActiveCasesData data)
+        {
+            return new LeadtimeActiveCasesModel(data);
         }
     }
 }

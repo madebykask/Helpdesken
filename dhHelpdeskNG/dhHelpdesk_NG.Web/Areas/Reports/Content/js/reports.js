@@ -53,6 +53,8 @@
                     return dhHelpdesk.reports.reportGeneratorReport();
                 case dhHelpdesk.reports.reportType.LeadtimeFinishedCases:
                     return dhHelpdesk.reports.leadtimeFinishedCases();
+                case dhHelpdesk.reports.reportType.LeadtimeActiveCases:
+                    return dhHelpdesk.reports.leadtimeActiveCases();
                 default:
                     return null;
             }
@@ -189,6 +191,14 @@
     }
 
     dhHelpdesk.reports.leadtimeFinishedCases = function (spec, my) {
+        my = my || {};
+
+        var that = dhHelpdesk.reports.report({ }, my);
+
+        return that;
+    }
+
+    dhHelpdesk.reports.leadtimeActiveCases = function (spec, my) {
         my = my || {};
 
         var that = dhHelpdesk.reports.report({ }, my);

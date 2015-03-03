@@ -6,6 +6,7 @@
 
     using DH.Helpdesk.BusinessData.Models.ProductArea;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeActiveCases;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeFinishedCases;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.RegistratedCasesDay;
     using DH.Helpdesk.Common.Tools;
@@ -187,6 +188,25 @@
                                 numberOfCasesLonger,
                                 casesByLeadTime,
                                 casesByLeadTimes);
+        }
+
+        public static LeadtimeActiveCasesData MapToLeadtimeActiveCasesData(
+                                                IQueryable<Case> cases,
+                                                IQueryable<Department> departments,      
+                                                IQueryable<CaseType> caseTypes)
+        {
+            var entities = (from c in cases
+                                join d in departments on c.Department_Id equals d.Id into dgj
+                                join ct in caseTypes on c.CaseType_Id equals ct.Id into ctgj
+                                from department in dgj.DefaultIfEmpty()
+                                from caseType in ctgj.DefaultIfEmpty()
+                                select new
+                                {
+                                    c.FinishingDate,
+                                    c.LeadTime
+                                }).ToList();
+
+            return new LeadtimeActiveCasesData();
         }
     }
 }

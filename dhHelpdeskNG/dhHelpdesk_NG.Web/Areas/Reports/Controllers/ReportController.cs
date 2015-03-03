@@ -108,6 +108,12 @@
                     return this.PartialView(
                                 "Options/LeadtimeFinishedCases",
                                 this.reportModelFactory.GetLeadtimeFinishedCasesOptionsModel(leadtimeFinishedCases));
+
+                case ReportType.LeadtimeActiveCases:
+                    var leadtimeActiveCases = this.reportService.GetLeadtimeActiveCasesOptions(this.OperationContext.CustomerId);
+                    return this.PartialView(
+                                "Options/LeadtimeActiveCases",
+                                this.reportModelFactory.GetLeadtimeActiveCasesOptionsModel(leadtimeActiveCases));
             }
 
             return null;
@@ -262,6 +268,20 @@
             var model = this.reportModelFactory.GetLeadtimeFinishedCasesModel(data, options.IsShowDetails);
 
             return this.PartialView("Reports/LeadtimeFinishedCases", model);
+        }
+
+        [HttpPost]
+        [BadRequestOnNotValid]
+        public PartialViewResult GetLeadtimeActiveCasesReport(LeadtimeActiveCasesOptionsModel options)
+        {
+            var data = this.reportService.GetLeadtimeActiveCasesData(
+                                            this.OperationContext.CustomerId,
+                                            options.DepartmentIds,
+                                            options.CaseTypeId);
+
+            var model = this.reportModelFactory.GetLeadtimeActiveCasesModel(data);
+
+            return this.PartialView("Reports/LeadtimeActiveCases", model);
         }
     }
 }
