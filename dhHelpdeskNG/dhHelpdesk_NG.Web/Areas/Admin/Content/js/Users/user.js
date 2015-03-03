@@ -324,6 +324,12 @@ $(function () {
             security: security
         });
 
+        var getUser = function() {
+            return user;
+        }
+
+        that.getUser = getUser;
+
         return that;
     }
 

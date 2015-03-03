@@ -60,9 +60,6 @@
                         </li>
                      }
                 </ul>
-                <div id="requiredFieldsMessage" class="validation-message" style="display: none;">
-                    <span>@Translation.Get("The case could not be saved because one or more mandatory fields were not filled in, please check the case.")</span>
-                </div>    
             </div>
         </div>
         <div class="newmode">
@@ -70,5 +67,13 @@
             @Html.Hidden("templateId", Model.NewModeParams.templateId);
         </div>
     }
+    
+    <script type="text/javascript">
+        $(function() {
+            var scope = dhHelpdesk.cases.scope({
+                requiredFieldsMessage: '@Translation.Get("Ärendet kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ärendet.")'
+            });
+        });
+    </script>
 }
 
