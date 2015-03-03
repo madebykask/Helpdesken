@@ -86,14 +86,14 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             customerToSave.ShowDocumentsOnExternalPage = vmodel.Customer.ShowDocumentsOnExternalPage;
             customerToSave.ShowFAQOnExternalStartPage = vmodel.Customer.ShowFAQOnExternalStartPage;
 
-            var setting = this._settingService.GetCustomerSetting(id);            
+            //var setting = this._settingService.GetCustomerSetting(id);            
 
             if (customerToSave == null)
                 throw new Exception("No customer found...");
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
-
-            this._customerService.SaveEditCustomer(customerToSave, setting, null, customerToSave.Language_Id, out errors);
+            
+            this._customerService.SaveEditCustomer(customerToSave, out errors);
 
             var allCategories = _documentService.GetDocumentCategories(id);
 

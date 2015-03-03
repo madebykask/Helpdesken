@@ -30,6 +30,7 @@
         void SaveCaseFieldSettingsForCustomerCopy(int customerId, int languageId, CaseFieldSetting caseFieldSetting, out IDictionary<string, string> errors);
         void SaveCaseFieldSettingsLangForCustomerCopy(CaseFieldSettingLanguage caseFieldSettingLanguage, out IDictionary<string, string> errors);
         void SaveEditCustomer(Customer customer, Setting setting, int[] us, int LanguageId, out IDictionary<string, string> errors);
+        void SaveEditCustomer(Customer customer, out IDictionary<string, string> errors);
         void SaveNewCustomerToGetId(Customer customer, out IDictionary<string, string> errors);
         void Commit();
 
@@ -285,6 +286,47 @@
 
 
             
+        }
+
+        public void SaveEditCustomer(Customer customer, out IDictionary<string, string> errors)
+        {
+            if (customer == null)
+                throw new ArgumentNullException("customer");
+
+            errors = new Dictionary<string, string>();
+
+            #region Check if fields are filled out or should be left empty
+
+            customer.Address = customer.Address ?? string.Empty;
+            customer.CaseStatisticsEmailList = customer.CaseStatisticsEmailList ?? string.Empty;
+            customer.CustomerID = customer.CustomerID ?? string.Empty;
+            customer.CustomerNumber = customer.CustomerNumber ?? string.Empty;
+            customer.DailyReportEmail = customer.DailyReportEmail ?? string.Empty;
+            customer.DirectoryPathExclude = customer.DirectoryPathExclude ?? string.Empty;
+            customer.HelpdeskEmail = customer.HelpdeskEmail ?? string.Empty;
+            customer.Logo = customer.Logo ?? string.Empty;
+            customer.LogoBackColor = customer.LogoBackColor ?? string.Empty;
+            customer.NDSPath = customer.NDSPath ?? string.Empty;
+            customer.NewCaseEmailList = customer.NewCaseEmailList ?? string.Empty;
+            customer.CloseCaseEmailList = customer.CloseCaseEmailList ?? string.Empty;
+            customer.OrderEMailList = customer.OrderEMailList ?? string.Empty;
+            customer.PostalAddress = customer.PostalAddress ?? string.Empty;
+            customer.PostalCode = customer.PostalCode ?? string.Empty;
+            customer.Phone = customer.Phone ?? string.Empty;
+            customer.RegistrationMessage = customer.RegistrationMessage ?? string.Empty;
+            customer.ResponsibleReminderEmailList = customer.ResponsibleReminderEmailList ?? string.Empty;
+            customer.CaseStatisticsEmailList = customer.CaseStatisticsEmailList ?? string.Empty;
+            customer.DailyReportEmail = customer.DailyReportEmail ?? string.Empty;
+            customer.NewCaseEmailList = customer.NewCaseEmailList ?? string.Empty;
+
+            #endregion
+            
+            if (customer.Id != 0)                
+                this._customerRepository.Update(customer);
+
+            if (errors.Count == 0)
+                this.Commit();            
+
         }
 
         public void SaveCaseFieldSettingsForCustomer(int customerId, int languageId, IEnumerable<CaseFieldSettingsWithLanguage> caseFieldSettingWithLanguages, List<CaseFieldSetting> caseFieldSettings, out IDictionary<string, string> errors)

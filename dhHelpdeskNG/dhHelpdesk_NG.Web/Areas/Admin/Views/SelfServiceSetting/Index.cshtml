@@ -50,7 +50,16 @@
                                     
                                     <span id="spNums"> 
                                         &nbsp; &nbsp; @Translation.Get("Antal rader", Enums.TranslationSource.TextTranslation):     
-                                        @Html.DropDownListFor(m => Model.StartPageFAQNums, Model.StartPageFAQNums, new { style = "width: 70px;" }) 
+                                      @*  @Html.DropDownListFor(m => Model.Customer.ShowFAQOnExternalStartPage, Model.StartPageFAQNums, new { style = "width: 70px;" }) *@
+                                        <select id="Customer.ShowFAQOnExternalStartPage" name="Customer.ShowFAQOnExternalStartPage">                                            
+                                            @if (Model.StartPageFAQNums != null)
+                                            {
+                                                foreach (var e in Model.StartPageFAQNums)
+                                                {
+                                                  <option value="@e.Value" @(e.Selected? "Selected" : "")> @e.Text </option>
+                                                }
+                                            }
+                                        </select>
                                     </span>                                                                                                         
                                 </td>
                             </tr>
@@ -171,6 +180,10 @@
             return false;
         });
 
+        //$("Customer_ShowFAQOnExternalStartPage").change(function () {
+        //    $("#SelectedCategories option").attr("selected", "selected");
+        //});
+           
         function submitForm() {
             $("#SelectedCategories option").attr("selected", "selected");
             $("#target").submit();
