@@ -24,16 +24,19 @@ namespace DH.Helpdesk.NewSelfService.Controllers
     {
         private readonly ICustomerService _customerService;                
         private readonly IBulletinBoardService _bulletinBoardService;
+        private readonly IInfoService _infoService;
 
         public StartController(IMasterDataService masterDataService,
                                ICustomerService customerService,
-                               ICaseSolutionService caseSolutionService,                               
+                               ICaseSolutionService caseSolutionService,
+                               IInfoService infoService,                               
                                IBulletinBoardService bulletinBoardService
                               ):base(masterDataService, caseSolutionService)
         {
             
             this._customerService = customerService;
             this._bulletinBoardService = bulletinBoardService;
+            this._infoService = infoService;
         }
 
         //
@@ -45,6 +48,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             var bb = _bulletinBoardService.GetBulletinBoards(SessionFacade.CurrentCustomer.Id,false);
 
             model.BulletinBoard = bb.ToList();
+            model.InfoText = _infoService.GetInfoText(1, SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId);
             return this.View(model);            
 
             //var s = new BulletinBoard();

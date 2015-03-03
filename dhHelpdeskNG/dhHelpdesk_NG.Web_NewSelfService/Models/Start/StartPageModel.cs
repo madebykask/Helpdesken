@@ -8,7 +8,9 @@ namespace DH.Helpdesk.NewSelfService.Models.Start
 {
     public class StartPageModel
     {
-        public List<BulletinBoard> BulletinBoard { get; set; }     
+        public List<BulletinBoard> BulletinBoard { get; set; }
+
+        public InfoText InfoText { get; set; }     
 
     }
 }

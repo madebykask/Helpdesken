@@ -29,6 +29,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
     using System.Threading.Tasks;
     using System.Net.Http;
     using System.Net.Http.Headers;
+    using DH.Helpdesk.Dal.Infrastructure.Context;
 
     public class CaseController : BaseController
     {
@@ -57,7 +58,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
         private readonly IWorkingGroupService _workingGroupService;
         private readonly IStateSecondaryService _stateSecondaryService;
         private readonly ICaseSolutionService _caseSolutionService;
-
+        private readonly IWorkContext workContext;
 
         private const string ParentPathDefaultValue = "--";
 
@@ -83,6 +84,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                               ICustomerUserService customerUserService,
                               ICaseSettingsService caseSettingService,
                               ICaseSearchService caseSearchService,
+                              IWorkContext workContext, 
                               IUserService userService,
                               IWorkingGroupService workingGroupService,
                               IStateSecondaryService stateSecondaryService,
@@ -115,6 +117,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             this._userService = userService;
             this._stateSecondaryService = stateSecondaryService;
             this._caseSolutionService = caseSolutionService;
+            this.workContext = workContext;
         }
 
 
@@ -748,8 +751,8 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                     1,
                     1,
                     search,
-                    1,
-                    1,
+                    SessionFacade.CurrentCustomer.WorkingDayStart,
+                    SessionFacade.CurrentCustomer.WorkingDayEnd,
                     null,
                     "Line Manager").ToList(); // Take(maxRecords)
 

@@ -1,4 +1,5 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
+@using  DH.Helpdesk.Common.Enums
 @model DH.Helpdesk.Web.Areas.Admin.Models.InfoTextShowViewModel
 
 <table class="tableform">
@@ -9,7 +10,7 @@
     </tr>
     <tr>
         <td>
-            @Html.TextAreaFor(model => model.InfoText.Name, new { style = "width:600px; height:125px;", maxlength = "500" })
+            @Html.TextAreaFor(model => model.InfoText.Name, new { style = "width:600px; height:125px;",  maxlength = (Model.InfoTextType== InfoTextTypes.SelfService?"10000":"500") })
         </td>
     </tr>
 </table>

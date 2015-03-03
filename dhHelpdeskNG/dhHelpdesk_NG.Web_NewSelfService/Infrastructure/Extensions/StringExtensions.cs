@@ -222,6 +222,18 @@
             if (strUrl.IndexOf("[userid]") > 0)            
                 if (SessionFacade.CurrentSystemUser != null) strUrl = strUrl.Replace("[userid]", SessionFacade.CurrentSystemUser);
 
+            if (strUrl.IndexOf("[username]") > 0)
+                if (SessionFacade.CurrentUserIdentity != null) strUrl = strUrl.Replace("[username]", SessionFacade.CurrentUserIdentity.FirstName);
+
+            if (strUrl.IndexOf("[userfamily]") > 0)
+                if (SessionFacade.CurrentUserIdentity != null) strUrl = strUrl.Replace("[userfamily]", SessionFacade.CurrentUserIdentity.LastName);
+
+            if (strUrl.IndexOf("[usersurname]") > 0)
+                if (SessionFacade.CurrentUserIdentity != null) strUrl = strUrl.Replace("[usersurname]", SessionFacade.CurrentUserIdentity.LastName);
+
+            if (strUrl.IndexOf("[userlastname]") > 0)
+                if (SessionFacade.CurrentUserIdentity != null) strUrl = strUrl.Replace("[userlastname]", SessionFacade.CurrentUserIdentity.LastName);
+
             if (strUrl.IndexOf("[language]") > 0)
                 if (SessionFacade.CurrentLanguageId > 0)
                 {                    

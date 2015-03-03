@@ -28,6 +28,8 @@ namespace DH.Helpdesk.NewSelfService.NinjectModules.Modules
     using DH.Helpdesk.Domain.Computers;
     using DH.Helpdesk.Domain.Invoice;
     using DH.Helpdesk.NewSelfService.Infrastructure.Translate;
+    using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
+    using DH.Helpdesk.Services.BusinessLogic.Admin.Users.Concrete;
     using Ninject.Modules;
 
     /// <summary>
@@ -40,6 +42,9 @@ namespace DH.Helpdesk.NewSelfService.NinjectModules.Modules
         /// </summary>
         public override void Load()
         {
+
+            this.Bind<IUserPermissionsChecker>().To<UserPermissionsChecker>();
+
             this.Bind<IEntityToBusinessModelMapper<ProductArea, ProductAreaOverview>>()
                 .To<ProductAreaToOverviewMapper>()
                 .InSingletonScope();

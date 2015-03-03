@@ -1,6 +1,4 @@
-
-
-body {
+/*body {
   background:#f2f7fe;
 }
 
@@ -8,8 +6,6 @@ img
 {
 	max-width: 100%;
 }
-
-/**NAVBAR***/
 
 .navbar-brand {
   float: left;
@@ -31,14 +27,6 @@ img
     border-radius: 0px;
   }
 }
-
-/*.navbar-nav > li > a {
-  padding-top: 0px;
-  padding-bottom: 5px;
-  line-height: 15px;
-  font-size:13px;
-}*/
-
 
 .navbar-default {
   background-color: #0067b2;
@@ -242,7 +230,7 @@ img
 }
 
 
-/************PANEL**************/
+
 .panel {
   margin-bottom: 20px;
   background-color: #fff;
@@ -281,7 +269,6 @@ img
 }
 
 
-/***TABS**************/
 .tab-pane
 {
 	border-left: 1px solid #ddd;
@@ -314,29 +301,7 @@ img
 {
 	margin-left:-15px;
 }
-/***FORM TAGS***************/
 
-/*input[type=text]
-{
-	min-width:300px;
-}
-.chosen-search input[type=text]
-{
-	min-width:280px;
-}
-
-select
-{
-	min-width:300px;
-}
-
-textarea
-{
-	min-width:300px;
-	min-height:100px;
-}*/
-
-/*****JUMBOTRON*********/
 .jumbotron {
   padding: 0 !important;
   padding-top:5px !important;
@@ -377,7 +342,7 @@ textarea
 
 
 
-/***BUTTONS****/
+
 
 .btn-dhblue {
   color: #fff;
@@ -392,7 +357,7 @@ textarea
   color: #fff;
   background-color: #3276b1;
   border-color: #285e8e;
-}
+}*/
 
 
 
