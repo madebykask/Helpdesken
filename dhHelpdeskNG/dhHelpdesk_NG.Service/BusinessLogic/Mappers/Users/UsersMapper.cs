@@ -3,7 +3,9 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Models.Customer;
     using DH.Helpdesk.BusinessData.Models.User.Input;
+    using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.User;
 
@@ -96,6 +98,23 @@
                 user.Email,
                 user.UserWorkingGroups,
                 user.StartPage);
+        }
+
+        public static List<CustomerSettings> MapToUserCustomersSettings(
+                                    IQueryable<Customer> customers,
+                                    IQueryable<User> users,
+                                    IQueryable<CustomerUser> customerUsers,
+                                    IQueryable<Setting> customerSettings,
+                                    IEntityToBusinessModelMapper<Setting, CustomerSettings> mapper)
+        {
+            var entities = (from cu in customerUsers
+                            join c in customers on cu.Customer_Id equals c.Id
+                            join u in users on cu.User_Id equals u.Id
+                            join cs in customerSettings on cu.Customer_Id equals cs.Customer_Id
+                            select cs)
+                            .ToList();
+
+            return entities.Select(mapper.Map).ToList();
         }
     }
 }

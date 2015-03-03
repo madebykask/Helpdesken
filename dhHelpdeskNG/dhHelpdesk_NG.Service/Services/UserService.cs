@@ -11,10 +11,12 @@ namespace DH.Helpdesk.Services.Services
 
     using DH.Helpdesk.BusinessData.Enums.Admin.Users;
     using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Customer;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.BusinessData.Models.User.Input;
     using DH.Helpdesk.Common.Extensions.String;
     using DH.Helpdesk.Dal.Infrastructure.Translate;
+    using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
@@ -124,6 +126,8 @@ namespace DH.Helpdesk.Services.Services
         List<User> GetActiveUsers();
 
         List<User> GetCustomerActiveUsers(int customerId);
+
+        List<CustomerSettings> GetUserCustomersSettings(int userId);
     }
 
     public class UserService : IUserService
@@ -150,6 +154,8 @@ namespace DH.Helpdesk.Services.Services
 
         private readonly ITranslator translator;
 
+        private readonly IEntityToBusinessModelMapper<Setting, CustomerSettings> customerSettingsToBusinessModelMapper;
+
         public UserService(
             IAccountActivityRepository accountActivityRepository,
             ICustomerRepository customerRepository,
@@ -168,7 +174,8 @@ namespace DH.Helpdesk.Services.Services
             IUserModuleRepository userModuleRepository, 
             IUnitOfWorkFactory unitOfWorkFactory, 
             IUserPermissionsChecker userPermissionsChecker, 
-            ITranslator translator)
+            ITranslator translator, 
+            IEntityToBusinessModelMapper<Setting, CustomerSettings> customerSettingsToBusinessModelMapper)
         {
             this._accountActivityRepository = accountActivityRepository;
             this._customerRepository = customerRepository;
@@ -188,6 +195,7 @@ namespace DH.Helpdesk.Services.Services
             this.unitOfWorkFactory = unitOfWorkFactory;
             this.userPermissionsChecker = userPermissionsChecker;
             this.translator = translator;
+            this.customerSettingsToBusinessModelMapper = customerSettingsToBusinessModelMapper;
         }
 
 
@@ -801,6 +809,29 @@ namespace DH.Helpdesk.Services.Services
                 var users = userRep.GetAll().GetActive();
 
                 return UsersMapper.MapToCustomerUsers(customers, users, customerUsers);
+            }
+        }
+
+        public List<CustomerSettings> GetUserCustomersSettings(int userId)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var customerRep = uow.GetRepository<Customer>();
+                var customerUserRep = uow.GetRepository<CustomerUser>();
+                var userRep = uow.GetRepository<User>();
+                var customerSettingsRep = uow.GetRepository<Setting>();
+
+                var customers = customerRep.GetAll();
+                var customerUsers = customerUserRep.GetAll();
+                var users = userRep.GetAll().GetById(userId);
+                var customerSettings = customerSettingsRep.GetAll();
+
+                return UsersMapper.MapToUserCustomersSettings(
+                                customers, 
+                                users, 
+                                customerUsers, 
+                                customerSettings,
+                                this.customerSettingsToBusinessModelMapper);
             }
         }
 

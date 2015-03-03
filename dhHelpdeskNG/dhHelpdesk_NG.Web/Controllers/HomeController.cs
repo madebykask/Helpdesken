@@ -155,10 +155,10 @@
 
             var customers = this.customerUserService.GetCustomerUsersForHomeIndexPage(SessionFacade.CurrentUser.Id);
             var customersIds = customers.Select(c => c.Customer.Customer_Id).ToArray();
-            var customerSettings = this.workContext.Customer.Settings;
+            var customersSettings = this.userService.GetUserCustomersSettings(SessionFacade.CurrentUser.Id);
             foreach (var module in modules)
             {
-                if (!customerSettings.IsModuleOn((Module)module.Module_Id))
+                if (!customersSettings.Any(s => s.IsModuleOn((Module)module.Module_Id)))
                 {
                     continue;
                 }
