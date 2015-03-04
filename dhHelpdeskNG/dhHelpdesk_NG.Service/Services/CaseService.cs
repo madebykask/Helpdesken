@@ -809,7 +809,7 @@
                 }
 
                 // State Secondary Email TODO ikea ims only?? 
-                if (!cms.DontSendMailToNotifier && !dontSendMailToNotfier && oldCase != null)  
+                if (!cms.DontSendMailToNotifier && !dontSendMailToNotfier && oldCase != null && oldCase.Id > 0)  
                     if (newCase.StateSecondary_Id != oldCase.StateSecondary_Id && newCase.StateSecondary_Id > 0)
                         if (_emailService.IsValidEmail(newCase.PersonsEmail))
                         {
