@@ -18,6 +18,7 @@
                                 @Translation.Get("Pågående")                                
                             </p>
                         </div>
+                        @*
                         <div class="span3">                                                    
                             <div class="graph finished">
                                 <strong class="bar" style="height: @(GetScale(Model.EndedCases))%;">@Model.EndedCases</strong>
@@ -25,7 +26,7 @@
                             <p>
                                 @Translation.Get("Avslutade")                                
                             </p>
-                        </div>
+                        </div>*@
                         <div class="span3">                                                    
                             <div class="graph inrest">
                                 <strong class="bar" style="height: @(GetScale(Model.InRestCases))%;">@Model.InRestCases</strong>
@@ -52,8 +53,10 @@
 {
     private int GetScale(int value)
     {
-        var max = Math.Max(Model.ActiveCases, Model.EndedCases);
-        max = Math.Max(max, Model.InRestCases);
+        var max = Math.Max(Model.ActiveCases, Model.InRestCases);
+        max = Math.Max(max, Model.MyCases);
+        // http://redmine.fastdev.se/issues/11212
+        //max = Math.Max(max, Model.EndedCases);
 
         var result = 100 - (int)((value/(float) max) * 100);
 
