@@ -756,11 +756,11 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 else
                     htmlOutput += "<li>";
 
-                htmlOutput += "<a href='#' value=" + pa.Id.ToString() + ">" + pa.Name + "</a>";
+                htmlOutput += "<a href='#' value=" + pa.Id.ToString() + ">" + Translation.Get(pa.Name) + "</a>";
                 if (hasChild)
                 {
                     htmlOutput += "<ul class='dropdown-menu'>";
-                    htmlOutput += BuildProcuctAreaDropdownButton(pa.SubProductAreas.OrderBy(p=> p.Name).ToList());
+                    htmlOutput += BuildProcuctAreaDropdownButton(pa.SubProductAreas.OrderBy(p=> Translation.Get(p.Name)).ToList());
                     htmlOutput += "</ul>";
                 }
                 htmlOutput += "</li>";

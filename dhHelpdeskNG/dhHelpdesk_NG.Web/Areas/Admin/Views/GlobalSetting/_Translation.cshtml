@@ -65,9 +65,11 @@
                                         {
                                             foreach (var item in Model.ListForEdit)
                                             {
+                                                
                                                 <tr>
                                                     <td style="width:200px">
-                                                        @Html.DisplayFor(modelItem => item.LanguageName)
+                                                        @Html.Label(Translation.Get(item.LanguageName))
+                                                        @*@Html.DisplayFor(modelItem => item.LanguageName)*@
                                                     </td>
                                                     <td>
                                                         <input type="text" name="@string.Format("TTs[{0}].TranslationName", i)", value="@item.TranslationName" />
@@ -86,7 +88,8 @@
                                             {
                                                 <tr>
                                                     <td style="width:200px">
-                                                        @Html.DisplayFor(modelItem => item.LanguageName)
+                                                        @Html.Label(Translation.Get(item.LanguageName))
+                                                        @*@Html.DisplayFor(modelItem => item.LanguageName)*@
                                                     </td>
                                                     <td>
                                                         <input type="text" name="@string.Format("TTs[{0}].TranslationName", i)", value="@item.TranslationName" />
