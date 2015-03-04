@@ -274,15 +274,23 @@
         [BadRequestOnNotValid]
         public PartialViewResult GetLeadtimeActiveCasesReport(LeadtimeActiveCasesOptionsModel options)
         {
+            const int HighHours = 2;
+            const int MediumDays = 2;
+            const int LowDays = 5;
+
             var data = this.reportService.GetLeadtimeActiveCasesData(
                                             this.OperationContext.CustomerId,
                                             options.DepartmentIds,
                                             options.CaseTypeId,
-                                            2, 
-                                            2, 
-                                            5);
+                                            HighHours, 
+                                            MediumDays, 
+                                            LowDays);
 
-            var model = this.reportModelFactory.GetLeadtimeActiveCasesModel(data);
+            var model = this.reportModelFactory.GetLeadtimeActiveCasesModel(
+                                            data,
+                                            HighHours,
+                                            MediumDays,
+                                            LowDays);
 
             return this.PartialView("Reports/LeadtimeActiveCases", model);
         }

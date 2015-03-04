@@ -111,6 +111,7 @@
     <Compile Include="BusinessLogic\BusinessModelValidators\Inventory\Concrete\PrinterValidator.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Orders\Concrete\UpdateOrderRequestValidator.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Orders\IUpdateOrderRequestValidator.cs" />
+    <Compile Include="BusinessLogic\Cases\CaseHelper.cs" />
     <Compile Include="BusinessLogic\MailTools\TemplateFormatters\MailTemplateFormatterNew.cs" />
     <Compile Include="BusinessLogic\MailTools\TemplateFormatters\OrderMailTemplateFormatter.cs" />
     <Compile Include="BusinessLogic\MailTools\TemplateFormatters\SurveyTemplate1.cs">

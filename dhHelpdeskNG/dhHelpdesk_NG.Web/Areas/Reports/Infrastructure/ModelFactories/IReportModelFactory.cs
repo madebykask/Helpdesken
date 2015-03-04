@@ -36,6 +36,10 @@
 
         LeadtimeActiveCasesOptionsModel GetLeadtimeActiveCasesOptionsModel(LeadtimeActiveCasesOptions options);
 
-        LeadtimeActiveCasesModel GetLeadtimeActiveCasesModel(LeadtimeActiveCasesData data);
+        LeadtimeActiveCasesModel GetLeadtimeActiveCasesModel(
+                            LeadtimeActiveCasesData data,
+                            int highHours,
+                            int mediumDays,
+                            int lowDays);
     }
 }

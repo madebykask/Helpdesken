@@ -42,8 +42,8 @@
                                 ReportType.CaseTypeArticleNo,
                                 ReportType.CaseSatisfaction,
                                 ReportType.ReportGenerator,
-                                ReportType.LeadtimeFinishedCases
-//                                , ReportType.LeadtimeActiveCases
+                                ReportType.LeadtimeFinishedCases,
+                                ReportType.LeadtimeActiveCases
                             };
 
             // It's a new report, so we need to add it to the tblReport table
@@ -190,9 +190,13 @@
                                 null);
         }
 
-        public LeadtimeActiveCasesModel GetLeadtimeActiveCasesModel(LeadtimeActiveCasesData data)
+        public LeadtimeActiveCasesModel GetLeadtimeActiveCasesModel(
+                                        LeadtimeActiveCasesData data,
+                                        int highHours,
+                                        int mediumDays,
+                                        int lowDays)
         {
-            return new LeadtimeActiveCasesModel(data);
+            return new LeadtimeActiveCasesModel(data, highHours, mediumDays, lowDays);
         }
     }
 }

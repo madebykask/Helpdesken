@@ -205,11 +205,24 @@
                                 from caseType in ctgj.DefaultIfEmpty()
                                 select new
                                 {
-                                    c.WatchDate,
                                     c.LeadTime
                                 }).ToList();
 
-            return new LeadtimeActiveCasesData();
+            var highHoursResult = new CasesTimeLeftOnSolution(highHours, entities.Count(c => c.LeadTime <= highHours));
+            var mediumDaysResult = new List<CasesTimeLeftOnSolution>();
+            var lowDaysResult = new List<CasesTimeLeftOnSolution>();
+
+            for (int i = 0; i <= mediumDays; i++)
+            {
+                mediumDaysResult.Add(new CasesTimeLeftOnSolution(i, entities.Count(c => c.LeadTime.IsHoursEqualDays(i))));
+            }
+
+            for (int i = 0; i <= lowDays; i++)
+            {
+                lowDaysResult.Add(new CasesTimeLeftOnSolution(i, entities.Count(c => c.LeadTime.IsHoursEqualDays(i))));
+            }
+
+            return new LeadtimeActiveCasesData(highHoursResult, mediumDaysResult, lowDaysResult);
         }
     }
 }

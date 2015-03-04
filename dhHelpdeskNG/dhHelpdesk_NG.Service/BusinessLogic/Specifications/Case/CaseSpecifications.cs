@@ -307,6 +307,13 @@
             return query;
         } 
 
+        public static IQueryable<Case> HasLeadTime(this IQueryable<Case> query)
+        {
+            query = query.Where(c => c.LeadTime > 0);
+
+            return query;
+        } 
+
         public static IQueryable<Case> Search(
                                 this IQueryable<Case> query,
                                 int customerId,

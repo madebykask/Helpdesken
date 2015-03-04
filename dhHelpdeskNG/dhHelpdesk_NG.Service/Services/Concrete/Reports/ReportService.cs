@@ -487,8 +487,8 @@
                         .GetByCustomer(customerId)
                         .GetByDepartments(departmentIds)
                         .GetByCaseType(caseTypeId)
+                        .HasLeadTime()
                         .GetActive()
-                        .GetWaitingForWatch()
                         .GetNotDeleted();
                 var departments = departmentRep.GetAll().GetActiveByCustomer(customerId);
                 var caseTypes = caseTypeRep.GetAll().GetActiveByCustomer(customerId);
