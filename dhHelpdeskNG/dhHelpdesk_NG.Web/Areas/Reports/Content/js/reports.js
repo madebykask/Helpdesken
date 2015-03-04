@@ -34,6 +34,14 @@
                 handler += params[i] + '=' + params[i + 1] + '&';
             }
             return handler;
+        },
+
+        raiseEvent: function (eventType, extraParameters) {
+            $(document).trigger(eventType, extraParameters);
+        },
+
+        onEvent: function (event, handler) {
+            $(document).on(event, handler);
         }
     }
 
@@ -41,10 +49,14 @@
         my = my || {};
         var that = {};
 
+        var workingGroupUsersRoute = spec.workingGroupUsersRoute || '';
+
         var getCurrentReport = function (type) {
             switch (type) {
                 case dhHelpdesk.reports.reportType.RegistratedCasesDay:
-                    return dhHelpdesk.reports.registratedCasesDayReport();
+                    return dhHelpdesk.reports.registratedCasesDayReport({
+                        workingGroupUsersRoute: workingGroupUsersRoute
+                    });
                 case dhHelpdesk.reports.reportType.CaseTypeArticleNo:
                     return dhHelpdesk.reports.caseTypeArticleNoReport();
                 case dhHelpdesk.reports.reportType.CaseSatisfaction:
@@ -137,6 +149,28 @@
 
         var that = dhHelpdesk.reports.report(spec, my);
 
+        var workingGroupUsersRoute = spec.workingGroupUsersRoute || '';
+
+        dhHelpdesk.reports.utils.onEvent('onLoadOptions', function () {
+            var administrators = $("#AdministratorId");
+            var workingGroups = $("#WorkingGroupId");
+            var onWorkingGroupChanged = function () {
+                administrators.prop('disabled', true);
+                administrators.empty();
+                administrators.append('<option />');
+                $.getJSON(workingGroupUsersRoute + '?workingGroupId=' + workingGroups.val(), function (data) {
+                    $.each(data, function (index, item) {
+                        administrators.append("<option value='" + item.Value + "'>" + item.Name + "</option>");
+                    });
+                })
+                .always(function () {
+                    administrators.prop('disabled', false);
+                });
+            }
+            workingGroups.change(onWorkingGroupChanged);
+            onWorkingGroupChanged();
+        });
+
         var getReportHandler = function () {
 
             var department = $("#DepartmentId").val();
@@ -206,53 +240,71 @@
         return that;
     }
 
-    var reportType = $("#ReportId");
-    var btnShow = $("#showReport");
-    var btnPrint = $('#printReport');
-    var btnExcel = $('#excelReport');
-    var manager = dhHelpdesk.reports.reportsManager();
+    dhHelpdesk.reports.scope = function (spec, my) {
+        spec = spec || {};
+        my = my || {};
+        var that = {};
 
-    var onGetReportOptions = function () {
-        var report = manager.getCurrentReport(parseInt(reportType.val()));
+        var workingGroupUsersRoute = spec.workingGroupUsersRoute || '';
 
-        if (report.getCanPrint()) {
-            btnPrint.show();
-        } else {
-            btnPrint.hide();
+        var onLoadOptions = function () {
+            dhHelpdesk.reports.utils.raiseEvent('onLoadOptions');
         }
 
-        if (report.getCanExcel()) {
-            btnExcel.show();
-        } else {
-            btnExcel.hide();
+        that.onLoadOptions = onLoadOptions;
+
+        var reportType = $("#ReportId");
+        var btnShow = $("#showReport");
+        var btnPrint = $('#printReport');
+        var btnExcel = $('#excelReport');
+        var manager = dhHelpdesk.reports.reportsManager({
+            workingGroupUsersRoute: workingGroupUsersRoute
+        });
+
+        var onGetReportOptions = function () {
+            var report = manager.getCurrentReport(parseInt(reportType.val()));
+
+            if (report.getCanPrint()) {
+                btnPrint.show();
+            } else {
+                btnPrint.hide();
+            }
+
+            if (report.getCanExcel()) {
+                btnExcel.show();
+            } else {
+                btnExcel.hide();
+            }
+
+
+            $("#getReportOptionsForm").submit();
         }
 
+        reportType.change(function () {
+            onGetReportOptions();
+        });
 
-        $("#getReportOptionsForm").submit();
-    }
-
-    reportType.change(function () {
         onGetReportOptions();
-    });
 
-    onGetReportOptions();
+        btnShow.click(function () {
+            var report = manager.getCurrentReport(parseInt(reportType.val()));
+            report.buildReport();
+        });
 
-    btnShow.click(function() {
-        var report = manager.getCurrentReport(parseInt(reportType.val()));
-        report.buildReport();
-    });
+        btnPrint.click(function () {
+            var report = manager.getCurrentReport(parseInt(reportType.val()));
+            if (report.getCanPrint()) {
+                report.printReport();
+            }
+        });
 
-    btnPrint.click(function () {
-        var report = manager.getCurrentReport(parseInt(reportType.val()));
-        if (report.getCanPrint()) {
-            report.printReport();
-        }
-    });
+        btnExcel.click(function () {
+            var report = manager.getCurrentReport(parseInt(reportType.val()));
+            if (report.getCanExcel()) {
+                report.excelReport();
+            }
+        });
 
-    btnExcel.click(function () {
-        var report = manager.getCurrentReport(parseInt(reportType.val()));
-        if (report.getCanExcel()) {
-            report.excelReport();
-        }
-    });
+        return that;
+    }
 });

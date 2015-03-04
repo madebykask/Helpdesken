@@ -128,6 +128,8 @@ namespace DH.Helpdesk.Services.Services
         List<User> GetCustomerActiveUsers(int customerId);
 
         List<CustomerSettings> GetUserCustomersSettings(int userId);
+
+        List<ItemOverview> GetWorkingGroupUsers(int customerId, int? workingGroupId);
     }
 
     public class UserService : IUserService
@@ -832,6 +834,32 @@ namespace DH.Helpdesk.Services.Services
                                 customerUsers, 
                                 customerSettings,
                                 this.customerSettingsToBusinessModelMapper);
+            }
+        }
+
+        public List<ItemOverview> GetWorkingGroupUsers(int customerId, int? workingGroupId)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var userRep = uow.GetRepository<User>();
+                var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
+                var userWorkingGroupRep = uow.GetRepository<UserWorkingGroup>();
+                var customerRep = uow.GetRepository<Customer>();
+                var customerUserRep = uow.GetRepository<CustomerUser>();
+
+                var users = userRep.GetAll().GetActive();
+                var workingGroups = workingGroupRep.GetAll().GetById(workingGroupId);
+                var userWorkingGroups = userWorkingGroupRep.GetAll();
+                var customers = customerRep.GetAll().GetById(customerId);
+                var customerUsers = customerUserRep.GetAll();
+
+                return UsersMapper.MapToWorkingGroupUsers(
+                                users,
+                                workingGroups,
+                                userWorkingGroups,
+                                customers,
+                                customerUsers,
+                                workingGroupId);
             }
         }
 

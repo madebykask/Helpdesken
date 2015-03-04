@@ -31,7 +31,7 @@
         <div class="tab-content overflow-visible">
             <div id="fragment-1" class="tab-pane tab-pane-border active">
                 @using (Ajax.BeginForm("GetReportOptions", "Report", null,
-                    new AjaxOptions { UpdateTargetId = "reportContent" }, new { id = "getReportOptionsForm" }))
+                    new AjaxOptions { UpdateTargetId = "reportContent", OnComplete = "onLoadOptions" }, new { id = "getReportOptionsForm" }))
                 {
                     <table class="tableform">    
                         <tr>
@@ -48,4 +48,18 @@
 </div>
 
 @Scripts.Render("~/bundles/report")
+
+<script type="text/javascript">
+    var scope;
+
+    $(function() {
+        scope = dhHelpdesk.reports.scope({
+            workingGroupUsersRoute: '@Url.Action("GetWorkingGroupUsers", "Services", new { area = "reports" })'
+        });
+    });
+
+    function onLoadOptions() {
+        scope.onLoadOptions();
+    }
+</script>
 
