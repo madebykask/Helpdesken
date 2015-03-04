@@ -359,7 +359,7 @@
 
             if (!string.IsNullOrEmpty(cellPhone))
                 inputParams.Add("CellPhone", cellPhone);
-
+            ViewBag.displaySettings = settings;
             var model = this.newNotifierModelFactory.Create(
                 settings,
                 domains,
