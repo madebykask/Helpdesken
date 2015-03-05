@@ -92,7 +92,7 @@
                                                                 }
                                                                 else
                                                                 {
-                                                                    <a href="@Url.Content(dynamicUrl.SetUrlParameters(r.Id))">@Html.DisplayFor(m => c.DateTimeValue, "Date")</a>
+                                                                    <a href="@Url.Content(dynamicUrl.SetStrParameters(r.Id))">@Html.DisplayFor(m => c.DateTimeValue, "Date")</a>
                                                                 }
                                                             }
                                                             else if (c.FieldType == FieldTypes.Time)
@@ -104,7 +104,7 @@
                                                                 }
                                                                 else
                                                                 {
-                                                                    <a href="@Url.Content(dynamicUrl.SetUrlParameters(r.Id))">@Html.DisplayFor(m => c.DateTimeValue, "DateAndTime")</a>
+                                                                    <a href="@Url.Content(dynamicUrl.SetStrParameters(r.Id))">@Html.DisplayFor(m => c.DateTimeValue, "DateAndTime")</a>
                                                                 }
                                                             }
                                                             else
@@ -118,7 +118,7 @@
                                                                     }
                                                                     else
                                                                     {
-                                                                        <a href="@Url.Content(dynamicUrl.SetUrlParameters(r.Id))">@Translation.Get(c.StringValue, Enums.TranslationSource.TextTranslation)</a>
+                                                                        <a href="@Url.Content(dynamicUrl.SetStrParameters(r.Id))">@Translation.Get(c.StringValue, Enums.TranslationSource.TextTranslation)</a>
                                                                     }
                                                                 }
                                                                 else
@@ -129,7 +129,7 @@
                                                                     }
                                                                     else
                                                                     {
-                                                                        <a href="@Url.Content(dynamicUrl.SetUrlParameters(r.Id))">@c.StringValue</a>
+                                                                        <a href="@Url.Content(dynamicUrl.SetStrParameters(r.Id))">@c.StringValue</a>
                                                                     }
                                                                 }
                                                             }

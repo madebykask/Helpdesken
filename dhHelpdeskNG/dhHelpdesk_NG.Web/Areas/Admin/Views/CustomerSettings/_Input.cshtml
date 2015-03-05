@@ -310,7 +310,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="span12">
-                            <table class="tableform">
+                            <table>
                                 <tr>
                                     <td>
                                         <strong>@Translation.Get("Lösenordspolicy", Enums.TranslationSource.TextTranslation)</strong>
@@ -351,6 +351,50 @@
                                         <input type="checkbox" name="setting.ComplexPassword" @(Model.Setting.ComplexPassword == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="setting.ComplexPassword" value="0" />
                                         </label>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <h4>@Translation.Get("Ärendeövesikt", Enums.TranslationSource.TextTranslation)</h4>
+                <div class="container">
+                    <div class="row">
+                        <div class="span12">
+                            <table>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Show working group", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        &nbsp;&nbsp;&nbsp;<input type="radio" name="Setting.CaseWorkingGroupSource" @(Model.Setting.CaseWorkingGroupSource == 0 ? "checked='checked'" : "") id="Customer_Setting_CaseWorkingGroupSource1" value="0" />
+                                        @Translation.Get("from User", Enums.TranslationSource.TextTranslation)
+                                        <br />
+                                        &nbsp;&nbsp;&nbsp;<input type="radio" name="Setting.CaseWorkingGroupSource" @(Model.Setting.CaseWorkingGroupSource == 1 ? "checked='checked'" : "") id="Customer_Setting_CaseWorkingGroupSource2" value="1" />
+                                        @Translation.Get("from Case", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <h4>@Translation.Get("Ärende", Enums.TranslationSource.TextTranslation)</h4>
+                <div class="container">
+                    <div class="row">
+                        <div class="span12">
+                            <table id="customerOrder">                                
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Administrator field", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        &nbsp;&nbsp;&nbsp;<input type="radio" name="Setting.DontConnectUserToWorkingGroup" @(Model.Setting.DontConnectUserToWorkingGroup == 1 ? "checked='checked'" : "") id="Customer_Setting_DontConnectUserToWorkingGroup1" value="1" />
+                                        @Translation.Get("Show all users", Enums.TranslationSource.TextTranslation)
+                                        <br />
+                                        &nbsp;&nbsp;&nbsp;<input type="radio" name="Setting.DontConnectUserToWorkingGroup" @(Model.Setting.DontConnectUserToWorkingGroup == 0 ? "checked='checked'" : "") id="Customer_Setting_DontConnectUserToWorkingGroup2" value="0" />
+                                        @Translation.Get("Show only users connected to selected working group", Enums.TranslationSource.TextTranslation)
                                     </td>
                                 </tr>
                             </table>
