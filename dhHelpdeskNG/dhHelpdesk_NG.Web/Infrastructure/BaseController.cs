@@ -7,6 +7,7 @@
     using System.Linq;
 
     using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Infrastructure.Attributes;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
     using DH.Helpdesk.Web.Models;
     using System.Configuration;
@@ -18,6 +19,7 @@
     using DH.Helpdesk.BusinessData.Models.User.Input;
     using DH.Helpdesk.Common.Enums;
 
+    [SessionRequired]
     [CustomAuthorize]
     public class BaseController : Controller
     {

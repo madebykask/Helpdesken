@@ -44,7 +44,7 @@
             res.AppendLine(LineSeparator);
             res.AppendLine(string.Format("Controller: {0}", this.Controller));
             res.AppendLine(string.Format("Action: {0}", this.Action));
-            if (this.WorkContext != null)
+            if (this.WorkContext != null && HttpContext.Session != null)
             {
                 if (this.WorkContext.User != null && !this.WorkContext.User.IsUserEmpty())
                 {
