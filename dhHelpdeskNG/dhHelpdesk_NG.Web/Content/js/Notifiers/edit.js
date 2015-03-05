@@ -52,13 +52,18 @@ $(function () {
 
     function onParentSelectChanged(parentId, selectedId) {
         var subItems = searchOUByParentId(secondLevelData, parentId);
-        var subItemId;
+        var GEN_EMPTY_OPTION = true;
+
         if (subItems.length > 0) {
-            subItemId = $('#sub_organization_unit_dropdown').html(generateOptions(subItems, selectedId)).show().val();
-            $('#OrganizationUnitId').val(subItemId);
+            $('#sub_organization_unit_dropdown').html(generateOptions(subItems, selectedId, GEN_EMPTY_OPTION)).show();
+            
         } else {
             $('#sub_organization_unit_dropdown').hide();
+        }
+        if (selectedId == null) {
             $('#OrganizationUnitId').val(parentId);
+        } else {
+            $('#OrganizationUnitId').val(selectedId);
         }
     }
 
@@ -69,31 +74,34 @@ $(function () {
     * @param { object } paramters
     */
     function initOrganizationUnitControls(data, selectedId, parameters) {
-        var selectedInLevel = 0;
+        var selectedInLevel = 1;
         var parentSelectedId;
         firstLevelData = [];
         secondLevelData = [];
 
         $.each(data, function (idx, el) {
+            /// force to select first found sub-item if field marked as required
+            if (selectedId == null && parameters.Required) {
+                selectedId = el.id;
+            }
+
             if (el.parent_id == '') {
                 firstLevelData.push(el);
-                if (el.id === selectedId) {
-                    selectedInLevel = 1;
-                }
             } else {
                 secondLevelData.push(el);
-                /// force to select first found sub-item if field marked as required
-                if (selectedId == null && parameters.Required) {
-                    selectedId = el.id;
-                }
                 if (el.id === selectedId) {
                     selectedInLevel = 2;
                     parentSelectedId = el.parent_id;
                 }
             }
         });
-        $('#organization_unit_dropdown').html(generateOptions(firstLevelData, parentSelectedId, !parameters.Required));
-        onParentSelectChanged(parentSelectedId, selectedId);
+        if (selectedInLevel === 1) {
+            $('#organization_unit_dropdown').html(generateOptions(firstLevelData, selectedId, !parameters.Required));
+            onParentSelectChanged(selectedId, null);
+        } else {
+            $('#organization_unit_dropdown').html(generateOptions(firstLevelData, parentSelectedId, !parameters.Required));
+            onParentSelectChanged(parentSelectedId, selectedId);
+        }
     }
 
     if (miscParameters.showManager) {
@@ -133,7 +141,7 @@ $(function () {
     }
 
     $('#region_dropdown').change(function () {
-        $('#OrganizationUnitId').val('').html('');
+        $('#OrganizationUnitId').val('');
         $('#organization_unit_dropdown').val('').html('');
         $('#sub_organization_unit_dropdown').val('').html('').hide();
         $.get(parameters.departmentDropDownUrl, { regionId: $(this).val() }, function (departmentDropDownMarkup) {
