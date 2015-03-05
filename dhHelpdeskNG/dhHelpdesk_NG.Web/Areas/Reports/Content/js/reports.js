@@ -156,18 +156,19 @@
             var workingGroups = $("#WorkingGroupId");
             var onWorkingGroupChanged = function () {
                 administrators.prop('disabled', true);
-                administrators.empty();
-                administrators.append('<option />');
                 $.getJSON(workingGroupUsersRoute + '?workingGroupId=' + workingGroups.val(), function (data) {
-                    $.each(data, function (index, item) {
+                    administrators.empty();
+                    administrators.append('<option />');
+                    for (var i = 0; i < data.length; i++) {
+                        var item = data[i];
                         administrators.append("<option value='" + item.Value + "'>" + item.Name + "</option>");
-                    });
+                    }
                 })
                 .always(function () {
                     administrators.prop('disabled', false);
                 });
             }
-            workingGroups.change(onWorkingGroupChanged);
+            workingGroups.off("change").on("change", onWorkingGroupChanged);
             onWorkingGroupChanged();
         });
 
