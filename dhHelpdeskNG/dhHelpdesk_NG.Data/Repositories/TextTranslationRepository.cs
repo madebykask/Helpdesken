@@ -13,7 +13,7 @@ namespace DH.Helpdesk.Dal.Repositories
     {
         int GetNextId();
         IEnumerable<Text> GetAllWithTranslation();
-        IEnumerable<TextList> GetAllTextsWithUsers(int texttypeId);
+        IEnumerable<TextList> GetAllTexts(int texttypeId);
     }
 
     public class TextRepository : RepositoryBase<Text>, ITextRepository
@@ -36,7 +36,7 @@ namespace DH.Helpdesk.Dal.Repositories
             return this.DataContext.Texts.Include("TextTranslations");
         }
 
-        public IEnumerable<TextList> GetAllTextsWithUsers(int texttypeId)
+        public IEnumerable<TextList> GetAllTexts(int texttypeId)
         {
 
             var txt =
@@ -193,7 +193,7 @@ namespace DH.Helpdesk.Dal.Repositories
                         join tt in this.DataContext.TextTranslations on l.Id equals tt.Language_Id
                         join t in this.DataContext.Texts on textId equals t.Id
                         where l.IsActive == 1 && tt.Text_Id == t.Id
-                        group l by new { l.Id, l.Name, tt.TextTranslated, textId, tt.TextTranslation_Id } into g
+                        group l by new { l.Id, l.Name, tt.TextTranslated, textId, tt.TextTranslation_Id, tt.CreatedDate } into g
                         select new TextTranslationLanguageList
                         {
                             Language_Id = g.Key.Id,
@@ -201,6 +201,7 @@ namespace DH.Helpdesk.Dal.Repositories
                             Text_Id = g.Key.textId,
                             TextTranslation_Id = g.Key.TextTranslation_Id,
                             TranslationName = g.Key.TextTranslated,
+                            CreatedDate = g.Key.CreatedDate
                         };
 
             return query.OrderBy(x => x.Text_Id);

@@ -291,7 +291,7 @@
 
         public ActionResult NewTranslation()
         {
-            var model = this.SaveTextTranslationViewModel(new Text { }, SessionFacade.CurrentCustomer.Language_Id);
+            var model = this.GetTextTranslationViewModel(new Text { }, SessionFacade.CurrentCustomer.Language_Id);
 
             SessionFacade.ActiveTab = "#fragment-4";
 
@@ -315,7 +315,7 @@
             if (errors.Count == 0)
                 return this.RedirectToAction("index", "globalsetting");
 
-            var model = this.SaveTextTranslationViewModel(text, 0);
+            var model = this.GetTextTranslationViewModel(text, 0);
 
             SessionFacade.ActiveTab = coll["activeTab"];
 
@@ -329,7 +329,7 @@
             if (text == null)
                 return new HttpNotFoundResult("No translation found...");
 
-            var model = this.SaveTextTranslationViewModel(text, language.Id);
+            var model = this.GetTextTranslationViewModel(text, language.Id);
 
             SessionFacade.ActiveTab = "#fragment-4";
 
@@ -351,13 +351,15 @@
                 t.ChangedByUser_Id = SessionFacade.CurrentUser.Id;
             }
 
+            
             IDictionary<string, string> errors = new Dictionary<string, string>();
+
             this._textTranslationService.SaveEditText(textToSave, TTs, out errors);
 
             if (errors.Count == 0)
                 return this.RedirectToAction("index", "globalsetting");
 
-            var model = this.SaveTextTranslationViewModel(textToSave, 0);
+            var model = this.GetTextTranslationViewModel(textToSave, 0);
 
             model.Tabposition = coll["activeTab"];
 
@@ -398,12 +400,12 @@
                 GlobalSettings = this._globalSettingService.GetGlobalSettings(),
                 Holidays = this._holidayService.GetHolidaysByHeaderId(holidayheaderid),
                 LanguagesToTranslateInto = this._languageService.GetLanguagesForGlobalSettings(),
-                Texts = this._textTranslationService.GetAllTexts(texttypeid).ToList(),
+                Texts = this._textTranslationService.GetAllNewTexts(texttypeid).ToList(),
                 ListForIndex = this._textTranslationService.GetIndexListToTextTranslations(languageId),
                 WatchDateCalendarValues = this._watchDateCalendarService.GetAllWatchDateCalendarValues().ToList(),
                 TextType = this._textTranslationService.GetTextType(texttypeid),
                 HolidayHeader = this._holidayService.GetHolidayHeader(1),
-                TextWithUsers = this._textTranslationService.GetAllTextsWithUsers(texttypeid).ToList(),
+                AllTexts = this._textTranslationService.GetAllTexts(texttypeid).ToList(),
                 Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
                 {
                     Text = Translation.Get(x.Name),
@@ -916,7 +918,7 @@
             return model;
         }
 
-        private GlobalSettingTextTranslationViewModel SaveTextTranslationViewModel(Text text, int languageId)
+        private GlobalSettingTextTranslationViewModel GetTextTranslationViewModel(Text text, int languageId)
         {
             var model = new GlobalSettingTextTranslationViewModel
             {
@@ -1007,7 +1009,7 @@
 
 
 
-            var model = this.SaveTextTranslationViewModel(text, id);
+            var model = this.GetTextTranslationViewModel(text, id);
 
             var view = "~/areas/admin/views/GlobalSetting/_Translation.cshtml";
             //var view = "~/areas/admin/views/GlobalSetting/EditTranslation.cshtml";
