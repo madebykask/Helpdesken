@@ -358,28 +358,28 @@
                     </div>
                 </div>
 
-                <h4>@Translation.Get("Ärendeövesikt", Enums.TranslationSource.TextTranslation)</h4>
+                <h4>@Translation.Get("Ärendeöversikt", Enums.TranslationSource.TextTranslation)</h4>
                 <div class="container">
                     <div class="row">
-                        <div class="span12">
-                            <table>
+                        <div class="span15">
+                            <table >
                                 <tr>
-                                    <td>
-                                        @Translation.Get("Show working group", Enums.TranslationSource.TextTranslation)
+                                    <td style="width:100px">
+                                        @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td>
+                                    <td >
                                         &nbsp;&nbsp;&nbsp;<input type="radio" name="Setting.CaseWorkingGroupSource" @(Model.Setting.CaseWorkingGroupSource == 0 ? "checked='checked'" : "") id="Customer_Setting_CaseWorkingGroupSource1" value="0" />
-                                        @Translation.Get("from User", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("visa endast värde om användarens standarddriftgrupp (fält för andra driftgrupper visas som tomma)", Enums.TranslationSource.TextTranslation)
                                         <br />
                                         &nbsp;&nbsp;&nbsp;<input type="radio" name="Setting.CaseWorkingGroupSource" @(Model.Setting.CaseWorkingGroupSource == 1 ? "checked='checked'" : "") id="Customer_Setting_CaseWorkingGroupSource2" value="1" />
-                                        @Translation.Get("from Case", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("visa alltid värde", Enums.TranslationSource.TextTranslation)
                                     </td>
                                 </tr>
                             </table>
                         </div>
                     </div>
                 </div>
-
+                
                 <h4>@Translation.Get("Ärende", Enums.TranslationSource.TextTranslation)</h4>
                 <div class="container">
                     <div class="row">
@@ -387,14 +387,14 @@
                             <table id="customerOrder">                                
                                 <tr>
                                     <td>
-                                        @Translation.Get("Administrator field", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
                                         &nbsp;&nbsp;&nbsp;<input type="radio" name="Setting.DontConnectUserToWorkingGroup" @(Model.Setting.DontConnectUserToWorkingGroup == 1 ? "checked='checked'" : "") id="Customer_Setting_DontConnectUserToWorkingGroup1" value="1" />
-                                        @Translation.Get("Show all users", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("visa alla handläggare oavsett vald driftgrupp", Enums.TranslationSource.TextTranslation)
                                         <br />
                                         &nbsp;&nbsp;&nbsp;<input type="radio" name="Setting.DontConnectUserToWorkingGroup" @(Model.Setting.DontConnectUserToWorkingGroup == 0 ? "checked='checked'" : "") id="Customer_Setting_DontConnectUserToWorkingGroup2" value="0" />
-                                        @Translation.Get("Show only users connected to selected working group", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("visa endast handläggare i vald driftgrupp", Enums.TranslationSource.TextTranslation)
                                     </td>
                                 </tr>
                             </table>
