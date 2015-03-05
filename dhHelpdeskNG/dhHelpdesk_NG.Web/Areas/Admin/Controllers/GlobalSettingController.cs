@@ -325,6 +325,10 @@
         public ActionResult EditTranslation(int id)
         {
             var text = this._textTranslationService.GetText(id);
+
+            if (SessionFacade.CurrentCustomer == null)
+                return new HttpNotFoundResult("Customer information is not available...");
+
             var language = this._languageService.GetLanguage(SessionFacade.CurrentCustomer.Language_Id);
             if (text == null)
                 return new HttpNotFoundResult("No translation found...");
