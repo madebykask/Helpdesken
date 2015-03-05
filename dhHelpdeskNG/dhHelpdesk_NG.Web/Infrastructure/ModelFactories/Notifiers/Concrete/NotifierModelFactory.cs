@@ -62,7 +62,8 @@
 
             var initials = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(
                 settings.Initials,
-                notifier.Initials);
+                notifier.Initials,
+                10);
 
             var lastName = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(
                 settings.LastName,
@@ -72,7 +73,7 @@
                 settings.DisplayName,
                 notifier.DisplayName);
 
-            var place = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Place, notifier.Place);
+            var place = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Place, notifier.Place, 100);
 
             var phone = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Phone, notifier.Phone);
 
@@ -80,7 +81,7 @@
                 settings.CellPhone,
                 notifier.CellPhone);
 
-            var email = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Email, notifier.Email);
+            var email = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Email, notifier.Email, 100);
 
             var code = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Code, notifier.Code);
 
@@ -192,7 +193,7 @@
                 group = new DropDownFieldModel(false);
             }
 
-            var other = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Other, notifier.Other);
+            var other = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Other, notifier.Other, 500);
 
             var ordered = this.notifierInputFieldModelFactory.CreateInputCheckBoxModel(
                 settings.Ordered,

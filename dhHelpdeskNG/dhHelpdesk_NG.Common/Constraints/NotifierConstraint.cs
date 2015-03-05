@@ -22,7 +22,7 @@
 
         public const int EmailMaxLength = 100;
 
-        public const int UserCodeMaxLength = 13;
+        public const int UserCodeMaxLength = 50;
 
         public const int CityMaxLength = 50;
 

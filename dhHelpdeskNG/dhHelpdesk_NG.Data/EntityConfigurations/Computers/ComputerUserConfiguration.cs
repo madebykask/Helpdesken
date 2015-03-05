@@ -29,7 +29,7 @@
             this.Property(u => u.Phone2).IsRequired().HasMaxLength(50);
             this.Property(u => u.Cellphone).IsRequired().HasMaxLength(50);
             this.Property(u => u.Email).IsRequired().HasMaxLength(100);
-            this.Property(u => u.UserCode).IsRequired().HasMaxLength(13);
+            this.Property(u => u.UserCode).IsRequired().HasMaxLength(50);
             this.Property(u => u.PostalAddress).IsRequired().HasMaxLength(50);
             this.Property(u => u.Postalcode).IsRequired().HasMaxLength(50);
             this.Property(u => u.City).IsRequired().HasMaxLength(50);
