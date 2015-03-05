@@ -1783,6 +1783,10 @@ td.td-bottom-multiselect .btn-group {
         background: #438eb9;
     }
 
+    .graph.unreaded {
+        background: #d96326;
+    }
+
     .graph.finished {
         background: #7858b8;
     }

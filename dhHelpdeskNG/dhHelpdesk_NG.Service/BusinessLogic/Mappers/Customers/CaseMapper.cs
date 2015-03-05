@@ -24,9 +24,8 @@
                                                 CasesMy = (from c in cus.Cases
                                                            join p in problems on c.Problem equals p into gj
                                                            from cp in gj.DefaultIfEmpty()
-                                                           where ( c.FinishingDate == null && c.Deleted == 0 &&
-                                                                  (c.CaseResponsibleUser_Id == userId || c.Problem.ResponsibleUser_Id == userId || c.Performer_User_Id == userId)
-                                                                 )
+                                                           where (c.FinishingDate == null && c.Deleted == 0 &&
+                                                                  (c.CaseResponsibleUser_Id == userId || c.Problem.ResponsibleUser_Id == userId || c.Performer_User_Id == userId))
                                                            select c).Count()
                                                 }).ToArray();
 
@@ -36,8 +35,7 @@
                                                 c.CasesInProgress,
                                                 c.CasesUnreaded,
                                                 c.CasesInRest,
-                                                c.CasesMy
-                                                )).ToArray();
+                                                c.CasesMy)).ToArray();
 
             return overviews;
         }
@@ -50,6 +48,7 @@
             var entity = query.Take(1).Select(cs => new
                                                 {
                                                     ActiveCases = query.Where(c => c.FinishingDate == null).Count(),
+                                                    UnreadCases = query.Where(c => c.Unread == 1 && c.Deleted == 0).Count(),
                                                     EndedCases = query.Where(c => c.FinishingDate != null).Count(),
                                                     InRestCases = query.Where(c => c.FinishingDate == null && c.StateSecondary_Id != null && c.StateSecondary.IncludeInCaseStatistics == 0 && c.Deleted == 0).Count(),
                                                     MyCases = (from c in query
@@ -70,7 +69,8 @@
                                     entity.ActiveCases,
                                     entity.EndedCases,
                                     entity.InRestCases,
-                                    entity.MyCases);
+                                    entity.MyCases,
+                                    entity.UnreadCases);
         }
     }
 }
