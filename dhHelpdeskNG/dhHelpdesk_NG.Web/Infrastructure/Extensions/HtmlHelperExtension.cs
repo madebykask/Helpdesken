@@ -614,7 +614,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                     else
                         htmlOutput += "<li>";
 
-                    htmlOutput += "<a href='#' value=" + caseType.Id.ToString() + ">" + Translation.Get(caseType.Name, Enums.TranslationSource.TextTranslation) + "</a>";
+                    htmlOutput += "<a href='#' value=" + caseType.Id.ToString() + ">" + Translation.Get(caseType.Name, SessionFacade.CurrentLanguageId) + "</a>";
                     if (hasChild)
                     {
                         htmlOutput += "<ul class='dropdown-menu'>";
@@ -701,11 +701,11 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 
                 result.Append(hasChild ? "<li class='dropdown-submenu'>" : "<li>");
 
-                result.Append("<a href='#' value=" + productArea.Id + ">" + productArea.Name + "</a>");
+                result.Append("<a href='#' value=" + productArea.Id + ">" + Translation.Get(productArea.Name, Enums.TranslationSource.TextTranslation) + "</a>");
                 if (hasChild)
                 {
                     result.Append("<ul class='dropdown-menu'>");
-                    result.Append(BuildProductAreasList(productArea.Children.OrderBy(p => p.Name).ToList()));
+                    result.Append(BuildProductAreasList(productArea.Children.OrderBy(p => Translation.Get(p.Name, Enums.TranslationSource.TextTranslation)).ToList()));
                     result.Append("</ul>");
                 }
 
@@ -725,11 +725,11 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 
                 result.Append(hasChild ? "<li class='dropdown-submenu'>" : "<li>");
 
-                result.Append("<a href='#' value=" + caseType.Id + ">" + caseType.Name + "</a>");
+                result.Append("<a href='#' value=" + caseType.Id + ">" + Translation.Get(caseType.Name, Enums.TranslationSource.TextTranslation) + "</a>");
                 if (hasChild)
                 {
                     result.Append("<ul class='dropdown-menu'>");
-                    result.Append(BuildCaseTypesList(caseType.Children.OrderBy(p => p.Name).ToList()));
+                    result.Append(BuildCaseTypesList(caseType.Children.OrderBy(p => Translation.Get(p.Name, Enums.TranslationSource.TextTranslation)).ToList()));
                     result.Append("</ul>");
                 }
 
@@ -756,11 +756,11 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 else
                     htmlOutput += "<li>";
 
-                htmlOutput += "<a href='#' value=" + pa.Id.ToString() + ">" + Translation.Get(pa.Name) + "</a>";
+                htmlOutput += "<a href='#' value=" + pa.Id.ToString() + ">" + Translation.Get(pa.Name, Enums.TranslationSource.TextTranslation) + "</a>";
                 if (hasChild)
                 {
                     htmlOutput += "<ul class='dropdown-menu'>";
-                    htmlOutput += BuildProcuctAreaDropdownButton(pa.SubProductAreas.OrderBy(p=> Translation.Get(p.Name)).ToList());
+                    htmlOutput += BuildProcuctAreaDropdownButton(pa.SubProductAreas.OrderBy(p => Translation.Get(p.Name, Enums.TranslationSource.TextTranslation)).ToList());
                     htmlOutput += "</ul>";
                 }
                 htmlOutput += "</li>";

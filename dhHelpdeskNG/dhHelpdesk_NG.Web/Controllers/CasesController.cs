@@ -1994,6 +1994,7 @@ namespace DH.Helpdesk.Web.Controllers
                     var p = this._productAreaService.GetProductArea(m.case_.ProductArea_Id.GetValueOrDefault());
                     if (p != null)
                     {
+                        p = TranslateProductArea(p);
                         m.ParantPath_ProductArea = p.getProductAreaParentPath();
                     }
                 }
@@ -2002,8 +2003,11 @@ namespace DH.Helpdesk.Web.Controllers
                 if (m.case_.CaseType_Id > 0)
                 {
                     var c = this._caseTypeService.GetCaseType(m.case_.CaseType_Id);
+                   //c = TranslateCaseType(c);
+                    
                     if (c != null)
                     {
+                        c = TranslateCaseType(c);
                         m.ParantPath_CaseType = c.getCaseTypeParentPath();
                     }
                 }
@@ -2449,7 +2453,27 @@ namespace DH.Helpdesk.Web.Controllers
             return String.Join("|", files);
 
         }
-        #endregion
 
+
+        private CaseType TranslateCaseType(CaseType caseType)
+        {
+            if (caseType.ParentCaseType != null)
+                caseType.ParentCaseType = TranslateCaseType(caseType.ParentCaseType);
+
+            caseType.Name = Translation.Get(caseType.Name);
+
+            return caseType;
+        }
+
+        private ProductArea TranslateProductArea(ProductArea productArea)
+        {
+            if (productArea.ParentProductArea != null)
+                productArea.ParentProductArea = TranslateProductArea(productArea.ParentProductArea);
+
+            productArea.Name = Translation.Get(productArea.Name);
+
+            return productArea;
+        }
+        #endregion
     }
 }
