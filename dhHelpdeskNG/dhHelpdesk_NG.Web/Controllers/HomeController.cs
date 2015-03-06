@@ -156,6 +156,7 @@
             var customers = this.customerUserService.GetCustomerUsersForHomeIndexPage(SessionFacade.CurrentUser.Id);
             var customersIds = customers.Select(c => c.Customer.Customer_Id).ToArray();
             var customersSettings = this.userService.GetUserCustomersSettings(SessionFacade.CurrentUser.Id);
+            var currentCustomerSettings = customersSettings.First(s => s.CustomerId == this.workContext.Customer.CustomerId);
             foreach (var module in modules)
             {
                 if (!customersSettings.Any(s => s.IsModuleOn((Module)module.Module_Id)))
@@ -218,7 +219,8 @@
                                             changesCustomers.Select(c => c.Customer.Customer_Id).ToArray(),
                                             SessionFacade.CurrentUser.Id);
 
-                        model.CustomerChanges = this.modulesInfoFactory.GetCustomerChangesModel(customerChanges);
+                        var showIcon = currentCustomerSettings.IsModuleOn(Module.ChangeManagement);
+                        model.CustomerChanges = this.modulesInfoFactory.GetCustomerChangesModel(customerChanges, showIcon);
                         break;
                     case Module.Cases:
                         var myCases = this.caseService.GetMyCases(this.workContext.User.UserId, module.NumberOfRows);                       

@@ -7,9 +7,9 @@
 
     internal class ModulesInfoFactory : IModulesInfoFactory
     {
-        public CustomerChangesModel GetCustomerChangesModel(CustomerChanges[] customerChanges)
+        public CustomerChangesModel GetCustomerChangesModel(CustomerChanges[] customerChanges, bool showIcon)
         {
-            return new CustomerChangesModel(customerChanges);
+            return new CustomerChangesModel(customerChanges, showIcon);
         }
 
         public MyCasesModel GetMyCasesModel(MyCase[] cases)
