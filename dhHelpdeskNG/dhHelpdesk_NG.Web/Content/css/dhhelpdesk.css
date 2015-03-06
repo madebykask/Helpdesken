@@ -1,4 +1,4 @@
-﻿us/**********************BODY**************************************************************/
+﻿/**********************BODY**************************************************************/
 body {
   /*background:#ffffff;*/
   background: #f2f7fe;
@@ -2973,7 +2973,7 @@ div.DTTT_print_info p {
 	line-height: 20px;
 }
 
-customers.dropdown-menu
+.customers.dropdown-menu
 {
     overflow: auto;
     max-height: 600px;    
