@@ -233,7 +233,7 @@
                                                     }
                                                     else
                                                     {
-                                                         <select id="case__Region_Id" name="case_.Region_Id"  >
+                                                         <select id="case__Region_Id" name="case_.Region_Id" data-field="region">
                                                             <option value="">&nbsp;</option>                                                            
                                                             @if (Model.regions != null)
                                                             {
@@ -258,7 +258,7 @@
                                                         }
                                                         else
                                                         {                                                        
-                                                            <select id="case__Department_Id" name="case_.Department_Id" >
+                                                            <select id="case__Department_Id" name="case_.Department_Id" data-field="department">
                                                                 <option value="">&nbsp;</option>
                                                                 @if (Model.departments != null)
                                                                 {
@@ -994,7 +994,7 @@
                                         <td>
                                             @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Performer_User_Id, CaseSolutionFields.Administrator))
                                             {
-                                                <select id="case__Performer_User_Id" name="case_.Performer_User_Id">
+                                                <select id="case__Performer_User_Id" name="case_.Performer_User_Id" data-field="administrator">
                                                     <option value="">&nbsp;</option>
                                                     @if (Model.performers != null)
                                                     {
@@ -1771,5 +1771,10 @@
 
         </text>
         }
+
+        var scope = dhHelpdesk.cases.scope({
+            requiredFieldsMessage: '@Translation.Get("Ärendet kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ärendet.")',
+            getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax")'
+        });
     });
 </script>

@@ -41,6 +41,29 @@
                             .ToList();
 
             return entities;
+        }
+
+        public static List<ItemOverview> MapToUserDepartments(
+                                        IQueryable<Region> regions,
+                                        IQueryable<User> users,
+                                        IQueryable<Department> departments,
+                                        IQueryable<DepartmentUser> userDepartments,
+                                        IQueryable<Customer> customers)
+        {
+            var entities = (from ud in userDepartments
+                            join u in users on ud.User_Id equals u.Id
+                            join d in departments on ud.Department_Id equals d.Id
+                            join c in customers on d.Customer_Id equals c.Id
+                            join r in regions on d.Region_Id equals r.Id
+                            select new
+                                       {
+                                           d.Id,
+                                           d.DepartmentName
+                                       })
+                            .OrderBy(d => d.DepartmentName)
+                            .ToList();
+
+            return entities.Select(d => new ItemOverview(d.DepartmentName, d.Id.ToString(CultureInfo.InvariantCulture))).ToList();
         } 
     }
 }

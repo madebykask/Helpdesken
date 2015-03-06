@@ -66,14 +66,6 @@
             @Html.Partial("_Input", Model)
             @Html.Hidden("templateId", Model.NewModeParams.templateId);
         </div>
-    }
-    
-    <script type="text/javascript">
-        $(function() {
-            var scope = dhHelpdesk.cases.scope({
-                requiredFieldsMessage: '@Translation.Get("Ärendet kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ärendet.")'
-            });
-        });
-    </script>
+    }    
 }
 
