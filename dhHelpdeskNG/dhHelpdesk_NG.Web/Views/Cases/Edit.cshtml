@@ -8,7 +8,7 @@
 
 @section Styles {
 
-    @if(Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
+    @if (Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
     {
         <style type="text/css">
             .tab-content {
@@ -182,7 +182,7 @@
     </script>
 }
 
-@if(Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
+@if (Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
 {
     @System.Web.Optimization.Scripts.Render(DH.Helpdesk.Web.BundleConfig.ScriptNames.DynamicCase)
 
@@ -195,33 +195,33 @@
 
 @Html.Partial("_Plupload")
 
-@if(Html.MasterModel() != null && SessionFacade.CurrentUser != null && Model != null)
+@if (Html.MasterModel() != null && SessionFacade.CurrentUser != null && Model != null)
 {
-    using(Html.BeginForm("edit", "cases", null, FormMethod.Post, new { id = "target" }))
+    using (Html.BeginForm("edit", "cases", null, FormMethod.Post, new { id = "target" }))
     {    
     <div class="secnavs fixed">
         <div class="pull-left">
             <ul class="secnav">
-                @if(Model.EditMode == Enums.AccessMode.FullAccess)
+                @if (Model.EditMode == Enums.AccessMode.FullAccess)
                 {
                     <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
                     <li>@Html.ActionLink(Translation.Get("Spara och stäng", Enums.TranslationSource.TextTranslation), null, null, new { @class = "btn", id = "case-action-save-and-close" })</li>
                     <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation), null, null, new { @class = "btn", id = "case-action-save-and-new" })</li>
                     <li class="secspace"></li>                    
-                    if(SessionFacade.CurrentUser.DeleteCasePermission == 1)
+                    if (SessionFacade.CurrentUser.DeleteCasePermission == 1)
                     {                            
                         <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "DeleteCase",
                                 new { caseId = @Model.case_.Id, customerId = @Model.case_.Customer_Id }, new
-                                                                                                             {
-                                                                                                                 @class = "btn deleteDialog",
-                                                                                                                 id = "case-action-delete",
-                                                                                                                 deleteDialogText = Translation.Get("Är du säker på att du vill radera detta ärende", Enums.TranslationSource.TextTranslation) + '?'
-                                                                                                             })</li>
+                                {
+                                    @class = "btn deleteDialog",
+                                    id = "case-action-delete",
+                                    deleteDialogText = Translation.Get("Är du säker på att du vill radera detta ärende", Enums.TranslationSource.TextTranslation) + '?'
+                                })</li>
                     }
                 }
                 <li>@Html.ActionLink(Translation.Get("Stäng", Enums.TranslationSource.TextTranslation), "Index", new { customerId = @Model.case_.Customer_Id }, new { @class = "btn", id = "case-action-close" })</li>
 
-                @if(Model.EditMode == Enums.AccessMode.FullAccess)
+                @if (Model.EditMode == Enums.AccessMode.FullAccess)
                 {
                     <li>
                         <div id="divActionMenu" class="btn-group">
@@ -264,6 +264,37 @@
                                         <li><a href="/cases/followup/@Model.case_.Id" >@Translation.Get("Follow up", Enums.TranslationSource.TextTranslation)</a></li>
                                     }
                                 }
+                                
+                                @if (Model.Languages != null && Model.Languages.Where(l => l.IsActive).ToList().Count > 1)
+                                {     
+                                    var curLanguage = (Model.case_.Id == 0? SessionFacade.CurrentLanguageId:Model.case_.RegLanguage_Id);                               
+                                    <li class="dropdown-submenu">
+                                        <a href="#">
+                                         
+                                            @Translation.Get("Språk")
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            @foreach (var lang in Model.Languages.Where(l => l.IsActive).ToList())
+                                            {
+                                                var langNameId = "langItem" + lang.Id;
+                                                <li>
+                                                                                                        
+                                                        <a id="@langNameId" class="langItem" href="#" onclick="ChangeCaseLanguageTo(@lang.Id,true);"> @Translation.Get(lang.Name) 
+                                                            @if (lang.Id == curLanguage) 
+                                                            {
+                                                              <i class='icon-ok'></i>
+                                                            }
+                                                        </a>
+                                                    @*}
+                                                    else
+                                                    {
+                                                        <a id="@langNameId" href="#" onclick="ChandeCaseLanguageTo(@lang.Id);"> @Translation.Get(lang.Name) </a>                                                        
+                                                    }*@
+                                                </li>
+                                            }
+                                        </ul>
+                                    </li>                                    
+                                }
                             
                             @*
                             if (Html.MasterModel().CustomerSetting.ModuleChangeManagement == 1 && Model.case_.Change_Id == null)
@@ -292,15 +323,15 @@
         <div class="pull-right">
             <ul class="secnav">
                 <li><a href="@Url.Action("Case", "Print", new { caseId = @Model.case_.Id, customerId = @Model.case_.Customer_Id })" title="@Translation.Get("Skriv ut")" class="btn" target="_blank"><i class="icon-file"></i></a></li>
-                @if(Html.MasterModel().CustomerSetting.ModuleInventory > 0)
+                @if (Html.MasterModel().CustomerSetting.ModuleInventory > 0)
                 {                                                            
                     <li><a href="#" title="@Translation.Get("Visa inventarie", Enums.TranslationSource.TextTranslation)" class="btn"><i class="icon-th-large"></i></a></li>
                 }
-                @if(Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ReportedBy.ToString()).ShowOnStartPage == 1)
+                @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ReportedBy.ToString()).ShowOnStartPage == 1)
                 {
-                    if(Model.RelatedCases != null)
+                    if (Model.RelatedCases != null)
                     {
-                        if(Model.RelatedCases.Count > 0)
+                        if (Model.RelatedCases.Count > 0)
                         {
                     <li><a data-toggle="modal" href="#divRelatedCases" title="@Translation.Get("Relaterade ärenden", Enums.TranslationSource.TextTranslation)" class="btn"><i class="icon-list"></i></a></li>
                         }
@@ -324,4 +355,15 @@
     <div id="divCopyCase" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
         @Html.Partial("_CopyCase", Model)
     </div>    
+    
+    <script type="text/javascript">
+        $(function() {
+            var scope = dhHelpdesk.cases.scope({
+                requiredFieldsMessage: '@Translation.Get("Ärendet kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ärendet.")'
+            });
+        });
+
+       
+
+    </script>        
 }

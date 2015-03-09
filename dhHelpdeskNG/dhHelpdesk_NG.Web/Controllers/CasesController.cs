@@ -866,7 +866,7 @@ namespace DH.Helpdesk.Web.Controllers
         {
             int workinggroupId = 0;
             int priorityId = 0;
-
+            int hasChild = 0;
             if (id.HasValue)
             {
                 var e = _productAreaService.GetProductArea(id.Value);
@@ -874,9 +874,11 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     workinggroupId = e.WorkingGroup_Id.HasValue ? e.WorkingGroup_Id.Value : 0;
                     priorityId = e.Priority_Id.HasValue ? e.Priority_Id.Value : 0;
+                    if (e.SubProductAreas != null && e.SubProductAreas.Count > 0)
+                        hasChild = 1;
                 }
             }
-            return Json(new { WorkingGroup_Id = workinggroupId, Priority_Id = priorityId });
+            return Json(new { WorkingGroup_Id = workinggroupId, Priority_Id = priorityId, HasChild = hasChild });
         }
 
         public JsonResult ChangeStatus(int? id)
@@ -1338,6 +1340,18 @@ namespace DH.Helpdesk.Web.Controllers
             return res;
         }
 
+        [HttpGet]
+        public JsonResult ProductAreaHasChild(int pId)
+        {
+            var res = "false";
+            var productArea = this._productAreaService.GetProductArea(pId);
+            if (productArea != null && productArea.SubProductAreas != null && productArea.SubProductAreas.Count > 0)
+                res = "true";
+
+            return Json(res);
+        }
+
+
         #endregion
 
         #region Private Methods and Operators
@@ -1793,7 +1807,7 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     m.priorities = this._priorityService.GetPriorities(customerId);
                 }
-
+                
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()).ShowOnStartPage == 1)
                 {
                     m.productAreas = this._productAreaService.GetProductAreas(customerId);
@@ -1989,6 +2003,7 @@ namespace DH.Helpdesk.Web.Controllers
                 }
 
                 // hämta parent path för productArea 
+                m.ProductAreaHasChild = 0;
                 if (m.case_.ProductArea_Id.HasValue)
                 {
                     var p = this._productAreaService.GetProductArea(m.case_.ProductArea_Id.GetValueOrDefault());
@@ -1996,13 +2011,15 @@ namespace DH.Helpdesk.Web.Controllers
                     {
                         p = TranslateProductArea(p);
                         m.ParantPath_ProductArea = p.getProductAreaParentPath();
+                        if (p.SubProductAreas != null && p.SubProductAreas.Count > 0)
+                            m.ProductAreaHasChild = 1;
                     }
                 }
 
                 // hämta parent path för casetype
                 if (m.case_.CaseType_Id > 0)
                 {
-                    var c = this._caseTypeService.GetCaseType(m.case_.CaseType_Id);
+                    var c = this._caseTypeService.GetCaseType(m.case_.CaseType_Id);                    
                    //c = TranslateCaseType(c);
                     
                     if (c != null)
@@ -2453,6 +2470,8 @@ namespace DH.Helpdesk.Web.Controllers
             return String.Join("|", files);
 
         }
+      
+        #endregion
 
 
         private CaseType TranslateCaseType(CaseType caseType)

@@ -14,10 +14,13 @@ $(".nav-tabs-actions a").unbind("click");
 $(".content input:text, .content textarea").eq(0).focus()
 
 
-function ShowToastMessage(message, msgType) {
+function ShowToastMessage(message, msgType, isSticky) {
+    var _Sticky = false;
+    if (isSticky)
+        _Sticky = true;
     $().toastmessage('showToast', {
         text: message,
-        sticky: false,
+        sticky: _Sticky,
         position: 'top-center',
         type: msgType,
         closeText: '',
@@ -302,6 +305,7 @@ function CaseInitForm() {
     });
 
     $('#case__ProductArea_Id').change(function () {
+        $("#ProductAreaHasChild").val(0);
         if ($(this).val() > 0) {
             $.post('/Cases/ChangeProductArea/', { 'id': $(this).val() }, function (data) {
                 //alert(JSON.stringify(data));
@@ -315,6 +319,9 @@ function CaseInitForm() {
                     if (exists > 0 && data.Priority_Id > 0) {
                         $("#case__Priority_Id").val(data.Priority_Id);
                     }
+
+                    $("#ProductAreaHasChild").val(data.HasChild);
+
                 }
             }, 'json');
         }
@@ -621,6 +628,12 @@ function CaseInitForm() {
     LogInitForm();
     bindDeleteCaseFileBehaviorToDeleteButtons();
     SetFocusToReportedByOnCase();
+}
+
+function productAreaHasChild(productAreaId) {
+    $.get('/Cases/ProductAreaHasChild', { pId: productAreaId, now: Date.now() }, function (data) {
+        return data;
+    });    
 }
 
 function SetFocusToReportedByOnCase() {
