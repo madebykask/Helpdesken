@@ -36,6 +36,7 @@
                             translate = translation.Label;
                         else
                             translate = translate.GetDefaultValue(SessionFacade.CurrentLanguageId);
+                            //Apparently this row is commented out because it is replaced by .GetDefaultValue above
                             //translate = Get(translate, Enums.TranslationSource.TextTranslation); 
                     }
                     catch

@@ -94,7 +94,8 @@ namespace DH.Helpdesk.Common.Extensions.String
                 {
                     case "agreeddate": str = "Överenskommet datum"; break;
                     case "available": str = "Anträffbar"; break;
-                    case "casecaption": str = "Rubrik"; break;
+                    case "casecaption": str = "Rubrik"; break; //obsolete? Seems like it doesn't exist in database.
+                    case "caption": str = "Rubrik"; break;
                     case "casenumber": str = "Ärende"; break;
                     case "caseresponsibleuser_id": str = "Ansvarig"; break;
                     case "casetype_id": str = "Ärendetyp"; break;
@@ -160,7 +161,8 @@ namespace DH.Helpdesk.Common.Extensions.String
                 {
                     case "agreeddate": str = "Agreed date"; break;
                     case "available": str = "Available"; break;
-                    case "casecaption": str = "Subject"; break;
+                    case "casecaption": str = "Subject"; break; //obsolete? Seems like it doesn't exist in database.
+                    case "caption": str = "Subject"; break;
                     case "casenumber": str = "Case"; break;
                     case "caseresponsibleuser_id": str = "Responsible"; break;
                     case "casetype_id": str = "Case Type"; break;
