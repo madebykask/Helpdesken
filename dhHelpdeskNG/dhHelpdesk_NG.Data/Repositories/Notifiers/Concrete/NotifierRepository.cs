@@ -294,7 +294,7 @@
                                     UserId = (cu.UserId != null ? cu.UserId : string.Empty),
                                     RegionName = k.Region.Name,
                                     DepartmentName = cu.Department.DepartmentName,
-                                    OUName = (cu.OU.Parent != null? cu.OU.Parent.Name:"") + " - " + cu.OU.Name
+                                    OUName = (cu.OU.Parent != null ? cu.OU.Parent.Name + " - " : "") + cu.OU.Name
                                 };
 
             return query.OrderBy(x => x.FirstName).ThenBy(x => x.SurName).ToList();

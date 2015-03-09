@@ -1018,8 +1018,11 @@ function NewNotifierEvent(id) {
             $('#case__Place').val(data.place);
             $('#case__UserCode').val(data.usercode);
             $('#case__Region_Id').val(data.regionid);
+            $('#RegionName').val(data.regionname);
             $('#case__Department_Id').val(data.departmentid);
-            $('#case__Ou_Id').val(data.ouid);
+            $('#DepartmentName').val(data.departmentname);
+            $('#case__Ou_Id').val(data.ouid);                        
+            $('#OUName').val(data.ouname);
         }
     }, 'json');
 }

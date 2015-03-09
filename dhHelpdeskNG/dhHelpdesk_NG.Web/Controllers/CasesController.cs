@@ -711,25 +711,19 @@ namespace DH.Helpdesk.Web.Controllers
             var cu = this._computerService.GetComputerUser(id);
             var u = new
             {
-                num = cu.UserId
-                ,
-                name = cu.SurName + ' ' + cu.FirstName
-                ,
-                email = cu.Email
-                ,
-                place = cu.Location
-                ,
-                phone = cu.Phone
-                ,
-                usercode = cu.UserCode
-                ,
-                cellphone = cu.Cellphone
-                ,
-                regionid = (cu.Department != null ? cu.Department.Region_Id : 0)
-                ,
-                departmentid = cu.Department_Id
-                ,
-                ouid = cu.OU_Id
+                num = cu.UserId,
+                name = cu.SurName + ' ' + cu.FirstName,
+                email = cu.Email,
+                place = cu.Location,
+                phone = cu.Phone,
+                usercode = cu.UserCode,
+                cellphone = cu.Cellphone,
+                regionid = (cu.Department != null ? cu.Department.Region_Id : 0),
+                regionname = (cu.Department != null ? cu.Department.Region.Name : ""),
+                departmentid = cu.Department_Id,
+                departmentname = cu.Department.DepartmentName,
+                ouid = cu.OU_Id,
+                ouname = (cu.OU.Parent != null ? cu.OU.Parent.Name + " - " : "") + cu.OU.Name
             };
             return this.Json(u);
         }
