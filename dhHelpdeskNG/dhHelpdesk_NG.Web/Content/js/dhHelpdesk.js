@@ -768,7 +768,7 @@ function GetComputerUserSearchOptions() {
             $('#RegionName').val(item.regionname);
             $('#case__Department_Id').val(item.departmentid);
             $('#DepartmentName').val(item.departmentname);
-            $('#case__Ou_Id').val(item.ouid);
+            $('#case__OU_Id').val(item.ouid);
             $('#OUName').val(item.ouname);
 
             return item.num;

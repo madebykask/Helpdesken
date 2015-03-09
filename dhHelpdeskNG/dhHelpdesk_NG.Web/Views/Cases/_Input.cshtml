@@ -278,12 +278,15 @@
                                                 <td class="span4">
                                                         @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.OU_Id, CaseSolutionFields.OU))
                                                         {
+                                                           
                                                            @Html.TextBox("OUName", Model.ous.Where(w => w.Id == Model.case_.OU_Id).Select(o => o.Name).SingleOrDefault(), new { id = "OUName", @readonly = true })
                                                            @Html.HiddenFor(m => Model.case_.OU_Id) 
+                                                             
+
                                                         }
                                                         else
                                                         {
-                                                            <select id="case__Ou_Id" name="case_.Ou_Id" >
+                                                            <select id="case__Ou_Id" name="case_.OU_Id" >
                                                                 <option value="">&nbsp;</option>
                                                                 @if (Model.ous != null)
                                                                 {
@@ -339,9 +342,9 @@
                                                     @Translation.Get("Spara användaruppgifter", SessionFacade.CurrentLanguageId)
                                                 </td>
                                                 <td class="span4">
-                                                    @if(Model.IsReadOnly(CaseSolutionFields.UpdateNotifierInformation))
+                                                    @if (Model.IsReadOnly(CaseSolutionFields.UpdateNotifierInformation))
                                                     {
-                                                        @Html.CheckBoxFor(m => Model.UpdateNotifierInformation, new { @class = "switchcheckbox", @readonly = "readonly"});
+                                                        @Html.CheckBoxFor(m => Model.UpdateNotifierInformation, new { @class = "switchcheckbox", @readonly = "readonly" });
                                                     }
                                                     else
                                                     {
