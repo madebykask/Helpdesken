@@ -14,6 +14,26 @@ $(".nav-tabs-actions a").unbind("click");
 $(".content input:text, .content textarea").eq(0).focus()
 
 
+$('#case__RegLanguage_Id').change(function () {   
+    ChangeCaseLanguageTo($("#case__RegLanguage_Id").val());
+});
+
+function ChangeCaseLanguageTo(newLanguageId, updateDropDown) {
+    var langItems = document.getElementsByClassName('langItem');
+    for (var i = 0; i < langItems.length; ++i) {
+        var item = langItems[i];
+        if (item.id == "langItem" + newLanguageId)
+            item.innerHTML = item.innerText + ' <i class="icon-ok"></i>';
+        else
+            item.innerHTML = item.innerText;
+    }
+
+    if (updateDropDown == true)
+        $("#case__RegLanguage_Id").val(newLanguageId).change();
+
+    $("#case_.RegLanguage_Id").val(newLanguageId);
+}
+
 function ShowToastMessage(message, msgType, isSticky) {
     var _Sticky = false;
     if (isSticky)
@@ -781,7 +801,7 @@ function GetComputerUserSearchOptions() {
             $('#RegionName').val(item.regionname);
             $('#case__Department_Id').val(item.departmentid);
             $('#DepartmentName').val(item.departmentname);
-            $('#case__Ou_Id').val(item.ouid);
+            $('#case__OU_Id').val(item.ouid);
             $('#OUName').val(item.ouname);
 
             return item.num;

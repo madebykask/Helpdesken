@@ -2470,10 +2470,7 @@ namespace DH.Helpdesk.Web.Controllers
             return String.Join("|", files);
 
         }
-      
-        #endregion
-
-
+              
         private CaseType TranslateCaseType(CaseType caseType)
         {
             if (caseType.ParentCaseType != null)
