@@ -38,7 +38,10 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public IEnumerable<TextList> GetAllTexts(int texttypeId)
         {
+            //Might not be needed in future since we have texttype. Earlier versions of DH Helpdesk assigned all core system phrases to id below 5000.
+            const int CoreSystemPhrases = 4999;
 
+            
             var txt =
                from T in this.DataContext.Texts
                join TT in this.DataContext.TextTranslations on T.Id equals TT.Text_Id into Translate
@@ -47,39 +50,27 @@ namespace DH.Helpdesk.Dal.Repositories
                from User1 in Users1.DefaultIfEmpty()
                join U2 in this.DataContext.Users on T.ChangedByUser_Id equals U2.Id into Users2
                from User2 in Users2.DefaultIfEmpty()
-               where (T.Type == texttypeId && T.Id > 4999)
+               where (T.Type == texttypeId && T.Id > CoreSystemPhrases)
                group T by new { T.Id, T.TextToTranslate, User2.SurName, User2.FirstName, Trans.ChangedDate, T.CreatedDate, U1Name = User1.FirstName, U1SurName = User1.SurName } into g
                select new TextList
-                    {
-                        Id = g.Key.Id,
-                        TextToTranslate = g.Key.TextToTranslate,
-                        CreatedByFirstName = g.Key.FirstName,
-                        CreatedByLastName = g.Key.SurName,
-                        ChangedDate = g.Key.ChangedDate,
-                        CreatedDate = g.Key.CreatedDate,
-                        ChangedByFirstName = g.Key.U1Name,
-                        ChangedByLastName = g.Key.U1SurName
-                    };
+               {
+                   Id = g.Key.Id,
+                   TextToTranslate = g.Key.TextToTranslate,
+                   CreatedByFirstName = g.Key.FirstName,
+                   CreatedByLastName = g.Key.SurName,
+                   ChangedDate = g.Key.ChangedDate,
+                   CreatedDate = g.Key.CreatedDate,
+                   ChangedByFirstName = g.Key.U1Name,
+                   ChangedByLastName = g.Key.U1SurName
 
-            /*var q = from t in this.DataContext.Texts
-                    join u in this.DataContext.Users on t.ChangedByUser_Id equals u.Id
-                    join tt in this.DataContext.TextTranslations on t.Id equals tt.Text_Id into t_tt
-                    from ts in t_tt.DefaultIfEmpty()
-                    where t.Id > 4999 && t.Type == texttypeId
-                    group t by new { t.Id, t.TextToTranslate, u.SurName, u.FirstName, ts.ChangedDate, t.CreatedDate } into g
-                    select new TextList
-                    {
-                        Id = g.Key.Id,
-                        TextToTranslate = g.Key.TextToTranslate,
-                        CreatedByFirstName = g.Key.FirstName,
-                        CreatedByLastName = g.Key.SurName,
-                        ChangedDate = g.Key.ChangedDate,
-                        CreatedDate = g.Key.CreatedDate
-                    };
-            */
-            
-            return txt.ToList();
-           
+               };
+
+            //Select all distinct items by id.
+            var txtToReturn = txt.GroupBy(text => text.Id).Select(grp => grp.FirstOrDefault()).ToList();
+
+
+            return txtToReturn.ToList();
+
         }
     }
 
@@ -89,7 +80,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public interface ITextTypeRepository : IRepository<TextType>
     {
-        TextType GetTextTypeById(int id);  
+        TextType GetTextTypeById(int id);
     }
 
     public class TextTypeRepository : RepositoryBase<TextType>, ITextTypeRepository
@@ -101,9 +92,9 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public TextType GetTextTypeById(int id)
         {
-           
+
             return this.DataContext.TextTypes.Where(x => x.Id == id).FirstOrDefault();
-           
+
         }
     }
 
@@ -134,7 +125,7 @@ namespace DH.Helpdesk.Dal.Repositories
         public string GetTTByLanguageId(int textid, int languageId)
         {
             return this.DataContext.TextTranslations.Where(tt => tt.Text_Id == textid && tt.Language_Id == languageId).Select(tt => tt.TextTranslated).SingleOrDefault();
-           
+
 
         }
 
@@ -143,7 +134,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
             TextTranslation tt = (from t in this.DataContext.Set<TextTranslation>()
                                   where t.Text_Id == textid && t.Language_Id == languageId
-                           select t).FirstOrDefault();
+                                  select t).FirstOrDefault();
 
 
             return tt;
@@ -185,7 +176,7 @@ namespace DH.Helpdesk.Dal.Repositories
                             t.TextToTranslate,
                             t.Language_Id == 1 ? "sv-SE" : t.Language_Id == 2 ? "en-US" : "de-DE",
                             t.TextTranslated)).ToList();
-        } 
+        }
 
         public IEnumerable<TextTranslationLanguageList> ReturnTTsListForEdit(int textId)
         {
