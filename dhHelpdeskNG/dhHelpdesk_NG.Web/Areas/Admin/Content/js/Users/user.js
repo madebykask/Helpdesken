@@ -182,8 +182,7 @@ $(function () {
                     walkPermissions(function (permission) {
                         var type = permission.getType();
                         
-                        var hasAccess = type != dhHelpdesk.admin.users.permissionType.faqPermission;
-                        permission.setAccess(hasAccess);
+                        permission.setAccess(true);
 
                         if (setPermissions || !permission.getIsHasAccess()) {
                             var hasPermission = type != dhHelpdesk.admin.users.permissionType.faqPermission;
@@ -196,7 +195,10 @@ $(function () {
                 case dhHelpdesk.admin.users.userGroup.customerAdministrator:
                 case dhHelpdesk.admin.users.userGroup.systemAdministrator:
                     walkPermissions(function (permission) {
-                        permission.setAccess(true);
+                        var type = permission.getType();
+
+                        var hasAccess = type != dhHelpdesk.admin.users.permissionType.faqPermission;
+                        permission.setAccess(hasAccess);
 
                         if (setPermissions || !permission.getIsHasAccess()) {
                             permission.setHasPermission(true);
