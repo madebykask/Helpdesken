@@ -29,7 +29,7 @@
 
         void SaveHoliday(Holiday holiday, out IDictionary<string, string> errors);
         void SaveHolidayHeader(HolidayHeader holidayheader, out IDictionary<string, string> errors);
-        void Commit();
+
 
         /// <summary>
         /// The get holidays.
@@ -159,7 +159,7 @@
             return DeleteMessage.Error;
         }
 
-        public void Commit()
+        private void Commit()
         {
             this._unitOfWork.Commit();
         }

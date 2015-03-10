@@ -12,7 +12,6 @@
     using DH.Helpdesk.BusinessData.Enums.Case;
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models.Case.Output;
-    using DH.Helpdesk.BusinessData.Models.Holiday.Output;
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
     using DH.Helpdesk.Common.Enums.Cases;
@@ -35,9 +34,7 @@
             GlobalSetting gs,
             Setting customerSetting,
             ISearch s,
-            int workingDayStart,
-            int workingDayEnd,
-            IEnumerable<HolidayOverview> holidays,
+            WorkTimeCalculator workTimeCalculator,
             string applicationId);
     }
 
@@ -81,11 +78,10 @@
                                     GlobalSetting gs, 
                                     Setting customerSetting, 
                                     ISearch s,
-                                    int workingDayStart,
-                                    int workingDayEnd,
-                                    IEnumerable<HolidayOverview> holidays,
+                                    WorkTimeCalculator workTimeCalculator,
                                     string applicationId)
         {
+            var now = DateTime.UtcNow;
             var dsn = ConfigurationManager.ConnectionStrings["HelpdeskOleDbContext"].ConnectionString;
             var customerUserSetting = this._customerUserRepository.GetCustomerSettings(f.CustomerId, userId);
             IList<ProductArea> pal = this._productAreaRepository.GetMany(x => x.Customer_Id == f.CustomerId).OrderBy(x => x.Name).ToList(); 
@@ -109,7 +105,7 @@
             {
                 return ret;
             }
-
+            
             using (var con = new OleDbConnection(dsn)) 
             {
                 using (var cmd = new OleDbCommand())
@@ -132,6 +128,7 @@
                                 var sortOrder = string.Empty;
                                 var displayLeftTime = true;
                                 DateTime caseRegistrationDate;
+
                                 DateTime.TryParse(dr["RegTime"].ToString(), out caseRegistrationDate);
                                 DateTime dtTmp;
                                 DateTime? caseFinishingDate = null;
@@ -157,18 +154,29 @@
                                 int.TryParse(dr["SolutionTime"].ToString(), out SLAtime);
                                 int timeOnPause;
                                 int.TryParse(dr["ExternalTime"].ToString(), out timeOnPause);
+                                int? departmentId = null;
+                                if (int.TryParse(dr["Department_Id"].ToString(), out intTmp))
+                                {
+                                    departmentId = intTmp;
+                                }
 
-                                var timeLeft = displayLeftTime
-                                                   ? CaseUtils.CalculateTimeLeft(
-                                                       caseRegistrationDate,
-                                                       caseFinishingDate,
-                                                        caseShouldBeFinishedInDate,
-                                                        workingDayStart,
-                                                        workingDayEnd,
-                                                        holidays,
-                                                        SLAtime * 60,
-                                                        timeOnPause)
-                                                   : null;
+                                int? timeLeft = null;
+                                if (displayLeftTime)
+                                {
+                                    if (caseShouldBeFinishedInDate.HasValue)
+                                    {
+                                        //// calc time by watching date
+                                        timeLeft = (int)Math.Floor((decimal)workTimeCalculator.CalcWorkTimeMinutes(
+                                            departmentId,
+                                            now,
+                                            caseShouldBeFinishedInDate.Value) / 60);
+                                    }
+                                    else if (SLAtime > 0)
+                                    {
+                                        //// calc by SLA value
+                                        timeLeft = (int)Math.Floor((SLAtime * 60 - (decimal)workTimeCalculator.CalcWorkTimeMinutes(departmentId, caseRegistrationDate, now)) / 60);
+                                    }
+                                }
 
                                 foreach (var c in csl)
                                 {

@@ -1,11 +1,14 @@
 ﻿namespace DH.Helpdesk.Services.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models.Holiday.Output;
+    using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Repositories;
+    using DH.Helpdesk.Dal.Utils;
     using DH.Helpdesk.Domain;
 
     public interface ICaseSearchService
@@ -67,6 +70,8 @@
             {
                 csf.ProductArea = this.productAreaService.GetProductAreaWithChildren(productAreaId, ", ", "Id");
             }
+            
+            var workTimeCalculator = WorkTimeCalculator.MakeCalculator(workingDayStart, workingDayEnd, holidays);
 
             return this.caseSearchRepository.Search(
                                                 csf, 
@@ -79,9 +84,7 @@
                                                 this.globalSettingService.GetGlobalSettings().FirstOrDefault(), 
                                                 this.settingService.GetCustomerSetting(f.CustomerId), 
                                                 s,
-                                                workingDayStart,
-                                                workingDayEnd,
-                                                holidays,
+                                                workTimeCalculator,
                                                 applicationId);
         }
     }

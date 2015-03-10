@@ -1271,14 +1271,14 @@
 
             if (case_.FinishingDate.HasValue)
             {
-                case_.LeadTime = CaseUtils.CalculateLeadTime(
-                                                            case_.RegTime,
-                                                            case_.WatchDate,
-                                                            case_.FinishingDate,
-                                                            case_.ExternalTime,
-                                                            this.workContext.Customer.WorkingDayStart,
-                                                            this.workContext.Customer.WorkingDayEnd,
-                                                            this.workContext.Cache.Holidays);
+                var workTimeCalc = WorkTimeCalculator.MakeCalculator(
+                    this.workContext.Customer.WorkingDayStart,
+                    this.workContext.Customer.WorkingDayEnd,
+                    this.workContext.Cache.Holidays);
+                case_.LeadTime = workTimeCalc.CalcWorkTimeMinutes(
+                    case_.Department_Id,
+                    case_.RegTime,
+                    case_.FinishingDate.Value) - case_.ExternalTime;
             }
 
             // save log

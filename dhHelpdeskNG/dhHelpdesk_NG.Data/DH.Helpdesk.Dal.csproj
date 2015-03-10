@@ -679,7 +679,7 @@
     <Compile Include="Repositories\WatchDateCalendarRepository.cs" />
     <Compile Include="Repositories\WorkingGroupRepository.cs" />
     <Compile Include="SearchRequestBuilders\Notifiers\NotifiersSearchRequestBuilder.cs" />
-    <Compile Include="Utils\CaseUtils.cs" />
+    <Compile Include="Utils\WorkTimeCalculator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">

@@ -16,6 +16,11 @@ namespace DH.Helpdesk.BusinessData.Models.Holiday.Output
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
-        public string Name { get; set; }         
+        public string Name { get; set; }  
+       
+        /// <summary>
+        /// ID of the Department
+        /// </summary>
+        public int DeptartmentId { get; set; }
     }
 }

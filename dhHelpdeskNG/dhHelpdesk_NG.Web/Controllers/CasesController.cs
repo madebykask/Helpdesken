@@ -1487,12 +1487,14 @@ namespace DH.Helpdesk.Web.Controllers
                     // calculating time spent in "inactive" state every save
                     if (caseSubState.IncludeInCaseStatistics == 0)
                     {
-                        var workingTimeMins = CaseUtils.CalculateTotalWorkingMinutes(
-                        oldCase.ChangeTime,
-                        DateTime.UtcNow,
-                        this.workContext.Customer.WorkingDayStart,
-                        this.workContext.Customer.WorkingDayEnd,
-                        this.workContext.Cache.Holidays);
+                        var workTimeCalc = WorkTimeCalculator.MakeCalculator(
+                            this.workContext.Customer.WorkingDayStart,
+                            this.workContext.Customer.WorkingDayEnd,
+                            this.workContext.Cache.Holidays);
+                        var workingTimeMins = workTimeCalc.CalcWorkTimeMinutes(
+                            oldCase.Department_Id,
+                            oldCase.ChangeTime,
+                            DateTime.UtcNow);
                         case_.ExternalTime = oldCase.ExternalTime + workingTimeMins;
                     }
                 }
@@ -1545,14 +1547,14 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (case_.FinishingDate.HasValue)
             {
-                case_.LeadTime = CaseUtils.CalculateLeadTime(
-                                                            case_.RegTime,
-                                                            case_.WatchDate,
-                                                            case_.FinishingDate,
-                                                            case_.ExternalTime,
-                                                            this.workContext.Customer.WorkingDayStart,
-                                                            this.workContext.Customer.WorkingDayEnd,
-                                                            this.workContext.Cache.Holidays);
+                 var workTimeCalc = WorkTimeCalculator.MakeCalculator(
+                    this.workContext.Customer.WorkingDayStart,
+                    this.workContext.Customer.WorkingDayEnd,
+                    this.workContext.Cache.Holidays);
+                case_.LeadTime = workTimeCalc.CalcWorkTimeMinutes(
+                    case_.Department_Id,
+                    case_.RegTime,
+                    case_.FinishingDate.Value) - case_.ExternalTime;
             }
 
             // save log
