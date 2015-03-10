@@ -145,11 +145,6 @@
                     break;
                 case UserGroup.CustomerAdministrator:
                 case UserGroup.SystemAdministrator:
-                    if (!permissions.Contains(UserPermission.FaqPermission))
-                    {
-                        wrongPermissions.Add(UserPermission.FaqPermission);
-                    }
-
                     break;
                 default:
                     wrongPermissions.AddRange(permissions);
