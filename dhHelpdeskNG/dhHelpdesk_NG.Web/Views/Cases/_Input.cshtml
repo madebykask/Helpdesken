@@ -95,6 +95,7 @@
                         @Html.Hidden("WriteTextToExternalNote", Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString()))
                         @Html.Hidden("Today", DateTime.Now.ToShortDateString())
                         @Html.Hidden("CurLanguageId", SessionFacade.CurrentLanguageId)
+                        @Html.Hidden("SelectedValueCarrier", "")
 
                         @if (Model.customerUserSetting.UserInfoPermission == 1)
                         {                                                        

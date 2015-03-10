@@ -111,9 +111,14 @@ function CaseCascadingSelectlistChange(id, customerId, postTo, ctl, departmentFi
     $.post(postTo, { 'id': id, 'customerId': customerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {
         $(ctlOption).remove();
         $(ctl).append('<option value="">&nbsp;</option>');
+        var selected = $('#SelectedValueCarrier').val();
+
         if (data != undefined) {
             for (var i = 0; i < data.list.length; i++) {
-                $(ctl).append('<option value="' + data.list[i].id + '">' + data.list[i].name + '</option>');
+                if (data.list[i].id == selected)
+                    $(ctl).append('<option value="' + data.list[i].id + '" selected>' + data.list[i].name + '</option>');
+                else
+                    $(ctl).append('<option value="' + data.list[i].id + '">' + data.list[i].name + '</option>');
             }
         }
     }, 'json');
@@ -268,7 +273,7 @@ function CaseInitForm() {
     });
 
     $('#case__Department_Id').change(function () {
-        CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeDepartment/', '#case__Ou_Id', $('#DepartmentFilterFormat').val());
+        CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeDepartment/', '#case__Ou_Id', $('#DepartmentFilterFormat').val());        
         $('#divInvoice').hide();
         $.get('/Cases/ShowInvoiceFields/', { 'departmentId': $(this).val() }, function (data) {
             if (data == 1) {
@@ -799,9 +804,10 @@ function GetComputerUserSearchOptions() {
             $('#case__UserCode').val(item.usercode);
             $('#case__Region_Id').val(item.regionid);
             $('#RegionName').val(item.regionname);
-            $('#case__Department_Id').val(item.departmentid);
+            $('#SelectedValueCarrier').val(item.ouid);
+            $('#case__Department_Id').val(item.departmentid).change();
             $('#DepartmentName').val(item.departmentname);
-            $('#case__OU_Id').val(item.ouid);
+            $('#case__OU_Id').val(item.ouid);                        
             $('#OUName').val(item.ouname);
 
             return item.num;
@@ -1019,7 +1025,8 @@ function NewNotifierEvent(id) {
             $('#case__UserCode').val(data.usercode);
             $('#case__Region_Id').val(data.regionid);
             $('#RegionName').val(data.regionname);
-            $('#case__Department_Id').val(data.departmentid);
+            $('#SelectedValueCarrier').val(data.ouid);
+            $('#case__Department_Id').val(data.departmentid).change();
             $('#DepartmentName').val(data.departmentname);
             $('#case__OU_Id').val(data.ouid);                        
             $('#OUName').val(data.ouname);
