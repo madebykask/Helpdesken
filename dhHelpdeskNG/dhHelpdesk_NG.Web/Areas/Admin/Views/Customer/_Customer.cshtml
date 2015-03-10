@@ -157,7 +157,7 @@
                     @Translation.Get("Informera anmälaren som standard", Enums.TranslationSource.TextTranslation)?
                 </td>
                 <td>
-                    @Html.DropDownListFor(model => model.Customer.CommunicateWithNotifier, Model.CWNSelect, "", new {})
+                    @Html.DropDownListFor(model => model.Customer.CommunicateWithNotifier, Model.CWNSelect)
                 </td>
             </tr>
             <tr>
