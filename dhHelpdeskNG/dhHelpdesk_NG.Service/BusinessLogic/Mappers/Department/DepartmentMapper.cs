@@ -54,7 +54,8 @@
                             join u in users on ud.User_Id equals u.Id
                             join d in departments on ud.Department_Id equals d.Id
                             join c in customers on d.Customer_Id equals c.Id
-                            join r in regions on d.Region_Id equals r.Id
+                            join r in regions on d.Region_Id equals r.Id into rgj
+                            from region in rgj.DefaultIfEmpty()
                             select new
                                        {
                                            d.Id,
@@ -62,6 +63,21 @@
                                        })
                             .OrderBy(d => d.DepartmentName)
                             .ToList();
+
+            if (!entities.Any())
+            {
+                entities = (from d in departments
+                            join c in customers on d.Customer_Id equals c.Id
+                            join r in regions on d.Region_Id equals r.Id into rgj
+                            from region in rgj.DefaultIfEmpty()
+                            select new
+                            {
+                                d.Id,
+                                d.DepartmentName
+                            })
+                            .OrderBy(d => d.DepartmentName)
+                            .ToList();
+            }
 
             return entities.Select(d => new ItemOverview(d.DepartmentName, d.Id.ToString(CultureInfo.InvariantCulture))).ToList();
         } 

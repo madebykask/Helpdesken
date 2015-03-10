@@ -88,7 +88,7 @@
                 var customers = customersRep.GetAll().GetById(customerId);
                 var departments = departmentsRep.GetAll().GetActiveByCustomer(customerId);
                 var userDepartments = userDepartmentsRep.GetAll();
-                var regions = regionRep.GetAll().GetActiveByCustomer(customerId);
+                var regions = regionRep.GetAll().GetById(regionId);
 
                 return DepartmentMapper.MapToUserDepartments(
                                         regions,
