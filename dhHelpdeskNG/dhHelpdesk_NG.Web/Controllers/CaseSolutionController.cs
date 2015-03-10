@@ -127,7 +127,8 @@ namespace DH.Helpdesk.Web.Controllers
             }
             else
             {
-                model.CaseSolutions = this._caseSolutionService.GetCaseSolutions(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.Name).ToList();
+                //Only return casesolution where templatepath is null and showinselfservice is false - these case solutions are E-Forms shown in myhr/linemanager/selfservice
+                model.CaseSolutions = this._caseSolutionService.GetCaseSolutions(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.Name).Where(x => x.TemplatePath == null && x.ShowInSelfService == false).ToList();
                 CS.SortBy = "Name";
                 CS.Ascending = true;
                 SessionFacade.CurrentCaseSolutionSearch = CS;
