@@ -269,9 +269,8 @@
                                 {     
                                     var curLanguage = (Model.case_.Id == 0? SessionFacade.CurrentLanguageId:Model.case_.RegLanguage_Id);                               
                                     <li class="dropdown-submenu">
-                                        <a href="#">
-                                         
-                                            @Translation.Get("Språk")
+                                        <a href="#">                                         
+                                            @Translation.Get("Språk för E-mail")
                                         </a>
                                         <ul class="dropdown-menu">
                                             @foreach (var lang in Model.Languages.Where(l => l.IsActive).ToList())

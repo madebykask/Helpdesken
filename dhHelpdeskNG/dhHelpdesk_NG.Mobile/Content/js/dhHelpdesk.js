@@ -1021,7 +1021,7 @@ function NewNotifierEvent(id) {
             $('#RegionName').val(data.regionname);
             $('#case__Department_Id').val(data.departmentid);
             $('#DepartmentName').val(data.departmentname);
-            $('#case__Ou_Id').val(data.ouid);                        
+            $('#case__OU_Id').val(data.ouid);                        
             $('#OUName').val(data.ouname);
         }
     }, 'json');
