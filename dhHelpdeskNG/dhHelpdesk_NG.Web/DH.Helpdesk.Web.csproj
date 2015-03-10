@@ -1889,6 +1889,7 @@
     <Compile Include="Areas\Admin\Models\Invoice\ArticlesImportModel.cs" />
     <Compile Include="Models\Invoice\CaseFileModel.cs" />
     <Compile Include="Models\Invoice\CaseInvoiceArticlesModel.cs" />
+    <Compile Include="Models\Profile\UserCustomersSettingsViewModel.cs" />
     <Compile Include="Models\Projects\ProjectOverviewSorting.cs" />
     <Compile Include="Models\Questionnaire\Input\CircularPartOverview.cs" />
     <Compile Include="Models\Questionnaire\Input\ConnectedToCircularOverview.cs" />
@@ -2845,6 +2846,8 @@
     <Content Include="Views\Survey\VoteError.cshtml" />
     <Content Include="Views\Shared\_Version.cshtml" />
     <Content Include="Views\Error\Unathorized.cshtml" />
+    <Content Include="Views\Profile\CustomersSettings.cshtml" />
+    <Content Include="Views\Profile\EditorTemplates\UserProfileCustomerSettings.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

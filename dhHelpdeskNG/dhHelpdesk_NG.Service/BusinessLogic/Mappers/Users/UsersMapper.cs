@@ -7,6 +7,8 @@
     using DH.Helpdesk.BusinessData.Models.Customer;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.BusinessData.Models.User.Input;
+    using DH.Helpdesk.BusinessData.Models.Users;
+    using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Domain;
@@ -118,6 +120,28 @@
                             .ToList();
 
             return entities.Select(mapper.Map).ToList();
+        }
+
+        public static List<UserProfileCustomerSettings> MapToUserProfileCustomersSettings(
+                                    IQueryable<Customer> customers,
+                                    IQueryable<User> users,
+                                    IQueryable<CustomerUser> customerUsers,
+                                    IQueryable<Setting> customerSettings)
+        {
+            var entities = (from cu in customerUsers
+                            join c in customers on cu.Customer_Id equals c.Id
+                            join u in users on cu.User_Id equals u.Id
+                            join cs in customerSettings on cu.Customer_Id equals cs.Customer_Id
+                            select new
+                                       {
+                                           cu.Customer_Id,
+                                           c.Name,
+                                           cu.ShowOnStartPage
+                                       })
+                            .OrderBy(r => r.Name)
+                            .ToList();
+
+            return entities.Select(e => new UserProfileCustomerSettings(e.Customer_Id, e.Name, e.ShowOnStartPage.ToBool())).ToList();
         }
 
         public static List<ItemOverview> MapToWorkingGroupUsers(

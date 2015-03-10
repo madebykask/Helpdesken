@@ -148,10 +148,10 @@ $(function () {
 
         that.getAdministrator = getAdministrator;
 
-        that.init = function() {
+        that.init = function(caseEntity) {
             var onChangeAdministrator = function () {
-                var regions = my.caseEntity.getUser().getRegion().getElement();
-                var departments = my.caseEntity.getUser().getDepartment().getElement();
+                var regions = caseEntity.getUser().getRegion().getElement();
+                var departments = caseEntity.getUser().getDepartment().getElement();
                 var administrators = administrator.getElement();
 
                 departments.prop('disabled', true);
@@ -224,11 +224,11 @@ $(function () {
         other.setCase(that);
         log.setCase(that);
 
-        /*user.init();
-        computer.init();
-        caseInfo.init();
-        other.init();
-        log.init();*/
+        /*user.init(that);
+        computer.init(that);
+        caseInfo.init(that);
+        other.init(that);
+        log.init(that);*/
 
         return that;
     }

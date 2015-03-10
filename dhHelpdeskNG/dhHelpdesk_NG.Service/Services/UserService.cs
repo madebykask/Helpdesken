@@ -14,6 +14,8 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.BusinessData.Models.Customer;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.BusinessData.Models.User.Input;
+    using DH.Helpdesk.BusinessData.Models.Users;
+    using DH.Helpdesk.Common.Extensions.Boolean;
     using DH.Helpdesk.Common.Extensions.String;
     using DH.Helpdesk.Dal.Infrastructure.Translate;
     using DH.Helpdesk.Dal.Mappers;
@@ -130,6 +132,10 @@ namespace DH.Helpdesk.Services.Services
         List<CustomerSettings> GetUserCustomersSettings(int userId);
 
         List<ItemOverview> GetWorkingGroupUsers(int customerId, int? workingGroupId);
+
+        List<UserProfileCustomerSettings> GetUserProfileCustomersSettings(int userId);
+
+        void UpdateUserProfileCustomerSettings(int userId, List<UserProfileCustomerSettings> customersSettings);
     }
 
     public class UserService : IUserService
@@ -860,6 +866,51 @@ namespace DH.Helpdesk.Services.Services
                                 customers,
                                 customerUsers,
                                 workingGroupId);
+            }
+        }
+
+        public List<UserProfileCustomerSettings> GetUserProfileCustomersSettings(int userId)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var customerRep = uow.GetRepository<Customer>();
+                var customerUserRep = uow.GetRepository<CustomerUser>();
+                var userRep = uow.GetRepository<User>();
+                var customerSettingsRep = uow.GetRepository<Setting>();
+
+                var customers = customerRep.GetAll();
+                var customerUsers = customerUserRep.GetAll();
+                var users = userRep.GetAll().GetById(userId);
+                var customerSettings = customerSettingsRep.GetAll();
+
+                return UsersMapper.MapToUserProfileCustomersSettings(
+                                customers,
+                                users,
+                                customerUsers,
+                                customerSettings);
+            }
+        }
+
+        public void UpdateUserProfileCustomerSettings(int userId, List<UserProfileCustomerSettings> customersSettings)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var customerUserRep = uow.GetRepository<CustomerUser>();
+
+                var customerUsers = customerUserRep.GetAll()
+                                .Where(cu => cu.User_Id == userId)
+                                .ToList();
+
+                foreach (var customerUser in customerUsers)
+                {
+                    var settings = customersSettings.FirstOrDefault(s => s.CustomerId == customerUser.Customer_Id);
+                    if (settings != null)
+                    {
+                        customerUser.ShowOnStartPage = settings.ShowOnStartPage.ToInt();
+                    }
+                }
+
+                uow.Save();
             }
         }
 
