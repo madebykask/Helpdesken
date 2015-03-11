@@ -73,10 +73,10 @@ a, a:hover, a:focus {
     margin:20px 0 20px 30px;
     color:#666;
     font-style:italic;
-    font-size:12px;
+    font-size:11px;
 }
 .footerdhhd img {
-    margin-top:-4px;
+    margin-top:-5px;
 }
 
 /************************  Content Error page *******************************************/
@@ -1651,7 +1651,8 @@ table th.thpointer {
 	border-bottom: 1px solid #dddddd;
 	border-top: 1px solid #dddddd;
 	padding:10px 0;
-	background:#fff;
+    background:#fff;
+
 }
 
 .tab-pane-border 
@@ -1659,12 +1660,24 @@ table th.thpointer {
 	padding:10px 10px 10px 10px;
 }
 
+.table-cases {
+    
+    table-layout:fixed;
+}
+
+.table-cases th, .table-cases td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
 /*.tab-pane-border .tab-pane-border div
 {
 	margin:0 0;
-}*/
+}
 
-/*.tab-pane-border div
+.tab-pane-border div
 {
 	margin:0 10px;
 }
@@ -1673,15 +1686,15 @@ table th.thpointer {
 {
 	margin-left:0;
 }
-*/
 
 
-/*.tab-pane-border div.tab-pane-border div
+
+.tab-pane-border div.tab-pane-border div
 {
 	margin:0 10px;
-}*/
+}
 
-/*.tab-pane-border div div
+.tab-pane-border div div
 {
 	margin:0 10px;
 }
