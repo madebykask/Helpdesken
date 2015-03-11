@@ -696,11 +696,6 @@
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                UserGroups = this._userService.GetUserGroups().OrderBy(x => x.Id).Select(x => new SelectListItem
-                {
-                    Text = Translation.Get(x.Name, Enums.TranslationSource.TextTranslation),
-                    Value = x.Id.ToString()
-                }).ToList(),
                 UserRoles = this._userService.GetUserRoles().Select(x => new SelectListItem
                 {
                     Text = Translation.Get(x.Description, Enums.TranslationSource.TextTranslation),
@@ -743,6 +738,26 @@
                     Value = x.Id.ToString()
                 }).ToList()
             };
+
+            
+            //If systemadministrator: select all. Else: do not select system administrator.
+            //Stopping customer administrators from changing users to system administrators.
+            if (SessionFacade.CurrentUser.UserGroupId == 4)
+            {
+                model.UserGroups = this._userService.GetUserGroups().OrderBy(x => x.Id).Select(x => new SelectListItem
+                {
+                    Text = Translation.Get(x.Name, Enums.TranslationSource.TextTranslation),
+                    Value = x.Id.ToString()
+                }).ToList();
+            }
+            else
+            {
+                model.UserGroups = this._userService.GetUserGroups().OrderBy(x => x.Id).Where(x => x.Id != 4).Select(x => new SelectListItem
+                {
+                Text = Translation.Get(x.Name, Enums.TranslationSource.TextTranslation),
+                    Value = x.Id.ToString()
+                }).ToList();
+            }
 
             #endregion
 
