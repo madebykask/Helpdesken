@@ -25,7 +25,6 @@
             List<ItemOverview> domains,
             List<ItemOverview> regions,
             List<ItemOverview> departments,
-            List<ItemOverview> organizationUnits,
             List<ItemOverview> divisions,
             List<ItemOverview> managers,
             List<ItemOverview> groups,
@@ -49,15 +48,15 @@
 
             var loginName = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.LoginName, null);
             var firstName = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.FirstName,(inputParams.ContainsKey("FName")? inputParams["FName"]:null));
-            var initials = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Initials, null);
+            var initials = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Initials, null, 10);
             var lastName = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.LastName, null);
 
             var displayName = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.DisplayName, null);
 
-            var place = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Place, (inputParams.ContainsKey("Placement") ? inputParams["Placement"] : null));
+            var place = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Place, (inputParams.ContainsKey("Placement") ? inputParams["Placement"] : null), 100);
             var phone = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Phone, (inputParams.ContainsKey("Phone") ? inputParams["Phone"] : null));
             var cellPhone = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.CellPhone, (inputParams.ContainsKey("CellPhone") ? inputParams["CellPhone"] : null));
-            var email = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Email, (inputParams.ContainsKey("Email") ? inputParams["Email"] : null));
+            var email = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Email, (inputParams.ContainsKey("Email") ? inputParams["Email"] : null), 100);
             var code = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Code, null);
 
             var postalAddress = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(
@@ -99,24 +98,7 @@
             }
 
             var unit = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Unit, null);
-
-            DropDownFieldModel organizationUnit;
-
-            if (settings.OrganizationUnit.Show)
-            {
-                var organizationUnitItems =
-                    organizationUnits.Select(u => new KeyValuePair<string, string>(u.Value, u.Name)).ToList();
-
-                organizationUnit = this.notifierInputFieldModelFactory.CreateDropDownModel(
-                    settings.OrganizationUnit,
-                    organizationUnitItems,
-                    (inputParams.ContainsKey("UnitId") ? inputParams["UnitId"] : null));
-            }
-            else
-            {
-                organizationUnit = new DropDownFieldModel(false);
-            }
-
+            
             DropDownFieldModel division;
 
             if (settings.Division.Show)
@@ -158,7 +140,7 @@
                 group = new DropDownFieldModel(false);
             }
 
-            var other = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Other, null);
+            var other = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Other, null, 500);
             var ordered = this.notifierInputFieldModelFactory.CreateInputCheckBoxModel(settings.Ordered, false);
 
             return new InputModel(
@@ -181,7 +163,6 @@
                 region,
                 department,
                 unit,
-                organizationUnit,
                 division,
                 manager,
                 group,

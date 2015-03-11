@@ -24,7 +24,6 @@
     public class MvcApplication : HttpApplication
     {
         private readonly IConfiguration configuration = ManualDependencyResolver.Get<IConfiguration>();
-        private readonly IWorkContext workContext = ManualDependencyResolver.Get<IWorkContext>();
 
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
@@ -43,9 +42,7 @@
         }
 
         protected void Application_Start()
-        {
-            
-
+        {           
             AreaRegistration.RegisterAllAreas();
 
             // No need to load all view engines
@@ -116,12 +113,13 @@
                 action = "BusinessLogicError";
             }
 
+            var workContext = ManualDependencyResolver.Get<IWorkContext>();
             LogManager.Error.Error(new ErrorContext(
                                         ex,
                                         currentController,
                                         currentAction,
                                         httpContext,
-                                        this.workContext).ToString());
+                                        workContext).ToString());
 
             httpContext.ClearError();
             httpContext.Response.Clear();

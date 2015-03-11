@@ -73,10 +73,10 @@ a, a:hover, a:focus {
     margin:20px 0 20px 30px;
     color:#666;
     font-style:italic;
-    font-size:12px;
+    font-size:11px;
 }
 .footerdhhd img {
-    margin-top:-4px;
+    margin-top:-5px;
 }
 
 /************************  Content Error page *******************************************/
@@ -1020,7 +1020,7 @@ label.error
     margin-left: 10px;
 }
 
-input[type=text].error, select.error, textarea.error
+input[type=text].error, select.error, textarea.error,  .btn-group.error .btn
 {
     border: 1px solid #ff0000;
     background-color: #ffeeee;
@@ -1651,7 +1651,8 @@ table th.thpointer {
 	border-bottom: 1px solid #dddddd;
 	border-top: 1px solid #dddddd;
 	padding:10px 0;
-	background:#fff;
+    background:#fff;
+
 }
 
 .tab-pane-border 
@@ -1659,12 +1660,24 @@ table th.thpointer {
 	padding:10px 10px 10px 10px;
 }
 
+.table-cases {
+    
+    table-layout:fixed;
+}
+
+.table-cases th, .table-cases td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
 /*.tab-pane-border .tab-pane-border div
 {
 	margin:0 0;
-}*/
+}
 
-/*.tab-pane-border div
+.tab-pane-border div
 {
 	margin:0 10px;
 }
@@ -1673,15 +1686,15 @@ table th.thpointer {
 {
 	margin-left:0;
 }
-*/
 
 
-/*.tab-pane-border div.tab-pane-border div
+
+.tab-pane-border div.tab-pane-border div
 {
 	margin:0 10px;
-}*/
+}
 
-/*.tab-pane-border div div
+.tab-pane-border div div
 {
 	margin:0 10px;
 }
@@ -1720,7 +1733,7 @@ input[type="checkbox"],
   margin-bottom: 5px;
 }
 
-    .secnav input[type="submit"].btn {
+    .secnav input[type="submit"].btn, .secnav input[type="button"].btn {
         margin-bottom: 0px;
     }
 
@@ -1781,6 +1794,10 @@ td.td-bottom-multiselect .btn-group {
 
     .graph.unread {
         background: #438eb9;
+    }
+
+    .graph.unreaded {
+        background: #d96326;
     }
 
     .graph.finished {
@@ -2969,6 +2986,11 @@ div.DTTT_print_info p {
 	line-height: 20px;
 }
 
+.customers.dropdown-menu
+{
+    overflow: auto;
+    max-height: 500px;    
+}
 
 
 /*
@@ -3013,7 +3035,7 @@ div.DTFC_LeftFootWrapper table {
 }
 
 .popup .faq .tab-content {
-    overflow: hidden;
+    /*overflow: hidden;*/
 }
 .popup .modal {
     margin-left: -50%;

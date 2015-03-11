@@ -10,5 +10,7 @@
     public interface IOrganizationUnitRepository : IRepository<OU>
     {
         List<ItemOverview> FindActiveAndShowable();
+        
+        IEnumerable<OU> GetActiveAndShowable();
     }
 }

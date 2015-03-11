@@ -15,29 +15,28 @@
     public interface IHolidayService
     {
         IEnumerable<Holiday> GetAll();
+
         IEnumerable<HolidayHeader> GetHolidayHeaders();
 
         IEnumerable<Holiday> GetHolidaysByHeaderId(int id);
+
         IEnumerable<Holiday> GetHolidaysByHeaderIdAndYear(int year, int id);
 
         IList<Holiday> GetHolidaysByHeaderIdAndYearForList(int year, int id);
 
         Holiday GetHoliday(int id);
+
         HolidayHeader GetHolidayHeader(int id);
 
         DeleteMessage DeleteHoliday(int id);
 
         void SaveHoliday(Holiday holiday, out IDictionary<string, string> errors);
-        void SaveHolidayHeader(HolidayHeader holidayheader, out IDictionary<string, string> errors);
-        void Commit();
 
-        /// <summary>
-        /// The get holidays.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="IEnumerable"/>.
-        /// </returns>
-        IEnumerable<HolidayOverview> GetHolidays();
+        void SaveHolidayHeader(HolidayHeader holidayheader, out IDictionary<string, string> errors);
+
+        IEnumerable<HolidayOverview> GetHolidayOverviews();
+
+        IEnumerable<HolidayOverview> GetDefaultCalendar();
     }
 
     public class HolidayService : IHolidayService
@@ -48,9 +47,12 @@
 
         private readonly IUnitOfWorkFactory unitOfWorkFactory;
 
+        private readonly IDepartmentRepository departmentRepository;
+
         public HolidayService(
             IHolidayRepository holidayRepository,
             IHolidayHeaderRepository holidayHeaderRepository,
+            IDepartmentRepository departmentRepository,
             IUnitOfWork unitOfWork, 
             IUnitOfWorkFactory unitOfWorkFactory)
         {
@@ -58,6 +60,7 @@
             this._holidayHeaderRepository = holidayHeaderRepository;
             this._unitOfWork = unitOfWork;
             this.unitOfWorkFactory = unitOfWorkFactory;
+            this.departmentRepository = departmentRepository;
         }
 
         public IEnumerable<Holiday> GetAll()
@@ -159,25 +162,20 @@
             return DeleteMessage.Error;
         }
 
-        public void Commit()
+        public IEnumerable<HolidayOverview> GetHolidayOverviews()
         {
-            this._unitOfWork.Commit();
+            return this.departmentRepository.GetAll().MapToOverviewsDept();
         }
 
-        /// <summary>
-        /// The get holidays.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="IEnumerable"/>.
-        /// </returns>
-        public IEnumerable<HolidayOverview> GetHolidays()
+        public IEnumerable<HolidayOverview> GetDefaultCalendar()
         {
-            using (var uow = this.unitOfWorkFactory.Create())
-            {
-                var rep = uow.GetRepository<Holiday>();
+            const int DEFAULT_CALENDAR_ID = 1;
+            return this._holidayRepository.GetHolidaysByHeaderId(DEFAULT_CALENDAR_ID).MapToOverviews();
+        }
 
-                return rep.GetAll().MapToOverviews();
-            }
+        private void Commit()
+        {
+            this._unitOfWork.Commit();
         }
     }
 }

@@ -2,9 +2,12 @@
 @if (Model != null && Model.CustomerChanges != null && Model.CustomerChanges.Any())
 {
     <div class="box-header portlet-header">
-        <div class="start-tile-img label orange">
-            <a href="@Url.Action("index", "changes", new {area = ""})"><img src="@Url.Content("~/Content/icons/changes.png")" alt="@Translation.Get("Kund")" /></a>
-        </div>
+        @if (Model.ShowIcon)
+        {
+            <div class="start-tile-img label orange">
+                <a href="@Url.Action("index", "changes", new {area = ""})"><img src="@Url.Content("~/Content/icons/changes.png")" alt="@Translation.Get("Kund")" /></a>
+            </div>            
+        }
         <h4>@Translation.Get("Sammanfattning - Ändringshantering")</h4>
     </div>
     <div class="box-body portlet-content">

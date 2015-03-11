@@ -51,7 +51,7 @@
             if (string.IsNullOrEmpty(infoText.Name))
                 errors.Add("InfoText.Name", "Du måste ange en informationstext");
             
-            infoText.Name = infoText.Name.Replace(global::System.Environment.NewLine, "<br />");
+            //infoText.Name = infoText.Name.Replace(global::System.Environment.NewLine, "<br />"); 
             infoText.Name = Guard.Sanitize(infoText.Name);
             infoText.ChangedDate = DateTime.UtcNow;
 

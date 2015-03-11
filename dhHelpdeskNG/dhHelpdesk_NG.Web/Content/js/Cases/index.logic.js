@@ -157,3 +157,50 @@ function ShowToastMessage(message, msgType) {
         }
     });
 }
+
+$(function () {
+    if (!window.dhHelpdesk) {
+        window.dhHelpdesk = {};
+    }
+
+    if (!window.dhHelpdesk.casesList) {
+        window.dhHelpdesk.casesList = {};
+    }
+
+    dhHelpdesk.casesList.scope = function (spec, my) {
+        spec = spec || {};
+        my = my || {};
+        var that = {};
+
+        var getDepartmentsUrl = spec.getDepartmentsUrl || '';
+        var regions = $('[data-field="region"]');
+        var departments = $('[data-field="department"]');
+        var administrators = $('[data-field="administrator"]');
+
+        var refreshDepartments = function () {
+            var departmentFilterFormat = 0;
+
+            departments.prop('disabled', true);
+            departments.empty();
+            departments.append('<option />');
+
+            $.getJSON(getDepartmentsUrl + '?regionId=' + regions.val() +
+                                        '&administratorId=' + administrators.val() + 
+                                        '&departmentFilterFormat=' + departmentFilterFormat, function (data) {
+                                            for (var i = 0; i < data.length; i++) {
+                                                var item = data[i];
+                                                departments.append("<option value='" + item.Value + "'>" + item.Name + "</option>");
+                                            }
+                                        })
+            .always(function () {
+                departments.prop('disabled', false);
+            });
+        }
+
+        /*regions.change(refreshDepartments);
+        administrators.change(refreshDepartments);
+        refreshDepartments();*/
+
+        return that;
+    }
+});

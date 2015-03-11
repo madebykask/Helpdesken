@@ -38,8 +38,13 @@
 
         public StringFieldModel CreateInputTextBoxModel(FieldOverviewSetting setting, string value)
         {
+            return this.CreateInputTextBoxModel(setting, value, 50);
+        }
+
+        public StringFieldModel CreateInputTextBoxModel(FieldOverviewSetting setting, string value, int maxLength)
+        {
             return setting.Show
-                ? new StringFieldModel(true, setting.Caption, value, setting.Required, 100)
+                ? new StringFieldModel(true, setting.Caption, value, setting.Required, maxLength)
                 : new StringFieldModel(false);
         }
 

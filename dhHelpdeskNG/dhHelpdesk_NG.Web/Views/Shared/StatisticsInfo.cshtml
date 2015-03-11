@@ -19,11 +19,11 @@
                             </p>
                         </div>
                         <div class="span3">                                                    
-                            <div class="graph finished">
-                                <strong class="bar" style="height: @(GetScale(Model.EndedCases))%;">@Model.EndedCases</strong>
+                            <div class="graph unreaded">
+                                <strong class="bar" style="height: @(GetScale(Model.UnreadCases))%;">@Model.UnreadCases</strong>
                             </div>
                             <p>
-                                @Translation.Get("Avslutade")                                
+                                @Translation.Get("Olästa ärenden")                                
                             </p>
                         </div>
                         <div class="span3">                                                    
@@ -52,8 +52,9 @@
 {
     private int GetScale(int value)
     {
-        var max = Math.Max(Model.ActiveCases, Model.EndedCases);
-        max = Math.Max(max, Model.InRestCases);
+        var max = Math.Max(Model.ActiveCases, Model.InRestCases);
+        max = Math.Max(max, Model.MyCases);
+        max = Math.Max(max, Model.UnreadCases);
 
         var result = 100 - (int)((value/(float) max) * 100);
 

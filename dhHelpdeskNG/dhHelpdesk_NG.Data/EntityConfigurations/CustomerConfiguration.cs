@@ -72,6 +72,9 @@
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             this.Property(x => x.CommunicateWithNotifier).IsRequired();
             this.Property(x => x.ShowDocumentsOnExternalPage).IsRequired();
+            this.Property(x => x.ShowFAQOnExternalStartPage).IsOptional();
+            this.Property(x => x.ShowCoWorkersOnExternalPage).IsRequired();
+            this.Property(x => x.ShowHelpOnExternalPage).IsRequired();
 
             this.ToTable("tblcustomer");
         }

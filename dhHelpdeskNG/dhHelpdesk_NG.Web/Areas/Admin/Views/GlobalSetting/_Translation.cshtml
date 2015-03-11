@@ -2,6 +2,7 @@
 @model DH.Helpdesk.Web.Areas.Admin.Models.GlobalSettingTextTranslationViewModel
 @{              
     string newtext = Request.QueryString["newtext"];
+    DateTime defDate = DateTime.Now;
 }
 @if (TempData["Error"] != null)
 {
@@ -60,48 +61,29 @@
                                 @if (newtext != "1")
                                 {
                                     if (Model.Text.Id > 4999)
-                                    {
-                                        if (Model.ListForEdit.Count > 0)
+                                    {                                        
+                                        foreach (var item in Model.Languages)
                                         {
-                                            foreach (var item in Model.ListForEdit)
-                                            {
-                                                <tr>
-                                                    <td style="width:200px">
-                                                        @Html.DisplayFor(modelItem => item.LanguageName)
-                                                    </td>
-                                                    <td>
-                                                        <input type="text" name="@string.Format("TTs[{0}].TranslationName", i)", value="@item.TranslationName" />
-                                                        <input type="hidden" name="@string.Format("TTs[{0}].Text_Id", i)" value="@item.Text_Id" />
-                                                        <input type="hidden" name="@string.Format("TTs[{0}].Language_Id", i)" value="@item.Language_Id" />
-                                                        <input type="hidden" name="@string.Format("TTs[{0}].TextTranslation_Id", i)" value="@item.TextTranslation_Id" />
+                                            var curTranslation = Model.ListForEdit.Where(t=> t.Language_Id == int.Parse(item.Value)).SingleOrDefault();
+                                                
+                                            <tr>
+                                                <td style="width:200px">
+                                                    @Html.Label(Translation.Get(item.Text))                                                    
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="@string.Format("TTs[{0}].TranslationName", i)", value="@(curTranslation==null?"":curTranslation.TranslationName)" />
+                                                    <input type="hidden" name="@string.Format("TTs[{0}].Text_Id", i)" value="@Model.Text.Id" />
+                                                    <input type="hidden" name="@string.Format("TTs[{0}].Language_Id", i)" value="@item.Value" />
+                                                    <input type="hidden" name="@string.Format("TTs[{0}].TextTranslation_Id", i)" value="@(curTranslation==null ? "": curTranslation.TextTranslation_Id.ToString())" />
+                                                    <input type="hidden" name="@string.Format("TTs[{0}].CreatedDate", i)" value="@(curTranslation==null ? defDate.ToString() : curTranslation.CreatedDate.ToString())" />
 
-                                                    </td> 
-                                                </tr>                        
-                                                    i++;
-                                            }
-                                        }
-                                        else
-                                        {
-                                            foreach (var item in Model.ListForNew)
-                                            {
-                                                <tr>
-                                                    <td style="width:200px">
-                                                        @Html.DisplayFor(modelItem => item.LanguageName)
-                                                    </td>
-                                                    <td>
-                                                        <input type="text" name="@string.Format("TTs[{0}].TranslationName", i)", value="@item.TranslationName" />
-                                                        <input type="hidden" name="@string.Format("TTs[{0}].Text_Id", i)" value="@item.Text_Id" />
-                                                        <input type="hidden" name="@string.Format("TTs[{0}].Language_Id", i)" value="@item.Language_Id" />
-                                                    </td> 
-                                                </tr>                            
-                                                    i++;
-                                            }
-                                        }
+                                                </td> 
+                                            </tr>                        
+                                            i++;
+                                        }                                                                               
                                     }
                                 }
-                            </table>
-                        @*<input type="hidden" id="LanguageId" name="LanguageId" value="@Model.TextTranslation.Language_Id" />*@
-                        @*<input type="hidden" id="TextTypeId" name="TextTypeId" value="@Model.TextType.Id" />*@
+                            </table>                        
                         </div>
                     </div>
                 </div>

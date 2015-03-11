@@ -25,7 +25,7 @@
         {
             this.Value = value;
             this.Required = required;
-            this.MaxLength = 100;
+            this.MaxLength = maxLength;
         }
 
         [MinValue(0)]

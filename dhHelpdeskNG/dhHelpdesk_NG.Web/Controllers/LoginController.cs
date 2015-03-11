@@ -38,8 +38,13 @@
         [HttpGet]
         public ActionResult Logout()
         {
-            this.Session.Clear();
-            ApplicationFacade.RemoveLoggedInUser(Session.SessionID);
+            if (this.Session != null)
+            {
+                this.Session.Clear();
+                ApplicationFacade.RemoveLoggedInUser(this.Session.SessionID);  
+                this.Session.Abandon();
+            }
+
             FormsAuthentication.SignOut();            
             return this.View("Login");
         }

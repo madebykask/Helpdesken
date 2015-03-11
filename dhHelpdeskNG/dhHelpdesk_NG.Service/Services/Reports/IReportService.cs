@@ -6,6 +6,7 @@
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseSatisfaction;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeActiveCases;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeFinishedCases;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.RegistratedCasesDay;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.ReportGenerator;
@@ -90,5 +91,15 @@
                                     DateTime? periodUntil,
                                     int leadTime,
                                     bool isShowDetails);
+
+        LeadtimeActiveCasesOptions GetLeadtimeActiveCasesOptions(int customerId);
+
+        LeadtimeActiveCasesData GetLeadtimeActiveCasesData(
+                                    int customerId,
+                                    List<int> departmentIds,
+                                    int? caseTypeId,
+                                    int highHours,
+                                    int mediumDays,
+                                    int lowDays);
     }
 }

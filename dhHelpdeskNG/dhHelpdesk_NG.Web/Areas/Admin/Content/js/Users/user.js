@@ -41,7 +41,7 @@ $(function () {
     dhHelpdesk.admin.users.userGroup = {
         user: 1,
         administrator: 2,
-        customAdministrator: 3,
+        customerAdministrator: 3,
         systemAdministrator: 4
     }
 
@@ -83,6 +83,9 @@ $(function () {
 
         var type = spec.type || '';
         var hasPermission = spec.hasPermission || my.element.prop('checked');
+        var isHasAccess = spec.isHasAccess || true;
+        var hidden = $(document).find('[name="' + my.element.attr('name') + '"]');
+        hidden.val(hasPermission ? 1 : 0);
 
         var getHasPermission = function() {
             return hasPermission;
@@ -91,23 +94,31 @@ $(function () {
         var setHasPermission = function(p) {
             hasPermission = p;
             my.element.prop('checked', p);
+            hidden.val(hasPermission ? 1 : 0);
         }
 
         var getType = function() {
             return type;
         }
 
-        var setAccess = function(isHasAccess) {
+        var setAccess = function (hasAccess) {
+            isHasAccess = hasAccess;
             my.element.prop('disabled', !isHasAccess);
+        }
+
+        var getIsHasAccess = function() {
+            return isHasAccess;
         }
 
         that.getType = getType;
         that.getHasPermission = getHasPermission;
         that.setHasPermission = setHasPermission;
         that.setAccess = setAccess;
+        that.getIsHasAccess = getIsHasAccess;
 
         my.element.click(function() {
             hasPermission = my.element.prop('checked');
+            hidden.val(hasPermission ? 1 : 0);
         });
 
         return that;
@@ -149,20 +160,61 @@ $(function () {
             return userGroup;
         }
 
-        var setUserGroup = function(ug) {
+        var setUserGroup = function (ug, sp) {
             userGroup = ug;
+
+            var setPermissions = sp !== 'undefined' ? sp : true;
 
             switch (ug) {
                 case dhHelpdesk.admin.users.userGroup.user:
                     walkPermissions(function (permission) {
                         permission.setAccess(false);
-                        permission.setHasPermission(permission.getType() == dhHelpdesk.admin.users.permissionType.createCasePermission);
+
+                        if (setPermissions || !permission.getIsHasAccess()) {
+                            var hasPermission = permission.getType() == dhHelpdesk.admin.users.permissionType.createCasePermission;
+                            permission.setHasPermission(hasPermission);
+                        }
+
+                        return true;
+                    });
+                    break;
+                case dhHelpdesk.admin.users.userGroup.administrator:
+                    walkPermissions(function (permission) {
+                        var type = permission.getType();
+                        
+                        permission.setAccess(true);
+
+                        if (setPermissions || !permission.getIsHasAccess()) {
+                            var hasPermission = type != dhHelpdesk.admin.users.permissionType.faqPermission;
+                            permission.setHasPermission(hasPermission);
+                        }
+
+                        return true;
+                    });
+                    break;
+                case dhHelpdesk.admin.users.userGroup.customerAdministrator:
+                case dhHelpdesk.admin.users.userGroup.systemAdministrator:
+                    walkPermissions(function (permission) {
+                        var type = permission.getType();
+
+                        var hasAccess = type != dhHelpdesk.admin.users.permissionType.faqPermission;
+                        permission.setAccess(hasAccess);
+
+                        if (setPermissions || !permission.getIsHasAccess()) {
+                            permission.setHasPermission(true);
+                        }
+
                         return true;
                     });
                     break;
                 default:
                     walkPermissions(function (permission) {
-                        permission.setAccess(true);
+                        permission.setAccess(false);
+
+                        if (setPermissions || !permission.getIsHasAccess()) {
+                            permission.setHasPermission(false);
+                        }
+
                         return true;
                     });
                     break;
@@ -203,11 +255,11 @@ $(function () {
         that.getOrderPermissions = getOrderPermissions;
 
         var uge = my.element.find('[data-field="userGroup"]');
-        var onChangeUserGroup = function () {
+        var onChangeUserGroup = function (setPermissions) {
             var ug = parseInt(uge.val());
-            setUserGroup(ug);
+            setUserGroup(ug, setPermissions);
         }
-        onChangeUserGroup();
+        onChangeUserGroup(false);
         uge.change(onChangeUserGroup);
 
         return that;
@@ -270,6 +322,12 @@ $(function () {
         var user = dhHelpdesk.admin.users.user({
             security: security
         });
+
+        var getUser = function() {
+            return user;
+        }
+
+        that.getUser = getUser;
 
         return that;
     }

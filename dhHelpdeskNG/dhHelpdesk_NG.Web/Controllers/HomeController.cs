@@ -154,19 +154,29 @@
             };
 
             var customers = this.customerUserService.GetCustomerUsersForHomeIndexPage(SessionFacade.CurrentUser.Id);
-            var customersIds = customers.Select(c => c.Customer.Customer_Id).ToArray();
-            var customerSettings = this.workContext.Customer.Settings;
+
+            if (!customers.Any())
+            {
+                return model;
+            }
+
+            var customersSettings = this.userService.GetUserCustomersSettings(SessionFacade.CurrentUser.Id);
+            var currentCustomerSettings = customersSettings.First(s => s.CustomerId == this.workContext.Customer.CustomerId);
             foreach (var module in modules)
             {
-                if (!customerSettings.IsModuleOn((Module)module.Module_Id))
-                {
-                    continue;
-                }
-
                 if (!module.isVisible)
                 {
                     continue;
                 }
+
+                if (!customersSettings.Any(s => s.IsModuleOn((Module)module.Module_Id)))
+                {
+                    continue;
+                }
+
+                var customersIds = module.NumberOfRows.HasValue
+                                                  ? customers.Take(module.NumberOfRows.Value).Select(c => c.Customer.Customer_Id).ToArray()
+                                                  : customers.Select(c => c.Customer.Customer_Id).ToArray();
 
                 switch ((Module)module.Module_Id)
                 {
@@ -177,11 +187,7 @@
                         model.CalendarOverviews = this.calendarService.GetCalendarOverviews(customersIds, module.NumberOfRows, true, true);
                         break;
                     case Module.Customers:
-
-                        var showedCustomers = !module.NumberOfRows.HasValue
-                                                  ? customers.Select(c => c.Customer.Customer_Id).ToArray()
-                                                  : customers.Take(module.NumberOfRows.Value).Select(c => c.Customer.Customer_Id).ToArray();
-                        var customerCases = this.caseService.GetCustomersCases(showedCustomers, this.workContext.User.UserId);                        
+                        var customerCases = this.caseService.GetCustomersCases(customersIds, this.workContext.User.UserId);                        
                         model.CustomersInfo = this.caseModelFactory.CreateCustomerCases(customerCases);
                         break;
                     case Module.DailyReport:
@@ -203,27 +209,16 @@
                         model.LinksInfo = this.linkModelFactory.GetLinksViewModel(this.linkService.GetLinkOverviews(customersIds, module.NumberOfRows, true));
                         break;
                     case Module.Statistics:
-                        model.StatisticsOverviews = this.statisticsService.GetStatistics(
-                                                                        module.NumberOfRows.HasValue ? customersIds.Take(module.NumberOfRows.Value).ToArray() : customersIds,                     
-                                                                        this.workContext.User.UserId);
+                        model.StatisticsOverviews = this.statisticsService.GetStatistics(customersIds, this.workContext.User.UserId);
                         break;
                     case Module.ChangeManagement:
-                        var changesCustomers = customers.Where(c => c.Settings.IsModuleOn(Module.ChangeManagement));
-                        if (module.NumberOfRows.HasValue)
-                        {
-                            changesCustomers = changesCustomers.Take(module.NumberOfRows.Value);
-                        }
-
-                        var customerChanges = this.changeService.GetCustomerChanges(
-                                            changesCustomers.Select(c => c.Customer.Customer_Id).ToArray(),
-                                            SessionFacade.CurrentUser.Id);
-
-                        model.CustomerChanges = this.modulesInfoFactory.GetCustomerChangesModel(customerChanges);
+                        var customerChanges = this.changeService.GetCustomerChanges(customersIds, SessionFacade.CurrentUser.Id);
+                        var showIcon = currentCustomerSettings.IsModuleOn(Module.ChangeManagement);
+                        model.CustomerChanges = this.modulesInfoFactory.GetCustomerChangesModel(customerChanges, showIcon);
                         break;
                     case Module.Cases:
                         var myCases = this.caseService.GetMyCases(this.workContext.User.UserId, module.NumberOfRows);                       
-                        model.MyCases = this.modulesInfoFactory.GetMyCasesModel(myCases);
-                      
+                        model.MyCases = this.modulesInfoFactory.GetMyCasesModel(myCases);                      
                         break;
                 }
             }

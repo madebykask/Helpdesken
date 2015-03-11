@@ -1,31 +1,27 @@
-﻿
-@using System.Web.Optimization
+﻿@using System.Web.Optimization
 @model DH.Helpdesk.Web.Models.Notifiers.InputModel
            
 @Scripts.Render("~/bundles/notifiers/notifier")
 
 <script type="text/javascript">
-    var parameters = {};
-    parameters.departmentDropDownUrl = '@Url.Action("DepartmentDropDown")';
+    window.parameters = {
+        departmentDropDownUrl: '@Url.Action("DepartmentDropDown")'
+    };
 
     @if (Model.Managers.Show)
     {
-        @:parameters.showManager = true;
-        @:parameters.managers = [];
+        @:window.parameters.showManager = true;
+        @:window.parameters.managers = [];
 
         foreach (var manager in Model.Managers.Value.Items)
         {
-            @:parameters.managers.push({ displayName: '@manager.Name', id: '@manager.Value' });
+            @:window.parameters.managers.push({ displayName: '@manager.Name', id: '@manager.Value' });
         }
     }
     else
     {
-        @:parameters.showManager = false;
+        @:window.parameters.showManager = false;
     }
-
-    $(function() {
-        applyPageBehavior(parameters);
-    });
 </script>
 
 <div class="content">
@@ -36,34 +32,19 @@
                     <a href="#fragment-1">@Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation)</a>
                 </li>
             </ul>
-           @* <div class="tab-content">
+            <div class="tab-content">
                 <div class="tab-pane tab-pane-border active" id="fragment-1">
                     @if (Model.UserId.Show || Model.Domain.Show || Model.LoginName.Show || Model.FirstName.Show || Model.Initials.Show || Model.LastName.Show || Model.DisplayName.Show || Model.Place.Show || Model.Phone.Show || Model.CellPhone.Show || Model.Email.Show || Model.Code.Show)
                     {
                         @Html.Partial("NotifierEdit/GeneralFields", Model)
                     }
-    @*<div class="container">
-        <ul class="nav nav-tabs">
-            <li class="active">
-                <a href="#fragment-1">@Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation)</a>
-            </li>
-        </ul>*@
-
-
-
-        <div class="tab-content">
-            <div class="tab-pane tab-pane-border active" id="fragment-1">
-                @if (Model.UserId.Show || Model.Domain.Show || Model.LoginName.Show || Model.FirstName.Show || Model.Initials.Show || Model.LastName.Show || Model.DisplayName.Show || Model.Place.Show || Model.Phone.Show || Model.CellPhone.Show || Model.Email.Show || Model.Code.Show)
-                {
-                    @Html.Partial("NotifierEdit/GeneralFields", Model)
-                }
                 
                     @if (Model.PostalAddress.Show || Model.PostalCode.Show || Model.City.Show)
                     {
                         @Html.Partial("NotifierEdit/AddressFields", Model)
                     }
                     
-                    @if (Model.Title.Show || Model.Department.Show || Model.Unit.Show || Model.OrganizationUnit.Show || Model.Division.Show || Model.Managers.Show || Model.Group.Show || Model.Other.Show)
+                    @if (Model.Title.Show || Model.Department.Show || Model.Unit.Show || ViewBag.displaySettings.OrganizationUnit.Show || Model.Division.Show || Model.Managers.Show || Model.Group.Show || Model.Other.Show)
                     {
                         @Html.Partial("NotifierEdit/OrganizationFields", Model)
                     }
@@ -75,8 +56,31 @@
                 
                     @Html.Partial("NotifierEdit/StateFields", Model)
                 </div>
-            </div>
+             </div>
         </div>
     </div>
 </div>
-          
+
+
+<script type="text/javascript">
+
+    $("#DepartmentErrorMessage").hide();
+
+    
+    $("#department_dropdown").change(function () {
+        if ('@Model.Department.Required' && $('#department_dropdown').val() == "") {
+            $("#DepartmentErrorMessage").show();
+        }
+        else {
+            $("#DepartmentErrorMessage").hide();
+        }
+    });
+
+    $("#target").submit(function (event) {
+        if ('@Model.Department.Required' && $('#department_dropdown').val() == "") {
+            $("#DepartmentErrorMessage").show();
+            return false;
+        }
+        
+    });
+</script>          

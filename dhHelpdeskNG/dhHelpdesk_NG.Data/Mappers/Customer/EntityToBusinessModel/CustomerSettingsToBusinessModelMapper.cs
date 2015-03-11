@@ -36,6 +36,7 @@ namespace DH.Helpdesk.Dal.Mappers.Customer.EntityToBusinessModel
             
             return new CustomerSettings
                        {
+                           CustomerId = entity.Customer_Id,
                            ModuleAccount = entity.ModuleAccount.ToBool(),
                            ModuleAdSync = entity.ModuleADSync.ToBool(),
                            ModuleAsset = entity.ModuleAsset.ToBool(),   

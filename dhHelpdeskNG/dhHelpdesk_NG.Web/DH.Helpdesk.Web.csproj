@@ -15,7 +15,7 @@
     <AssemblyName>DH.Helpdesk.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <SccProjectName>
     </SccProjectName>
     <SccLocalPath>
@@ -31,9 +31,12 @@
     <OldToolsVersion>4.0</OldToolsVersion>
     <IISExpressSSLPort>
     </IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
-    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
+    <IISExpressAnonymousAuthentication>
+    </IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>
+    </IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode>
+    </IISExpressUseClassicPipelineMode>
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
     <DontImportPostSharp>True</DontImportPostSharp>
     <TargetFrameworkProfile />
@@ -211,6 +214,7 @@
     <Compile Include="App_Start\NinjectModules\Common\UserModule.cs" />
     <Compile Include="App_Start\NinjectModules\Common\WorkContextModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\AccountModule.cs" />
+    <Compile Include="App_Start\NinjectModules\Modules\AdminModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\CasesModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\ChangesModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\EmailModule.cs" />
@@ -1497,8 +1501,10 @@
     <Content Include="Content\js\lib\angular-1.3.11\i18n\angular-locale_zu-za.js" />
     <Content Include="Content\js\lib\angular-1.3.11\i18n\angular-locale_zu.js" />
     <Content Include="Content\js\lib\angular-1.3.11\version.txt" />
+    <Content Include="Content\js\Notifiers\edit.js" />
     <Content Include="Content\templates\case-invoice-case-files.tmpl.html" />
     <Compile Include="Areas\Reports\Controllers\ReportController.cs" />
+    <Compile Include="Areas\Reports\Controllers\ServicesController.cs" />
     <Compile Include="Areas\Reports\Infrastructure\Concrete\ExcelBuilder.cs" />
     <Compile Include="Areas\Reports\Infrastructure\Concrete\PrintBuilder.cs" />
     <Compile Include="Areas\Reports\Infrastructure\Concrete\ReportsBuilder.cs" />
@@ -1517,6 +1523,7 @@
     <Compile Include="Areas\Reports\Infrastructure\Utils\ReportUtils.cs" />
     <Compile Include="Areas\Reports\Models\Options\CaseSatisfactionOptions.cs" />
     <Compile Include="Areas\Reports\Models\Options\CaseTypeArticleNoOptionsModel.cs" />
+    <Compile Include="Areas\Reports\Models\Options\LeadtimeActiveCasesOptionsModel.cs" />
     <Compile Include="Areas\Reports\Models\Options\LeadtimeFinishedCasesOptionsModel.cs" />
     <Compile Include="Areas\Reports\Models\Options\RegistratedCasesDayOptionsModel.cs" />
     <Compile Include="Areas\Reports\Models\Options\ReportGenerator\ReportGeneratorFilterModel.cs" />
@@ -1525,6 +1532,7 @@
     <Compile Include="Areas\Reports\Models\Options\ReportsOptions.cs" />
     <Compile Include="Areas\Reports\Models\Reports\CaseSatisfactionReport.cs" />
     <Compile Include="Areas\Reports\Models\Reports\CaseTypeArticleNoModel.cs" />
+    <Compile Include="Areas\Reports\Models\Reports\LeadtimeActiveCasesModel.cs" />
     <Compile Include="Areas\Reports\Models\Reports\LeadtimeFinishedCasesModel.cs" />
     <Compile Include="Areas\Reports\Models\Reports\ReportGenerator\CaseOverviewModel.cs" />
     <Compile Include="Areas\Reports\Models\Reports\ReportGenerator\ReportGeneratorModel.cs" />
@@ -1579,6 +1587,8 @@
     <Compile Include="Infrastructure\ApplicationFacade.cs" />
     <Compile Include="Infrastructure\Attributes\CustomHandleErrorAttribute.cs" />
     <Compile Include="Infrastructure\Attributes\CurrentTabAttribute.cs" />
+    <Compile Include="Infrastructure\Attributes\SessionRequiredAttribute.cs" />
+    <Compile Include="Infrastructure\Attributes\UserPermissionsAttribute.cs" />
     <Compile Include="Infrastructure\Binders\BinderHelper.cs" />
     <Compile Include="Infrastructure\Binders\DateTimeBinder.cs" />
     <Compile Include="Infrastructure\Binders\NullableDateTimeBinder.cs" />
@@ -1799,7 +1809,6 @@
     <Compile Include="Infrastructure\ModelFactories\Projects\IUpdatedProjectViewModelFactory.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtension.cs" />
     <Compile Include="Infrastructure\Extensions\IntegerExtensions.cs" />
-    <Compile Include="Infrastructure\Permission.cs" />
     <Compile Include="Infrastructure\SessionFacade.cs" />
     <Compile Include="Infrastructure\Extensions\StringExtensions.cs" />
     <Compile Include="Infrastructure\Session\ActiveTab.cs" />
@@ -1818,6 +1827,7 @@
     <Compile Include="Infrastructure\Translation.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\Rules\ModelClientValidationMaxLengthFromRule.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\Rules\ModelClientValidationRequiredFromRule.cs" />
+    <Compile Include="Infrastructure\WorkingTimeCalculatorFactory.cs" />
     <Compile Include="Models\BulletinBoardInputViewModel.cs" />
     <Compile Include="Models\CalendarInputViewModel.cs" />
     <Compile Include="Models\CaseSolutionSettingModel.cs" />
@@ -1880,6 +1890,7 @@
     <Compile Include="Areas\Admin\Models\Invoice\ArticlesImportModel.cs" />
     <Compile Include="Models\Invoice\CaseFileModel.cs" />
     <Compile Include="Models\Invoice\CaseInvoiceArticlesModel.cs" />
+    <Compile Include="Models\Profile\UserCustomersSettingsViewModel.cs" />
     <Compile Include="Models\Projects\ProjectOverviewSorting.cs" />
     <Compile Include="Models\Questionnaire\Input\CircularPartOverview.cs" />
     <Compile Include="Models\Questionnaire\Input\ConnectedToCircularOverview.cs" />
@@ -2488,6 +2499,8 @@
     <Content Include="Areas\Reports\Views\Report\Reports\LeadtimeFinishedCases.cshtml" />
     <Content Include="Areas\Admin\Views\SelfServiceSetting\Index.cshtml" />
     <Content Include="Areas\Admin\Views\SelfServiceSetting\EditRegMessage.cshtml" />
+    <Content Include="Areas\Reports\Views\Report\Options\LeadtimeActiveCases.cshtml" />
+    <Content Include="Areas\Reports\Views\Report\Reports\LeadtimeActiveCases.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />
@@ -2554,7 +2567,6 @@
     <Content Include="Areas\Admin\Views\CustomerCaseFieldSettings\_Input.cshtml" />
     <Content Include="Areas\Admin\Views\CustomerCaseFieldSettings\Edit.cshtml" />
     <Content Include="Content\js\Notifiers\index.js" />
-    <Content Include="Content\js\Notifiers\notifier.js" />
     <Content Include="Content\js\Notifiers\notifiers.js" />
     <Content Include="Views\Faq\CategoryEditing.cshtml" />
     <Content Include="Views\Faq\EditCategory.cshtml" />
@@ -2835,6 +2847,8 @@
     <Content Include="Views\Survey\VoteError.cshtml" />
     <Content Include="Views\Shared\_Version.cshtml" />
     <Content Include="Views\Error\Unathorized.cshtml" />
+    <Content Include="Views\Profile\CustomersSettings.cshtml" />
+    <Content Include="Views\Profile\EditorTemplates\UserProfileCustomerSettings.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

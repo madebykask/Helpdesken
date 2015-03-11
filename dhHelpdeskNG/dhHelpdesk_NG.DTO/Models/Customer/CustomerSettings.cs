@@ -16,6 +16,8 @@ namespace DH.Helpdesk.BusinessData.Models.Customer
     /// </summary>
     public sealed class CustomerSettings
     {
+        public int CustomerId { get; set; }
+
         /// <summary>
         /// Gets or sets a value indicating whether module account.
         /// </summary>

@@ -6,8 +6,13 @@
 
     public sealed class NewFaqModel
     {
-        public NewFaqModel(string temporaryId, DropDownWithSubmenusContent categories, DropDownContent workingGroups)
+        public NewFaqModel(
+            string temporaryId, 
+            DropDownWithSubmenusContent categories, 
+            DropDownContent workingGroups, 
+            bool userHasFaqAdminPermission)
         {
+            this.UserHasFaqAdminPermission = userHasFaqAdminPermission;
             if (string.IsNullOrEmpty(temporaryId))
             {
                 throw new ArgumentNullException("temporaryId", "Value cannot be null or empty.");
@@ -33,5 +38,7 @@
         public DropDownContent WorkingGroups { get; private set; }
 
         public DropDownWithSubmenusContent Categories { get; private set; }
+
+        public bool UserHasFaqAdminPermission { get; private set; }
     }
 }

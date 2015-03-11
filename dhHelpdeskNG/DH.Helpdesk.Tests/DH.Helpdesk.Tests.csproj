@@ -87,14 +87,13 @@
     <Compile Include="Services\NotifierServiceTests.cs" />
     <Compile Include="Web\Infrastructure\Filters\Changes\ChangesFilterTests.cs" />
     <Compile Include="Web\Infrastructure\Tools\WebTemporaryFileTests.cs" />
+    <Compile Include="Dal\Utils\WorkTimeCalculatorTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Dal\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">
       <Project>{90DEFCB6-E297-4F99-A532-DA1E0522AA49}</Project>

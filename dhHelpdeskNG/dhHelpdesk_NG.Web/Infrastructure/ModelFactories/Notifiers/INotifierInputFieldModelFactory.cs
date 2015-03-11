@@ -11,6 +11,8 @@
 
         StringFieldModel CreateInputTextBoxModel(FieldOverviewSetting setting, string value);
 
+        StringFieldModel CreateInputTextBoxModel(FieldOverviewSetting setting, string value, int maxLength);
+
         BooleanFieldModel CreateInputCheckBoxModel(FieldOverviewSetting setting, bool value);
 
         DropDownFieldModel CreateDropDownModel(

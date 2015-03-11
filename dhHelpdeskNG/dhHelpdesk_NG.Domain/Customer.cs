@@ -50,6 +50,9 @@
         public Guid CustomerGUID { get; set; }
         public int CommunicateWithNotifier { get; set; }
         public int ShowDocumentsOnExternalPage { get; set; }
+        public int? ShowFAQOnExternalStartPage { get; set; }
+        public int ShowCoWorkersOnExternalPage { get; set; }
+        public int ShowHelpOnExternalPage { get; set; }
 
         public virtual Language Language { get; set; }
         public virtual ICollection<Application> Applications { get; set; }

@@ -6,13 +6,17 @@
 
     using DH.Helpdesk.BusinessData.Models.Faq.Output;
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
     using DH.Helpdesk.Web.Models.Faq.Output;
 
     public sealed class NewFaqModelFactory : INewFaqModelFactory
     {
-        public NewFaqModel Create(string temporaryId, List<CategoryWithSubcategories> categories, int categoryId, List<ItemOverview> workingGroups)
+        public NewFaqModel Create(
+            string temporaryId, 
+            List<CategoryWithSubcategories> categories, 
+            int categoryId, 
+            List<ItemOverview> workingGroups,
+            bool userHasFaqAdminPermission)
         {
             var categoryDropDownItems =
                categories.Select(this.CategoryToDropDownItem).ToList();
@@ -22,7 +26,7 @@
 
             var workingGroupDropDownItems = workingGroups.Select(g => new DropDownItem(g.Name, g.Value)).ToList();
             var workingGroupDropDownContent = new DropDownContent(workingGroupDropDownItems);
-            return new NewFaqModel(temporaryId, categoryDropDownContent, workingGroupDropDownContent);
+            return new NewFaqModel(temporaryId, categoryDropDownContent, workingGroupDropDownContent, userHasFaqAdminPermission);
         }
 
         private DropDownWithSubmenusItem CategoryToDropDownItem(CategoryWithSubcategories categoryWithSubcategories)

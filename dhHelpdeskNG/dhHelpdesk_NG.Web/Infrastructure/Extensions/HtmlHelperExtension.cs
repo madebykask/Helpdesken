@@ -391,13 +391,14 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
                     sb.Append("<td>");
+                    
                     if (o.CaseType != null)
-                        sb.Append(o.CaseType.Name);
+                        sb.Append(Translation.Get(o.CaseType.Name, Enums.TranslationSource.TextTranslation, customerId));
                     else
                         sb.Append(ey);
                     sb.Append(from);
                     if (cur.CaseType != null)
-                        sb.Append(cur.CaseType.Name);
+                        sb.Append(Translation.Get(cur.CaseType.Name, Enums.TranslationSource.TextTranslation, customerId));
                     else
                         sb.Append(ey);
                     sb.Append("</td>");
@@ -413,12 +414,12 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
                     sb.Append("<td>");
                     if (o.ProductArea != null)
-                        sb.Append(o.ProductArea.Name);
+                        sb.Append(Translation.Get(o.ProductArea.Name, Enums.TranslationSource.TextTranslation, customerId));
                     else
                         sb.Append(ey);
                     sb.Append(from);
                     if (cur.ProductArea != null)
-                        sb.Append(cur.ProductArea.Name);
+                        sb.Append(Translation.Get(cur.ProductArea.Name, Enums.TranslationSource.TextTranslation, customerId));
                     else
                         sb.Append(ey);
                     sb.Append("</td>");
@@ -483,12 +484,12 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
                     sb.Append("<td>");
                     if (o.Priority != null)
-                        sb.Append(o.Priority.Name);
+                        sb.Append(Translation.Get(o.Priority.Name, Enums.TranslationSource.TextTranslation, customerId));
                     else
                         sb.Append(ey);
                     sb.Append(from);
                     if (cur.Priority != null)
-                        sb.Append(cur.Priority.Name);
+                        sb.Append(Translation.Get(cur.Priority.Name, Enums.TranslationSource.TextTranslation, customerId));
                     else
                         sb.Append(ey);
                     sb.Append("</td>");
@@ -505,12 +506,12 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
                     sb.Append("<td>");
                     if (o.WorkingGroup != null)
-                        sb.Append(o.WorkingGroup.WorkingGroupName);
+                        sb.Append(Translation.Get(o.WorkingGroup.WorkingGroupName, Enums.TranslationSource.TextTranslation, customerId));
                     else
                         sb.Append(ey);
                     sb.Append(from);
                     if (cur.WorkingGroup != null)
-                        sb.Append(cur.WorkingGroup.WorkingGroupName);
+                        sb.Append(Translation.Get(cur.WorkingGroup.WorkingGroupName, Enums.TranslationSource.TextTranslation, customerId));
                     else
                         sb.Append(ey);
                     sb.Append("</td>");
@@ -526,12 +527,12 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
                     sb.Append("<td>");
                     if (o.StateSecondary != null)
-                        sb.Append(o.StateSecondary.Name);
+                        sb.Append(Translation.Get(o.StateSecondary.Name, Enums.TranslationSource.TextTranslation, customerId));
                     else
                         sb.Append(ey);
                     sb.Append(from);
                     if (cur.StateSecondary != null)
-                        sb.Append(cur.StateSecondary.Name);
+                        sb.Append(Translation.Get(cur.StateSecondary.Name, Enums.TranslationSource.TextTranslation, customerId));
                     else
                         sb.Append(ey);
                     sb.Append("</td>");
@@ -547,12 +548,12 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
                     sb.Append("<td>");
                     if (o.Status != null)
-                        sb.Append(o.Status.Name);
+                        sb.Append(Translation.Get(o.Status.Name, Enums.TranslationSource.TextTranslation, customerId));
                     else
                         sb.Append(ey);
                     sb.Append(from);
                     if (cur.Status != null)
-                        sb.Append(cur.Status.Name);
+                        sb.Append(Translation.Get(cur.Status.Name, Enums.TranslationSource.TextTranslation, customerId));
                     else
                         sb.Append(ey);
                     sb.Append("</td>");
@@ -614,7 +615,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                     else
                         htmlOutput += "<li>";
 
-                    htmlOutput += "<a href='#' value=" + caseType.Id.ToString() + ">" + Translation.Get(caseType.Name, Enums.TranslationSource.TextTranslation) + "</a>";
+                    htmlOutput += "<a href='#' value=" + caseType.Id.ToString() + ">" + Translation.Get(caseType.Name, SessionFacade.CurrentLanguageId) + "</a>";
                     if (hasChild)
                     {
                         htmlOutput += "<ul class='dropdown-menu'>";
@@ -701,11 +702,11 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 
                 result.Append(hasChild ? "<li class='dropdown-submenu'>" : "<li>");
 
-                result.Append("<a href='#' value=" + productArea.Id + ">" + productArea.Name + "</a>");
+                result.Append("<a href='#' value=" + productArea.Id + ">" + Translation.Get(productArea.Name, Enums.TranslationSource.TextTranslation) + "</a>");
                 if (hasChild)
                 {
                     result.Append("<ul class='dropdown-menu'>");
-                    result.Append(BuildProductAreasList(productArea.Children.OrderBy(p => p.Name).ToList()));
+                    result.Append(BuildProductAreasList(productArea.Children.OrderBy(p => Translation.Get(p.Name, Enums.TranslationSource.TextTranslation)).ToList()));
                     result.Append("</ul>");
                 }
 
@@ -725,11 +726,11 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 
                 result.Append(hasChild ? "<li class='dropdown-submenu'>" : "<li>");
 
-                result.Append("<a href='#' value=" + caseType.Id + ">" + caseType.Name + "</a>");
+                result.Append("<a href='#' value=" + caseType.Id + ">" + Translation.Get(caseType.Name, Enums.TranslationSource.TextTranslation) + "</a>");
                 if (hasChild)
                 {
                     result.Append("<ul class='dropdown-menu'>");
-                    result.Append(BuildCaseTypesList(caseType.Children.OrderBy(p => p.Name).ToList()));
+                    result.Append(BuildCaseTypesList(caseType.Children.OrderBy(p => Translation.Get(p.Name, Enums.TranslationSource.TextTranslation)).ToList()));
                     result.Append("</ul>");
                 }
 
@@ -756,11 +757,11 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 else
                     htmlOutput += "<li>";
 
-                htmlOutput += "<a href='#' value=" + pa.Id.ToString() + ">" + pa.Name + "</a>";
+                htmlOutput += "<a href='#' value=" + pa.Id.ToString() + ">" + Translation.Get(pa.Name, Enums.TranslationSource.TextTranslation) + "</a>";
                 if (hasChild)
                 {
                     htmlOutput += "<ul class='dropdown-menu'>";
-                    htmlOutput += BuildProcuctAreaDropdownButton(pa.SubProductAreas.OrderBy(p=> p.Name).ToList());
+                    htmlOutput += BuildProcuctAreaDropdownButton(pa.SubProductAreas.OrderBy(p => Translation.Get(p.Name, Enums.TranslationSource.TextTranslation)).ToList());
                     htmlOutput += "</ul>";
                 }
                 htmlOutput += "</li>";
@@ -867,8 +868,12 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 htmlOutput += "</tr>";
 
                 if (productArea.SubProductAreas != null)
+                {
                     if (productArea.SubProductAreas.Count > 0)
-                        htmlOutput += BuildProductAreaTreeRow(productArea.SubProductAreas.ToList(), iteration + 20);
+                    {
+                        htmlOutput += BuildProductAreaTreeRow(productArea.SubProductAreas.OrderBy(x=>x.Name).ToList(), iteration + 20);
+                    }
+                }
             }
 
             return new MvcHtmlString(htmlOutput);

@@ -492,6 +492,7 @@
     <Compile Include="Infrastructure\Translation.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\Rules\ModelClientValidationMaxLengthFromRule.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\Rules\ModelClientValidationRequiredFromRule.cs" />
+    <Compile Include="Infrastructure\WorkingTimeCalculatorFactory.cs" />
     <Compile Include="Models\BulletinBoardInputViewModel.cs" />
     <Compile Include="Models\CalendarInputViewModel.cs" />
     <Compile Include="Models\CaseSolutionSettingModel.cs" />

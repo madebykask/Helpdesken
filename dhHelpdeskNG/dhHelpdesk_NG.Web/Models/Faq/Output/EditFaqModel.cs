@@ -20,8 +20,10 @@
             string urlTwo, 
             DropDownContent workingGroup, 
             bool informationIsAvailableForNotifiers, 
-            bool showOnStartPage)
+            bool showOnStartPage, 
+            bool userHasFaqAdminPermission)
         {
+            this.UserHasFaqAdminPermission = userHasFaqAdminPermission;
             //if (id <= 0)
             //{
             //    throw new ArgumentOutOfRangeException("id", "Must be more than zero.");
@@ -90,6 +92,8 @@
         public string UrlTwo { get; private set; }
 
         public DropDownContent WorkingGroup { get; private set; }
+
+        public bool UserHasFaqAdminPermission { get; private set; }
 
         #endregion
     }

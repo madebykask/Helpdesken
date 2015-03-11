@@ -21,18 +21,18 @@ namespace DH.Helpdesk.BusinessData.Models.Holiday.Output
         public int TimeFrom { get; set; }
 
         /// <summary>
-        /// Gets or sets the time until.
+        /// Begin of working day in holiday
         /// </summary>
         public int TimeUntil { get; set; }
 
         /// <summary>
-        /// Gets or sets the holiday date.
+        /// End of working day in holiday
         /// </summary>
         public DateTime HolidayDate { get; set; }
 
         /// <summary>
         /// Gets or sets the holiday header.
         /// </summary>
-        public HolidayHeaderOverview HolidayHeader { get; set; }
+        public int DepartmentId { get; set; }
     }
 }

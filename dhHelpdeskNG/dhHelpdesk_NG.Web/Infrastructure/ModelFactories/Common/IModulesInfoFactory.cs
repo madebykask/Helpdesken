@@ -7,7 +7,7 @@
 
     public interface IModulesInfoFactory
     {
-        CustomerChangesModel GetCustomerChangesModel(CustomerChanges[] customerChanges);
+        CustomerChangesModel GetCustomerChangesModel(CustomerChanges[] customerChanges, bool showIcon);
 
         MyCasesModel GetMyCasesModel(MyCase[] cases);
     }

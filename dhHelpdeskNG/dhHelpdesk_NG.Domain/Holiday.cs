@@ -6,8 +6,17 @@
     public class Holiday : Entity
     {
         public int HolidayHeader_Id { get; set; }
-        public int TimeFrom { get; set; }
-        public int TimeUntil { get; set; }
+
+            /// <summary>
+            /// Begin of working day in this holiday
+            /// </summary>
+            public int TimeFrom { get; set; }
+
+            /// <summary>
+            /// End of working day in this holiday
+            /// </summary>
+            public int TimeUntil { get; set; }
+
         public DateTime CreatedDate { get; set; }
         public DateTime HolidayDate { get; set; }
         public string HolidayName { get; set; }
@@ -15,7 +24,7 @@
         public virtual HolidayHeader HolidayHeader { get; set; }
     }
 
-    public class HolidayHeader :Entity
+    public class HolidayHeader : Entity
     {
         public string Name { get; set; }
 

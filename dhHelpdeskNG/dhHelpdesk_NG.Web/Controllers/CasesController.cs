@@ -26,6 +26,7 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Dal.Utils;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Mobile.Infrastructure;
     using DH.Helpdesk.Services.Exceptions;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
@@ -100,7 +101,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ICaseSolutionSettingService caseSolutionSettingService;
 
         private readonly IInvoiceHelper invoiceHelper;
-
+        
         #endregion
 
         #region Constructor
@@ -384,6 +385,7 @@ namespace DH.Helpdesk.Web.Controllers
                     fd.CaseWatchDateStartFilter = sm.caseSearchFilter.CaseWatchDateStartFilter;
                     
                     srm.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(cusId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
+                    var workTimeCalculator = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
                     srm.cases = this._caseSearchService.Search(
                         sm.caseSearchFilter,
                         srm.caseSettings,
@@ -395,7 +397,7 @@ namespace DH.Helpdesk.Web.Controllers
                         sm.Search,
                         this.workContext.Customer.WorkingDayStart,
                         this.workContext.Customer.WorkingDayEnd,
-                        this.workContext.Cache.Holidays,
+                        workTimeCalculator,
                         this.configuration.Application.ApplicationId);
                     m.caseSearchResult = srm;
                     m.caseSearchFilterData = fd;
@@ -711,25 +713,19 @@ namespace DH.Helpdesk.Web.Controllers
             var cu = this._computerService.GetComputerUser(id);
             var u = new
             {
-                num = cu.UserId
-                ,
-                name = cu.SurName + ' ' + cu.FirstName
-                ,
-                email = cu.Email
-                ,
-                place = cu.Location
-                ,
-                phone = cu.Phone
-                ,
-                usercode = cu.UserCode
-                ,
-                cellphone = cu.Cellphone
-                ,
-                regionid = (cu.Department != null ? cu.Department.Region_Id : 0)
-                ,
-                departmentid = cu.Department_Id
-                ,
-                ouid = cu.OU_Id
+                num = cu.UserId,
+                name = cu.SurName + ' ' + cu.FirstName,
+                email = cu.Email,
+                place = cu.Location,
+                phone = cu.Phone,
+                usercode = cu.UserCode,
+                cellphone = cu.Cellphone,
+                regionid = (cu.Department != null ? cu.Department.Region_Id : 0),
+                regionname = (cu.Department != null ? cu.Department.Region.Name : ""),
+                departmentid = cu.Department_Id,
+                departmentname = cu.Department.DepartmentName,
+                ouid = cu.OU_Id,
+                ouname = (cu.OU.Parent != null ? cu.OU.Parent.Name + " - " : "") + cu.OU.Name
             };
             return this.Json(u);
         }
@@ -866,7 +862,7 @@ namespace DH.Helpdesk.Web.Controllers
         {
             int workinggroupId = 0;
             int priorityId = 0;
-
+            int hasChild = 0;
             if (id.HasValue)
             {
                 var e = _productAreaService.GetProductArea(id.Value);
@@ -874,9 +870,11 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     workinggroupId = e.WorkingGroup_Id.HasValue ? e.WorkingGroup_Id.Value : 0;
                     priorityId = e.Priority_Id.HasValue ? e.Priority_Id.Value : 0;
+                    if (e.SubProductAreas != null && e.SubProductAreas.Count > 0)
+                        hasChild = 1;
                 }
             }
-            return Json(new { WorkingGroup_Id = workinggroupId, Priority_Id = priorityId });
+            return Json(new { WorkingGroup_Id = workinggroupId, Priority_Id = priorityId, HasChild = hasChild });
         }
 
         public JsonResult ChangeStatus(int? id)
@@ -1059,6 +1057,7 @@ namespace DH.Helpdesk.Web.Controllers
                 sm.Search.Ascending = frm.ReturnFormValue("hidSortByAsc").convertStringToBool();
 
                 m.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(f.CustomerId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
+                var workTimeCalc = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
                 m.cases = this._caseSearchService.Search(
                     f,
                     m.caseSettings,
@@ -1070,7 +1069,7 @@ namespace DH.Helpdesk.Web.Controllers
                     sm.Search,
                     this.workContext.Customer.WorkingDayStart,
                     this.workContext.Customer.WorkingDayEnd,
-                    this.workContext.Cache.Holidays,
+                    workTimeCalc,
                     this.configuration.Application.ApplicationId);
 
                 sm.Search.IdsForLastSearch = GetIdsFromSearchResult(m.cases);
@@ -1161,6 +1160,9 @@ namespace DH.Helpdesk.Web.Controllers
                 : string.Empty;
 
             bool caseTypeCheck = frm.IsFormValueTrue("CaseTypeCheck");
+            var caseType = caseTypeCheck
+                ? ((frm.ReturnFormValue("CaseTypeId") == string.Empty) ? "0" : frm.ReturnFormValue("CaseTypeId"))
+                : string.Empty;
 
             bool productAreaCheck = frm.IsFormValueTrue("ProductAreaCheck");
             var productArea = (productAreaCheck)
@@ -1203,7 +1205,7 @@ namespace DH.Helpdesk.Web.Controllers
                             userId,
                             regions,
                             registerBy,
-                            caseTypeCheck,
+                            caseType,
                             productArea,
                             workingGroup,
                             responsibleCheck,
@@ -1337,6 +1339,18 @@ namespace DH.Helpdesk.Web.Controllers
             var res = new RedirectToRouteResult(prevInfo);
             return res;
         }
+
+        [HttpGet]
+        public JsonResult ProductAreaHasChild(int pId)
+        {
+            var res = "false";
+            var productArea = this._productAreaService.GetProductArea(pId);
+            if (productArea != null && productArea.SubProductAreas != null && productArea.SubProductAreas.Count > 0)
+                res = "true";
+
+            return Json(res);
+        }
+
 
         #endregion
 
@@ -1479,12 +1493,11 @@ namespace DH.Helpdesk.Web.Controllers
                     // calculating time spent in "inactive" state every save
                     if (caseSubState.IncludeInCaseStatistics == 0)
                     {
-                        var workingTimeMins = CaseUtils.CalculateTotalWorkingMinutes(
-                        oldCase.ChangeTime,
-                        DateTime.UtcNow,
-                        this.workContext.Customer.WorkingDayStart,
-                        this.workContext.Customer.WorkingDayEnd,
-                        this.workContext.Cache.Holidays);
+                        var workTimeCalc = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
+                        var workingTimeMins = workTimeCalc.CalcWorkTimeMinutes(
+                            oldCase.Department_Id,
+                            oldCase.ChangeTime,
+                            DateTime.UtcNow);
                         case_.ExternalTime = oldCase.ExternalTime + workingTimeMins;
                     }
                 }
@@ -1537,14 +1550,11 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (case_.FinishingDate.HasValue)
             {
-                case_.LeadTime = CaseUtils.CalculateLeadTime(
-                                                            case_.RegTime,
-                                                            case_.WatchDate,
-                                                            case_.FinishingDate,
-                                                            case_.ExternalTime,
-                                                            this.workContext.Customer.WorkingDayStart,
-                                                            this.workContext.Customer.WorkingDayEnd,
-                                                            this.workContext.Cache.Holidays);
+                var workTimeCalc = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
+                case_.LeadTime = workTimeCalc.CalcWorkTimeMinutes(
+                    case_.Department_Id,
+                    case_.RegTime,
+                    case_.FinishingDate.Value) - case_.ExternalTime;
             }
 
             // save log
@@ -1793,7 +1803,7 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     m.priorities = this._priorityService.GetPriorities(customerId);
                 }
-
+                
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()).ShowOnStartPage == 1)
                 {
                     m.productAreas = this._productAreaService.GetProductAreas(customerId);
@@ -1989,21 +1999,28 @@ namespace DH.Helpdesk.Web.Controllers
                 }
 
                 // hämta parent path för productArea 
+                m.ProductAreaHasChild = 0;
                 if (m.case_.ProductArea_Id.HasValue)
                 {
                     var p = this._productAreaService.GetProductArea(m.case_.ProductArea_Id.GetValueOrDefault());
                     if (p != null)
                     {
+                        p = TranslateProductArea(p);
                         m.ParantPath_ProductArea = p.getProductAreaParentPath();
+                        if (p.SubProductAreas != null && p.SubProductAreas.Count > 0)
+                            m.ProductAreaHasChild = 1;
                     }
                 }
 
                 // hämta parent path för casetype
                 if (m.case_.CaseType_Id > 0)
                 {
-                    var c = this._caseTypeService.GetCaseType(m.case_.CaseType_Id);
+                    var c = this._caseTypeService.GetCaseType(m.case_.CaseType_Id);                    
+                   //c = TranslateCaseType(c);
+                    
                     if (c != null)
                     {
+                        c = TranslateCaseType(c);
                         m.ParantPath_CaseType = c.getCaseTypeParentPath();
                     }
                 }
@@ -2259,7 +2276,20 @@ namespace DH.Helpdesk.Web.Controllers
             ret.RegisteredBy = registeredBys;
             ret.SelectedRegisteredBy = userCaseSettings.RegisteredBy;
 
-            ret.CaseTypeCheck = userCaseSettings.CaseType;
+            ret.CaseTypeCheck = userCaseSettings.CaseType != string.Empty;
+            ret.CaseTypes = this._caseTypeService.GetCaseTypes(customerId);
+            ret.CaseTypePath = "--";
+            int caseType;
+            int.TryParse(userCaseSettings.CaseType, out caseType);
+            ret.CaseTypeId = caseType;
+            if (caseType > 0)
+            {
+                var ct = this._caseTypeService.GetCaseType(ret.CaseTypeId);
+                if (ct != null)
+                {
+                    ret.CaseTypePath = ct.getCaseTypeParentPath();
+                }
+            }
 
             ret.ProductAreas = this._productAreaService.GetProductAreas(customerId);
             ret.ProductAreaPath = "--";
@@ -2449,7 +2479,26 @@ namespace DH.Helpdesk.Web.Controllers
             return String.Join("|", files);
 
         }
-        #endregion
+              
+        private CaseType TranslateCaseType(CaseType caseType)
+        {
+            if (caseType.ParentCaseType != null)
+                caseType.ParentCaseType = TranslateCaseType(caseType.ParentCaseType);
 
+            caseType.Name = Translation.Get(caseType.Name);
+
+            return caseType;
+        }
+
+        private ProductArea TranslateProductArea(ProductArea productArea)
+        {
+            if (productArea.ParentProductArea != null)
+                productArea.ParentProductArea = TranslateProductArea(productArea.ParentProductArea);
+
+            productArea.Name = Translation.Get(productArea.Name);
+
+            return productArea;
+        }
+        #endregion
     }
 }

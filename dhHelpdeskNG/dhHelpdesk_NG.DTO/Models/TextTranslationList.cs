@@ -1,4 +1,5 @@
 ﻿
+using System;
 namespace DH.Helpdesk.BusinessData.Models
 {
     public class TextTranslationLanguageList
@@ -9,6 +10,7 @@ namespace DH.Helpdesk.BusinessData.Models
         public string LanguageName { get; set; }
         public string TranslationName { get; set; }
         public int ChangedByUser_Id { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 
     public class TextTranslationList

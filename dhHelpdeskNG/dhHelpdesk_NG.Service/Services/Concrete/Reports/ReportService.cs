@@ -8,6 +8,7 @@
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseSatisfaction;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeActiveCases;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeFinishedCases;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.RegistratedCasesDay;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.ReportGenerator;
@@ -447,6 +448,58 @@
                             periodUntil,
                             leadTime,
                             isShowDetails);
+            }
+        }
+
+        #endregion
+
+        #region LeadtimeActiveCases
+
+        public LeadtimeActiveCasesOptions GetLeadtimeActiveCasesOptions(int customerId)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var departmentRep = uow.GetRepository<Department>();
+                var caseTypeRep = uow.GetRepository<CaseType>();
+
+                var departments = departmentRep.GetAll().GetActiveByCustomer(customerId);
+                var caseTypes = caseTypeRep.GetAll().GetActiveByCustomer(customerId);
+
+                return ReportsOptionsMapper.MapToLeadtimeActiveCasesOptions(departments, caseTypes);
+            }
+        }
+
+        public LeadtimeActiveCasesData GetLeadtimeActiveCasesData(
+                        int customerId, 
+                        List<int> departmentIds, 
+                        int? caseTypeId,
+                        int highHours,
+                        int mediumDays,
+                        int lowDays)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var casesRep = uow.GetRepository<Case>();
+                var departmentRep = uow.GetRepository<Department>();
+                var caseTypeRep = uow.GetRepository<CaseType>();
+
+                var cases = casesRep.GetAll()
+                        .GetByCustomer(customerId)
+                        .GetByDepartments(departmentIds)
+                        .GetByCaseType(caseTypeId)
+                        .HasLeadTime()
+                        .GetActive()
+                        .GetNotDeleted();
+                var departments = departmentRep.GetAll().GetActiveByCustomer(customerId);
+                var caseTypes = caseTypeRep.GetAll().GetActiveByCustomer(customerId);
+
+                return ReportsMapper.MapToLeadtimeActiveCasesData(
+                                    cases, 
+                                    departments, 
+                                    caseTypes,
+                                    highHours,
+                                    mediumDays,
+                                    lowDays);
             }
         }
 

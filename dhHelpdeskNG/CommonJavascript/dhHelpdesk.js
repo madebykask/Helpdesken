@@ -14,10 +14,33 @@ $(".nav-tabs-actions a").unbind("click");
 $(".content input:text, .content textarea").eq(0).focus()
 
 
-function ShowToastMessage(message, msgType) {
+$('#case__RegLanguage_Id').change(function () {   
+    ChangeCaseLanguageTo($("#case__RegLanguage_Id").val());
+});
+
+function ChangeCaseLanguageTo(newLanguageId, updateDropDown) {
+    var langItems = document.getElementsByClassName('langItem');
+    for (var i = 0; i < langItems.length; ++i) {
+        var item = langItems[i];
+        if (item.id == "langItem" + newLanguageId)
+            item.innerHTML = item.innerText + ' <i class="icon-ok"></i>';
+        else
+            item.innerHTML = item.innerText;
+    }
+
+    if (updateDropDown == true)
+        $("#case__RegLanguage_Id").val(newLanguageId).change();
+
+    $("#case_.RegLanguage_Id").val(newLanguageId);
+}
+
+function ShowToastMessage(message, msgType, isSticky) {
+    var _Sticky = false;
+    if (isSticky)
+        _Sticky = true;
     $().toastmessage('showToast', {
         text: message,
-        sticky: false,
+        sticky: _Sticky,
         position: 'top-center',
         type: msgType,
         closeText: '',
@@ -88,9 +111,14 @@ function CaseCascadingSelectlistChange(id, customerId, postTo, ctl, departmentFi
     $.post(postTo, { 'id': id, 'customerId': customerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {
         $(ctlOption).remove();
         $(ctl).append('<option value="">&nbsp;</option>');
+        var selected = $('#SelectedValueCarrier').val();
+
         if (data != undefined) {
             for (var i = 0; i < data.list.length; i++) {
-                $(ctl).append('<option value="' + data.list[i].id + '">' + data.list[i].name + '</option>');
+                if (data.list[i].id == selected)
+                    $(ctl).append('<option value="' + data.list[i].id + '" selected>' + data.list[i].name + '</option>');
+                else
+                    $(ctl).append('<option value="' + data.list[i].id + '">' + data.list[i].name + '</option>');
             }
         }
     }, 'json');
@@ -245,17 +273,13 @@ function CaseInitForm() {
     });
 
     $('#case__Department_Id').change(function () {
-        CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeDepartment/', '#case__Ou_Id', $('#DepartmentFilterFormat').val());
+        CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeDepartment/', '#case__Ou_Id', $('#DepartmentFilterFormat').val());        
         $('#divInvoice').hide();
         $.get('/Cases/ShowInvoiceFields/', { 'departmentId': $(this).val() }, function (data) {
             if (data == 1) {
                 $('#divInvoice').show();
             }
         }, 'json');
-    });
-
-    $('#case__Region_Id').change(function () {
-        CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeRegion/', '#case__Department_Id', $('#DepartmentFilterFormat').val());
     });
 
     $('#case__Status_Id').change(function () {
@@ -302,6 +326,8 @@ function CaseInitForm() {
     });
 
     $('#case__ProductArea_Id').change(function () {
+        $("#ProductAreaHasChild").val(0);
+        document.getElementById("divProductArea").classList.remove("error");
         if ($(this).val() > 0) {
             $.post('/Cases/ChangeProductArea/', { 'id': $(this).val() }, function (data) {
                 //alert(JSON.stringify(data));
@@ -315,6 +341,9 @@ function CaseInitForm() {
                     if (exists > 0 && data.Priority_Id > 0) {
                         $("#case__Priority_Id").val(data.Priority_Id);
                     }
+
+                    $("#ProductAreaHasChild").val(data.HasChild);
+
                 }
             }, 'json');
         }
@@ -623,6 +652,12 @@ function CaseInitForm() {
     SetFocusToReportedByOnCase();
 }
 
+function productAreaHasChild(productAreaId) {
+    $.get('/Cases/ProductAreaHasChild', { pId: productAreaId, now: Date.now() }, function (data) {
+        return data;
+    });    
+}
+
 function SetFocusToReportedByOnCase() {
     if ($('#ShowReportedBy').val() == 1) {
         $('#case__ReportedBy').focus();
@@ -766,9 +801,10 @@ function GetComputerUserSearchOptions() {
             $('#case__UserCode').val(item.usercode);
             $('#case__Region_Id').val(item.regionid);
             $('#RegionName').val(item.regionname);
-            $('#case__Department_Id').val(item.departmentid);
+            $('#SelectedValueCarrier').val(item.ouid);
+            $('#case__Department_Id').val(item.departmentid).change();
             $('#DepartmentName').val(item.departmentname);
-            $('#case__Ou_Id').val(item.ouid);
+            $('#case__OU_Id').val(item.ouid);                        
             $('#OUName').val(item.ouname);
 
             return item.num;
@@ -985,8 +1021,12 @@ function NewNotifierEvent(id) {
             $('#case__Place').val(data.place);
             $('#case__UserCode').val(data.usercode);
             $('#case__Region_Id').val(data.regionid);
-            $('#case__Department_Id').val(data.departmentid);
-            $('#case__Ou_Id').val(data.ouid);
+            $('#RegionName').val(data.regionname);
+            $('#SelectedValueCarrier').val(data.ouid);
+            $('#case__Department_Id').val(data.departmentid).change();
+            $('#DepartmentName').val(data.departmentname);
+            $('#case__OU_Id').val(data.ouid);                        
+            $('#OUName').val(data.ouname);
         }
     }, 'json');
 }

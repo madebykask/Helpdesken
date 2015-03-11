@@ -1,15 +1,17 @@
-﻿using System.Collections.Generic;
-using DH.Helpdesk.BusinessData.Models.Users.Output;
-
-namespace DH.Helpdesk.Web.Models.Profile
+﻿namespace DH.Helpdesk.Web.Models.Profile
 {
+    using System.Collections.Generic;
+
+    using DH.Helpdesk.BusinessData.Models.Users.Output;
+
     public sealed class UserModulesViewModel
     {
-        private IEnumerable<UserModuleOverview> _modules = new UserModuleOverview[] {};
+        private IEnumerable<UserModuleOverview> modules = new UserModuleOverview[] { };
+
         public IEnumerable<UserModuleOverview> Modules
         {
-            get { return _modules; }
-            set { _modules = value; }
+            get { return this.modules; }
+            set { this.modules = value; }
         }
     }
 }

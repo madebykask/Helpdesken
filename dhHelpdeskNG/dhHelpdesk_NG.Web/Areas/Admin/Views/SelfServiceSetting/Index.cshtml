@@ -33,7 +33,7 @@
                                     @Translation.Get("Visa på självservice", Enums.TranslationSource.TextTranslation)
                                 </td>
                             </tr>                            
-                            <tr>
+                            <tr style="height:30px">
                                 <td></td>
                                 <td>
                                     <input type="checkbox" name="customer.ShowFAQOnExternalPage" @(Model.Customer.ShowFAQOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
@@ -41,7 +41,29 @@
                                     &nbsp; &nbsp; @Translation.Get("Visa FAQ på självservice", Enums.TranslationSource.TextTranslation)
                                 </td>
                             </tr>
-                            <tr>
+                            <tr style="height:40px">
+                                <td></td>
+                                <td style="vertical-align:middle">
+                                    <input type="checkbox" id="chkFAQOnStartPage" name="customer.ShowFAQOnExternalStartPage" @(Model.Customer.ShowFAQOnExternalStartPage > 0 ? "checked=checked" : "") value="1"/>
+                                    <input type="hidden" name="customer.ShowFAQOnExternalStartPage" value="0" />
+                                    &nbsp; &nbsp; @Translation.Get("Visa FAQ på självservice start sidan", Enums.TranslationSource.TextTranslation)
+                                    
+                                    <span id="spNums"> 
+                                        &nbsp; &nbsp; @Translation.Get("Antal rader", Enums.TranslationSource.TextTranslation):     
+                                        @Html.DropDownListFor(m => Model.Customer.ShowFAQOnExternalStartPage, Model.StartPageFAQNums, new { style = "width: 70px;" }) 
+                                        @*<select id="Customer.ShowFAQOnExternalStartPage" name="Customer.ShowFAQOnExternalStartPage">                                            
+                                            @if (Model.StartPageFAQNums != null)
+                                            {
+                                                foreach (var e in Model.StartPageFAQNums)
+                                                {
+                                                  <option value="@e.Value" @(e.Selected? "Selected" : "")> @e.Text </option>
+                                                }
+                                            }
+                                        </select>*@
+                                    </span>                                                                                                         
+                                </td>
+                            </tr>
+                            <tr style="height:40px">
                                 <td></td>
                                 <td>
                                     <input type="checkbox" name="customer.ShowBulletinBoardOnExtPage" @(Model.Customer.ShowBulletinBoardOnExtPage == 1 ? "checked=checked" : "") value="1"/>
@@ -49,7 +71,7 @@
                                     &nbsp; &nbsp; @Translation.Get("Visa anslagstavlan på självservice", Enums.TranslationSource.TextTranslation)
                                 </td>
                             </tr>
-                            <tr>
+                            <tr style="height:40px">
                                 <td></td>
                                 <td>
                                     <input type="checkbox" name="customer.ShowDashboardOnExternalPage" @(Model.Customer.ShowDashboardOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
@@ -57,7 +79,7 @@
                                     &nbsp; &nbsp; @Translation.Get("Visa Dashboard på självservice", Enums.TranslationSource.TextTranslation)
                                 </td>
                             </tr>
-                            <tr>
+                            <tr style="height:40px">
                                 <td></td>
                                 <td>
                                     <input type="checkbox" name="customer.PasswordRequiredOnExternalPage" @(Model.Customer.PasswordRequiredOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
@@ -65,14 +87,33 @@
                                     &nbsp; &nbsp; @Translation.Get("Självservice kräver lösenord", Enums.TranslationSource.TextTranslation)
                                 </td>
                             </tr>
-                            <tr>
+
+                            <tr style="height:40px">
+                                <td></td>
+                                <td>
+                                    <input type="checkbox" name="customer.ShowCoWorkersOnExternalPage" @(Model.Customer.ShowCoWorkersOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
+                                    <input type="hidden" name="customer.ShowCoWorkersOnExternalPage" value="0" />
+                                    &nbsp; &nbsp; @Translation.Get("Visa CoWorkers på självservice", Enums.TranslationSource.TextTranslation)
+                                </td>
+                            </tr>
+
+                            <tr style="height:40px">
+                                <td></td>
+                                <td>
+                                    <input type="checkbox" name="customer.ShowHelpOnExternalPage" @(Model.Customer.ShowHelpOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
+                                    <input type="hidden" name="customer.ShowHelpOnExternalPage" value="0" />
+                                    &nbsp; &nbsp; @Translation.Get("Visa Help på självservice", Enums.TranslationSource.TextTranslation)
+                                </td>
+                            </tr>
+
+                            <tr style="height:40px">
                                 <td></td>
                                 <td>
                                     <input type="checkbox" id="chkDoc" name="customer.ShowDocumentsOnExternalPage" @(Model.Customer.ShowDocumentsOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
                                     <input type="hidden" name="customer.ShowDocumentsOnExternalPage" value="0" />
                                     &nbsp; &nbsp; @Translation.Get("Visa Documents på självservice", Enums.TranslationSource.TextTranslation)
                                 </td>
-                            </tr>
+                            </tr>                            
                             <tr id="docCategories">
                                 <td>
                                     @Translation.Get("Dokument", Enums.TranslationSource.TextTranslation) @Translation.Get("Kategorier", Enums.TranslationSource.TextTranslation)
@@ -115,6 +156,15 @@
         else
             $('#docCategories').hide();
 
+        if ('@Model.Customer.ShowFAQOnExternalStartPage ' > 0) {
+            $('#spNums').show();
+            $('#StartPageFAQNums').show()
+        }
+        else {
+            $('#spNums').hide();
+            $('#StartPageFAQNums').hide();
+        }
+
         $('#chkDoc').click(function () {
             if ($('#chkDoc').attr('checked')) {
                 $('#docCategories').show();
@@ -122,7 +172,17 @@
             else {
                 $('#docCategories').hide();
             }
+        });
 
+        $('#chkFAQOnStartPage').click(function () {
+            if ($('#chkFAQOnStartPage').attr('checked')) {                
+                $('#spNums').show();
+                $('#StartPageFAQNums').show();
+            }
+            else {
+                $('#spNums').hide();
+                $('#StartPageFAQNums').hide();
+            }
         });
 
         $("#addCat").click(function () {
@@ -139,6 +199,10 @@
             return false;
         });
 
+        //$("Customer_ShowFAQOnExternalStartPage").change(function () {
+        //    $("#SelectedCategories option").attr("selected", "selected");
+        //});
+           
         function submitForm() {
             $("#SelectedCategories option").attr("selected", "selected");
             $("#target").submit();

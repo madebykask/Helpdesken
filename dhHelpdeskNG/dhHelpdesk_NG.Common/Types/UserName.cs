@@ -16,5 +16,10 @@
         {
             return string.Format("{0} {1}", this.FirstName, this.LastName);
         }
+
+        public string GetReversedFullName()
+        {
+            return string.Format("{0} {1}", this.LastName, this.FirstName);
+        }
     }
 }

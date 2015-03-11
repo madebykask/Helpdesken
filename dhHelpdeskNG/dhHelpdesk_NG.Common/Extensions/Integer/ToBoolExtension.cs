@@ -60,5 +60,15 @@ namespace DH.Helpdesk.Common.Extensions.Integer
 
             return value.Value != 0;
         }
+
+        public static bool ToDefaultTrueBool(this int? value)
+        {
+            if (!value.HasValue)
+            {
+                return true;
+            }
+
+            return value.Value != 0;
+        }
     }
 }

@@ -2,7 +2,7 @@
 <div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
-            <li>@Html.ActionLink(Translation.Get("Lägg till") + " " + Translation.Get("Causing Part"), "New", new { customerId = Model.Customer.Id }, new { @class = "btn" })</li>
+            <li>@Html.ActionLink(Translation.Get("Lägg till") + " " + Translation.Get("Rotorsak"), "New", new { customerId = Model.Customer.Id }, new { @class = "btn" })</li>
         </ul>
     </div>
     @Html.Partial("_MasterDataPanel", Model.Customer)
@@ -10,7 +10,7 @@
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
-            <li class="active"><a href="#fragment-1">@Translation.Get("Causing Part") - @Model.Customer.Name</a></li>
+            <li class="active"><a href="#fragment-1">@Translation.Get("Rotorsak") - @Model.Customer.Name</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment-1">
@@ -18,7 +18,7 @@
                     <thead>
                         <tr>
                             <th>
-                                @Translation.Get("Causing Part")
+                                @Translation.Get("Rotorsak")
                             </th>
                             <th>
                                 @Translation.Get("Aktiv")

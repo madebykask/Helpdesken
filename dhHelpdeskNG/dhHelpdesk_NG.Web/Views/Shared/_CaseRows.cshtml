@@ -7,11 +7,11 @@
 
 @if (Model != null)
 {    
-    <table class="table table-striped table-bordered table-hover">
+    <table class="table table-striped table-bordered table-hover table-cases">
         <thead>
             <tr>
                 <!--fasta kolumner -->
-                <th></th>
+                <th style="width:18px;"></th>
                 <!-- valbara kolumner -->
                 @if (Model.caseSettings != null)
                 {                
@@ -35,7 +35,9 @@
                 <tr title="@r.Tooltip" class="@r.IsUnread.GetClassForCaseRowTr(@r.IsUrgent)">
                     <!--fasta kolumner -->
                     <td>
-                        <img title="@r.CaseIcon.CaseIconTitle()" alt="@r.CaseIcon.CaseIconTitle()" src="@Url.Content("~/Content/icons/" + r.CaseIcon.CaseIconSrc())" />   
+                        <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">
+                            <img title="@r.CaseIcon.CaseIconTitle()" alt="@r.CaseIcon.CaseIconTitle()" src="@Url.Content("~/Content/icons/" + r.CaseIcon.CaseIconSrc())" />   
+                        </a>
                     </td>
                     <!-- valbara kolumner -->
                     @foreach (var c in r.Columns)

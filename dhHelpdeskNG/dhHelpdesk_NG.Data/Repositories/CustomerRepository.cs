@@ -134,7 +134,7 @@
                          join c in this.DataContext.Customers on cu.Customer_Id equals c.Id
                          join u in this.DataContext.Users on cu.User_Id equals u.Id
                          join s in this.DataContext.Settings on c.Id equals s.Customer_Id
-                         where u.Id == userId
+                         where u.Id == userId && cu.ShowOnStartPage != 0
                          select new { UserId = u.Id, Customer = cu, Settings = s })
                          .ToList();
 
@@ -199,7 +199,9 @@
                 userSettingEntity.CaseUserFilter = (newSetting.RegisteredBy == string.Empty)
                     ? null
                     : newSetting.RegisteredBy;
-                userSettingEntity.CaseCaseTypeFilter = (newSetting.CaseType) ? "0" : null;
+                userSettingEntity.CaseCaseTypeFilter = (newSetting.CaseType == string.Empty)
+                    ? null
+                    : newSetting.CaseType;
                 userSettingEntity.CaseProductAreaFilter = (newSetting.ProductArea == string.Empty)
                     ? null
                     : newSetting.ProductArea;

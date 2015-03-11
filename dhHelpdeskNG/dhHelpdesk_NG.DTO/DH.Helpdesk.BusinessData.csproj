@@ -64,6 +64,9 @@
     <Compile Include="Enums\Accounts\Fields\OtherFields.cs" />
     <Compile Include="Enums\Accounts\Fields\ProgramFields.cs" />
     <Compile Include="Enums\Accounts\Fields\UserFields.cs" />
+    <Compile Include="Enums\Admin\Users\UserGroup.cs" />
+    <Compile Include="Enums\Admin\Users\UserOrderPermission.cs" />
+    <Compile Include="Enums\Admin\Users\UserPermission.cs" />
     <Compile Include="Enums\Case\CasesCustomFilter.cs" />
     <Compile Include="Enums\Case\Fields\CaseInfoFields.cs" />
     <Compile Include="Enums\Case\Fields\ComputerFields.cs" />
@@ -359,6 +362,8 @@
     <Compile Include="Models\Reports\Data\CaseTypeArticleNo\CaseTypeArticleNoData.cs" />
     <Compile Include="Models\Reports\Data\CaseTypeArticleNo\CaseTypeData.cs" />
     <Compile Include="Models\Reports\Data\CaseTypeArticleNo\ProductAreaData.cs" />
+    <Compile Include="Models\Reports\Data\LeadtimeActiveCases\CasesTimeLeftOnSolution.cs" />
+    <Compile Include="Models\Reports\Data\LeadtimeActiveCases\LeadtimeActiveCasesData.cs" />
     <Compile Include="Models\Reports\Data\LeadtimeFinishedCases\FinishedCasesLeadTime.cs" />
     <Compile Include="Models\Reports\Data\LeadtimeFinishedCases\FinishedCasesLeadTimes.cs" />
     <Compile Include="Models\Reports\Data\LeadtimeFinishedCases\LeadtimeFinishedCasesData.cs" />
@@ -368,6 +373,7 @@
     <Compile Include="Models\Reports\Enums\ShowCases.cs" />
     <Compile Include="Models\Reports\Options\CaseSatisfactionOptionsResponse.cs" />
     <Compile Include="Models\Reports\Options\CaseTypeArticleNoOptions.cs" />
+    <Compile Include="Models\Reports\Options\LeadtimeActiveCasesOptions.cs" />
     <Compile Include="Models\Reports\Options\LeadtimeFinishedCasesOptions.cs" />
     <Compile Include="Models\Reports\Options\RegistratedCasesCaseTypeOptionsResponse.cs" />
     <Compile Include="Models\Reports\Options\RegistratedCasesDayOptions.cs" />
@@ -879,6 +885,7 @@
     <Compile Include="Models\UserSearchResults.cs" />
     <Compile Include="Enums\Changes\ChangeStatus.cs" />
     <Compile Include="Enums\Changes\Subtopic.cs" />
+    <Compile Include="Models\Users\UserProfileCustomerSettings.cs" />
     <Compile Include="OldComponents\DbUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\User\Input\UserOverview.cs" />

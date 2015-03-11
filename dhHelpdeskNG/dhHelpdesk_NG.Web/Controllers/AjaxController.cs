@@ -14,13 +14,15 @@ namespace DH.Helpdesk.Web.Controllers
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Interfaces;
+    using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
 
     /// <summary>
     /// The ajax controller.
     /// </summary>
-    public class AjaxController : Controller
+    public class AjaxController : BaseController
     {
         /// <summary>
         /// The product area service.
@@ -32,21 +34,22 @@ namespace DH.Helpdesk.Web.Controllers
         /// </summary>
         private readonly ICausingPartService causingPartService;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AjaxController"/> class.
-        /// </summary>
-        /// <param name="productAreaService">
-        /// The product area service.
-        /// </param>
-        /// <param name="causingPartService">
-        /// The causing Type Service.
-        /// </param>
+        private readonly IDepartmentService departmentService;
+
+        private readonly IWorkContext workContext;
+
         public AjaxController(
+            IMasterDataService masterDataService,
             IProductAreaService productAreaService, 
-            ICausingPartService causingPartService)
+            ICausingPartService causingPartService, 
+            IDepartmentService departmentService, 
+            IWorkContext workContext)
+            : base(masterDataService)
         {
             this.productAreaService = productAreaService;
             this.causingPartService = causingPartService;
+            this.departmentService = departmentService;
+            this.workContext = workContext;
         }
 
         /// <summary>
@@ -83,6 +86,17 @@ namespace DH.Helpdesk.Web.Controllers
             var all = this.causingPartService.GetActiveCausingParts(customerId);
             this.FillHierarchyList(null, list, all);
             return this.Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult GetDepartments(int? regionId, int? administratorId, int departmentFilterFormat)
+        {
+            var departments = this.departmentService.GetUserDepartments(
+                                    this.workContext.Customer.CustomerId,
+                                    administratorId,
+                                    regionId,
+                                    departmentFilterFormat);
+            return this.Json(departments, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>

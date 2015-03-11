@@ -41,6 +41,7 @@
         public string CaseIsLockedByUserName { get; set; }
         public Infrastructure.Enums.AccessMode EditMode { get; set; } //(-1,0,1)
         public bool Disable_SendMailAboutCaseToNotifier { get; set; }
+        public int ProductAreaHasChild { get; set; }
         public Case case_  { get; set; }
         public CaseLog CaseLog { get; set; }
         public SendToDialogModel SendToDialogModel { get; set; }

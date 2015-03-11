@@ -22,6 +22,8 @@
         string GetDepartmentName(int departmentId);
 
         ItemOverview FindActiveOverview(int departmentId);
+
+        IEnumerable<Department> GetActiveDepartmentsBy(int customerId, int? regionId);
     }
 
     public sealed class DepartmentRepository : RepositoryBase<Department>, IDepartmentRepository
@@ -106,6 +108,23 @@
                 departments.Select(
                     d => new ItemOverview(d.DepartmentName, d.Id.ToString(CultureInfo.InvariantCulture)))
                     .FirstOrDefault();            
+        }
+
+        /// <summary>
+        /// Returns active depratments for customer by regionId
+        /// </summary>
+        /// <param name="customerId"></param>
+        /// <param name="regionId"></param>
+        /// <returns></returns>
+        public IEnumerable<Department> GetActiveDepartmentsBy(int customerId, int? regionId)
+        {
+            var query = this.DataContext.Departments.Where(d => d.Customer_Id == customerId && d.IsActive != 0);
+            if (regionId.HasValue)
+            {
+                return query.Where(it => it.Region_Id == regionId.Value);
+            }
+
+            return query;
         }
     }
 

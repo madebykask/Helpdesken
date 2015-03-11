@@ -1,9 +1,12 @@
 ﻿namespace DH.Helpdesk.Services.Services.Concrete
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Shared;
+    
     using DH.Helpdesk.Dal.Repositories;
+    using DH.Helpdesk.Domain;
 
     public class OrganizationService : IOrganizationService
     {
@@ -52,6 +55,26 @@
         public List<ItemOverview> GetOrganizationUnits()
         {
             return this.organizationUnitRepository.FindActiveAndShowable();
+        }
+
+        public OU[] GetOrganizationUnitsBy(int customerId, int? regionId, int? departmentId)
+        {
+            var activeDepartments = this.departmentRepository.GetActiveDepartmentsBy(customerId, regionId);
+            if (departmentId.HasValue)
+            {
+                activeDepartments = activeDepartments.Where(it => it.Id == departmentId.Value);
+            }
+
+            var data =
+                this.organizationUnitRepository.GetActiveAndShowable()
+                    .Join(
+                        activeDepartments,
+                        unit => unit.Department_Id,
+                        department => department.Id,
+                        (unit, department) => unit)
+                        .OrderBy(it => it.Parent_OU_Id).ThenBy(it => it.Name).ToArray();
+
+            return data;
         }
     }
 }

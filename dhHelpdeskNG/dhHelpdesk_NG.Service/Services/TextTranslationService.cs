@@ -11,9 +11,9 @@
 
     public interface ITextTranslationService
     {
-        IEnumerable<Text> GetAllTexts(int texttypeId);
+        IEnumerable<Text> GetAllNewTexts(int texttypeId);
 
-        IEnumerable<TextList> GetAllTextsWithUsers(int texttypeId);
+        IEnumerable<TextList> GetAllTexts(int texttypeId);
 
         IList<TextTranslation> GetAllTextTranslations();
         IList<TextTranslationLanguageList> GetEditListToTextTranslations(int textid);
@@ -58,14 +58,14 @@
             this._textTypeRepository = textTypeRepository;
         }
 
-        public IEnumerable<Text> GetAllTexts(int texttypeId)
+        public IEnumerable<Text> GetAllNewTexts(int texttypeId)
         {
             return this._textRepository.GetAll().Where(x => x.Id > 4999 && x.Type == texttypeId).OrderBy(x => x.TextToTranslate);
         }
 
-        public IEnumerable<TextList> GetAllTextsWithUsers(int texttypeId)
+        public IEnumerable<TextList> GetAllTexts(int texttypeId)
         {
-            return this._textRepository.GetAllTextsWithUsers(texttypeId).OrderBy(x => x.TextToTranslate);
+            return this._textRepository.GetAllTexts(texttypeId).OrderBy(x => x.TextToTranslate);
         }
 
         public IList<TextTranslation> GetAllTextTranslations()
@@ -169,52 +169,33 @@
             if (string.IsNullOrEmpty(text.TextToTranslate))
                 errors.Add("text.TextToTranslate", "Du måste ange ett ord att översätta");
 
-
-            if (text.TextTranslations.Count == 0)
+            foreach (var tt in TTs)
             {
-                foreach (var t in TTs)
-                {
-                    if (t.TranslationName == null)
-                        t.TranslationName = "";
+                if (tt.TranslationName == null)
+                    tt.TranslationName = "";
 
-             
-                    var newTT = new TextTranslation { 
-                        TextTranslated = t.TranslationName, 
-                        Language_Id = t.Language_Id, 
-                        Text_Id = text.Id, 
-                        ChangedDate = curNow,
-                        CreatedDate = curNow,
-                        ChangedByUser_Id = t.ChangedByUser_Id };
-
-                    this._textTranslationRepository.Add(newTT);
-                }
-            }
-            else
-            {
-                foreach (var tt in text.TextTranslations)
-                {
-
-                    foreach (var change in TTs.Where(x => x.Text_Id == tt.Text_Id && x.Language_Id == tt.Language_Id))
+                var ttEntity = new TextTranslation()
                     {
-                        if (change.TranslationName == null)
-                            change.TranslationName = "";
+                        TextTranslation_Id = tt.TextTranslation_Id,
+                        Text_Id = text.Id,
+                        Language_Id = tt.Language_Id,
+                        TextTranslated = tt.TranslationName,
+                        ChangedByUser_Id = tt.ChangedByUser_Id,
+                        CreatedDate = tt.CreatedDate,
+                        ChangedDate = curNow
+                    };
 
-                        tt.ChangedDate = curNow;
-                        tt.ChangedByUser_Id = change.ChangedByUser_Id;
-                        if (change.TranslationName != tt.TextTranslated)
-                        {
-                            tt.TextTranslated = change.TranslationName;
-                        }
-                        this._textTranslationRepository.Update(tt);
-                    }
+                if (ttEntity.TextTranslation_Id == 0)
+                {
+                    ttEntity.CreatedDate = curNow;
+                    ttEntity.TextTranslation_Id = 0;
+                    this._textTranslationRepository.Add(ttEntity);
+
                 }
-            }
-
-            if (text.Id == 0)
-                this._textRepository.Add(text);
-            else
-                this._textRepository.Update(text);
-
+                else
+                    this._textTranslationRepository.Update(ttEntity);                    
+            }           
+                    
             if (errors.Count == 0)
                 this.Commit();
         }

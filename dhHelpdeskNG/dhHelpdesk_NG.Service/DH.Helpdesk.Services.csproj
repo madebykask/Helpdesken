@@ -59,6 +59,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Linq.Dynamic">
       <HintPath>..\packages\System.Linq.Dynamic.1.0.3\lib\net40\System.Linq.Dynamic.dll</HintPath>
     </Reference>
@@ -69,6 +70,8 @@
   <ItemGroup>
     <Compile Include="Attributes\Orders\CreateMissingOrderFieldSettingsAttribute.cs" />
     <Compile Include="BusinessLogic\Accounts\OrderAccountDefaultSettingsCreator.cs" />
+    <Compile Include="BusinessLogic\Admin\Users\Concrete\UserPermissionsChecker.cs" />
+    <Compile Include="BusinessLogic\Admin\Users\IUserPermissionsChecker.cs" />
     <Compile Include="BusinessLogic\BusinessModelAuditors\Changes\InvitationToCabAudit.cs" />
     <Compile Include="BusinessLogic\BusinessModelAuditors\Orders\CreateCaseAuditor.cs" />
     <Compile Include="BusinessLogic\BusinessModelAuditors\Orders\InformOrdererAuditor.cs" />
@@ -108,6 +111,7 @@
     <Compile Include="BusinessLogic\BusinessModelValidators\Inventory\Concrete\PrinterValidator.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Orders\Concrete\UpdateOrderRequestValidator.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Orders\IUpdateOrderRequestValidator.cs" />
+    <Compile Include="BusinessLogic\Cases\CaseHelper.cs" />
     <Compile Include="BusinessLogic\MailTools\TemplateFormatters\MailTemplateFormatterNew.cs" />
     <Compile Include="BusinessLogic\MailTools\TemplateFormatters\OrderMailTemplateFormatter.cs" />
     <Compile Include="BusinessLogic\MailTools\TemplateFormatters\SurveyTemplate1.cs">
@@ -174,6 +178,7 @@
     <Compile Include="BusinessLogic\Mappers\ProductArea\ProductAreaMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Questionnaire\CircularPartMappers.cs" />
     <Compile Include="BusinessLogic\Mappers\Questionnaire\QuestionnaireQuestionResultMappers.cs" />
+    <Compile Include="BusinessLogic\Mappers\Reports\Data\ReportOptions.cs" />
     <Compile Include="BusinessLogic\Mappers\Reports\ReportsMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Reports\ReportsOptionsMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Shared\Data\UnionItemOverview.cs" />

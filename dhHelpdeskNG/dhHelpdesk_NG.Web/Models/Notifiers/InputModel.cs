@@ -33,7 +33,6 @@
             DropDownFieldModel region,
             DropDownFieldModel department,
             StringFieldModel unit,
-            DropDownFieldModel organizationUnit,
             DropDownFieldModel division,
             DropDownFieldModel managers,
             DropDownFieldModel group,
@@ -63,7 +62,6 @@
                 region,
                 department,
                 unit,
-                organizationUnit,
                 division,
                 managers,
                 group,
@@ -97,7 +95,6 @@
             DropDownFieldModel region,
             DropDownFieldModel department,
             StringFieldModel unit,
-            DropDownFieldModel organizationUnit,
             DropDownFieldModel division,
             DropDownFieldModel managers,
             DropDownFieldModel group,
@@ -125,7 +122,6 @@
             this.Region = region;
             this.Department = department;
             this.Unit = unit;
-            this.OrganizationUnit = organizationUnit;
             this.Division = division;
             this.Managers = managers;
             this.Group = group;
@@ -189,8 +185,6 @@
         public StringFieldModel LoginName { get; set; }
 
         public BooleanFieldModel Ordered { get; set; }
-
-        public DropDownFieldModel OrganizationUnit { get; set; }
 
         [IsId]
         public int? OrganizationUnitId { get; set; }

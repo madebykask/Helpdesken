@@ -375,7 +375,7 @@
                                             {
                                                 var tempPath = c.TemplatePath;
                                                 tempPath += "?language=[language]";
-                                                <a href="@Url.Content(tempPath.SetUrlParameters())">
+                                                <a href="@Url.Content(tempPath.SetStrParameters())">
                                                     <span class="glyphicon glyphicon-plus"></span>@c.Name
                                                     <br />
                                                     <span class="small">@c.Description </span>
@@ -421,7 +421,7 @@
                                             {
                                                 var tempPath = c.TemplatePath;
                                                 tempPath += "?language=[language]";
-                                                <a href="@Url.Content(tempPath.SetUrlParameters())">                                                
+                                                <a href="@Url.Content(tempPath.SetStrParameters())">                                                
                                                     <span class="glyphicon glyphicon-plus"></span>@c.Name
                                                     <br />
                                                     <span class="small"> @Translation.Get(c.Name + "_Description", Enums.TranslationSource.TextTranslation) </span>
@@ -502,100 +502,107 @@
                         }
                     }
 
-                    @if (!hideMenu)
+                    @if (SessionFacade.CurrentCustomer.ShowDocumentsOnExternalPage != 0)
                     {
-                        var document = pActionSettings.SingleOrDefault(a => a.ObjectId == ActionObject.Document);
-                        if (document != null)
+                        if (!hideMenu)
                         {
-                            if (document.Visibled)
+                            var document = pActionSettings.SingleOrDefault(a => a.ObjectId == ActionObject.Document);
+                            if (document != null)
                             {
-                            <li class="blue">
-                                <a href="@Url.Action("Index", "Documents", new { customerId = pCustomerId, area = "" })">
-                                    <div class="@(string.IsNullOrEmpty(document.ObjectClass) ? "ico-documents" : document.ObjectClass)"></div>
-                                    @Translation.Get(document.ObjectValue, Enums.TranslationSource.TextTranslation)
-                                </a>
-                            </li>
+                                if (document.Visibled)
+                                {
+                                <li class="blue">
+                                    <a href="@Url.Action("Index", "Documents", new { customerId = pCustomerId, area = "" })">
+                                        <div class="@(string.IsNullOrEmpty(document.ObjectClass) ? "ico-documents" : document.ObjectClass)"></div>
+                                        @Translation.Get(document.ObjectValue, Enums.TranslationSource.TextTranslation)
+                                    </a>
+                                </li>
+                                }
                             }
-                        }
-                        else
-                        {
-                            <li class="blue">
-                                <a href="@Url.Action("Index", "Documents", new { customerId = pCustomerId, area = "" })">
-                                    <div class="ico-documents"></div>
-                                    @if (appType == "LineManager")
-                                    {
-                                      @Translation.Get("HR Documents", Enums.TranslationSource.TextTranslation)
-                                    }
-                                    else
-                                    {
-                                      @Translation.Get("Documents", Enums.TranslationSource.TextTranslation)
-                                    }                                    
-                                </a>
-                            </li>
+                            else
+                            {                            
+                                <li class="blue">
+                                    <a href="@Url.Action("Index", "Documents", new { customerId = pCustomerId, area = "" })">
+                                        <div class="ico-documents"></div>
+                                        @if (appType == "LineManager")
+                                        {
+                                            @Translation.Get("HR Documents", Enums.TranslationSource.TextTranslation)
+                                        }
+                                        else
+                                        {
+                                            @Translation.Get("Documents", Enums.TranslationSource.TextTranslation)
+                                        }                                    
+                                    </a>
+                                </li>
+                            }
                         }
                     }
 
-                    @if (!hideMenu && appType == "LineManager")
+                    @if (SessionFacade.CurrentCustomer.ShowCoWorkersOnExternalPage != 0)
                     {
-                        var coWorker = pActionSettings.SingleOrDefault(a => a.ObjectId == ActionObject.CoWorker);
-                        if (coWorker != null)
+                        if (!hideMenu)
                         {
-                            if (coWorker.Visibled)
+                            var coWorker = pActionSettings.SingleOrDefault(a => a.ObjectId == ActionObject.CoWorker);
+                            if (coWorker != null)
                             {
-                            <li class="blue">
-                                <a href="@Url.Action("Index", "CoWorkers", new { customerId = pCustomerId, area = "" })">
-                                    <div class="@(string.IsNullOrEmpty(coWorker.ObjectClass) ? "ico-coworkers" : coWorker.ObjectClass)"></div>
-                                    @Translation.Get(coWorker.ObjectValue, Enums.TranslationSource.TextTranslation)
-                                </a>
-                            </li>
+                                if (coWorker.Visibled)
+                                {
+                                    <li class="blue">
+                                        <a href="@Url.Action("Index", "CoWorkers", new { customerId = pCustomerId, area = "" })">
+                                            <div class="@(string.IsNullOrEmpty(coWorker.ObjectClass) ? "ico-coworkers" : coWorker.ObjectClass)"></div>
+                                            @Translation.Get(coWorker.ObjectValue, Enums.TranslationSource.TextTranslation)
+                                        </a>
+                                    </li>
+                                }
                             }
-                        }
-                        else
-                        {
-                            <li class="blue">
-                                <a href="@Url.Action("Index", "CoWorkers", new { customerId = pCustomerId, area = "" })">
-                                    <div class="ico-coworkers"></div>
-                                    @Translation.Get("My Co-Workers", Enums.TranslationSource.TextTranslation)
-                                </a>
-                            </li>
+                            else
+                            {                            
+                                <li class="blue">
+                                    <a href="@Url.Action("Index", "CoWorkers", new { customerId = pCustomerId, area = "" })">
+                                        <div class="ico-coworkers"></div>
+                                        @Translation.Get("My Co-Workers", Enums.TranslationSource.TextTranslation)
+                                    </a>
+                                </li>
+                            }
                         }
                     }
 
-                    @if (!hideMenu)
+                    @if (SessionFacade.CurrentCustomer.ShowHelpOnExternalPage != 0)
                     {
-                        var help = pActionSettings.SingleOrDefault(a => a.ObjectId == ActionObject.Help);
-                        if (help != null)
+                        if (!hideMenu)
                         {
-                            if (help.Visibled)
+                            var help = pActionSettings.SingleOrDefault(a => a.ObjectId == ActionObject.Help);
+                            if (help != null)
                             {
-                            <li class="dropdown blue">
+                                if (help.Visibled)
+                                {
+                                    <li class="dropdown blue">
+                                        <a href="#" class="dropdown-toggle blue" data-toggle="dropdown">
+                                            <div class="@(string.IsNullOrEmpty(help.ObjectClass) ? "ico-help" : help.ObjectClass)"></div>
+                                            @Translation.Get(help.ObjectValue, Enums.TranslationSource.TextTranslation)
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="@Url.Action("FindYourWay", "Help", new { customerId = pCustomerId, area = "" })">@Translation.Get("Find Your Way", Enums.TranslationSource.TextTranslation)</a></li>
+                                            <li><a href="@Url.Action("Index", "Help", new { customerId = pCustomerId, area = "" })">@Translation.Get("Help", Enums.TranslationSource.TextTranslation)</a></li>
+                                            <li><a href="@Url.Action("About", "Help", new { customerId = pCustomerId, area = "" })">@Translation.Get("About", Enums.TranslationSource.TextTranslation)</a></li>
+                                        </ul>
+                                    </li>
+                                }
+                            }
+                            else
+                            {
+                                <li class="dropdown blue">
                                 <a href="#" class="dropdown-toggle blue" data-toggle="dropdown">
-                                    <div class="@(string.IsNullOrEmpty(help.ObjectClass) ? "ico-help" : help.ObjectClass)"></div>
-                                    @Translation.Get(help.ObjectValue, Enums.TranslationSource.TextTranslation)
-                                </a>
+                                    <div class="ico-help"></div>                                
+                                    @Translation.Get("Need Help", Enums.TranslationSource.TextTranslation)?                                                                                                
+                                </a>                               
                                 <ul class="dropdown-menu">
                                     <li><a href="@Url.Action("FindYourWay", "Help", new { customerId = pCustomerId, area = "" })">@Translation.Get("Find Your Way", Enums.TranslationSource.TextTranslation)</a></li>
                                     <li><a href="@Url.Action("Index", "Help", new { customerId = pCustomerId, area = "" })">@Translation.Get("Help", Enums.TranslationSource.TextTranslation)</a></li>
                                     <li><a href="@Url.Action("About", "Help", new { customerId = pCustomerId, area = "" })">@Translation.Get("About", Enums.TranslationSource.TextTranslation)</a></li>
-                                </ul>
+                                </ul>                                
                             </li>
                             }
-                        }
-                        else
-                        {<li class="dropdown blue">
-                            <a href="#" class="dropdown-toggle blue" data-toggle="dropdown">
-                                <div class="ico-help"></div>                                
-                                @Translation.Get("Need Help", Enums.TranslationSource.TextTranslation)?                                                                                                
-                            </a>
-                            @if (appType == "LineManager")
-                            {
-                            <ul class="dropdown-menu">
-                                <li><a href="@Url.Action("FindYourWay", "Help", new { customerId = pCustomerId, area = "" })">@Translation.Get("Find Your Way", Enums.TranslationSource.TextTranslation)</a></li>
-                                <li><a href="@Url.Action("Index", "Help", new { customerId = pCustomerId, area = "" })">@Translation.Get("Help", Enums.TranslationSource.TextTranslation)</a></li>
-                                <li><a href="@Url.Action("About", "Help", new { customerId = pCustomerId, area = "" })">@Translation.Get("About", Enums.TranslationSource.TextTranslation)</a></li>
-                            </ul>
-                            }
-                        </li>
                         }
                     }
                 </ul>

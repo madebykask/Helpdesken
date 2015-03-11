@@ -9,14 +9,21 @@ namespace DH.Helpdesk.Services.Services
     using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Enums.Admin.Users;
     using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Customer;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.BusinessData.Models.User.Input;
+    using DH.Helpdesk.BusinessData.Models.Users;
+    using DH.Helpdesk.Common.Extensions.Boolean;
     using DH.Helpdesk.Common.Extensions.String;
+    using DH.Helpdesk.Dal.Infrastructure.Translate;
+    using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Accounts;
+    using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Users;
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
     using DH.Helpdesk.Services.Localization;
@@ -24,6 +31,8 @@ namespace DH.Helpdesk.Services.Services
     using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
 
     using DH.Helpdesk.Services.BusinessLogic.Specifications.User;
+
+    using UserGroup = DH.Helpdesk.Domain.UserGroup;
 
     public interface IUserService
     {
@@ -119,6 +128,14 @@ namespace DH.Helpdesk.Services.Services
         List<User> GetActiveUsers();
 
         List<User> GetCustomerActiveUsers(int customerId);
+
+        List<CustomerSettings> GetUserCustomersSettings(int userId);
+
+        List<ItemOverview> GetWorkingGroupUsers(int customerId, int? workingGroupId);
+
+        List<UserProfileCustomerSettings> GetUserProfileCustomersSettings(int userId);
+
+        void UpdateUserProfileCustomerSettings(int userId, List<UserProfileCustomerSettings> customersSettings);
     }
 
     public class UserService : IUserService
@@ -141,6 +158,12 @@ namespace DH.Helpdesk.Services.Services
 
         private readonly IUnitOfWorkFactory unitOfWorkFactory;
 
+        private readonly IUserPermissionsChecker userPermissionsChecker;
+
+        private readonly ITranslator translator;
+
+        private readonly IEntityToBusinessModelMapper<Setting, CustomerSettings> customerSettingsToBusinessModelMapper;
+
         public UserService(
             IAccountActivityRepository accountActivityRepository,
             ICustomerRepository customerRepository,
@@ -157,7 +180,10 @@ namespace DH.Helpdesk.Services.Services
             ICaseSettingRepository casesettingRepository,
             IModuleRepository moduleRepository,
             IUserModuleRepository userModuleRepository, 
-            IUnitOfWorkFactory unitOfWorkFactory)
+            IUnitOfWorkFactory unitOfWorkFactory, 
+            IUserPermissionsChecker userPermissionsChecker, 
+            ITranslator translator, 
+            IEntityToBusinessModelMapper<Setting, CustomerSettings> customerSettingsToBusinessModelMapper)
         {
             this._accountActivityRepository = accountActivityRepository;
             this._customerRepository = customerRepository;
@@ -175,6 +201,9 @@ namespace DH.Helpdesk.Services.Services
             _moduleRepository = moduleRepository;
             _userModuleRepository = userModuleRepository;
             this.unitOfWorkFactory = unitOfWorkFactory;
+            this.userPermissionsChecker = userPermissionsChecker;
+            this.translator = translator;
+            this.customerSettingsToBusinessModelMapper = customerSettingsToBusinessModelMapper;
         }
 
 
@@ -373,6 +402,12 @@ namespace DH.Helpdesk.Services.Services
 
             errors = new Dictionary<string, string>();
 
+            List<UserPermission> wrongPermissions;
+            if (!this.userPermissionsChecker.CheckPermissions(user, out wrongPermissions))
+            {
+                errors.Add("User permissions", this.translator.Translate("There are wrong permissions for this user group."));
+            }
+
             var hasDublicate = this.GetUsers()
                             .Any(u => u.UserID.EqualWith(user.UserID) && u.Id != user.Id);
             if (hasDublicate)
@@ -519,6 +554,12 @@ namespace DH.Helpdesk.Services.Services
             }
 
             errors = new Dictionary<string, string>();
+
+            List<UserPermission> wrongPermissions;
+            if (!this.userPermissionsChecker.CheckPermissions(user, out wrongPermissions))
+            {
+                errors.Add("User permissions", this.translator.Translate("There are wrong permissions for this user group."));
+            }
 
             var hasDublicate = this.GetUsers()
                             .Any(u => u.UserID.EqualWith(user.UserID));
@@ -776,6 +817,100 @@ namespace DH.Helpdesk.Services.Services
                 var users = userRep.GetAll().GetActive();
 
                 return UsersMapper.MapToCustomerUsers(customers, users, customerUsers);
+            }
+        }
+
+        public List<CustomerSettings> GetUserCustomersSettings(int userId)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var customerRep = uow.GetRepository<Customer>();
+                var customerUserRep = uow.GetRepository<CustomerUser>();
+                var userRep = uow.GetRepository<User>();
+                var customerSettingsRep = uow.GetRepository<Setting>();
+
+                var customers = customerRep.GetAll();
+                var customerUsers = customerUserRep.GetAll();
+                var users = userRep.GetAll().GetById(userId);
+                var customerSettings = customerSettingsRep.GetAll();
+
+                return UsersMapper.MapToUserCustomersSettings(
+                                customers, 
+                                users, 
+                                customerUsers, 
+                                customerSettings,
+                                this.customerSettingsToBusinessModelMapper);
+            }
+        }
+
+        public List<ItemOverview> GetWorkingGroupUsers(int customerId, int? workingGroupId)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var userRep = uow.GetRepository<User>();
+                var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
+                var userWorkingGroupRep = uow.GetRepository<UserWorkingGroup>();
+                var customerRep = uow.GetRepository<Customer>();
+                var customerUserRep = uow.GetRepository<CustomerUser>();
+
+                var users = userRep.GetAll().GetActive();
+                var workingGroups = workingGroupRep.GetAll().GetById(workingGroupId);
+                var userWorkingGroups = userWorkingGroupRep.GetAll();
+                var customers = customerRep.GetAll().GetById(customerId);
+                var customerUsers = customerUserRep.GetAll();
+
+                return UsersMapper.MapToWorkingGroupUsers(
+                                users,
+                                workingGroups,
+                                userWorkingGroups,
+                                customers,
+                                customerUsers,
+                                workingGroupId);
+            }
+        }
+
+        public List<UserProfileCustomerSettings> GetUserProfileCustomersSettings(int userId)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var customerRep = uow.GetRepository<Customer>();
+                var customerUserRep = uow.GetRepository<CustomerUser>();
+                var userRep = uow.GetRepository<User>();
+                var customerSettingsRep = uow.GetRepository<Setting>();
+
+                var customers = customerRep.GetAll();
+                var customerUsers = customerUserRep.GetAll();
+                var users = userRep.GetAll().GetById(userId);
+                var customerSettings = customerSettingsRep.GetAll();
+
+                return UsersMapper.MapToUserProfileCustomersSettings(
+                                customers,
+                                users,
+                                customerUsers,
+                                customerSettings);
+            }
+        }
+
+        public void UpdateUserProfileCustomerSettings(int userId, List<UserProfileCustomerSettings> customersSettings)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var customerUserRep = uow.GetRepository<CustomerUser>();
+
+                var customerUsers = customerUserRep.GetAll()
+                                .Where(cu => cu.User_Id == userId)
+                                .ToList();
+
+                foreach (var customerUser in customerUsers)
+                {
+                    var settings = customersSettings.FirstOrDefault(s => s.CustomerId == customerUser.Customer_Id);
+                    if (settings != null)
+                    {
+                        customerUser.ShowOnStartPage = settings.ShowOnStartPage.ToInt();
+                    }
+                }
+
+                uow.Save();
             }
         }
 

@@ -52,11 +52,24 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 Value = x.Id.ToString()
             }).ToList();
 
+            var selectedNum = 0;
+            if (customer.ShowFAQOnExternalStartPage.HasValue)
+              selectedNum = customer.ShowFAQOnExternalStartPage.Value;
+
+            var nums = new List<int> { 1, 5, 10, 50, 100, 1000 };            
+            var numbers = nums.Select(x => new SelectListItem
+            {
+                Text = x.ToString(),
+                Value = x.ToString(),
+                Selected = (x == selectedNum)
+            }).ToList();
+
             var model = new SelfServiceIndexViewModel()
                 {
                     Customer = customer,
                     AvailableCategories = availableCats,
-                    SelectedCategories = selectedCats
+                    SelectedCategories = selectedCats,
+                    StartPageFAQNums = numbers
                 };
 
             return View(model);
@@ -71,15 +84,18 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             customerToSave.ShowDashboardOnExternalPage = vmodel.Customer.ShowDashboardOnExternalPage;
             customerToSave.ShowFAQOnExternalPage = vmodel.Customer.ShowFAQOnExternalPage;
             customerToSave.ShowDocumentsOnExternalPage = vmodel.Customer.ShowDocumentsOnExternalPage;
+            customerToSave.ShowFAQOnExternalStartPage = vmodel.Customer.ShowFAQOnExternalStartPage;
+            customerToSave.ShowCoWorkersOnExternalPage = vmodel.Customer.ShowCoWorkersOnExternalPage;
+            customerToSave.ShowHelpOnExternalPage = vmodel.Customer.ShowHelpOnExternalPage;
 
-            var setting = this._settingService.GetCustomerSetting(id);            
+            //var setting = this._settingService.GetCustomerSetting(id);            
 
             if (customerToSave == null)
                 throw new Exception("No customer found...");
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
-
-            this._customerService.SaveEditCustomer(customerToSave, setting, null, customerToSave.Language_Id, out errors);
+            
+            this._customerService.SaveEditCustomer(customerToSave, out errors);
 
             var allCategories = _documentService.GetDocumentCategories(id);
 

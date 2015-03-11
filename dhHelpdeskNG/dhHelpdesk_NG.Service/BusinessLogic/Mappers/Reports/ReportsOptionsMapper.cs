@@ -13,6 +13,8 @@
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.CaseType;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.ProductArea;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Reports.Data;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Shared.Data;
 
     public static class ReportsOptionsMapper
     {
@@ -35,19 +37,13 @@
                                        IQueryable<WorkingGroupEntity> workingGroups,
                                        IQueryable<User> administrators)
         {
-            var overviews = departments.Select(d => new { d.Id, Name = d.DepartmentName, Type = "Departments" }).Union(
-                            caseTypes.Select(t => new { t.Id, t.Name, Type = "CaseTypes" }).Union(
-                            workingGroups.Select(g => new { g.Id, Name = g.WorkingGroupName, Type = "WorkingGroups" }).Union(
-                            administrators.Select(a => new { a.Id, Name = a.FirstName + " " + a.SurName, Type = "Administrators" }))))
-                            .OrderBy(o => o.Type)
-                            .ThenBy(o => o.Name)
-                            .ToList();
+            var options = GetOptions(departments, caseTypes, workingGroups, administrators, null, null, false);
 
             return new RegistratedCasesDayOptions(
-                            overviews.Where(o => o.Type == "Departments").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToList(),
-                            overviews.Where(o => o.Type == "CaseTypes").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToList(),
-                            overviews.Where(o => o.Type == "WorkingGroups").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToList(),
-                            overviews.Where(o => o.Type == "Administrators").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToList());
+                            options.Departments,
+                            options.CaseTypesOverviews,
+                            options.WorkingGroups,
+                            options.Administrators);
         }
 
         public static CaseTypeArticleNoOptions MapToCaseTypeArticleNoOptions(
@@ -57,28 +53,13 @@
                                         IQueryable<ProductArea> productAreas,
                                         bool productAreaLineRelations = false)
         {
-            var overviews = departments.Select(d => new { d.Id, Name = d.DepartmentName, Type = "Departments" }).Union(
-                            workingGroups.Select(g => new { g.Id, Name = g.WorkingGroupName, Type = "WorkingGroups" }).Union(
-                            caseTypes.Select(t => new { t.Id, t.Name, Type = "CaseTypes" })))
-                            .OrderBy(o => o.Type)
-                            .ThenBy(o => o.Name)
-                            .ToList();
-
-            var productAreaEntities = productAreas.Select(a => new ProductAreaItem
-                                                                 {
-                                                                     Id = a.Id, 
-                                                                     ParentId = a.Parent_ProductArea_Id, 
-                                                                     Name = a.Name
-                                                                 })
-                                                                 .OrderBy(a => a.Name)
-                                                                 .ToList();
-            var productAreasItems = productAreaLineRelations ? productAreaEntities.BuildLineRelations() : productAreaEntities.BuildRelations();
+            var options = GetOptions(departments, caseTypes, workingGroups, null, productAreas, null, false, productAreaLineRelations);
 
             return new CaseTypeArticleNoOptions(
-                            overviews.Where(o => o.Type == "Departments").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToList(),                            
-                            overviews.Where(o => o.Type == "WorkingGroups").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToList(),
-                            overviews.Where(o => o.Type == "CaseTypes").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToList(),
-                            productAreasItems);
+                            options.Departments,                            
+                            options.WorkingGroups,
+                            options.CaseTypesOverviews,
+                            options.ProductAreas);
         }
 
         public static ReportGeneratorOptions MapToReportGeneratorOptions(
@@ -88,48 +69,13 @@
                                         IQueryable<CaseType> caseTypes,
                                         int languageId)
         {
-            var separator = Guid.NewGuid().ToString();
-
-            var overviews = departments.Select(d => new { d.Id, Name = d.DepartmentName, Type = "Department" }).Union(
-                            workingGroups.Select(g => new { g.Id, Name = g.WorkingGroupName, Type = "WorkingGroup" }).Union(
-                            caseTypes.Select(t => new
-                                                      {
-                                                          t.Id, 
-                                                          Name = t.Name + separator + t.Parent_CaseType_Id, 
-                                                          Type = "CaseType"
-                                                      })))
-                            .OrderBy(o => o.Type)
-                            .ThenBy(o => o.Name)
-                            .ToList();
-
-            var fs = fields.Select(f => new
-                                   {
-                                       f.Id, 
-                                       Caption = f.CaseFieldSettingLanguages.FirstOrDefault(l => l.Language_Id == languageId).Label,
-                                       FieldName = f.Name
-                                   })
-                                   .ToList()
-                                   .Select(f => new ItemOverview(!string.IsNullOrEmpty(f.Caption) ? f.Caption : f.FieldName, f.Id.ToString(CultureInfo.InvariantCulture)))
-                                   .OrderBy(f => f.Name)
-                                   .ToList();
+            var options = GetOptions(departments, caseTypes, workingGroups, null, null, fields, true, false, languageId);
 
             return new ReportGeneratorOptions(
-                            fs,
-                            overviews.Where(o => o.Type == "Department").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToList(),
-                            overviews.Where(o => o.Type == "WorkingGroup").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToList(),
-                            overviews.Where(o => o.Type == "CaseType").Select(
-                                o =>
-                                    {
-                                        var values = o.Name.Split(new[] { separator }, StringSplitOptions.RemoveEmptyEntries);
-                                        string name = values[0];
-                                        int? parentId = null;
-                                        int parentIdVal;
-                                        if (values.Length > 1 && int.TryParse(values[1], out parentIdVal))
-                                        {
-                                            parentId = parentIdVal;
-                                        }
-                                        return new CaseTypeItem(o.Id, parentId, name);
-                                    }).ToList().BuildRelations());
+                            options.Fields,
+                            options.Departments,
+                            options.WorkingGroups,
+                            options.CaseTypes);
         }
 
         public static LeadtimeFinishedCasesOptions MapToLeadtimeFinishedCasesOptions(
@@ -137,36 +83,148 @@
                                                         IQueryable<CaseType> caseTypes,
                                                         IQueryable<WorkingGroupEntity> workingGroups)
         {
-            var separator = Guid.NewGuid().ToString();
-
-            var overviews = departments.Select(d => new { d.Id, Name = d.DepartmentName, Type = "Department" }).Union(
-                            workingGroups.Select(g => new { g.Id, Name = g.WorkingGroupName, Type = "WorkingGroup" }).Union(
-                            caseTypes.Select(t => new
-                            {
-                                t.Id,
-                                Name = t.Name + separator + t.Parent_CaseType_Id,
-                                Type = "CaseType"
-                            })))
-                            .OrderBy(o => o.Type)
-                            .ThenBy(o => o.Name)
-                            .ToList();
+            var options = GetOptions(departments, caseTypes, workingGroups);
 
             return new LeadtimeFinishedCasesOptions(
-                            overviews.Where(o => o.Type == "Department").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToList(),                                        
-                            overviews.Where(o => o.Type == "CaseType").Select(
-                                o =>
+                            options.Departments,                                        
+                            options.CaseTypes,
+                            options.WorkingGroups);
+        }
+
+        public static LeadtimeActiveCasesOptions MapToLeadtimeActiveCasesOptions(
+                                                        IQueryable<Department> departments,
+                                                        IQueryable<CaseType> caseTypes)
+        {
+            var options = GetOptions(departments, caseTypes);
+
+            return new LeadtimeActiveCasesOptions(
+                            options.Departments,                                        
+                            options.CaseTypes);
+        }
+
+        private static ReportOptions GetOptions(
+                                        IQueryable<Department> departments = null,
+                                        IQueryable<CaseType> caseTypes = null,
+                                        IQueryable<WorkingGroupEntity> workingGroups = null,
+                                        IQueryable<User> administrators = null,
+                                        IQueryable<ProductArea> productAreas = null,
+                                        IQueryable<CaseFieldSetting> fields = null,
+                                        bool caseTypeRootsOnly = true,
+                                        bool productAreaLineRelations = false,
+                                        int? languageId = null)
+        {
+            var caseTypesResult = new List<CaseTypeItem>();
+            var productAreasResult = new List<ProductAreaItem>();
+            var fieldsResult = new List<ItemOverview>();
+
+            IQueryable<UnionItemOverview> query = null;
+            var separator = Guid.NewGuid().ToString();
+
+            if (departments != null)
+            {
+                query = departments.Select(d => new UnionItemOverview { Id = d.Id, Name = d.DepartmentName, Type = "Departments" });
+            }
+
+            if (caseTypes != null)
+            {
+                IQueryable<UnionItemOverview> union;
+                if (caseTypeRootsOnly)
+                {
+                    union = caseTypes.Select(t => new UnionItemOverview
+                            {
+                                Id = t.Id,
+                                Name = t.Name + separator + t.Parent_CaseType_Id,
+                                Type = "CaseTypes"
+                            });
+                }
+                else
+                {
+                    union = caseTypes.Select(t => new UnionItemOverview { Id = t.Id, Name = t.Name, Type = "CaseTypes" });
+                }
+
+                query = query == null ? union : query.Union(union);
+            }
+
+            if (workingGroups != null)
+            {
+                var union = workingGroups.Select(g => new UnionItemOverview { Id = g.Id, Name = g.WorkingGroupName, Type = "WorkingGroups" });
+                query = query == null ? union : query.Union(union);
+            }
+
+            if (administrators != null)
+            {
+                var union = administrators.Select(a => new UnionItemOverview { Id = a.Id, Name = a.FirstName + " " + a.SurName, Type = "Administrators" });
+                query = query == null ? union : query.Union(union);
+            }
+
+            if (productAreas != null)
+            {
+                var productAreaEntities = productAreas.Select(a => new ProductAreaItem
+                                                    {
+                                                        Id = a.Id,
+                                                        ParentId = a.Parent_ProductArea_Id,
+                                                        Name = a.Name
+                                                    })
+                                                    .OrderBy(a => a.Name)
+                                                    .ToList();
+
+                productAreasResult = productAreaLineRelations ? productAreaEntities.BuildLineRelations() : productAreaEntities.BuildRelations();
+            }
+
+            if (fields != null)
+            {
+                fieldsResult = fields.Select(f => new
                                 {
-                                    var values = o.Name.Split(new[] { separator }, StringSplitOptions.RemoveEmptyEntries);
-                                    string name = values[0];
-                                    int? parentId = null;
-                                    int parentIdVal;
-                                    if (values.Length > 1 && int.TryParse(values[1], out parentIdVal))
-                                    {
-                                        parentId = parentIdVal;
-                                    }
-                                    return new CaseTypeItem(o.Id, parentId, name);
-                                }).ToList().BuildRelations(),
-                                overviews.Where(o => o.Type == "WorkingGroup").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToList());
+                                    f.Id,
+                                    Caption = f.CaseFieldSettingLanguages.FirstOrDefault(l => l.Language_Id == languageId).Label,
+                                    FieldName = f.Name
+                                })
+                                .ToList()
+                                .Select(f => new ItemOverview(!string.IsNullOrEmpty(f.Caption) ? f.Caption : f.FieldName, f.Id.ToString(CultureInfo.InvariantCulture)))
+                                .OrderBy(f => f.Name)
+                                .ToList();
+            }
+
+            var overviews = query != null ? query
+                            .OrderBy(o => o.Type)
+                            .ThenBy(o => o.Name)
+                            .ToList() : new List<UnionItemOverview>();
+
+            var departmentsResult = overviews.Where(o => o.Type == "Departments").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToList();
+            var caseTypesOverviewsResult = overviews.Where(o => o.Type == "CaseTypes").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToList();
+            var workingGroupsResult = overviews.Where(o => o.Type == "WorkingGroups").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToList();
+            var administratorsResult = overviews.Where(o => o.Type == "Administrators").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToList();
+            
+            if (caseTypeRootsOnly)
+            {
+                caseTypesResult = overviews.Where(o => o.Type == "CaseTypes").Select(
+                o =>
+                    {
+                        var values = o.Name.Split(new[] { separator }, StringSplitOptions.RemoveEmptyEntries);
+                        string name = values[0];
+                        int? parentId = null;
+                        int parentIdVal;
+                        if (values.Length > 1 && int.TryParse(values[1], out parentIdVal))
+                        {
+                            parentId = parentIdVal;
+                        }
+
+                        return new CaseTypeItem(o.Id, parentId, name);
+                    }).ToList().BuildRelations();     
+            }
+            else
+            {
+                caseTypesOverviewsResult = overviews.Where(o => o.Type == "CaseTypes").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToList();
+            }                  
+
+            return new ReportOptions(
+                    departmentsResult,
+                    caseTypesOverviewsResult,
+                    caseTypesResult,
+                    productAreasResult,
+                    workingGroupsResult,
+                    administratorsResult,
+                    fieldsResult);
         }
     }
 }

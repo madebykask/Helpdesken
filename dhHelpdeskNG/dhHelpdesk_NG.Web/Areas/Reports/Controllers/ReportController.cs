@@ -108,6 +108,12 @@
                     return this.PartialView(
                                 "Options/LeadtimeFinishedCases",
                                 this.reportModelFactory.GetLeadtimeFinishedCasesOptionsModel(leadtimeFinishedCases));
+
+                case ReportType.LeadtimeActiveCases:
+                    var leadtimeActiveCases = this.reportService.GetLeadtimeActiveCasesOptions(this.OperationContext.CustomerId);
+                    return this.PartialView(
+                                "Options/LeadtimeActiveCases",
+                                this.reportModelFactory.GetLeadtimeActiveCasesOptionsModel(leadtimeActiveCases));
             }
 
             return null;
@@ -262,6 +268,31 @@
             var model = this.reportModelFactory.GetLeadtimeFinishedCasesModel(data, options.IsShowDetails);
 
             return this.PartialView("Reports/LeadtimeFinishedCases", model);
+        }
+
+        [HttpPost]
+        [BadRequestOnNotValid]
+        public PartialViewResult GetLeadtimeActiveCasesReport(LeadtimeActiveCasesOptionsModel options)
+        {
+            const int HighHours = 2;
+            const int MediumDays = 2;
+            const int LowDays = 5;
+
+            var data = this.reportService.GetLeadtimeActiveCasesData(
+                                            this.OperationContext.CustomerId,
+                                            options.DepartmentIds,
+                                            options.CaseTypeId,
+                                            HighHours, 
+                                            MediumDays, 
+                                            LowDays);
+
+            var model = this.reportModelFactory.GetLeadtimeActiveCasesModel(
+                                            data,
+                                            HighHours,
+                                            MediumDays,
+                                            LowDays);
+
+            return this.PartialView("Reports/LeadtimeActiveCases", model);
         }
     }
 }

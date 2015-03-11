@@ -44,6 +44,38 @@ namespace DH.Helpdesk.Common.Tools
         }
 
         /// <summary>
+        /// Shortcut to round datetime to specified hour
+        /// Achtung: if Hour == 24 sets date to next day
+        /// </summary>
+        /// <param name="date"></param>
+        /// <param name="hour"></param>
+        /// <returns></returns>
+        public static DateTime SetToHour(this DateTime date, int hour)
+        {
+            if (hour < 0 || hour > 24)
+            {
+                throw new ArgumentException();
+            }
+
+            if (hour == 24)
+            {
+                return new DateTime(date.Year, date.Month, date.Day).AddDays(1);
+            }
+
+            return new DateTime(date.Year, date.Month, date.Day, hour, 0, 0);
+        }
+
+        /// <summary>
+        /// Makes next date for current date
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns></returns>
+        public static DateTime MakeTomorrow(this DateTime date)
+        {
+            return date.RoundToDay().AddDays(1);
+        }
+
+        /// <summary>
         /// The round to hour.
         /// </summary>
         /// <param name="date">

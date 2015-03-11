@@ -293,6 +293,27 @@
             return query;
         } 
 
+        public static IQueryable<Case> GetActive(this IQueryable<Case> query)
+        {
+            query = query.Where(c => !c.FinishingDate.HasValue);
+
+            return query;
+        } 
+
+        public static IQueryable<Case> GetWaitingForWatch(this IQueryable<Case> query)
+        {
+            query = query.Where(c => c.WatchDate.HasValue);
+
+            return query;
+        } 
+
+        public static IQueryable<Case> HasLeadTime(this IQueryable<Case> query)
+        {
+            query = query.Where(c => c.LeadTime > 0);
+
+            return query;
+        } 
+
         public static IQueryable<Case> Search(
                                 this IQueryable<Case> query,
                                 int customerId,
