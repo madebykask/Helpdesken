@@ -868,8 +868,12 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 htmlOutput += "</tr>";
 
                 if (productArea.SubProductAreas != null)
+                {
                     if (productArea.SubProductAreas.Count > 0)
-                        htmlOutput += BuildProductAreaTreeRow(productArea.SubProductAreas.ToList(), iteration + 20);
+                    {
+                        htmlOutput += BuildProductAreaTreeRow(productArea.SubProductAreas.OrderBy(x=>x.Name).ToList(), iteration + 20);
+                    }
+                }
             }
 
             return new MvcHtmlString(htmlOutput);
