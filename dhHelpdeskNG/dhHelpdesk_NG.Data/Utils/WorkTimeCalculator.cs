@@ -161,7 +161,7 @@
         {
             if (calcFrom > calcTo)
             {
-                throw new ArgumentException("calcFrom can not be less that calcTo");
+                throw new ArgumentException("calcFrom can not be more that calcTo");
             }
 
             HolidayCache holidaysCacheToUse = null;

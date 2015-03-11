@@ -166,10 +166,22 @@
                                     if (caseShouldBeFinishedInDate.HasValue)
                                     {
                                         //// calc time by watching date
-                                        timeLeft = (int)Math.Floor((decimal)workTimeCalculator.CalcWorkTimeMinutes(
+                                        if (caseShouldBeFinishedInDate.Value > now)
+                                        {
+                                            timeLeft = (int)Math.Floor((decimal)workTimeCalculator.CalcWorkTimeMinutes(
+                                                departmentId,
+                                                now,
+                                                caseShouldBeFinishedInDate.Value) / 60);
+                                        }
+                                        else
+                                        {
+                                            //// for cases that should be closed in the past
+                                            timeLeft = -(int)Math.Floor((decimal)workTimeCalculator.CalcWorkTimeMinutes(
                                             departmentId,
-                                            now,
-                                            caseShouldBeFinishedInDate.Value) / 60);
+                                            caseShouldBeFinishedInDate.Value,
+                                            now) / 60);
+                                        }
+                                        
                                     }
                                     else if (SLAtime > 0)
                                     {
