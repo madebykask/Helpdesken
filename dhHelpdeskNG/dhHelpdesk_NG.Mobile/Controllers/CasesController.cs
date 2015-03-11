@@ -7,6 +7,7 @@
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Helpers;
+    
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Case;
@@ -294,7 +295,7 @@
                         sm.Search,
                         this.workContext.Customer.WorkingDayStart,
                         this.workContext.Customer.WorkingDayEnd,
-                        this.workContext.Cache.Holidays,
+                        WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext),
                         this.configuration.Application.ApplicationId);
                     m.caseSearchResult = srm;
                     m.caseSearchFilterData = fd;
@@ -914,8 +915,8 @@
                 css.Add(cs1);
                 css.Add(cs2);
                 m.caseSettings = css;
-                
-                //m.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(f.CustomerId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
+
+                var workTimeCalc = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
                 m.cases = this._caseSearchService.Search(
                     f,
                     m.caseSettings,
@@ -927,7 +928,7 @@
                     sm.Search,
                     this.workContext.Customer.WorkingDayStart,
                     this.workContext.Customer.WorkingDayEnd,
-                    this.workContext.Cache.Holidays,
+                    workTimeCalc,
                     this.configuration.Application.ApplicationId);
 
                 sm.Search.IdsForLastSearch = GetIdsFromSearchResult(m.cases);
@@ -1271,10 +1272,7 @@
 
             if (case_.FinishingDate.HasValue)
             {
-                var workTimeCalc = WorkTimeCalculator.MakeCalculator(
-                    this.workContext.Customer.WorkingDayStart,
-                    this.workContext.Customer.WorkingDayEnd,
-                    this.workContext.Cache.Holidays);
+                var workTimeCalc = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
                 case_.LeadTime = workTimeCalc.CalcWorkTimeMinutes(
                     case_.Department_Id,
                     case_.RegTime,

@@ -47,7 +47,7 @@
                         var holidayCache = new HolidayCache();
                         foreach (var holidayOverview in holidayKV.Value)
                         {
-                            /// temporary fix for exception in overview
+                            /// checking if we have same dates in one calendar
                             if (!holidayCache.ContainsKey(holidayOverview.HolidayDate))
                             {
                                 holidayCache.Add(
@@ -73,53 +73,6 @@
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Fabric method for create
-        /// </summary>
-        /// <param name="workingDayStart">in local time</param>
-        /// <param name="workingDayEnd">in local time</param>
-        /// <param name="holidays"></param>
-        /// <returns></returns>
-        public static WorkTimeCalculator MakeCalculator(
-            int workingDayStart,
-            int workingDayEnd,
-            IEnumerable<HolidayOverview> holidays)
-        {
-            IEnumerable<HolidayOverview> defaultCalendar = null;
-            var holidayCache = new Dictionary<int, IList<HolidayOverview>>();
-            foreach (var holidayOverview in holidays)
-            {
-                var deptId = holidayOverview.HolidayHeader.DeptartmentId;
-                if (holidayCache.ContainsKey(deptId))
-                {
-                    holidayCache[deptId].Add(holidayOverview);
-                }
-                else
-                {
-                    holidayCache.Add(deptId, new List<HolidayOverview>() { holidayOverview });
-                }
-            }
-
-            //// default calendar with id = 1
-            if (holidayCache.ContainsKey(1))
-            {
-                defaultCalendar = holidayCache[1];
-            }
-
-            //// due to we perform calculations in UTC, we need to conver working hours in UTC also
-            //// Due to we have only hours there is a bug with NST (3:30) or New Zealand (2:45) timezones 
-            //// TODO (Alexander Semenischev): fix bug with timezones
-            var workBeginTime = DateTime.Now.RoundToWorkDateTime(workingDayStart).ToUniversalTime();
-            var workEndTime = DateTime.Now.RoundToWorkDateTime(workingDayEnd).ToUniversalTime();
-            var workBeginUtc = (int)Math.Floor((decimal)(workBeginTime.Hour * 60 + workBeginTime.Minute * 60 + workBeginTime.Second) / 60);
-            var workEndUtc = (int)Math.Floor((decimal)(workEndTime.Hour * 60 + workEndTime.Minute * 60 + workEndTime.Second) / 60);
-            return new WorkTimeCalculator(
-                workBeginUtc,
-                workEndUtc,
-                holidayCache,
-                defaultCalendar);
         }
 
         /// <summary>

@@ -24,7 +24,7 @@
             ISearch s,
             int workingDayStart,
             int workingDayEnd,
-            IEnumerable<HolidayOverview> holidays,
+            WorkTimeCalculator workTimeCalculator,
             string applicationId = null);
     }
 
@@ -58,7 +58,7 @@
                                 ISearch s,
                                 int workingDayStart,
                                 int workingDayEnd,
-                                IEnumerable<HolidayOverview> holidays,
+                                WorkTimeCalculator workTimeCalculator,
                                 string applicationId = null)
         {
             int productAreaId;
@@ -70,8 +70,6 @@
             {
                 csf.ProductArea = this.productAreaService.GetProductAreaWithChildren(productAreaId, ", ", "Id");
             }
-            
-            var workTimeCalculator = WorkTimeCalculator.MakeCalculator(workingDayStart, workingDayEnd, holidays);
 
             return this.caseSearchRepository.Search(
                                                 csf, 

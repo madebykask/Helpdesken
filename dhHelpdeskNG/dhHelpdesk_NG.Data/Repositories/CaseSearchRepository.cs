@@ -180,8 +180,7 @@
                                             departmentId,
                                             caseShouldBeFinishedInDate.Value,
                                             now) / 60);
-                                        }
-                                        
+                                        }                                        
                                     }
                                     else if (SLAtime > 0)
                                     {

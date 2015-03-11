@@ -27,6 +27,11 @@ namespace DH.Helpdesk.Mobile.Infrastructure.WorkContext.Concrete
         private const string CacheHolidays = "CACHE_CONTEXT_HOLIDAYS";
 
         /// <summary>
+        /// Cache for default calendar
+        /// </summary>
+        private const string CacheDefaultCalendar = "CACHE_CONTEXT_DEFAULT_HOLIDAYS";
+
+        /// <summary>
         /// The holiday service.
         /// </summary>
         private readonly IHolidayService holidayService;
@@ -34,7 +39,12 @@ namespace DH.Helpdesk.Mobile.Infrastructure.WorkContext.Concrete
         /// <summary>
         /// The holidays.
         /// </summary>
-        private IEnumerable<HolidayOverview> holidays;
+        private IEnumerable<HolidayOverview> holidays;  
+        
+        /// <summary>
+        /// The default calendar holidays.
+        /// </summary>
+        private IEnumerable<HolidayOverview> defaultHolidays;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CacheContext"/> class.
@@ -59,11 +69,29 @@ namespace DH.Helpdesk.Mobile.Infrastructure.WorkContext.Concrete
                     this.holidays = (IEnumerable<HolidayOverview>)HttpContext.Current.Cache[CacheHolidays];
                     if (this.holidays == null)
                     {
-                        HttpContext.Current.Cache[CacheHolidays] = this.holidays = this.holidayService.GetHolidays();
+                        HttpContext.Current.Cache[CacheHolidays] = this.holidays = this.holidayService.GetHolidayOverviews();
                     }
                 }
 
                 return this.holidays;
+            }
+        }
+
+        public IEnumerable<HolidayOverview> DefaultCalendarHolidays
+        {
+            get
+            {
+                if (this.defaultHolidays == null)
+                {
+                    this.defaultHolidays = (IEnumerable<HolidayOverview>)HttpContext.Current.Cache[CacheDefaultCalendar];
+                    if (this.defaultHolidays == null)
+                    {
+                        HttpContext.Current.Cache[CacheDefaultCalendar] =
+                            this.defaultHolidays = this.holidayService.GetDefaultCalendar();
+                    }
+                }
+
+                return this.defaultHolidays;
             }
         }
 
@@ -73,6 +101,7 @@ namespace DH.Helpdesk.Mobile.Infrastructure.WorkContext.Concrete
         public void Refresh()
         {
             this.holidays = null;
+            HttpContext.Current.Cache.Remove(CacheDefaultCalendar);
             HttpContext.Current.Cache.Remove(CacheHolidays);
         }
     }

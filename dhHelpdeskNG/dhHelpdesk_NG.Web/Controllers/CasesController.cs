@@ -26,6 +26,7 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Dal.Utils;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Mobile.Infrastructure;
     using DH.Helpdesk.Services.Exceptions;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
@@ -100,7 +101,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ICaseSolutionSettingService caseSolutionSettingService;
 
         private readonly IInvoiceHelper invoiceHelper;
-
+        
         #endregion
 
         #region Constructor
@@ -384,6 +385,7 @@ namespace DH.Helpdesk.Web.Controllers
                     fd.CaseWatchDateStartFilter = sm.caseSearchFilter.CaseWatchDateStartFilter;
                     
                     srm.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(cusId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
+                    var workTimeCalculator = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
                     srm.cases = this._caseSearchService.Search(
                         sm.caseSearchFilter,
                         srm.caseSettings,
@@ -395,7 +397,7 @@ namespace DH.Helpdesk.Web.Controllers
                         sm.Search,
                         this.workContext.Customer.WorkingDayStart,
                         this.workContext.Customer.WorkingDayEnd,
-                        this.workContext.Cache.Holidays,
+                        workTimeCalculator,
                         this.configuration.Application.ApplicationId);
                     m.caseSearchResult = srm;
                     m.caseSearchFilterData = fd;
@@ -1055,6 +1057,7 @@ namespace DH.Helpdesk.Web.Controllers
                 sm.Search.Ascending = frm.ReturnFormValue("hidSortByAsc").convertStringToBool();
 
                 m.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(f.CustomerId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
+                var workTimeCalc = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
                 m.cases = this._caseSearchService.Search(
                     f,
                     m.caseSettings,
@@ -1066,7 +1069,7 @@ namespace DH.Helpdesk.Web.Controllers
                     sm.Search,
                     this.workContext.Customer.WorkingDayStart,
                     this.workContext.Customer.WorkingDayEnd,
-                    this.workContext.Cache.Holidays,
+                    workTimeCalc,
                     this.configuration.Application.ApplicationId);
 
                 sm.Search.IdsForLastSearch = GetIdsFromSearchResult(m.cases);
@@ -1490,10 +1493,7 @@ namespace DH.Helpdesk.Web.Controllers
                     // calculating time spent in "inactive" state every save
                     if (caseSubState.IncludeInCaseStatistics == 0)
                     {
-                        var workTimeCalc = WorkTimeCalculator.MakeCalculator(
-                            this.workContext.Customer.WorkingDayStart,
-                            this.workContext.Customer.WorkingDayEnd,
-                            this.workContext.Cache.Holidays);
+                        var workTimeCalc = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
                         var workingTimeMins = workTimeCalc.CalcWorkTimeMinutes(
                             oldCase.Department_Id,
                             oldCase.ChangeTime,
@@ -1550,10 +1550,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (case_.FinishingDate.HasValue)
             {
-                 var workTimeCalc = WorkTimeCalculator.MakeCalculator(
-                    this.workContext.Customer.WorkingDayStart,
-                    this.workContext.Customer.WorkingDayEnd,
-                    this.workContext.Cache.Holidays);
+                var workTimeCalc = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
                 case_.LeadTime = workTimeCalc.CalcWorkTimeMinutes(
                     case_.Department_Id,
                     case_.RegTime,

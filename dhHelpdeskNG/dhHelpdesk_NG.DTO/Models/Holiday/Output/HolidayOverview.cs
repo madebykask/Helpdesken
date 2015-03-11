@@ -33,6 +33,6 @@ namespace DH.Helpdesk.BusinessData.Models.Holiday.Output
         /// <summary>
         /// Gets or sets the holiday header.
         /// </summary>
-        public HolidayHeaderOverview HolidayHeader { get; set; }
+        public int DepartmentId { get; set; }
     }
 }
