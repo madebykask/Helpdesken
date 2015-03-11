@@ -282,10 +282,6 @@ function CaseInitForm() {
         }, 'json');
     });
 
-    $('#case__Region_Id').change(function () {
-        CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeRegion/', '#case__Department_Id', $('#DepartmentFilterFormat').val());
-    });
-
     $('#case__Status_Id').change(function () {
         if ($(this).val() > 0) {
             $.post('/Cases/ChangeStatus/', { 'id': $(this).val() }, function (data) {

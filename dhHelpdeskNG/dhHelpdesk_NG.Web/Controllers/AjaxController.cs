@@ -89,13 +89,13 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetDepartments(int? regionId, int? administratorId)
+        public JsonResult GetDepartments(int? regionId, int? administratorId, int departmentFilterFormat)
         {
-            var userId = administratorId.HasValue ? administratorId : this.workContext.User.UserId;
             var departments = this.departmentService.GetUserDepartments(
                                     this.workContext.Customer.CustomerId,
-                                    userId,
-                                    regionId);
+                                    administratorId,
+                                    regionId,
+                                    departmentFilterFormat);
             return this.Json(departments, JsonRequestBehavior.AllowGet);
         }
 

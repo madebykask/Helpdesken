@@ -27,7 +27,7 @@
 
         ItemOverview FindActiveOverview(int departmentId);
 
-        List<ItemOverview> GetUserDepartments(int customerId, int? userId, int? regionId);
+        List<ItemOverview> GetUserDepartments(int customerId, int? userId, int? regionId, int departmentFilterFormat);
     }
 
     public class DepartmentService : IDepartmentService
@@ -74,7 +74,7 @@
             }
         }
 
-        public List<ItemOverview> GetUserDepartments(int customerId, int? userId, int? regionId)
+        public List<ItemOverview> GetUserDepartments(int customerId, int? userId, int? regionId, int departmentFilterFormat)
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {
@@ -90,12 +90,41 @@
                 var userDepartments = userDepartmentsRep.GetAll();
                 var regions = regionRep.GetAll().GetById(regionId);
 
+                if (userId.HasValue && regionId.HasValue)
+                {
+                    return DepartmentMapper.MapToUserDepartments(
+                                            regions,
+                                            users,
+                                            departments,
+                                            userDepartments,
+                                            customers,
+                                            departmentFilterFormat,
+                                            regionId.Value);                    
+                }
+                
+                if (userId.HasValue)
+                {
+                    return DepartmentMapper.MapToUserDepartments(
+                                            users,
+                                            departments,
+                                            userDepartments,
+                                            customers,
+                                            departmentFilterFormat);     
+                }
+
+                if (regionId.HasValue)
+                {
+                    return DepartmentMapper.MapToUserDepartments(
+                                            regions,
+                                            departments,
+                                            customers,
+                                            departmentFilterFormat);
+                }
+
                 return DepartmentMapper.MapToUserDepartments(
-                                        regions,
-                                        users,
-                                        departments,
-                                        userDepartments,
-                                        customers);
+                                            departments,
+                                            customers,
+                                            departmentFilterFormat);     
             }
         }
                 

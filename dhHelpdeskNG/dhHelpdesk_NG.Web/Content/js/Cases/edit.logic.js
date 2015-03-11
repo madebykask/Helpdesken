@@ -51,6 +51,29 @@ $(function () {
                 return string;
             prevstring = string.replace(omit, place);
             return dhHelpdesk.cases.utils.replaceAll(prevstring, omit, place, string);
+        },
+
+        refreshDepartments: function (caseEntity) {
+            var regions = caseEntity.getUser().getRegion().getElement();
+            var departments = caseEntity.getUser().getDepartment().getElement();
+            var administrators = caseEntity.getOther().getAdministrator().getElement();
+            var departmentFilterFormat = caseEntity.getUser().getDepartmentFilterFormat().getElement();
+
+            departments.prop('disabled', true);
+            departments.empty();
+            departments.append('<option />');
+
+            $.getJSON(caseEntity.getGetDepartmentsUrl() + '?regionId=' + regions.val() +
+                                        '&administratorId=' + administrators.val() + 
+                                        '&departmentFilterFormat=' + departmentFilterFormat.val(), function (data) {
+                                            for (var i = 0; i < data.length; i++) {
+                                                var item = data[i];
+                                                departments.append("<option value='" + item.Value + "'>" + item.Name + "</option>");
+                                            }
+                                        })
+            .always(function () {
+                departments.prop('disabled', false);
+            });
         }
     }
 
@@ -105,7 +128,8 @@ $(function () {
         var that = dhHelpdesk.cases.caseFields(spec, my);
 
         var region = spec.region || {};
-        var department = spec.department || {};        
+        var department = spec.department || {};
+        var departmentFilterFormat = spec.departmentFilterFormat || {};
 
         var getRegion = function() {
             return region;
@@ -115,8 +139,20 @@ $(function () {
             return department;
         }
 
+        var getDepartmentFilterFormat = function() {
+            return departmentFilterFormat;
+        }
+
         that.getRegion = getRegion;
         that.getDepartment = getDepartment;
+        that.getDepartmentFilterFormat = getDepartmentFilterFormat;
+
+        that.init = function (caseEntity) {
+            region.getElement().change(function() {
+                dhHelpdesk.cases.utils.refreshDepartments(caseEntity);
+            });
+            dhHelpdesk.cases.utils.refreshDepartments(caseEntity);
+        }
 
         return that;
     }
@@ -140,7 +176,6 @@ $(function () {
         var that = dhHelpdesk.cases.caseFields(spec, my);
 
         var administrator = spec.administrator || {};
-        var getDepartmentsUrl = spec.getDepartmentsUrl || '';
 
         var getAdministrator = function() {
             return administrator;
@@ -148,28 +183,11 @@ $(function () {
 
         that.getAdministrator = getAdministrator;
 
-        that.init = function(caseEntity) {
-            var onChangeAdministrator = function () {
-                var regions = caseEntity.getUser().getRegion().getElement();
-                var departments = caseEntity.getUser().getDepartment().getElement();
-                var administrators = administrator.getElement();
-
-                departments.prop('disabled', true);
-                departments.empty();
-                departments.append('<option />');
-
-                $.getJSON(getDepartmentsUrl + '?regionId=' + regions.val() + '&administratorId=' + administrators.val(), function (data) {
-                    for (var i = 0; i < data.length; i++) {
-                        var item = data[i];
-                        departments.append("<option value='" + item.Value + "'>" + item.Name + "</option>");
-                    }
-                })
-                .always(function () {
-                    departments.prop('disabled', false);
-                });
-            }
-            administrator.getElement().change(onChangeAdministrator);
-            onChangeAdministrator();
+        that.init = function(caseEntity) {            
+            administrator.getElement().change(function () {
+                dhHelpdesk.cases.utils.refreshDepartments(caseEntity);
+            });
+            dhHelpdesk.cases.utils.refreshDepartments(caseEntity);
         }
 
         return that;
@@ -191,6 +209,7 @@ $(function () {
         var caseInfo = spec.caseInfo || {};
         var other = spec.other || {};
         var log = spec.log || {};
+        var getDepartmentsUrl = spec.getDepartmentsUrl || '';
 
         var getUser = function() {
             return user;
@@ -211,12 +230,16 @@ $(function () {
         var getLog = function() {
             return log;
         }
+        var getGetDepartmentsUrl = function() {
+            return getDepartmentsUrl;
+        }
 
         that.getUser = getUser;
         that.getComputer = getComputer;
         that.getCaseInfo = getCaseInfo;
         that.getOther = getOther;
         that.getLog = getLog;
+        that.getGetDepartmentsUrl = getGetDepartmentsUrl;
 
         user.setCase(that);
         computer.setCase(that);
@@ -224,11 +247,11 @@ $(function () {
         other.setCase(that);
         log.setCase(that);
 
-        /*user.init(that);
+        user.init(that);
         computer.init(that);
         caseInfo.init(that);
         other.init(that);
-        log.init(that);*/
+        log.init(that);
 
         return that;
     }
@@ -243,13 +266,13 @@ $(function () {
 
         var user = dhHelpdesk.cases.user({
             region: dhHelpdesk.cases.object({ element: $('[data-field="region"]') }),
-            department: dhHelpdesk.cases.object({ element: $('[data-field="department"]') })
+            department: dhHelpdesk.cases.object({ element: $('[data-field="department"]') }),
+            departmentFilterFormat: dhHelpdesk.cases.object({ element: $('[data-field="departmentFilterFormat"]') })
         });
         var computer = dhHelpdesk.cases.computer({});
         var caseInfo = dhHelpdesk.cases.caseInfo({});
         var other = dhHelpdesk.cases.other({
-            administrator: dhHelpdesk.cases.object({ element: $('[data-field="administrator"]') }),
-            getDepartmentsUrl: getDepartmentsUrl
+            administrator: dhHelpdesk.cases.object({ element: $('[data-field="administrator"]') })
         });
         var log = dhHelpdesk.cases.log({});
 
@@ -258,7 +281,8 @@ $(function () {
             computer: computer,
             caseInfo: caseInfo,
             other: other,
-            log: log
+            log: log,
+            getDepartmentsUrl: getDepartmentsUrl
         });
 
         var getCase = function() {
