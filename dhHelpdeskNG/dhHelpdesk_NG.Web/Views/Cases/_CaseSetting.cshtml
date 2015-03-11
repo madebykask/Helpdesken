@@ -116,9 +116,19 @@
                                     <td>
                                         @Html.CheckBoxFor(m => Model.CaseTypeCheck, new { @class = "switchcheckbox" })
                                     </td>                        
-                                    <td>
-                                
-                                    </td>
+                                    <td colspan="2">
+                                        <div id="divCaseTypeSetting" class="btn-group">
+                                            <div class="btn" id="divBreadcrumbs_CaseTypeSetting">@Model.CaseTypePath</div>
+                                            <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="#">@Translation.Get("--")</a></li>
+                                                @Html.CaseTypeDropdownButtonString(Model.CaseTypes)
+                                            </ul>
+                                            @Html.HiddenFor(model => model.CaseTypeId)
+                                        </div>
+                                    </td>                            
                                 </tr>
                             } 
                            @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()) == 1)
@@ -436,6 +446,13 @@
         var val = $(this).attr('value');
         $("#divBreadcrumbs_ProductAreaSetting").text(getBreadcrumbs(this));        
         $("#ProductAreaId").val(val);
+    });
+
+    $('#divCaseTypeSetting ul.dropdown-menu li a').click(function (e) {
+        e.preventDefault();
+        var val = $(this).attr('value');
+        $("#divBreadcrumbs_CaseTypeSetting").text(getBreadcrumbs(this));        
+        $("#CaseTypeId").val(val);
     });
 
     $('#divClosingReasonSetting ul.dropdown-menu li a').click(function (e) {

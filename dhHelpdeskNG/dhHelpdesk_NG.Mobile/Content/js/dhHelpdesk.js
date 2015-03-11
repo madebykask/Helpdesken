@@ -327,6 +327,7 @@ function CaseInitForm() {
 
     $('#case__ProductArea_Id').change(function () {
         $("#ProductAreaHasChild").val(0);
+        document.getElementById("divProductArea").classList.remove("error");
         if ($(this).val() > 0) {
             $.post('/Cases/ChangeProductArea/', { 'id': $(this).val() }, function (data) {
                 //alert(JSON.stringify(data));

@@ -9,7 +9,7 @@
                     int userId, 
                     string region, 
                     string registeredBy, 
-                    bool caseType, 
+                    string caseType, 
                     string productArea, 
                     string workingGroup, 
                     bool responsible,
@@ -60,7 +60,7 @@
 
         public string RegisteredBy { get; private set; }
 
-        public bool CaseType { get; private set; }
+        public string CaseType { get; private set; }
 
         public string ProductArea { get; private set; }
 

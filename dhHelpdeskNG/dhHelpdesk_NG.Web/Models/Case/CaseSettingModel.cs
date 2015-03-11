@@ -44,6 +44,12 @@ namespace DH.Helpdesk.Web.Models.Case
 
         public bool CaseTypeCheck { get; set; }
 
+        public string CaseTypePath { get; set; }
+
+        public int CaseTypeId { get; set; }
+
+        public IList<CaseType> CaseTypes { get; set; }
+
         public bool ProductAreaCheck { get; set; }
         public string ProductAreaPath { get; set; }
         public int ProductAreaId { get; set; }

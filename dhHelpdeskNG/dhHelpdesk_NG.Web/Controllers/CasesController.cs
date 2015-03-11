@@ -1157,6 +1157,9 @@ namespace DH.Helpdesk.Web.Controllers
                 : string.Empty;
 
             bool caseTypeCheck = frm.IsFormValueTrue("CaseTypeCheck");
+            var caseType = caseTypeCheck
+                ? ((frm.ReturnFormValue("CaseTypeId") == string.Empty) ? "0" : frm.ReturnFormValue("CaseTypeId"))
+                : string.Empty;
 
             bool productAreaCheck = frm.IsFormValueTrue("ProductAreaCheck");
             var productArea = (productAreaCheck)
@@ -1199,7 +1202,7 @@ namespace DH.Helpdesk.Web.Controllers
                             userId,
                             regions,
                             registerBy,
-                            caseTypeCheck,
+                            caseType,
                             productArea,
                             workingGroup,
                             responsibleCheck,
@@ -2276,7 +2279,20 @@ namespace DH.Helpdesk.Web.Controllers
             ret.RegisteredBy = registeredBys;
             ret.SelectedRegisteredBy = userCaseSettings.RegisteredBy;
 
-            ret.CaseTypeCheck = userCaseSettings.CaseType;
+            ret.CaseTypeCheck = userCaseSettings.CaseType != string.Empty;
+            ret.CaseTypes = this._caseTypeService.GetCaseTypes(customerId);
+            ret.CaseTypePath = "--";
+            int caseType;
+            int.TryParse(userCaseSettings.CaseType, out caseType);
+            ret.CaseTypeId = caseType;
+            if (caseType > 0)
+            {
+                var ct = this._caseTypeService.GetCaseType(ret.CaseTypeId);
+                if (ct != null)
+                {
+                    ret.CaseTypePath = ct.getCaseTypeParentPath();
+                }
+            }
 
             ret.ProductAreas = this._productAreaService.GetProductAreas(customerId);
             ret.ProductAreaPath = "--";

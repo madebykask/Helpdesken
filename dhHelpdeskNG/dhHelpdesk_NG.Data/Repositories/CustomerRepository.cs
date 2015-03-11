@@ -199,7 +199,9 @@
                 userSettingEntity.CaseUserFilter = (newSetting.RegisteredBy == string.Empty)
                     ? null
                     : newSetting.RegisteredBy;
-                userSettingEntity.CaseCaseTypeFilter = (newSetting.CaseType) ? "0" : null;
+                userSettingEntity.CaseCaseTypeFilter = (newSetting.CaseType == string.Empty)
+                    ? null
+                    : newSetting.CaseType;
                 userSettingEntity.CaseProductAreaFilter = (newSetting.ProductArea == string.Empty)
                     ? null
                     : newSetting.ProductArea;
