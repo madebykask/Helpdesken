@@ -47,7 +47,13 @@
                         var holidayCache = new HolidayCache();
                         foreach (var holidayOverview in holidayKV.Value)
                         {
-                            holidayCache.Add(holidayOverview.HolidayDate, new Tuple<int, int>(holidayOverview.TimeFrom, holidayOverview.TimeUntil));
+                            /// temporary fix for exception in overview
+                            if (!holidayCache.ContainsKey(holidayOverview.HolidayDate))
+                            {
+                                holidayCache.Add(
+                                    holidayOverview.HolidayDate,
+                                    new Tuple<int, int>(holidayOverview.TimeFrom, holidayOverview.TimeUntil));
+                            }
                         }
 
                         this.depatmentsHoliday.Add(holidayKV.Key, holidayCache);
