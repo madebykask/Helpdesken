@@ -21,13 +21,13 @@
         $(function () {
             var validator = $("#target").validate({
                 rules: {
-                    "Name": {
+                    "FinishingCauseCategory.Name": {
                         required: true
                     }
                 },
                 messages: {
-                    "Name": {
-                        required: "@Translation.Get("Du måste ange en avslutskategori", Enums.TranslationSource.TextTranslation)"
+                    "FinishingCauseCategory.Name": {
+                        required: "@Translation.Get("Du måste ange en kategori", Enums.TranslationSource.TextTranslation)"
                 }
             },
             submitHandler: function (form) {

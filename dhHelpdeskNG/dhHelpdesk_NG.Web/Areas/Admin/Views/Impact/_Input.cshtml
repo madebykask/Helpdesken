@@ -36,24 +36,4 @@
         </div>
     </div>
 </div>
-<script type="text/javascript">
 
-    $(function () {
-        var validator = $("#target").validate({
-            rules: {
-                "Name": {
-                    required: true
-                }
-            },
-            messages: {
-                "Name": {
-                    required: "@Translation.Get("Du måste ange en påverkan", Enums.TranslationSource.TextTranslation)"
-                }
-            },
-            submitHandler: function (form) {
-                form.submit();
-            }
-        });
-    });
-
-</script>

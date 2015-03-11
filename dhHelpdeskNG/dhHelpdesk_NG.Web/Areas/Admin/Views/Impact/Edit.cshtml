@@ -17,3 +17,28 @@
     </div>
     @Html.Partial("_Input", Model)
 }
+@section Scripts {
+    <script type="text/javascript">
+
+        $(function () {
+
+            var validator = $("#target").validate({
+                rules: {
+                    "Impact.Name": {
+                        required: true
+                    }
+                },
+                messages: {
+                    "Impact.Name": {
+                        required: "@Translation.Get("Du måste ange en påverkan", Enums.TranslationSource.TextTranslation)"
+                    }
+                },
+                submitHandler: function (form) {
+                    form.submit();
+                }
+            });
+        });
+        $("input:text:visible:first").focus();
+</script>
+
+}

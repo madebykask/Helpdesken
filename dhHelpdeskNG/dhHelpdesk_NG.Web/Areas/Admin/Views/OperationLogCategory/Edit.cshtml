@@ -23,12 +23,12 @@
         $(function () {
             var validator = $("#target").validate({
                 rules: {
-                    "OLCName": {
+                    "OperationLogCategory.OLCName": {
                         required: true
                     }
                 },
                 messages: {
-                    "OLCName": {
+                    "OperationLogCategory.OLCName": {
                         required: "@Translation.Get("Du måste ange en kategori", Enums.TranslationSource.TextTranslation)"
                 }
             },
