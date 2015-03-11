@@ -151,7 +151,6 @@ $(function () {
             region.getElement().change(function() {
                 dhHelpdesk.cases.utils.refreshDepartments(caseEntity);
             });
-            dhHelpdesk.cases.utils.refreshDepartments(caseEntity);
         }
 
         return that;
@@ -187,7 +186,6 @@ $(function () {
             administrator.getElement().change(function () {
                 dhHelpdesk.cases.utils.refreshDepartments(caseEntity);
             });
-            dhHelpdesk.cases.utils.refreshDepartments(caseEntity);
         }
 
         return that;
@@ -252,6 +250,8 @@ $(function () {
         caseInfo.init(that);
         other.init(that);
         log.init(that);
+
+        dhHelpdesk.cases.utils.refreshDepartments(that);
 
         return that;
     }

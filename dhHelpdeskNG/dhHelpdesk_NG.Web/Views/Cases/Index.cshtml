@@ -67,3 +67,11 @@
 </div>
 }
 @Scripts.Render("~/bundles/cases/index")
+
+<script type="text/javascript">
+    $(function() {
+        var scope = dhHelpdesk.casesList.scope({
+            getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax")'
+        });
+    });
+</script>
