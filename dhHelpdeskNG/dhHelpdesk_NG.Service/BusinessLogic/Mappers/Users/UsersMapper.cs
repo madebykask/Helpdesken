@@ -141,7 +141,7 @@
                             .OrderBy(r => r.Name)
                             .ToList();
 
-            return entities.Select(e => new UserProfileCustomerSettings(e.Customer_Id, e.Name, e.ShowOnStartPage.ToBool())).ToList();
+            return entities.Select(e => new UserProfileCustomerSettings(e.Customer_Id, e.Name, e.ShowOnStartPage.ToDefaultTrueBool())).ToList();
         }
 
         public static List<ItemOverview> MapToWorkingGroupUsers(
