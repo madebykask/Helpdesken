@@ -1020,7 +1020,7 @@ label.error
     margin-left: 10px;
 }
 
-input[type=text].error, select.error, textarea.error
+input[type=text].error, select.error, textarea.error,  .btn-group.error .btn
 {
     border: 1px solid #ff0000;
     background-color: #ffeeee;

@@ -1711,6 +1711,7 @@
                 var msgTxt =  '@Translation.Get("Ärendet kunde inte sparas då den lägsta möjliga nivån på fält")' + " [" +   
                               '@Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)' + "] " + 
                               '@Translation.Get("inte har valts. Vänligen kontrollera ärendet.")';
+                document.getElementById("divProductArea").classList.add("error");                
                 ShowToastMessage(msgTxt, "error", true);
                 return false;
             }
