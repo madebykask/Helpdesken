@@ -304,10 +304,14 @@
                 var departmentsData =
                     this.departmentRepository.GetActiveDepartmentsBy(currentCustomerId, regionId).ToArray();
                 departments = departmentsData.Select(it => new ItemOverview(it.DepartmentName, it.Id.ToString())).ToList();
-                if (departmentsData.Any())
-                {
-                    inputParams.Add("DepartmentId", departmentsData[0].Id.ToString());
-                }
+
+                if (departmentId != null)
+                    inputParams.Add("DepartmentId", departmentId.ToString()); // Takes data from Case page
+                else
+                    if (departmentsData.Any())
+                    {
+                        inputParams.Add("DepartmentId", departmentsData[0].Id.ToString());
+                    }
             }
 
             if (settings.OrganizationUnit.Show)
@@ -315,9 +319,22 @@
                 var deptId = departments != null && (settings.Department.Show && departments.Any())
                                  ? int.Parse(departments.FirstOrDefault().Value)
                                  : (int?)null;
+
+                if (departmentId != null)
+                    deptId = departmentId; // Takes data from Case page                
+
                 var organizationUnits = this.organizationService.GetOrganizationUnitsBy(currentCustomerId, null, deptId);
                 ViewBag.organizationUnits = organizationUnits.Select(it => new { id = it.Id.ToString(), parent_id = it.Parent_OU_Id.ToString(), name = it.Name });
-                ViewBag.selectedOrganizationUnitId = organizationUnits.Any() ? organizationUnits.First().Id.ToString() : string.Empty;
+
+                if (unitId != null)
+                {
+                    inputParams.Add("UnitId", unitId.Value.ToString());
+                    ViewBag.selectedOrganizationUnitId = unitId.Value.ToString();
+                }
+                else
+                {
+                    ViewBag.selectedOrganizationUnitId = organizationUnits.Any() ? organizationUnits.First().Id.ToString() : string.Empty;
+                }
             }
 
             if (settings.Region.Show)
