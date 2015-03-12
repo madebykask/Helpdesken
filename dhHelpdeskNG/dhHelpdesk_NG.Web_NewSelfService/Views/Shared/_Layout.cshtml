@@ -45,13 +45,10 @@
 
     <script type="text/javascript">
         //Tooltip on startpage
-        $(document).ready(function () {
+        //$(document).ready(function () {
 
-            $("* [rel='tooltip']").tooltip({
-                html: true
-            });
-
-        });
+          
+        //});
 
         var isDirty = false;
 
@@ -119,9 +116,14 @@
        
 
     </script>
+
     <!--COMMUNICATE SCRIPT---->
     <script type='text/javascript'>
         $(document).ready(function () {
+            $("* [rel='tooltip']").tooltip({
+                html: true
+            });
+
             $('.mapButton').click(function () {
                 var mapPos = parseInt($('.siteCom').css('left'), 10);
                 if (mapPos < 0) {
@@ -191,17 +193,7 @@
         var appType = System.Configuration.ConfigurationManager.AppSettings["CurrentApplication"].ToString();
         
     }
-    @*<div style="position: fixed; top: 30%; right: -2px; background: #fff; padding: 20px 20px 5px 20px; border: 1px solid #ccc;">
-        <ul class="nav nav-pills nav-stacked">
-            <li class="active">
-                <a href="#" data-toggle="modal" data-target="#myModal2">
-                    <span class="badge pull-right">2</span>
-                    Communicate
-                </a>
-            </li>
-        </ul>
-    </div>*@
-
+   
     <!-- COMMUNICATE DIV--->
     @*<input type="button" value ="@employeeList" />*@
 

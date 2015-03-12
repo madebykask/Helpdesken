@@ -49,11 +49,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
 
             model.BulletinBoard = bb.ToList();
             model.InfoText = _infoService.GetInfoText(1, SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId);
-            return this.View(model);            
-
-            //var s = new BulletinBoard();
-            
-            //var bb = _bulletinBoardService.GetBulletinBoardOverviews(SessionFacade.CurrentCustomer.Id);
+            return this.View(model);                        
          }        
     }
 }
