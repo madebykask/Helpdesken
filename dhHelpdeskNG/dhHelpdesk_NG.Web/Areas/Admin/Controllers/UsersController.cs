@@ -187,8 +187,21 @@
             userInputViewModel.User.ReportPermission = 1;
             userInputViewModel.User.SetPriorityPermission = 1;
             //userInputViewModel.UsersUserRole.User_Id = SessionFacade.CurrentUser.Id;
-            userInputViewModel.User.UserGroup_Id = 4;
+            //userInputViewModel.User.UserGroup_Id = 4;
 
+            if (userInputViewModel.User.UserGroup_Id == 1)
+            {
+                userInputViewModel.User.Performer = 0;
+                userInputViewModel.User.CloseCasePermission = 0;
+                userInputViewModel.User.CopyCasePermission = 0;
+                userInputViewModel.User.DeleteCasePermission = 0;
+                userInputViewModel.User.FAQPermission = 0;
+                userInputViewModel.User.MoveCasePermission = 0;
+                userInputViewModel.User.ReportPermission = 0;
+                userInputViewModel.User.SetPriorityPermission = 0;
+                userInputViewModel.User.ActivateCasePermission = 0;
+            }
+            
 
             this._userService.SaveNewUser(user, AAsSelected, CsSelected, OTsSelected, null, out errors);
 
