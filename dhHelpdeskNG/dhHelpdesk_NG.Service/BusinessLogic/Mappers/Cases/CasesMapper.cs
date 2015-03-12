@@ -19,7 +19,6 @@
                                              c.Caption,
                                              c.Description
                                         })
-
                                 .OrderByDescending(c => c.RegTime)
                                 .ToList();
 

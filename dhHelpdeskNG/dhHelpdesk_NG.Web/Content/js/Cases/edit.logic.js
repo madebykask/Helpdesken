@@ -133,9 +133,14 @@ $(function () {
         my = my || {};
         var that = dhHelpdesk.cases.caseFields(spec, my);
 
+        var userId = spec.userId || {};
         var region = spec.region || {};
         var department = spec.department || {};
         var departmentFilterFormat = spec.departmentFilterFormat || {};
+
+        var getUserId = function() {
+            return userId;
+        }
 
         var getRegion = function() {
             return region;
@@ -149,11 +154,22 @@ $(function () {
             return departmentFilterFormat;
         }
 
+        that.getUserId = getUserId;
         that.getRegion = getRegion;
         that.getDepartment = getDepartment;
         that.getDepartmentFilterFormat = getDepartmentFilterFormat;
 
         that.init = function (caseEntity) {
+            /*var relatedCasesTimeout = null;
+
+            var checkRelatedCases = function () {
+                clearTimeout(relatedCasesTimeout);
+            }
+
+            userId.getElement().keyup(function() {
+                relatedCasesTimeout = setTimeout(checkRelatedCases, 1000);
+            });*/
+
             region.getElement().change(function() {
                 dhHelpdesk.cases.utils.refreshDepartments(caseEntity);
             });
@@ -271,6 +287,7 @@ $(function () {
         var getDepartmentsUrl = spec.getDepartmentsUrl || '';
 
         var user = dhHelpdesk.cases.user({
+            userId: dhHelpdesk.cases.object({ element: $('[data-field="userId"]') }),
             region: dhHelpdesk.cases.object({ element: $('[data-field="region"]') }),
             department: dhHelpdesk.cases.object({ element: $('[data-field="department"]') }),
             departmentFilterFormat: dhHelpdesk.cases.object({ element: $('[data-field="departmentFilterFormat"]') })

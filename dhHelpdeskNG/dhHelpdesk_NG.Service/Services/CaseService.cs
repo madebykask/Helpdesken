@@ -83,6 +83,8 @@
         CustomerCases[] GetCustomersCases(int[] customerIds, int userId);
 
         List<RelatedCase> GetCaseRelatedCases(int caseId, int customerId, string userId, UserOverview currentUser);
+
+        int GetCaseRelatedCasesCount(int caseId, int customerId, string userId, UserOverview currentUser);
     }
 
     public class CaseService : ICaseService
@@ -326,6 +328,19 @@
                         .GetByCustomer(customerId)
                         .GetRelatedCases(caseId, userId, currentUser)
                         .MapToRelatedCases();
+            }
+        }
+
+        public int GetCaseRelatedCasesCount(int caseId, int customerId, string userId, UserOverview currentUser)
+        {
+            using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            {
+                var caseRep = uow.GetRepository<Case>();
+
+                return caseRep.GetAll()
+                        .GetByCustomer(customerId)
+                        .GetRelatedCases(caseId, userId, currentUser)
+                        .Count();
             }
         }
 

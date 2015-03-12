@@ -1369,6 +1369,18 @@ namespace DH.Helpdesk.Web.Controllers
             return this.View(model);
         }
 
+        [HttpGet]
+        public JsonResult RelatedCasesCount(int caseId, string userId)
+        {
+            var count = this._caseService.GetCaseRelatedCasesCount(
+                                                caseId,
+                                                this.workContext.Customer.CustomerId,
+                                                userId,
+                                                SessionFacade.CurrentUser);
+
+            return this.Json(count, JsonRequestBehavior.AllowGet);
+        }
+
         #endregion
 
         #region Private Methods and Operators
