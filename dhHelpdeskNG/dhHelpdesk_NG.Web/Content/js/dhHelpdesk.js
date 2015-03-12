@@ -282,7 +282,6 @@ function CaseInitForm() {
         }, 'json');
     });
 
-
     $('#case__Status_Id').change(function () {
         if ($(this).val() > 0) {
             $.post('/Cases/ChangeStatus/', { 'id': $(this).val() }, function (data) {

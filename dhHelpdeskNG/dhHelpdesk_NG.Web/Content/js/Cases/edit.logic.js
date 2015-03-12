@@ -59,16 +59,22 @@ $(function () {
             var administrators = caseEntity.getOther().getAdministrator().getElement();
             var departmentFilterFormat = caseEntity.getUser().getDepartmentFilterFormat().getElement();
 
+            var selectedDepartment = departments.val();
+
             departments.prop('disabled', true);
             departments.empty();
             departments.append('<option />');
 
             $.getJSON(caseEntity.getGetDepartmentsUrl() + '?regionId=' + regions.val() +
-                                        '&administratorId=' + administrators.val() + 
+                                        '&administratorId=' + administrators.val() +
                                         '&departmentFilterFormat=' + departmentFilterFormat.val(), function (data) {
                                             for (var i = 0; i < data.length; i++) {
                                                 var item = data[i];
-                                                departments.append("<option value='" + item.Value + "'>" + item.Name + "</option>");
+                                                var option = $("<option value='" + item.Value + "'>" + item.Name + "</option>");
+                                                if (option.val() == selectedDepartment) {
+                                                    option.prop("selected", true);
+                                                }
+                                                departments.append(option);
                                             }
                                         })
             .always(function () {
