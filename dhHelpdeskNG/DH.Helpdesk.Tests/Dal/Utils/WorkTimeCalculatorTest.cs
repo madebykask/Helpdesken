@@ -15,31 +15,31 @@
 
         private const int WorkingHourEnd = 18;
 
+        private const int DefaultDepartmentId = 123;
+
         private readonly HolidayOverview[] holidays = new HolidayOverview[] 
         { 
             //// full redday on Tuesday 3-th March 2015
             new HolidayOverview() 
                 {  
                     HolidayDate = new DateTime(2015, 03, 3),
-                    HolidayHeader = null
+                    DepartmentId = DefaultDepartmentId
                 }, 
             //// Red day on Sunday 8-th March 2015
             new HolidayOverview()
                 {  
                     HolidayDate = new DateTime(2015, 03, 08),
-                    HolidayHeader = null
+                    DepartmentId = DefaultDepartmentId
                 }, 
             //// Partially red day on Wednesday 11-th March 2015
             new HolidayOverview()
                 {  
                     HolidayDate = new DateTime(2015, 03, 11),
-                    HolidayHeader = null,
+                    DepartmentId = DefaultDepartmentId,
                     TimeFrom = 9,
                     TimeUntil = 12
                 }, 
         };
-
-        private const int DefaultDepartmentId = 123;
 
         [Test]
         public void GetRange1CrossingTest()
