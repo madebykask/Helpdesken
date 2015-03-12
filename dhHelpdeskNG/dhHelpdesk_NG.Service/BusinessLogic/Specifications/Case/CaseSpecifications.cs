@@ -7,9 +7,12 @@
     using DH.Helpdesk.BusinessData.Enums.Case.Fields;
     using DH.Helpdesk.BusinessData.Models.Reports.Enums;
     using DH.Helpdesk.BusinessData.Models.Shared.Input;
+    using DH.Helpdesk.BusinessData.Models.User.Input;
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Domain;
+
+    using UserGroup = DH.Helpdesk.BusinessData.Enums.Admin.Users.UserGroup;
 
     public static class CaseSpecifications
     {
@@ -310,6 +313,23 @@
         public static IQueryable<Case> HasLeadTime(this IQueryable<Case> query)
         {
             query = query.Where(c => c.LeadTime > 0);
+
+            return query;
+        }
+
+        public static IQueryable<Case> GetRelatedCases(this IQueryable<Case> query, int caseId, string userId, UserOverview user)
+        {
+            query = query.Where(c => c.Id != caseId && c.ReportedBy.Trim().ToLower() == userId.Trim().ToLower());
+
+            if (user.RestrictedCasePermission == 1 && user.UserGroupId == (int)UserGroup.Administrator)
+            {
+                query = query.Where(c => c.Performer_User_Id == user.Id || c.CaseResponsibleUser_Id == user.Id);
+            }
+
+            if (user.RestrictedCasePermission == 1 && user.UserGroupId == (int)UserGroup.User)
+            {
+                query = query.Where(c => c.ReportedBy.Trim().ToLower() == user.UserId.Trim().ToLower());
+            }
 
             return query;
         } 

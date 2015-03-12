@@ -1,0 +1,48 @@
+﻿@using DH.Helpdesk.BusinessData.OldComponents
+@using DH.Helpdesk.Common.Extensions.DateTime
+@model DH.Helpdesk.Web.Models.Case.RelatedCasesViewModel
+
+<div class="content">
+    <div class="container">
+        <div class="tab-content overflow-visible">
+            <div class="tab-pane tab-pane-border active">                            
+                <table class="table table-striped table-bordered table-hover table-pointer">
+                    <thead>
+                        <tr>
+                            <th>@Translation.Get(GlobalEnums.TranslationCaseFields.CaseNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)</th>
+                            <th>@Translation.Get(GlobalEnums.TranslationCaseFields.RegTime.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)</th>
+                            <th>@Translation.Get(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)</th>
+                            <th>@Translation.Get(GlobalEnums.TranslationCaseFields.Caption.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)</th>
+                            <th>@Translation.Get(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var relatedCase in Model.RelatedCases)
+                        {
+                            var rc = relatedCase;                            
+                            <tr onclick="window.location.href='@Url.Action("Edit", new RouteValueDictionary { { "id", rc.CaseId } })'">
+                                <td>
+                                    
+                                    @Html.HiddenFor(m => rc.CaseId)
+                                    @((int)rc.CaseNumber)
+                                </td>
+                                <td>
+                                    @rc.RegistrationDate.ToFormattedDate()
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(m => rc.Status)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(m => rc.Caption)
+                                </td>
+                                <td>
+                                    @rc.Description.ForHtmlView()
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>        
+    </div>
+</div>

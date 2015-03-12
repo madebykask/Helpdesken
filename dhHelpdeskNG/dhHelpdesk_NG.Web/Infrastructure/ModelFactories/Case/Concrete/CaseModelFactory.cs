@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
 
+    using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.Infrastructure.Cases;
@@ -30,6 +31,11 @@
         public CustomerCasesModel CreateCustomerCases(CustomerCases[] customerCases)
         {
             return new CustomerCasesModel(customerCases);
+        }
+
+        public RelatedCasesViewModel GetRelatedCasesModel(List<RelatedCase> relatedCases, int customerId)
+        {
+            return new RelatedCasesViewModel(relatedCases, customerId);
         }
     }
 }

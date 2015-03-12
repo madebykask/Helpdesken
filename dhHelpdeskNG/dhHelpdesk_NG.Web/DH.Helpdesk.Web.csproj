@@ -1840,6 +1840,7 @@
     <Compile Include="Models\Case\CaseSettingModel.cs" />
     <Compile Include="Models\Case\CustomerCasesModel.cs" />
     <Compile Include="Models\Case\MyCasesModel.cs" />
+    <Compile Include="Models\Case\RelatedCasesViewModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\GeneralModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\InviteToModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\LogModel.cs" />
@@ -2849,6 +2850,7 @@
     <Content Include="Views\Error\Unathorized.cshtml" />
     <Content Include="Views\Profile\CustomersSettings.cshtml" />
     <Content Include="Views\Profile\EditorTemplates\UserProfileCustomerSettings.cshtml" />
+    <Content Include="Views\Cases\RelatedCases.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

@@ -101,7 +101,9 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ICaseSolutionSettingService caseSolutionSettingService;
 
         private readonly IInvoiceHelper invoiceHelper;
-        
+
+        private readonly ICaseModelFactory caseModelFactory;
+
         #endregion
 
         #region Constructor
@@ -154,7 +156,8 @@ namespace DH.Helpdesk.Web.Controllers
             IInvoiceArticlesModelFactory invoiceArticlesModelFactory, 
             IConfiguration configuration,
             ICaseSolutionSettingService caseSolutionSettingService,            
-            IInvoiceHelper invoiceHelper)
+            IInvoiceHelper invoiceHelper, 
+            ICaseModelFactory caseModelFactory)
             : base(masterDataService)
         {            
             this._caseService = caseService;
@@ -204,6 +207,7 @@ namespace DH.Helpdesk.Web.Controllers
             this.configuration = configuration;
             this.caseSolutionSettingService = caseSolutionSettingService;            
             this.invoiceHelper = invoiceHelper;
+            this.caseModelFactory = caseModelFactory;
         }
 
         #endregion
@@ -1351,6 +1355,19 @@ namespace DH.Helpdesk.Web.Controllers
             return Json(res);
         }
 
+        [HttpGet]
+        public ViewResult RelatedCases(int caseId, string userId)
+        {
+            var relatedCases = this._caseService.GetCaseRelatedCases(
+                                                caseId,
+                                                this.workContext.Customer.CustomerId,
+                                                userId,
+                                                SessionFacade.CurrentUser);
+
+            var model = this.caseModelFactory.GetRelatedCasesModel(relatedCases, this.workContext.Customer.CustomerId);
+
+            return this.View(model);
+        }
 
         #endregion
 

@@ -18,7 +18,10 @@
     using DH.Helpdesk.Domain.MailTemplates;
     using DH.Helpdesk.Domain.Problems;
     using DH.Helpdesk.Services.BusinessLogic.MailTools.TemplateFormatters;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Cases;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Customers;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications.Case;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Customers;
     using DH.Helpdesk.Services.Infrastructure.Email;
     using DH.Helpdesk.Services.Localization;
@@ -78,6 +81,8 @@
         MyCase[] GetMyCases(int userId, int? count = null);
 
         CustomerCases[] GetCustomersCases(int[] customerIds, int userId);
+
+        List<RelatedCase> GetCaseRelatedCases(int caseId, int customerId, string userId, UserOverview currentUser);
     }
 
     public class CaseService : ICaseService
@@ -308,6 +313,19 @@
                                     .MapToCustomerCases(problemsRep.GetAll(), userId);
 
                 return customerCases;
+            }
+        }
+
+        public List<RelatedCase> GetCaseRelatedCases(int caseId, int customerId, string userId, UserOverview currentUser)
+        {
+            using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            {
+                var caseRep = uow.GetRepository<Case>();
+
+                return caseRep.GetAll()
+                        .GetByCustomer(customerId)
+                        .GetRelatedCases(caseId, userId, currentUser)
+                        .MapToRelatedCases();
             }
         }
 
