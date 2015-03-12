@@ -85,7 +85,19 @@
         {
             var model = this.IndexViewModel();
 
-            model.Customers = this._customerService.GetAllCustomers().ToList();
+            //If administrator. return all customers, else: return only customers that user is assigned to.
+            if (SessionFacade.CurrentUser.UserGroupId == 4)
+            {
+                model.Customers = this._customerService.GetAllCustomers().ToList();
+            }
+            else
+            {
+                model.Customers = this._userService.GetCustomersForUser(SessionFacade.CurrentUser.Id);
+            }
+
+            
+
+
 
             return this.View(model);
         }
