@@ -177,30 +177,6 @@ $(function () {
         var departments = $('[data-field="department"]');
         var administrators = $('[data-field="administrator"]');
 
-        var refreshDepartments = function () {
-            var departmentFilterFormat = 0;
-
-            departments.prop('disabled', true);
-            departments.empty();
-            departments.append('<option />');
-
-            $.getJSON(getDepartmentsUrl + '?regionId=' + regions.val() +
-                                        '&administratorId=' + administrators.val() + 
-                                        '&departmentFilterFormat=' + departmentFilterFormat, function (data) {
-                                            for (var i = 0; i < data.length; i++) {
-                                                var item = data[i];
-                                                departments.append("<option value='" + item.Value + "'>" + item.Name + "</option>");
-                                            }
-                                        })
-            .always(function () {
-                departments.prop('disabled', false);
-            });
-        }
-
-        /*regions.change(refreshDepartments);
-        administrators.change(refreshDepartments);
-        refreshDepartments();*/
-
         return that;
     }
 });
