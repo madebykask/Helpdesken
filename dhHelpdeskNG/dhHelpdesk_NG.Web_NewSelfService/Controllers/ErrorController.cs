@@ -20,6 +20,8 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                 ErrorCode = errorCode,
                 ErrorMessage = message
             };
+
+            ViewBag.HasError = "true";
             return View(model);
         }
 

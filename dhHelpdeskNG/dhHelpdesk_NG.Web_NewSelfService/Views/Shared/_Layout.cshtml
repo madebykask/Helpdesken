@@ -192,6 +192,13 @@
 
         var appType = System.Configuration.ConfigurationManager.AppSettings["CurrentApplication"].ToString();
         
+        var hasError = ViewBag.HasError;
+        var pHasError = false;
+        if (hasError == "true")
+        {
+            pHasError = true;
+        } 
+        
     }
    
     <!-- COMMUNICATE DIV--->
@@ -494,7 +501,7 @@
                         }
                     }
 
-                    @if (SessionFacade.CurrentCustomer.ShowDocumentsOnExternalPage != 0)
+                    @if (!pHasError && SessionFacade.CurrentCustomer.ShowDocumentsOnExternalPage != 0)
                     {
                         if (!hideMenu)
                         {
@@ -530,7 +537,7 @@
                         }
                     }
 
-                    @if (SessionFacade.CurrentCustomer.ShowCoWorkersOnExternalPage != 0)
+                    @if (!pHasError && SessionFacade.CurrentCustomer.ShowCoWorkersOnExternalPage != 0)
                     {
                         if (!hideMenu)
                         {
@@ -559,7 +566,7 @@
                         }
                     }
 
-                    @if (SessionFacade.CurrentCustomer.ShowHelpOnExternalPage != 0)
+                    @if (!pHasError && SessionFacade.CurrentCustomer.ShowHelpOnExternalPage != 0)
                     {
                         if (!hideMenu)
                         {

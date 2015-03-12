@@ -72,6 +72,7 @@
             {
                 SessionFacade.UserHasAccess = false;
                 filterContext.Result = new RedirectResult(Url.Action("Index", "Error", new { message = string.Format("Invalid Customer Id! ({0})", customerId), errorCode = 101 }));
+                return;
             }
 
             if(filterContext.ActionParameters.Keys.Contains("languageId"))
@@ -147,6 +148,7 @@
                     {
                         SessionFacade.UserHasAccess = false;
                         filterContext.Result = new RedirectResult(Url.Action("Index", "Error", new { message = "You don't have access to the portal! (User Id is not specified)", errorCode = 101 }));
+                        return;
                     }
                     else
                     {
@@ -169,6 +171,7 @@
                                 SessionFacade.UserHasAccess = false;
                                 SessionFacade.CurrentCoWorkers = new List<SubordinateResponseItem>();
                                 filterContext.Result = new RedirectResult(Url.Action("Index", "Error", new { message = "You don't have access to the portal! (user is not manager for country)", errorCode = 103 }));
+                                return;
                             }
                         }
 
@@ -178,6 +181,7 @@
                             {
                                 SessionFacade.UserHasAccess = false;
                                 filterContext.Result = new RedirectResult(Url.Action("Index", "Error", new { message = "You don't have access to the portal! (EmployeeNumber is not specified)", errorCode = 101 }));
+                                return;
                             }
                             else
                             {
@@ -194,6 +198,7 @@
                                     SessionFacade.UserHasAccess = false;
                                     SessionFacade.CurrentCoWorkers = new List<SubordinateResponseItem>();
                                     filterContext.Result = new RedirectResult(Url.Action("Index", "Error", new { message = "You don't have access to the portal! (user is not manager)", errorCode = 102 }));
+                                    return;
                                 }
                             }
                         }
