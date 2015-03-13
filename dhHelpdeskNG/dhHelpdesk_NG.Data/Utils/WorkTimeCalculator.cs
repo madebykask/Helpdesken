@@ -9,6 +9,7 @@
 
     /// <summary>
     /// Calculator for working time for cases
+    /// @TODO (Alexander Semenischev): Due to we have only hours there is a bug with NST (3:30) or New Zealand (2:45) timezones. That should be fixed.
     /// </summary>
     public class WorkTimeCalculator
     {
@@ -29,7 +30,7 @@
         /// <param name="defaultHolidayCalendar"></param>
         public WorkTimeCalculator(int workingHourBegin, int workingHourEnd, Dictionary<int, IList<HolidayOverview>> holidayCalendars, IEnumerable<HolidayOverview> defaultHolidayCalendar)
         {
-            if (workingHourBegin < 0 || workingHourBegin > 23 || workingHourEnd < 0 || workingHourEnd > 24)
+            if (!ValidateWorkingHours(ref workingHourBegin, ref workingHourEnd))
             {
                 throw new ArgumentException();
             }
@@ -75,6 +76,17 @@
             }
         }
 
+        public static bool ValidateWorkingHours(ref int workingHourBegin, ref int workingHourEnd)
+        {
+            //// we dont have 24 hour, but when user sets 0-24 assumes that he meant 0-0
+            if (workingHourEnd == 24)
+            {
+                workingHourEnd = 0;
+            }
+
+            return !(workingHourBegin < 0 || workingHourBegin > 23 || workingHourEnd < 0 || workingHourEnd > 23);
+        }
+
         /// <summary>
         /// Returns time range intersection in minutes (inner join in terms of SQL)
         /// </summary>
@@ -89,7 +101,12 @@
             DateTime range2Begin,
             DateTime range2End)
         {
-            if (range1Begin > range1End || range2Begin > range2End)
+            if (range1Begin > range1End)
+            {
+                throw new ArgumentException();
+            }
+
+            if (range2Begin > range2End)
             {
                 throw new ArgumentException();
             }
@@ -109,8 +126,9 @@
         /// <param name="caseDepartmentId"></param>
         /// <param name="calcFrom">Period start in UTC</param>
         /// <param name="calcTo">Period until in UTC</param>
+        /// <param name="minutesOnPause">minutes that we should not count as work time</param>
         /// <returns></returns>
-        public int CalcWorkTimeMinutes(int? caseDepartmentId, DateTime calcFrom, DateTime calcTo)
+        public int CalcWorkTimeMinutes(int? caseDepartmentId, DateTime calcFrom, DateTime calcTo, int minutesOnPause = 0)
         {
             if (calcFrom > calcTo)
             {
@@ -133,7 +151,7 @@
                                   ? this.CalcHolidayTimeM(calcFrom, calcTo, holidaysCacheToUse)
                                   : 0;
 
-            return commonWorkTime - weekendTime - holidayTime;
+            return commonWorkTime - weekendTime - holidayTime - minutesOnPause;
         }
 
 
@@ -155,9 +173,9 @@
                     calcToRound);
             }
 
-            var workingHoursPerDay = 24;
-            var timePrefix = 0;
-            var timePostfix = 0;
+            int workingHoursPerDay;
+            int timePrefix;
+            int timePostfix;
             if (workingHourBegin < workingHourEnd)
             {
                 // working day like 8-18
@@ -182,6 +200,21 @@
                     calcFrom.SetToHour(24),
                     calcFrom,
                     calcFrom.MakeTomorrow());
+                timePostfix = GetRange1Crossing(
+                    calcTo.RoundToDay(),
+                    calcTo.SetToHour(workingHourEnd),
+                    calcTo.RoundToDay(),
+                    calcTo);
+            }
+            else
+            {
+                //// here we have working day 0-0 or 23-23
+                workingHoursPerDay = 24;
+                timePrefix = GetRange1Crossing(
+                   calcFrom.SetToHour(workingHourBegin),
+                   calcFrom.SetToHour(24),
+                   calcFrom,
+                   calcFrom.MakeTomorrow());
                 timePostfix = GetRange1Crossing(
                     calcTo.RoundToDay(),
                     calcTo.SetToHour(workingHourEnd),

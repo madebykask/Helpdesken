@@ -1519,7 +1519,7 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     var caseSubState = this._stateSecondaryService.GetStateSecondary(oldCase.StateSecondary_Id.Value);
 
-                    // calculating time spent in "inactive" state every save
+                    // calculating time spent in "inactive" state since last changing every save
                     if (caseSubState.IncludeInCaseStatistics == 0)
                     {
                         var workTimeCalc = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);

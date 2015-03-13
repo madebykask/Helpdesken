@@ -95,19 +95,19 @@ $(function () {
             administrators.append('<option />');
 
             $.getJSON(caseEntity.getGetDepartmentUsersUrl() + '?departmentId=' + departments.val(), function (data) {
-                                            for (var i = 0; i < data.length; i++) {
-                                                var item = data[i];
-                                                var option = $("<option value='" + item.Value + "'>" + item.Name + "</option>");
-                                                if (option.val() == selectedAdministrator) {
-                                                    option.prop("selected", true);
-                                                }
-                                                administrators.append(option);
-                                            }
-                                        })
+                for (var i = 0; i < data.length; i++) {
+                    var item = data[i];
+                    var option = $("<option value='" + item.Value + "'>" + item.Name + "</option>");
+                    if (option.val() == selectedAdministrator) {
+                        option.prop("selected", true);
+                    }
+                    administrators.append(option);
+                }
+            })
             .always(function () {
                 administrators.prop('disabled', false);
             });
-        },
+        }
     }
 
     dhHelpdesk.cases.object = function (spec, my) {
@@ -286,7 +286,7 @@ $(function () {
             return getDepartmentsUrl;
         }
 
-        var getGetDepartmentUsersUrl = function() {
+        var getGetDepartmentUsersUrl = function () {
             return getDepartmentUsersUrl;
         }
 

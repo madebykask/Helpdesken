@@ -153,7 +153,7 @@
                                             users,
                                             customers,
                                             departments,
-                                            userDepartments);                    
+                                            userDepartments);
                 }
 
                 return UsersMapper.MapToCustomerUsersOverviews(customers, users, customerUsers);

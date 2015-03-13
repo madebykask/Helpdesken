@@ -171,7 +171,8 @@
                                             timeLeft = (int)Math.Floor((decimal)workTimeCalculator.CalcWorkTimeMinutes(
                                                 departmentId,
                                                 now,
-                                                caseShouldBeFinishedInDate.Value) / 60);
+                                                caseShouldBeFinishedInDate.Value,
+                                                timeOnPause) / 60);
                                         }
                                         else
                                         {
@@ -179,13 +180,14 @@
                                             timeLeft = -(int)Math.Floor((decimal)workTimeCalculator.CalcWorkTimeMinutes(
                                             departmentId,
                                             caseShouldBeFinishedInDate.Value,
-                                            now) / 60);
+                                            now,
+                                            timeOnPause) / 60);
                                         }                                        
                                     }
                                     else if (SLAtime > 0)
                                     {
                                         //// calc by SLA value
-                                        timeLeft = (int)Math.Floor((SLAtime * 60 - (decimal)workTimeCalculator.CalcWorkTimeMinutes(departmentId, caseRegistrationDate, now)) / 60);
+                                        timeLeft = (int)Math.Floor((SLAtime * 60 - (decimal)workTimeCalculator.CalcWorkTimeMinutes(departmentId, caseRegistrationDate, now, timeOnPause)) / 60);
                                     }
                                 }
 
