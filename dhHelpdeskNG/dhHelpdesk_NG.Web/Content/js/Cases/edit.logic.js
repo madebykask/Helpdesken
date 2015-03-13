@@ -85,6 +85,10 @@ $(function () {
         },
 
         refreshAdministrators: function (caseEntity) {
+
+            // temporary solution
+            return;
+
             var departments = caseEntity.getUser().getDepartment().getElement();
             var administrators = caseEntity.getOther().getAdministrator().getElement();
 
