@@ -9,6 +9,7 @@
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Department;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Users;
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
 
     using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
@@ -28,6 +29,8 @@
         ItemOverview FindActiveOverview(int departmentId);
 
         List<ItemOverview> GetUserDepartments(int customerId, int? userId, int? regionId, int departmentFilterFormat);
+
+        List<ItemOverview> GetDepartmentUsers(int customerId, int? departmentId);
     }
 
     public class DepartmentService : IDepartmentService
@@ -127,7 +130,36 @@
                                             departmentFilterFormat);     
             }
         }
-                
+
+        public List<ItemOverview> GetDepartmentUsers(int customerId, int? departmentId)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var usersRep = uow.GetRepository<User>();
+                var customersRep = uow.GetRepository<Customer>();
+                var departmentsRep = uow.GetRepository<Department>();
+                var userDepartmentsRep = uow.GetRepository<DepartmentUser>();
+                var customerUsersRep = uow.GetRepository<CustomerUser>();
+
+                var users = usersRep.GetAll();
+                var customers = customersRep.GetAll().GetById(customerId);
+                var departments = departmentsRep.GetAll().GetById(departmentId);
+                var userDepartments = userDepartmentsRep.GetAll();
+                var customerUsers = customerUsersRep.GetAll();
+
+                if (departmentId.HasValue)
+                {
+                    return DepartmentMapper.MapToDepartmentUsers(
+                                            users,
+                                            customers,
+                                            departments,
+                                            userDepartments);                    
+                }
+
+                return UsersMapper.MapToCustomerUsersOverviews(customers, users, customerUsers);
+            }
+        }
+
         public Department GetDepartment(int id)
         {
             return this._departmentRepository.Get(x => x.Id == id);

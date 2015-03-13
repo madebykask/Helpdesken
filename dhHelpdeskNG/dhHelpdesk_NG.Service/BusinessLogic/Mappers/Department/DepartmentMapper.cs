@@ -5,8 +5,10 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications.User;
     using DH.Helpdesk.Services.utils;
 
     public static class DepartmentMapper
@@ -135,6 +137,26 @@
                             .ToList();
 
             return entities.Select(d => new ItemOverview(d.departmentDescription(departmentFilterFormat), d.Id.ToString(CultureInfo.InvariantCulture))).ToList();
+        }
+
+        public static List<ItemOverview> MapToDepartmentUsers(
+                                            IQueryable<User> users,
+                                            IQueryable<Customer> customers,
+                                            IQueryable<Department> departments,
+                                            IQueryable<DepartmentUser> userDepartments)
+        {
+            var entities = (from ud in userDepartments
+                            join u in users on ud.User_Id equals u.Id
+                            join d in departments on ud.Department_Id equals d.Id
+                            join c in customers on d.Customer_Id equals c.Id
+                            select u)
+                            .GetOrderedByName()
+                            .ToList();
+
+            return entities.Select(u => new ItemOverview(
+                                        new UserName(u.FirstName, u.SurName).GetReversedFullName(),
+                                        u.Id.ToString(CultureInfo.InvariantCulture)))
+                                        .ToList();
         }
     }
 }
