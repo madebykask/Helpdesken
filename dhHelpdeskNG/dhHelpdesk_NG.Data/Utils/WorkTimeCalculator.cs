@@ -126,8 +126,9 @@
         /// <param name="caseDepartmentId"></param>
         /// <param name="calcFrom">Period start in UTC</param>
         /// <param name="calcTo">Period until in UTC</param>
+        /// <param name="minutesOnPause">minutes that we should not count as work time</param>
         /// <returns></returns>
-        public int CalcWorkTimeMinutes(int? caseDepartmentId, DateTime calcFrom, DateTime calcTo)
+        public int CalcWorkTimeMinutes(int? caseDepartmentId, DateTime calcFrom, DateTime calcTo, int minutesOnPause = 0)
         {
             if (calcFrom > calcTo)
             {
@@ -150,7 +151,7 @@
                                   ? this.CalcHolidayTimeM(calcFrom, calcTo, holidaysCacheToUse)
                                   : 0;
 
-            return commonWorkTime - weekendTime - holidayTime;
+            return commonWorkTime - weekendTime - holidayTime - minutesOnPause;
         }
 
 

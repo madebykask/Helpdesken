@@ -11,9 +11,9 @@
     [TestFixture]
     public class WorkTimeCalculatorTest
     {
-        private const int WorkingHourBegin = 8;
+        private const int WorkingHourBegin = 7;
 
-        private const int WorkingHourEnd = 18;
+        private const int WorkingHourEnd = 17;
 
         private const int DefaultDepartmentId = 123;
 
@@ -79,10 +79,10 @@
         public void WorkTimeWithWeekendsTest()
         {
             var inst = this.InstantiateDefault();
-            var friday = new DateTime(2015, 03, 13, 14, 05, 0);
-            var monday = new DateTime(2015, 03, 16, 7, 40, 0);
-            const int FridayToMondayResult = 235; // 3h 55 min
-            Assert.AreEqual(FridayToMondayResult, inst.CalcWorkTimeMinutes(DefaultDepartmentId, friday, monday), "Include working hours only when weekends in range");
+            var friday = new DateTime(2015, 03, 13, 14, 01, 0);
+            var wednesday = new DateTime(2015, 03, 18, 15, 01, 0);
+            const int FridayToMondayResult = 1860; // 3h 59 + 10h + 10h + 7h 01 = 1860 m
+            Assert.AreEqual(FridayToMondayResult, inst.CalcWorkTimeMinutes(DefaultDepartmentId, friday, wednesday), "Include working hours only when weekends in range");
 
             var saturdayTwoWeekends = new DateTime(2015, 03, 14, 11, 00, 0);
             var sundayTwoWeekends = new DateTime(2015, 03, 22, 14, 05, 0);
