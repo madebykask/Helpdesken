@@ -43,7 +43,7 @@ namespace DH.Helpdesk.Services.Services
         List<CustomerWorkingGroupForUser> GetWorkinggroupsForUserAndCustomer(int userId, int customerId);
         IList<LoggedOnUsersOnIndexPage> GetListToUserLoggedOn();
         IList<Department> GetDepartmentsForUser(int userId, int customerId = 0);
-        IList<Customer> GetCustomersForUser(int userId);
+        IList<Customer> GetCustomersConnectedToUser(int userId);
         IList<User> GetAdministrators(int customerId, int active = 1);
         IList<User> GetSystemOwners(int customerId);
         IList<User> GetUsers();
@@ -246,7 +246,7 @@ namespace DH.Helpdesk.Services.Services
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public IList<Customer> GetCustomersForUser(int userId)
+        public IList<Customer> GetCustomersConnectedToUser(int userId)
         {
             return this._customerRepository.CustomersForUser(userId);
         }

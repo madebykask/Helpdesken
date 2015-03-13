@@ -92,7 +92,8 @@
             }
             else
             {
-                model.Customers = this._userService.GetCustomersForUser(SessionFacade.CurrentUser.Id);
+                model.Customers = this._userService.GetCustomersConnectedToUser(SessionFacade.CurrentUser.Id);
+                //model.Customers = this._userService.GetCustomersForUser(SessionFacade.CurrentUser.Id);
             }
 
             
