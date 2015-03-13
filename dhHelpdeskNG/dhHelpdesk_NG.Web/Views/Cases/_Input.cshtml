@@ -231,7 +231,8 @@
                                                 <td class="span4">
                                                     @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Region_Id, CaseSolutionFields.Region))
                                                     {
-                                                        @Html.TextBoxFor(m => Model.case_.Region.Name, new { id = "RegionName", @readonly = true })
+                                                        var curRegion = Model.regions.Where(r=> r.Id == Model.case_.Region_Id).SingleOrDefault();
+                                                        @Html.TextBoxFor(m => curRegion.Name, new { id = "RegionName", @readonly = true })
                                                         @Html.HiddenFor(m => Model.case_.Region_Id)
                                                     }
                                                     else
@@ -256,7 +257,9 @@
                                                 <td class="span4">
                                                         @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Department_Id, CaseSolutionFields.Department))
                                                         {
-                                                           @Html.TextBoxFor(m => Model.case_.Department.DepartmentName, new { id = "DepartmentName", @readonly = true })
+                                                            var curDep = Model.departments.Where(d=> d.Id == Model.case_.Department_Id).SingleOrDefault();
+                                                           @Html.TextBoxFor(m =>  curDep.DepartmentName, 
+                                                                            new { id = "DepartmentName", @readonly = true })
                                                            @Html.HiddenFor(m => Model.case_.Department_Id) 
                                                         }
                                                         else

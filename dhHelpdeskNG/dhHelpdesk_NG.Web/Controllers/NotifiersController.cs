@@ -299,6 +299,13 @@
                 domains = this.domainRepository.FindByCustomerId(currentCustomerId);
             }
 
+            if (settings.Region.Show)
+            {
+                regions = this.regionRepository.FindByCustomerId(currentCustomerId);
+                if (regionId != null && regionId > 0)
+                    inputParams.Add("RegionId", regionId.Value.ToString());
+            }
+
             if (settings.Department.Show)
             {
                 var departmentsData =
@@ -307,23 +314,21 @@
 
                 if (departmentId != null)
                     inputParams.Add("DepartmentId", departmentId.ToString()); // Takes data from Case page
-                else
-                    if (departmentsData.Any())
-                    {
-                        inputParams.Add("DepartmentId", departmentsData[0].Id.ToString());
-                    }
+                //else
+                //    if (departmentsData.Any())
+                //    {
+                //        inputParams.Add("DepartmentId", departmentsData[0].Id.ToString());
+                //    }
             }
-
+                       
             if (settings.OrganizationUnit.Show)
             {
-                var deptId = departments != null && (settings.Department.Show && departments.Any())
-                                 ? int.Parse(departments.FirstOrDefault().Value)
-                                 : (int?)null;
-
-                if (departmentId != null)
-                    deptId = departmentId; // Takes data from Case page                
-
-                var organizationUnits = this.organizationService.GetOrganizationUnitsBy(currentCustomerId, null, deptId);
+                //var deptId = departments != null && (settings.Department.Show && departments.Any())
+                //                 ? int.Parse(departments.FirstOrDefault().Value)
+                //                 : (int?)null;                                
+                var organizationUnits = this.organizationService.GetOrganizationUnitsBy(currentCustomerId, null, departmentId);
+                
+                //, regionId, departmentId
                 ViewBag.organizationUnits = organizationUnits.Select(it => new { id = it.Id.ToString(), parent_id = it.Parent_OU_Id.ToString(), name = it.Name });
 
                 if (unitId != null)
@@ -331,19 +336,11 @@
                     inputParams.Add("UnitId", unitId.Value.ToString());
                     ViewBag.selectedOrganizationUnitId = unitId.Value.ToString();
                 }
-                else
-                {
-                    ViewBag.selectedOrganizationUnitId = organizationUnits.Any() ? organizationUnits.First().Id.ToString() : string.Empty;
-                }
+                //else
+                //{
+                //    ViewBag.selectedOrganizationUnitId = organizationUnits.Any() ? organizationUnits.First().Id.ToString() : string.Empty;
+                //}
             }
-
-            if (settings.Region.Show)
-            {
-                regions = this.regionRepository.FindByCustomerId(currentCustomerId);
-                if (regionId != null && regionId > 0)
-                  inputParams.Add("RegionId", regionId.Value.ToString());
-            }
-
             if (settings.Division.Show)
             {
                 divisions = this.divisionRepository.FindByCustomerId(currentCustomerId);
