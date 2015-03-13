@@ -38,7 +38,7 @@
                     DepartmentId = DefaultDepartmentId,
                     TimeFrom = 9,
                     TimeUntil = 12
-                }, 
+                },
         };
 
         [Test]
@@ -59,7 +59,7 @@
             var inst = this.InstantiateDefault();
             var oneDayStart = new DateTime(2015, 03, 06, 16, 0, 0);
             var oneDayEnd = new DateTime(2015, 03, 06, 19, 48, 0);
-            const int OneDayResult = 120;
+            const int OneDayResult = 60;
 
             var twoDayStart = new DateTime(2015, 03, 05, 16, 0, 0);
             var twoDayEnd = new DateTime(2015, 03, 06, 11, 23, 0);
@@ -100,20 +100,20 @@
         public void WorkTimeWithRedDayTest()
         {
             var item = this.InstantiateDefault();
-            var monday = new DateTime(2015, 03, 2, 7, 23, 58);
+            var monday = new DateTime(2015, 03, 2, 6, 23, 58);
             var wednesday = new DateTime(2015, 03, 4, 12, 1, 0);
-            var fullReddayRslt = 841; /// 14 hrs 1 min
-            Assert.AreEqual(fullReddayRslt, item.CalcWorkTimeMinutes(DefaultDepartmentId, monday, wednesday), "Only working time should be counted within interal with redays");
+            var fullReddayRslt = 901; /// 10h + 5h 1m = 901
+            Assert.AreEqual(fullReddayRslt, item.CalcWorkTimeMinutes(DefaultDepartmentId, monday, wednesday), "Only working time should be counted within interval with redays");
 
             var tuesday = new DateTime(2015, 03, 10, 16, 30, 0);
             var thurstday = new DateTime(2015, 03, 12, 8, 30, 0);
             var partReddayRslt = 300; /// 3 hrs 0 min
-            Assert.AreEqual(partReddayRslt, item.CalcWorkTimeMinutes(DefaultDepartmentId, tuesday, thurstday), "Only working time should be counted within interal with partial redays");
+            Assert.AreEqual(partReddayRslt, item.CalcWorkTimeMinutes(DefaultDepartmentId, tuesday, thurstday), "Only working time should be counted within interval with partial redays");
 
             var sunday = new DateTime(2015, 03, 8, 16, 30, 0);
             monday = new DateTime(2015, 03, 9, 9, 25, 0);
-            var weekendReddayRslt = 85; /// 25 min
-            Assert.AreEqual(weekendReddayRslt, item.CalcWorkTimeMinutes(DefaultDepartmentId, sunday, monday), "Only working time should be counted within interal with partial redays that crossings with weekends");
+            var weekendReddayRslt = 145; /// 25 min
+            Assert.AreEqual(weekendReddayRslt, item.CalcWorkTimeMinutes(DefaultDepartmentId, sunday, monday), "Only working time should be counted within interval with partial redays that crossings with weekends");
         }
 
         [Test]
