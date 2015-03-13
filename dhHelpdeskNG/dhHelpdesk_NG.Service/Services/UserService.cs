@@ -43,6 +43,7 @@ namespace DH.Helpdesk.Services.Services
         List<CustomerWorkingGroupForUser> GetWorkinggroupsForUserAndCustomer(int userId, int customerId);
         IList<LoggedOnUsersOnIndexPage> GetListToUserLoggedOn();
         IList<Department> GetDepartmentsForUser(int userId, int customerId = 0);
+        IList<Customer> GetCustomersForUser(int userId);
         IList<User> GetAdministrators(int customerId, int active = 1);
         IList<User> GetSystemOwners(int customerId);
         IList<User> GetUsers();
@@ -238,6 +239,16 @@ namespace DH.Helpdesk.Services.Services
         {
             return this._departmentRepository.GetDepartmentsForUser(userId, customerId).OrderBy(x => x.Customer_Id).ThenBy(x => x.DepartmentName).ToList();
             //return this._departmentRepository.GetDepartmentsForUser(userId, customerId).ToList();
+        }
+
+        /// <summary>
+        /// Returns Ilist of Customer with all the customers that the user is assigned to
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public IList<Customer> GetCustomersForUser(int userId)
+        {
+            return this._customerRepository.CustomersForUser(userId);
         }
 
         public IList<User> GetAdministrators(int customerId, int active = 1)
@@ -462,7 +473,7 @@ namespace DH.Helpdesk.Services.Services
 
             if (!user.Cs.Any(it => it.Id == user.Customer_Id))
             {
-                errors.Add("User.Customer_Id", "Du måste ange ett standartkund");
+                errors.Add("User.Customer_Id", "Du måste ange ett standardkund");
             }
 
             if (user.Id == 0)
