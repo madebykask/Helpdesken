@@ -76,9 +76,36 @@ $(function () {
                                                 }
                                                 departments.append(option);
                                             }
+
+                                            dhHelpdesk.cases.utils.refreshAdministrators(caseEntity);
                                         })
             .always(function () {
                 departments.prop('disabled', false);
+            });
+        },
+
+        refreshAdministrators: function (caseEntity) {
+            var departments = caseEntity.getUser().getDepartment().getElement();
+            var administrators = caseEntity.getOther().getAdministrator().getElement();
+
+            var selectedAdministrator = administrators.val();
+
+            administrators.prop('disabled', true);
+            administrators.empty();
+            administrators.append('<option />');
+
+            $.getJSON(caseEntity.getGetDepartmentUsersUrl() + '?departmentId=' + departments.val(), function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var item = data[i];
+                    var option = $("<option value='" + item.Value + "'>" + item.Name + "</option>");
+                    if (option.val() == selectedAdministrator) {
+                        option.prop("selected", true);
+                    }
+                    administrators.append(option);
+                }
+            })
+            .always(function () {
+                administrators.prop('disabled', false);
             });
         }
     }
@@ -157,6 +184,10 @@ $(function () {
             region.getElement().change(function() {
                 dhHelpdesk.cases.utils.refreshDepartments(caseEntity);
             });
+
+            department.getElement().change(function () {
+                dhHelpdesk.cases.utils.refreshAdministrators(caseEntity);
+            });
         }
 
         return that;
@@ -214,6 +245,7 @@ $(function () {
         var other = spec.other || {};
         var log = spec.log || {};
         var getDepartmentsUrl = spec.getDepartmentsUrl || '';
+        var getDepartmentUsersUrl = spec.getDepartmentUsersUrl || '';
 
         var getUser = function() {
             return user;
@@ -238,12 +270,17 @@ $(function () {
             return getDepartmentsUrl;
         }
 
+        var getGetDepartmentUsersUrl = function () {
+            return getDepartmentUsersUrl;
+        }
+
         that.getUser = getUser;
         that.getComputer = getComputer;
         that.getCaseInfo = getCaseInfo;
         that.getOther = getOther;
         that.getLog = getLog;
         that.getGetDepartmentsUrl = getGetDepartmentsUrl;
+        that.getGetDepartmentUsersUrl = getGetDepartmentUsersUrl;
 
         user.setCase(that);
         computer.setCase(that);
@@ -269,6 +306,7 @@ $(function () {
 
         var requiredFieldsMessage = spec.requiredFieldsMessage || '';
         var getDepartmentsUrl = spec.getDepartmentsUrl || '';
+        var getDepartmentUsersUrl = spec.getDepartmentUsersUrl || '';
 
         var user = dhHelpdesk.cases.user({
             region: dhHelpdesk.cases.object({ element: $('[data-field="region"]') }),
@@ -288,7 +326,8 @@ $(function () {
             caseInfo: caseInfo,
             other: other,
             log: log,
-            getDepartmentsUrl: getDepartmentsUrl
+            getDepartmentsUrl: getDepartmentsUrl,
+            getDepartmentUsersUrl: getDepartmentUsersUrl
         });
 
         var getCase = function() {

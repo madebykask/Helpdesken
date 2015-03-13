@@ -31,6 +31,24 @@
             return entities;
         }
 
+        public static List<ItemOverview> MapToCustomerUsersOverviews(
+                                    IQueryable<Customer> customers,
+                                    IQueryable<User> users,
+                                    IQueryable<CustomerUser> customerUsers)
+        {
+            var entities = (from cu in customerUsers
+                            join c in customers on cu.Customer_Id equals c.Id
+                            join u in users on cu.User_Id equals u.Id
+                            select u)
+                            .GetOrderedByName()
+                            .ToList();
+
+            return entities.Select(u => new ItemOverview(
+                                        new UserName(u.FirstName, u.SurName).GetReversedFullName(),
+                                        u.Id.ToString(CultureInfo.InvariantCulture)))
+                                        .ToList();
+        }
+
         public static User MapToUser(UserOverview overview)
         {
             return new User 
