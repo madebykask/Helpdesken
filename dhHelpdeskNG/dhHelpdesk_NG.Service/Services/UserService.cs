@@ -136,6 +136,8 @@ namespace DH.Helpdesk.Services.Services
         List<UserProfileCustomerSettings> GetUserProfileCustomersSettings(int userId);
 
         void UpdateUserProfileCustomerSettings(int userId, List<UserProfileCustomerSettings> customersSettings);
+
+        List<Customer> GetCustomersForUser(int userId);
     }
 
     public class UserService : IUserService
@@ -911,6 +913,22 @@ namespace DH.Helpdesk.Services.Services
                 }
 
                 uow.Save();
+            }
+        }
+
+        public List<Customer> GetCustomersForUser(int userId)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var customersRep = uow.GetRepository<Customer>();
+                var usersRep = uow.GetRepository<User>();
+                var userCustomersRep = uow.GetRepository<CustomerUser>();
+
+                var customers = customersRep.GetAll();
+                var users = usersRep.GetAll().GetById(userId);
+                var userCustomers = userCustomersRep.GetAll();
+
+                return UsersMapper.MapToUserCustomers(customers, users, userCustomers);
             }
         }
 
