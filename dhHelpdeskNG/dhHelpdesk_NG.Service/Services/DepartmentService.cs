@@ -13,11 +13,12 @@
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
 
     using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
+    using DH.Helpdesk.Common.Enums;
 
     public interface IDepartmentService
     {
         IList<Department> GetDepartmentsByUserPermissions(int userId, int customerId);
-        IList<Department> GetDepartments(int customerId, int isActive = 1);
+        IList<Department> GetDepartments(int customerId, ActivationStatus isActive = ActivationStatus.Active);
         Department GetDepartment(int id);
         DeleteMessage DeleteDepartment(int id);
 
@@ -50,9 +51,12 @@
             this.unitOfWorkFactory = unitOfWorkFactory;
         }
 
-        public IList<Department> GetDepartments(int customerId, int isActive = 1)
-        {
-            return this._departmentRepository.GetMany(x => x.Customer_Id == customerId && x.IsActive != 0).OrderBy(x => x.DepartmentName).ToList();
+        public IList<Department> GetDepartments(int customerId, ActivationStatus isActive = ActivationStatus.Active)
+        {            
+            if (isActive == ActivationStatus.All)
+               return this._departmentRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.DepartmentName).ToList();
+            else
+               return this._departmentRepository.GetMany(x => x.Customer_Id == customerId && x.IsActive == (int)isActive).OrderBy(x => x.DepartmentName).ToList();
         }
 
         public IList<Department> GetDepartmentsByUserPermissions(int userId, int customerId)

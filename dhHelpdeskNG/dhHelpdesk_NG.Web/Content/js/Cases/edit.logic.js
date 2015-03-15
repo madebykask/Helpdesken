@@ -71,13 +71,15 @@ $(function () {
                                             for (var i = 0; i < data.length; i++) {
                                                 var item = data[i];
                                                 var option = $("<option value='" + item.Value + "'>" + item.Name + "</option>");
-                                                if (option.val() == selectedDepartment) {
-                                                    option.prop("selected", true);
-                                                }
+                                                //Contact Majid about this 
+                                                //if (option.val() == selectedDepartment) { 
+                                                //    option.prop("selected", true);
+                                                //}
                                                 departments.append(option);
                                             }
 
                                             dhHelpdesk.cases.utils.refreshAdministrators(caseEntity);
+                                            $('#case__Department_Id').change();
                                         })
             .always(function () {
                 departments.prop('disabled', false);
@@ -241,7 +243,7 @@ $(function () {
 
         that.init = function(caseEntity) {            
             administrator.getElement().change(function () {
-                dhHelpdesk.cases.utils.refreshDepartments(caseEntity);
+                //dhHelpdesk.cases.utils.refreshDepartments(caseEntity); // Contact to Majid
             });
         }
 
@@ -314,7 +316,7 @@ $(function () {
         other.init(that);
         log.init(that);
 
-        dhHelpdesk.cases.utils.refreshDepartments(that);
+        //dhHelpdesk.cases.utils.refreshDepartments(that);  => Contact to Majid
 
         return that;
     }
