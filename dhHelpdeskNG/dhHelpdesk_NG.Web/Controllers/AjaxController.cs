@@ -100,11 +100,12 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetDepartmentUsers(int? departmentId)
+        public JsonResult GetDepartmentUsers(int? departmentId, int? workingGroupId)
         {
             var users = this.departmentService.GetDepartmentUsers(
                                     this.workContext.Customer.CustomerId,
-                                    departmentId);
+                                    departmentId,
+                                    workingGroupId);
 
             return this.Json(users, JsonRequestBehavior.AllowGet);
         }

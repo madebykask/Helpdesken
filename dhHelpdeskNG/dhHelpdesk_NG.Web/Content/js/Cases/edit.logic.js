@@ -60,7 +60,6 @@ $(function () {
             var departmentFilterFormat = caseEntity.getUser().getDepartmentFilterFormat().getElement();
 
             var selectedDepartment = departments.val();
-
             departments.prop('disabled', true);
             departments.empty();
             departments.append('<option />');
@@ -71,15 +70,11 @@ $(function () {
                                             for (var i = 0; i < data.length; i++) {
                                                 var item = data[i];
                                                 var option = $("<option value='" + item.Value + "'>" + item.Name + "</option>");
-                                                //Contact Majid about this 
-                                                //if (option.val() == selectedDepartment) { 
-                                                //    option.prop("selected", true);
-                                                //}
+                                                if (option.val() == selectedDepartment) { 
+                                                    option.prop("selected", true);
+                                                }
                                                 departments.append(option);
                                             }
-
-                                            dhHelpdesk.cases.utils.refreshAdministrators(caseEntity);
-                                            $('#case__Department_Id').change();
                                         })
             .always(function () {
                 departments.prop('disabled', false);
@@ -87,12 +82,10 @@ $(function () {
         },
 
         refreshAdministrators: function (caseEntity) {
-
-            // temporary solution
-            return;
-
             var departments = caseEntity.getUser().getDepartment().getElement();
             var administrators = caseEntity.getOther().getAdministrator().getElement();
+            var workingGroups = caseEntity.getOther().getWorkingGroup().getElement();
+            var dontConnectUserToWorkingGroup = caseEntity.getUser().getDontConnectUserToWorkingGroup().getElement();
 
             var selectedAdministrator = administrators.val();
 
@@ -100,16 +93,18 @@ $(function () {
             administrators.empty();
             administrators.append('<option />');
 
-            $.getJSON(caseEntity.getGetDepartmentUsersUrl() + '?departmentId=' + departments.val(), function (data) {
-                for (var i = 0; i < data.length; i++) {
-                    var item = data[i];
-                    var option = $("<option value='" + item.Value + "'>" + item.Name + "</option>");
-                    if (option.val() == selectedAdministrator) {
-                        option.prop("selected", true);
-                    }
-                    administrators.append(option);
-                }
-            })
+            $.getJSON(caseEntity.getGetDepartmentUsersUrl() + 
+                                '?departmentId=' + departments.val() +
+                                '&workingGroupId=' + (dontConnectUserToWorkingGroup.val() == 0 ? workingGroups.val() : ''), function (data) {
+                                for (var i = 0; i < data.length; i++) {
+                                    var item = data[i];
+                                    var option = $("<option value='" + item.Value + "'>" + item.Name + "</option>");
+                                    if (option.val() == selectedAdministrator) {
+                                        option.prop("selected", true);
+                                    }
+                                    administrators.append(option);
+                                }
+                            })
             .always(function () {
                 administrators.prop('disabled', false);
             });
@@ -170,6 +165,7 @@ $(function () {
         var region = spec.region || {};
         var department = spec.department || {};
         var departmentFilterFormat = spec.departmentFilterFormat || {};
+        var dontConnectUserToWorkingGroup = spec.dontConnectUserToWorkingGroup || {};
 
         var getUserId = function() {
             return userId;
@@ -187,10 +183,15 @@ $(function () {
             return departmentFilterFormat;
         }
 
+        var getDontConnectUserToWorkingGroup = function() {
+            return dontConnectUserToWorkingGroup;
+        }
+
         that.getUserId = getUserId;
         that.getRegion = getRegion;
         that.getDepartment = getDepartment;
         that.getDepartmentFilterFormat = getDepartmentFilterFormat;
+        that.getDontConnectUserToWorkingGroup = getDontConnectUserToWorkingGroup;
 
         that.init = function (caseEntity) {
             /*var relatedCasesTimeout = null;
@@ -234,16 +235,26 @@ $(function () {
         var that = dhHelpdesk.cases.caseFields(spec, my);
 
         var administrator = spec.administrator || {};
+        var workingGroup = spec.workingGroup || {};
 
         var getAdministrator = function() {
             return administrator;
         }
 
+        var getWorkingGroup = function() {
+            return workingGroup;
+        }
+
         that.getAdministrator = getAdministrator;
+        that.getWorkingGroup = getWorkingGroup;
 
         that.init = function(caseEntity) {            
             administrator.getElement().change(function () {
-                //dhHelpdesk.cases.utils.refreshDepartments(caseEntity); // Contact to Majid
+                dhHelpdesk.cases.utils.refreshDepartments(caseEntity);
+            });
+
+            workingGroup.getElement().change(function () {
+                dhHelpdesk.cases.utils.refreshAdministrators(caseEntity);
             });
         }
 
@@ -316,7 +327,8 @@ $(function () {
         other.init(that);
         log.init(that);
 
-        //dhHelpdesk.cases.utils.refreshDepartments(that);  => Contact to Majid
+        dhHelpdesk.cases.utils.refreshDepartments(that);
+        dhHelpdesk.cases.utils.refreshAdministrators(that);
 
         return that;
     }
@@ -334,12 +346,14 @@ $(function () {
             userId: dhHelpdesk.cases.object({ element: $('[data-field="userId"]') }),
             region: dhHelpdesk.cases.object({ element: $('[data-field="region"]') }),
             department: dhHelpdesk.cases.object({ element: $('[data-field="department"]') }),
-            departmentFilterFormat: dhHelpdesk.cases.object({ element: $('[data-field="departmentFilterFormat"]') })
+            departmentFilterFormat: dhHelpdesk.cases.object({ element: $('[data-field="departmentFilterFormat"]') }),
+            dontConnectUserToWorkingGroup: dhHelpdesk.cases.object({ element: $('[data-field="dontConnectUserToWorkingGroup"]') })
         });
         var computer = dhHelpdesk.cases.computer({});
         var caseInfo = dhHelpdesk.cases.caseInfo({});
         var other = dhHelpdesk.cases.other({
-            administrator: dhHelpdesk.cases.object({ element: $('[data-field="administrator"]') })
+            administrator: dhHelpdesk.cases.object({ element: $('[data-field="administrator"]') }),
+            workingGroup: dhHelpdesk.cases.object({ element: $('[data-field="workingGroup"]') })
         });
         var log = dhHelpdesk.cases.log({});
 

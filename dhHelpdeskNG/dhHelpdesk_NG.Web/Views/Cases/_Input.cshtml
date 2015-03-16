@@ -94,7 +94,7 @@
                         @Html.HiddenFor(model => model.CaseMailSetting.SendMailAboutNewCaseTo)
                         @Html.HiddenFor(model => model.CaseMailSetting.HelpdeskMailFromAdress)
                         @Html.HiddenFor(model => model.CaseMailSetting.AbsoluterUrl)
-                        @Html.HiddenFor(model => model.CaseMailSetting.DontConnectUserToWorkingGroup)
+                        @Html.HiddenFor(model => model.CaseMailSetting.DontConnectUserToWorkingGroup, new { data_field = "dontConnectUserToWorkingGroup" })
                         @Html.HiddenFor(model => model.CaseFileNames)
                         @Html.HiddenFor(model => model.LogFileNames)
                         @Html.HiddenFor(model => model.case_.Unread)
@@ -960,7 +960,7 @@
                                         <td>
                                             @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.WorkingGroup_Id, CaseSolutionFields.WorkingGroup))
                                             {
-                                                <select id="case__WorkingGroup_Id" name="case_.WorkingGroup_Id">
+                                                <select id="case__WorkingGroup_Id" name="case_.WorkingGroup_Id" data-field="workingGroup">
                                                     <option value="">&nbsp;</option>
                                                     @if (Model.workingGroups != null)
                                                     {

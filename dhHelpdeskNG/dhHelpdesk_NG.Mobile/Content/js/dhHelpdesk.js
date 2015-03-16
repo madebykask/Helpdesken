@@ -121,7 +121,10 @@ function CaseCascadingSelectlistChange(id, customerId, postTo, ctl, departmentFi
                     $(ctl).append('<option value="' + data.list[i].id + '">' + data.list[i].name + '</option>');
             }
         }
-    }, 'json');
+    }, 'json').always(function () {
+        if (ctl == '#case__Ou_Id')
+            $('#case__Ou_Id').prop('disabled', false);
+    });
 }
 
 
@@ -273,6 +276,7 @@ function CaseInitForm() {
     });
 
     $('#case__Department_Id').change(function () {
+        $('#case__Ou_Id').prop('disabled', true);
         CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeDepartment/', '#case__Ou_Id', $('#DepartmentFilterFormat').val());        
         $('#divInvoice').hide();
         $.get('/Cases/ShowInvoiceFields/', { 'departmentId': $(this).val() }, function (data) {

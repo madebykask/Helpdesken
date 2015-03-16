@@ -354,11 +354,6 @@ function CaseInitForm() {
     });
 
     $('#case__WorkingGroup_Id').change(function () {
-        // filter administrators
-        var DontConnectUserToWorkingGroup = $('#CaseMailSetting_DontConnectUserToWorkingGroup').val();
-        if (DontConnectUserToWorkingGroup == 0) {
-            CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeWorkingGroupFilterUser/', '#case__Performer_User_Id', $('#DepartmentFilterFormat').val());
-        }
         //set state secondery
         SelectValueInOtherDropdownOnChange($(this).val(), '/Cases/ChangeWorkingGroupSetStateSecondary/', '#case__StateSecondary_Id')
     });

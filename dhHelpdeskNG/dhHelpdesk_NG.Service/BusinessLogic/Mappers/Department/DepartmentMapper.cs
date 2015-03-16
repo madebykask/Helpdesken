@@ -142,16 +142,56 @@
         public static List<ItemOverview> MapToDepartmentUsers(
                                             IQueryable<User> users,
                                             IQueryable<Customer> customers,
-                                            IQueryable<Department> departments,
-                                            IQueryable<DepartmentUser> userDepartments)
+                                            IQueryable<CustomerUser> customerUsers,
+                                            IQueryable<Department> departments,                                            
+                                            IQueryable<DepartmentUser> userDepartments,
+                                            IQueryable<WorkingGroupEntity> workingGroups,
+                                            IQueryable<UserWorkingGroup> userWorkingGroups,
+                                            int? departmentId,
+                                            int? workingGroupId)
         {
-            var entities = (from ud in userDepartments
+            var entities = new List<User>();
+
+            if (departmentId.HasValue && workingGroupId.HasValue)
+            {
+                entities = (from ud in userDepartments
                             join u in users on ud.User_Id equals u.Id
                             join d in departments on ud.Department_Id equals d.Id
+                            join uwg in userWorkingGroups on u.Id equals uwg.User_Id
+                            join wg in workingGroups on uwg.WorkingGroup_Id equals wg.Id
                             join c in customers on d.Customer_Id equals c.Id
                             select u)
                             .GetOrderedByName()
                             .ToList();
+            }
+            else if (departmentId.HasValue)
+            {
+                entities = (from ud in userDepartments
+                            join u in users on ud.User_Id equals u.Id
+                            join d in departments on ud.Department_Id equals d.Id
+                            join c in customers on u.Customer_Id equals c.Id
+                            select u)
+                            .GetOrderedByName()
+                            .ToList();
+            }
+            else if (workingGroupId.HasValue)
+            {
+                entities = (from u in users 
+                            join uwg in userWorkingGroups on u.Id equals uwg.User_Id
+                            join wg in workingGroups on uwg.WorkingGroup_Id equals wg.Id
+                            join c in customers on u.Customer_Id equals c.Id
+                            select u)
+                            .GetOrderedByName()
+                            .ToList();                
+            } 
+            else
+            {
+                entities = (from u in users
+                            join c in customers on u.Customer_Id equals c.Id
+                            select u)
+                            .GetOrderedByName()
+                            .ToList();                                
+            }            
 
             return entities.Select(u => new ItemOverview(
                                         new UserName(u.FirstName, u.SurName).GetReversedFullName(),
