@@ -9,6 +9,8 @@
 
 @{  
     var pDepartmentVisible = false;
+    
+
     if (Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Department_Id, CaseSolutionFields.Department) == string.Empty)
     {
         pDepartmentVisible = true;   
@@ -931,7 +933,7 @@
                                                 <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>
                                             }
                                             <div id="divCaseFiles">
-                                                @Html.Partial("_CaseFiles", Model.CaseFilesModel)
+                                                @Html.Partial("_CaseFiles", Model.CaseFilesModel, new ViewDataDictionary {{"CaseInactive", Model.case_.FinishingDate.HasValue.ToString()} })
                                             </div>
                                         </td>
                                     </tr>
