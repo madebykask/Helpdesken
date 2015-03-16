@@ -812,7 +812,7 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             var list = unionList.Select(x => new { id = x.Key, name = x.Value });
-            return this.Json(new { list });
+            return this.Json(new { list }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult ChangeCountry(int? id, int customerId, int departmentFilterFormat)

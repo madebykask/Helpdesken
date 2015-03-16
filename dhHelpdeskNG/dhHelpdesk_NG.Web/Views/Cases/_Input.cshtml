@@ -68,7 +68,7 @@
                     <div class="container">
                         @Html.HiddenFor(model => model.case_.Id, new { data_field = "caseId" })
                         @Html.HiddenFor(model => model.case_.CaseGUID)
-                        @Html.HiddenFor(model => model.case_.Customer_Id)
+                        @Html.HiddenFor(model => model.case_.Customer_Id, new { data_field = "customerId" })
                         @Html.HiddenFor(model => model.case_.User_Id)
                         @Html.HiddenFor(model => model.case_.IpAddress)
                         @Html.HiddenFor(model => model.case_.Deleted)
@@ -298,7 +298,7 @@
                                                         }
                                                         else
                                                         {
-                                                            <select id="case__Ou_Id" name="case_.OU_Id" >
+                                                            <select id="case__Ou_Id" name="case_.OU_Id" data-field="ou">
                                                                 <option value="">&nbsp;</option>
                                                                 @if (Model.ous != null)
                                                                 {
@@ -1811,7 +1811,8 @@
             getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax")',
             getDepartmentUsersUrl: '@Url.Action("GetDepartmentUsers", "Ajax")',
             relatedCasesUrl: '@Url.Action("RelatedCases", "Cases")',
-            relatedCasesCountUrl: '@Url.Action("RelatedCasesCount", "Cases")'
+            relatedCasesCountUrl: '@Url.Action("RelatedCasesCount", "Cases")',
+            getDepartmentOusUrl: '@Url.Action("ChangeDepartment", "Cases")'
         });
     });
 </script>
