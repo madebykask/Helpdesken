@@ -9,8 +9,10 @@
     {
         public RelatedCasesViewModel(
             List<RelatedCase> relatedCases, 
-            int customerId)
+            int customerId, 
+            string userId)
         {
+            this.UserId = userId;
             this.CustomerId = customerId;
             this.RelatedCases = relatedCases;
         }
@@ -20,5 +22,7 @@
 
         [IsId]
         public int CustomerId { get; private set; }
+
+        public string UserId { get; private set; }
     }
 }

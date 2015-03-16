@@ -1368,7 +1368,7 @@ namespace DH.Helpdesk.Web.Controllers
                                                 userId,
                                                 SessionFacade.CurrentUser);
 
-            var model = this.caseModelFactory.GetRelatedCasesModel(relatedCases, this.workContext.Customer.CustomerId);
+            var model = this.caseModelFactory.GetRelatedCasesModel(relatedCases, this.workContext.Customer.CustomerId, userId);
 
             return this.View(model);
         }
@@ -2024,12 +2024,6 @@ namespace DH.Helpdesk.Web.Controllers
                         m.templateistrue = templateistrue;
                     }
                 } // Load Case Template
-
-                // related cases
-                if (caseId != 0 && !string.IsNullOrWhiteSpace(m.case_.ReportedBy))
-                {
-                    m.RelatedCases = this._caseService.GetRelatedCases(caseId, customerId, m.case_.ReportedBy, SessionFacade.CurrentUser);
-                }
 
                 // hämta parent path för productArea 
                 m.ProductAreaHasChild = 0;

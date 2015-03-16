@@ -83,7 +83,6 @@
         /// Gets or sets the languages.
         /// </summary>
         public IEnumerable<LanguageOverview> Languages { get; set; }
-        public IList<CaseRelation> RelatedCases { get; set; }
         //public IList<CaseHistory> caseHistories { get; set; }
         public CaseHistory EmptyCaseHistory { get; set; }
         public FilesModel LogFilesModel { get; set; }

@@ -19,6 +19,6 @@
 
         CustomerCasesModel CreateCustomerCases(CustomerCases[] customerCases);
 
-        RelatedCasesViewModel GetRelatedCasesModel(List<RelatedCase> relatedCases, int customerId);
+        RelatedCasesViewModel GetRelatedCasesModel(List<RelatedCase> relatedCases, int customerId, string userId);
     }
 }

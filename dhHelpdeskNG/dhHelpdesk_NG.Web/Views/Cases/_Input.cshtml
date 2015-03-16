@@ -66,7 +66,7 @@
             <div class="tab-content">
                 <div class="tab-pane tab-pane-border active" id="case">
                     <div class="container">
-                        @Html.HiddenFor(model => model.case_.Id)
+                        @Html.HiddenFor(model => model.case_.Id, new { data_field = "caseId" })
                         @Html.HiddenFor(model => model.case_.CaseGUID)
                         @Html.HiddenFor(model => model.case_.Customer_Id)
                         @Html.HiddenFor(model => model.case_.User_Id)
@@ -135,6 +135,7 @@
                                                 </td>
                                                 <td>
                                                     <a href="#" id="AddNotifier" class="btn">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>
+                                                    <a href="#" data-field="relatedCases" title="@Translation.Get("Relaterade ärenden")" class="btn"><i class="icon-list"></i></a>
                                                 </td>
                                             </tr>
                                             <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Persons_Name, CaseSolutionFields.PersonsName)">
@@ -1808,7 +1809,9 @@
         var scope = dhHelpdesk.cases.scope({
             requiredFieldsMessage: '@Translation.Get("Ärendet kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ärendet.")',
             getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax")',
-            getDepartmentUsersUrl: '@Url.Action("GetDepartmentUsers", "Ajax")'
+            getDepartmentUsersUrl: '@Url.Action("GetDepartmentUsers", "Ajax")',
+            relatedCasesUrl: '@Url.Action("RelatedCases", "Cases")',
+            relatedCasesCountUrl: '@Url.Action("RelatedCasesCount", "Cases")'
         });
     });
 </script>

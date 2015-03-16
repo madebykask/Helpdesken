@@ -108,7 +108,15 @@ $(function () {
             .always(function () {
                 administrators.prop('disabled', false);
             });
-        }
+        },
+
+        delay: function() {
+            var timer = 0;
+            return function(callback, ms){
+                clearTimeout (timer);
+                timer = setTimeout(callback, ms);
+            };
+        }()
     }
 
     dhHelpdesk.cases.object = function (spec, my) {
@@ -161,11 +169,23 @@ $(function () {
         my = my || {};
         var that = dhHelpdesk.cases.caseFields(spec, my);
 
+        var relatedCasesUrl = spec.relatedCasesUrl || '';
+        var relatedCasesCountUrl = spec.relatedCasesCountUrl || '';
         var userId = spec.userId || {};
         var region = spec.region || {};
         var department = spec.department || {};
         var departmentFilterFormat = spec.departmentFilterFormat || {};
         var dontConnectUserToWorkingGroup = spec.dontConnectUserToWorkingGroup || {};
+        var relatedCases = spec.relatedCases || {};
+        relatedCases.getElement().hide();
+
+        var getRelatedCasesUrl = function() {
+            return relatedCasesUrl;
+        }
+
+        var getRelatedCasesCountUrl = function() {
+            return relatedCasesCountUrl;
+        }
 
         var getUserId = function() {
             return userId;
@@ -187,22 +207,44 @@ $(function () {
             return dontConnectUserToWorkingGroup;
         }
 
+        var getRelatedCases = function() {
+            return relatedCases;
+        }
+
+        that.getRelatedCasesUrl = getRelatedCasesUrl;
+        that.getRelatedCasesCountUrl = getRelatedCasesCountUrl;
         that.getUserId = getUserId;
         that.getRegion = getRegion;
         that.getDepartment = getDepartment;
         that.getDepartmentFilterFormat = getDepartmentFilterFormat;
         that.getDontConnectUserToWorkingGroup = getDontConnectUserToWorkingGroup;
+        that.getRelatedCases = getRelatedCases;
 
         that.init = function (caseEntity) {
-            /*var relatedCasesTimeout = null;
-
             var checkRelatedCases = function () {
-                clearTimeout(relatedCasesTimeout);
+                var caseId = that.getCase().getCaseId().getElement();
+                var userIdValue = encodeURIComponent(userId.getElement().val());
+                $.getJSON(getRelatedCasesCountUrl() + 
+                            '?caseId=' + caseId.val() +
+                            '&userId=' + userIdValue, function(data) {
+                                if (data > 0) {
+                                    relatedCases.getElement().show();
+                                } else {
+                                    relatedCases.getElement().hide();
+                                }
+                            });
             }
+            checkRelatedCases();
 
             userId.getElement().keyup(function() {
-                relatedCasesTimeout = setTimeout(checkRelatedCases, 1000);
-            });*/
+                dhHelpdesk.cases.utils.delay(checkRelatedCases, 500);
+            });
+
+            relatedCases.getElement().click(function () {
+                var caseId = that.getCase().getCaseId().getElement();
+                var userIdValue = encodeURIComponent(userId.getElement().val());
+                window.open(getRelatedCasesUrl() + '?caseId=' + caseId.val() + '&userId=' + userIdValue, '_blank');
+            });
 
             region.getElement().change(function() {
                 dhHelpdesk.cases.utils.refreshDepartments(caseEntity);
@@ -272,6 +314,7 @@ $(function () {
         my = my || {};
         var that = {};
 
+        var caseId = spec.caseId || {};
         var user = spec.user || {};
         var computer = spec.computer || {};
         var caseInfo = spec.caseInfo || {};
@@ -279,6 +322,10 @@ $(function () {
         var log = spec.log || {};
         var getDepartmentsUrl = spec.getDepartmentsUrl || '';
         var getDepartmentUsersUrl = spec.getDepartmentUsersUrl || '';
+
+        var getCaseId = function() {
+            return caseId;
+        }
 
         var getUser = function() {
             return user;
@@ -307,6 +354,7 @@ $(function () {
             return getDepartmentUsersUrl;
         }
 
+        that.getCaseId = getCaseId;
         that.getUser = getUser;
         that.getComputer = getComputer;
         that.getCaseInfo = getCaseInfo;
@@ -341,13 +389,18 @@ $(function () {
         var requiredFieldsMessage = spec.requiredFieldsMessage || '';
         var getDepartmentsUrl = spec.getDepartmentsUrl || '';
         var getDepartmentUsersUrl = spec.getDepartmentUsersUrl || '';
+        var relatedCasesUrl = spec.relatedCasesUrl || '';
+        var relatedCasesCountUrl = spec.relatedCasesCountUrl || '';
 
         var user = dhHelpdesk.cases.user({
             userId: dhHelpdesk.cases.object({ element: $('[data-field="userId"]') }),
             region: dhHelpdesk.cases.object({ element: $('[data-field="region"]') }),
             department: dhHelpdesk.cases.object({ element: $('[data-field="department"]') }),
             departmentFilterFormat: dhHelpdesk.cases.object({ element: $('[data-field="departmentFilterFormat"]') }),
-            dontConnectUserToWorkingGroup: dhHelpdesk.cases.object({ element: $('[data-field="dontConnectUserToWorkingGroup"]') })
+            dontConnectUserToWorkingGroup: dhHelpdesk.cases.object({ element: $('[data-field="dontConnectUserToWorkingGroup"]') }),
+            relatedCases: dhHelpdesk.cases.object({ element: $('[data-field="relatedCases"]') }),
+            relatedCasesUrl: relatedCasesUrl,
+            relatedCasesCountUrl: relatedCasesCountUrl
         });
         var computer = dhHelpdesk.cases.computer({});
         var caseInfo = dhHelpdesk.cases.caseInfo({});
@@ -358,6 +411,7 @@ $(function () {
         var log = dhHelpdesk.cases.log({});
 
         var caseEntity = dhHelpdesk.cases.case({
+            caseId: dhHelpdesk.cases.object({ element: $('[data-field="caseId"]') }),
             user: user,
             computer: computer,
             caseInfo: caseInfo,

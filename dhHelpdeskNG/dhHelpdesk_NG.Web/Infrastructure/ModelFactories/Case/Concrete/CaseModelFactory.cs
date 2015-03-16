@@ -33,9 +33,9 @@
             return new CustomerCasesModel(customerCases);
         }
 
-        public RelatedCasesViewModel GetRelatedCasesModel(List<RelatedCase> relatedCases, int customerId)
+        public RelatedCasesViewModel GetRelatedCasesModel(List<RelatedCase> relatedCases, int customerId, string userId)
         {
-            return new RelatedCasesViewModel(relatedCases, customerId);
+            return new RelatedCasesViewModel(relatedCases, customerId, userId);
         }
     }
 }

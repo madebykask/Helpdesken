@@ -2773,7 +2773,6 @@
     <Content Include="Views\Changes\EditorTemplates\ExistingLog.cshtml" />
     <Content Include="Views\Profile\Modules.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\UserModuleOverview.cshtml" />
-    <Content Include="Views\Cases\_RelatedCases.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\NewLog.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\Contacts\ContactsModel.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\Contacts\ContactModel.cshtml" />
