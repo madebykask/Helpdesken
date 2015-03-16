@@ -791,16 +791,20 @@ namespace DH.Helpdesk.Web.Controllers
             var prelist =
             id.HasValue ?
                 this._ouService.GetOUs(customerId)
-                         .Where(e => e.IsActive == 1 && id.GetValueOrDefault() == e.Department_Id)                
+                         .Where(e => e.IsActive == 1 && id.GetValueOrDefault() == e.Department_Id)
                 :
-                this._ouService.GetOUs(customerId);            
+                null;
+                //this._ouService.GetOUs(customerId);            
             
             var unionList = new Dictionary<int,string>();
-            foreach (var ou in prelist)
+            if (prelist != null)
             {
-                unionList.Add(ou.Id, ou.Name);
-                foreach (var s in ou.SubOUs.Where(e => e.IsActive == 1))                
-                    unionList.Add(s.Id, ou.Name + " - " + s.Name );                                
+                foreach (var ou in prelist)
+                {
+                    unionList.Add(ou.Id, ou.Name);
+                    foreach (var s in ou.SubOUs.Where(e => e.IsActive == 1))
+                        unionList.Add(s.Id, ou.Name + " - " + s.Name);
+                }
             }
 
             var list = unionList.Select(x => new { id = x.Key, name = x.Value });

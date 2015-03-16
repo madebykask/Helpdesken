@@ -7,6 +7,7 @@
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Common.Enums;
 
     public class DepartmentController : BaseAdminController
     {
@@ -38,7 +39,7 @@
         public ActionResult Index(int customerId)
         {
             var customer = this._customerService.GetCustomer(customerId);
-            var departments = this._departmentService.GetDepartments(customer.Id).ToList();
+            var departments = this._departmentService.GetDepartments(customer.Id, ActivationStatus.All).ToList();
 
             var model = new DepartmentIndexViewModel { Departments = departments, Customer = customer};
             return this.View(model);
