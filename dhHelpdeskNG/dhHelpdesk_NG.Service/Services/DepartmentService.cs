@@ -13,6 +13,7 @@
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
 
     using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
+    using DH.Helpdesk.Common.Enums;
 
     public interface IDepartmentService
     {
