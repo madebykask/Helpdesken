@@ -19,6 +19,7 @@
         public string RelatedField { get; set; }
         public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }
+        public string EMailIdentifier { get; set; }
 
         public virtual Customer Customer { get; set; }
         public virtual ICollection<CaseFieldSettingLanguage> CaseFieldSettingLanguages { get; set; }
