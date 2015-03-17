@@ -16,5 +16,22 @@
         {
             return this.View();
         }
+
+        /// <summary>
+        /// Clear Admin Sessions. Used by close administration button.
+        /// </summary>
+        [HttpPost]
+        public void ClearAdminSessions()
+        {
+            ClearUserSearchSession();
+        }
+
+        /// <summary>
+        /// Clear user search session.
+        /// </summary>
+        private void ClearUserSearchSession()
+        {
+            this.Session["UserSearch"] = null;
+        }
     }
 }
