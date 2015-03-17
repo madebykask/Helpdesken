@@ -87,6 +87,7 @@
             IList<ProductArea> pal = this._productAreaRepository.GetMany(x => x.Customer_Id == f.CustomerId).OrderBy(x => x.Name).ToList(); 
             IList<CaseSearchResult> ret = new List<CaseSearchResult>();
             var caseTypes = this.caseTypeRepository.GetCaseTypeOverviews(f.CustomerId).ToArray();
+            var displayLeftTime = csl.Any(it => it.Name == TimeLeftColumn);
 
             var sql = this.ReturnCaseSearchSql(
                                         f, 
@@ -126,7 +127,7 @@
                                 IList<Field> cols = new List<Field>();
                                 var toolTip = string.Empty;
                                 var sortOrder = string.Empty;
-                                var displayLeftTime = true;
+                                
                                 DateTime caseRegistrationDate;
 
                                 DateTime.TryParse(dr["RegTime"].ToString(), out caseRegistrationDate);
