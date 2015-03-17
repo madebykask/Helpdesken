@@ -27,10 +27,14 @@ $(function () {
     dhHelpdesk.cases.utils = {
         okText: '',
         cancelText: '',
+        yesText: '',
+        noText: '',
 
-        init: function (okText, cancelText) {
+        init: function (okText, cancelText, yesText, noText) {
             dhHelpdesk.cases.utils.okText = okText;
             dhHelpdesk.cases.utils.cancelText = cancelText;
+            dhHelpdesk.cases.utils.yesText = yesText;
+            dhHelpdesk.cases.utils.noText = noText;
         },
 
         showMessage: function (message, type) {
@@ -165,7 +169,10 @@ $(function () {
             $(document).on(event, handler);
         },
 
-        confirmDialog: function (text, onOk, onCancel) {
+        confirmDialog: function (text, onOk, onCancel, yesNo) {
+            var firstText = yesNo ? dhHelpdesk.cases.utils.yesText : dhHelpdesk.cases.utils.okText;
+            var secondText = yesNo ? dhHelpdesk.cases.utils.noText : dhHelpdesk.cases.utils.cancelText;
+
             var d = $('<div class="modal fade">' +
                             '<div class="modal-dialog">' +
                                 '<form method="post" id="deleteDialogForm" class="modal-content">' +
@@ -174,8 +181,8 @@ $(function () {
                                         '<p class="alert alert-info infop">' + text + '</p>' +
                                     '</div>' +
                                     '<div class="modal-footer">' +
-                                        '<button type="button" class="btn btn-ok">' + dhHelpdesk.cases.utils.okText + '</button>' +
-                                        '<button type="button" class="btn btn-cancel">' + dhHelpdesk.cases.utils.cancelText + '</button>' +
+                                        '<button type="button" class="btn btn-ok">' + firstText + '</button>' +
+                                        '<button type="button" class="btn btn-cancel">' + secondText + '</button>' +
                                     '</div>' +
                                 '</form>' +
                             '</div>' +
@@ -419,7 +426,7 @@ $(function () {
                         caseFile.getDeleteFile().getElement().triggerHandler('click', [{ self: true }]);
                     },
                     function() {                        
-                    });
+                    }, true);
             });
         }
 
@@ -593,8 +600,10 @@ $(function () {
         var deleteCaseFileConfirmMessage = spec.deleteCaseFileConfirmMessage || '';
         var okText = spec.okText || '';
         var cancelText = spec.cancelText || '';
+        var yesText = spec.yesText || '';
+        var noText = spec.noText || '';
 
-        dhHelpdesk.cases.utils.init(okText, cancelText);
+        dhHelpdesk.cases.utils.init(okText, cancelText, yesText, noText);
 
         var user = dhHelpdesk.cases.user({
             userId: dhHelpdesk.cases.object({ element: $('[data-field="userId"]') }),
