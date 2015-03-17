@@ -127,7 +127,7 @@
                                 IList<Field> cols = new List<Field>();
                                 var toolTip = string.Empty;
                                 var sortOrder = string.Empty;
-                                
+                                var doCalcTimeLeft = displayLeftTime;
                                 DateTime caseRegistrationDate;
 
                                 DateTime.TryParse(dr["RegTime"].ToString(), out caseRegistrationDate);
@@ -136,13 +136,13 @@
                                 if (DateTime.TryParse(dr["FinishingDate"].ToString(), out dtTmp))
                                 {
                                     caseFinishingDate = dtTmp;
-                                    displayLeftTime = false;
+                                    doCalcTimeLeft = false;
                                 }
 
                                 int intTmp;
                                 if (int.TryParse(dr["IncludeInCaseStatistics"].ToString(), out intTmp))
                                 {
-                                    displayLeftTime = displayLeftTime && intTmp == 1;
+                                    doCalcTimeLeft = displayLeftTime && intTmp == 1;
                                 }
 
                                 DateTime? caseShouldBeFinishedInDate = null;
@@ -162,7 +162,7 @@
                                 }
 
                                 int? timeLeft = null;
-                                if (displayLeftTime)
+                                if (doCalcTimeLeft)
                                 {
                                     if (caseShouldBeFinishedInDate.HasValue)
                                     {
