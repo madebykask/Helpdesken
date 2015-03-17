@@ -24,7 +24,7 @@
     var i = 0;
     foreach (var file in Model.Files)
     {
-                <tr>
+                <tr data-field="caseFile" data-field-id="@Model.ObjectId" data-field-name="@file.FileName">
                     <td>
                         <a href="@Url.Action("DownloadFile", new RouteValueDictionary { { "id", Model.ObjectId }, { "fileName", file.FileName } })"><i class="icon-file"></i>@file.FileName</a>
                     </td>
@@ -39,7 +39,7 @@
                         {
                             if (ViewBag.CaseInactive == "False")
                             {
-                                <a id="@string.Format("delete_casefile_button_{0}", i)" class="btn bt-small" title="@Translation.Get("Ta bort")"><i class="icon-remove"></i></a> 
+                                <a id="@string.Format("delete_casefile_button_{0}", i)" class="btn bt-small" data-field="deleteFile" title="@Translation.Get("Ta bort")"><i class="icon-remove"></i></a> 
                             }
                            
                         }

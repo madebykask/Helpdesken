@@ -25,6 +25,14 @@ $(function () {
     }
 
     dhHelpdesk.cases.utils = {
+        okText: '',
+        cancelText: '',
+
+        init: function (okText, cancelText) {
+            dhHelpdesk.cases.utils.okText = okText;
+            dhHelpdesk.cases.utils.cancelText = cancelText;
+        },
+
         showMessage: function (message, type) {
             $().toastmessage('showToast', {
                 text: dhHelpdesk.cases.utils.replaceAll(message, '|', '<br />'),
@@ -147,7 +155,59 @@ $(function () {
                 clearTimeout (timer);
                 timer = setTimeout(callback, ms);
             };
-        }()
+        }(),
+
+        raiseEvent: function (eventType, extraParameters) {
+            $(document).trigger(eventType, extraParameters);
+        },
+
+        onEvent: function (event, handler) {
+            $(document).on(event, handler);
+        },
+
+        confirmDialog: function (text, onOk, onCancel) {
+            var d = $('<div class="modal fade">' +
+                            '<div class="modal-dialog">' +
+                                '<form method="post" id="deleteDialogForm" class="modal-content">' +
+                                    '<div class="modal-body">' +
+                                        '<button type="button" class="close" data-dismiss="modal">&times;</button>' +
+                                        '<p class="alert alert-info infop">' + text + '</p>' +
+                                    '</div>' +
+                                    '<div class="modal-footer">' +
+                                        '<button type="button" class="btn btn-ok">' + dhHelpdesk.cases.utils.okText + '</button>' +
+                                        '<button type="button" class="btn btn-cancel">' + dhHelpdesk.cases.utils.cancelText + '</button>' +
+                                    '</div>' +
+                                '</form>' +
+                            '</div>' +
+                        '</div>');
+
+            d.on("show", function () {
+                d.find(".btn-cancel").on("click", function (e) {
+                    onCancel();
+                    d.modal('hide');
+                });
+
+                d.find(".btn-ok").on("click", function (e) {
+                    onOk();
+                    d.modal('hide');
+                });
+            });
+
+            d.on("hide", function () {
+                d.find(".btn-ok").off("click");
+                d.find(".btn-cancel").off("click");
+            });
+
+            d.on("hidden", function () {
+                d.remove();
+            });
+
+            d.modal({
+                "backdrop": "static",
+                "keyboard": true,
+                "show": true
+            });
+        }
     }
 
     dhHelpdesk.cases.object = function (spec, my) {
@@ -164,6 +224,33 @@ $(function () {
         }
 
         that.getElement = getElement;
+
+        return that;
+    }
+
+    dhHelpdesk.cases.file = function (spec, my) {
+        my = my || {};
+        var that = {};
+
+        var id = spec.id || null;
+        var name = spec.name || '';
+        var deleteFile = spec.deleteFile || {};
+
+        var getId = function() {
+            return id;
+        }
+
+        var getName = function() {
+            return name;
+        }
+
+        var getDeleteFile = function () {
+            return deleteFile;
+        }
+
+        that.getId = getId;
+        that.getName = getName;
+        that.getDeleteFile = getDeleteFile;
 
         return that;
     }
@@ -306,7 +393,68 @@ $(function () {
     dhHelpdesk.cases.caseInfo = function (spec, my) {
         my = my || {};
         var that = dhHelpdesk.cases.caseFields(spec, my);
-        
+
+        var deleteCaseFileConfirmMessage = spec.deleteCaseFileConfirmMessage || '';
+        var caseFiles = spec.caseFiles || [];
+
+        var getDeleteCaseFileConfirmMessage = function() {
+            return deleteCaseFileConfirmMessage;
+        }
+
+        var getCaseFiles = function() {
+            return caseFiles;
+        }
+
+        var addCaseFile = function(caseFile) {
+            caseFiles.push(caseFile);
+
+            caseFile.getDeleteFile().getElement().click(function (e, args) {
+                if (args && args.self) {
+                    return;
+                }
+
+                e.stopImmediatePropagation();
+                dhHelpdesk.cases.utils.confirmDialog(deleteCaseFileConfirmMessage,
+                    function() {
+                        caseFile.getDeleteFile().getElement().triggerHandler('click', [{ self: true }]);
+                    },
+                    function() {                        
+                    });
+            });
+        }
+
+        var getCaseFile = function(id) {
+            for (var i = 0; i < caseFiles.length; i++) {
+                var caseFile = caseFiles[i];
+                if (caseFile.getId() == id) {
+                    return caseFile;
+                }
+            }
+
+            return null;
+        }
+
+        var deleteCaseFile = function(caseFile) {
+            for (var i = 0; i < caseFiles.length; i++) {
+                var file = caseFile[i];
+                if (file.getId() == caseFile.getId()) {
+                    caseFiles.splice(i, 1);
+                    return;
+                }
+            }
+        }
+
+        var clearCaseFiles = function() {
+            caseFiles = [];
+        }
+
+        that.getDeleteCaseFileConfirmMessage = getDeleteCaseFileConfirmMessage;
+        that.getCaseFiles = getCaseFiles;
+        that.addCaseFile = addCaseFile;
+        that.getCaseFiles = getCaseFile;
+        that.deleteCaseFile = deleteCaseFile;
+        that.clearCaseFiles = clearCaseFiles;
+
         return that;
     }
 
@@ -442,6 +590,11 @@ $(function () {
         var relatedCasesUrl = spec.relatedCasesUrl || '';
         var relatedCasesCountUrl = spec.relatedCasesCountUrl || '';
         var getDepartmentOusUrl = spec.getDepartmentOusUrl || '';
+        var deleteCaseFileConfirmMessage = spec.deleteCaseFileConfirmMessage || '';
+        var okText = spec.okText || '';
+        var cancelText = spec.cancelText || '';
+
+        dhHelpdesk.cases.utils.init(okText, cancelText);
 
         var user = dhHelpdesk.cases.user({
             userId: dhHelpdesk.cases.object({ element: $('[data-field="userId"]') }),
@@ -455,7 +608,35 @@ $(function () {
             relatedCasesCountUrl: relatedCasesCountUrl
         });
         var computer = dhHelpdesk.cases.computer({});
-        var caseInfo = dhHelpdesk.cases.caseInfo({});
+
+        var caseInfo = dhHelpdesk.cases.caseInfo({
+            deleteCaseFileConfirmMessage: deleteCaseFileConfirmMessage
+        });
+
+        var refreshCaseFiles = function () {
+            caseInfo.clearCaseFiles();
+
+            $('[data-field="caseFile"]').each(function () {
+                var $this = $(this);
+                var caseFile = dhHelpdesk.cases.file({
+                    id: $this.attr("data-field-id"),
+                    name: $this.attr("data-field-name"),
+                    deleteFile: dhHelpdesk.cases.object({ element: $this.find('[data-field="deleteFile"]') })
+                });
+
+                caseInfo.addCaseFile(caseFile);
+            });
+        }
+        refreshCaseFiles();
+
+        dhHelpdesk.cases.utils.onEvent("OnUploadedCaseFileRendered", function () {
+            refreshCaseFiles();
+        });
+
+        dhHelpdesk.cases.utils.onEvent("OnDeleteCaseFile", function () {
+            refreshCaseFiles();
+        });
+
         var other = dhHelpdesk.cases.other({
             administrator: dhHelpdesk.cases.object({ element: $('[data-field="administrator"]') }),
             workingGroup: dhHelpdesk.cases.object({ element: $('[data-field="workingGroup"]') })
