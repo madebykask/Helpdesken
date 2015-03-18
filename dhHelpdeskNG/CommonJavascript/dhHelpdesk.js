@@ -290,6 +290,8 @@ function CaseInitForm() {
     // Remove after implementing http://redmine.fastdev.se/issues/10995
     $('#case__Region_Id').change(function () {
         CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeRegion/', '#case__Department_Id', $('#DepartmentFilterFormat').val());
+        $('#case__Ou_Id').prop('disabled', true);
+        CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeDepartment/', '#case__Ou_Id', $('#DepartmentFilterFormat').val());
     });
 
     $('#case__Status_Id').change(function () {
