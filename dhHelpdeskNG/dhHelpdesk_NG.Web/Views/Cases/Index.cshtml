@@ -73,5 +73,17 @@
         var scope = dhHelpdesk.casesList.scope({
             getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax")'
         });
+        
+        var ReloadCaseOverview = function(){
+            var TimeBeforeReload = "@Model.CaseSetting.RefreshContent";
+            TimeBeforeReload = TimeBeforeReload / 60;
+            TimeBeforeReload = TimeBeforeReload * 60000;
+            if (TimeBeforeReload != null || TimeBeforeReload != NaN || TimeBeforeReload != "")
+            {
+                setTimeout(function () { location.reload(); }, TimeBeforeReload);
+            }
+            
+        };
+        ReloadCaseOverview();
     });
 </script>

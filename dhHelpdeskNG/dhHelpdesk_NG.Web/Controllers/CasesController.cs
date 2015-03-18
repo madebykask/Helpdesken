@@ -248,8 +248,8 @@ namespace DH.Helpdesk.Web.Controllers
                     fd.customerUserSetting = cu;
                     fd.customerSetting = this._settingService.GetCustomerSetting(cusId);
                     fd.filterCustomerId = cusId;
-                    
 
+                    
                     //region
                     if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseRegionFilter))
                         fd.filterRegion = this._regionService.GetRegions(cusId);
@@ -418,9 +418,14 @@ namespace DH.Helpdesk.Web.Controllers
                     m.CaseSetting = GetCaseSettingModel(cusId, userId);
                     m.caseSearchResult.ShowRemainingTime = showRemainingTime;
                     m.caseSearchResult.RemainingTime = this.caseModelFactory.GetCaseRemainingTimeModel(remainingTime);
+
+                    //Set refreshcontent
+                    User user = new User();
+                    user = _userService.GetUser(userId);
+                    m.CaseSetting.RefreshContent = user.RefreshContent;
                 }
             }
-
+            
             return this.View(m);
         }
 
