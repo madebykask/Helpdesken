@@ -390,6 +390,8 @@ namespace DH.Helpdesk.Web.Controllers
                     
                     srm.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(cusId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
                     var workTimeCalculator = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
+                    var showRemainingTime = this.workContext.Customer.Settings.ShowCaseOverviewInfo;
+                    var remainingTime = new CaseRemainingTimeData();
                     srm.cases = this._caseSearchService.Search(
                         sm.caseSearchFilter,
                         srm.caseSettings,
@@ -402,7 +404,9 @@ namespace DH.Helpdesk.Web.Controllers
                         this.workContext.Customer.WorkingDayStart,
                         this.workContext.Customer.WorkingDayEnd,
                         workTimeCalculator,
-                        this.configuration.Application.ApplicationId);
+                        this.configuration.Application.ApplicationId,
+                        showRemainingTime,
+                        remainingTime);
                     m.caseSearchResult = srm;
                     m.caseSearchFilterData = fd;
                     sm.Search.IdsForLastSearch = GetIdsFromSearchResult(srm.cases);
@@ -412,6 +416,8 @@ namespace DH.Helpdesk.Web.Controllers
                     var caseTemplateTree = GetCaseTemplateTreeModel(cusId, userId);
                     m.CaseTemplateTreeButton = caseTemplateTree;
                     m.CaseSetting = GetCaseSettingModel(cusId, userId);
+                    m.caseSearchResult.ShowRemainingTime = showRemainingTime;
+                    m.caseSearchResult.RemainingTime = this.caseModelFactory.GetCaseRemainingTimeModel(remainingTime);
                 }
             }
 
@@ -1069,6 +1075,8 @@ namespace DH.Helpdesk.Web.Controllers
 
                 m.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(f.CustomerId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
                 var workTimeCalc = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
+                var showRemainingTime = this.workContext.Customer.Settings.ShowCaseOverviewInfo;
+                var remainingTime = new CaseRemainingTimeData();
                 m.cases = this._caseSearchService.Search(
                     f,
                     m.caseSettings,
@@ -1081,10 +1089,14 @@ namespace DH.Helpdesk.Web.Controllers
                     this.workContext.Customer.WorkingDayStart,
                     this.workContext.Customer.WorkingDayEnd,
                     workTimeCalc,
-                    this.configuration.Application.ApplicationId);
+                    this.configuration.Application.ApplicationId,
+                    showRemainingTime,
+                    remainingTime);
 
                 sm.Search.IdsForLastSearch = GetIdsFromSearchResult(m.cases);
                 SessionFacade.CurrentCaseSearch = sm;
+                m.ShowRemainingTime = showRemainingTime;
+                m.RemainingTime = this.caseModelFactory.GetCaseRemainingTimeModel(remainingTime);
             }
 
             return this.PartialView("_CaseRows", m);

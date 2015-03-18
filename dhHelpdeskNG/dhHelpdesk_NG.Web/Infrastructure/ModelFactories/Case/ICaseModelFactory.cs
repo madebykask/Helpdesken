@@ -20,5 +20,7 @@
         CustomerCasesModel CreateCustomerCases(CustomerCases[] customerCases);
 
         RelatedCasesViewModel GetRelatedCasesModel(List<RelatedCase> relatedCases, int customerId, string userId);
+
+        CaseRemainingTimeViewModel GetCaseRemainingTimeModel(CaseRemainingTimeData data);
     }
 }

@@ -37,5 +37,10 @@
         {
             return new RelatedCasesViewModel(relatedCases, customerId, userId);
         }
+
+        public CaseRemainingTimeViewModel GetCaseRemainingTimeModel(CaseRemainingTimeData data)
+        {
+            return new CaseRemainingTimeViewModel(data);
+        }
     }
 }

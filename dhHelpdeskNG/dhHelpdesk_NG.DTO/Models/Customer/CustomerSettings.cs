@@ -150,6 +150,10 @@ namespace DH.Helpdesk.BusinessData.Models.Customer
 
         public bool ModuleCaseInvoice { get; set; }
 
+        public bool ShowCaseOverviewInfo { get; set; }
+
+        public bool ShowStatusPanel { get; set; }
+
         /// <summary>
         /// The is module on.
         /// </summary>

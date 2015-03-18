@@ -25,7 +25,9 @@
             int workingDayStart,
             int workingDayEnd,
             WorkTimeCalculator workTimeCalculator,
-            string applicationId = null);
+            string applicationId = null,
+            bool calculateRemainingTime = false,
+            CaseRemainingTimeData remainingTime = null);
     }
 
     public class CaseSearchService : ICaseSearchService
@@ -59,7 +61,9 @@
                                 int workingDayStart,
                                 int workingDayEnd,
                                 WorkTimeCalculator workTimeCalculator,
-                                string applicationId = null)
+                                string applicationId = null,
+                                bool calculateRemainingTime = false,
+                                CaseRemainingTimeData remainingTime = null)
         {
             int productAreaId;
             var csf = new CaseSearchFilter();
