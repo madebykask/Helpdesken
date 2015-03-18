@@ -43,7 +43,7 @@
 
             var organizationUnitFirstChild =
                 this.DataContext.OUs.Where(u => u.IsActive != 0 && u.Parent_OU_Id != null && u.Parent.Parent_OU_Id == null && u.Department_Id == departmentId)
-                    .Select(u => new { Id = u.Id, Name = u.Name + " - " + u.Parent.Name })
+                    .Select(u => new { Id = u.Id, Name = u.Parent.Name + " - " + u.Name })
                     .ToList();
 
             var organizationUnitOverviews =

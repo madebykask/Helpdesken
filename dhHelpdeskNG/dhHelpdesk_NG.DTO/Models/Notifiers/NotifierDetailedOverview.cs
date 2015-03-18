@@ -24,6 +24,7 @@
             string postalCode,
             string city,
             string title,
+            string region,
             string department,
             string unit,
             string organizationUnit,
@@ -53,6 +54,7 @@
             this.PostalCode = postalCode;
             this.City = city;
             this.Title = title;
+            this.Region = region;
             this.Department = department;
             this.Unit = unit;
             this.OrganizationUnit = organizationUnit;
@@ -100,6 +102,8 @@
         public string City { get; private set; }
 
         public string Title { get; private set; }
+
+        public string Region { get; private set; }
 
         public string Department { get; private set; }
 

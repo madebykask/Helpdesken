@@ -49,11 +49,11 @@
         
         public int? GetDefaultRegion(int customerId)
         {
-            var regionId =
+            int? regionId =
                 this.DataContext.Regions.Where(r => r.Customer_Id == customerId && r.IsDefault == 1)
-                    .Select(r => r.Id).SingleOrDefault();                   
+                    .Select(r => r.Id).SingleOrDefault();
 
-            return regionId;                
+            return regionId <= 0 ? null : regionId;                
         }
 
         public void ResetDefault(int exclude)
