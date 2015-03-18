@@ -415,6 +415,11 @@
                     translateField = true;
                     break;
 
+                case "statesecondary_id":
+                    ret = dr[col].ToString();
+                    translateField = true;
+                    break;
+
                 case "plandate":
                     if (customerSetting.PlanDateFormat == 0)
                     {
@@ -445,6 +450,7 @@
                             ret = p.Name;
                         else                    
                             ret = p.getProductAreaParentPath();
+                    translateField = true;
                     break;
                 default:
                     if (string.Compare(dr[col].GetType().FullName, "System.DateTime", true, CultureInfo.InvariantCulture) == 0)
