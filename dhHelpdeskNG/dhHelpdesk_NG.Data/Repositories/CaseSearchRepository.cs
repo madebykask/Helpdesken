@@ -87,6 +87,7 @@
             IList<ProductArea> pal = this._productAreaRepository.GetMany(x => x.Customer_Id == f.CustomerId).OrderBy(x => x.Name).ToList(); 
             IList<CaseSearchResult> ret = new List<CaseSearchResult>();
             var caseTypes = this.caseTypeRepository.GetCaseTypeOverviews(f.CustomerId).ToArray();
+            var displayLeftTime = csl.Any(it => it.Name == TimeLeftColumn);
 
             var sql = this.ReturnCaseSearchSql(
                                         f, 
@@ -126,7 +127,7 @@
                                 IList<Field> cols = new List<Field>();
                                 var toolTip = string.Empty;
                                 var sortOrder = string.Empty;
-                                var displayLeftTime = true;
+                                var doCalcTimeLeft = displayLeftTime;
                                 DateTime caseRegistrationDate;
 
                                 DateTime.TryParse(dr["RegTime"].ToString(), out caseRegistrationDate);
@@ -135,13 +136,13 @@
                                 if (DateTime.TryParse(dr["FinishingDate"].ToString(), out dtTmp))
                                 {
                                     caseFinishingDate = dtTmp;
-                                    displayLeftTime = false;
+                                    doCalcTimeLeft = false;
                                 }
 
                                 int intTmp;
                                 if (int.TryParse(dr["IncludeInCaseStatistics"].ToString(), out intTmp))
                                 {
-                                    displayLeftTime = displayLeftTime && intTmp == 1;
+                                    doCalcTimeLeft = displayLeftTime && intTmp == 1;
                                 }
 
                                 DateTime? caseShouldBeFinishedInDate = null;
@@ -161,7 +162,7 @@
                                 }
 
                                 int? timeLeft = null;
-                                if (displayLeftTime)
+                                if (doCalcTimeLeft)
                                 {
                                     if (caseShouldBeFinishedInDate.HasValue)
                                     {
