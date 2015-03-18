@@ -44,7 +44,7 @@
                         @Html.Partial("NotifierEdit/AddressFields", Model)
                     }
                     
-                    @if (Model.Title.Show || Model.Department.Show || Model.Unit.Show || ViewBag.displaySettings.OrganizationUnit.Show || Model.Division.Show || Model.Managers.Show || Model.Group.Show || Model.Other.Show)
+                    @if (Model.Title.Show || Model.Department.Show || Model.Unit.Show || Model.OrganizationUnit.Show || Model.Division.Show || Model.Managers.Show || Model.Group.Show || Model.Other.Show)
                     {
                         @Html.Partial("NotifierEdit/OrganizationFields", Model)
                     }
@@ -65,22 +65,42 @@
 <script type="text/javascript">
 
     $("#DepartmentErrorMessage").hide();
+    $("#OrganizationUnitErrorMessage").hide();
 
     
     $("#department_dropdown").change(function () {
-        if ('@Model.Department.Required' && $('#department_dropdown').val() == "") {
+        if ('@Model.Department.Required'.toLowerCase() == "true" && $('#department_dropdown').val() == "") {
             $("#DepartmentErrorMessage").show();
         }
         else {
             $("#DepartmentErrorMessage").hide();
         }
+        $("#organizationUnit_dropdown").change();
+    });
+
+    $("#organizationUnit_dropdown").change(function () {
+        if ('@Model.OrganizationUnit.Required'.toLowerCase() == "true" && $('#organizationUnit_dropdown').val() == "") {
+            $("#OrganizationUnitErrorMessage").show();
+         }
+         else {
+            $("#OrganizationUnitErrorMessage").hide();
+         }
     });
 
     $("#target").submit(function (event) {
-        if ('@Model.Department.Required' && $('#department_dropdown').val() == "") {
+        var isPrevent = true;
+        if ('@Model.Department.Required'.toLowerCase() == "true" && $('#department_dropdown').val() == "") {
             $("#DepartmentErrorMessage").show();
-            return false;
+            isPrevent = false;
         }
+
+        if ('@Model.OrganizationUnit.Required'.toLowerCase() == "true" && $('#organizationUnit_dropdown').val() == "") {
+            $("#OrganizationUnitErrorMessage").show();
+            isPrevent = false;
+        }
+
+        if (!isPrevent)
+           return false;
         
     });
 </script>          

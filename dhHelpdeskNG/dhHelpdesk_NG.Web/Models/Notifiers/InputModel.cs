@@ -32,6 +32,7 @@
             StringFieldModel title,
             DropDownFieldModel region,
             DropDownFieldModel department,
+            DropDownFieldModel organizationUnit,
             StringFieldModel unit,
             DropDownFieldModel division,
             DropDownFieldModel managers,
@@ -61,6 +62,7 @@
                 title,
                 region,
                 department,
+                organizationUnit,
                 unit,
                 division,
                 managers,
@@ -94,6 +96,7 @@
             StringFieldModel title,
             DropDownFieldModel region,
             DropDownFieldModel department,
+            DropDownFieldModel organizationUnit,
             StringFieldModel unit,
             DropDownFieldModel division,
             DropDownFieldModel managers,
@@ -121,6 +124,7 @@
             this.Title = title;
             this.Region = region;
             this.Department = department;
+            this.OrganizationUnit = organizationUnit;
             this.Unit = unit;
             this.Division = division;
             this.Managers = managers;
@@ -149,6 +153,8 @@
         public DropDownFieldModel Region { get; set; }
 
         public DropDownFieldModel Department { get; set; }
+
+        public DropDownFieldModel OrganizationUnit { get; set; }
 
         [IsId]
         public int? DepartmentId { get; set; }

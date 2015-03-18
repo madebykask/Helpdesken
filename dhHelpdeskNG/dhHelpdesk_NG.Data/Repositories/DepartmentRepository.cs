@@ -124,7 +124,7 @@
                 return query.Where(it => it.Region_Id == regionId.Value);
             }
 
-            return query;
+            return query.OrderBy(d=> d.DepartmentName);
         }
     }
 

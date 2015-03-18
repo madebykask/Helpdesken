@@ -370,7 +370,7 @@
                             Manager = r.ManagerComputerUser.UserId,
                             DisplayName = r.DisplayName != string.Empty ? r.DisplayName : null,
                             Ordered = r.OrderPermission != 0,
-                            OrganizationUnit = r.OU.Name,
+                            OrganizationUnit = r.OU.Parent_OU_Id == null ? r.OU.Name : r.OU.Name + " - " + r.OU.Parent.Name,
                             Other = r.Info != string.Empty ? r.Info : null,
                             Password = r.Password != string.Empty ? r.Password : null,
                             Phone = r.Phone != string.Empty ? r.Phone : null,

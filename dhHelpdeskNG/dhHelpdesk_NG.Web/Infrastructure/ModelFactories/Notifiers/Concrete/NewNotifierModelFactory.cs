@@ -25,10 +25,11 @@
             List<ItemOverview> domains,
             List<ItemOverview> regions,
             List<ItemOverview> departments,
+            List<ItemOverview> organizationUnits,
             List<ItemOverview> divisions,
             List<ItemOverview> managers,
             List<ItemOverview> groups,
-            Dictionary<string,string> inputParams)
+            Dictionary<string, string> inputParams)
         {
             var userId = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.UserId, (inputParams.ContainsKey("UserId") ? inputParams["UserId"] : null));
 
@@ -47,7 +48,7 @@
 
 
             var loginName = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.LoginName, null);
-            var firstName = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.FirstName,(inputParams.ContainsKey("FName")? inputParams["FName"]:null));
+            var firstName = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.FirstName, (inputParams.ContainsKey("FName") ? inputParams["FName"] : null));
             var initials = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Initials, null, 10);
             var lastName = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.LastName, null);
 
@@ -70,6 +71,7 @@
 
             DropDownFieldModel region;
             DropDownFieldModel department;
+            DropDownFieldModel organizationUnit;
 
             if (settings.Region.Show)
             {
@@ -97,8 +99,23 @@
                 department = new DropDownFieldModel(false);
             }
 
+            if (settings.OrganizationUnit.Show)
+            {
+                var organizationUnitItems =
+                    organizationUnits.Select(d => new KeyValuePair<string, string>(d.Value, d.Name)).ToList();
+
+                organizationUnit = this.notifierInputFieldModelFactory.CreateDropDownModel(
+                    settings.OrganizationUnit,
+                    organizationUnitItems,
+                    (inputParams.ContainsKey("OrganizationUnitId") ? inputParams["OrganizationUnitId"] : null));
+            }
+            else
+            {
+                organizationUnit = new DropDownFieldModel(false);
+            }
+
             var unit = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Unit, null);
-            
+
             DropDownFieldModel division;
 
             if (settings.Division.Show)
@@ -162,6 +179,7 @@
                 title,
                 region,
                 department,
+                organizationUnit,
                 unit,
                 division,
                 manager,

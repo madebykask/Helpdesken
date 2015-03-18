@@ -15,7 +15,7 @@
     <AssemblyName>DH.Helpdesk.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <SccProjectName>
     </SccProjectName>
     <SccLocalPath>
@@ -31,12 +31,9 @@
     <OldToolsVersion>4.0</OldToolsVersion>
     <IISExpressSSLPort>
     </IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>
-    </IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>
-    </IISExpressWindowsAuthentication>
-    <IISExpressUseClassicPipelineMode>
-    </IISExpressUseClassicPipelineMode>
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
     <DontImportPostSharp>True</DontImportPostSharp>
     <TargetFrameworkProfile />
@@ -2852,6 +2849,7 @@
     <Content Include="Views\Profile\EditorTemplates\UserProfileCustomerSettings.cshtml" />
     <Content Include="Views\Cases\RelatedCases.cshtml" />
     <Content Include="Views\Cases\CaseRemainingTime.cshtml" />
+    <Content Include="Views\Notifiers\OrganizationUnitDropDown.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
@@ -3662,7 +3660,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>57747</DevelopmentServerPort>
+          <DevelopmentServerPort>52667</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:57747/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

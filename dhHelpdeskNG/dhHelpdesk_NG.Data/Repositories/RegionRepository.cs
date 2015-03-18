@@ -14,6 +14,7 @@
     public interface IRegionRepository : IRepository<Region>
     {
         List<ItemOverview> FindByCustomerId(int customerId);
+        int? GetDefaultRegion(int customerId);
         IList<Region> GetRegionsWithDepartments(int customerId);
         void ResetDefault(int exclude);
     }
@@ -44,6 +45,15 @@
             return
                 regionOverview.Select(r => new ItemOverview(r.Name, r.Id.ToString(CultureInfo.InvariantCulture)))
                     .OrderBy(x => x.Name).ToList();
+        }
+        
+        public int? GetDefaultRegion(int customerId)
+        {
+            var regionId =
+                this.DataContext.Regions.Where(r => r.Customer_Id == customerId && r.IsDefault == 1)
+                    .Select(r => r.Id).SingleOrDefault();                   
+
+            return regionId;                
         }
 
         public void ResetDefault(int exclude)

@@ -276,6 +276,8 @@ function CaseInitForm() {
     });
 
     $('#case__Department_Id').change(function () {
+        $('#case__Ou_Id').prop('disabled', true);
+        CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeDepartment/', '#case__Ou_Id', $('#DepartmentFilterFormat').val());
         $('#divInvoice').hide();
         $.get('/Cases/ShowInvoiceFields/', { 'departmentId': $(this).val() }, function (data) {
             if (data == 1) {
@@ -436,7 +438,7 @@ function CaseInitForm() {
         if ($("#case__Department_Id").val() != '')
             params += "&departmentId=" + $("#case__Department_Id").val();
         if ($("#case__Ou_Id").val() != '')
-            params += "&unitId=" + $("#case__Ou_Id").val();
+            params += "&organizationUnitId=" + $("#case__Ou_Id").val();
         
         var win = window.open('/Notifiers/NewNotifierPopup' + params, '_blank', 'left=100,top=100,width=990,height=480,toolbar=0,resizable=1,menubar=0,status=0,scrollbars=1');
         //win.onbeforeunload = function () { CaseNewNotifierEvent(win.returnValue); }

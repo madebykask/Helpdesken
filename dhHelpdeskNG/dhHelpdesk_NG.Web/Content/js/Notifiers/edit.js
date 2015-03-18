@@ -8,28 +8,7 @@ $(function () {
     var firstLevelData = [], secondLevelData = [];
     var organizationData = window.organizationData || [];
     var parameters = window.displaySettings;
-    var miscParameters = window.parameters;
-
-    /**
-    * Searches items by id
-    * @params { object[] } data_array 
-    * @params { string } id_to_search
-    * returns { object[] }
-    */
-    function searchOUByParentId(dataArray, idToSearch) {
-        var i = 0;
-        var res = [];
-        var len = dataArray.length;
-        if (len == 0) {
-            return res;
-        }
-        for (i = 0; i < len; i++) {
-            if (dataArray[i]['parent_id'] === idToSearch) {
-                res.push(dataArray[i]);
-            }
-        }
-        return res;
-    }
+    var miscParameters = window.parameters;  
 
     /**
     * Generates options HTLM by array
@@ -48,61 +27,7 @@ $(function () {
             res.push(['<option value="', dataArray[i].id, '" ', selectedId === dataArray[i].id ? 'selected' : '', '>', dataArray[i].name, '</option>'].join(''));
         }
         return res.join('');
-    }
-
-    function onParentSelectChanged(parentId, selectedId) {
-        var subItems = searchOUByParentId(secondLevelData, parentId);
-        var GEN_EMPTY_OPTION = true;
-
-        if (subItems.length > 0) {
-            $('#sub_organization_unit_dropdown').html(generateOptions(subItems, selectedId, GEN_EMPTY_OPTION)).show();
-            
-        } else {
-            $('#sub_organization_unit_dropdown').hide();
-        }
-        if (selectedId == null) {
-            $('#OrganizationUnitId').val(parentId);
-        } else {
-            $('#OrganizationUnitId').val(selectedId);
-        }
-    }
-
-    /**
-    * Intializes select and subselect for organization unit 
-    * @param { object[] } data
-    * @param { string } selectedId
-    * @param { object } paramters
-    */
-    function initOrganizationUnitControls(data, selectedId, parameters) {
-        var selectedInLevel = 1;
-        var parentSelectedId;
-        firstLevelData = [];
-        secondLevelData = [];
-
-        $.each(data, function (idx, el) {
-            /// force to select first found sub-item if field marked as required
-            if (selectedId == null && parameters.Required) {
-                selectedId = el.id;
-            }
-
-            if (el.parent_id == '') {
-                firstLevelData.push(el);
-            } else {
-                secondLevelData.push(el);
-                if (el.id === selectedId) {
-                    selectedInLevel = 2;
-                    parentSelectedId = el.parent_id;
-                }
-            }
-        });
-        if (selectedInLevel === 1) {
-            $('#organization_unit_dropdown').html(generateOptions(firstLevelData, selectedId, !parameters.Required));
-            onParentSelectChanged(selectedId, null);
-        } else {
-            $('#organization_unit_dropdown').html(generateOptions(firstLevelData, parentSelectedId, !parameters.Required));
-            onParentSelectChanged(parentSelectedId, selectedId);
-        }
-    }
+    }    
 
     if (miscParameters.showManager) {
         (function () {
@@ -128,54 +53,26 @@ $(function () {
         })();
     }
 
-    function FetchOrgnaizationUnits(regionId, departmentId) {
-        initOrganizationUnitControls([], null, parameters);
-        $.get('/Notifiers/OrganizationUnits', {
-            regionId: regionId,
-            departmentId: departmentId
-        }, function (data) {
-            if (data) {
-                initOrganizationUnitControls(data, null, parameters);
-            }
-        });
-    }
-
     $('#region_dropdown').change(function () {
+        $('#departmentId').val('');
+        $('#department_dropdown').val('').html('');
+        $('#department_dropdown').prop('disabled', true);
+        $.get('/Notifiers/DepartmentDropDown', { regionId: $(this).val() }, function (departmentDropDownMarkup) {
+            $('#department_dropdown').html($(departmentDropDownMarkup).html());
+            $('#department_dropdown').trigger('change');
+        }).always(function () {
+            $('#department_dropdown').prop('disabled', false);
+        });
+
+    });
+
+    $('#department_dropdown').change(function () {
         $('#OrganizationUnitId').val('');
-        $('#organization_unit_dropdown').val('').html('');
-        $('#sub_organization_unit_dropdown').val('').html('').hide();
-        $.get(parameters.departmentDropDownUrl, { regionId: $(this).val() }, function (departmentDropDownMarkup) {
-            if ($('#department_dropdown').length === 0) {
-                FetchOrgnaizationUnits($('#region_dropdown').val(), '');
-            } else {
-                $('#department_dropdown').html($(departmentDropDownMarkup).html());
-                $('#department_dropdown').trigger('change');
-            }
+        $('#organizationUnit_dropdown').val('').html('');
+        $.get('/Notifiers/OrganizationUnitDropDown', { departmentId: $(this).val() }, function (organizationUnitDropDownMarkup) {
+            $('#organizationUnit_dropdown').html($(organizationUnitDropDownMarkup).html());
+            //$('#organizationUnit_dropdown').trigger('change');
         });
     });
-
-    if (!$('#organization_unit_dropdown').is(':visible')) {
-        return;
-    }
-
-    /// events
-    $('#department_dropdown').change(function() {
-        FetchOrgnaizationUnits($('#region_dropdown').val(), $('#department_dropdown').val());
-    });
-    $('#organization_unit_dropdown').on('change', function() {
-        onParentSelectChanged($('#organization_unit_dropdown').val());
-    });
-    $('#sub_organization_unit_dropdown').on('change', function() {
-        var subItemId = $('#sub_organization_unit_dropdown').val();
-        if (subItemId !== '') {
-            $('#OrganizationUnitId').val(subItemId);
-        } else {
-            $('#OrganizationUnitId').val($('#organization_unit_dropdown').val());
-        }
-    });
-    var initValue = $('#OrganizationUnitId').val();
-    if (initValue === '') {
-        initValue = null;
-    }
-    initOrganizationUnitControls(organizationData, initValue, parameters);
+    
 });
