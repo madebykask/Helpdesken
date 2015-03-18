@@ -473,6 +473,8 @@ function CaseInitForm() {
     var getLogFiles = function () {
         $.get('/Cases/LogFiles', { id: $('#LogKey').val(), now: Date.now() }, function (data) {
             $('#divCaseLogFiles').html(data);
+            // Raise event about rendering of uploaded file
+            $(document).trigger("OnUploadedCaseLogFileRendered", []);
             bindDeleteLogFileBehaviorToDeleteButtons();
         });
     };
@@ -989,6 +991,9 @@ function bindDeleteLogFileBehaviorToDeleteButtons() {
             fileNames = fileNames.replace("|" + fileName.trim(), "");
             fileNames = fileNames.replace(fileName.trim() + "|", "");
             $('#LogFileNames').val(fileNames);
+
+            // Raise event about deleted file
+            $(document).trigger("OnDeleteCaseLogFile", [key, fileName]);
         });
     });
 }

@@ -500,6 +500,67 @@ $(function () {
         my = my || {};
         var that = dhHelpdesk.cases.caseFields(spec, my);
         
+        var deleteCaseLogFileConfirmMessage = spec.deleteCaseLogFileConfirmMessage || '';
+        var caseLogFiles = spec.caseLogFiles || [];
+
+        var getDeleteCaseLogFileConfirmMessage = function () {
+            return deleteCaseLogFileConfirmMessage;
+        }
+
+        var getCaseLogFiles = function () {
+            return caseLogFiles;
+        }
+
+        var addCaseLogFile = function (caseLogFile) {
+            caseLogFiles.push(caseLogFile);
+
+            caseLogFile.getDeleteFile().getElement().click(function (e, args) {
+                if (args && args.self) {
+                    return;
+                }
+
+                e.stopImmediatePropagation();
+                dhHelpdesk.cases.utils.confirmDialog(deleteCaseLogFileConfirmMessage,
+                    function () {
+                        caseLogFile.getDeleteFile().getElement().triggerHandler('click', [{ self: true }]);
+                    },
+                    function () {
+                    }, true);
+            });
+        }
+
+        var getCaseLogFile = function (id) {
+            for (var i = 0; i < caseLogFiles.length; i++) {
+                var caseLogFile = caseLogFiles[i];
+                if (caseLogFile.getId() == id) {
+                    return caseLogFile;
+                }
+            }
+
+            return null;
+        }
+
+        var deleteCaseLogFile = function (caseLogFile) {
+            for (var i = 0; i < caseLogFiles.length; i++) {
+                var file = caseLogFile[i];
+                if (file.getId() == caseLogFile.getId()) {
+                    caseLogFiles.splice(i, 1);
+                    return;
+                }
+            }
+        }
+
+        var clearCaseLogFiles = function () {
+            caseLogFiles = [];
+        }
+
+        that.getDeleteCaseLogFileConfirmMessage = getDeleteCaseLogFileConfirmMessage;
+        that.getCaseLogFiles = getCaseLogFiles;
+        that.addCaseLogFile = addCaseLogFile;
+        that.getCaseLogFiles = getCaseLogFile;
+        that.deleteCaseLogFile = deleteCaseLogFile;
+        that.clearCaseLogFiles = clearCaseLogFiles;
+
         return that;
     }
 
@@ -622,6 +683,15 @@ $(function () {
             deleteCaseFileConfirmMessage: deleteCaseFileConfirmMessage
         });
 
+        var other = dhHelpdesk.cases.other({
+            administrator: dhHelpdesk.cases.object({ element: $('[data-field="administrator"]') }),
+            workingGroup: dhHelpdesk.cases.object({ element: $('[data-field="workingGroup"]') })
+        });
+
+        var log = dhHelpdesk.cases.log({
+            deleteCaseLogFileConfirmMessage: deleteCaseFileConfirmMessage
+        });
+
         var refreshCaseFiles = function () {
             caseInfo.clearCaseFiles();
 
@@ -646,11 +716,29 @@ $(function () {
             refreshCaseFiles();
         });
 
-        var other = dhHelpdesk.cases.other({
-            administrator: dhHelpdesk.cases.object({ element: $('[data-field="administrator"]') }),
-            workingGroup: dhHelpdesk.cases.object({ element: $('[data-field="workingGroup"]') })
+        var refreshCaseLogFiles = function () {
+            log.clearCaseLogFiles();
+
+            $('[data-field="caseLogFile"]').each(function () {
+                var $this = $(this);
+                var caseLogFile = dhHelpdesk.cases.file({
+                    id: $this.attr("data-field-id"),
+                    name: $this.attr("data-field-name"),
+                    deleteFile: dhHelpdesk.cases.object({ element: $this.find('[data-field="deleteFile"]') })
+                });
+
+                log.addCaseLogFile(caseLogFile);
+            });
+        }
+        refreshCaseLogFiles();
+
+        dhHelpdesk.cases.utils.onEvent("OnUploadedCaseLogFileRendered", function () {
+            refreshCaseLogFiles();
         });
-        var log = dhHelpdesk.cases.log({});
+
+        dhHelpdesk.cases.utils.onEvent("OnDeleteCaseLogFile", function () {
+            refreshCaseLogFiles();
+        });
 
         var caseEntity = dhHelpdesk.cases.case({
             caseId: dhHelpdesk.cases.object({ element: $('[data-field="caseId"]') }),

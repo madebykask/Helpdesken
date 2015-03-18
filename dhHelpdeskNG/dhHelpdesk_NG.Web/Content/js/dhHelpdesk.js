@@ -276,8 +276,6 @@ function CaseInitForm() {
     });
 
     $('#case__Department_Id').change(function () {
-        $('#case__Ou_Id').prop('disabled', true);
-        CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeDepartment/', '#case__Ou_Id', $('#DepartmentFilterFormat').val());        
         $('#divInvoice').hide();
         $.get('/Cases/ShowInvoiceFields/', { 'departmentId': $(this).val() }, function (data) {
             if (data == 1) {
@@ -475,6 +473,8 @@ function CaseInitForm() {
     var getLogFiles = function () {
         $.get('/Cases/LogFiles', { id: $('#LogKey').val(), now: Date.now() }, function (data) {
             $('#divCaseLogFiles').html(data);
+            // Raise event about rendering of uploaded file
+            $(document).trigger("OnUploadedCaseLogFileRendered", []);
             bindDeleteLogFileBehaviorToDeleteButtons();
         });
     };
@@ -991,6 +991,9 @@ function bindDeleteLogFileBehaviorToDeleteButtons() {
             fileNames = fileNames.replace("|" + fileName.trim(), "");
             fileNames = fileNames.replace(fileName.trim() + "|", "");
             $('#LogFileNames').val(fileNames);
+
+            // Raise event about deleted file
+            $(document).trigger("OnDeleteCaseLogFile", [key, fileName]);
         });
     });
 }
