@@ -377,13 +377,15 @@ $(function () {
                 window.open(getRelatedCasesUrl() + '?caseId=' + caseId.val() + '&userId=' + userIdValue, '_blank');
             });
 
-            region.getElement().change(function() {
-                dhHelpdesk.cases.utils.refreshDepartments(caseEntity);
+            region.getElement().change(function () {
+                // uncomment for implementing http://redmine.fastdev.se/issues/10995
+                // dhHelpdesk.cases.utils.refreshDepartments(caseEntity);
             });
 
             department.getElement().change(function () {
-                dhHelpdesk.cases.utils.refreshOus(caseEntity);
-                dhHelpdesk.cases.utils.refreshAdministrators(caseEntity, true);
+                // uncomment for implementing http://redmine.fastdev.se/issues/10995
+                /*dhHelpdesk.cases.utils.refreshOus(caseEntity);
+                dhHelpdesk.cases.utils.refreshAdministrators(caseEntity, true);*/
             });
         }
 
@@ -485,11 +487,13 @@ $(function () {
 
         that.init = function(caseEntity) {            
             administrator.getElement().change(function () {
-                dhHelpdesk.cases.utils.refreshDepartments(caseEntity, true);
+                // uncomment for implementing http://redmine.fastdev.se/issues/10995
+                // dhHelpdesk.cases.utils.refreshDepartments(caseEntity, true);
             });
 
             workingGroup.getElement().change(function () {
-                dhHelpdesk.cases.utils.refreshAdministrators(caseEntity);
+                // uncomment for implementing http://redmine.fastdev.se/issues/10995
+                // dhHelpdesk.cases.utils.refreshAdministrators(caseEntity);
             });
         }
 
@@ -641,8 +645,9 @@ $(function () {
         other.init(that);
         log.init(that);
 
-        dhHelpdesk.cases.utils.refreshDepartments(that, true);
-        dhHelpdesk.cases.utils.refreshAdministrators(that, true);
+        // uncomment for implementing http://redmine.fastdev.se/issues/10995
+        /*dhHelpdesk.cases.utils.refreshDepartments(that, true);
+        dhHelpdesk.cases.utils.refreshAdministrators(that, true);*/
 
         return that;
     }
