@@ -38,7 +38,7 @@
         public List<ItemOverview> FindByCustomerId(int customerId)
         {
             var regionOverview =
-                this.DataContext.Regions.Where(r => r.Customer_Id == customerId)
+                this.DataContext.Regions.Where(r => r.Customer_Id == customerId && r.IsActive != 0)
                     .Select(r => new { r.Name, r.Id })
                     .ToList();
 
@@ -50,7 +50,7 @@
         public int? GetDefaultRegion(int customerId)
         {
             int? regionId =
-                this.DataContext.Regions.Where(r => r.Customer_Id == customerId && r.IsDefault == 1)
+                this.DataContext.Regions.Where(r => r.Customer_Id == customerId && r.IsActive != 0 && r.IsDefault == 1)
                     .Select(r => r.Id).SingleOrDefault();
 
             return regionId <= 0 ? null : regionId;                
