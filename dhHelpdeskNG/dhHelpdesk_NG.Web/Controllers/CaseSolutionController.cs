@@ -122,7 +122,8 @@ namespace DH.Helpdesk.Web.Controllers
             if (SessionFacade.CurrentCaseSolutionSearch != null)
             {
                 CS = SessionFacade.CurrentCaseSolutionSearch;
-                model.CaseSolutions = this._caseSolutionService.SearchAndGenerateCaseSolutions(SessionFacade.CurrentCustomer.Id, CS);
+                var CaseSolutions = this._caseSolutionService.SearchAndGenerateCaseSolutions(SessionFacade.CurrentCustomer.Id, CS);
+                model.CaseSolutions = CaseSolutions.OrderBy(x => x.Name).Where(x => x.TemplatePath == null && x.ShowInSelfService == false).ToList();
                 model.SearchCss = CS.SearchCss;
             }
             else
