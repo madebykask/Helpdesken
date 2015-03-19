@@ -60,12 +60,11 @@
                             {
                                 <!-- Hours left -->
                                 @(string.IsNullOrEmpty(c.StringValue) ? " - " : string.Format("{0} h", c.StringValue))
-                            } else 
-                            {
+                            } else                             
+                            {   <!-- string -->
                                 if (c.TranslateThis)
-                                {
-                                    <!-- string -->
-                                    @Translation.Get(c.StringValue)
+                                {                                                                                                        
+                                    @Translation.Get(c.StringValue)                                                                     
                                 }
                                 else    
                                 {

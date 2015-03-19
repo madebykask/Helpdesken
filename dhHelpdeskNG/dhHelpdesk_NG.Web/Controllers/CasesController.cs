@@ -407,6 +407,8 @@ namespace DH.Helpdesk.Web.Controllers
                         this.configuration.Application.ApplicationId,
                         showRemainingTime,
                         out remainingTime);
+
+                    srm.cases = TreeTranslate(srm.cases);
                     m.caseSearchResult = srm;
                     m.caseSearchFilterData = fd;
                     sm.Search.IdsForLastSearch = GetIdsFromSearchResult(srm.cases);
@@ -2546,6 +2548,34 @@ namespace DH.Helpdesk.Web.Controllers
 
             return productArea;
         }
+
+        private IList<CaseSearchResult> TreeTranslate(IList<CaseSearchResult> cases)
+        {
+            var ret = cases;
+            foreach (CaseSearchResult r in ret)
+            {
+                foreach (var c in r.Columns)
+                {
+                    if (c.TreeTranslation)
+                    {
+                        switch (c.Key.ToLower())
+                        {
+                            case "productarea_id":
+                                var p = _productAreaService.GetProductArea(c.Id);
+                                if (p != null)
+                                {
+                                    p = TranslateProductArea(p);
+                                    c.StringValue = p.getProductAreaParentPath();
+                                }
+                                break;
+                        }
+                    }
+                }
+            }
+
+            return ret;
+        }
+
         #endregion
     }
 }

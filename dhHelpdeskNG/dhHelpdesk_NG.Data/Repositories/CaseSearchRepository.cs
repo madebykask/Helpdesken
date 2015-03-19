@@ -218,6 +218,8 @@
                                                 FieldTypes fieldType;
                                                 DateTime? dateValue;
                                                 bool translateField;
+                                                bool treeTranslation;
+                                                int baseId = 0;
                                                 //if (c.Line == 1)
                                                 //{
                                                 var value = GetDatareaderValue(
@@ -229,15 +231,21 @@
                                                                                 timeLeft,
                                                                                 caseTypes,
                                                                                 out translateField,
+                                                                                out treeTranslation,
                                                                                 out dateValue,
-                                                                                out fieldType);
+                                                                                out fieldType,
+                                                                                out baseId);
                                                 field = new Field
                                                             {
+                                                                Key = c.Name,
+                                                                Id = baseId,
                                                                 StringValue = value,
                                                                 TranslateThis = translateField,
+                                                                TreeTranslation = treeTranslation,
                                                                 DateTimeValue = dateValue,
                                                                 FieldType = fieldType
                                                             };
+
                                                 if (string.Compare(
                                                     s.SortBy,
                                                     c.Name,
@@ -391,15 +399,19 @@
                                 int? timeLeft,
                                 IEnumerable<CaseTypeOverview> caseTypes,
                                 out bool translateField, 
+                                out bool treeTranslation, 
                                 out DateTime? dateValue, 
-                                out FieldTypes fieldType) 
+                                out FieldTypes fieldType,
+                                out int baseId) 
         {
             var ret = string.Empty;
             var sep = " - ";
             translateField = false;
-
+            treeTranslation = false;
             fieldType = FieldTypes.String;
             dateValue = null;
+            baseId = 0;
+            
             switch (fieldName.ToLower())
             {
                 case "regtime":
@@ -460,11 +472,14 @@
                 case "productarea_id":
                     ProductArea p = dr.SafeGetInteger("ProductArea_Id").getProductAreaItem(pal);
                     if (p != null)
+                    {
                         if (ConfigurationManager.AppSettings["InitFromSelfService"] == "true")
                             ret = p.Name;
-                        else                    
+                        else
                             ret = p.getProductAreaParentPath();
-                    translateField = true;
+                        baseId = p.Id;
+                    }                    
+                    treeTranslation = true;
                     break;
                 default:
                     if (string.Compare(dr[col].GetType().FullName, "System.DateTime", true, CultureInfo.InvariantCulture) == 0)

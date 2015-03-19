@@ -11,5 +11,7 @@ namespace DH.Helpdesk.Domain
         public DateTime? DateTimeValue { get; set; }
         public FieldTypes FieldType { get; set; }
         public bool TranslateThis { get; set; }
+        public bool TreeTranslation { get; set; }
+        
     }
 }
