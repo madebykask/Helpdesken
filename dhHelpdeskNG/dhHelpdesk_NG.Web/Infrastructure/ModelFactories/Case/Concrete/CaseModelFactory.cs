@@ -40,7 +40,7 @@
 
         public CaseRemainingTimeViewModel GetCaseRemainingTimeModel(CaseRemainingTimeData data)
         {
-            return new CaseRemainingTimeViewModel(data);
+            return new CaseRemainingTimeViewModel(data, 10);
         }
     }
 }

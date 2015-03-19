@@ -391,7 +391,7 @@ namespace DH.Helpdesk.Web.Controllers
                     srm.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(cusId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
                     var workTimeCalculator = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
                     var showRemainingTime = this.workContext.Customer.Settings.ShowCaseOverviewInfo;
-                    var remainingTime = new CaseRemainingTimeData();
+                    CaseRemainingTimeData remainingTime;
                     srm.cases = this._caseSearchService.Search(
                         sm.caseSearchFilter,
                         srm.caseSettings,
@@ -406,7 +406,7 @@ namespace DH.Helpdesk.Web.Controllers
                         workTimeCalculator,
                         this.configuration.Application.ApplicationId,
                         showRemainingTime,
-                        remainingTime);
+                        out remainingTime);
                     m.caseSearchResult = srm;
                     m.caseSearchFilterData = fd;
                     sm.Search.IdsForLastSearch = GetIdsFromSearchResult(srm.cases);
@@ -1081,7 +1081,7 @@ namespace DH.Helpdesk.Web.Controllers
                 m.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(f.CustomerId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
                 var workTimeCalc = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
                 var showRemainingTime = this.workContext.Customer.Settings.ShowCaseOverviewInfo;
-                var remainingTime = new CaseRemainingTimeData();
+                CaseRemainingTimeData remainingTime;
                 m.cases = this._caseSearchService.Search(
                     f,
                     m.caseSettings,
@@ -1096,7 +1096,7 @@ namespace DH.Helpdesk.Web.Controllers
                     workTimeCalc,
                     this.configuration.Application.ApplicationId,
                     showRemainingTime,
-                    remainingTime);
+                    out remainingTime);
 
                 sm.Search.IdsForLastSearch = GetIdsFromSearchResult(m.cases);
                 SessionFacade.CurrentCaseSearch = sm;

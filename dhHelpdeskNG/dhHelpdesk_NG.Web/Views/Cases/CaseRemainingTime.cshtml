@@ -1,1 +1,33 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseRemainingTimeViewModel
+
+@{
+    var columns = Model.Days.Count + 3;
+}
+
+<table class="table table-striped table-bordered table-hover" style="width: 30%; float: right;">
+    <thead>
+        <tr>
+            <th colspan="@columns">@Translation.Get("Antal ärenden med återstående åtgärdstid")</th>
+        </tr>
+        <tr>
+            <th>@Translation.Get("Akut")</th>
+            <th>@string.Format("< {0}", 1)</th>
+            @foreach (var day in Model.Days)
+            {
+                <th>@day.Time</th>
+            }
+            <th>@string.Format("> {0} {1}", Model.MaxDays, Translation.Get("dagar"))</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Model.Delayed.NumberOfCases</td>
+            <td>@Model.LessThenOneDay.NumberOfCases</td>
+            @foreach (var day in Model.Days)
+            {
+                <td>@day.NumberOfCases</td>
+            }
+            <td>@Model.MoreThenMaxDays.NumberOfCases</td>
+        </tr>
+    </tbody>
+</table>

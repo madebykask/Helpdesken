@@ -35,7 +35,9 @@
             Setting customerSetting,
             ISearch s,
             WorkTimeCalculator workTimeCalculator,
-            string applicationId);
+            string applicationId,
+            bool calculateRemainingTime,
+            out CaseRemainingTimeData remainingTime);
     }
 
     public class CaseSearchRepository : ICaseSearchRepository
@@ -79,7 +81,9 @@
                                     Setting customerSetting, 
                                     ISearch s,
                                     WorkTimeCalculator workTimeCalculator,
-                                    string applicationId)
+                                    string applicationId,
+                                    bool calculateRemainingTime,
+                                    out CaseRemainingTimeData remainingTime)
         {
             var now = DateTime.UtcNow;
             var dsn = ConfigurationManager.ConnectionStrings["HelpdeskOleDbContext"].ConnectionString;
@@ -88,6 +92,7 @@
             IList<CaseSearchResult> ret = new List<CaseSearchResult>();
             var caseTypes = this.caseTypeRepository.GetCaseTypeOverviews(f.CustomerId).ToArray();
             var displayLeftTime = csl.Any(it => it.Name == TimeLeftColumn);
+            remainingTime = new CaseRemainingTimeData();
 
             var sql = this.ReturnCaseSearchSql(
                                         f, 
@@ -121,13 +126,13 @@
                         var dr = cmd.ExecuteReader();
                         if (dr != null && dr.HasRows)
                         {
+                            var doCalcTimeLeft = displayLeftTime || calculateRemainingTime;
                             while (dr.Read())
                             {
                                 var row = new CaseSearchResult();  
                                 IList<Field> cols = new List<Field>();
                                 var toolTip = string.Empty;
                                 var sortOrder = string.Empty;
-                                var doCalcTimeLeft = displayLeftTime;
                                 DateTime caseRegistrationDate;
 
                                 DateTime.TryParse(dr["RegTime"].ToString(), out caseRegistrationDate);
@@ -142,7 +147,7 @@
                                 int intTmp;
                                 if (int.TryParse(dr["IncludeInCaseStatistics"].ToString(), out intTmp))
                                 {
-                                    doCalcTimeLeft = displayLeftTime && intTmp == 1;
+                                    doCalcTimeLeft = doCalcTimeLeft && intTmp == 1;
                                 }
 
                                 DateTime? caseShouldBeFinishedInDate = null;
@@ -189,6 +194,15 @@
                                     {
                                         //// calc by SLA value
                                         timeLeft = (int)Math.Floor((SLAtime * 60 - (decimal)workTimeCalculator.CalcWorkTimeMinutes(departmentId, caseRegistrationDate, now, timeOnPause)) / 60);
+                                    }
+
+                                    if (timeLeft.HasValue)
+                                    {
+                                        int caseId;
+                                        if (int.TryParse(dr["Id"].ToString(), out caseId))
+                                        {
+                                            remainingTime.AddRemainingTime(caseId, timeLeft.Value);
+                                        }
                                     }
                                 }
 

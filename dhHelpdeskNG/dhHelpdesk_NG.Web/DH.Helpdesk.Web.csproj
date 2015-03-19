@@ -15,7 +15,7 @@
     <AssemblyName>DH.Helpdesk.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <SccProjectName>
     </SccProjectName>
     <SccLocalPath>
@@ -31,9 +31,12 @@
     <OldToolsVersion>4.0</OldToolsVersion>
     <IISExpressSSLPort>
     </IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
-    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
+    <IISExpressAnonymousAuthentication>
+    </IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>
+    </IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode>
+    </IISExpressUseClassicPipelineMode>
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
     <DontImportPostSharp>True</DontImportPostSharp>
     <TargetFrameworkProfile />
@@ -1832,6 +1835,7 @@
     <Compile Include="Models\Case\CaseFilterSeachBoxes.cs" />
     <Compile Include="Models\CaseSolutionInputViewModel.cs" />
     <Compile Include="Models\Case\CaseOverview.cs" />
+    <Compile Include="Models\Case\CaseRemainingTimeItemViewModel.cs" />
     <Compile Include="Models\Case\CaseRemainingTimeViewModel.cs" />
     <Compile Include="Models\Case\CaseTemplateTreeModel.cs" />
     <Compile Include="Models\Case\CaseViewModel.cs" />

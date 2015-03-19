@@ -1,12 +1,9 @@
 ﻿namespace DH.Helpdesk.Services.Services
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Case;
-    using DH.Helpdesk.BusinessData.Models.Holiday.Output;
-    using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Utils;
     using DH.Helpdesk.Domain;
@@ -25,9 +22,23 @@
             int workingDayStart,
             int workingDayEnd,
             WorkTimeCalculator workTimeCalculator,
-            string applicationId = null,
-            bool calculateRemainingTime = false,
-            CaseRemainingTimeData remainingTime = null);
+            string applicationId = null);
+
+        IList<CaseSearchResult> Search(
+            CaseSearchFilter f,
+            IList<CaseSettings> csl,
+            int userId,
+            string userUserId,
+            int showNotAssignedWorkingGroups,
+            int userGroupId,
+            int restrictedCasePermission,
+            ISearch s,
+            int workingDayStart,
+            int workingDayEnd,
+            WorkTimeCalculator workTimeCalculator,
+            string applicationId,
+            bool calculateRemainingTime,
+            out CaseRemainingTimeData remainingTime);
     }
 
     public class CaseSearchService : ICaseSearchService
@@ -50,6 +61,38 @@
         }
 
         public IList<CaseSearchResult> Search(
+            CaseSearchFilter f,
+            IList<CaseSettings> csl,
+            int userId,
+            string userUserId,
+            int showNotAssignedWorkingGroups,
+            int userGroupId,
+            int restrictedCasePermission,
+            ISearch s,
+            int workingDayStart,
+            int workingDayEnd,
+            WorkTimeCalculator workTimeCalculator,
+            string applicationId = null)
+        {
+            CaseRemainingTimeData remainingTime;
+            return this.Search(
+                        f,
+                        csl,
+                        userId,
+                        userUserId,
+                        showNotAssignedWorkingGroups,
+                        userGroupId,
+                        restrictedCasePermission,
+                        s,
+                        workingDayStart,
+                        workingDayEnd,
+                        workTimeCalculator,
+                        applicationId,
+                        false,
+                        out remainingTime);
+        }
+
+        public IList<CaseSearchResult> Search(
                                 CaseSearchFilter f, 
                                 IList<CaseSettings> csl, 
                                 int userId, 
@@ -61,9 +104,9 @@
                                 int workingDayStart,
                                 int workingDayEnd,
                                 WorkTimeCalculator workTimeCalculator,
-                                string applicationId = null,
-                                bool calculateRemainingTime = false,
-                                CaseRemainingTimeData remainingTime = null)
+                                string applicationId,
+                                bool calculateRemainingTime,
+                                out CaseRemainingTimeData remainingTime)
         {
             int productAreaId;
             var csf = new CaseSearchFilter();
@@ -87,7 +130,9 @@
                                                 this.settingService.GetCustomerSetting(f.CustomerId), 
                                                 s,
                                                 workTimeCalculator,
-                                                applicationId);
+                                                applicationId,
+                                                calculateRemainingTime,
+                                                out remainingTime);
         }
     }
 }
