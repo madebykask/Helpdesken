@@ -1100,6 +1100,7 @@ namespace DH.Helpdesk.Web.Controllers
                     showRemainingTime,
                     out remainingTime);
 
+                m.cases = TreeTranslate(m.cases);
                 sm.Search.IdsForLastSearch = GetIdsFromSearchResult(m.cases);
                 SessionFacade.CurrentCaseSearch = sm;
                 m.ShowRemainingTime = showRemainingTime;
