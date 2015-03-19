@@ -123,6 +123,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 CS = SessionFacade.CurrentCaseSolutionSearch;
                 var CaseSolutions = this._caseSolutionService.SearchAndGenerateCaseSolutions(SessionFacade.CurrentCustomer.Id, CS);
+                //Only return casesolution where templatepath is null and showinselfservice is false - these case solutions are E-Forms shown in myhr/linemanager/selfservice
                 model.CaseSolutions = CaseSolutions.OrderBy(x => x.Name).Where(x => x.TemplatePath == null && x.ShowInSelfService == false).ToList();
                 model.SearchCss = CS.SearchCss;
             }
