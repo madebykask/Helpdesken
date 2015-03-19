@@ -229,37 +229,12 @@
                             </div>
                             <button  class="btn btn-success" onclick=" SaveExternalMessage() ">@Translation.Get("Send", Enums.TranslationSource.TextTranslation)</button>
                             <hr />
-                        </div>
-                        @*<div class="form-group row">
-                                <label class="col-md-2">
-                                    Attached File:
-                                </label>
-                                <div class="col-md-10">
-                                    <a href="#" role="button" data-togg le="modal" data-target="#myModal2" class="btn btn-default">Add</a>
-                                </div>
-                            </div>*@
+                        </div>                        
                     </div>
                 </div>
                 <div class="com-list">
-                    @if (pCaseLogs != null)
-                    {
-                        foreach (var logItem in pCaseLogs.CaseLogs)
-                        {                            
-                            <div class="@(!string.IsNullOrEmpty(logItem.RegUser) ? "com-list-hd" : "com-list-com")" >
-                                <div class="list-arrow"></div>
-                                <p> 
-                                    @(logItem.User_Id == null ? (logItem.RegUser == SessionFacade.CurrentSystemUser ? Translation.Get("Me", Enums.TranslationSource.TextTranslation) : logItem.RegUser) : logItem.User.FirstName + " " + logItem.User.SurName) 
-                                    | 
-                                    @Html.DisplayFor(l => logItem.RegTime, "DateAndTime") 
-                                </p>
-                                <p>                                    
-                                    @Html.Raw(logItem.Text_Internal.Replace("\n", "<br />"))                                                                       
-                                </p>
-                            </div>                            
-                        }
-                    }   
-                                          
-                </div>
+                     @Html.Partial("_CaseLogNote", pCaseLogs)
+                 </div>
             </div>
         </div>
     }
@@ -608,22 +583,7 @@
             </div>
         </div>
     </div>
-
-    @*<div class="navbar fixed">
-            <div class="navbar-container">
-                <a href="/">
-                    <div class="navbar-header pull-left navbar-brand">
-                        <img src="@Url.Content("~/Content/img/dhhelpdesk.png")" class="navbar-brand" />
-                    </div>
-                </a>
-                <div class="navbar-header pull-right">
-                    <ul class="nav dh-nav">                        
-                    </ul>
-                </div>
-            </div>
-        </div>*@
-
-    @*<script type="text/javascript" src="@Url.Content("~/Content/js/dhHelpdesk.js")"></script>*@
+   
     @RenderBody()
     @RenderSection("Dialogs", false)
     <script type="text/javascript" src="@Url.Content("~/Content/js/dhHelpdesk.js")"></script>
@@ -715,8 +675,7 @@
 
 <script type="text/javascript">
     
-    function ChangeLang(langId) {
-        //alert(languageId);        
+    function ChangeLang(langId) {                
         if ('@showLanguageSelect' == false)
             return;
 
@@ -729,7 +688,7 @@
                 data: "{ languageId:" + langId +"}",
                 dataType: "html",
                 success: function (result) {                   
-                    window.location.reload();                    
+                    window.location.reload();
                 },
                 error: function (result) {
                     //alert('Error in change language');
@@ -744,12 +703,17 @@
         
         var note = $('#myNote').val();
         //alert(window.location.href);
-        var currentPath = window.location.href;
+        //var currentPath = window.location.href;
         if (note == "") {
             alert('Note text is empty!');
         } else {
-                        
-            $.ajax({
+                     
+            $('#_CaseLogNote').val('').html('');
+            $.get('/Case/SaveLogNote', { caseId: '@currentCaseId', note: note }, function (_CaseLogNoteMarkup) {
+                $('#_CaseLogNote').html($(_CaseLogNoteMarkup).html());
+            });
+
+            @*$.ajax({
                 type: "POST",
                 url: '@Url.Action("SaveExternalMessage", "Case", new { area = "" })', 
                 contentType: "application/json; charset=utf-8",
@@ -761,10 +725,9 @@
                 error: function (result) {
                     location.reload();                                       
                 }
-            });
-        }
-
+            });*@
+        }       
         
-    }
+    }   
 
 </script>

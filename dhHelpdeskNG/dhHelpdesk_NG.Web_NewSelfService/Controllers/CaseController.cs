@@ -448,8 +448,21 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             return this.File(fileContent, "application/octet-stream", fileName);
         }
 
-        [HttpPost]
-        public JsonResult SaveExternalMessage(int caseId, string extraNote, string backUrlAddresss) 
+        [HttpGet]
+        public PartialViewResult SaveLogNote(int caseId, string note)
+        {
+            SaveExternalMessage(caseId, note);            
+
+            CaseLogModel model = new CaseLogModel()
+                  {
+                      CaseId = caseId,
+                      CaseLogs = this._logService.GetLogsByCaseId(caseId).OrderByDescending(l=> l.RegTime).ToList()
+                  };
+
+            return this.PartialView(model);
+        }
+        
+        private void SaveExternalMessage(int caseId, string extraNote) 
         {
             IDictionary<string, string> errors;
 
@@ -457,13 +470,9 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             var currentCustomer = _customerService.GetCustomer(currentCase.Customer_Id);
             var cs = this._settingService.GetCustomerSetting(currentCustomer.Id);
 
-            // save case history
-            // may be need change PersonsEmail
+            // save case history            
             int caseHistoryId = this._caseService.SaveCaseHistory(currentCase, 0, currentCase.PersonsEmail, out errors, SessionFacade.CurrentUserIdentity.UserId);
-
-            //var guid = new Guid(curGUID);
-            //var emailLog = _caseService.GetEMailLogByGUID(guid);
-
+            
             // save log
             var caseLog = new CaseLog
                               {
@@ -478,7 +487,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                                   EquipmentPrice = 0,
                                   Price = 0,
                                   Charge = false,
-                                  RegUser = SessionFacade.CurrentSystemUser, //emailLog.EmailAddress,
+                                  RegUser = SessionFacade.CurrentSystemUser,
                                   SendMailAboutCaseToNotifier = true,
                                   SendMailAboutLog = true
                               };
@@ -536,11 +545,8 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                                                        cs.DontConnectUserToWorkingGroup
                                                        );
 
-            this._caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, newLogFiles);
-
-            ViewBag["ShowLogMessage"] = "yes";
-            return Json(new { url = backUrlAddresss });
-            //return null; // RedirectToAction("Index", new { id = caseId });
+            this._caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, newLogFiles);            
+            //return Json(new { url = backUrlAddresss });            
         }
 
         [HttpPost]

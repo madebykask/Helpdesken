@@ -499,9 +499,9 @@
                 regions = this.regionRepository.FindByCustomerId(currentCustomerId);
 
                 // As each "Department" must has a "Region" in defination, we get notifier RegionId from Department.
-                var selectedDepartment = this.departmentRepository.GetById(notifier.DepartmentId.Value);
-                departmentRegionId = selectedDepartment.Region_Id;
-
+                if (notifier.DepartmentId != null)
+                    departmentRegionId = this.departmentRepository.GetById(notifier.DepartmentId.Value).Region_Id;
+                 
                 if (departmentRegionId != null && departmentRegionId.Value > 0) 
                     inputParams.Add("RegionId", departmentRegionId.Value.ToString()); // Takes default from saved Notifier
             }
