@@ -16,6 +16,7 @@
         IList<Customer> GetAllCustomers();
         IList<Customer> GetCustomers(int customerId);
         IList<Customer> SearchAndGenerateCustomers(ICustomerSearch searchCustomers);
+        IList<Customer> SearchAndGenerateCustomersConnectedToUser(ICustomerSearch searchCustomers, int userId);
         IList<CustomerReportList> GetCustomerReportList(int id);
         IList<Report> GetAllReports();
 
@@ -51,9 +52,11 @@
         private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICaseSettingRepository _caseSettingRepository;
+        
 
         private readonly ICaseFieldSettingService _caseFieldSettingService;
         private readonly ISettingService _settingService;
+        private readonly IUserService _userService;
 
         public CustomerService(
             ICaseFieldSettingRepository caseFieldSettingRepository,
@@ -67,7 +70,8 @@
             ICaseSettingRepository caseSettingRepository,
 
             ICaseFieldSettingService caseFieldSettingService,
-            ISettingService settingService)
+            ISettingService settingService,
+            IUserService userService)
         {
             this._caseFieldSettingRepository = caseFieldSettingRepository;
             this._caseFieldSettingLanguageRepository = caseFieldSettingLanguageRepository;
@@ -81,6 +85,7 @@
 
             this._caseFieldSettingService = caseFieldSettingService;
             this._settingService = settingService;
+            this._userService = userService;
         }
 
         public IList<Customer> GetAllCustomers()
@@ -107,6 +112,24 @@
             var filter = !string.IsNullOrEmpty(searchCustomers.SearchCs) ? searchCustomers.SearchCs : string.Empty;
             var query = from c in this._customerRepository.GetAll() select c;
 
+            if (!string.IsNullOrEmpty(filter))
+            {
+                query = query.Where(x => x.Address.ContainsText(filter)
+                    || x.CustomerID.ContainsText(filter)
+                    || x.CustomerNumber.ContainsText(filter)
+                    || x.Name.ContainsText(filter)
+                    || x.Phone.ContainsText(filter)
+                    || x.PostalAddress.ContainsText(filter)
+                    || x.PostalCode.ContainsText(filter));
+            }
+
+            return query.OrderBy(x => x.Name).ToList();
+        }
+
+        public IList<Customer> SearchAndGenerateCustomersConnectedToUser(ICustomerSearch searchCustomers, int userId)
+        {
+            var filter = !string.IsNullOrEmpty(searchCustomers.SearchCs) ? searchCustomers.SearchCs : string.Empty;
+            var query = from c in this._userService.GetCustomersConnectedToUser(userId) select c;
             if (!string.IsNullOrEmpty(filter))
             {
                 query = query.Where(x => x.Address.ContainsText(filter)
