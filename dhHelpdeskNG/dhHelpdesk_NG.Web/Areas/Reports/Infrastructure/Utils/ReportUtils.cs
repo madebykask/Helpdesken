@@ -61,9 +61,10 @@
                         Translation.Get("Frågeregistrering"));
                 case ReportType.CaseTypeArticleNo:
                     return string.Format(
-                        "{0} - {1}",
+                        "{0} - {1}/{2}",
                         Translation.Get("Rapport"),
-                        Translation.Get("Case Type/Article No"));
+                        Translation.Get("Ärendetyp"),
+                        Translation.Get("Artikelnummer"));
                 case ReportType.CaseTypeSupplier:
                     return string.Format(
                         "{0} - {1}/{2}",

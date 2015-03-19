@@ -43,11 +43,12 @@
                                 ReportType.CaseSatisfaction,
                                 ReportType.ReportGenerator,
                                 ReportType.LeadtimeFinishedCases,
-                                ReportType.LeadtimeActiveCases
+                                ReportType.LeadtimeActiveCases,
+                                ReportType.CaseSatisfaction
                             };
 
             // It's a new report, so we need to add it to the tblReport table
-            reports.Add(ReportType.CaseSatisfaction);
+            //reports.Add(ReportType.CaseSatisfaction);
 
             var items = reports
                         .Where(ready.Contains)
