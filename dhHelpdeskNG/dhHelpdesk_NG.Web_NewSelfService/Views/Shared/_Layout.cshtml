@@ -232,7 +232,7 @@
                         </div>                        
                     </div>
                 </div>
-                <div class="com-list">
+                <div id="CaseLogPartial" class="com-list">
                      @Html.Partial("_CaseLogNote", pCaseLogs)
                  </div>
             </div>
@@ -667,7 +667,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>*@
+                            </div>*@    
 </body>
 
 </html>
@@ -701,33 +701,15 @@
         if ('@currentCaseId' == null || '@currentCaseId' == "")
             return;
         
-        var note = $('#myNote').val();
-        //alert(window.location.href);
-        //var currentPath = window.location.href;
+        var note = $('#myNote').val();        
         if (note == "") {
             alert('Note text is empty!');
-        } else {
-                     
-            $('#_CaseLogNote').val('').html('');
-            $.get('/Case/SaveLogNote', { caseId: '@currentCaseId', note: note }, function (_CaseLogNoteMarkup) {
-                $('#_CaseLogNote').html($(_CaseLogNoteMarkup).html());
-            });
-
-            @*$.ajax({
-                type: "POST",
-                url: '@Url.Action("SaveExternalMessage", "Case", new { area = "" })', 
-                contentType: "application/json; charset=utf-8",
-                data: "{ caseId: '@currentCaseId', extraNote:'" + note + "', backUrlAddresss:'" + currentPath + "'}",
-                dataType: "html",
-                success: function (result) {
-                    location.reload();                    
-                },
-                error: function (result) {
-                    location.reload();                                       
-                }
-            });*@
-        }       
-        
+        } else {                                             
+            $.get('/Case/_CaseLogNote', { caseId: '@currentCaseId', note: note }, function (_CaseLogNoteMarkup) {
+                $('#CaseLogPartial').html(_CaseLogNoteMarkup);
+                $('#myNote').val('');
+            });            
+        }               
     }   
 
 </script>

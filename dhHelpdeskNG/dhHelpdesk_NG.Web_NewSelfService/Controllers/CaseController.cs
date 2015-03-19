@@ -449,7 +449,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
         }
 
         [HttpGet]
-        public PartialViewResult SaveLogNote(int caseId, string note)
+        public PartialViewResult _CaseLogNote(int caseId, string note)
         {
             SaveExternalMessage(caseId, note);            
 
