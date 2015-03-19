@@ -164,7 +164,8 @@
                             cfs.Required,
                             cfs.ShowExternal,
                             cfs.ShowOnStartPage,
-                            cfs.Name
+                            cfs.Name,
+                            cfs.EMailIdentifier
                         }
                             into grouped
                             select new CaseListToCase
@@ -178,7 +179,8 @@
                                 Required = grouped.Key.Required,
                                 ShowExternal = grouped.Key.ShowExternal,
                                 ShowOnStartPage = grouped.Key.ShowOnStartPage,
-                                Name = grouped.Key.Name
+                                Name = grouped.Key.Name,
+                                EMailIdentifier = grouped.Key.EMailIdentifier
                             };
 
             if (query.Count() == 0 || query == null)

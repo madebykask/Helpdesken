@@ -20,7 +20,8 @@ namespace DH.Helpdesk.BusinessData.Models
         public int ShowOnStartPage { get; set; }
         public string LabelNotToChange { get; set; }
         public string LabelToChange { get; set; }
-        public string Name { get; set; }        
+        public string Name { get; set; }
+        public string EMailIdentifier {get; set;}
     }
 
     public class CaseSettingList

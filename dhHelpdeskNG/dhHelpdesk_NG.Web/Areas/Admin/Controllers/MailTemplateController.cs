@@ -475,6 +475,10 @@
                         ExtraLabel = Translation.Get(ExtraLabel, Enums.TranslationSource.TextTranslation, customerId);
                         ExtraLabel = ":" + ExtraLabel;
                     }
+                    if (cfsl.Label == null)
+                    {
+                        cfsl.Label = Translation.Get(mailTemplateRowName, Enums.TranslationSource.CaseTranslation, customerId);
+                    }
 
                     string row = "";
                     row = "<tr>"
