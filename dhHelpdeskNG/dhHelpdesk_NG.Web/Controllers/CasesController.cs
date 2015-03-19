@@ -1075,6 +1075,18 @@ namespace DH.Helpdesk.Web.Controllers
                 f.CaseClosingDateEndFilter = frm.GetDate("CaseClosingDateEndFilter");
                 f.CaseClosingReasonFilter = frm.ReturnFormValue("hidFilterClosingReasonId").ReturnCustomerUserValue();
 
+                int caseRemainingTimeFilter;
+                if (int.TryParse(frm.ReturnFormValue("CaseRemainingTime"), out caseRemainingTimeFilter))
+                {
+                    f.CaseRemainingTimeFilter = caseRemainingTimeFilter;
+                }
+
+                int caseRemainingTimeMaxFilter;
+                if (int.TryParse(frm.ReturnFormValue("CaseRemainingTimeMax"), out caseRemainingTimeMaxFilter))
+                {
+                    f.CaseRemainingTimeMaxFilter = caseRemainingTimeMaxFilter;
+                }
+
                 var sm = this.GetCaseSearchModel(f.CustomerId, f.UserId);
                 sm.caseSearchFilter = f;
                 sm.Search.SortBy = frm.ReturnFormValue("hidSortBy");

@@ -82,7 +82,10 @@ function search() {
     }
     $.post('/Cases/Search/', $("#frmCaseSearch").serialize(), function (result) {
         $('#search_result').html(result);
-    });
+    })
+    .always(function () {
+        $(document).trigger("OnCasesLoaded");
+    });;
 }
 
 function sortCases(sortBy) {
@@ -167,15 +170,85 @@ $(function () {
         window.dhHelpdesk.casesList = {};
     }
 
+    dhHelpdesk.casesList.utils = {
+        raiseEvent: function (eventType, extraParameters) {
+            $(document).trigger(eventType, extraParameters);
+        },
+
+        onEvent: function (event, handler) {
+            $(document).on(event, handler);
+        }
+    }
+
     dhHelpdesk.casesList.scope = function (spec, my) {
         spec = spec || {};
         my = my || {};
         var that = {};
 
-        var getDepartmentsUrl = spec.getDepartmentsUrl || '';
-        var regions = $('[data-field="region"]');
-        var departments = $('[data-field="department"]');
-        var administrators = $('[data-field="administrator"]');
+        var caseRemainingTime = $('[data-field="caseRemainingTime"]');
+        var caseRemainingTimeHidePlace = $('[data-field="caseRemainingTimeHidePlace"]');
+        var caseRemainingTimeShowPlace = $('[data-field="caseRemainingTimeShowPlace"]');
+        var showCaseFilters = $('#btnMore');
+        var searchForm = $('#frmCaseSearch');
+
+        var moveCaseRemainingTimeIntoHidePlace = function() {
+            caseRemainingTime.detach().appendTo(caseRemainingTimeHidePlace);
+        }
+
+        var moveCaseRemainingTimeIntoShowPlace = function() {
+            caseRemainingTime.detach().appendTo(caseRemainingTimeShowPlace);
+        }
+
+        var isCaseFilterHided = function() {
+            return $("#icoPlus").hasClass('icon-minus-sign');
+        }
+
+        var moveCaseRemainingTime = function() {
+            if (isCaseFilterHided()) {
+                moveCaseRemainingTimeIntoShowPlace();
+            } else {
+                moveCaseRemainingTimeIntoHidePlace();
+            }
+        }
+        moveCaseRemainingTime();
+
+        showCaseFilters.click(function () {
+            moveCaseRemainingTime();
+        });
+
+        var loader = $('<img src="Content/icons/ajax-loader.gif" />');
+
+        var bindCaseRemainingTime = function() {
+            $('[data-remaining-time]').each(function () {
+                $(this).click(function () {
+                    var $this = $(this);
+                    var remainingTime = $('<input name="CaseRemainingTime" type="hidden" />');
+                    var remainingTimeMax = $('<input name="CaseRemainingTimeMax" type="hidden" />');
+                    remainingTime.val($this.attr('data-remaining-time'));
+                    remainingTimeMax.val($this.attr('data-remaining-time-max'));
+
+                    searchForm.append(remainingTime);
+                    searchForm.append(remainingTimeMax);
+                    $this.after(loader);
+                    search();
+                    remainingTime.remove();
+                    remainingTimeMax.remove();
+                });
+            });
+        }
+        bindCaseRemainingTime();
+
+        dhHelpdesk.casesList.utils.onEvent("OnCasesLoaded", function() {
+            caseRemainingTime.remove();
+            caseRemainingTime = $('[data-field="caseRemainingTime"]');
+            if (isCaseFilterHided()) {
+                moveCaseRemainingTimeIntoShowPlace();
+            } else {
+                moveCaseRemainingTimeIntoHidePlace();
+            }
+
+            bindCaseRemainingTime();
+        });
 
         return that;
     }

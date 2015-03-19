@@ -4,6 +4,7 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Utils;
     using DH.Helpdesk.Domain;
@@ -118,7 +119,7 @@
                 csf.ProductArea = this.productAreaService.GetProductAreaWithChildren(productAreaId, ", ", "Id");
             }
 
-            return this.caseSearchRepository.Search(
+            var result = this.caseSearchRepository.Search(
                                                 csf, 
                                                 csl, 
                                                 userId, 
@@ -133,6 +134,27 @@
                                                 applicationId,
                                                 calculateRemainingTime,
                                                 out remainingTime);
+
+            if (f.CaseRemainingTimeFilter.HasValue && calculateRemainingTime)
+            {
+                IEnumerable<CaseRemainingTime> filteredCaseRemainigTimes;
+                if (f.CaseRemainingTimeFilter < 0)
+                {
+                    filteredCaseRemainigTimes = remainingTime.CaseRemainingTimes.Where(t => t.RemainingTime < 0);
+                }
+                else if (f.CaseRemainingTimeFilter == int.MaxValue && f.CaseRemainingTimeMaxFilter.HasValue)
+                {
+                    filteredCaseRemainigTimes = remainingTime.CaseRemainingTimes.Where(t => t.RemainingTime.IsHoursGreaterDays(f.CaseRemainingTimeMaxFilter.Value));
+                }
+                else 
+                {
+                    filteredCaseRemainigTimes = remainingTime.CaseRemainingTimes.Where(t => t.RemainingTime.IsHoursEqualDays(f.CaseRemainingTimeFilter.Value));
+                }
+
+                result = result.Where(c => filteredCaseRemainigTimes.Select(t => t.CaseId).Contains(c.Id)).ToList();
+            }
+
+            return result;
         }
     }
 }

@@ -15,7 +15,7 @@
             this.MaxDays = maxDays;
             this.Data = data;
 
-            this.Delayed = new CaseRemainingTimeItemViewModel(0, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime < 0));
+            this.Delayed = new CaseRemainingTimeItemViewModel(int.MinValue, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime < 0));
             this.LessThenOneDay = new CaseRemainingTimeItemViewModel(0, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime.IsHoursEqualDays(0)));
 
             for (var i = 1; i <= this.MaxDays; i++)
