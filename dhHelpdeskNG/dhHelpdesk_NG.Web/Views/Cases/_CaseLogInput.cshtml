@@ -61,7 +61,7 @@
                 <li class="secspace"></li>
                 <li>
                     @Translation.Get("Standardtext", SessionFacade.CurrentCaseLanguageId)&nbsp;
-                            <select id="lstStandarTexts">
+                            <select id="lstStandarTexts" style="max-width:220px;">
                                 <option>&nbsp;</option>
                                 @foreach (var e in Model.standardTexts.Where(e => e.IsActive == 1))
                                 {

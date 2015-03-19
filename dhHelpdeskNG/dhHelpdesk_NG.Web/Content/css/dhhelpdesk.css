@@ -2,7 +2,7 @@
 body {
   /*background:#ffffff;*/
   background: #f2f7fe;
-  min-width:1350px !important;
+  /*min-width:1350px !important;*/
 }
 
 a, a:hover, a:focus {
@@ -205,7 +205,7 @@ input[type="text"] {
 		padding-bottom: 10px;
 		width:116px;
 		height:25px;
-        max-width:20%;
+        /*max-width:20%;*/
         
 	}
 
