@@ -29,7 +29,7 @@
                         </tr>
                         }
                          else      {
-                            <tr rel="tooltip" title="<p style='text-align:left'><strong>@Translation.Get("Kund"):</strong> @Html.DisplayFor(m => myCase.CustomerName)</p><p style='text-align:left'><strong>@Translation.Get("Anmälare"):</strong> @Html.DisplayFor(m => myCase.InitiatorName)</p><p style='text-align:left'><strong>@Translation.Get("Beskrivning"):</strong> @Html.DisplayFor(m => myCase.Description)</div>" style="cursor: pointer" onclick="window.location.href = '@Url.Action("Edit", "Cases", new { id = myCase.Id })'">
+                            <tr rel="tooltip" title="<p style='text-align:left'><strong>@Translation.Get("Kund"):</strong> @Html.DisplayFor(m => myCase.CustomerName)</p><p style='text-align:left'><strong>@Translation.Get("Anmälare"):</strong> @Html.DisplayFor(m => myCase.InitiatorName)</p><p class='toodesc' style='text-align:left'><strong>@Translation.Get("Beskrivning"):</strong> @Html.DisplayFor(m => myCase.Description)</p><p class='readmore'></p>" style="cursor: pointer" onclick="window.location.href = '@Url.Action("Edit", "Cases", new { id = myCase.Id })'">
                                 <td>
                                  @myCase.CaseNumber
                             </td>
