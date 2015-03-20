@@ -1,4 +1,5 @@
 ﻿@using System.Globalization
+@using DH.Helpdesk.BusinessData.Enums.Users
 @model DH.Helpdesk.BusinessData.Models.Users.Output.UserModuleOverview
 <tr>
     <td>
@@ -11,9 +12,12 @@
         @Model.Module.Name
     </td>
     <td>
-        @Html.DropDownListFor(m => m.NumberOfRows, 
+        @if (Model.Id != (int)Module.Statistics)
+        {
+            @Html.DropDownListFor(m => m.NumberOfRows, 
                 GetNumberOfRowsList(), 
-                new { @style = "width: 5em;"})
+                new { @style = "width: 5em;"})            
+        }
     </td>
 </tr>
 @functions{

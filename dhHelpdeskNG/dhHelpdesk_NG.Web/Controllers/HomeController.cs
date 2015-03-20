@@ -154,6 +154,7 @@
             };
 
             var customers = this.customerUserService.GetCustomerUsersForHomeIndexPage(SessionFacade.CurrentUser.Id);
+            var customerIdsAll = customers.Select(c => c.Customer.Customer_Id).ToArray();
 
             if (!customers.Any())
             {
@@ -209,7 +210,7 @@
                         model.LinksInfo = this.linkModelFactory.GetLinksViewModel(this.linkService.GetLinkOverviews(customersIds, module.NumberOfRows, true));
                         break;
                     case Module.Statistics:
-                        model.StatisticsOverviews = this.statisticsService.GetStatistics(customersIds, this.workContext.User.UserId);
+                        model.StatisticsOverviews = this.statisticsService.GetStatistics(customerIdsAll, this.workContext.User.UserId);
                         break;
                     case Module.ChangeManagement:
                         var customerChanges = this.changeService.GetCustomerChanges(customersIds, SessionFacade.CurrentUser.Id);
