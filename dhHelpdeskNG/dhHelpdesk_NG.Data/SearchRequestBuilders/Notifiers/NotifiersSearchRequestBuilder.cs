@@ -92,12 +92,28 @@
                     {
                         this.notifiers = this.notifiers.OrderBy(u => u.City);
                     }
-                    else
+                    else if (field.Name == OrganizationField.Region)
                     {
-                        throw new NotImplementedException();
+                        this.notifiers = this.notifiers.OrderBy(u => u.Department.Region.Name);
                     }
-
+                    else if (field.Name == OrganizationField.Department)
+                    {
+                        this.notifiers = this.notifiers.OrderBy(u => u.Department.DepartmentName);
+                    }
+                    else if (field.Name == OrganizationField.OrganizationUnit)
+                    {
+                        this.notifiers = this.notifiers.OrderBy(u => u.OU.Name);
+                    }
+                    else if (field.Name == StateField.ChangedDate)
+                    {
+                        this.notifiers = this.notifiers.OrderBy(u => u.ChangeTime);
+                    }
+                    else if (field.Name == StateField.SynchronizationDate)
+                    {
+                        this.notifiers = this.notifiers.OrderBy(u => u.SyncChangedDate);
+                    }                    
                     break;
+
                 case SortBy.Descending:
                     if (field.Name == GeneralField.UserId)
                     {
@@ -159,11 +175,26 @@
                     {
                         this.notifiers = this.notifiers.OrderByDescending(u => u.City);
                     }
-                    else
+                    else if (field.Name == OrganizationField.Region)
                     {
-                        throw new NotImplementedException();
+                        this.notifiers = this.notifiers.OrderByDescending(u => u.Department.Region.Name);
                     }
-
+                    else if (field.Name == OrganizationField.Department)
+                    {
+                        this.notifiers = this.notifiers.OrderByDescending(u => u.Department.DepartmentName);
+                    }
+                    else if (field.Name == OrganizationField.OrganizationUnit)
+                    {
+                        this.notifiers = this.notifiers.OrderByDescending(u => u.OU.Name);
+                    }
+                    else if (field.Name == StateField.ChangedDate)
+                    {
+                        this.notifiers = this.notifiers.OrderByDescending(u => u.ChangeTime);
+                    }
+                    else if (field.Name == StateField.SynchronizationDate)
+                    {
+                        this.notifiers = this.notifiers.OrderByDescending(u => u.SyncChangedDate);
+                    }                    
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

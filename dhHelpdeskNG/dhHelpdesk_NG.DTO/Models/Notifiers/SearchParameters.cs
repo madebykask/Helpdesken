@@ -11,6 +11,7 @@
             int? domainId,
             int? regionId,
             int? departmentId,
+            int? organizationUnitId,
             int? divisionId,
             string pharse,
             NotifierStatus status,
@@ -21,6 +22,7 @@
             this.DomainId = domainId;
             this.RegionId = regionId;
             this.DepartmentId = departmentId;
+            this.OrganizationUnit = organizationUnitId;
             this.DivisionId = divisionId;
             this.Pharse = pharse;
             this.Status = status;
@@ -39,6 +41,9 @@
 
         [IsId]
         public int? DepartmentId { get; private set; }
+
+        [IsId]
+        public int? OrganizationUnit { get; private set; }
         
         [IsId]
         public int? DivisionId { get; private set; }

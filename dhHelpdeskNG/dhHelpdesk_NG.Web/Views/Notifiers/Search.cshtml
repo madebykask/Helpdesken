@@ -1,7 +1,9 @@
-﻿
+﻿@using System.Web.Optimization
 @using DH.Helpdesk.BusinessData.Enums.Notifiers
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @model DH.Helpdesk.Web.Models.Notifiers.SearchModel
+
+@Scripts.Render("~/bundles/notifiers/notifier")
 
 @using (Ajax.BeginForm("Search", null, new AjaxOptions { UpdateTargetId = "notifiers_grid" }, new { id = "search_form" }))
 {
@@ -22,7 +24,7 @@
             {
                 <tr>
                     <td>@Translation.Get("Område", Enums.TranslationSource.TextTranslation)</td>
-                    <td>@Html.DropDown("region_dropdown", "RegionId", true, Model.Region.Content)</td>
+                    <td>@Html.DropDown("region_dropdown", "RegionId", true, Model.Region.Content)</td>                    
                 </tr>
                 <tr>
                     <td>@Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation)</td>
@@ -31,8 +33,19 @@
                             @Html.Partial("DepartmentDropDown", Model.Department.Content)
                         </div>
                     </td>
-                </tr>
-            }
+                </tr>                
+                if (Model.OrganizationUnit.Show)
+                {
+                    <tr>
+                        <td>@Translation.Get("Organisationsenhet", Enums.TranslationSource.TextTranslation)</td>
+                        <td>
+                            <div id="organizationUnit_dropdown_container">
+                                @Html.Partial("OrganizationUnitDropDown", Model.OrganizationUnit.Content)
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }            
 
             @if (Model.Division.Show)
             {

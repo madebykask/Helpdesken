@@ -10,6 +10,7 @@
             SearchDropDownModel domain,
             SearchDropDownModel regions,
             SearchDropDownModel department,
+            SearchDropDownModel organizationUnit,
             SearchDropDownModel division,
             string pharse,
             NotifierStatus status,
@@ -19,6 +20,7 @@
             this.Domain = domain;
             this.Region = regions;
             this.Department = department;
+            this.OrganizationUnit = organizationUnit;
             this.Division = division;
             this.Pharse = pharse;
             this.Status = status;
@@ -34,6 +36,9 @@
 
         [NotNull]
         public SearchDropDownModel Department { get; private set; }
+
+        [NotNull]
+        public SearchDropDownModel OrganizationUnit { get; private set; }
 
         [NotNull]
         public SearchDropDownModel Division { get; private set; }

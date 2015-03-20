@@ -196,6 +196,7 @@
             List<ItemOverview> searchDomains = null;
             List<ItemOverview> searchRegions = null;
             List<ItemOverview> searchDepartments = null;
+            List<ItemOverview> searchOrganizationUnit = null;
             List<ItemOverview> searchDivisions = null;
 
             if (settings.Domain.ShowInNotifiers)
@@ -217,6 +218,8 @@
                 {
                     searchDepartments = this.departmentRepository.FindActiveOverviews(currentCustomerId);
                 }
+
+                searchOrganizationUnit = this.organizationService.GetOrganizationUnits(filters.DepartmentId);
             }
 
             if (settings.Division.ShowInNotifiers)
@@ -233,6 +236,7 @@
                 filters.DomainId,
                 filters.RegionId,
                 filters.DepartmentId,
+                filters.OrganizationUnitId,
                 filters.DivisionId,
                 filters.Pharse,
                 filters.Status,
@@ -246,6 +250,7 @@
                 searchDomains,
                 searchRegions,
                 searchDepartments,
+                searchOrganizationUnit,
                 searchDivisions,
                 filters,
                 searchResult);
@@ -588,6 +593,7 @@
             List<ItemOverview> searchDomains = null;
             List<ItemOverview> searchRegions = null;
             List<ItemOverview> searchDepartments = null;
+            List<ItemOverview> searchOrganizationUnit = null;
             List<ItemOverview> searchDivisions = null;
 
             if (displaySettings.Domain.ShowInNotifiers)
@@ -609,6 +615,8 @@
                 {
                     searchDepartments = this.departmentRepository.FindActiveOverviews(currentCustomerId);
                 }
+
+                searchOrganizationUnit = this.organizationService.GetOrganizationUnits(filters.DepartmentId);
             }
 
             if (displaySettings.Division.ShowInNotifiers)
@@ -621,6 +629,7 @@
                 filters.DomainId,
                 filters.RegionId,
                 filters.DepartmentId,
+                filters.OrganizationUnitId,
                 filters.DivisionId,
                 filters.Pharse,
                 filters.Status,
@@ -634,6 +643,7 @@
                 searchDomains,
                 searchRegions,
                 searchDepartments,
+                searchOrganizationUnit,
                 searchDivisions,
                 filters,
                 searchResult);
@@ -659,6 +669,7 @@
                 filters.DomainId,
                 filters.RegionId,
                 filters.DepartmentId,
+                filters.OrganizationUnitId,
                 filters.DivisionId,
                 filters.Pharse,
                 filters.Status,

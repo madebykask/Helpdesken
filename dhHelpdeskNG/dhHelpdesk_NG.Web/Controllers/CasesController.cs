@@ -261,7 +261,9 @@ namespace DH.Helpdesk.Web.Controllers
                     fd.filterDepartment = this._departmentService.GetDepartmentsByUserPermissions(userId, cusId);
                     if (!fd.filterDepartment.Any())
                     {
-                        fd.filterDepartment = this._departmentService.GetDepartments(cusId);
+                        fd.filterDepartment = this._departmentService.GetDepartments(cusId)
+                                                                     .Where(d => d.Region_Id == null || (d.Region != null && d.Region.IsActive != 0))
+                                                                     .ToList();
                     }
 
                     //användare
@@ -737,12 +739,12 @@ namespace DH.Helpdesk.Web.Controllers
                 phone = cu.Phone,
                 usercode = cu.UserCode,
                 cellphone = cu.Cellphone,
-                regionid = (cu.Department != null ? cu.Department.Region_Id : 0),
-                regionname = (cu.Department != null ? cu.Department.Region.Name : ""),
+                regionid = (cu.Department != null)? cu.Department.Region_Id == null ? "" : cu.Department.Region_Id.Value.ToString() : "",
+                regionname = (cu.Department != null)? cu.Department.Region != null? cu.Department.Region.Name : "" : "",
                 departmentid = cu.Department_Id,
                 departmentname = cu.Department.DepartmentName,
                 ouid = cu.OU_Id,
-                ouname = (cu.OU.Parent != null ? cu.OU.Parent.Name + " - " : "") + cu.OU.Name
+                ouname = cu.OU != null ? (cu.OU.Parent != null ? cu.OU.Parent.Name + " - " : "") + cu.OU.Name : ""
             };
             return this.Json(u);
         }
@@ -759,7 +761,9 @@ namespace DH.Helpdesk.Web.Controllers
             var dep = this._departmentService.GetDepartmentsByUserPermissions(SessionFacade.CurrentUser.Id, customerId);
             if (!dep.Any())
             {
-                dep = this._departmentService.GetDepartments(customerId);
+                dep = this._departmentService.GetDepartments(customerId)
+                                             .Where(d => d.Region_Id == null || (d.Region != null && d.Region.IsActive != 0))
+                                             .ToList();
             }
 
             if (id.HasValue)
@@ -1927,8 +1931,11 @@ namespace DH.Helpdesk.Web.Controllers
                 m.problems = this._problemService.GetCustomerProblems(customerId);
                 m.currencies = this._currencyService.GetCurrencies();
                 m.users = this._userService.GetUsers(customerId);
-                m.projects = this._projectService.GetCustomerProjects(customerId);                
-                m.departments = deps.Any() ? deps : this._departmentService.GetDepartments(customerId);
+                m.projects = this._projectService.GetCustomerProjects(customerId);
+                m.departments = deps.Any() ? deps : 
+                      this._departmentService.GetDepartments(customerId)
+                                             .Where(d => d.Region_Id == null || (d.Region != null && d.Region.IsActive != 0))
+                                             .ToList();                
                 m.standardTexts = this._standardTextService.GetStandardTexts(customerId);
                 m.Languages = this._languageService.GetActiveLanguages();
 

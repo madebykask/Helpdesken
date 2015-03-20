@@ -80,11 +80,13 @@
                 var departments = departmentsRep.GetAll().GetActiveByCustomer(customerId);
                 var userDepartments = userDepartmentsRep.GetAll();
 
-                return DepartmentMapper.MapToUserDepartments(
+                var deps = DepartmentMapper.MapToUserDepartments(
                                         users,
                                         customers,
                                         departments,
                                         userDepartments);
+                return deps.Where(d=> d.Region_Id == null || (d.Region != null && d.Region.IsActive != 0))
+                           .ToList();
             }
         }
 
