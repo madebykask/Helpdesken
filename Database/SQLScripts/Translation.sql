@@ -2814,6 +2814,20 @@ If not exists (select * from tblTextTranslation where Text_Id = 1331 and Languag
 	INSERT INTO tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1331, 2, 'User has permission to manage Calendar')
 GO
 
+UPDATE tblText Set TextString = 'Användaren får skapa ärendemallar' WHERE Id=818;
+GO
+
+UPDATE tblText Set TextString = 'Användaren har rättighet till aktuellt' WHERE Id=1001;
+GO
+
+
+UPDATE tblText Set TextString = 'Användaren har rättighet att administrera ärendemallar' WHERE Id=1330;
+GO
+
+UPDATE tblText Set TextString = 'Användaren har rättighet att administrera Aktuellt' WHERE Id=1331;
+GO
+
+
 if not exists (select * from tbltext where id = 1332)
 	insert into tbltext (id, TextString) VALUES (1332, 'Var vänlig ange tid i siffror mellan 0-24 (i. e 8-17)')
 GO
