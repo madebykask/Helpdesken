@@ -81,7 +81,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td></td>
+                                    <td><input type="checkbox" id="LimitWGs"> @Translation.Get("Begränsa läsrättighet till",Enums.TranslationSource.TextTranslation):<br></td>
                                     <td>
                                         @Html.ListBox("WGsAvailable", Model.WGsAvailable, new { style = "width: 340px; height: 150px" })                                        
                                     </td>
@@ -93,6 +93,7 @@
                                         @Html.ListBox("WGsSelected", Model.WGsSelected, new { style = "width: 340px; height: 150px" })
                                     </td>
                                 </tr>
+                                
                             </table>
                             @Html.HiddenFor(model => model.BulletinBoard.Customer_Id)
                             @Html.HiddenFor(model => model.BulletinBoard.Id)
@@ -133,7 +134,31 @@
         return false;
     });
 
+
+    $("#LimitWGs").change(function () {
+        if ($("#LimitWGs").attr("checked")) {
+            $("#WGsAvailable").attr("disabled", false);
+            $("#WGsSelected").attr("disabled", false);
+        }
+        else {
+            $("#WGsSelected option").remove().appendTo("#WGsAvailable");
+            $("#WGsAvailable").attr("disabled", true);
+            $("#WGsSelected").attr("disabled", true);
+        }
+    });
+
     $(function () {
+        if ($("#WGsSelected option").length > 0) {
+            $("#LimitWGs").attr("checked", true)
+            $("#WGsAvailable").attr("disabled", false);
+            $("#WGsSelected").attr("disabled", false);
+        }
+        else {
+            $("#WGsAvailable").attr("disabled", true);
+            $("#WGsSelected").attr("disabled", true);
+        }
+
+        
         var validator = $("#target").validate({
             rules: {
                 "BulletinBoard.Text": {
@@ -150,5 +175,8 @@
             }
         });
     });
+
+
+
 
 </script>
