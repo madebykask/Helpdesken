@@ -514,8 +514,8 @@
             // fields
             sql.Add("select distinct");
 
-            // vid avslutade ärenden visas bara första 500, TODO fungerar inte i Oracle 
-            if (f != null && f.CaseProgress == "1")
+            // vid avslutade ärenden visas bara första 500
+            if (f != null && (f.CaseProgress == "1" || f.CaseProgress =="-1"))
             {
                 sql.Add("top 500");
             }
