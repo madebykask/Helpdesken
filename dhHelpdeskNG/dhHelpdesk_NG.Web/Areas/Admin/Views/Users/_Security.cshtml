@@ -15,21 +15,32 @@
                 @Translation.Get("Kunder", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
-                @Translation.Get("Tillgängliga", Enums.TranslationSource.TextTranslation)
-            </td>
-            <td>
-                @Translation.Get("Användaren har rättighet till", Enums.TranslationSource.TextTranslation)
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                @Html.ListBox("CsAvailable", Model.CsAvailable, new { style = "width: 460px; height: 100px" })
-                <input type="button" value="&lt;" id="removeCs" class="btn" />
-                <input type="button" value="&gt;" id="addCs" class="btn" />
-            </td>
-            <td>
-                @Html.ListBox("CsSelected", Model.CsSelected, new { style = "width: 460px; height: 100px" })
+                <table>
+                    <tr>
+                        <td>
+                            @Translation.Get("Tillgängliga", Enums.TranslationSource.TextTranslation)
+                        </td>
+                        <td>
+                
+                        </td>
+                        <td>
+                            @Translation.Get("Användaren har rättighet till", Enums.TranslationSource.TextTranslation)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.ListBox("CsAvailable", Model.CsAvailable, new { style = "width: 314px; height: 100px" })
+                            
+                        </td>
+                        <td>
+                            <input type="button" value="&gt;" id="addCs" class="btn" /><br />
+                            <input type="button" value="&lt;" id="removeCs" class="btn" />
+                        </td>
+                        <td>
+                            @Html.ListBox("CsSelected", Model.CsSelected, new { style = "width: 314px; height: 100px" })
+                        </td>
+                    </tr>
+                </table>
             </td>
         </tr>
         <tr>
@@ -188,25 +199,36 @@
                 &nbsp; &nbsp;@Translation.Get("Användaren kan administrera beställningar", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
-
         <tr>
-            <td></td>
             <td>
-                @Translation.Get("Tillgängliga beställningstyper", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
-                @Translation.Get("Användaren har rättighet till", Enums.TranslationSource.TextTranslation)
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                @Html.ListBox("OTsAvailable", Model.OTsAvailable, new { style = "width: 460px; height: 100px" })
-                <input type="button" value="&lt;" id="removeOTs" class="btn" />
-                <input type="button" value="&gt;" id="addOTs" class="btn" />
-            </td>
-            <td>
-                @Html.ListBox("OTsSelected", Model.OTsSelected, new { style = "width: 460px; height: 100px" })
+                <table>
+                    <tr>
+                        <td>
+                            @Translation.Get("Tillgängliga beställningstyper", Enums.TranslationSource.TextTranslation)
+                        </td>
+                        <td>
+                
+                        </td>
+                        <td>
+                            @Translation.Get("Användaren har rättighet till", Enums.TranslationSource.TextTranslation)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.ListBox("OTsAvailable", Model.OTsAvailable, new { style = "width: 314px; height: 100px" })
+                            
+                        </td>
+                        <td>
+                            <input type="button" value="&gt;" id="addOTs" class="btn" /><br />
+                            <input type="button" value="&lt;" id="removeOTs" class="btn" />
+                        </td>
+                        <td>
+                            @Html.ListBox("OTsSelected", Model.OTsSelected, new { style = "width: 314px; height: 100px" })
+                        </td>
+                    </tr>
+                </table>
             </td>
         </tr>
         <tr>
@@ -214,21 +236,32 @@
                 @Translation.Get("Beställning konto", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
-                @Translation.Get("Tillgängliga kontobehörigheter", Enums.TranslationSource.TextTranslation)
-            </td>
-            <td>
-                @Translation.Get("Användaren har rättighet till", Enums.TranslationSource.TextTranslation)
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                @Html.ListBox("AAsAvailable", Model.AAsAvailable, new { style = "width: 460px; height: 100px" })
-                <input type="button" value="&lt;" id="removeAAs" class="btn" />
-                <input type="button" value="&gt;" id="addAAs" class="btn" />
-            </td>
-            <td>
-                @Html.ListBox("AAsSelected", Model.AAsSelected, new { style = "width: 460px; height: 100px" })
+                <table>
+                    <tr>
+                        <td>
+                            @Translation.Get("Tillgängliga kontobehörigheter", Enums.TranslationSource.TextTranslation)
+                        </td>
+                        <td>
+                
+                        </td>
+                        <td>
+                            @Translation.Get("Användaren har rättighet till", Enums.TranslationSource.TextTranslation)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.ListBox("AAsAvailable", Model.AAsAvailable, new { style = "width: 314px; height: 100px" })
+                            
+                        </td>
+                        <td>
+                            <input type="button" value="&gt;" id="addAAs" class="btn" /><br />
+                            <input type="button" value="&lt;" id="removeAAs" class="btn" />
+                        </td>
+                        <td>
+                            @Html.ListBox("AAsSelected", Model.AAsSelected, new { style = "width: 314px; height: 100px" })
+                        </td>
+                    </tr>
+                </table>
             </td>
         </tr>
         <tr>

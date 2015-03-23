@@ -92,13 +92,22 @@
             </tr>
             <tr>
                 <td></td>
-                <td>
-                    @Html.ListBox("UsAvailable", Model.UsAvailable, new { style = "width: 303px; height: 350px" })
-                    <input type="button" value="&lt;" class="btn" id="removeUs" />
-                    <input type="button" value="&gt;" class="btn" id="addUs" />
-                </td>
-                <td>
-                    @Html.ListBox("UsSelected", Model.UsSelected, new { style = "width: 300px; height: 350px" })
+                <td colspan="2">
+                    <table>
+                        <tr>
+                            <td>
+                                @Html.ListBox("UsAvailable", Model.UsAvailable, new { style = "width: 314px; height: 350px" })
+                            </td>
+                            <td>
+                                <input type="button" value="&gt;" class="btn" id="addUs" /><br />
+                                <input type="button" value="&lt;" class="btn" id="removeUs" />
+                            </td>
+                            <td>
+                                @Html.ListBox("UsSelected", Model.UsSelected, new { style = "width: 314px; height: 350px" })
+                            </td>
+                        </tr>
+                    </table>
+                    
                 </td>
             </tr>
             <tr>

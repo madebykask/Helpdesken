@@ -1661,14 +1661,38 @@ table th.thpointer {
 }
 
 .table-cases {
-    
-    table-layout:fixed;
+    table-layout:fixed !important;
+    width:100%;
 }
 
-.table-cases th, .table-cases td {
-    white-space: nowrap;
+.table-cases.smalltext {
+    font-size:12px;
+}
+.table-cases.smallertext {
+    font-size:11px;
+}
+
+.table-cases th {
+    /*white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
+    text-overflow: ellipsis;*/
+    overflow-wrap:break-word;
+    line-height:13px;
+}
+.table-cases td {
+    overflow-wrap:break-word;
+    line-height:13px;
+}
+
+.table-cases td select, .table-cases th select, .table-cases td input[type="text"], .table-cases th input[type="text"] {
+    max-width:90%;
+}
+
+.table-cases th.colwide {
+    width:20%;
+}
+.table-cases th.colnarrow {
+    width:5%;
 }
 
 
@@ -2164,6 +2188,41 @@ h4
 .icon-green {background-image:url("../img/glyphicons-halflings-green.png")}
 .icon-yellow {background-image:url("../img/glyphicons-halflings-yellow.png")}
 .icon-dh {background-image:url("../img/glyphicons-halflings-dh.png")}
+
+[class^="dh-icon-"],
+[class*=" dh-icon-"] {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-top: 1px;
+  *margin-right: .3em;
+  line-height: 14px;
+  vertical-align: text-top;
+  background-image: url("../img/glyphicons-dh.png");
+  background-position: 14px 14px;
+  background-repeat: no-repeat;
+}
+.dh-icon-textfield {
+    background-position: 0 0;
+}
+.dh-icon-textarea {
+    background-position: -24px 0;
+}
+.dh-icon-select {
+    background-position: -48px 0;
+}
+.dh-icon-checkbox {
+    background-position: -72px 0;
+}
+.dh-icon-calendar {
+    background-position: -96px 0;
+}
+.dh-icon-numericfield {
+    background-position: -120px 0;
+}
+.dh-icon-attachment {
+    background-position: -144px 0;
+}
 
 /*********************SWITCHES FOR CHECKBOX*******************************************/
 

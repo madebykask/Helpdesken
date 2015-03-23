@@ -10,33 +10,41 @@
         <div class="tab-content" id="labelList">
             <div class="tab-pane tab-pane-border active" id="fragment1">
                 <div class="container">
-                    <strong>@Translation.Get("Inställning av de fält som ska visas på ärendeinformationen", Enums.TranslationSource.TextTranslation)</strong>
+                    <strong>@Translation.Get("Inställning av de fält som ska visas på ärendeinformationen", Enums.TranslationSource.TextTranslation)</strong><br />
+                    <i class="dh-icon-textfield"></i> @Translation.Get("Textfält", Enums.TranslationSource.TextTranslation)<br />
+                    <i class="dh-icon-textarea"></i> @Translation.Get("Textfält - större", Enums.TranslationSource.TextTranslation)<br />
+                    <i class="dh-icon-select"></i> @Translation.Get("Valruta - dropdown", Enums.TranslationSource.TextTranslation)<br />
+                    <i class="dh-icon-calendar"></i> @Translation.Get("Datumfält", Enums.TranslationSource.TextTranslation)<br />
+                    <i class="dh-icon-numericfield"></i> @Translation.Get("Numeriskt fält", Enums.TranslationSource.TextTranslation)<br />
+                    <i class="dh-icon-checkbox"></i> @Translation.Get("Checkbox", Enums.TranslationSource.TextTranslation)<br />
+                    <i class="dh-icon-attachment"></i> @Translation.Get("Bifoga fil", Enums.TranslationSource.TextTranslation)<br />
+                    --- @Translation.Get("Automatisk hämtning", Enums.TranslationSource.TextTranslation)<br />
                     <input type="hidden" id="customerId" name="customerId" value="@Model.Customer.Id" />
-                    <table class="table table-striped table-bordered table-hover" style="width: 1200px">
+                    <table class="table table-striped table-bordered table-hover table-cases">
                         <thead>
                             <tr>
-                                <th style="width: 5px">&nbsp;
+                                <th style="width:16px">&nbsp;
                                 </th>
-                                <th style="width: 150px">
+                                <th>
                                     @Translation.Get("Fält", Enums.TranslationSource.TextTranslation)
                                 </th>
-                                <th style="width: 50px">
+                                <th>
                                     @Translation.Get("Visa", Enums.TranslationSource.TextTranslation)
                                 </th>
-                                <th style="width: 150px">
+                                <th>
                                     @Translation.Get("Visa på självservice", Enums.TranslationSource.TextTranslation)
                                 </th>
-                                <th style="width: 300px">
+                                <th>
                                     @Translation.Get("Rubrik", Enums.TranslationSource.TextTranslation)
                                     @Html.DropDownListFor(model => model.Language.Id, Model.Languages, new { style = "width: auto;", id = "LanguageId", onchange = "changeLabelList(this.options[this.selectedIndex].value);" })
                                 </th>
-                                <th style="width: 50px">
+                                <th>
                                     @Translation.Get("Obligatorisk", Enums.TranslationSource.TextTranslation)
                                 </th>
-                                <th style="width: 50px">
+                                <th>
                                     @Translation.Get("Storlek", Enums.TranslationSource.TextTranslation)
                                 </th>
-                                <th style="width: 250px">
+                                <th>
                                     @Translation.Get("Skapa din egen hjälptext till fältet", Enums.TranslationSource.TextTranslation)
                                 </th>
                             </tr>
@@ -47,7 +55,7 @@
                             </th>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-textfield"></i>
                             </td>
                             <td>
                                 @Translation.Get("Användar ID", Enums.TranslationSource.TextTranslation)
@@ -79,7 +87,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-textfield"></i>
                             </td>
                             <td>
                                 @Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation)
@@ -112,7 +120,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-textfield"></i>
                             </td>
                             <td>
                                 @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)
@@ -145,7 +153,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-textfield"></i>
                             </td>
                             <td>
                                 @Translation.Get("Telefon", Enums.TranslationSource.TextTranslation)
@@ -178,7 +186,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-textfield"></i>
                             </td>
                             <td>
                                 @Translation.Get("Mobil", Enums.TranslationSource.TextTranslation)
@@ -211,7 +219,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-select"></i>
                             </td>
                             <td>
                                 @Translation.Get("Kund", Enums.TranslationSource.TextTranslation)
@@ -244,7 +252,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-select"></i>
                             </td>
                             <td>
                                 @Translation.Get("Område", Enums.TranslationSource.TextTranslation)
@@ -277,7 +285,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-select"></i>
                             </td>
                             <td>
                                 @Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation)
@@ -310,7 +318,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-select"></i>
                             </td>
                             <td>
                                 @Translation.Get("Organisationsenhet")
@@ -343,7 +351,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-textfield"></i>
                             </td>
                             <td>
                                 @Translation.Get("Placering", Enums.TranslationSource.TextTranslation)
@@ -376,7 +384,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-textfield"></i>
                             </td>
                             <td>
                                 @Translation.Get("Ansvarskod", Enums.TranslationSource.TextTranslation)
@@ -414,7 +422,7 @@
                             </th>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-textfield"></i>
                             </td>
                             <td>
                                 @Translation.Get("PC Nummer", Enums.TranslationSource.TextTranslation)
@@ -448,7 +456,7 @@
                             
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-textfield"></i>
                             </td>
                             <td>
                                 @Translation.Get("Datortyp", Enums.TranslationSource.TextTranslation)
@@ -481,7 +489,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-textfield"></i>
                             </td>
                             <td>
                                 @Translation.Get("Placering", Enums.TranslationSource.TextTranslation)
@@ -519,7 +527,7 @@
                             </th>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td>---
                             </td>
                             <td>
                                 @Translation.Get("Ärende", Enums.TranslationSource.TextTranslation)
@@ -552,7 +560,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td>---
                             </td>
                             <td>
                                 @Translation.Get("Registreringsdatum", Enums.TranslationSource.TextTranslation)
@@ -585,7 +593,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td>---
                             </td>
                             <td>
                                 @Translation.Get("Ändringsdatum", Enums.TranslationSource.TextTranslation)
@@ -618,7 +626,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td>---
                             </td>
                             <td>
                                 @Translation.Get("Registrerad av", Enums.TranslationSource.TextTranslation)
@@ -651,7 +659,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-select"></i>
                             </td>
                             <td>
                                 @Translation.Get("Ärendetyp", Enums.TranslationSource.TextTranslation)
@@ -684,7 +692,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-select"></i>
                             </td>
                             <td>
                                 @Translation.Get("Produktområde", Enums.TranslationSource.TextTranslation)
@@ -717,7 +725,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-select"></i>
                             </td>
                             <td>
                                 @Translation.Get("System", Enums.TranslationSource.TextTranslation)
@@ -750,7 +758,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-select"></i>
                             </td>
                             <td>
                                 @Translation.Get("Brådskandegrad", Enums.TranslationSource.TextTranslation)
@@ -783,7 +791,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-select"></i>
                             </td>
                             <td>
                                 @Translation.Get("Påverkan", Enums.TranslationSource.TextTranslation)
@@ -816,7 +824,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-select"></i>
                             </td>
                             <td>
                                 @Translation.Get("Kategori", Enums.TranslationSource.TextTranslation)
@@ -849,7 +857,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-select"></i>
                             </td>
                             <td>
                                 @Translation.Get("Leverantör", Enums.TranslationSource.TextTranslation)
@@ -882,7 +890,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-textfield"></i>
                             </td>
                             <td>
                                 @Translation.Get("Fakturanummer", Enums.TranslationSource.TextTranslation)
@@ -915,7 +923,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-textfield"></i>
                             </td>
                             <td>
                                 @Translation.Get("Referensnummer", Enums.TranslationSource.TextTranslation)
@@ -948,7 +956,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-textfield"></i>
                             </td>
                             <td>
                                 @Translation.Get("Rubrik", Enums.TranslationSource.TextTranslation)
@@ -981,7 +989,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-textarea"></i>
                             </td>
                             <td>
                                 @Translation.Get("Beskrivning", Enums.TranslationSource.TextTranslation)
@@ -1015,7 +1023,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-textfield"></i>
                             </td>
                             <td>
                                 @Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)
@@ -1048,7 +1056,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-checkbox"></i>
                             </td>
                             <td>
                                 @Translation.Get("Telefonkontakt", Enums.TranslationSource.TextTranslation)
@@ -1081,7 +1089,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-checkbox"></i>
                             </td>
                             <td>
                                 @Translation.Get("SMS", Enums.TranslationSource.TextTranslation)
@@ -1114,7 +1122,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-calendar"></i>
                             </td>
                             <td>
                                 @Translation.Get("Överenskommet datum", Enums.TranslationSource.TextTranslation)
@@ -1147,7 +1155,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-textfield"></i>
                             </td>
                             <td>
                                 @Translation.Get("Anträffbar", Enums.TranslationSource.TextTranslation)
@@ -1180,7 +1188,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-numericfield"></i> <i class="dh-icon-select"></i>
                             </td>
                             <td>
                                 @Translation.Get("Kostnad", Enums.TranslationSource.TextTranslation)
@@ -1213,7 +1221,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-attachment"></i>
                             </td>
                             <td>
                                 @Translation.Get("Bifogad fil", Enums.TranslationSource.TextTranslation)
@@ -1251,7 +1259,7 @@
                             </th>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-select"></i>
                             </td>
                             <td>
                                 @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
@@ -1284,7 +1292,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-select"></i>
                             </td>
                             <td>
                                 @Translation.Get("Ansvarig", Enums.TranslationSource.TextTranslation)
@@ -1317,7 +1325,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-select"></i>
                             </td>
                             <td>
                                 @Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation)
@@ -1350,7 +1358,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-select"></i>
                             </td>
                             <td>
                                 @Translation.Get("Prioritet", Enums.TranslationSource.TextTranslation)
@@ -1383,7 +1391,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-select"></i>
                             </td>
                             <td>
                                 @Translation.Get("Status", Enums.TranslationSource.TextTranslation)
@@ -1416,7 +1424,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-select"></i>
                             </td>
                             <td>
                                 @Translation.Get("Understatus", Enums.TranslationSource.TextTranslation)
@@ -1449,7 +1457,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-calendar"></i>
                             </td>
                             <td>
                                 @Translation.Get("Planerad åtgärdsdatum", Enums.TranslationSource.TextTranslation)
@@ -1482,7 +1490,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-calendar"></i>
                             </td>
                             <td>
                                 @Translation.Get("Bevakningsdatum", Enums.TranslationSource.TextTranslation)
@@ -1515,7 +1523,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-checkbox"></i>
                             </td>
                             <td>
                                 @Translation.Get("Verifierad", Enums.TranslationSource.TextTranslation)
@@ -1548,7 +1556,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-textfield"></i>
                             </td>
                             <td>
                                 @Translation.Get("Verifierad beskrivning", Enums.TranslationSource.TextTranslation)
@@ -1581,7 +1589,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-select"></i>
                             </td>
                             <td>
                                 @Translation.Get("Lösningsgrad", Enums.TranslationSource.TextTranslation)
@@ -1614,7 +1622,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-textfield"></i>
                             </td>
                             <td>
                                 @Translation.Get("Rotorsak", Enums.TranslationSource.TextTranslation)
@@ -1652,7 +1660,7 @@
                             </th>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-textarea"></i>
                             </td>
                             <td>
                                 @Translation.Get("Intern notering", Enums.TranslationSource.TextTranslation)
@@ -1685,7 +1693,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-textarea"></i>
                             </td>
                             <td>
                                 @Translation.Get("Extern notering", Enums.TranslationSource.TextTranslation)
@@ -1718,7 +1726,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-checkbox"></i>
                             </td>
                             <td>
                                 @Translation.Get("Debitering", Enums.TranslationSource.TextTranslation)
@@ -1751,7 +1759,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-attachment"></i>
                             </td>
                             <td>
                                 @Translation.Get("Bifogad fil", Enums.TranslationSource.TextTranslation)
@@ -1784,7 +1792,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-textarea"></i>
                             </td>
                             <td>
                                 @Translation.Get("Avslutsbeskrivning", Enums.TranslationSource.TextTranslation)
@@ -1817,7 +1825,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-calendar"></i>
                             </td>
                             <td>
                                 @Translation.Get("Avslutsdatum", Enums.TranslationSource.TextTranslation)
@@ -1850,7 +1858,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>&nbsp;
+                            <td><i class="dh-icon-select"></i>
                             </td>
                             <td>
                                 @Translation.Get("Avslutsorsak")

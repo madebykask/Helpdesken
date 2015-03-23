@@ -3,7 +3,11 @@
     <div class="tab-content">
         <div class="tab-pane tab-pane-border active" id="fragment-1">                                   
             <h4>@Translation.Get("Filter", Enums.TranslationSource.TextTranslation)  @Translation.Get("Ärendeöversikt", Enums.TranslationSource.TextTranslation) </h4>    
-            <div id="colsetting_result" class="row">                
+            <div id="colsetting_result" class="row">
+                <div class="span100">
+                    Teckensnittsstorlek i tabell (ju mindre desto mer information kan visas på skärmen).<br />
+                    <select><option></option></select>
+                </div>                
                 <div class="span5">
                      @Html.HiddenFor(m=> Model.CustomerId)                
                      @Html.HiddenFor(m=> Model.UserId)

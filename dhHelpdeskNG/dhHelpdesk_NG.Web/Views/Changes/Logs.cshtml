@@ -1,21 +1,21 @@
 ﻿
 @model DH.Helpdesk.Web.Models.Changes.LogsModel
-
-<table class="table table-striped table-bordered table-hover">
+<div class="container">
+<table class="table table-striped table-bordered table-hover table-cases">
     <thead>
         <tr>
-            <td>
+            <th>
                 @Translation.Get("Datum och tid")
                @* @Html.LabelFor(m => m.Logs.FirstOrDefault().DateAndTime)*@
-            </td>
-            <td>
+            </th>
+            <th>
                 @Translation.Get("Registrerad av")
                 @*@Html.LabelFor(m => m.Logs.FirstOrDefault().RegisteredBy)*@
-            </td>
-            <td>
+            </th>
+            <th>
                 @Html.LabelFor(m => m.Logs.FirstOrDefault().Text)
-            </td>
-            <td></td>
+            </th>
+            <th>&nbsp;</th>
         </tr>
     </thead>
     <tbody>
@@ -41,3 +41,4 @@
         }
     </tbody>
 </table>
+</div>
