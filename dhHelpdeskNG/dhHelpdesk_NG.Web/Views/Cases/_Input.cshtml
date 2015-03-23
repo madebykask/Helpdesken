@@ -209,11 +209,11 @@
                                                 <td class="span4">
                                                     @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Persons_Phone, CaseSolutionFields.PersonsPhone))
                                                     {
-                                                        @Html.TextBoxFor(model => model.case_.PersonsPhone, new { maxlength = "30" })
+                                                        @Html.TextBoxFor(model => model.case_.PersonsPhone, new { maxlength = "40" })
                                                     }
                                                     else
                                                     {
-                                                       @Html.TextBoxFor(model => model.case_.PersonsPhone, new { maxlength = "30", @readonly = "readonly" })
+                                                       @Html.TextBoxFor(model => model.case_.PersonsPhone, new { maxlength = "40", @readonly = "readonly" })
                                                     }
                                                 </td>
                                             </tr>
@@ -811,11 +811,11 @@
                                         <td colspan="2">
                                             @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Miscellaneous, CaseSolutionFields.Miscellaneous))
                                             {
-                                                @Html.TextAreaFor(model => model.case_.Miscellaneous)
+                                                @Html.TextAreaFor(model => model.case_.Miscellaneous, new { maxlength = "1000" })
                                             }
                                             else
                                             {
-                                                @Html.TextAreaFor(model => model.case_.Miscellaneous, new { @readonly = true })
+                                                @Html.TextAreaFor(model => model.case_.Miscellaneous, new { maxlength = "1000", @readonly = true })
                                             }
                                         </td>
                                     </tr>

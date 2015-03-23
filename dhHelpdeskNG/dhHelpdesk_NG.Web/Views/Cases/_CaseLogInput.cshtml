@@ -172,11 +172,11 @@
                      }
                     else
                     {
-                        @Html.TextAreaFor(model => model.case_.FinishingDescription, new { @readonly = true })
+                        @Html.TextAreaFor(model => model.case_.FinishingDescription, new { maxlength = "200", @readonly = true })
                     }
                 </td>
                 <td>
-                    @Html.TextAreaFor(model => model.case_.FinishingDescription)
+                    @Html.TextAreaFor(model => model.case_.FinishingDescription, new { maxlength = "200" })
                 </td>
             </tr>
             <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ClosingReason, CaseSolutionFields.FinishingCause)">
