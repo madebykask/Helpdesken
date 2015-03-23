@@ -2874,5 +2874,18 @@ If not exists (select * from tblTextTranslation where text_id = 1336 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1336, 2, 'Article number')
 GO
 
+
+-- 2015-03-23
+
+If not exists (select * from tbltext where id = 1337)
+	insert into tbltext (id, TextString) VALUES (1337, 'För att se över dessa ärenden, gå till')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1337 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1337, 2, 'To review cases please go to')
+GO
+
+
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

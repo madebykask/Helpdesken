@@ -159,62 +159,63 @@
                         </div>
                     </td>
                 </tr>
-             }
-            <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.FinishingDescription, CaseSolutionFields.FinishingDescription)">
-                <td>
-                     @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.FinishingDescription, CaseSolutionFields.FinishingDescription))
-                    {
-                        @CaseFieldCaption(GlobalEnums.TranslationCaseFields.FinishingDescription,"Avslutsbeskrivning")
-                        if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString()).Required == 1)
+             
+                <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.FinishingDescription, CaseSolutionFields.FinishingDescription)">
+                    <td>
+                         @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.FinishingDescription, CaseSolutionFields.FinishingDescription))
                         {
-                            <span class="mandatorystar">*</span>
+                            @CaseFieldCaption(GlobalEnums.TranslationCaseFields.FinishingDescription,"Avslutsbeskrivning")
+                            if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString()).Required == 1)
+                            {
+                                <span class="mandatorystar">*</span>
+                            }
+                         }
+                        else
+                        {
+                            @Html.TextAreaFor(model => model.case_.FinishingDescription, new { maxlength = "200", @readonly = true })
                         }
-                     }
-                    else
-                    {
-                        @Html.TextAreaFor(model => model.case_.FinishingDescription, new { maxlength = "200", @readonly = true })
-                    }
-                </td>
-                <td>
-                    @Html.TextAreaFor(model => model.case_.FinishingDescription, new { maxlength = "200" })
-                </td>
-            </tr>
-            <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ClosingReason, CaseSolutionFields.FinishingCause)">
-                <td>
-                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ClosingReason,"Avslutsorsak")
-                </td>
-                <td>
-                    <div id="divFinishingType" class="btn-group">
-                        @{
-                            string disabled = Model.GetDisabledString(GlobalEnums.TranslationCaseFields.ClosingReason, CaseSolutionFields.FinishingCause);
+                    </td>
+                    <td>
+                        @Html.TextAreaFor(model => model.case_.FinishingDescription, new { maxlength = "200" })
+                    </td>
+                </tr>
+                <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ClosingReason, CaseSolutionFields.FinishingCause)">
+                    <td>
+                        @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ClosingReason,"Avslutsorsak")
+                    </td>
+                    <td>
+                        <div id="divFinishingType" class="btn-group">
+                            @{
+                                string disabled = Model.GetDisabledString(GlobalEnums.TranslationCaseFields.ClosingReason, CaseSolutionFields.FinishingCause);
+                            }
+                            <div class="btn @disabled" id="divBreadcrumbs_FinishingType">@Translation.Get("--")</div>
+                            <button class="btn dropdown-toggle" data-toggle="dropdown" @disabled>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropup">
+                                <li><a href="#">@Translation.Get("--")</a></li>
+                                @Html.FinishingCauseDropdownButtonString(Model.finishingCauses)
+                            </ul>
+                            @Html.HiddenFor(model => model.CaseLog.FinishingType)
+                        </div>
+                    </td>
+                </tr>
+                <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.FinishingDate, CaseSolutionFields.FinishingDate)">
+                    <td>
+                        @CaseFieldCaption(GlobalEnums.TranslationCaseFields.FinishingDate,"Avslutsdatum")
+                    </td>
+                    <td>
+                        @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.FinishingDate, CaseSolutionFields.FinishingDate))
+                        {
+                            @Html.EditorFor(m => m.CaseLog.FinishingDate, "DatePicker", new { id = "divCaseLog_FinishingDate" })
                         }
-                        <div class="btn @disabled" id="divBreadcrumbs_FinishingType">@Translation.Get("--")</div>
-                        <button class="btn dropdown-toggle" data-toggle="dropdown" @disabled>
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu dropup">
-                            <li><a href="#">@Translation.Get("--")</a></li>
-                            @Html.FinishingCauseDropdownButtonString(Model.finishingCauses)
-                        </ul>
-                        @Html.HiddenFor(model => model.CaseLog.FinishingType)
-                    </div>
-                </td>
-            </tr>
-            <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.FinishingDate, CaseSolutionFields.FinishingDate)">
-                <td>
-                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.FinishingDate,"Avslutsdatum")
-                </td>
-                <td>
-                    @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.FinishingDate, CaseSolutionFields.FinishingDate))
-                    {
-                        @Html.EditorFor(m => m.CaseLog.FinishingDate, "DatePicker", new { id = "divCaseLog_FinishingDate" })
-                    }
-                    else
-                    {
-                        @Html.EditorFor(m => m.case_.FinishingDate, "DateReadOnly")
-                    }
-                </td>
-            </tr>
+                        else
+                        {
+                            @Html.EditorFor(m => m.case_.FinishingDate, "DateReadOnly")
+                        }
+                    </td>
+                </tr>
+                 }
         </table>
     </div>
 </div>
