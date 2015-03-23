@@ -3,7 +3,7 @@
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
-            <li class="active"><a href="#fragment-1">@Translation.Get("CausingPart", Enums.TranslationSource.CaseTranslation, Model.Customer.Id) - @Model.Customer.Name</a></li>
+            <li class="active"><a href="#fragment-1">@Translation.Get("Rotorsak") - @Model.Customer.Name</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment1">
@@ -22,7 +22,7 @@
                             <table class="tableform">
                                 <tr>
                                     <td class="span3">
-                                        @Translation.Get("CausingPart", Enums.TranslationSource.CaseTranslation, Model.Customer.Id)
+                                        @Translation.Get("Rotorsak")
                                     </td>
                                     <td class="span9">
                                         @Html.TextBoxFor(model => model.CausingPart.Name, new { maxlength = "50" })
@@ -56,13 +56,13 @@
                     </div>
                     @if (Model.CausingPart.Children != null && Model.CausingPart.Children.Any())
                     {
-                        <h4>@Translation.Get("CausingPart", Enums.TranslationSource.CaseTranslation, Model.Customer.Id)</h4>
+                        <h4>@Translation.Get("Rotorsak")</h4>
                         <div class="container">
                             <table class="table table-striped table-bordered table-hover">
                                 <thead>
                                     <tr>
                                         <th>
-                                            @Translation.Get("CausingPart", Enums.TranslationSource.CaseTranslation, Model.Customer.Id)
+                                            @Translation.Get("Rotorsak")
                                         </th>
                                         <th>
                                             @Translation.Get("Aktiv")
