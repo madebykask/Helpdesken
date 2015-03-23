@@ -74,7 +74,10 @@ function unsetSearchFilter() {
 
 function search() {
     var searchStr = $('#txtFreeTextSearch').val();
-    if (searchStr.length > 0) {
+    if (searchStr.length > 0 && searchStr[0] === "#") {
+        /// if looking by case number - set case state filter to "All"
+        $('#lstfilterCaseProgress').val(-1);
+        /// and reset search filter
         unsetSearchFilter();
     }
     $.post('/Cases/Search/', $("#frmCaseSearch").serialize(), function (result) {
