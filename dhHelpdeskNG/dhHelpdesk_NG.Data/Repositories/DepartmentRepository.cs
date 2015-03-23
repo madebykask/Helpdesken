@@ -123,7 +123,7 @@
                                                                (d.Region_Id == null || (d.Region != null && d.Region.IsActive != 0)));                
             if (regionId.HasValue)
             {
-                return query.Where(it => it.Region_Id == regionId.Value);
+                return query.Where(it => it.Region_Id == regionId.Value).OrderBy(d=> d.DepartmentName);
             }
 
             return query.OrderBy(d=> d.DepartmentName);
