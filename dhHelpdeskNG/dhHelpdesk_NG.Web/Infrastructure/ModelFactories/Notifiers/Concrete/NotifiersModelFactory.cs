@@ -53,21 +53,28 @@
             if (settings.Department.ShowInNotifiers)
             {
                 var regionItems = searchRegions.Select(r => new DropDownItem(r.Name, r.Value)).ToList();
-                var departmentItems = searchDepartments.Select(d => new DropDownItem(d.Name, d.Value)).ToList();
-                var organizationUnitItems = searchOrganizationUnit.Select(d => new DropDownItem(d.Name, d.Value)).ToList();
+                var departmentItems = searchDepartments.Select(d => new DropDownItem(d.Name, d.Value)).ToList();                
 
                 var regionSelectedValue = filters.RegionId.HasValue ? filters.RegionId.ToString() : null;
                 var departmentSelectedValue = filters.DepartmentId.HasValue ? filters.DepartmentId.ToString() : null;
-                var organizationUnitSelectedValue = filters.OrganizationUnitId.HasValue ? filters.OrganizationUnitId.ToString() : null;
-
+                
                 var regionContent = new DropDownContent(regionItems, regionSelectedValue);
                 region = new SearchDropDownModel(true, regionContent);
 
                 var departmentContent = new DropDownContent(departmentItems, departmentSelectedValue);
                 department = new SearchDropDownModel(true, departmentContent);
 
-                var organizationUnitContent = new DropDownContent(organizationUnitItems, organizationUnitSelectedValue);
-                organizationUnit = new SearchDropDownModel(true, organizationUnitContent);
+                if (settings.OrganizationUnit.ShowInNotifiers)
+                {
+                    var organizationUnitItems = searchOrganizationUnit.Select(d => new DropDownItem(d.Name, d.Value)).ToList();
+                    var organizationUnitSelectedValue = filters.OrganizationUnitId.HasValue ? filters.OrganizationUnitId.ToString() : null;
+                    var organizationUnitContent = new DropDownContent(organizationUnitItems, organizationUnitSelectedValue);
+                    organizationUnit = new SearchDropDownModel(true, organizationUnitContent);
+                }
+                else
+                {
+                    organizationUnit = new SearchDropDownModel(false);
+                }
             }
             else
             {
