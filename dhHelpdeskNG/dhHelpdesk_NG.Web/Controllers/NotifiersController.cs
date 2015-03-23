@@ -204,6 +204,11 @@
                 searchDomains = this.domainRepository.FindByCustomerId(currentCustomerId);
             }
 
+            if (settings.Region.ShowInNotifiers)
+            {
+                searchRegions = this.regionRepository.FindByCustomerId(currentCustomerId);
+            }
+
             if (settings.Department.ShowInNotifiers)
             {
                 searchRegions = this.regionRepository.FindByCustomerId(currentCustomerId);
@@ -599,6 +604,11 @@
             if (displaySettings.Domain.ShowInNotifiers)
             {
                 searchDomains = this.domainRepository.FindByCustomerId(currentCustomerId);
+            }
+
+            if (displaySettings.Region.ShowInNotifiers)
+            {
+                searchRegions = this.regionRepository.FindByCustomerId(currentCustomerId);
             }
 
             if (displaySettings.Department.ShowInNotifiers)
