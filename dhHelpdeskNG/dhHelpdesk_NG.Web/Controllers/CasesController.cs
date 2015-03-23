@@ -2474,8 +2474,12 @@ namespace DH.Helpdesk.Web.Controllers
             };
 
             allColumns.Add(fixValue2);
-            colSettingModel.CaseFieldSettingLanguages = allColumns;
-
+            var caseFieldSettingsWithNoLabel = allColumns.Where(x => x.Label == null);
+            var caseFieldSettingsWithLabel = allColumns.Where(x => x.Label != null)
+                                                                    .OrderBy(x => x.Label)
+                                                                    .ThenBy(x => x.Name);
+            var CompleteListofCaseFieldSettings = caseFieldSettingsWithLabel.Concat(caseFieldSettingsWithNoLabel);
+            colSettingModel.CaseFieldSettingLanguages = CompleteListofCaseFieldSettings.ToList();
 
             IList<CaseSettings> userColumns = new List<CaseSettings>();
             userColumns = _caseSettingService.GetCaseSettingsWithUser(customerId, userId, SessionFacade.CurrentUser.UserGroupId);
