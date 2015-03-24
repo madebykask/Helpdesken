@@ -182,32 +182,32 @@
                 switch ((Module)module.Module_Id)
                 {
                     case Module.BulletinBoard:
-                        model.BulletinBoardOverviews = this.bulletinBoardService.GetBulletinBoardOverviews(customersIds, module.NumberOfRows, true);
+                        model.BulletinBoardOverviews = this.bulletinBoardService.GetBulletinBoardOverviews(customerIdsAll, module.NumberOfRows, true);
                         break;
                     case Module.Calendar:
-                        model.CalendarOverviews = this.calendarService.GetCalendarOverviews(customersIds, module.NumberOfRows, true, true);
+                        model.CalendarOverviews = this.calendarService.GetCalendarOverviews(customerIdsAll, module.NumberOfRows, true, true);
                         break;
                     case Module.Customers:
                         var customerCases = this.caseService.GetCustomersCases(customersIds, this.workContext.User.UserId);                        
                         model.CustomersInfo = this.caseModelFactory.CreateCustomerCases(customerCases);
                         break;
                     case Module.DailyReport:
-                        model.DailyReportOverviews = this.dailyReportService.GetDailyReportOverviews(customersIds, module.NumberOfRows);
+                        model.DailyReportOverviews = this.dailyReportService.GetDailyReportOverviews(customerIdsAll, module.NumberOfRows);
                         break;
                     case Module.Documents:
-                        model.DocumentOverviews = this.documentService.GetDocumentOverviews(customersIds, module.NumberOfRows, true);
+                        model.DocumentOverviews = this.documentService.GetDocumentOverviews(customerIdsAll, module.NumberOfRows, true);
                         break;
                     case Module.Faq:
-                        model.FaqOverviews = this.faqService.GetFaqByCustomers(customersIds, module.NumberOfRows, true);
+                        model.FaqOverviews = this.faqService.GetFaqByCustomers(customerIdsAll, module.NumberOfRows, true);
                         break;
                     case Module.OperationalLog:
-                        model.OperationLogOverviews = this.operationLogService.GetOperationLogOverviews(customersIds, module.NumberOfRows, true);
+                        model.OperationLogOverviews = this.operationLogService.GetOperationLogOverviews(customerIdsAll, module.NumberOfRows, true);
                         break;
                     case Module.Problems:
-                        model.ProblemOverviews = this.problemService.GetProblemOverviews(customersIds, module.NumberOfRows, true);
+                        model.ProblemOverviews = this.problemService.GetProblemOverviews(customerIdsAll, module.NumberOfRows, true);
                         break;
                     case Module.QuickLinks:
-                        model.LinksInfo = this.linkModelFactory.GetLinksViewModel(this.linkService.GetLinkOverviews(customersIds, module.NumberOfRows, true));
+                        model.LinksInfo = this.linkModelFactory.GetLinksViewModel(this.linkService.GetLinkOverviews(customerIdsAll, module.NumberOfRows, true));
                         break;
                     case Module.Statistics:
                         model.StatisticsOverviews = this.statisticsService.GetStatistics(customerIdsAll, this.workContext.User.UserId);
