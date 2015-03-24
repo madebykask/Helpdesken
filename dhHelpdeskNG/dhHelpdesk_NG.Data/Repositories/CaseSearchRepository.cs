@@ -220,8 +220,7 @@
                                                 bool translateField;
                                                 bool treeTranslation;
                                                 int baseId = 0;
-                                                //if (c.Line == 1)
-                                                //{
+                                              
                                                 var value = GetDatareaderValue(
                                                                                 dr,
                                                                                 i,
@@ -254,11 +253,6 @@
                                                 {
                                                     sortOrder = value;
                                                 }
-                                                //}
-                                                //else
-                                                //{
-                                                //    toolTip += GetDatareaderValue(dr, i, c.Name, customerSetting, pal, timeLeft, caseTypes, out translateField, out dateValue, out fieldType) + Environment.NewLine;
-                                                //}
                                             }
 
                                             break; 

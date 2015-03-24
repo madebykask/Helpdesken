@@ -41,6 +41,8 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Web.Models.Shared;
     using System.Web.Script.Serialization;
 
+    using WebGrease.Css.Extensions;
+
     public class CasesController : BaseController
     {
         #region Private variables
@@ -2478,8 +2480,20 @@ namespace DH.Helpdesk.Web.Controllers
             var caseFieldSettingsWithLabel = allColumns.Where(x => x.Label != null)
                                                                     .OrderBy(x => x.Label)
                                                                     .ThenBy(x => x.Name);
-            var CompleteListofCaseFieldSettings = caseFieldSettingsWithLabel.Concat(caseFieldSettingsWithNoLabel);
-            colSettingModel.CaseFieldSettingLanguages = CompleteListofCaseFieldSettings.ToList();
+
+            //// translating and sorting in alpabet order
+            var fieldsCollection = caseFieldSettingsWithLabel.Concat(caseFieldSettingsWithNoLabel).ToList();
+            foreach (var field in fieldsCollection)
+            {
+                field.Label = string.IsNullOrEmpty(field.Label)
+                                   ? Translation.Get(
+                                       field.Name,
+                                       Enums.TranslationSource.CaseTranslation,
+                                       SessionFacade.CurrentCustomer.Id)
+                                   : field.Label;
+            }
+
+            colSettingModel.CaseFieldSettingLanguages = fieldsCollection.OrderBy(it => it.Label).ToList();
 
             IList<CaseSettings> userColumns = new List<CaseSettings>();
             userColumns = _caseSettingService.GetCaseSettingsWithUser(customerId, userId, SessionFacade.CurrentUser.UserGroupId);
@@ -2497,13 +2511,6 @@ namespace DH.Helpdesk.Web.Controllers
                 Value = "1",
                 Selected = false
             });
-            //li.Add(new SelectListItem()
-            //{
-            //    Text = Translation.Get("Utökad info", Enums.TranslationSource.TextTranslation),
-            //    Value = "2",
-            //    Selected = false
-            //});
-
             colSettingModel.LineList = li;
 
             return colSettingModel;
