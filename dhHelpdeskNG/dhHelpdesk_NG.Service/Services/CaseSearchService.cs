@@ -142,6 +142,10 @@
                 {
                     filteredCaseRemainigTimes = remainingTime.CaseRemainingTimes.Where(t => t.RemainingTime < 0);
                 }
+                else if (f.CaseRemainingTimeHoursFilter && f.CaseRemainingTimeMaxFilter.HasValue)
+                {
+                    filteredCaseRemainigTimes = remainingTime.CaseRemainingTimes.Where(t => t.RemainingTime == f.CaseRemainingTimeFilter.Value);
+                }
                 else if (f.CaseRemainingTimeFilter == int.MaxValue && f.CaseRemainingTimeMaxFilter.HasValue)
                 {
                     filteredCaseRemainigTimes = remainingTime.CaseRemainingTimes.Where(t => t.RemainingTime.IsHoursGreaterDays(f.CaseRemainingTimeMaxFilter.Value));

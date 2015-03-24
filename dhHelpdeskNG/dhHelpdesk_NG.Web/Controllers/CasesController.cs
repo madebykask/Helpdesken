@@ -1093,6 +1093,12 @@ namespace DH.Helpdesk.Web.Controllers
                     f.CaseRemainingTimeMaxFilter = caseRemainingTimeMaxFilter;
                 }
 
+                bool caseRemainingTimeHoursFilter;
+                if (bool.TryParse(frm.ReturnFormValue("CaseRemainingTimeHours"), out caseRemainingTimeHoursFilter))
+                {
+                    f.CaseRemainingTimeHoursFilter = caseRemainingTimeHoursFilter;
+                }
+
                 var sm = this.GetCaseSearchModel(f.CustomerId, f.UserId);
                 sm.caseSearchFilter = f;
                 sm.Search.SortBy = frm.ReturnFormValue("hidSortBy");

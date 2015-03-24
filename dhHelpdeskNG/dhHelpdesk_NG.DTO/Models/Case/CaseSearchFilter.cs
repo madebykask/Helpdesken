@@ -54,6 +54,8 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
         public int? CaseRemainingTimeMaxFilter { get; set; }
 
+        public bool CaseRemainingTimeHoursFilter { get; set; }
+
         public CaseSearchFilter Copy(CaseSearchFilter o)
         {
             var r = new CaseSearchFilter();

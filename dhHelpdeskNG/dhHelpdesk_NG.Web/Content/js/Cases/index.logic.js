@@ -224,15 +224,19 @@ $(function () {
                     var $this = $(this);
                     var remainingTime = $('<input name="CaseRemainingTime" type="hidden" />');
                     var remainingTimeMax = $('<input name="CaseRemainingTimeMax" type="hidden" />');
+                    var remainingTimeHours = $('<input name="CaseRemainingTimeHours" type="hidden" />');
                     remainingTime.val($this.attr('data-remaining-time'));
                     remainingTimeMax.val($this.attr('data-remaining-time-max'));
+                    remainingTimeHours.val($this.attr('data-remaining-time-hours'));
 
                     searchForm.append(remainingTime);
                     searchForm.append(remainingTimeMax);
+                    searchForm.append(remainingTimeHours);
                     $this.after(loader);
                     search();
                     remainingTime.remove();
                     remainingTimeMax.remove();
+                    remainingTimeHours.remove();
                 });
             });
         }
