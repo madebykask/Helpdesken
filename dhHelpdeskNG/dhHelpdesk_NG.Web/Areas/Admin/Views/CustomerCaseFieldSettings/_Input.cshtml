@@ -13,7 +13,7 @@
                     <strong>@Translation.Get("Inställning av de fält som ska visas på ärendeinformationen", Enums.TranslationSource.TextTranslation)</strong><br />
                     <i class="dh-icon-textfield"></i> @Translation.Get("Textfält", Enums.TranslationSource.TextTranslation)<br />
                     <i class="dh-icon-textarea"></i> @Translation.Get("Textfält - större", Enums.TranslationSource.TextTranslation)<br />
-                    <i class="dh-icon-select"></i> @Translation.Get("Valruta - dropdown", Enums.TranslationSource.TextTranslation)<br />
+                    <i class="dh-icon-select"></i> @Translation.Get("Vallista - dropdown", Enums.TranslationSource.TextTranslation)<br />
                     <i class="dh-icon-calendar"></i> @Translation.Get("Datumfält", Enums.TranslationSource.TextTranslation)<br />
                     <i class="dh-icon-numericfield"></i> @Translation.Get("Numeriskt fält", Enums.TranslationSource.TextTranslation)<br />
                     <i class="dh-icon-checkbox"></i> @Translation.Get("Checkbox", Enums.TranslationSource.TextTranslation)<br />
@@ -28,20 +28,20 @@
                                 <th>
                                     @Translation.Get("Fält", Enums.TranslationSource.TextTranslation)
                                 </th>
-                                <th>
+                                <th style="width:5%">
                                     @Translation.Get("Visa", Enums.TranslationSource.TextTranslation)
                                 </th>
-                                <th>
+                                <th style="width:8%">
                                     @Translation.Get("Visa på självservice", Enums.TranslationSource.TextTranslation)
                                 </th>
                                 <th>
                                     @Translation.Get("Rubrik", Enums.TranslationSource.TextTranslation)
                                     @Html.DropDownListFor(model => model.Language.Id, Model.Languages, new { style = "width: auto;", id = "LanguageId", onchange = "changeLabelList(this.options[this.selectedIndex].value);" })
                                 </th>
-                                <th>
+                                <th style="width:8%">
                                     @Translation.Get("Obligatorisk", Enums.TranslationSource.TextTranslation)
                                 </th>
-                                <th>
+                                <th style="width:7%">
                                     @Translation.Get("Storlek", Enums.TranslationSource.TextTranslation)
                                 </th>
                                 <th>
