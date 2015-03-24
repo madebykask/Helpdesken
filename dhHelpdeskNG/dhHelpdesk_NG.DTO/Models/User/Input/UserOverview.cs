@@ -38,7 +38,8 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             string phone,
             string email,
             ICollection<UserWorkingGroup> wgs,
-            int startPage)
+            int startPage,
+            bool showSolutionTime)
         {
             this.StartPage = startPage;
             this.Id = id;
@@ -72,6 +73,7 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             this.Phone = phone;
             this.Email = email;
             this.UserWorkingGroups = wgs;
+            this.ShowSolutionTime = showSolutionTime;
         }
 
         [IsId]
@@ -139,5 +141,7 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
         public ICollection<UserWorkingGroup> UserWorkingGroups { get; set; }
 
         public int StartPage { get; private set; }
+
+        public bool ShowSolutionTime { get; set; }
     }
 }

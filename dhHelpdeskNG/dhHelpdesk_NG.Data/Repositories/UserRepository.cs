@@ -14,6 +14,7 @@ namespace DH.Helpdesk.Dal.Repositories
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.BusinessData.Models.User.Input;
+    using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Common.Extensions.String;
     using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Dal.Infrastructure;
@@ -376,7 +377,8 @@ namespace DH.Helpdesk.Dal.Repositories
                         x.Phone,
                         x.Email,
                         x.UserWorkingGroups,
-                        x.StartPage)).SingleOrDefault();
+                        x.StartPage,
+                        x.ShowSolutionTime.ToBool())).SingleOrDefault();
             return u;
         }
     }

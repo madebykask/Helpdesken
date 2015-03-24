@@ -1,0 +1,11 @@
+﻿@model DH.Helpdesk.Web.Models.Profile.ProfileInputViewModel
+
+<table class="tableform">
+    <tr>
+        <td>
+            <input type="checkbox" name="User.ShowSolutionTime" @(Model.User.ShowSolutionTime == 1 ? "checked=checked" : "") value="1"/>
+            <input type="hidden" name="User.ShowSolutionTime" value="0" />
+            @Translation.Get("Antal ärenden med återstående åtgärdstid")
+        </td>
+    </tr>    
+</table>

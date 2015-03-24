@@ -120,7 +120,8 @@
                 user.Phone,
                 user.Email,
                 user.UserWorkingGroups,
-                user.StartPage);
+                user.StartPage,
+                user.ShowSolutionTime.ToBool());
         }
 
         public static List<CustomerSettings> MapToUserCustomersSettings(

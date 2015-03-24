@@ -11,6 +11,7 @@
             this.HasKey(x => new { x.User_Id, x.WorkingGroup_Id });
 
             this.Property(x => x.UserRole).IsRequired();
+            this.Property(x => x.IsDefault).IsRequired();
 
             this.ToTable("tblUserWorkingGroup");
         }

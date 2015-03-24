@@ -2504,6 +2504,7 @@
     <Content Include="Areas\Admin\Views\SelfServiceSetting\EditRegMessage.cshtml" />
     <Content Include="Areas\Reports\Views\Report\Options\LeadtimeActiveCases.cshtml" />
     <Content Include="Areas\Reports\Views\Report\Reports\LeadtimeActiveCases.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\Layout.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />
@@ -2854,6 +2855,7 @@
     <Content Include="Views\Cases\RelatedCases.cshtml" />
     <Content Include="Views\Cases\CaseRemainingTime.cshtml" />
     <Content Include="Views\Notifiers\OrganizationUnitDropDown.cshtml" />
+    <Content Include="Views\Profile\CaseOverview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

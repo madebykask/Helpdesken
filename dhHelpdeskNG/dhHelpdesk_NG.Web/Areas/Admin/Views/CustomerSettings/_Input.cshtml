@@ -364,7 +364,7 @@
                         <div class="span15">
                             <table >
                                 <tr>
-                                    <td style="width:220px">
+                                    <td style="width:100px">
                                         @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td >
@@ -373,17 +373,6 @@
                                         <br />
                                         <input type="radio" name="Setting.CaseWorkingGroupSource" @(Model.Setting.CaseWorkingGroupSource == 1 ? "checked='checked'" : "") id="Customer_Setting_CaseWorkingGroupSource2" value="1" />
                                         @Translation.Get("visa alltid värde", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        @Translation.Get("Antal ärenden med återstående åtgärdstid")
-                                    </td>
-                                    <td>
-                                        <label class="checkbox">
-                                            <input type="checkbox" name="Setting.ShowCaseOverviewInfo" @(Model.Setting.ShowCaseOverviewInfo == 1 ? "checked=checked" : "") value="1"/>
-                                            <input type="hidden" name="Setting.ShowCaseOverviewInfo" value="0" />
-                                        </label>
                                     </td>
                                 </tr>
                             </table>
