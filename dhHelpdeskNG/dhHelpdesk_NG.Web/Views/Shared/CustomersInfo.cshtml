@@ -19,7 +19,7 @@
                                 @customer.CustomerName
                             </a>
                             <div class="pull-right">
-                            <a href="@Url.Action("index", "cases", new { customerId = customer.CustomerId, customFilter = "MyCases" })" 
+                            <a href="@Url.Action("index", "cases", new { customerId = customer.CustomerId, clearFilters = true, customFilter = "MyCases" })" 
                                     class="start-tile label my" 
                                     rel="tooltip" 
                                     data-toggle="tooltip" 
@@ -27,19 +27,19 @@
                                 @customer.CasesMy                                           
                             </a>
                                                             
-                            <a href="@Url.Action("index", "cases", new { customerId = customer.CustomerId, customFilter = "HoldCases" })" 
+                            <a href="@Url.Action("index", "cases", new { customerId = customer.CustomerId, clearFilters = true, customFilter = "HoldCases" })" 
                                     class="start-tile label inrest" 
                                     rel="tooltip" 
                                     title="@Translation.Get("Vilande ärenden")">
                                 @customer.CasesInRest
                             </a>
-                            <a href="@Url.Action("index", "cases", new { customerId = customer.CustomerId, customFilter = "UnreadCases" })" 
+                            <a href="@Url.Action("index", "cases", new { customerId = customer.CustomerId, clearFilters = true, customFilter = "UnreadCases" })" 
                                     rel="tooltip" 
                                     class="start-tile label closed" 
                                     title="@Translation.Get("Olästa ärenden")">
                                 @customer.CasesUnreaded                                          
                             </a>
-                            <a href="@Url.Action("index", "cases", new { customerId = customer.CustomerId, customFilter = "InProcessCases" })" 
+                            <a href="@Url.Action("index", "cases", new { customerId = customer.CustomerId, clearFilters = true, customFilter = "InProcessCases" })" 
                                     rel="tooltip" 
                                     class="start-tile label unread" 
                                     title="@Translation.Get("Pågående ärenden")">

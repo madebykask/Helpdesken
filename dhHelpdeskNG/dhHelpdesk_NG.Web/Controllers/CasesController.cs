@@ -216,7 +216,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         #region Public Methods and Operators
 
-        public ActionResult Index(int? customerId, bool? clearFilters = false, CasesCustomFilter customFilter = CasesCustomFilter.None)
+        public ActionResult Index(int? customerId, bool? clearFilters = false, CasesCustomFilter customFilter = CasesCustomFilter.None, bool? DefaultSearch = false)
         {                        
             if (clearFilters == true)
             {
@@ -325,43 +325,50 @@ namespace DH.Helpdesk.Web.Controllers
                     {
                         fd.ClosingReasons = this._finishingCauseService.GetFinishingCauses(cusId);
                     }
-
+                    
                     var sm = this.GetCaseSearchModel(cusId, userId);
-
+                    if (!(customFilter == CasesCustomFilter.None))
+                    {
+                        sm = this.GetEmptySearchModel(cusId, userId);
+                    }
+                    
                     // hämta parent path för productArea 
                     sm.caseSearchFilter.ParantPath_ProductArea = ParentPathDefaultValue;
                     sm.caseSearchFilter.ParentPathClosingReason = ParentPathDefaultValue;
                     sm.caseSearchFilter.ParantPath_CaseType = ParentPathDefaultValue;
-                    if (!string.IsNullOrWhiteSpace(sm.caseSearchFilter.ProductArea))
-                    {
-                        if (sm.caseSearchFilter.ProductArea != "0")
-                        {
-                            var p = this._productAreaService.GetProductArea(sm.caseSearchFilter.ProductArea.convertStringToInt());
-                            if (p != null)
-                                sm.caseSearchFilter.ParantPath_ProductArea = p.getProductAreaParentPath();
-                        }
-                    }
 
-                    if (!string.IsNullOrWhiteSpace(sm.caseSearchFilter.CaseClosingReasonFilter))
+                    if (customFilter == CasesCustomFilter.None)
                     {
-                        if (sm.caseSearchFilter.CaseClosingReasonFilter != "0")
+                        if (!string.IsNullOrWhiteSpace(sm.caseSearchFilter.ProductArea))
                         {
-                            var fc = this._finishingCauseService.GetFinishingCause(sm.caseSearchFilter.CaseClosingReasonFilter.convertStringToInt());
-                            if (fc != null)
+                            if (sm.caseSearchFilter.ProductArea != "0")
                             {
-                                sm.caseSearchFilter.ParentPathClosingReason = fc.GetFinishingCauseParentPath();
+                                var p = this._productAreaService.GetProductArea(sm.caseSearchFilter.ProductArea.convertStringToInt());
+                                if (p != null)
+                                    sm.caseSearchFilter.ParantPath_ProductArea = p.getProductAreaParentPath();
                             }
                         }
-                    }
 
-                    // hämta parent path för casetype
-                    if ((sm.caseSearchFilter.CaseType > 0))
-                    {
-                        var c = this._caseTypeService.GetCaseType(sm.caseSearchFilter.CaseType);
-                        if (c != null)
-                            sm.caseSearchFilter.ParantPath_CaseType = c.getCaseTypeParentPath();
+                        if (!string.IsNullOrWhiteSpace(sm.caseSearchFilter.CaseClosingReasonFilter))
+                        {
+                            if (sm.caseSearchFilter.CaseClosingReasonFilter != "0")
+                            {
+                                var fc = this._finishingCauseService.GetFinishingCause(sm.caseSearchFilter.CaseClosingReasonFilter.convertStringToInt());
+                                if (fc != null)
+                                {
+                                    sm.caseSearchFilter.ParentPathClosingReason = fc.GetFinishingCauseParentPath();
+                                }
+                            }
+                        }
+
+                        // hämta parent path för casetype
+                        if ((sm.caseSearchFilter.CaseType > 0))
+                        {
+                            var c = this._caseTypeService.GetCaseType(sm.caseSearchFilter.CaseType);
+                            if (c != null)
+                                sm.caseSearchFilter.ParantPath_CaseType = c.getCaseTypeParentPath();
+                        }
                     }
-                    
                     switch (customFilter)
                     {
                         case CasesCustomFilter.MyCases:
@@ -372,9 +379,9 @@ namespace DH.Helpdesk.Web.Controllers
                             sm.caseSearchFilter.CaseProgress = "4";
                             sm.caseSearchFilter.UserPerformer = string.Empty;                            
                             break;
-                        case CasesCustomFilter.HoldCases:                            
+                        case CasesCustomFilter.HoldCases:
                             sm.caseSearchFilter.CaseProgress = "3";
-                            sm.caseSearchFilter.UserPerformer = string.Empty;                            
+                            sm.caseSearchFilter.UserPerformer = string.Empty;
                             break;
                         case CasesCustomFilter.InProcessCases:                            
                             sm.caseSearchFilter.CaseProgress = "2";
@@ -1677,7 +1684,7 @@ namespace DH.Helpdesk.Web.Controllers
                 if (SessionFacade.CurrentCaseSearch.caseSearchFilter.CustomerId != customerId)
                     newSearch = true;
 
-            if (newSearch)
+            if (newSearch || (!(SessionFacade.CurrentCaseSearch.caseSearchFilter.CustomFilter == CasesCustomFilter.None)))
             {
                 ISearch s = new Search();
                 var f = new CaseSearchFilter();
@@ -1719,6 +1726,50 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 m = SessionFacade.CurrentCaseSearch;
             }
+
+            return m;
+        }
+
+        private CaseSearchModel GetEmptySearchModel(int customerId, int userId)
+        {
+            CaseSearchModel m;
+            
+                ISearch s = new Search();
+                var f = new CaseSearchFilter();
+                m = new CaseSearchModel();
+                var cu = this._customerUserService.GetCustomerSettings(customerId, userId);
+                if (cu == null)
+                {
+                    throw new Exception("It looks that something has happened with your session. Refresh page to fix it.");
+                }
+
+                f.CustomerId = customerId;
+                f.UserId = userId;
+                f.CaseType = 0;
+                f.Category = null;
+                f.Priority = null;
+                f.ProductArea = null;
+                f.Region = null;
+                f.StateSecondary = null;
+                f.Status = null;
+                f.User = null;
+                f.UserPerformer = null;
+                f.UserResponsible = null;
+                f.WorkingGroup = null;
+                //f.CaseProgress = "2";
+                f.CaseRegistrationDateStartFilter = cu.CaseRegistrationDateStartFilter;
+                f.CaseRegistrationDateEndFilter = cu.CaseRegistrationDateEndFilter;
+                f.CaseWatchDateStartFilter = cu.CaseWatchDateStartFilter;
+                f.CaseWatchDateEndFilter = cu.CaseWatchDateEndFilter;
+                f.CaseClosingDateStartFilter = cu.CaseClosingDateStartFilter;
+                f.CaseClosingDateEndFilter = cu.CaseClosingDateEndFilter;
+                f.CaseClosingReasonFilter = null;
+                s.SortBy = "CaseNumber";
+                s.Ascending = true;
+
+                m.caseSearchFilter = f;
+                m.Search = s;
+            
 
             return m;
         }
