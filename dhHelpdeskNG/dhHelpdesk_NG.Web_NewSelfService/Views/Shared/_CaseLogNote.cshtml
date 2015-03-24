@@ -2,7 +2,7 @@
 
 @if (Model.CaseLogs != null)
 {
-    foreach (var logItem in Model.CaseLogs)
+    foreach (var logItem in Model.CaseLogs.Where(l=> ! string.IsNullOrEmpty(l.Text_Internal.Trim())))
     {                            
         <div class="@(!string.IsNullOrEmpty(logItem.RegUser) ? "com-list-hd" : "com-list-com")" >
             <div class="list-arrow"></div>

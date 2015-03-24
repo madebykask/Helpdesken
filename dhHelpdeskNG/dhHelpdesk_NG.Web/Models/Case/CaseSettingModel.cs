@@ -6,6 +6,9 @@ namespace DH.Helpdesk.Web.Models.Case
 {
     using System;
     using System.Collections.Generic;
+    using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Web.Enums;
+    using System.Reflection;
 
     public class CaseColumnsSettingsModel
     {
@@ -20,7 +23,31 @@ namespace DH.Helpdesk.Web.Models.Case
         public IList<CaseFieldSettingsWithLanguage> CaseFieldSettingLanguages { get; set; }
 
         public IList<CaseFieldSetting> CaseFieldSettings { get; set; }
-        
+
+        public IList<SelectListItem> GetColStyles(string selectedStyle)
+        {
+            if (string.IsNullOrEmpty(selectedStyle))
+                selectedStyle = ColumnStyle.Normal.Key;
+            var ret = new List<SelectListItem>();            
+
+            ColumnStyle instance = new ColumnStyle();
+            Type type = typeof(ColumnStyle); 
+	        FieldInfo[] fields = type.GetFields(); 
+            Dictionary<string, object> properties = new Dictionary<string, object>();
+            foreach (var field in fields) 
+            {
+                properties.Add(field.Name, field.GetValue(instance));
+            }	                            
+
+            foreach (var prop in properties)
+            {                
+                KeyValuePair<string, string> objVal = (KeyValuePair<string, string>) prop.Value;
+                ret.Add(new SelectListItem { Value = objVal.Key, Text = Translation.Get(objVal.Value), Selected = (objVal.Key.ToLower() == selectedStyle.ToLower()) });   
+            }
+
+            return ret;            
+        }
+            
     }
 
     public sealed class CaseSettingModel

@@ -7,6 +7,12 @@ BEGIN
 END
 GO 
 
+IF COL_LENGTH('dbo.tblCaseSettings','ColStyle') IS NULL
+BEGIN	 
+	ALTER TABLE [dbo].[tblCaseSettings]
+	ADD [ColStyle] nvarchar(50) NULL 
+END
+GO 
 -- 2013-03-24 Aleksei Matveev
 -- Add 'ShowSolutionTime' into 'tblUsers'
 IF COL_LENGTH('dbo.tblUsers','ShowSolutionTime') IS NULL

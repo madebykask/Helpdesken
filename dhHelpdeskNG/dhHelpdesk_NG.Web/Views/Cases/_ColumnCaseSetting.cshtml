@@ -1,35 +1,43 @@
-﻿@model DH.Helpdesk.Web.Models.Case.CaseColumnsSettingsModel
+﻿@using DH.Helpdesk.Web.Enums;
+@model DH.Helpdesk.Web.Models.Case.CaseColumnsSettingsModel
 <form id="frmColCaseSetting" name="frmColCaseSetting">
     <div class="tab-content">
         <div class="tab-pane tab-pane-border active" id="fragment-1">                                   
             <h4>@Translation.Get("Filter", Enums.TranslationSource.TextTranslation)  @Translation.Get("Ärendeöversikt", Enums.TranslationSource.TextTranslation) </h4>    
             <div id="colsetting_result" class="row">
+                <div class="span100">                    
+                    @Translation.Get("Teckensnittsstorlek i tabell (ju mindre desto mer information kan visas på skärmen).", Enums.TranslationSource.TextTranslation)<br />
+                    <select>
+                        <option>
+                            
+                        </option>
+                    </select>
+                </div>             
                 <div class="span100">
-                    Teckensnittsstorlek i tabell (ju mindre desto mer information kan visas på skärmen).<br />
-                    <select><option></option></select>
-                </div>                
+                    @Translation.Get("Välj den mest lämpliga bredden för de kolumner som du vill visa på ärendeöversikten (beroende på mängden information i varje kolumn).", Enums.TranslationSource.TextTranslation)
+                    <br />
+                    @Translation.Get("(Välj bred på högst 3 kolumner för bästa resultat).", Enums.TranslationSource.TextTranslation)                    
+                </div>       
                 <div class="span5">
                      @Html.HiddenFor(m=> Model.CustomerId)                
                      @Html.HiddenFor(m=> Model.UserId)
                     <table class="table table-striped table-bordered table-hover" id="customerCaseSum">
                         <thead>
-                            <tr>
-                                <th style="width:20px">                                        
-                                   
-                               </th>
+                            <tr>                                
                                 <th>
                                     @Translation.Get("Kolumn", Enums.TranslationSource.TextTranslation)
                                 </th>                                
-                                <th>&nbsp;
+                                <th>
+                                    @Translation.Get("Kolumnbredd", Enums.TranslationSource.TextTranslation)
+                                </th>
+                                <th>
+                                    &nbsp;
                                 </th>
                             </tr>
                         </thead>
                                                              
                         <tbody id="dataTable" >
-                            <tr class="rowAdding" id="0" >                                   
-                                    <td style="width:20px" >                                        
-                                   
-                                    </td>
+                            <tr class="rowAdding" id="0" >                                                                       
                                     <td>
                                         <input type="hidden" style="width: 80px;" name="colOrderValue" id="colOrderValue" value="99" />
                                         <input type="hidden" style="width: 80px;" name="minWidthValue" id="minWidthValue" value="100" />
@@ -44,6 +52,9 @@
                                                 }
                                         </select>
                                     </td>                                           
+                                    <td>
+                                        @Html.DropDownList("newColStyle", Model.GetColStyles(ColumnStyle.Normal.Key))
+                                    </td>
                                     <td>
                                         <input class="btn btn-success" type="button" value="@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)" id="AddRow" 
                                                onclick="addCaseSettingRow()" onmouseover="javascript:this.style.cursor='move'; javascript:this.style.cursor='pointer';"/>
@@ -60,9 +71,7 @@
                                         @if (Model.UserColumns != null)
                                         {
                                             var findCaption = false;
-                                            <td style="cursor:move">                                        
-                                   
-                                            </td>
+                                            
                                             <td style="cursor:move">
                                                 @Html.HiddenFor(model => uc.ColOrder)
                                                 @Html.HiddenFor(model => uc.MinWidth)                                                                                                
@@ -80,7 +89,10 @@
                                                     <label style="cursor:move" for="subCategoryName"> @Translation.Get(uc.Name, Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id) </label>
                                                 }                                                
                                             </td> 
-                                        }                                        
+                                        }   
+                                        <td>
+                                            @Html.DropDownList("colStyle", Model.GetColStyles(uc.ColStyle))
+                                        </td>                                     
                                         <td>
                                             @Html.HiddenFor(model => uc.Id)
                                             @Html.HiddenFor(model => uc.Name)
@@ -134,7 +146,7 @@
 
     function addCaseSettingRow() {                       
         $.post('/cases/AddCaseSettingColumn/' + '?customerId=' + '@Model.CustomerId.ToString()' + '&userId=' + '@Model.UserId.ToString()' + 
-            '&labellist=' + $("#labellist").val() + '&linelist=1' + //+ $("#linelist").val() +
+            '&labellist=' + $("#labellist").val() + '&linelist=1&colStyle=' + $("#newColStyle").val() +
             '&minWidthValue=' + $("#minWidthValue").val() + '&colOrderValue=' + $("#colOrderValue").val() + '&userGroup=4 ' , function (result) {
                 $("#colsetting_result").html(result);
            });

@@ -189,7 +189,7 @@
         {
             pCaseLogs = helper.GetCaseLogs(currentCaseId);
         }
-
+        
         var appType = System.Configuration.ConfigurationManager.AppSettings["CurrentApplication"].ToString();
         
         var hasError = ViewBag.HasError;
@@ -208,7 +208,7 @@
     {
         <div class="siteCom">
             <div class="mapButton">
-                 @if ((pCaseLogs != null) && (pCaseLogs.CaseLogs != null) && (pCaseLogs.CaseLogs.Count > 0) && (string.IsNullOrEmpty(pCaseLogs.CaseLogs[0].RegUser)))
+                 @if ((pCaseLogs != null) && (pCaseLogs.CaseLogs != null) && (pCaseLogs.CaseLogs.Count > 0) && (string.IsNullOrEmpty(pCaseLogs.CaseLogs.Where(l => !string.IsNullOrEmpty(l.Text_Internal.Trim())).First().RegUser)))
                  {
                     <div class="mapText" title="@Translation.Get("Communicate", Enums.TranslationSource.TextTranslation)"><span class="glyphicon glyphicon-comment"></span><span class="glyphicon glyphicon-certificate newcom"></span></div>
                  }

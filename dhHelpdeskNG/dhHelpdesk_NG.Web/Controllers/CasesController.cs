@@ -1304,8 +1304,9 @@ namespace DH.Helpdesk.Web.Controllers
                 var updatedName = frm["uc.Name"].Split(',');
                 var updatedRow = frm["uc.Line"].Split(','); //frm.ReturnFormValue("rows").Split(',');
                 var updatedMinWith = frm["uc.MinWidth"].Split(',');
+                var updatedColStyle = frm["uc.ColStyle"].Split(',');
                 var updatedColOrder = frm["uc.ColOrder"].Split(',');
-                var updatedUserGroup = frm["uc.UserGroup"].Split(',');
+                var updatedUserGroup = frm["uc.UserGroup"].Split(',');                
 
                 IDictionary<string, string> errors = new Dictionary<string, string>();
                 DateTime nowTime = DateTime.Now;
@@ -1318,6 +1319,7 @@ namespace DH.Helpdesk.Web.Controllers
                     newColSetting.Name = updatedName[ii];
                     newColSetting.Line = int.Parse(updatedRow[ii]);
                     newColSetting.MinWidth = int.Parse(updatedMinWith[ii]);
+                    newColSetting.ColStyle = updatedColStyle[ii];
                     newColSetting.ColOrder = int.Parse(updatedColOrder[ii]);
                     newColSetting.UserGroup = int.Parse(updatedUserGroup[ii]);
                     newColSetting.ChangeTime = nowTime;
@@ -1329,7 +1331,9 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddCaseSettingColumn(int customerId, int userId, string labellist, int linelist, int minWidthValue, int colOrderValue, int userGroup)
+        public ActionResult AddCaseSettingColumn(int customerId, int userId, string labellist,
+                                                 int linelist, string colStyle, int minWidthValue,
+                                                 int colOrderValue, int userGroup)
         {
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
@@ -1344,8 +1348,9 @@ namespace DH.Helpdesk.Web.Controllers
             newCaseSetting.Name = labellist;
             newCaseSetting.Line = linelist;
             newCaseSetting.MinWidth = minWidthValue;
+            newCaseSetting.ColStyle = colStyle;
             newCaseSetting.ColOrder = colOrderValue;
-            newCaseSetting.UserGroup = userGroup;
+            newCaseSetting.UserGroup = userGroup;            
             newCaseSetting.RegTime = nowTime;
             newCaseSetting.ChangeTime = nowTime;
 

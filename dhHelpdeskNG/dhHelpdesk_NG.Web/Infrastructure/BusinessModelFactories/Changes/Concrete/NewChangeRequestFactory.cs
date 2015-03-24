@@ -56,7 +56,7 @@
             {
                 return;
             }
-
+            
             var contact = Contact.CreateNew(
                 model.Name.Value,
                 model.Phone.Value,
