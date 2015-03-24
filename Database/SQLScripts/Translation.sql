@@ -2886,6 +2886,149 @@ If not exists (select * from tblTextTranslation where text_id = 1337 and Languag
 GO
 
 
+--2015-03-24
 
+If not exists (select * from tbltext where id = 1338)
+	insert into tbltext (id, TextString) VALUES (1338, 'Välj den mest lämpliga bredden för de kolumner som du vill visa på ärendeöversikten (beroende på mängden information i varje kolumn).')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1338 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1338, 2, 'Select the most appropriate width for the columns you want to display in the case overview (depending on the amount of information in each).')
+GO
+
+If not exists (select * from tbltext where id = 1339)
+	insert into tbltext (id, TextString) VALUES (1339, '(Välj bred på högst 3 kolumner för bästa resultat).')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1339 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1339, 2, '(Select wide on maximum 3 columns for best results).')
+GO
+
+
+If not exists (select * from tbltext where id = 1340)
+	insert into tbltext (id, TextString) VALUES (1340, 'Kolumnbredd')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1340 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1340, 2, 'Column width')
+GO
+
+
+If not exists (select * from tbltext where id = 1341)
+	insert into tbltext (id, TextString) VALUES (1341, 'Normal')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1341 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1341, 2, 'Normal')
+GO
+
+If not exists (select * from tbltext where id = 1342)
+	insert into tbltext (id, TextString) VALUES (1342, 'Bred')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1342 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1342, 2, 'Wide')
+GO
+
+
+If not exists (select * from tbltext where id = 1343)
+	insert into tbltext (id, TextString) VALUES (1343, 'Smal')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1343 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1343, 2, 'Narrow')
+GO
+
+
+If not exists (select * from tbltext where id = 1344)
+	insert into tbltext (id, TextString) VALUES (1344, 'Teckensnittsstorlek i tabell (ju mindre desto mer information kan visas på skärmen).')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1344 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1344, 2, 'Font size in table (the smaller the more information can be displayed).')
+GO
+
+If not exists (select * from tbltext where id = 1345)
+	insert into tbltext (id, TextString) VALUES (1345, 'Mindre')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1345 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1345, 2, 'Small')
+GO
+
+
+If not exists (select * from tbltext where id = 1346)
+	insert into tbltext (id, TextString) VALUES (1346, 'Minst')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1346 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1346, 2, 'Smaller')
+GO
+
+
+If not exists (select * from tbltext where id = 1347)
+	insert into tbltext (id, TextString) VALUES (1347, 'Textfält')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1347 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1347, 2, 'Text field')
+GO
+
+If not exists (select * from tbltext where id = 1348)
+	insert into tbltext (id, TextString) VALUES (1348, 'Textfält – större')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1348 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1348, 2, 'Textarea')
+GO
+
+If not exists (select * from tbltext where id = 1349)
+	insert into tbltext (id, TextString) VALUES (1349, 'Valruta – dropdown')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1349 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1349, 2, 'Select box – dropdown')
+GO
+
+If not exists (select * from tbltext where id = 1350)
+	insert into tbltext (id, TextString) VALUES (1350, 'Datumfält')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1350 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1350, 2, 'Date field')
+GO
+
+If not exists (select * from tbltext where id = 1351)
+	insert into tbltext (id, TextString) VALUES (1351, 'Numeriskt fält')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1351 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1351, 2, 'Numeric field')
+GO
+
+
+If not exists (select * from tbltext where id = 1352)
+	insert into tbltext (id, TextString) VALUES (1352, 'Checkbox')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1352 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1352, 2, 'Checkbox')
+GO
+
+If not exists (select * from tbltext where id = 1353)
+	insert into tbltext (id, TextString) VALUES (1353, 'Bifoga fil')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1353 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1353, 2, 'Attache file')
+GO
+
+If not exists (select * from tbltext where id = 1354)
+	insert into tbltext (id, TextString) VALUES (1354, 'Automatisk hämtning')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1354 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1354, 2, 'Automatically filled in')
+GO
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

@@ -632,28 +632,31 @@
                         MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                         if (m != null)
                         {
-                            if (!cms.DontSendMailToNotifier && !dontSendMailToNotfier)
+                            if (!String.IsNullOrEmpty(m.Body) || !String.IsNullOrEmpty(m.Subject))
                             {
-                                if (_emailService.IsValidEmail(newCase.PersonsEmail))
+                                if (!cms.DontSendMailToNotifier && !dontSendMailToNotfier)
                                 {
-                                    var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(customEmailSender1));
-                                    _emailLogRepository.Add(el);
-                                    _emailLogRepository.Commit();
-                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(),1);
-                                   
-                                    _emailService.SendEmail(customEmailSender1, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);                                    
+                                    if (_emailService.IsValidEmail(newCase.PersonsEmail))
+                                    {
+                                        var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(customEmailSender1));
+                                        _emailLogRepository.Add(el);
+                                        _emailLogRepository.Commit();
+                                        fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 1);
+
+                                        _emailService.SendEmail(customEmailSender1, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                    }
                                 }
-                            }
-                            if (!string.IsNullOrWhiteSpace(cms.SendMailAboutNewCaseTo))
-                            {
-                                string[] to = cms.SendMailAboutNewCaseTo.Split(';');
-                                for (int i = 0; i < to.Length; i++)
+                                if (!string.IsNullOrWhiteSpace(cms.SendMailAboutNewCaseTo))
                                 {
-                                    var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(customEmailSender1));
-                                    _emailLogRepository.Add(el);
-                                    _emailLogRepository.Commit();
-                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(),2);
-                                    _emailService.SendEmail(customEmailSender1, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                    string[] to = cms.SendMailAboutNewCaseTo.Split(';');
+                                    for (int i = 0; i < to.Length; i++)
+                                    {
+                                        var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(customEmailSender1));
+                                        _emailLogRepository.Add(el);
+                                        _emailLogRepository.Commit();
+                                        fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 2);
+                                        _emailService.SendEmail(customEmailSender1, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                    }
                                 }
                             }
                         }
@@ -673,11 +676,14 @@
                                 MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                                 if (m != null)
                                 {
-                                    var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.Administrator.Email, _emailService.GetMailMessageId(helpdeskMailFromAdress));
-                                    _emailLogRepository.Add(el);
-                                    _emailLogRepository.Commit();
-                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(),3);
-                                    _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                    if (!String.IsNullOrEmpty(m.Body) || !String.IsNullOrEmpty(m.Subject))
+                                    {
+                                        var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.Administrator.Email, _emailService.GetMailMessageId(helpdeskMailFromAdress));
+                                        _emailLogRepository.Add(el);
+                                        _emailLogRepository.Commit();
+                                        fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 3);
+                                        _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                    }
                                 }
                             }
 
@@ -688,12 +694,15 @@
                                 MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                                 if (m != null)
                                 {
-                                    var smsTo = GetSmsRecipient(customerSetting, newCase.Administrator.CellPhone);
-                                    var el = new EmailLog(caseHistoryId, mailTemplateId, smsTo, _emailService.GetMailMessageId(helpdeskMailFromAdress));
-                                    _emailLogRepository.Add(el);
-                                    _emailLogRepository.Commit();
-                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(),4);
-                                    _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, GetSmsSubject(customerSetting), m.Body, fields, el.MessageId);
+                                    if (!String.IsNullOrEmpty(m.Body) || !String.IsNullOrEmpty(m.Subject))
+                                    {
+                                        var smsTo = GetSmsRecipient(customerSetting, newCase.Administrator.CellPhone);
+                                        var el = new EmailLog(caseHistoryId, mailTemplateId, smsTo, _emailService.GetMailMessageId(helpdeskMailFromAdress));
+                                        _emailLogRepository.Add(el);
+                                        _emailLogRepository.Commit();
+                                        fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 4);
+                                        _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, GetSmsSubject(customerSetting), m.Body, fields, el.MessageId);
+                                    }
                                 }
                             }
                         }
@@ -712,11 +721,14 @@
                                 MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                                 if (m != null)
                                 {
-                                    var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.Priority.EMailList, _emailService.GetMailMessageId(helpdeskMailFromAdress));
-                                    _emailLogRepository.Add(el);
-                                    _emailLogRepository.Commit();
-                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(),5);
-                                    _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                    if (!String.IsNullOrEmpty(m.Body) || !String.IsNullOrEmpty(m.Subject))
+                                    {
+                                        var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.Priority.EMailList, _emailService.GetMailMessageId(helpdeskMailFromAdress));
+                                        _emailLogRepository.Add(el);
+                                        _emailLogRepository.Commit();
+                                        fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 5);
+                                        _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                    }
                                 }
                             }
                         }
@@ -732,31 +744,34 @@
                             MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                             if (m != null)
                             {
-                                string wgEmails = string.Empty;
-
-                                if (newCase.Workinggroup.AllocateCaseMail == 1)
-                                    wgEmails = newCase.Workinggroup.EMail;
-                                else
+                                if (!String.IsNullOrEmpty(m.Body) || !String.IsNullOrEmpty(m.Subject))
                                 {
-                                    if (newCase.Workinggroup.UserWorkingGroups != null && newCase.Workinggroup.AllocateCaseMail == 1)
-                                        foreach (var ur in newCase.Workinggroup.UserWorkingGroups)  //TODO behöver vi kolla avdelning?                                
-                                        {
-                                            if (ur.UserRole == 2)
-                                                if (ur.User != null)
-                                                    if (ur.User.IsActive == 1 && ur.User.AllocateCaseMail == 1 && _emailService.IsValidEmail(ur.User.Email))
-                                                    {
-                                                        wgEmails = wgEmails + ur.User.Email + ";";
-                                                    }
-                                        }
-                                }
+                                    string wgEmails = string.Empty;
 
-                                if (!string.IsNullOrWhiteSpace(wgEmails))
-                                {
-                                    var el = new EmailLog(caseHistoryId, mailTemplateId, wgEmails, _emailService.GetMailMessageId(helpdeskMailFromAdress));
-                                    _emailLogRepository.Add(el);
-                                    _emailLogRepository.Commit();
-                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(),6);
-                                    _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                    if (newCase.Workinggroup.AllocateCaseMail == 1)
+                                        wgEmails = newCase.Workinggroup.EMail;
+                                    else
+                                    {
+                                        if (newCase.Workinggroup.UserWorkingGroups != null && newCase.Workinggroup.AllocateCaseMail == 1)
+                                            foreach (var ur in newCase.Workinggroup.UserWorkingGroups)  //TODO behöver vi kolla avdelning?                                
+                                            {
+                                                if (ur.UserRole == 2)
+                                                    if (ur.User != null)
+                                                        if (ur.User.IsActive == 1 && ur.User.AllocateCaseMail == 1 && _emailService.IsValidEmail(ur.User.Email))
+                                                        {
+                                                            wgEmails = wgEmails + ur.User.Email + ";";
+                                                        }
+                                            }
+                                    }
+
+                                    if (!string.IsNullOrWhiteSpace(wgEmails))
+                                    {
+                                        var el = new EmailLog(caseHistoryId, mailTemplateId, wgEmails, _emailService.GetMailMessageId(helpdeskMailFromAdress));
+                                        _emailLogRepository.Add(el);
+                                        _emailLogRepository.Commit();
+                                        fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 6);
+                                        _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                    }
                                 }
                             }
                         }
@@ -774,11 +789,14 @@
                                         MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                                         if (m != null)
                                         {
-                                            var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(helpdeskMailFromAdress));
-                                            _emailLogRepository.Add(el);
-                                            _emailLogRepository.Commit();
-                                            fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(),7);
-                                            _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                            if (!String.IsNullOrEmpty(m.Body) || !String.IsNullOrEmpty(m.Subject))
+                                            {
+                                                var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(helpdeskMailFromAdress));
+                                                _emailLogRepository.Add(el);
+                                                _emailLogRepository.Commit();
+                                                fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 7);
+                                                _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                            }
                                         }
                                     }
 
@@ -796,46 +814,49 @@
                     MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                     if (m != null)
                     {
-                        if (!string.IsNullOrWhiteSpace(newCase.Customer.CloseCaseEmailList))
+                        if (!String.IsNullOrEmpty(m.Body) || !String.IsNullOrEmpty(m.Subject))
                         {
-                            string[] to = newCase.Customer.CloseCaseEmailList.Split(';');
-                            for (int i = 0; i < to.Length; i++)
+                            if (!string.IsNullOrWhiteSpace(newCase.Customer.CloseCaseEmailList))
                             {
-                                if (_emailService.IsValidEmail(to[i]))  
+                                string[] to = newCase.Customer.CloseCaseEmailList.Split(';');
+                                for (int i = 0; i < to.Length; i++)
                                 {
-                                    var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(customEmailSender2));
-                                    _emailLogRepository.Add(el);
-                                    _emailLogRepository.Commit();
-                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(),8);
-                                    _emailService.SendEmail(customEmailSender2, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                    if (_emailService.IsValidEmail(to[i]))
+                                    {
+                                        var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(customEmailSender2));
+                                        _emailLogRepository.Add(el);
+                                        _emailLogRepository.Commit();
+                                        fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 8);
+                                        _emailService.SendEmail(customEmailSender2, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                    }
                                 }
                             }
-                        }
 
-                        if (!cms.DontSendMailToNotifier && !dontSendMailToNotfier)
-                            if (_emailService.IsValidEmail(newCase.PersonsEmail))
+                            if (!cms.DontSendMailToNotifier && !dontSendMailToNotfier)
+                                if (_emailService.IsValidEmail(newCase.PersonsEmail))
+                                {
+                                    var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(customEmailSender2));
+                                    _emailLogRepository.Add(el);
+                                    _emailLogRepository.Commit();
+                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 9);
+                                    _emailService.SendEmail(customEmailSender2, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                }
+
+                            // send sms
+                            if (newCase.SMS == 1 && !dontSendMailToNotfier && !string.IsNullOrWhiteSpace(newCase.PersonsCellphone))
                             {
-                                var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(customEmailSender2));
-                                _emailLogRepository.Add(el);
-                                _emailLogRepository.Commit();
-                                fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(),9);
-                                _emailService.SendEmail(customEmailSender2, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                int smsMailTemplateId = (int)GlobalEnums.MailTemplates.SmsClosedCase;
+                                MailTemplateLanguageEntity mt = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, smsMailTemplateId);
+                                if (mt != null)
+                                {
+                                    var smsTo = GetSmsRecipient(customerSetting, newCase.PersonsCellphone);
+                                    var el = new EmailLog(caseHistoryId, mailTemplateId, smsTo, _emailService.GetMailMessageId(helpdeskMailFromAdress));
+                                    _emailLogRepository.Add(el);
+                                    _emailLogRepository.Commit();
+                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 10);
+                                    _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, GetSmsSubject(customerSetting), mt.Body, fields, el.MessageId);
+                                }
                             }
-
-                        // send sms
-                        if (newCase.SMS == 1 &&  !dontSendMailToNotfier && !string.IsNullOrWhiteSpace(newCase.PersonsCellphone))
-                        {
-                            int smsMailTemplateId = (int)GlobalEnums.MailTemplates.SmsClosedCase;
-                            MailTemplateLanguageEntity mt = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, smsMailTemplateId);
-                            if (mt != null)
-                            {
-                                var smsTo = GetSmsRecipient(customerSetting, newCase.PersonsCellphone);
-                                var el = new EmailLog(caseHistoryId, mailTemplateId, smsTo, _emailService.GetMailMessageId(helpdeskMailFromAdress));
-                                _emailLogRepository.Add(el);
-                                _emailLogRepository.Commit();
-                                fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(),10);
-                                _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, GetSmsSubject(customerSetting), mt.Body, fields, el.MessageId);
-                            }                                
                         }
 
                     }
@@ -857,11 +878,14 @@
                             MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                             if (m != null)
                             {
-                                var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(customEmailSender3));
-                                _emailLogRepository.Add(el);
-                                _emailLogRepository.Commit();
-                                fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(),11);
-                                _emailService.SendEmail(customEmailSender3, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                if (!String.IsNullOrEmpty(m.Body) || !String.IsNullOrEmpty(m.Subject))
+                                {
+                                    var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(customEmailSender3));
+                                    _emailLogRepository.Add(el);
+                                    _emailLogRepository.Commit();
+                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 11);
+                                    _emailService.SendEmail(customEmailSender3, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                }
                             }
                         }
 
