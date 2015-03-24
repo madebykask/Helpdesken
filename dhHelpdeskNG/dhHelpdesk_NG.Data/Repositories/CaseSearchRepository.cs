@@ -126,9 +126,10 @@
                         var dr = cmd.ExecuteReader();
                         if (dr != null && dr.HasRows)
                         {
-                            var doCalcTimeLeft = displayLeftTime || calculateRemainingTime;
                             while (dr.Read())
                             {
+                                var doCalcTimeLeft = displayLeftTime || calculateRemainingTime;
+
                                 var row = new CaseSearchResult();  
                                 IList<Field> cols = new List<Field>();
                                 var toolTip = string.Empty;
