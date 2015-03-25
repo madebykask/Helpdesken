@@ -968,9 +968,6 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpGet]
         public ActionResult Files(string id)
         {
-            var thiscase = _caseService.GetCaseById(int.Parse(id));
-            ViewBag.CaseInactive = thiscase.FinishingDate.HasValue.ToString();
-
             //var files = this._caseFileService.GetCaseFiles(int.Parse(id));
             var files = GuidHelper.IsGuid(id)
                                 ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Cases)

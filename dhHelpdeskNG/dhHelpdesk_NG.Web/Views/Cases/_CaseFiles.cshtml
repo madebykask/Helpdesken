@@ -22,6 +22,9 @@
         <tbody>
             @{
     var i = 0;
+    var caseInactive = false;
+    caseInactive = (ViewData["CaseInactive"] != null? (bool) ViewData["CaseInactive"]:false);
+    
     foreach (var file in Model.Files)
     {
                 <tr data-field="caseFile" data-field-id="@Model.ObjectId" data-field-name="@file.FileName">
@@ -37,7 +40,7 @@
                     <td>
                         @if (SessionFacade.CurrentUser.DeleteAttachedFilePermission == 1)
                         {
-                            if (ViewBag.CaseInactive == "False")
+                            if (!caseInactive)
                             {
                                 <a id="@string.Format("delete_casefile_button_{0}", i)" class="btn bt-small" data-field="deleteFile" title="@Translation.Get("Ta bort")"><i class="icon-remove"></i></a> 
                             }
