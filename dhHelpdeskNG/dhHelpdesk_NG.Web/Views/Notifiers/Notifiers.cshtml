@@ -5,6 +5,7 @@
 @Scripts.Render("~/bundles/notifiers/notifiers")
 
 <script type="text/javascript">
+    
     var parameters = {};
     parameters.departmentDropDownUrl = '@Url.Action("DepartmentDropDown")';
 
@@ -19,3 +20,8 @@
 <div id="notifiers_grid">
     @Html.Partial("NotifiersGrid", Model.GridModel)
 </div>
+
+<script type="text/javascript">
+    $("#DepartmentErrorMessage").hide();
+    $("#OrganizationUnitErrorMessage").hide();
+</script>

@@ -11,6 +11,7 @@ var iframeOptions = {
     enablePublicMethods: true,                                          // Enable methods within iframe hosted page
     resizedCallback: function (messageData) {                           // Callback fn when resize is received     
     },
+    bodyMargin: '0 0 200px 0',
     messageCallback: function (messageData) {                           // Callback fn when message is received
         if (messageData.message === 'cancelCase') {
             var elem = $('#case-action-close');

@@ -11,7 +11,6 @@
     using DH.Helpdesk.Domain.Computers;
     using DH.Helpdesk.Web.Infrastructure.Session;
     using DH.Helpdesk.Web.Models;
-    using DH.Helpdesk.Web.Enums;
     using DH.Helpdesk.Common.Types;
 
     public static class SessionFacade

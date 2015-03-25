@@ -99,6 +99,17 @@ namespace DH.Helpdesk.Web.Controllers
             return this.Json(departments, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
+        public JsonResult GetDepartmentUsers(int? departmentId, int? workingGroupId)
+        {
+            var users = this.departmentService.GetDepartmentUsers(
+                                    this.workContext.Customer.CustomerId,
+                                    departmentId,
+                                    workingGroupId);
+
+            return this.Json(users, JsonRequestBehavior.AllowGet);
+        }
+
         /// <summary>
         /// The fill hierarchy list.
         /// </summary>

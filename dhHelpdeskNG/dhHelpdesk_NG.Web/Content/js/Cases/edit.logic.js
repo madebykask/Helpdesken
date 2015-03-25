@@ -25,6 +25,18 @@ $(function () {
     }
 
     dhHelpdesk.cases.utils = {
+        okText: '',
+        cancelText: '',
+        yesText: '',
+        noText: '',
+
+        init: function (okText, cancelText, yesText, noText) {
+            dhHelpdesk.cases.utils.okText = okText;
+            dhHelpdesk.cases.utils.cancelText = cancelText;
+            dhHelpdesk.cases.utils.yesText = yesText;
+            dhHelpdesk.cases.utils.noText = noText;
+        },
+
         showMessage: function (message, type) {
             $().toastmessage('showToast', {
                 text: dhHelpdesk.cases.utils.replaceAll(message, '|', '<br />'),
@@ -53,34 +65,154 @@ $(function () {
             return dhHelpdesk.cases.utils.replaceAll(prevstring, omit, place, string);
         },
 
-        refreshDepartments: function (caseEntity) {
+        refreshDepartments: function (caseEntity, keepOldValue) {
             var regions = caseEntity.getUser().getRegion().getElement();
             var departments = caseEntity.getUser().getDepartment().getElement();
             var administrators = caseEntity.getOther().getAdministrator().getElement();
             var departmentFilterFormat = caseEntity.getUser().getDepartmentFilterFormat().getElement();
 
             var selectedDepartment = departments.val();
-
             departments.prop('disabled', true);
             departments.empty();
             departments.append('<option />');
 
             $.getJSON(caseEntity.getGetDepartmentsUrl() + '?regionId=' + regions.val() +
-                                        '&administratorId=' + administrators.val() +
+                                        '&administratorId=' + administrators.val() + 
                                         '&departmentFilterFormat=' + departmentFilterFormat.val(), function (data) {
                                             for (var i = 0; i < data.length; i++) {
                                                 var item = data[i];
                                                 var option = $("<option value='" + item.Value + "'>" + item.Name + "</option>");
-                                                //Contact Majid about this 
-                                                //if (option.val() == selectedDepartment) { 
-                                                //    option.prop("selected", true);
-                                                //}
+                                                if (keepOldValue && option.val() == selectedDepartment) { 
+                                                    option.prop("selected", true);
+                                                }
                                                 departments.append(option);
                                             }
-                                            $('#case__Department_Id').change();
+
+                                            dhHelpdesk.cases.utils.refreshOus(caseEntity, keepOldValue);
                                         })
             .always(function () {
                 departments.prop('disabled', false);
+            });
+        },
+
+        refreshOus: function(caseEntity, keepOldValue) {
+            var customerId = caseEntity.getCustomerId().getElement().val();
+            var departments = caseEntity.getUser().getDepartment().getElement();
+            var ous = caseEntity.getUser().getOu().getElement();
+            var departmentFilterFormat = caseEntity.getUser().getDepartmentFilterFormat().getElement();
+
+            var selectedOu = ous.val();
+            ous.prop('disabled', true);
+            ous.empty();
+            ous.append('<option />');
+
+            $.getJSON(caseEntity.getGetDepartmentOusUrl() +
+                    '?id=' + departments.val() +
+                    '&customerId=' + customerId +
+                    '&departmentFilterFormat=' + departmentFilterFormat.val(), function (data) {
+                        for (var i = 0; i < data.list.length; i++) {
+                            var item = data.list[i];
+                            var option = $("<option value='" + item.id + "'>" + item.name + "</option>");
+                            if (keepOldValue && option.val() == selectedOu) {
+                                option.prop("selected", true);
+                            }
+                            ous.append(option);
+                        }
+                    })
+            .always(function () {
+                ous.prop('disabled', false);
+            });
+        },
+
+        refreshAdministrators: function (caseEntity, keepOldValue) {
+            var departments = caseEntity.getUser().getDepartment().getElement();
+            var administrators = caseEntity.getOther().getAdministrator().getElement();
+            var workingGroups = caseEntity.getOther().getWorkingGroup().getElement();
+            var dontConnectUserToWorkingGroup = caseEntity.getUser().getDontConnectUserToWorkingGroup().getElement();
+
+            var selectedAdministrator = administrators.val();
+
+            administrators.prop('disabled', true);
+            administrators.empty();
+            administrators.append('<option />');
+
+            $.getJSON(caseEntity.getGetDepartmentUsersUrl() + 
+                                '?departmentId=' + departments.val() +
+                                '&workingGroupId=' + (dontConnectUserToWorkingGroup.val() == 0 ? workingGroups.val() : ''), function (data) {
+                                for (var i = 0; i < data.length; i++) {
+                                    var item = data[i];
+                                    var option = $("<option value='" + item.Value + "'>" + item.Name + "</option>");
+                                    if (keepOldValue && option.val() == selectedAdministrator) {
+                                        option.prop("selected", true);
+                                    }
+                                    administrators.append(option);
+                                }
+                            })
+            .always(function () {
+                administrators.prop('disabled', false);
+            });
+        },
+
+        delay: function() {
+            var timer = 0;
+            return function(callback, ms){
+                clearTimeout (timer);
+                timer = setTimeout(callback, ms);
+            };
+        }(),
+
+        raiseEvent: function (eventType, extraParameters) {
+            $(document).trigger(eventType, extraParameters);
+        },
+
+        onEvent: function (event, handler) {
+            $(document).on(event, handler);
+        },
+
+        confirmDialog: function (text, onOk, onCancel, yesNo) {
+            var firstText = yesNo ? dhHelpdesk.cases.utils.yesText : dhHelpdesk.cases.utils.okText;
+            var secondText = yesNo ? dhHelpdesk.cases.utils.noText : dhHelpdesk.cases.utils.cancelText;
+
+            var d = $('<div class="modal fade">' +
+                            '<div class="modal-dialog">' +
+                                '<form method="post" id="deleteDialogForm" class="modal-content">' +
+                                    '<div class="modal-body">' +
+                                        '<button type="button" class="close" data-dismiss="modal">&times;</button>' +
+                                        '<p class="alert alert-info infop">' + text + '</p>' +
+                                    '</div>' +
+                                    '<div class="modal-footer">' +
+                                        '<button type="button" class="btn btn-ok">' + firstText + '</button>' +
+                                        '<button type="button" class="btn btn-cancel">' + secondText + '</button>' +
+                                    '</div>' +
+                                '</form>' +
+                            '</div>' +
+                        '</div>');
+
+            d.on("show", function () {
+                d.find(".btn-cancel").on("click", function (e) {
+                    onCancel();
+                    d.modal('hide');
+                });
+
+                d.find(".btn-ok").on("click", function (e) {
+                    onOk();
+                    d.modal('hide');
+                });
+            });
+
+            d.on("hide", function () {
+                d.find(".btn-ok").off("click");
+                d.find(".btn-cancel").off("click");
+            });
+
+            d.on("hidden", function () {
+                d.remove();
+            });
+
+            d.modal({
+                "backdrop": "static",
+                "keyboard": true,
+                "show": true
             });
         }
     }
@@ -99,6 +231,33 @@ $(function () {
         }
 
         that.getElement = getElement;
+
+        return that;
+    }
+
+    dhHelpdesk.cases.file = function (spec, my) {
+        my = my || {};
+        var that = {};
+
+        var id = spec.id || null;
+        var name = spec.name || '';
+        var deleteFile = spec.deleteFile || {};
+
+        var getId = function() {
+            return id;
+        }
+
+        var getName = function() {
+            return name;
+        }
+
+        var getDeleteFile = function () {
+            return deleteFile;
+        }
+
+        that.getId = getId;
+        that.getName = getName;
+        that.getDeleteFile = getDeleteFile;
 
         return that;
     }
@@ -135,9 +294,28 @@ $(function () {
         my = my || {};
         var that = dhHelpdesk.cases.caseFields(spec, my);
 
+        var relatedCasesUrl = spec.relatedCasesUrl || '';
+        var relatedCasesCountUrl = spec.relatedCasesCountUrl || '';
+        var userId = spec.userId || {};
         var region = spec.region || {};
         var department = spec.department || {};
+        var ou = spec.ou || {};
         var departmentFilterFormat = spec.departmentFilterFormat || {};
+        var dontConnectUserToWorkingGroup = spec.dontConnectUserToWorkingGroup || {};
+        var relatedCases = spec.relatedCases || {};
+        relatedCases.getElement().hide();
+
+        var getRelatedCasesUrl = function() {
+            return relatedCasesUrl;
+        }
+
+        var getRelatedCasesCountUrl = function() {
+            return relatedCasesCountUrl;
+        }
+
+        var getUserId = function() {
+            return userId;
+        }
 
         var getRegion = function() {
             return region;
@@ -147,17 +325,71 @@ $(function () {
             return department;
         }
 
+        var getOu = function() {
+            return ou;
+        }
+
         var getDepartmentFilterFormat = function() {
             return departmentFilterFormat;
         }
 
+        var getDontConnectUserToWorkingGroup = function() {
+            return dontConnectUserToWorkingGroup;
+        }
+
+        var getRelatedCases = function() {
+            return relatedCases;
+        }
+
+        that.getRelatedCasesUrl = getRelatedCasesUrl;
+        that.getRelatedCasesCountUrl = getRelatedCasesCountUrl;
+        that.getUserId = getUserId;
         that.getRegion = getRegion;
         that.getDepartment = getDepartment;
+        that.getOu = getOu;
         that.getDepartmentFilterFormat = getDepartmentFilterFormat;
+        that.getDontConnectUserToWorkingGroup = getDontConnectUserToWorkingGroup;
+        that.getRelatedCases = getRelatedCases;
 
         that.init = function (caseEntity) {
-            region.getElement().change(function() {
-                dhHelpdesk.cases.utils.refreshDepartments(caseEntity);
+            var checkRelatedCases = function (uId) {
+                var caseId = that.getCase().getCaseId().getElement();
+                var userIdValue = encodeURIComponent(uId || userId.getElement().val());
+                $.getJSON(getRelatedCasesCountUrl() + 
+                            '?caseId=' + caseId.val() +
+                            '&userId=' + userIdValue, function(data) {
+                                if (data > 0) {
+                                    relatedCases.getElement().show();
+                                } else {
+                                    relatedCases.getElement().hide();
+                                }
+                            });
+            }
+            checkRelatedCases();
+
+            userId.getElement().keyup(function() {
+                dhHelpdesk.cases.utils.delay(checkRelatedCases, 500);
+            });
+
+            relatedCases.getElement().click(function () {
+                var caseId = that.getCase().getCaseId().getElement();
+                var userIdValue = encodeURIComponent(userId.getElement().val());
+                window.open(getRelatedCasesUrl() + '?caseId=' + caseId.val() + '&userId=' + userIdValue, '_blank');
+            });
+
+            region.getElement().change(function () {
+                // uncomment for implementing http://redmine.fastdev.se/issues/10995
+                // dhHelpdesk.cases.utils.refreshDepartments(caseEntity);
+            });
+
+            department.getElement().change(function () {
+                // uncomment for implementing http://redmine.fastdev.se/issues/10995
+                /*dhHelpdesk.cases.utils.refreshOus(caseEntity);
+                dhHelpdesk.cases.utils.refreshAdministrators(caseEntity, true);*/
+            });
+
+            dhHelpdesk.cases.utils.onEvent("OnUserIdChanged", function(e, uId) {
+                checkRelatedCases(uId);
             });
         }
 
@@ -174,7 +406,68 @@ $(function () {
     dhHelpdesk.cases.caseInfo = function (spec, my) {
         my = my || {};
         var that = dhHelpdesk.cases.caseFields(spec, my);
-        
+
+        var deleteCaseFileConfirmMessage = spec.deleteCaseFileConfirmMessage || '';
+        var caseFiles = spec.caseFiles || [];
+
+        var getDeleteCaseFileConfirmMessage = function() {
+            return deleteCaseFileConfirmMessage;
+        }
+
+        var getCaseFiles = function() {
+            return caseFiles;
+        }
+
+        var addCaseFile = function(caseFile) {
+            caseFiles.push(caseFile);
+
+            caseFile.getDeleteFile().getElement().click(function (e, args) {
+                if (args && args.self) {
+                    return;
+                }
+
+                e.stopImmediatePropagation();
+                dhHelpdesk.cases.utils.confirmDialog(deleteCaseFileConfirmMessage,
+                    function() {
+                        caseFile.getDeleteFile().getElement().triggerHandler('click', [{ self: true }]);
+                    },
+                    function() {                        
+                    }, true);
+            });
+        }
+
+        var getCaseFile = function(id) {
+            for (var i = 0; i < caseFiles.length; i++) {
+                var caseFile = caseFiles[i];
+                if (caseFile.getId() == id) {
+                    return caseFile;
+                }
+            }
+
+            return null;
+        }
+
+        var deleteCaseFile = function(caseFile) {
+            for (var i = 0; i < caseFiles.length; i++) {
+                var file = caseFile[i];
+                if (file.getId() == caseFile.getId()) {
+                    caseFiles.splice(i, 1);
+                    return;
+                }
+            }
+        }
+
+        var clearCaseFiles = function() {
+            caseFiles = [];
+        }
+
+        that.getDeleteCaseFileConfirmMessage = getDeleteCaseFileConfirmMessage;
+        that.getCaseFiles = getCaseFiles;
+        that.addCaseFile = addCaseFile;
+        that.getCaseFiles = getCaseFile;
+        that.deleteCaseFile = deleteCaseFile;
+        that.clearCaseFiles = clearCaseFiles;
+
         return that;
     }
 
@@ -183,16 +476,28 @@ $(function () {
         var that = dhHelpdesk.cases.caseFields(spec, my);
 
         var administrator = spec.administrator || {};
+        var workingGroup = spec.workingGroup || {};
 
         var getAdministrator = function() {
             return administrator;
         }
 
+        var getWorkingGroup = function() {
+            return workingGroup;
+        }
+
         that.getAdministrator = getAdministrator;
+        that.getWorkingGroup = getWorkingGroup;
 
         that.init = function(caseEntity) {            
             administrator.getElement().change(function () {
-                //dhHelpdesk.cases.utils.refreshDepartments(caseEntity); // Contact to Majid
+                // uncomment for implementing http://redmine.fastdev.se/issues/10995
+                // dhHelpdesk.cases.utils.refreshDepartments(caseEntity, true);
+            });
+
+            workingGroup.getElement().change(function () {
+                // uncomment for implementing http://redmine.fastdev.se/issues/10995
+                // dhHelpdesk.cases.utils.refreshAdministrators(caseEntity);
             });
         }
 
@@ -203,6 +508,67 @@ $(function () {
         my = my || {};
         var that = dhHelpdesk.cases.caseFields(spec, my);
         
+        var deleteCaseLogFileConfirmMessage = spec.deleteCaseLogFileConfirmMessage || '';
+        var caseLogFiles = spec.caseLogFiles || [];
+
+        var getDeleteCaseLogFileConfirmMessage = function () {
+            return deleteCaseLogFileConfirmMessage;
+        }
+
+        var getCaseLogFiles = function () {
+            return caseLogFiles;
+        }
+
+        var addCaseLogFile = function (caseLogFile) {
+            caseLogFiles.push(caseLogFile);
+
+            caseLogFile.getDeleteFile().getElement().click(function (e, args) {
+                if (args && args.self) {
+                    return;
+                }
+
+                e.stopImmediatePropagation();
+                dhHelpdesk.cases.utils.confirmDialog(deleteCaseLogFileConfirmMessage,
+                    function () {
+                        caseLogFile.getDeleteFile().getElement().triggerHandler('click', [{ self: true }]);
+                    },
+                    function () {
+                    }, true);
+            });
+        }
+
+        var getCaseLogFile = function (id) {
+            for (var i = 0; i < caseLogFiles.length; i++) {
+                var caseLogFile = caseLogFiles[i];
+                if (caseLogFile.getId() == id) {
+                    return caseLogFile;
+                }
+            }
+
+            return null;
+        }
+
+        var deleteCaseLogFile = function (caseLogFile) {
+            for (var i = 0; i < caseLogFiles.length; i++) {
+                var file = caseLogFile[i];
+                if (file.getId() == caseLogFile.getId()) {
+                    caseLogFiles.splice(i, 1);
+                    return;
+                }
+            }
+        }
+
+        var clearCaseLogFiles = function () {
+            caseLogFiles = [];
+        }
+
+        that.getDeleteCaseLogFileConfirmMessage = getDeleteCaseLogFileConfirmMessage;
+        that.getCaseLogFiles = getCaseLogFiles;
+        that.addCaseLogFile = addCaseLogFile;
+        that.getCaseLogFiles = getCaseLogFile;
+        that.deleteCaseLogFile = deleteCaseLogFile;
+        that.clearCaseLogFiles = clearCaseLogFiles;
+
         return that;
     }
 
@@ -210,12 +576,24 @@ $(function () {
         my = my || {};
         var that = {};
 
+        var caseId = spec.caseId || {};
+        var customerId = spec.customerId || {};
         var user = spec.user || {};
         var computer = spec.computer || {};
         var caseInfo = spec.caseInfo || {};
         var other = spec.other || {};
         var log = spec.log || {};
         var getDepartmentsUrl = spec.getDepartmentsUrl || '';
+        var getDepartmentUsersUrl = spec.getDepartmentUsersUrl || '';
+        var getDepartmentOusUrl = spec.getDepartmentOusUrl || '';
+
+        var getCaseId = function() {
+            return caseId;
+        }
+
+        var getCustomerId = function() {
+            return customerId;
+        }
 
         var getUser = function() {
             return user;
@@ -240,12 +618,24 @@ $(function () {
             return getDepartmentsUrl;
         }
 
+        var getGetDepartmentUsersUrl = function () {
+            return getDepartmentUsersUrl;
+        }
+
+        var getGetDepartmentOusUrl = function() {
+            return getDepartmentOusUrl;
+        }
+
+        that.getCaseId = getCaseId;
+        that.getCustomerId = getCustomerId;
         that.getUser = getUser;
         that.getComputer = getComputer;
         that.getCaseInfo = getCaseInfo;
         that.getOther = getOther;
         that.getLog = getLog;
         that.getGetDepartmentsUrl = getGetDepartmentsUrl;
+        that.getGetDepartmentUsersUrl = getGetDepartmentUsersUrl;
+        that.getGetDepartmentOusUrl = getGetDepartmentOusUrl;
 
         user.setCase(that);
         computer.setCase(that);
@@ -259,7 +649,9 @@ $(function () {
         other.init(that);
         log.init(that);
 
-        //dhHelpdesk.cases.utils.refreshDepartments(that);  => Contact to Majid
+        // uncomment for implementing http://redmine.fastdev.se/issues/10995
+        /*dhHelpdesk.cases.utils.refreshDepartments(that, true);
+        dhHelpdesk.cases.utils.refreshAdministrators(that, true);*/
 
         return that;
     }
@@ -271,26 +663,103 @@ $(function () {
 
         var requiredFieldsMessage = spec.requiredFieldsMessage || '';
         var getDepartmentsUrl = spec.getDepartmentsUrl || '';
+        var getDepartmentUsersUrl = spec.getDepartmentUsersUrl || '';
+        var relatedCasesUrl = spec.relatedCasesUrl || '';
+        var relatedCasesCountUrl = spec.relatedCasesCountUrl || '';
+        var getDepartmentOusUrl = spec.getDepartmentOusUrl || '';
+        var deleteCaseFileConfirmMessage = spec.deleteCaseFileConfirmMessage || '';
+        var okText = spec.okText || '';
+        var cancelText = spec.cancelText || '';
+        var yesText = spec.yesText || '';
+        var noText = spec.noText || '';
+
+        dhHelpdesk.cases.utils.init(okText, cancelText, yesText, noText);
 
         var user = dhHelpdesk.cases.user({
+            userId: dhHelpdesk.cases.object({ element: $('[data-field="userId"]') }),
             region: dhHelpdesk.cases.object({ element: $('[data-field="region"]') }),
             department: dhHelpdesk.cases.object({ element: $('[data-field="department"]') }),
-            departmentFilterFormat: dhHelpdesk.cases.object({ element: $('[data-field="departmentFilterFormat"]') })
+            ou: dhHelpdesk.cases.object({ element: $('[data-field="ou"]') }),
+            departmentFilterFormat: dhHelpdesk.cases.object({ element: $('[data-field="departmentFilterFormat"]') }),
+            dontConnectUserToWorkingGroup: dhHelpdesk.cases.object({ element: $('[data-field="dontConnectUserToWorkingGroup"]') }),
+            relatedCases: dhHelpdesk.cases.object({ element: $('[data-field="relatedCases"]') }),
+            relatedCasesUrl: relatedCasesUrl,
+            relatedCasesCountUrl: relatedCasesCountUrl
         });
         var computer = dhHelpdesk.cases.computer({});
-        var caseInfo = dhHelpdesk.cases.caseInfo({});
-        var other = dhHelpdesk.cases.other({
-            administrator: dhHelpdesk.cases.object({ element: $('[data-field="administrator"]') })
+
+        var caseInfo = dhHelpdesk.cases.caseInfo({
+            deleteCaseFileConfirmMessage: deleteCaseFileConfirmMessage
         });
-        var log = dhHelpdesk.cases.log({});
+
+        var other = dhHelpdesk.cases.other({
+            administrator: dhHelpdesk.cases.object({ element: $('[data-field="administrator"]') }),
+            workingGroup: dhHelpdesk.cases.object({ element: $('[data-field="workingGroup"]') })
+        });
+
+        var log = dhHelpdesk.cases.log({
+            deleteCaseLogFileConfirmMessage: deleteCaseFileConfirmMessage
+        });
+
+        var refreshCaseFiles = function () {
+            caseInfo.clearCaseFiles();
+
+            $('[data-field="caseFile"]').each(function () {
+                var $this = $(this);
+                var caseFile = dhHelpdesk.cases.file({
+                    id: $this.attr("data-field-id"),
+                    name: $this.attr("data-field-name"),
+                    deleteFile: dhHelpdesk.cases.object({ element: $this.find('[data-field="deleteFile"]') })
+                });
+
+                caseInfo.addCaseFile(caseFile);
+            });
+        }
+        refreshCaseFiles();
+
+        dhHelpdesk.cases.utils.onEvent("OnUploadedCaseFileRendered", function () {
+            refreshCaseFiles();
+        });
+
+        dhHelpdesk.cases.utils.onEvent("OnDeleteCaseFile", function () {
+            refreshCaseFiles();
+        });
+
+        var refreshCaseLogFiles = function () {
+            log.clearCaseLogFiles();
+
+            $('[data-field="caseLogFile"]').each(function () {
+                var $this = $(this);
+                var caseLogFile = dhHelpdesk.cases.file({
+                    id: $this.attr("data-field-id"),
+                    name: $this.attr("data-field-name"),
+                    deleteFile: dhHelpdesk.cases.object({ element: $this.find('[data-field="deleteFile"]') })
+                });
+
+                log.addCaseLogFile(caseLogFile);
+            });
+        }
+        refreshCaseLogFiles();
+
+        dhHelpdesk.cases.utils.onEvent("OnUploadedCaseLogFileRendered", function () {
+            refreshCaseLogFiles();
+        });
+
+        dhHelpdesk.cases.utils.onEvent("OnDeleteCaseLogFile", function () {
+            refreshCaseLogFiles();
+        });
 
         var caseEntity = dhHelpdesk.cases.case({
+            caseId: dhHelpdesk.cases.object({ element: $('[data-field="caseId"]') }),
+            customerId: dhHelpdesk.cases.object({ element: $('[data-field="customerId"]') }),
             user: user,
             computer: computer,
             caseInfo: caseInfo,
             other: other,
             log: log,
-            getDepartmentsUrl: getDepartmentsUrl
+            getDepartmentsUrl: getDepartmentsUrl,
+            getDepartmentUsersUrl: getDepartmentUsersUrl,
+            getDepartmentOusUrl: getDepartmentOusUrl
         });
 
         var getCase = function() {

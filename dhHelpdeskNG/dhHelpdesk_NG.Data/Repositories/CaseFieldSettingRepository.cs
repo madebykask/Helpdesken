@@ -42,14 +42,15 @@
                             join cfs in this.DataContext.CaseFieldSettings on cfsl.CaseFieldSettings_Id equals cfs.Id
                             //join cs in this.DataContext.CaseSettings on cfs.Name equals cs.Name
                         where cfs.Customer_Id == customerId && cfsl.Language_Id == languageId && cfs.ShowOnStartPage == 1
-                        group cfsl by new { cfsl.CaseFieldSettings_Id, cfsl.Label, cfsl.Language_Id, cfsl.FieldHelp, cfs.Name } into grouped
+                        group cfsl by new { cfsl.CaseFieldSettings_Id, cfsl.Label, cfsl.Language_Id, cfsl.FieldHelp, cfs.Name, cfs.EMailIdentifier } into grouped
                         select new CaseFieldSettingsWithLanguage
                         {
                             Id = grouped.Key.CaseFieldSettings_Id,
                             Label = grouped.Key.Label,
                             Language_Id = grouped.Key.Language_Id,
                             FieldHelp = grouped.Key.FieldHelp,
-                            Name = grouped.Key.Name
+                            Name = grouped.Key.Name,
+                            EMailIdentifier = grouped.Key.EMailIdentifier
                         };
 
             return query.OrderBy(x => x.Id);
@@ -163,7 +164,8 @@
                             cfs.Required,
                             cfs.ShowExternal,
                             cfs.ShowOnStartPage,
-                            cfs.Name
+                            cfs.Name,
+                            cfs.EMailIdentifier
                         }
                             into grouped
                             select new CaseListToCase
@@ -177,7 +179,8 @@
                                 Required = grouped.Key.Required,
                                 ShowExternal = grouped.Key.ShowExternal,
                                 ShowOnStartPage = grouped.Key.ShowOnStartPage,
-                                Name = grouped.Key.Name
+                                Name = grouped.Key.Name,
+                                EMailIdentifier = grouped.Key.EMailIdentifier
                             };
 
             if (query.Count() == 0 || query == null)

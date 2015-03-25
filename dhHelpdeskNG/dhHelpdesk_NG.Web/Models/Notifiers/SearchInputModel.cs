@@ -13,6 +13,8 @@
 
         public int? DepartmentId { get; set; }
 
+        public int? OrganizationUnitId { get; set; }
+
         public int? DivisionId { get; set; }
 
         public string Pharse { get; set; }
@@ -29,6 +31,7 @@
                 this.DomainId,
                 this.RegionId,
                 this.DepartmentId,
+                this.OrganizationUnitId,
                 this.DivisionId,
                 this.Pharse,
                 this.Status,

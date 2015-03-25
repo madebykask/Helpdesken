@@ -134,6 +134,7 @@
                                     <td class="span15">
                                         @Translation.Get("Tillgängliga", Enums.TranslationSource.TextTranslation)
                                     </td>
+                                    <td></td>
                                     <td>
                                         @Translation.Get("Valda", Enums.TranslationSource.TextTranslation)
                                     </td>
@@ -143,12 +144,14 @@
                                          
                                     </td>
                                     <td>
-                                        @Html.ListBox("WgAvailable", Model.WgAvailable, new { style = "width: 300px; height: 100px" })
-                                        <input type="button" value="&lt;" id="removeWg" />
-                                        <input type="button" value="&gt;" id="addWg" />
+                                        @Html.ListBox("WgAvailable", Model.WgAvailable, new { style = "width: 314px; height: 100px" })
                                     </td>
                                     <td>
-                                        @Html.ListBox("WgSelected", Model.WgSelected, new { style = "width: 300px; height: 100px" })
+                                        <input type="button" value="&gt;" id="addWg" class="btn" /><br />
+                                        <input type="button" value="&lt;" id="removeWg" class="btn" />
+                                    </td>
+                                    <td>
+                                        @Html.ListBox("WgSelected", Model.WgSelected, new { style = "width: 314px; height: 100px" })
                                     </td>
                                 </tr>
                             </table>

@@ -73,6 +73,8 @@
         public DateTime PasswordChangedDate { get; set; }
         public DateTime RegTime { get; set; }
 
+        public int ShowSolutionTime { get; set; }
+
         public virtual Domain Domain { get; set; }
         public virtual Language Language { get; set; }
         public virtual User ChangedByUser { get; set; }

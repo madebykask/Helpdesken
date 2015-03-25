@@ -35,7 +35,9 @@
             Setting customerSetting,
             ISearch s,
             WorkTimeCalculator workTimeCalculator,
-            string applicationId);
+            string applicationId,
+            bool calculateRemainingTime,
+            out CaseRemainingTimeData remainingTime);
     }
 
     public class CaseSearchRepository : ICaseSearchRepository
@@ -79,7 +81,9 @@
                                     Setting customerSetting, 
                                     ISearch s,
                                     WorkTimeCalculator workTimeCalculator,
-                                    string applicationId)
+                                    string applicationId,
+                                    bool calculateRemainingTime,
+                                    out CaseRemainingTimeData remainingTime)
         {
             var now = DateTime.UtcNow;
             var dsn = ConfigurationManager.ConnectionStrings["HelpdeskOleDbContext"].ConnectionString;
@@ -88,6 +92,7 @@
             IList<CaseSearchResult> ret = new List<CaseSearchResult>();
             var caseTypes = this.caseTypeRepository.GetCaseTypeOverviews(f.CustomerId).ToArray();
             var displayLeftTime = csl.Any(it => it.Name == TimeLeftColumn);
+            remainingTime = new CaseRemainingTimeData();
 
             var sql = this.ReturnCaseSearchSql(
                                         f, 
@@ -123,11 +128,12 @@
                         {
                             while (dr.Read())
                             {
+                                var doCalcTimeLeft = displayLeftTime || calculateRemainingTime;
+
                                 var row = new CaseSearchResult();  
                                 IList<Field> cols = new List<Field>();
                                 var toolTip = string.Empty;
                                 var sortOrder = string.Empty;
-                                var doCalcTimeLeft = displayLeftTime;
                                 DateTime caseRegistrationDate;
 
                                 DateTime.TryParse(dr["RegTime"].ToString(), out caseRegistrationDate);
@@ -142,7 +148,7 @@
                                 int intTmp;
                                 if (int.TryParse(dr["IncludeInCaseStatistics"].ToString(), out intTmp))
                                 {
-                                    doCalcTimeLeft = displayLeftTime && intTmp == 1;
+                                    doCalcTimeLeft = doCalcTimeLeft && intTmp == 1;
                                 }
 
                                 DateTime? caseShouldBeFinishedInDate = null;
@@ -190,6 +196,15 @@
                                         //// calc by SLA value
                                         timeLeft = (int)Math.Floor((SLAtime * 60 - (decimal)workTimeCalculator.CalcWorkTimeMinutes(departmentId, caseRegistrationDate, now, timeOnPause)) / 60);
                                     }
+
+                                    if (timeLeft.HasValue)
+                                    {
+                                        int caseId;
+                                        if (int.TryParse(dr["Id"].ToString(), out caseId))
+                                        {
+                                            remainingTime.AddRemainingTime(caseId, timeLeft.Value);
+                                        }
+                                    }
                                 }
 
                                 foreach (var c in csl)
@@ -204,8 +219,9 @@
                                                 FieldTypes fieldType;
                                                 DateTime? dateValue;
                                                 bool translateField;
-                                                //if (c.Line == 1)
-                                                //{
+                                                bool treeTranslation;
+                                                int baseId = 0;
+                                              
                                                 var value = GetDatareaderValue(
                                                                                 dr,
                                                                                 i,
@@ -215,15 +231,21 @@
                                                                                 timeLeft,
                                                                                 caseTypes,
                                                                                 out translateField,
+                                                                                out treeTranslation,
                                                                                 out dateValue,
-                                                                                out fieldType);
+                                                                                out fieldType,
+                                                                                out baseId);
                                                 field = new Field
                                                             {
+                                                                Key = c.Name,
+                                                                Id = baseId,
                                                                 StringValue = value,
                                                                 TranslateThis = translateField,
+                                                                TreeTranslation = treeTranslation,
                                                                 DateTimeValue = dateValue,
                                                                 FieldType = fieldType
                                                             };
+
                                                 if (string.Compare(
                                                     s.SortBy,
                                                     c.Name,
@@ -232,11 +254,6 @@
                                                 {
                                                     sortOrder = value;
                                                 }
-                                                //}
-                                                //else
-                                                //{
-                                                //    toolTip += GetDatareaderValue(dr, i, c.Name, customerSetting, pal, timeLeft, caseTypes, out translateField, out dateValue, out fieldType) + Environment.NewLine;
-                                                //}
                                             }
 
                                             break; 
@@ -377,15 +394,19 @@
                                 int? timeLeft,
                                 IEnumerable<CaseTypeOverview> caseTypes,
                                 out bool translateField, 
+                                out bool treeTranslation, 
                                 out DateTime? dateValue, 
-                                out FieldTypes fieldType) 
+                                out FieldTypes fieldType,
+                                out int baseId) 
         {
             var ret = string.Empty;
             var sep = " - ";
             translateField = false;
-
+            treeTranslation = false;
             fieldType = FieldTypes.String;
             dateValue = null;
+            baseId = 0;
+            
             switch (fieldName.ToLower())
             {
                 case "regtime":
@@ -411,6 +432,11 @@
                     break;
 
                 case "status_id":
+                    ret = dr[col].ToString();
+                    translateField = true;
+                    break;
+
+                case "statesecondary_id":
                     ret = dr[col].ToString();
                     translateField = true;
                     break;
@@ -441,10 +467,14 @@
                 case "productarea_id":
                     ProductArea p = dr.SafeGetInteger("ProductArea_Id").getProductAreaItem(pal);
                     if (p != null)
+                    {
                         if (ConfigurationManager.AppSettings["InitFromSelfService"] == "true")
                             ret = p.Name;
-                        else                    
+                        else
                             ret = p.getProductAreaParentPath();
+                        baseId = p.Id;
+                    }                    
+                    treeTranslation = true;
                     break;
                 default:
                     if (string.Compare(dr[col].GetType().FullName, "System.DateTime", true, CultureInfo.InvariantCulture) == 0)
@@ -479,8 +509,8 @@
             // fields
             sql.Add("select distinct");
 
-            // vid avslutade ärenden visas bara första 500, TODO fungerar inte i Oracle 
-            if (f != null && f.CaseProgress == "1")
+            // vid avslutade ärenden visas bara första 500
+            if (f != null && (f.CaseProgress == "1" || f.CaseProgress =="-1"))
             {
                 sql.Add("top 500");
             }

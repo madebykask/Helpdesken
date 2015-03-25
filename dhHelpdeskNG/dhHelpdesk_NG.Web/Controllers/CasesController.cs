@@ -41,6 +41,8 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Web.Models.Shared;
     using System.Web.Script.Serialization;
 
+    using WebGrease.Css.Extensions;
+
     public class CasesController : BaseController
     {
         #region Private variables
@@ -101,7 +103,9 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ICaseSolutionSettingService caseSolutionSettingService;
 
         private readonly IInvoiceHelper invoiceHelper;
-        
+
+        private readonly ICaseModelFactory caseModelFactory;
+
         #endregion
 
         #region Constructor
@@ -154,7 +158,8 @@ namespace DH.Helpdesk.Web.Controllers
             IInvoiceArticlesModelFactory invoiceArticlesModelFactory, 
             IConfiguration configuration,
             ICaseSolutionSettingService caseSolutionSettingService,            
-            IInvoiceHelper invoiceHelper)
+            IInvoiceHelper invoiceHelper, 
+            ICaseModelFactory caseModelFactory)
             : base(masterDataService)
         {            
             this._caseService = caseService;
@@ -204,13 +209,14 @@ namespace DH.Helpdesk.Web.Controllers
             this.configuration = configuration;
             this.caseSolutionSettingService = caseSolutionSettingService;            
             this.invoiceHelper = invoiceHelper;
+            this.caseModelFactory = caseModelFactory;
         }
 
         #endregion
 
         #region Public Methods and Operators
 
-        public ActionResult Index(int? customerId, bool? clearFilters = false, CasesCustomFilter customFilter = CasesCustomFilter.None)
+        public ActionResult Index(int? customerId, bool? clearFilters = false, CasesCustomFilter customFilter = CasesCustomFilter.None, bool? DefaultSearch = false)
         {                        
             if (clearFilters == true)
             {
@@ -244,8 +250,8 @@ namespace DH.Helpdesk.Web.Controllers
                     fd.customerUserSetting = cu;
                     fd.customerSetting = this._settingService.GetCustomerSetting(cusId);
                     fd.filterCustomerId = cusId;
-                    
 
+                    
                     //region
                     if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseRegionFilter))
                         fd.filterRegion = this._regionService.GetRegions(cusId);
@@ -257,7 +263,9 @@ namespace DH.Helpdesk.Web.Controllers
                     fd.filterDepartment = this._departmentService.GetDepartmentsByUserPermissions(userId, cusId);
                     if (!fd.filterDepartment.Any())
                     {
-                        fd.filterDepartment = this._departmentService.GetDepartments(cusId);
+                        fd.filterDepartment = this._departmentService.GetDepartments(cusId)
+                                                                     .Where(d => d.Region_Id == null || (d.Region != null && d.Region.IsActive != 0))
+                                                                     .ToList();
                     }
 
                     //användare
@@ -317,43 +325,50 @@ namespace DH.Helpdesk.Web.Controllers
                     {
                         fd.ClosingReasons = this._finishingCauseService.GetFinishingCauses(cusId);
                     }
-
+                    
                     var sm = this.GetCaseSearchModel(cusId, userId);
-
+                    if (!(customFilter == CasesCustomFilter.None))
+                    {
+                        sm = this.GetEmptySearchModel(cusId, userId);
+                    }
+                    
                     // hämta parent path för productArea 
                     sm.caseSearchFilter.ParantPath_ProductArea = ParentPathDefaultValue;
                     sm.caseSearchFilter.ParentPathClosingReason = ParentPathDefaultValue;
                     sm.caseSearchFilter.ParantPath_CaseType = ParentPathDefaultValue;
-                    if (!string.IsNullOrWhiteSpace(sm.caseSearchFilter.ProductArea))
-                    {
-                        if (sm.caseSearchFilter.ProductArea != "0")
-                        {
-                            var p = this._productAreaService.GetProductArea(sm.caseSearchFilter.ProductArea.convertStringToInt());
-                            if (p != null)
-                                sm.caseSearchFilter.ParantPath_ProductArea = p.getProductAreaParentPath();
-                        }
-                    }
 
-                    if (!string.IsNullOrWhiteSpace(sm.caseSearchFilter.CaseClosingReasonFilter))
+                    if (customFilter == CasesCustomFilter.None)
                     {
-                        if (sm.caseSearchFilter.CaseClosingReasonFilter != "0")
+                        if (!string.IsNullOrWhiteSpace(sm.caseSearchFilter.ProductArea))
                         {
-                            var fc = this._finishingCauseService.GetFinishingCause(sm.caseSearchFilter.CaseClosingReasonFilter.convertStringToInt());
-                            if (fc != null)
+                            if (sm.caseSearchFilter.ProductArea != "0")
                             {
-                                sm.caseSearchFilter.ParentPathClosingReason = fc.GetFinishingCauseParentPath();
+                                var p = this._productAreaService.GetProductArea(sm.caseSearchFilter.ProductArea.convertStringToInt());
+                                if (p != null)
+                                    sm.caseSearchFilter.ParantPath_ProductArea = p.getProductAreaParentPath();
                             }
                         }
-                    }
 
-                    // hämta parent path för casetype
-                    if ((sm.caseSearchFilter.CaseType > 0))
-                    {
-                        var c = this._caseTypeService.GetCaseType(sm.caseSearchFilter.CaseType);
-                        if (c != null)
-                            sm.caseSearchFilter.ParantPath_CaseType = c.getCaseTypeParentPath();
+                        if (!string.IsNullOrWhiteSpace(sm.caseSearchFilter.CaseClosingReasonFilter))
+                        {
+                            if (sm.caseSearchFilter.CaseClosingReasonFilter != "0")
+                            {
+                                var fc = this._finishingCauseService.GetFinishingCause(sm.caseSearchFilter.CaseClosingReasonFilter.convertStringToInt());
+                                if (fc != null)
+                                {
+                                    sm.caseSearchFilter.ParentPathClosingReason = fc.GetFinishingCauseParentPath();
+                                }
+                            }
+                        }
+
+                        // hämta parent path för casetype
+                        if ((sm.caseSearchFilter.CaseType > 0))
+                        {
+                            var c = this._caseTypeService.GetCaseType(sm.caseSearchFilter.CaseType);
+                            if (c != null)
+                                sm.caseSearchFilter.ParantPath_CaseType = c.getCaseTypeParentPath();
+                        }
                     }
-                    
                     switch (customFilter)
                     {
                         case CasesCustomFilter.MyCases:
@@ -364,9 +379,9 @@ namespace DH.Helpdesk.Web.Controllers
                             sm.caseSearchFilter.CaseProgress = "4";
                             sm.caseSearchFilter.UserPerformer = string.Empty;                            
                             break;
-                        case CasesCustomFilter.HoldCases:                            
+                        case CasesCustomFilter.HoldCases:
                             sm.caseSearchFilter.CaseProgress = "3";
-                            sm.caseSearchFilter.UserPerformer = string.Empty;                            
+                            sm.caseSearchFilter.UserPerformer = string.Empty;
                             break;
                         case CasesCustomFilter.InProcessCases:                            
                             sm.caseSearchFilter.CaseProgress = "2";
@@ -386,6 +401,10 @@ namespace DH.Helpdesk.Web.Controllers
                     
                     srm.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(cusId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
                     var workTimeCalculator = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
+                    // Uncomment for http://redmine.fastdev.se/issues/10654
+                    // var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
+                    var showRemainingTime = false;
+                    CaseRemainingTimeData remainingTime;
                     srm.cases = this._caseSearchService.Search(
                         sm.caseSearchFilter,
                         srm.caseSettings,
@@ -398,7 +417,11 @@ namespace DH.Helpdesk.Web.Controllers
                         this.workContext.Customer.WorkingDayStart,
                         this.workContext.Customer.WorkingDayEnd,
                         workTimeCalculator,
-                        this.configuration.Application.ApplicationId);
+                        this.configuration.Application.ApplicationId,
+                        showRemainingTime,
+                        out remainingTime);
+
+                    srm.cases = TreeTranslate(srm.cases);
                     m.caseSearchResult = srm;
                     m.caseSearchFilterData = fd;
                     sm.Search.IdsForLastSearch = GetIdsFromSearchResult(srm.cases);
@@ -408,9 +431,16 @@ namespace DH.Helpdesk.Web.Controllers
                     var caseTemplateTree = GetCaseTemplateTreeModel(cusId, userId);
                     m.CaseTemplateTreeButton = caseTemplateTree;
                     m.CaseSetting = GetCaseSettingModel(cusId, userId);
+                    m.caseSearchResult.ShowRemainingTime = showRemainingTime;
+                    m.caseSearchResult.RemainingTime = this.caseModelFactory.GetCaseRemainingTimeModel(remainingTime);
+
+                    //Set refreshcontent
+                    User user = new User();
+                    user = _userService.GetUser(userId);
+                    m.CaseSetting.RefreshContent = user.RefreshContent;
                 }
             }
-
+            
             return this.View(m);
         }
 
@@ -720,12 +750,12 @@ namespace DH.Helpdesk.Web.Controllers
                 phone = cu.Phone,
                 usercode = cu.UserCode,
                 cellphone = cu.Cellphone,
-                regionid = (cu.Department != null ? cu.Department.Region_Id : 0),
-                regionname = (cu.Department != null ? cu.Department.Region.Name : ""),
+                regionid = (cu.Department != null)? cu.Department.Region_Id == null ? "" : cu.Department.Region_Id.Value.ToString() : "",
+                regionname = (cu.Department != null)? cu.Department.Region != null? cu.Department.Region.Name : "" : "",
                 departmentid = cu.Department_Id,
                 departmentname = cu.Department.DepartmentName,
                 ouid = cu.OU_Id,
-                ouname = (cu.OU.Parent != null ? cu.OU.Parent.Name + " - " : "") + cu.OU.Name
+                ouname = cu.OU != null ? (cu.OU.Parent != null ? cu.OU.Parent.Name + " - " : "") + cu.OU.Name : ""
             };
             return this.Json(u);
         }
@@ -742,11 +772,17 @@ namespace DH.Helpdesk.Web.Controllers
             var dep = this._departmentService.GetDepartmentsByUserPermissions(SessionFacade.CurrentUser.Id, customerId);
             if (!dep.Any())
             {
-                dep = this._departmentService.GetDepartments(customerId);
+                dep = this._departmentService.GetDepartments(customerId)
+                                             .Where(d => d.Region_Id == null || (d.Region != null && d.Region.IsActive != 0))
+                                             .ToList();
             }
 
             if (id.HasValue)
-                dep = dep.Where(x => x.Region_Id == id).ToList();
+            {
+                var curRegion = this._regionService.GetRegion(id.Value);
+                if (curRegion.IsActive != 0)
+                  dep = dep.Where(x => x.Region_Id == id).ToList();
+            }
 
             var list = dep.Select(x => new { id = x.Id, name = x.DepartmentDescription(departmentFilterFormat) });
 
@@ -808,7 +844,7 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             var list = unionList.Select(x => new { id = x.Key, name = x.Value });
-            return this.Json(new { list });
+            return this.Json(new { list }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult ChangeCountry(int? id, int customerId, int departmentFilterFormat)
@@ -1055,6 +1091,24 @@ namespace DH.Helpdesk.Web.Controllers
                 f.CaseClosingDateEndFilter = frm.GetDate("CaseClosingDateEndFilter");
                 f.CaseClosingReasonFilter = frm.ReturnFormValue("hidFilterClosingReasonId").ReturnCustomerUserValue();
 
+                int caseRemainingTimeFilter;
+                if (int.TryParse(frm.ReturnFormValue("CaseRemainingTime"), out caseRemainingTimeFilter))
+                {
+                    f.CaseRemainingTimeFilter = caseRemainingTimeFilter;
+                }
+
+                int caseRemainingTimeMaxFilter;
+                if (int.TryParse(frm.ReturnFormValue("CaseRemainingTimeMax"), out caseRemainingTimeMaxFilter))
+                {
+                    f.CaseRemainingTimeMaxFilter = caseRemainingTimeMaxFilter;
+                }
+
+                bool caseRemainingTimeHoursFilter;
+                if (bool.TryParse(frm.ReturnFormValue("CaseRemainingTimeHours"), out caseRemainingTimeHoursFilter))
+                {
+                    f.CaseRemainingTimeHoursFilter = caseRemainingTimeHoursFilter;
+                }
+
                 var sm = this.GetCaseSearchModel(f.CustomerId, f.UserId);
                 sm.caseSearchFilter = f;
                 sm.Search.SortBy = frm.ReturnFormValue("hidSortBy");
@@ -1062,6 +1116,10 @@ namespace DH.Helpdesk.Web.Controllers
 
                 m.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(f.CustomerId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
                 var workTimeCalc = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
+                // Uncomment for http://redmine.fastdev.se/issues/10654
+                // var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
+                var showRemainingTime = false;
+                CaseRemainingTimeData remainingTime;
                 m.cases = this._caseSearchService.Search(
                     f,
                     m.caseSettings,
@@ -1074,10 +1132,15 @@ namespace DH.Helpdesk.Web.Controllers
                     this.workContext.Customer.WorkingDayStart,
                     this.workContext.Customer.WorkingDayEnd,
                     workTimeCalc,
-                    this.configuration.Application.ApplicationId);
+                    this.configuration.Application.ApplicationId,
+                    showRemainingTime,
+                    out remainingTime);
 
+                m.cases = TreeTranslate(m.cases);
                 sm.Search.IdsForLastSearch = GetIdsFromSearchResult(m.cases);
                 SessionFacade.CurrentCaseSearch = sm;
+                m.ShowRemainingTime = showRemainingTime;
+                m.RemainingTime = this.caseModelFactory.GetCaseRemainingTimeModel(remainingTime);
             }
 
             return this.PartialView("_CaseRows", m);
@@ -1246,8 +1309,9 @@ namespace DH.Helpdesk.Web.Controllers
                 var updatedName = frm["uc.Name"].Split(',');
                 var updatedRow = frm["uc.Line"].Split(','); //frm.ReturnFormValue("rows").Split(',');
                 var updatedMinWith = frm["uc.MinWidth"].Split(',');
+                var updatedColStyle = frm["uc.ColStyle"].Split(',');
                 var updatedColOrder = frm["uc.ColOrder"].Split(',');
-                var updatedUserGroup = frm["uc.UserGroup"].Split(',');
+                var updatedUserGroup = frm["uc.UserGroup"].Split(',');                
 
                 IDictionary<string, string> errors = new Dictionary<string, string>();
                 DateTime nowTime = DateTime.Now;
@@ -1260,6 +1324,7 @@ namespace DH.Helpdesk.Web.Controllers
                     newColSetting.Name = updatedName[ii];
                     newColSetting.Line = int.Parse(updatedRow[ii]);
                     newColSetting.MinWidth = int.Parse(updatedMinWith[ii]);
+                    newColSetting.ColStyle = updatedColStyle[ii];
                     newColSetting.ColOrder = int.Parse(updatedColOrder[ii]);
                     newColSetting.UserGroup = int.Parse(updatedUserGroup[ii]);
                     newColSetting.ChangeTime = nowTime;
@@ -1271,7 +1336,9 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddCaseSettingColumn(int customerId, int userId, string labellist, int linelist, int minWidthValue, int colOrderValue, int userGroup)
+        public ActionResult AddCaseSettingColumn(int customerId, int userId, string labellist,
+                                                 int linelist, string colStyle, int minWidthValue,
+                                                 int colOrderValue, int userGroup)
         {
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
@@ -1286,8 +1353,9 @@ namespace DH.Helpdesk.Web.Controllers
             newCaseSetting.Name = labellist;
             newCaseSetting.Line = linelist;
             newCaseSetting.MinWidth = minWidthValue;
+            newCaseSetting.ColStyle = colStyle;
             newCaseSetting.ColOrder = colOrderValue;
-            newCaseSetting.UserGroup = userGroup;
+            newCaseSetting.UserGroup = userGroup;            
             newCaseSetting.RegTime = nowTime;
             newCaseSetting.ChangeTime = nowTime;
 
@@ -1355,6 +1423,31 @@ namespace DH.Helpdesk.Web.Controllers
             return Json(res);
         }
 
+        [HttpGet]
+        public ViewResult RelatedCases(int caseId, string userId)
+        {
+            var relatedCases = this._caseService.GetCaseRelatedCases(
+                                                caseId,
+                                                this.workContext.Customer.CustomerId,
+                                                userId,
+                                                SessionFacade.CurrentUser);
+
+            var model = this.caseModelFactory.GetRelatedCasesModel(relatedCases, this.workContext.Customer.CustomerId, userId);
+
+            return this.View(model);
+        }
+
+        [HttpGet]
+        public JsonResult RelatedCasesCount(int caseId, string userId)
+        {
+            var count = this._caseService.GetCaseRelatedCasesCount(
+                                                caseId,
+                                                this.workContext.Customer.CustomerId,
+                                                userId,
+                                                SessionFacade.CurrentUser);
+
+            return this.Json(count, JsonRequestBehavior.AllowGet);
+        }
 
         #endregion
 
@@ -1601,7 +1694,7 @@ namespace DH.Helpdesk.Web.Controllers
                 if (SessionFacade.CurrentCaseSearch.caseSearchFilter.CustomerId != customerId)
                     newSearch = true;
 
-            if (newSearch)
+            if (newSearch || (!(SessionFacade.CurrentCaseSearch.caseSearchFilter.CustomFilter == CasesCustomFilter.None)))
             {
                 ISearch s = new Search();
                 var f = new CaseSearchFilter();
@@ -1643,6 +1736,50 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 m = SessionFacade.CurrentCaseSearch;
             }
+
+            return m;
+        }
+
+        private CaseSearchModel GetEmptySearchModel(int customerId, int userId)
+        {
+            CaseSearchModel m;
+            
+                ISearch s = new Search();
+                var f = new CaseSearchFilter();
+                m = new CaseSearchModel();
+                var cu = this._customerUserService.GetCustomerSettings(customerId, userId);
+                if (cu == null)
+                {
+                    throw new Exception("It looks that something has happened with your session. Refresh page to fix it.");
+                }
+
+                f.CustomerId = customerId;
+                f.UserId = userId;
+                f.CaseType = 0;
+                f.Category = null;
+                f.Priority = null;
+                f.ProductArea = null;
+                f.Region = null;
+                f.StateSecondary = null;
+                f.Status = null;
+                f.User = null;
+                f.UserPerformer = null;
+                f.UserResponsible = null;
+                f.WorkingGroup = null;
+                //f.CaseProgress = "2";
+                f.CaseRegistrationDateStartFilter = cu.CaseRegistrationDateStartFilter;
+                f.CaseRegistrationDateEndFilter = cu.CaseRegistrationDateEndFilter;
+                f.CaseWatchDateStartFilter = cu.CaseWatchDateStartFilter;
+                f.CaseWatchDateEndFilter = cu.CaseWatchDateEndFilter;
+                f.CaseClosingDateStartFilter = cu.CaseClosingDateStartFilter;
+                f.CaseClosingDateEndFilter = cu.CaseClosingDateEndFilter;
+                f.CaseClosingReasonFilter = null;
+                s.SortBy = "CaseNumber";
+                s.Ascending = true;
+
+                m.caseSearchFilter = f;
+                m.Search = s;
+            
 
             return m;
         }
@@ -1863,8 +2000,11 @@ namespace DH.Helpdesk.Web.Controllers
                 m.problems = this._problemService.GetCustomerProblems(customerId);
                 m.currencies = this._currencyService.GetCurrencies();
                 m.users = this._userService.GetUsers(customerId);
-                m.projects = this._projectService.GetCustomerProjects(customerId);                
-                m.departments = deps.Any() ? deps : this._departmentService.GetDepartments(customerId);
+                m.projects = this._projectService.GetCustomerProjects(customerId);
+                m.departments = deps.Any() ? deps : 
+                      this._departmentService.GetDepartments(customerId)
+                                             .Where(d => d.Region_Id == null || (d.Region != null && d.Region.IsActive != 0))
+                                             .ToList();                
                 m.standardTexts = this._standardTextService.GetStandardTexts(customerId);
                 m.Languages = this._languageService.GetActiveLanguages();
 
@@ -1995,12 +2135,6 @@ namespace DH.Helpdesk.Web.Controllers
                         m.templateistrue = templateistrue;
                     }
                 } // Load Case Template
-
-                // related cases
-                if (caseId != 0 && !string.IsNullOrWhiteSpace(m.case_.ReportedBy))
-                {
-                    m.RelatedCases = this._caseService.GetRelatedCases(caseId, customerId, m.case_.ReportedBy, SessionFacade.CurrentUser);
-                }
 
                 // hämta parent path för productArea 
                 m.ProductAreaHasChild = 0;
@@ -2409,8 +2543,24 @@ namespace DH.Helpdesk.Web.Controllers
             };
 
             allColumns.Add(fixValue2);
-            colSettingModel.CaseFieldSettingLanguages = allColumns;
+            var caseFieldSettingsWithNoLabel = allColumns.Where(x => x.Label == null);
+            var caseFieldSettingsWithLabel = allColumns.Where(x => x.Label != null)
+                                                                    .OrderBy(x => x.Label)
+                                                                    .ThenBy(x => x.Name);
 
+            //// translating and sorting in alpabet order
+            var fieldsCollection = caseFieldSettingsWithLabel.Concat(caseFieldSettingsWithNoLabel).ToList();
+            foreach (var field in fieldsCollection)
+            {
+                field.Label = string.IsNullOrEmpty(field.Label)
+                                   ? Translation.Get(
+                                       field.Name,
+                                       Enums.TranslationSource.CaseTranslation,
+                                       SessionFacade.CurrentCustomer.Id)
+                                   : field.Label;
+            }
+
+            colSettingModel.CaseFieldSettingLanguages = fieldsCollection.OrderBy(it => it.Label).ToList();
 
             IList<CaseSettings> userColumns = new List<CaseSettings>();
             userColumns = _caseSettingService.GetCaseSettingsWithUser(customerId, userId, SessionFacade.CurrentUser.UserGroupId);
@@ -2428,13 +2578,6 @@ namespace DH.Helpdesk.Web.Controllers
                 Value = "1",
                 Selected = false
             });
-            //li.Add(new SelectListItem()
-            //{
-            //    Text = Translation.Get("Utökad info", Enums.TranslationSource.TextTranslation),
-            //    Value = "2",
-            //    Selected = false
-            //});
-
             colSettingModel.LineList = li;
 
             return colSettingModel;
@@ -2503,6 +2646,34 @@ namespace DH.Helpdesk.Web.Controllers
 
             return productArea;
         }
+
+        private IList<CaseSearchResult> TreeTranslate(IList<CaseSearchResult> cases)
+        {
+            var ret = cases;
+            foreach (CaseSearchResult r in ret)
+            {
+                foreach (var c in r.Columns)
+                {
+                    if (c.TreeTranslation)
+                    {
+                        switch (c.Key.ToLower())
+                        {
+                            case "productarea_id":
+                                var p = _productAreaService.GetProductArea(c.Id);
+                                if (p != null)
+                                {
+                                    p = TranslateProductArea(p);
+                                    c.StringValue = p.getProductAreaParentPath();
+                                }
+                                break;
+                        }
+                    }
+                }
+            }
+
+            return ret;
+        }
+
         #endregion
     }
 }

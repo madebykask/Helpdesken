@@ -22,7 +22,7 @@
         private readonly ICaseFieldSettingService _caseFieldSettingService;
         private readonly IAccountFieldSettingsService _accountFieldSettingsService;
         private readonly IOrderService _orderService;
-        private readonly ISettingService _settingService;       
+        private readonly ISettingService _settingService;
 
         public MailTemplateController(
             IAccountActivityService accountActivityService,
@@ -76,7 +76,7 @@
 
                 };
             }
-            
+
             var mailTemplateLanguage = new MailTemplateLanguageEntity() { Language_Id = customer.Language_Id, MailTemplate = mailTemplate };
 
             var model = this.CreateInputViewModel(mailTemplateLanguage, customer, customer.Language_Id, null, null);
@@ -136,7 +136,7 @@
 
                 return this.RedirectToAction("index", "mailtemplate", new { customerId = customerId });
 
-                
+
             }
 
             return this.View(mailtemplatelanguage);
@@ -144,7 +144,7 @@
 
         public ActionResult Edit(int id, int customerId, int languageId, int? ordertypeId, int? accountactivityId)
         {
-          
+
             var customer = this._customerService.GetCustomer(customerId);
 
             var mailTemplate = new MailTemplateEntity();
@@ -157,10 +157,10 @@
                 {
                     //Id = id,
                     MailID = id,
-                    
+
                 };
             }
-                //return new HttpNotFoundResult("No mail template found...");
+            //return new HttpNotFoundResult("No mail template found...");
 
             //var mailTemplateLanguage = this._mailTemplateService.GetMailTemplateLanguage(mailTemplate.Id, languageId);
             var mailTemplateLanguage = this._mailTemplateService.GetMailTemplateLanguageForCustomer(id, customer.Id, languageId);
@@ -182,16 +182,16 @@
                 mailTemplateLanguage.MailTemplate = mailTemplate;
             }
 
-               // return new HttpNotFoundResult("No mail template found...");
+            // return new HttpNotFoundResult("No mail template found...");
 
             var model = this.CreateInputViewModel(mailTemplateLanguage, customer, languageId, ordertypeId, accountactivityId);
-            
+
             // 1 to 99  System case template
             if (id <= 99)
                 model.IsStandardTemplate = true;
             return this.View(model);
 
-            
+
         }
 
         [HttpPost]
@@ -202,7 +202,7 @@
 
             var customer = this._customerService.GetCustomer(customerId);
             var mailTemplate = this._mailTemplateService.GetMailTemplate(id, customerId);
-            
+
             var customersettings = this._settingService.GetCustomerSetting(customer.Id);
 
             if (mailTemplate == null)
@@ -212,7 +212,7 @@
                     //Id = id,
                     MailID = id,
                     Customer_Id = customer.Id,
-                     
+
                 };
             }
             var update = true;
@@ -246,15 +246,15 @@
                 mailtemplatelanguageToSave.Subject = mailTemplateLanguage.Subject;
                 mailtemplatelanguageToSave.Body = mailTemplateLanguage.Body;
                 if (mailTemplateLanguage.MailTemplateName != null)
-                   mailtemplatelanguageToSave.MailTemplateName = mailTemplateLanguage.MailTemplateName;
+                    mailtemplatelanguageToSave.MailTemplateName = mailTemplateLanguage.MailTemplateName;
             }
 
             this._mailTemplateService.SaveMailTemplateLanguage(mailtemplatelanguageToSave, update, out errors);
 
             if (errors.Count == 0)
-               // return this.RedirectToAction("edit", "mailtemplate", new { customerId = customer.Id, id = id, languageId = mailTemplateLanguage.Language_Id });
+                // return this.RedirectToAction("edit", "mailtemplate", new { customerId = customer.Id, id = id, languageId = mailTemplateLanguage.Language_Id });
                 return this.RedirectToAction("index", "mailtemplate", new { customerId = customerId });
-            
+
 
             var model = this.MailTemplateIndexViewModel(customer, customersettings);
             return this.View(model);
@@ -266,7 +266,7 @@
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
             var mailTemplateLanguage = this._mailTemplateService.GetMailTemplateLanguage(id, languageid);
-            
+
             if (mailTemplateLanguage != null)
             {
                 this._mailTemplateService.DeleteMailTemplateLanguage(mailTemplateLanguage, out errors);
@@ -361,7 +361,7 @@
 
             #endregion
 
-            
+
             #region Changes
 
             List<SelectListItem> _changes = new List<SelectListItem>();
@@ -422,7 +422,7 @@
             });
             _survey.Add(new SelectListItem()
             {
-                Text =Translation.Get("Påminnelse", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Enkät", Enums.TranslationSource.TextTranslation),
+                Text = Translation.Get("Påminnelse", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Enkät", Enums.TranslationSource.TextTranslation),
                 Value = "16",
             });
             #endregion
@@ -433,9 +433,9 @@
             {
                 mailTemplates.AddRange(this._mailTemplateService
                                            .GetMailTemplates(customer.Id, lang.Id)
-                                           .Where(x=> !mailTemplates.Select(m=> m.MailID)
+                                           .Where(x => !mailTemplates.Select(m => m.MailID)
                                                                     .Contains(x.MailID))
-                                           .ToList());                
+                                           .ToList());
             }
 
             var model = new MailTemplateIndexViewModel
@@ -461,6 +461,47 @@
             return model;
         }
 
+        public MvcHtmlString MailTemplateFieldIdentifierRow(int customerId, string mailTemplateRowName, string ExtraLabel)
+        {
+            var cfs = this._caseFieldSettingService.GetAllCaseFieldSettings().Where(x => x.Name == mailTemplateRowName && x.Customer_Id == customerId && x.ShowOnStartPage == 1);
+            
+            if (cfs.Any())
+            {
+                var cfsl = this._caseFieldSettingService.GetCaseFieldSettingLanguage(cfs.FirstOrDefault().Id, SessionFacade.CurrentLanguageId);
+                if (!(cfsl == null))
+                {
+                    if (ExtraLabel != null)
+                    {
+                        ExtraLabel = Translation.Get(ExtraLabel, Enums.TranslationSource.TextTranslation, customerId);
+                        ExtraLabel = ":" + ExtraLabel;
+                    }
+                    if (cfsl.Label == null)
+                    {
+                        cfsl.Label = Translation.Get(mailTemplateRowName, Enums.TranslationSource.CaseTranslation, customerId);
+                    }
+
+                    string row = "";
+                    row = "<tr>"
+                        + "<td>"
+                        + cfsl.Label
+                        + ExtraLabel
+                        + "</td>"
+                        + "<td>"
+                        + cfs.FirstOrDefault().EMailIdentifier
+                        + "</td>"
+                        + "</tr>";
+                    var html = new MvcHtmlString(row);
+                    return html;
+                }
+                else
+                    return null;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         private MailTemplateInputViewModel CreateInputViewModel(MailTemplateLanguageEntity mailTemplateLanguage, Customer customer, int languageId, int? ordertypeId, int? accountactivityId)
         {
             var model = new MailTemplateInputViewModel
@@ -468,7 +509,7 @@
                 IsStandardTemplate = false,
                 MailTemplateLanguage = mailTemplateLanguage,
                 Customer = customer,
-                CaseFieldSettingWithLangauges = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customer.Id, languageId),
+                CaseFieldSettingWithLangauges = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customer.Id, SessionFacade.CurrentLanguageId),
                 AccountFieldSettings = this._accountFieldSettingsService.GetAccountFieldSettings(customer.Id, accountactivityId),
                 OrderFieldSettings = this._orderService.GetOrderFieldSettingsForMailTemplate(customer.Id, ordertypeId),
                 Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
@@ -487,7 +528,7 @@
         {
             var customer = this._customerService.GetCustomer(customerId);
             //var mailTemplateLanguageToUpdate = this._mailTemplateService.GetMailTemplateLanguage(mailTemplateLanguageId, id);
-           
+
             //var mailTemplate = this._mailTemplateService.GetMailTemplate(mailTemplateId, customerId);
 
             var mailTemplate = this._mailTemplateService.GetMailTemplate(id, customerId);
@@ -506,16 +547,16 @@
             if (mailTemplateLanguageToUpdate == null)
                 mailTemplateLanguageToUpdate = new MailTemplateLanguageEntity
                 {
-                    
+
                     MailTemplate_Id = mailTemplate.Id,
                     Language_Id = mailTemplateLanguageId,
                     Subject = string.Empty,
                     Body = string.Empty,
                     MailTemplate = mailTemplate,
                     MailTemplateName = mailTemplateName
-                    
+
                 };
-                //mailTemplateLanguageToUpdate = new MailTemplateLanguage() { Language_Id = id, MailTemplate = mailTemplate };
+            //mailTemplateLanguageToUpdate = new MailTemplateLanguage() { Language_Id = id, MailTemplate = mailTemplate };
 
 
             var mailTemplateLanguage = new MailTemplateLanguageEntity() { Language_Id = mailTemplateLanguageId, MailTemplate = mailTemplate };

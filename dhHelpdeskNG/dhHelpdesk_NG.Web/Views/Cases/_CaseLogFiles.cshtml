@@ -10,14 +10,15 @@
                 var i = 0;
                 foreach (var filename in Model.Files) 
                 {
-                    <tr>
+                    <tr data-field="caseLogFile" data-field-id="@Model.Id" data-field-name="@filename">
                         <td>
                             <a href="@this.Url.Action("DownloadLogFile", new RouteValueDictionary {{ "id", Model.Id }, { "fileName", filename } })"><i class="icon-file"></i> @filename</a>
                         </td>
                         <td>
-                            @if (SessionFacade.CurrentUser.DeleteAttachedFilePermission == 1)
+                            @* TODO: fix this, set deleteattachedfilepermission to true if usergroupid is administrator *@
+                            @if (SessionFacade.CurrentUser.DeleteAttachedFilePermission == 1 || SessionFacade.CurrentUser.UserGroupId == 4)
                             {
-                            <a id="@string.Format("delete_logfile_button_{0}", i)" class="btn bt-small" title="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)"><i class="icon-remove"></i></a>
+                            <a id="@string.Format("delete_logfile_button_{0}", i)" class="btn bt-small" data-field="deleteFile" title="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)"><i class="icon-remove"></i></a>
                             }
                         </td>
                     </tr>

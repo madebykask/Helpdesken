@@ -1,12 +1,16 @@
 ﻿
-@using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings
 @using CasesFieldsTypes = DH.Helpdesk.Common.Enums.Cases
 @using DH.Helpdesk.Common.Extensions.DateTime
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @model DH.Helpdesk.Web.Models.Case.CaseSearchResultModel
 
 @if (Model != null)
-{    
+{   if (Model.ShowRemainingTime)
+    {
+        <div style="display: none;">
+            @Html.Partial("CaseRemainingTime", Model.RemainingTime)            
+        </div>
+    } 
     <table class="table table-striped table-bordered table-hover table-cases">
         <thead>
             <tr>
@@ -58,12 +62,11 @@
                             {
                                 <!-- Hours left -->
                                 @(string.IsNullOrEmpty(c.StringValue) ? " - " : string.Format("{0} h", c.StringValue))
-                            } else 
-                            {
+                            } else                             
+                            {   <!-- string -->
                                 if (c.TranslateThis)
-                                {
-                                    <!-- string -->
-                                    @Translation.Get(c.StringValue)
+                                {                                                                                                        
+                                    @Translation.Get(c.StringValue)                                                                     
                                 }
                                 else    
                                 {

@@ -31,6 +31,24 @@
             return entities;
         }
 
+        public static List<ItemOverview> MapToCustomerUsersOverviews(
+                                    IQueryable<Customer> customers,
+                                    IQueryable<User> users,
+                                    IQueryable<CustomerUser> customerUsers)
+        {
+            var entities = (from cu in customerUsers
+                            join c in customers on cu.Customer_Id equals c.Id
+                            join u in users on cu.User_Id equals u.Id
+                            select u)
+                            .GetOrderedByName()
+                            .ToList();
+
+            return entities.Select(u => new ItemOverview(
+                                        new UserName(u.FirstName, u.SurName).GetReversedFullName(),
+                                        u.Id.ToString(CultureInfo.InvariantCulture)))
+                                        .ToList();
+        }
+
         public static User MapToUser(UserOverview overview)
         {
             return new User 
@@ -102,7 +120,8 @@
                 user.Phone,
                 user.Email,
                 user.UserWorkingGroups,
-                user.StartPage);
+                user.StartPage,
+                user.ShowSolutionTime.ToBool());
         }
 
         public static List<CustomerSettings> MapToUserCustomersSettings(
@@ -186,6 +205,21 @@
                 .ToList();
 
             return allCustomerUsers.Select(u => new ItemOverview(new UserName(u.FirstName, u.SurName).GetReversedFullName(), u.Id.ToString(CultureInfo.InvariantCulture))).ToList();
+        }
+
+        public static List<Customer> MapToUserCustomers(
+                                IQueryable<Customer> customers,
+                                IQueryable<User> users,
+                                IQueryable<CustomerUser> customerUsers)
+        {
+            var entities = (from u in users
+                            join cu in customerUsers on u.Id equals cu.User_Id
+                            join c in customers on cu.Customer_Id equals c.Id
+                            select c)
+                            .OrderBy(c => c.Name)
+                            .ToList();
+
+            return entities;
         } 
     }
 }

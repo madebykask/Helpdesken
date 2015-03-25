@@ -1,7 +1,7 @@
 ﻿
 @model DH.Helpdesk.Web.Models.Changes.SettingsEdit.SettingsModel
            
-<table class="table table-striped table-bordered table-hover">
+<table class="table table-striped table-bordered table-hover table-cases">
     <thead>
         <tr>
             <th>@Translation.Get("Fält", Enums.TranslationSource.TextTranslation)</th>
@@ -9,8 +9,8 @@
             <th>@Translation.Get("Lista", Enums.TranslationSource.TextTranslation)</th>
             <th>@Translation.Get("Visa på självservice", Enums.TranslationSource.TextTranslation)</th>
             <th>
-                @Translation.Get("Rubrik", Enums.TranslationSource.TextTranslation)
-                @Html.DropDownListFor(m => m.LanguageId, Model.Languages, new { id = "settings_language_dropdown" })
+                @Translation.Get("Rubrik", Enums.TranslationSource.TextTranslation)<br />
+                @Html.DropDownListFor(m => m.LanguageId, Model.Languages, new { id = "settings_language_dropdown", @style = "max-width:99%;" })
             </th>
             <th>@Translation.Get("Obligatorisk", Enums.TranslationSource.TextTranslation)</th>
             <th>@Translation.Get("Standardvärde", Enums.TranslationSource.TextTranslation)</th>

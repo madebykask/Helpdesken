@@ -67,7 +67,8 @@
         public List<ItemOverview> FindActiveOverviews(int customerId)
         {
             var departmentOverviews =
-                this.DataContext.Departments.Where(d => d.Customer_Id == customerId && d.IsActive != 0)
+                this.DataContext.Departments.Where(d => d.Customer_Id == customerId && d.IsActive != 0 && 
+                                                       (d.Region_Id == null || (d.Region != null && d.Region.IsActive != 0)))
                     .Select(d => new { d.Id, d.DepartmentName })
                     .ToList();
 
@@ -100,7 +101,7 @@
                 this.DataContext.Departments
                     .Where(d =>
                             d.Id == departmentId &&
-                            d.IsActive != 0)
+                            d.IsActive != 0 && (d.Region_Id == null || (d.Region != null && d.Region.IsActive != 0)))
                     .Select(d => new { d.Id, d.DepartmentName })
                     .ToList();
 
@@ -118,13 +119,14 @@
         /// <returns></returns>
         public IEnumerable<Department> GetActiveDepartmentsBy(int customerId, int? regionId)
         {
-            var query = this.DataContext.Departments.Where(d => d.Customer_Id == customerId && d.IsActive != 0);
+            var query = this.DataContext.Departments.Where(d => d.Customer_Id == customerId && d.IsActive != 0 && 
+                                                               (d.Region_Id == null || (d.Region != null && d.Region.IsActive != 0)));                
             if (regionId.HasValue)
             {
-                return query.Where(it => it.Region_Id == regionId.Value);
+                return query.Where(it => it.Region_Id == regionId.Value).OrderBy(d=> d.DepartmentName);
             }
 
-            return query;
+            return query.OrderBy(d=> d.DepartmentName);
         }
     }
 

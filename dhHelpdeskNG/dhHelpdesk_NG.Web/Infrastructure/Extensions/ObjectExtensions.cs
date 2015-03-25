@@ -133,6 +133,7 @@
             return ret;
         }
 
+
         public static int CaseFieldSettingRequiredCheck(this IList<CaseFieldSetting> cfs, string valueToFind)
         {
             int ret = 0;
@@ -195,6 +196,10 @@
         {
             return cfs.ToList().getCaseSettingsValue(valueToFind).FieldSize;
         }
+        public static string getEMailIdentifier(this IEnumerable<CaseFieldSetting> cfs, string valueToFind)
+        {
+            return cfs.ToList().getCaseSettingsValue(valueToFind).EMailIdentifier;
+        }
 
         public static string getLabel(this IEnumerable<CaseFieldSettingsWithLanguage> cfsl, string valueToFind)
         {
@@ -204,6 +209,10 @@
         public static string getFieldHelp(this IEnumerable<CaseFieldSettingsWithLanguage> cfsl, string valueToFind)
         {
             return cfsl.ToList().getCaseFieldSettingsLanguageValue(valueToFind).FieldHelp;
+        }
+        public static string getEMailIdentifier(this IEnumerable<CaseFieldSettingsWithLanguage> cfsl, string valueToFind)
+        {
+            return cfsl.ToList().getCaseFieldSettingsLanguageValue(valueToFind).EMailIdentifier;
         }
 
         public static string getCaseFieldSettingWithLanguageId(this IEnumerable<CaseFieldSettingsWithLanguage> cfsl, string valueToFind)

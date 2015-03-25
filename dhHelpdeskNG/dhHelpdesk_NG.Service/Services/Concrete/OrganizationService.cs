@@ -57,6 +57,14 @@
             return this.organizationUnitRepository.FindActiveAndShowable();
         }
 
+        public List<ItemOverview> GetOrganizationUnits(int? departmentId)
+        {
+            var emptyList = new List<ItemOverview>();
+            return departmentId == null ?
+                emptyList :
+                this.organizationUnitRepository.FindActive(departmentId);
+        }
+
         public OU[] GetOrganizationUnitsBy(int customerId, int? regionId, int? departmentId)
         {
             var activeDepartments = this.departmentRepository.GetActiveDepartmentsBy(customerId, regionId);

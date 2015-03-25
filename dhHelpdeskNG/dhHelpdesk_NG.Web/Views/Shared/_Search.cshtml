@@ -7,6 +7,7 @@
 {<form id="frmCaseSearch" name="frmCaseSearch">
     <div class="container">
         <div class="row" id="hiddeninfo" style="display:none">
+            <div data-field="caseRemainingTimeShowPlace" style="float: right;"></div>
             <div class="span12">
                 <table class="tableform">
                     <tr>
@@ -32,7 +33,7 @@
                                     {
                                         if (e.IsActive == 1)
                                         {                        
-                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.Region)>@e.Name</option>
+                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.Region)>@e.Name</option>
                                         }
                                     }
                                 </select>
@@ -51,7 +52,7 @@
                                     {
                                         if (e.IsActive == 1)
                                         {                        
-                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.Country)>@e.Name</option>
+                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.Country)>@e.Name</option>
                                         }
                                     }
                                 </select>
@@ -62,7 +63,7 @@
                     {
                         <tr>
                             <td>                                
-                               @Translation.Get(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                    
+                                @Translation.Get(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                    
                             </td>
                             <td>
                                 <select id="lstfilterDepartment" name="lstfilterDepartment" data-field="department" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
@@ -70,7 +71,7 @@
                                     {
                                         if (e.IsActive == 1)
                                         {                        
-                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.Department)>@e.DepartmentDescription(Model.customerSetting.DepartmentFilterFormat)</option>
+                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.Department)>@e.DepartmentDescription(Model.customerSetting.DepartmentFilterFormat)</option>
                                         }
                                     }
                                 </select>
@@ -81,7 +82,7 @@
                     {
                         <tr>
                             <td>                                                               
-                               @Translation.Get(GlobalEnums.TranslationCaseFields.User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                
+                                @Translation.Get(GlobalEnums.TranslationCaseFields.User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                
                             </td>
                             <td>
                                 <select id="lstfilterUser" name="lstfilterUser" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
@@ -148,7 +149,7 @@
                                     {
                                         if (e.IsActive == 1)
                                         {                        
-                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.Category)>@e.Name</option>
+                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.Category)>@e.Name</option>
                                         }
                                     }
                                 </select>
@@ -167,7 +168,7 @@
                                     {
                                         if (e.IsActive == 1)
                                         {                        
-                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.WorkingGroup)>@e.WorkingGroupName</option>
+                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.WorkingGroup)>@e.WorkingGroupName</option>
                                         }
                                     }
                                 </select>
@@ -187,7 +188,7 @@
                                     {
                                         if (e.IsActive == 1 && e.Performer == 1)
                                         {                        
-                                        <option value="@e.Id @e.Id.IdIsSelected(Model.caseSearchFilter.UserResponsible)">@e.SurName @e.FirstName</option>
+                                            <option value="@e.Id @e.Id.IdIsSelected(Model.caseSearchFilter.UserResponsible)">@e.SurName @e.FirstName</option>
                                         }
                                     }
                                 </select>
@@ -206,7 +207,7 @@
                                     {
                                         if (e.IsActive == 1 && e.Performer == 1)
                                         {                        
-                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.UserPerformer)>@e.SurName @e.FirstName</option>
+                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.UserPerformer)>@e.SurName @e.FirstName</option>
                                         }
                                     }
                                 </select>
@@ -217,7 +218,7 @@
                     {
                         <tr>
                             <td>                                
-                               @Translation.Get(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                    
+                                @Translation.Get(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                    
                             </td>
                             <td>
                                 <select id="lstfilterPriority" name="lstfilterPriority" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
@@ -225,7 +226,7 @@
                                     {
                                         if (e.IsActive == 1)
                                         {                        
-                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.Priority)>@Translation.Get(e.Name, Enums.TranslationSource.TextTranslation)</option>
+                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.Priority)>@Translation.Get(e.Name, Enums.TranslationSource.TextTranslation)</option>
                                         }
                                     }
                                 </select>
@@ -236,7 +237,7 @@
                     {
                         <tr>
                             <td>                                                                
-                               @Translation.Get(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                    
+                                @Translation.Get(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                    
                             </td>
                             <td>
                                 <select id="lstfilterStatus" name="lstfilterStatus" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
@@ -244,7 +245,7 @@
                                     {
                                         if (e.IsActive == 1)
                                         {                        
-                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.Status)>@Translation.Get(e.Name, Enums.TranslationSource.TextTranslation)</option>
+                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.Status)>@Translation.Get(e.Name, Enums.TranslationSource.TextTranslation)</option>
                                         }
                                     }
                                 </select>
@@ -263,7 +264,7 @@
                                     {
                                         if (e.IsActive == 1)
                                         {                        
-                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.StateSecondary)>@Translation.Get(e.Name, Enums.TranslationSource.TextTranslation)</option>
+                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.StateSecondary)>@Translation.Get(e.Name, Enums.TranslationSource.TextTranslation)</option>
                                         }
                                     }
                                 </select>
@@ -357,8 +358,8 @@
                         </td>
                         <td class="span4">
                             <input type="text" id="txtFreeTextSearch" value="@Model.caseSearchFilter.FreeTextSearch" name="txtFreeTextSearch" 
-                                    rel="tooltip" 
-                                    title="@Translation.Get("Use # to search for case number")" />
+                                   rel="tooltip" 
+                                   title="@Translation.Get("Använd # för att söka efter ärendenummer")" />
                         </td>
                         <td>
                             <select id="lstfilterCaseProgress" name="lstfilterCaseProgress">
@@ -380,6 +381,7 @@
                     </tr>
                 </table>
             </div>
+            <div data-field="caseRemainingTimeHidePlace" style="float: right;"></div>                            
         </div>
     </div>
     </form>

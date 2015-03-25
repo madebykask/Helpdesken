@@ -27,3 +27,4 @@ _ReSharper*/
 dhHelpdeskNG/dhHelpdesk_NG.Web/Web.config
 dhHelpdeskNG/dhHelpdesk_NG.Web/App_Data/Uploaded Files/Reports/
 dhHelpdeskNG/dhHelpdesk_NG.Web/log4net.config
+dhHelpdeskNG/packages/*

@@ -66,9 +66,9 @@
             <div class="tab-content">
                 <div class="tab-pane tab-pane-border active" id="case">
                     <div class="container">
-                        @Html.HiddenFor(model => model.case_.Id)
+                        @Html.HiddenFor(model => model.case_.Id, new { data_field = "caseId" })
                         @Html.HiddenFor(model => model.case_.CaseGUID)
-                        @Html.HiddenFor(model => model.case_.Customer_Id)
+                        @Html.HiddenFor(model => model.case_.Customer_Id, new { data_field = "customerId" })
                         @Html.HiddenFor(model => model.case_.User_Id)
                         @Html.HiddenFor(model => model.case_.IpAddress)
                         @Html.HiddenFor(model => model.case_.Deleted)
@@ -94,7 +94,7 @@
                         @Html.HiddenFor(model => model.CaseMailSetting.SendMailAboutNewCaseTo)
                         @Html.HiddenFor(model => model.CaseMailSetting.HelpdeskMailFromAdress)
                         @Html.HiddenFor(model => model.CaseMailSetting.AbsoluterUrl)
-                        @Html.HiddenFor(model => model.CaseMailSetting.DontConnectUserToWorkingGroup)
+                        @Html.HiddenFor(model => model.CaseMailSetting.DontConnectUserToWorkingGroup, new { data_field = "dontConnectUserToWorkingGroup" })
                         @Html.HiddenFor(model => model.CaseFileNames)
                         @Html.HiddenFor(model => model.LogFileNames)
                         @Html.HiddenFor(model => model.case_.Unread)
@@ -126,15 +126,16 @@
                                                     @Html.Hidden("ShowReportedBy", Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ReportedBy.ToString()).ShowOnStartPage)
                                                     @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.ReportedBy, CaseSolutionFields.UserNumber))
                                                     {
-                                                        @Html.TextBoxFor(model => model.case_.ReportedBy, new { maxlength = "40", autocomplete = "Off" })
+                                                        @Html.TextBoxFor(model => model.case_.ReportedBy, new { maxlength = "40", autocomplete = "Off", data_field = "userId" })
                                                     }
                                                     else
                                                     {
-                                                        @Html.TextBoxFor(model => model.case_.ReportedBy, new { maxlength = "40", autocomplete = "Off", @readonly = true })
+                                                        @Html.TextBoxFor(model => model.case_.ReportedBy, new { maxlength = "40", autocomplete = "Off", @readonly = true, data_field = "userId" })
                                                     }
                                                 </td>
                                                 <td>
                                                     <a href="#" id="AddNotifier" class="btn">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>
+                                                    <a href="#" data-field="relatedCases" title="@Translation.Get("Relaterade ärenden")" class="btn"><i class="icon-list"></i></a>
                                                 </td>
                                             </tr>
                                             <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Persons_Name, CaseSolutionFields.PersonsName)">
@@ -208,11 +209,11 @@
                                                 <td class="span4">
                                                     @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Persons_Phone, CaseSolutionFields.PersonsPhone))
                                                     {
-                                                        @Html.TextBoxFor(model => model.case_.PersonsPhone, new { maxlength = "30" })
+                                                        @Html.TextBoxFor(model => model.case_.PersonsPhone, new { maxlength = "40" })
                                                     }
                                                     else
                                                     {
-                                                       @Html.TextBoxFor(model => model.case_.PersonsPhone, new { maxlength = "30", @readonly = "readonly" })
+                                                       @Html.TextBoxFor(model => model.case_.PersonsPhone, new { maxlength = "40", @readonly = "readonly" })
                                                     }
                                                 </td>
                                             </tr>
@@ -300,7 +301,7 @@
                                                         }
                                                         else
                                                         {
-                                                            <select id="case__Ou_Id" name="case_.OU_Id" >
+                                                            <select id="case__Ou_Id" name="case_.OU_Id" data-field="ou">
                                                                 <option value="">&nbsp;</option>
                                                                 @if (Model.ous != null)
                                                                 {
@@ -810,11 +811,11 @@
                                         <td colspan="2">
                                             @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Miscellaneous, CaseSolutionFields.Miscellaneous))
                                             {
-                                                @Html.TextAreaFor(model => model.case_.Miscellaneous)
+                                                @Html.TextAreaFor(model => model.case_.Miscellaneous, new { maxlength = "1000" })
                                             }
                                             else
                                             {
-                                                @Html.TextAreaFor(model => model.case_.Miscellaneous, new { @readonly = true })
+                                                @Html.TextAreaFor(model => model.case_.Miscellaneous, new { maxlength = "1000", @readonly = true })
                                             }
                                         </td>
                                     </tr>
@@ -932,8 +933,8 @@
                                             {
                                                 <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>
                                             }
-                                            <div id="divCaseFiles">
-                                                @Html.Partial("_CaseFiles", Model.CaseFilesModel)
+                                            <div id="divCaseFiles">                                                
+                                                @Html.Partial("_CaseFiles", Model.CaseFilesModel, new ViewDataDictionary{{"CaseInactive", Model.case_.FinishingDate.HasValue} })
                                             </div>
                                         </td>
                                     </tr>
@@ -963,7 +964,7 @@
                                         <td>
                                             @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.WorkingGroup_Id, CaseSolutionFields.WorkingGroup))
                                             {
-                                                <select id="case__WorkingGroup_Id" name="case_.WorkingGroup_Id">
+                                                <select id="case__WorkingGroup_Id" name="case_.WorkingGroup_Id" data-field="workingGroup">
                                                     <option value="">&nbsp;</option>
                                                     @if (Model.workingGroups != null)
                                                     {
@@ -1216,7 +1217,7 @@
                                     }
                                     <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.CausingPart, CaseSolutionFields.CausingPart)">
                                         <td>
-                                            @CaseFieldCaption(GlobalEnums.TranslationCaseFields.CausingPart, "Orsak")
+                                            @CaseFieldCaption(GlobalEnums.TranslationCaseFields.CausingPart, "Rotorsak")
                                         </td>
                                         <td class="span1" style="float: left;">
                                             @Html.HiddenFor(model => model.case_.CausingPartId, new { ModelId = "causing-type" })
@@ -1810,7 +1811,16 @@
 
         var scope = dhHelpdesk.cases.scope({
             requiredFieldsMessage: '@Translation.Get("Ärendet kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ärendet.")',
-            getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax")'
+            getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax")',
+            getDepartmentUsersUrl: '@Url.Action("GetDepartmentUsers", "Ajax")',
+            relatedCasesUrl: '@Url.Action("RelatedCases", "Cases")',
+            relatedCasesCountUrl: '@Url.Action("RelatedCasesCount", "Cases")',
+            getDepartmentOusUrl: '@Url.Action("ChangeDepartment", "Cases")',
+            deleteCaseFileConfirmMessage: '@Translation.Get("Är du säker på att du vill ta bort den här filen?")',
+            okText: '@Translation.Get("OK")',
+            cancelText: '@Translation.Get("Avbryt")',
+            yesText: '@Translation.Get("Ja")',
+            noText: '@Translation.Get("Nej")'
         });
     });
 </script>

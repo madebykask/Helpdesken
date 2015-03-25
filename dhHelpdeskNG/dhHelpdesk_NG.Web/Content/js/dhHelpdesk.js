@@ -1,4 +1,12 @@
-﻿var dhHelpdesk = {};
+﻿// Global variables 
+var dhHelpdesk = {};
+var publicCustomerId = $('#case__Customer_Id').val();
+var publicDepartmentControlName = '#case__Department_Id';
+var publicOUControlName = '#case__Ou_Id';
+
+// controller methods:
+var publicChangeRegion = '/Cases/ChangeRegion/';
+var publicChangeDepartment = '/Cases/ChangeDepartment/';
 
 
 //Start FAQ Acordion
@@ -126,7 +134,6 @@ function CaseCascadingSelectlistChange(id, customerId, postTo, ctl, departmentFi
             $('#case__Ou_Id').prop('disabled', false);
     });
 }
-
 
 function CaseWriteTextToLogNote(value) {
     $('#WriteTextToExternalNote').val(value);
@@ -258,6 +265,50 @@ function FAQInitForm() {
     bindDeleteFAQFileBehaviorToDeleteButtons();
 
 }
+
+function refreshDepartment(regionId, departmentFilterFormat, selectedDepartmentId) {
+    var ctlOption = publicDepartmentControlName + ' option';
+    $.post(publicChangeRegion, { 'id': regionId, 'customerId': publicCustomerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {
+        $(ctlOption).remove();
+        $(publicDepartmentControlName).append('<option value="">&nbsp;</option>');
+        $(publicDepartmentControlName).prop('disabled', true);
+        if (data != undefined) {
+            for (var i = 0; i < data.list.length; i++) {
+                var item = data.list[i];
+                var option = $("<option value='" + item.id + "'>" + item.name + "</option>");
+                if (option.val() == selectedDepartmentId) {
+                    option.prop("selected", true);
+                }
+                $(publicDepartmentControlName).append(option);
+            }
+        }
+    }, 'json').always(function () {
+        $(publicDepartmentControlName).change();
+        $(publicDepartmentControlName).prop('disabled', false);
+    });
+}
+
+function refreshOrganizationUnit(departmentId, departmentFilterFormat, selectedOrganizationUnitId) {
+    var ctlOption = publicOUControlName + ' option';
+    $.post(publicChangeDepartment, { 'id': departmentId, 'customerId': publicCustomerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {
+        $(ctlOption).remove();
+        $(publicOUControlName).append('<option value="">&nbsp;</option>');
+        $(publicOUControlName).prop('disabled', true);
+        if (data != undefined) {
+            for (var i = 0; i < data.list.length; i++) {
+                var item = data.list[i];
+                var option = $("<option value='" + item.id + "'>" + item.name + "</option>");
+                if (option.val() == selectedOrganizationUnitId) {
+                    option.prop("selected", true);
+                }
+                $(publicOUControlName).append(option);
+            }
+        }
+    }, 'json').always(function () {
+        $(publicOUControlName).prop('disabled', false);
+    });
+}
+
 function CaseInitForm() {
 
     $('#CaseLog_TextExternal').focus(function () {
@@ -275,17 +326,32 @@ function CaseInitForm() {
         CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeCountry/', '#case__Supplier_Id', $('#DepartmentFilterFormat').val());
     });
 
+    // Remove after implementing http://redmine.fastdev.se/issues/10995
+    $('#case__Region_Id').change(function (departmentId) {        
+        var regionId = $(this).val();
+        var departmentFilterFormat = $('#DepartmentFilterFormat').val();
+        refreshDepartment(regionId, departmentFilterFormat, departmentId);
+    });
+
+
     $('#case__Department_Id').change(function () {
-        $('#case__Ou_Id').prop('disabled', true);
-        CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeDepartment/', '#case__Ou_Id', $('#DepartmentFilterFormat').val());        
+        // Remove after implementing http://redmine.fastdev.se/issues/10995        
+        var departmentId = $(this).val();
+        var departmentFilterFormat = $('#DepartmentFilterFormat').val();
+        refreshOrganizationUnit(departmentId, departmentFilterFormat);
+        showInvoice(departmentId);       
+    });
+
+    function showInvoice(departmentId) {
         $('#divInvoice').hide();
-        $.get('/Cases/ShowInvoiceFields/', { 'departmentId': $(this).val() }, function (data) {
+        $.get('/Cases/ShowInvoiceFields/', { 'departmentId': departmentId }, function (data) {
             if (data == 1) {
                 $('#divInvoice').show();
             }
         }, 'json');
-    });
+    }
 
+     
     $('#case__Status_Id').change(function () {
         if ($(this).val() > 0) {
             $.post('/Cases/ChangeStatus/', { 'id': $(this).val() }, function (data) {
@@ -354,6 +420,7 @@ function CaseInitForm() {
     });
 
     $('#case__WorkingGroup_Id').change(function () {
+        // Remove after implementing http://redmine.fastdev.se/issues/10995
         // filter administrators
         var DontConnectUserToWorkingGroup = $('#CaseMailSetting_DontConnectUserToWorkingGroup').val();
         if (DontConnectUserToWorkingGroup == 0) {
@@ -443,7 +510,7 @@ function CaseInitForm() {
         if ($("#case__Department_Id").val() != '')
             params += "&departmentId=" + $("#case__Department_Id").val();
         if ($("#case__Ou_Id").val() != '')
-            params += "&unitId=" + $("#case__Ou_Id").val();
+            params += "&organizationUnitId=" + $("#case__Ou_Id").val();
         
         var win = window.open('/Notifiers/NewNotifierPopup' + params, '_blank', 'left=100,top=100,width=990,height=480,toolbar=0,resizable=1,menubar=0,status=0,scrollbars=1');
         //win.onbeforeunload = function () { CaseNewNotifierEvent(win.returnValue); }
@@ -466,18 +533,17 @@ function CaseInitForm() {
     var getCaseFiles = function () {
         $.get('/Cases/Files', { id: $('#CaseKey').val(), now: Date.now() }, function (data) {
             $('#divCaseFiles').html(data);
+            // Raise event about rendering of uploaded file
+            $(document).trigger("OnUploadedCaseFileRendered", []);
             bindDeleteCaseFileBehaviorToDeleteButtons();
         });
-    };
-
-    //var GetCurrentFiles() {
-    //   //
-        
-    //};
+    };   
 
     var getLogFiles = function () {
         $.get('/Cases/LogFiles', { id: $('#LogKey').val(), now: Date.now() }, function (data) {
             $('#divCaseLogFiles').html(data);
+            // Raise event about rendering of uploaded file
+            $(document).trigger("OnUploadedCaseLogFileRendered", []);
             bindDeleteLogFileBehaviorToDeleteButtons();
         });
     };
@@ -795,20 +861,29 @@ function GetComputerUserSearchOptions() {
 
         updater: function (obj) {
             var item = JSON.parse(obj);
+            var departmentFilterFormat = $('#DepartmentFilterFormat').val();
             //console.log(JSON.stringify(item));
             $('#case__ReportedBy').val(item.num);
+
+            // Raise event about UserId changed.
+            $(document).trigger("OnUserIdChanged", [item.num]);
+
             $('#case__PersonsName').val(item.name);
             $('#case__PersonsEmail').val(item.email);
             $('#case__PersonsPhone').val(item.phone);
             $('#case__PersonsCellphone').val(item.cellphone);
             $('#case__Place').val(item.place);
             $('#case__UserCode').val(item.usercode);
+
             $('#case__Region_Id').val(item.regionid);
             $('#RegionName').val(item.regionname);
-            $('#SelectedValueCarrier').val(item.ouid);
-            $('#case__Department_Id').val(item.departmentid).change();
+
+            $('#case__Department_Id').val(item.departmentid);
+            refreshDepartment(item.regionid, departmentFilterFormat, item.departmentid);                        
             $('#DepartmentName').val(item.departmentname);
-            $('#case__OU_Id').val(item.ouid);                        
+
+            $('#case__OU_Id').val(item.ouid);
+            refreshOrganizationUnit(item.departmentid, departmentFilterFormat, item.ouid);            
             $('#OUName').val(item.ouname);
 
             return item.num;
@@ -981,7 +1056,6 @@ function bindDeleteCaseFileBehaviorToDeleteButtons() {
         });
     });
 }
-
 function bindDeleteLogFileBehaviorToDeleteButtons() {
     $('#log_files_table a[id^="delete_logfile_button_"]').click(function () {
         var key = $('#LogKey').val();
@@ -994,6 +1068,9 @@ function bindDeleteLogFileBehaviorToDeleteButtons() {
             fileNames = fileNames.replace("|" + fileName.trim(), "");
             fileNames = fileNames.replace(fileName.trim() + "|", "");
             $('#LogFileNames').val(fileNames);
+
+            // Raise event about deleted file
+            $(document).trigger("OnDeleteCaseLogFile", [key, fileName]);
         });
     });
 }
@@ -1017,20 +1094,31 @@ function SetPriority() {
 function NewNotifierEvent(id) {
     $.post('/Cases/Get_User', { 'Id': id }, function (data) {
         if (data != undefined) {
+            var departmentFilterFormat = $('#DepartmentFilterFormat').val();
             $('#case__ReportedBy').val(data.num);
+
+            // Raise event about UserId changed.
+            $(document).trigger("OnUserIdChanged", [data.num]);
+
             $('#case__PersonsName').val(data.name);
             $('#case__PersonsEmail').val(data.email);
             $('#case__PersonsPhone').val(data.phone);
             $('#case__PersonsCellphone').val(data.cellphone);
             $('#case__Place').val(data.place);
             $('#case__UserCode').val(data.usercode);
+            
             $('#case__Region_Id').val(data.regionid);
+            //$('#case__Region_Id').change();
             $('#RegionName').val(data.regionname);
-            $('#SelectedValueCarrier').val(data.ouid);
-            $('#case__Department_Id').val(data.departmentid).change();
+
+            $('#case__Department_Id').val(data.departmentid);
+            refreshDepartment(data.regionid, departmentFilterFormat, data.departmentid);
             $('#DepartmentName').val(data.departmentname);
-            $('#case__OU_Id').val(data.ouid);                        
+
+            $('#case__OU_Id').val(data.ouid);
+            refreshOrganizationUnit(data.departmentid, departmentFilterFormat, data.ouid);
             $('#OUName').val(data.ouname);
+
         }
     }, 'json');
 }

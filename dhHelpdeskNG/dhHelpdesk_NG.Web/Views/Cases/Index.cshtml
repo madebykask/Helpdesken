@@ -73,5 +73,28 @@
         var scope = dhHelpdesk.casesList.scope({
             getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax")'
         });
+        
+        var ReloadCaseOverview = function(){
+            var TimeBeforeReload = "@Model.CaseSetting.RefreshContent";
+            TimeBeforeReload = TimeBeforeReload / 60;
+            TimeBeforeReload = TimeBeforeReload * 60000;
+            debugger;
+            if (TimeBeforeReload != null || TimeBeforeReload != NaN || TimeBeforeReload != "")
+            {
+                var TimeBeforeReload = parseInt(TimeBeforeReload, 10);
+                if (TimeBeforeReload != 0) {
+                    setTimeout(function () {
+                        var CaseOverViewActive = $("#fragment-1").attr("class");
+                        debugger;
+                        if (CaseOverViewActive.indexOf("active") >= 0) {
+                            debugger;
+                            location.reload();
+                        }
+                    }, TimeBeforeReload);
+                }
+            }
+            
+        };
+        ReloadCaseOverview();
     });
 </script>

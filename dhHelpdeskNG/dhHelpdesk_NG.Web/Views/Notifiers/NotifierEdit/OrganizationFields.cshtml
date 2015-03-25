@@ -38,27 +38,27 @@
                         </td>
                         <td>
                             <div id="department_dropdown_container">
-                                @Html.Partial("DepartmentDropDown", Model.Department.Value, new ViewDataDictionary { { "Required", true } })
+                                @Html.Partial("DepartmentDropDown", Model.Department.Value, new ViewDataDictionary { { "Required", Model.Department.Required } })
                             </div>
                         </td>
                     </tr>
                 }
 
-                @Html.EditorFor(m => m.Unit, "TextBox")
-                                    
-                @if (ViewBag.displaySettings.OrganizationUnit.Show)
+                @if (Model.OrganizationUnit.Show)
                 {
                     <tr>
                         <td class="span3">
-                            @(Translation.Get(ViewBag.displaySettings.OrganizationUnit.Caption, Enums.TranslationSource.TextTranslation) + (ViewBag.displaySettings.OrganizationUnit.Required ? "*" : string.Empty))
+                            @(Translation.Get(Model.OrganizationUnit.Caption, Enums.TranslationSource.TextTranslation) + (Model.OrganizationUnit.Required ? "*" : string.Empty))
                         </td>
                         <td>
-                            <select id="organization_unit_dropdown" name="OrganizationUnitId_lev1"></select>
-                            <select id="sub_organization_unit_dropdown" style="display: none"></select>
-                            <input type="hidden" id="OrganizationUnitId" name="OrganizationUnitId" value="@ViewBag.selectedOrganizationUnitId" />
+                            <div id="organizationUnit_dropdown_container">
+                                @Html.Partial("OrganizationUnitDropDown", Model.OrganizationUnit.Value, new ViewDataDictionary { { "Required", Model.OrganizationUnit.Required } })
+                            </div>
                         </td>
                     </tr>
                 }
+
+                @Html.EditorFor(m => m.Unit, "TextBox")                                                    
 
                 @if (Model.Division.Show)
                 {

@@ -50,6 +50,12 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
         public CasesCustomFilter CustomFilter { get; set; }
 
+        public int? CaseRemainingTimeFilter { get; set; }
+
+        public int? CaseRemainingTimeMaxFilter { get; set; }
+
+        public bool CaseRemainingTimeHoursFilter { get; set; }
+
         public CaseSearchFilter Copy(CaseSearchFilter o)
         {
             var r = new CaseSearchFilter();
@@ -84,7 +90,10 @@ namespace DH.Helpdesk.BusinessData.Models.Case
             r.CaseClosingReasonFilter = o.CaseClosingReasonFilter;
             r.ParentPathClosingReason = o.ParentPathClosingReason;
             r.CustomFilter = o.CustomFilter;
-                   
+            r.CaseRemainingTimeFilter = o.CaseRemainingTimeFilter;
+            r.CaseRemainingTimeMaxFilter = o.CaseRemainingTimeMaxFilter;
+            r.CaseRemainingTimeHoursFilter = o.CaseRemainingTimeHoursFilter;
+
             return r;
         }
     }

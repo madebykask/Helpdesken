@@ -1,8 +1,9 @@
 ﻿@using DH.Helpdesk.Common.Extensions.DateTime
-@model DH.Helpdesk.Web.Models.Case.CaseFilesModel     
 
+@model DH.Helpdesk.Web.Models.Case.CaseFilesModel     
 @if (Model != null && Model.Files != null && Model.Files.Any())
 {    
+
     <table id="case_files_table" class="table table-striped">
         <thead>
             <tr>
@@ -16,16 +17,19 @@
                     @Translation.Get("Upplagd av")
                 </th>
                 <th></th>
-            </tr>    
+            </tr>
         </thead>
-        <tbody>            
-        @{
-            var i = 0;
-            foreach (var file in Model.Files) 
-            {
-                <tr>
+        <tbody>
+            @{
+    var i = 0;
+    var caseInactive = false;
+    caseInactive = (ViewData["CaseInactive"] != null? (bool) ViewData["CaseInactive"]:false);
+    
+    foreach (var file in Model.Files)
+    {
+                <tr data-field="caseFile" data-field-id="@Model.ObjectId" data-field-name="@file.FileName">
                     <td>
-                        <a href="@Url.Action("DownloadFile", new RouteValueDictionary { { "id", Model.ObjectId }, { "fileName", file.FileName } })"><i class="icon-file"></i> @file.FileName</a>
+                        <a href="@Url.Action("DownloadFile", new RouteValueDictionary { { "id", Model.ObjectId }, { "fileName", file.FileName } })"><i class="icon-file"></i>@file.FileName</a>
                     </td>
                     <td>
                         @file.CreatedDate.ToFormattedDateTime()
@@ -36,13 +40,17 @@
                     <td>
                         @if (SessionFacade.CurrentUser.DeleteAttachedFilePermission == 1)
                         {
-                            <a id="@string.Format("delete_casefile_button_{0}", i)" class="btn bt-small" title="@Translation.Get("Ta bort")"><i class="icon-remove"></i></a>
+                            if (!caseInactive)
+                            {
+                                <a id="@string.Format("delete_casefile_button_{0}", i)" class="btn bt-small" data-field="deleteFile" title="@Translation.Get("Ta bort")"><i class="icon-remove"></i></a> 
+                            }
+                           
                         }
                     </td>
                 </tr>
-                i++;
+                        i++;
+    }
             }
-        }
         </tbody>
     </table> 
-}    
+}

@@ -16,6 +16,7 @@
             List<ItemOverview> searchDomains,
             List<ItemOverview> searchRegions,
             List<ItemOverview> searchDepartments,
+            List<ItemOverview> searchOrganizationUnit,
             List<ItemOverview> searchDivisions,
             NotifierFilters filters,
             SearchResult searchResult);

@@ -23,6 +23,7 @@
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Notifiers;
     using DH.Helpdesk.Web.Models.Notifiers;
     using DH.Helpdesk.Web.Models.Notifiers.ConfigurableFields;
+    using DH.Helpdesk.Web.Infrastructure.Tools;
 
     public sealed class NotifiersController : BaseController
     {
@@ -151,19 +152,30 @@
         {
             List<ItemOverview> departments;
 
+            // Prevent to show departments with inactive region
             if (regionId.HasValue)
             {
-                departments =
-                    this.departmentRepository.FindActiveByCustomerIdAndRegionId(
-                        SessionFacade.CurrentCustomer.Id,
-                        regionId.Value);
-            }
-            else
-            {
-                departments = this.departmentRepository.FindActiveOverviews(SessionFacade.CurrentCustomer.Id);
+                var curRegion = this.regionRepository.GetById(regionId.Value);
+                if (curRegion.IsActive == 0)
+                    regionId = null; 
             }
 
+            var departmentsData =
+                    this.departmentRepository.GetActiveDepartmentsBy(SessionFacade.CurrentCustomer.Id, regionId).ToArray();
+
+            departments = departmentsData.Select(d => new ItemOverview(d.DepartmentName, d.Id.ToString())).ToList();
+            
             var model = new DropDownContent(departments.Select(d => new DropDownItem(d.Name, d.Value)).ToList());
+            return this.PartialView(model);
+        }
+
+        [HttpGet]
+        public PartialViewResult OrganizationUnitDropDown(int? departmentId)
+        {
+            List<ItemOverview> organizationUnits;           
+            organizationUnits = organizationUnits = this.organizationService.GetOrganizationUnits(departmentId);
+
+            var model = new DropDownContent(organizationUnits.Select(d => new DropDownItem(d.Name, d.Value)).ToList());
             return this.PartialView(model);
         }
 
@@ -192,11 +204,17 @@
             List<ItemOverview> searchDomains = null;
             List<ItemOverview> searchRegions = null;
             List<ItemOverview> searchDepartments = null;
+            List<ItemOverview> searchOrganizationUnit = null;
             List<ItemOverview> searchDivisions = null;
 
             if (settings.Domain.ShowInNotifiers)
             {
                 searchDomains = this.domainRepository.FindByCustomerId(currentCustomerId);
+            }
+
+            if (settings.Region.ShowInNotifiers)
+            {
+                searchRegions = this.regionRepository.FindByCustomerId(currentCustomerId);
             }
 
             if (settings.Department.ShowInNotifiers)
@@ -213,6 +231,8 @@
                 {
                     searchDepartments = this.departmentRepository.FindActiveOverviews(currentCustomerId);
                 }
+
+                searchOrganizationUnit = this.organizationService.GetOrganizationUnits(filters.DepartmentId);
             }
 
             if (settings.Division.ShowInNotifiers)
@@ -229,6 +249,7 @@
                 filters.DomainId,
                 filters.RegionId,
                 filters.DepartmentId,
+                filters.OrganizationUnitId,
                 filters.DivisionId,
                 filters.Pharse,
                 filters.Status,
@@ -242,6 +263,7 @@
                 searchDomains,
                 searchRegions,
                 searchDepartments,
+                searchOrganizationUnit,
                 searchDivisions,
                 filters,
                 searchResult);
@@ -277,7 +299,7 @@
             string cellPhone, 
             int? regionId, 
             int? departmentId, 
-            int? unitId)
+            int? organizationUnitId)
         {
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
             var inputParams = new Dictionary<string,string>();
@@ -290,6 +312,7 @@
             List<ItemOverview> domains = null;
             List<ItemOverview> regions = null;
             List<ItemOverview> departments = null;
+            List<ItemOverview> organizationUnits = null;
             List<ItemOverview> divisions = null;
             List<ItemOverview> managers = null;
             List<ItemOverview> groups = null;
@@ -302,45 +325,30 @@
             if (settings.Region.Show)
             {
                 regions = this.regionRepository.FindByCustomerId(currentCustomerId);
-                if (regionId != null && regionId > 0)
-                    inputParams.Add("RegionId", regionId.Value.ToString());
+
+                if (regionId != null && regionId.Value > 0)
+                    inputParams.Add("RegionId", regionId.Value.ToString()); // Takes default from Case page
             }
 
             if (settings.Department.Show)
             {
                 var departmentsData =
                     this.departmentRepository.GetActiveDepartmentsBy(currentCustomerId, regionId).ToArray();
-                departments = departmentsData.Select(it => new ItemOverview(it.DepartmentName, it.Id.ToString())).ToList();
 
-                if (departmentId != null)
-                    inputParams.Add("DepartmentId", departmentId.ToString()); // Takes data from Case page
-                //else
-                //    if (departmentsData.Any())
-                //    {
-                //        inputParams.Add("DepartmentId", departmentsData[0].Id.ToString());
-                //    }
+                departments = departmentsData.Select(d => new ItemOverview(d.DepartmentName, d.Id.ToString())).ToList();
+
+                if (departmentId != null && departmentId.Value > 0)
+                    inputParams.Add("DepartmentId", departmentId.Value.ToString()); // Takes default from Case page                
             }
                        
             if (settings.OrganizationUnit.Show)
-            {
-                //var deptId = departments != null && (settings.Department.Show && departments.Any())
-                //                 ? int.Parse(departments.FirstOrDefault().Value)
-                //                 : (int?)null;                                
-                var organizationUnits = this.organizationService.GetOrganizationUnitsBy(currentCustomerId, null, departmentId);
-                
-                //, regionId, departmentId
-                ViewBag.organizationUnits = organizationUnits.Select(it => new { id = it.Id.ToString(), parent_id = it.Parent_OU_Id.ToString(), name = it.Name });
+            {                
+                organizationUnits = this.organizationService.GetOrganizationUnits(departmentId);
 
-                if (unitId != null)
-                {
-                    inputParams.Add("UnitId", unitId.Value.ToString());
-                    ViewBag.selectedOrganizationUnitId = unitId.Value.ToString();
-                }
-                //else
-                //{
-                //    ViewBag.selectedOrganizationUnitId = organizationUnits.Any() ? organizationUnits.First().Id.ToString() : string.Empty;
-                //}
+                if (organizationUnitId != null && organizationUnitId.Value > 0)
+                    inputParams.Add("OrganizationUnitId", organizationUnitId.Value.ToString()); // Takes default from Case page                
             }
+
             if (settings.Division.Show)
             {
                 divisions = this.divisionRepository.FindByCustomerId(currentCustomerId);
@@ -379,6 +387,7 @@
                 domains,
                 regions,
                 departments,
+                organizationUnits,
                 divisions,
                 managers,
                 groups,
@@ -402,9 +411,14 @@
             List<ItemOverview> domains = null;
             List<ItemOverview> regions = null;
             List<ItemOverview> departments = null;
+            List<ItemOverview> organizationUnits = null;
             List<ItemOverview> divisions = null;
             List<ItemOverview> managers = null;
             List<ItemOverview> groups = null;
+
+            int? regionId = null;
+            int? departmentId = null;
+            int? organizationUnitId = null;
 
             if (settings.Domain.Show)
             {
@@ -414,29 +428,30 @@
             if (settings.Region.Show)
             {
                 regions = this.regionRepository.FindByCustomerId(currentCustomerId);
+
+                regionId = this.regionRepository.GetDefaultRegion(currentCustomerId);
+                if (regionId != null && regionId.Value > 0)
+                    inputParams.Add("RegionId", regionId.Value.ToString()); // Takes default from setting
             }
 
             if (settings.Department.Show)
             {
-                int? regionId = settings.Region.Show && regions != null && regions.Count > 0 ? int.Parse(regions[0].Value) : (int?)null;
                 var departmentsData =
                     this.departmentRepository.GetActiveDepartmentsBy(currentCustomerId, regionId).ToArray();
-                departments = departmentsData.Select(it => new ItemOverview(it.DepartmentName, it.Id.ToString())).ToList();
-                if (departmentsData.Any())
-                {
-                    inputParams.Add("DepartmentId", departmentsData[0].Id.ToString());
-                }
+
+                departments = departmentsData.Select(d => new ItemOverview(d.DepartmentName, d.Id.ToString())).ToList();
+
+                if (departmentId != null && departmentId.Value > 0)
+                    inputParams.Add("DepartmentId", departmentId.Value.ToString()); // Takes default from setting
             }
 
             if (settings.OrganizationUnit.Show)
             {
-                var deptId = departments != null && (settings.Department.Show && departments.Any())
-                                 ? int.Parse(departments.FirstOrDefault().Value)
-                                 : (int?)null;
-                var organizationUnits = this.organizationService.GetOrganizationUnitsBy(currentCustomerId, null, deptId);
-                ViewBag.organizationUnits = organizationUnits.Select(it => new { id = it.Id.ToString(), parent_id = it.Parent_OU_Id.ToString(), name = it.Name });
-                ViewBag.selectedOrganizationUnitId = organizationUnits.Any() ? organizationUnits.First().Id.ToString() : string.Empty;
-            }
+                organizationUnits = this.organizationService.GetOrganizationUnits(departmentId);
+                                                
+                if (organizationUnitId != null && organizationUnitId.Value > 0)
+                    inputParams.Add("OrganizationUnitId", organizationUnitId.Value.ToString()); // Takes default from setting
+            }            
 
             if (settings.Division.Show)
             {
@@ -459,6 +474,7 @@
                 domains,
                 regions,
                 departments,
+                organizationUnits,
                 divisions,
                 managers,
                 groups,
@@ -471,6 +487,7 @@
         public ViewResult Notifier(int id)
         {
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
+            var inputParams = new Dictionary<string, string>();
             var notifier = this.notifierRepository.FindNotifierDetailsById(id);
 
             var displaySettings =
@@ -481,56 +498,53 @@
             List<ItemOverview> domains = null;
             List<ItemOverview> regions = null;
             List<ItemOverview> departments = null;
+            List<ItemOverview> organizationUnits = null;
             List<ItemOverview> divisions = null;
             List<ItemOverview> managers = null;
             List<ItemOverview> groups = null;
+
+            int? departmentRegionId = null;
+            int? departmentId = null;
+            int? organizationUnitId = null;
 
             if (displaySettings.Domain.Show)
             {
                 domains = this.domainRepository.FindByCustomerId(currentCustomerId);
             }
-
-            // Begins urgent emergency fix.
-            int? departmentRegionId = null;
-
-            if (displaySettings.Department.Show)
+                        
+            if (displaySettings.Region.Show)
             {
                 regions = this.regionRepository.FindByCustomerId(currentCustomerId);
 
-                if (notifier.DepartmentId.HasValue)
-                {
-                    var selectedDepartment = this.departmentRepository.GetById(notifier.DepartmentId.Value);
-                    departmentRegionId = selectedDepartment.Region_Id;
-
-                    if (departmentRegionId.HasValue)
-                    {
-                        departments = this.departmentRepository.FindActiveByCustomerIdAndRegionId(
-                            currentCustomerId,
-                            selectedDepartment.Region_Id.Value);
-                    }
-                    else
-                    {
-                        departments = this.departmentRepository.FindActiveOverviews(currentCustomerId);
-                    }
-                }
-                else
-                {
-                    departments = this.departmentRepository.FindActiveOverviews(currentCustomerId);
-                }
+                // As each "Department" must has a "Region" in defination, we get notifier RegionId from Department.
+                if (notifier.DepartmentId != null)
+                    departmentRegionId = this.departmentRepository.GetById(notifier.DepartmentId.Value).Region_Id;
+                 
+                if (departmentRegionId != null && departmentRegionId.Value > 0) 
+                    inputParams.Add("RegionId", departmentRegionId.Value.ToString()); // Takes default from saved Notifier
             }
-            // Ends urgent emergency fix.
+
+            if (displaySettings.Department.Show)
+            {
+                var departmentsData =
+                    this.departmentRepository.GetActiveDepartmentsBy(currentCustomerId, departmentRegionId).ToArray();
+
+                departments = departmentsData.Select(d => new ItemOverview(d.DepartmentName, d.Id.ToString())).ToList();
+                departmentId = notifier.DepartmentId;
+                
+                if (departmentId != null && departmentId.Value > 0)
+                    inputParams.Add("DepartmentId", departmentId.Value.ToString()); // Takes default from saved Notifier
+            }
 
             if (displaySettings.OrganizationUnit.Show)
             {
-                ViewBag.organizationUnits =
-                    this.organizationService.GetOrganizationUnitsBy(
-                        currentCustomerId,
-                        null,
-                        displaySettings.Department.Show ? notifier.DepartmentId : null)
-                        .Select(
-                            it => new { id = it.Id.ToString(), parent_id = it.Parent_OU_Id.ToString(), name = it.Name });
-            }
+                organizationUnits = this.organizationService.GetOrganizationUnits(departmentId);
+                organizationUnitId = notifier.OrganizationUnitId;
 
+                if (organizationUnitId != null && organizationUnitId.Value > 0)
+                    inputParams.Add("OrganizationUnitId", organizationUnitId.Value.ToString()); // Takes default from saved Notifier
+            }            
+            
             if (displaySettings.Division.Show)
             {
                 divisions = this.divisionRepository.FindByCustomerId(currentCustomerId);
@@ -555,6 +569,7 @@
                 domains,
                 regions,
                 departments,
+                organizationUnits,
                 divisions,
                 managers,
                 groups);
@@ -591,11 +606,17 @@
             List<ItemOverview> searchDomains = null;
             List<ItemOverview> searchRegions = null;
             List<ItemOverview> searchDepartments = null;
+            List<ItemOverview> searchOrganizationUnit = null;
             List<ItemOverview> searchDivisions = null;
 
             if (displaySettings.Domain.ShowInNotifiers)
             {
                 searchDomains = this.domainRepository.FindByCustomerId(currentCustomerId);
+            }
+
+            if (displaySettings.Region.ShowInNotifiers)
+            {
+                searchRegions = this.regionRepository.FindByCustomerId(currentCustomerId);
             }
 
             if (displaySettings.Department.ShowInNotifiers)
@@ -612,6 +633,8 @@
                 {
                     searchDepartments = this.departmentRepository.FindActiveOverviews(currentCustomerId);
                 }
+
+                searchOrganizationUnit = this.organizationService.GetOrganizationUnits(filters.DepartmentId);
             }
 
             if (displaySettings.Division.ShowInNotifiers)
@@ -624,6 +647,7 @@
                 filters.DomainId,
                 filters.RegionId,
                 filters.DepartmentId,
+                filters.OrganizationUnitId,
                 filters.DivisionId,
                 filters.Pharse,
                 filters.Status,
@@ -637,6 +661,7 @@
                 searchDomains,
                 searchRegions,
                 searchDepartments,
+                searchOrganizationUnit,
                 searchDivisions,
                 filters,
                 searchResult);
@@ -662,6 +687,7 @@
                 filters.DomainId,
                 filters.RegionId,
                 filters.DepartmentId,
+                filters.OrganizationUnitId,
                 filters.DivisionId,
                 filters.Pharse,
                 filters.Status,
@@ -688,22 +714,6 @@
             return this.RedirectToAction("Notifiers");
         }
 
-        /// <summary>
-        /// Returns Organization unit in JSON by departmentId, or all units for customer if deprarmtentId is null
-        /// </summary>
-        /// <param name="departmentId"></param>
-        /// <returns></returns>
-        public JsonResult OrganizationUnits(int? regionId, int? departmentId)
-        {
-            var data =
-                this.organizationService.GetOrganizationUnitsBy(
-                    SessionFacade.CurrentCustomer.Id,
-                    regionId,
-                    departmentId)
-                .Select(it => new { id = it.Id.ToString(), parent_id = it.Parent_OU_Id.ToString(), name = it.Name });
-           
-            return this.Json(data, JsonRequestBehavior.AllowGet);
-        }
 
         #endregion
     }

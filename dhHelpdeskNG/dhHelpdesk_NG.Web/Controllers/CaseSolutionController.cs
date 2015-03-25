@@ -122,13 +122,15 @@ namespace DH.Helpdesk.Web.Controllers
             if (SessionFacade.CurrentCaseSolutionSearch != null)
             {
                 CS = SessionFacade.CurrentCaseSolutionSearch;
-                model.CaseSolutions = this._caseSolutionService.SearchAndGenerateCaseSolutions(SessionFacade.CurrentCustomer.Id, CS);
+                var CaseSolutions = this._caseSolutionService.SearchAndGenerateCaseSolutions(SessionFacade.CurrentCustomer.Id, CS);
+                //Only return casesolution where templatepath is null - these case solutions are E-Forms shown in myhr/linemanager/selfservice
+                model.CaseSolutions = CaseSolutions.OrderBy(x => x.Name).Where(x => x.TemplatePath == null).ToList();
                 model.SearchCss = CS.SearchCss;
             }
             else
             {
-                //Only return casesolution where templatepath is null and showinselfservice is false - these case solutions are E-Forms shown in myhr/linemanager/selfservice
-                model.CaseSolutions = this._caseSolutionService.GetCaseSolutions(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.Name).Where(x => x.TemplatePath == null && x.ShowInSelfService == false).ToList();
+                //Only return casesolution where templatepath is null - these case solutions are E-Forms shown in myhr/linemanager/selfservice
+                model.CaseSolutions = this._caseSolutionService.GetCaseSolutions(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.Name).Where(x => x.TemplatePath == null).ToList();
                 CS.SortBy = "Name";
                 CS.Ascending = true;
                 SessionFacade.CurrentCaseSolutionSearch = CS;
@@ -150,7 +152,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             CS.SearchCss = SearchCaseSolutions.SearchCss;
 
-            var caseSol = this._caseSolutionService.SearchAndGenerateCaseSolutions(SessionFacade.CurrentCustomer.Id, CS);
+            var caseSol = this._caseSolutionService.SearchAndGenerateCaseSolutions(SessionFacade.CurrentCustomer.Id, CS).OrderBy(x => x.Name).Where(x => x.TemplatePath == null).ToList();
 
             if (SearchCaseSolutions != null)
                 SessionFacade.CurrentCaseSolutionSearch = CS;

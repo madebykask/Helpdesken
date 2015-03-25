@@ -2,14 +2,14 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @model DH.Helpdesk.Web.Models.Notifiers.SettingsModel
            
-<table class="table table-striped table-bordered table-hover">
+<table class="table table-striped table-bordered table-hover table-cases">
     <thead>
         <tr>
             <th>@Translation.Get("Fält", Enums.TranslationSource.TextTranslation)</th>
             <th>@Translation.Get("Visa", Enums.TranslationSource.TextTranslation)</th>
             <th>@Translation.Get("Lista", Enums.TranslationSource.TextTranslation)</th>
             <th>
-                @Translation.Get("Rubrik", Enums.TranslationSource.TextTranslation)
+                @Translation.Get("Rubrik", Enums.TranslationSource.TextTranslation)<br />
                 @Html.DropDown("language_dropdown", "LanguageId", false, Model.Language)
             </th>
             <th>@Translation.Get("Obligatorisk", Enums.TranslationSource.TextTranslation)</th>
@@ -18,7 +18,7 @@
     </thead>
     <tbody>
         <tr>
-            <td colspan="7" class="header">@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</td>
+            <td colspan="6" class="header">@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.UserId)
@@ -57,7 +57,7 @@
             @Html.EditorFor(m => m.Code)
         </tr>
         <tr>
-            <td colspan="7" class="header">@Translation.Get("Adress", Enums.TranslationSource.TextTranslation)</td>
+            <td colspan="6" class="header">@Translation.Get("Adress", Enums.TranslationSource.TextTranslation)</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.PostalAddress)
@@ -69,7 +69,7 @@
             @Html.EditorFor(m => m.City)
         </tr>
         <tr>
-            <td colspan="7" class="header">@Translation.Get("Organisation", Enums.TranslationSource.TextTranslation)</td>
+            <td colspan="6" class="header">@Translation.Get("Organisation", Enums.TranslationSource.TextTranslation)</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.Title)
@@ -99,13 +99,13 @@
             @Html.EditorFor(m => m.Other)
         </tr>
         <tr>
-            <td colspan="7" class="header">@Translation.Get("Beställning", Enums.TranslationSource.TextTranslation)</td>
+            <td colspan="6" class="header">@Translation.Get("Beställning", Enums.TranslationSource.TextTranslation)</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.Ordered)
         </tr>
         <tr>
-            <td colspan="7" class="header">@Translation.Get("Status", Enums.TranslationSource.TextTranslation)</td>
+            <td colspan="6" class="header">@Translation.Get("Status", Enums.TranslationSource.TextTranslation)</td>
         </tr>
         <tr>
             @Html.DisplayFor(m => m.CreatedDate)

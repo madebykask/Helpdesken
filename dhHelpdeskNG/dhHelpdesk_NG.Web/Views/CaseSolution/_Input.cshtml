@@ -40,6 +40,15 @@
                                         @Html.DropDownListFor(model => model.CaseSolution.CaseSolutionCategory_Id, Model.CsCategories, "")
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Visa på självservice", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="checkbox" style="padding-left: 20px">
+                                        <input type="checkbox" name="Casesolution.ShowInSelfService" @(Model.CaseSolution.ShowInSelfService == true ? "checked=checked" : "") value ="true" />
+                                        <input type="hidden" name="Casesolution.ShowInSelfService" value="0" />
+                                    </td>
+                                </tr>
                             </table>
                         </div>
                     </div>
@@ -807,7 +816,7 @@
                                         </td>
                                     </tr>
                                 }
-                                @if (Model.CaseFieldSettings.Count() != 0)
+                                @*@if (Model.CaseFieldSettings.Count() != 0)
                                 {
                                     <tr>
                                         <td>
@@ -852,7 +861,7 @@
                                     <td class="span9">
                                         @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.FinishingCause, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.ClosingReason)
                                     </td>
-                                </tr>
+                                </tr>*@
                             </table>
                         </div>
                     </div>
@@ -1108,7 +1117,6 @@
     </div>
 </div>
 <script type="text/javascript">
-
 
     $("select").change(function () {
         

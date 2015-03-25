@@ -187,8 +187,21 @@
             userInputViewModel.User.ReportPermission = 1;
             userInputViewModel.User.SetPriorityPermission = 1;
             //userInputViewModel.UsersUserRole.User_Id = SessionFacade.CurrentUser.Id;
-            userInputViewModel.User.UserGroup_Id = 4;
+            //userInputViewModel.User.UserGroup_Id = 4;
 
+            if (userInputViewModel.User.UserGroup_Id == 1)
+            {
+                userInputViewModel.User.Performer = 0;
+                userInputViewModel.User.CloseCasePermission = 0;
+                userInputViewModel.User.CopyCasePermission = 0;
+                userInputViewModel.User.DeleteCasePermission = 0;
+                userInputViewModel.User.FAQPermission = 0;
+                userInputViewModel.User.MoveCasePermission = 0;
+                userInputViewModel.User.ReportPermission = 0;
+                userInputViewModel.User.SetPriorityPermission = 0;
+                userInputViewModel.User.ActivateCasePermission = 0;
+            }
+            
 
             this._userService.SaveNewUser(user, AAsSelected, CsSelected, OTsSelected, null, out errors);
 
@@ -270,27 +283,27 @@
                              customersAlert.Add(c.Name);
                     }                                       
                 }
-                else
-                {
-                    if (UserWorkingGroups != null && UserWorkingGroups.Any())
-                    {
-                        foreach (var c in allCustomers)
-                        {
-                            if (_userService.UserHasCase(c.Id, userToSave.Id, UserWorkingGroups.Where(w => w.UserRole != 0).Select(w => w.WorkingGroup_Id).ToList()))
-                                customersAlert.Add(c.Name);
-                        }
-                    }                       
-                }
+                //else
+                //{
+                //    if (UserWorkingGroups != null && UserWorkingGroups.Any())
+                //    {
+                //        foreach (var c in allCustomers)
+                //        {
+                //            if (_userService.UserHasCase(c.Id, userToSave.Id, UserWorkingGroups.Where(w => w.UserRole != 0).Select(w => w.WorkingGroup_Id).ToList()))
+                //                customersAlert.Add(c.Name);
+                //        }
+                //    }                       
+                //}
 
                 if (customersAlert.Any())
                 {
                     err = Translation.Get("Användare") + " [" + userToSave.FirstName + " " + userToSave.SurName + "] " +
                           Translation.Get("har aktiva ärenden hos kund") + ":";
                     err += "(" + string.Join(",", customersAlert.ToArray()) + ")|";
-                    err += " " + Translation.Get("Var vänlig se över dessa ärenden") + ":|";
-                    err += " -" + Translation.Get("Ärendeöversikt") + "|";
-                    err += " -" + Translation.Get("Pågående ärenden") + "|";
-                    err += " -" + Translation.Get("Välj handläggare");
+                    err += " " + Translation.Get("För att se över dessa ärenden, gå till") + ":|";
+                    err += " " + Translation.Get("Ärendeöversikt") + "|";
+                    err += " " + Translation.Get("Pågående ärenden") + "|";
+                    err += " " + Translation.Get("Handläggare");
                 }
 
                 if (userToSave.UserRoles != null)

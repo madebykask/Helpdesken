@@ -31,6 +31,7 @@
                     Name = u.Name,                    
                     Description = u.Description
                 })
+                .OrderBy(m => m.Name)
                 .ToList();            
         }
 

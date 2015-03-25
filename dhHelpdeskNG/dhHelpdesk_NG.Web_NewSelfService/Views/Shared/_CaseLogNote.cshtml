@@ -1,0 +1,19 @@
+﻿@model DH.Helpdesk.NewSelfService.Models.Case.CaseLogModel
+
+@if (Model.CaseLogs != null)
+{
+    foreach (var logItem in Model.CaseLogs.Where(l=> ! string.IsNullOrEmpty(l.Text_Internal.Trim())))
+    {                            
+        <div class="@(!string.IsNullOrEmpty(logItem.RegUser) ? "com-list-hd" : "com-list-com")" >
+            <div class="list-arrow"></div>
+            <p> 
+                @(logItem.User_Id == null ? (logItem.RegUser == SessionFacade.CurrentSystemUser ? Translation.Get("Me", Enums.TranslationSource.TextTranslation) : logItem.RegUser) : logItem.User.FirstName + " " + logItem.User.SurName) 
+                | 
+                @Html.DisplayFor(l => logItem.RegTime, "DateAndTime") 
+            </p>
+            <p>                                    
+                @Html.Raw(logItem.Text_Internal.Replace("\n", "<br />"))                                                                       
+            </p>
+        </div>                            
+    }
+}                     

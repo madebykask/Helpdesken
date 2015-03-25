@@ -6,6 +6,8 @@
         public int UserRole { get; set; }
         public int WorkingGroup_Id { get; set; }
 
+        public int IsDefault { get; set; }
+
         public virtual User User { get; set; }
     }
 }

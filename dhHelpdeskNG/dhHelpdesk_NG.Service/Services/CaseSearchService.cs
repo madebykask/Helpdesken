@@ -1,11 +1,9 @@
 ﻿namespace DH.Helpdesk.Services.Services
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Case;
-    using DH.Helpdesk.BusinessData.Models.Holiday.Output;
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Utils;
@@ -26,6 +24,22 @@
             int workingDayEnd,
             WorkTimeCalculator workTimeCalculator,
             string applicationId = null);
+
+        IList<CaseSearchResult> Search(
+            CaseSearchFilter f,
+            IList<CaseSettings> csl,
+            int userId,
+            string userUserId,
+            int showNotAssignedWorkingGroups,
+            int userGroupId,
+            int restrictedCasePermission,
+            ISearch s,
+            int workingDayStart,
+            int workingDayEnd,
+            WorkTimeCalculator workTimeCalculator,
+            string applicationId,
+            bool calculateRemainingTime,
+            out CaseRemainingTimeData remainingTime);
     }
 
     public class CaseSearchService : ICaseSearchService
@@ -48,6 +62,38 @@
         }
 
         public IList<CaseSearchResult> Search(
+            CaseSearchFilter f,
+            IList<CaseSettings> csl,
+            int userId,
+            string userUserId,
+            int showNotAssignedWorkingGroups,
+            int userGroupId,
+            int restrictedCasePermission,
+            ISearch s,
+            int workingDayStart,
+            int workingDayEnd,
+            WorkTimeCalculator workTimeCalculator,
+            string applicationId = null)
+        {
+            CaseRemainingTimeData remainingTime;
+            return this.Search(
+                        f,
+                        csl,
+                        userId,
+                        userUserId,
+                        showNotAssignedWorkingGroups,
+                        userGroupId,
+                        restrictedCasePermission,
+                        s,
+                        workingDayStart,
+                        workingDayEnd,
+                        workTimeCalculator,
+                        applicationId,
+                        false,
+                        out remainingTime);
+        }
+
+        public IList<CaseSearchResult> Search(
                                 CaseSearchFilter f, 
                                 IList<CaseSettings> csl, 
                                 int userId, 
@@ -59,7 +105,9 @@
                                 int workingDayStart,
                                 int workingDayEnd,
                                 WorkTimeCalculator workTimeCalculator,
-                                string applicationId = null)
+                                string applicationId,
+                                bool calculateRemainingTime,
+                                out CaseRemainingTimeData remainingTime)
         {
             int productAreaId;
             var csf = new CaseSearchFilter();
@@ -71,7 +119,7 @@
                 csf.ProductArea = this.productAreaService.GetProductAreaWithChildren(productAreaId, ", ", "Id");
             }
 
-            return this.caseSearchRepository.Search(
+            var result = this.caseSearchRepository.Search(
                                                 csf, 
                                                 csl, 
                                                 userId, 
@@ -83,7 +131,34 @@
                                                 this.settingService.GetCustomerSetting(f.CustomerId), 
                                                 s,
                                                 workTimeCalculator,
-                                                applicationId);
+                                                applicationId,
+                                                calculateRemainingTime,
+                                                out remainingTime);
+
+            if (f.CaseRemainingTimeFilter.HasValue && calculateRemainingTime)
+            {
+                IEnumerable<CaseRemainingTime> filteredCaseRemainigTimes;
+                if (f.CaseRemainingTimeFilter < 0)
+                {
+                    filteredCaseRemainigTimes = remainingTime.CaseRemainingTimes.Where(t => t.RemainingTime < 0);
+                }
+                else if (f.CaseRemainingTimeHoursFilter && f.CaseRemainingTimeMaxFilter.HasValue)
+                {
+                    filteredCaseRemainigTimes = remainingTime.CaseRemainingTimes.Where(t => t.RemainingTime == f.CaseRemainingTimeFilter.Value);
+                }
+                else if (f.CaseRemainingTimeFilter == int.MaxValue && f.CaseRemainingTimeMaxFilter.HasValue)
+                {
+                    filteredCaseRemainigTimes = remainingTime.CaseRemainingTimes.Where(t => t.RemainingTime.IsHoursGreaterDays(f.CaseRemainingTimeMaxFilter.Value));
+                }
+                else 
+                {
+                    filteredCaseRemainigTimes = remainingTime.CaseRemainingTimes.Where(t => t.RemainingTime.IsHoursEqualDays(f.CaseRemainingTimeFilter.Value));
+                }
+
+                result = result.Where(c => filteredCaseRemainigTimes.Select(t => t.CaseId).Contains(c.Id)).ToList();
+            }
+
+            return result;
         }
     }
 }

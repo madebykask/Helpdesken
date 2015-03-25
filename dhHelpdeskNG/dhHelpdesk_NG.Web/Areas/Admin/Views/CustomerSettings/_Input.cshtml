@@ -368,10 +368,10 @@
                                         @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td >
-                                        &nbsp;&nbsp;&nbsp;<input type="radio" name="Setting.CaseWorkingGroupSource" @(Model.Setting.CaseWorkingGroupSource == 0 ? "checked='checked'" : "") id="Customer_Setting_CaseWorkingGroupSource1" value="0" />
+                                        <input type="radio" name="Setting.CaseWorkingGroupSource" @(Model.Setting.CaseWorkingGroupSource == 0 ? "checked='checked'" : "") id="Customer_Setting_CaseWorkingGroupSource1" value="0" />
                                         @Translation.Get("visa endast värde om användarens standarddriftgrupp (fält för andra driftgrupper visas som tomma)", Enums.TranslationSource.TextTranslation)
                                         <br />
-                                        &nbsp;&nbsp;&nbsp;<input type="radio" name="Setting.CaseWorkingGroupSource" @(Model.Setting.CaseWorkingGroupSource == 1 ? "checked='checked'" : "") id="Customer_Setting_CaseWorkingGroupSource2" value="1" />
+                                        <input type="radio" name="Setting.CaseWorkingGroupSource" @(Model.Setting.CaseWorkingGroupSource == 1 ? "checked='checked'" : "") id="Customer_Setting_CaseWorkingGroupSource2" value="1" />
                                         @Translation.Get("visa alltid värde", Enums.TranslationSource.TextTranslation)
                                     </td>
                                 </tr>

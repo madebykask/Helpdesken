@@ -119,6 +119,14 @@
                 &nbsp; &nbsp;@Translation.Get("Visa alltid ej tilldelade ärenden på ärendeöversikten", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
+        @*<tr>
+            <td></td>
+            <td>
+                <input type="checkbox" name="User.ShowSolutionTime" @(Model.User.ShowSolutionTime == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="User.ShowSolutionTime" value="0" />
+                &nbsp; &nbsp;@Translation.Get("Antal ärenden med återstående åtgärdstid")
+            </td>
+        </tr>*@    
         <tr>
             <td></td>
             <td>

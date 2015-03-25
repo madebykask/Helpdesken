@@ -26,6 +26,7 @@
             List<ItemOverview> domains,
             List<ItemOverview> regions,
             List<ItemOverview> departments,
+            List<ItemOverview> organizationUnits,
             List<ItemOverview> divisions,
             List<ItemOverview> managers,
             List<ItemOverview> groups)
@@ -99,6 +100,7 @@
 
             DropDownFieldModel region;
             DropDownFieldModel department;
+            DropDownFieldModel organizationUnit;
 
             if (regions != null)
             {
@@ -132,6 +134,25 @@
             else
             {
                 department = new DropDownFieldModel(false);
+            }
+
+            if (organizationUnits != null)
+            {
+                var organizationUnitItems =
+                    organizationUnits.Select(d => new KeyValuePair<string, string>(d.Value, d.Name)).ToList();
+
+                var organizationUnitValue = notifier.OrganizationUnitId.HasValue
+                    ? notifier.OrganizationUnitId.Value.ToString(CultureInfo.InvariantCulture)
+                    : null;
+
+                organizationUnit = this.notifierInputFieldModelFactory.CreateDropDownModel(
+                    settings.OrganizationUnit,
+                    organizationUnitItems,
+                    organizationUnitValue);
+            }
+            else
+            {
+                organizationUnit = new DropDownFieldModel(false);
             }
 
             var unit = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Unit, notifier.Unit);
@@ -242,6 +263,7 @@
                 title,
                 region,
                 department,
+                organizationUnit,
                 unit,
                 division,
                 manager,

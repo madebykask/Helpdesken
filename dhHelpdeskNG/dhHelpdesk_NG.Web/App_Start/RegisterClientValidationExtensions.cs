@@ -1,6 +1,6 @@
 using DH.Helpdesk.Web;
 
-[assembly: WebActivator.PreApplicationStartMethod(typeof(RegisterClientValidationExtensions), "Start")]
+[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(RegisterClientValidationExtensions), "Start")]
 
 namespace DH.Helpdesk.Web
 {

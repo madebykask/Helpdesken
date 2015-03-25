@@ -45,13 +45,10 @@
 
     <script type="text/javascript">
         //Tooltip on startpage
-        $(document).ready(function () {
+        //$(document).ready(function () {
 
-            $("* [rel='tooltip']").tooltip({
-                html: true
-            });
-
-        });
+          
+        //});
 
         var isDirty = false;
 
@@ -119,9 +116,14 @@
        
 
     </script>
+
     <!--COMMUNICATE SCRIPT---->
     <script type='text/javascript'>
         $(document).ready(function () {
+            $("* [rel='tooltip']").tooltip({
+                html: true
+            });
+
             $('.mapButton').click(function () {
                 var mapPos = parseInt($('.siteCom').css('left'), 10);
                 if (mapPos < 0) {
@@ -187,21 +189,18 @@
         {
             pCaseLogs = helper.GetCaseLogs(currentCaseId);
         }
-
+        
         var appType = System.Configuration.ConfigurationManager.AppSettings["CurrentApplication"].ToString();
         
+        var hasError = ViewBag.HasError;
+        var pHasError = false;
+        if (hasError == "true")
+        {
+            pHasError = true;
+        } 
+        
     }
-    @*<div style="position: fixed; top: 30%; right: -2px; background: #fff; padding: 20px 20px 5px 20px; border: 1px solid #ccc;">
-        <ul class="nav nav-pills nav-stacked">
-            <li class="active">
-                <a href="#" data-toggle="modal" data-target="#myModal2">
-                    <span class="badge pull-right">2</span>
-                    Communicate
-                </a>
-            </li>
-        </ul>
-    </div>*@
-
+   
     <!-- COMMUNICATE DIV--->
     @*<input type="button" value ="@employeeList" />*@
 
@@ -209,7 +208,7 @@
     {
         <div class="siteCom">
             <div class="mapButton">
-                 @if ((pCaseLogs != null) && (pCaseLogs.CaseLogs != null) && (pCaseLogs.CaseLogs.Count > 0) && (string.IsNullOrEmpty(pCaseLogs.CaseLogs[0].RegUser)))
+                 @if ((pCaseLogs != null) && (pCaseLogs.CaseLogs != null) && (pCaseLogs.CaseLogs.Count > 0) && (string.IsNullOrEmpty(pCaseLogs.CaseLogs.Where(l => !string.IsNullOrEmpty(l.Text_Internal.Trim())).First().RegUser)))
                  {
                     <div class="mapText" title="@Translation.Get("Communicate", Enums.TranslationSource.TextTranslation)"><span class="glyphicon glyphicon-comment"></span><span class="glyphicon glyphicon-certificate newcom"></span></div>
                  }
@@ -230,37 +229,12 @@
                             </div>
                             <button  class="btn btn-success" onclick=" SaveExternalMessage() ">@Translation.Get("Send", Enums.TranslationSource.TextTranslation)</button>
                             <hr />
-                        </div>
-                        @*<div class="form-group row">
-                                <label class="col-md-2">
-                                    Attached File:
-                                </label>
-                                <div class="col-md-10">
-                                    <a href="#" role="button" data-togg le="modal" data-target="#myModal2" class="btn btn-default">Add</a>
-                                </div>
-                            </div>*@
+                        </div>                        
                     </div>
                 </div>
-                <div class="com-list">
-                    @if (pCaseLogs != null)
-                    {
-                        foreach (var logItem in pCaseLogs.CaseLogs)
-                        {                            
-                            <div class="@(!string.IsNullOrEmpty(logItem.RegUser) ? "com-list-hd" : "com-list-com")" >
-                                <div class="list-arrow"></div>
-                                <p> 
-                                    @(logItem.User_Id == null ? (logItem.RegUser == SessionFacade.CurrentSystemUser ? Translation.Get("Me", Enums.TranslationSource.TextTranslation) : logItem.RegUser) : logItem.User.FirstName + " " + logItem.User.SurName) 
-                                    | 
-                                    @Html.DisplayFor(l => logItem.RegTime, "DateAndTime") 
-                                </p>
-                                <p>                                    
-                                    @Html.Raw(logItem.Text_Internal.Replace("\n", "<br />"))                                                                       
-                                </p>
-                            </div>                            
-                        }
-                    }   
-                                          
-                </div>
+                <div id="CaseLogPartial" class="com-list">
+                     @Html.Partial("_CaseLogNote", pCaseLogs)
+                 </div>
             </div>
         </div>
     }
@@ -502,7 +476,7 @@
                         }
                     }
 
-                    @if (SessionFacade.CurrentCustomer.ShowDocumentsOnExternalPage != 0)
+                    @if (!pHasError && SessionFacade.CurrentCustomer.ShowDocumentsOnExternalPage != 0)
                     {
                         if (!hideMenu)
                         {
@@ -538,7 +512,7 @@
                         }
                     }
 
-                    @if (SessionFacade.CurrentCustomer.ShowCoWorkersOnExternalPage != 0)
+                    @if (!pHasError && SessionFacade.CurrentCustomer.ShowCoWorkersOnExternalPage != 0)
                     {
                         if (!hideMenu)
                         {
@@ -567,7 +541,7 @@
                         }
                     }
 
-                    @if (SessionFacade.CurrentCustomer.ShowHelpOnExternalPage != 0)
+                    @if (!pHasError && SessionFacade.CurrentCustomer.ShowHelpOnExternalPage != 0)
                     {
                         if (!hideMenu)
                         {
@@ -609,22 +583,7 @@
             </div>
         </div>
     </div>
-
-    @*<div class="navbar fixed">
-            <div class="navbar-container">
-                <a href="/">
-                    <div class="navbar-header pull-left navbar-brand">
-                        <img src="@Url.Content("~/Content/img/dhhelpdesk.png")" class="navbar-brand" />
-                    </div>
-                </a>
-                <div class="navbar-header pull-right">
-                    <ul class="nav dh-nav">                        
-                    </ul>
-                </div>
-            </div>
-        </div>*@
-
-    @*<script type="text/javascript" src="@Url.Content("~/Content/js/dhHelpdesk.js")"></script>*@
+   
     @RenderBody()
     @RenderSection("Dialogs", false)
     <script type="text/javascript" src="@Url.Content("~/Content/js/dhHelpdesk.js")"></script>
@@ -708,7 +667,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>*@
+                            </div>*@    
 </body>
 
 </html>
@@ -716,8 +675,7 @@
 
 <script type="text/javascript">
     
-    function ChangeLang(langId) {
-        //alert(languageId);        
+    function ChangeLang(langId) {                
         if ('@showLanguageSelect' == false)
             return;
 
@@ -730,7 +688,7 @@
                 data: "{ languageId:" + langId +"}",
                 dataType: "html",
                 success: function (result) {                   
-                    window.location.reload();                    
+                    window.location.reload();
                 },
                 error: function (result) {
                     //alert('Error in change language');
@@ -743,29 +701,15 @@
         if ('@currentCaseId' == null || '@currentCaseId' == "")
             return;
         
-        var note = $('#myNote').val();
-        //alert(window.location.href);
-        var currentPath = window.location.href;
+        var note = $('#myNote').val();        
         if (note == "") {
             alert('Note text is empty!');
-        } else {
-                        
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("SaveExternalMessage", "Case", new { area = "" })', 
-                contentType: "application/json; charset=utf-8",
-                data: "{ caseId: '@currentCaseId', extraNote:'" + note + "', backUrlAddresss:'" + currentPath + "'}",
-                dataType: "html",
-                success: function (result) {
-                    location.reload();                    
-                },
-                error: function (result) {
-                    location.reload();                                       
-                }
-            });
-        }
-
-        
-    }
+        } else {                                             
+            $.get('/Case/_CaseLogNote', { caseId: '@currentCaseId', note: note }, function (_CaseLogNoteMarkup) {
+                $('#CaseLogPartial').html(_CaseLogNoteMarkup);
+                $('#myNote').val('');
+            });            
+        }               
+    }   
 
 </script>

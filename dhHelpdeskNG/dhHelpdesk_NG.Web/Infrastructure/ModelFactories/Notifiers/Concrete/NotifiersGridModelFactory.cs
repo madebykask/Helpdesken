@@ -33,6 +33,7 @@
             CreateHeaderIfNeeded(settings.PostalCode, AddressField.PostalCode, headers);
             CreateHeaderIfNeeded(settings.City, AddressField.City, headers);
             CreateHeaderIfNeeded(settings.Title, OrganizationField.Title, headers);
+            CreateHeaderIfNeeded(settings.Region, OrganizationField.Region, headers);
             CreateHeaderIfNeeded(settings.Department, OrganizationField.Department, headers);
             CreateHeaderIfNeeded(settings.Unit, OrganizationField.Unit, headers);
             CreateHeaderIfNeeded(settings.OrganizationUnit, OrganizationField.OrganizationUnit, headers);
@@ -73,6 +74,7 @@
                 CreateValueIfNeeded(settings.PostalCode, AddressField.PostalCode, notifier.PostalCode, cellValues);
                 CreateValueIfNeeded(settings.City, AddressField.City, notifier.City, cellValues);
                 CreateValueIfNeeded(settings.Title, OrganizationField.Title, notifier.Title, cellValues);
+                CreateValueIfNeeded(settings.Region, OrganizationField.Region, notifier.Region, cellValues);
                 CreateValueIfNeeded(settings.Department, OrganizationField.Department, notifier.Department, cellValues);
                 CreateValueIfNeeded(settings.Unit, OrganizationField.Unit, notifier.Unit, cellValues);
 

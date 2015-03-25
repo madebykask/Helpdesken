@@ -63,7 +63,9 @@ namespace DH.Helpdesk.Dal.Mappers.Customer.EntityToBusinessModel
                            ModuleQuestionnaire = entity.ModuleQuestionnaire.ToBool(),
                            ModuleTimeRegistration = entity.ModuleTimeRegistration.ToBool(),
                            ModuleWatch = entity.ModuleWatch.ToBool(),
-                           ModuleCaseInvoice = entity.ModuleCaseInvoice.ToBool()
+                           ModuleCaseInvoice = entity.ModuleCaseInvoice.ToBool(),
+                           ShowCaseOverviewInfo = entity.ShowCaseOverviewInfo.ToBool(),
+                           ShowStatusPanel = entity.ShowStatusPanel.ToBool()
                        };
         }
     }

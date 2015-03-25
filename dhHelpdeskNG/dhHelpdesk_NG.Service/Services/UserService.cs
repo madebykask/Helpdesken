@@ -43,6 +43,7 @@ namespace DH.Helpdesk.Services.Services
         List<CustomerWorkingGroupForUser> GetWorkinggroupsForUserAndCustomer(int userId, int customerId);
         IList<LoggedOnUsersOnIndexPage> GetListToUserLoggedOn();
         IList<Department> GetDepartmentsForUser(int userId, int customerId = 0);
+        IList<Customer> GetCustomersConnectedToUser(int userId);
         IList<User> GetAdministrators(int customerId, int active = 1);
         IList<User> GetSystemOwners(int customerId);
         IList<User> GetUsers();
@@ -136,6 +137,8 @@ namespace DH.Helpdesk.Services.Services
         List<UserProfileCustomerSettings> GetUserProfileCustomersSettings(int userId);
 
         void UpdateUserProfileCustomerSettings(int userId, List<UserProfileCustomerSettings> customersSettings);
+
+        List<Customer> GetCustomersForUser(int userId);
     }
 
     public class UserService : IUserService
@@ -236,6 +239,16 @@ namespace DH.Helpdesk.Services.Services
         {
             return this._departmentRepository.GetDepartmentsForUser(userId, customerId).OrderBy(x => x.Customer_Id).ThenBy(x => x.DepartmentName).ToList();
             //return this._departmentRepository.GetDepartmentsForUser(userId, customerId).ToList();
+        }
+
+        /// <summary>
+        /// Returns Ilist of Customer with all the customers that the user is assigned to
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public IList<Customer> GetCustomersConnectedToUser(int userId)
+        {
+            return this._customerRepository.CustomersForUser(userId);
         }
 
         public IList<User> GetAdministrators(int customerId, int active = 1)
@@ -460,7 +473,7 @@ namespace DH.Helpdesk.Services.Services
 
             if (!user.Cs.Any(it => it.Id == user.Customer_Id))
             {
-                errors.Add("User.Customer_Id", "Du måste ange ett standartkund");
+                errors.Add("User.Customer_Id", "Du måste ange ett standardkund");
             }
 
             if (user.Id == 0)
@@ -911,6 +924,22 @@ namespace DH.Helpdesk.Services.Services
                 }
 
                 uow.Save();
+            }
+        }
+
+        public List<Customer> GetCustomersForUser(int userId)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var customersRep = uow.GetRepository<Customer>();
+                var usersRep = uow.GetRepository<User>();
+                var userCustomersRep = uow.GetRepository<CustomerUser>();
+
+                var customers = customersRep.GetAll();
+                var users = usersRep.GetAll().GetById(userId);
+                var userCustomers = userCustomersRep.GetAll();
+
+                return UsersMapper.MapToUserCustomers(customers, users, userCustomers);
             }
         }
 

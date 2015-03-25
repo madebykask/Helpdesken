@@ -1,7 +1,8 @@
-﻿
+﻿@using System.Web.Optimization
 @using DH.Helpdesk.BusinessData.Enums.Notifiers
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @model DH.Helpdesk.Web.Models.Notifiers.SearchModel
+@Scripts.Render("~/bundles/notifiers/notifier")
 
 @using (Ajax.BeginForm("Search", null, new AjaxOptions { UpdateTargetId = "notifiers_grid" }, new { id = "search_form" }))
 {
@@ -17,13 +18,16 @@
                     <td>@Html.DropDown("domain_dropdown", "DomainId", true, Model.Domain.Content)</td>
                 </tr>
             }
-
-            @if (Model.Department.Show)
+            @if (Model.Region.Show)
             {
                 <tr>
                     <td>@Translation.Get("Område", Enums.TranslationSource.TextTranslation)</td>
                     <td>@Html.DropDown("region_dropdown", "RegionId", true, Model.Region.Content)</td>
                 </tr>
+            }
+
+            @if (Model.Department.Show)
+            {
                 <tr>
                     <td>@Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation)</td>
                     <td>
@@ -31,7 +35,18 @@
                             @Html.Partial("DepartmentDropDown", Model.Department.Content)
                         </div>
                     </td>
+                </tr>                
+                if (Model.OrganizationUnit.Show)
+                {
+                <tr>
+                    <td>@Translation.Get("Organisationsenhet", Enums.TranslationSource.TextTranslation)</td>
+                    <td>
+                        <div id="organizationUnit_dropdown_container">
+                            @Html.Partial("OrganizationUnitDropDown", Model.OrganizationUnit.Content)
+                        </div>
+                    </td>
                 </tr>
+                }
             }
 
             @if (Model.Division.Show)
@@ -71,7 +86,7 @@
             </tr>
             <tr>
                 <td>
-                    <input type="submit" onclick="ResetPaging()" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" class="btn" />                    
+                    <input type="submit" onclick="ResetPaging()" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" class="btn" />
                 </td>
             </tr>
         </table>

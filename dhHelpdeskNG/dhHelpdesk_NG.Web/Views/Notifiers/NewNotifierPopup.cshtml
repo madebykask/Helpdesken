@@ -32,7 +32,7 @@
         <div class="pull-left">
             <ul class="secnav">
                 <li>
-                    <input type="submit" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn" />
+                    <input type="submit" onclick="inputValidate();" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn" />
                 </li>
                 <li>
                     <input type="button" onclick=" window.close()" value="@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)" class="btn" />
@@ -41,4 +41,21 @@
         </div>
     </div>
     @Html.Partial("_Input", Model)
+
+    <script type="text/javascript">
+        $("#DepartmentErrorMessage").hide();
+        $("#OrganizationUnitErrorMessage").hide();
+
+        function inputValidate() {            
+            if ('@Model.Department.Required'.toLowerCase() == "true" && $('#department_dropdown').val() == "") {
+                $("#DepartmentErrorMessage").show();                
+            }
+
+            if ('@Model.OrganizationUnit.Required'.toLowerCase() == "true" && $('#organizationUnit_dropdown').val() == "") {
+                $("#OrganizationUnitErrorMessage").show();                
+            }
+        }
+            
+    </script>
 }
+

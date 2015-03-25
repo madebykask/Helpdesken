@@ -2,8 +2,11 @@
 
 @{
     ViewBag.Title = "Index";
-    var welcomePart = Model.InfoText.Name;
-    welcomePart = welcomePart.SetStrParameters();
+    var welcomePart = "";
+    if (Model.InfoText != null) 
+    {   
+        welcomePart = Model.InfoText.Name.SetStrParameters();            
+    }
 }
 
 <div class="container-fluid dh-container">
@@ -14,8 +17,8 @@
                <div class="col-md-12">
                     <div class="panel panel-default">
                         <div class="panel-body">                             
-                             @Html.Raw(welcomePart)
-                           @*  <div class="row">
+                             @*@Html.Raw(welcomePart)*@
+                             <div class="row">
                                 <div class="col-md-5">
                                     <h3 style="margin-top: 1px;">@Translation.Get("Welcome", Enums.TranslationSource.TextTranslation) @SessionFacade.CurrentUserIdentity.FirstName                                        
                                         @Translation.Get("to the MyHRportal", Enums.TranslationSource.TextTranslation) </h3>
@@ -27,7 +30,7 @@
                                 <div class="col-md-7">
                                     <img src="@Url.Content("~/Content/img-profile/ikea-notepad.png")" />
                                 </div>
-                            </div>*@
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -63,7 +66,7 @@
     </div>
     <div class="row">
         <div class="col-md-10 small">
-            Version 1.3
+            Version 1.3.2
             <img src="@Url.Content("~/Content/img-profile/dh_solutions_slogan.png")" class="pull-right" />
         </div>
     </div>

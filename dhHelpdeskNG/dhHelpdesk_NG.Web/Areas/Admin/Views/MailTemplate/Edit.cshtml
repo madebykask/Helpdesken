@@ -4,7 +4,7 @@
     ViewBag.Title = "Edit";
     string accountactivityid = Request.QueryString["accountactivityId"];
     string ordertypeid = Request.QueryString["ordertypeId"];
-    
+
     var routeValues = new RouteValueDictionary();
     
         
@@ -15,24 +15,31 @@
     <div class="secnavs fixed">
         <div class="pull-left">
             <ul class="secnav">
-                <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", new { }, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>                                
-                <li>@Html.ActionLink(
-                                     Translation.Get((Model.IsStandardTemplate?"Rensa":"Ta bort"),
+                <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", new { }, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
+                @if (!(Model.IsStandardTemplate))
+                {
+                    <li>@Html.ActionLink(
+                                     Translation.Get(("Ta bort"),
                                                      Enums.TranslationSource.TextTranslation), "delete",
-                                                    new { id = Model.MailTemplateLanguage.MailTemplate.Id, 
-                                                          languageid = Model.MailTemplateLanguage.Language_Id,                                            
-                                                          customerId = Model.Customer.Id
-                                                        }, 
-                                     new { @class = "btn deleteDialog", 
-                                           deleteDialogText = Translation.Get((Model.IsStandardTemplate? "Är du säker på att du vill rensa denna mall":
-                                                                                                         "Är du säker på att du vill ta bort denna mall"), 
-                                                                              Enums.TranslationSource.TextTranslation) + "?"
-                                           ,
-                                           buttonTypes = "YesNo",
-                                           id = "DelBtn"                              
-                                         })
-                </li>
-                
+                                                    new
+                                                    {
+                                                        id = Model.MailTemplateLanguage.MailTemplate.Id,
+                                                        languageid = Model.MailTemplateLanguage.Language_Id,
+                                                        customerId = Model.Customer.Id
+                                                    },
+                                     new
+                                     {
+                                         @class = "btn deleteDialog",
+                                         deleteDialogText = Translation.Get(("Är du säker på att du vill ta bort denna mall"),
+                                                                            Enums.TranslationSource.TextTranslation) + "?"
+                                       ,
+                                         buttonTypes = "YesNo",
+                                         id = "DelBtn"
+                                     })
+                    </li>
+                }
+
+
                 <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", new { customerId = Model.Customer.Id }, new { @class = "btn" })</li>
             </ul>
         </div>
@@ -46,9 +53,9 @@
     <input type="hidden" id="mailId" name="mailId" value="@Model.MailTemplateLanguage.MailTemplate.MailID" />
     <input type="hidden" id="mailTemplateName" name="mailTemplateName" value="@Model.MailTemplateLanguage.MailTemplateName" />
     <div id="mailtemplate_container">
-            <span id="languageList">
-                @Html.Partial("_Input", Model)
-            </span>
+        <span id="languageList">
+            @Html.Partial("_Input", Model)
+        </span>
     </div>
 }
 @section Scripts {
@@ -63,11 +70,11 @@
             var list = $("#languageList");
             list.html("");
             if (id != "") {
-                $.get('/MailTemplate/UpdateLanguageList/' + $("#mailId").val() + '?customerId=' + $("#customerId").val() + '&mailTemplateLanguageId=' + id + '&mailTemplateId=' + $("#mailTemplateId").val() + '&mailId=' + $("#mailId").val() + '&mailTemplateName=' + $("#mailTemplateName").val() , function (result) {
+                $.get('/MailTemplate/UpdateLanguageList/' + $("#mailId").val() + '?customerId=' + $("#customerId").val() + '&mailTemplateLanguageId=' + id + '&mailTemplateId=' + $("#mailTemplateId").val() + '&mailId=' + $("#mailId").val() + '&mailTemplateName=' + $("#mailTemplateName").val(), function (result) {
                     list.html(result);
                 });
             }
-        }    
+        }
     </script>
 }
 
