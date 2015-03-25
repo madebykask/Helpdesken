@@ -776,7 +776,11 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             if (id.HasValue)
-                dep = dep.Where(x => x.Region_Id == id).ToList();
+            {
+                var curRegion = this._regionService.GetRegion(id.Value);
+                if (curRegion.IsActive != 0)
+                  dep = dep.Where(x => x.Region_Id == id).ToList();
+            }
 
             var list = dep.Select(x => new { id = x.Id, name = x.DepartmentDescription(departmentFilterFormat) });
 
