@@ -92,6 +92,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
             r.CustomFilter = o.CustomFilter;
             r.CaseRemainingTimeFilter = o.CaseRemainingTimeFilter;
             r.CaseRemainingTimeMaxFilter = o.CaseRemainingTimeMaxFilter;
+            r.CaseRemainingTimeHoursFilter = o.CaseRemainingTimeHoursFilter;
 
             return r;
         }
