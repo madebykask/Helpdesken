@@ -176,6 +176,8 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
             this.userName = null;
             this.userWorkingGroups = null;
             HttpContext.Current.Session[UserModules] = this.modules = null;
+            this.user = null;
+            SessionFacade.CurrentUser = this.userService.GetUserOverview(SessionFacade.CurrentUser.Id);
         }
 
         public bool IsUserEmpty()
