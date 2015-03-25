@@ -1,6 +1,8 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.Tools.Concrete
 {
+    using DH.Helpdesk.Common.Enums;
     using System.Collections.Generic;
+    using System.Configuration;
     using System.Globalization;
     using System.IO;
     using System.Linq;
@@ -20,7 +22,8 @@
 
         public TemporaryFilesCache(string topic)
         {
-            this.temporaryDirectory = HttpContext.Current.Server.MapPath(@"~\App_Data");
+            //HttpContext.Current.Server.MapPath(@"~\App_Data");
+            this.temporaryDirectory = ConfigurationManager.AppSettings[AppSettingsKey.FilesDirectory]; 
             this.topic = topic;
         }
 
@@ -149,7 +152,7 @@
 
         private string ComposeDirectoryPath(string objectId, params string[] subtopics)
         {
-            var composedPath = Path.Combine(this.temporaryDirectory, "Uploaded Files", this.topic, objectId);
+            var composedPath = Path.Combine(this.temporaryDirectory, "Temporary", this.topic, objectId);
 
             foreach (var subtopic in subtopics)
             {
