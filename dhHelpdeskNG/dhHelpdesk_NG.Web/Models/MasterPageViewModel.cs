@@ -20,6 +20,8 @@
         
         public IList<Language> Languages { get; set; }
 
+        public IEnumerable<GlobalSetting> GlobalSettings { get; set; }
+
         public int UsersDefaultLanguage
         {
             get

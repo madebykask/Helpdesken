@@ -66,6 +66,9 @@
 
             var b = this.TryUpdateModel(changeToSave, "globalsetting");
 
+            if (string.IsNullOrEmpty(changeToSave.ApplicationName))
+                changeToSave.ApplicationName = "";
+
             var vmodel = this.SaveGsInputViewModel(changeToSave);
 
             IDictionary<string, string> errors = new Dictionary<string, string>();

@@ -42,6 +42,9 @@
 
             errors = new Dictionary<string, string>();
 
+            if (string.IsNullOrEmpty(globalSetting.ApplicationName))
+                errors.Add("GlobalSetting.ApplicationName", "Du måste ange ett namn");
+
             if (globalSetting.Id == 0)
                 this._globalSettingRepository.Add(globalSetting);
             else

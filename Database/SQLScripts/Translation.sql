@@ -2975,7 +2975,7 @@ If not exists (select * from tblTextTranslation where text_id = 1347 and Languag
 GO
 
 If not exists (select * from tbltext where id = 1348)
-	insert into tbltext (id, TextString) VALUES (1348, 'Textfält – större')
+	insert into tbltext (id, TextString) VALUES (1348, 'Textfält - större')
 GO
 
 If not exists (select * from tblTextTranslation where text_id = 1348 and Language_Id = 2)
@@ -2983,7 +2983,7 @@ If not exists (select * from tblTextTranslation where text_id = 1348 and Languag
 GO
 
 If not exists (select * from tbltext where id = 1349)
-	insert into tbltext (id, TextString) VALUES (1349, 'Valruta – dropdown')
+	insert into tbltext (id, TextString) VALUES (1349, 'Vallista - dropdown')
 GO
 
 If not exists (select * from tblTextTranslation where text_id = 1349 and Language_Id = 2)
