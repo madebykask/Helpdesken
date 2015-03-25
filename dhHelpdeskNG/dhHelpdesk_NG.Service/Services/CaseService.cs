@@ -664,7 +664,7 @@
                 }
 
                 // send email to tblCase.Performer_User_Id
-                if (newCase.FinishingDate == null && oldCase != null)
+                if (newCase.FinishingDate == null && oldCase != null && oldCase.Id > 0)
                 {
                     if (newCase.Performer_User_Id != oldCase.Performer_User_Id)
                     {
@@ -710,7 +710,7 @@
                 }
 
                 // send email priority has changed
-                if (newCase.FinishingDate == null && oldCase != null)
+                if (newCase.FinishingDate == null && oldCase != null && oldCase.Id > 0)
                     if (newCase.Priority_Id != oldCase.Priority_Id)
                     {
                         if (newCase.Priority != null)
@@ -735,7 +735,7 @@
                     }
 
                 // send email working group has changed
-                if (newCase.FinishingDate == null && oldCase != null)
+                if (newCase.FinishingDate == null && oldCase != null && oldCase.Id > 0)
                     if (newCase.WorkingGroup_Id != oldCase.WorkingGroup_Id)
                     {
                         if (newCase.Workinggroup != null)
@@ -778,8 +778,8 @@
                     }
 
                 // send email when product area is set
-                if (newCase.FinishingDate == null && oldCase != null)
-                    if (oldCase.ProductAreaSetDate == null && newCase.RegistrationSource == 3 && oldCase.Id > 0)
+                if (newCase.FinishingDate == null && oldCase != null && oldCase.Id > 0)
+                    if (oldCase.ProductAreaSetDate == null && newCase.RegistrationSource == 3)
                         if (!cms.DontSendMailToNotifier && _emailService.IsValidEmail(newCase.PersonsEmail))
                             if (newCase.ProductArea != null)
                                 if (newCase.ProductArea.MailID.HasValue)

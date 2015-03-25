@@ -51,7 +51,7 @@
             List<string> files,
             MailSenders mailSenders)
         {
-            if (log == null ||
+            if (log == null || log.Id <= 0 ||
                 !log.SendMailAboutCaseToNotifier ||
                 dontSendMailToNotfier ||
                 !this.emailService.IsValidEmail(newCase.PersonsEmail) ||
@@ -111,7 +111,7 @@
             string helpdeskMailFromAdress,
             List<string> files)
         {
-            if (log == null ||
+            if (log == null || log.Id <= 0 ||
                 !log.SendMailAboutCaseToNotifier ||
                 dontSendMailToNotfier ||
                 newCase.FinishingDate != null)
@@ -178,7 +178,7 @@
             string helpdeskMailFromAdress,
             List<string> files)
         {
-            if (log == null ||
+            if (log == null || log.Id <= 0 ||
                 !log.SendMailAboutLog ||
                 string.IsNullOrWhiteSpace(log.EmailRecepientsInternalLog))
             {
