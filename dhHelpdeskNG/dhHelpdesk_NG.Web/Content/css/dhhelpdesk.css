@@ -1677,10 +1677,14 @@ table th.thpointer {
     overflow: hidden;
     text-overflow: ellipsis;*/
     overflow-wrap:break-word;
+    word-wrap: break-word;
+    -ms-word-break: break-all;
     line-height:13px;
 }
 .table-cases td {
     overflow-wrap:break-word;
+    word-wrap: break-word;
+    -ms-word-break: break-all;
     line-height:13px;
 }
 
