@@ -152,6 +152,14 @@
         {
             List<ItemOverview> departments;
 
+            // Prevent to show departments with inactive region
+            if (regionId.HasValue)
+            {
+                var curRegion = this.regionRepository.GetById(regionId.Value);
+                if (curRegion.IsActive == 0)
+                    regionId = null; 
+            }
+
             var departmentsData =
                     this.departmentRepository.GetActiveDepartmentsBy(SessionFacade.CurrentCustomer.Id, regionId).ToArray();
 
