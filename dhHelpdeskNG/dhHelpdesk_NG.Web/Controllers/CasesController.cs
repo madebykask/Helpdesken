@@ -401,7 +401,9 @@ namespace DH.Helpdesk.Web.Controllers
                     
                     srm.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(cusId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
                     var workTimeCalculator = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
-                    var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
+                    // Uncomment for http://redmine.fastdev.se/issues/10654
+                    // var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
+                    var showRemainingTime = false;
                     CaseRemainingTimeData remainingTime;
                     srm.cases = this._caseSearchService.Search(
                         sm.caseSearchFilter,
@@ -1114,7 +1116,9 @@ namespace DH.Helpdesk.Web.Controllers
 
                 m.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(f.CustomerId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
                 var workTimeCalc = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
-                var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
+                // Uncomment for http://redmine.fastdev.se/issues/10654
+                // var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
+                var showRemainingTime = false;
                 CaseRemainingTimeData remainingTime;
                 m.cases = this._caseSearchService.Search(
                     f,
