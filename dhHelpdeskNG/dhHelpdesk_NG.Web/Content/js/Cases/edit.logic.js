@@ -352,9 +352,9 @@ $(function () {
         that.getRelatedCases = getRelatedCases;
 
         that.init = function (caseEntity) {
-            var checkRelatedCases = function () {
+            var checkRelatedCases = function (uId) {
                 var caseId = that.getCase().getCaseId().getElement();
-                var userIdValue = encodeURIComponent(userId.getElement().val());
+                var userIdValue = encodeURIComponent(uId || userId.getElement().val());
                 $.getJSON(getRelatedCasesCountUrl() + 
                             '?caseId=' + caseId.val() +
                             '&userId=' + userIdValue, function(data) {
@@ -386,6 +386,10 @@ $(function () {
                 // uncomment for implementing http://redmine.fastdev.se/issues/10995
                 /*dhHelpdesk.cases.utils.refreshOus(caseEntity);
                 dhHelpdesk.cases.utils.refreshAdministrators(caseEntity, true);*/
+            });
+
+            dhHelpdesk.cases.utils.onEvent("OnUserIdChanged", function(e, uId) {
+                checkRelatedCases(uId);
             });
         }
 

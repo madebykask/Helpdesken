@@ -864,6 +864,10 @@ function GetComputerUserSearchOptions() {
             var departmentFilterFormat = $('#DepartmentFilterFormat').val();
             //console.log(JSON.stringify(item));
             $('#case__ReportedBy').val(item.num);
+
+            // Raise event about UserId changed.
+            $(document).trigger("OnUserIdChanged", [item.num]);
+
             $('#case__PersonsName').val(item.name);
             $('#case__PersonsEmail').val(item.email);
             $('#case__PersonsPhone').val(item.phone);
@@ -1092,6 +1096,10 @@ function NewNotifierEvent(id) {
         if (data != undefined) {
             var departmentFilterFormat = $('#DepartmentFilterFormat').val();
             $('#case__ReportedBy').val(data.num);
+
+            // Raise event about UserId changed.
+            $(document).trigger("OnUserIdChanged", [data.num]);
+
             $('#case__PersonsName').val(data.name);
             $('#case__PersonsEmail').val(data.email);
             $('#case__PersonsPhone').val(data.phone);
