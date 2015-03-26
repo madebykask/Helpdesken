@@ -10,15 +10,27 @@
         <div class="tab-content" id="labelList">
             <div class="tab-pane tab-pane-border active" id="fragment1">
                 <div class="container">
+                    <div>
+                        <table>
+                            <tr>
+                                <td style="width:210px;"><i class="dh-icon-textfield"></i> @Translation.Get("Textfält", Enums.TranslationSource.TextTranslation)<br /></td>
+                                <td style="width:210px;"><i class="dh-icon-textarea"></i> @Translation.Get("Textfält - större", Enums.TranslationSource.TextTranslation)<br /></td>
+                                <td>--- @Translation.Get("Automatisk hämtning", Enums.TranslationSource.TextTranslation)<br /></td>
+                            </tr>
+                            <tr>
+                                <td><i class="dh-icon-calendar"></i> @Translation.Get("Datumfält", Enums.TranslationSource.TextTranslation)<br /></td>
+                                <td><i class="dh-icon-numericfield"></i> @Translation.Get("Numeriskt fält", Enums.TranslationSource.TextTranslation)<br /></td>
+                                <td><i class="dh-icon-checkbox"></i> @Translation.Get("Checkbox", Enums.TranslationSource.TextTranslation)<br /></td>
+                            </tr>
+                            <tr>
+                                <td><i class="dh-icon-select"></i> @Translation.Get("Vallista - dropdown", Enums.TranslationSource.TextTranslation)<br /></td>
+                                <td><i class="dh-icon-attachment"></i> @Translation.Get("Bifoga fil", Enums.TranslationSource.TextTranslation)<br /></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <br />
                     <strong>@Translation.Get("Inställning av de fält som ska visas på ärendeinformationen", Enums.TranslationSource.TextTranslation)</strong><br />
-                    <i class="dh-icon-textfield"></i> @Translation.Get("Textfält", Enums.TranslationSource.TextTranslation)<br />
-                    <i class="dh-icon-textarea"></i> @Translation.Get("Textfält - större", Enums.TranslationSource.TextTranslation)<br />
-                    <i class="dh-icon-select"></i> @Translation.Get("Vallista - dropdown", Enums.TranslationSource.TextTranslation)<br />
-                    <i class="dh-icon-calendar"></i> @Translation.Get("Datumfält", Enums.TranslationSource.TextTranslation)<br />
-                    <i class="dh-icon-numericfield"></i> @Translation.Get("Numeriskt fält", Enums.TranslationSource.TextTranslation)<br />
-                    <i class="dh-icon-checkbox"></i> @Translation.Get("Checkbox", Enums.TranslationSource.TextTranslation)<br />
-                    <i class="dh-icon-attachment"></i> @Translation.Get("Bifoga fil", Enums.TranslationSource.TextTranslation)<br />
-                    --- @Translation.Get("Automatisk hämtning", Enums.TranslationSource.TextTranslation)<br />
                     <input type="hidden" id="customerId" name="customerId" value="@Model.Customer.Id" />
                     <table class="table table-striped table-bordered table-hover table-cases">
                         <thead>
