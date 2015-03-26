@@ -6,8 +6,7 @@
 */
 $(function () {
     var firstLevelData = [], secondLevelData = [];
-    var organizationData = window.organizationData || [];
-    var parameters = window.displaySettings;
+    var organizationData = window.organizationData || [];    
     var miscParameters = window.parameters;  
 
     /**
