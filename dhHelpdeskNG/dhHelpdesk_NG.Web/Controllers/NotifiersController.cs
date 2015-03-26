@@ -381,7 +381,7 @@
 
             if (!string.IsNullOrEmpty(cellPhone))
                 inputParams.Add("CellPhone", cellPhone);
-            ViewBag.displaySettings = settings;
+            
             var model = this.newNotifierModelFactory.Create(
                 settings,
                 domains,
@@ -468,7 +468,6 @@
                 groups = this.notifierGroupRepository.FindOverviewsByCustomerId(currentCustomerId);
             }
 
-            ViewBag.displaySettings = settings;
             var model = this.newNotifierModelFactory.Create(
                 settings,
                 domains,
@@ -560,8 +559,6 @@
                 groups = this.notifierGroupRepository.FindOverviewsByCustomerId(currentCustomerId);
             }
 
-            ViewBag.displaySettings = displaySettings;
-            ViewBag.organizationUnitId = notifier.OrganizationUnitId;
             var model = this.notifierModelFactory.Create(
                 displaySettings,
                 departmentRegionId,

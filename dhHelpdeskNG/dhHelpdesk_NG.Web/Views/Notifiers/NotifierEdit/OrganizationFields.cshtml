@@ -3,14 +3,7 @@
 @using System.Web.Script.Serialization
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @model DH.Helpdesk.Web.Models.Notifiers.InputModel
-@{
-    var subOrgData = ViewBag.organizationUnits;
-    var jsSerializer = new JavaScriptSerializer();
-}
-<script type="text/javascript">
-    window.organizationData = @Html.Raw(jsSerializer.Serialize(subOrgData));
-    window.displaySettings = @Html.Raw(jsSerializer.Serialize(ViewBag.displaySettings.OrganizationUnit));
-</script>
+
 <div class="container">
     <h4>@Translation.Get("Organisation", Enums.TranslationSource.TextTranslation)</h4>
     <div class="row">
