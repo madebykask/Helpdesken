@@ -1647,6 +1647,11 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (case_.FinishingDate.HasValue)
             {
+                if (case_.RegTime > case_.FinishingDate)
+                {
+                    case_.FinishingDate = case_.RegTime;
+                }
+
                 var workTimeCalc = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
                 case_.LeadTime = workTimeCalc.CalcWorkTimeMinutes(
                     case_.Department_Id,
