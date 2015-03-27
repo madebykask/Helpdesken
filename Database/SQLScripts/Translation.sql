@@ -2979,7 +2979,7 @@ If not exists (select * from tbltext where id = 1348)
 GO
 
 If not exists (select * from tblTextTranslation where text_id = 1348 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1348, 2, 'Textarea')
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1348, 2, 'Text area')
 GO
 
 If not exists (select * from tbltext where id = 1349)
