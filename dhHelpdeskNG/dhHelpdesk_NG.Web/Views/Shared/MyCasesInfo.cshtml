@@ -1,7 +1,8 @@
 ﻿@using DH.Helpdesk.Common.Extensions.DateTime
 @model DH.Helpdesk.Web.Models.Case.MyCasesModel
 
-@if (Model != null && Model.Cases != null && Model.Cases.Any())
+@* Temporary inactive MyCases only for 27th March released #11837 *@
+@if (Model != null && Model.Cases != null && Model.Cases.Any() && 1==2)
 {
     <div class="box-header portlet-header">
         <div class="start-tile-img label orange">
