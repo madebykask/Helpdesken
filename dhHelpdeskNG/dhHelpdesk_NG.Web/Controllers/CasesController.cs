@@ -597,7 +597,7 @@ namespace DH.Helpdesk.Web.Controllers
                     lockedByUserId = caseUserInfo.UserId;
                 }
 
-                int customerId = moveToCustomerId.HasValue ? moveToCustomerId.Value : 0;
+                int customerId = moveToCustomerId.HasValue ? moveToCustomerId.Value : _caseService.GetCaseById(id).Customer_Id;
                 m = this.GetCaseInputViewModel(userId, customerId, id, lockedByUserId, redirectFrom, null, null, updateState);
                 if (uni.HasValue)
                 {
