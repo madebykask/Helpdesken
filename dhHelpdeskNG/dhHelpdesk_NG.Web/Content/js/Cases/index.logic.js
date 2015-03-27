@@ -202,7 +202,7 @@ $(function () {
             moveCaseRemainingTime();
         });
 
-        var loader = $('<img src="Content/icons/ajax-loader.gif" />');
+        var loader = $('<img src="/Content/icons/ajax-loader.gif" />');
 
         var bindCaseRemainingTime = function() {
             $('[data-remaining-time]').each(function () {
