@@ -51,7 +51,7 @@
             List<string> files,
             MailSenders mailSenders)
         {
-            if (log == null || log.Id <= 0 ||
+            if (log == null || log.Id <= 0 || string.IsNullOrWhiteSpace(log.TextExternal) ||
                 !log.SendMailAboutCaseToNotifier ||
                 dontSendMailToNotfier ||
                 !this.emailService.IsValidEmail(newCase.PersonsEmail) ||
