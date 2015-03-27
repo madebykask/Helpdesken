@@ -2974,14 +2974,6 @@ If not exists (select * from tblTextTranslation where text_id = 1347 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1347, 2, 'Text field')
 GO
 
-If not exists (select * from tbltext where id = 1348)
-	insert into tbltext (id, TextString) VALUES (1348, 'Textfält - större')
-GO
-
-If not exists (select * from tblTextTranslation where text_id = 1348 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1348, 2, 'Text area')
-GO
-
 If not exists (select * from tbltext where id = 1349)
 	insert into tbltext (id, TextString) VALUES (1349, 'Vallista - dropdown')
 GO
@@ -3054,5 +3046,14 @@ GO
 If not exists (select * from tblTextTranslation where text_id = 1357 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1357, 2, 'Smallest')
 GO
+
+If not exists (select * from tbltext where id = 1358)
+	insert into tbltext (id, TextString) VALUES (1358, 'Textfält – större')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1358 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1358, 2, 'Text area')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

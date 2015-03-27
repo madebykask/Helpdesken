@@ -463,6 +463,16 @@
 
         public MvcHtmlString MailTemplateFieldIdentifierRow(int customerId, string mailTemplateRowName, string ExtraLabel)
         {
+            //Super quick fix TODO: FIX... Im sorry
+            if (mailTemplateRowName == "tblLog_Text_External")
+            {
+                mailTemplateRowName = "tblLog.Text_External";   
+            }
+            else if (mailTemplateRowName == "tblLog_Text_Internal")
+            {
+                mailTemplateRowName = "tblLog.Text_Internal";
+            }
+
             var cfs = this._caseFieldSettingService.GetAllCaseFieldSettings().Where(x => x.Name == mailTemplateRowName && x.Customer_Id == customerId && x.ShowOnStartPage == 1);
             
             if (cfs.Any())

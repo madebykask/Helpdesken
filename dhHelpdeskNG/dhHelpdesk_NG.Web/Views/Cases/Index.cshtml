@@ -62,7 +62,8 @@
             getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax")'
         });
         
-        var ReloadCaseOverview = function(){
+@*        Commented out because Therese & Stina changed their mind that this was not an acceptable solution. In IE it will set focus to that window which the location.reload happens.
+    var ReloadCaseOverview = function(){
             var TimeBeforeReload = "@Model.CaseSetting.RefreshContent";
             TimeBeforeReload = TimeBeforeReload / 60;
             TimeBeforeReload = TimeBeforeReload * 60000;
@@ -80,6 +81,6 @@
             }
             
         };
-        ReloadCaseOverview();
+        ReloadCaseOverview();*@
     });
 </script>
