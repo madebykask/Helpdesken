@@ -265,17 +265,53 @@ $(function () {
         return that;
     }
 
+    dhHelpdesk.admin.users.workingGroup = function (spec, my) {
+        my = my || {};
+        var that = dhHelpdesk.admin.users.object(spec, my);
+
+        var isDefault = spec.isDefault || false;
+
+        var getIsDefault = function() {
+            return isDefault;
+        }
+
+        that.getIsDefault = getIsDefault;
+
+        return that;
+    }
+
+    dhHelpdesk.admin.users.workingGroups = function (spec, my) {
+        my = my || {};
+        var that = dhHelpdesk.admin.users.object(spec, my);
+
+        var workingGroups = spec.workingGroups || [];
+
+        var getWorkingGroups = function() {
+            return workingGroups;
+        }
+
+        that.getWorkingGroups = getWorkingGroups;
+
+        return that;
+    }
+
     dhHelpdesk.admin.users.user = function (spec, my) {
         my = my || {};
         var that = dhHelpdesk.admin.users.object(spec, my);
 
         var security = spec.security || null;
+        var workingGroups = spec.workingGroups || null;
 
         var getSecurity = function() {
             return security;
         }
 
+        var getWorkingGroups = function() {
+            return workingGroups;
+        }
+
         that.getSecurity = getSecurity;
+        that.getWorkingGroups = getWorkingGroups;
 
         return that;
     }
@@ -319,8 +355,23 @@ $(function () {
             orderPermissions: orderPermissions
         });
 
+        var wGs = [];
+        $('[data-field="UserWorkingGroup"]').each(function() {
+            var $this = $(this);
+            var wg = dhHelpdesk.admin.users.workingGroup({
+                element: $this
+            });
+
+            wGs.push(wg);
+        });
+
+        var workingGroups = dhHelpdesk.admin.users.workingGroups({
+            workingGroups: wGs
+        });
+
         var user = dhHelpdesk.admin.users.user({
-            security: security
+            security: security,
+            workingGroups: workingGroups
         });
 
         var getUser = function() {

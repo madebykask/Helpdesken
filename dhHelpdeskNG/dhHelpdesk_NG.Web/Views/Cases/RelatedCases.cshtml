@@ -27,6 +27,9 @@
                             var rc = relatedCase;                            
                             <tr onclick="window.location.href='@Url.Action("Edit", new RouteValueDictionary { { "id", rc.CaseId } })'">
                                 <td>
+                                    <img title="@relatedCase.CaseIcon.CaseIconTitle()" alt="@relatedCase.CaseIcon.CaseIconTitle()" src="@Url.Content("~/Content/icons/" + relatedCase.CaseIcon.CaseIconSrc())" />   
+                                </td>                                
+                                <td>
                                     
                                     @Html.HiddenFor(m => rc.CaseId)
                                     @((int)rc.CaseNumber)
