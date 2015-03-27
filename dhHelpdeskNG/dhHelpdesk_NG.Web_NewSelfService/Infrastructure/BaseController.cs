@@ -87,7 +87,7 @@
                     SessionFacade.CurrentLanguageId = SessionFacade.CurrentCustomer.Language_Id;
             }
            
-            if (ConfigurationManager.AppSettings["LoginMode"].ToString() == "SSO")
+            if (ConfigurationManager.AppSettings[Enums.ApplicationKeys.LoginMode].ToString() == Enums.LoginModes.SSO)
             {
                 ClaimsPrincipal principal = User as ClaimsPrincipal;
 
@@ -112,22 +112,22 @@
 
                         if (pureType != null)
                         {
-                            if (pureType.Replace(" ", "").ToLower() == ConfigurationManager.AppSettings["ClaimDomain"].ToString().Replace(" ", "").ToLower())
+                            if (pureType.Replace(" ", "").ToLower() == ConfigurationManager.AppSettings[Enums.FederationServiceKeys.ClaimDomain].ToString().Replace(" ", "").ToLower())
                                 userIdentity.Domain = value;
 
-                            if (pureType.Replace(" ", "").ToLower() == ConfigurationManager.AppSettings["ClaimUserId"].ToString().Replace(" ", "").ToLower())
+                            if (pureType.Replace(" ", "").ToLower() == ConfigurationManager.AppSettings[Enums.FederationServiceKeys.ClaimUserId].ToString().Replace(" ", "").ToLower())
                                 userIdentity.UserId = value;
 
-                            if (pureType.Replace(" ", "").ToLower() == ConfigurationManager.AppSettings["ClaimEmployeeNumber"].ToString().Replace(" ", "").ToLower())
+                            if (pureType.Replace(" ", "").ToLower() == ConfigurationManager.AppSettings[Enums.FederationServiceKeys.ClaimEmployeeNumber].ToString().Replace(" ", "").ToLower())
                                 userIdentity.EmployeeNumber = value;
 
-                            if (pureType.Replace(" ", "").ToLower() == ConfigurationManager.AppSettings["ClaimFirstName"].ToString().Replace(" ", "").ToLower())
+                            if (pureType.Replace(" ", "").ToLower() == ConfigurationManager.AppSettings[Enums.FederationServiceKeys.ClaimFirstName].ToString().Replace(" ", "").ToLower())
                                 userIdentity.FirstName = value;
 
-                            if (pureType.Replace(" ", "").ToLower() == ConfigurationManager.AppSettings["ClaimLastName"].ToString().Replace(" ", "").ToLower())
+                            if (pureType.Replace(" ", "").ToLower() == ConfigurationManager.AppSettings[Enums.FederationServiceKeys.ClaimLastName].ToString().Replace(" ", "").ToLower())
                                 userIdentity.LastName = value;
 
-                            if (pureType.Replace(" ", "").ToLower() == ConfigurationManager.AppSettings["ClaimEmail"].ToString().Replace(" ", "").ToLower())
+                            if (pureType.Replace(" ", "").ToLower() == ConfigurationManager.AppSettings[Enums.FederationServiceKeys.ClaimEmail].ToString().Replace(" ", "").ToLower())
                                 userIdentity.Email = value;
                         }
                     }
@@ -135,13 +135,13 @@
                     var netId = principal.Identity.Name;
                     var ssoLog = new NewSSOLog()
                     {
-                        ApplicationId = ConfigurationManager.AppSettings["ApplicationId"].ToString(),
+                        ApplicationId = ConfigurationManager.AppSettings[Enums.ApplicationKeys.ApplicationId].ToString(),
                         NetworkId = netId,
                         ClaimData = claimData,
                         CreatedDate = DateTime.Now
                     };
 
-                    if (ConfigurationManager.AppSettings["SSOLog"].ToString().ToLower() == "true" && string.IsNullOrEmpty(SessionFacade.CurrentSystemUser))
+                    if (ConfigurationManager.AppSettings[Enums.ApplicationKeys.SSOLog].ToString().ToLower() == "true" && string.IsNullOrEmpty(SessionFacade.CurrentSystemUser))
                         _masterDataService.SaveSSOLog(ssoLog);
 
                     if (string.IsNullOrEmpty(userIdentity.UserId))
@@ -155,7 +155,7 @@
                         SessionFacade.CurrentSystemUser = userIdentity.UserId;
                         SessionFacade.CurrentUserIdentity = userIdentity;
 
-                        var defaultEmployeeNumber = ConfigurationManager.AppSettings["DefaultEmployeeNumber"].ToString();
+                        var defaultEmployeeNumber = ConfigurationManager.AppSettings[Enums.ApplicationKeys.DefaultEmployeeNumber].ToString();
                         if (!string.IsNullOrEmpty(defaultEmployeeNumber))
                             userIdentity.EmployeeNumber = defaultEmployeeNumber;
 
@@ -206,7 +206,7 @@
                 }
             } // SSO Login
             else
-            if (ConfigurationManager.AppSettings["LoginMode"].ToString() == "Windows")
+            if (ConfigurationManager.AppSettings[Enums.ApplicationKeys.LoginMode].ToString() == Enums.LoginModes.Windows)
             {
                 var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
                 SessionFacade.UserHasAccess = true;
@@ -356,9 +356,15 @@
         {
             if(this._masterDataService != null)
             {
-                // TextTypeId 300  is used for Line Manager
-                if(SessionFacade.TextTranslation == null)
-                    SessionFacade.TextTranslation = this._masterDataService.GetTranslationTexts(); //.Where(x=> x.Type == 300).ToList();
+                if (SessionFacade.TextTranslation == null)
+                {
+                    if (ConfigurationManager.AppSettings[Enums.ApplicationKeys.CurrentApplicationType].ToString() == Enums.ApplicationTypes.LineManager)
+                        SessionFacade.TextTranslation = this._masterDataService.GetTranslationTexts()
+                                                                               .Where(x => x.Type == 300)
+                                                                               .ToList();
+                    else
+                        SessionFacade.TextTranslation = this._masterDataService.GetTranslationTexts().ToList();
+                }                
 
                 if(SessionFacade.CurrentUser == null)
                     SessionFacade.CaseTranslation = this._masterDataService.GetCaseTranslations();
