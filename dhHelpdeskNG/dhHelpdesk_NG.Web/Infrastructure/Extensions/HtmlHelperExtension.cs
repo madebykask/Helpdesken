@@ -8,6 +8,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
     using System.Web.Mvc;
     using System.Web.Routing;
 
+    using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.BusinessData.Models.CaseType;
     using DH.Helpdesk.BusinessData.Models.ProductArea;
@@ -163,16 +164,6 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             if (caseTypes != null)
             {
                 return BuildCaseTypeDropdownButton(caseTypes) ;
-            }
-            else
-                return new MvcHtmlString(string.Empty);
-        }
-
-        public static MvcHtmlString OUDropdownButtonString(this HtmlHelper helper, IList<OU> ous)
-        {
-            if (ous != null)
-            {
-                return BuildOUDropdownButton(ous);
             }
             else
                 return new MvcHtmlString(string.Empty);
@@ -1010,6 +1001,23 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             }
 
             return new MvcHtmlString(sb.ToString());
+        }
+
+        #endregion
+
+        #region CaseOverview class settings
+
+        public static string GetFieldCls(
+            this HtmlHelper helper,
+            string fieldName,
+            IEnumerable<CaseOverviewGridColumnSetting> columnsSettings)
+        {
+            var style = columnsSettings.FirstOrDefault(it => it.Name == fieldName);
+            if (style != null)
+            {
+                return style.Style;
+            }
+            return null;
         }
 
         #endregion

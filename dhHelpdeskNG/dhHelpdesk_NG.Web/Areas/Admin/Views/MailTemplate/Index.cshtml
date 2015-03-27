@@ -51,13 +51,13 @@
                             @Translation.Get("Driftlogg", Enums.TranslationSource.TextTranslation)</h4>
                         @Html.Partial("_OperationLogsMailTemplates", Model)
                     }
-
+                    @* COMMENTED OUT BECAUSE THIS IS NOT FINISHED
                     if (Model.Settings.ModuleQuestionnaire == 1)
                     {
                         <h4>
                             @Translation.Get("Enkät", Enums.TranslationSource.TextTranslation)</h4>
                         @Html.Partial("_SurveyMailTemplates", Model)
-                    }
+                    }*@
 
                     if (Model.MailTemplates.Count > 0)
                     {

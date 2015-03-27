@@ -11,6 +11,7 @@
     using DH.Helpdesk.BusinessData.Models.Projects.Output;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Changes;
+    using DH.Helpdesk.Web.Areas.Admin.Controllers;
     using DH.Helpdesk.Web.Models.Invoice;
     using DH.Helpdesk.Web.Models.Shared;
 
@@ -76,8 +77,9 @@
         /// Gets or sets the languages.
         /// </summary>
         public IEnumerable<LanguageOverview> Languages { get; set; }
-        //public IList<CaseHistory> caseHistories { get; set; }
+  
         public CaseHistory EmptyCaseHistory { get; set; }
+        
         public FilesModel LogFilesModel { get; set; }
 
         public CaseFilesModel CaseFilesModel { get; set; }
@@ -104,9 +106,6 @@
 
         public NewCaseParams  NewModeParams { get; set; }
 
-        //public DropDownWithSubmenusContent CategoryWithSubcategories { get; private set; }
-        ////public List<CategoryWithSubcategories> CategoryWithSubcategories { get; set; }
-        //public EditingFaqModel EditFaqModel { get; set; }
         public CaseTemplateTreeModel CaseTemplateTreeButton { get; set; }
 
         public DynamicCase DynamicCase { get; set; }
@@ -119,6 +118,7 @@
 
     public class CaseIndexViewModel
     {
+        public int CustomerId { get; set; }
         public CaseSearchFilterData caseSearchFilterData { get; set; }
         public CaseSearchResultModel caseSearchResult { get; set; }
         public CaseTemplateTreeModel CaseTemplateTreeButton { get; set; }
@@ -127,6 +127,7 @@
 
     public class CaseSearchResultModel
     {
+        public CaseColumnsSettingsModel GridSettings { get; set; }
         public IList<CaseSettings> caseSettings { get; set; }
         public IList<CaseSearchResult> cases { get; set; }
 

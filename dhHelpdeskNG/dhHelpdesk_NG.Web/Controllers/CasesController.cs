@@ -35,13 +35,13 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Case;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Invoice;
     using DH.Helpdesk.Web.Infrastructure.Mvc;
+    using DH.Helpdesk.Web.Infrastructure.Services.Case;
     using DH.Helpdesk.Web.Infrastructure.Tools;
     using DH.Helpdesk.Web.Models;
     using DH.Helpdesk.Web.Models.Case;
     using DH.Helpdesk.Web.Models.Shared;
-    using System.Web.Script.Serialization;
-
-    using WebGrease.Css.Extensions;
+    
+    using DH.Helpdesk.Web.Models.Case.Input;
 
     public class CasesController : BaseController
     {
@@ -106,6 +106,8 @@ namespace DH.Helpdesk.Web.Controllers
 
         private readonly ICaseModelFactory caseModelFactory;
 
+        private readonly CaseOverviewGridSettingsService caseOverviewSettingsService;
+
         #endregion
 
         #region Constructor
@@ -159,7 +161,8 @@ namespace DH.Helpdesk.Web.Controllers
             IConfiguration configuration,
             ICaseSolutionSettingService caseSolutionSettingService,            
             IInvoiceHelper invoiceHelper, 
-            ICaseModelFactory caseModelFactory)
+            ICaseModelFactory caseModelFactory,
+            CaseOverviewGridSettingsService caseOverviewSettingsService)
             : base(masterDataService)
         {            
             this._caseService = caseService;
@@ -210,6 +213,7 @@ namespace DH.Helpdesk.Web.Controllers
             this.caseSolutionSettingService = caseSolutionSettingService;            
             this.invoiceHelper = invoiceHelper;
             this.caseModelFactory = caseModelFactory;
+            this.caseOverviewSettingsService = caseOverviewSettingsService;
         }
 
         #endregion
@@ -400,6 +404,7 @@ namespace DH.Helpdesk.Web.Controllers
                     fd.CaseWatchDateStartFilter = sm.caseSearchFilter.CaseWatchDateStartFilter;
                     
                     srm.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(cusId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
+                    
                     var workTimeCalculator = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
                     // Uncomment for http://redmine.fastdev.se/issues/10654
                     // var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
@@ -422,6 +427,9 @@ namespace DH.Helpdesk.Web.Controllers
                         out remainingTime);
 
                     srm.cases = TreeTranslate(srm.cases);
+                    srm.GridSettings = this.caseOverviewSettingsService.GetSettings(
+                        SessionFacade.CurrentCustomer.Id,
+                        SessionFacade.CurrentUser.Id);
                     m.caseSearchResult = srm;
                     m.caseSearchFilterData = fd;
                     sm.Search.IdsForLastSearch = GetIdsFromSearchResult(srm.cases);
@@ -433,8 +441,6 @@ namespace DH.Helpdesk.Web.Controllers
                     m.CaseSetting = GetCaseSettingModel(cusId, userId);
                     m.caseSearchResult.ShowRemainingTime = showRemainingTime;
                     m.caseSearchResult.RemainingTime = this.caseModelFactory.GetCaseRemainingTimeModel(remainingTime);
-
-                    //Set refreshcontent
                     User user = new User();
                     user = _userService.GetUser(userId);
                     m.CaseSetting.RefreshContent = user.RefreshContent;
@@ -1063,9 +1069,13 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var f = new CaseSearchFilter();
             var m = new CaseSearchResultModel();
-
+            
             if (SessionFacade.CurrentUser != null)
             {
+                m.GridSettings =
+                    this.caseOverviewSettingsService.GetSettings(
+                        SessionFacade.CurrentCustomer.Id,
+                        SessionFacade.CurrentUser.Id);
                 f.CustomerId = frm.ReturnFormValue("hidFilterCustomerId").convertStringToInt();
                 f.UserId = SessionFacade.CurrentUser.Id;
                 f.CaseType = frm.ReturnFormValue("hidFilterCaseTypeId").convertStringToInt();
@@ -1295,105 +1305,20 @@ namespace DH.Helpdesk.Web.Controllers
             SessionFacade.CurrentCaseSearch = null;  
         }
 
-        public void SaveColSetting(FormCollection frm)
+
+        /// <summary>
+        /// Saving settings for case overview page
+        /// </summary>
+        /// <param name="inputSettings"></param>
+        public void SaveColSetting(CaseOverviewSettingsInput inputSettings)
         {
-
-            // Update Rows one by one ordered as a showed 
-
-            int customerId = int.Parse(frm["CustomerId"]);
-            int userId = int.Parse(frm["UserId"]);
-
-            if (frm["uc.Id"] != null)
-            {
-                var updatedId = frm["uc.Id"].Split(',');
-                var updatedName = frm["uc.Name"].Split(',');
-                var updatedRow = frm["uc.Line"].Split(','); //frm.ReturnFormValue("rows").Split(',');
-                var updatedMinWith = frm["uc.MinWidth"].Split(',');
-                var updatedColStyle = frm["uc.ColStyle"].Split(',');
-                var updatedColOrder = frm["uc.ColOrder"].Split(',');
-                var updatedUserGroup = frm["uc.UserGroup"].Split(',');                
-
-                IDictionary<string, string> errors = new Dictionary<string, string>();
-                DateTime nowTime = DateTime.Now;
-                var newColSetting = new CaseSettings();
-                for (int ii = 0; ii < updatedId.Length; ii++)
-                {
-                    newColSetting.Id = int.Parse(updatedId[ii]);
-                    newColSetting.Customer_Id = customerId;
-                    newColSetting.User_Id = userId;
-                    newColSetting.Name = updatedName[ii];
-                    newColSetting.Line = int.Parse(updatedRow[ii]);
-                    newColSetting.MinWidth = int.Parse(updatedMinWith[ii]);
-                    newColSetting.ColStyle = updatedColStyle[ii];
-                    newColSetting.ColOrder = int.Parse(updatedColOrder[ii]);
-                    newColSetting.UserGroup = int.Parse(updatedUserGroup[ii]);
-                    newColSetting.ChangeTime = nowTime;
-
-                    _caseSettingService.UpdateCaseSetting(newColSetting, out errors);
-                }
-
-            }
+            this.caseOverviewSettingsService.UpdateSettings(
+                inputSettings,
+                SessionFacade.CurrentCustomer.Id,
+                SessionFacade.CurrentUser.Id,
+                SessionFacade.CurrentUser.UserGroupId);
         }
 
-        [HttpPost]
-        public ActionResult AddCaseSettingColumn(int customerId, int userId, string labellist,
-                                                 int linelist, string colStyle, int minWidthValue,
-                                                 int colOrderValue, int userGroup)
-        {
-
-            IDictionary<string, string> errors = new Dictionary<string, string>();
-
-            DateTime nowTime = DateTime.Now;
-
-            var newCaseSetting = new CaseSettings();
-
-            newCaseSetting.Id = 0;
-            newCaseSetting.Customer_Id = customerId;
-            newCaseSetting.User_Id = userId;
-            newCaseSetting.Name = labellist;
-            newCaseSetting.Line = linelist;
-            newCaseSetting.MinWidth = minWidthValue;
-            newCaseSetting.ColStyle = colStyle;
-            newCaseSetting.ColOrder = colOrderValue;
-            newCaseSetting.UserGroup = userGroup;            
-            newCaseSetting.RegTime = nowTime;
-            newCaseSetting.ChangeTime = nowTime;
-
-            _caseSettingService.SaveCaseSetting(newCaseSetting, out errors);
-
-            var model = new CaseColumnsSettingsModel();
-            model = GetCaseColumnSettingModel(customerId, userId);
-
-            return PartialView("_ColumnCaseSetting", model);
-
-        }
-
-        [HttpPost]
-        public ActionResult SortCaseSettingColumn(int customerId, int userId, string sortIds)
-        {
-            var elementsId = sortIds.Split('|');
-
-            _caseSettingService.ReOrderCaseSetting(elementsId.ToList());
-
-            var model = new CaseColumnsSettingsModel();
-            model = GetCaseColumnSettingModel(customerId, userId);
-
-            return PartialView("_ColumnCaseSetting", model);
-
-        }
-
-        [HttpPost]
-        public ActionResult DeleteRowFromCaseSettings(int id, int userId, int customerId)
-        {
-            if (this._caseSettingService.DeleteCaseSetting(id) != DeleteMessage.Success)
-                this.TempData.Add("Error", "");
-
-            var model = new CaseColumnsSettingsModel();
-
-            model = GetCaseColumnSettingModel(customerId, userId);
-
-            return PartialView("_ColumnCaseSetting", model);
-        }
 
         [HttpGet]
         public RedirectToRouteResult ChangeCurrentLanguage(int languageId)        
@@ -1647,6 +1572,11 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (case_.FinishingDate.HasValue)
             {
+                if (case_.RegTime > case_.FinishingDate)
+                {
+                    case_.FinishingDate = case_.RegTime;
+                }
+
                 var workTimeCalc = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
                 case_.LeadTime = workTimeCalc.CalcWorkTimeMinutes(
                     case_.Department_Id,
@@ -2501,89 +2431,12 @@ namespace DH.Helpdesk.Web.Controllers
 
             ret.ClosingReasonCheck = userCaseSettings.CaseClosingReasonFilter != string.Empty;
             ret.ClosingReasons = this._finishingCauseService.GetFinishingCauses(customerId);
-            ret.ColumnSettingModel = this.GetCaseColumnSettingModel(customerId, userId);
+            ret.ColumnSettingModel = this.caseOverviewSettingsService.GetSettings(customerId, userId);
 
             return ret;
         }
 
-        private CaseColumnsSettingsModel GetCaseColumnSettingModel(int customerId, int userId)
-        {
-            CaseColumnsSettingsModel colSettingModel = new CaseColumnsSettingsModel();
-
-            colSettingModel.CustomerId = customerId;
-            colSettingModel.UserId = userId;
-
-            var showColumns = _caseFieldSettingService.ListToShowOnCasePage(customerId, SessionFacade.CurrentLanguageId)
-                                       .Where(c => c.ShowOnStartPage == 1)
-                                       .Select(s => s.CFS_Id)
-                                       .ToList();
-
-            IList<CaseFieldSettingsWithLanguage> allColumns = new List<CaseFieldSettingsWithLanguage>();
-            allColumns = _caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customerId, SessionFacade.CurrentLanguageId)
-                                                 .Where(c => showColumns.Contains(c.Id))
-                                                 .ToList();
-
-            //<option value="tblProblem.ResponsibleUser_Id">@Translation.Get("Problem", Enums.TranslationSource.TextTranslation)</option>
-
-            var fixValue1 = new CaseFieldSettingsWithLanguage
-            {
-                Id = 9998,
-                Label = Translation.Get("Tid kvar", Enums.TranslationSource.TextTranslation),
-                Name = "_temporary_.LeadTime",
-                Language_Id = SessionFacade.CurrentLanguageId
-            };
-            allColumns.Add(fixValue1);
-
-            var fixValue2 = new CaseFieldSettingsWithLanguage
-            {
-                Id = 9999,
-                Label = Translation.Get("Problem", Enums.TranslationSource.TextTranslation),
-                Name = "tblProblem.ResponsibleUser_Id",
-                Language_Id = SessionFacade.CurrentLanguageId
-            };
-
-            allColumns.Add(fixValue2);
-            var caseFieldSettingsWithNoLabel = allColumns.Where(x => x.Label == null);
-            var caseFieldSettingsWithLabel = allColumns.Where(x => x.Label != null)
-                                                                    .OrderBy(x => x.Label)
-                                                                    .ThenBy(x => x.Name);
-
-            //// translating and sorting in alpabet order
-            var fieldsCollection = caseFieldSettingsWithLabel.Concat(caseFieldSettingsWithNoLabel).ToList();
-            foreach (var field in fieldsCollection)
-            {
-                field.Label = string.IsNullOrEmpty(field.Label)
-                                   ? Translation.Get(
-                                       field.Name,
-                                       Enums.TranslationSource.CaseTranslation,
-                                       SessionFacade.CurrentCustomer.Id)
-                                   : field.Label;
-            }
-
-            colSettingModel.CaseFieldSettingLanguages = fieldsCollection.OrderBy(it => it.Label).ToList();
-
-            IList<CaseSettings> userColumns = new List<CaseSettings>();
-            userColumns = _caseSettingService.GetCaseSettingsWithUser(customerId, userId, SessionFacade.CurrentUser.UserGroupId);
-
-            IList<CaseFieldSetting> userCaseFieldSettings = new List<CaseFieldSetting>();
-            userCaseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
-
-            colSettingModel.UserColumns = userColumns;
-            colSettingModel.CaseFieldSettings = userCaseFieldSettings;
-
-            List<SelectListItem> li = new List<SelectListItem>();
-            li.Add(new SelectListItem()
-            {
-                Text = Translation.Get("Info", Enums.TranslationSource.TextTranslation),
-                Value = "1",
-                Selected = false
-            });
-            colSettingModel.LineList = li;
-
-            return colSettingModel;
-
-        }
-
+        
         private string GetIdsFromSearchResult(IList<CaseSearchResult> cases)
         {
             if (cases == null)

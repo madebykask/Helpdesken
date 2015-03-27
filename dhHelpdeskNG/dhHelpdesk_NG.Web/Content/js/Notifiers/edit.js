@@ -5,9 +5,7 @@
 * NOTE: multiselects are not supported
 */
 $(function () {
-    var firstLevelData = [], secondLevelData = [];
-    var organizationData = window.organizationData || [];
-    var parameters = window.displaySettings;
+    var firstLevelData = [], secondLevelData = [];    
     var miscParameters = window.parameters;  
 
     /**

@@ -1,4 +1,4 @@
-﻿@using DH.Helpdesk.Web.Enums;
+﻿@using DH.Helpdesk.Web.Models.Case
 @model DH.Helpdesk.Web.Models.Case.CaseColumnsSettingsModel
 <form id="frmColCaseSetting" name="frmColCaseSetting">
     <div class="tab-content">
@@ -7,11 +7,7 @@
             <div id="colsetting_result" class="row">
                 <div class="span100">                    
                     @Translation.Get("Teckensnittsstorlek i tabell (ju mindre desto mer information kan visas på skärmen).", Enums.TranslationSource.TextTranslation)<br />
-                    <select>
-                        <option>
-                            
-                        </option>
-                    </select>
+                    @Html.DropDownListFor(x => x.SelectedFontStyle, CaseColumnsSettingsModel.FontStyles)
                 </div>             
                 <div class="span100">
                     @Translation.Get("Välj den mest lämpliga bredden för de kolumner som du vill visa på ärendeöversikten (beroende på mängden information i varje kolumn).", Enums.TranslationSource.TextTranslation)
@@ -19,8 +15,8 @@
                     @Translation.Get("(Välj bred på högst 3 kolumner för bästa resultat).", Enums.TranslationSource.TextTranslation)                    
                 </div>       
                 <div class="span5">
-                     @Html.HiddenFor(m=> Model.CustomerId)                
-                     @Html.HiddenFor(m=> Model.UserId)
+                    @Html.HiddenFor(m=> Model.CustomerId)                
+                    @Html.HiddenFor(m=> Model.UserId)
                     <table class="table table-striped table-bordered table-hover" id="customerCaseSum">
                         <thead>
                             <tr>                                
@@ -36,74 +32,49 @@
                             </tr>
                         </thead>
                                                              
-                        <tbody id="dataTable" >
-                            <tr class="rowAdding" id="0" >                                                                       
-                                    <td>
-                                        <input type="hidden" style="width: 80px;" name="colOrderValue" id="colOrderValue" value="99" />
-                                        <input type="hidden" style="width: 80px;" name="minWidthValue" id="minWidthValue" value="100" />
+                        <tbody id="dataTable">
+                            <tr class="rowAdding">                                                                       
+                                <td>
+                                    <input type="hidden" style="width: 80px;" name="colOrderValue" id="colOrderValue" value="99" />
+                                    <input type="hidden" style="width: 80px;" name="minWidthValue" id="minWidthValue" value="100" />
 
-                                        <select  id="labellist">                                            
-                                             @foreach (var cfs in Model.CaseFieldSettingLanguages)
-                                                {
-                                                    if (cfs.Name != "Filename" && cfs.Name != "text_internal" && cfs.Name != "tblLog.Text_External" && cfs.Name != "tblLog.Text_Internal" && cfs.Name != "tblLog.Charge" && cfs.Name != "tblLog.Filename")
-                                                    {
-                                                        <option id="label" value="@cfs.Name">@cfs.Label</option>  
-                                                    }
-                                                }
-                                        </select>
-                                    </td>                                           
-                                    <td>
-                                        @Html.DropDownList("newColStyle", Model.GetColStyles(ColumnStyle.Normal.Key))
-                                    </td>
-                                    <td>
-                                        <input class="btn btn-success" type="button" value="@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)" id="AddRow" 
-                                               onclick="addCaseSettingRow()" onmouseover="javascript:this.style.cursor='move'; javascript:this.style.cursor='pointer';"/>
-                                        <input type="hidden" id="caseSettingId" value="" />
-                                    </td> 
-                                              
-                                </tr>     
+                                    <select id="labellist">
+                                        @foreach (var fieldSetting in Model.AvailableColumns)
+                                        {
+                                            <option value="@fieldSetting.Name">@Translation.Get(fieldSetting.Name, Enums.TranslationSource.CaseTranslation, Model.CustomerId)</option>
+                                        }
+                                    </select>
+                                </td>                                           
+                                <td>
+                                    <select id="newColStyle">
+                                        @foreach (var fieldSetting in CaseColumnsSettingsModel.FieldStyles)
+                                        {
+                                            <option value="@fieldSetting.Value">@fieldSetting.Text</option>
+                                        }
+                                    </select>
+                                </td>
+                                <td>
+                                    <input class="btn btn-success addrow" type="button" value="@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)" />
+                                    <input type="hidden" id="caseSettingId" value="" />
+                                </td>
+                            </tr>     
                             @if (Model != null)
                             {
-                                
-                                foreach (var uc in  Model.UserColumns)
+                                var i = 0;
+                                foreach (var columnSettings in  Model.SelectedColumns)
                                 {                                    
-                                    <tr id="@uc.Id" class="SortableRow" style="cursor:move">                                        
-                                        @if (Model.UserColumns != null)
-                                        {
-                                            var findCaption = false;
-                                            
-                                            <td style="cursor:move">
-                                                @Html.HiddenFor(model => uc.ColOrder)
-                                                @Html.HiddenFor(model => uc.MinWidth)                                                                                                
-                                                
-                                                @foreach (var cfs in Model.CaseFieldSettingLanguages)
-                                                {
-                                                    if (cfs.Name.ToUpper() == uc.Name.ToUpper())
-                                                    {                                                                                                                  
-                                                        <label style="cursor:move" for="subCategoryName">@(string.IsNullOrEmpty(cfs.Label) ? Translation.Get(cfs.Name, Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id) : cfs.Label)</label>
-                                                        findCaption = true;                                                     
-                                                    }                                                    
-                                                }
-                                                @if (!findCaption)
-                                                {
-                                                    <label style="cursor:move" for="subCategoryName"> @Translation.Get(uc.Name, Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id) </label>
-                                                }                                                
-                                            </td> 
-                                        }   
+                                    <tr class="SortableRow">
                                         <td>
-                                            @Html.DropDownList("colStyle", Model.GetColStyles(uc.ColStyle))
+                                             <label for="subCategoryName"> @Translation.Get(columnSettings.Name, Enums.TranslationSource.CaseTranslation, Model.CustomerId) </label>
+                                        </td>
+                                        <td>
+                                            @Html.DropDownList(String.Format("column_style", i), CaseColumnsSettingsModel.GetColStyles(columnSettings.Style))
+                                            @Html.Hidden(String.Format("column_name", i++), @columnSettings.Name )
                                         </td>                                     
                                         <td>
-                                            @Html.HiddenFor(model => uc.Id)
-                                            @Html.HiddenFor(model => uc.Name)
-                                            @Html.HiddenFor(model => uc.UserGroup)
-                                            @Html.HiddenFor(model => uc.Line)
-                                            <input class="btn btn-danger" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" 
-                                                   onclick ="deleteCaseSettingRow(@uc.Id)" onmouseover="javascript:this.style.cursor='move'; javascript:this.style.cursor='pointer';"/>
-                                            <input type="hidden" id="deleteCaseSettingsId" value="@uc.Id" />
-                                            <input type="hidden" id="userGroup" value="@uc.UserGroup" />                                                                                         
+                                            <input class="btn btn-danger deleterow" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
                                         </td>
-                                    </tr>                                           
+                                    </tr>
                                 }
                             }
                         </tbody>
@@ -114,48 +85,22 @@
         </div>                
     </div>
 </form>
-
-<script type="text/javascript">    
-
-    $(function () {        
-        $("#customerCaseSum tbody").sortable(
-            {                
-                items: "> tr:not(:first)",                
-                update: function (event, ui) {                    
-                    var elements = document.querySelectorAll('.SortableRow');
-                    //console.log('Count:' + elements.length.toString());
-                    var newOrder = "";
-                    for (var i = 0; i < elements.length; ++i) {
-                        var item = elements[i];              
-                        newOrder += item.id.toString() + "|" ;                        
-                    }                   
-                    
-                    $.post('@this.Url.Action("SortCaseSettingColumn")', 
-                        { customerId: '@Model.CustomerId', 
-                            userId: '@Model.UserId',
-                            sortIds: newOrder,                            
-                        }, function (result) {
-                            $("#colsetting_result").html(result);
-                        });                 
-                }                
-            });
-
-        $("#customerCaseSum tbody").disableSelection();
-    });
-
-
-    function addCaseSettingRow() {                       
-        $.post('/cases/AddCaseSettingColumn/' + '?customerId=' + '@Model.CustomerId.ToString()' + '&userId=' + '@Model.UserId.ToString()' + 
-            '&labellist=' + $("#labellist").val() + '&linelist=1&colStyle=' + $("#newColStyle").val() +
-            '&minWidthValue=' + $("#minWidthValue").val() + '&colOrderValue=' + $("#colOrderValue").val() + '&userGroup=4 ' , function (result) {
-                $("#colsetting_result").html(result);
-           });
-    }
-
-    function deleteCaseSettingRow(id) {                
-        $.post('/cases/DeleteRowFromCaseSettings/' + id + '?userId=' + '@Model.UserId.ToString()' + '&customerId=' + '@Model.CustomerId.ToString()', 
-               function(result) {$("#colsetting_result").html(result);}
-              );
-    }
-
+<script id="caseFieldRow" type="text/x-jsrender">
+    <tr class="SortableRow">
+        <td>
+            <label for="subCategoryName">{{:label}}</label>
+        </td> 
+        <td>
+            <select name="column_style" fieldid="{{:fieldId}}">
+                @foreach (var fieldSetting in CaseColumnsSettingsModel.FieldStyles)
+                {
+                    <option value="@fieldSetting.Value">@fieldSetting.Text</option>
+                }
+            </select>
+            <input type="hidden" name="column_name" value="{{:fieldId}}"/>
+        </td>
+        <td>
+            <input class="btn btn-danger deleterow" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
+        </td>
+    </tr>
 </script>

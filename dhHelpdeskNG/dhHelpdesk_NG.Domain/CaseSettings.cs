@@ -8,7 +8,8 @@
         public int ColOrder { get; set; }
         
         /// <summary>
-        /// Used in ver.4. We have to process data only if it is 1
+        /// What line to use to display this column value. 
+        /// Does not support this feature in v5
         /// </summary>
         public int Line { get; set; }
         public int MinWidth { get; set; }

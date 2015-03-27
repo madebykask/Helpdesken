@@ -1,53 +1,79 @@
-﻿using System.Web.Mvc;
-using DH.Helpdesk.BusinessData.Models;
-using DH.Helpdesk.Domain;
-
-namespace DH.Helpdesk.Web.Models.Case
+﻿namespace DH.Helpdesk.Web.Models.Case
 {
     using System;
     using System.Collections.Generic;
-    using DH.Helpdesk.Web.Infrastructure;
-    using DH.Helpdesk.Web.Enums;
-    using System.Reflection;
+    using System.Linq;
+    using System.Web.Mvc;
 
+    using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Web.Infrastructure;
+
+    /// <summary>
+    /// Case overview grid settings model
+    /// </summary>
     public class CaseColumnsSettingsModel
     {
+        public static readonly IEnumerable<SelectListItem> FieldStyles = new[]
+            {
+                new SelectListItem
+                    {
+                        Value = "colnormal",
+                        Text =
+                            @Translation.Get(
+                                "Normal",
+                                Enums
+                            .TranslationSource
+                            .TextTranslation)
+                    },
+                new SelectListItem
+                    {
+                        Value = "colwide",
+                        Text =
+                            @Translation.Get(
+                                "Bred",
+                                Enums
+                            .TranslationSource
+                            .TextTranslation)
+                    },
+                new SelectListItem
+                    {
+                        Value = "colnarrow",
+                        Text =
+                            @Translation.Get(
+                                "Smal",
+                                Enums
+                            .TranslationSource
+                            .TextTranslation)
+                    }
+            };
+
+        public static readonly IEnumerable<SelectListItem> FontStyles = new[]
+                {
+                    new SelectListItem { Value = "normaltext", Text = @Translation.Get("Normal", Enums.TranslationSource.TextTranslation) },
+                    new SelectListItem { Value = "smalltext", Text = @Translation.Get("Mindre", Enums.TranslationSource.TextTranslation) },
+                    new SelectListItem { Value = "smallertext", Text = @Translation.Get("Minst", Enums.TranslationSource.TextTranslation) }
+                };
+
         public int CustomerId { get; set; }
 
         public int UserId { get; set; }
 
-        public IList<CaseSettings> UserColumns { get; set; }
+        public IEnumerable<CaseOverviewGridColumnSetting> AvailableColumns { get; set; }
+
+        public IEnumerable<CaseOverviewGridColumnSetting> SelectedColumns { get; set; }
         
         public IList<SelectListItem> LineList { get; set; }
-
-        public IList<CaseFieldSettingsWithLanguage> CaseFieldSettingLanguages { get; set; }
-
+   
         public IList<CaseFieldSetting> CaseFieldSettings { get; set; }
 
-        public IList<SelectListItem> GetColStyles(string selectedStyle)
+        public string SelectedFontStyle { get; set; }
+
+        public static IList<SelectListItem> GetColStyles(string selectedStyle)
         {
-            if (string.IsNullOrEmpty(selectedStyle))
-                selectedStyle = ColumnStyle.Normal.Key;
-            var ret = new List<SelectListItem>();            
-
-            ColumnStyle instance = new ColumnStyle();
-            Type type = typeof(ColumnStyle); 
-	        FieldInfo[] fields = type.GetFields(); 
-            Dictionary<string, object> properties = new Dictionary<string, object>();
-            foreach (var field in fields) 
-            {
-                properties.Add(field.Name, field.GetValue(instance));
-            }	                            
-
-            foreach (var prop in properties)
-            {                
-                KeyValuePair<string, string> objVal = (KeyValuePair<string, string>) prop.Value;
-                ret.Add(new SelectListItem { Value = objVal.Key, Text = Translation.Get(objVal.Value), Selected = (objVal.Key.ToLower() == selectedStyle.ToLower()) });   
-            }
-
-            return ret;            
+            var selectedVal = string.IsNullOrEmpty(selectedStyle) ? string.Empty : selectedStyle.ToLower();
+            return FieldStyles.Select(fieldStyle => new SelectListItem() { Value = fieldStyle.Value, Selected = selectedVal == fieldStyle.Value.ToLower(), Text = fieldStyle.Text }).ToList();
         }
-            
     }
 
     public sealed class CaseSettingModel

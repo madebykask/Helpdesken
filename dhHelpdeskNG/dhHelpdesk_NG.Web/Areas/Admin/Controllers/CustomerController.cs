@@ -519,7 +519,7 @@
                 }).ToList(),
                 Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
                 {
-                    Text = x.Name,
+                    Text = Translation.Get(x.Name),
                     Value = x.Id.ToString(),
                 }).ToList(),
 

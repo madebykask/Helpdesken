@@ -46,7 +46,9 @@
                 return new HttpNotFoundResult("No user found...");
             }
 
-            var allModules = this.moduleService.GetAllModules();
+            // Temporary inactive MyCases only for 27th March released #11837 
+            var allModules = this.moduleService.GetAllModules()
+                                                .Where(m => m.Id != 12 && m.Name != "Mina tilldelade ärenden"); 
                                           
             var modules = new UserModulesViewModel();
             var userModules = this.workContext.User.Modules;

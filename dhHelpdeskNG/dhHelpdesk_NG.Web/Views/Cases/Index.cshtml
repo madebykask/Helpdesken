@@ -26,18 +26,6 @@
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
             <li id="CasesTab"  class="active"><a href="#fragment-1">@Translation.Get("Ärenden", Enums.TranslationSource.TextTranslation)</a></li>
-
-            @*
-            @if (Html.MasterModel().CustomerSetting.ModuleChangeManagement == 1)
-            {
-                <li><a href="#fragment-2">@Translation.Get("Ändringshantering", Enums.TranslationSource.TextTranslation)</a></li>    
-            }
-            @if (Html.MasterModel().CustomerSetting.ModuleOrder == 1)
-            {
-                <li><a href="#fragment-3">@Translation.Get("Beställningar", Enums.TranslationSource.TextTranslation)</a></li>
-            }
-            *@
-
             <li id="SettingTab"><a href="#fragment-4">@Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)</a></li>
         </ul>
         <div class="tab-content">
@@ -78,16 +66,13 @@
             var TimeBeforeReload = "@Model.CaseSetting.RefreshContent";
             TimeBeforeReload = TimeBeforeReload / 60;
             TimeBeforeReload = TimeBeforeReload * 60000;
-            debugger;
             if (TimeBeforeReload != null || TimeBeforeReload != NaN || TimeBeforeReload != "")
             {
                 var TimeBeforeReload = parseInt(TimeBeforeReload, 10);
                 if (TimeBeforeReload != 0) {
                     setTimeout(function () {
                         var CaseOverViewActive = $("#fragment-1").attr("class");
-                        debugger;
                         if (CaseOverViewActive.indexOf("active") >= 0) {
-                            debugger;
                             location.reload();
                         }
                     }, TimeBeforeReload);

@@ -12,6 +12,7 @@
     using DH.Helpdesk.Dal.EntityConfigurations.Computers;
     using DH.Helpdesk.Dal.EntityConfigurations.DailyReport;
     using DH.Helpdesk.Dal.EntityConfigurations.Faq;
+    using DH.Helpdesk.Dal.EntityConfigurations.Grid;
     using DH.Helpdesk.Dal.EntityConfigurations.Inventory;
     using DH.Helpdesk.Dal.EntityConfigurations.Invoice;
     using DH.Helpdesk.Dal.EntityConfigurations.Licenses;
@@ -32,6 +33,7 @@
     using DH.Helpdesk.Domain.Changes;
     using DH.Helpdesk.Domain.Computers;
     using DH.Helpdesk.Domain.Faq;
+    using DH.Helpdesk.Domain.Grid;
     using DH.Helpdesk.Domain.Inventory;
     using DH.Helpdesk.Domain.Invoice;
     using DH.Helpdesk.Domain.MailTemplates;
@@ -496,7 +498,9 @@
  
         public DbSet<CaseInvoiceEntity> CaseInvoices { get; set; } 
 
-        public DbSet<CaseInvoiceSettingsEntity> CaseInvoiceSettings { get; set; } 
+        public DbSet<CaseInvoiceSettingsEntity> CaseInvoiceSettings { get; set; }
+
+        public DbSet<GridSettingsEntity> GridSettings { get; set; } 
 
         #endregion
 
@@ -739,6 +743,7 @@
             modelBuilder.Configurations.Add(new ManufacturerConfiguration());
             modelBuilder.Configurations.Add(new DH.Helpdesk.Dal.EntityConfigurations.Licenses.ApplicationConfiguration());
             modelBuilder.Configurations.Add(new LicenseFileConfiguration());
+            modelBuilder.Configurations.Add(new GridSettingsEntityConfiguration());
 
             #endregion
 
