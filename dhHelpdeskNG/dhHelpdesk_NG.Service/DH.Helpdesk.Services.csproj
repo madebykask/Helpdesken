@@ -264,6 +264,7 @@
     <Compile Include="Infrastructure\Email\ICaseMailer.cs" />
     <Compile Include="Services\Concrete\Reports\ReportService.cs" />
     <Compile Include="Services\Concrete\Users\UsersPasswordHistoryService.cs" />
+    <Compile Include="Services\Grid\GridSettingsService.cs" />
     <Compile Include="Services\ISurveyService.cs" />
     <Compile Include="Localization\CultureTranslations.cs" />
     <Compile Include="Infrastructure\ManualDependencyResolver.cs" />

@@ -38,7 +38,7 @@
 
                     if (this.defaultCulture == null)
                     {
-                        this.defaultCulture = new CultureInfo(Services.Infrastructure.ApplicationDefaultParameters.Culture);                        
+                        this.defaultCulture = new CultureInfo("en-US");
                     }
                 }
 

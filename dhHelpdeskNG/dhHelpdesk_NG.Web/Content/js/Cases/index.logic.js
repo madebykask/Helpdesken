@@ -131,20 +131,6 @@ window.onload = function () {
     $('#btnCaseTemplate').show();
 };
 
-$('#btnSaveCaseSetting').click(function (e) {
-    e.preventDefault();
-    window.SaveSetting(e);
-});
-
-function SaveSetting(e) {
-    $.post('/Cases/SaveSetting/', $("#frmCaseSetting").serialize(), function (result) {
-    });
-
-    $.post('/Cases/SaveColSetting/', $("#frmColCaseSetting").serialize(), function (result) {
-        window.location.href = '/cases/';
-    });
-}
-
 // msgType : Success,Warning,Notice,Error
 function ShowToastMessage(message, msgType) {
     $().toastmessage('showToast', {

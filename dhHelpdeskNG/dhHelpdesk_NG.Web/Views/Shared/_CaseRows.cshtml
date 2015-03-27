@@ -3,31 +3,19 @@
 @using DH.Helpdesk.Common.Extensions.DateTime
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @model DH.Helpdesk.Web.Models.Case.CaseSearchResultModel
-
 @if (Model != null)
-{   if (Model.ShowRemainingTime)
-    {
-        <div style="display: none;">
-            @Html.Partial("CaseRemainingTime", Model.RemainingTime)            
-        </div>
-    } 
-    <table class="table table-striped table-bordered table-hover table-cases">
+{  
+    <table class="table table-striped table-bordered table-hover table-cases @Model.GridSettings.SelectedFontStyle">
         <thead>
             <tr>
                 <!--fasta kolumner -->
                 <th style="width:18px;"></th>
-                <!-- valbara kolumner -->
-                @if (Model.caseSettings != null)
-                {                
-                    foreach (var c in Model.caseSettings)
-                    {
-                        var colName = "";
-                        colName = Translation.Get(c.Name, Enums.TranslationSource.CaseTranslation, c.Customer_Id??0) ?? c.Name;
-
-                        <th onclick="sortCases('@c.Name')" class="thpointer" >
-                            @colName <i class="@c.Name.SetCaseSortIcon()"></i>                                
-                        </th>                        
-                    }    
+                <!-- valbara kolumner -->            
+                @foreach (var columnSettings in Model.GridSettings.SelectedColumns)
+                {
+                    <th onclick="sortCases('@columnSettings.Name')" class="thpointer @Html.GetFieldCls(columnSettings.Name, Model.GridSettings.SelectedColumns)" >
+                        @Translation.Get(columnSettings.Name, Enums.TranslationSource.CaseTranslation, Model.GridSettings.CustomerId) <i class="@columnSettings.Name.SetCaseSortIcon()"></i>                                
+                    </th>                        
                 }
             </tr>
         </thead>        

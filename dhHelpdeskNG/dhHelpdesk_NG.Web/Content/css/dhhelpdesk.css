@@ -1659,7 +1659,7 @@ table th.thpointer {
 {
 	padding:10px 10px 10px 10px;
 }
-
+/****  CASE OVERVIEW PAGE BEGIN   ****/
 .table-cases {
     table-layout:fixed !important;
     width:100%;
@@ -1699,39 +1699,14 @@ table th.thpointer {
     width:5%;
 }
 
-
-/*.tab-pane-border .tab-pane-border div
+.SortableRow,
+.SortableRow td,
+.SortableRow label
 {
-	margin:0 0;
+    cursor: move;
 }
 
-.tab-pane-border div
-{
-	margin:0 10px;
-}
-
-.tab-pane-border .tab-pane-border
-{
-	margin-left:0;
-}
-
-
-
-.tab-pane-border div.tab-pane-border div
-{
-	margin:0 10px;
-}
-
-.tab-pane-border div div
-{
-	margin:0 10px;
-}
-
-.tab-pane-border div div div
-{
-	margin:0 -5px;
-	*margin:0 0px;
-}*/
+/*********************** CASE OVERVIEW PAGE END  ***********/
 
 
 /****************VARIOUS SELECT, INPUT, ETC*******************************/

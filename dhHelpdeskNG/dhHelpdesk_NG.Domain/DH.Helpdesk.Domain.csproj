@@ -115,6 +115,7 @@
     <Compile Include="Computers\ComputerLog.cs" />
     <Compile Include="Computers\ComputerModel.cs" />
     <Compile Include="Computers\ComputerType.cs" />
+    <Compile Include="Grid\GridSettingsEntity.cs" />
     <Compile Include="Interfaces\IActiveEntity.cs" />
     <Compile Include="Interfaces\ICustomerEntity.cs" />
     <Compile Include="Interfaces\IDatedEntity.cs" />

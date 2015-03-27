@@ -136,3 +136,32 @@ begin
 	update tblcasefieldsettings set EMailIdentifier = '[#1]' where casefield = 'CaseNumber'
 end
 
+-------------------------------------------------------------------
+-- Support for storing grid settings for user and customer
+if not exists(select * from sysobjects WHERE Name = N'UserGridSettings')
+BEGIN
+	CREATE TABLE [dbo].[UserGridSettings](
+		[Id] [int] IDENTITY(1,1) NOT NULL,
+		[CustomerId] [int] not null,
+		[UserId] [int] NOT NULL,
+		[GridId] [nchar](20) NOT NULL,
+		[Parameter] [nchar](20) NOT NULL,
+		[Value] [nchar](20) NOT NULL,
+		CONSTRAINT [PK_UserGridSettings] PRIMARY KEY CLUSTERED 
+		(
+			[CustomerId] ASC,
+			[UserId] ASC,
+			[GridId] ASC
+		)
+	) ON [PRIMARY]
+
+
+	ALTER TABLE [dbo].[UserGridSettings]  WITH NOCHECK ADD  CONSTRAINT [FK_UserGridSettings_tblCustomer] FOREIGN KEY([CustomerId])
+	REFERENCES [dbo].[tblCustomer] ([Id])
+
+
+	ALTER TABLE [dbo].[UserGridSettings]  WITH NOCHECK ADD  CONSTRAINT [FK_UserGridSettings_tblUsers] FOREIGN KEY([UserId])
+	REFERENCES [dbo].[tblUsers] ([Id])
+
+END
+go
