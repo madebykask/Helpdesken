@@ -652,7 +652,7 @@
             }
             else
             {
-                sql.Add(this.ReturnCaseSearchWhere(f, customerSetting, userId, userUserId, showNotAssignedWorkingGroups, userGroupId, restrictedCasePermission, gs));
+                sql.Add(this.ReturnCaseSearchWhere(f, customerSetting, customerUserSetting, userId, userUserId, showNotAssignedWorkingGroups, userGroupId, restrictedCasePermission, gs));
             }
 
             // ORDER BY ...
@@ -805,7 +805,7 @@
             return sb.ToString();
         }
 
-        private string ReturnCaseSearchWhere(CaseSearchFilter f, Setting customerSetting, int userId, string userUserId, int showNotAssignedWorkingGroups, int userGroupId, int restrictedCasePermission, GlobalSetting gs)
+        private string ReturnCaseSearchWhere(CaseSearchFilter f, Setting customerSetting, CustomerUser customerUserSetting, int userId, string userUserId, int showNotAssignedWorkingGroups, int userGroupId, int restrictedCasePermission, GlobalSetting gs)
         {
             if (f == null || customerSetting == null || gs == null)
             {
@@ -887,7 +887,18 @@
             // performer/utförare
             if (!string.IsNullOrWhiteSpace(f.UserPerformer))
             {
-                sb.Append(" and (tblCase.Performer_User_Id in (" + f.UserPerformer.SafeForSqlInject() + ")) ");
+                //ShowNotAssignedCases
+                if (customerUserSetting.User.ShowNotAssignedCases == 1 && restrictedCasePermission != 1 && f.UserPerformer == userId.ToString())
+                {
+                    sb.Append(" and (tblCase.Performer_User_Id in (" + f.UserPerformer.SafeForSqlInject() + ") OR tblCase.Performer_User_Id = 0) ");
+                    //sb.Append(" OR tblCase.Performer_User_Id = 0 ");
+                    //sb.Append(") ");
+                }
+                else
+                {
+                    sb.Append(" and (tblCase.Performer_User_Id in (" + f.UserPerformer.SafeForSqlInject() + ")) ");
+                }
+                
             }
 
             // ansvarig
