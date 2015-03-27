@@ -3030,5 +3030,29 @@ GO
 If not exists (select * from tblTextTranslation where text_id = 1354 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1354, 2, 'Automatically filled in')
 GO
+
+If not exists (select * from tbltext where id = 1355)
+	insert into tbltext (id, TextString) VALUES (1355, 'Normal')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1355 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1355, 2, 'Normal')
+GO
+
+If not exists (select * from tbltext where id = 1356)
+	insert into tbltext (id, TextString) VALUES (1356, 'Mindre')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1356 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1356, 2, 'Smaller')
+GO
+
+If not exists (select * from tbltext where id = 1357)
+	insert into tbltext (id, TextString) VALUES (1357, 'Minst')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1357 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1357, 2, 'Smallest')
+GO
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
