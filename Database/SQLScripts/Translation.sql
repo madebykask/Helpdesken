@@ -3055,5 +3055,21 @@ If not exists (select * from tblTextTranslation where text_id = 1358 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1358, 2, 'Text area')
 GO
 
+If not exists (select * from tbltext where id = 1359)
+	insert into tbltext (id, TextString) VALUES (1359, 'Bred')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1359 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1359, 2, 'Wide')
+GO
+
+If not exists (select * from tbltext where id = 1360)
+	insert into tbltext (id, TextString) VALUES (1360, 'Small')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1360 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1360, 2, 'Small')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
