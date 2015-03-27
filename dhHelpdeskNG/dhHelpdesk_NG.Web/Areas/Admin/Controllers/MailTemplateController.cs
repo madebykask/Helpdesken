@@ -466,7 +466,7 @@
             //Super quick fix TODO: FIX... Im sorry
             if (mailTemplateRowName == "tblLog_Text_External")
             {
-                mailTemplateRowName = "tblLog.Text_External";   
+                mailTemplateRowName = "tblLog.Text_External";
             }
             else if (mailTemplateRowName == "tblLog_Text_Internal")
             {
@@ -488,6 +488,15 @@
                     if (cfsl.Label == null)
                     {
                         cfsl.Label = Translation.Get(mailTemplateRowName, Enums.TranslationSource.CaseTranslation, customerId);
+
+                        if (cfsl.Label == "tblLog.Text_External")
+                        {
+                            cfsl.Label = Translation.Get("Extern notering", Enums.TranslationSource.TextTranslation);
+                        }
+                        else if (cfsl.Label == "tblLog.Text_Internal")
+                        {
+                            cfsl.Label = Translation.Get("Intern notering", Enums.TranslationSource.TextTranslation);
+                        }
                     }
 
                     string row = "";
