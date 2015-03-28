@@ -1722,21 +1722,29 @@
         //},
         submitHandler: function(form) {
             
-            var res = $("#ProductAreaHasChild").val();
-            
-            if (res == '1')
-            {
-                var msgTxt =  '@Translation.Get("Ärendet kunde inte sparas då den lägsta möjliga nivån på fält")' + " [" +   
-                              '@Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)' + "] " + 
-                              '@Translation.Get("inte har valts. Vänligen kontrollera ärendet.")';
-                document.getElementById("divProductArea").classList.add("error");                
-                ShowToastMessage(msgTxt, "error", true);
-                return false;
-            }
-            else
+            if (isProductAreaValid())
                 form.submit();
+            else                
+                return false;            
+                
         }
     });
+
+    function isProductAreaValid() {
+        var ret = true;
+        var res = $("#ProductAreaHasChild").val();
+
+        if (res == '1') {
+            var msgTxt = '@Translation.Get("Ärendet kunde inte sparas då den lägsta möjliga nivån på fält")' + " [" +
+                         '@Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)' + "] " +
+                         '@Translation.Get("inte har valts. Vänligen kontrollera ärendet.")';
+            document.getElementById("divProductArea").classList.add("error");
+            ShowToastMessage(msgTxt, "error", true);
+            ret = false;
+        }
+
+    return ret;
+}
 
     function FieldIsRequired(value) {
         var ret = false;
