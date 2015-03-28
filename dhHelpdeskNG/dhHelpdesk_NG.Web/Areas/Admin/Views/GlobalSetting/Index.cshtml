@@ -134,22 +134,31 @@
                     </tbody>
                 </table>
             </div>
-
+            
             <div class="tab-pane tab-pane-border" id="fragment-4">
+
                 <div class="container">
                     <div class="row">
-                        <div class="span8">
-                            <table class="tableform" id="tblText">
-                                <tr>
-                                    <td>
-                                        @Translation.Get("Typ", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                    <td>
-                                        @Html.DropDownListFor(model => model.TextType.Id, Model.TextTypes, new { style = "width: auto;", id = "TextTypeId", onchange = "changeTextType(this.options[this.selectedIndex].value);" })
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
+                       @* @using (Html.BeginForm("index", "globalsetting", FormMethod.Post, new { id = "search" }))
+                        {
+                            *@<div @*class="filterContent"*@>
+                                <table class="tableform" id="tblText">
+                                    <tr>
+                                        <td style="width:50px">
+                                            &nbsp;&nbsp;@Translation.Get("Typ", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td style="width:200px">
+                                            @Html.DropDownListFor(model => model.TextType.Id, Model.TextTypes, new { style = "width: auto;", id = "TextTypeId", onchange = "changeTextType(this.options[this.selectedIndex].value);" })
+                                        </td>
+                                        <td>
+                                            @Html.TextBoxFor(model => model.SearchTextTr, new { maxlength = "50"})
+                                            @Html.DropDownListFor(model => model.SearchConditions, Model.SearchConditions, new { style = "width: auto;", id = "SearchId", onchange = "" })
+                                            <input type="button" id="searchQueryBtn" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" class="btn" onclick="submit();" />
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        @*}*@
                     </div>
                     <div id="translationList">
                         @Html.Partial("_TranslationsList", Model) 
@@ -165,6 +174,8 @@
 
 @section Scripts {
     <script type="text/javascript">
+
+        var texttypeId = $("#TextTypeId").val();
 
         var activeTab = $('#activeTab').val();
         if(activeTab)
@@ -191,6 +202,17 @@
                 });
             }
         }
-    </script>
 
+        var searchtext = $("#SearchTextTr").text;
+
+        function searchText() {
+            var list = $('#translationList');
+            list.html('');
+            if (id != '') {
+                $.get('/GlobalSetting/SearchText/' + searchtext + '&texttypeId=' + texttypeId, function (result) {
+                    list.html(result);
+                });
+            }
+        }
+    </script>
 }

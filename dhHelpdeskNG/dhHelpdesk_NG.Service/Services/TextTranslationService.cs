@@ -14,7 +14,7 @@
         IEnumerable<Text> GetAllNewTexts(int texttypeId);
 
         IEnumerable<TextList> GetAllTexts(int texttypeId);
-
+        //IList<Text> SearchAndGenerateTexts(TranslationSearch SearchTranslation);
         IList<TextTranslation> GetAllTextTranslations();
         IList<TextTranslationLanguageList> GetEditListToTextTranslations(int textid);
         IList<TextTranslationLanguageList> GetIndexListToTextTranslations(int languageId);

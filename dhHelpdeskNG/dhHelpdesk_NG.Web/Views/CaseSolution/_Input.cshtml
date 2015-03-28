@@ -478,7 +478,7 @@
                                         </td>
                                     </tr>
                                 }
-                                <tr>
+                                <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString())">
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                         </td>
@@ -500,7 +500,7 @@
                                     </tr>
                                 @if (Model.CaseFieldSettings.Count() != 0)
                                 {
-                                    <tr>
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.SMS.ToString())">
                                             <td>
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.SMS.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                             </td>
@@ -719,7 +719,7 @@
                                         </td>
                                     </tr>
                                  }
-                                    <tr >
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.PlanDate.ToString())">
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.PlanDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                         </td>
@@ -730,7 +730,7 @@
                                             @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.PlanDate, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.PlanDate)
                                         </td>
                                     </tr>
-                                    <tr >
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.WatchDate.ToString())">
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                         </td>
@@ -741,7 +741,7 @@
                                             @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.WatchDate, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.WatchDate)
                                         </td>
                                     </tr>
-                                    <tr>
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Verified.ToString())">
                                         <td>
                                            @Translation.Get(GlobalEnums.TranslationCaseFields.Verified.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                         </td>
@@ -790,7 +790,7 @@
                                 </tr>
                                 @if (Model.CaseFieldSettings.Count() != 0)
                                 {
-                                    <tr>
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString())">
                                         <td class="span3">
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                         </td>

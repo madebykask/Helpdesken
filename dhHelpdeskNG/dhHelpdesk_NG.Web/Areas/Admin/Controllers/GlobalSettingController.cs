@@ -39,9 +39,9 @@
 
         public ActionResult Index()
         {
-            var model = this.GetGSIndexViewModel(1, 1, SessionFacade.CurrentCustomer.Language_Id);
-
             
+            var model = this.GetGSIndexViewModel(0, 1, SessionFacade.CurrentCustomer.Language_Id);
+           
             return this.View(model);
         }
 
@@ -431,12 +431,19 @@
             };
 
             model.TextTypes = new List<SelectListItem>();
+            model.TextTypes.Add(new SelectListItem { Text = "Dh Helpdesk", Value = "0" });
             model.TextTypes.Add(new SelectListItem { Text = "Master data", Value = "1" });
 
             foreach (var textype in this._textTranslationService.GetTextTypes())
             {
                 model.TextTypes.Add(new SelectListItem { Text = textype.Name, Value = textype.Id.ToString() });
             }
+
+            model.SearchConditions = new List<SelectListItem>();
+            //model.SearchConditions.Add(new SelectListItem { Text = "--", Value = "0" });
+            model.SearchConditions.Add(new SelectListItem { Text = Translation.Get("Börjar med"), Value = "1" });
+            model.SearchConditions.Add(new SelectListItem { Text = Translation.Get("Innehåller"), Value = "2" });
+
 
             return model;
         }
@@ -1034,6 +1041,19 @@
             
             return this.RenderRazorViewToString(view, model);
             
+        }
+
+        [CustomAuthorize(Roles = "3,4")]
+        [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")]
+        public string SearchTranslation()
+        {
+
+            var model = this.GetGSIndexViewModel(1, 1, SessionFacade.CurrentCustomer.Language_Id);
+
+            var view = "~/areas/admin/views/GlobalSetting/_TranslationsList.cshtml";
+
+            return this.RenderRazorViewToString(view, model);
+
         }
 
         [CustomAuthorize(Roles = "3,4")]

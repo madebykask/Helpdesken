@@ -30,6 +30,9 @@
 
         public User User { get; set; }
 
+        public string SearchTextTr { get; set; }
+        public IList<SelectListItem> SearchConditions { get; set; }
+
     }
 
     public class GlobalSettingInputViewModel : BaseTabInputViewModel
