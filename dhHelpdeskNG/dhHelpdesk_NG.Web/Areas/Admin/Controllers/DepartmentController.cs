@@ -118,7 +118,7 @@
             {
                 Department = department,
                 Customer = customer,
-                Regions = this._regionService.GetRegions(customer.Id).Select(x => new SelectListItem
+                Regions = this._regionService.GetRegions(customer.Id).Where(x => x.IsActive == 1).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
