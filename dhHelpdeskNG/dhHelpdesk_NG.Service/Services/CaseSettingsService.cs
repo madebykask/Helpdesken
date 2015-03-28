@@ -112,13 +112,22 @@
                         colSetting => colSetting.Name,
                         userSelection => userSelection.Name,
                         (colSetting, userSelection) =>
-                        new CaseOverviewGridColumnSetting()
+                        new 
                             {
+                                caseSettingsId = userSelection.Id,
                                 Name = userSelection.Name,
                                 Order = userSelection.ColOrder,
                                 Style = userSelection.ColStyle
                             })
-                    .OrderBy(it => it.Order);
+                    .OrderBy(it => it.Order)
+                    .ThenBy(it => it.caseSettingsId)
+                    .Select(
+                        it => new CaseOverviewGridColumnSetting()
+                                  {
+                                      Name = it.Name,
+                                      Order = it.Order,
+                                      Style = it.Style
+                    });
             return res;
         }
 

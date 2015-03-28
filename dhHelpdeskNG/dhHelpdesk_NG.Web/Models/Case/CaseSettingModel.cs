@@ -14,46 +14,73 @@
     /// </summary>
     public class CaseColumnsSettingsModel
     {
-        public static readonly IEnumerable<SelectListItem> FieldStyles = new[]
+        public static IEnumerable<SelectListItem> FieldStyles
+        {
+            get
             {
-                new SelectListItem
-                    {
-                        Value = "colnormal",
-                        Text =
-                            @Translation.Get(
-                                "Normal",
-                                Enums
-                            .TranslationSource
-                            .TextTranslation)
-                    },
-                new SelectListItem
-                    {
-                        Value = "colwide",
-                        Text =
-                            @Translation.Get(
-                                "Bred",
-                                Enums
-                            .TranslationSource
-                            .TextTranslation)
-                    },
-                new SelectListItem
-                    {
-                        Value = "colnarrow",
-                        Text =
-                            @Translation.Get(
-                                "Smal",
-                                Enums
-                            .TranslationSource
-                            .TextTranslation)
-                    }
-            };
+                return new[]
+                           {
+                               new SelectListItem
+                                   {
+                                       Value = "colnormal",
+                                       Text =
+                                           @Translation.Get(
+                                               "Normal",
+                                               Enums.TranslationSource.TextTranslation)
+                                   },
+                               new SelectListItem
+                                   {
+                                       Value = "colwide",
+                                       Text =
+                                           @Translation.Get(
+                                               "Bred",
+                                               Enums.TranslationSource.TextTranslation)
+                                   },
+                               new SelectListItem
+                                   {
+                                       Value = "colnarrow",
+                                       Text =
+                                           @Translation.Get(
+                                               "Smal",
+                                               Enums.TranslationSource.TextTranslation)
+                                   }
+                           };
+            }
+        }
 
-        public static readonly IEnumerable<SelectListItem> FontStyles = new[]
-                {
-                    new SelectListItem { Value = "normaltext", Text = @Translation.Get("Normal", Enums.TranslationSource.TextTranslation) },
-                    new SelectListItem { Value = "smalltext", Text = @Translation.Get("Mindre", Enums.TranslationSource.TextTranslation) },
-                    new SelectListItem { Value = "smallertext", Text = @Translation.Get("Minst", Enums.TranslationSource.TextTranslation) }
-                };
+        public static IEnumerable<SelectListItem> FontStyles
+        {
+            get
+            {
+                return new[]
+                           {
+                               new SelectListItem
+                                   {
+                                       Value = "normaltext",
+                                       Text =
+                                           @Translation.Get(
+                                               "Normal",
+                                               Enums.TranslationSource.TextTranslation)
+                                   },
+                               new SelectListItem
+                                   {
+                                       Value = "smalltext",
+                                       Text =
+                                           @Translation.Get(
+                                               "Mindre",
+                                               Enums.TranslationSource.TextTranslation)
+                                   },
+                               new SelectListItem
+                                   {
+                                       Value = "smallertext",
+                                       Text =
+                                           @Translation.Get(
+                                               "Minst",
+                                               Enums.TranslationSource.TextTranslation)
+                                   }
+                           };
+            }
+        }
 
         public int CustomerId { get; set; }
 
