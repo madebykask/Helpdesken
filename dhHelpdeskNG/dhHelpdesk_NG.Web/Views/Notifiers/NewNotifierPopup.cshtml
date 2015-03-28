@@ -1,6 +1,7 @@
-﻿
+﻿@using System.Web.Optimization
 @model DH.Helpdesk.Web.Models.Notifiers.InputModel
-           
+
+@Scripts.Render("~/bundles/notifiers/notifier")    
 <script type="text/javascript">
     function afterSuccessSubmit(result, state, response) {
         window.returnValue = result;
@@ -18,7 +19,7 @@
     ViewBag.Title = Translation.Get("Ny anmälare", Enums.TranslationSource.TextTranslation);
 }
 
-@using (Ajax.BeginForm("NewNotifierPopup", "Notifiers", new AjaxOptions { OnSuccess = "afterSuccessSubmit" }))
+@using (Ajax.BeginForm("NewNotifierPopup", "Notifiers", new AjaxOptions { OnSuccess = "afterSuccessSubmit" }, new { id = "target" }))
 {
     <div class="navbar fixed">
             <div class="navbar-container">
@@ -32,7 +33,7 @@
         <div class="pull-left">
             <ul class="secnav">
                 <li>
-                    <input type="submit" onclick="inputValidate();" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn" />
+                    <input type="submit" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn" />
                 </li>
                 <li>
                     <input type="button" onclick=" window.close()" value="@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)" class="btn" />
@@ -40,22 +41,6 @@
             </ul>
         </div>
     </div>
-    @Html.Partial("_Input", Model)
-
-    <script type="text/javascript">
-        $("#DepartmentErrorMessage").hide();
-        $("#OrganizationUnitErrorMessage").hide();
-
-        function inputValidate() {            
-            if ('@Model.Department.Required'.toLowerCase() == "true" && $('#department_dropdown').val() == "") {
-                $("#DepartmentErrorMessage").show();                
-            }
-
-            if ('@Model.OrganizationUnit.Required'.toLowerCase() == "true" && $('#organizationUnit_dropdown').val() == "") {
-                $("#OrganizationUnitErrorMessage").show();                
-            }
-        }
-            
-    </script>
+    @Html.Partial("_Input", Model)   
 }
 
