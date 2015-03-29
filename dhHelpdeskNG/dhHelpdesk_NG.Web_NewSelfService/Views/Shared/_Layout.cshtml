@@ -258,7 +258,7 @@
                               {
                                 <li>
                                     <a href="@Url.Action("ChangeLanguage", "start", new { area = "", language = lang.LanguageId, currentUrl = this.Request.Url.LocalPath, lastParams = HttpContext.Current.Request.QueryString })"> 
-                                       @Translation.Get(lang.Name, Enums.TranslationSource.TextTranslation) @(lang.Id == SessionFacade.CurrentLanguageId ? "●" : "")
+                                       @Translation.Get(lang.Name, Enums.TranslationSource.TextTranslation, SessionFacade.CurrentCustomer.Language_Id) @(lang.Id == SessionFacade.CurrentLanguageId ? "●" : "")
                                     </a>
 
                                 </li>
