@@ -138,6 +138,7 @@
                                                 applicationId,
                                                 calculateRemainingTime,
                                                 this.productAreaService,
+                                                out remainingTime,
                                                 relatedCasesCaseId,
                                                 relatedCasesUserId);
 
