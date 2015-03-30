@@ -201,7 +201,6 @@
                 userInputViewModel.User.SetPriorityPermission = 0;
                 userInputViewModel.User.ActivateCasePermission = 0;
             }
-            
 
             this._userService.SaveNewUser(user, AAsSelected, CsSelected, OTsSelected, null, out errors);
 
@@ -319,7 +318,9 @@
                         userToSave.UserRoles.Add(userRight);
                     }
                 }
-                
+
+                // Quick fix for http://redmine.fastdev.se/issues/10997
+                userToSave.Default_WorkingGroup_Id = userModel.User.Default_WorkingGroup_Id;
                 this._userService.SaveEditUser(userToSave, AAsSelected, CsSelected, OTsSelected, Departments, UserWorkingGroups, out errors);
 
                 if (errors.Count == 0)

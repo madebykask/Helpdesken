@@ -72,7 +72,13 @@ $(function () {
 
         var element = spec.element || {};
 
+        var getElement = function() {
+            return element;
+        }
+
         my.element = element;
+
+        that.getElement = getElement;
 
         return that;
     }
@@ -285,12 +291,22 @@ $(function () {
         var that = dhHelpdesk.admin.users.object(spec, my);
 
         var workingGroups = spec.workingGroups || [];
+        var clearUserWorkingGroups = spec.clearUserWorkingGroups || null;
 
         var getWorkingGroups = function() {
             return workingGroups;
         }
 
         that.getWorkingGroups = getWorkingGroups;
+
+        if (clearUserWorkingGroups != null) {
+            clearUserWorkingGroups.getElement().click(function() {
+                for (var i = 0; i < workingGroups.length; i++) {
+                    var wg = workingGroups[i];
+                    wg.getElement().prop('checked', false);
+                }
+            });
+        }
 
         return that;
     }
@@ -356,7 +372,7 @@ $(function () {
         });
 
         var wGs = [];
-        $('[data-field="UserWorkingGroup"]').each(function() {
+        $('[data-field="userWorkingGroup"]').each(function () {
             var $this = $(this);
             var wg = dhHelpdesk.admin.users.workingGroup({
                 element: $this
@@ -366,7 +382,8 @@ $(function () {
         });
 
         var workingGroups = dhHelpdesk.admin.users.workingGroups({
-            workingGroups: wGs
+            workingGroups: wGs,
+            clearUserWorkingGroups: dhHelpdesk.admin.users.object({ element: $('[data-field="clearUserWorkingGroups"]') })
         });
 
         var user = dhHelpdesk.admin.users.user({
