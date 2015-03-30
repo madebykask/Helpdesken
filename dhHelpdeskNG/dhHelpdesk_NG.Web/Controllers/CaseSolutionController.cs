@@ -477,7 +477,7 @@ namespace DH.Helpdesk.Web.Controllers
                     Value = x.Id.ToString()
                 }).ToList(),
 
-                ProductAreas = this._productAreaService.GetProductAreas(SessionFacade.CurrentCustomer.Id),
+                ProductAreas = this._productAreaService.GetTopProductAreas(SessionFacade.CurrentCustomer.Id),
 
                 WorkingGroups = this._workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {

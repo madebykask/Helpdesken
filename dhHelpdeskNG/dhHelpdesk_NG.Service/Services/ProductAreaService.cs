@@ -16,7 +16,9 @@
 
     public interface IProductAreaService : IProductAreaNameResolver
     {
-        IList<ProductAreaEntity> GetProductAreas(int customerId);
+        ProductAreaEntity[] GetProductAreasForCustomer(int customerId);
+
+        IList<ProductAreaEntity> GetTopProductAreas(int customerId);
 
         ProductAreaEntity GetProductArea(int id);
 
@@ -101,8 +103,17 @@
             this.unitOfWork = unitOfWork;
             this.unitOfWorkFactory = unitOfWorkFactory;
         }
-        
-        public IList<ProductAreaEntity> GetProductAreas(int customerId)
+
+        public ProductAreaEntity[] GetProductAreasForCustomer(int customerId)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var repository = uow.GetRepository<ProductAreaEntity>();
+                return repository.GetAll().Where(it => it.Customer_Id == customerId).ToArray();
+            }
+        }
+
+        public IList<ProductAreaEntity> GetTopProductAreas(int customerId)
         {
             return this.productAreaRepository.GetMany(x => x.Customer_Id == customerId && x.Parent_ProductArea_Id == null).OrderBy(x => x.Name).ToList();
         }
@@ -288,7 +299,7 @@
         {
             if (this.productAreaCache == null || this.cachiedForCustomer != customerId)
             {
-                this.productAreaCache = this.GetProductAreas(customerId).ToDictionary(it => it.Id, it => it);
+                this.productAreaCache = this.GetProductAreasForCustomer(customerId).ToDictionary(it => it.Id, it => it);
                 this.cachiedForCustomer = customerId;
             }
 

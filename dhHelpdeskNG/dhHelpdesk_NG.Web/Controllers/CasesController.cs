@@ -304,7 +304,7 @@ namespace DH.Helpdesk.Web.Controllers
                     }
                     //produktonmråde
                     if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseProductAreaFilter))
-                        fd.filterProductArea = this._productAreaService.GetProductAreas(cusId);
+                        fd.filterProductArea = this._productAreaService.GetTopProductAreas(cusId);
                     //kategori                        
                     if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseCategoryFilter))
                         fd.filterCategory = this._categoryService.GetCategories(cusId);
@@ -1921,7 +1921,7 @@ namespace DH.Helpdesk.Web.Controllers
                 
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()).ShowOnStartPage == 1)
                 {
-                    m.productAreas = this._productAreaService.GetProductAreas(customerId);
+                    m.productAreas = this._productAreaService.GetTopProductAreas(customerId);
                 }
 
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Region_Id.ToString()).ShowOnStartPage == 1)
@@ -2403,7 +2403,7 @@ namespace DH.Helpdesk.Web.Controllers
                 }
             }
 
-            ret.ProductAreas = this._productAreaService.GetProductAreas(customerId);
+            ret.ProductAreas = this._productAreaService.GetTopProductAreas(customerId);
             ret.ProductAreaPath = "--";
          
             int pa;

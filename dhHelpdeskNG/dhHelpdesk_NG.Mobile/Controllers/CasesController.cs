@@ -1482,7 +1482,7 @@
 
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()).ShowOnStartPage == 1)
                 {
-                    m.productAreas = this._productAreaService.GetProductAreas(customerId);
+                    m.productAreas = this._productAreaService.GetTopProductAreas(customerId);
                 }
 
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Region_Id.ToString()).ShowOnStartPage == 1)
@@ -1871,7 +1871,7 @@
 
         //    ret.CaseTypeCheck = userCaseSettings.CaseType;
 
-        //    ret.ProductAreas = this._productAreaService.GetProductAreas(customerId);
+        //    ret.ProductAreas = this._productAreaService.GetTopProductAreas(customerId);
         //    ret.ProductAreaPath = "--";
 
         //    int pa;

@@ -798,7 +798,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             var caseTypes = this._caseTypeService.GetCaseTypes(customerId);
 
             //Product Area tree            
-            var productAreas = this._productAreaService.GetProductAreas(customerId);
+            var productAreas = this._productAreaService.GetTopProductAreas(customerId);
 
             //System list            
             var systems = this._systemService.GetSystems(customerId);
