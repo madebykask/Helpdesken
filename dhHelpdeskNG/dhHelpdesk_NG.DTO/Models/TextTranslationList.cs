@@ -4,10 +4,6 @@ namespace DH.Helpdesk.BusinessData.Models
 {
     public class TextTranslationLanguageList
     {
-        public TextTranslationLanguageList()
-        { 
-        }
-
         public int Language_Id { get; set; }
         public int Text_Id { get;  set; }
         public int TextTranslation_Id { get; set; }

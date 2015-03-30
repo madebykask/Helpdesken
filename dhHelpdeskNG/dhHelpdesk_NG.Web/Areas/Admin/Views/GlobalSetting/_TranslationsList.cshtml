@@ -1,8 +1,7 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
-@model DH.Helpdesk.Web.Areas.Admin.Models.TranslationGridModel
-
+@model DH.Helpdesk.Web.Areas.Admin.Models.GlobalSettingIndexViewModel
 <div class="row-fluid">
-    <div class="span100">
+    <div class="span12">
         <table class="table table-striped table-bordered table-hover table-cases" id="tblTextTranslation">
             <thead>
                 <tr>
@@ -25,7 +24,7 @@
             </thead>
             <tbody>
                 @foreach (var item in Model.AllTexts)
-                {                                                        
+                {                    
                     <tr>
                         <td>
                             <a href="@Url.Action("edittranslation", "globalsetting", new { area = "admin", id = item.Id })">@Html.DisplayFor(modelItem => item.TextToTranslate)</a>
@@ -51,21 +50,3 @@
         </table>
     </div>
 </div>
-
-<script type="text/javascript">
-    function DoSearch() {
-        var textTypeId = $("#TextTypeId").val();
-        var searchText = $("#SearchTextTr").val();
-        var searchOption = $("#SearchId").val();
-        var list = $('#translationList');
-
-        list.html('');
-        if (textTypeId != '') {
-            $.get('/GlobalSetting/SearchText?textTypeId=' + textTypeId +
-                                            '&searchValue=' + searchText +
-                                            '&searchOption=' + searchOption, function (result) {
-                list.html($(result).html());
-            });
-        }
-    }
-</script>

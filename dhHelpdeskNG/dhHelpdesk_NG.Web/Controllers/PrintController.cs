@@ -223,7 +223,14 @@ namespace DH.Helpdesk.Web.Controllers
             var fields = this.caseFieldSettingService.GetCaseFieldSettings(customerId);
             
             var ous = this.ouService.GetOUs(customerId);
-            caseModel.Ou = ous.FirstOrDefault(o => caseModel.OuId == o.Id);
+            var selectedOU = new Domain.OU();
+            if (caseModel.OuId.HasValue)
+            {
+                selectedOU = this.ouService.GetOU(caseModel.OuId.Value);
+                if (selectedOU.Parent_OU_Id != null)
+                    selectedOU.Name = selectedOU.Parent.Name + " - " + selectedOU.Name;
+            }
+            caseModel.Ou = selectedOU; //ous.FirstOrDefault(o => caseModel.OuId == o.Id);
             caseModel.Logs = this.logService.GetCaseLogOverviews(caseId);
             caseModel.User = this.userService.GetUserOverview(caseModel.UserId);
 
