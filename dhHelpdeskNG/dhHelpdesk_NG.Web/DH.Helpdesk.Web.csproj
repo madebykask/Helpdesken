@@ -1847,6 +1847,7 @@
     <Compile Include="Models\Case\CustomerCasesModel.cs" />
     <Compile Include="Models\Case\Input\CaseOverviewSettingsInput.cs" />
     <Compile Include="Models\Case\MyCasesModel.cs" />
+    <Compile Include="Models\Case\RelatedCasesFullViewModel.cs" />
     <Compile Include="Models\Case\RelatedCasesViewModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\GeneralModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\InviteToModel.cs" />
@@ -2860,6 +2861,7 @@
     <Content Include="Views\Cases\RelatedCases.cshtml" />
     <Content Include="Views\Cases\CaseRemainingTime.cshtml" />
     <Content Include="Views\Notifiers\OrganizationUnitDropDown.cshtml" />
+    <Content Include="Views\Cases\RelatedCasesFull.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

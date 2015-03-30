@@ -1,0 +1,20 @@
+﻿@using System.Web.Optimization
+@model DH.Helpdesk.Web.Models.Case.RelatedCasesFullViewModel
+
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#mainTab">@(string.IsNullOrEmpty(Model.UserId) ? Translation.Get("Relaterade ärenden") : string.Format("\"{0}\" - {1}", Model.UserId, Translation.Get("Relaterade ärenden")))</a>
+            </li>
+        </ul>        
+        <div class="tab-content overflow-visible">
+            <div class="tab-pane tab-pane-border active" id="mainTab">
+                <div class="container" id="search_result">
+                    @Html.Partial("_CaseRows", Model.SearchResult)
+                </div>                                            
+            </div>
+        </div>        
+    </div>
+</div>
+@Scripts.Render("~/bundles/cases/index")

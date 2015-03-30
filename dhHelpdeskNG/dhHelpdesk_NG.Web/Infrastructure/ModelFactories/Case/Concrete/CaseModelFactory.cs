@@ -42,5 +42,10 @@
         {
             return new CaseRemainingTimeViewModel(data);
         }
+
+        public RelatedCasesFullViewModel GetRelatedCasesFullModel(CaseSearchResultModel searchResult, string userId)
+        {
+            return new RelatedCasesFullViewModel(searchResult, userId);
+        }
     }
 }

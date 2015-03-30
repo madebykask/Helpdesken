@@ -22,5 +22,7 @@
         RelatedCasesViewModel GetRelatedCasesModel(List<RelatedCase> relatedCases, int customerId, string userId);
 
         CaseRemainingTimeViewModel GetCaseRemainingTimeModel(CaseRemainingTimeData data);
+
+        RelatedCasesFullViewModel GetRelatedCasesFullModel(CaseSearchResultModel searchResult, string userId);
     }
 }

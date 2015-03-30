@@ -406,9 +406,7 @@ namespace DH.Helpdesk.Web.Controllers
                     srm.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(cusId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
                     
                     var workTimeCalculator = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
-                    // Uncomment for http://redmine.fastdev.se/issues/10654
-                    // var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
-                    var showRemainingTime = false;
+                    var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
                     CaseRemainingTimeData remainingTime;
                     srm.cases = this._caseSearchService.Search(
                         sm.caseSearchFilter,
@@ -1126,9 +1124,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                 m.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(f.CustomerId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
                 var workTimeCalc = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
-                // Uncomment for http://redmine.fastdev.se/issues/10654
-                // var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
-                var showRemainingTime = false;
+                var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
                 CaseRemainingTimeData remainingTime;
                 m.cases = this._caseSearchService.Search(
                     f,
@@ -1358,8 +1354,50 @@ namespace DH.Helpdesk.Web.Controllers
                                                 SessionFacade.CurrentUser);
 
             var model = this.caseModelFactory.GetRelatedCasesModel(relatedCases, this.workContext.Customer.CustomerId, userId);
-
             return this.View(model);
+        }
+
+        [HttpGet]
+        public ViewResult RelatedCasesFull(int caseId, string userId)
+        {
+            var searchResult = new CaseSearchResultModel();
+            searchResult.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(
+                                    SessionFacade.CurrentCustomer.Id, 
+                                    SessionFacade.CurrentUser.Id, 
+                                    SessionFacade.CurrentUser.UserGroupId);
+            var search = this.GetEmptySearchModel(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser.Id);
+            var workTimeCalculator = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
+
+            var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
+            CaseRemainingTimeData remainingTime;
+            searchResult.cases = this._caseSearchService.Search(
+                search.caseSearchFilter,
+                searchResult.caseSettings,
+                SessionFacade.CurrentUser.Id,
+                userId,
+                SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups,
+                SessionFacade.CurrentUser.UserGroupId,
+                SessionFacade.CurrentUser.RestrictedCasePermission,
+                search.Search,
+                this.workContext.Customer.WorkingDayStart,
+                this.workContext.Customer.WorkingDayEnd,
+                workTimeCalculator,
+                this.configuration.Application.ApplicationId,
+                showRemainingTime,
+                out remainingTime);
+
+            searchResult.cases = this.TreeTranslate(searchResult.cases);
+            searchResult.GridSettings = this.caseOverviewSettingsService.GetSettings(
+                SessionFacade.CurrentCustomer.Id,
+                SessionFacade.CurrentUser.Id);
+            search.Search.IdsForLastSearch = this.GetIdsFromSearchResult(searchResult.cases);
+
+            searchResult.ShowRemainingTime = showRemainingTime;
+            searchResult.RemainingTime = this.caseModelFactory.GetCaseRemainingTimeModel(remainingTime);
+
+            var model = this.caseModelFactory.GetRelatedCasesFullModel(searchResult, userId);
+
+            return this.View("RelatedCasesFull", model);
         }
 
         [HttpGet]
