@@ -11,7 +11,9 @@
         <div class="tab-content overflow-visible">
             <div class="tab-pane tab-pane-border active" id="mainTab">
                 <input type="hidden" id="relatedCasesCaseId" value="@Model.CaseId" />                
-                <input type="hidden" id="relatedCasesUserId" value="@Model.UserId" />                
+                <input type="hidden" id="relatedCasesUserId" value="@Model.UserId" />  
+                <input type="hidden" value="@Model.SortBy" id="hidSortBy" name="hidSortBy" />
+                <input type="hidden" value="@Model.SortByAsc" id="hidSortByAsc" name="hidSortByAsc" />                              
                 <div class="container" id="search_result">
                     @Html.Action("RelatedCasesFullContent", Model)
                 </div>                                            

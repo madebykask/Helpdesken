@@ -1841,6 +1841,7 @@
     <Compile Include="Models\Case\CaseOverview.cs" />
     <Compile Include="Models\Case\CaseRemainingTimeItemViewModel.cs" />
     <Compile Include="Models\Case\CaseRemainingTimeViewModel.cs" />
+    <Compile Include="Models\Case\CaseSortField.cs" />
     <Compile Include="Models\Case\CaseTemplateTreeModel.cs" />
     <Compile Include="Models\Case\CaseViewModel.cs" />
     <Compile Include="Models\Case\CaseSettingModel.cs" />

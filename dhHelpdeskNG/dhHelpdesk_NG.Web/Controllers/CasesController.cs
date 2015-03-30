@@ -1360,7 +1360,21 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpGet]
         public ViewResult RelatedCasesFull(int caseId, string userId)
         {
-            var model = this.caseModelFactory.GetRelatedCasesFullModel(null, userId, caseId);
+            var sortBy = CaseSortField.CaseNumber;
+            var sortByAsc = true;
+            if (SessionFacade.CurrentCaseSearch != null && 
+                SessionFacade.CurrentCaseSearch.Search != null)
+            {
+                sortBy = SessionFacade.CurrentCaseSearch.Search.SortBy;
+                sortByAsc = SessionFacade.CurrentCaseSearch.Search.Ascending;
+            }
+
+            var model = this.caseModelFactory.GetRelatedCasesFullModel(
+                                                null, 
+                                                userId, 
+                                                caseId,
+                                                sortBy,
+                                                sortByAsc);
             return this.View(model);            
         }
 
@@ -1432,6 +1446,8 @@ namespace DH.Helpdesk.Web.Controllers
 
             searchResult.ShowRemainingTime = showRemainingTime;
             searchResult.RemainingTime = this.caseModelFactory.GetCaseRemainingTimeModel(remainingTime);
+            SessionFacade.CurrentCaseSearch = search;
+
             return searchResult;
         }
 
@@ -1442,7 +1458,7 @@ namespace DH.Helpdesk.Web.Controllers
                                             string userId)
         {
             var cases = this.GetUnfilteredCases(sortBy, sortByAsc, caseId, userId);
-            var model = this.caseModelFactory.GetRelatedCasesFullModel(cases, userId, caseId);
+            var model = this.caseModelFactory.GetRelatedCasesFullModel(cases, userId, caseId, sortBy, sortByAsc.convertStringToBool());
 
             return model;
         }

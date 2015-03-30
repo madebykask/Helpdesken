@@ -43,9 +43,14 @@
             return new CaseRemainingTimeViewModel(data);
         }
 
-        public RelatedCasesFullViewModel GetRelatedCasesFullModel(CaseSearchResultModel searchResult, string userId, int caseId)
+        public RelatedCasesFullViewModel GetRelatedCasesFullModel(
+                                CaseSearchResultModel searchResult, 
+                                string userId, 
+                                int caseId,
+                                string sortBy,
+                                bool sortByAsc)
         {
-            return new RelatedCasesFullViewModel(searchResult, userId, caseId);
+            return new RelatedCasesFullViewModel(searchResult, userId, caseId, sortBy, sortByAsc);
         }
     }
 }
