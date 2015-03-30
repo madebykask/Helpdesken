@@ -1563,6 +1563,11 @@ namespace DH.Helpdesk.Web.Controllers
                 }
             }
 
+            if (caseLog.FinishingDate != null)
+            {
+                case_.FinishingDate = caseLog.FinishingDate;
+            }
+
             // save case and case history
             int caseHistoryId = this._caseService.SaveCase(
                         case_, 
@@ -1627,6 +1632,7 @@ namespace DH.Helpdesk.Web.Controllers
             caseLog.CaseId = case_.Id;
             caseLog.CaseHistoryId = caseHistoryId;
             caseLog.Id = this._logService.SaveLog(caseLog, temporaryLogFiles.Count, out errors);
+            
 
             // save case files
             if (!edit)

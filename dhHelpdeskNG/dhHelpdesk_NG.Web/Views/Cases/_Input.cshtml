@@ -1598,8 +1598,41 @@
                 required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.WatchDate.ToString())")
             },
             "CaseLog.FinishingType": {
-                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.ClosingReason, CaseSolutionFields.FinishingCause))  
+                required: function(){
+                    if ($('#CaseLog_FinishingDate').closest('tr').css('display') != 'none' && $('#CaseLog_FinishingType').closest('tr').css('display') != 'none')
+                    {
+                        if (($('#CaseLog_FinishingDate').val() == "" || $('#CaseLog_FinishingDate').val() == null) && @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.FinishingDate, CaseSolutionFields.FinishingDate)) == false)
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            return true;
+                        }
+                    }
+                    else{
+                        return false;
+                    }
+                }
                 },
+            "CaseLog.FinishingDate": {
+                required: function()
+                {
+                    if ($('#CaseLog_FinishingType').closest('tr').css('display') != 'none' && $('#CaseLog_FinishingDate').closest('tr').css('display') != 'none')
+                    {
+                        if ($('#CaseLog_FinishingType').val() == "" && @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.ClosingReason, CaseSolutionFields.FinishingCause)) == false)
+                        {
+                            return false;
+                        }
+                        else{
+                            return true;
+                        }
+                    }
+                    else{
+                        return false;
+                    }
+                }
+            },
             "CaseLog.TextExternal": {
                 maxlength: 3000
             },
@@ -1715,6 +1748,9 @@
             },
             "CaseLog.FinishingType": {
                 required: "@Translation.Get(GlobalEnums.TranslationCaseFields.ClosingReason.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
+            },
+            "CaseLog.FinishingDate": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
             }
         },
         //errorPlacement: function (error, element) {
