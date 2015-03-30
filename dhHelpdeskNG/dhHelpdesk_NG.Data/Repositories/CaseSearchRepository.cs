@@ -15,8 +15,10 @@
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
     using DH.Helpdesk.Common.Enums.Cases;
+    using DH.Helpdesk.Dal.Repositories.ProductArea;
     using DH.Helpdesk.Dal.Utils;
     using DH.Helpdesk.Domain;
+    using ProductAreaEntity = DH.Helpdesk.Domain.ProductArea;
 
     /// <summary>
     /// The CaseSearchRepository interface.
@@ -37,6 +39,7 @@
             WorkTimeCalculator workTimeCalculator,
             string applicationId,
             bool calculateRemainingTime,
+            IProductAreaNameResolver productAreaNamesResolver,
             out CaseRemainingTimeData remainingTime);
     }
 
@@ -83,12 +86,13 @@
                                     WorkTimeCalculator workTimeCalculator,
                                     string applicationId,
                                     bool calculateRemainingTime,
+                                    IProductAreaNameResolver productAreaNamesResolver,
                                     out CaseRemainingTimeData remainingTime)
         {
             var now = DateTime.UtcNow;
             var dsn = ConfigurationManager.ConnectionStrings["HelpdeskOleDbContext"].ConnectionString;
             var customerUserSetting = this._customerUserRepository.GetCustomerSettings(f.CustomerId, userId);
-            IList<ProductArea> pal = this._productAreaRepository.GetMany(x => x.Customer_Id == f.CustomerId).OrderBy(x => x.Name).ToList(); 
+            IList<ProductAreaEntity> pal = this._productAreaRepository.GetMany(x => x.Customer_Id == f.CustomerId).OrderBy(x => x.Name).ToList(); 
             IList<CaseSearchResult> ret = new List<CaseSearchResult>();
             var caseTypes = this.caseTypeRepository.GetCaseTypeOverviews(f.CustomerId).ToArray();
             var displayLeftTime = csl.Any(it => it.Name == TimeLeftColumn);
@@ -230,6 +234,7 @@
                                                                                 pal,
                                                                                 timeLeft,
                                                                                 caseTypes,
+                                                                                productAreaNamesResolver,
                                                                                 out translateField,
                                                                                 out treeTranslation,
                                                                                 out dateValue,
@@ -389,10 +394,11 @@
                                 IDataReader dr, 
                                 int col, 
                                 string fieldName, 
-                                Setting customerSetting, 
-                                IList<ProductArea> pal,
+                                Setting customerSetting,
+                                IList<ProductAreaEntity> pal,
                                 int? timeLeft,
                                 IEnumerable<CaseTypeOverview> caseTypes,
+                                IProductAreaNameResolver productAreaNamesResolver,
                                 out bool translateField, 
                                 out bool treeTranslation, 
                                 out DateTime? dateValue, 
@@ -465,13 +471,18 @@
                     ret = timeLeft.ToString();
                     break;
                 case "productarea_id":
-                    ProductArea p = dr.SafeGetInteger("ProductArea_Id").getProductAreaItem(pal);
+                    ProductAreaEntity p = dr.SafeGetInteger("ProductArea_Id").getProductAreaItem(pal);
                     if (p != null)
                     {
                         if (ConfigurationManager.AppSettings["InitFromSelfService"] == "true")
+                        {
                             ret = p.Name;
+                        }
                         else
-                            ret = p.getProductAreaParentPath();
+                        {
+                            ret = string.Join(" - ", productAreaNamesResolver.GetParentPath(p.Id, customerSetting.Customer_Id));
+                        }
+                            
                         baseId = p.Id;
                     }                    
                     treeTranslation = true;

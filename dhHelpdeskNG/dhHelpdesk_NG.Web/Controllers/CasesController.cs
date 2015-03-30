@@ -349,7 +349,8 @@ namespace DH.Helpdesk.Web.Controllers
                             {
                                 var p = this._productAreaService.GetProductArea(sm.caseSearchFilter.ProductArea.convertStringToInt());
                                 if (p != null)
-                                    sm.caseSearchFilter.ParantPath_ProductArea = p.getProductAreaParentPath();
+                                    sm.caseSearchFilter.ParantPath_ProductArea =
+                                        string.Join(" - ", this._productAreaService.GetParentPath(p.Id, cusId));
                             }
                         }
 
@@ -424,7 +425,7 @@ namespace DH.Helpdesk.Web.Controllers
                         showRemainingTime,
                         out remainingTime);
 
-                    srm.cases = TreeTranslate(srm.cases);
+                    srm.cases = this.TreeTranslate(srm.cases, cusId);
                     srm.GridSettings = this.caseOverviewSettingsService.GetSettings(
                         SessionFacade.CurrentCustomer.Id,
                         SessionFacade.CurrentUser.Id);
@@ -439,8 +440,7 @@ namespace DH.Helpdesk.Web.Controllers
                     m.CaseSetting = GetCaseSettingModel(cusId, userId);
                     m.caseSearchResult.ShowRemainingTime = showRemainingTime;
                     m.caseSearchResult.RemainingTime = this.caseModelFactory.GetCaseRemainingTimeModel(remainingTime);
-                    User user = new User();
-                    user = _userService.GetUser(userId);
+                    User user = this._userService.GetUser(userId);
                     m.CaseSetting.RefreshContent = user.RefreshContent;
                 }
             }
@@ -1142,7 +1142,7 @@ namespace DH.Helpdesk.Web.Controllers
                     showRemainingTime,
                     out remainingTime);
 
-                m.cases = TreeTranslate(m.cases);
+                m.cases = this.TreeTranslate(m.cases, f.CustomerId);
                 sm.Search.IdsForLastSearch = GetIdsFromSearchResult(m.cases);
                 SessionFacade.CurrentCaseSearch = sm;
                 m.ShowRemainingTime = showRemainingTime;
@@ -1386,7 +1386,7 @@ namespace DH.Helpdesk.Web.Controllers
                 showRemainingTime,
                 out remainingTime);
 
-            searchResult.cases = this.TreeTranslate(searchResult.cases);
+            searchResult.cases = this.TreeTranslate(searchResult.cases, SessionFacade.CurrentCustomer.Id);
             searchResult.GridSettings = this.caseOverviewSettingsService.GetSettings(
                 SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentUser.Id);
@@ -2111,8 +2111,8 @@ namespace DH.Helpdesk.Web.Controllers
                     var p = this._productAreaService.GetProductArea(m.case_.ProductArea_Id.GetValueOrDefault());
                     if (p != null)
                     {
-                        p = TranslateProductArea(p);
-                        m.ParantPath_ProductArea = p.getProductAreaParentPath();
+                        var names = this._productAreaService.GetParentPath(p.Id, customerId).Select(name => Translation.Get(name));
+                        m.ParantPath_ProductArea = string.Join(" - ", names);
                         if (p.SubProductAreas != null && p.SubProductAreas.Count > 0)
                             m.ProductAreaHasChild = 1;
                     }
@@ -2409,7 +2409,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                 var p = this._productAreaService.GetProductArea(ret.ProductAreaId);
                 if (p != null)
-                    ret.ProductAreaPath = p.getProductAreaParentPath();
+                    ret.ProductAreaPath = string.Join(" - ", this._productAreaService.GetParentPath(p.Id, customerId));
             }
             ret.ProductAreaCheck = (userCaseSettings.ProductArea != string.Empty);
 
@@ -2528,17 +2528,7 @@ namespace DH.Helpdesk.Web.Controllers
             return caseType;
         }
 
-        private ProductArea TranslateProductArea(ProductArea productArea)
-        {
-            if (productArea.ParentProductArea != null)
-                productArea.ParentProductArea = TranslateProductArea(productArea.ParentProductArea);
-
-            productArea.Name = Translation.Get(productArea.Name);
-
-            return productArea;
-        }
-
-        private IList<CaseSearchResult> TreeTranslate(IList<CaseSearchResult> cases)
+        private IList<CaseSearchResult> TreeTranslate(IList<CaseSearchResult> cases, int customerId)
         {
             var ret = cases;
             foreach (CaseSearchResult r in ret)
@@ -2553,8 +2543,8 @@ namespace DH.Helpdesk.Web.Controllers
                                 var p = _productAreaService.GetProductArea(c.Id);
                                 if (p != null)
                                 {
-                                    p = TranslateProductArea(p);
-                                    c.StringValue = p.getProductAreaParentPath();
+                                    var names = this._productAreaService.GetParentPath(p.Id, customerId).Select(name => Translation.Get(name));
+                                    c.StringValue = string.Join(" - ", names);
                                 }
                                 break;
                         }

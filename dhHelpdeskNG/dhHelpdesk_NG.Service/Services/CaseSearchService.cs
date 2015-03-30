@@ -118,7 +118,7 @@
             {
                 csf.ProductArea = this.productAreaService.GetProductAreaWithChildren(productAreaId, ", ", "Id");
             }
-
+    
             var result = this.caseSearchRepository.Search(
                                                 csf, 
                                                 csl, 
@@ -133,6 +133,7 @@
                                                 workTimeCalculator,
                                                 applicationId,
                                                 calculateRemainingTime,
+                                                this.productAreaService,
                                                 out remainingTime);
 
             if (f.CaseRemainingTimeFilter.HasValue && calculateRemainingTime)

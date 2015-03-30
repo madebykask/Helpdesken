@@ -1624,7 +1624,7 @@
                     var p = this._productAreaService.GetProductArea(m.case_.ProductArea_Id.GetValueOrDefault());
                     if (p != null)
                     {
-                        m.ParantPath_ProductArea = p.getProductAreaParentPath();
+                        m.ParantPath_ProductArea = string.Join(" - ", this._productAreaService.GetParentPath(p.Id, customerId));
                     }
                 }
 

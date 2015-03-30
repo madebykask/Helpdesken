@@ -575,7 +575,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 var c = this._productAreaService.GetProductArea(caseSolution.ProductArea_Id.Value);
                 if (c != null)
-                    model.ParantPath_ProductArea = c.getProductAreaParentPath();
+                    model.ParantPath_ProductArea = string.Join(" - ", this._productAreaService.GetParentPath(c.Id, SessionFacade.CurrentCustomer.Id));
             }
 
             if (cs.ModuleProject == 1)

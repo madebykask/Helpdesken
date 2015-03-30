@@ -280,7 +280,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                     var p = this._productAreaService.GetProductArea(model.NewCase.ProductArea_Id.GetValueOrDefault());
                     if(p != null)
                     {
-                        model.ProductAreaParantPath = p.getProductAreaParentPath();
+                        model.ProductAreaParantPath = string.Join(" - ", this._productAreaService.GetParentPath(p.Id, currentCustomer.Id));
                     }
                 }
 
