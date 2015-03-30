@@ -14,6 +14,7 @@
         IEnumerable<Text> GetAllNewTexts(int texttypeId);
 
         IEnumerable<TextList> GetAllTexts(int texttypeId);
+        List<TextList> GetAllTextsAndTranslations(int texttypeId);
         //IList<Text> SearchAndGenerateTexts(TranslationSearch SearchTranslation);
         IList<TextTranslation> GetAllTextTranslations();
         IList<TextTranslationLanguageList> GetEditListToTextTranslations(int textid);
@@ -66,6 +67,11 @@
         public IEnumerable<TextList> GetAllTexts(int texttypeId)
         {
             return this._textRepository.GetAllTexts(texttypeId).OrderBy(x => x.TextToTranslate);
+        }
+
+        public List<TextList> GetAllTextsAndTranslations(int texttypeId)
+        {
+            return this._textRepository.GetAllTextsAndTranslations(texttypeId);
         }
 
         public IList<TextTranslation> GetAllTextTranslations()

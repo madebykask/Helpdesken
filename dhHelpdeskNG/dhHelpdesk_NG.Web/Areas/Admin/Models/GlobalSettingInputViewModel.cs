@@ -15,13 +15,13 @@
         public IEnumerable<TextTranslationLanguageList> ListForIndex { get; set; }
 
         public IEnumerable<Holiday> Holidays { get; set; }
-        public IList<Text> Texts { get; set; }
+        
         public IList<WatchDateCalendarValue> WatchDateCalendarValues { get; set; }
         public IList<SelectListItem> Languages { get; set; }
-        public IList<TextList> AllTexts { get; set; }
-
+        
+        public IList<Text> Texts { get; set; }
         public Language Language { get; set; }
-
+        public TranslationGridModel GridModel { get; set; }
         public IList<SelectListItem> TextTypes { get; set; }
         public TextType TextType { get; set; }
         public IList<SelectListItem> HolidayHeaders { get; set; }
@@ -35,6 +35,13 @@
 
     }
 
+    public class TranslationGridModel
+    {        
+        public IList<TextList> AllTexts { get; set; }
+
+        public IList<TextList> AllTextAndTranslations { get; set; }
+
+    }
     public class GlobalSettingInputViewModel : BaseTabInputViewModel
     {
         public GlobalSetting GlobalSetting { get; set; }
