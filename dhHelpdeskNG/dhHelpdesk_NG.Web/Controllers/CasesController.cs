@@ -1930,7 +1930,7 @@ namespace DH.Helpdesk.Web.Controllers
                                                     RequestExtension.GetAbsoluteUrl(), 
                                                     cs.DontConnectUserToWorkingGroup);
 
-                m.CaseMailSetting.DontSendMailToNotifier = !SessionFacade.CurrentCustomer.CommunicateWithNotifier.ToBool();
+                m.CaseMailSetting.DontSendMailToNotifier = !_customerService.GetCustomer(customerId).CommunicateWithNotifier.ToBool();
 
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()).ShowOnStartPage == 1)
                 {
