@@ -14,6 +14,7 @@ namespace DH.Helpdesk.Dal.Repositories
         int GetNextId();
         IEnumerable<Text> GetAllWithTranslation();
         IEnumerable<TextList> GetAllTexts(int texttypeId);
+        List<TextList> GetAllTextsAndTranslations(int texttypeId);
     }
 
     public class TextRepository : RepositoryBase<Text>, ITextRepository
@@ -36,12 +37,32 @@ namespace DH.Helpdesk.Dal.Repositories
             return this.DataContext.Texts.Include("TextTranslations");
         }
 
+        public List<TextList> GetAllTextsAndTranslations(int texttypeId)
+        {
+            var textEntity = this.DataContext.Texts.Where(t => t.Type == texttypeId)
+                        .Select(t => new TextList
+                        {
+                            Id = t.Id,
+                            TextToTranslate = t.TextToTranslate,
+                            Translations = t.TextTranslations.Select(tt=> 
+                                new TextTranlationsTextLanguageList
+                                {
+                                    Text_Id= tt.Text_Id, 
+                                    Language_Id = tt.Language_Id, 
+                                    TranslationName=tt.TextTranslated, 
+                                    TranslationText_Id = tt.TextTranslation_Id
+                                }).ToList()
+                        }
+
+                );            
+            return textEntity.ToList();
+
+        }
         public IEnumerable<TextList> GetAllTexts(int texttypeId)
         {
             //Might not be needed in future since we have texttype. Earlier versions of DH Helpdesk assigned all core system phrases to id below 5000.
             const int CoreSystemPhrases = 4999;
 
-            
             var txt =
                from T in this.DataContext.Texts
                join TT in this.DataContext.TextTranslations on T.Id equals TT.Text_Id into Translate
@@ -51,7 +72,18 @@ namespace DH.Helpdesk.Dal.Repositories
                join U2 in this.DataContext.Users on T.ChangedByUser_Id equals U2.Id into Users2
                from User2 in Users2.DefaultIfEmpty()
                where (T.Type == texttypeId) //&& T.Id > CoreSystemPhrases)
-               group T by new { T.Id, T.TextToTranslate, User2.SurName, User2.FirstName, Trans.ChangedDate, T.CreatedDate, U1Name = User1.FirstName, U1SurName = User1.SurName } into g
+               group T by new
+               {
+                   T.Id,
+                   T.TextToTranslate,
+                   User2.SurName,
+                   User2.FirstName,
+                   Trans.ChangedDate,
+                   T.CreatedDate,
+                   U1Name = User1.FirstName,
+                   U1SurName = User1.SurName,
+                   Translation = Trans
+               } into g
                select new TextList
                {
                    Id = g.Key.Id,
@@ -62,13 +94,33 @@ namespace DH.Helpdesk.Dal.Repositories
                    CreatedDate = g.Key.CreatedDate,
                    ChangedByFirstName = g.Key.U1Name,
                    ChangedByLastName = g.Key.U1SurName
+                   //,
+                   //Translation = new TextTranslationLanguageList
+                   //{
+                   //    Text_Id = g.Key.Translation.Text_Id,
+                   //    TextTranslation_Id = g.Key.Translation.TextTranslation_Id,
+                   //    Language_Id = g.Key.Translation.Language_Id,
+                   //    TranslationName = g.Key.Translation.TextTranslated,
+                   //    LanguageName = g.Key.Translation.Language.Name,
+                   //    CreatedDate = g.Key.Translation.ChangedDate,
+                   //    ChangedByUser_Id = (g.Key.Translation.ChangedByUser_Id.HasValue? g.Key.Translation.ChangedByUser_Id.Value:0)
+                   //}
 
                };
 
+            //var ordText = txt.OrderBy(t => t.TextToTranslate);
+                       
             //Select all distinct items by id.
             var txtToReturn = txt.GroupBy(text => text.Id).Select(grp => grp.FirstOrDefault()).ToList();
 
 
+            //foreach (var curText in txtToReturn)
+            //{
+            //    IEnumerable<TextTranslationLanguageList> curTranslations = ordText.Where(o => o.Id == curText.Id).Select(o => o.Translation).ToList();
+            //    curText.Translations = new List<TextTranslationLanguageList>();
+            //    curText.Translations.AddRange(curTranslations);
+            //}
+            
             return txtToReturn.ToList();
 
         }

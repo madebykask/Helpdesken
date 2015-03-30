@@ -1,8 +1,11 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
+﻿@using System.Linq;
+@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Admin.Models.GlobalSettingIndexViewModel
 @{
     ViewBag.Title = "Global Settings";
+    
 }
+
 <div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav" id="myButton">
@@ -148,12 +151,12 @@
                                             &nbsp;&nbsp;@Translation.Get("Typ", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td style="width:200px">
-                                            @Html.DropDownListFor(model => model.TextType.Id, Model.TextTypes, new { style = "width: auto;", id = "TextTypeId", onchange = "changeTextType(this.options[this.selectedIndex].value);" })
+                                            @Html.DropDownListFor(model => model.TextType.Id, Model.TextTypes, new { style = "width: auto;", id = "TextTypeId", onchange = "changeTextType(this.options[this.selectedIndex].value);" })                                            
                                         </td>
                                         <td>
                                             @Html.TextBoxFor(model => model.SearchTextTr, new { maxlength = "50"})
                                             @Html.DropDownListFor(model => model.SearchConditions, Model.SearchConditions, new { style = "width: auto;", id = "SearchId", onchange = "" })
-                                            <input type="button" id="searchQueryBtn" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" class="btn" onclick="submit();" />
+                                            <input type="button" id="searchQueryBtn" onclick ="DoSearch();" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" class="btn" onclick="submit();" />
                                         </td>
                                     </tr>
                                 </table>
@@ -161,7 +164,7 @@
                         @*}*@
                     </div>
                     <div id="translationList">
-                        @Html.Partial("_TranslationsList", Model) 
+                        @Html.Partial("_TranslationsList", Model.GridModel) 
                     </div>
                 </div>
             </div>
@@ -180,15 +183,14 @@
         var activeTab = $('#activeTab').val();
         if(activeTab)
             $('#myTab a[href="' + activeTab + '"]').click();//.tab('show')
-
-       
+        
 
         function changeTextType(id) {
             var list = $('#translationList');
             list.html('');
             if (id != '') {
                 $.get('/GlobalSetting/ChangeTextType/' + id, function (result) {
-                    list.html(result);
+                    list.html($(result).html());
                 });
             }
         }
@@ -202,17 +204,6 @@
                 });
             }
         }
-
-        var searchtext = $("#SearchTextTr").text;
-
-        function searchText() {
-            var list = $('#translationList');
-            list.html('');
-            if (id != '') {
-                $.get('/GlobalSetting/SearchText/' + searchtext + '&texttypeId=' + texttypeId, function (result) {
-                    list.html(result);
-                });
-            }
-        }
+                    
     </script>
 }

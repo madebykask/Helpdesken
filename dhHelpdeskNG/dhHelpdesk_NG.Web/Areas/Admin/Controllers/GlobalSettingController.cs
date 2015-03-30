@@ -402,6 +402,10 @@
         {
             var start = this._globalSettingService.GetGlobalSettings().FirstOrDefault();
 
+            var gridModel = new TranslationGridModel();
+            //gridModel.AllTexts = this._textTranslationService.GetAllTexts(texttypeid).ToList();
+            gridModel.AllTexts = this._textTranslationService.GetAllTexts(texttypeid).ToList();
+            
             var model = new GlobalSettingIndexViewModel
             {
                 GlobalSettings = this._globalSettingService.GetGlobalSettings(),
@@ -412,7 +416,7 @@
                 WatchDateCalendarValues = this._watchDateCalendarService.GetAllWatchDateCalendarValues().ToList(),
                 TextType = this._textTranslationService.GetTextType(texttypeid),
                 HolidayHeader = this._holidayService.GetHolidayHeader(1),
-                AllTexts = this._textTranslationService.GetAllTexts(texttypeid).ToList(),
+                GridModel = gridModel,
                 Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
                 {
                     Text = Translation.Get(x.Name),
@@ -430,6 +434,7 @@
                 }).ToList(),
             };
 
+            //model.SearchModel = Json(model.AllTexts);
             model.TextTypes = new List<SelectListItem>();
             model.TextTypes.Add(new SelectListItem { Text = "Dh Helpdesk", Value = "0" });
             model.TextTypes.Add(new SelectListItem { Text = "Master data", Value = "1" });
@@ -1032,15 +1037,41 @@
 
         [CustomAuthorize(Roles = "3,4")]
         [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")]
-        public string ChangeTextType(int id)
+        [HttpGet]
+        public PartialViewResult ChangeTextType(int id)
         {
+            var model = new TranslationGridModel();            
+            model.AllTexts = this._textTranslationService.GetAllTexts(id).ToList();            
+            var view = "~/areas/admin/views/GlobalSetting/_TranslationsList.cshtml";
 
-            var model = this.GetGSIndexViewModel(id, 1, SessionFacade.CurrentCustomer.Language_Id);
+            return this.PartialView(view , model);                                     
+        }
+
+        [HttpGet]
+        public PartialViewResult SearchText(int textTypeId, string searchValue, int searchOption)
+        {
+            var model = new TranslationGridModel();            
+            var allTexts = this._textTranslationService.GetAllTexts(textTypeId).ToList();
+
+            switch (searchOption)
+            {
+                case 1:
+                    model.AllTexts = allTexts.Where(a => a.TextToTranslate.ToLower().StartsWith(searchValue.ToLower())).OrderBy(a => a.TextToTranslate).ToList();
+                    break;
+
+                case 2:                    
+                    model.AllTexts = allTexts.Where(a => a.TextToTranslate.ToLower().Contains(searchValue.ToLower())).OrderBy(a => a.TextToTranslate).ToList();
+                    break;
+
+                default:
+                    model.AllTexts = allTexts.OrderBy(a => a.TextToTranslate).ToList();
+                    break;
+            }
 
             var view = "~/areas/admin/views/GlobalSetting/_TranslationsList.cshtml";
-            
-            return this.RenderRazorViewToString(view, model);
-            
+
+            return this.PartialView(view, model);
+
         }
 
         [CustomAuthorize(Roles = "3,4")]
