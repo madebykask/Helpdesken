@@ -39,7 +39,9 @@
             WorkTimeCalculator workTimeCalculator,
             string applicationId,
             bool calculateRemainingTime,
-            out CaseRemainingTimeData remainingTime);
+            out CaseRemainingTimeData remainingTime,
+            int? relatedCasesCaseId = null,
+            string relatedCasesUserId = null);
     }
 
     public class CaseSearchService : ICaseSearchService
@@ -107,7 +109,9 @@
                                 WorkTimeCalculator workTimeCalculator,
                                 string applicationId,
                                 bool calculateRemainingTime,
-                                out CaseRemainingTimeData remainingTime)
+                                out CaseRemainingTimeData remainingTime,
+                                int? relatedCasesCaseId = null,
+                                string relatedCasesUserId = null)
         {
             int productAreaId;
             var csf = new CaseSearchFilter();
@@ -134,7 +138,8 @@
                                                 applicationId,
                                                 calculateRemainingTime,
                                                 this.productAreaService,
-                                                out remainingTime);
+                                                relatedCasesCaseId,
+                                                relatedCasesUserId);
 
             if (f.CaseRemainingTimeFilter.HasValue && calculateRemainingTime)
             {

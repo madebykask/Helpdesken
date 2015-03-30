@@ -23,6 +23,6 @@
 
         CaseRemainingTimeViewModel GetCaseRemainingTimeModel(CaseRemainingTimeData data);
 
-        RelatedCasesFullViewModel GetRelatedCasesFullModel(CaseSearchResultModel searchResult, string userId);
+        RelatedCasesFullViewModel GetRelatedCasesFullModel(CaseSearchResultModel searchResult, string userId, int caseId);
     }
 }

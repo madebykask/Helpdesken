@@ -20,6 +20,8 @@
     using DH.Helpdesk.Domain;
     using ProductAreaEntity = DH.Helpdesk.Domain.ProductArea;
 
+    using UserGroup = DH.Helpdesk.BusinessData.Enums.Admin.Users.UserGroup;
+
     /// <summary>
     /// The CaseSearchRepository interface.
     /// </summary>
@@ -40,7 +42,9 @@
             string applicationId,
             bool calculateRemainingTime,
             IProductAreaNameResolver productAreaNamesResolver,
-            out CaseRemainingTimeData remainingTime);
+            out CaseRemainingTimeData remainingTime,
+            int? relatedCasesCaseId = null,
+            string relatedCasesUserId = null);
     }
 
     public class CaseSearchRepository : ICaseSearchRepository
@@ -87,7 +91,9 @@
                                     string applicationId,
                                     bool calculateRemainingTime,
                                     IProductAreaNameResolver productAreaNamesResolver,
-                                    out CaseRemainingTimeData remainingTime)
+                                    out CaseRemainingTimeData remainingTime,
+                                    int? relatedCasesCaseId = null,
+                                    string relatedCasesUserId = null)
         {
             var now = DateTime.UtcNow;
             var dsn = ConfigurationManager.ConnectionStrings["HelpdeskOleDbContext"].ConnectionString;
@@ -109,7 +115,9 @@
                                         restrictedCasePermission, 
                                         gs, 
                                         s,
-                                        applicationId);
+                                        applicationId,
+                                        relatedCasesCaseId,
+                                        relatedCasesUserId);
 
             if (string.IsNullOrEmpty(sql))
             {
@@ -513,7 +521,9 @@
                     int restrictedCasePermission, 
                     GlobalSetting gs, 
                     ISearch s,
-                    string applicationId)
+                    string applicationId,
+                    int? relatedCasesCaseId,
+                    string relatedCasesUserId)
         {
             var sql = new List<string>();
 
@@ -663,7 +673,7 @@
             }
             else
             {
-                sql.Add(this.ReturnCaseSearchWhere(f, customerSetting, customerUserSetting, userId, userUserId, showNotAssignedWorkingGroups, userGroupId, restrictedCasePermission, gs));
+                sql.Add(this.ReturnCaseSearchWhere(f, customerSetting, customerUserSetting, userId, userUserId, showNotAssignedWorkingGroups, userGroupId, restrictedCasePermission, gs, relatedCasesCaseId, relatedCasesUserId));
             }
 
             // ORDER BY ...
@@ -816,7 +826,7 @@
             return sb.ToString();
         }
 
-        private string ReturnCaseSearchWhere(CaseSearchFilter f, Setting customerSetting, CustomerUser customerUserSetting, int userId, string userUserId, int showNotAssignedWorkingGroups, int userGroupId, int restrictedCasePermission, GlobalSetting gs)
+        private string ReturnCaseSearchWhere(CaseSearchFilter f, Setting customerSetting, CustomerUser customerUserSetting, int userId, string userUserId, int showNotAssignedWorkingGroups, int userGroupId, int restrictedCasePermission, GlobalSetting gs, int? relatedCasesCaseId, string relatedCasesUserId = null)
         {
             if (f == null || customerSetting == null || gs == null)
             {
@@ -828,49 +838,68 @@
             // kund 
             sb.Append(" where (tblCase.Customer_Id = " + f.CustomerId + ")");
             sb.Append(" and (tblCase.Deleted = 0)");
-            sb.Append(" and (tblCustomerUser.[User_Id] = " + f.UserId + ")");
-
-            // användaren får bara se avdelningar som den har behörighet till
-            sb.Append(" and (tblCase.Department_Id In (select Department_Id from tblDepartmentUser where [User_Id] = " + userId + ")");
-            sb.Append(" or not exists (select Department_Id from tblDepartmentUser where ([User_Id] = " + userId + "))");
-            sb.Append(") ");
-
-            // finns kryssruta på användaren att den bara får se sina egna ärenden
-            if (restrictedCasePermission == 1)
+            if (!relatedCasesCaseId.HasValue)
             {
-                if (userGroupId == 2)
-                    sb.Append(" and (tblCase.Performer_User_Id = " + userId + " or tblcase.CaseResponsibleUser_Id = " + userId + ")");
-                else if (userGroupId == 1)
-                    sb.Append(" and (lower(tblCase.reportedBy) = lower(" + userUserId + ") or tblcase.UserId = " + userId + ")");
-            }            
+                sb.Append(" and (tblCustomerUser.[User_Id] = " + f.UserId + ")");
+
+                // användaren får bara se avdelningar som den har behörighet till
+                sb.Append(" and (tblCase.Department_Id In (select Department_Id from tblDepartmentUser where [User_Id] = " + userId + ")");
+                sb.Append(" or not exists (select Department_Id from tblDepartmentUser where ([User_Id] = " + userId + "))");
+                sb.Append(") ");
+
+                // finns kryssruta på användaren att den bara får se sina egna ärenden
+                if (restrictedCasePermission == 1)
+                {
+                    if (userGroupId == 2)
+                        sb.Append(" and (tblCase.Performer_User_Id = " + userId + " or tblcase.CaseResponsibleUser_Id = " + userId + ")");
+                    else if (userGroupId == 1)
+                        sb.Append(" and (lower(tblCase.reportedBy) = lower(" + userUserId + ") or tblcase.UserId = " + userId + ")");
+                }            
+            }
+            else
+            {
+                // Related cases list http://redmine.fastdev.se/issues/11257
+                sb.AppendFormat(" AND ([tblCase].[Id] != {0}) AND (LOWER(LTRIM(RTRIM([tblCase].[ReportedBy]))) = LOWER(LTRIM(RTRIM('{1}')))) ", relatedCasesCaseId.Value, relatedCasesUserId);
+                if (restrictedCasePermission == 1)
+                {
+                    if (userGroupId == (int)UserGroup.Administrator)
+                    {
+                        sb.AppendFormat(" AND ([tblCase].[Performer_User_Id] = {0} OR [tblCase].[CaseResponsibleUser_Id] = {0}) ", userId);
+                    }
+                    else if (userGroupId == (int)UserGroup.User)
+                    {
+                        sb.AppendFormat(" AND (LOWER(LTRIM(RTRIM([tblCase].[ReportedBy]))) = LOWER(LTRIM(RTRIM('{0}')))) ", userUserId);
+                    }
+                }            
+            }
             
             // ärende progress - iShow i gammal helpdesk
             switch (f.CaseProgress)
             {
-                case "-1":
+                case CaseProgressFilter.None:
                     break;
-                case "1":
+                case CaseProgressFilter.ClosedCases:
                     sb.Append(" and (tblCase.FinishingDate is not null)");
                     break;
-                case "2":
+                case CaseProgressFilter.CasesInProgress:
                     sb.Append(" and (tblCase.FinishingDate is null)");
                     break;
-                case "3":
+                case CaseProgressFilter.CasesInRest:
                     sb.Append(" and (tblCase.FinishingDate is null and tblCase.StateSecondary_Id is not null and tblStateSecondary.IncludeInCaseStatistics = 0)");
                     break;
-                case "4":
+                case CaseProgressFilter.UnreadCases:
                     sb.Append(" and (tblCase.FinishingDate is null and tblCase.Status = 1)");
                     break;
-                case "5":
+                case CaseProgressFilter.FinishedNotApproved:
                     sb.Append(" and (tblCase.FinishingDate is not null and tblCaseType.RequireApproving = 1 and tblCase.ApprovedDate is null)");
                     break;
-                case "6":
+                case CaseProgressFilter.InProgressStatusGreater1:
                     sb.Append(" and (tblCase.FinishingDate is null and tblCase.Status > 1)");
                     break;
-                case "7":
+                case CaseProgressFilter.CasesWithWatchDate:
                     sb.Append(" and (tblCase.FinishingDate is null and tblCase.WatchDate is not null)");
                     break;
-                case "8":
+                case CaseProgressFilter.FollowUp:
                     sb.Append(" and (tblCase.FollowUpdate is not null)");
                     break;
                 default:

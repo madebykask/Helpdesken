@@ -10,8 +10,10 @@
         </ul>        
         <div class="tab-content overflow-visible">
             <div class="tab-pane tab-pane-border active" id="mainTab">
+                <input type="hidden" id="relatedCasesCaseId" value="@Model.CaseId" />                
+                <input type="hidden" id="relatedCasesUserId" value="@Model.UserId" />                
                 <div class="container" id="search_result">
-                    @Html.Partial("_CaseRows", Model.SearchResult)
+                    @Html.Action("RelatedCasesFullContent", Model)
                 </div>                                            
             </div>
         </div>        

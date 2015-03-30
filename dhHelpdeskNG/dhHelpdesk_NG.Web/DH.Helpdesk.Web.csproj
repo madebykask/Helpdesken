@@ -2862,6 +2862,7 @@
     <Content Include="Views\Cases\CaseRemainingTime.cshtml" />
     <Content Include="Views\Notifiers\OrganizationUnitDropDown.cshtml" />
     <Content Include="Views\Cases\RelatedCasesFull.cshtml" />
+    <Content Include="Views\Cases\RelatedCasesFullContent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

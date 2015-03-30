@@ -1360,44 +1360,15 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpGet]
         public ViewResult RelatedCasesFull(int caseId, string userId)
         {
-            var searchResult = new CaseSearchResultModel();
-            searchResult.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(
-                                    SessionFacade.CurrentCustomer.Id, 
-                                    SessionFacade.CurrentUser.Id, 
-                                    SessionFacade.CurrentUser.UserGroupId);
-            var search = this.GetEmptySearchModel(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser.Id);
-            var workTimeCalculator = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
+            var model = this.caseModelFactory.GetRelatedCasesFullModel(null, userId, caseId);
+            return this.View(model);            
+        }
 
-            var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
-            CaseRemainingTimeData remainingTime;
-            searchResult.cases = this._caseSearchService.Search(
-                search.caseSearchFilter,
-                searchResult.caseSettings,
-                SessionFacade.CurrentUser.Id,
-                userId,
-                SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups,
-                SessionFacade.CurrentUser.UserGroupId,
-                SessionFacade.CurrentUser.RestrictedCasePermission,
-                search.Search,
-                this.workContext.Customer.WorkingDayStart,
-                this.workContext.Customer.WorkingDayEnd,
-                workTimeCalculator,
-                this.configuration.Application.ApplicationId,
-                showRemainingTime,
-                out remainingTime);
-
-            searchResult.cases = this.TreeTranslate(searchResult.cases, SessionFacade.CurrentCustomer.Id);
-            searchResult.GridSettings = this.caseOverviewSettingsService.GetSettings(
-                SessionFacade.CurrentCustomer.Id,
-                SessionFacade.CurrentUser.Id);
-            search.Search.IdsForLastSearch = this.GetIdsFromSearchResult(searchResult.cases);
-
-            searchResult.ShowRemainingTime = showRemainingTime;
-            searchResult.RemainingTime = this.caseModelFactory.GetCaseRemainingTimeModel(remainingTime);
-
-            var model = this.caseModelFactory.GetRelatedCasesFullModel(searchResult, userId);
-
-            return this.View("RelatedCasesFull", model);
+        [HttpGet]
+        public PartialViewResult RelatedCasesFullContent(int caseId, string userId, string sortBy, string sortByAsc)
+        {
+            var model = this.GetRelatedCasesViewModel(sortBy, sortByAsc, caseId, userId);
+            return this.PartialView(model);
         }
 
         [HttpGet]
@@ -1415,6 +1386,66 @@ namespace DH.Helpdesk.Web.Controllers
         #endregion
 
         #region Private Methods and Operators
+
+        private CaseSearchResultModel GetUnfilteredCases(
+                    string sortBy,
+                    string sortByAsc,
+                    int? relatedCasesCaseId = null, 
+                    string relatedCasesUserId = null)
+        {
+            var searchResult = new CaseSearchResultModel();
+            searchResult.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(
+                                    SessionFacade.CurrentCustomer.Id,
+                                    SessionFacade.CurrentUser.Id,
+                                    SessionFacade.CurrentUser.UserGroupId);
+            var search = this.GetEmptySearchModel(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser.Id);
+            search.Search.SortBy = sortBy ?? string.Empty;
+            search.Search.Ascending = sortByAsc.convertStringToBool();
+            search.caseSearchFilter.CaseProgress = CaseProgressFilter.None;
+            var workTimeCalculator = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
+
+            var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
+            CaseRemainingTimeData remainingTime;
+            searchResult.cases = this._caseSearchService.Search(
+                search.caseSearchFilter,
+                searchResult.caseSettings,
+                SessionFacade.CurrentUser.Id,
+                SessionFacade.CurrentUser.UserId,
+                SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups,
+                SessionFacade.CurrentUser.UserGroupId,
+                SessionFacade.CurrentUser.RestrictedCasePermission,
+                search.Search,
+                this.workContext.Customer.WorkingDayStart,
+                this.workContext.Customer.WorkingDayEnd,
+                workTimeCalculator,
+                this.configuration.Application.ApplicationId,
+                showRemainingTime,
+                out remainingTime,
+                relatedCasesCaseId,
+                relatedCasesUserId);
+
+            searchResult.cases = this.TreeTranslate(searchResult.cases, SessionFacade.CurrentCustomer.Id);
+            searchResult.GridSettings = this.caseOverviewSettingsService.GetSettings(
+                SessionFacade.CurrentCustomer.Id,
+                SessionFacade.CurrentUser.Id);
+            search.Search.IdsForLastSearch = this.GetIdsFromSearchResult(searchResult.cases);
+
+            searchResult.ShowRemainingTime = showRemainingTime;
+            searchResult.RemainingTime = this.caseModelFactory.GetCaseRemainingTimeModel(remainingTime);
+            return searchResult;
+        }
+
+        private RelatedCasesFullViewModel GetRelatedCasesViewModel(
+                                            string sortBy,
+                                            string sortByAsc,
+                                            int caseId, 
+                                            string userId)
+        {
+            var cases = this.GetUnfilteredCases(sortBy, sortByAsc, caseId, userId);
+            var model = this.caseModelFactory.GetRelatedCasesFullModel(cases, userId, caseId);
+
+            return model;
+        }
 
         private void CheckTemplateParameters(int? templateId, int caseId)
         {
