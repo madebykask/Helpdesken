@@ -18,6 +18,11 @@
                 <li id="btnSaveCaseSetting" style="display: none">
                     <input type="button"  class="btn" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" />
                 </li>
+                <li>
+                    <a href="@Url.Action("index", "cases", new {customerId = SessionFacade.CurrentCustomer.Id, clearFilters = true, customFilter = "MyCases" })" class="btn">
+                                @Translation.Get("Mina ärenden")                                     
+                            </a>
+                </li>
             </ul>
         </div>
     </div>
@@ -71,7 +76,7 @@
                         setTimeout(function () {
                             var CaseOverViewActive = $("#fragment-1").attr("class");
                             if (CaseOverViewActive.indexOf("active") >= 0) {
-                                location.reload();
+                                window.location.href = window.location.href;
                             }
                         }, TimeBeforeReload);
                     }
