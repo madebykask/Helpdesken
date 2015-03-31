@@ -542,7 +542,8 @@
             return model;
         }
 
-        [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")]
+        //commented out because: redmine case #10053
+        //[OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")]
         public string UpdateLanguageList(int id, int customerId, int mailTemplateLanguageId, int mailTemplateId, int? accountactivityId, int? ordertypeId, int mailId, string mailTemplateName)
         {
             var customer = this._customerService.GetCustomer(customerId);
