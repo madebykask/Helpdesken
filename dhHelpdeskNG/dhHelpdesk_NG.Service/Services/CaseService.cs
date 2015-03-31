@@ -394,7 +394,9 @@
             c.Supplier_Id = this._supplierServicee.GetDefaultId(customerId);
             c.Priority_Id = this._priorityService.GetDefaultId(customerId);
             c.Status_Id = this._statusService.GetDefaultId(customerId);
-            c.WorkingGroup_Id = this._workingGroupService.GetDefaultId(customerId, userId);
+            // http://redmine.fastdev.se/issues/10997
+//            c.WorkingGroup_Id = this._workingGroupService.GetDefaultId(customerId, userId);
+            c.WorkingGroup_Id = this.userRepository.GetUserDefaultWorkingGroupId(userId, customerId);
             c.RegUserId =  adUser.GetUserFromAdPath();
             c.RegUserDomain = adUser.GetDomainFromAdPath();
 

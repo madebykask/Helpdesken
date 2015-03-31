@@ -319,8 +319,6 @@
                     }
                 }
 
-                // Quick fix for http://redmine.fastdev.se/issues/10997
-                userToSave.Default_WorkingGroup_Id = userModel.User.Default_WorkingGroup_Id;
                 this._userService.SaveEditUser(userToSave, AAsSelected, CsSelected, OTsSelected, Departments, UserWorkingGroups, out errors);
 
                 if (errors.Count == 0)

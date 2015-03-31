@@ -53,6 +53,10 @@ namespace DH.Helpdesk.Dal.Repositories
         IEnumerable<User> FindUsersByName(string name);
 
         bool UserHasCase(int customerId, int userId, List<int> workingGroupIds);
+
+        int? GetUserDefaultWorkingGroupId(int userId, int customerId);
+
+        WorkingGroupEntity GetUserDefaultWorkingGroup(int userId, int customerId);
     }
 
     public sealed class UserRepository : RepositoryBase<User>, IUserRepository
@@ -99,6 +103,42 @@ namespace DH.Helpdesk.Dal.Repositories
                     return false;
             }
                         
+        }
+
+        public int? GetUserDefaultWorkingGroupId(int userId, int customerId)
+        {
+            var entities = (from cu in this.DataContext.CustomerUsers.Where(x => x.User_Id == userId)
+                        join c in this.DataContext.Customers.Where(c => c.Id == customerId) on cu.Customer_Id equals c.Id
+                        join wg in this.DataContext.WorkingGroups on c.Id equals wg.Customer_Id
+                        join u in this.DataContext.Users on userId equals u.Id
+                        from uwg in this.DataContext.UserWorkingGroups.Where(x => x.WorkingGroup_Id == wg.Id && x.User_Id == userId).DefaultIfEmpty()
+                        where uwg.IsDefault == 1
+                        select wg.Id).ToList();
+
+            if (entities.Any())
+            {
+                return entities.First();
+            }
+
+            return null;
+        }
+
+        public WorkingGroupEntity GetUserDefaultWorkingGroup(int userId, int customerId)
+        {
+            var entities = (from cu in this.DataContext.CustomerUsers.Where(x => x.User_Id == userId)
+                            join c in this.DataContext.Customers.Where(c => c.Id == customerId) on cu.Customer_Id equals c.Id
+                            join wg in this.DataContext.WorkingGroups on c.Id equals wg.Customer_Id
+                            join u in this.DataContext.Users on userId equals u.Id
+                            from uwg in this.DataContext.UserWorkingGroups.Where(x => x.WorkingGroup_Id == wg.Id && x.User_Id == userId).DefaultIfEmpty()
+                            where uwg.IsDefault == 1
+                            select wg).ToList();
+
+            if (entities.Any())
+            {
+                return entities.First();
+            }
+
+            return null;
         }
 
         public List<ItemOverview> FindActiveUsersIncludeEmails(int customerId)
@@ -218,15 +258,16 @@ namespace DH.Helpdesk.Dal.Repositories
                         join wg in this.DataContext.WorkingGroups on c.Id equals wg.Customer_Id
                         join u in this.DataContext.Users on userId equals u.Id
                         from uwg in this.DataContext.UserWorkingGroups.Where(x => x.WorkingGroup_Id == wg.Id && x.User_Id == userId).DefaultIfEmpty()
-                        group uwg by new { wg.WorkingGroupName, userId, c.Name, wg.Id, u.Default_WorkingGroup_Id, uwg.UserRole } into g
+                        group uwg by new { wg.WorkingGroupName, userId, c.Name, wg.Id, uwg.UserRole, CustomerId = c.Id, uwg.IsDefault } into g
                         select new CustomerWorkingGroupForUser
                         {
                             WorkingGroupName = g.Key.WorkingGroupName,
                             User_Id = userId,
                             CustomerName = g.Key.Name,
-                            IsStandard = g.Key.Default_WorkingGroup_Id,
+                            IsStandard = g.Key.IsDefault,
                             WorkingGroup_Id = g.Key.Id,
-                            RoleToUWG = g.Key.UserRole == null ? 0 : g.Key.UserRole
+                            RoleToUWG = g.Key.UserRole == null ? 0 : g.Key.UserRole,
+                            CustomerId = g.Key.CustomerId
                         };
 
             var queryList = query.OrderBy(x => x.CustomerName + x.WorkingGroupName).ToList();

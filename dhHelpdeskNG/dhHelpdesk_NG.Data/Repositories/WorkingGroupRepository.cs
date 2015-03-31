@@ -72,6 +72,8 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public int? GetDefaultWorkingGroupId(int customerId, int userId)
         {
+            // http://redmine.fastdev.se/issues/10997
+            /*
             // get setting from user
             int? idFromUserSetting =
                 this.DataContext.Users.Where(u => u.Id == userId)
@@ -82,7 +84,23 @@ namespace DH.Helpdesk.Dal.Repositories
                 this.DataContext.WorkingGroups.Where(g => g.Customer_Id == customerId && g.IsDefault == 1)
                     .Select(g => g.Id)
                     .FirstOrDefault();
-            return idFromUserSetting.HasValue ? idFromUserSetting : idFromWorkingGroup;  
+            return idFromUserSetting.HasValue ? idFromUserSetting : idFromWorkingGroup; 
+             */
+
+            var entities = (from cu in this.DataContext.CustomerUsers.Where(x => x.User_Id == userId)
+                            join c in this.DataContext.Customers.Where(c => c.Id == customerId) on cu.Customer_Id equals c.Id
+                            join wg in this.DataContext.WorkingGroups on c.Id equals wg.Customer_Id
+                            join u in this.DataContext.Users on userId equals u.Id
+                            from uwg in this.DataContext.UserWorkingGroups.Where(x => x.WorkingGroup_Id == wg.Id && x.User_Id == userId).DefaultIfEmpty()
+                            where uwg.IsDefault == 1
+                            select wg.Id).ToList();
+
+            if (entities.Any())
+            {
+                return entities.First();
+            }
+
+            return null;
         }
 
         public IList<UserWorkingGroup> ListUserForWorkingGroup(int workingGroupId)

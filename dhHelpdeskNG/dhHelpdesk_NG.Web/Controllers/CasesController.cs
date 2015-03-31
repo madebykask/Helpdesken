@@ -2215,9 +2215,17 @@ namespace DH.Helpdesk.Web.Controllers
                     m.case_.DefaultOwnerWG_Id = null;
                     if (m.case_.User_Id != 0)
                     {
-                        var curUser = _userService.GetUser(m.case_.User_Id);
+                        // http://redmine.fastdev.se/issues/10997
+                        /*var curUser = _userService.GetUser(m.case_.User_Id);                        
+
                         if (curUser.Default_WorkingGroup_Id != null)
-                           m.case_.DefaultOwnerWG_Id = curUser.Default_WorkingGroup_Id;                        
+                           m.case_.DefaultOwnerWG_Id = curUser.Default_WorkingGroup_Id;*/
+
+                        var userDefaultWorkingGroupId = this._userService.GetUserDefaultWorkingGroupId(m.case_.User_Id, m.case_.Customer_Id);
+                        if (userDefaultWorkingGroupId.HasValue)
+                        {
+                            m.case_.DefaultOwnerWG_Id = userDefaultWorkingGroupId;
+                        }
                     }
                 }
                 else

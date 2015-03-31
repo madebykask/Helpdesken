@@ -10,11 +10,18 @@
         {
             if (workingGroups != null && workingGroups.Any())
             {
-                query =
+                // http://redmine.fastdev.se/issues/10997
+                /*query =
                     query.Where(
                         u =>
                         u.Default_WorkingGroup_Id != null
-                        && workingGroups.ToList().Contains(u.Default_WorkingGroup_Id.Value));
+                        && workingGroups.ToList().Contains(u.Default_WorkingGroup_Id.Value));*/
+
+                query =
+                    query.Where(
+                        u =>
+                        u.UserWorkingGroups != null
+                        && u.UserWorkingGroups.Any(w => workingGroups.Contains(w.WorkingGroup_Id)));
             }
 
             return query;

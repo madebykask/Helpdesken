@@ -130,7 +130,8 @@
 
             var mailMessageId = this.emailService.GetMailMessageId(helpdeskMailFromAdress);
 
-            var caseOwner = this.userService.GetUser(newCase.User_Id);
+            // http://redmine.fastdev.se/issues/10997
+            /*var caseOwner = this.userService.GetUser(newCase.User_Id);
             if (caseOwner == null || 
                 !caseOwner.Default_WorkingGroup_Id.HasValue)
             {
@@ -138,6 +139,13 @@
             }
 
             var defaultWorkingGroup = this.workingGroupService.GetWorkingGroup(caseOwner.Default_WorkingGroup_Id.Value);
+            if (defaultWorkingGroup == null || 
+                !this.emailService.IsValidEmail(defaultWorkingGroup.EMail))
+            {
+                return;
+            }*/
+
+            var defaultWorkingGroup = this.userService.GetUserDefaultWorkingGroup(newCase.User_Id, newCase.Customer_Id);
             if (defaultWorkingGroup == null || 
                 !this.emailService.IsValidEmail(defaultWorkingGroup.EMail))
             {

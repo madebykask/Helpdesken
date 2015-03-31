@@ -19,7 +19,6 @@
                             </th>
                             <th class="span3">
                                 @Translation.Get("Standard", Enums.TranslationSource.TextTranslation)
-                                <input type="button" value='@Translation.Get("Rensa")' data-field="clearUserWorkingGroups" />
                             </th>
                         </tr>
                     </thead>
@@ -33,6 +32,7 @@
                                     @if (customername != uwg.CustomerName)
                                     {    
                                         @uwg.CustomerName
+                                        <input type="radio" style="display: none;" data-field="userWorkingGroup" name="@uwg.CustomerId" value="-1" />
                                     }
                                 </td>
                                 <td>
@@ -47,7 +47,8 @@
                                     <input type="checkbox" name="@string.Format("UserWorkingGroups[{0}].UserRole", i)" id="UserWorkingGroup_[@i]_1" @(uwg.RoleToUWG == 1 ? "checked=checked" : "") class="userRole" value="1" />
                                 </td>
                                 <td>
-                                    <input type="radio" name="User.Default_WorkingGroup_Id" data-field="userWorkingGroup" value="@uwg.WorkingGroup_Id" @(uwg.IsStandard == uwg.WorkingGroup_Id ? "checked=checked" : "") />
+                                    <input type="radio" name="@uwg.CustomerId" data-field="userWorkingGroup" data-field-id="@i" value="@uwg.IsStandard" @(uwg.IsStandard == 1 ? "checked=checked" : "") />
+                                    <input type="hidden" name="@string.Format("UserWorkingGroups[{0}].IsDefault", i)" data-field="@string.Format("userWorkingGroup{0}", i)" value="@uwg.IsStandard" />
                                 </td>            
                             </tr>   
                             customername = uwg.CustomerName;

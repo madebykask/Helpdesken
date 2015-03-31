@@ -25,7 +25,10 @@
         public int CopyCasePermission { get; set; }
         public int Customer_Id { get; set; }
         public int DailyReportReminder { get; set; }
+
+        // obsolete field http://redmine.fastdev.se/issues/10997
         public int? Default_WorkingGroup_Id { get; set; }
+        
         public int DeleteCasePermission { get; set; }
         public int DeleteAttachedFilePermission { get; set; }
         public int? Domain_Id { get; set; }
