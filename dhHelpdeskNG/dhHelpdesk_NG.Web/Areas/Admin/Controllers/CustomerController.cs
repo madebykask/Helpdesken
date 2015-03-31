@@ -1043,7 +1043,7 @@
 
 
             //Get Category to copy
-            var productAreasToCopy = this._productAreaService.GetTopProductAreas(customerToCopy.Id);
+            var productAreasToCopy = this._productAreaService.GetAllProductAreas(customerToCopy.Id);
 
             foreach (var p in productAreasToCopy)
             {

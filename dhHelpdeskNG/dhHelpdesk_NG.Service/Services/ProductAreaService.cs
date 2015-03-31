@@ -20,6 +20,8 @@
 
         IList<ProductAreaEntity> GetTopProductAreas(int customerId);
 
+        IList<ProductAreaEntity> GetAllProductAreas(int customerId);
+
         ProductAreaEntity GetProductArea(int id);
 
         string GetProductAreaWithChildren(int id, string separator, string valueToReturn);
@@ -114,6 +116,11 @@
         }
 
         public IList<ProductAreaEntity> GetTopProductAreas(int customerId)
+        {
+            return this.productAreaRepository.GetMany(x => x.Customer_Id == customerId && x.Parent_ProductArea_Id == null && x.IsActive != 0).OrderBy(x => x.Name).ToList();
+        }
+
+        public IList<ProductAreaEntity> GetAllProductAreas(int customerId)
         {
             return this.productAreaRepository.GetMany(x => x.Customer_Id == customerId && x.Parent_ProductArea_Id == null).OrderBy(x => x.Name).ToList();
         }

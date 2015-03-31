@@ -166,3 +166,5 @@ BEGIN
 
 END
 go
+
+UPDATE tblGlobalSettings SET DBVersion = '5.3.4'
