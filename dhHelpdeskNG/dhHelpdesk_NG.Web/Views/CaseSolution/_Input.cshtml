@@ -816,9 +816,9 @@
                                         </td>
                                     </tr>
                                 }
-                                @*@if (Model.CaseFieldSettings.Count() != 0)
+                                @if (Model.CaseFieldSettings.Count() != 0)
                                 {
-                                    <tr>
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString())">
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                         </td>
@@ -830,7 +830,7 @@
                                         </td>
                                     </tr>
                                 }
-                                <tr >
+                                <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.FinishingDate.ToString())">
                                     <td>
                                         @Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                     </td>
@@ -841,7 +841,7 @@
                                         @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.FinishingDate, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.FinishingDate)
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.ClosingReason.ToString())">
                                     <td>
                                         @Translation.Get(GlobalEnums.TranslationCaseFields.ClosingReason.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                     </td>
@@ -861,7 +861,7 @@
                                     <td class="span9">
                                         @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.FinishingCause, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.ClosingReason)
                                     </td>
-                                </tr>*@
+                                </tr>
                             </table>
                         </div>
                     </div>

@@ -110,6 +110,8 @@ namespace DH.Helpdesk.Dal.Repositories
     public interface ITextTypeRepository : IRepository<TextType>
     {
         TextType GetTextTypeById(int id);
+        string GetTextTypeName(int id);
+        
     }
 
     public class TextTypeRepository : RepositoryBase<TextType>, ITextTypeRepository
@@ -123,6 +125,13 @@ namespace DH.Helpdesk.Dal.Repositories
         {
 
             return this.DataContext.TextTypes.Where(x => x.Id == id).FirstOrDefault();
+
+        }
+
+        public string GetTextTypeName(int id)
+        {
+
+            return this.DataContext.TextTypes.Where(x => x.Id == id).Select(tt => tt.Name).SingleOrDefault();
 
         }
     }

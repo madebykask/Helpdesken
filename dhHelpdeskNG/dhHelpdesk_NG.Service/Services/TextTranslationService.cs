@@ -29,7 +29,10 @@
         string GetTextTranslationByLanguage(int id, int langaugeid);
 
         IList<TextType> GetTextTypes();
+        IList<TextType> GetTextTypesForNewText();
         TextType GetTextType(int id);
+        String GetTextTypeName(int id);
+        
 
         void SaveEditText(Text text, List<TextTranslationLanguageList> TTs, out IDictionary<string, string> errors);
         void SaveEditText(Text text, TextTranslation texttranslation, bool update, out IDictionary<string, string> errors);
@@ -84,9 +87,19 @@
             return this._textTypeRepository.GetAll().OrderBy(x => x.Name).ToList();
         }
 
+        public IList<TextType> GetTextTypesForNewText()
+        {
+            return this._textTypeRepository.GetMany(x => x.Id > 0).OrderBy(x => x.Name).ToList();
+        }
+
         public TextType GetTextType(int id)
         {
             return this._textTypeRepository.GetById(id);
+        }
+
+        public String GetTextTypeName(int id)
+        {
+            return this._textTypeRepository.GetTextTypeName(id);
         }
 
         public IList<TextTranslationLanguageList> GetEditListToTextTranslations(int textid)
@@ -208,27 +221,39 @@
 
         public void SaveNewText(Text text, out IDictionary<string, string> errors)
         {
+            
             if (text == null)
                 throw new ArgumentNullException("text");
 
             errors = new Dictionary<string, string>();
 
-            text.ChangedDate = DateTime.Now;
-            text.CreatedDate = DateTime.Now;
-            
-            text.Id = this._textRepository.GetNextId() + 1;
+            if (string.IsNullOrEmpty(text.TextToTranslate))
+                errors.Add("text.TextToTranslate", "Du måste ange ett ord att översätta");
 
-            if (text.Id < 5000)
+            var hasDublicate = this.GetAllTexts(text.Type)
+                            .Any(t => t.TextToTranslate.Equals(text.TextToTranslate));
+
+            if (hasDublicate)
             {
-                text.Id = 5000;
+                errors.Add("text.TextToTranslate", "Ordet finns redan.");
+
             }
             else
             {
-                text.Id = text.Id + 1;
+                text.ChangedDate = DateTime.Now;
+                text.CreatedDate = DateTime.Now;
+
+                text.Id = this._textRepository.GetNextId() + 1;
+
+                if (text.Id < 5000)
+                {
+                    text.Id = 5000;
+                }
+                else
+                {
+                    text.Id = text.Id + 1;
+                }
             }
-            
-            if (string.IsNullOrEmpty(text.TextToTranslate))
-                errors.Add("text.TextToTranslate", "Du måste ange ett ord att översätta");
 
 
             this._textRepository.Add(text);

@@ -101,6 +101,7 @@
 
         public IList<SelectListItem> TextTypes { get; set; }
         public TextType TextType { get; set; }
+        public string TextTypeName { get; set; }
         
     }
 }

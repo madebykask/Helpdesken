@@ -3,7 +3,7 @@
 @model DH.Helpdesk.Web.Areas.Admin.Models.GlobalSettingIndexViewModel
 @{
     ViewBag.Title = "Global Settings";
-    
+ 
 }
 
 <div class="secnavs fixed">
@@ -19,7 +19,7 @@
                 @Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Kalender bevakningsdatum", Enums.TranslationSource.TextTranslation), "newwatchdate", new { newwdc = 1 }, new { @class = "btn" })
             </li>
             <li id="menu4" style="display: none">
-                @Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Översättningar", Enums.TranslationSource.TextTranslation), "newtranslation", new { newtext = 1 }, new { @class = "btn" })
+                @Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Översättningar", Enums.TranslationSource.TextTranslation), "newtranslation", new { newtext = 1, texttypeid = Model.TextType.Id }, new { @class = "btn" })
             </li>
         </ul>
     </div>
@@ -142,9 +142,7 @@
 
                 <div class="container">
                     <div class="row">
-                       @* @using (Html.BeginForm("index", "globalsetting", FormMethod.Post, new { id = "search" }))
-                        {
-                            *@<div @*class="filterContent"*@>
+                            <div>
                                 <table class="tableform" id="tblText">
                                     <tr>
                                         <td style="width:50px">
@@ -161,7 +159,6 @@
                                     </tr>
                                 </table>
                             </div>
-                        @*}*@
                     </div>
                     <div id="translationList">
                         @Html.Partial("_TranslationsList", Model.GridModel) 
@@ -190,7 +187,7 @@
             list.html('');
             if (id != '') {
                 $.get('/GlobalSetting/ChangeTextType/' + id, function (result) {
-                    list.html($(result).html());
+                    list.html($(result).html());                    
                 });
             }
         }
@@ -203,6 +200,10 @@
                     list.html(result);
                 });
             }
+        }
+
+        function getCurTextType() {
+            return $("#TextTypeId").val();
         }
                     
     </script>

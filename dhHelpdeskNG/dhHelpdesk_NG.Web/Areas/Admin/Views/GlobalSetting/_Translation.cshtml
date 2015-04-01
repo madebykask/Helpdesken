@@ -3,6 +3,11 @@
 @{              
     string newtext = Request.QueryString["newtext"];
     DateTime defDate = DateTime.Now;
+
+    if (Model.Text.Id == 0)
+    {
+        newtext = "1";
+    }
 }
 @if (TempData["Error"] != null)
 {
@@ -18,31 +23,42 @@
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment-4">
                 <div class="container">
+                    @Html.ValidationSummary()
                     <div class="row">
                         <div class="span8">
                             <table class="tableform" id="tblText">
-                                @if (newtext != "1")
-                                {
-                                    <tr>
-                                        <td style="width:200px">
-                                            @Translation.Get("Text", Enums.TranslationSource.TextTranslation)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(model => model.Text.TextToTranslate)
-                                        </td>
-                                    </tr>
-                                }
-                                @if (newtext != null)
-                                {
-                                    <tr>
-                                        <td>
-                                            @Translation.Get("Typ", Enums.TranslationSource.TextTranslation)
-                                        </td>
-                                        <td>
-                                             @Html.DropDownListFor(model => model.TextType.Id, Model.TextTypes, new { style = "width: auto;", id = "TextTypeId", onchange = "changeTextType(this.options[this.selectedIndex].value);" })
-                                        </td>
-                                    </tr>
-                                }
+                                   
+                                    @if (newtext != "1")
+                                    {
+                                        <tr>
+                                            <td style="width:200px">
+                                                @Translation.Get("Typ", Enums.TranslationSource.TextTranslation)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(model => model.TextTypeName)
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:200px">
+                                                @Translation.Get("Text", Enums.TranslationSource.TextTranslation)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(model => model.Text.TextToTranslate)
+                                            </td>
+                                        </tr>
+                                    }
+                                    @if (newtext != null)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Translation.Get("Typ", Enums.TranslationSource.TextTranslation)
+                                            </td>
+                                            <td>
+                                                 @Html.DropDownListFor(model => model.TextType.Id, Model.TextTypes, new { style = "width: auto;", id = "TextTypeId", onchange = "changeTextType(this.options[this.selectedIndex].value);" })
+                                            </td>
+                                        </tr>
+                                    }
+                                
                             </table>
                         </div>
                     </div>
@@ -53,15 +69,15 @@
                                 {
                                     <tr>
                                         <td style="width:200px">
-                                            <input type="text" name="textToTranslate", value="" />
+                                            @Html.TextBoxFor(model => model.Text.TextToTranslate, new { maxlength = "50" })
                                         </td>
                                     </tr>
                                 }
                                 @{ var i = 0; }
                                 @if (newtext != "1")
                                 {
-                                    if (Model.Text.Id > 4999)
-                                    {                                        
+                                    //if (Model.Text.Id > 4999)
+                                    //{                                        
                                         foreach (var item in Model.Languages)
                                         {
                                             var curTranslation = Model.ListForEdit.Where(t=> t.Language_Id == int.Parse(item.Value)).SingleOrDefault();
@@ -71,7 +87,7 @@
                                                     @Html.Label(Translation.Get(item.Text))                                                    
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="@string.Format("TTs[{0}].TranslationName", i)", value="@(curTranslation==null?"":curTranslation.TranslationName)" />
+                                                    <input type="text" name="@string.Format("TTs[{0}].TranslationName", i)", value="@(curTranslation==null?"":curTranslation.TranslationName)" style="width:500px"/>
                                                     <input type="hidden" name="@string.Format("TTs[{0}].Text_Id", i)" value="@Model.Text.Id" />
                                                     <input type="hidden" name="@string.Format("TTs[{0}].Language_Id", i)" value="@item.Value" />
                                                     <input type="hidden" name="@string.Format("TTs[{0}].TextTranslation_Id", i)" value="@(curTranslation==null ? "": curTranslation.TextTranslation_Id.ToString())" />
@@ -81,7 +97,7 @@
                                             </tr>                        
                                             i++;
                                         }                                                                               
-                                    }
+                                    //}
                                 }
                             </table>                        
                         </div>
@@ -89,7 +105,8 @@
                 </div>
             </div>
         </div>
-    
+  
+
 <script type="text/javascript">
 
     $("input:text:visible:first").focus();
