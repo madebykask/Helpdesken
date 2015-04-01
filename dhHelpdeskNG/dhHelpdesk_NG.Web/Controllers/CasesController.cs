@@ -916,7 +916,7 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     workinggroupId = e.WorkingGroup_Id.HasValue ? e.WorkingGroup_Id.Value : 0;
                     priorityId = e.Priority_Id.HasValue ? e.Priority_Id.Value : 0;
-                    if (e.SubProductAreas != null && e.SubProductAreas.Count > 0)
+                    if (e.SubProductAreas != null && e.SubProductAreas.Where(s=> s.IsActive != 0).ToList().Count > 0)
                         hasChild = 1;
                 }
             }
@@ -1340,7 +1340,8 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var res = "false";
             var productArea = this._productAreaService.GetProductArea(pId);
-            if (productArea != null && productArea.SubProductAreas != null && productArea.SubProductAreas.Count > 0)
+            if (productArea != null && productArea.SubProductAreas != null && 
+                productArea.SubProductAreas.Where(p=> p.IsActive != 0).ToList().Count > 0)
                 res = "true";
 
             return Json(res);
@@ -2172,7 +2173,7 @@ namespace DH.Helpdesk.Web.Controllers
                     {
                         var names = this._productAreaService.GetParentPath(p.Id, customerId).Select(name => Translation.Get(name));
                         m.ParantPath_ProductArea = string.Join(" - ", names);
-                        if (p.SubProductAreas != null && p.SubProductAreas.Count > 0)
+                        if (p.SubProductAreas != null && p.SubProductAreas.Where(s=> s.IsActive != 0).ToList().Count > 0)
                             m.ProductAreaHasChild = 1;
                     }
                 }

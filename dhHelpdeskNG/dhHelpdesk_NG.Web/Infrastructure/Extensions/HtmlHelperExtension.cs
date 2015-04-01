@@ -739,9 +739,10 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             {
 
                 bool hasChild = false;
-                if (pa.SubProductAreas != null)
-                    if (pa.SubProductAreas.Count > 0)
+                if (pa.SubProductAreas != null)                                    
+                    if (pa.SubProductAreas.Where(p => p.IsActive != 0).ToList().Count > 0)
                         hasChild = true;
+                
 
                 if (hasChild)
                     htmlOutput += "<li class='dropdown-submenu'>";
@@ -752,7 +753,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 if (hasChild)
                 {
                     htmlOutput += "<ul class='dropdown-menu'>";
-                    htmlOutput += BuildProcuctAreaDropdownButton(pa.SubProductAreas.OrderBy(p => Translation.Get(p.Name, Enums.TranslationSource.TextTranslation)).ToList());
+                    htmlOutput += BuildProcuctAreaDropdownButton(pa.SubProductAreas.Where(p=> p.IsActive != 0).ToList().OrderBy(p => Translation.Get(p.Name, Enums.TranslationSource.TextTranslation)).ToList());
                     htmlOutput += "</ul>";
                 }
                 htmlOutput += "</li>";

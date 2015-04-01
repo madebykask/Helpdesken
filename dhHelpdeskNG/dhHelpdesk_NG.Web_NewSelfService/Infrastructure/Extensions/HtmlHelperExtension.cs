@@ -614,7 +614,7 @@ namespace DH.Helpdesk.NewSelfService.Infrastructure.Extensions
 
                 bool hasChild = false;
                 if (pa.SubProductAreas != null)
-                    if (pa.SubProductAreas.Count > 0)
+                    if (pa.SubProductAreas.Where(s => s.IsActive != 0).ToList().Count > 0)
                         hasChild = true;
 
                 if (hasChild)
@@ -626,7 +626,7 @@ namespace DH.Helpdesk.NewSelfService.Infrastructure.Extensions
                 if (hasChild)
                 {
                     htmlOutput += "<ul class='dropdown-menu'>";
-                    htmlOutput += BuildProcuctAreaDropdownButton(pa.SubProductAreas.ToList());
+                    htmlOutput += BuildProcuctAreaDropdownButton(pa.SubProductAreas.Where(s => s.IsActive != 0).ToList());
                     htmlOutput += "</ul>";
                 }
                 htmlOutput += "</li>";
