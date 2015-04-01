@@ -326,7 +326,6 @@
 
                 return caseRep.GetAll()
                         .GetByCustomer(customerId)
-                        .GetNotDeleted()
                         .GetRelatedCases(caseId, userId, currentUser)
                         .MapToRelatedCases();
             }
@@ -340,7 +339,6 @@
 
                 return caseRep.GetAll()
                         .GetByCustomer(customerId)
-                        .GetNotDeleted()
                         .GetRelatedCases(caseId, userId, currentUser)
                         .Count();
             }

@@ -837,28 +837,10 @@
 
             // kund 
             sb.Append(" where (tblCase.Customer_Id = " + f.CustomerId + ")");
-            sb.Append(" and (tblCase.Deleted = 0)");
-            if (!relatedCasesCaseId.HasValue)
-            {
-                sb.Append(" and (tblCustomerUser.[User_Id] = " + f.UserId + ")");
 
-                // användaren får bara se avdelningar som den har behörighet till
-                sb.Append(" and (tblCase.Department_Id In (select Department_Id from tblDepartmentUser where [User_Id] = " + userId + ")");
-                sb.Append(" or not exists (select Department_Id from tblDepartmentUser where ([User_Id] = " + userId + "))");
-                sb.Append(") ");
-
-                // finns kryssruta på användaren att den bara får se sina egna ärenden
-                if (restrictedCasePermission == 1)
-                {
-                    if (userGroupId == 2)
-                        sb.Append(" and (tblCase.Performer_User_Id = " + userId + " or tblcase.CaseResponsibleUser_Id = " + userId + ")");
-                    else if (userGroupId == 1)
-                        sb.Append(" and (lower(tblCase.reportedBy) = lower(" + userUserId + ") or tblcase.UserId = " + userId + ")");
-                }            
-            }
-            else
+            // Related cases list http://redmine.fastdev.se/issues/11257
+            if (relatedCasesCaseId.HasValue)
             {
-                // Related cases list http://redmine.fastdev.se/issues/11257
                 sb.AppendFormat(" AND ([tblCase].[Id] != {0}) AND (LOWER(LTRIM(RTRIM([tblCase].[ReportedBy]))) = LOWER(LTRIM(RTRIM('{1}')))) ", relatedCasesCaseId.Value, relatedCasesUserId);
                 if (restrictedCasePermission == 1)
                 {
@@ -871,7 +853,26 @@
                         sb.AppendFormat(" AND (LOWER(LTRIM(RTRIM([tblCase].[ReportedBy]))) = LOWER(LTRIM(RTRIM('{0}')))) ", userUserId);
                     }
                 }            
+
+                return sb.ToString();
             }
+
+            sb.Append(" and (tblCase.Deleted = 0)");
+            sb.Append(" and (tblCustomerUser.[User_Id] = " + f.UserId + ")");
+
+            // användaren får bara se avdelningar som den har behörighet till
+            sb.Append(" and (tblCase.Department_Id In (select Department_Id from tblDepartmentUser where [User_Id] = " + userId + ")");
+            sb.Append(" or not exists (select Department_Id from tblDepartmentUser where ([User_Id] = " + userId + "))");
+            sb.Append(") ");
+
+            // finns kryssruta på användaren att den bara får se sina egna ärenden
+            if (restrictedCasePermission == 1)
+            {
+                if (userGroupId == 2)
+                    sb.Append(" and (tblCase.Performer_User_Id = " + userId + " or tblcase.CaseResponsibleUser_Id = " + userId + ")");
+                else if (userGroupId == 1)
+                    sb.Append(" and (lower(tblCase.reportedBy) = lower('" + userUserId + "') or tblcase.User_Id = " + userId + ")");
+            }            
             
             // ärende progress - iShow i gammal helpdesk
             switch (f.CaseProgress)
