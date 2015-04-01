@@ -2156,9 +2156,9 @@ namespace DH.Helpdesk.Web.Controllers
                         m.case_.Change_Id = caseTemplate.Change_Id;
                         m.case_.FinishingDate = caseTemplate.FinishingDate;
                         m.case_.FinishingDescription = caseTemplate.FinishingDescription;
-                        m.case_.CausingPartId = caseTemplate.CausingPartId;
+                        m.case_.CausingPartId = caseTemplate.FinishingCause_Id;
                         m.case_.PlanDate = caseTemplate.PlanDate;
-
+                      
                         m.CaseTemplateName = caseTemplate.Name;
 
                         //To get the right users for perfomers when creating a case from a template
@@ -2196,7 +2196,7 @@ namespace DH.Helpdesk.Web.Controllers
                         m.ParantPath_CaseType = c.getCaseTypeParentPath();
                     }
                 }
-
+                
                 // check department info
                 m.ShowInvoiceFields = 0;
                 if (m.case_.Department_Id > 0 && m.case_.Department_Id.HasValue)

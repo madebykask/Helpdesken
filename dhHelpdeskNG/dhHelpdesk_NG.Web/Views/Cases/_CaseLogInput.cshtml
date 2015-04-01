@@ -138,9 +138,9 @@
                     </td>
                 }
             </tr>
-            @if (Model.templateistrue != 1)
-            {
-                if (Model.CaseLog.Id == 0)
+            @*@if (Model.templateistrue != 1)
+            {*@
+                @if (Model.CaseLog.Id == 0)
                 {                                        
                 <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString())">
                     <td>
@@ -159,16 +159,16 @@
                         </div>
                     </td>
                 </tr>
-                if (SessionFacade.CurrentUser.CloseCasePermission == 1)
+               @if (SessionFacade.CurrentUser.CloseCasePermission == 1)
                 {
-<tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.FinishingDescription, CaseSolutionFields.FinishingDescription)">
+                <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.FinishingDescription, CaseSolutionFields.FinishingDescription)">
                     <td>
                          @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.FinishingDescription, CaseSolutionFields.FinishingDescription))
                          {
                              @CaseFieldCaption(GlobalEnums.TranslationCaseFields.FinishingDescription, "Avslutsbeskrivning")
                              if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString()).Required == 1)
                              {
-<span class="mandatorystar">*</span>
+                                <span class="mandatorystar">*</span>
                              }
                          }
                          else
@@ -180,7 +180,7 @@
                         @Html.TextAreaFor(model => model.case_.FinishingDescription, new { maxlength = "200" })
                     </td>
                 </tr>
-<tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ClosingReason, CaseSolutionFields.FinishingCause)">
+               <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ClosingReason, CaseSolutionFields.FinishingCause)">
                     <td>
                         @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ClosingReason, "Avslutsorsak")
                     </td>
@@ -201,7 +201,7 @@
                     </div>
                     </td>
                 </tr>
-<tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.FinishingDate, CaseSolutionFields.FinishingDate)">
+                <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.FinishingDate, CaseSolutionFields.FinishingDate)">
                     <td>
                         @CaseFieldCaption(GlobalEnums.TranslationCaseFields.FinishingDate, "Avslutsdatum")
                     </td>
@@ -217,7 +217,7 @@
                 </td>
                 </tr>
                 }
-            }
+           @* }*@
         </table>
     </div>
 </div>
