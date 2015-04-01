@@ -581,8 +581,9 @@
             return this._caseHistoryRepository.GetCaseHistoryByCaseId(caseId).ToList(); 
         }
 
-        public void SendCaseEmail(int caseId, CaseMailSetting cms, int caseHistoryId, Case oldCase = null, CaseLog log = null, List<CaseFileDto> logFiles = null)
+        public void SendCaseEmail(int caseId, CaseMailSetting cms, int caseHistoryId, Case oldCase = null, CaseLog log = null, List<CaseFileDto> logFiles = null)        
         {
+            var isClosedMailSentToNotifier = false;
             if (_emailService.IsValidEmail(cms.HelpdeskMailFromAdress))
             {
                 // get new case information
@@ -842,6 +843,7 @@
                                     _emailLogRepository.Commit();
                                     fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 9);
                                     _emailService.SendEmail(customEmailSender2, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                    isClosedMailSentToNotifier = true;
                                 }
 
                             // send sms
@@ -865,7 +867,7 @@
                 }
 
                 // State Secondary Email TODO ikea ims only?? 
-                if (!cms.DontSendMailToNotifier && !dontSendMailToNotfier && oldCase != null && oldCase.Id > 0)  
+                if (!cms.DontSendMailToNotifier && !dontSendMailToNotfier && !isClosedMailSentToNotifier && oldCase != null && oldCase.Id > 0)  
                     if (newCase.StateSecondary_Id != oldCase.StateSecondary_Id && newCase.StateSecondary_Id > 0)
                         if (_emailService.IsValidEmail(newCase.PersonsEmail))
                         {
