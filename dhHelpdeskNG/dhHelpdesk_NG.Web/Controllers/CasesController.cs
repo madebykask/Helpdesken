@@ -1107,6 +1107,12 @@ namespace DH.Helpdesk.Web.Controllers
                     f.CaseRemainingTimeFilter = caseRemainingTimeFilter;
                 }
 
+                int caseRemainingTimeUntilFilter;
+                if (int.TryParse(frm.ReturnFormValue("CaseRemainingTimeUntil"), out caseRemainingTimeUntilFilter))
+                {
+                    f.CaseRemainingTimeUntilFilter = caseRemainingTimeUntilFilter;
+                }
+
                 int caseRemainingTimeMaxFilter;
                 if (int.TryParse(frm.ReturnFormValue("CaseRemainingTimeMax"), out caseRemainingTimeMaxFilter))
                 {

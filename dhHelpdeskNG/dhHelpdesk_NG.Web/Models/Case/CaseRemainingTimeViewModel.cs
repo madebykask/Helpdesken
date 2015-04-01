@@ -15,12 +15,22 @@
         {
             this.Data = data;
 
-            this.Delayed = new CaseRemainingTimeItemViewModel(int.MinValue, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime < 0));
+            this.Delayed = new CaseRemainingTimeItemViewModel(int.MinValue, null, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime < 0));
 
-            var hs = this.Data.CaseRemainingTimes.Select(t => t.RemainingTime).Where(t => t > 0 && t < 24).Distinct().OrderBy(t => t);
+            /*var hs = this.Data.CaseRemainingTimes.Select(t => t.RemainingTime).Where(t => t > 0 && t < 24).Distinct().OrderBy(t => t);
             foreach (var h in hs)
             {
                 this.hours.Add(new CaseRemainingTimeItemViewModel(h, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime == h)));
+            }*/
+
+            if (this.Data.CaseRemainingTimes.Select(t => t.RemainingTime).Any(t => t > 0 && t < 24))
+            {
+                this.hours.Add(new CaseRemainingTimeItemViewModel(1, null, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime == 1)));                
+                this.hours.Add(new CaseRemainingTimeItemViewModel(2, null, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime == 2)));                
+                this.hours.Add(new CaseRemainingTimeItemViewModel(3, 4, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime >= 3 && t.RemainingTime <= 4)));
+                this.hours.Add(new CaseRemainingTimeItemViewModel(5, 8, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime >= 5 && t.RemainingTime <= 8)));
+                this.hours.Add(new CaseRemainingTimeItemViewModel(9, 16, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime >= 9 && t.RemainingTime <= 16)));
+                this.hours.Add(new CaseRemainingTimeItemViewModel(17, 23, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime >= 17 && t.RemainingTime <= 23)));                
             }
 
             var ds = this.Data.CaseRemainingTimes.Select(t => t.RemainingTime).Where(t => t >= 24).ToList();
@@ -28,12 +38,12 @@
             if (this.MaxDays > 5)
             {
                 this.MaxDays = 5;
-                this.MoreThenMaxDays = new CaseRemainingTimeItemViewModel(int.MaxValue, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime.IsHoursGreaterDays(this.MaxDays)));
+                this.MoreThenMaxDays = new CaseRemainingTimeItemViewModel(int.MaxValue, null, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime.IsHoursGreaterDays(this.MaxDays)));
             }
 
             for (var i = 1; i <= this.MaxDays; i++)
             {
-                this.days.Add(new CaseRemainingTimeItemViewModel(i, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime.IsHoursEqualDays(i))));
+                this.days.Add(new CaseRemainingTimeItemViewModel(i, null, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime.IsHoursEqualDays(i))));
             }
         }
 

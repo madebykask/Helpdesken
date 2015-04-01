@@ -227,18 +227,22 @@ $(function () {
                 $(this).click(function () {
                     var $this = $(this);
                     var remainingTime = $('<input name="CaseRemainingTime" type="hidden" />');
+                    var remainingTimeUntil = $('<input name="CaseRemainingTimeUntil" type="hidden" />');
                     var remainingTimeMax = $('<input name="CaseRemainingTimeMax" type="hidden" />');
                     var remainingTimeHours = $('<input name="CaseRemainingTimeHours" type="hidden" />');
                     remainingTime.val($this.attr('data-remaining-time'));
+                    remainingTimeUntil.val($this.attr('data-remaining-time-until'));
                     remainingTimeMax.val($this.attr('data-remaining-time-max'));
                     remainingTimeHours.val($this.attr('data-remaining-time-hours'));
 
                     searchForm.append(remainingTime);
+                    searchForm.append(remainingTimeUntil);
                     searchForm.append(remainingTimeMax);
                     searchForm.append(remainingTimeHours);
                     $this.after(loader);
                     search();
                     remainingTime.remove();
+                    remainingTimeUntil.remove();
                     remainingTimeMax.remove();
                     remainingTimeHours.remove();
                 });

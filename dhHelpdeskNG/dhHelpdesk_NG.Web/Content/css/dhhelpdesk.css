@@ -3207,3 +3207,7 @@ div.DTFC_LeftFootWrapper table {
 .caselistdocs:nth-of-type(odd) {
     background: #f5f5f5;
 }
+
+.case-remaining-time {
+    font-size: small;
+}

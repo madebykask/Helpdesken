@@ -52,6 +52,8 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
         public int? CaseRemainingTimeFilter { get; set; }
 
+        public int? CaseRemainingTimeUntilFilter { get; set; }
+
         public int? CaseRemainingTimeMaxFilter { get; set; }
 
         public bool CaseRemainingTimeHoursFilter { get; set; }
@@ -91,6 +93,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
             r.ParentPathClosingReason = o.ParentPathClosingReason;
             r.CustomFilter = o.CustomFilter;
             r.CaseRemainingTimeFilter = o.CaseRemainingTimeFilter;
+            r.CaseRemainingTimeUntilFilter = o.CaseRemainingTimeUntilFilter;
             r.CaseRemainingTimeMaxFilter = o.CaseRemainingTimeMaxFilter;
             r.CaseRemainingTimeHoursFilter = o.CaseRemainingTimeHoursFilter;
 
