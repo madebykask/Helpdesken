@@ -44,7 +44,7 @@ $(function () {
                 position: 'top-center',
                 type: type || 'notice',
                 closeText: '',
-                stayTime: 3000,
+                stayTime: 10000,
                 inEffectDuration: 1000,
                 width: 700
             });
@@ -672,6 +672,8 @@ $(function () {
         var cancelText = spec.cancelText || '';
         var yesText = spec.yesText || '';
         var noText = spec.noText || '';
+        var validationMessages = spec.validationMessages || [];
+        var mandatoryFieldsText = spec.mandatoryFieldsText || '';
 
         dhHelpdesk.cases.utils.init(okText, cancelText, yesText, noText);
 
@@ -772,7 +774,18 @@ $(function () {
         // http://redmine.fastdev.se/issues/11179
         $('#target').submit(function () {
             if (!$(this).valid()) {
-                dhHelpdesk.cases.utils.showError(requiredFieldsMessage);
+                var message = requiredFieldsMessage + '<br />' + mandatoryFieldsText + ':';
+                $('label.error:visible').each(function (key, value) {
+                    var errorText = $(value).text();
+
+                    $.each(validationMessages, function(index, validationMessage) {
+                        errorText = '<br />' + '[' + dhHelpdesk.cases.utils.replaceAll(errorText, validationMessage, '').trim() + ']';
+                    });
+                    
+                    message += errorText;
+                });
+
+                dhHelpdesk.cases.utils.showError(message);
             } 
         });
 
