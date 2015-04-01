@@ -21,60 +21,60 @@
 </h4>
 @if (Model.templateistrue != 1)
 {
-<div class="secnavs secnavmarg">
-    <div class="pull-left">
-        <ul class="secnav">
-            @if (Model.CustomerSettings.ModuleFaq == true && Model.customerUserSetting.User.FAQPermission == 1)
-            {
-                <li><a href="#" id="AddFAQ" class="btn">@Translation.Get("Ny FAQ", Enums.TranslationSource.TextTranslation)</a></li>
-                <li class="secspace"></li>
-            }
-            
-            <li>
-                <div class="checkbox">
-                    @if (Model.Disable_SendMailAboutCaseToNotifier)
-                    {                        
-                        @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier,
-                                new { @disabled = "disabled", InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool() })
-                    }
-                    else
-                    {
-                        @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier,
-                                new { InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool() }) 
-                    }
-                    <span class="lbl">@Translation.Get("Informera anmälaren om åtgärden", SessionFacade.CurrentCaseLanguageId) </span>
-                </div>
-            </li>
-            <li class="secspace"></li>
-            <li>
-                <div class="checkbox">
-                    @Html.CheckBoxFor(model => model.CaseLog.HighPriority)
-                    <span class="lbl">@Translation.Get("Hög prioritet", SessionFacade.CurrentCaseLanguageId) </span>
-                </div>
-            </li>
-            @if (Model.CaseLog.Id == 0)
-            {
-                if (Model.standardTexts != null)
+    <div class="secnavs secnavmarg">
+        <div class="pull-left">
+            <ul class="secnav">
+                @if (Model.CustomerSettings.ModuleFaq == true && Model.customerUserSetting.User.FAQPermission == 1)
                 {
-                    if (Model.standardTexts.Any())
-                    {                        
+                    <li><a href="#" id="AddFAQ" class="btn">@Translation.Get("Ny FAQ", Enums.TranslationSource.TextTranslation)</a></li>
+                    <li class="secspace"></li>
+                }
+
+                <li>
+                    <div class="checkbox">
+                        @if (Model.Disable_SendMailAboutCaseToNotifier)
+                        {                        
+                            @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier,
+                                new { @disabled = "disabled", InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool() })
+                        }
+                        else
+                        {
+                            @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier,
+                                new { InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool() }) 
+                        }
+                        <span class="lbl">@Translation.Get("Informera anmälaren om åtgärden", SessionFacade.CurrentCaseLanguageId) </span>
+                    </div>
+                </li>
                 <li class="secspace"></li>
                 <li>
-                    @Translation.Get("Standardtext", SessionFacade.CurrentCaseLanguageId)&nbsp;
-                            <select id="lstStandarTexts" style="max-width:220px;">
+                    <div class="checkbox">
+                        @Html.CheckBoxFor(model => model.CaseLog.HighPriority)
+                        <span class="lbl">@Translation.Get("Hög prioritet", SessionFacade.CurrentCaseLanguageId) </span>
+                    </div>
+                </li>
+                @if (Model.CaseLog.Id == 0)
+                {
+                    if (Model.standardTexts != null)
+                    {
+                        if (Model.standardTexts.Any())
+                        {                        
+                    <li class="secspace"></li>
+                    <li>
+                        @Translation.Get("Standardtext", SessionFacade.CurrentCaseLanguageId)&nbsp;
+                            <select id="lstStandarTexts" style="max-width: 220px;">
                                 <option>&nbsp;</option>
                                 @foreach (var e in Model.standardTexts.Where(e => e.IsActive == 1))
                                 {
                                     <option value="@e.Id">@e.Name</option>
                                 }
                             </select>
-                </li>
+                    </li>
+                        }
                     }
                 }
-            }
-        </ul>
+            </ul>
+        </div>
     </div>
-</div>
 }
 <div class="row">
     <div class="span12">
@@ -88,7 +88,7 @@
             </thead>
             <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Text_External, CaseSolutionFields.ExternalLogNote)">
                 <td>
-                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Text_External,"Extern notering")
+                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Text_External, "Extern notering")
                 </td>
                 <td>
                     @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Description, CaseSolutionFields.Description))
@@ -111,9 +111,9 @@
                 </td>
             </tr>
 
-            <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote)">            
+            <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote)">
                 <td>
-                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal,"Intern notering")
+                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, "Intern notering")
                 </td>
                 <td>
                     @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Description, CaseSolutionFields.Description))
@@ -125,31 +125,31 @@
                         @Html.TextAreaFor(model => model.CaseLog.TextInternal, new { style = "height:105px;", @readonly = true })
                     }
                 </td>
-                @if(Model.templateistrue != 1)
+                @if (Model.templateistrue != 1)
                 {
-                <td>
-                    <div class="checkbox">
-                        @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutLog)
-                        <span class="lbl">@Translation.Get("Skicka intern loggpost till", SessionFacade.CurrentCaseLanguageId)</span>
-                    </div>
-                    <div id="divEmailRecepientsInternalLog" style="display: none">
-                        @Html.TextAreaFor(model => model.CaseLog.EmailRecepientsInternalLog, new { @readonly = "readonly" })
-                    </div>
-                </td>
-                }                
-            </tr> 
-             @if(Model.templateistrue != 1) 
-             {          
+                    <td>
+                        <div class="checkbox">
+                            @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutLog)
+                            <span class="lbl">@Translation.Get("Skicka intern loggpost till", SessionFacade.CurrentCaseLanguageId)</span>
+                        </div>
+                        <div id="divEmailRecepientsInternalLog" style="display: none">
+                            @Html.TextAreaFor(model => model.CaseLog.EmailRecepientsInternalLog, new { @readonly = "readonly" })
+                        </div>
+                    </td>
+                }
+            </tr>
+            @if (Model.templateistrue != 1)
+            {
                 if (Model.CaseLog.Id == 0)
                 {                                        
-                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString())">
-                        <td>
-                            @CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Filename,"Bifogad fil")
-                        </td>
-                        <td>
-                            <a href="#upload_logfiles_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentCaseLanguageId)</a>
-                        </td>
-                    </tr>                
+                <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString())">
+                    <td>
+                        @CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Filename, "Bifogad fil")
+                    </td>
+                    <td>
+                        <a href="#upload_logfiles_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentCaseLanguageId)</a>
+                    </td>
+                </tr>                
                 }            
                 <tr>
                     <td class="span3"></td>
@@ -159,50 +159,51 @@
                         </div>
                     </td>
                 </tr>
-             
-                <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.FinishingDescription, CaseSolutionFields.FinishingDescription)">
+                if (SessionFacade.CurrentUser.CloseCasePermission == 1)
+                {
+<tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.FinishingDescription, CaseSolutionFields.FinishingDescription)">
                     <td>
                          @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.FinishingDescription, CaseSolutionFields.FinishingDescription))
-                        {
-                            @CaseFieldCaption(GlobalEnums.TranslationCaseFields.FinishingDescription,"Avslutsbeskrivning")
-                            if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString()).Required == 1)
-                            {
-                                <span class="mandatorystar">*</span>
-                            }
+                         {
+                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.FinishingDescription, "Avslutsbeskrivning")
+                             if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString()).Required == 1)
+                             {
+<span class="mandatorystar">*</span>
+                             }
                          }
-                        else
-                        {
-                            @Html.TextAreaFor(model => model.case_.FinishingDescription, new { maxlength = "200", @readonly = true })
-                        }
+                         else
+                         {
+                             @Html.TextAreaFor(model => model.case_.FinishingDescription, new { maxlength = "200", @readonly = true })
+                         }
                     </td>
                     <td>
                         @Html.TextAreaFor(model => model.case_.FinishingDescription, new { maxlength = "200" })
                     </td>
                 </tr>
-                <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ClosingReason, CaseSolutionFields.FinishingCause)">
+<tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ClosingReason, CaseSolutionFields.FinishingCause)">
                     <td>
-                        @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ClosingReason,"Avslutsorsak")
+                        @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ClosingReason, "Avslutsorsak")
                     </td>
                     <td>
                         <div id="divFinishingType" class="btn-group">
                             @{
-                                string disabled = Model.GetDisabledString(GlobalEnums.TranslationCaseFields.ClosingReason, CaseSolutionFields.FinishingCause);
+                         string disabled = Model.GetDisabledString(GlobalEnums.TranslationCaseFields.ClosingReason, CaseSolutionFields.FinishingCause);
                             }
-                            <div class="btn @disabled" id="divBreadcrumbs_FinishingType">@Translation.Get("--")</div>
+                    <div class="btn @disabled" id="divBreadcrumbs_FinishingType">@Translation.Get("--")</div>
                             <button class="btn dropdown-toggle" data-toggle="dropdown" @disabled>
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu dropup">
                                 <li><a href="#">@Translation.Get("--")</a></li>
                                 @Html.FinishingCauseDropdownButtonString(Model.finishingCauses)
-                            </ul>
+                    </ul>
                             @Html.HiddenFor(model => model.CaseLog.FinishingType)
-                        </div>
+                    </div>
                     </td>
                 </tr>
-                <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.FinishingDate, CaseSolutionFields.FinishingDate)">
+<tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.FinishingDate, CaseSolutionFields.FinishingDate)">
                     <td>
-                        @CaseFieldCaption(GlobalEnums.TranslationCaseFields.FinishingDate,"Avslutsdatum")
+                        @CaseFieldCaption(GlobalEnums.TranslationCaseFields.FinishingDate, "Avslutsdatum")
                     </td>
                     <td>
                         @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.FinishingDate, CaseSolutionFields.FinishingDate))
@@ -213,9 +214,10 @@
                         {
                             @Html.EditorFor(m => m.case_.FinishingDate, "DateReadOnly")
                         }
-                    </td>
+                </td>
                 </tr>
-                 }
+                }
+            }
         </table>
     </div>
 </div>
