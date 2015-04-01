@@ -429,27 +429,10 @@
                                     </th>
                                 </tr>
                                 @Html.Action("MailTemplateFieldIdentifierRow", new { customerId = Model.Customer.Id, mailTemplateRowName = GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString() });   
-                                <tr>
-                                    <td>
-                                        @Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString()):@Translation.Get("E-post", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                    <td>[#13]
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        @Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString()):@Translation.Get("Förnamn", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                    <td>[#6]
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        @Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString()):@Translation.Get("Efternamn", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                    <td>[#7]
-                                    </td>
-                                </tr>
+                                @Html.Action("MailTemplateFieldIdentifierRow", new { customerId = Model.Customer.Id, mailTemplateRowName = GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Extralabel = "E-post", EMailIdentifier="[#13]" });
+
+                                @Html.Action("MailTemplateFieldIdentifierRow", new { customerId = Model.Customer.Id, mailTemplateRowName = GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Extralabel = "Förnamn", EMailIdentifier ="[#6]" });   
+                                @Html.Action("MailTemplateFieldIdentifierRow", new { customerId = Model.Customer.Id, mailTemplateRowName = GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Extralabel = "Efternamn", EMailIdentifier ="[#7]" });   
                                 @Html.Action("MailTemplateFieldIdentifierRow", new { customerId = Model.Customer.Id, mailTemplateRowName = GlobalEnums.TranslationCaseFields.Priority_Id.ToString() });
                                 <tr>
                                     <td>
@@ -1092,20 +1075,18 @@
                                     </td>
                                 </tr>
                             }
-                           @* 
-                            COMMENTED OUT BECAUSE THIS MODULE IS NOT YET FINISHED
+@*
+                                COMMENTED OUT BECAUSE THIS MODULE IS NOT YET FINISHED
                             <tr>
-                                <th colspan="2">
-                                    @Translation.Get("Snabbenkät", Enums.TranslationSource.TextTranslation)
+                                <th colspan="2">@Translation.Get("Snabbenkät", Enums.TranslationSource.TextTranslation)
                                 </th>
                             </tr>
-                            <tr>
-                                <td>
-                                    @Translation.Get("Snabbenkät", Enums.TranslationSource.TextTranslation)
-                                </td>
-                                <td>[#777]
-                                </td>
-                            </tr>*@
+                                <tr>
+                                    <td>@Translation.Get("Snabbenkät", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>[#777]
+                                    </td>
+                                </tr>*@
                         </table>
                         @Html.HiddenFor(model => model.MailTemplateLanguage.Language_Id)
                         @Html.HiddenFor(model => model.MailTemplateLanguage.MailTemplate_Id)
