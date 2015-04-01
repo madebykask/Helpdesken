@@ -461,7 +461,7 @@ namespace DH.Helpdesk.Web.Controllers
                 if (SessionFacade.CurrentUser.CreateCasePermission == 1)
                 {
                     var userId = SessionFacade.CurrentUser.Id;
-                    m = this.GetCaseInputViewModel(userId, customerId, 0, 0, "", templateId, copyFromCaseId, false, templateistrue);
+                    m = this.GetCaseInputViewModel(userId, customerId, 0, 0, "", null, templateId, copyFromCaseId, false, templateistrue);
 
                     var caseParam = new NewCaseParams
                     {
@@ -552,15 +552,17 @@ namespace DH.Helpdesk.Web.Controllers
 
         [HttpPost]
         [ValidateInput(false)]
-        public RedirectToRouteResult EditAndClose(
+        public RedirectResult EditAndClose(
                                     Case case_,
                                     CaseLog caseLog,
                                     CaseMailSetting caseMailSetting,
                                     bool? updateNotifierInformation,
-                                    string caseInvoiceArticles)
+                                    string caseInvoiceArticles,
+                                    string BackUrl)
         {
             this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation, caseInvoiceArticles);
-            return this.RedirectToAction("index", "cases", new { customerId = case_.Customer_Id });
+
+            return string.IsNullOrEmpty(BackUrl) ? this.Redirect(Url.Action("index", "cases", new { customerId = case_.Customer_Id })) : this.Redirect(BackUrl);
         }
 
         [HttpPost]
@@ -576,7 +578,7 @@ namespace DH.Helpdesk.Web.Controllers
             return this.RedirectToAction("new", "cases", new { customerId = case_.Customer_Id });
         }
 
-        public ActionResult Edit(int id, string redirectFrom = "", int? moveToCustomerId = null, bool? uni = null, bool updateState = true)
+        public ActionResult Edit(int id, string redirectFrom = "", int? moveToCustomerId = null, bool? uni = null, bool updateState = true, string backUrl = null)
         {
             CaseInputViewModel m = null;
 
@@ -596,7 +598,7 @@ namespace DH.Helpdesk.Web.Controllers
                 }
 
                 int customerId = moveToCustomerId.HasValue ? moveToCustomerId.Value : _caseService.GetCaseById(id).Customer_Id;
-                m = this.GetCaseInputViewModel(userId, customerId, id, lockedByUserId, redirectFrom, null, null, updateState);
+                m = this.GetCaseInputViewModel(userId, customerId, id, lockedByUserId, redirectFrom, backUrl, null, null, updateState);
                 if (uni.HasValue)
                 {
                     m.UpdateNotifierInformation = uni.Value;                    
@@ -1170,7 +1172,7 @@ namespace DH.Helpdesk.Web.Controllers
             return this.RedirectToAction("edit", "cases", new { id = id, redirectFrom = "save" });
         }
 
-        public RedirectToRouteResult Activate(int id)
+        public RedirectToRouteResult Activate(int id, string backUrl = null)
         {
             IDictionary<string, string> errors;
             string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
@@ -1178,7 +1180,7 @@ namespace DH.Helpdesk.Web.Controllers
                 if (SessionFacade.CurrentUser.ActivateCasePermission == 1)
                     this._caseService.Activate(id, SessionFacade.CurrentUser.Id, adUser, out errors);
 
-            return this.RedirectToAction("edit", "cases", new { id = id, redirectFrom = "save" });
+            return this.RedirectToAction("edit", "cases", new { id, redirectFrom = "save", backUrl });
         }
 
 
@@ -1446,6 +1448,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             searchResult.ShowRemainingTime = showRemainingTime;
             searchResult.RemainingTime = this.caseModelFactory.GetCaseRemainingTimeModel(remainingTime);
+            searchResult.BackUrl = Url.Action("RelatedCasesFull", "Cases", new { area = string.Empty, caseId = relatedCasesCaseId, userId = relatedCasesUserId });
             SessionFacade.CurrentCaseSearch = search;
 
             return searchResult;
@@ -1833,10 +1836,13 @@ namespace DH.Helpdesk.Web.Controllers
         /// The <see cref="CaseInputViewModel"/>.
         /// </returns>
         private CaseInputViewModel GetCaseInputViewModel(int userId, int customerId, int caseId, int lockedByUserId = 0, 
-                                                         string redirectFrom = "", int? templateId = null, 
+                                                         string redirectFrom = "", 
+                                                         string backUrl = null,
+                                                         int? templateId = null, 
                                                          int? copyFromCaseId = null, bool updateState = true, int? templateistrue = 0)
         {
             var m = new CaseInputViewModel();
+            m.BackUrl = backUrl;
             SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
             var acccessToGroups = this._userService.GetWorkinggroupsForUserAndCustomer(SessionFacade.CurrentUser.Id, customerId);
             var deps = this._departmentService.GetDepartmentsByUserPermissions(userId, customerId);

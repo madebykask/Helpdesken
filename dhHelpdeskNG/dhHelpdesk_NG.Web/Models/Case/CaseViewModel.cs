@@ -114,6 +114,7 @@
 
         public string CaseTemplateName { get; set; }
 
+        public string BackUrl { get; set; }
     }
 
     public class CaseIndexViewModel
@@ -134,6 +135,8 @@
         public bool ShowRemainingTime { get; set; }
 
         public CaseRemainingTimeViewModel RemainingTime { get; set; }
+
+        public string BackUrl { get; set; }
     }
 
     public class NewCaseParams

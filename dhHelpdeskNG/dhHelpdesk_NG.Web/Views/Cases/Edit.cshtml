@@ -199,6 +199,7 @@
 {
     using (Html.BeginForm("edit", "cases", null, FormMethod.Post, new { id = "target" }))
     {    
+        @Html.HiddenFor(m => m.BackUrl) 
     <div class="secnavs fixed">
         <div class="pull-left">
             <ul class="secnav">
@@ -219,7 +220,14 @@
                                 })</li>
                     }
                 }
-                <li>@Html.ActionLink(Translation.Get("Stäng", Enums.TranslationSource.TextTranslation), "Index", new { customerId = @Model.case_.Customer_Id }, new { @class = "btn", id = "case-action-close" })</li>
+                @if (string.IsNullOrEmpty(Model.BackUrl))
+                {
+                    <li>@Html.ActionLink(Translation.Get("Stäng", Enums.TranslationSource.TextTranslation), "Index", new { customerId = @Model.case_.Customer_Id }, new { @class = "btn", id = "case-action-close" })</li>
+                }
+                else
+                {
+                    <li><a id="case-action-close" class = "btn" href="@Model.BackUrl">@Translation.Get("Stäng")</a></li>
+                }
 
                 @if (Model.EditMode == Enums.AccessMode.FullAccess)
                 {
@@ -236,8 +244,8 @@
                                     </a>
                                 </li>
                                 @if (SessionFacade.CurrentUser.ActivateCasePermission == 1 && Model.case_.FinishingDate.HasValue)
-                                {                                
-                                    <li><a href="/cases/activate/@Model.case_.Id">@Translation.Get("Aktivera", Enums.TranslationSource.TextTranslation)</a></li>
+                                {   
+                                    <li>@Html.ActionLink(Translation.Get("Aktivera"), "Activate", "Cases", new { id = Model.case_.Id, backUrl = Model.BackUrl }, new { @class="btn" })</li>                             
                                 }
 
                                 @if (SessionFacade.CurrentUser.MoveCasePermission == 1)
@@ -323,7 +331,7 @@
 
                     if (SessionFacade.CurrentUser.ActivateCasePermission == 1 && Model.case_.FinishingDate.HasValue)
                     {                                
-                    <li><a class="btn" href="/cases/activate/@Model.case_.Id">@Translation.Get("Aktivera", Enums.TranslationSource.TextTranslation)</a></li>
+                        <li>@Html.ActionLink(Translation.Get("Aktivera"), "Activate", "Cases", new { id = Model.case_.Id, backUrl = Model.BackUrl }, new { @class="btn" })</li>                             
                     }
 
                 }

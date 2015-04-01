@@ -33,7 +33,7 @@
                 <tr title="@r.Tooltip" class="@r.IsUnread.GetClassForCaseRowTr(@r.IsUrgent)">
                     <!--fasta kolumner -->
                     <td>
-                        <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">
+                        <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id, backUrl = Model.BackUrl })">
                             <img title="@r.CaseIcon.CaseIconTitle()" alt="@r.CaseIcon.CaseIconTitle()" src="@Url.Content("~/Content/icons/" + r.CaseIcon.CaseIconSrc())" />   
                         </a>
                     </td>
@@ -41,7 +41,7 @@
                     @foreach (var c in r.Columns)
                     {       
                         <td>
-                            <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">
+                            <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id, backUrl = Model.BackUrl })">
                             @if (c.FieldType == CasesFieldsTypes.FieldTypes.Date)
                             {
                                 <!-- date -->
