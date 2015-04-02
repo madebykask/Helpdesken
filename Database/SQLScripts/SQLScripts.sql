@@ -9,5 +9,12 @@ If not exists (select * from tblTextType where Id = 1)
 	insert into tblTextType (Id, TextType, Status) VALUES (1, 'Grunddata', 1)
 GO
 
+IF COL_LENGTH('dbo.tblGlobalSettings','HelpdeskDBVersion') IS NULL
+BEGIN	 
+	ALTER TABLE [dbo].[tblGlobalSettings]
+	ADD [HelpdeskDBVersion] nvarchar(20) NULL 
+END
+GO 
+
 -- Last Line to update database version
-UPDATE tblGlobalSettings SET DBVersion = '5.3.5'
+UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.5'

@@ -167,4 +167,11 @@ BEGIN
 END
 go
 
-UPDATE tblGlobalSettings SET DBVersion = '5.3.4'
+IF COL_LENGTH('dbo.tblGlobalSettings','HelpdeskDBVersion') IS NULL
+BEGIN	 
+	ALTER TABLE [dbo].[tblGlobalSettings]
+	ADD [HelpdeskDBVersion] nvarchar(20) NULL 
+END
+GO 
+
+UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.4'
