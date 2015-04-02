@@ -211,6 +211,9 @@
 
             bundles.Add(new ScriptBundle("~/bundles/admin/users").Include(
                             "~/Areas/Admin/Content/js/Users/user.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/cases/relatedCases").Include(
+                            "~/Content/js/Cases/relatedCases.logic.js"));
         }
     }
 }
