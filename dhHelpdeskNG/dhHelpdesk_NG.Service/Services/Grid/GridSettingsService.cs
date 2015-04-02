@@ -188,6 +188,7 @@
 
                 uow.Save();
             }
+
             this.caseSettingsService.SyncSettings(inputModel.columnDefs.MapToCaseOverviewSettings(), customerId, userId, userGroupId);
         }
 

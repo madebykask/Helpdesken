@@ -114,11 +114,8 @@
         public int? templateistrue { get; set; }
 
         public string CaseTemplateName { get; set; }
-<<<<<<< HEAD
 
         public string BackUrl { get; set; }
-=======
->>>>>>> [ADD] #10574 activity loading bar
     }
 
     public class CaseIndexViewModel

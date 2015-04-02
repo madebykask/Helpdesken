@@ -363,57 +363,6 @@ function unsetSearchFilter() {
     // @TODO: InitiatorName
 }
 
-
-function search(sortBy, sortByAsc) {
-
-    // http://redmine.fastdev.se/issues/11257
-    var relatedCasesCaseId = $('#relatedCasesCaseId');
-    var relatedCasesUserId = $('#relatedCasesUserId');
-    if (relatedCasesCaseId.length > 0) {
-        $.get('/Cases/RelatedCasesFullContent?caseId=' + relatedCasesCaseId.val() +
-                        '&userId=' + relatedCasesUserId.val() +
-                        '&sortBy=' + sortBy +
-                        '&sortByAsc=' + sortByAsc, function (result) {
-            $('#search_result').html(result);
-        })
-        .always(function () {
-            $(document).trigger("OnCasesLoaded");
-        });
-
-        return;
-    }
-
-    var searchStr = $('#txtFreeTextSearch').val();
-    if (searchStr.length > 0 && searchStr[0] === "#") {
-        /// if looking by case number - set case state filter to "All"
-        $('#lstfilterCaseProgress').val(-1);
-        /// and reset search filter
-        unsetSearchFilter();
-    }
-    $.post('/Cases/Search/', $("#frmCaseSearch").serialize(), function (result) {
-        $('#search_result').html(result);
-    })
-    .always(function () {
-        $(document).trigger("OnCasesLoaded");
-    });;
-}
-
-function sortCases(sortBy) {
-    var asc = $("#hidSortByAsc").val();
-    var selected = $("#hidSortBy").val();
-
-    if (sortBy == selected) {
-        asc = asc.toLowerCase().match('true') ? 'false' : 'true';
-    }
-    else {
-        asc = 'true';
-    }
-
-    $("#hidSortBy").val(sortBy);
-    $("#hidSortByAsc").val(asc);
-    search(sortBy, asc);
-}
-
 // visa filter ikon på case/ärende sök
 function setFilterIcon() {
     $('#icoFilter').hide();

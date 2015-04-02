@@ -46,7 +46,7 @@
                                           UserId = userId,
                                           AvailableColumns =
                                               this.caseSettingService
-                                              .GetAvailableCaseOverviewGridColumnSettings(customerId),
+                                              .GetAvailableCaseOverviewGridColumnSettings(customerId).OrderBy(it => Translation.Get(it.Name, Enums.TranslationSource.CaseTranslation, customerId)),
                                           SelectedColumns =
                                               this.caseSettingService
                                               .GetSelectedCaseOverviewGridColumnSettings(

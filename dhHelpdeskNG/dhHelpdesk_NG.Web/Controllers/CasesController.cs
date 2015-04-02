@@ -426,7 +426,6 @@ namespace DH.Helpdesk.Web.Controllers
             return this.Json(new { result = "success", data = data });
         }
 
-                    
         private CaseSearchFilterData CreateCaseSearchFilterData(int cusId, int userId, bool clearFilters, CustomerUser cu, CaseSearchModel sm)
         {
             var fd = new CaseSearchFilterData
@@ -1536,6 +1535,7 @@ namespace DH.Helpdesk.Web.Controllers
                 SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentUser.Id,
                 SessionFacade.CurrentUser.UserGroupId);
+            SessionFacade.CaseOverviewGridSettings = null;
         }
 
 
