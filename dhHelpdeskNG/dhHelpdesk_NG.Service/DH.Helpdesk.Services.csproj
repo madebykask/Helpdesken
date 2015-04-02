@@ -149,6 +149,7 @@
     <Compile Include="BusinessLogic\Mappers\Department\DepartmentMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Documents\DocumentMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Faqs\FaqMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\Grid\CaseOverviewToGridColumnDefMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Inventory\ServerOverviewMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Licenses\ApplicationMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Licenses\ComputerMapper.cs" />

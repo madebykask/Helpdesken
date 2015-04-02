@@ -1,4 +1,300 @@
-﻿"use strict";
+﻿"use strsict";
+
+var GRID_STATE = {
+    IDLE: 0,
+    LOADING: 1
+};
+
+(function($) {
+    /// message types
+    var ERROR_MSG_TYPE = 0;
+    var LOADING_MSG_TYPE = 1;
+    var NODATA_MSG_TYPE = 2;
+    
+    var SORT_ASC = 0;
+    var SORT_DESC = 1;
+    var JOINER = '';
+
+    function strJoin() {
+        return Array.prototype.join.call(arguments, JOINER);
+    }
+
+    function getClsForSortDir(sortDir) {
+        if (sortDir === SORT_ASC) {
+            return "icon-chevron-up";
+        }
+        if (sortDir === SORT_DESC) {
+            return "icon-chevron-down";
+        }
+        return '';
+    }
+
+    function Page() {};
+
+    Page.prototype.init = function(gridInitSettings) {
+        var me = this;
+        //// Bind elements
+        me.$table = $('.table-cases');
+        me.$tableHeader = $('table.table-cases thead');
+        me.$tableBody = $('.table-cases tbody');
+        me.$tableLoaderMsg = ' div.loading-msg';
+        me.$tableNoDataMsg = ' div.no-data-msg';
+        me.$tableErrorMsg = ' div.error-msg';
+        me.$buttonsToDisableWhenGridLoads = $('ul.secnav a.btn, ul.secnav div.btn-group button, ul.secnav input[type=button], #btnSearch, #btnClearFilter');
+        me.$searchField = '#txtFreeTextSearch';
+        me.$filterForm = $('#frmCaseSearch');
+        me.$caseFilterType = '#lstfilterCaseProgress';
+        //// Bind events
+        $('#btnSearch, a.refresh-grid').on('click', function (ev) {
+            ev.preventDefault();
+            if (me._gridState !== window.GRID_STATE.IDLE) {
+                return false;
+            }
+            setFilterIcon();
+            me.onSearchClick.apply(me);
+            return false;
+        });
+        /////// moved from _Search.cshtml
+        $("#btnClearFilter").click(function () {
+            if (me.getGridState() !== window.GRID_STATE.IDLE) {
+                return false;
+            }
+            window.location.href = '/Cases/Index/?clearFilters=True';
+            return false;
+        });
+
+        $("#btnMore").click(function (e) {
+            e.preventDefault();
+            $("#hiddeninfo").toggle();
+            if ($("#icoPlus").hasClass('icon-minus-sign')) {
+                $("#icoPlus").removeClass('icon-minus-sign').addClass('icon-plus-sign');
+            }
+            else {
+                $("#icoPlus").removeClass('icon-plus-sign').addClass('icon-minus-sign');
+            }
+        });
+
+        $('#txtFreeTextSearch').keydown(function (e) {
+            if (e.keyCode == 13) {
+                $("#btnSearch").click();
+            }
+        });
+
+        $('ul.secnav #btnNewCase a.btn').on('click', function(ev) {
+            if (window.app.getGridState() === window.GRID_STATE.LOADING) {
+                ev.preventDefault();
+                return false;
+            }
+            return true;
+        });
+
+        me.setGridState(window.GRID_STATE.IDLE);
+        me.setGridSettings(gridInitSettings);
+        me.fetchData();
+    };
+
+    Page.prototype.onGridRowClick = function(caseId) {
+        var me = this;
+        window.location.href = '/Cases/Edit/' + caseId;
+    };
+
+    Page.prototype.setGridState = function(gridStateId) {
+        var me = this;
+        me._gridState = gridStateId;
+        if (gridStateId == window.GRID_STATE.IDLE) {
+            me.$buttonsToDisableWhenGridLoads.removeClass('disabled');
+        } else {
+            me.$buttonsToDisableWhenGridLoads.addClass('disabled');
+        }
+    };
+
+    Page.prototype.getGridState = function() {
+        return this._gridState;
+    };
+
+    /**
+    * @param { {String: id, String: displayName } gridSettings
+    */
+    Page.prototype.setGridSettings = function(gridSettings) {
+        var me = this;
+        var out = ['<tr><th style="width:18px;"></th>'];
+        var sortCallback = function () {
+            me.setSortField.call(me, $(this).attr('fieldname'), $(this));
+        };
+        me.gridSettings = gridSettings;
+        me.visibleFieldsCount = 1; //// we have at least one column with icon
+        $.each(me.gridSettings.columnDefs, function (idx, fieldSetting) {
+            var sortCls = '';
+            if (!fieldSetting.isHidden) {
+                me.visibleFieldsCount += 1;
+                if (me.gridSettings.sortOptions != null && fieldSetting.field === me.gridSettings.sortOptions.sortBy) {
+                    sortCls = getClsForSortDir(me.gridSettings.sortOptions.sortDir);
+                }
+                out.push(strJoin('<th class="thpointer ', fieldSetting.field, ' ', fieldSetting.cls, '" fieldname="', fieldSetting.field, '">', fieldSetting.displayName, '<i class="', sortCls, '"></i>'));
+            }
+        });
+        out.push('</tr>');
+        me.$table.addClass(me.gridSettings.cls);
+        me.$tableHeader.html(out.join(JOINER));
+        me.$tableHeader.find('th.thpointer').on('click', sortCallback);
+    };
+
+    Page.prototype.setSortField = function(fieldName, $el) {
+        var me = this;
+        var oldEl;
+        var sortOpt = me.gridSettings.sortOptions;
+        var oldCls = getClsForSortDir(sortOpt.sortDir);
+        if (window.app.getGridState() === window.GRID_STATE.LOADING) {
+            return false;
+        }
+        if (sortOpt.sortBy === fieldName) {
+            sortOpt.sortDir = (sortOpt.sortDir == SORT_ASC) ? SORT_DESC : SORT_ASC;
+            oldEl = $el;
+        } else {
+            oldEl = $(me.$table).find('thead [fieldname="' + sortOpt.sortBy + '"]');
+            sortOpt.sortBy = fieldName;
+            sortOpt.sortDir = SORT_DESC;
+        }
+        if (oldEl.length > 0) {
+            $(oldEl).find('i').removeClass(oldCls);
+        }
+        $($el).find('i').addClass(getClsForSortDir(sortOpt.sortDir));
+        me.fetchData();
+    },
+
+    Page.prototype.showMsg = function(msgType) {
+        var me = this;
+        me.hideMessage();
+        if (msgType === LOADING_MSG_TYPE) {
+            $(me.$tableLoaderMsg).show();
+            return;
+        }
+        if (msgType === ERROR_MSG_TYPE) {
+            $(me.$tableBody).html('');
+            $(me.$tableErrorMsg).show();
+            return;
+        }
+        if (msgType === NODATA_MSG_TYPE) {
+            $(me.$tableBody).html('');
+            $(me.$tableNoDataMsg).show();
+            return;
+        }
+        console.warn('not implemented');
+    };
+
+    Page.prototype.hideMessage = function () {
+        var me = this;
+        $(me.$tableLoaderMsg).hide();
+        $(me.$tableErrorMsg).hide();
+        $(me.$tableNoDataMsg).hide();
+    };
+
+    Page.prototype.getClsRow = function(record) {
+        var res = [];
+        if (record.isUnread) {
+            res.push('textbold');
+        }
+        if (record.isUrgent) {
+            res.push('textred');
+        }
+        return res.join(' ');
+    };
+
+    Page.prototype.formatCell = function (caseId, cellValue) {
+        var out = [strJoin('<td>')];
+        out.push(cellValue == null ? '' : cellValue);
+        out.push('</td>');
+        return out.join(JOINER);
+    };
+
+    Page.prototype.loadData = function(data) {
+        var me = this;
+        var out = [];
+        
+        if (data && data.length > 0) {
+            me.hideMessage();
+            $.each(data, function (idx, record) {
+                var firstCell = strJoin('<td><img title="', record.caseIconTitle, '" alt="', record.caseIconTitle, '" src="', record.caseIconUrl, '" /></td>');
+                var rowOut = [strJoin('<tr class="', me.getClsRow(record), '" caseid="', record.case_id, '">'), firstCell];
+                $.each(me.gridSettings.columnDefs, function (idx, columnSettings) {
+                    if (!columnSettings.isHidden) {
+                        if (record[columnSettings.field] == null) {
+                            rowOut.push(me.formatCell(record.case_id, ''));
+                            if (Page.isDebug) 
+                                console.warn('could not find field "' + columnSettings.field + '" in record');
+                        } else {
+                            rowOut.push(me.formatCell(record.case_id, record[columnSettings.field]));
+                        }
+                    }
+                });
+                rowOut.push('</tr>');
+                out.push(rowOut.join(JOINER));
+            });
+            me.$tableBody.html(out.join(JOINER));
+            me.$tableBody.find('tr').on('click', function (ev) {
+                me.onGridRowClick.call(me, $(this).attr('caseid'));
+            });
+        } else {
+            me.showMsg(NODATA_MSG_TYPE);
+        }
+        me.setGridState(window.GRID_STATE.IDLE);
+        $(document).trigger("OnCasesLoaded");
+    };
+
+    Page.prototype.onSearchClick = function () {
+        var me = this;
+        var searchStr = $(me.$searchField).val();
+        if (searchStr.length > 0 && searchStr[0] === "#") {
+            /// if looking by case number - set case state filter to "All"
+            $(me.$caseFilterType).val(-1);
+            /// and reset search filter
+            unsetSearchFilter();
+        }
+        me.fetchData();
+    };
+
+    Page.prototype.onGetData = function (response) {
+        var me = this;
+        if (response && response.result === 'success' && response.data) {
+            me.loadData(response.data);
+        } else {
+            me.showMsg(ERROR_MSG_TYPE);
+            me.setGridState(window.GRID_STATE.IDLE);
+        }
+    };
+
+    Page.prototype.fetchData = function() {
+        var me = this;
+        var fetchParams = me.$filterForm.serializeArray();
+        fetchParams.push({ name: 'sortBy', value: me.gridSettings.sortOptions.sortBy },
+            { name: 'sortDir', value: me.gridSettings.sortOptions.sortDir },
+            { name: 'pageIndex', value: me.gridSettings.pageOptions.pageIndex },
+            { name: 'recPerPage', value: me.gridSettings.pageOptions.recPerPage });
+        me.setGridState(window.GRID_STATE.LOADING);
+        me.showMsg(LOADING_MSG_TYPE);
+        $.ajax('/Cases/SearchAjax', {
+            type: 'POST',
+            dataType: 'json',
+            data: fetchParams,
+            success: function() {
+                me.onGetData.apply(me, arguments);
+            },
+            error: function() {
+                me.showMsg(ERROR_MSG_TYPE);
+                me.setGridState(window.GRID_STATE.IDLE);
+            }
+        });
+    };
+   
+    window.app = new Page();
+    $(document).ready(function() {
+        app.init.call(window.app, window.gridSettings);
+    });
+    $(function () {
+        setFilterIcon();
+    });
+})($);
+
 
 $('#divCaseType ul.dropdown-menu li a').click(function (e) {
     e.preventDefault();
@@ -22,11 +318,7 @@ $('#divClosingReason ul.dropdown-menu li a').click(function (e) {
     $("#hidFilterClosingReasonId").val(val);
 });
 
-$('#btnSearch').click(function (e) {
-    e.preventDefault();
-    search();
-    setFilterIcon();
-});
+
 
 $('#SettingTab').click(function (e) {
     $('#btnSaveCaseSetting').show();
@@ -139,10 +431,6 @@ function setFilterIcon() {
         $('#icoFilter').show();
     }
 }
-
-$(function () {
-    setFilterIcon();
-});
 
 window.onload = function () {
     $('#btnNewCase').show();

@@ -13,8 +13,6 @@
                     <tr>
                         <td class="span3">
                             <input type="hidden" value="@Model.filterCustomerId" id="hidFilterCustomer_Id" name="hidFilterCustomerId" />                             
-                            <input type="hidden" value="@SessionFacade.CurrentCaseSearch.Search.SortBy" id="hidSortBy" name="hidSortBy" />
-                            <input type="hidden" value="@SessionFacade.CurrentCaseSearch.Search.Ascending" id="hidSortByAsc" name="hidSortByAsc" />
                         </td>
                         <td class="span4">
                         </td>
@@ -415,28 +413,5 @@
             $("#icoPlus").removeClass('icon-plus-sign').addClass('icon-minus-sign');
             $("#icoFilter").addClass('icon-filter');                        
         }
-        
-
-        $("#btnClearFilter").click(function() {
-            window.location.href = '@Url.Action("Index", "Cases", new { customerId = Model.customer != null ? Model.customer.Id : (int?)null, clearFilters = true })';
-            return false;
-        });
-
-        $("#btnMore").click(function (e) {
-            e.preventDefault();
-            $("#hiddeninfo").toggle();
-            if ($("#icoPlus").hasClass('icon-minus-sign')) {
-                $("#icoPlus").removeClass('icon-minus-sign').addClass('icon-plus-sign');
-            }
-            else {
-                $("#icoPlus").removeClass('icon-plus-sign').addClass('icon-minus-sign');
-            }
-        });
-
-        $('#txtFreeTextSearch').keydown(function (e) {
-            if (e.keyCode == 13) {
-                $("#btnSearch").click();
-            }
-        });
     });
 </script>

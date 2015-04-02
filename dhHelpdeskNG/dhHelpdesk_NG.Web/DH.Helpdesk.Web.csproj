@@ -15,7 +15,7 @@
     <AssemblyName>DH.Helpdesk.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <SccProjectName>
     </SccProjectName>
     <SccLocalPath>
@@ -1616,6 +1616,7 @@
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\ComputerBuilder.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\ServerBulider.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\PrinterBuilder.cs" />
+    <Compile Include="Infrastructure\CaseOverview\OutputFormatter.cs" />
     <Compile Include="Infrastructure\Configuration\Concrete\ApplicationConfiguration.cs" />
     <Compile Include="Infrastructure\ActionFilters\BadRequestOnNotValidAttribute.cs" />
     <Compile Include="Infrastructure\Configuration\Concrete\Configuration.cs" />
@@ -1681,6 +1682,8 @@
     <Compile Include="Infrastructure\Filters\Problems\ProblemFilter.cs" />
     <Compile Include="Infrastructure\Filters\Projects\ProjectFilter.cs" />
     <Compile Include="Infrastructure\Filters\Reports\ReportsFilter.cs" />
+    <Compile Include="Infrastructure\Grid\JsonGridSettingsMapper.cs" />
+    <Compile Include="Infrastructure\Grid\Output\JsonGridSettingsModel.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\LocalizedMaxSizeFromAttribute.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\Rules\ModelClientValidationMaxSizeFromRule.cs" />
     <Compile Include="Infrastructure\Logger\ErrorContext.cs" />
@@ -1723,7 +1726,7 @@
     <Compile Include="Infrastructure\Print\PrintPdfEvents.cs" />
     <Compile Include="Infrastructure\Print\PrintPdfResult.cs" />
     <Compile Include="Infrastructure\Print\PrintPdfView.cs" />
-    <Compile Include="Infrastructure\Services\Case\CaseOverviewGridSettingsService.cs" />
+    <Compile Include="Infrastructure\CaseOverview\CaseOverviewGridSettingsService.cs" />
     <Compile Include="Infrastructure\Tools\Concrete\InvoiceHelper.cs" />
     <Compile Include="Infrastructure\Tools\Concrete\RouteResolver.cs" />
     <Compile Include="Infrastructure\Tools\DateTimeHelper.cs" />
@@ -2863,6 +2866,7 @@
     <Content Include="Views\Cases\CaseRemainingTime.cshtml" />
     <Content Include="Views\Notifiers\OrganizationUnitDropDown.cshtml" />
     <Content Include="Views\Cases\RelatedCasesFull.cshtml" />
+    <Content Include="Views\Cases\IndexAjax.cshtml" />
     <Content Include="Views\Cases\RelatedCasesFullContent.cshtml" />
   </ItemGroup>
   <ItemGroup>

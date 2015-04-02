@@ -1,6 +1,10 @@
 ﻿namespace DH.Helpdesk.Domain.Grid
 {
-    public class GridSettingsEntity: Entity
+    /// <summary>
+    /// Table for storing column settings.
+    /// 
+    /// </summary>
+    public class GridSettingsEntity : Entity
     {
         public int CustomerId { get; set; }
 
@@ -10,6 +14,11 @@
         /// ID of the grid, for ex. case_overview
         /// </summary>
         public string GridId { get; set; }
+
+        /// <summary>
+        /// ID of the field from DH.Helpdesk.BusionessData.Models.Grid.GridColumnsDefinition
+        /// </summary>
+        public int? FieldId { get; set; }
 
         /// <summary>
         /// Name of the paramter, ex. limit

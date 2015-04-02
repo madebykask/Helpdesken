@@ -1,4 +1,16 @@
 -- update DB from 5.3.4.XX to 5.3.5.xx version
+IF COL_LENGTH('dbo.UserGridSettings','FieldId') IS NULL
+BEGIN	 
+	ALTER TABLE [dbo].[UserGridSettings]
+	ADD [FieldId] int default(NULL)
+
+	/****** Object:  Index [IDX_UserSettings(FieldId)]    Script Date: 31.03.2015 14:15:20 ******/
+  CREATE NONCLUSTERED INDEX [IDX_UserSettings(FieldId)] ON [dbo].[UserGridSettings]
+  (
+    [FieldId] ASC
+  )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+END
+GO 
 
 -- Add new values to tblTextType - Nina
 If not exists (select * from tblTextType where Id = 0)

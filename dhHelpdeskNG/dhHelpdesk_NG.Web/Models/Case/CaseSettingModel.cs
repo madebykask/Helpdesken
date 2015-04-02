@@ -14,6 +14,8 @@
     /// </summary>
     public class CaseColumnsSettingsModel
     {
+        #region Static fields
+
         public static IEnumerable<SelectListItem> FieldStyles
         {
             get
@@ -81,6 +83,8 @@
                            };
             }
         }
+
+        #endregion
 
         public int CustomerId { get; set; }
 

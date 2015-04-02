@@ -20,6 +20,9 @@ $(document).ready(function () {
     //// bind event handlers 
     $('#btnSaveCaseSetting').click(function (e) {
         e.preventDefault();
+        if (window.app.getGridState() !== GRID_STATE.IDLE) {
+            return false;
+        }
         $.post('/Cases/SaveSetting/', $("#frmCaseSetting").serialize(), function () {
             /// due to strange work with lists[] in .NET we have to send a bit different structure
             var formData = {

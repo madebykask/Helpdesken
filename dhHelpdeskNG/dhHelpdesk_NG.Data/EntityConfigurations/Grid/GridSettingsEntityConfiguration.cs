@@ -12,8 +12,10 @@
             this.Property(x => x.CustomerId).IsRequired();
             this.Property(x => x.UserId).IsRequired();
             this.Property(x => x.GridId).IsRequired();
+            this.Property(x => x.FieldId).IsOptional();
             this.Property(x => x.Parameter).IsRequired();
             this.Property(x => x.Value).IsRequired();
+            
 
             this.ToTable("UserGridSettings");
         }

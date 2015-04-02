@@ -5,13 +5,14 @@
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models.Customer;
+    using DH.Helpdesk.BusinessData.Models.Grid;
     using DH.Helpdesk.BusinessData.Models.Language.Output;
     using DH.Helpdesk.BusinessData.Models.Logs.Output;
     using DH.Helpdesk.BusinessData.Models.Problem.Output;
     using DH.Helpdesk.BusinessData.Models.Projects.Output;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Changes;
-    using DH.Helpdesk.Web.Areas.Admin.Controllers;
+    using DH.Helpdesk.Web.Infrastructure.Grid.Output;
     using DH.Helpdesk.Web.Models.Invoice;
     using DH.Helpdesk.Web.Models.Shared;
 
@@ -113,8 +114,11 @@
         public int? templateistrue { get; set; }
 
         public string CaseTemplateName { get; set; }
+<<<<<<< HEAD
 
         public string BackUrl { get; set; }
+=======
+>>>>>>> [ADD] #10574 activity loading bar
     }
 
     public class CaseIndexViewModel
@@ -126,10 +130,22 @@
         public CaseSettingModel CaseSetting { get; set; }
     }
 
+    public class JsonCaseIndexViewModel
+    {
+        public CaseSearchFilterData CaseSearchFilterData { get; set; }
+
+        public CaseTemplateTreeModel CaseTemplateTreeButton { get; set; }
+
+        public CaseSettingModel CaseSetting { get; set; }
+
+        public JsonGridSettingsModel GridSettings { get; set; }
+    }
+
     public class CaseSearchResultModel
     {
         public CaseColumnsSettingsModel GridSettings { get; set; }
         public IList<CaseSettings> caseSettings { get; set; }
+
         public IList<CaseSearchResult> cases { get; set; }
 
         public bool ShowRemainingTime { get; set; }

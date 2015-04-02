@@ -678,7 +678,7 @@
 
             // ORDER BY ...
             var orderBy = new List<string> { "order by" };
-            string sort = s != null ? s.SortBy.Replace("_temporary_.", string.Empty) : string.Empty;
+            string sort = (s != null && !string.IsNullOrEmpty(s.SortBy)) ? s.SortBy.Replace("_temporary_.", string.Empty) : string.Empty;
             if (string.IsNullOrEmpty(sort))
             {
                 orderBy.Add(" CaseNumber ");
