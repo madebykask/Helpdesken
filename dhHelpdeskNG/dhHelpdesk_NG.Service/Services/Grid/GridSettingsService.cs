@@ -114,13 +114,9 @@
             switch (gridId)
             {
                 case CASE_OVERVIEW_GRID_ID:
-                    var name2IdMap =
-                        GridColumnsDefinition.CaseOverviewColumnsDictionary.ToDictionary(
-                            kv => kv.Value,
-                            kv => kv.Key);
                     return
                         this.caseSettingsService.GetAvailableCaseOverviewGridColumnSettings(customerId)
-                            .Select(it => new GridColumnDef { id = name2IdMap[it.Name], name = it.Name, cls = string.Empty })
+                            .Select(it => new GridColumnDef { id = GridColumnsDefinition.GetFieldId(it.Name), name = it.Name, cls = string.Empty })
                             .ToList();
                 default:
                     throw new NotImplementedException(string.Format("GetAvailableColumnNames() is not implmented for supplyed grid_ID {0}", gridId));

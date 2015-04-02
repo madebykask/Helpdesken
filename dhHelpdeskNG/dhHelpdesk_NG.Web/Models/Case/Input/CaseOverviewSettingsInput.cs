@@ -20,9 +20,6 @@
 
         internal GridSettingsModel MapToGridSettingsModel()
         {
-            var name2IdMap = GridColumnsDefinition.CaseOverviewColumnsDictionary.ToDictionary(
-                kv => kv.Value,
-                kv => kv.Key);
             var res = new GridSettingsModel
                           {
                               cls = this.SelectedFontStyle,
@@ -31,7 +28,7 @@
                                       it =>
                                       new GridColumnDef
                                           {
-                                              id = name2IdMap[it.ColumnName],
+                                              id = GridColumnsDefinition.GetFieldId(it.ColumnName),
                                               name = it.ColumnName,
                                               cls = it.Style
                                           }).ToList()

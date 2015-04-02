@@ -17,10 +17,9 @@
         /// <returns></returns>
         public static List<GridColumnDef> MapToColumnDefinitions(this IQueryable<GridSettingsEntity> columnSettions, CaseOverviewGridColumnSetting[] caseOverviewSettings)
         {
-            var name2IdMap = GridColumnsDefinition.CaseOverviewColumnsDictionary.ToDictionary(kv => kv.Value, kv => kv.Key);
             return
                 caseOverviewSettings.Select(
-                    it => new GridColumnDef() { id = name2IdMap[it.Name], name = it.Name, cls = it.Style }).ToList();
+                    it => new GridColumnDef() { id = GridColumnsDefinition.GetFieldId(it.Name), name = it.Name, cls = it.Style }).ToList();
         }
 
         public static CaseOverviewGridColumnSetting[] MapToCaseOverviewSettings(

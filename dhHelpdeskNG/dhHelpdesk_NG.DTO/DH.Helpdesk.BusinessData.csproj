@@ -210,6 +210,7 @@
     <Compile Include="Models\Accounts\AccountSettings\Read\Processing\ProgramFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Processing\UserFieldSettings.cs" />
     <Compile Include="Models\Grid\CaseOverviewColumnDefinition.cs" />
+    <Compile Include="Models\Grid\GridColumnDefinition.cs" />
     <Compile Include="Models\Grid\GridSettingsModel.cs" />
     <Compile Include="Models\Invoice\CaseInvoiceOrderFile.cs" />
     <Compile Include="Models\Licenses\Computers\ComputerOverview.cs" />
