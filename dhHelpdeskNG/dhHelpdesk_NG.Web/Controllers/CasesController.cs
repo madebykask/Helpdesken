@@ -278,6 +278,12 @@ namespace DH.Helpdesk.Web.Controllers
             m.CaseSearchFilterData = this.CreateCaseSearchFilterData(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser.Id, clearFilters.HasValue && clearFilters.Value, customerUser, caseSearchModel);
             m.CaseTemplateTreeButton = this.GetCaseTemplateTreeModel(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser.Id);
             m.CaseSetting = this.GetCaseSettingModel(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser.Id);
+
+            //Set refreshcontent
+            User user = new User();
+            user = _userService.GetUser(SessionFacade.CurrentUser.Id);
+            m.CaseSetting.RefreshContent = user.RefreshContent;
+
             return this.View("IndexAjax", m);
         }
 
@@ -812,6 +818,8 @@ namespace DH.Helpdesk.Web.Controllers
                 }
 
                 int customerId = moveToCustomerId.HasValue ? moveToCustomerId.Value : _caseService.GetCaseById(id).Customer_Id;
+
+
                 m = this.GetCaseInputViewModel(userId, customerId, id, lockedByUserId, redirectFrom, backUrl, null, null, updateState);
                 if (uni.HasValue)
                 {
