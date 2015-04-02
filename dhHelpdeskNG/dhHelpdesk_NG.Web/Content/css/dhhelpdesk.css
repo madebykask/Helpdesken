@@ -1677,7 +1677,7 @@ table th.thpointer {
 
     .loading-msg,
     .no-data-msg,
-    .error-msg 
+    .error-msg
     {
         display: none;
         background-color: #f9f9f9;
@@ -1691,6 +1691,19 @@ table th.thpointer {
         position: absolute;
         color: gray;
         padding: 10px;
+    }
+    .nofields-msg {
+        border: 1px solid #dddddd;
+        display: none;
+        left: 0px;
+        right: 0px;
+        position: absolute;
+        color: gray;
+        padding: 10px;
+    }
+    #fragment-4 .nofields-msg {
+        display: block;
+        position: static;
     }
     .loading-msg 
     {
@@ -2906,6 +2919,8 @@ body.login {
 .container {
     margin-left: 0.5em;
 }
+#colsetting_result.container
+{ margin-left: 0px; }
 .ml15 {
     margin-left: 1.5em !important;
 }

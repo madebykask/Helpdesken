@@ -81,7 +81,7 @@ $(document).ready(function () {
             /// prevent to add duplicate columns
             return false;
         }
-        $('#dataTable').append(template.render(fieldInfo)).find('select[fieldid=' + fieldId + ']').val($('#newColStyle').val());
+        $('#dataTable').append(template.render(fieldInfo)).find('select[fieldid*="' + fieldId + '"]').val($('#newColStyle').val());
     });
 
     $('#dataTable').on('click', '.deleterow', function () {

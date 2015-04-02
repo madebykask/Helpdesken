@@ -2,7 +2,8 @@
 
 var GRID_STATE = {
     IDLE: 0,
-    LOADING: 1
+    LOADING: 1,
+    BAD_CONFIG: 2
 };
 
 (function($) {
@@ -10,6 +11,7 @@ var GRID_STATE = {
     var ERROR_MSG_TYPE = 0;
     var LOADING_MSG_TYPE = 1;
     var NODATA_MSG_TYPE = 2;
+    var BADCONFIG_MSG_TYPE = 3;
     
     var SORT_ASC = 0;
     var SORT_DESC = 1;
@@ -40,6 +42,7 @@ var GRID_STATE = {
         me.$tableLoaderMsg = ' div.loading-msg';
         me.$tableNoDataMsg = ' div.no-data-msg';
         me.$tableErrorMsg = ' div.error-msg';
+        me.$noFieldsMsg = $('#search_result div.nofields-msg');
         me.$buttonsToDisableWhenGridLoads = $('ul.secnav a.btn, ul.secnav div.btn-group button, ul.secnav input[type=button], #btnSearch, #btnClearFilter');
         me.$searchField = '#txtFreeTextSearch';
         me.$filterForm = $('#frmCaseSearch');
@@ -55,8 +58,9 @@ var GRID_STATE = {
             return false;
         });
         /////// moved from _Search.cshtml
-        $("#btnClearFilter").click(function () {
+        $("#btnClearFilter").click(function (ev) {
             if (me.getGridState() !== window.GRID_STATE.IDLE) {
+                ev.preventDefault();
                 return false;
             }
             window.location.href = '/Cases/Index/?clearFilters=True';
@@ -81,7 +85,7 @@ var GRID_STATE = {
         });
 
         $('ul.secnav #btnNewCase a.btn').on('click', function(ev) {
-            if (window.app.getGridState() === window.GRID_STATE.LOADING) {
+            if (window.app.getGridState() !== window.GRID_STATE.LOADING) {
                 ev.preventDefault();
                 return false;
             }
@@ -90,7 +94,6 @@ var GRID_STATE = {
 
         me.setGridState(window.GRID_STATE.IDLE);
         me.setGridSettings(gridInitSettings);
-        me.fetchData();
     };
 
     Page.prototype.onGridRowClick = function(caseId) {
@@ -122,6 +125,11 @@ var GRID_STATE = {
             me.setSortField.call(me, $(this).attr('fieldname'), $(this));
         };
         me.gridSettings = gridSettings;
+        if (me.gridSettings.columnDefs.length == 0) {
+            me.showMsg(BADCONFIG_MSG_TYPE);
+            me.setGridState(GRID_STATE.BAD_CONFIG);
+            return false;
+        }
         me.visibleFieldsCount = 1; //// we have at least one column with icon
         $.each(me.gridSettings.columnDefs, function (idx, fieldSetting) {
             var sortCls = '';
@@ -137,6 +145,7 @@ var GRID_STATE = {
         me.$table.addClass(me.gridSettings.cls);
         me.$tableHeader.html(out.join(JOINER));
         me.$tableHeader.find('th.thpointer').on('click', sortCallback);
+        me.fetchData();
     };
 
     Page.prototype.setSortField = function(fieldName, $el) {
@@ -177,6 +186,11 @@ var GRID_STATE = {
         if (msgType === NODATA_MSG_TYPE) {
             $(me.$tableBody).html('');
             $(me.$tableNoDataMsg).show();
+            return;
+        }
+        if (msgType === BADCONFIG_MSG_TYPE) {
+            me.$table.hide();
+            me.$noFieldsMsg.show();
             return;
         }
         console.warn('not implemented');

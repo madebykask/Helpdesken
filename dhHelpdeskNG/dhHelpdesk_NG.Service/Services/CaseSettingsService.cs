@@ -26,7 +26,9 @@
 
         IEnumerable<CaseOverviewGridColumnSetting> GetAvailableCaseOverviewGridColumnSettings(int customerId);
 
-        IEnumerable<CaseOverviewGridColumnSetting> GetSelectedCaseOverviewGridColumnSettings(int customerId, int userId);
+        IEnumerable<CaseOverviewGridColumnSetting> GetAvailableCaseOverviewGridColumnSettingsByUserGroup(int customerId, int userGroupId);
+
+        IEnumerable<CaseOverviewGridColumnSetting> GetSelectedCaseOverviewGridColumnSettings(int customerId, int userGroupId, int userId);
 
         CaseSettings GetCaseSetting(int id);
 
@@ -94,17 +96,33 @@
             customerEnabledFields.AddRange(CaseOverviewGridColumnSetting.GetDefaulVirtualFields());
             return customerEnabledFields;                   
         }
-        
+
+        /// <summary>
+        /// Returns ll available columns for case overview grid
+        /// </summary>
+        /// <param name="customerId"></param>
+        /// <param name="userGroupId"></param>
+        /// <returns></returns>
+        public IEnumerable<CaseOverviewGridColumnSetting> GetAvailableCaseOverviewGridColumnSettingsByUserGroup(int customerId, int userGroupId)
+        {
+            var customerEnabledFields =
+                this.GetCaseSettingsByUserGroup(customerId, userGroupId)
+                    .Where(it => !GridColumnsDefinition.NotAvailableField.Contains(it.Name))
+                    .Select(it => new CaseOverviewGridColumnSetting() { Name = it.Name }).ToList();            
+            return customerEnabledFields;
+        }
+
         /// <summary>
         /// Returns column settings for case overview table selected by user 
         /// </summary>
         /// <param name="customerId"></param>
+        /// <param name="userGroupId"></param>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public IEnumerable<CaseOverviewGridColumnSetting> GetSelectedCaseOverviewGridColumnSettings(int customerId, int userId)
+        public IEnumerable<CaseOverviewGridColumnSetting> GetSelectedCaseOverviewGridColumnSettings(int customerId, int userGroupId, int userId)
         {
             var res =
-                this.GetAvailableCaseOverviewGridColumnSettings(customerId)
+                this.GetAvailableCaseOverviewGridColumnSettingsByUserGroup(customerId, userGroupId)
                     .Join(
                         this.GetAvailableCaseSettings(customerId, userId),
                         colSetting => colSetting.Name,

@@ -1,91 +1,92 @@
 ﻿@using DH.Helpdesk.Web.Models.Case
 @model DH.Helpdesk.Web.Models.Case.CaseColumnsSettingsModel
-<form id="frmColCaseSetting" name="frmColCaseSetting">
-    <div class="tab-content">
-        <div class="tab-pane tab-pane-border active" id="fragment-1">                                   
-            <h4>@Translation.Get("Filter", Enums.TranslationSource.TextTranslation)  @Translation.Get("Ärendeöversikt", Enums.TranslationSource.TextTranslation) </h4>    
-            <div id="colsetting_result" class="row">
-                <div class="span100">                    
-                    @Translation.Get("Teckensnittsstorlek i tabell (ju mindre desto mer information kan visas på skärmen).", Enums.TranslationSource.TextTranslation)<br />
-                    @Html.DropDownListFor(x => x.SelectedFontStyle, CaseColumnsSettingsModel.FontStyles)
-                </div>             
-                <div class="span100">
-                    @Translation.Get("Välj den mest lämpliga bredden för de kolumner som du vill visa på ärendeöversikten (beroende på mängden information i varje kolumn).", Enums.TranslationSource.TextTranslation)
-                    <br />
-                    @Translation.Get("(Välj bred på högst 3 kolumner för bästa resultat).", Enums.TranslationSource.TextTranslation)                    
-                </div>       
-                <div class="span5">
-                    @Html.HiddenFor(m=> Model.CustomerId)                
-                    @Html.HiddenFor(m=> Model.UserId)
-                    <table class="table table-striped table-bordered table-hover" id="customerCaseSum">
-                        <thead>
-                            <tr>                                
-                                <th>
-                                    @Translation.Get("Kolumn", Enums.TranslationSource.TextTranslation)
-                                </th>                                
-                                <th>
-                                    @Translation.Get("Kolumnbredd", Enums.TranslationSource.TextTranslation)
-                                </th>
-                                <th>
-                                    &nbsp;
-                                </th>
-                            </tr>
-                        </thead>
-                                                             
-                        <tbody id="dataTable">
-                            <tr class="rowAdding">                                                                       
-                                <td>
-                                    <input type="hidden" style="width: 80px;" name="colOrderValue" id="colOrderValue" value="99" />
-                                    <input type="hidden" style="width: 80px;" name="minWidthValue" id="minWidthValue" value="100" />
+           @if (Model.AvailableColumns.Any())
+           {
+               <form id="frmColCaseSetting" name="frmColCaseSetting">
+                   <div class="tab-content">
+                       <div class="tab-pane tab-pane-border active" id="fragment-1">                                   
+                           <h4>@Translation.Get("Filter", Enums.TranslationSource.TextTranslation)  @Translation.Get("Ärendeöversikt", Enums.TranslationSource.TextTranslation) </h4>    
+                           <div id="colsetting_result" class="row">
+                               <div class="span100">                    
+                                   @Translation.Get("Teckensnittsstorlek i tabell (ju mindre desto mer information kan visas på skärmen).", Enums.TranslationSource.TextTranslation)<br />
+                                   @Html.DropDownListFor(x => x.SelectedFontStyle, CaseColumnsSettingsModel.FontStyles)
+                               </div>             
+                               <div class="span100">
+                                   @Translation.Get("Välj den mest lämpliga bredden för de kolumner som du vill visa på ärendeöversikten (beroende på mängden information i varje kolumn).", Enums.TranslationSource.TextTranslation)
+                                   <br />
+                                   @Translation.Get("(Välj bred på högst 3 kolumner för bästa resultat).", Enums.TranslationSource.TextTranslation)                    
+                               </div>       
+                               <div class="span5">
+                                   @Html.HiddenFor(m => Model.CustomerId)                
+                                   @Html.HiddenFor(m => Model.UserId)
+                                   <table class="table table-striped table-bordered table-hover" id="customerCaseSum">
+                                       <thead>
+                                           <tr>                                
+                                               <th>
+                                                   @Translation.Get("Kolumn", Enums.TranslationSource.TextTranslation)
+                                               </th>                                
+                                               <th>
+                                                   @Translation.Get("Kolumnbredd", Enums.TranslationSource.TextTranslation)
+                                               </th>
+                                               <th>
+                                                   &nbsp;
+                                               </th>
+                                           </tr>
+                                       </thead>                                                             
+                                       <tbody id="dataTable">
+                                           <tr class="rowAdding">                                                                       
+                                               <td>
+                                                   <input type="hidden" style="width: 80px;" name="colOrderValue" id="colOrderValue" value="99" />
+                                                   <input type="hidden" style="width: 80px;" name="minWidthValue" id="minWidthValue" value="100" />
 
-                                    <select id="labellist">
-                                        @foreach (var fieldSetting in Model.AvailableColumns)
-                                        {
-                                            <option value="@fieldSetting.Name">@Translation.Get(fieldSetting.Name, Enums.TranslationSource.CaseTranslation, Model.CustomerId)</option>
-                                        }
-                                    </select>
-                                </td>                                           
-                                <td>
-                                    <select id="newColStyle">
-                                        @foreach (var fieldSetting in CaseColumnsSettingsModel.FieldStyles)
-                                        {
-                                            <option value="@fieldSetting.Value">@fieldSetting.Text</option>
-                                        }
-                                    </select>
-                                </td>
-                                <td>
-                                    <input class="btn btn-success addrow" type="button" value="@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)" />
-                                    <input type="hidden" id="caseSettingId" value="" />
-                                </td>
-                            </tr>     
-                            @if (Model != null)
-                            {
-                                var i = 0;
-                                foreach (var columnSettings in  Model.SelectedColumns)
-                                {                                    
-                                    <tr class="SortableRow">
-                                        <td>
-                                             <label for="subCategoryName"> @Translation.Get(columnSettings.Name, Enums.TranslationSource.CaseTranslation, Model.CustomerId) </label>
-                                        </td>
-                                        <td>
-                                            @Html.DropDownList(String.Format("column_style", i), CaseColumnsSettingsModel.GetColStyles(columnSettings.Style))
-                                            @Html.Hidden(String.Format("column_name", i++), @columnSettings.Name )
-                                        </td>                                     
-                                        <td>
-                                            <input class="btn btn-danger deleterow" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
-                                        </td>
-                                    </tr>
-                                }
-                            }
-                        </tbody>
-                    </table>                    
-                </div>
-            </div>
+                                                   <select id="labellist">
+                                                       @foreach (var fieldSetting in Model.AvailableColumns)
+                                                       {
+                                                           <option value="@fieldSetting.Name">@Translation.Get(fieldSetting.Name, Enums.TranslationSource.CaseTranslation, Model.CustomerId)</option>
+                                                       }
+                                                   </select>
+                                               </td>                                           
+                                               <td>
+                                                   <select id="newColStyle">
+                                                       @foreach (var fieldSetting in CaseColumnsSettingsModel.FieldStyles)
+                                                       {
+                                                           <option value="@fieldSetting.Value">@fieldSetting.Text</option>
+                                                       }
+                                                   </select>
+                                               </td>
+                                               <td>
+                                                   <input class="btn btn-success addrow" type="button" value="@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)" />
+                                                   <input type="hidden" id="caseSettingId" value="" />
+                                               </td>
+                                           </tr>     
+                                           @if (Model != null)
+                                           {
+                                               var i = 0;
+                                               foreach (var columnSettings in  Model.SelectedColumns)
+                                               {
+                                                   <tr class="SortableRow">
+                                                       <td>
+                                                           <label for="subCategoryName"> @Translation.Get(columnSettings.Name, Enums.TranslationSource.CaseTranslation, Model.CustomerId) </label>
+                                                       </td>
+                                                       <td>
+                                                           @Html.DropDownList(String.Format("column_style", i), CaseColumnsSettingsModel.GetColStyles(columnSettings.Style))
+                                                           @Html.Hidden(String.Format("column_name", i++), @columnSettings.Name)
+                                                       </td>                                     
+                                                       <td>
+                                                           <input class="btn btn-danger deleterow" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
+                                                       </td>
+                                                   </tr>
+                                               }
+                                           }
+                                       </tbody>
+                                   </table>                    
+                               </div>
+                           </div>
             
-        </div>                
-    </div>
-</form>
-<script id="caseFieldRow" type="text/x-jsrender">
+                       </div>                
+                   </div>
+               </form>
+               <script id="caseFieldRow" type="text/x-jsrender">
     <tr class="SortableRow">
         <td>
             <label for="subCategoryName">{{:label}}</label>
@@ -104,3 +105,8 @@
         </td>
     </tr>
 </script>
+           }
+           else
+           {
+               <div class="nofields-msg">No columns has been selected for your role for this customer in Adminsitration->"Customer"->"Case overview". Contact with your administrator.</div>
+           }

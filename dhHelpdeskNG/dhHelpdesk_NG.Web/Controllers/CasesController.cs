@@ -38,7 +38,6 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Case;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Invoice;
     using DH.Helpdesk.Web.Infrastructure.Mvc;
-    using DH.Helpdesk.Web.Infrastructure.Services.Case;
     using DH.Helpdesk.Web.Infrastructure.Tools;
     using DH.Helpdesk.Web.Models;
     using DH.Helpdesk.Web.Models.Case;
@@ -246,12 +245,14 @@ namespace DH.Helpdesk.Web.Controllers
             if (SessionFacade.CurrentCustomer == null)
             {
                 SessionFacade.CurrentCustomer = this._customerService.GetCustomer(customerId.HasValue ? customerId.Value : SessionFacade.CurrentUser.CustomerId);
+                SessionFacade.CaseOverviewGridSettings = null;
             }
             else
             {
                 if (customerId.HasValue && customerId.Value != SessionFacade.CurrentCustomer.Id)
                 {
                     SessionFacade.CurrentCustomer = this._customerService.GetCustomer(customerId.Value);
+                    SessionFacade.CaseOverviewGridSettings = null;
                 }
             }
 
@@ -265,6 +266,7 @@ namespace DH.Helpdesk.Web.Controllers
                 SessionFacade.CaseOverviewGridSettings =
                     this.gridSettingsService.GetForCustomerUserGrid(
                         SessionFacade.CurrentCustomer.Id,
+                        SessionFacade.CurrentUser.UserGroupId,
                         SessionFacade.CurrentUser.Id,
                         GridSettingsService.CASE_OVERVIEW_GRID_ID);
             }
@@ -302,6 +304,7 @@ namespace DH.Helpdesk.Web.Controllers
                 GridSettings =
                     this.caseOverviewSettingsService.GetSettings(
                         SessionFacade.CurrentCustomer.Id,
+                        SessionFacade.CurrentUser.UserGroupId,
                         SessionFacade.CurrentUser.Id)
             };
 
@@ -357,6 +360,7 @@ namespace DH.Helpdesk.Web.Controllers
                     this.gridSettingsService.GetForCustomerUserGrid(
                         SessionFacade.CurrentCustomer.Id,
                         SessionFacade.CurrentUser.Id,
+                        SessionFacade.CurrentUser.UserGroupId,
                         GridSettingsService.CASE_OVERVIEW_GRID_ID);
             }
             else
@@ -1156,6 +1160,7 @@ namespace DH.Helpdesk.Web.Controllers
                 m.GridSettings =
                     this.caseOverviewSettingsService.GetSettings(
                         SessionFacade.CurrentCustomer.Id,
+                        SessionFacade.CurrentUser.UserGroupId,
                         SessionFacade.CurrentUser.Id);
                 f.CustomerId = frm.ReturnFormValue("hidFilterCustomerId").convertStringToInt();
                 f.UserId = SessionFacade.CurrentUser.Id;
@@ -1532,6 +1537,7 @@ namespace DH.Helpdesk.Web.Controllers
             searchResult.cases = this.TreeTranslate(searchResult.cases, SessionFacade.CurrentCustomer.Id);
             searchResult.GridSettings = this.caseOverviewSettingsService.GetSettings(
                 SessionFacade.CurrentCustomer.Id,
+                SessionFacade.CurrentUser.UserGroupId,
                 SessionFacade.CurrentUser.Id);
             search.Search.IdsForLastSearch = this.GetIdsFromSearchResult(searchResult.cases);
 
@@ -2625,7 +2631,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             ret.ClosingReasonCheck = userCaseSettings.CaseClosingReasonFilter != string.Empty;
             ret.ClosingReasons = this._finishingCauseService.GetFinishingCauses(customerId);
-            ret.ColumnSettingModel = this.caseOverviewSettingsService.GetSettings(customerId, userId);
+            ret.ColumnSettingModel = this.caseOverviewSettingsService.GetSettings(customerId, SessionFacade.CurrentUser.UserGroupId, userId);
 
             return ret;
         }
