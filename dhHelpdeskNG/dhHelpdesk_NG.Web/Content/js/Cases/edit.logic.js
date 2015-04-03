@@ -786,6 +786,18 @@ $(function () {
                 });
 
                 dhHelpdesk.cases.utils.showError(message);
+
+                // http://redmine.fastdev.se/issues/11916
+                $('.date').each(function() {
+                    var $this = $(this);
+                    var errorLabel = $this.find('label.error:visible');
+                    if (errorLabel.length > 0) {
+                        var calendarIcon = $this.find('.add-on');
+                        if (calendarIcon.length > 0) {
+                            errorLabel.detach().insertAfter(calendarIcon);
+                        }
+                    }
+                });
             } 
         });
 
