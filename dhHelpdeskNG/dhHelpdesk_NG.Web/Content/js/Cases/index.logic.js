@@ -47,6 +47,7 @@ var GRID_STATE = {
         me.$searchField = '#txtFreeTextSearch';
         me.$filterForm = $('#frmCaseSearch');
         me.$caseFilterType = '#lstfilterCaseProgress';
+        me.$remainingView = $('[data-field="caseRemainingTimeHidePlace"]');
         //// Bind events
         $('#btnSearch, a.refresh-grid').on('click', function (ev) {
             ev.preventDefault();
@@ -94,11 +95,6 @@ var GRID_STATE = {
 
         me.setGridState(window.GRID_STATE.IDLE);
         me.setGridSettings(gridInitSettings);
-    };
-
-    Page.prototype.onGridRowClick = function(caseId) {
-        var me = this;
-        window.location.href = '/Cases/Edit/' + caseId;
     };
 
     Page.prototype.setGridState = function(gridStateId) {
@@ -215,9 +211,7 @@ var GRID_STATE = {
     };
 
     Page.prototype.formatCell = function (caseId, cellValue) {
-        var out = [strJoin('<td>')];
-        out.push(cellValue == null ? '' : cellValue);
-        out.push('</td>');
+        var out = [strJoin('<td><a href="/Cases/Edit/', caseId, '">', cellValue == null ? '&nbsp;' : cellValue, '</a></td>')];
         return out.join(JOINER);
     };
 
@@ -228,7 +222,7 @@ var GRID_STATE = {
         if (data && data.length > 0) {
             me.hideMessage();
             $.each(data, function (idx, record) {
-                var firstCell = strJoin('<td><img title="', record.caseIconTitle, '" alt="', record.caseIconTitle, '" src="', record.caseIconUrl, '" /></td>');
+                var firstCell = strJoin('<td><a href="/Cases/Edit/', record.case_id, '"><img title="', record.caseIconTitle, '" alt="', record.caseIconTitle, '" src="', record.caseIconUrl, '" /></a></td>');
                 var rowOut = [strJoin('<tr class="', me.getClsRow(record), '" caseid="', record.case_id, '">'), firstCell];
                 $.each(me.gridSettings.columnDefs, function (idx, columnSettings) {
                     if (!columnSettings.isHidden) {
@@ -245,14 +239,29 @@ var GRID_STATE = {
                 out.push(rowOut.join(JOINER));
             });
             me.$tableBody.html(out.join(JOINER));
-            me.$tableBody.find('tr').on('click', function (ev) {
-                me.onGridRowClick.call(me, $(this).attr('caseid'));
-            });
         } else {
             me.showMsg(NODATA_MSG_TYPE);
         }
         me.setGridState(window.GRID_STATE.IDLE);
         $(document).trigger("OnCasesLoaded");
+    };
+
+    Page.prototype.onRemainingViewClick = function(aElement) {
+        var me = this;
+        me.fetchData([{ 'name': 'CaseRemainingTime', 'value': $(aElement).attr('data-remaining-time') },
+        { 'name': 'CaseRemainingTimeUntil', 'value': $(aElement).attr('data-remaining-time-until') },
+        { 'name': 'CaseRemainingTimeMax', 'value': $(aElement).attr('data-remaining-time-max') },
+        { 'name': 'CaseRemainingTimeHours', 'value': $(aElement).attr('data-remaining-time-hours') }]);
+    };
+
+    Page.prototype.loadRemainingView = function(htmlContent) {
+        var me = this;
+        me.$remainingView.html(htmlContent);
+        me.$remainingView.find('a').on('click', function (ev) {
+            ev.preventDefault();
+            me.onRemainingViewClick.call(me, this);
+            return false;
+        });
     };
 
     Page.prototype.onSearchClick = function () {
@@ -271,19 +280,28 @@ var GRID_STATE = {
         var me = this;
         if (response && response.result === 'success' && response.data) {
             me.loadData(response.data);
+            if (response.remainingView) {
+                me.loadRemainingView(response.remainingView);
+            }
         } else {
             me.showMsg(ERROR_MSG_TYPE);
             me.setGridState(window.GRID_STATE.IDLE);
         }
     };
 
-    Page.prototype.fetchData = function() {
+    Page.prototype.fetchData = function(addFetchParam) {
         var me = this;
-        var fetchParams = me.$filterForm.serializeArray();
-        fetchParams.push({ name: 'sortBy', value: me.gridSettings.sortOptions.sortBy },
+        var fetchParams;
+        var baseParams = me.$filterForm.serializeArray();
+        baseParams.push({ name: 'sortBy', value: me.gridSettings.sortOptions.sortBy },
             { name: 'sortDir', value: me.gridSettings.sortOptions.sortDir },
             { name: 'pageIndex', value: me.gridSettings.pageOptions.pageIndex },
             { name: 'recPerPage', value: me.gridSettings.pageOptions.recPerPage });
+        if (addFetchParam != null && addFetchParam.length > 0) {
+            fetchParams = baseParams.concat(addFetchParam);
+        } else {
+            fetchParams = baseParams;
+        }
         me.setGridState(window.GRID_STATE.LOADING);
         me.showMsg(LOADING_MSG_TYPE);
         $.ajax('/Cases/SearchAjax', {

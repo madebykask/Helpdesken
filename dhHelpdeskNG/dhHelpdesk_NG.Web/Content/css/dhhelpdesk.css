@@ -1754,9 +1754,6 @@ table th.thpointer {
     -ms-word-break: break-all;
     line-height:13px;
 }
-.table-cases tr {
-    cursor: pointer;
-}
 .table-cases td {
     overflow-wrap:break-word;
     word-wrap: break-word;

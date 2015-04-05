@@ -136,6 +136,10 @@
         public CaseSettingModel CaseSetting { get; set; }
 
         public JsonGridSettingsModel GridSettings { get; set; }
+
+        public bool ShowRemainingTime { get; set; }
+
+        public CaseRemainingTimeViewModel RemainingTime { get; set; }
     }
 
     public class CaseSearchResultModel
@@ -144,10 +148,6 @@
         public IList<CaseSettings> caseSettings { get; set; }
 
         public IList<CaseSearchResult> cases { get; set; }
-
-        public bool ShowRemainingTime { get; set; }
-
-        public CaseRemainingTimeViewModel RemainingTime { get; set; }
 
         public string BackUrl { get; set; }
     }

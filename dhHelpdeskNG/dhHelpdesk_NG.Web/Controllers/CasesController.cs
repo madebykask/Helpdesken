@@ -285,6 +285,7 @@ namespace DH.Helpdesk.Web.Controllers
             User user = new User();
             user = _userService.GetUser(SessionFacade.CurrentUser.Id);
             m.CaseSetting.RefreshContent = user.RefreshContent;
+            m.ShowRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
 
             return this.View("IndexAjax", m);
         }
@@ -338,19 +339,25 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 f.CaseRemainingTimeFilter = caseRemainingTimeFilter;
             }
-
+            
+            int caseRemainingTimeUntilFilter;
+            if (int.TryParse(frm.ReturnFormValue("CaseRemainingTimeUntil"), out caseRemainingTimeUntilFilter))
+            {
+                f.CaseRemainingTimeUntilFilter = caseRemainingTimeUntilFilter;
+            }
+            
             int caseRemainingTimeMaxFilter;
             if (int.TryParse(frm.ReturnFormValue("CaseRemainingTimeMax"), out caseRemainingTimeMaxFilter))
             {
                 f.CaseRemainingTimeMaxFilter = caseRemainingTimeMaxFilter;
             }
-
+            
             bool caseRemainingTimeHoursFilter;
             if (bool.TryParse(frm.ReturnFormValue("CaseRemainingTimeHours"), out caseRemainingTimeHoursFilter))
             {
                 f.CaseRemainingTimeHoursFilter = caseRemainingTimeHoursFilter;
             }
-
+            
             var sm = this.GetCaseSearchModel(f.CustomerId, f.UserId);
             sm.caseSearchFilter = f;
            
@@ -378,8 +385,8 @@ namespace DH.Helpdesk.Web.Controllers
             sm.Search.Ascending = gridSettings.sortOptions.sortDir == SortingDirection.Asc;
             m.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(f.CustomerId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
             var workTimeCalc = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
-            var showRemainingTime = false;
-            CaseRemainingTimeData remainingTime;
+            var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
+            CaseRemainingTimeData remainingTimeData;
             m.cases = this._caseSearchService.Search(
                 f,
                 m.caseSettings,
@@ -394,7 +401,7 @@ namespace DH.Helpdesk.Web.Controllers
                 workTimeCalc,
                 this.configuration.Application.ApplicationId,
                 showRemainingTime,
-                out remainingTime);
+                out remainingTimeData);
 
             m.cases = this.TreeTranslate(m.cases, f.CustomerId);
             sm.Search.IdsForLastSearch = this.GetIdsFromSearchResult(m.cases);
@@ -432,8 +439,8 @@ namespace DH.Helpdesk.Web.Controllers
 
                 data.Add(jsRow);
             }
-
-            return this.Json(new { result = "success", data = data });
+            var caseRemainingModel = this.caseModelFactory.GetCaseRemainingTimeModel(remainingTimeData);
+            return this.Json(new { result = "success", data = data, remainingView = this.RenderPartialViewToString("CaseRemainingTime", caseRemainingModel) });
         }
 
         private CaseSearchFilterData CreateCaseSearchFilterData(int cusId, int userId, bool clearFilters, CustomerUser cu, CaseSearchModel sm)
@@ -1150,101 +1157,101 @@ namespace DH.Helpdesk.Web.Controllers
             }
         }
 
-        public ActionResult Search(FormCollection frm)
-        {
-            var f = new CaseSearchFilter();
-            var m = new CaseSearchResultModel();
-            
-            if (SessionFacade.CurrentUser != null)
-            {
-                m.GridSettings =
-                    this.caseOverviewSettingsService.GetSettings(
-                        SessionFacade.CurrentCustomer.Id,
-                        SessionFacade.CurrentUser.UserGroupId,
-                        SessionFacade.CurrentUser.Id);
-                f.CustomerId = frm.ReturnFormValue("hidFilterCustomerId").convertStringToInt();
-                f.UserId = SessionFacade.CurrentUser.Id;
-                f.CaseType = frm.ReturnFormValue("hidFilterCaseTypeId").convertStringToInt();
-                f.ProductArea = frm.ReturnFormValue("hidFilterProductAreaId").ReturnCustomerUserValue();
-                f.Region = frm.ReturnFormValue("lstFilterRegion");
-                f.Country = frm.ReturnFormValue("lstFilterCountry");
-                f.Department = frm.ReturnFormValue("lstFilterDepartment");
-                f.User = frm.ReturnFormValue("lstFilterUser");
-                f.Category = frm.ReturnFormValue("lstFilterCategory");
-                f.WorkingGroup = frm.ReturnFormValue("lstFilterWorkingGroup");
-                f.UserPerformer = frm.ReturnFormValue("lstFilterPerformer");
-                f.UserResponsible = frm.ReturnFormValue("lstFilterResponsible");
-                f.Priority = frm.ReturnFormValue("lstFilterPriority");
-                f.Status = frm.ReturnFormValue("lstFilterStatus");
-                f.StateSecondary = frm.ReturnFormValue("lstFilterStateSecondary");
-                f.CaseProgress = frm.ReturnFormValue("lstFilterCaseProgress");
-                f.FreeTextSearch = frm.ReturnFormValue("txtFreeTextSearch");
-                f.CaseRegistrationDateStartFilter = frm.GetDate("CaseRegistrationDateStartFilter");
-                f.CaseRegistrationDateEndFilter = frm.GetDate("CaseRegistrationDateEndFilter");
-                f.CaseWatchDateStartFilter = frm.GetDate("CaseWatchDateStartFilter");
-                f.CaseWatchDateEndFilter = frm.GetDate("CaseWatchDateEndFilter");
-                f.CaseClosingDateStartFilter = frm.GetDate("CaseClosingDateStartFilter");
-                f.CaseClosingDateEndFilter = frm.GetDate("CaseClosingDateEndFilter");
-                f.CaseClosingReasonFilter = frm.ReturnFormValue("hidFilterClosingReasonId").ReturnCustomerUserValue();
-
-                int caseRemainingTimeFilter;
-                if (int.TryParse(frm.ReturnFormValue("CaseRemainingTime"), out caseRemainingTimeFilter))
-                {
-                    f.CaseRemainingTimeFilter = caseRemainingTimeFilter;
-                }
-
-                int caseRemainingTimeUntilFilter;
-                if (int.TryParse(frm.ReturnFormValue("CaseRemainingTimeUntil"), out caseRemainingTimeUntilFilter))
-                {
-                    f.CaseRemainingTimeUntilFilter = caseRemainingTimeUntilFilter;
-                }
-
-                int caseRemainingTimeMaxFilter;
-                if (int.TryParse(frm.ReturnFormValue("CaseRemainingTimeMax"), out caseRemainingTimeMaxFilter))
-                {
-                    f.CaseRemainingTimeMaxFilter = caseRemainingTimeMaxFilter;
-                }
-
-                bool caseRemainingTimeHoursFilter;
-                if (bool.TryParse(frm.ReturnFormValue("CaseRemainingTimeHours"), out caseRemainingTimeHoursFilter))
-                {
-                    f.CaseRemainingTimeHoursFilter = caseRemainingTimeHoursFilter;
-                }
-
-                var sm = this.GetCaseSearchModel(f.CustomerId, f.UserId);
-                sm.caseSearchFilter = f;
-                sm.Search.SortBy = frm.ReturnFormValue("hidSortBy");
-                sm.Search.Ascending = frm.ReturnFormValue("hidSortByAsc").convertStringToBool();
-
-                m.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(f.CustomerId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
-                var workTimeCalc = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
-                var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
-                CaseRemainingTimeData remainingTime;
-                m.cases = this._caseSearchService.Search(
-                    f,
-                    m.caseSettings,
-                    SessionFacade.CurrentUser.Id,
-                    SessionFacade.CurrentUser.UserId,
-                    SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups,
-                    SessionFacade.CurrentUser.UserGroupId,
-                    SessionFacade.CurrentUser.RestrictedCasePermission,
-                    sm.Search,
-                    this.workContext.Customer.WorkingDayStart,
-                    this.workContext.Customer.WorkingDayEnd,
-                    workTimeCalc,
-                    this.configuration.Application.ApplicationId,
-                    showRemainingTime,
-                    out remainingTime);
-
-                m.cases = this.TreeTranslate(m.cases, f.CustomerId);
-                sm.Search.IdsForLastSearch = GetIdsFromSearchResult(m.cases);
-                SessionFacade.CurrentCaseSearch = sm;
-                m.ShowRemainingTime = showRemainingTime;
-                m.RemainingTime = this.caseModelFactory.GetCaseRemainingTimeModel(remainingTime);
-            }
-
-            return this.PartialView("_CaseRows", m);
-        }
+//        public ActionResult Search(FormCollection frm)
+//        {
+//            var f = new CaseSearchFilter();
+//            var m = new CaseSearchResultModel();
+//            
+//            if (SessionFacade.CurrentUser != null)
+//            {
+//                m.GridSettings =
+//                    this.caseOverviewSettingsService.GetSettings(
+//                        SessionFacade.CurrentCustomer.Id,
+//                        SessionFacade.CurrentUser.UserGroupId,
+//                        SessionFacade.CurrentUser.Id);
+//                f.CustomerId = frm.ReturnFormValue("hidFilterCustomerId").convertStringToInt();
+//                f.UserId = SessionFacade.CurrentUser.Id;
+//                f.CaseType = frm.ReturnFormValue("hidFilterCaseTypeId").convertStringToInt();
+//                f.ProductArea = frm.ReturnFormValue("hidFilterProductAreaId").ReturnCustomerUserValue();
+//                f.Region = frm.ReturnFormValue("lstFilterRegion");
+//                f.Country = frm.ReturnFormValue("lstFilterCountry");
+//                f.Department = frm.ReturnFormValue("lstFilterDepartment");
+//                f.User = frm.ReturnFormValue("lstFilterUser");
+//                f.Category = frm.ReturnFormValue("lstFilterCategory");
+//                f.WorkingGroup = frm.ReturnFormValue("lstFilterWorkingGroup");
+//                f.UserPerformer = frm.ReturnFormValue("lstFilterPerformer");
+//                f.UserResponsible = frm.ReturnFormValue("lstFilterResponsible");
+//                f.Priority = frm.ReturnFormValue("lstFilterPriority");
+//                f.Status = frm.ReturnFormValue("lstFilterStatus");
+//                f.StateSecondary = frm.ReturnFormValue("lstFilterStateSecondary");
+//                f.CaseProgress = frm.ReturnFormValue("lstFilterCaseProgress");
+//                f.FreeTextSearch = frm.ReturnFormValue("txtFreeTextSearch");
+//                f.CaseRegistrationDateStartFilter = frm.GetDate("CaseRegistrationDateStartFilter");
+//                f.CaseRegistrationDateEndFilter = frm.GetDate("CaseRegistrationDateEndFilter");
+//                f.CaseWatchDateStartFilter = frm.GetDate("CaseWatchDateStartFilter");
+//                f.CaseWatchDateEndFilter = frm.GetDate("CaseWatchDateEndFilter");
+//                f.CaseClosingDateStartFilter = frm.GetDate("CaseClosingDateStartFilter");
+//                f.CaseClosingDateEndFilter = frm.GetDate("CaseClosingDateEndFilter");
+//                f.CaseClosingReasonFilter = frm.ReturnFormValue("hidFilterClosingReasonId").ReturnCustomerUserValue();
+//
+//                int caseRemainingTimeFilter;
+//                if (int.TryParse(frm.ReturnFormValue("CaseRemainingTime"), out caseRemainingTimeFilter))
+//                {
+//                    f.CaseRemainingTimeFilter = caseRemainingTimeFilter;
+//                }
+//
+//                int caseRemainingTimeUntilFilter;
+//                if (int.TryParse(frm.ReturnFormValue("CaseRemainingTimeUntil"), out caseRemainingTimeUntilFilter))
+//                {
+//                    f.CaseRemainingTimeUntilFilter = caseRemainingTimeUntilFilter;
+//                }
+//
+//                int caseRemainingTimeMaxFilter;
+//                if (int.TryParse(frm.ReturnFormValue("CaseRemainingTimeMax"), out caseRemainingTimeMaxFilter))
+//                {
+//                    f.CaseRemainingTimeMaxFilter = caseRemainingTimeMaxFilter;
+//                }
+//
+//                bool caseRemainingTimeHoursFilter;
+//                if (bool.TryParse(frm.ReturnFormValue("CaseRemainingTimeHours"), out caseRemainingTimeHoursFilter))
+//                {
+//                    f.CaseRemainingTimeHoursFilter = caseRemainingTimeHoursFilter;
+//                }
+//
+//                var sm = this.GetCaseSearchModel(f.CustomerId, f.UserId);
+//                sm.caseSearchFilter = f;
+//                sm.Search.SortBy = frm.ReturnFormValue("hidSortBy");
+//                sm.Search.Ascending = frm.ReturnFormValue("hidSortByAsc").convertStringToBool();
+//
+//                m.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(f.CustomerId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
+//                var workTimeCalc = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
+//                var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
+//                CaseRemainingTimeData remainingTime;
+//                m.cases = this._caseSearchService.Search(
+//                    f,
+//                    m.caseSettings,
+//                    SessionFacade.CurrentUser.Id,
+//                    SessionFacade.CurrentUser.UserId,
+//                    SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups,
+//                    SessionFacade.CurrentUser.UserGroupId,
+//                    SessionFacade.CurrentUser.RestrictedCasePermission,
+//                    sm.Search,
+//                    this.workContext.Customer.WorkingDayStart,
+//                    this.workContext.Customer.WorkingDayEnd,
+//                    workTimeCalc,
+//                    this.configuration.Application.ApplicationId,
+//                    showRemainingTime,
+//                    out remainingTime);
+//
+//                m.cases = this.TreeTranslate(m.cases, f.CustomerId);
+//                sm.Search.IdsForLastSearch = GetIdsFromSearchResult(m.cases);
+//                SessionFacade.CurrentCaseSearch = sm;
+//                m.ShowRemainingTime = showRemainingTime;
+//                m.RemainingTime = this.caseModelFactory.GetCaseRemainingTimeModel(remainingTime);
+//            }
+//
+//            return this.PartialView("_CaseRows", m);
+//        }
 
         public RedirectToRouteResult Copy(int id, int customerId)
         {
@@ -1497,6 +1504,23 @@ namespace DH.Helpdesk.Web.Controllers
 
         #region Private Methods and Operators
 
+        private string RenderPartialViewToString(string viewName, object model)
+        {
+            if (string.IsNullOrEmpty(viewName))
+                viewName = ControllerContext.RouteData.GetRequiredString("action");
+
+            ViewData.Model = model;
+
+            using (StringWriter sw = new StringWriter())
+            {
+                ViewEngineResult viewResult = ViewEngines.Engines.FindPartialView(ControllerContext, viewName);
+                ViewContext viewContext = new ViewContext(ControllerContext, viewResult.View, ViewData, TempData, sw);
+                viewResult.View.Render(viewContext, sw);
+
+                return sw.GetStringBuilder().ToString();
+            }
+        }
+
         private CaseSearchResultModel GetUnfilteredCases(
                     string sortBy,
                     string sortByAsc,
@@ -1541,8 +1565,8 @@ namespace DH.Helpdesk.Web.Controllers
                 SessionFacade.CurrentUser.Id);
             search.Search.IdsForLastSearch = this.GetIdsFromSearchResult(searchResult.cases);
 
-            searchResult.ShowRemainingTime = showRemainingTime;
-            searchResult.RemainingTime = this.caseModelFactory.GetCaseRemainingTimeModel(remainingTime);
+//            searchResult.ShowRemainingTime = showRemainingTime;
+//            searchResult.RemainingTime = this.caseModelFactory.GetCaseRemainingTimeModel(remainingTime);
             searchResult.BackUrl = Url.Action("RelatedCasesFull", "Cases", new { area = string.Empty, caseId = relatedCasesCaseId, userId = relatedCasesUserId });
             SessionFacade.CurrentCaseSearch = search;
 
