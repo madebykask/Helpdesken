@@ -1568,7 +1568,7 @@ namespace DH.Helpdesk.Web.Controllers
 //            searchResult.ShowRemainingTime = showRemainingTime;
 //            searchResult.RemainingTime = this.caseModelFactory.GetCaseRemainingTimeModel(remainingTime);
             searchResult.BackUrl = Url.Action("RelatedCasesFull", "Cases", new { area = string.Empty, caseId = relatedCasesCaseId, userId = relatedCasesUserId });
-            SessionFacade.CurrentCaseSearch = search;
+//            SessionFacade.CurrentCaseSearch = search;
 
             return searchResult;
         }

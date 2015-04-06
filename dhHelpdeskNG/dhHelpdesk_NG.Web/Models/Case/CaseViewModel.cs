@@ -150,6 +150,10 @@
         public IList<CaseSearchResult> cases { get; set; }
 
         public string BackUrl { get; set; }
+
+        public bool ShowRemainingTime { get; set; }
+
+        public CaseRemainingTimeViewModel RemainingTime { get; set; }
     }
 
     public class NewCaseParams
