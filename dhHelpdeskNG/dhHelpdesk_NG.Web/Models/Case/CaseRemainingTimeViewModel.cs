@@ -5,6 +5,7 @@
 
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.Common.Tools;
+    using DH.Helpdesk.Web.Infrastructure;
 
     public sealed class CaseRemainingTimeViewModel
     {
@@ -26,11 +27,11 @@
             if (this.Data.CaseRemainingTimes.Select(t => t.RemainingTime).Any(t => t > 0 && t < 24))
             {
                 this.hours.Add(new CaseRemainingTimeItemViewModel(1, null, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime == 1)));                
-                this.hours.Add(new CaseRemainingTimeItemViewModel(2, null, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime == 2)));                
-                this.hours.Add(new CaseRemainingTimeItemViewModel(3, 4, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime >= 3 && t.RemainingTime <= 4)));
-                this.hours.Add(new CaseRemainingTimeItemViewModel(5, 8, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime >= 5 && t.RemainingTime <= 8)));
-                this.hours.Add(new CaseRemainingTimeItemViewModel(9, 16, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime >= 9 && t.RemainingTime <= 16)));
-                this.hours.Add(new CaseRemainingTimeItemViewModel(17, 23, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime >= 17 && t.RemainingTime <= 23)));                
+                this.hours.Add(new CaseRemainingTimeItemViewModel(2, null, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime == 2)));
+                this.hours.Add(new CaseRemainingTimeItemViewModel(3, 4, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime >= 3 && t.RemainingTime <= 4), string.Format("3-4 {0}", Translation.Get("h"))));
+                this.hours.Add(new CaseRemainingTimeItemViewModel(5, 8, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime >= 5 && t.RemainingTime <= 8), string.Format("5-8 {0}", Translation.Get("h"))));
+                this.hours.Add(new CaseRemainingTimeItemViewModel(9, 16, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime >= 9 && t.RemainingTime <= 16), string.Format("9-16 {0}", Translation.Get("h"))));
+                this.hours.Add(new CaseRemainingTimeItemViewModel(17, 23, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime >= 17 && t.RemainingTime <= 23), string.Format("17-23 {0}", Translation.Get("h"))));                
             }
 
             var ds = this.Data.CaseRemainingTimes.Select(t => t.RemainingTime).Where(t => t >= 24).ToList();

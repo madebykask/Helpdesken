@@ -23,11 +23,11 @@
                 {
                     if (hour.TimeUntil.Value < 23)
                     {
-                        <th>@string.Format("{0}-{1} {2}", hour.Time, hour.TimeUntil, Translation.Get("h"))</th>
+                        <th class="thpointer">@MvcHtmlString.Create(string.Format("<span rel=\"tooltip\" title=\"{2}\">{0} {1}</span>", hour.TimeUntil, Translation.Get("h"), hour.Tooltip))</th>
                     }
                     else
                     {
-                        <th>@string.Format("{0}+ {1}", hour.Time, Translation.Get("h"))</th>
+                        <th class="thpointer">@MvcHtmlString.Create(string.Format("<span rel=\"tooltip\" title=\"{1}\">24 {0}</span>", Translation.Get("h"), hour.Tooltip))</th>
                     }
                 }
             }
