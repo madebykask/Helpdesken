@@ -85,13 +85,13 @@ var GRID_STATE = {
             }
         });
 
-        $('ul.secnav #btnNewCase a.btn').on('click', function(ev) {
-            if (window.app.getGridState() !== window.GRID_STATE.LOADING) {
-                ev.preventDefault();
-                return false;
-            }
-            return true;
-        });
+        //$('ul.secnav #btnNewCase a.btn').on('click', function(ev) {
+        //    if (window.app.getGridState() !== window.GRID_STATE.LOADING) {
+        //        //ev.preventDefault();
+        //        return false;
+        //    }
+        //    return true;
+        //});
 
         me.setGridState(window.GRID_STATE.IDLE);
         me.setGridSettings(gridInitSettings);
