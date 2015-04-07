@@ -137,8 +137,6 @@
 
         public JsonGridSettingsModel GridSettings { get; set; }
 
-        public bool ShowRemainingTime { get; set; }
-
         public CaseRemainingTimeViewModel RemainingTime { get; set; }
     }
 

@@ -17,6 +17,17 @@ var GRID_STATE = {
     var SORT_DESC = 1;
     var JOINER = '';
 
+    function getUrlParameter(sParam) {
+        var sPageURL = window.location.search.substring(1);
+        var sURLVariables = sPageURL.split('&');
+        for (var i = 0; i < sURLVariables.length; i++) {
+            var sParameterName = sURLVariables[i].split('=');
+            if (sParameterName[0] == sParam) {
+                return sParameterName[1];
+            }
+        }
+    }
+
     function strJoin() {
         return Array.prototype.join.call(arguments, JOINER);
     }
@@ -301,7 +312,9 @@ var GRID_STATE = {
         var me = this;
         var fetchParams;
         var baseParams = me.$filterForm.serializeArray();
-        baseParams.push({ name: 'sortBy', value: me.gridSettings.sortOptions.sortBy },
+        baseParams.push(
+            { name: 'customFilter', value: getUrlParameter('customFilter') },
+            { name: 'sortBy', value: me.gridSettings.sortOptions.sortBy },
             { name: 'sortDir', value: me.gridSettings.sortOptions.sortDir },
             { name: 'pageIndex', value: me.gridSettings.pageOptions.pageIndex },
             { name: 'recPerPage', value: me.gridSettings.pageOptions.recPerPage });
