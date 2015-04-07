@@ -11,7 +11,12 @@
         public int FieldSize { get; set; }
         public int ListEdit { get; set; }
         public int Required { get; set; }
+
+        /// <summary>
+        /// Now used as "available" field for this customer 
+        /// </summary>
         public int ShowOnStartPage { get; set; }
+
         public int ShowExternal { get; set; }
         public string DefaultValue { get; set; }
         public string Name { get; set; }

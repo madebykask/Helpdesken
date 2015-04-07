@@ -13,6 +13,7 @@
         IList<CaseListToCase> ListToShowOnCasePage(int customerId, int languageId);
         IList<CaseFieldSetting> GetAllCaseFieldSettings();
         IList<CaseFieldSetting> GetCaseFieldSettings(int customerId);
+        IList<CaseFieldSetting> GetCustomerEnabledCaseFieldSettings(int customerId);
         
         IList<CaseFieldSettingLanguage> GetCaseFieldSettingLanguages();
         IList<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguages(int? customerId, int languageId);
@@ -54,6 +55,11 @@
         public IList<CaseFieldSetting> GetCaseFieldSettings(int customerId)
         {
             return this._caseFieldSettingRepository.GetMany(x => x.Customer_Id == customerId).ToList();
+        }
+
+        public IList<CaseFieldSetting> GetCustomerEnabledCaseFieldSettings(int customerId)
+        {
+            return this._caseFieldSettingRepository.GetMany(x => x.Customer_Id == customerId && x.ShowOnStartPage == 1).ToList();
         }
         
         public IList<CaseFieldSetting> GetCaseFieldSettingsForDefaultCust()

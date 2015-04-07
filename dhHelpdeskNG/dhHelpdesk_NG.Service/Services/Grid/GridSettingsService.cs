@@ -81,7 +81,7 @@
                 res.cls = gridParams.ContainsKey(GRID_CLS_KEY) ? gridParams[GRID_CLS_KEY] : DEFAULT_GRID_CLS;
                 res.sortOptions = MapSortOptions(gridParams);
                 res.pageOptions = MapPageOptions(gridParams);
-                var columnSettings = this.caseSettingsService.GetSelectedCaseOverviewGridColumnSettings(customerId, userGroupId, userId);
+                var columnSettings = this.caseSettingsService.GetSelectedCaseOverviewGridColumnSettings(customerId, userId);
                 var columns = columnSettings as CaseOverviewGridColumnSetting[] ?? columnSettings.ToArray();
 
                 res.columnDefs = allGridParams.Where(it => it.FieldId.HasValue).MapToColumnDefinitions(columns);

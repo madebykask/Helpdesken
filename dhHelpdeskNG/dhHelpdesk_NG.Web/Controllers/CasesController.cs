@@ -1409,6 +1409,11 @@ namespace DH.Helpdesk.Web.Controllers
         /// <param name="inputSettings"></param>
         public void SaveColSetting(CaseOverviewSettingsInput inputSettings)
         {
+            if (!inputSettings.FieldStyle.Any())
+            {
+                throw new ArgumentException("columns count can not be 0");
+            }
+
             this.gridSettingsService.SaveCaseoviewSettings(
                 inputSettings.MapToGridSettingsModel(),
                 SessionFacade.CurrentCustomer.Id,

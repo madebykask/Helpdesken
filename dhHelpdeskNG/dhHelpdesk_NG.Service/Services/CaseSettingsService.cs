@@ -28,7 +28,7 @@
 
         IEnumerable<CaseOverviewGridColumnSetting> GetAvailableCaseOverviewGridColumnSettingsByUserGroup(int customerId, int userGroupId);
 
-        IEnumerable<CaseOverviewGridColumnSetting> GetSelectedCaseOverviewGridColumnSettings(int customerId, int userGroupId, int userId);
+        IEnumerable<CaseOverviewGridColumnSetting> GetSelectedCaseOverviewGridColumnSettings(int customerId, int userId);
 
         CaseSettings GetCaseSetting(int id);
 
@@ -90,7 +90,7 @@
         public IEnumerable<CaseOverviewGridColumnSetting> GetAvailableCaseOverviewGridColumnSettings(int customerId)
         {
             var customerEnabledFields =
-                this.caseFieldSettingService.GetCaseFieldSettings(customerId)
+                this.caseFieldSettingService.GetCustomerEnabledCaseFieldSettings(customerId)
                     .Where(it => !GridColumnsDefinition.NotAvailableField.Contains(it.Name))
                     .Select(it => new CaseOverviewGridColumnSetting() { Name = it.Name }).ToList();
             customerEnabledFields.AddRange(CaseOverviewGridColumnSetting.GetDefaulVirtualFields());
@@ -116,13 +116,12 @@
         /// Returns column settings for case overview table selected by user 
         /// </summary>
         /// <param name="customerId"></param>
-        /// <param name="userGroupId"></param>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public IEnumerable<CaseOverviewGridColumnSetting> GetSelectedCaseOverviewGridColumnSettings(int customerId, int userGroupId, int userId)
+        public IEnumerable<CaseOverviewGridColumnSetting> GetSelectedCaseOverviewGridColumnSettings(int customerId, int userId)
         {
             var res =
-                this.GetAvailableCaseOverviewGridColumnSettingsByUserGroup(customerId, userGroupId)
+                this.GetAvailableCaseOverviewGridColumnSettings(customerId)
                     .Join(
                         this.GetAvailableCaseSettings(customerId, userId),
                         colSetting => colSetting.Name,
