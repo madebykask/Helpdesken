@@ -76,6 +76,9 @@
         public DateTime PasswordChangedDate { get; set; }
         public DateTime RegTime { get; set; }
 
+        /// <summary>
+        /// Flag to display "Solution time" grid on case overview page
+        /// </summary>
         public int ShowSolutionTime { get; set; }
 
         public virtual Domain Domain { get; set; }

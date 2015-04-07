@@ -439,8 +439,15 @@ namespace DH.Helpdesk.Web.Controllers
 
                 data.Add(jsRow);
             }
-            var caseRemainingModel = this.caseModelFactory.GetCaseRemainingTimeModel(remainingTimeData);
-            return this.Json(new { result = "success", data = data, remainingView = this.RenderPartialViewToString("CaseRemainingTime", caseRemainingModel) });
+            
+            var remainingView = string.Empty;
+            if (SessionFacade.CurrentUser.ShowSolutionTime)
+            {
+                remainingView = this.RenderPartialViewToString(
+                    "CaseRemainingTime",
+                    this.caseModelFactory.GetCaseRemainingTimeModel(remainingTimeData));
+            }
+            return this.Json(new { result = "success", data = data, remainingView = remainingView });
         }
 
         private CaseSearchFilterData CreateCaseSearchFilterData(int cusId, int userId, bool clearFilters, CustomerUser cu, CaseSearchModel sm)
