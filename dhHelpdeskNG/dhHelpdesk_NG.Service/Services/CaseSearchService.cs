@@ -142,6 +142,7 @@
                                                 relatedCasesCaseId,
                                                 relatedCasesUserId);
 
+            var workingHours = workingDayEnd - workingDayStart;
             if (f.CaseRemainingTimeFilter.HasValue && calculateRemainingTime)
             {
                 IEnumerable<CaseRemainingTime> filteredCaseRemainigTimes;
@@ -162,11 +163,11 @@
                 }
                 else if (f.CaseRemainingTimeFilter == int.MaxValue && f.CaseRemainingTimeMaxFilter.HasValue)
                 {
-                    filteredCaseRemainigTimes = remainingTime.CaseRemainingTimes.Where(t => t.RemainingTime.IsHoursGreaterDays(f.CaseRemainingTimeMaxFilter.Value));
+                    filteredCaseRemainigTimes = remainingTime.CaseRemainingTimes.Where(t => t.RemainingTime.IsHoursGreaterDays(f.CaseRemainingTimeMaxFilter.Value, workingHours));
                 }
                 else 
                 {
-                    filteredCaseRemainigTimes = remainingTime.CaseRemainingTimes.Where(t => t.RemainingTime.IsHoursEqualDays(f.CaseRemainingTimeFilter.Value));
+                    filteredCaseRemainigTimes = remainingTime.CaseRemainingTimes.Where(t => t.RemainingTime.IsHoursEqualDays(f.CaseRemainingTimeFilter.Value, workingHours));
                 }
 
                 result = result.Where(c => filteredCaseRemainigTimes.Select(t => t.CaseId).Contains(c.Id)).ToList();

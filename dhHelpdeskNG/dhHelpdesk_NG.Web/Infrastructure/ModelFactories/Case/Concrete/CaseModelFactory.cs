@@ -4,6 +4,7 @@
 
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models.Case.Output;
+    using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.Infrastructure.Cases;
     using DH.Helpdesk.Web.Models.Case;
@@ -38,9 +39,9 @@
             return new RelatedCasesViewModel(relatedCases, customerId, userId);
         }
 
-        public CaseRemainingTimeViewModel GetCaseRemainingTimeModel(CaseRemainingTimeData data)
+        public CaseRemainingTimeViewModel GetCaseRemainingTimeModel(CaseRemainingTimeData data, IWorkContext workContext)
         {
-            return new CaseRemainingTimeViewModel(data);
+            return new CaseRemainingTimeViewModel(data, workContext);
         }
 
         public RelatedCasesFullViewModel GetRelatedCasesFullModel(
