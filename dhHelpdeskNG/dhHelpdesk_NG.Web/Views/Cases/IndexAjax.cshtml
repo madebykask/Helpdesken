@@ -23,6 +23,11 @@
                 }                    
                 <li id="btnSaveCaseSetting" style= "display: none">                   
                     <input type="button"  class="btn" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" /> 
+                </li>
+                <li>
+                    <a href="@Url.Action("index", "cases", new {customerId = SessionFacade.CurrentCustomer.Id, clearFilters = true, customFilter = "MyCases" })" class="btn">
+                                @Translation.Get("Mina ärenden")                                     
+                            </a>
                 </li>    
             </ul>
         </div>
