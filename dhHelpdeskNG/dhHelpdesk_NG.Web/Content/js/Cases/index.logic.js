@@ -93,6 +93,14 @@ var GRID_STATE = {
             return true;
         });
 
+        $('ul.secnav #btnMyCases a.btn').on('click', function (ev) {
+            if (window.app.getGridState() !== window.GRID_STATE.IDLE) {
+                ev.preventDefault();
+                return false;
+            }
+            return true;
+        });
+
         me.setGridState(window.GRID_STATE.IDLE);
         me.setGridSettings(gridInitSettings);
     };
