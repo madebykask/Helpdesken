@@ -362,13 +362,14 @@ $('#divClosingReason ul.dropdown-menu li a').click(function (e) {
 
 $('#SettingTab').click(function (e) {
     $('#btnSaveCaseSetting').show();
-
+    $('#btnMyCases').hide();
     $('#btnNewCase').hide();
     $('#btnCaseTemplate').hide();
 });
 
 $('#CasesTab').click(function (e) {
     $('#btnNewCase').show();
+    $('#btnMyCases').show();
     $('#btnCaseTemplate').show();
     $('#btnSaveCaseSetting').hide();
 });
