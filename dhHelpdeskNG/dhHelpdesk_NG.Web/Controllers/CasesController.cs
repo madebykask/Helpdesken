@@ -445,7 +445,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 remainingView = this.RenderPartialViewToString(
                     "CaseRemainingTime",
-                    this.caseModelFactory.GetCaseRemainingTimeModel(remainingTimeData));
+                    this.caseModelFactory.GetCaseRemainingTimeModel(remainingTimeData, this.workContext));
             }
             return this.Json(new { result = "success", data = data, remainingView = remainingView });
         }
