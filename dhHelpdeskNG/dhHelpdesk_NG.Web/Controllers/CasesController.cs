@@ -45,6 +45,7 @@ namespace DH.Helpdesk.Web.Controllers
     
     using DH.Helpdesk.Web.Models.Case.Input;
     using DH.Helpdesk.Web.Infrastructure.Grid;
+    using DH.Helpdesk.Services.Services.Concrete;
 
     public class CasesController : BaseController
     {
@@ -115,6 +116,8 @@ namespace DH.Helpdesk.Web.Controllers
         
         private readonly OutputFormatter outputFormatter;
 
+        private readonly IOrganizationService _organizationService;
+
         #endregion
 
         #region Constructor
@@ -169,7 +172,10 @@ namespace DH.Helpdesk.Web.Controllers
             ICaseSolutionSettingService caseSolutionSettingService,            
             IInvoiceHelper invoiceHelper, 
             ICaseModelFactory caseModelFactory,
-            CaseOverviewGridSettingsService caseOverviewSettingsService, GridSettingsService gridSettingsService, OutputFormatter outputFormatter)
+            CaseOverviewGridSettingsService caseOverviewSettingsService, 
+            GridSettingsService gridSettingsService, 
+            OutputFormatter outputFormatter,
+            IOrganizationService organizationService)
             : base(masterDataService)
         {            
             this._caseService = caseService;
@@ -223,6 +229,7 @@ namespace DH.Helpdesk.Web.Controllers
             this.caseOverviewSettingsService = caseOverviewSettingsService;
             this.gridSettingsService = gridSettingsService;
             this.outputFormatter = outputFormatter;
+            this._organizationService = organizationService;
         }
 
         #endregion
@@ -2176,22 +2183,8 @@ namespace DH.Helpdesk.Web.Controllers
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Impact_Id.ToString()).ShowOnStartPage == 1)
                 {
                     m.impacts = this._impactService.GetImpacts(customerId);
-                }
-
-                if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.OU_Id.ToString()).ShowOnStartPage == 1)
-                {
-                    m.ous = this._ouService.GetOUs(customerId);                    
-                }
-
-                //if (m.case_.OU_Id != null && m.case_.OU_Id.Value > 0)
-                //{                    
-                //    var o = this._ouService.GetOU(m.case_.OU_Id.Value);
-                //    if (o != null)
-                //    {
-                //        m.ParantPath_OU = o.getOUParentPath();
-                //    }
-                //}
-
+                }                
+         
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()).ShowOnStartPage == 1)
                 {
                     m.priorities = this._priorityService.GetPriorities(customerId);
@@ -2388,6 +2381,13 @@ namespace DH.Helpdesk.Web.Controllers
                     }
                 } // Load Case Template
 
+                
+                if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.OU_Id.ToString()).ShowOnStartPage == 1)
+                {
+                    //m.ous = this._ouService.GetOUs(customerId);
+                    m.ous = this._organizationService.GetOUs(m.case_.Department_Id).ToList();
+                }
+                
                 // hämta parent path för productArea 
                 m.ProductAreaHasChild = 0;
                 if (m.case_.ProductArea_Id.HasValue)

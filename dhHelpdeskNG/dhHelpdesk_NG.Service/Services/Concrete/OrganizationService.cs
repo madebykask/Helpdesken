@@ -65,24 +65,12 @@
                 this.organizationUnitRepository.FindActive(departmentId);
         }
 
-        public OU[] GetOrganizationUnitsBy(int customerId, int? regionId, int? departmentId)
+        public List<OU> GetOUs(int? departmentId)
         {
-            var activeDepartments = this.departmentRepository.GetActiveDepartmentsBy(customerId, regionId);
-            if (departmentId.HasValue)
-            {
-                activeDepartments = activeDepartments.Where(it => it.Id == departmentId.Value);
-            }
-
-            var data =
-                this.organizationUnitRepository.GetActiveAndShowable()
-                    .Join(
-                        activeDepartments,
-                        unit => unit.Department_Id,
-                        department => department.Id,
-                        (unit, department) => unit)
-                        .OrderBy(it => it.Parent_OU_Id).ThenBy(it => it.Name).ToArray();
-
-            return data;
+            var emptyList = new List<OU>();
+            return departmentId == null ?
+                emptyList :
+                this.organizationUnitRepository.GetOUs(departmentId).OrderBy(o=> o.Name).ToList();
         }
     }
 }

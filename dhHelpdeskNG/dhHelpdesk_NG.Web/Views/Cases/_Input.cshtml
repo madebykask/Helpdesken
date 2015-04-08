@@ -11,7 +11,7 @@
     var pDepartmentVisible = false;
     if (Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Department_Id, CaseSolutionFields.Department) == string.Empty)
     {
-        pDepartmentVisible = true;   
+        pDepartmentVisible = true;
     }
  }
 @if (Model.case_ != null)
@@ -239,7 +239,7 @@
                                                 <td class="span4">
                                                     @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Region_Id, CaseSolutionFields.Region))
                                                     {
-                                                        var curRegion = Model.regions.Where(r=> r.Id == Model.case_.Region_Id).SingleOrDefault();
+                                                        var curRegion = Model.regions.Where(r => r.Id == Model.case_.Region_Id).SingleOrDefault();
                                                         @Html.TextBoxFor(m => curRegion.Name, new { id = "RegionName", @readonly = true })
                                                         @Html.HiddenFor(m => Model.case_.Region_Id)
                                                     }
@@ -266,10 +266,9 @@
                                                         
                                                         @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Department_Id, CaseSolutionFields.Department))
                                                         {
-                                                            var curDep = Model.departments.Where(d=> d.Id == Model.case_.Department_Id).SingleOrDefault();
-                                                           @Html.TextBoxFor(m =>  curDep.DepartmentName, 
-                                                                            new { id = "DepartmentName", @readonly = true })
-                                                           @Html.HiddenFor(m => Model.case_.Department_Id) 
+                                                            var curDep = Model.departments.Where(d => d.Id == Model.case_.Department_Id).SingleOrDefault();
+                                                            @Html.TextBoxFor(m => curDep.DepartmentName, new { id = "DepartmentName", @readonly = true })
+                                                            @Html.HiddenFor(m => Model.case_.Department_Id) 
                                                         }
                                                         else
                                                         {                                                        
@@ -292,39 +291,23 @@
                                                 </td>
                                                 <td class="span4">
                                                         @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.OU_Id, CaseSolutionFields.OU))
-                                                        {
-                                                           
-                                                           @Html.TextBox("OUName", Model.ous.Where(w => w.Id == Model.case_.OU_Id).Select(o => o.Name).SingleOrDefault(), new { id = "OUName", @readonly = true })
-                                                           @Html.HiddenFor(m => Model.case_.OU_Id) 
-                                                             
-
+                                                        {                                                                                                                        
+                                                            @Html.TextBox("OUName", Model.ous.Where(w => w.Id == Model.case_.OU_Id).Select(o => o.Name).SingleOrDefault(), new { id = "OuName", @readonly = true })
+                                                            @Html.HiddenFor(m => Model.case_.OU_Id, new { id="case__Ou_Id", name="case_.OU_Id"})                                                              
                                                         }
                                                         else
                                                         {
                                                             <select id="case__Ou_Id" name="case_.OU_Id" data-field="ou">
                                                                 <option value="">&nbsp;</option>
                                                                 @if (Model.ous != null)
-                                                                {
-                                                                    var curOUs =
-                                                                        pDepartmentVisible?
-                                                                            Model.ous.Where(e => (e.IsActive == 1 || Model.case_.OU_Id == e.Id)
-                                                                                              && Model.case_.Department_Id == e.Department_Id).ToList():
-                                                                            null;
-                                                                    if (curOUs != null)
-                                                                    {
-                                                                        foreach (var e in curOUs)
-                                                                        {                                                                
-                                                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.OU_Id.ToString()) >@e.Name</option>
-                                                                
-                                                                            foreach (var sub in e.SubOUs.Where(s => s.IsActive == 1 || Model.case_.OU_Id == s.Id))
-                                                                            { 
-                                                                                    <option value="@sub.Id" @sub.Id.IdIsSelected(Model.case_.OU_Id.ToString()) > @e.Name - @sub.Name</option>
-                                                                            }
-                                                                        }
-                                                                    }
+                                                                {                                                                   
+                                                                    foreach (var ou in Model.ous)
+                                                                    {                                                                
+                                                                        <option value="@ou.Id" @ou.Id.IdIsSelected(Model.case_.OU_Id.ToString()) >@ou.Name</option>
+                                                                    }                                                                 
                                                                 }
                                                             </select>
-                                                        }                                                   
+                                                        }                                    
                                                 </td>                                                
                                             </tr>
                                             <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Place, CaseSolutionFields.Place)">
@@ -934,7 +917,7 @@
                                                 <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>
                                             }
                                             <div id="divCaseFiles">                                                
-                                                @Html.Partial("_CaseFiles", Model.CaseFilesModel, new ViewDataDictionary{{"CaseInactive", Model.case_.FinishingDate.HasValue} })
+                                                @Html.Partial("_CaseFiles", Model.CaseFilesModel, new ViewDataDictionary { { "CaseInactive", Model.case_.FinishingDate.HasValue } })
                                             </div>
                                         </td>
                                     </tr>

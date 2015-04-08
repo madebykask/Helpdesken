@@ -1,15 +1,18 @@
 ﻿// Global variables 
 var dhHelpdesk = {};
 var publicCustomerId = $('#case__Customer_Id').val();
+
 var publicDepartmentControlName = '#case__Department_Id';
+var publicReadOnlyDepartmentName = '#DepartmentName';
+
 var publicOUControlName = '#case__Ou_Id';
+var publicReadOnlyOUName = '#OuName';
+
 
 // controller methods:
 var publicChangeRegion = '/Cases/ChangeRegion/';
 var publicChangeDepartment = '/Cases/ChangeDepartment/';
 
-
-//Start FAQ Acordion
 
 //tabbar
 $('.nav-tabs li:not(.disabled) a').click(function (e) {
@@ -129,9 +132,6 @@ function CaseCascadingSelectlistChange(id, customerId, postTo, ctl, departmentFi
                     $(ctl).append('<option value="' + data.list[i].id + '">' + data.list[i].name + '</option>');
             }
         }
-    }, 'json').always(function () {
-        if (ctl == '#case__Ou_Id')
-            $('#case__Ou_Id').prop('disabled', false);
     });
 }
 
@@ -197,10 +197,8 @@ function FAQInitForm() {
             },
             buttons: { browse: true, start: true, stop: true, cancel: true },
             preinit: {
-                Init: function (up, info) {
-                    //console.log('1:init', info);                    
+                Init: function (up, info) {                    
                 },
-
 
                 UploadFile: function (up, file) {
 
@@ -231,9 +229,7 @@ function FAQInitForm() {
                     $('#FAQFileNames').val(strFiles + "|" + file.name);
                 },
 
-                UploadComplete: function (up, file) {
-
-                    //console.log('3:uploaded complete',file.name);
+                UploadComplete: function (up, file) {                   
                     //plupload_add
                     $(".plupload_buttons").css("display", "inline");
                     $(".plupload_upload_status").css("display", "inline");
@@ -267,6 +263,8 @@ function FAQInitForm() {
 }
 
 function refreshDepartment(regionId, departmentFilterFormat, selectedDepartmentId) {
+    $(publicDepartmentControlName).val('');
+    $(publicReadOnlyDepartmentName).val('');
     var ctlOption = publicDepartmentControlName + ' option';
     $.post(publicChangeRegion, { 'id': regionId, 'customerId': publicCustomerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {
         $(ctlOption).remove();
@@ -277,18 +275,24 @@ function refreshDepartment(regionId, departmentFilterFormat, selectedDepartmentI
                 var item = data.list[i];
                 var option = $("<option value='" + item.id + "'>" + item.name + "</option>");
                 if (option.val() == selectedDepartmentId) {
+                    $(publicDepartmentControlName).val(selectedDepartmentId);
+                    $(publicReadOnlyDepartmentName).val(item.name);
                     option.prop("selected", true);
                 }
                 $(publicDepartmentControlName).append(option);
             }
         }
     }, 'json').always(function () {
+        $(publicOUControlName).val('');
+        $(publicReadOnlyOUName).val('');
         $(publicDepartmentControlName).change();
         $(publicDepartmentControlName).prop('disabled', false);
     });
 }
 
 function refreshOrganizationUnit(departmentId, departmentFilterFormat, selectedOrganizationUnitId) {
+    $(publicOUControlName).val('');
+    $(publicReadOnlyOUName).val('');
     var ctlOption = publicOUControlName + ' option';
     $.post(publicChangeDepartment, { 'id': departmentId, 'customerId': publicCustomerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {
         $(ctlOption).remove();
@@ -299,6 +303,8 @@ function refreshOrganizationUnit(departmentId, departmentFilterFormat, selectedO
                 var item = data.list[i];
                 var option = $("<option value='" + item.id + "'>" + item.name + "</option>");
                 if (option.val() == selectedOrganizationUnitId) {
+                    $(publicOUControlName).val(selectedOrganizationUnitId);
+                    $(publicReadOnlyOUName).val(item.name);
                     option.prop("selected", true);
                 }
                 $(publicOUControlName).append(option);
@@ -334,7 +340,7 @@ function CaseInitForm() {
     });
 
 
-    $('#case__Department_Id').change(function () {
+    $(publicDepartmentControlName).change(function () {
         // Remove after implementing http://redmine.fastdev.se/issues/10995        
         var departmentId = $(this).val();
         var departmentFilterFormat = $('#DepartmentFilterFormat').val();
@@ -477,7 +483,7 @@ function CaseInitForm() {
         e.preventDefault();
         var val = $(this).attr('value');
         $("#divBreadcrumbs_OU").text(getBreadcrumbs(this));
-        $("#case__Ou_Id").val(val).trigger('change');
+        $(publicOUControlName).val(val).trigger('change');
     });
 
     $('#divProductArea ul.dropdown-menu li a').click(function (e) {
@@ -507,14 +513,13 @@ function CaseInitForm() {
             params += "&cellPhone=" + $("#case__PersonsCellphone").val();
         if ($("#case__Region_Id").val() != '')
             params += "&regionId=" + $("#case__Region_Id").val();
-        if ($("#case__Department_Id").val() != '')
-            params += "&departmentId=" + $("#case__Department_Id").val();
-        if ($("#case__Ou_Id").val() != '')
-            params += "&organizationUnitId=" + $("#case__Ou_Id").val();
+        if ($(publicDepartmentControlName).val() != '')
+            params += "&departmentId=" + $(publicDepartmentControlName).val();
+        if ($(publicOUControlName).val() != '')
+            params += "&organizationUnitId=" + $(publicOUControlName).val();
         
         var win = window.open('/Notifiers/NewNotifierPopup' + params, '_blank', 'left=100,top=100,width=990,height=480,toolbar=0,resizable=1,menubar=0,status=0,scrollbars=1');
-        //win.onbeforeunload = function () { CaseNewNotifierEvent(win.returnValue); }
-        //$(win).on('beforeunload', function () { CaseNewNotifierEvent(win.returnValue); });
+        
     });
 
     $('#AddFAQ').click(function (e) {
@@ -578,9 +583,7 @@ function CaseInitForm() {
             },
             buttons: { browse: true, start: true, stop: true, cancel: true },
             preinit: {
-                Init: function (up, info) {
-                    
-                    //console.log('1:init', info);                    
+                Init: function (up, info) {                                        
                 },
 
                 
@@ -611,10 +614,7 @@ function CaseInitForm() {
                     $('#CaseFileNames').val(strFiles + "|" + file.name);                                       
                 },
 
-                UploadComplete: function (up, file) {
-
-                    //console.log('3:uploaded complete',file.name);
-                    //plupload_add
+                UploadComplete: function (up, file) {                    
                     $(".plupload_buttons").css("display", "inline");
                     $(".plupload_upload_status").css("display", "inline");                    
                     up.refresh();
@@ -878,13 +878,13 @@ function GetComputerUserSearchOptions() {
             $('#case__Region_Id').val(item.regionid);
             $('#RegionName').val(item.regionname);
 
-            $('#case__Department_Id').val(item.departmentid);
+            $(publicDepartmentControlName).val(item.departmentid);
             refreshDepartment(item.regionid, departmentFilterFormat, item.departmentid);                        
-            $('#DepartmentName').val(item.departmentname);
+            $(publicReadOnlyDepartmentName).val(item.departmentname);
 
-            $('#case__OU_Id').val(item.ouid);
+            $(publicOUControlName).val(item.ouid);
             refreshOrganizationUnit(item.departmentid, departmentFilterFormat, item.ouid);            
-            $('#OUName').val(item.ouname);
+            $(publicReadOnlyOUName).val(item.ouname);
 
             return item.num;
         }
@@ -1107,17 +1107,16 @@ function NewNotifierEvent(id) {
             $('#case__Place').val(data.place);
             $('#case__UserCode').val(data.usercode);
             
-            $('#case__Region_Id').val(data.regionid);
-            //$('#case__Region_Id').change();
+            $('#case__Region_Id').val(data.regionid);            
             $('#RegionName').val(data.regionname);
 
-            $('#case__Department_Id').val(data.departmentid);
+            $(publicDepartmentControlName).val(data.departmentid);
             refreshDepartment(data.regionid, departmentFilterFormat, data.departmentid);
-            $('#DepartmentName').val(data.departmentname);
+            $(publicReadOnlyDepartmentName).val(data.departmentname);
 
-            $('#case__OU_Id').val(data.ouid);
+            $(publicOUControlName).val(data.ouid);
             refreshOrganizationUnit(data.departmentid, departmentFilterFormat, data.ouid);
-            $('#OUName').val(data.ouname);
+            $(publicReadOnlyOUName).val(data.ouname);
 
         }
     }, 'json');

@@ -1,6 +1,93 @@
 ﻿"use strict";
+var regionControlName = '#Region';
+var departmentControlName = '#Department';
+var departmentControlId = '#CaseSolution.Department_Id';
+var OUControlName = '#OU';
+var OUControlId = '#CaseSolution.OU_Id';
+
+// controller methods:
+var changeRegion = '/CaseSolution/ChangeRegion';
+var changeDepartment = '/CaseSolution/ChangeDepartment/';
+
 
 $(function () {
+
+    $(regionControlName).change(function () {
+        refreshDepartments($(this).val());
+    });
+
+    $(departmentControlName).change(function () {
+        refreshOrganizationUnits($(this).val());   
+    });
+
+    function refreshDepartments(regionId) {
+        $(departmentControlId).val('');
+        var ctlOption = departmentControlName + ' option';
+        $.post(changeRegion, { 'regionId': regionId }, function (data) {
+            $(ctlOption).remove();
+            $(departmentControlName).append('<option value="">&nbsp;</option>');
+            $(departmentControlName).prop('disabled', true);
+            if (data != undefined) {
+                for (var i = 0; i < data.list.length; i++) {
+                    var item = data.list[i];
+                    var option = $("<option value='" + item.id + "'>" + item.name + "</option>");                    
+                    $(departmentControlName).append(option);
+                }
+            }
+        }, 'json').always(function () {
+            $(departmentControlName).change();
+            $(departmentControlName).prop('disabled', false);
+        });
+    }
+
+    function refreshOrganizationUnits(departmentId) {
+        $(OUControlId).val('');
+        var ctlOption = OUControlName + ' option';
+        $.post(changeDepartment, { 'departmentId': departmentId }, function (data) {
+            $(ctlOption).remove();
+            $(OUControlName).append('<option value="">&nbsp;</option>');
+            $(OUControlName).prop('disabled', true);
+            if (data != undefined) {
+                for (var i = 0; i < data.list.length; i++) {
+                    var item = data.list[i];
+                    var option = $("<option value='" + item.id + "'>" + item.name + "</option>");                    
+                    $(OUControlName).append(option);
+                }
+            }
+        }, 'json').always(function () {            
+            $(OUControlName).prop('disabled', false);
+        });
+    }
+
+    $("select").change(function () {
+
+        if ($(this).attr('elementclass') == 'OptionDropDown') {
+            var e = document.getElementById($(this).attr('id'));
+            var curVal = e.options[e.selectedIndex].value;
+            var resultValue = "";
+
+            switch (curVal) {
+                case "1":
+                    resultValue = "DisplayField";
+                    break;
+
+                case "2":
+                    resultValue = "ReadOnly";
+                    break;
+
+                case "3":
+                    resultValue = "Hide";
+                    break;
+            }
+
+            var curName = $(this).attr('elementname');
+
+            var hideElement = document.getElementById('hide_' + curName);
+            hideElement.setAttribute("value", resultValue);
+
+        }
+    });
+
     $('#WorkingGroup').change(function () {
         // filter administrators
         CaseCascadingSelectlistChange($(this).val(), $('#CaseSolution_Customer_Id').val(), '/Cases/ChangeWorkingGroupFilterUser/', '#PerformerUser');
