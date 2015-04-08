@@ -17,27 +17,27 @@
             {
                 if (!hour.TimeUntil.HasValue)
                 {
-                    <th>@string.Format("{0} {1}", hour.Time, Translation.Get("h"))</th>
+                    <th>@string.Format("<{0} {1}", hour.Time, Translation.Get("h"))</th>
                 }
                 else
                 {
                     if (hour.TimeUntil.Value < 23)
                     {
-                        <th class="thpointer">@MvcHtmlString.Create(string.Format("<span rel=\"tooltip\" title=\"{2}\">{0} {1}</span>", hour.TimeUntil, Translation.Get("h"), hour.Tooltip))</th>
+                        <th>@string.Format("<{0} {1}", hour.TimeUntil, Translation.Get("h"))</th>
                     }
                     else
                     {
-                        <th class="thpointer">@MvcHtmlString.Create(string.Format("<span rel=\"tooltip\" title=\"{1}\">24 {0}</span>", Translation.Get("h"), hour.Tooltip))</th>
+                        <th>@string.Format("<24 {0}", Translation.Get("h"))</th>
                     }
                 }
             }
             @foreach (var day in Model.Days)
             {
-                <th>@day.Time</th>
+                <th>@string.Format("<{0} {1}", day.Time, Translation.Get("d"))</th>
             }
             @if (Model.MoreThenMaxDays != null)
             {
-                <th>@string.Format("> {0} {1}", Model.MaxDays, Translation.Get("dagar"))</th>                
+                <th>@string.Format(">={0} {1}", Model.MaxDays, Translation.Get("d"))</th>                
             }
         </tr>
     </thead>
