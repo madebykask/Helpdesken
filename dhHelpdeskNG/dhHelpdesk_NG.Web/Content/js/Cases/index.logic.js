@@ -80,11 +80,6 @@ var GRID_STATE = {
             if (me._gridState !== window.GRID_STATE.IDLE) {
                 return false;
             }
-            if (me.isFilterEmpty()) {
-                $('#icoFilter').hide();
-            } else {
-                $('#icoFilter').show();
-            }
             me.onSearchClick.apply(me);
             return false;
         });
@@ -145,7 +140,8 @@ var GRID_STATE = {
     * Resolves whether filter form fields is empty
     * @returns { bool } 
     */
-    Page.prototype.isFilterEmpty = function() {
+    Page.prototype.isFilterEmpty = function () {
+        var me = this;
         return $('#lstFilterRegion option:selected').length === 0 &&
             $('#lstFilterCountry option:selected').length === 0 &&
             $('#lstfilterDepartment option:selected').length === 0 &&
@@ -160,10 +156,13 @@ var GRID_STATE = {
             $('#lstfilterStatus option:selected').length === 0 &&
             $('#lstfilterStateSecondary option:selected').length === 0 &&
             isNullOrEmpty($('#hidFilterClosingReasonId').val()) &&
-            isNullOrEmpty($('#CaseClosingDateEndFilter').val()) &&
-            isNullOrEmpty($('#CaseClosingDateStartFilter').val()) &&
-            isNullOrEmpty($('#CaseWatchDateEndFilter').val()) &&
-            isNullOrEmpty($('#CaseWatchDateStartFilter').val());
+            isNullOrEmpty($('[name=CaseInitiatorFilter]', me.$filterForm).val()) &&
+            isNullOrEmpty($('[name=CaseClosingDateStartFilter]', me.$filterForm).val()) &&
+            isNullOrEmpty($('[name=CaseClosingDateEndFilter]', me.$filterForm).val()) &&
+            isNullOrEmpty($('[name=CaseWatchDateStartFilter]', me.$filterForm).val()) &&
+            isNullOrEmpty($('[name=CaseWatchDateEndFilter]', me.$filterForm).val()) &&
+            isNullOrEmpty($('[name=CaseRegistrationDateStartFilter]', me.$filterForm).val()) &&
+            isNullOrEmpty($('[name=CaseRegistrationDateEndFilter]', me.$filterForm).val());
     };
 
     /// initial state of search form
@@ -173,8 +172,6 @@ var GRID_STATE = {
             $('#icoFilter').hide();
         } else {
             $('#icoFilter').show();
-            $("#hiddeninfo").show();
-            $("#icoPlus").removeClass('icon-plus-sign').addClass('icon-minus-sign');
         }
     };
 
@@ -197,6 +194,7 @@ var GRID_STATE = {
     */
     Page.prototype.setGridSettings = function(gridSettings) {
         var me = this;
+        var hasColSpecialClass = '';
         var out = ['<tr><th style="width:18px;"></th>'];
         var sortCallback = function () {
             me.setSortField.call(me, $(this).attr('fieldname'), $(this));
@@ -219,7 +217,7 @@ var GRID_STATE = {
             }
         });
         out.push('</tr>');
-        me.$table.addClass(me.gridSettings.cls);
+        me.$table.addClass([me.gridSettings.cls, hasColSpecialClass].join(' '));
         me.$tableHeader.html(out.join(JOINER));
         me.$tableHeader.find('th.thpointer').on('click', sortCallback);
         me.fetchData();
@@ -345,6 +343,27 @@ var GRID_STATE = {
         });
     };
 
+    /**
+    * Sets search filter to empty values in sake to fetch more data as possible
+    */
+    Page.prototype.unsetSearchFilter = function () {
+        var me = this;
+        /// filterRegion,filterCountry,filterDepartment,filterCaseUser, 
+        $("#lstFilterRegion, #lstFilterCountry, #lstfilterDepartment, #lstfilterUser").val('').trigger("chosen:updated");
+        /// filterCaseType
+        unsetBootstrapsDropdown('#divCaseType');
+        /// filterProductArea
+        unsetBootstrapsDropdown('#divProductArea');
+        /// filterCategory, filterWorkingGroup, filterUser, filterPerformer, filterPriority, filterStatus, filterStateSecondary
+        $('#lstfilterCategory, #lstfilterWorkingGroup, #lstfilterResponsible, #lstfilterPerformer, #lstfilterPriority, #lstfilterStatus, #lstfilterStateSecondary').val('').trigger("chosen:updated");
+        /// CaseRegistrationDateFilterShow, CaseWatchDateFilterShow, CaseClosingDateFilterShow
+        $('.date-block input[type=text]', me.$filterForm).val('');
+        //ClosingReasons
+        unsetBootstrapsDropdown('#divClosingReason');
+        /// Initiator
+        $('[name=CaseInitiatorFilter]', me.$filterForm).val('');
+    };
+
     Page.prototype.onSearchClick = function () {
         var me = this;
         var searchStr = $(me.$searchField).val();
@@ -352,7 +371,12 @@ var GRID_STATE = {
             /// if looking by case number - set case state filter to "All"
             $(me.$caseFilterType).val(-1);
             /// and reset search filter
-            unsetSearchFilter();
+            me.unsetSearchFilter();
+        }
+        if (me.isFilterEmpty()) {
+            $('#icoFilter').hide();
+        } else {
+            $('#icoFilter').show();
         }
         me.fetchData();
     };
@@ -457,24 +481,6 @@ function unsetBootstrapsDropdown(blockElementJqueryId) {
     $(blockElementJqueryId).find('input[type=hidden]').val(val);
 }
 
-/**
-* Sets search filter to empty values in sake to fetch more data as possible
-*/
-function unsetSearchFilter() {
-    /// filterRegion,filterCountry,filterDepartment,filterCaseUser, 
-    $("#lstFilterRegion, #lstFilterCountry, #lstfilterDepartment, #lstfilterUser").val('').trigger("chosen:updated");
-    /// filterCaseType
-    unsetBootstrapsDropdown('#divCaseType');
-    /// filterProductArea
-    unsetBootstrapsDropdown('#divProductArea');
-    /// filterCategory, filterWorkingGroup, filterUser, filterPerformer, filterPriority, filterStatus, filterStateSecondary
-    $('#lstfilterCategory, #lstfilterWorkingGroup, #lstfilterResponsible, #lstfilterPerformer, #lstfilterPriority, #lstfilterStatus, #lstfilterStateSecondary').val('').trigger("chosen:updated");
-    /// CaseRegistrationDateFilterShow, CaseWatchDateFilterShow, CaseClosingDateFilterShow
-    $('.date-block input[type=text]').val('');
-    //ClosingReasons
-    unsetBootstrapsDropdown('#divClosingReason');
-    // @TODO: InitiatorName
-}
 
 window.onload = function () {
     $('#btnNewCase').show();

@@ -1,11 +1,6 @@
 ﻿@using System.Threading
 @model DateTime?
 @{
-    var controlId = ViewData["id"];
-    if (controlId == null)
-    {
-        throw new ArgumentNullException("id", "id must be specified.");
-    }
 
     var inputAttributes = (Dictionary<string, object>)ViewData["inputAttributes"];
     Dictionary<string, object> htmlAttributes;
@@ -40,18 +35,11 @@
         controlName = name;
         htmlAttributes.Add("Name", controlName);
     }
+    htmlAttributes.Add("id", null);
 }
 <input type="text" style="display: none;" />
 <div class="input-append date dateie">
-    @if (!string.IsNullOrWhiteSpace(controlName))
-    {
-        // todo
-        @Html.TextBoxFor(m => formattedDate, htmlAttributes)
-    }
-    else
-    {
-        @Html.TextBox(controlName, formattedDate, htmlAttributes)
-    }
+     @Html.TextBox(string.Empty, formattedDate, htmlAttributes)
     <span class="add-on">
         <i class="icon-calendar"></i>
     </span>
