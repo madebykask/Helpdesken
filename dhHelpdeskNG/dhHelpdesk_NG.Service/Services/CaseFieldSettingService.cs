@@ -17,6 +17,7 @@
         
         IList<CaseFieldSettingLanguage> GetCaseFieldSettingLanguages();
         IList<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguages(int? customerId, int languageId);
+        IList<CaseFieldSettingsWithLanguage> GetAllCaseFieldSettingsWithLanguages(int? customerId, int languageId);
         IList<ListCases> ListToShowOnCaseSummaryPage(int? customerId, int? languageId, int? UserGroupId);
         IList<ListCases> ListToShowOnCustomerSettingSummaryPage(int? customerId, int? languageId, int? UserGroupId);
 
@@ -52,6 +53,11 @@
             return this._caseFieldSettingRepository.GetAll().ToList();
         }
 
+        /// <summary>
+        /// Note: only gets cfs.ShowOnStartPage == 1 from repo
+        /// </summary>
+        /// <param name="customerId"></param>
+        /// <returns></returns>
         public IList<CaseFieldSetting> GetCaseFieldSettings(int customerId)
         {
             return this._caseFieldSettingRepository.GetMany(x => x.Customer_Id == customerId).ToList();
@@ -78,6 +84,10 @@
         public IList<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguages(int? customerId, int languageId)
         {
             return this._caseFieldSettingLanguageRepository.GetCaseFieldSettingsWithLanguages(customerId, languageId).ToList();
+        }
+        public IList<CaseFieldSettingsWithLanguage> GetAllCaseFieldSettingsWithLanguages(int? customerId, int languageId)
+        {
+            return this._caseFieldSettingLanguageRepository.GetAllCaseFieldSettingsWithLanguages(customerId, languageId).ToList();
         }
 
         public IList<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguagesForDefaultCust(int languageId)

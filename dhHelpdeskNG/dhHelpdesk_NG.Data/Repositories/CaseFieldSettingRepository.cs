@@ -14,6 +14,7 @@
     {
         void DeleteByLanguageId(int languageId, int customerId);
         IEnumerable<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguages(int? customerId, int? languageId);
+        IEnumerable<CaseFieldSettingsWithLanguage> GetAllCaseFieldSettingsWithLanguages(int? customerId, int? languageId);
         IEnumerable<CaseFieldSettingsForTranslation> GetCaseFieldSettingsForTranslation(int userId);
         IEnumerable<CaseFieldSettingsForTranslation> GetCaseFieldSettingsForTranslation();
         IEnumerable<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguagesForDefaultCust(int languageId);
@@ -36,12 +37,38 @@
             del.ForEach(d => this.DataContext.CaseFieldSettingLanguages.Remove(d));
         }
 
+        /// <summary>
+        /// Note: Only returns where ShowOnStartPage == 1
+        /// </summary>
+        /// <param name="customerId"></param>
+        /// <param name="languageId"></param>
+        /// <returns></returns>
         public IEnumerable<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguages(int? customerId, int? languageId)
         {
             var query = from cfsl in this.DataContext.CaseFieldSettingLanguages
                             join cfs in this.DataContext.CaseFieldSettings on cfsl.CaseFieldSettings_Id equals cfs.Id
                             //join cs in this.DataContext.CaseSettings on cfs.Name equals cs.Name
                         where cfs.Customer_Id == customerId && cfsl.Language_Id == languageId && cfs.ShowOnStartPage == 1
+                        group cfsl by new { cfsl.CaseFieldSettings_Id, cfsl.Label, cfsl.Language_Id, cfsl.FieldHelp, cfs.Name, cfs.EMailIdentifier } into grouped
+                        select new CaseFieldSettingsWithLanguage
+                        {
+                            Id = grouped.Key.CaseFieldSettings_Id,
+                            Label = grouped.Key.Label,
+                            Language_Id = grouped.Key.Language_Id,
+                            FieldHelp = grouped.Key.FieldHelp,
+                            Name = grouped.Key.Name,
+                            EMailIdentifier = grouped.Key.EMailIdentifier
+                        };
+
+            return query.OrderBy(x => x.Id);
+        }
+
+        public IEnumerable<CaseFieldSettingsWithLanguage> GetAllCaseFieldSettingsWithLanguages(int? customerId, int? languageId)
+        {
+            var query = from cfsl in this.DataContext.CaseFieldSettingLanguages
+                        join cfs in this.DataContext.CaseFieldSettings on cfsl.CaseFieldSettings_Id equals cfs.Id
+                        //join cs in this.DataContext.CaseSettings on cfs.Name equals cs.Name
+                        where cfs.Customer_Id == customerId && cfsl.Language_Id == languageId
                         group cfsl by new { cfsl.CaseFieldSettings_Id, cfsl.Label, cfsl.Language_Id, cfsl.FieldHelp, cfs.Name, cfs.EMailIdentifier } into grouped
                         select new CaseFieldSettingsWithLanguage
                         {

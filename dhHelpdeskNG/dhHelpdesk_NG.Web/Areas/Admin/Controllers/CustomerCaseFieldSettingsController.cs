@@ -103,7 +103,7 @@
             {
                 CustomerCaseSummaryViewModel = new CustomerCaseSummaryViewModel(),
                 CaseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(customer.Id),
-                CaseFieldSettingWithLangauges = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customer.Id, language.Id),
+                CaseFieldSettingWithLangauges = this._caseFieldSettingService.GetAllCaseFieldSettingsWithLanguages(customer.Id, language.Id),
                 Customer = customer,
                 Language = language,
                 ListCaseForLabel = this._caseFieldSettingService.ListToShowOnCasePage(customer.Id, language.Id),
