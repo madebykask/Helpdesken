@@ -2262,7 +2262,7 @@ namespace DH.Helpdesk.Web.Controllers
                         m.case_.Cost = caseTemplate.Cost;
                         m.case_.OtherCost = caseTemplate.OtherCost;
                         m.case_.Available = caseTemplate.Available;
-                        m.case_.CausingPartId = caseTemplate.FinishingCause_Id;
+                       // m.case_.CausingPartId = caseTemplate.FinishingCause_Id;
                         m.case_.ContactBeforeAction = caseTemplate.ContactBeforeAction;
                         m.case_.WatchDate = caseTemplate.WatchDate;
                         m.case_.Project_Id = caseTemplate.Project_Id;
@@ -2270,7 +2270,7 @@ namespace DH.Helpdesk.Web.Controllers
                         m.case_.Change_Id = caseTemplate.Change_Id;
                         m.case_.FinishingDate = caseTemplate.FinishingDate;
                         m.case_.FinishingDescription = caseTemplate.FinishingDescription;
-                        m.case_.CausingPartId = caseTemplate.FinishingCause_Id;
+                        //m.case_.CausingPartId = caseTemplate.FinishingCause_Id;
                         m.case_.PlanDate = caseTemplate.PlanDate;
                       
                         m.CaseTemplateName = caseTemplate.Name;
@@ -2281,6 +2281,13 @@ namespace DH.Helpdesk.Web.Controllers
 
                         // This is used for hide fields(which are not in casetemplate) in new case input
                         m.templateistrue = templateistrue;
+
+                        var finishingCauses = this._finishingCauseService.GetFinishingCauseInfos(customerId);
+                       
+                        m.FinishingCause = this.GetFinishingCauseFullPath(finishingCauses.ToArray(), caseTemplate.FinishingCause_Id);
+                       
+
+
                     }
                 } // Load Case Template
 
