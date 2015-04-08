@@ -186,8 +186,11 @@
 
         public string ClosingReasonPath { get; set; }
 
-        public CaseColumnsSettingsModel ColumnSettingModel { get; set; }        
+        public CaseColumnsSettingsModel ColumnSettingModel { get; set; }
 
-        public string InitiatorName { get; set; }
+        /// <summary>
+        /// Flag to display "filter by intitator" field on case overview page
+        /// </summary>
+        public bool CaseInitiatorFilterShow { get; set; }
     }
 }

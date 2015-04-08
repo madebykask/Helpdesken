@@ -339,7 +339,7 @@ namespace DH.Helpdesk.Web.Controllers
             f.CaseClosingDateStartFilter = frm.GetDate("CaseClosingDateStartFilter");
             f.CaseClosingDateEndFilter = frm.GetDate("CaseClosingDateEndFilter");
             f.CaseClosingReasonFilter = frm.ReturnFormValue("hidFilterClosingReasonId").ReturnCustomerUserValue();
-
+            f.Initiator = frm.ReturnFormValue("CaseInitiatorFilter");
             int caseRemainingTimeFilter;
             if (int.TryParse(frm.ReturnFormValue("CaseRemainingTime"), out caseRemainingTimeFilter))
             {
@@ -482,6 +482,7 @@ namespace DH.Helpdesk.Web.Controllers
             return this.Json(new { result = "success", data = data, remainingView = remainingView });
         }
 
+
         private CaseSearchFilterData CreateCaseSearchFilterData(int cusId, int userId, bool clearFilters, CustomerUser cu, CasesCustomFilter customFilter = CasesCustomFilter.None)
         {
             var fd = new CaseSearchFilterData
@@ -565,7 +566,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 fd.ClosingReasons = this._finishingCauseService.GetFinishingCauses(cusId);
             }
-
+         
             var sm = this.GetCaseSearchModel(cusId, userId);
             if (!(customFilter == CasesCustomFilter.None))
             {
@@ -610,6 +611,7 @@ namespace DH.Helpdesk.Web.Controllers
                         sm.caseSearchFilter.ParantPath_CaseType = c.getCaseTypeParentPath();
                 }
             }
+
             switch (customFilter)
             {
                 case CasesCustomFilter.MyCases:
@@ -631,10 +633,6 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             sm.caseSearchFilter.CustomFilter = customFilter;
-
-            fd.caseSearchFilter = sm.caseSearchFilter;
-
-
             fd.caseSearchFilter = sm.caseSearchFilter;
             fd.CaseClosingDateEndFilter = sm.caseSearchFilter.CaseClosingDateEndFilter;
             fd.CaseClosingDateStartFilter = sm.caseSearchFilter.CaseClosingDateStartFilter;
@@ -642,7 +640,7 @@ namespace DH.Helpdesk.Web.Controllers
             fd.CaseRegistrationDateStartFilter = sm.caseSearchFilter.CaseRegistrationDateStartFilter;
             fd.CaseWatchDateEndFilter = sm.caseSearchFilter.CaseWatchDateEndFilter;
             fd.CaseWatchDateStartFilter = sm.caseSearchFilter.CaseWatchDateStartFilter;
-
+            
             return fd;
         }
 
@@ -1265,102 +1263,6 @@ namespace DH.Helpdesk.Web.Controllers
             }
         }
 
-//        public ActionResult Search(FormCollection frm)
-//        {
-//            var f = new CaseSearchFilter();
-//            var m = new CaseSearchResultModel();
-//            
-//            if (SessionFacade.CurrentUser != null)
-//            {
-//                m.GridSettings =
-//                    this.caseOverviewSettingsService.GetSettings(
-//                        SessionFacade.CurrentCustomer.Id,
-//                        SessionFacade.CurrentUser.UserGroupId,
-//                        SessionFacade.CurrentUser.Id);
-//                f.CustomerId = frm.ReturnFormValue("hidFilterCustomerId").convertStringToInt();
-//                f.UserId = SessionFacade.CurrentUser.Id;
-//                f.CaseType = frm.ReturnFormValue("hidFilterCaseTypeId").convertStringToInt();
-//                f.ProductArea = frm.ReturnFormValue("hidFilterProductAreaId").ReturnCustomerUserValue();
-//                f.Region = frm.ReturnFormValue("lstFilterRegion");
-//                f.Country = frm.ReturnFormValue("lstFilterCountry");
-//                f.Department = frm.ReturnFormValue("lstFilterDepartment");
-//                f.User = frm.ReturnFormValue("lstFilterUser");
-//                f.Category = frm.ReturnFormValue("lstFilterCategory");
-//                f.WorkingGroup = frm.ReturnFormValue("lstFilterWorkingGroup");
-//                f.UserPerformer = frm.ReturnFormValue("lstFilterPerformer");
-//                f.UserResponsible = frm.ReturnFormValue("lstFilterResponsible");
-//                f.Priority = frm.ReturnFormValue("lstFilterPriority");
-//                f.Status = frm.ReturnFormValue("lstFilterStatus");
-//                f.StateSecondary = frm.ReturnFormValue("lstFilterStateSecondary");
-//                f.CaseProgress = frm.ReturnFormValue("lstFilterCaseProgress");
-//                f.FreeTextSearch = frm.ReturnFormValue("txtFreeTextSearch");
-//                f.CaseRegistrationDateStartFilter = frm.GetDate("CaseRegistrationDateStartFilter");
-//                f.CaseRegistrationDateEndFilter = frm.GetDate("CaseRegistrationDateEndFilter");
-//                f.CaseWatchDateStartFilter = frm.GetDate("CaseWatchDateStartFilter");
-//                f.CaseWatchDateEndFilter = frm.GetDate("CaseWatchDateEndFilter");
-//                f.CaseClosingDateStartFilter = frm.GetDate("CaseClosingDateStartFilter");
-//                f.CaseClosingDateEndFilter = frm.GetDate("CaseClosingDateEndFilter");
-//                f.CaseClosingReasonFilter = frm.ReturnFormValue("hidFilterClosingReasonId").ReturnCustomerUserValue();
-//
-//                int caseRemainingTimeFilter;
-//                if (int.TryParse(frm.ReturnFormValue("CaseRemainingTime"), out caseRemainingTimeFilter))
-//                {
-//                    f.CaseRemainingTimeFilter = caseRemainingTimeFilter;
-//                }
-//
-//                int caseRemainingTimeUntilFilter;
-//                if (int.TryParse(frm.ReturnFormValue("CaseRemainingTimeUntil"), out caseRemainingTimeUntilFilter))
-//                {
-//                    f.CaseRemainingTimeUntilFilter = caseRemainingTimeUntilFilter;
-//                }
-//
-//                int caseRemainingTimeMaxFilter;
-//                if (int.TryParse(frm.ReturnFormValue("CaseRemainingTimeMax"), out caseRemainingTimeMaxFilter))
-//                {
-//                    f.CaseRemainingTimeMaxFilter = caseRemainingTimeMaxFilter;
-//                }
-//
-//                bool caseRemainingTimeHoursFilter;
-//                if (bool.TryParse(frm.ReturnFormValue("CaseRemainingTimeHours"), out caseRemainingTimeHoursFilter))
-//                {
-//                    f.CaseRemainingTimeHoursFilter = caseRemainingTimeHoursFilter;
-//                }
-//
-//                var sm = this.GetCaseSearchModel(f.CustomerId, f.UserId);
-//                sm.caseSearchFilter = f;
-//                sm.Search.SortBy = frm.ReturnFormValue("hidSortBy");
-//                sm.Search.Ascending = frm.ReturnFormValue("hidSortByAsc").convertStringToBool();
-//
-//                m.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(f.CustomerId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
-//                var workTimeCalc = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
-//                var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
-//                CaseRemainingTimeData remainingTime;
-//                m.cases = this._caseSearchService.Search(
-//                    f,
-//                    m.caseSettings,
-//                    SessionFacade.CurrentUser.Id,
-//                    SessionFacade.CurrentUser.UserId,
-//                    SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups,
-//                    SessionFacade.CurrentUser.UserGroupId,
-//                    SessionFacade.CurrentUser.RestrictedCasePermission,
-//                    sm.Search,
-//                    this.workContext.Customer.WorkingDayStart,
-//                    this.workContext.Customer.WorkingDayEnd,
-//                    workTimeCalc,
-//                    this.configuration.Application.ApplicationId,
-//                    showRemainingTime,
-//                    out remainingTime);
-//
-//                m.cases = this.TreeTranslate(m.cases, f.CustomerId);
-//                sm.Search.IdsForLastSearch = GetIdsFromSearchResult(m.cases);
-//                SessionFacade.CurrentCaseSearch = sm;
-//                m.ShowRemainingTime = showRemainingTime;
-//                m.RemainingTime = this.caseModelFactory.GetCaseRemainingTimeModel(remainingTime);
-//            }
-//
-//            return this.PartialView("_CaseRows", m);
-//        }
-
         public RedirectToRouteResult Copy(int id, int customerId)
         {
             return this.RedirectToAction("new", "cases", new { customerId = customerId, copyFromCaseId = id });
@@ -1504,7 +1406,8 @@ namespace DH.Helpdesk.Web.Controllers
                             frm.IsFormValueTrue("CaseRegistrationDateFilterShow"),
                             frm.IsFormValueTrue("CaseWatchDateFilterShow"),
                             frm.IsFormValueTrue("CaseClosingDateFilterShow"),
-                            closingReason);
+                            closingReason,
+                            frm.IsFormValueTrue("CaseInitiatorFilterShow"));
 
             this._customerUserService.UpdateUserCaseSetting(newCaseSetting);
             SessionFacade.CurrentCaseSearch = null;  
@@ -2741,6 +2644,9 @@ namespace DH.Helpdesk.Web.Controllers
             ret.CaseRegistrationDateFilterShow = userCaseSettings.CaseRegistrationDateFilterShow;
             ret.CaseWatchDateFilterShow = userCaseSettings.CaseWatchDateFilterShow;
             ret.CaseClosingDateFilterShow = userCaseSettings.CaseClosingDateFilterShow;
+
+            /// "Inititator" field
+            ret.CaseInitiatorFilterShow = userCaseSettings.CaseInitiatorFilterShow;
 
             ret.ClosingReasons = this._finishingCauseService.GetFinishingCauses(customerId);
             ret.ClosingReasonPath = "--";

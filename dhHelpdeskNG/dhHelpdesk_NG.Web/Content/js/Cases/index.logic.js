@@ -15,7 +15,8 @@ var GRID_STATE = {
     
     var SORT_ASC = 0;
     var SORT_DESC = 1;
-    var JOINER = '';
+    var EMPTY_STR = '';
+    var JOINER = EMPTY_STR;
 
     function getUrlParameter(sParam) {
         var sPageURL = window.location.search.substring(1);
@@ -42,8 +43,22 @@ var GRID_STATE = {
         return '';
     }
 
+    /**
+    * Checks whether supplyed string empty or null
+    * @param { string } str
+    * @returns { bool }
+    */
+    function isNullOrEmpty(str) {
+        return str == null || str == EMPTY_STR;
+    }
+
+    
     function Page() {};
 
+    /**
+    * Initialization method. Called when page ready
+    * @param { object } gridInitSettings
+    */
     Page.prototype.init = function(gridInitSettings) {
         var me = this;
         //// Bind elements
@@ -65,7 +80,11 @@ var GRID_STATE = {
             if (me._gridState !== window.GRID_STATE.IDLE) {
                 return false;
             }
-            setFilterIcon();
+            if (me.isFilterEmpty()) {
+                $('#icoFilter').hide();
+            } else {
+                $('#icoFilter').show();
+            }
             me.onSearchClick.apply(me);
             return false;
         });
@@ -111,9 +130,52 @@ var GRID_STATE = {
             }
             return true;
         });
-
+        
+        me.initSearchForm();
         me.setGridState(window.GRID_STATE.IDLE);
         me.setGridSettings(gridInitSettings);
+    
+        $('.input-append.date').datepicker({
+            format: 'yyyy-mm-dd',
+            autoclose: true
+        });
+    };
+
+    /**
+    * Resolves whether filter form fields is empty
+    * @returns { bool } 
+    */
+    Page.prototype.isFilterEmpty = function() {
+        return $('#lstFilterRegion option:selected').length === 0 &&
+            $('#lstFilterCountry option:selected').length === 0 &&
+            $('#lstfilterDepartment option:selected').length === 0 &&
+            $('#lstfilterUser option:selected').length === 0 &&
+            isNullOrEmpty($('#hidFilterCaseTypeId').val()) &&
+            isNullOrEmpty($('#hidFilterProductAreaId').val()) &&
+            $('#lstfilterCategory option:selected').length === 0 &&
+            $('#lstfilterWorkingGroup option:selected').length === 0 &&
+            $('#lstfilterResponsible option:selected').length === 0 &&
+            $('#lstfilterPerformer option:selected').length === 0 &&
+            $('#lstfilterPriority option:selected').length === 0 &&
+            $('#lstfilterStatus option:selected').length === 0 &&
+            $('#lstfilterStateSecondary option:selected').length === 0 &&
+            isNullOrEmpty($('#hidFilterClosingReasonId').val()) &&
+            isNullOrEmpty($('#CaseClosingDateEndFilter').val()) &&
+            isNullOrEmpty($('#CaseClosingDateStartFilter').val()) &&
+            isNullOrEmpty($('#CaseWatchDateEndFilter').val()) &&
+            isNullOrEmpty($('#CaseWatchDateStartFilter').val());
+    };
+
+    /// initial state of search form
+    Page.prototype.initSearchForm = function() {
+        var me = this;
+        if (me.isFilterEmpty()) {
+            $('#icoFilter').hide();
+        } else {
+            $('#icoFilter').show();
+            $("#hiddeninfo").show();
+            $("#icoPlus").removeClass('icon-plus-sign').addClass('icon-minus-sign');
+        }
     };
 
     Page.prototype.setGridState = function(gridStateId) {
@@ -343,9 +405,6 @@ var GRID_STATE = {
     $(document).ready(function() {
         app.init.call(window.app, window.gridSettings);
     });
-    $(function () {
-        setFilterIcon();
-    });
 })($);
 
 
@@ -415,24 +474,6 @@ function unsetSearchFilter() {
     //ClosingReasons
     unsetBootstrapsDropdown('#divClosingReason');
     // @TODO: InitiatorName
-}
-
-// visa filter ikon på case/ärende sök
-function setFilterIcon() {
-    $('#icoFilter').hide();
-    var sel = $('.chosen-select option:selected').length;
-    var hid = 'undefined';
-
-    if ($('#hidFilterProductAreaId').length != 0) {
-        var hid = hid + $('#hidFilterProductAreaId').val();
-    }
-    if ($('#hidFilterCaseTypeId').length != 0) {
-        var hid = hid + $('#hidFilterCaseTypeId').val();
-    }
-    hid = hid.replace('undefined', '');
-    if (sel > 0 || hid != '') {
-        $('#icoFilter').show();
-    }
 }
 
 window.onload = function () {

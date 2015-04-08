@@ -45,6 +45,9 @@
 
         public bool IsClearFilters { get; set; }
 
-        public string InitiatorName { get; set; }
+        /// <summary>
+        /// Preset string in "filter by intitator" filter field on case overview page
+        /// </summary>
+        public string CaseInitiatorFilter { get; set; }
     }    
 }

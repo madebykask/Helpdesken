@@ -88,7 +88,8 @@
                   userSetting.CaseRegistrationDateFilterShow,
                   userSetting.CaseWatchDateFilterShow,
                   userSetting.CaseClosingDateFilterShow,
-                  (userSetting.CaseClosingReasonFilter != null) ? userSetting.CaseClosingReasonFilter.Replace(" ", string.Empty) : string.Empty);
+                  (userSetting.CaseClosingReasonFilter != null) ? userSetting.CaseClosingReasonFilter.Replace(" ", string.Empty) : string.Empty,
+                  userSetting.CaseInitiatorFilterShow);
         }
 
         public void UpdateUserCaseSetting(UserCaseSetting newSetting)

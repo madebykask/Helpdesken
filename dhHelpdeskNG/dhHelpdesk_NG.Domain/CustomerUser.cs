@@ -45,6 +45,11 @@
 
         public string CaseClosingReasonFilter { get; set; }
 
+        /// <summary>
+        /// Flag to display "filter by intitator" field on case overview page
+        /// </summary>
+        public bool CaseInitiatorFilterShow { get; set; }
+
         public virtual Customer Customer { get; set; }
 
         public virtual User User { get; set; }

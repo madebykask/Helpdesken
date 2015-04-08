@@ -28,5 +28,15 @@ BEGIN
 END
 GO 
 
+---------------------------------------------------------------
+--  Add filter by "Initiator" in case overview table filter  --
+IF COL_LENGTH('dbo.tblCustomerUser','CaseInitiatorFilterShow') IS NULL
+BEGIN	 
+	ALTER TABLE [dbo].[tblCustomerUser]
+	add [CaseInitiatorFilterShow] BIT NOT NULL DEFAULT(0)
+END
+GO 
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.5'

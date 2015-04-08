@@ -826,7 +826,18 @@
             return sb.ToString();
         }
 
-        private string ReturnCaseSearchWhere(CaseSearchFilter f, Setting customerSetting, CustomerUser customerUserSetting, int userId, string userUserId, int showNotAssignedWorkingGroups, int userGroupId, int restrictedCasePermission, GlobalSetting gs, int? relatedCasesCaseId, string relatedCasesUserId = null)
+        private string ReturnCaseSearchWhere(
+            CaseSearchFilter f, 
+            Setting customerSetting, 
+            CustomerUser customerUserSetting, 
+            int userId, 
+            string userUserId, 
+            int showNotAssignedWorkingGroups, 
+            int userGroupId, 
+            int restrictedCasePermission, 
+            GlobalSetting gs, 
+            int? relatedCasesCaseId, 
+            string relatedCasesUserId = null)
         {
             if (f == null || customerSetting == null || gs == null)
             {
@@ -1060,6 +1071,20 @@
                     sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblFormFieldValue] WHERE {0}))", this.GetSqlLike("FormFieldValue", text));
                     sb.Append(") ");
                 }
+            }
+            
+            // "Initiator" search field
+            if (!string.IsNullOrEmpty(f.Initiator))
+            {
+                sb.Append(" AND (");
+                sb.AppendFormat("{0}", this.GetSqlLike("[tblCase].[Persons_Name]", f.Initiator));
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[ReportedBy]", f.Initiator));
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[UserCode]", f.Initiator));
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Email]", f.Initiator));
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Place]", f.Initiator));
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_CellPhone]", f.Initiator));
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Phone]", f.Initiator));
+                sb.Append(") ");
             }
 
             //LockCaseToWorkingGroup

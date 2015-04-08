@@ -191,7 +191,7 @@
 
         public void UpdateUserSetting(UserCaseSetting newSetting)
         {
-            var userSettingEntity = this.DataContext.CustomerUsers.Where(cu=> cu.Customer_Id == newSetting.CustomerId && cu.User_Id == newSetting.UserId).FirstOrDefault();
+            var userSettingEntity = this.DataContext.CustomerUsers.Where(cu => cu.Customer_Id == newSetting.CustomerId && cu.User_Id == newSetting.UserId).FirstOrDefault();
 
             if (userSettingEntity != null)
             {
@@ -232,6 +232,7 @@
                 userSettingEntity.CaseClosingReasonFilter = newSetting.CaseClosingReasonFilter == string.Empty
                                                                             ? null
                                                                             : newSetting.CaseClosingReasonFilter;
+                userSettingEntity.CaseInitiatorFilterShow = newSetting.CaseInitiatorFilterShow;
             }
         }
     }

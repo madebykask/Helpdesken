@@ -19,6 +19,17 @@
                         <td class="span5">
                         </td>
                     </tr>
+                    @if (Model.customerUserSetting.CaseInitiatorFilterShow)
+                    {
+                        <tr>
+                            <td>                                
+                                @Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                    
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(m=>m.CaseInitiatorFilter)
+                            </td>
+                        </tr>                
+                    }
                     @if (Model.filterRegion != null)
                     {
                         <tr>
@@ -276,8 +287,8 @@
                                 @Translation.Get(GlobalEnums.TranslationCaseFields.RegTime.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                    
                             </td>
                             <td>
-                                @Html.EditorFor(m => m.CaseRegistrationDateStartFilter, "DatePicker", new { id = "CaseRegistrationDateStartFilter"  })                                         
-                                @Html.EditorFor(m => m.CaseRegistrationDateEndFilter, "DatePicker", new { id = "CaseRegistrationDateEndFilter" })                                                                         
+                                @Html.EditorFor(m => m.CaseRegistrationDateStartFilter, "DatePickerNoJs", new { id = "CaseRegistrationDateStartFilter"  })                                         
+                                @Html.EditorFor(m => m.CaseRegistrationDateEndFilter, "DatePickerNoJs", new { id = "CaseRegistrationDateEndFilter" })                                                                         
                             </td>
                         </tr>                
                     }
@@ -288,8 +299,8 @@
                                 @Translation.Get(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                 
                             </td>
                             <td>
-                                @Html.EditorFor(m => Model.CaseWatchDateStartFilter, "DatePicker", new { id = "CaseWatchDateStartFilter" })                                         
-                                @Html.EditorFor(m => Model.CaseWatchDateEndFilter, "DatePicker", new { id = "CaseWatchDateEndFilter" })                                                                         
+                                @Html.EditorFor(m => Model.CaseWatchDateStartFilter, "DatePickerNoJs", new { id = "CaseWatchDateStartFilter" })                                         
+                                @Html.EditorFor(m => Model.CaseWatchDateEndFilter, "DatePickerNoJs", new { id = "CaseWatchDateEndFilter" })                                                                         
                             </td>
                         </tr>                
                     }
@@ -300,8 +311,8 @@
                                 @Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                    
                             </td>
                             <td>
-                                @Html.EditorFor(m => m.CaseClosingDateStartFilter, "DatePicker", new { id = "CaseClosingDateStartFilter" })                                         
-                                @Html.EditorFor(m => m.CaseClosingDateEndFilter, "DatePicker", new { id = "CaseClosingDateEndFilter" })                                                                         
+                                @Html.EditorFor(m => m.CaseClosingDateStartFilter, "DatePickerNoJs", new { id = "CaseClosingDateStartFilter" })                                         
+                                @Html.EditorFor(m => m.CaseClosingDateEndFilter, "DatePickerNoJs", new { id = "CaseClosingDateEndFilter" })                                                                         
                             </td>
                         </tr>                
                     }
@@ -323,17 +334,6 @@
                                     </ul>
                                     <input type="hidden" class="hidden" value="@Model.caseSearchFilter.CaseClosingReasonFilter" id="hidFilterClosingReasonId" name="hidFilterClosingReasonId" />
                                 </div>
-                            </td>
-                        </tr>                
-                    }
-                    @if (Model.InitiatorName != null)
-                    {
-                        <tr>
-                            <td>                                
-                                @Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                    
-                            </td>
-                            <td>
-                                @Html.TextBoxFor(m=>m.InitiatorName)
                             </td>
                         </tr>                
                     }
@@ -384,34 +384,3 @@
     </div>
     </form>
 }
-
-<script>
-    $(function () {
-        if (
-            '@Model.caseSearchFilter.Region' != '' ||
-                '@Model.caseSearchFilter.Country' != '' ||
-                '@Model.caseSearchFilter.Department' != '' ||
-                '@Model.caseSearchFilter.User' != '' ||
-                '@Model.caseSearchFilter.CaseType.supressZero()' != '' ||
-                '@Model.caseSearchFilter.ProductArea' != '' ||
-                '@Model.caseSearchFilter.Category' != '' ||
-                '@Model.caseSearchFilter.WorkingGroup' != '' ||
-                '@Model.caseSearchFilter.UserResponsible' != '' ||
-                '@Model.caseSearchFilter.UserPerformer' != '' ||
-                '@Model.caseSearchFilter.Priority' != '' ||
-                '@Model.caseSearchFilter.Status' != '' ||
-                '@Model.caseSearchFilter.StateSecondary' != '' ||
-                '@Model.caseSearchFilter.CaseClosingReasonFilter' != '' ||
-                '@Model.CaseClosingDateEndFilter' != '' ||
-                '@Model.CaseClosingDateStartFilter' != '' ||
-                '@Model.CaseRegistrationDateEndFilter' != '' ||
-                '@Model.CaseRegistrationDateStartFilter' != '' ||
-                '@Model.CaseWatchDateEndFilter' != '' ||
-                '@Model.CaseWatchDateStartFilter' != '') {
-
-            $("#hiddeninfo").toggle();
-            $("#icoPlus").removeClass('icon-plus-sign').addClass('icon-minus-sign');
-            $("#icoFilter").addClass('icon-filter');                        
-        }
-    });
-</script>
