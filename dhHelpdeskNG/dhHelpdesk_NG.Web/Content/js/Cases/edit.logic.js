@@ -355,6 +355,10 @@ $(function () {
             var checkRelatedCases = function (uId) {
                 var caseId = that.getCase().getCaseId().getElement();
                 var userIdValue = encodeURIComponent(uId || userId.getElement().val());
+                if (userIdValue == null || userIdValue.trim() == '') {
+                    relatedCases.getElement().hide();
+                    return;
+                }
                 $.getJSON(getRelatedCasesCountUrl() + 
                             '?caseId=' + caseId.val() +
                             '&userId=' + userIdValue, function(data) {
