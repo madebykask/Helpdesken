@@ -284,9 +284,6 @@ function refreshDepartment(regionId, departmentFilterFormat, selectedDepartmentI
             }            
         }
     }, 'json').always(function () {
-        //$(publicOUControlName).val('');
-        //$(publicReadOnlyOUName).val('');
-        //$(publicDepartmentControlName).change();
         $(publicDepartmentControlName).prop('disabled', false);
         refreshOrganizationUnit(selectedDepartmentId, departmentFilterFormat, selectedOU);        
     });
@@ -882,12 +879,7 @@ function GetComputerUserSearchOptions() {
             $('#RegionName').val(item.regionname);
 
             $(publicDepartmentControlName).val(item.departmentid);
-            refreshDepartment(item.regionid, departmentFilterFormat, item.departmentid, item.ouid);                        
-            //$(publicReadOnlyDepartmentName).val(item.departmentname);
-
-            //$(publicOUControlName).val(item.ouid);
-            //refreshOrganizationUnit(item.departmentid, departmentFilterFormat, item.ouid);            
-            //$(publicReadOnlyOUName).val(item.ouname);
+            refreshDepartment(item.regionid, departmentFilterFormat, item.departmentid, item.ouid);                                 
 
             return item.num;
         }
@@ -1114,12 +1106,7 @@ function NewNotifierEvent(id) {
             $('#RegionName').val(data.regionname);
 
             $(publicDepartmentControlName).val(data.departmentid);
-            refreshDepartment(data.regionid, departmentFilterFormat, data.departmentid, data.ouid);
-            //$(publicReadOnlyDepartmentName).val(data.departmentname);
-
-            //$(publicOUControlName).val(data.ouid);
-            //refreshOrganizationUnit(data.departmentid, departmentFilterFormat, data.ouid);
-            //$(publicReadOnlyOUName).val(data.ouname);
+            refreshDepartment(data.regionid, departmentFilterFormat, data.departmentid, data.ouid);           
 
         }
     }, 'json');
