@@ -36,7 +36,7 @@
             if (this.MaxDays > 5)
             {
                 this.MaxDays = 5;
-                this.MoreThenMaxDays = new CaseRemainingTimeItemViewModel(int.MaxValue, null, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime.IsHoursGreaterDays(this.MaxDays, workingHours)));
+                this.MoreThenMaxDays = new CaseRemainingTimeItemViewModel(int.MaxValue, null, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime.IsHoursGreaterEqualDays(this.MaxDays + 1, workingHours)));
             }
 
             for (var i = 1; i <= this.MaxDays; i++)
