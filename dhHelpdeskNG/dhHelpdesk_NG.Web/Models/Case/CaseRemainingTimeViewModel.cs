@@ -38,16 +38,9 @@
                 this.MoreThenMaxDays = new CaseRemainingTimeItemViewModel(int.MaxValue, null, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime.IsHoursGreaterEqualDays(this.MaxDays, workingHours)));
             }
 
-            for (var i = 0; i < this.MaxDays; i++)
+            for (var i = 1; i < this.MaxDays; i++)
             {
-                if (i == 0)
-                {
-                    this.days.Add(new CaseRemainingTimeItemViewModel(i + 1, null, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime >= workingHours - 1 && t.RemainingTime < workingHours)));
-                }
-                else
-                {
-                    this.days.Add(new CaseRemainingTimeItemViewModel(i + 1, null, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime.IsHoursEqualDays(i, workingHours))));                    
-                }
+                this.days.Add(new CaseRemainingTimeItemViewModel(i + 1, null, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime.IsHoursEqualDays(i, workingHours))));
             }
         }
 

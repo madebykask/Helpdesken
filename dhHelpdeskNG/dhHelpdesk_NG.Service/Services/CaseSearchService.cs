@@ -167,14 +167,7 @@
                 }
                 else 
                 {
-                    if (f.CaseRemainingTimeFilter.Value == 0)
-                    {
-                        filteredCaseRemainigTimes = remainingTime.CaseRemainingTimes.Where(t => t.RemainingTime >= workingHours - 1 && t.RemainingTime < workingHours);
-                    }
-                    else
-                    {
-                        filteredCaseRemainigTimes = remainingTime.CaseRemainingTimes.Where(t => t.RemainingTime.IsHoursEqualDays(f.CaseRemainingTimeFilter.Value - 1, workingHours));                        
-                    }
+                    filteredCaseRemainigTimes = remainingTime.CaseRemainingTimes.Where(t => t.RemainingTime.IsHoursEqualDays(f.CaseRemainingTimeFilter.Value - 1, workingHours));
                 }
 
                 result = result.Where(c => filteredCaseRemainigTimes.Select(t => t.CaseId).Contains(c.Id)).ToList();
