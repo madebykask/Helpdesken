@@ -1,167 +1,42 @@
--- 2013-03-23 Aleksei Matveev
--- Change 'DeliveryPeriod' column type to NVARCHAR(200)
-IF COL_LENGTH('dbo.tblCaseInvoiceOrder','DeliveryPeriod') IS NOT NULL
+-- update DB from 5.3.4.XX to 5.3.5.xx version
+IF COL_LENGTH('dbo.UserGridSettings','FieldId') IS NULL
 BEGIN	 
-	ALTER TABLE [dbo].[tblCaseInvoiceOrder]
-	ALTER COLUMN [DeliveryPeriod] NVARCHAR(200) NULL
+	ALTER TABLE [dbo].[UserGridSettings]
+	ADD [FieldId] int default(NULL)
+
+	/****** Object:  Index [IDX_UserSettings(FieldId)]    Script Date: 31.03.2015 14:15:20 ******/
+  CREATE NONCLUSTERED INDEX [IDX_UserSettings(FieldId)] ON [dbo].[UserGridSettings]
+  (
+    [FieldId] ASC
+  )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 END
 GO 
 
-IF COL_LENGTH('dbo.tblCaseSettings','ColStyle') IS NULL
-BEGIN	 
-	ALTER TABLE [dbo].[tblCaseSettings]
-	ADD [ColStyle] nvarchar(50) NULL 
-END
-GO 
--- 2013-03-24 Aleksei Matveev
--- Add 'ShowSolutionTime' into 'tblUsers'
-IF COL_LENGTH('dbo.tblUsers','ShowSolutionTime') IS NULL
-BEGIN	 
-	ALTER TABLE [dbo].[tblUsers]
-	ADD [ShowSolutionTime] INT NOT NULL DEFAULT(0)
-END
-GO 
+-- Add new values to tblTextType - Nina
+If not exists (select * from tblTextType where Id = 0)
+	insert into tblTextType (Id, TextType, Status) VALUES (0, 'Dh Helpdesk', 1)
+GO
 
--- 2013-03-24 Aleksei Matveev
--- Add 'IsDefault' into 'tblUsers'
-IF COL_LENGTH('dbo.tblUserWorkingGroup','IsDefault') IS NULL
+If not exists (select * from tblTextType where Id = 1)
+	insert into tblTextType (Id, TextType, Status) VALUES (1, 'Grunddata', 1)
+GO
+
+IF COL_LENGTH('dbo.tblGlobalSettings','HelpdeskDBVersion') IS NULL
 BEGIN	 
-	ALTER TABLE [dbo].[tblUserWorkingGroup]
-	ADD [IsDefault] INT NOT NULL DEFAULT(0)
+	ALTER TABLE [dbo].[tblGlobalSettings]
+	ADD [HelpdeskDBVersion] nvarchar(20) NULL 
 END
 GO 
 
-if exists(select * from [dbo].[tblCaseFieldSettings] where casefield = 'Persons_Phone')
-begin
-	update tblcasefieldsettings set EMailIdentifier = '[#9]' where casefield = 'Persons_Phone'
-end
-
-if exists(select * from [dbo].[tblCaseFieldSettings] where casefield = 'Persons_EMail')
-begin
-	update tblcasefieldsettings set EMailIdentifier = '[#8]' where casefield = 'Persons_EMail'
-end
-
-if exists(select * from [dbo].[tblCaseFieldSettings] where casefield = 'Description')
-begin
-	update tblcasefieldsettings set EMailIdentifier = '[#5]' where casefield = 'Description'
-end
-
-if exists(select * from [dbo].[tblCaseFieldSettings] where casefield = 'Caption')
-begin
-	update tblcasefieldsettings set EMailIdentifier = '[#4]' where casefield = 'Caption'
-end
-
-if exists(select * from [dbo].[tblCaseFieldSettings] where casefield = 'Persons_Name')
-begin
-	update tblcasefieldsettings set EMailIdentifier = '[#3]' where casefield = 'Persons_Name'
-end
-
-if exists(select * from [dbo].[tblCaseFieldSettings] where casefield = 'ReportedBy')
-begin
-	update tblcasefieldsettings set EMailIdentifier = '[#27]' where casefield = 'ReportedBy'
-end
-
-if exists(select * from [dbo].[tblCaseFieldSettings] where casefield = 'Category_Id')
-begin
-	update tblcasefieldsettings set EMailIdentifier = '[#26]' where casefield = 'Category_Id'
-end
-
-if exists(select * from [dbo].[tblCaseFieldSettings] where casefield = 'CaseType_Id')
-begin
-	update tblcasefieldsettings set EMailIdentifier = '[#25]' where casefield = 'CaseType_Id'
-end
-
-if exists(select * from [dbo].[tblCaseFieldSettings] where casefield = 'Place')
-begin
-	update tblcasefieldsettings set EMailIdentifier = '[#24]' where casefield = 'Place'
-end
-
-if exists(select * from [dbo].[tblCaseFieldSettings] where casefield = 'Miscellaneous')
-begin
-	update tblcasefieldsettings set EMailIdentifier = '[#23]' where casefield = 'Miscellaneous'
-end
-
-if exists(select * from [dbo].[tblCaseFieldSettings] where casefield = 'WatchDate')
-begin
-	update tblcasefieldsettings set EMailIdentifier = '[#21]' where casefield = 'WatchDate'
-end
-
-if exists(select * from [dbo].[tblCaseFieldSettings] where casefield = 'Customer_Id')
-begin
-	update tblcasefieldsettings set EMailIdentifier = '[#2]' where casefield = 'Customer_Id'
-end
-
-if exists(select * from [dbo].[tblCaseFieldSettings] where casefield = 'Available')
-begin
-	update tblcasefieldsettings set EMailIdentifier = '[#19]' where casefield = 'Available'
-end
-
-if exists(select * from [dbo].[tblCaseFieldSettings] where casefield = 'Persons_CellPhone')
-begin
-	update tblcasefieldsettings set EMailIdentifier = '[#18]' where casefield = 'Persons_CellPhone'
-end
-
-if exists(select * from [dbo].[tblCaseFieldSettings] where casefield = 'InventoryNumber')
-begin
-	update tblcasefieldsettings set EMailIdentifier = '[#17]' where casefield = 'InventoryNumber'
-end
-
-if exists(select * from [dbo].[tblCaseFieldSettings] where casefield = 'RegTime')
-begin
-	update tblcasefieldsettings set EMailIdentifier = '[#16]' where casefield = 'RegTime'
-end
-
-if exists(select * from [dbo].[tblCaseFieldSettings] where casefield = 'WorkingGroup_Id')
-begin
-	update tblcasefieldsettings set EMailIdentifier = '[#15]' where casefield = 'WorkingGroup_Id'
-end
-
-if exists(select * from [dbo].[tblCaseFieldSettings] where casefield = 'Priority_Id')
-begin
-	update tblcasefieldsettings set EMailIdentifier = '[#12]' where casefield = 'Priority_Id'
-end
-
-if exists(select * from [dbo].[tblCaseFieldSettings] where casefield = 'tblLog.Text_Internal')
-begin
-	update tblcasefieldsettings set EMailIdentifier = '[#11]' where casefield = 'tblLog.Text_Internal'
-end
-
-if exists(select * from [dbo].[tblCaseFieldSettings] where casefield = 'tblLog.Text_External')
-begin
-	update tblcasefieldsettings set EMailIdentifier = '[#10]' where casefield = 'tblLog.Text_External'
-end
-
-if exists(select * from [dbo].[tblCaseFieldSettings] where casefield = 'CaseNumber')
-begin
-	update tblcasefieldsettings set EMailIdentifier = '[#1]' where casefield = 'CaseNumber'
-end
-
--------------------------------------------------------------------
--- Support for storing grid settings for user and customer
-if not exists(select * from sysobjects WHERE Name = N'UserGridSettings')
-BEGIN
-	CREATE TABLE [dbo].[UserGridSettings](
-		[Id] [int] IDENTITY(1,1) NOT NULL,
-		[CustomerId] [int] not null,
-		[UserId] [int] NOT NULL,
-		[GridId] [nchar](20) NOT NULL,
-		[Parameter] [nchar](20) NOT NULL,
-		[Value] [nchar](20) NOT NULL,
-		CONSTRAINT [PK_UserGridSettings] PRIMARY KEY CLUSTERED 
-		(
-			[CustomerId] ASC,
-			[UserId] ASC,
-			[GridId] ASC
-		)
-	) ON [PRIMARY]
-
-
-	ALTER TABLE [dbo].[UserGridSettings]  WITH NOCHECK ADD  CONSTRAINT [FK_UserGridSettings_tblCustomer] FOREIGN KEY([CustomerId])
-	REFERENCES [dbo].[tblCustomer] ([Id])
-
-
-	ALTER TABLE [dbo].[UserGridSettings]  WITH NOCHECK ADD  CONSTRAINT [FK_UserGridSettings_tblUsers] FOREIGN KEY([UserId])
-	REFERENCES [dbo].[tblUsers] ([Id])
-
+---------------------------------------------------------------
+--  Add filter by "Initiator" in case overview table filter  --
+IF COL_LENGTH('dbo.tblCustomerUser','CaseInitiatorFilterShow') IS NULL
+BEGIN	 
+	ALTER TABLE [dbo].[tblCustomerUser]
+	add [CaseInitiatorFilterShow] BIT NOT NULL DEFAULT(0)
 END
-go
+GO 
+
+
+-- Last Line to update database version
+UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.5'

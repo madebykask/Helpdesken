@@ -21,6 +21,7 @@
             this.Property(x => x.AttachedFileFolder).IsRequired().HasMaxLength(50);
             this.Property(x => x.DBType).IsRequired();
             this.Property(x => x.DBVersion).IsRequired().HasMaxLength(10);
+            this.Property(x => x.HelpdeskDBVersion).IsOptional().HasMaxLength(20);
             this.Property(x => x.DefaultLanguage_Id).IsRequired();
             this.Property(x => x.EMailBodyEncoding).IsOptional().HasMaxLength(20);
             this.Property(x => x.FullTextSearch).IsRequired();

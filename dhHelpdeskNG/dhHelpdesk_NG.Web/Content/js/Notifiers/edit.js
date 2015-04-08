@@ -4,16 +4,9 @@
 * Management select with subselect in organization units.
 * NOTE: multiselects are not supported
 */
-$(function () {
-    var firstLevelData = [], secondLevelData = [];    
-    var miscParameters = window.parameters;  
 
-    /**
-    * Generates options HTLM by array
-    * @param { object[] } data_array
-    * @param { string|null } parent_id_of_selected
-    * @param { bool } is_put_empty
-    */
+$(function () {    
+    var miscParameters = window.parameters;      
     function generateOptions(dataArray, selectedId, isPutEmpty) {
         var res = [];
         var i;
@@ -68,9 +61,10 @@ $(function () {
         $('#OrganizationUnitId').val('');
         $('#organizationUnit_dropdown').val('').html('');
         $.get('/Notifiers/OrganizationUnitDropDown', { departmentId: $(this).val() }, function (organizationUnitDropDownMarkup) {
-            $('#organizationUnit_dropdown').html($(organizationUnitDropDownMarkup).html());
-            //$('#organizationUnit_dropdown').trigger('change');
+            $('#organizationUnit_dropdown').html($(organizationUnitDropDownMarkup).html());            
         });
     });
     
 });
+
+

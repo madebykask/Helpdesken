@@ -25,7 +25,10 @@
         public int CopyCasePermission { get; set; }
         public int Customer_Id { get; set; }
         public int DailyReportReminder { get; set; }
+
+        // obsolete field http://redmine.fastdev.se/issues/10997
         public int? Default_WorkingGroup_Id { get; set; }
+        
         public int DeleteCasePermission { get; set; }
         public int DeleteAttachedFilePermission { get; set; }
         public int? Domain_Id { get; set; }
@@ -73,6 +76,9 @@
         public DateTime PasswordChangedDate { get; set; }
         public DateTime RegTime { get; set; }
 
+        /// <summary>
+        /// Flag to display "Solution time" grid on case overview page
+        /// </summary>
         public int ShowSolutionTime { get; set; }
 
         public virtual Domain Domain { get; set; }

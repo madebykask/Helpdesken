@@ -12,6 +12,8 @@
         List<ItemOverview> FindActiveAndShowable();
 
         List<ItemOverview> FindActive(int? departmentId);
+
+        List<OU> GetOUs(int? departmentId);
         
         IEnumerable<OU> GetActiveAndShowable();
     }

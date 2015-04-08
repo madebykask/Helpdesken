@@ -139,6 +139,10 @@ namespace DH.Helpdesk.Services.Services
         void UpdateUserProfileCustomerSettings(int userId, List<UserProfileCustomerSettings> customersSettings);
 
         List<Customer> GetCustomersForUser(int userId);
+
+        int? GetUserDefaultWorkingGroupId(int userId, int customerId);
+
+        WorkingGroupEntity GetUserDefaultWorkingGroup(int userId, int customerId);
     }
 
     public class UserService : IUserService
@@ -533,8 +537,11 @@ namespace DH.Helpdesk.Services.Services
                 {
                     foreach (var uwg in UserWorkingGroups)
                     {
-                        if (uwg.UserRole != 0)
-                            user.UserWorkingGroups.Add(uwg);
+                        // http://redmine.fastdev.se/issues/10997
+//                        if (uwg.UserRole != 0)
+//                            user.UserWorkingGroups.Add(uwg);
+
+                        user.UserWorkingGroups.Add(uwg);
                     }
                 }
                 
@@ -941,6 +948,16 @@ namespace DH.Helpdesk.Services.Services
 
                 return UsersMapper.MapToUserCustomers(customers, users, userCustomers);
             }
+        }
+
+        public int? GetUserDefaultWorkingGroupId(int userId, int customerId)
+        {
+            return this._userRepository.GetUserDefaultWorkingGroupId(userId, customerId);
+        }
+
+        public WorkingGroupEntity GetUserDefaultWorkingGroup(int userId, int customerId)
+        {
+            return this._userRepository.GetUserDefaultWorkingGroup(userId, customerId);
         }
 
         /// <summary>

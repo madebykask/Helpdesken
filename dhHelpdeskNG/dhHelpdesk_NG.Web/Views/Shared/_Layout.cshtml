@@ -3,10 +3,15 @@
 
 <!DOCTYPE html>
 <html>
+    @{
+    var model = Html.MasterModel();
+    
+    var GlobalSetting = model.GlobalSettings.Where(x => x.ApplicationName != null).FirstOrDefault();
+}
 <head>
     <meta content="html/text; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
-    <title>@Translation.Get("dhHelpdesk")</title>
+    <title>@GlobalSetting.ApplicationName</title>
     <script type="text/javascript">
         var trans_yes = '@Translation.Get("Ja", Enums.TranslationSource.TextTranslation)';
         var trans_no = '@Translation.Get("Nej", Enums.TranslationSource.TextTranslation)';
@@ -16,9 +21,7 @@
     @RenderSection("Styles", false)
     @Scripts.Render("~/bundles/common")
 </head>
-@{
-    var model = Html.MasterModel();
-}
+
 <body>
     @if(model != null && model.CustomerSetting != null && SessionFacade.CurrentUser != null)
     {   

@@ -5,14 +5,14 @@
 
 <script type="text/javascript">
     window.parameters = {
-        departmentDropDownUrl: '@Url.Action("DepartmentDropDown")'
-    };
+        departmentDropDownUrl: '@Url.Action("DepartmentDropDown")'            
+    };           
 
     @if (Model.Managers.Show)
     {
         @:window.parameters.showManager = true;
-        @:window.parameters.managers = [];
-
+        @:window.parameters.managers = [];        
+        
         foreach (var manager in Model.Managers.Value.Items)
         {
             @:window.parameters.managers.push({ displayName: '@manager.Name', id: '@manager.Value' });
@@ -64,43 +64,225 @@
 
 <script type="text/javascript">
 
-    $("#DepartmentErrorMessage").hide();
-    $("#OrganizationUnitErrorMessage").hide();
-
+    var validationTrans = "@Translation.Get("måste anges")";
     
-    $("#department_dropdown").change(function () {
-        if ('@Model.Department.Required'.toLowerCase() == "true" && $('#department_dropdown').val() == "") {
-            $("#DepartmentErrorMessage").show();
+    var validator = $("#target").validate({
+        ignore: "",
+        rules: {
+            "UserId.Value": {
+                required: getBoolean("@Model.UserId.Required")
+            },
+
+            "DomainId": {
+                required: getBoolean("@Model.Domain.Required")
+            },
+
+            "LoginName.Value": {
+                required: getBoolean("@Model.LoginName.Required")
+            },
+
+            "FirstName.Value": {
+                required: getBoolean("@Model.FirstName.Required")
+            },
+
+            "Initials.Value": {
+                required: getBoolean("@Model.Initials.Required")
+            },
+
+            "LastName.Value": {
+                required: getBoolean("@Model.LastName.Required")
+            },
+
+            "DisplayName.Value": {
+                required: getBoolean("@Model.DisplayName.Required")
+            },
+
+            "Place.Value": {
+                required: getBoolean("@Model.Place.Required")
+            },
+
+            "Phone.Value": {
+                required: getBoolean("@Model.Phone.Required")
+            },
+
+            "CellPhone.Value": {
+                required: getBoolean("@Model.CellPhone.Required")
+            },
+
+            "Email.Value": {
+                required: getBoolean("@Model.Email.Required")
+            },
+
+            "Code.Value": {
+                required: getBoolean("@Model.Code.Required")
+            },
+
+            "PostalAddress.Value": {
+                required: getBoolean("@Model.PostalAddress.Required")
+            },
+
+            "PostalCode.Value": {
+                required: getBoolean("@Model.PostalCode.Required")
+            },
+
+            "City.Value": {
+                required: getBoolean("@Model.City.Required")
+            },
+
+            "Title.Value": {
+                required: getBoolean("@Model.Title.Required")
+            },
+
+            "RegionId": {
+                required: getBoolean("@Model.Region.Required")
+            },
+
+            "DepartmentId": {
+                required: getBoolean("@Model.Department.Required")
+            },
+
+            "OrganizationUnitId": {
+                required: getBoolean("@Model.OrganizationUnit.Required")
+            },
+
+            "Unit.Value": {
+                required: getBoolean("@Model.Unit.Required")
+            },
+
+            "DivisionId": {
+                required: getBoolean("@Model.Division.Required")
+            },
+
+            "Manager": {
+                required: getBoolean("@Model.Managers.Required")
+            },
+
+            "GroupId": {
+                required: getBoolean("@Model.Group.Required")
+            },
+
+            "Other.Value": {
+                required: getBoolean("@Model.Other.Required")
+             },
+        },
+        messages: {
+            "UserId.Value": {
+                required: "@Model.UserId.Caption" + " " + validationTrans
+            },            
+
+            "DomainId": {
+                required: "@Model.Domain.Caption" + " " + validationTrans
+            },
+
+            "LoginName.Value": {
+                required: "@Model.LoginName.Caption" + " " + validationTrans
+            },
+
+            "FirstName.Value": {
+                required: "@Model.FirstName.Caption" + " " + validationTrans
+            },
+
+            "Initials.Value": {
+                required: "@Model.Initials.Caption" + " " + validationTrans
+            },
+
+            "LastName.Value": {
+                required: "@Model.LastName.Caption" + " " + validationTrans
+            },
+
+            "DisplayName.Value": {
+                required: "@Model.DisplayName.Caption" + " " + validationTrans
+            },
+
+            "Place.Value": {
+                required: "@Model.Place.Caption" + " " + validationTrans
+            },
+
+            "Phone.Value": {
+                required: "@Model.Phone.Caption" + " " + validationTrans
+            },
+
+            "CellPhone.Value": {
+                required: "@Model.CellPhone.Caption" + " " + validationTrans
+            },
+
+            "Email.Value": {
+                required: "@Model.Email.Caption" + " " + validationTrans
+            },
+
+            "Code.Value": {
+                required: "@Model.Code.Caption" + " " + validationTrans
+            },
+
+            "PostalAddress.Value": {
+                required: "@Model.PostalAddress.Caption" + " " + validationTrans
+            },
+
+            "PostalCode.Value": {
+                required: "@Model.PostalCode.Caption" + " " + validationTrans
+            },
+
+            "City.Value": {
+                required: "@Model.City.Caption" + " " + validationTrans
+            },
+
+            "Title.Value": {
+                required: "@Model.Title.Caption" + " " + validationTrans
+            },
+
+            "RegionId": {
+                required: "@Model.Region.Caption" + " " + validationTrans
+            },
+
+            "DepartmentId": {
+                required: "@Model.Department.Caption" + " " + validationTrans
+            },
+
+            "OrganizationUnitId": {
+                required: "@Model.OrganizationUnit.Caption" + " " + validationTrans
+            },
+
+            "Unit.Value": {
+                required: "@Model.Unit.Caption" + " " + validationTrans
+            },
+
+            "DivisionId": {
+                required: "@Model.Division.Caption" + " " + validationTrans
+            },
+
+            "Manager": {
+                required: "@Model.Managers.Caption" + " " + validationTrans
+            },
+
+            "GroupId": {
+                required: "@Model.Group.Caption" + " " + validationTrans
+            },
+
+            "Other.Value": {
+                required: "@Model.Other.Caption" + " " + validationTrans
+            },
+            
         }
-        else {
-            $("#DepartmentErrorMessage").hide();
-        }
-        $("#organizationUnit_dropdown").change();
+
     });
 
-    $("#organizationUnit_dropdown").change(function () {
-        if ('@Model.OrganizationUnit.Required'.toLowerCase() == "true" && $('#organizationUnit_dropdown').val() == "") {
-            $("#OrganizationUnitErrorMessage").show();
-         }
-         else {
-            $("#OrganizationUnitErrorMessage").hide();
-         }
-    });
+    function getBoolean(value) {
+        var ret = false;
+        var strVal = value.toLowerCase();
 
-    $("#target").submit(function (event) {
-        var isPrevent = true;
-        if ('@Model.Department.Required'.toLowerCase() == "true" && $('#department_dropdown').val() == "") {
-            $("#DepartmentErrorMessage").show();
-            isPrevent = false;
+        switch (strVal) {
+
+            case "false":
+            case "0":
+                ret = false
+                break;
+
+            case 'true':
+                ret = true;
+                break;            
         }
 
-        if ('@Model.OrganizationUnit.Required'.toLowerCase() == "true" && $('#organizationUnit_dropdown').val() == "") {
-            $("#OrganizationUnitErrorMessage").show();
-            isPrevent = false;
-        }
+        return ret;
+    }
 
-        if (!isPrevent)
-           return false;
-        
-    });
 </script>          

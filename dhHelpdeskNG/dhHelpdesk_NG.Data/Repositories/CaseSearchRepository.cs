@@ -15,8 +15,12 @@
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
     using DH.Helpdesk.Common.Enums.Cases;
+    using DH.Helpdesk.Dal.Repositories.ProductArea;
     using DH.Helpdesk.Dal.Utils;
     using DH.Helpdesk.Domain;
+    using ProductAreaEntity = DH.Helpdesk.Domain.ProductArea;
+
+    using UserGroup = DH.Helpdesk.BusinessData.Enums.Admin.Users.UserGroup;
 
     /// <summary>
     /// The CaseSearchRepository interface.
@@ -37,7 +41,10 @@
             WorkTimeCalculator workTimeCalculator,
             string applicationId,
             bool calculateRemainingTime,
-            out CaseRemainingTimeData remainingTime);
+            IProductAreaNameResolver productAreaNamesResolver,
+            out CaseRemainingTimeData remainingTime,
+            int? relatedCasesCaseId = null,
+            string relatedCasesUserId = null);
     }
 
     public class CaseSearchRepository : ICaseSearchRepository
@@ -83,12 +90,15 @@
                                     WorkTimeCalculator workTimeCalculator,
                                     string applicationId,
                                     bool calculateRemainingTime,
-                                    out CaseRemainingTimeData remainingTime)
+                                    IProductAreaNameResolver productAreaNamesResolver,
+                                    out CaseRemainingTimeData remainingTime,
+                                    int? relatedCasesCaseId = null,
+                                    string relatedCasesUserId = null)
         {
             var now = DateTime.UtcNow;
             var dsn = ConfigurationManager.ConnectionStrings["HelpdeskOleDbContext"].ConnectionString;
             var customerUserSetting = this._customerUserRepository.GetCustomerSettings(f.CustomerId, userId);
-            IList<ProductArea> pal = this._productAreaRepository.GetMany(x => x.Customer_Id == f.CustomerId).OrderBy(x => x.Name).ToList(); 
+            IList<ProductAreaEntity> pal = this._productAreaRepository.GetMany(x => x.Customer_Id == f.CustomerId).OrderBy(x => x.Name).ToList(); 
             IList<CaseSearchResult> ret = new List<CaseSearchResult>();
             var caseTypes = this.caseTypeRepository.GetCaseTypeOverviews(f.CustomerId).ToArray();
             var displayLeftTime = csl.Any(it => it.Name == TimeLeftColumn);
@@ -105,7 +115,9 @@
                                         restrictedCasePermission, 
                                         gs, 
                                         s,
-                                        applicationId);
+                                        applicationId,
+                                        relatedCasesCaseId,
+                                        relatedCasesUserId);
 
             if (string.IsNullOrEmpty(sql))
             {
@@ -230,6 +242,7 @@
                                                                                 pal,
                                                                                 timeLeft,
                                                                                 caseTypes,
+                                                                                productAreaNamesResolver,
                                                                                 out translateField,
                                                                                 out treeTranslation,
                                                                                 out dateValue,
@@ -389,10 +402,11 @@
                                 IDataReader dr, 
                                 int col, 
                                 string fieldName, 
-                                Setting customerSetting, 
-                                IList<ProductArea> pal,
+                                Setting customerSetting,
+                                IList<ProductAreaEntity> pal,
                                 int? timeLeft,
                                 IEnumerable<CaseTypeOverview> caseTypes,
+                                IProductAreaNameResolver productAreaNamesResolver,
                                 out bool translateField, 
                                 out bool treeTranslation, 
                                 out DateTime? dateValue, 
@@ -465,13 +479,18 @@
                     ret = timeLeft.ToString();
                     break;
                 case "productarea_id":
-                    ProductArea p = dr.SafeGetInteger("ProductArea_Id").getProductAreaItem(pal);
+                    ProductAreaEntity p = dr.SafeGetInteger("ProductArea_Id").getProductAreaItem(pal);
                     if (p != null)
                     {
                         if (ConfigurationManager.AppSettings["InitFromSelfService"] == "true")
+                        {
                             ret = p.Name;
+                        }
                         else
-                            ret = p.getProductAreaParentPath();
+                        {
+                            ret = string.Join(" - ", productAreaNamesResolver.GetParentPath(p.Id, customerSetting.Customer_Id));
+                        }
+                            
                         baseId = p.Id;
                     }                    
                     treeTranslation = true;
@@ -502,7 +521,9 @@
                     int restrictedCasePermission, 
                     GlobalSetting gs, 
                     ISearch s,
-                    string applicationId)
+                    string applicationId,
+                    int? relatedCasesCaseId,
+                    string relatedCasesUserId)
         {
             var sql = new List<string>();
 
@@ -652,12 +673,12 @@
             }
             else
             {
-                sql.Add(this.ReturnCaseSearchWhere(f, customerSetting, userId, userUserId, showNotAssignedWorkingGroups, userGroupId, restrictedCasePermission, gs));
+                sql.Add(this.ReturnCaseSearchWhere(f, customerSetting, customerUserSetting, userId, userUserId, showNotAssignedWorkingGroups, userGroupId, restrictedCasePermission, gs, relatedCasesCaseId, relatedCasesUserId));
             }
 
             // ORDER BY ...
             var orderBy = new List<string> { "order by" };
-            string sort = s != null ? s.SortBy.Replace("_temporary_.", string.Empty) : string.Empty;
+            string sort = (s != null && !string.IsNullOrEmpty(s.SortBy)) ? s.SortBy.Replace("_temporary_.", string.Empty) : string.Empty;
             if (string.IsNullOrEmpty(sort))
             {
                 orderBy.Add(" CaseNumber ");
@@ -805,7 +826,18 @@
             return sb.ToString();
         }
 
-        private string ReturnCaseSearchWhere(CaseSearchFilter f, Setting customerSetting, int userId, string userUserId, int showNotAssignedWorkingGroups, int userGroupId, int restrictedCasePermission, GlobalSetting gs)
+        private string ReturnCaseSearchWhere(
+            CaseSearchFilter f, 
+            Setting customerSetting, 
+            CustomerUser customerUserSetting, 
+            int userId, 
+            string userUserId, 
+            int showNotAssignedWorkingGroups, 
+            int userGroupId, 
+            int restrictedCasePermission, 
+            GlobalSetting gs, 
+            int? relatedCasesCaseId, 
+            string relatedCasesUserId = null)
         {
             if (f == null || customerSetting == null || gs == null)
             {
@@ -816,6 +848,26 @@
 
             // kund 
             sb.Append(" where (tblCase.Customer_Id = " + f.CustomerId + ")");
+
+            // Related cases list http://redmine.fastdev.se/issues/11257
+            if (relatedCasesCaseId.HasValue)
+            {
+                sb.AppendFormat(" AND ([tblCase].[Id] != {0}) AND (LOWER(LTRIM(RTRIM([tblCase].[ReportedBy]))) = LOWER(LTRIM(RTRIM('{1}')))) ", relatedCasesCaseId.Value, relatedCasesUserId);
+                if (restrictedCasePermission == 1)
+                {
+                    if (userGroupId == (int)UserGroup.Administrator)
+                    {
+                        sb.AppendFormat(" AND ([tblCase].[Performer_User_Id] = {0} OR [tblCase].[CaseResponsibleUser_Id] = {0}) ", userId);
+                    }
+                    else if (userGroupId == (int)UserGroup.User)
+                    {
+                        sb.AppendFormat(" AND (LOWER(LTRIM(RTRIM([tblCase].[ReportedBy]))) = LOWER(LTRIM(RTRIM('{0}')))) ", userUserId);
+                    }
+                }            
+
+                return sb.ToString();
+            }
+
             sb.Append(" and (tblCase.Deleted = 0)");
             sb.Append(" and (tblCustomerUser.[User_Id] = " + f.UserId + ")");
 
@@ -830,36 +882,36 @@
                 if (userGroupId == 2)
                     sb.Append(" and (tblCase.Performer_User_Id = " + userId + " or tblcase.CaseResponsibleUser_Id = " + userId + ")");
                 else if (userGroupId == 1)
-                    sb.Append(" and (lower(tblCase.reportedBy) = lower(" + userUserId + ") or tblcase.UserId = " + userId + ")");
+                    sb.Append(" and (lower(tblCase.reportedBy) = lower('" + userUserId + "') or tblcase.User_Id = " + userId + ")");
             }            
             
             // ärende progress - iShow i gammal helpdesk
             switch (f.CaseProgress)
             {
-                case "-1":
+                case CaseProgressFilter.None:
                     break;
-                case "1":
+                case CaseProgressFilter.ClosedCases:
                     sb.Append(" and (tblCase.FinishingDate is not null)");
                     break;
-                case "2":
+                case CaseProgressFilter.CasesInProgress:
                     sb.Append(" and (tblCase.FinishingDate is null)");
                     break;
-                case "3":
+                case CaseProgressFilter.CasesInRest:
                     sb.Append(" and (tblCase.FinishingDate is null and tblCase.StateSecondary_Id is not null and tblStateSecondary.IncludeInCaseStatistics = 0)");
                     break;
-                case "4":
+                case CaseProgressFilter.UnreadCases:
                     sb.Append(" and (tblCase.FinishingDate is null and tblCase.Status = 1)");
                     break;
-                case "5":
+                case CaseProgressFilter.FinishedNotApproved:
                     sb.Append(" and (tblCase.FinishingDate is not null and tblCaseType.RequireApproving = 1 and tblCase.ApprovedDate is null)");
                     break;
-                case "6":
+                case CaseProgressFilter.InProgressStatusGreater1:
                     sb.Append(" and (tblCase.FinishingDate is null and tblCase.Status > 1)");
                     break;
-                case "7":
+                case CaseProgressFilter.CasesWithWatchDate:
                     sb.Append(" and (tblCase.FinishingDate is null and tblCase.WatchDate is not null)");
                     break;
-                case "8":
+                case CaseProgressFilter.FollowUp:
                     sb.Append(" and (tblCase.FollowUpdate is not null)");
                     break;
                 default:
@@ -887,7 +939,18 @@
             // performer/utförare
             if (!string.IsNullOrWhiteSpace(f.UserPerformer))
             {
-                sb.Append(" and (tblCase.Performer_User_Id in (" + f.UserPerformer.SafeForSqlInject() + ")) ");
+                //ShowNotAssignedCases
+                if (customerUserSetting.User.ShowNotAssignedCases == 1 && restrictedCasePermission != 1 && f.UserPerformer == userId.ToString())
+                {
+                    sb.Append(" and (tblCase.Performer_User_Id in (" + f.UserPerformer.SafeForSqlInject() + ") OR tblCase.Performer_User_Id = 0) ");
+                    //sb.Append(" OR tblCase.Performer_User_Id = 0 ");
+                    //sb.Append(") ");
+                }
+                else
+                {
+                    sb.Append(" and (tblCase.Performer_User_Id in (" + f.UserPerformer.SafeForSqlInject() + ")) ");
+                }
+                
             }
 
             // ansvarig
@@ -1008,6 +1071,20 @@
                     sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblFormFieldValue] WHERE {0}))", this.GetSqlLike("FormFieldValue", text));
                     sb.Append(") ");
                 }
+            }
+            
+            // "Initiator" search field
+            if (!string.IsNullOrEmpty(f.Initiator))
+            {
+                sb.Append(" AND (");
+                sb.AppendFormat("{0}", this.GetSqlLike("[tblCase].[Persons_Name]", f.Initiator));
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[ReportedBy]", f.Initiator));
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[UserCode]", f.Initiator));
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Email]", f.Initiator));
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Place]", f.Initiator));
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_CellPhone]", f.Initiator));
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Phone]", f.Initiator));
+                sb.Append(") ");
             }
 
             //LockCaseToWorkingGroup

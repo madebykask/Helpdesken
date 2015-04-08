@@ -16,12 +16,14 @@ namespace DH.Helpdesk.Domain
         public string ApplicationName { get; set; }
         public string AttachedFileFolder { get; set; }
         public string DBVersion { get; set; }
+        public string HelpdeskDBVersion { get; set; }
         public string EMailBodyEncoding { get; set; }
         public string PDFPrintPassword { get; set; }
         public string PDFPrintUserName { get; set; }
         public string ServerName { get; set; }
         public string SMTPServer { get; set; }
         public string ExternalSite { get; set; }
+        
 
         public virtual Language DefaultLanguage { get; set; }
     }

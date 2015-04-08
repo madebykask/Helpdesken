@@ -34,6 +34,7 @@ namespace DH.Helpdesk.Dal.Repositories.MailTemplates.Concrete
                 where
                     m.MailID == Id && l.Language_Id == languageId
                     && (m.Customer_Id == customerId || m.Customer_Id == null)
+                    orderby m.Customer_Id descending
                 select l).FirstOrDefault();
         }
 

@@ -392,7 +392,9 @@
             c.Supplier_Id = this._supplierServicee.GetDefaultId(customerId);
             c.Priority_Id = this._priorityService.GetDefaultId(customerId);
             c.Status_Id = this._statusService.GetDefaultId(customerId);
-            c.WorkingGroup_Id = this._workingGroupService.GetDefaultId(customerId, userId);
+            // http://redmine.fastdev.se/issues/10997
+//            c.WorkingGroup_Id = this._workingGroupService.GetDefaultId(customerId, userId);
+            c.WorkingGroup_Id = this.userRepository.GetUserDefaultWorkingGroupId(userId, customerId);
             c.RegUserId =  adUser.GetUserFromAdPath();
             c.RegUserDomain = adUser.GetDomainFromAdPath();
 
@@ -579,8 +581,9 @@
             return this._caseHistoryRepository.GetCaseHistoryByCaseId(caseId).ToList(); 
         }
 
-        public void SendCaseEmail(int caseId, CaseMailSetting cms, int caseHistoryId, Case oldCase = null, CaseLog log = null, List<CaseFileDto> logFiles = null)
+        public void SendCaseEmail(int caseId, CaseMailSetting cms, int caseHistoryId, Case oldCase = null, CaseLog log = null, List<CaseFileDto> logFiles = null)        
         {
+            var isClosedMailSentToNotifier = false;
             if (_emailService.IsValidEmail(cms.HelpdeskMailFromAdress))
             {
                 // get new case information
@@ -840,6 +843,7 @@
                                     _emailLogRepository.Commit();
                                     fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 9);
                                     _emailService.SendEmail(customEmailSender2, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                    isClosedMailSentToNotifier = true;
                                 }
 
                             // send sms
@@ -863,7 +867,7 @@
                 }
 
                 // State Secondary Email TODO ikea ims only?? 
-                if (!cms.DontSendMailToNotifier && !dontSendMailToNotfier && oldCase != null && oldCase.Id > 0)  
+                if (!cms.DontSendMailToNotifier && !dontSendMailToNotfier && !isClosedMailSentToNotifier && oldCase != null && oldCase.Id > 0)  
                     if (newCase.StateSecondary_Id != oldCase.StateSecondary_Id && newCase.StateSecondary_Id > 0)
                         if (_emailService.IsValidEmail(newCase.PersonsEmail))
                         {

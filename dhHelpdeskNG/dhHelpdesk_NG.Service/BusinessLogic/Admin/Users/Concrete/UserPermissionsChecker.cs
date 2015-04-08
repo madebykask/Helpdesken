@@ -37,10 +37,11 @@
                 permissions.Add(UserPermission.Performer);
             }
 
-            if (user.CreateCasePermission.ToBool())
-            {
-                permissions.Add(UserPermission.CreateCasePermission);
-            }
+            //Commented out because redmine 11954
+            //if (user.CreateCasePermission.ToBool())
+            //{
+            //    permissions.Add(UserPermission.CreateCasePermission);
+            //}
 
             if (user.CopyCasePermission.ToBool())
             {
@@ -67,15 +68,16 @@
                 permissions.Add(UserPermission.ActivateCasePermission);
             }
 
-            if (user.CloseCasePermission.ToBool())
-            {
-                permissions.Add(UserPermission.CloseCasePermission);
-            }
-
-            if (user.RestrictedCasePermission.ToBool())
-            {
-                permissions.Add(UserPermission.RestrictedCasePermission);
-            }
+            //Commented out because redmine 11954
+            //if (user.CloseCasePermission.ToBool())
+            //{
+            //    permissions.Add(UserPermission.CloseCasePermission);
+            //}
+            //Commented out because redmine 11954
+            //if (user.RestrictedCasePermission.ToBool())
+            //{
+            //    permissions.Add(UserPermission.RestrictedCasePermission);
+            //}
 
             if (user.FollowUpPermission.ToBool())
             {
@@ -128,12 +130,17 @@
             switch ((UserGroup)user.UserGroup_Id)
             {
                 case UserGroup.User:
-                    if (!permissions.Contains(UserPermission.CreateCasePermission))
-                    {
-                        wrongPermissions.Add(UserPermission.CreateCasePermission);
-                    }
+                    //Commented out because redmine 11954
+                    //if (!permissions.Contains(UserPermission.CreateCasePermission))
+                    //{
+                    //    wrongPermissions.Add(UserPermission.CreateCasePermission);
+                    //}
+                    //if (!permissions.Contains(UserPermission.RestrictedCasePermission))
+                    //{
+                    //    wrongPermissions.Add(UserPermission.RestrictedCasePermission);
+                    //}
 
-                    wrongPermissions.AddRange(permissions.Where(p => p != UserPermission.CreateCasePermission));
+                    wrongPermissions.AddRange(permissions);
 
                     break;
                 case UserGroup.Administrator:

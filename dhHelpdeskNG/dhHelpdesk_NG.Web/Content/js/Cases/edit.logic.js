@@ -44,7 +44,7 @@ $(function () {
                 position: 'top-center',
                 type: type || 'notice',
                 closeText: '',
-                stayTime: 3000,
+                stayTime: 10000,
                 inEffectDuration: 1000,
                 width: 700
             });
@@ -354,10 +354,14 @@ $(function () {
         that.init = function (caseEntity) {
             var checkRelatedCases = function (uId) {
                 var caseId = that.getCase().getCaseId().getElement();
-                var userIdValue = encodeURIComponent(uId || userId.getElement().val());
+                var userIdValue = uId || userId.getElement().val();
+                if (userIdValue == null || userIdValue.trim() == '') {
+                    relatedCases.getElement().hide();
+                    return;
+                }
                 $.getJSON(getRelatedCasesCountUrl() + 
                             '?caseId=' + caseId.val() +
-                            '&userId=' + userIdValue, function(data) {
+                            '&userId=' + encodeURIComponent(userIdValue), function (data) {
                                 if (data > 0) {
                                     relatedCases.getElement().show();
                                 } else {
@@ -672,6 +676,8 @@ $(function () {
         var cancelText = spec.cancelText || '';
         var yesText = spec.yesText || '';
         var noText = spec.noText || '';
+        var validationMessages = spec.validationMessages || [];
+        var mandatoryFieldsText = spec.mandatoryFieldsText || '';
 
         dhHelpdesk.cases.utils.init(okText, cancelText, yesText, noText);
 
@@ -772,7 +778,30 @@ $(function () {
         // http://redmine.fastdev.se/issues/11179
         $('#target').submit(function () {
             if (!$(this).valid()) {
-                dhHelpdesk.cases.utils.showError(requiredFieldsMessage);
+                var message = requiredFieldsMessage + '<br />' + mandatoryFieldsText + ':';
+                $('label.error:visible').each(function (key, value) {
+                    var errorText = $(value).text();
+
+                    $.each(validationMessages, function(index, validationMessage) {
+                        errorText = '<br />' + '[' + dhHelpdesk.cases.utils.replaceAll(errorText, validationMessage, '').trim() + ']';
+                    });
+                    
+                    message += errorText;
+                });
+
+                dhHelpdesk.cases.utils.showError(message);
+
+                // http://redmine.fastdev.se/issues/11916
+                $('.date').each(function() {
+                    var $this = $(this);
+                    var errorLabel = $this.find('label.error:visible');
+                    if (errorLabel.length > 0) {
+                        var calendarIcon = $this.find('.add-on');
+                        if (calendarIcon.length > 0) {
+                            errorLabel.detach().insertAfter(calendarIcon);
+                        }
+                    }
+                });
             } 
         });
 

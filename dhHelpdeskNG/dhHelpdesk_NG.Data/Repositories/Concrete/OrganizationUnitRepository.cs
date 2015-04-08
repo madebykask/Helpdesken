@@ -54,6 +54,31 @@
                     u => new ItemOverview(u.Name, u.Id.ToString(CultureInfo.InvariantCulture))).OrderBy(x => x.Name).ToList();
         }
 
+        public List<OU> GetOUs(int? departmentId)
+        {
+            var organizationUnitRoot =
+                this.DataContext.OUs.Where(u => u.IsActive != 0 && 
+                                                u.Parent_OU_Id == null && 
+                                                u.Department_Id == departmentId).ToList();
+
+            var organizationUnitFirstChild =
+                this.DataContext.OUs.Where(u => u.IsActive != 0 && 
+                                                u.Parent_OU_Id != null && 
+                                                u.Parent.Parent_OU_Id == null && 
+                                                u.Department_Id == departmentId).ToList();
+
+            foreach (var subOU in organizationUnitFirstChild)
+            {
+                subOU.Name = subOU.Parent.Name + " - " + subOU.Name;
+            }
+
+            var organizationUnitOverviews =
+                organizationUnitRoot.Union(organizationUnitFirstChild);
+
+            return
+                organizationUnitOverviews.ToList();
+        }
+
         public IEnumerable<OU> GetActiveAndShowable()
         {
             return this.DataContext.OUs.Where(u => u.IsActive != 0 && u.Show != 0);

@@ -15,7 +15,8 @@
                 {
                     <tr>
                         <td class="span3">
-                            @(Translation.Get(Model.Region.Caption, Enums.TranslationSource.TextTranslation) + (Model.Region.Required ? "*" : string.Empty))
+                            @* Region in Notifier is only for filtering help*@ 
+                            @(Translation.Get(Model.Region.Caption, Enums.TranslationSource.TextTranslation)) 
                         </td>
                         <td>
                             @Html.DropDown("region_dropdown", "RegionId", !Model.Region.Required, Model.Region.Value)
@@ -82,7 +83,7 @@
                                     selectedManagerDisplayName = Model.Managers.Value.Items.Single(m => m.Value == Model.Managers.Value.SelectedValue).Name;
                                 }
                             }
-                            <input id="manager_textbox" type="text" value="@selectedManagerDisplayName" />
+                            <input id="manager_textbox" type="text" value="@selectedManagerDisplayName" name="Manager" />
                             <input id="manager_id_hidden" type="hidden" name="ManagerId" value="@selectedManagerId" />
                         </td>
                     </tr>

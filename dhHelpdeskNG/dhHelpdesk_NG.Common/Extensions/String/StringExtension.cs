@@ -176,7 +176,7 @@ namespace DH.Helpdesk.Common.Extensions.String
                     case "description": str = "Description"; break;
                     case "filename": str = "Attached file"; break;
                     case "finishingdate": str = "Closing date"; break;
-                    case "finishingdescription": str = "Closing date"; break;
+                    case "finishingdescription": str = "Closing description"; break;
                     case "impact_id": str = "Impact"; break;
                     case "inventorylocation": str = "Placement"; break;
                     case "inventorynumber": str = "PC Nummer"; break;

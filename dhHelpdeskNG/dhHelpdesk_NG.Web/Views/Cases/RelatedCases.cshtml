@@ -14,6 +14,7 @@
                 <table class="table table-striped table-bordered table-hover table-pointer">
                     <thead>
                         <tr>
+                            <th></th>
                             <th>@Translation.Get(GlobalEnums.TranslationCaseFields.CaseNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)</th>
                             <th>@Translation.Get(GlobalEnums.TranslationCaseFields.RegTime.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)</th>
                             <th>@Translation.Get(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)</th>
@@ -26,6 +27,9 @@
                         {
                             var rc = relatedCase;                            
                             <tr onclick="window.location.href='@Url.Action("Edit", new RouteValueDictionary { { "id", rc.CaseId } })'">
+                                <td>
+                                    <img title="@relatedCase.CaseIcon.CaseIconTitle()" alt="@relatedCase.CaseIcon.CaseIconTitle()" src="@Url.Content("~/Content/icons/" + relatedCase.CaseIcon.CaseIconSrc())" />   
+                                </td>                                
                                 <td>
                                     
                                     @Html.HiddenFor(m => rc.CaseId)

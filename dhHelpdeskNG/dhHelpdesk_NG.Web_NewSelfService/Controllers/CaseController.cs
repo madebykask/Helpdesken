@@ -30,6 +30,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
     using System.Net.Http;
     using System.Net.Http.Headers;
     using DH.Helpdesk.Dal.Infrastructure.Context;
+    using DH.Helpdesk.NewSelfService.Infrastructure;
 
     public class CaseController : BaseController
     {
@@ -279,7 +280,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                     var p = this._productAreaService.GetProductArea(model.NewCase.ProductArea_Id.GetValueOrDefault());
                     if(p != null)
                     {
-                        model.ProductAreaParantPath = p.getProductAreaParentPath();
+                        model.ProductAreaParantPath = string.Join(" - ", this._productAreaService.GetParentPath(p.Id, currentCustomer.Id));
                     }
                 }
 
@@ -696,18 +697,18 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             cs.ReportedBy = "";
             var LMtype = "";
 
-            if (ConfigurationManager.AppSettings["CurrentApplication"].ToString() == "LineManager")
+            if (ConfigurationManager.AppSettings[Enums.ApplicationKeys.CurrentApplicationType].ToString() == Enums.ApplicationTypes.LineManager)
             {
-                var caseListCondition = ConfigurationManager.AppSettings["CaseList"].ToString().ToLower().Split(',');
+                var caseListCondition = ConfigurationManager.AppSettings[Enums.ApplicationKeys.CaseList].ToString().ToLower().Split(',');
 
-                if (caseListCondition.Contains("manager"))
+                if (caseListCondition.Contains(Enums.CaseListTypes.manager))
                 {
                     LMtype = "1";
                     cs.RegUserId = curUser;
                     cs.ReportedBy = "'" + SessionFacade.CurrentUserIdentity.EmployeeNumber + "'";
                 }
 
-                if (caseListCondition.Contains("coworkers"))
+                if (caseListCondition.Contains(Enums.CaseListTypes.coworkers))
                 {
                     LMtype = LMtype + "2";
                     var employees = SessionFacade.CurrentCoWorkers;
@@ -744,7 +745,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             // 1: User in Customer Setting
             srm.CaseSettings = this._caseSettingService.GetCaseSettingsByUserGroup(cusId, 1);
 
-            if (LMtype == "" && ConfigurationManager.AppSettings["CurrentApplication"].ToString() == "LineManager")
+            if (LMtype == "" && ConfigurationManager.AppSettings[Enums.ApplicationKeys.CurrentApplicationType].ToString() == Enums.ApplicationTypes.LineManager)
                 srm.Cases = null;
             else
             {
@@ -762,7 +763,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                     null,
                     "Line Manager").ToList(); // Take(maxRecords)
 
-                if (LMtype != "" && ConfigurationManager.AppSettings["CurrentApplication"].ToString() == "LineManager")
+                if (LMtype != "" && ConfigurationManager.AppSettings[Enums.ApplicationKeys.CurrentApplicationType].ToString() == Enums.ApplicationTypes.LineManager)
                 {
                     var dynamicCases = _caseService.GetAllDynamicCases();
                     model.DynamicCases = dynamicCases;
@@ -797,7 +798,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             var caseTypes = this._caseTypeService.GetCaseTypes(customerId);
 
             //Product Area tree            
-            var productAreas = this._productAreaService.GetProductAreas(customerId);
+            var productAreas = this._productAreaService.GetTopProductAreas(customerId);
 
             //System list            
             var systems = this._systemService.GetSystems(customerId);

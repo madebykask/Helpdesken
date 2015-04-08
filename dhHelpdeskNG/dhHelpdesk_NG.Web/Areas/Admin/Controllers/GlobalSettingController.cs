@@ -37,11 +37,10 @@
             this._watchDateCalendarService = watchDateCalendarService;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(int texttypeid)
         {
-            var model = this.GetGSIndexViewModel(1, 1, SessionFacade.CurrentCustomer.Language_Id);
-
-            
+            var model = this.GetGSIndexViewModel(texttypeid, 1, SessionFacade.CurrentCustomer.Language_Id);
+           
             return this.View(model);
         }
 
@@ -66,13 +65,16 @@
 
             var b = this.TryUpdateModel(changeToSave, "globalsetting");
 
+            if (string.IsNullOrEmpty(changeToSave.ApplicationName))
+                changeToSave.ApplicationName = "";
+
             var vmodel = this.SaveGsInputViewModel(changeToSave);
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
             this._globalSettingService.SaveGlobalSetting(changeToSave, out errors);
 
             if (errors.Count == 0)
-                return this.RedirectToAction("index", "globalsetting");
+                return this.RedirectToAction("index", "globalsetting", new { texttypeid = 0 });
 
             var model = this.SaveGsInputViewModel(changeToSave);
             model.Tabposition = coll["activeTab"];
@@ -103,7 +105,7 @@
                 this._holidayService.SaveHolidayHeader(holidayheader, out errors);
 
                 if (errors.Count == 0)
-                    return this.RedirectToAction("index", "globalsetting");
+                    return this.RedirectToAction("index", "globalsetting", new { texttypeid = 0 });
 
                 var model = this.SaveHolidayViewModel(holidayheader, viewModel.Year);
                 SessionFacade.ActiveTab = coll["activeTab"];
@@ -199,7 +201,7 @@
                 this._watchDateCalendarService.SaveWatchDateCalendar(watchdatecalendar, out errors);
 
                 if (errors.Count == 0)
-                    return this.RedirectToAction("index", "globalsetting");
+                    return this.RedirectToAction("index", "globalsetting", new { texttypeid = 0 });
 
                 var model = this.SaveWatchDateViewModel(watchdatecalendar, viewModel.Year);
 
@@ -216,7 +218,7 @@
                 this._watchDateCalendarService.SaveWatchDateCalendar(watchdatecalendar, out errors);
 
                 if (errors.Count == 0)
-                    return this.RedirectToAction("index", "globalsetting");
+                    return this.RedirectToAction("index", "globalsetting", new { texttypeid = 0 });
 
                 var model = this.SaveWatchDateViewModel(watchdatecalendar, viewModel.Year);
 
@@ -262,7 +264,7 @@
             this._watchDateCalendarService.SaveWatchDateCalendarValue(wdcValueToSave, out errors);
 
             if (errors.Count == 0)
-                return this.RedirectToAction("index", "globalsetting");
+                return this.RedirectToAction("index", "globalsetting", new { texttypeid = 0 });
 
             SessionFacade.ActiveTab = coll["activeTab"];
 
@@ -289,9 +291,9 @@
             return this.View(model);
         }
 
-        public ActionResult NewTranslation()
+        public ActionResult NewTranslation(int texttypeid)
         {
-            var model = this.GetTextTranslationViewModel(new Text { }, SessionFacade.CurrentCustomer.Language_Id);
+            var model = this.GetTextTranslationViewModel(new Text { }, texttypeid, SessionFacade.CurrentCustomer.Language_Id);
 
             SessionFacade.ActiveTab = "#fragment-4";
 
@@ -310,13 +312,20 @@
             text.Type = vmodel.TextType.Id;
             text.ChangedByUser_Id = SessionFacade.CurrentUser.Id;
 
+
             this._textTranslationService.SaveNewText(text, out errors);
 
             if (errors.Count == 0)
-                return this.RedirectToAction("index", "globalsetting");
+                return this.RedirectToAction("edittranslation", "globalsetting", new { area = "admin", id = text.Id });
+                //return this.RedirectToAction("index", "globalsetting", new { texttypeid = text.Type });
 
-            var model = this.GetTextTranslationViewModel(text, 0);
 
+            var model = this.GetTextTranslationViewModel(text, text.Type, 0);
+
+            foreach (var error in errors)
+            {
+                ModelState.AddModelError(error.Key, Translation.Get(error.Value));
+            }
             SessionFacade.ActiveTab = coll["activeTab"];
 
             return this.View(model);
@@ -333,7 +342,7 @@
             if (text == null)
                 return new HttpNotFoundResult("No translation found...");
 
-            var model = this.GetTextTranslationViewModel(text, language.Id);
+            var model = this.GetTextTranslationViewModel(text, text.Type, language.Id);
 
             SessionFacade.ActiveTab = "#fragment-4";
 
@@ -341,12 +350,13 @@
         }
 
         [HttpPost]
-        public ActionResult EditTranslation(int id, List<TextTranslationLanguageList> TTs, FormCollection coll)
+        public ActionResult EditTranslation(int id, int texttypeid, List<TextTranslationLanguageList> TTs, FormCollection coll)
         {
             var textToSave = this._textTranslationService.GetText(id);
 
             if (textToSave == null)
                 throw new Exception("No text found...");
+
 
             var b = this.TryUpdateModel(textToSave, "text");
 
@@ -361,9 +371,9 @@
             this._textTranslationService.SaveEditText(textToSave, TTs, out errors);
 
             if (errors.Count == 0)
-                return this.RedirectToAction("index", "globalsetting");
+                return this.RedirectToAction("index", "globalsetting", new { texttypeid = texttypeid });
 
-            var model = this.GetTextTranslationViewModel(textToSave, 0);
+            var model = this.GetTextTranslationViewModel(textToSave, texttypeid, 0);
 
             model.Tabposition = coll["activeTab"];
 
@@ -371,7 +381,7 @@
         }
 
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection coll)
+        public ActionResult Delete(int id, int texttypeid, FormCollection coll)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
             var text = this._textTranslationService.GetText(id);
@@ -391,7 +401,7 @@
             this._textTranslationService.DeleteText(text, out errors);
 
             SessionFacade.ActiveTab = coll["activeTab"];
-            return this.RedirectToAction("index", "globalsetting");
+            return this.RedirectToAction("index", "globalsetting", new { texttypeid = texttypeid });
         }
 
         
@@ -399,6 +409,10 @@
         {
             var start = this._globalSettingService.GetGlobalSettings().FirstOrDefault();
 
+            var gridModel = new TranslationGridModel();
+            //gridModel.AllTexts = this._textTranslationService.GetAllTexts(texttypeid).ToList();
+            gridModel.AllTexts = this._textTranslationService.GetAllTexts(texttypeid).ToList();
+            
             var model = new GlobalSettingIndexViewModel
             {
                 GlobalSettings = this._globalSettingService.GetGlobalSettings(),
@@ -409,7 +423,12 @@
                 WatchDateCalendarValues = this._watchDateCalendarService.GetAllWatchDateCalendarValues().ToList(),
                 TextType = this._textTranslationService.GetTextType(texttypeid),
                 HolidayHeader = this._holidayService.GetHolidayHeader(1),
-                AllTexts = this._textTranslationService.GetAllTexts(texttypeid).ToList(),
+                GridModel = gridModel,
+                TextTypes = this._textTranslationService.GetTextTypes().Select(x => new SelectListItem
+                {
+                    Text = Translation.Get(x.Name),
+                    Value = x.Id.ToString()
+                }).ToList(),
                 Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
                 {
                     Text = Translation.Get(x.Name),
@@ -427,13 +446,21 @@
                 }).ToList(),
             };
 
-            model.TextTypes = new List<SelectListItem>();
-            model.TextTypes.Add(new SelectListItem { Text = "Master data", Value = "1" });
+            //model.SearchModel = Json(model.AllTexts);
+            //model.TextTypes = new List<SelectListItem>();
+            //model.TextTypes.Add(new SelectListItem { Text = "Dh Helpdesk", Value = "0" });
+            //model.TextTypes.Add(new SelectListItem { Text = "Master data", Value = "1" });
 
-            foreach (var textype in this._textTranslationService.GetTextTypes())
-            {
-                model.TextTypes.Add(new SelectListItem { Text = textype.Name, Value = textype.Id.ToString() });
-            }
+            //foreach (var textype in this._textTranslationService.GetTextTypes())
+            //{
+            //    model.TextTypes.Add(new SelectListItem { Text = textype.Name, Value = textype.Id.ToString() });
+            //}
+
+            model.SearchConditions = new List<SelectListItem>();
+            //model.SearchConditions.Add(new SelectListItem { Text = "--", Value = "0" });
+            model.SearchConditions.Add(new SelectListItem { Text = Translation.Get("Börjar med"), Value = "1" });
+            model.SearchConditions.Add(new SelectListItem { Text = Translation.Get("Innehåller"), Value = "2" });
+
 
             return model;
         }
@@ -922,7 +949,7 @@
             return model;
         }
 
-        private GlobalSettingTextTranslationViewModel GetTextTranslationViewModel(Text text, int languageId)
+        private GlobalSettingTextTranslationViewModel GetTextTranslationViewModel(Text text, int texttypeid, int languageId)
         {
             var model = new GlobalSettingTextTranslationViewModel
             {
@@ -932,6 +959,8 @@
                 TextTranslations = this._textTranslationService.GetAllTextTranslations(),
                 TextTranslation = this._textTranslationService.GetTextTranslationByIdAndLanguage(text.Id, languageId),
                 Language = this._languageService.GetLanguage(languageId),
+                TextType = this._textTranslationService.GetTextType(text.Type),
+                TextTypeName = Translation.Get(this._textTranslationService.GetTextTypeName(texttypeid)),
                 Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
                 {
                     Text = Translation.Get(x.Name),
@@ -939,13 +968,31 @@
                 }).ToList()
             };
 
-            model.TextTypes = new List<SelectListItem>();
-            model.TextTypes.Add(new SelectListItem { Text = "Master data", Value = "1" });
-
-            foreach (var textype in this._textTranslationService.GetTextTypes())
+            if (text.Id == 0)
             {
-                model.TextTypes.Add(new SelectListItem { Text = textype.Name, Value = textype.Id.ToString() });
+                model.TextTypes = this._textTranslationService.GetTextTypesForNewText().Select(x => new SelectListItem
+                {
+                    Text = Translation.Get(x.Name),
+                    Value = x.Id.ToString()
+                }).ToList();
             }
+            else
+            {
+                model.TextTypes = this._textTranslationService.GetTextTypes().Select(x => new SelectListItem
+                {
+                    Text = Translation.Get(x.Name),
+                    Value = x.Id.ToString()
+                }).ToList();
+            }
+
+            //model.TextTypes = new List<SelectListItem>();
+            //model.TextTypes.Add(new SelectListItem { Text = "Master data", Value = "1" });
+
+            //foreach (var textype in this._textTranslationService.GetTextTypes())
+            //{
+            //    model.TextTypes.Add(new SelectListItem { Text = textype.Name, Value = textype.Id.ToString() });
+            //}
+
 
             return model;
         }
@@ -1013,7 +1060,7 @@
 
 
 
-            var model = this.GetTextTranslationViewModel(text, id);
+            var model = this.GetTextTranslationViewModel(text, text.Type, id);
 
             var view = "~/areas/admin/views/GlobalSetting/_Translation.cshtml";
             //var view = "~/areas/admin/views/GlobalSetting/EditTranslation.cshtml";
@@ -1022,15 +1069,54 @@
 
         [CustomAuthorize(Roles = "3,4")]
         [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")]
-        public string ChangeTextType(int id)
+        [HttpGet]
+        public PartialViewResult ChangeTextType(int id)
         {
+            var model = new TranslationGridModel();            
+            model.AllTexts = this._textTranslationService.GetAllTexts(id).ToList();            
+            var view = "~/areas/admin/views/GlobalSetting/_TranslationsList.cshtml";
 
-            var model = this.GetGSIndexViewModel(id, 1, SessionFacade.CurrentCustomer.Language_Id);
+            return this.PartialView(view , model);                                     
+        }
+
+        [HttpGet]
+        public PartialViewResult SearchText(int textTypeId, string searchValue, int searchOption)
+        {
+            var model = new TranslationGridModel();            
+            var allTexts = this._textTranslationService.GetAllTexts(textTypeId).ToList();
+
+            switch (searchOption)
+            {
+                case 1:
+                    model.AllTexts = allTexts.Where(a => a.TextToTranslate.ToLower().StartsWith(searchValue.ToLower())).OrderBy(a => a.TextToTranslate).ToList();
+                    break;
+
+                case 2:                    
+                    model.AllTexts = allTexts.Where(a => a.TextToTranslate.ToLower().Contains(searchValue.ToLower())).OrderBy(a => a.TextToTranslate).ToList();
+                    break;
+
+                default:
+                    model.AllTexts = allTexts.OrderBy(a => a.TextToTranslate).ToList();
+                    break;
+            }
 
             var view = "~/areas/admin/views/GlobalSetting/_TranslationsList.cshtml";
-            
+
+            return this.PartialView(view, model);
+
+        }
+
+        [CustomAuthorize(Roles = "3,4")]
+        [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")]
+        public string SearchTranslation()
+        {
+
+            var model = this.GetGSIndexViewModel(1, 1, SessionFacade.CurrentCustomer.Language_Id);
+
+            var view = "~/areas/admin/views/GlobalSetting/_TranslationsList.cshtml";
+
             return this.RenderRazorViewToString(view, model);
-            
+
         }
 
         [CustomAuthorize(Roles = "3,4")]

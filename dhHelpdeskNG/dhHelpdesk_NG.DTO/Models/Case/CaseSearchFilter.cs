@@ -18,6 +18,12 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         public string User { get; set; }
         public string UserPerformer { get; set; }
         public string UserResponsible { get; set; }
+
+        /// <summary>
+        /// String that will be searched in "Initiator" case field
+        /// </summary>
+        public string Initiator { get; set; }
+
         public string Category { get; set; }
         public string WorkingGroup { get; set; }
         public string Priority { get; set; }
@@ -51,6 +57,8 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         public CasesCustomFilter CustomFilter { get; set; }
 
         public int? CaseRemainingTimeFilter { get; set; }
+
+        public int? CaseRemainingTimeUntilFilter { get; set; }
 
         public int? CaseRemainingTimeMaxFilter { get; set; }
 
@@ -91,8 +99,10 @@ namespace DH.Helpdesk.BusinessData.Models.Case
             r.ParentPathClosingReason = o.ParentPathClosingReason;
             r.CustomFilter = o.CustomFilter;
             r.CaseRemainingTimeFilter = o.CaseRemainingTimeFilter;
+            r.CaseRemainingTimeUntilFilter = o.CaseRemainingTimeUntilFilter;
             r.CaseRemainingTimeMaxFilter = o.CaseRemainingTimeMaxFilter;
             r.CaseRemainingTimeHoursFilter = o.CaseRemainingTimeHoursFilter;
+            r.Initiator = o.Initiator;
 
             return r;
         }

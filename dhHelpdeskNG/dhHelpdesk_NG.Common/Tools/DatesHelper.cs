@@ -149,5 +149,35 @@ namespace DH.Helpdesk.Common.Tools
         {
             return hours.IsHoursGreaterEqualDays(days) && hours.IsHoursLessDays(days + 1);
         }
+
+        public static bool IsHoursLessDay(this int hours, int workingHours)
+        {
+            return hours < workingHours;
+        }
+
+        public static bool IsHoursLessEqualDays(this int hours, int days, int workingHours)
+        {
+            return hours <= days * workingHours;
+        }
+
+        public static bool IsHoursLessDays(this int hours, int days, int workingHours)
+        {
+            return hours < days * workingHours;
+        }
+
+        public static bool IsHoursGreaterEqualDays(this int hours, int days, int workingHours)
+        {
+            return hours >= days * workingHours;
+        }
+
+        public static bool IsHoursGreaterDays(this int hours, int days, int workingHours)
+        {
+            return hours > days * workingHours;
+        }
+
+        public static bool IsHoursEqualDays(this int hours, int days, int workingHours)
+        {
+            return hours.IsHoursGreaterEqualDays(days, workingHours) && hours.IsHoursLessDays(days + 1, workingHours);
+        }
     }
 }

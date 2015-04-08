@@ -5,22 +5,30 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
-    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Dal.Repositories;
+    using DH.Helpdesk.Dal.Repositories.ProductArea;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.utils;
 
-    public interface IProductAreaService
-    {
-        IList<ProductArea> GetProductAreas(int customerId);
+    using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
+    using ProductAreaEntity = DH.Helpdesk.Domain.ProductArea;
 
-        ProductArea GetProductArea(int id);
+    public interface IProductAreaService : IProductAreaNameResolver
+    {
+        ProductAreaEntity[] GetProductAreasForCustomer(int customerId);
+
+        IList<ProductAreaEntity> GetTopProductAreas(int customerId);
+
+        IList<ProductAreaEntity> GetAllProductAreas(int customerId);
+
+        ProductAreaEntity GetProductArea(int id);
 
         string GetProductAreaWithChildren(int id, string separator, string valueToReturn);
 
         DeleteMessage DeleteProductArea(int id);
-       
-        void SaveProductArea(ProductArea productArea,int[] wg, out IDictionary<string, string> errors);
+
+        void SaveProductArea(ProductAreaEntity productArea, int[] wg, out IDictionary<string, string> errors);
 
         void Commit();
 
@@ -84,22 +92,40 @@
 
         private readonly IUnitOfWork unitOfWork;
 
+        private readonly IUnitOfWorkFactory unitOfWorkFactory;
+
         public ProductAreaService(
             IProductAreaRepository productAreaRepository,
             IWorkingGroupRepository workingGroupRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            IUnitOfWorkFactory unitOfWorkFactory)
         {
             this.productAreaRepository = productAreaRepository;
             this.workingGroupRepository = workingGroupRepository;
             this.unitOfWork = unitOfWork;
+            this.unitOfWorkFactory = unitOfWorkFactory;
         }
 
-        public IList<ProductArea> GetProductAreas(int customerId)
+        public ProductAreaEntity[] GetProductAreasForCustomer(int customerId)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var repository = uow.GetRepository<ProductAreaEntity>();
+                return repository.GetAll().Where(it => it.Customer_Id == customerId).ToArray();
+            }
+        }
+
+        public IList<ProductAreaEntity> GetTopProductAreas(int customerId)
+        {
+            return this.productAreaRepository.GetMany(x => x.Customer_Id == customerId && x.Parent_ProductArea_Id == null && x.IsActive != 0).OrderBy(x => x.Name).ToList();
+        }
+
+        public IList<ProductAreaEntity> GetAllProductAreas(int customerId)
         {
             return this.productAreaRepository.GetMany(x => x.Customer_Id == customerId && x.Parent_ProductArea_Id == null).OrderBy(x => x.Name).ToList();
         }
-        
-        public ProductArea GetProductArea(int id)
+
+        public ProductAreaEntity GetProductArea(int id)
         {
             return this.productAreaRepository.GetById(id);
         }
@@ -110,8 +136,8 @@
 
             if (id != 0)
             {
-                string children = string.Empty; 
-                ProductArea pa = this.productAreaRepository.GetById(id);
+                string children = string.Empty;
+                ProductAreaEntity pa = this.productAreaRepository.GetById(id);
                 ret = pa.getObjectValue(valueToReturn);
 
                 if (pa.SubProductAreas != null)
@@ -145,7 +171,7 @@
             return DeleteMessage.Error;
         }
 
-        public void SaveProductArea(ProductArea productArea, int[] wg, out IDictionary<string, string> errors)
+        public void SaveProductArea(ProductAreaEntity productArea, int[] wg, out IDictionary<string, string> errors)
         {
             if (productArea == null)
                 throw new ArgumentNullException("productarea");
@@ -252,11 +278,11 @@
             return this.productAreaRepository.SaveProductArea(productArea);
         }
 
-        private string loopProdcuctAreas(IList<ProductArea> pal, string separator, string valueToReturn)
+        private string loopProdcuctAreas(IList<ProductAreaEntity> pal, string separator, string valueToReturn)
         {
             string ret = string.Empty;
 
-            foreach (ProductArea pa in pal)
+            foreach (var pa in pal)
             {
                 if (string.IsNullOrWhiteSpace(ret))
                     ret += pa.getObjectValue(valueToReturn);
@@ -271,5 +297,33 @@
             return ret;
         }
 
+        /// <summary>
+        /// Returns list of parent product categories including supplyed category by productAreaId
+        /// </summary>
+        /// <param name="productAreaId"></param>
+        /// <returns></returns>
+        public IEnumerable<string> GetParentPath(int productAreaId, int customerId)
+        {
+            if (this.productAreaCache == null || this.cachiedForCustomer != customerId)
+            {
+                this.productAreaCache = this.GetProductAreasForCustomer(customerId).ToDictionary(it => it.Id, it => it);
+                this.cachiedForCustomer = customerId;
+            }
+
+            var recursionsMax = 10;
+            int? lookingProductAreaId = productAreaId;
+            var res = new List<string>();
+            while (lookingProductAreaId.HasValue && this.productAreaCache.ContainsKey(lookingProductAreaId.Value) && recursionsMax-- > 0)
+            {
+                res.Add(this.productAreaCache[lookingProductAreaId.Value].Name);
+                lookingProductAreaId = this.productAreaCache[lookingProductAreaId.Value].Parent_ProductArea_Id;
+            }
+
+            return res.AsQueryable().Reverse().ToArray();
+        }
+
+        private Dictionary<int, ProductAreaEntity> productAreaCache;
+
+        private int cachiedForCustomer;
     }
 }

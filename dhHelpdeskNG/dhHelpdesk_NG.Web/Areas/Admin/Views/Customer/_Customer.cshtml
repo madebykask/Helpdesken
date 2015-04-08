@@ -293,14 +293,6 @@
     });
 
     $("#addUs").click(function () {
-        //if (document.getElementById("UsAvailable").length != 0 && document.getElementById("UsAvailable").selectedIndex != -1) {
-        //    // Lägg till bild
-        //    document.getElementById("UsSelected").options[document.getElementById("UsSelected").length] = new Option(document.getElementById("UsAvailable")[document.getElementById("UsAvailable").selectedIndex].text, document.getElementById("UsAvailable")[document.getElementById("UsAvailable").selectedIndex].value, false, false)
-
-        //    // Ta bort bild
-        //    document.getElementById("UsAvailable").options[document.getElementById("UsAvailable").selectedIndex] = null
-        //}
-
         $("#UsAvailable option:selected").remove().appendTo("#UsSelected");
         $("#UsAvailable").get(0).selectedIndex = -1;
         $("#UsSelected").get(0).selectedIndex = -1;
@@ -308,15 +300,6 @@
     });
 
     $("#removeUs").click(function () {
-
-        //if (document.getElementById("UsSelected").length != 0 && document.getElementById("UsSelected").selectedIndex != -1) {
-        //    // Lägg till bild
-        //    document.getElementById("UsAvailable").options[document.getElementById("UsAvailable").length] = new Option(document.getElementById("UsSelected")[document.getElementById("UsSelected").selectedIndex].text, document.getElementById("UsSelected")[document.getElementById("UsSelected").selectedIndex].value, false, false)
-
-        //    // Ta bort bild
-        //    document.getElementById("UsSelected").options[document.getElementById("UsSelected").selectedIndex] = null
-        //}
-
         $("#UsSelected option:selected").remove().appendTo("#UsAvailable");
         $("#UsAvailable").get(0).selectedIndex = -1;
         $("#UsSelected").get(0).selectedIndex = -1;

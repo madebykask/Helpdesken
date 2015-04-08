@@ -404,7 +404,6 @@ Go
 
 
 
-UPDATE tblGlobalSettings SET DBVersion = '5.0.4'
 GO
 -- 2015-01-14 Released Version 5.0.4.1  ------------------------------------------------------------------------------------
 
@@ -534,8 +533,6 @@ BEGIN
     EXECUTE sp_executeSQL @Command
 END
 Go
-
-UPDATE tblGlobalSettings SET DBVersion = '5.3.0'
 
 
 -- Released Version 5.3.0  (2015-01-22) **************************************************************************************************************** 
@@ -834,7 +831,7 @@ BEGIN
 END
 GO
 
-UPDATE tblGlobalSettings SET DBVersion = '5.3.1'
+
 
 -- Released Version 5.3.1.7  (2015-01-22) **************************************************************************************************************** 
 
@@ -883,7 +880,7 @@ begin
 
 end
 
-UPDATE tblGlobalSettings SET DBVersion = '5.3.2'
+
 
 
 -- Released Version 5.3.2.4  (2015-02-27) **************************************************************************************************************** 
@@ -963,7 +960,6 @@ update tblcustomeruser set showonstartpage = 1 where user_id in
  where tblusers.id not in 
     (select user_id from tblcustomeruser where showonstartpage = 1))
 
-UPDATE tblGlobalSettings SET DBVersion = '5.3.3'
 
 
 -- Released Version 5.3.3.13  (2015-03-17) **************************************************************************************************************** 

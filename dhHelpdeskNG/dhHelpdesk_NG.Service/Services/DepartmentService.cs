@@ -36,6 +36,9 @@
         List<ItemOverview> GetUserDepartments(int customerId, int? userId, int? regionId, int departmentFilterFormat);
 
         List<ItemOverview> GetDepartmentUsers(int customerId, int? departmentId, int? workingGroupId);
+
+        IEnumerable<Department> GetActiveDepartmentsBy(int customerId, int? regionId);
+
     }
 
     public class DepartmentService : IDepartmentService
@@ -202,6 +205,11 @@
             }
 
             return DeleteMessage.Error;
+        }
+
+        public IEnumerable<Department> GetActiveDepartmentsBy(int customerId, int? regionId)
+        {
+            return departmentRepository.GetActiveDepartmentsBy(customerId, regionId);
         }
 
         public void SaveDepartment(Department department, out IDictionary<string, string> errors)

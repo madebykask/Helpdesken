@@ -19,6 +19,6 @@
 
         List<ItemOverview> GetOrganizationUnits(int? departmentId);
 
-        OU[] GetOrganizationUnitsBy(int customerId, int? regionId, int? departmentId);
+        List<OU> GetOUs(int? departmentId);
     }
 }

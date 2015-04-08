@@ -201,7 +201,6 @@
                 userInputViewModel.User.SetPriorityPermission = 0;
                 userInputViewModel.User.ActivateCasePermission = 0;
             }
-            
 
             this._userService.SaveNewUser(user, AAsSelected, CsSelected, OTsSelected, null, out errors);
 
@@ -319,7 +318,7 @@
                         userToSave.UserRoles.Add(userRight);
                     }
                 }
-                
+
                 this._userService.SaveEditUser(userToSave, AAsSelected, CsSelected, OTsSelected, Departments, UserWorkingGroups, out errors);
 
                 if (errors.Count == 0)

@@ -5,35 +5,49 @@
 
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.Common.Tools;
+    using DH.Helpdesk.Dal.Infrastructure.Context;
 
     public sealed class CaseRemainingTimeViewModel
     {
+        private const int DefaultMaxDays = 5;
+
         private readonly List<CaseRemainingTimeItemViewModel> hours = new List<CaseRemainingTimeItemViewModel>();
+
         private readonly List<CaseRemainingTimeItemViewModel> days = new List<CaseRemainingTimeItemViewModel>();
 
-        public CaseRemainingTimeViewModel(CaseRemainingTimeData data)
+        public CaseRemainingTimeViewModel(CaseRemainingTimeData data, IWorkContext workContext)
         {
             this.Data = data;
 
-            this.Delayed = new CaseRemainingTimeItemViewModel(int.MinValue, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime < 0));
+            this.Delayed = new CaseRemainingTimeItemViewModel(int.MinValue, null, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime < 0));
 
-            var hs = this.Data.CaseRemainingTimes.Select(t => t.RemainingTime).Where(t => t > 0 && t < 24).Distinct().OrderBy(t => t);
-            foreach (var h in hs)
+            var workingHours = workContext.Customer.WorkingDayEnd - workContext.Customer.WorkingDayStart;
+
+            AddHoursItem(0, 0, workingHours, data, this.hours);
+            AddHoursItem(1, 1, workingHours, data, this.hours);
+            AddHoursItem(2, 3, workingHours, data, this.hours);
+            AddHoursItem(4, 7, workingHours, data, this.hours);
+            AddHoursItem(8, 15, workingHours, data, this.hours);
+            AddHoursItem(16, 23, workingHours, data, this.hours);
+
+            var ds = this.Data.CaseRemainingTimes.Select(t => t.RemainingTime).Where(t => t >= workingHours).ToList();
+            this.MaxDays = ds.Any() ? ds.Max() / workingHours : DefaultMaxDays;
+            if (this.MaxDays > DefaultMaxDays)
             {
-                this.hours.Add(new CaseRemainingTimeItemViewModel(h, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime == h)));
+                this.MaxDays = DefaultMaxDays;
+                this.MoreThenMaxDays = new CaseRemainingTimeItemViewModel(int.MaxValue, null, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime.IsHoursGreaterEqualDays(this.MaxDays, workingHours)));
             }
 
-            var ds = this.Data.CaseRemainingTimes.Select(t => t.RemainingTime).Where(t => t >= 24).ToList();
-            this.MaxDays = ds.Any() ? ds.Max() / 24 : 5;
-            if (this.MaxDays > 5)
+            for (var i = 0; i < this.MaxDays; i++)
             {
-                this.MaxDays = 5;
-                this.MoreThenMaxDays = new CaseRemainingTimeItemViewModel(int.MaxValue, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime.IsHoursGreaterDays(this.MaxDays)));
-            }
-
-            for (var i = 1; i <= this.MaxDays; i++)
-            {
-                this.days.Add(new CaseRemainingTimeItemViewModel(i, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime.IsHoursEqualDays(i))));
+                if (i == 0)
+                {
+                    this.days.Add(new CaseRemainingTimeItemViewModel(i + 1, null, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime >= workingHours - 1 && t.RemainingTime < workingHours)));
+                }
+                else
+                {
+                    this.days.Add(new CaseRemainingTimeItemViewModel(i + 1, null, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime.IsHoursEqualDays(i, workingHours))));                    
+                }
             }
         }
 
@@ -60,5 +74,32 @@
         public CaseRemainingTimeItemViewModel MoreThenMaxDays { get; private set; }
 
         private CaseRemainingTimeData Data { get; set; }
+
+        private static void AddHoursItem(
+                        int start,
+                        int end,
+                        int workingHours,
+                        CaseRemainingTimeData data,
+                        List<CaseRemainingTimeItemViewModel> hours)
+        {
+            if (start >= workingHours)
+            {
+                return;
+            }
+
+            var count = 0;
+            var s = start;
+            while (workingHours > s && s <= end)
+            {
+                count += data.CaseRemainingTimes.Count(t => t.RemainingTime == s);
+                s++;
+            }
+
+            hours.Add(new CaseRemainingTimeItemViewModel(
+                start <= 1 ? start + 1 : start,
+                start != end ? s : (int?)null,
+                count,
+                string.Empty));
+        }
     }
 }

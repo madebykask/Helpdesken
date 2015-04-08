@@ -147,17 +147,7 @@
                                         <td class="span3">
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                         </td>
-                                        <td class="span9">
-                                            @*<select id="Department" name="model.CaseSolution.Department_Id">
-                                                <option value="">&nbsp;</option>
-                                                @if(Model.departments != null)
-                                                {
-                                                    foreach (var e in Model.departments.Where(e => e.IsActive == 1 || Model.CaseSolution.Department_Id == e.Id).Where(e => Model.CaseSolution.Region_Id == e.Region_Id || !Model.CaseSolution.Region_Id.IntHasValue()))
-                                                    {
-                                                    <option value="@e.Id" @e.Id.IdIsSelected(Model.CaseSolution.Department_Id.ToString())>@e.DepartmentName</option>
-                                                    }
-                                                }
-                                            </select>*@
+                                        <td class="span9">                                            
                                             @Html.DropDownListFor(model => model.CaseSolution.Department_Id, Model.Departments, "", new { id = "Department" })
                                         </td>
                                         <td class="span9">
@@ -478,7 +468,7 @@
                                         </td>
                                     </tr>
                                 }
-                                <tr>
+                                <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString())">
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                         </td>
@@ -500,7 +490,7 @@
                                     </tr>
                                 @if (Model.CaseFieldSettings.Count() != 0)
                                 {
-                                    <tr>
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.SMS.ToString())">
                                             <td>
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.SMS.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                             </td>
@@ -719,7 +709,7 @@
                                         </td>
                                     </tr>
                                  }
-                                    <tr >
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.PlanDate.ToString())">
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.PlanDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                         </td>
@@ -730,7 +720,7 @@
                                             @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.PlanDate, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.PlanDate)
                                         </td>
                                     </tr>
-                                    <tr >
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.WatchDate.ToString())">
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                         </td>
@@ -741,7 +731,7 @@
                                             @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.WatchDate, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.WatchDate)
                                         </td>
                                     </tr>
-                                    <tr>
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Verified.ToString())">
                                         <td>
                                            @Translation.Get(GlobalEnums.TranslationCaseFields.Verified.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                         </td>
@@ -790,7 +780,7 @@
                                 </tr>
                                 @if (Model.CaseFieldSettings.Count() != 0)
                                 {
-                                    <tr>
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString())">
                                         <td class="span3">
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                         </td>
@@ -816,9 +806,9 @@
                                         </td>
                                     </tr>
                                 }
-                                @*@if (Model.CaseFieldSettings.Count() != 0)
+                                @if (Model.CaseFieldSettings.Count() != 0)
                                 {
-                                    <tr>
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString())">
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                         </td>
@@ -830,7 +820,7 @@
                                         </td>
                                     </tr>
                                 }
-                                <tr >
+                                <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.FinishingDate.ToString())">
                                     <td>
                                         @Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                     </td>
@@ -841,7 +831,7 @@
                                         @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.FinishingDate, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.FinishingDate)
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.ClosingReason.ToString())">
                                     <td>
                                         @Translation.Get(GlobalEnums.TranslationCaseFields.ClosingReason.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                     </td>
@@ -861,7 +851,7 @@
                                     <td class="span9">
                                         @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.FinishingCause, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.ClosingReason)
                                     </td>
-                                </tr>*@
+                                </tr>
                             </table>
                         </div>
                     </div>
@@ -1118,56 +1108,8 @@
 </div>
 <script type="text/javascript">
 
-    $("select").change(function () {
-        
-        if ($(this).attr('elementclass') == 'OptionDropDown') {
-            var e = document.getElementById($(this).attr('id'));
-            var curVal = e.options[e.selectedIndex].value;
-            var resultValue = "";
-
-            switch (curVal) {
-                case "1":
-                    resultValue = "DisplayField";
-                    break;
-
-                case "2":
-                    resultValue = "ReadOnly";
-                    break;
-
-                case "3":
-                    resultValue = "Hide";
-                    break;
-            }
-            
-            var curName = $(this).attr('elementname');
-
-            var hideElement = document.getElementById('hide_' + curName);
-            hideElement.setAttribute("value", resultValue);
-
-        }
-    });
-  
-
-    $('#divCaseType ul.dropdown-menu li a').click(function (e) {
-        e.preventDefault();
-        var val = $(this).attr('value');
-        $("#divBreadcrumbs_CaseType").text(getBreadcrumbs(this));
-        $("#case__CaseType_Id").val(val).trigger('change');
-    });
-
-    $('#divProductArea ul.dropdown-menu li a').click(function (e) {
-        e.preventDefault();
-        var val = $(this).attr('value');
-        $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(this));
-        $("#case__ProductArea_Id").val(val).trigger('change');;
-    });
-
-    $('#divFinishingCause ul.dropdown-menu li a').click(function (e) {
-        e.preventDefault();
-        var val = $(this).attr('value');
-        $("#divBreadcrumbs_FinishingCause").text(getBreadcrumbs(this));
-        $("#case__FinishingCause_Id").val(val).trigger('change');;
-    });
+    
+ 
 
     var validator = $("#target").validate({
         ignore: "",

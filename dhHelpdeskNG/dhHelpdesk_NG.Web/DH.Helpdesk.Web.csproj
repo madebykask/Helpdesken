@@ -15,7 +15,7 @@
     <AssemblyName>DH.Helpdesk.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <SccProjectName>
     </SccProjectName>
     <SccLocalPath>
@@ -363,6 +363,7 @@
     <Content Include="Areas\Reports\Content\js\reports.js" />
     <Content Include="Content\bootstrap-tagsinput.css" />
     <Content Include="Content\css\bootstrap-tagsinput.css" />
+    <Content Include="Content\img\ajax-loader.GIF" />
     <Content Include="Content\img\dh_solutions_version.png" />
     <Content Include="Content\img\glyphicons-dh.png" />
     <Content Include="Content\js\Account\order.js" />
@@ -386,7 +387,6 @@
     <Content Include="Content\css\chosen-sprite%402x.png" />
     <Content Include="Content\css\chosen-sprite.png" />
     <Content Include="Content\css\chosen.css" />
-    <Content Include="Content\icons\ajax-loader.gif" />
     <Content Include="Content\img\backgrounds.gif" />
     <Content Include="Content\img\buttons-disabled.png" />
     <Content Include="Content\img\buttons.png" />
@@ -406,6 +406,7 @@
     <Content Include="Content\js\Cases\index.settings.js" />
     <Content Include="Content\js\Cases\edit.logic.js" />
     <Content Include="Content\js\Cases\index.logic.js" />
+    <Content Include="Content\js\Cases\relatedCases.logic.js" />
     <Content Include="Content\js\CaseTemplates\edit.logic.js" />
     <Content Include="Content\js\Changes\inventoryDialog.js" />
     <Compile Include="Areas\Inventory\Controllers\ComputerInventoryBaseController.cs" />
@@ -1616,6 +1617,7 @@
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\ComputerBuilder.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\ServerBulider.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\PrinterBuilder.cs" />
+    <Compile Include="Infrastructure\CaseOverview\OutputFormatter.cs" />
     <Compile Include="Infrastructure\Configuration\Concrete\ApplicationConfiguration.cs" />
     <Compile Include="Infrastructure\ActionFilters\BadRequestOnNotValidAttribute.cs" />
     <Compile Include="Infrastructure\Configuration\Concrete\Configuration.cs" />
@@ -1681,6 +1683,8 @@
     <Compile Include="Infrastructure\Filters\Problems\ProblemFilter.cs" />
     <Compile Include="Infrastructure\Filters\Projects\ProjectFilter.cs" />
     <Compile Include="Infrastructure\Filters\Reports\ReportsFilter.cs" />
+    <Compile Include="Infrastructure\Grid\JsonGridSettingsMapper.cs" />
+    <Compile Include="Infrastructure\Grid\Output\JsonGridSettingsModel.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\LocalizedMaxSizeFromAttribute.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\Rules\ModelClientValidationMaxSizeFromRule.cs" />
     <Compile Include="Infrastructure\Logger\ErrorContext.cs" />
@@ -1723,7 +1727,7 @@
     <Compile Include="Infrastructure\Print\PrintPdfEvents.cs" />
     <Compile Include="Infrastructure\Print\PrintPdfResult.cs" />
     <Compile Include="Infrastructure\Print\PrintPdfView.cs" />
-    <Compile Include="Infrastructure\Services\Case\CaseOverviewGridSettingsService.cs" />
+    <Compile Include="Infrastructure\CaseOverview\CaseOverviewGridSettingsService.cs" />
     <Compile Include="Infrastructure\Tools\Concrete\InvoiceHelper.cs" />
     <Compile Include="Infrastructure\Tools\Concrete\RouteResolver.cs" />
     <Compile Include="Infrastructure\Tools\DateTimeHelper.cs" />
@@ -1841,12 +1845,14 @@
     <Compile Include="Models\Case\CaseOverview.cs" />
     <Compile Include="Models\Case\CaseRemainingTimeItemViewModel.cs" />
     <Compile Include="Models\Case\CaseRemainingTimeViewModel.cs" />
+    <Compile Include="Models\Case\CaseSortField.cs" />
     <Compile Include="Models\Case\CaseTemplateTreeModel.cs" />
     <Compile Include="Models\Case\CaseViewModel.cs" />
     <Compile Include="Models\Case\CaseSettingModel.cs" />
     <Compile Include="Models\Case\CustomerCasesModel.cs" />
     <Compile Include="Models\Case\Input\CaseOverviewSettingsInput.cs" />
     <Compile Include="Models\Case\MyCasesModel.cs" />
+    <Compile Include="Models\Case\RelatedCasesFullViewModel.cs" />
     <Compile Include="Models\Case\RelatedCasesViewModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\GeneralModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\InviteToModel.cs" />
@@ -2860,6 +2866,10 @@
     <Content Include="Views\Cases\RelatedCases.cshtml" />
     <Content Include="Views\Cases\CaseRemainingTime.cshtml" />
     <Content Include="Views\Notifiers\OrganizationUnitDropDown.cshtml" />
+    <Content Include="Views\Cases\RelatedCasesFull.cshtml" />
+    <Content Include="Views\Cases\IndexAjax.cshtml" />
+    <Content Include="Views\Cases\RelatedCasesFullContent.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\DatePickerNoJS.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

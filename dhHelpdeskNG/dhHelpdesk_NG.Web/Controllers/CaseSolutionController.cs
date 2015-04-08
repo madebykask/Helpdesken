@@ -17,6 +17,8 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Models;
     using DH.Helpdesk.Web.Models.Case;
+    using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.Services.Services.Concrete;
 
     public class CaseSolutionController : UserInteractionController
     {
@@ -46,6 +48,9 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IProblemService _problemService;
         private readonly IChangeService _changeService;
         private readonly ICausingPartService _causingPartService;
+        private readonly IOrganizationService _organizationService;
+
+        
 
         private readonly ICaseSolutionSettingService caseSolutionSettingService;
 
@@ -77,7 +82,8 @@ namespace DH.Helpdesk.Web.Controllers
             ISettingService settingService,
             IProblemService problemService,
             IChangeService changeService,
-            ICausingPartService causingPartService)
+            ICausingPartService causingPartService,
+            IOrganizationService organizationService)
             : base(masterDataService)
         {
             this._caseFieldSettingService = caseFieldSettingService;
@@ -107,6 +113,7 @@ namespace DH.Helpdesk.Web.Controllers
             this._problemService = problemService;
             this._changeService = changeService;
             this._causingPartService = causingPartService;
+            this._organizationService = organizationService;
         }
 
         [HttpPost]
@@ -419,6 +426,30 @@ namespace DH.Helpdesk.Web.Controllers
             }
         }
 
+        public JsonResult ChangeRegion(int? regionId)
+        {
+            var list = this._departmentService.GetActiveDepartmentsBy(SessionFacade.CurrentCustomer.Id, regionId)
+                                            .Select( d=> new
+                                            {
+                                                id = d.Id,
+                                                name = d.DepartmentName                                                
+                                            });                                    
+
+            return this.Json(new { list });
+        }
+
+        public JsonResult ChangeDepartment(int? departmentId)
+        {
+            var list = this._organizationService.GetOrganizationUnits(departmentId)
+                                            .Select(o => new
+                                            {
+                                                id = o.Value,
+                                                name = o.Name
+                                            });
+
+            return this.Json(new { list });
+        }
+
         private CaseSolutionIndexViewModel IndexInputViewModel()
         {
             var activeTab = SessionFacade.FindActiveTab("CaseSolution");
@@ -435,6 +466,31 @@ namespace DH.Helpdesk.Web.Controllers
         private CaseSolutionInputViewModel CreateInputViewModel(CaseSolution caseSolution)
         {
             var cs = this._settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
+            
+            List<SelectListItem> regions = null;
+            List<SelectListItem> departments = null;
+            List<SelectListItem> organizationUnits = null;
+
+            regions = this._regionService.GetActiveRegions(SessionFacade.CurrentCustomer.Id)
+                                         .Select(x => new SelectListItem
+                                         {
+                                             Text = x.Name,
+                                             Value = x.Id.ToString()
+                                         }).ToList();
+
+            departments = this._departmentService.GetActiveDepartmentsBy(SessionFacade.CurrentCustomer.Id, caseSolution.Region_Id)
+                                         .Select(x => new SelectListItem
+                                         {
+                                             Text = x.DepartmentName,
+                                             Value = x.Id.ToString()
+                                         }).ToList();
+
+            organizationUnits = this._organizationService.GetOrganizationUnits(caseSolution.Department_Id)
+                                         .Select(x => new SelectListItem
+                                         {
+                                             Text = x.Name,
+                                             Value = x.Value
+                                         }).ToList();
 
             var model = new CaseSolutionInputViewModel
             {
@@ -461,6 +517,7 @@ namespace DH.Helpdesk.Web.Controllers
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
+
                 FinishingCauses = this._finishingCauseService.GetFinishingCauses(SessionFacade.CurrentCustomer.Id),
 
                 PerformerUsers = this._userService.GetUsers(SessionFacade.CurrentCustomer.Id)
@@ -477,7 +534,7 @@ namespace DH.Helpdesk.Web.Controllers
                     Value = x.Id.ToString()
                 }).ToList(),
 
-                ProductAreas = this._productAreaService.GetProductAreas(SessionFacade.CurrentCustomer.Id),
+                ProductAreas = this._productAreaService.GetTopProductAreas(SessionFacade.CurrentCustomer.Id),
 
                 WorkingGroups = this._workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
@@ -485,23 +542,11 @@ namespace DH.Helpdesk.Web.Controllers
                     Value = x.Id.ToString()
                 }).ToList(),
 
-                Departments = this._departmentService.GetDepartments(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
-                {
-                    Text = x.DepartmentName,
-                    Value = x.Id.ToString()
-                }).ToList(),
+                Regions = regions,
 
-                Regions = this._regionService.GetActiveRegions(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString()
-                }).ToList(),
-
-                OUs = this._ouService.GetOUs(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString()
-                }).ToList(),
+                Departments = departments,
+                
+                OUs = organizationUnits,
 
                 Systems = this._systemService.GetSystems(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
@@ -575,7 +620,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 var c = this._productAreaService.GetProductArea(caseSolution.ProductArea_Id.Value);
                 if (c != null)
-                    model.ParantPath_ProductArea = c.getProductAreaParentPath();
+                    model.ParantPath_ProductArea = string.Join(" - ", this._productAreaService.GetParentPath(c.Id, SessionFacade.CurrentCustomer.Id));
             }
 
             if (cs.ModuleProject == 1)

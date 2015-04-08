@@ -1,8 +1,11 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
+﻿@using System.Linq;
+@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Admin.Models.GlobalSettingIndexViewModel
 @{
     ViewBag.Title = "Global Settings";
+ 
 }
+
 <div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav" id="myButton">
@@ -16,7 +19,7 @@
                 @Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Kalender bevakningsdatum", Enums.TranslationSource.TextTranslation), "newwatchdate", new { newwdc = 1 }, new { @class = "btn" })
             </li>
             <li id="menu4" style="display: none">
-                @Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Översättningar", Enums.TranslationSource.TextTranslation), "newtranslation", new { newtext = 1 }, new { @class = "btn" })
+                @Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Översättningar", Enums.TranslationSource.TextTranslation), "newtranslation", new { newtext = 1, texttypeid = Model.TextType.Id }, new { @class = "btn" })
             </li>
         </ul>
     </div>
@@ -60,7 +63,7 @@
                                     @Html.DisplayFor(modelItem => item.DefaultLanguage.Name)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.DBVersion)
+                                    @Html.DisplayFor(modelItem => item.HelpdeskDBVersion)
                                 </td>
                                 <td>
                                     @DateTime.Now.ToLongTimeString()
@@ -134,25 +137,31 @@
                     </tbody>
                 </table>
             </div>
-
+            
             <div class="tab-pane tab-pane-border" id="fragment-4">
+
                 <div class="container">
                     <div class="row">
-                        <div class="span8">
-                            <table class="tableform" id="tblText">
-                                <tr>
-                                    <td>
-                                        @Translation.Get("Typ", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                    <td>
-                                        @Html.DropDownListFor(model => model.TextType.Id, Model.TextTypes, new { style = "width: auto;", id = "TextTypeId", onchange = "changeTextType(this.options[this.selectedIndex].value);" })
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
+                            <div>
+                                <table class="tableform" id="tblText">
+                                    <tr>
+                                        <td style="width:50px">
+                                            &nbsp;&nbsp;@Translation.Get("Typ", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td style="width:200px">
+                                            @Html.DropDownListFor(model => model.TextType.Id, Model.TextTypes, new { style = "width: auto;", id = "TextTypeId", onchange = "changeTextType(this.options[this.selectedIndex].value);" })                                            
+                                        </td>
+                                        <td>
+                                            @Html.TextBoxFor(model => model.SearchTextTr, new { maxlength = "50"})
+                                            @Html.DropDownListFor(model => model.SearchConditions, Model.SearchConditions, new { style = "width: auto;", id = "SearchId", onchange = "" })
+                                            <input type="button" id="searchQueryBtn" onclick ="DoSearch();" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" class="btn" onclick="submit();" />
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
                     </div>
                     <div id="translationList">
-                        @Html.Partial("_TranslationsList", Model) 
+                        @Html.Partial("_TranslationsList", Model.GridModel) 
                     </div>
                 </div>
             </div>
@@ -166,18 +175,19 @@
 @section Scripts {
     <script type="text/javascript">
 
+        var texttypeId = $("#TextTypeId").val();
+
         var activeTab = $('#activeTab').val();
         if(activeTab)
             $('#myTab a[href="' + activeTab + '"]').click();//.tab('show')
-
-       
+        
 
         function changeTextType(id) {
             var list = $('#translationList');
             list.html('');
             if (id != '') {
                 $.get('/GlobalSetting/ChangeTextType/' + id, function (result) {
-                    list.html(result);
+                    list.html($(result).html());                    
                 });
             }
         }
@@ -191,6 +201,10 @@
                 });
             }
         }
-    </script>
 
+        function getCurTextType() {
+            return $("#TextTypeId").val();
+        }
+                    
+    </script>
 }

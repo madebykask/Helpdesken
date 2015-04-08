@@ -16,5 +16,6 @@ namespace DH.Helpdesk.BusinessData.Models
         public string ChangedByFirstName { get; set; }
         public string ChangedByLastName { get; set; }
         
+        public List<TextTranlationsTextLanguageList> Translations { get; set; }
     }
 }

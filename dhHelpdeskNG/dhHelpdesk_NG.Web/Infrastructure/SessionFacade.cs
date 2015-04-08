@@ -6,6 +6,7 @@
     using System.Web;
 
     using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Grid;
     using DH.Helpdesk.BusinessData.Models.User.Input;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Computers;
@@ -58,6 +59,8 @@
         private const string _CURRENT_LOGIN_Mode = "CURRENT_LOGIN_Mode";
 
         private const string _CURRENT_USER_IDENTITY = "CURRENT_USER_IDENTITY";
+
+        private const string _CASE_OVERVIEW_SETTINGS_KEY = "CASE_OVERVIEW_SETTINGS";
 
         #endregion
 
@@ -443,6 +446,29 @@
                 else
                 {
                     HttpContext.Current.Session[_TEXT_TRANSLATION] = value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Holds settings for "Case overview" grid
+        /// </summary>
+        public static GridSettingsModel CaseOverviewGridSettings
+        {
+            get
+            {
+                return (GridSettingsModel)HttpContext.Current.Session[_CASE_OVERVIEW_SETTINGS_KEY];
+            }
+
+            set
+            {
+                if (HttpContext.Current.Session[_CASE_OVERVIEW_SETTINGS_KEY] == null)
+                {
+                    HttpContext.Current.Session.Add(_CASE_OVERVIEW_SETTINGS_KEY, value);
+                }
+                else
+                {
+                    HttpContext.Current.Session[_CASE_OVERVIEW_SETTINGS_KEY] = value;
                 }
             }
         }

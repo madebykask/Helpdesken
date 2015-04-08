@@ -6,7 +6,7 @@
     var columns = 1 + Model.Hours.Count + Model.Days.Count + (Model.MoreThenMaxDays != null ? 1 : 0);
 }
 
-<table class="table table-striped table-bordered table-hover" data-field="caseRemainingTime">
+<table class="table table-striped table-bordered table-hover case-remaining-time" data-field="caseRemainingTime">
     <thead>
         <tr>
             <th colspan="@columns">@Translation.Get("Antal ärenden med återstående åtgärdstid")</th>
@@ -15,15 +15,29 @@
             <th>@Translation.Get("Akut")</th>
             @foreach (var hour in Model.Hours)
             {
-                <th>@string.Format("{0} {1}", hour.Time, Translation.Get("h"))</th>
+                if (!hour.TimeUntil.HasValue)
+                {
+                    <th>@string.Format("<{0} {1}", hour.Time, Translation.Get("h"))</th>
+                }
+                else
+                {
+                    if (hour.TimeUntil.Value < 23)
+                    {
+                        <th>@string.Format("<{0} {1}", hour.TimeUntil, Translation.Get("h"))</th>
+                    }
+                    else
+                    {
+                        <th>@string.Format("<24 {0}", Translation.Get("h"))</th>
+                    }
+                }
             }
             @foreach (var day in Model.Days)
             {
-                <th>@day.Time</th>
+                <th>@string.Format("<{0} {1}", day.Time, Translation.Get("d"))</th>
             }
             @if (Model.MoreThenMaxDays != null)
             {
-                <th>@string.Format("> {0} {1}", Model.MaxDays, Translation.Get("dagar"))</th>                
+                <th>@string.Format(">={0} {1}", Model.MaxDays, Translation.Get("d"))</th>                
             }
         </tr>
     </thead>
@@ -51,11 +65,12 @@
     {
         if (model.NumberOfCases > 0)
         {
-            return MvcHtmlString.Create(string.Format("<a href=\"#\" data-remaining-time=\"{0}\" data-remaining-time-max=\"{1}\" data-remaining-time-hours=\"{2}\">{3}</a>", 
+            return MvcHtmlString.Create(string.Format("<a href=\"#\" data-remaining-time=\"{0}\" data-remaining-time-until=\"{4}\" data-remaining-time-max=\"{1}\" data-remaining-time-hours=\"{2}\">{3}</a>", 
                         model.Time, 
                         Model.MaxDays,
                         hours,
-                        model.NumberOfCases));
+                        model.NumberOfCases,
+                        model.TimeUntil));
         }
 
         return MvcHtmlString.Create(model.NumberOfCases.ToString(CultureInfo.InvariantCulture));

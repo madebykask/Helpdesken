@@ -5,7 +5,7 @@
 
     public static class Translation
     {
-        public static string Get(string translate, Enums.TranslationSource source = Enums.TranslationSource.TextTranslation, int customerId = 0)
+        public static string Get(string translate, Enums.TranslationSource source = Enums.TranslationSource.TextTranslation,int languageId = 0, int customerId = 0)
         {
             if (source == Enums.TranslationSource.TextTranslation)
             {
@@ -15,7 +15,7 @@
                     {
                         var translation = SessionFacade.TextTranslation.Where(x => x.TextToTranslate.ToLower() == translate.ToLower()).FirstOrDefault();
                         if (translation != null)
-                            translate = translation.TextTranslations.Where(x => x.Language_Id == SessionFacade.CurrentLanguageId).FirstOrDefault().TextTranslated ?? translate;
+                            translate = translation.TextTranslations.Where(x => x.Language_Id == ((languageId > 0) ? languageId :SessionFacade.CurrentLanguageId)).FirstOrDefault().TextTranslated ?? translate;
                     }
                     catch
                     {

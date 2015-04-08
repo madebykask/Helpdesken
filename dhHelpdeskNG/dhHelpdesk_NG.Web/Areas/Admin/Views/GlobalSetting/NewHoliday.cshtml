@@ -16,10 +16,39 @@
                 else {
                     <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "newholiday", new { id = Model.HolidayHeader.Id }, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
                 }
-                <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", null, new { @class = "btn" })</li>
+                <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", new { texttypeid = 0}, new { @class = "btn" })</li>
             </ul>
         </div>
     </div>
     @Html.Partial("_Holiday", Model)
    
 }
+@section Scripts {
+    <script type="text/javascript">
+        //function submitForm() {
+        //    $("#target").submit();
+        //}
+
+        $("input:text:visible:first").focus();
+
+        $(function () {
+
+            var validator = $("#target").validate({
+                rules: {
+                    "ChangedHeaderName": {
+                        required: true
+                    }
+                },
+                messages: {
+                    "ChangedHeaderName": {
+                        required: "@Translation.Get("Du måste ange en text", Enums.TranslationSource.TextTranslation)"
+                    }
+                },
+                submitHandler: function (form) {
+                    form.submit();
+                }
+            });
+        });
+
+</script>  
+    }

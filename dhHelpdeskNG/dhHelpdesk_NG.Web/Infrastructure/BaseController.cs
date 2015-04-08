@@ -251,6 +251,9 @@
             var masterViewModel = new MasterPageViewModel();
             masterViewModel.Languages = this._masterDataService.GetLanguages();
             masterViewModel.SelectedLanguageId = SessionFacade.CurrentLanguageId;
+
+            masterViewModel.GlobalSettings = this._masterDataService.GetGlobalSettings();
+
             if (SessionFacade.CurrentUser != null)
             {
                 masterViewModel.Customers = this._masterDataService.GetCustomers(SessionFacade.CurrentUser.Id);

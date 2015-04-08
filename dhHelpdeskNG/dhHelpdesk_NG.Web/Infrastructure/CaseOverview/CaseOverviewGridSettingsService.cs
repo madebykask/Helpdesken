@@ -1,17 +1,13 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Services.Case
+﻿namespace DH.Helpdesk.Web.Infrastructure.CaseOverview
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
 
-    using DH.Helpdesk.BusinessData.Models;
-    using DH.Helpdesk.BusinessData.Models.Grid;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Grid;
     using DH.Helpdesk.Web.Models.Case;
-    using DH.Helpdesk.Web.Models.Case.Input;
 
     public class CaseOverviewGridSettingsService
     {
@@ -27,50 +23,27 @@
             this.caseFieldSettingService = caseFieldSettingService;
             this.gridSettingsService = gridSettingsService;
         }
-
-        public void UpdateSettings(CaseOverviewSettingsInput model, int customerId, int userId, int userGroupId)
-        {
-            if (model.FieldStyle == null)
-            {
-                throw new ArgumentException("Feild styles can not be null");
-            }
-            var gridSettings = this.gridSettingsService.GetForCustomerUserGrid(customerId, userId, GRID_ID);
-            gridSettings.Parameters["font_style"] = model.SelectedFontStyle;
-            this.gridSettingsService.Save(gridSettings, customerId, userId);
-            var i = 0;
-            var inputSetting =
-                model.FieldStyle.Select(
-                    it => new CaseOverviewGridColumnSetting { Name = it.ColumnName, Style = it.Style, Order = i++ });
-            var filteredInput =
-                this.caseSettingService.GetAvailableCaseOverviewGridColumnSettings(customerId, userId)
-                    .Join(
-                        inputSetting,
-                        availableFiled => availableFiled.Name,
-                        incoming => incoming.Name,
-                        (availableFiled, incoming) => incoming)
-                    .ToArray();
-            this.caseSettingService.SyncSettings(filteredInput, customerId, userId, userGroupId);
-        }
-
-        public const string GRID_ID = "case_overview";
+        
         public const string DEFAULT_FONT_STYLE = "normal";
 
-        public CaseColumnsSettingsModel GetSettings(int customerId, int userId)
+        /// <summary>
+        /// Content of this method was taken from CaseOverviewController
+        /// </summary>
+        /// <param name="customerId"></param>
+        /// <param name="userGroupId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public CaseColumnsSettingsModel GetSettings(int customerId, int userGroupId, int userId)
         {
-            var gridSettings = this.gridSettingsService.GetForCustomerUserGrid(customerId, userId, GRID_ID);
+            var gridSettings = this.gridSettingsService.GetForCustomerUserGrid(customerId, userGroupId, userId, GridSettingsService.CASE_OVERVIEW_GRID_ID);
             var colSettingModel = new CaseColumnsSettingsModel
                                       {
                                           CustomerId = customerId,
-                                          SelectedFontStyle =
-                                              gridSettings.Parameters.ContainsKey("font_style")
-                                                  ? gridSettings.Parameters["font_style"]
-                                                  : DEFAULT_FONT_STYLE,
+                                          SelectedFontStyle = gridSettings.cls,
                                           UserId = userId,
                                           AvailableColumns =
                                               this.caseSettingService
-                                              .GetAvailableCaseOverviewGridColumnSettings(
-                                                  customerId,
-                                                  userId),
+                                              .GetAvailableCaseOverviewGridColumnSettings(customerId).OrderBy(it => Translation.Get(it.Name, Enums.TranslationSource.CaseTranslation, customerId)),
                                           SelectedColumns =
                                               this.caseSettingService
                                               .GetSelectedCaseOverviewGridColumnSettings(
@@ -101,5 +74,6 @@
             colSettingModel.LineList = li;
             return colSettingModel;
         }
+        
     }
 }

@@ -1482,7 +1482,7 @@
 
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()).ShowOnStartPage == 1)
                 {
-                    m.productAreas = this._productAreaService.GetProductAreas(customerId);
+                    m.productAreas = this._productAreaService.GetTopProductAreas(customerId);
                 }
 
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Region_Id.ToString()).ShowOnStartPage == 1)
@@ -1624,7 +1624,7 @@
                     var p = this._productAreaService.GetProductArea(m.case_.ProductArea_Id.GetValueOrDefault());
                     if (p != null)
                     {
-                        m.ParantPath_ProductArea = p.getProductAreaParentPath();
+                        m.ParantPath_ProductArea = string.Join(" - ", this._productAreaService.GetParentPath(p.Id, customerId));
                     }
                 }
 
@@ -1667,9 +1667,17 @@
                     m.case_.DefaultOwnerWG_Id = null;
                     if (m.case_.User_Id != 0)
                     {
-                        var curUser = _userService.GetUser(m.case_.User_Id);
+                        // http://redmine.fastdev.se/issues/10997
+                        /*var curUser = _userService.GetUser(m.case_.User_Id);                        
+
                         if (curUser.Default_WorkingGroup_Id != null)
-                            m.case_.DefaultOwnerWG_Id = curUser.Default_WorkingGroup_Id;
+                           m.case_.DefaultOwnerWG_Id = curUser.Default_WorkingGroup_Id;*/
+
+                        var userDefaultWorkingGroupId = this._userService.GetUserDefaultWorkingGroupId(m.case_.User_Id, m.case_.Customer_Id);
+                        if (userDefaultWorkingGroupId.HasValue)
+                        {
+                            m.case_.DefaultOwnerWG_Id = userDefaultWorkingGroupId;
+                        }
                     }
                 }
                 else
@@ -1871,7 +1879,7 @@
 
         //    ret.CaseTypeCheck = userCaseSettings.CaseType;
 
-        //    ret.ProductAreas = this._productAreaService.GetProductAreas(customerId);
+        //    ret.ProductAreas = this._productAreaService.GetTopProductAreas(customerId);
         //    ret.ProductAreaPath = "--";
 
         //    int pa;

@@ -1,86 +1,88 @@
 ﻿@using System.Web.Optimization
 @using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Models.Case.CaseIndexViewModel
-
 @if (Html.MasterModel() != null && SessionFacade.CurrentUser != null && Model != null)
 {    
-<div class="secnavs fixed">
-    <div class="pull-left">
-        <ul class="secnav">
-            @if (SessionFacade.CurrentUser.CreateCasePermission == 1)
-            {                                        
-                <li id="btnNewCase">
-                    @Html.ActionLink(Translation.Get("Skapa ärende"), "new", "cases", new { customerId = Model.caseSearchFilterData.filterCustomerId } , new { @class = "btn" })
+    <div class="secnavs fixed">
+        <div class="pull-left">
+            <ul class="secnav">
+                @if (SessionFacade.CurrentUser.CreateCasePermission == 1)
+                {                                        
+                    <li id="btnNewCase">
+                        @Html.ActionLink(Translation.Get("Skapa ärende"), "new", "cases", new { customerId = Model.caseSearchFilterData.filterCustomerId }, new { @class = "btn" })
+                    </li>
+                    <li id="btnCaseTemplate">
+                        @Html.Partial("_CaseTemplateTree", Model.CaseTemplateTreeButton)
+                    </li>                
+                }
+                <li id="btnSaveCaseSetting" style="display: none">
+                    <input type="button"  class="btn" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" />
                 </li>
-                <li id="btnCaseTemplate">                   
-                    @Html.Partial("_CaseTemplateTree", Model.CaseTemplateTreeButton)
-                </li>                
-            }                    
-            <li id="btnSaveCaseSetting" style= "display: none">                   
-                <input type="button"  class="btn" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" /> 
-            </li>    
-        </ul>
+                <li>
+                    <a href="@Url.Action("index", "cases", new {customerId = SessionFacade.CurrentCustomer.Id, clearFilters = true, customFilter = "MyCases" })" class="btn">
+                                @Translation.Get("Mina ärenden")                                     
+                            </a>
+                </li>
+            </ul>
+        </div>
     </div>
-</div>
-<div class="content">
-    <div class="container">
-        <ul class="nav nav-tabs" id="myTab">
-            <li id="CasesTab"  class="active"><a href="#fragment-1">@Translation.Get("Ärenden", Enums.TranslationSource.TextTranslation)</a></li>
-            <li id="SettingTab"><a href="#fragment-4">@Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)</a></li>
-        </ul>
-        <div class="tab-content">
-            <div class="tab-pane tab-pane-border active" id="fragment-1">
+    <div class="content">
+        <div class="container">
+            <ul class="nav nav-tabs" id="myTab">
+                <li id="CasesTab" class="active"><a href="#fragment-1">@Translation.Get("Ärenden", Enums.TranslationSource.TextTranslation)</a></li>
+                <li id="SettingTab"><a href="#fragment-4">@Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane tab-pane-border active" id="fragment-1">
                     @Html.Partial("_Search", Model.caseSearchFilterData)
-                <div class="container" id="search_result">
-                    @Html.Partial("_CaseRows", Model.caseSearchResult)
+                    <div class="container" id="search_result">
+                        @Html.Partial("_CaseRows", Model.caseSearchResult)
+                    </div>
                 </div>
-            </div>
-            <div class="tab-pane tab-pane-border" id="fragment-2">
-                <div class="container">
-                    -
+                <div class="tab-pane tab-pane-border" id="fragment-2">
+                    <div class="container">
+                        -
+                    </div>
                 </div>
-            </div>
-            <div class="tab-pane tab-pane-border" id="fragment-3">
-                <div class="container">
-                    -
+                <div class="tab-pane tab-pane-border" id="fragment-3">
+                    <div class="container">
+                        -
+                    </div>
                 </div>
-            </div>
-            <div class="tab-pane tab-pane-border " id="fragment-4">
-                <div id="setting_result" class="container">
-                    @Html.Partial("_CaseSetting", Model.CaseSetting)
+                <div class="tab-pane tab-pane-border " id="fragment-4">
+                    <div id="setting_result" class="container">
+                        @Html.Partial("_CaseSetting", Model.CaseSetting)
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 }
 @Scripts.Render("~/bundles/cases/index")
 
 <script type="text/javascript">
-    $(function() {
+    $(function () {
         var scope = dhHelpdesk.casesList.scope({
             getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax")'
         });
-        
-@*        Commented out because Therese & Stina changed their mind that this was not an acceptable solution. In IE it will set focus to that window which the location.reload happens.
-    var ReloadCaseOverview = function(){
+
+        var ReloadCaseOverview = function () {
             var TimeBeforeReload = "@Model.CaseSetting.RefreshContent";
-            TimeBeforeReload = TimeBeforeReload / 60;
-            TimeBeforeReload = TimeBeforeReload * 60000;
-            if (TimeBeforeReload != null || TimeBeforeReload != NaN || TimeBeforeReload != "")
-            {
-                var TimeBeforeReload = parseInt(TimeBeforeReload, 10);
-                if (TimeBeforeReload != 0) {
-                    setTimeout(function () {
-                        var CaseOverViewActive = $("#fragment-1").attr("class");
-                        if (CaseOverViewActive.indexOf("active") >= 0) {
-                            location.reload();
-                        }
-                    }, TimeBeforeReload);
+                TimeBeforeReload = TimeBeforeReload / 60;
+                TimeBeforeReload = TimeBeforeReload * 60000;
+                if (TimeBeforeReload != null || TimeBeforeReload != NaN || TimeBeforeReload != "") {
+                    var TimeBeforeReload = parseInt(TimeBeforeReload, 10);
+                    if (TimeBeforeReload != 0) {
+                        setTimeout(function () {
+                            var CaseOverViewActive = $("#fragment-1").attr("class");
+                            if (CaseOverViewActive.indexOf("active") >= 0) {
+                                window.location.href = window.location.href;
+                            }
+                        }, TimeBeforeReload);
+                    }
                 }
-            }
-            
-        };
-        ReloadCaseOverview();*@
+
+            };
+        ReloadCaseOverview();
     });
 </script>

@@ -4,6 +4,7 @@
 
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models.Case.Output;
+    using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.Infrastructure.Cases;
     using DH.Helpdesk.Web.Models.Case;
@@ -21,6 +22,13 @@
 
         RelatedCasesViewModel GetRelatedCasesModel(List<RelatedCase> relatedCases, int customerId, string userId);
 
-        CaseRemainingTimeViewModel GetCaseRemainingTimeModel(CaseRemainingTimeData data);
+        CaseRemainingTimeViewModel GetCaseRemainingTimeModel(CaseRemainingTimeData data, IWorkContext workContext);
+
+        RelatedCasesFullViewModel GetRelatedCasesFullModel(
+                                    CaseSearchResultModel searchResult, 
+                                    string userId, 
+                                    int caseId,
+                                    string sortBy,
+                                    bool sortByAsc);
     }
 }

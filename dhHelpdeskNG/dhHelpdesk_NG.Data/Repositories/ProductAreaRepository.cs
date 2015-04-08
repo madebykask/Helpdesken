@@ -8,13 +8,14 @@ namespace DH.Helpdesk.Dal.Repositories
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Domain;
+    using ProductAreaEntity = DH.Helpdesk.Domain.ProductArea;
 
     #region PRODUCTAREA
 
     /// <summary>
     /// The ProductAreaRepository interface.
     /// </summary>
-    public interface IProductAreaRepository : IRepository<ProductArea>
+    public interface IProductAreaRepository : IRepository<ProductAreaEntity>
     {
         /// <summary>
         /// The get product area overview.
@@ -72,14 +73,14 @@ namespace DH.Helpdesk.Dal.Repositories
     /// <summary>
     /// The product area repository.
     /// </summary>
-    public class ProductAreaRepository : RepositoryBase<ProductArea>, IProductAreaRepository
+    public class ProductAreaRepository : RepositoryBase<ProductAreaEntity>, IProductAreaRepository
     {
         /// <summary>
         /// The product area entity to business model mapper.
         /// </summary>
-        private readonly IEntityToBusinessModelMapper<ProductArea, ProductAreaOverview> productAreaEntityToBusinessModelMapper;
+        private readonly IEntityToBusinessModelMapper<ProductAreaEntity, ProductAreaOverview> productAreaEntityToBusinessModelMapper;
 
-        private readonly IBusinessModelToEntityMapper<ProductAreaOverview, ProductArea> toEntityMapper;
+        private readonly IBusinessModelToEntityMapper<ProductAreaOverview, ProductAreaEntity> toEntityMapper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductAreaRepository"/> class.
@@ -91,9 +92,9 @@ namespace DH.Helpdesk.Dal.Repositories
         /// The product area entity to business model mapper.
         /// </param>
         public ProductAreaRepository(
-            IDatabaseFactory databaseFactory, 
-            IEntityToBusinessModelMapper<ProductArea, ProductAreaOverview> productAreaEntityToBusinessModelMapper, 
-            IBusinessModelToEntityMapper<ProductAreaOverview, ProductArea> toEntityMapper)
+            IDatabaseFactory databaseFactory,
+            IEntityToBusinessModelMapper<ProductAreaEntity, ProductAreaOverview> productAreaEntityToBusinessModelMapper,
+            IBusinessModelToEntityMapper<ProductAreaOverview, ProductAreaEntity> toEntityMapper)
             : base(databaseFactory)
         {
             this.productAreaEntityToBusinessModelMapper = productAreaEntityToBusinessModelMapper;
@@ -191,7 +192,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public int SaveProductArea(ProductAreaOverview productArea)
         {
-            ProductArea entity;
+            ProductAreaEntity entity;
             if (productArea.Id > 0)
             {
                 entity = this.DataContext.ProductAreas.Find(productArea.Id);
@@ -199,7 +200,7 @@ namespace DH.Helpdesk.Dal.Repositories
             }
             else
             {
-                entity = new ProductArea();
+                entity = new ProductAreaEntity();
                 this.toEntityMapper.Map(productArea, entity);
                 this.DataContext.ProductAreas.Add(entity);
             }

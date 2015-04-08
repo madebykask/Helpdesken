@@ -20,6 +20,15 @@ $(document).ready(function () {
     //// bind event handlers 
     $('#btnSaveCaseSetting').click(function (e) {
         e.preventDefault();
+        if (window.app.getGridState() !== GRID_STATE.IDLE) {
+            return false;
+        }
+        /// validation
+        if ($('#dataTable tr.SortableRow').length == 0) {
+            window.ShowToastMessage('You should have at least one column selected for the "Case overview" grid', 'error');
+            return false;
+        }
+
         $.post('/Cases/SaveSetting/', $("#frmCaseSetting").serialize(), function () {
             /// due to strange work with lists[] in .NET we have to send a bit different structure
             var formData = {
@@ -78,7 +87,7 @@ $(document).ready(function () {
             /// prevent to add duplicate columns
             return false;
         }
-        $('#dataTable').append(template.render(fieldInfo)).find('select[fieldid=' + fieldId + ']').val($('#newColStyle').val());
+        $('#dataTable').append(template.render(fieldInfo)).find('select[fieldid*="' + fieldId + '"]').val($('#newColStyle').val());
     });
 
     $('#dataTable').on('click', '.deleterow', function () {

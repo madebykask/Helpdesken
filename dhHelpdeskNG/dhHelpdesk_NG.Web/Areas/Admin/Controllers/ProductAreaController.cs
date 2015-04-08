@@ -39,7 +39,7 @@
         public ActionResult Index(int customerId)
         {
             var customer = this._customerService.GetCustomer(customerId);
-            var productAreas = this._productAreaService.GetProductAreas(customer.Id).OrderBy(x => x.Name).ToList();
+            var productAreas = this._productAreaService.GetAllProductAreas(customer.Id).OrderBy(x => x.Name).ToList();
             
             var model = new ProductAreaIndexViewModel { ProductAreas = productAreas, Customer = customer };
 

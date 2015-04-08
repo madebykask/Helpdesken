@@ -461,7 +461,7 @@
             return model;
         }
 
-        public MvcHtmlString MailTemplateFieldIdentifierRow(int customerId, string mailTemplateRowName, string ExtraLabel)
+        public MvcHtmlString MailTemplateFieldIdentifierRow(int customerId, string mailTemplateRowName, string ExtraLabel, string EMailIdentifier)
         {
             //Super quick fix TODO: FIX... Im sorry
             if (mailTemplateRowName == "tblLog_Text_External")
@@ -485,7 +485,7 @@
                         ExtraLabel = Translation.Get(ExtraLabel, Enums.TranslationSource.TextTranslation, customerId);
                         ExtraLabel = ":" + ExtraLabel;
                     }
-                    if (cfsl.Label == null)
+                    if (cfsl.Label == null || cfsl.Label == "")
                     {
                         cfsl.Label = Translation.Get(mailTemplateRowName, Enums.TranslationSource.CaseTranslation, customerId);
 
@@ -499,6 +499,12 @@
                         }
                     }
 
+                    var emailIdentifier = cfs.FirstOrDefault().EMailIdentifier;
+                    if (EMailIdentifier != null)
+                    {
+                        emailIdentifier = EMailIdentifier;
+                    }
+
                     string row = "";
                     row = "<tr>"
                         + "<td>"
@@ -506,7 +512,7 @@
                         + ExtraLabel
                         + "</td>"
                         + "<td>"
-                        + cfs.FirstOrDefault().EMailIdentifier
+                        + emailIdentifier
                         + "</td>"
                         + "</tr>";
                     var html = new MvcHtmlString(row);
@@ -542,7 +548,8 @@
             return model;
         }
 
-        [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")]
+        //commented out because: redmine case #10053
+        //[OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")]
         public string UpdateLanguageList(int id, int customerId, int mailTemplateLanguageId, int mailTemplateId, int? accountactivityId, int? ordertypeId, int mailId, string mailTemplateName)
         {
             var customer = this._customerService.GetCustomer(customerId);

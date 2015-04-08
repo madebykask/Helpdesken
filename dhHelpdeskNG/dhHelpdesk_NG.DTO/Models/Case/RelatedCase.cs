@@ -2,6 +2,7 @@
 {
     using System;
 
+    using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class RelatedCase
@@ -12,8 +13,10 @@
             DateTime registrationDate, 
             string status, 
             string caption, 
-            string description)
+            string description, 
+            GlobalEnums.CaseIcon caseIcon)
         {
+            this.CaseIcon = caseIcon;
             this.Description = description;
             this.Caption = caption;
             this.Status = status;
@@ -36,5 +39,7 @@
 
         [NotNull]
         public string Description { get; private set; }
+
+        public GlobalEnums.CaseIcon CaseIcon { get; private set; }
     }
 }

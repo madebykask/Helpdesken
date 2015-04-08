@@ -11,7 +11,7 @@
     var pDepartmentVisible = false;
     if (Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Department_Id, CaseSolutionFields.Department) == string.Empty)
     {
-        pDepartmentVisible = true;   
+        pDepartmentVisible = true;
     }
  }
 @if (Model.case_ != null)
@@ -135,7 +135,7 @@
                                                 </td>
                                                 <td>
                                                     <a href="#" id="AddNotifier" class="btn">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>
-                                                    <a href="#" data-field="relatedCases" title="@Translation.Get("Relaterade ärenden")" class="btn"><i class="icon-list"></i></a>
+                                                    <a href="#" data-field="relatedCases" style="display: none;" title="@Translation.Get("Relaterade ärenden")" class="btn"><i class="icon-list"></i></a>
                                                 </td>
                                             </tr>
                                             <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Persons_Name, CaseSolutionFields.PersonsName)">
@@ -239,7 +239,7 @@
                                                 <td class="span4">
                                                     @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Region_Id, CaseSolutionFields.Region))
                                                     {
-                                                        var curRegion = Model.regions.Where(r=> r.Id == Model.case_.Region_Id).SingleOrDefault();
+                                                        var curRegion = Model.regions.Where(r => r.Id == Model.case_.Region_Id).SingleOrDefault();
                                                         @Html.TextBoxFor(m => curRegion.Name, new { id = "RegionName", @readonly = true })
                                                         @Html.HiddenFor(m => Model.case_.Region_Id)
                                                     }
@@ -266,10 +266,9 @@
                                                         
                                                         @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Department_Id, CaseSolutionFields.Department))
                                                         {
-                                                            var curDep = Model.departments.Where(d=> d.Id == Model.case_.Department_Id).SingleOrDefault();
-                                                           @Html.TextBoxFor(m =>  curDep.DepartmentName, 
-                                                                            new { id = "DepartmentName", @readonly = true })
-                                                           @Html.HiddenFor(m => Model.case_.Department_Id) 
+                                                            var curDep = Model.departments.Where(d => d.Id == Model.case_.Department_Id).SingleOrDefault();
+                                                            @Html.TextBoxFor(m => curDep.DepartmentName, new { id = "DepartmentName", @readonly = true })
+                                                            @Html.HiddenFor(m => Model.case_.Department_Id) 
                                                         }
                                                         else
                                                         {                                                        
@@ -292,39 +291,23 @@
                                                 </td>
                                                 <td class="span4">
                                                         @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.OU_Id, CaseSolutionFields.OU))
-                                                        {
-                                                           
-                                                           @Html.TextBox("OUName", Model.ous.Where(w => w.Id == Model.case_.OU_Id).Select(o => o.Name).SingleOrDefault(), new { id = "OUName", @readonly = true })
-                                                           @Html.HiddenFor(m => Model.case_.OU_Id) 
-                                                             
-
+                                                        {                                                                                                                        
+                                                            @Html.TextBox("OUName", Model.ous.Where(w => w.Id == Model.case_.OU_Id).Select(o => o.Name).SingleOrDefault(), new { id = "OuName", @readonly = true })
+                                                            @Html.HiddenFor(m => Model.case_.OU_Id, new { id="case__Ou_Id", name="case_.OU_Id"})                                                              
                                                         }
                                                         else
                                                         {
                                                             <select id="case__Ou_Id" name="case_.OU_Id" data-field="ou">
                                                                 <option value="">&nbsp;</option>
                                                                 @if (Model.ous != null)
-                                                                {
-                                                                    var curOUs =
-                                                                        pDepartmentVisible?
-                                                                            Model.ous.Where(e => (e.IsActive == 1 || Model.case_.OU_Id == e.Id)
-                                                                                              && Model.case_.Department_Id == e.Department_Id).ToList():
-                                                                            null;
-                                                                    if (curOUs != null)
-                                                                    {
-                                                                        foreach (var e in curOUs)
-                                                                        {                                                                
-                                                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.OU_Id.ToString()) >@e.Name</option>
-                                                                
-                                                                            foreach (var sub in e.SubOUs.Where(s => s.IsActive == 1 || Model.case_.OU_Id == s.Id))
-                                                                            { 
-                                                                                    <option value="@sub.Id" @sub.Id.IdIsSelected(Model.case_.OU_Id.ToString()) > @e.Name - @sub.Name</option>
-                                                                            }
-                                                                        }
-                                                                    }
+                                                                {                                                                   
+                                                                    foreach (var ou in Model.ous)
+                                                                    {                                                                
+                                                                        <option value="@ou.Id" @ou.Id.IdIsSelected(Model.case_.OU_Id.ToString()) >@ou.Name</option>
+                                                                    }                                                                 
                                                                 }
                                                             </select>
-                                                        }                                                   
+                                                        }                                    
                                                 </td>                                                
                                             </tr>
                                             <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Place, CaseSolutionFields.Place)">
@@ -934,7 +917,7 @@
                                                 <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>
                                             }
                                             <div id="divCaseFiles">                                                
-                                                @Html.Partial("_CaseFiles", Model.CaseFilesModel, new ViewDataDictionary{{"CaseInactive", Model.case_.FinishingDate.HasValue} })
+                                                @Html.Partial("_CaseFiles", Model.CaseFilesModel, new ViewDataDictionary { { "CaseInactive", Model.case_.FinishingDate.HasValue } })
                                             </div>
                                         </td>
                                     </tr>
@@ -1598,8 +1581,41 @@
                 required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.WatchDate.ToString())")
             },
             "CaseLog.FinishingType": {
-                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.ClosingReason, CaseSolutionFields.FinishingCause))  
+                required: function(){
+                    if ($('#CaseLog_FinishingDate').closest('tr').css('display') != 'none' && $('#CaseLog_FinishingType').closest('tr').css('display') != 'none')
+                    {
+                        if (($('#CaseLog_FinishingDate').val() == "" || $('#CaseLog_FinishingDate').val() == null) && @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.FinishingDate, CaseSolutionFields.FinishingDate)) == false)
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            return true;
+                        }
+                    }
+                    else{
+                        return false;
+                    }
+                }
                 },
+            "CaseLog.FinishingDate": {
+                required: function()
+                {
+                    if ($('#CaseLog_FinishingType').closest('tr').css('display') != 'none' && $('#CaseLog_FinishingDate').closest('tr').css('display') != 'none')
+                    {
+                        if ($('#CaseLog_FinishingType').val() == "" && @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.ClosingReason, CaseSolutionFields.FinishingCause)) == false)
+                        {
+                            return false;
+                        }
+                        else{
+                            return true;
+                        }
+                    }
+                    else{
+                        return false;
+                    }
+                }
+            },
             "CaseLog.TextExternal": {
                 maxlength: 3000
             },
@@ -1715,6 +1731,9 @@
             },
             "CaseLog.FinishingType": {
                 required: "@Translation.Get(GlobalEnums.TranslationCaseFields.ClosingReason.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
+            },
+            "CaseLog.FinishingDate": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
             }
         },
         //errorPlacement: function (error, element) {
@@ -1722,21 +1741,29 @@
         //},
         submitHandler: function(form) {
             
-            var res = $("#ProductAreaHasChild").val();
-            
-            if (res == '1')
-            {
-                var msgTxt =  '@Translation.Get("Ärendet kunde inte sparas då den lägsta möjliga nivån på fält")' + " [" +   
-                              '@Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)' + "] " + 
-                              '@Translation.Get("inte har valts. Vänligen kontrollera ärendet.")';
-                document.getElementById("divProductArea").classList.add("error");                
-                ShowToastMessage(msgTxt, "error", true);
-                return false;
-            }
-            else
+            if (isProductAreaValid())
                 form.submit();
+            else                
+                return false;            
+                
         }
     });
+
+    function isProductAreaValid() {
+        var ret = true;
+        var res = $("#ProductAreaHasChild").val();
+
+        if (res == '1') {
+            var msgTxt = '@Translation.Get("Ärendet kunde inte sparas då den lägsta möjliga nivån på fält")' + " [" +
+                         '@Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)' + "] " +
+                         '@Translation.Get("inte har valts. Vänligen kontrollera ärendet.")';
+            document.getElementById("divProductArea").classList.add("error");
+            ShowToastMessage(msgTxt, "error", true);
+            ret = false;
+        }
+
+    return ret;
+}
 
     function FieldIsRequired(value) {
         var ret = false;
@@ -1813,14 +1840,16 @@
             requiredFieldsMessage: '@Translation.Get("Ärendet kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ärendet.")',
             getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax")',
             getDepartmentUsersUrl: '@Url.Action("GetDepartmentUsers", "Ajax")',
-            relatedCasesUrl: '@Url.Action("RelatedCases", "Cases")',
+            relatedCasesUrl: '@Url.Action("RelatedCasesFull", "Cases")',
             relatedCasesCountUrl: '@Url.Action("RelatedCasesCount", "Cases")',
             getDepartmentOusUrl: '@Url.Action("ChangeDepartment", "Cases")',
             deleteCaseFileConfirmMessage: '@Translation.Get("Är du säker på att du vill ta bort den här filen?")',
             okText: '@Translation.Get("OK")',
             cancelText: '@Translation.Get("Avbryt")',
             yesText: '@Translation.Get("Ja")',
-            noText: '@Translation.Get("Nej")'
+            noText: '@Translation.Get("Nej")',
+            validationMessages: ['@Translation.Get("måste anges")'],
+            mandatoryFieldsText: '@Translation.Get("Obligatoriska fält")'
         });
     });
 </script>

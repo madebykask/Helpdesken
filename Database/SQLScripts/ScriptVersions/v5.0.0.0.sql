@@ -5006,6 +5006,3 @@ update tblmailtemplate_tbllanguage set body = replace(body, '[#99]', '[#98]')
 where body like '%![#99]%' ESCAPE '!'
 and body not like '%![#98]%' ESCAPE '!'
 and mailtemplate_id in (select id from tblmailtemplate where (mailid = 1 or mailid=3 or mailid=4 or mailid=5) )
-
-UPDATE tblGlobalSettings SET DBVersion = '4.25'
-GO

@@ -26,6 +26,8 @@
         void SaveSSOLog(NewSSOLog SSOLog);
         void SaveADFSSetting(ADFSSetting adfsSetting);
         ADFSSetting GetADFSSetting();
+
+        IList<GlobalSetting> GetGlobalSettings();
         
     }
 
@@ -38,7 +40,8 @@
         private readonly ITextRepository _textRepository;
         private readonly IUserRepository _userRepository;
         private readonly ICacheProvider _cache;
-        private readonly IADFSRepository _adfsRepository;        
+        private readonly IADFSRepository _adfsRepository;
+        private readonly IGlobalSettingRepository _globalSettingRepository;
 
         public MasterDataService(
             ICustomerRepository customerRepository,
@@ -48,6 +51,7 @@
             IUserRepository userRepository,
             ICaseFieldSettingLanguageRepository caseFieldSettingLanguageRepository,
             ICacheProvider cache,
+            IGlobalSettingRepository globalSettingRepository,
             IADFSRepository adfsRepository)
         {
             this._customerRepository = customerRepository;
@@ -58,6 +62,7 @@
             this._caseFieldSettingLanguageRepository = caseFieldSettingLanguageRepository; 
             this._cache = cache;
             this._adfsRepository = adfsRepository;
+            this._globalSettingRepository = globalSettingRepository;
         }
 
         public IList<Customer> GetCustomers(int userId)
@@ -78,6 +83,11 @@
         public Setting GetCustomerSetting(int customerId)
         {
             return this._settingRepository.GetCustomerSetting(customerId);  
+        }
+
+        public IList<GlobalSetting> GetGlobalSettings()
+        {
+            return this._globalSettingRepository.GetAll().ToList();
         }
 
         public IList<Language> GetLanguages()

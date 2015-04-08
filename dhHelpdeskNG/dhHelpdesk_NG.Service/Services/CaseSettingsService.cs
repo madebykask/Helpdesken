@@ -5,6 +5,7 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Grid;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
@@ -23,9 +24,9 @@
 
         IList<CaseSettings> GetCaseSettingsForDefaultCust();
 
-        IEnumerable<CaseOverviewGridColumnSetting> GetAvailableCaseOverviewGridColumnSettings(
-            int customerId,
-            int userId);
+        IEnumerable<CaseOverviewGridColumnSetting> GetAvailableCaseOverviewGridColumnSettings(int customerId);
+
+        IEnumerable<CaseOverviewGridColumnSetting> GetAvailableCaseOverviewGridColumnSettingsByUserGroup(int customerId, int userGroupId);
 
         IEnumerable<CaseOverviewGridColumnSetting> GetSelectedCaseOverviewGridColumnSettings(int customerId, int userId);
 
@@ -85,18 +86,32 @@
         /// Returns ll available columns for case overview grid
         /// </summary>
         /// <param name="customerId"></param>
-        /// <param name="userId"></param>
         /// <returns></returns>
-        public IEnumerable<CaseOverviewGridColumnSetting> GetAvailableCaseOverviewGridColumnSettings(int customerId, int userId)
+        public IEnumerable<CaseOverviewGridColumnSetting> GetAvailableCaseOverviewGridColumnSettings(int customerId)
         {
             var customerEnabledFields =
-                this.caseFieldSettingService.GetCaseFieldSettings(customerId)
-                    .Where(it => !CaseOverviewGridColumnSetting.NotAvailableField.Contains(it.Name))
+                this.caseFieldSettingService.GetCustomerEnabledCaseFieldSettings(customerId)
+                    .Where(it => !GridColumnsDefinition.NotAvailableField.Contains(it.Name))
                     .Select(it => new CaseOverviewGridColumnSetting() { Name = it.Name }).ToList();
             customerEnabledFields.AddRange(CaseOverviewGridColumnSetting.GetDefaulVirtualFields());
             return customerEnabledFields;                   
         }
-        
+
+        /// <summary>
+        /// Returns ll available columns for case overview grid
+        /// </summary>
+        /// <param name="customerId"></param>
+        /// <param name="userGroupId"></param>
+        /// <returns></returns>
+        public IEnumerable<CaseOverviewGridColumnSetting> GetAvailableCaseOverviewGridColumnSettingsByUserGroup(int customerId, int userGroupId)
+        {
+            var customerEnabledFields =
+                this.GetCaseSettingsByUserGroup(customerId, userGroupId)
+                    .Where(it => !GridColumnsDefinition.NotAvailableField.Contains(it.Name))
+                    .Select(it => new CaseOverviewGridColumnSetting() { Name = it.Name }).ToList();            
+            return customerEnabledFields;
+        }
+
         /// <summary>
         /// Returns column settings for case overview table selected by user 
         /// </summary>
@@ -106,7 +121,7 @@
         public IEnumerable<CaseOverviewGridColumnSetting> GetSelectedCaseOverviewGridColumnSettings(int customerId, int userId)
         {
             var res =
-                this.GetAvailableCaseOverviewGridColumnSettings(customerId, userId)
+                this.GetAvailableCaseOverviewGridColumnSettings(customerId)
                     .Join(
                         this.GetAvailableCaseSettings(customerId, userId),
                         colSetting => colSetting.Name,
@@ -120,6 +135,7 @@
                                 Style = userSelection.ColStyle
                             })
                     .OrderBy(it => it.Order)
+                     //// data in DB can contain same values in the Order field, so sorting also by fieldId
                     .ThenBy(it => it.caseSettingsId)
                     .Select(
                         it => new CaseOverviewGridColumnSetting()
@@ -314,52 +330,6 @@
                         this._caseSettingRepository.Add(entity);
                     });
             this._caseSettingRepository.Commit();
-            
-//            var oldSettings =
-//                this.GetSelectedCaseOverviewGridColumnSettings(customerId, userId)
-//                    .ToDictionary(it => it.Name, it => it);
-//            var columnsToDelete = new List<string>();
-//            var columnsToAdd = new List<CaseOverviewGridColumnSetting>();
-//            var columnsToUpdate = new List<CaseOverviewGridColumnSetting>();
-//            Dictionary<string, CaseOverviewGridColumnSetting> dictionary;
-//            var affectedColNames = oldSettings.Keys.Union(filteredInput.Keys).Distinct();
-//
-//            foreach (var affectedCol in affectedColNames)
-//            {
-//                if (filteredInput.ContainsKey(affectedCol))
-//                {
-//                    if (oldSettings.ContainsKey(affectedCol))
-//                    {
-//                        columnsToUpdate.Add(filteredInput[affectedCol]);
-//                    }
-//                    else
-//                    {
-//                        columnsToAdd.Add(filteredInput[affectedCol]);
-//                    }
-//                }
-//                else
-//                {
-//                    if (oldSettings.ContainsKey(affectedCol))
-//                    {
-//                        columnsToDelete.Add(affectedCol);
-//                    }
-//                }
-//            }
-//
-//            if (columnsToDelete.Count > 0)
-//            {
-//                this.caseSettingService.DeleteCaseSettings(columnsToDelete.ToArray());
-//            }
-//
-//            if (columnsToUpdate.Count > 0)
-//            {
-//                this.caseSettingService.UpdateCaseSettings(columnsToUpdate.ToArray());
-//            }
-//
-//            if (columnsToAdd.Count > 0)
-//            {
-//                this.caseSettingService.UpdateCaseSetting();
-//            }
         }
 
         private IEnumerable<CaseSettings> GetAvailableCaseSettings(int customerId, int userId)

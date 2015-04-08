@@ -72,7 +72,13 @@ $(function () {
 
         var element = spec.element || {};
 
+        var getElement = function() {
+            return element;
+        }
+
         my.element = element;
+
+        that.getElement = getElement;
 
         return that;
     }
@@ -265,17 +271,136 @@ $(function () {
         return that;
     }
 
+    dhHelpdesk.admin.users.workingGroup = function (spec, my) {
+        my = my || {};
+        var that = dhHelpdesk.admin.users.object(spec, my);
+
+        var id = spec.id || null;
+        var isDefault = spec.isDefault || false;
+        var customerId = spec.customerId || null;
+        var markerElement = spec.markerElement || null;
+
+        var getId = function() {
+            return id;
+        }
+
+        var getIsDefault = function() {
+            return isDefault;
+        }
+
+        var getCustomerId = function() {
+            return customerId;
+        }
+
+        var isEmpty = function() {
+            return my.element.val() == '-1';
+        }
+
+        var getMarkerElement = function() {
+            return markerElement;
+        }
+
+        that.getId = getId;
+        that.getIsDefault = getIsDefault;
+        that.getCustomerId = getCustomerId;
+        that.isEmpty = isEmpty;
+        that.getMarkerElement = getMarkerElement;
+
+        return that;
+    }
+
+    dhHelpdesk.admin.users.workingGroups = function (spec, my) {
+        my = my || {};
+        var that = dhHelpdesk.admin.users.object(spec, my);
+
+        var workingGroups = spec.workingGroups || [];
+        var clearUserWorkingGroups = spec.clearUserWorkingGroups || null;
+
+        var getWorkingGroups = function() {
+            return workingGroups;
+        }
+
+        var getEmpty = function(customerId) {
+            for (var i = 0; i < workingGroups.length; i++) {
+                var wg = workingGroups[i];
+                if (wg.isEmpty() && wg.getCustomerId() == customerId) {
+                    return wg;
+                }
+            }
+
+            return null;
+        }
+
+        var getById = function(id) {
+            for (var i = 0; i < workingGroups.length; i++) {
+                var wg = workingGroups[i];
+                if (wg.getId() == id) {
+                    return wg;
+                }
+            }
+
+            return null;
+        }
+
+        var markAll = function(mark, customerId) {
+            for (var i = 0; i < workingGroups.length; i++) {
+                var wg = workingGroups[i];
+                if (wg.getCustomerId() == customerId) {
+                    wg.getMarkerElement().val(mark);
+                }
+            }
+        }
+
+        that.getWorkingGroups = getWorkingGroups;
+
+        if (clearUserWorkingGroups != null) {
+            clearUserWorkingGroups.getElement().click(function() {
+                for (var i = 0; i < workingGroups.length; i++) {
+                    var wg = workingGroups[i];
+                    wg.getElement().prop('checked', false);
+                }
+            });
+        }
+
+        for (var j = 0; j < workingGroups.length; j++) {
+            var workingGroup = workingGroups[j];
+            workingGroup.getElement().click(function () {
+                var $this = $(this);
+                var wg = getById($this.attr('data-field-id'));
+                var checked = wg.getMarkerElement().val() == '1';
+                if (checked) {
+                    wg.getMarkerElement().val('0');
+                    var empty = getEmpty(wg.getCustomerId());
+                    if (empty != null) {
+                        empty.getElement().prop('checked', true);
+                    }
+                } else {
+                    markAll('0', wg.getCustomerId());
+                    wg.getMarkerElement().val('1');
+                }                
+            });
+        }
+
+        return that;
+    }
+
     dhHelpdesk.admin.users.user = function (spec, my) {
         my = my || {};
         var that = dhHelpdesk.admin.users.object(spec, my);
 
         var security = spec.security || null;
+        var workingGroups = spec.workingGroups || null;
 
         var getSecurity = function() {
             return security;
         }
 
+        var getWorkingGroups = function() {
+            return workingGroups;
+        }
+
         that.getSecurity = getSecurity;
+        that.getWorkingGroups = getWorkingGroups;
 
         return that;
     }
@@ -287,14 +412,14 @@ $(function () {
 
         var casePermissions = [];
         casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="performerPermission"]'), type: dhHelpdesk.admin.users.permissionType.performerPermission }));
-        casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="createCasePermission"]'), type: dhHelpdesk.admin.users.permissionType.createCasePermission }));
+        //casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="createCasePermission"]'), type: dhHelpdesk.admin.users.permissionType.createCasePermission }));
         casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="copyCasePermission"]'), type: dhHelpdesk.admin.users.permissionType.copyCasePermission }));
         casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="deleteCasePermission"]'), type: dhHelpdesk.admin.users.permissionType.deleteCasePermission }));
         casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="deleteAttachedFilePermission"]'), type: dhHelpdesk.admin.users.permissionType.deleteAttachedFilePermission }));
         casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="moveCasePermission"]'), type: dhHelpdesk.admin.users.permissionType.moveCasePermission }));
         casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="activateCasePermission"]'), type: dhHelpdesk.admin.users.permissionType.activateCasePermission }));
-        casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="closeCasePermission"]'), type: dhHelpdesk.admin.users.permissionType.closeCasePermission }));
-        casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="restrictedCasePermission"]'), type: dhHelpdesk.admin.users.permissionType.restrictedCasePermission }));
+        //casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="closeCasePermission"]'), type: dhHelpdesk.admin.users.permissionType.closeCasePermission }));
+        //casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="restrictedCasePermission"]'), type: dhHelpdesk.admin.users.permissionType.restrictedCasePermission }));
         casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="followUpPermission"]'), type: dhHelpdesk.admin.users.permissionType.followUpPermission }));
         casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="dataSecurityPermission"]'), type: dhHelpdesk.admin.users.permissionType.dataSecurityPermission }));
         var caseTemplatePermissions = [];
@@ -319,8 +444,28 @@ $(function () {
             orderPermissions: orderPermissions
         });
 
+        var wGs = [];
+        $('[data-field="userWorkingGroup"]').each(function () {
+            var $this = $(this);
+            var id = $this.attr('data-field-id');
+            var wg = dhHelpdesk.admin.users.workingGroup({
+                id: id,
+                element: $this,
+                customerId: $this.attr('name'),
+                markerElement: $('[data-field="userWorkingGroup' + id + '"]')
+            });
+
+            wGs.push(wg);
+        });
+
+        var workingGroups = dhHelpdesk.admin.users.workingGroups({
+            workingGroups: wGs,
+            clearUserWorkingGroups: dhHelpdesk.admin.users.object({ element: $('[data-field="clearUserWorkingGroups"]') })
+        });
+
         var user = dhHelpdesk.admin.users.user({
-            security: security
+            security: security,
+            workingGroups: workingGroups
         });
 
         var getUser = function() {
