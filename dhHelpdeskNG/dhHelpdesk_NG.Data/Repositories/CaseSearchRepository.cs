@@ -51,6 +51,10 @@
     {
         private const string TimeLeftColumn = "_temporary_.LeadTime";
         private const string TimeLeftColumnLower = "_temporary_.leadtime";
+        
+        private const string Combinator_OR = "OR";
+
+        private const string Combinator_AND = "AND";
 
         private readonly ICustomerUserRepository _customerUserRepository;
 
@@ -1077,13 +1081,13 @@
             if (!string.IsNullOrEmpty(f.Initiator))
             {
                 sb.Append(" AND (");
-                sb.AppendFormat("{0}", this.GetSqlLike("[tblCase].[Persons_Name]", f.Initiator));
-                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[ReportedBy]", f.Initiator));
-                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[UserCode]", f.Initiator));
-                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Email]", f.Initiator));
-                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Place]", f.Initiator));
-                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_CellPhone]", f.Initiator));
-                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Phone]", f.Initiator));
+                sb.AppendFormat("{0}", this.GetSqlLike("[tblCase].[Persons_Name]", f.Initiator, Combinator_AND));
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[ReportedBy]", f.Initiator, Combinator_AND));
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[UserCode]", f.Initiator, Combinator_AND));
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Email]", f.Initiator, Combinator_AND));
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Place]", f.Initiator, Combinator_AND));
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_CellPhone]", f.Initiator, Combinator_AND));
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Phone]", f.Initiator, Combinator_AND));
                 sb.Append(") ");
             }
 
@@ -1106,7 +1110,7 @@
             return sb.ToString();
         }
 
-        private string GetSqlLike(string field, string text)
+        private string GetSqlLike(string field, string text, string combinator = Combinator_OR)
         {
             var sb = new StringBuilder();
             if (!string.IsNullOrEmpty(field) && 
@@ -1123,7 +1127,7 @@
                     sb.AppendFormat("(LOWER({0}) LIKE '%{1}%')", field, words[i].Trim());
                     if (words.Length > 1 && i < words.Length - 1)
                     {
-                        sb.Append(" OR ");
+                        sb.Append(string.Format(" {0} ", combinator));
                     }
                 }
 
