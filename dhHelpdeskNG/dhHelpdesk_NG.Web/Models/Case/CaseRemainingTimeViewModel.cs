@@ -31,16 +31,20 @@
             AddHoursItem(16, 23, workingHours, data, this.hours);
 
             var ds = this.Data.CaseRemainingTimes.Select(t => t.RemainingTime).Where(t => t >= workingHours).ToList();
-            this.MaxDays = ds.Any() ? ds.Max() / workingHours : DefaultMaxDays;
+            this.MaxDays = ds.Any() ? ds.Max() / workingHours : 1;
             if (this.MaxDays > DefaultMaxDays)
             {
                 this.MaxDays = DefaultMaxDays;
-                this.MoreThenMaxDays = new CaseRemainingTimeItemViewModel(int.MaxValue, null, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime.IsHoursGreaterEqualDays(this.MaxDays, workingHours)));
             }
 
             for (var i = 1; i < this.MaxDays; i++)
             {
                 this.days.Add(new CaseRemainingTimeItemViewModel(i + 1, null, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime.IsHoursEqualDays(i, workingHours))));
+            }
+
+            if (this.MaxDays > 0)
+            {
+                this.MoreThenMaxDays = new CaseRemainingTimeItemViewModel(int.MaxValue, null, this.Data.CaseRemainingTimes.Count(t => t.RemainingTime.IsHoursGreaterEqualDays(this.MaxDays, workingHours)));
             }
         }
 
