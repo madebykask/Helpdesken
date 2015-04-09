@@ -640,6 +640,7 @@ namespace DH.Helpdesk.Web.Controllers
             fd.CaseRegistrationDateStartFilter = sm.caseSearchFilter.CaseRegistrationDateStartFilter;
             fd.CaseWatchDateEndFilter = sm.caseSearchFilter.CaseWatchDateEndFilter;
             fd.CaseWatchDateStartFilter = sm.caseSearchFilter.CaseWatchDateStartFilter;
+            fd.CaseInitiatorFilter = sm.caseSearchFilter.Initiator;
             
             return fd;
         }
