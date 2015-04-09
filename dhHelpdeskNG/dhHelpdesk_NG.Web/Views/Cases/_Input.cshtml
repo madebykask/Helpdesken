@@ -362,6 +362,10 @@
                                 </div>
                             </div>
                         }
+                        else
+                        {
+                            @Html.HiddenFor(m => Model.case_.RegLanguage_Id);   
+                        }
                         <div style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.InventoryNumber, CaseSolutionFields.InventoryNumber)"  class="computer-block hideshow">
                             <h4><a href="#" class="showbtn"><i class="icon-plus-sign"></i></a><a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a> @Translation.Get("Datorinformation")</h4>
                             <div class="row">
