@@ -1,23 +1,13 @@
-//PrintPdfView.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   Defines the PrintPdfView type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace DH.Helpdesk.Web.Infrastructure.Print
 {
     using System;
     using System.IO;
     using System.Text;
     using System.Web.Mvc;
-    using System.Xml;
 
     using iTextSharp.text;
-    using iTextSharp.text.html;
+    using iTextSharp.text.html.simpleparser;
     using iTextSharp.text.pdf;
-    using iTextSharp.text.xml;
 
     /// <summary>
     /// The print view.
@@ -38,6 +28,15 @@ namespace DH.Helpdesk.Web.Infrastructure.Print
         /// The footer.
         /// </summary>
         private readonly ViewEngineResult footer;
+
+        static PrintPdfView()
+        {
+            var fontpath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "ARIALUNI.TTF");
+            if (!FontFactory.IsRegistered("ARIALUNI"))
+            {
+                FontFactory.Register(fontpath);
+            }            
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PrintPdfView"/> class.
@@ -65,8 +64,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Print
         /// The result.
         /// </param>
         public PrintPdfView(ViewEngineResult result) : this(result, null, null)
-        {
-            
+        {            
         }
 
         /// <summary>
@@ -80,31 +78,19 @@ namespace DH.Helpdesk.Web.Infrastructure.Print
         /// </param>
         public void Render(ViewContext viewContext, TextWriter writer)
         {
-            XmlParser parser;
             string source = this.RenderView(viewContext, this.result.View);
-            using (var reader = this.GetXmlReader(source))
-            {
-                while (reader.Read() && (reader.NodeType != XmlNodeType.Element))
-                {
-                }
-                if ((reader.NodeType == XmlNodeType.Element) && (reader.Name == "itext"))
-                {
-                    parser = new XmlParser();
-                }
-                else
-                {
-                    parser = new HtmlParser();
-                }
-            }
             var document = new Document();
-            document.Open();
+
             PdfWriter instance = PdfWriter.GetInstance(document, viewContext.HttpContext.Response.OutputStream);
+            
+            document.Open();
 
             string headerString = null;
             if (this.header != null)
             {
                 headerString = this.RenderView(viewContext, this.header.View);
             }
+
             string footerString = null;
             if (this.footer != null)
             {
@@ -114,10 +100,15 @@ namespace DH.Helpdesk.Web.Infrastructure.Print
             instance.PageEvent = new PrintPdfEvents(headerString, footerString);
             instance.CloseStream = false;
             viewContext.HttpContext.Response.ContentType = "application/pdf";
-            using (var reader2 = this.GetXmlReader(source))
+
+            var list = HTMLWorker.ParseToList(new StringReader(source), new StyleSheet());
+            foreach (var element in list)
             {
-                parser.Go(document, reader2);
+                document.Add((IElement)element);
             }
+
+            document.Close();
+
             instance.Close();
         }
 
@@ -176,20 +167,6 @@ namespace DH.Helpdesk.Web.Infrastructure.Print
         public void ReleaseView(ControllerContext controllerContext, IView view)
         {
             this.result.ViewEngine.ReleaseView(controllerContext, this.result.View);
-        }
-
-        /// <summary>
-        /// The get xml reader.
-        /// </summary>
-        /// <param name="source">
-        /// The source.
-        /// </param>
-        /// <returns>
-        /// The <see cref="XmlTextReader"/>.
-        /// </returns>
-        private XmlTextReader GetXmlReader(string source)
-        {
-            return new XmlTextReader(new MemoryStream(Encoding.UTF8.GetBytes(source))) { WhitespaceHandling = WhitespaceHandling.None };
         }
 
         /// <summary>
