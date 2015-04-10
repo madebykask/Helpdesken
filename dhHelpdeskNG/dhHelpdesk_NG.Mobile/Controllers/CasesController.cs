@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Controllers
+﻿namespace DH.Helpdesk.Mobile.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -32,7 +32,8 @@
     using DH.Helpdesk.Mobile.Models;
     using DH.Helpdesk.Mobile.Models.Case;
     using DH.Helpdesk.Mobile.Models.Shared;
-    using System.Web.Script.Serialization;    
+    using System.Web.Script.Serialization;
+    using DH.Helpdesk.Common.Enums;    
 
     public class CasesController : BaseController
     {
@@ -296,7 +297,7 @@
                         this.workContext.Customer.WorkingDayStart,
                         this.workContext.Customer.WorkingDayEnd,
                         WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext),
-                        this.configuration.Application.ApplicationId);
+                        ApplicationTypes.HelpdeskMobile);
                     m.caseSearchResult = srm;
                     m.caseSearchFilterData = fd;
                     sm.Search.IdsForLastSearch = GetIdsFromSearchResult(srm.cases);
@@ -929,7 +930,7 @@
                     this.workContext.Customer.WorkingDayStart,
                     this.workContext.Customer.WorkingDayEnd,
                     workTimeCalc,
-                    this.configuration.Application.ApplicationId);
+                    ApplicationTypes.HelpdeskMobile);
 
                 sm.Search.IdsForLastSearch = GetIdsFromSearchResult(m.cases);
                 SessionFacade.CurrentCaseSearch = sm;

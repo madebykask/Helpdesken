@@ -169,10 +169,10 @@
 
         private string GetCurrentLoginMode()
         {                        
-            if (ConfigurationManager.AppSettings["LoginMode"] == null)
+            if (ConfigurationManager.AppSettings[AppSettingsKey.LoginMode] == null)
                 return LoginMode.Application;
             else
-                return ConfigurationManager.AppSettings["LoginMode"];                       
+                return ConfigurationManager.AppSettings[AppSettingsKey.LoginMode].ToString().ToLower();                       
         }
 
         private string GetSSOUserId()

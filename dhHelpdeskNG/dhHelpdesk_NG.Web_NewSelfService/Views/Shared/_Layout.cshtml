@@ -180,7 +180,7 @@
             pCaseLogs = helper.GetCaseLogs(currentCaseId);
         }
         
-        var appType = System.Configuration.ConfigurationManager.AppSettings["CurrentApplication"].ToString();
+        var appType = System.Configuration.ConfigurationManager.AppSettings[AppSettingsKey.CurrentApplicationType].ToString().ToLower();
         
         var hasError = ViewBag.HasError;
         var pHasError = false;
@@ -357,7 +357,7 @@
                             <li class="dropdown blue">
                                 <a href="#" class="dropdown-toggle blue" data-toggle="dropdown">
                                     <div class="ico-new"></div>
-                                    @if (appType == "LineManager")
+                                    @if (appType ==  ApplicationTypes.LineManager)
                                     {
                                        @Translation.Get("Order New Service Request", Enums.TranslationSource.TextTranslation)
                                     }
@@ -419,7 +419,7 @@
                             <li class="blue">
                                 <a href="@Url.Action("UserCases", "case", new { customerId = pCustomerId, progressId = "2", area = "" })">
                                     <div class="ico-ongoing"></div>
-                                    @if (appType == "LineManager")
+                                    @if (appType == ApplicationTypes.LineManager)
                                     {
                                       @Translation.Get("Ongoing Service Requests", Enums.TranslationSource.TextTranslation)
                                     }
@@ -452,7 +452,7 @@
                             <li class="blue">
                                 <a href="@Url.Action("UserCases", "case", new { customerId = pCustomerId, progressId = "1", area = "" })">
                                     <div class="ico-finished"></div>
-                                    @if (appType == "LineManager")
+                                    @if (appType == ApplicationTypes.LineManager)
                                     {
                                       @Translation.Get("Finished Service Requests", Enums.TranslationSource.TextTranslation)
                                     }
@@ -488,7 +488,7 @@
                                 <li class="blue">
                                     <a href="@Url.Action("Index", "Documents", new { customerId = pCustomerId, area = "" })">
                                         <div class="ico-documents"></div>
-                                        @if (appType == "LineManager")
+                                        @if (appType == ApplicationTypes.LineManager)
                                         {
                                             @Translation.Get("HR Documents", Enums.TranslationSource.TextTranslation)
                                         }

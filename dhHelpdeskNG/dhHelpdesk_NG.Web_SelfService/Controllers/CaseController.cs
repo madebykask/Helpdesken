@@ -35,6 +35,7 @@ namespace DH.Helpdesk.SelfService.Controllers
     using Microsoft.SqlServer.Server;
     using DH.Helpdesk.SelfService.Models.SelfService;
     using System.Configuration;
+    using DH.Helpdesk.Common.Enums;
 
     public class CaseController : BaseController
     {
@@ -650,7 +651,8 @@ namespace DH.Helpdesk.SelfService.Controllers
                 search,
                 1,
                 1,
-                null).Take(maxRecords).ToList();
+                null,
+                ApplicationTypes.SelfService).Take(maxRecords).ToList();
             
             model.CaseSearchResult = srm;
             SessionFacade.CurrentCaseSearch = sm;

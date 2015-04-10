@@ -46,6 +46,7 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Web.Models.Case.Input;
     using DH.Helpdesk.Web.Infrastructure.Grid;
     using DH.Helpdesk.Services.Services.Concrete;
+    using DH.Helpdesk.Common.Enums;
 
     public class CasesController : BaseController
     {
@@ -431,7 +432,7 @@ namespace DH.Helpdesk.Web.Controllers
                 this.workContext.Customer.WorkingDayStart,
                 this.workContext.Customer.WorkingDayEnd,
                 workTimeCalc,
-                this.configuration.Application.ApplicationId,
+                ApplicationTypes.Helpdesk,
                 showRemainingTime,
                 out remainingTimeData);
 
@@ -1568,7 +1569,7 @@ namespace DH.Helpdesk.Web.Controllers
                 this.workContext.Customer.WorkingDayStart,
                 this.workContext.Customer.WorkingDayEnd,
                 workTimeCalculator,
-                this.configuration.Application.ApplicationId,
+                ApplicationTypes.Helpdesk,
                 showRemainingTime,
                 out remainingTime,
                 relatedCasesCaseId,

@@ -2,9 +2,11 @@
 {
     public static class LoginMode
     {
-        public const string Application = "Application";
+        public const string Application = "application";
 
-        public const string SSO = "SSO";
+        public const string Windows = "windows";
+
+        public const string SSO = "sso";
         
     }
 }

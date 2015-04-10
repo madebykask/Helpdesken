@@ -56,11 +56,13 @@
     <Compile Include="Collections\NamedObjectCollection.cs" />
     <Compile Include="Constraints\NotifierConstraint.cs" />
     <Compile Include="Enums\AppSettingsKey.cs" />
+    <Compile Include="Enums\Cases\CaseListTypes.cs" />
     <Compile Include="Enums\Cases\FieldTypes.cs" />
     <Compile Include="Enums\CircularStateId.cs" />
     <Compile Include="Enums\ActionObject.cs" />
     <Compile Include="Enums\CircularStates.cs" />
     <Compile Include="Enums\ActivationStatus.cs" />
+    <Compile Include="Enums\ApplicationTypes.cs" />
     <Compile Include="Enums\LoginMode.cs" />
     <Compile Include="Enums\InfoTextTypes.cs" />
     <Compile Include="Enums\LanquageNameId.cs" />

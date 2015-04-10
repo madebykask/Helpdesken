@@ -52,7 +52,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
         public string ParentPathClosingReason { get; set; }
 
-        public string LMCaseList { get; set; }
+        public string CaseListType { get; set; }
 
         public CasesCustomFilter CustomFilter { get; set; }
 
@@ -88,7 +88,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
             r.UserResponsible = o.UserResponsible;
             r.WorkingGroup = o.WorkingGroup;
             r.ReportedBy = o.ReportedBy;
-            r.LMCaseList = o.LMCaseList;  
+            r.CaseListType = o.CaseListType;  
             r.CaseRegistrationDateStartFilter = o.CaseRegistrationDateStartFilter;    
             r.CaseRegistrationDateEndFilter = o.CaseRegistrationDateEndFilter;    
             r.CaseWatchDateStartFilter = o.CaseWatchDateStartFilter;    

@@ -23,6 +23,7 @@
     using DH.Helpdesk.Common.Classes.ServiceAPI.AMAPI.Output;    
     using DH.Helpdesk.BusinessData.Models.Language.Output;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+    using DH.Helpdesk.Common.Enums;
     
 
     public class BaseController : Controller
@@ -39,7 +40,8 @@
             this._caseSolutionService = caseSolutionService;
         }
 
-        protected override void OnActionExecuting(ActionExecutingContext filterContext) //called before a controller action is executed, that is before ~/UserController/index 
+        //called before a controller action is executed, that is before ~/HomeController/index 
+        protected override void OnActionExecuting(ActionExecutingContext filterContext) 
         {
             var customerId = -1;
 
@@ -52,7 +54,9 @@
                     customerId = int.Parse(customerIdPassed.ToString());
             }
 
-            if((SessionFacade.CurrentCustomer != null && SessionFacade.CurrentCustomer.Id != customerId && customerId != -1) || (SessionFacade.CurrentCustomer == null))
+            if((SessionFacade.CurrentCustomer != null && 
+                SessionFacade.CurrentCustomer.Id != customerId && customerId != -1) ||
+               (SessionFacade.CurrentCustomer == null))
             {
                 var newCustomer = this._masterDataService.GetCustomer(customerId);
                 SessionFacade.CurrentCustomer = newCustomer;
@@ -71,7 +75,9 @@
             if(SessionFacade.CurrentCustomer == null)
             {
                 SessionFacade.UserHasAccess = false;
-                filterContext.Result = new RedirectResult(Url.Action("Index", "Error", new { message = string.Format("Invalid Customer Id! ({0})", customerId), errorCode = 101 }));
+                filterContext.Result = new RedirectResult(Url.Action("Index", "Error", 
+                                                            new { message = string.Format("Invalid Customer Id! ({0})", customerId),
+                                                                  errorCode = 101 }));
                 return;
             }
 
@@ -83,11 +89,12 @@
             }
             else
             {
-                if(SessionFacade.CurrentCustomer != null & (SessionFacade.CurrentLanguageId == null || (SessionFacade.CurrentLanguageId != null && SessionFacade.CurrentLanguageId == 0)))
+                if(SessionFacade.CurrentCustomer != null & 
+                   (SessionFacade.CurrentLanguageId == null || (SessionFacade.CurrentLanguageId != null && SessionFacade.CurrentLanguageId == 0)))
                     SessionFacade.CurrentLanguageId = SessionFacade.CurrentCustomer.Language_Id;
             }
-           
-            if (ConfigurationManager.AppSettings[Enums.ApplicationKeys.LoginMode].ToString() == Enums.LoginModes.SSO)
+
+            if (ConfigurationManager.AppSettings[AppSettingsKey.LoginMode].ToString().ToLower() == LoginMode.SSO)
             {
                 ClaimsPrincipal principal = User as ClaimsPrincipal;
 
@@ -135,13 +142,14 @@
                     var netId = principal.Identity.Name;
                     var ssoLog = new NewSSOLog()
                     {
-                        ApplicationId = ConfigurationManager.AppSettings[Enums.ApplicationKeys.ApplicationId].ToString(),
+                        ApplicationId = ConfigurationManager.AppSettings[AppSettingsKey.ApplicationId].ToString(),
                         NetworkId = netId,
                         ClaimData = claimData,
                         CreatedDate = DateTime.Now
                     };
 
-                    if (ConfigurationManager.AppSettings[Enums.ApplicationKeys.SSOLog].ToString().ToLower() == "true" && string.IsNullOrEmpty(SessionFacade.CurrentSystemUser))
+                    if (ConfigurationManager.AppSettings[AppSettingsKey.SSOLog].ToString().ToLower() == "true" && 
+                        string.IsNullOrEmpty(SessionFacade.CurrentSystemUser))
                         _masterDataService.SaveSSOLog(ssoLog);
 
                     if (string.IsNullOrEmpty(userIdentity.UserId))
@@ -155,7 +163,7 @@
                         SessionFacade.CurrentSystemUser = userIdentity.UserId;
                         SessionFacade.CurrentUserIdentity = userIdentity;
 
-                        var defaultEmployeeNumber = ConfigurationManager.AppSettings[Enums.ApplicationKeys.DefaultEmployeeNumber].ToString();
+                        var defaultEmployeeNumber = ConfigurationManager.AppSettings[AppSettingsKey.DefaultEmployeeNumber].ToString();
                         if (!string.IsNullOrEmpty(defaultEmployeeNumber))
                             userIdentity.EmployeeNumber = defaultEmployeeNumber;
 
@@ -206,7 +214,7 @@
                 }
             } // SSO Login
             else
-            if (ConfigurationManager.AppSettings[Enums.ApplicationKeys.LoginMode].ToString() == Enums.LoginModes.Windows)
+                if (ConfigurationManager.AppSettings[AppSettingsKey.LoginMode].ToString().ToLower() == LoginMode.Windows)
             {
                 var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
                 SessionFacade.UserHasAccess = true;
@@ -308,7 +316,7 @@
         //        filterContext.HttpContext.Response.TrySkipIisCustomErrors = true;
         //    }
         //}
-
+         
 
         protected string RenderRazorViewToString(string viewName, object model, bool partial = true)
         {
@@ -358,7 +366,7 @@
             {
                 if (SessionFacade.TextTranslation == null)
                 {
-                    if (ConfigurationManager.AppSettings[Enums.ApplicationKeys.CurrentApplicationType].ToString() == Enums.ApplicationTypes.LineManager)
+                    if (ConfigurationManager.AppSettings[AppSettingsKey.CurrentApplicationType].ToString().ToLower() == ApplicationTypes.LineManager)
                         SessionFacade.TextTranslation = this._masterDataService.GetTranslationTexts()
                                                                                .Where(x => x.Type == 300)
                                                                                .ToList();
