@@ -72,8 +72,10 @@ var GRID_STATE = {
         me.$buttonsToDisableWhenGridLoads = $('ul.secnav a.btn, ul.secnav div.btn-group button, ul.secnav input[type=button], #btnSearch, #btnClearFilter');
         me.$searchField = '#txtFreeTextSearch';
         me.$filterForm = $('#frmCaseSearch');
+        me.$filterFormContent = $('#hiddeninfo');
         me.$caseFilterType = '#lstfilterCaseProgress';
         me.$remainingView = $('[data-field="caseRemainingTimeHidePlace"]');
+        me.$btnExpandFilter = $("#btnMore");
         //// Bind events
         $('#btnSearch, a.refresh-grid').on('click', function (ev) {
             ev.preventDefault();
@@ -93,15 +95,10 @@ var GRID_STATE = {
             return false;
         });
 
-        $("#btnMore").click(function (e) {
+        me.$btnExpandFilter.click(function (e) {
             e.preventDefault();
-            $("#hiddeninfo").toggle();
-            if ($("#icoPlus").hasClass('icon-minus-sign')) {
-                $("#icoPlus").removeClass('icon-minus-sign').addClass('icon-plus-sign');
-            }
-            else {
-                $("#icoPlus").removeClass('icon-plus-sign').addClass('icon-minus-sign');
-            }
+            me.toggleFilter.call(me, !me.$filterFormContent.is(':visible'));
+            return false;
         });
 
         $('#txtFreeTextSearch').keydown(function (e) {
@@ -125,7 +122,7 @@ var GRID_STATE = {
             }
             return true;
         });
-        
+
         me.initSearchForm();
         me.setGridState(window.GRID_STATE.IDLE);
         me.setGridSettings(gridInitSettings);
@@ -165,13 +162,31 @@ var GRID_STATE = {
             isNullOrEmpty($('[name=CaseRegistrationDateEndFilter]', me.$filterForm).val());
     };
 
+    /**
+    * @param { bool } forceShow
+    */
+    Page.prototype.toggleFilter = function(forceShow) {
+        var me = this;
+        if ((forceShow != null && forceShow !== false)
+            || (forceShow == null && me.$filterFormContent.is(':visible'))) {
+            me.$filterFormContent.show();
+            $("#icoPlus").removeClass('icon-plus-sign').addClass('icon-minus-sign');
+        } else {
+            me.$filterFormContent.hide();
+            $("#icoPlus").removeClass('icon-minus-sign').addClass('icon-plus-sign');
+        }
+    };
+    
+
     /// initial state of search form
-    Page.prototype.initSearchForm = function() {
+    Page.prototype.initSearchForm = function () {
         var me = this;
         if (me.isFilterEmpty()) {
             $('#icoFilter').hide();
+            me.toggleFilter(false);
         } else {
             $('#icoFilter').show();
+            me.toggleFilter(true);
         }
     };
 

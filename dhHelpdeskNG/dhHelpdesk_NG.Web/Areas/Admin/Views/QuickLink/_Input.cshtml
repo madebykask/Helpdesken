@@ -182,6 +182,36 @@
         $("#UsAvailable").get(0).selectedIndex = -1;
         return false;
     });
+
+
+    $(function () {
+        var ClearAndLock = function (Main, Second, Third, ChangeEvent) {
+            if ($(Main).val() != '') {
+                $(Main).attr('disabled', false);
+                $(Second).attr('disabled', true);
+                $(Second).val('');
+                $(Third).attr('disabled', true);
+                $(Third).val('');
+            }
+            else if (ChangeEvent == true && $(Main).val() == '') {
+                $(Second).attr('disabled', false);
+                $(Third).attr('disabled', false);
+            };
+        };
+        ClearAndLock('#Link_URLAddress', '#Link_Document_Id', '#Link_CaseSolution_Id');
+        ClearAndLock('#Link_Document_Id', '#Link_CaseSolution_Id', '#Link_URLAddress');
+        ClearAndLock('#Link_CaseSolution_Id', '#Link_URLAddress', '#Link_Document_Id');
+        $("#Link_URLAddress").change(function () {
+            ClearAndLock(this, '#Link_Document_Id', '#Link_CaseSolution_Id', true);
+        });
+        $("#Link_Document_Id").change(function () {
+            ClearAndLock(this, '#Link_URLAddress', '#Link_CaseSolution_Id', true);
+        });
+        $("#Link_CaseSolution_Id").change(function () {
+            ClearAndLock(this, '#Link_URLAddress', '#Link_Document_Id', true);
+        });
+    });
+
 </script>
 
 

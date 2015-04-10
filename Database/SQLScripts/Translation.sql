@@ -3097,5 +3097,13 @@ If not exists (select * from tblTextTranslation where text_id = 1363 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1363, 2, 'The word already exists.')
 GO
 
+If not exists (select * from tbltext where id = 1364)
+	insert into tbltext (id, TextString) VALUES (1364, 'Sätt avdelningen som standard på ärenden som registreras via e-mail')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1364 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1364, 2, 'Default department when cases are registered by e-mail')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

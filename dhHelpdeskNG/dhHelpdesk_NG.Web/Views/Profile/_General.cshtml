@@ -131,7 +131,7 @@
             <td></td>
             <td>
                 @Html.DropDownListFor(model => model.User.RefreshContent, Model.RefreshInterval, new { style = "width: auto;" })
-                &nbsp;@Translation.Get("Uppdateringsintervall", Enums.TranslationSource.TextTranslation) (min)
+                &nbsp;@Translation.Get("Uppdateringsintervall", Enums.TranslationSource.TextTranslation) &nbsp;(@Translation.Get("min", Enums.TranslationSource.TextTranslation))
             </td>
         </tr>
         <tr>
@@ -140,7 +140,7 @@
             </td>
             <td>
                 @Html.TextBoxFor(model => model.User.SessionTimeout, new { maxlength = "50", style = "width: 60px;" })
-                &nbsp; &nbsp;@Translation.Get("(min)", Enums.TranslationSource.TextTranslation)
+                &nbsp; &nbsp;(@Translation.Get("min", Enums.TranslationSource.TextTranslation))
             </td>
         </tr>
     </table>
