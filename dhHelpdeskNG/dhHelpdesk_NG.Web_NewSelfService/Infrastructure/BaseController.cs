@@ -54,33 +54,51 @@
                     customerId = int.Parse(customerIdPassed.ToString());
             }
 
-            if((SessionFacade.CurrentCustomer != null && 
-                SessionFacade.CurrentCustomer.Id != customerId && customerId != -1) ||
-               (SessionFacade.CurrentCustomer == null))
+            if (SessionFacade.CurrentCustomer == null && customerId == -1)
+            {
+                filterContext.Result = new RedirectResult(Url.Action("Index", "Error",
+                                                            new
+                                                            {
+                                                                message = "Customer Id is empty",
+                                                                errorCode = 101
+                                                            }));
+                return;
+            }
+           
+            // CustomerId has been changed by user
+            if ((SessionFacade.CurrentCustomer != null && SessionFacade.CurrentCustomer.Id != customerId && customerId != -1) || 
+                (SessionFacade.CurrentCustomer == null && customerId != -1)) 
             {
                 var newCustomer = this._masterDataService.GetCustomer(customerId);
                 SessionFacade.CurrentCustomer = newCustomer;
-                ViewBag.PublicCustomerId = customerId;
-                ViewBag.PublicCaseTemplate = _caseSolutionService.GetCaseSolutions(customerId).ToList();
-
-                // Customer changed clear sessions
+                
+                // Customer changed > clear sessions
                 SessionFacade.CurrentCoWorkers = null;
             }
 
+            if (SessionFacade.CurrentCustomer == null)
+            {
+                SessionFacade.UserHasAccess = false;
+                filterContext.Result = new RedirectResult(Url.Action("Index", "Error",
+                                                            new
+                                                            {
+                                                                message = string.Format("Invalid Customer Id! ({0})", customerId),
+                                                                errorCode = 101
+                                                            }));
+                return;
+            }
+            else
+            {
+                customerId = SessionFacade.CurrentCustomer.Id;
+                //ViewBag.PublicCustomerId = customerId;
+                //ViewBag.PublicCaseTemplate = _caseSolutionService.GetCaseSolutions(customerId).ToList();
+            }
+            
             if (SessionFacade.AllLanguages == null)
             {
                 SessionFacade.AllLanguages = GetActiveLanguages();
             }
-
-            if(SessionFacade.CurrentCustomer == null)
-            {
-                SessionFacade.UserHasAccess = false;
-                filterContext.Result = new RedirectResult(Url.Action("Index", "Error", 
-                                                            new { message = string.Format("Invalid Customer Id! ({0})", customerId),
-                                                                  errorCode = 101 }));
-                return;
-            }
-
+            
             if(filterContext.ActionParameters.Keys.Contains("languageId"))
             {
                 var languageIdPassed = filterContext.ActionParameters["languageId"];

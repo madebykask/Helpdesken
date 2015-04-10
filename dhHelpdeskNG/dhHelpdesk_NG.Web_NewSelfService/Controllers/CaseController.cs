@@ -720,14 +720,17 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                         caseListType = CaseListTypes.CoWorkerCases;
                     
                     var employees = SessionFacade.CurrentCoWorkers;
-                    foreach (var emp in employees)
+                    if (employees != null)
                     {
-                        if (emp.EmployeeNumber != "")
+                        foreach (var emp in employees)
                         {
-                            if (cs.ReportedBy == "")
-                                cs.ReportedBy = "'" + emp.EmployeeNumber + "'";
-                            else
-                                cs.ReportedBy = cs.ReportedBy + "," + "'" + emp.EmployeeNumber + "'";
+                            if (emp.EmployeeNumber != "")
+                            {
+                                if (cs.ReportedBy == "")
+                                    cs.ReportedBy = "'" + emp.EmployeeNumber + "'";
+                                else
+                                    cs.ReportedBy = cs.ReportedBy + "," + "'" + emp.EmployeeNumber + "'";
+                            }
                         }
                     }
 
