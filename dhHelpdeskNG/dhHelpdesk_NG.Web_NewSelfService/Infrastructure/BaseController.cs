@@ -47,6 +47,7 @@
         {
             var customerId = -1;
             TempData["ShowLanguageSelect"] = true;
+            SessionFacade.LastError = null;
 
             if(filterContext.ActionParameters.Keys.Contains("customerId"))
             {
@@ -251,9 +252,7 @@
 
                 SessionFacade.CurrentUserIdentity = ui;
             }
-            
-            // Last correct url used for back from Error page
-            SessionFacade.LastCorrectUrl = filterContext.HttpContext.Request.Url.AbsoluteUri;
+                        
             this.SetTextTranslation(filterContext);
         }
                 
@@ -292,6 +291,11 @@
         {
             this.SetMasterPageModel(filterContext);
             base.OnActionExecuted(filterContext);
+
+            // Last correct url used for back from Error page
+            if (SessionFacade.LastError == null)
+                SessionFacade.LastCorrectUrl =
+                    filterContext.HttpContext.Request.Url.AbsoluteUri;
         }
 
         //protected override void OnAuthorization(AuthorizationContext filterContext)  //called when a process requests authorization or authorization occurs before login and before OnActionExecuting + index + OnActionExecuted 
