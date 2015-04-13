@@ -33,6 +33,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
     using DH.Helpdesk.NewSelfService.Infrastructure;
     using DH.Helpdesk.BusinessData.Enums.Case;
     using DH.Helpdesk.Common.Enums;
+    using DH.Helpdesk.NewSelfService.Infrastructure.Common.Concrete;
 
     public class CaseController : BaseController
     {
@@ -144,17 +145,24 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             {
                 currentCase = this._caseService.GetCaseById(Int32.Parse(id));
 
-                if(currentCase == null)
-                    return RedirectToAction("Index", "Error", new { message = "Can not find the Case!" });
+                if (currentCase == null)
+                {
+                    ErrorGenerator.MakeError("Can not find the Case!");
+                    return RedirectToAction("Index", "Error");
+                }
 
-                if(currentCase != null && currentCase.RegUserId != SessionFacade.CurrentUserIdentity.UserId)
-                    return RedirectToAction("Index", "Error", new { message = "Can not find this Case in your cases!" }); ;
+                if (currentCase != null && currentCase.RegUserId != SessionFacade.CurrentUserIdentity.UserId)
+                {
+                    ErrorGenerator.MakeError("Can not find this Case in your cases!");
+                    return RedirectToAction("Index", "Error");
+                }
 
             }
 
             if(currentCase == null)
             {
-                return RedirectToAction("Index", "Error", new { message = "Can not find the Case!" });
+                ErrorGenerator.MakeError("Can not find the Case!");
+                return RedirectToAction("Index", "Error");                
             }
             else
             {
@@ -169,10 +177,13 @@ namespace DH.Helpdesk.NewSelfService.Controllers
 
             Customer currentCustomer = default(Customer);
 
-            if(SessionFacade.CurrentCustomer != null)
+            if (SessionFacade.CurrentCustomer != null)
                 currentCustomer = SessionFacade.CurrentCustomer;
             else
-                return RedirectToAction("Index", "Error", new { message = "Customer Id: " + customerId.ToString() + " is not valid!", errorCode = 108 });
+            {
+                ErrorGenerator.MakeError(string.Format("Customer Id: {0} is not valid!", customerId.ToString()), 201);
+                return RedirectToAction("Index", "Error");                
+            }
 
             currentCase.Customer = currentCustomer;
 
@@ -211,11 +222,13 @@ namespace DH.Helpdesk.NewSelfService.Controllers
         {
             // *** New Case ***
             var currentCustomer = default(Customer);
-            if(SessionFacade.CurrentCustomer != null)
+            if (SessionFacade.CurrentCustomer != null)
                 currentCustomer = SessionFacade.CurrentCustomer;
             else
-                return RedirectToAction("Index", "Error", new { message = "Customer Id: " + customerId.ToString() + " is not valid!", errorCode = 208 });
-
+            {
+                ErrorGenerator.MakeError(string.Format("Customer Id: {0} is not valid!", customerId.ToString()), 201);
+                return RedirectToAction("Index", "Error");
+            }
             var languageId = SessionFacade.CurrentLanguageId;
 
             var model = this.GetNewCaseModel(currentCustomer.Id, languageId);
@@ -305,17 +318,23 @@ namespace DH.Helpdesk.NewSelfService.Controllers
         {
 
             var currentCustomer = default(Customer);
-            if(SessionFacade.CurrentCustomer != null)
+            if (SessionFacade.CurrentCustomer != null)
                 currentCustomer = SessionFacade.CurrentCustomer;
             else
-                return RedirectToAction("Index", "Error", new { message = "Customer Id: " + customerId.ToString() + " is not valid!", errorCode = 208 });
+            {
+                ErrorGenerator.MakeError(string.Format("Customer Id: {0} is not valid!", customerId.ToString()), 201);
+                return RedirectToAction("Index", "Error");
+            }                
 
             var languageId = SessionFacade.CurrentLanguageId;
 
             UserCasesModel model = null;
 
             if (progressId != CaseProgressFilter.ClosedCases && progressId != CaseProgressFilter.CasesInProgress)
-                return RedirectToAction("Index", "Error", new { message = "Process is not valid!", errorCode = 207 });
+            {
+                ErrorGenerator.MakeError("Process is not valid!", 202);
+                return RedirectToAction("Index", "Error");                
+            }
 
             if(SessionFacade.CurrentUserIdentity != null)
             {
@@ -325,7 +344,8 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "Error", new { message = "You don't have access to user cases! please login again.", errorCode = 204 });
+                ErrorGenerator.MakeError("You don't have access to user cases! please login again.", 203);
+                return RedirectToAction("Index", "Error");                
             }
 
             return this.View("UserCases", model);
@@ -589,7 +609,10 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                 var id = frm.ReturnFormValue("MailGuid");
 
                 if (progressId != CaseProgressFilter.ClosedCases && progressId != CaseProgressFilter.CasesInProgress)
-                    return RedirectToAction("Index", "Error", new { message = "Process is not valid!", errorCode = 207 });
+                {                    
+                    ErrorGenerator.MakeError("Process is not valid!", 202);
+                    return RedirectToAction("Index", "Error");                                 
+                }
 
                 var model = GetUserCasesModel(customerId, languageId, userId,
                                               pharasSearch, maxRecords, progressId,
@@ -599,8 +622,8 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             }
             catch(Exception e)
             {
-                return RedirectToAction("Index", "Error", new { message = "Error in load user cases!", errorCode = 206 });
-                //return View("Error");
+                ErrorGenerator.MakeError("Error in load user cases!", 204);
+                return RedirectToAction("Index", "Error");                
             }
         }
 

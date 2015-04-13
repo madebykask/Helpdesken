@@ -238,6 +238,7 @@
     <Compile Include="Infrastructure\BusinessModelFactories\Notifiers\IUpdatedNotifierFactory.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Notifiers\IUpdatedSettingsFactory.cs" />
     <Compile Include="Infrastructure\Common\Concrete\CommonFunctions.cs" />
+    <Compile Include="Infrastructure\Common\Concrete\ErrorGenerator.cs" />
     <Compile Include="Infrastructure\Common\ICommonFunctions.cs" />
     <Compile Include="Infrastructure\Constants.cs" />
     <Compile Include="Infrastructure\Enums.cs" />
@@ -296,7 +297,7 @@
     <Compile Include="Models\Common\SortFieldModel.cs" />
     <Compile Include="Models\CoWorkers\CoWorkersModel.cs" />
     <Compile Include="Models\Documents\DocumentsModel.cs" />
-    <Compile Include="Models\Error\ErrorModel.cs" />
+    <Compile Include="Models\Error\Error.cs" />
     <Compile Include="Models\ISearchModel.cs" />
     <Compile Include="Models\MasterPageViewModel.cs" />
     <Compile Include="Models\Notifiers\ConfigurableFields\BooleanFieldModel.cs" />

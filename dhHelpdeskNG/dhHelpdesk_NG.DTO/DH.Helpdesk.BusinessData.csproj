@@ -209,6 +209,7 @@
     <Compile Include="Models\Accounts\AccountSettings\Read\Processing\OtherFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Processing\ProgramFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Processing\UserFieldSettings.cs" />
+    <Compile Include="Models\Error\ErrorModel.cs" />
     <Compile Include="Models\Grid\CaseOverviewColumnDefinition.cs" />
     <Compile Include="Models\Grid\GridColumnDefinition.cs" />
     <Compile Include="Models\Grid\GridSettingsModel.cs" />

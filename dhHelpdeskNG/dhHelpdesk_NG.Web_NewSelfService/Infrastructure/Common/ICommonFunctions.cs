@@ -12,6 +12,6 @@
 
         List<ActionSetting> GetActionSettings(int customerId);
 
-        CaseLogModel GetCaseLogs(int caseId);
+        CaseLogModel GetCaseLogs(int caseId);        
     }
 }

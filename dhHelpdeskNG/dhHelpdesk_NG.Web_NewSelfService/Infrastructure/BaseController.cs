@@ -24,6 +24,8 @@
     using DH.Helpdesk.BusinessData.Models.Language.Output;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
     using DH.Helpdesk.Common.Enums;
+    using DH.Helpdesk.BusinessData.Models.Error;
+    using DH.Helpdesk.NewSelfService.Infrastructure.Common.Concrete;
     
 
     public class BaseController : Controller
@@ -44,7 +46,6 @@
         protected override void OnActionExecuting(ActionExecutingContext filterContext) 
         {
             var customerId = -1;
-
             TempData["ShowLanguageSelect"] = true;
 
             if(filterContext.ActionParameters.Keys.Contains("customerId"))
@@ -55,13 +56,9 @@
             }
 
             if (SessionFacade.CurrentCustomer == null && customerId == -1)
-            {
-                filterContext.Result = new RedirectResult(Url.Action("Index", "Error",
-                                                            new
-                                                            {
-                                                                message = "Customer Id is empty",
-                                                                errorCode = 101
-                                                            }));
+            {                
+                ErrorGenerator.MakeError("Customer Id is empty", 101);
+                filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));                                                           
                 return;
             }
            
@@ -79,12 +76,8 @@
             if (SessionFacade.CurrentCustomer == null)
             {
                 SessionFacade.UserHasAccess = false;
-                filterContext.Result = new RedirectResult(Url.Action("Index", "Error",
-                                                            new
-                                                            {
-                                                                message = string.Format("Invalid Customer Id! ({0})", customerId),
-                                                                errorCode = 101
-                                                            }));
+                ErrorGenerator.MakeError(string.Format("Invalid Customer Id! ({0})", customerId), 101);
+                filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));                 
                 return;
             }
             else
@@ -173,7 +166,8 @@
                     if (string.IsNullOrEmpty(userIdentity.UserId))
                     {
                         SessionFacade.UserHasAccess = false;
-                        filterContext.Result = new RedirectResult(Url.Action("Index", "Error", new { message = "You don't have access to the portal! (User Id is not specified)", errorCode = 101 }));
+                        ErrorGenerator.MakeError("You don't have access to the portal! (User Id is not specified)", 101);
+                        filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));                                         
                         return;
                     }
                     else
@@ -196,7 +190,9 @@
                             {
                                 SessionFacade.UserHasAccess = false;
                                 SessionFacade.CurrentCoWorkers = new List<SubordinateResponseItem>();
-                                filterContext.Result = new RedirectResult(Url.Action("Index", "Error", new { message = "You don't have access to the portal! (user is not manager for country)", errorCode = 103 }));
+                                
+                                ErrorGenerator.MakeError("You don't have access to the portal! (user is not manager for country)", 103);
+                                filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));                                   
                                 return;
                             }
                         }
@@ -206,7 +202,9 @@
                             if (string.IsNullOrEmpty(userIdentity.EmployeeNumber))
                             {
                                 SessionFacade.UserHasAccess = false;
-                                filterContext.Result = new RedirectResult(Url.Action("Index", "Error", new { message = "You don't have access to the portal! (EmployeeNumber is not specified)", errorCode = 101 }));
+                                
+                                ErrorGenerator.MakeError("You don't have access to the portal! (EmployeeNumber is not specified)", 104);
+                                filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));                                  
                                 return;
                             }
                             else
@@ -223,7 +221,9 @@
                                 {
                                     SessionFacade.UserHasAccess = false;
                                     SessionFacade.CurrentCoWorkers = new List<SubordinateResponseItem>();
-                                    filterContext.Result = new RedirectResult(Url.Action("Index", "Error", new { message = "You don't have access to the portal! (user is not manager)", errorCode = 102 }));
+
+                                    ErrorGenerator.MakeError("You don't have access to the portal! (user is not manager)", 102);
+                                    filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));                                     
                                     return;
                                 }
                             }
@@ -251,8 +251,9 @@
 
                 SessionFacade.CurrentUserIdentity = ui;
             }
-
-
+            
+            // Last correct url used for back from Error page
+            SessionFacade.LastCorrectUrl = filterContext.HttpContext.Request.Url.AbsoluteUri;
             this.SetTextTranslation(filterContext);
         }
                 
@@ -264,9 +265,7 @@
                 var lId = allLang.Where(a => a.LanguageId == language).Select(a => a.Id).SingleOrDefault();
                 SessionFacade.CurrentLanguageId = lId;
             }
-
-            
-            
+                        
             currentUrl += "?language=" + language;
 
             var allParam = lastParams.Split('&');

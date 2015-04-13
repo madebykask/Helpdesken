@@ -7,15 +7,17 @@ using System.Web;
 
 namespace DH.Helpdesk.NewSelfService.Models.Error
 {
-    public class ErrorModel
+    public class Error
     {
-        public ErrorModel()
+        public Error()
         {            
         }
 
-        public int ErrorCode { get; set; }
+        public string ErrorCode { get; set; }
 
-        public string ErrorMessage { get; set; }        
+        public string ErrorMessage { get; set; }
+
+        public string BackURL { get; set; }        
 
     }
 }

@@ -12,7 +12,8 @@
     using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.BusinessData.Models.CoWorkers;
     using DH.Helpdesk.Common.Classes.ServiceAPI.AMAPI.Output;
-    using DH.Helpdesk.BusinessData.Models.Language.Output;    
+    using DH.Helpdesk.BusinessData.Models.Language.Output;
+    using DH.Helpdesk.BusinessData.Models.Error;    
     
     public static class SessionFacade
     {
@@ -40,6 +41,8 @@
         private const string _CURRENT_COWORKERS = "CURRENT_COWORKERS";
         private const string _USER_HAS_ACCESS = "USER_HAS_ACCESS";
         private const string _ALL_LANGUAGES = "ALL_LANGUAGES";
+        private const string _LAST_CORRECT_URL = "LAST_CORRECT_URL";
+        private const string _LAST_ERROR = "LAST_ERROR";
 
         public static int CurrentCustomerID
         {
@@ -89,6 +92,40 @@
                     HttpContext.Current.Session.Add(_USER_HAS_ACCESS, value);
                 else
                     HttpContext.Current.Session[_USER_HAS_ACCESS] = value;
+            }
+        }
+
+        public static string LastCorrectUrl
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_LAST_CORRECT_URL] == null)
+                    return null;
+                return (string )HttpContext.Current.Session[_LAST_CORRECT_URL];
+            }
+            set
+            {
+                if (HttpContext.Current.Session[_LAST_CORRECT_URL] == null)
+                    HttpContext.Current.Session.Add(_LAST_CORRECT_URL, value);
+                else
+                    HttpContext.Current.Session[_LAST_CORRECT_URL] = value;
+            }
+        }
+
+        public static ErrorModel LastError
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_LAST_ERROR] == null)
+                    return null;
+                return (ErrorModel)HttpContext.Current.Session[_LAST_ERROR];
+            }
+            set
+            {
+                if (HttpContext.Current.Session[_LAST_ERROR] == null)
+                    HttpContext.Current.Session.Add(_LAST_ERROR, value);
+                else
+                    HttpContext.Current.Session[_LAST_ERROR] = value;
             }
         }
 

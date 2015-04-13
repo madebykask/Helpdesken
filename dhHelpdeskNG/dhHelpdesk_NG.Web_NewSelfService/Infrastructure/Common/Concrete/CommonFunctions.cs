@@ -8,9 +8,9 @@ using DH.Helpdesk.Domain;
 namespace DH.Helpdesk.NewSelfService.Infrastructure.Common.Concrete
 {
     using DH.Helpdesk.BusinessData.Models.ActionSetting;
-
     using Microsoft.Ajax.Utilities;
-using DH.Helpdesk.NewSelfService.Models.Case;
+    using DH.Helpdesk.NewSelfService.Models.Case;
+    using DH.Helpdesk.BusinessData.Models.Error;
 
     public sealed class CommonFunctions : ICommonFunctions
     {                
@@ -42,8 +42,8 @@ using DH.Helpdesk.NewSelfService.Models.Case;
             var caseLogs = _logService.GetLogsByCaseId(caseId).OrderByDescending(l=> l.RegTime).ToList();
             
             var caseLogModel = new CaseLogModel { CaseId = caseId, CaseLogs = caseLogs };
-
+            
             return caseLogModel;                            
-        }
+        }      
     }
 }
