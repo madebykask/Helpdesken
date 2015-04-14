@@ -7,6 +7,7 @@
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.FinishingCauseCustomer;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeActiveCases;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeFinishedCases;
     using DH.Helpdesk.BusinessData.Models.Reports.Enums;
@@ -40,11 +41,11 @@
                             {
                                 ReportType.RegistratedCasesDay,
                                 ReportType.CaseTypeArticleNo,
-                                ReportType.CaseSatisfaction,
                                 ReportType.ReportGenerator,
                                 ReportType.LeadtimeFinishedCases,
                                 ReportType.LeadtimeActiveCases,
-                                ReportType.CaseSatisfaction
+                                ReportType.CaseSatisfaction/*,
+                                ReportType.FinishingCauseCustomer*/
                             };
 
             // It's a new report, so we need to add it to the tblReport table
@@ -198,6 +199,29 @@
                                         int lowDays)
         {
             return new LeadtimeActiveCasesModel(data, highHours, mediumDays, lowDays);
+        }
+
+        public FinishingCauseCustomerOptionsModel GetFinishingCauseCustomerOptionsModel(FinishingCauseCustomerOptions options)
+        {
+            var departments = WebMvcHelper.CreateMultiSelectField(options.Departments);
+            var workingGroups = WebMvcHelper.CreateMultiSelectField(options.WorkingGroups);
+            var caseTypes = options.CaseTypes;
+            var administrators = WebMvcHelper.CreateListField(options.Administrators);
+            var periodFrom = DateTime.Today.AddYears(-1);
+            var periodUntil = DateTime.Today;
+
+            return new FinishingCauseCustomerOptionsModel(
+                        departments,
+                        workingGroups,
+                        caseTypes,
+                        administrators,
+                        periodFrom,
+                        periodUntil);
+        }
+
+        public FinishingCauseCustomerModel GetFinishingCauseCustomerModel(FinishingCauseCustomerData data)
+        {
+            return new FinishingCauseCustomerModel(data);
         }
     }
 }

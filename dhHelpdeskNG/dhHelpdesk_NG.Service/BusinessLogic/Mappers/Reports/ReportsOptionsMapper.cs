@@ -102,6 +102,21 @@
                             options.CaseTypes);
         }
 
+        public static FinishingCauseCustomerOptions MapToFinishingCauseCustomerOptions(
+                                                        IQueryable<Department> departments,
+                                                        IQueryable<WorkingGroupEntity> workingGroups,
+                                                        IQueryable<CaseType> caseTypes,
+                                                        IQueryable<User> administrators)
+        {
+            var options = GetOptions(departments, caseTypes, workingGroups, administrators);
+
+            return new FinishingCauseCustomerOptions(
+                            options.Departments,
+                            options.CaseTypes,
+                            options.WorkingGroups,
+                            options.Administrators);
+        }
+
         private static ReportOptions GetOptions(
                                         IQueryable<Department> departments = null,
                                         IQueryable<CaseType> caseTypes = null,

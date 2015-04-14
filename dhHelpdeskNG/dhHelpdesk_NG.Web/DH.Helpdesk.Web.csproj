@@ -363,6 +363,7 @@
     <Content Include="Areas\Reports\Content\js\reports.js" />
     <Content Include="Content\bootstrap-tagsinput.css" />
     <Content Include="Content\css\bootstrap-tagsinput.css" />
+    <Content Include="Content\icons\ajax-loader.gif" />
     <Content Include="Content\img\ajax-loader.GIF" />
     <Content Include="Content\img\dh_solutions_version.png" />
     <Content Include="Content\img\glyphicons-dh.png" />
@@ -1526,6 +1527,7 @@
     <Compile Include="Areas\Reports\Infrastructure\Utils\ReportUtils.cs" />
     <Compile Include="Areas\Reports\Models\Options\CaseSatisfactionOptions.cs" />
     <Compile Include="Areas\Reports\Models\Options\CaseTypeArticleNoOptionsModel.cs" />
+    <Compile Include="Areas\Reports\Models\Options\FinishingCauseCustomerOptionsModel.cs" />
     <Compile Include="Areas\Reports\Models\Options\LeadtimeActiveCasesOptionsModel.cs" />
     <Compile Include="Areas\Reports\Models\Options\LeadtimeFinishedCasesOptionsModel.cs" />
     <Compile Include="Areas\Reports\Models\Options\RegistratedCasesDayOptionsModel.cs" />
@@ -1535,6 +1537,7 @@
     <Compile Include="Areas\Reports\Models\Options\ReportsOptions.cs" />
     <Compile Include="Areas\Reports\Models\Reports\CaseSatisfactionReport.cs" />
     <Compile Include="Areas\Reports\Models\Reports\CaseTypeArticleNoModel.cs" />
+    <Compile Include="Areas\Reports\Models\Reports\FinishingCauseCustomerModel.cs" />
     <Compile Include="Areas\Reports\Models\Reports\LeadtimeActiveCasesModel.cs" />
     <Compile Include="Areas\Reports\Models\Reports\LeadtimeFinishedCasesModel.cs" />
     <Compile Include="Areas\Reports\Models\Reports\ReportGenerator\CaseOverviewModel.cs" />
@@ -2516,6 +2519,8 @@
     <Content Include="Areas\Reports\Views\Report\Options\LeadtimeActiveCases.cshtml" />
     <Content Include="Areas\Reports\Views\Report\Reports\LeadtimeActiveCases.cshtml" />
     <Content Include="Areas\Admin\Views\Users\Layout.cshtml" />
+    <Content Include="Areas\Reports\Views\Report\Options\FinishingCauseCustomer.cshtml" />
+    <Content Include="Areas\Reports\Views\Report\Reports\FinishingCauseCustomer.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />

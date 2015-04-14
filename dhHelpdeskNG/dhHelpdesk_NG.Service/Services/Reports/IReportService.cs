@@ -6,6 +6,7 @@
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseSatisfaction;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.FinishingCauseCustomer;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeActiveCases;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeFinishedCases;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.RegistratedCasesDay;
@@ -101,5 +102,16 @@
                                     int highHours,
                                     int mediumDays,
                                     int lowDays);
+
+        FinishingCauseCustomerOptions GetFinishingCauseCustomerOptions(int customerId);
+
+        FinishingCauseCustomerData GetFinishingCauseCustomerData(
+                                    int customerId,
+                                    List<int> departmentIds,
+                                    List<int> workingGroupIds,
+                                    int? caseTypeId,
+                                    int? administratorId,
+                                    DateTime? periodFrom,
+                                    DateTime? periodUntil);
     }
 }

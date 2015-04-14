@@ -8,6 +8,7 @@
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseSatisfaction;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.FinishingCauseCustomer;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeActiveCases;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeFinishedCases;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.RegistratedCasesDay;
@@ -500,6 +501,81 @@
                                     highHours,
                                     mediumDays,
                                     lowDays);
+            }
+        }
+
+        #endregion
+
+        #region FinishingCauseCustomer
+
+        public FinishingCauseCustomerOptions GetFinishingCauseCustomerOptions(int customerId)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var departmentRep = uow.GetRepository<Department>();
+                var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
+                var caseTypeRep = uow.GetRepository<CaseType>();
+                var administratorRep = uow.GetRepository<User>();
+
+                var departments = departmentRep.GetAll().GetActiveByCustomer(customerId);
+                var workingGroups = workingGroupRep.GetAll().GetActiveByCustomer(customerId);
+                var caseTypes = caseTypeRep.GetAll().GetActiveByCustomer(customerId);
+                var administrators = administratorRep.GetAll().GetActiveByCustomer(customerId);
+
+                return ReportsOptionsMapper.MapToFinishingCauseCustomerOptions(
+                                            departments,
+                                            workingGroups,
+                                            caseTypes,
+                                            administrators);
+            }
+        }
+
+        public FinishingCauseCustomerData GetFinishingCauseCustomerData(
+            int customerId,
+            List<int> departmentIds,
+            List<int> workingGroupIds,
+            int? caseTypeId,
+            int? administratorId,
+            DateTime? periodFrom,
+            DateTime? periodUntil)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var casesRep = uow.GetRepository<Case>();
+                var departmentRep = uow.GetRepository<Department>();
+                var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
+                var caseTypeRep = uow.GetRepository<CaseType>();
+                var administratorRep = uow.GetRepository<User>();
+
+                var caseTypeIds = new List<int>();
+                if (caseTypeId.HasValue)
+                {
+                    LoadCaseTypeChildrenIds(caseTypeId.Value, caseTypeIds, uow);
+                }
+
+                var cases = casesRep.GetAll()
+                        .GetByCustomer(customerId)
+                        .GetByDepartments(departmentIds)
+                        .GetByWorkingGroups(workingGroupIds)
+                        .GetByCaseTypes(caseTypeIds)
+                        .GetByAdministrator(administratorId)
+                        .GetByRegistrationPeriod(periodFrom, periodUntil)
+                        .GetActive()
+                        .GetNotDeleted();
+
+                var departments = departmentRep.GetAll().GetActiveByCustomer(customerId);
+                var workingGroups = workingGroupRep.GetAll().GetActiveByCustomer(customerId);
+                var caseTypes = caseTypeRep.GetAll().GetActiveByCustomer(customerId);
+                var administrators = administratorRep.GetAll().GetActiveByCustomer(customerId);
+
+                return ReportsMapper.MapToFinishingCauseCustomerData(
+                                            cases,
+                                            departments,
+                                            workingGroups,
+                                            caseTypes,
+                                            administrators,
+                                            periodFrom,
+                                            periodUntil);
             }
         }
 

@@ -371,6 +371,7 @@
     <Compile Include="Models\Reports\Data\CaseTypeArticleNo\CaseTypeArticleNoData.cs" />
     <Compile Include="Models\Reports\Data\CaseTypeArticleNo\CaseTypeData.cs" />
     <Compile Include="Models\Reports\Data\CaseTypeArticleNo\ProductAreaData.cs" />
+    <Compile Include="Models\Reports\Data\FinishingCauseCustomer\FinishingCauseCustomerData.cs" />
     <Compile Include="Models\Reports\Data\LeadtimeActiveCases\CasesTimeLeftOnSolution.cs" />
     <Compile Include="Models\Reports\Data\LeadtimeActiveCases\LeadtimeActiveCasesData.cs" />
     <Compile Include="Models\Reports\Data\LeadtimeFinishedCases\FinishedCasesLeadTime.cs" />
@@ -382,6 +383,7 @@
     <Compile Include="Models\Reports\Enums\ShowCases.cs" />
     <Compile Include="Models\Reports\Options\CaseSatisfactionOptionsResponse.cs" />
     <Compile Include="Models\Reports\Options\CaseTypeArticleNoOptions.cs" />
+    <Compile Include="Models\Reports\Options\FinishingCauseCustomerOptions.cs" />
     <Compile Include="Models\Reports\Options\LeadtimeActiveCasesOptions.cs" />
     <Compile Include="Models\Reports\Options\LeadtimeFinishedCasesOptions.cs" />
     <Compile Include="Models\Reports\Options\RegistratedCasesCaseTypeOptionsResponse.cs" />

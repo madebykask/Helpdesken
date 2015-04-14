@@ -6,6 +6,7 @@
 
     using DH.Helpdesk.BusinessData.Models.ProductArea;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.FinishingCauseCustomer;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeActiveCases;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeFinishedCases;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.RegistratedCasesDay;
@@ -223,6 +224,32 @@
             }
 
             return new LeadtimeActiveCasesData(highHoursResult, mediumDaysResult, lowDaysResult);
+        }
+
+        public static FinishingCauseCustomerData MapToFinishingCauseCustomerData(
+                                                IQueryable<Case> cases,
+                                                IQueryable<Department> departments,      
+                                                IQueryable<WorkingGroupEntity> workingGroups,
+                                                IQueryable<CaseType> caseTypes,  
+                                                IQueryable<User> administrators,
+                                                DateTime? periodFrom,
+                                                DateTime? periodUntil)
+        {
+            var entities = (from c in cases
+                            join d in departments on c.Department_Id equals d.Id into dgj
+                            join wg in workingGroups on c.WorkingGroup_Id equals wg.Id into wggj
+                            join ct in caseTypes on c.CaseType_Id equals ct.Id into ctgj
+                            join u in administrators on c.Performer_User_Id equals u.Id into ugj
+                            from department in dgj.DefaultIfEmpty()
+                            from caseType in ctgj.DefaultIfEmpty()
+                            from workingGroup in wggj.DefaultIfEmpty()
+                            from user in ugj.DefaultIfEmpty()
+                            select new
+                            {
+                                c
+                            }).ToList();
+
+            return new FinishingCauseCustomerData();
         }
     }
 }

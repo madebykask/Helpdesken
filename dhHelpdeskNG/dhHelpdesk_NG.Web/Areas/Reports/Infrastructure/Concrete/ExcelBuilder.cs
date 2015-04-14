@@ -7,6 +7,7 @@
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
     using DH.Helpdesk.BusinessData.Models.Reports.Enums;
     using DH.Helpdesk.Web.Areas.Reports.Infrastructure.Extensions;
+    using DH.Helpdesk.Web.Areas.Reports.Models.Reports;
     using DH.Helpdesk.Web.Areas.Reports.Models.Reports.ReportGenerator;
     using DH.Helpdesk.Web.Infrastructure;
 
@@ -131,6 +132,22 @@
                 ws.AutoFit(column);
 
                 return excelPackage.GetAsByteArray();                            
+            }
+        }
+
+        public byte[] GetFinishingCauseCustomerExcel(FinishingCauseCustomerModel data)
+        {
+            using (var memoryStream = new MemoryStream())
+            using (var excelPackage = new ExcelPackage(memoryStream))
+            {
+                var ws = excelPackage.AddReportWorksheet();
+                var row = 1;
+                var column = 1;
+
+
+                ws.AutoFit(column);
+
+                return excelPackage.GetAsByteArray();  
             }
         }
     }

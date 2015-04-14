@@ -114,6 +114,12 @@
                     return this.PartialView(
                                 "Options/LeadtimeActiveCases",
                                 this.reportModelFactory.GetLeadtimeActiveCasesOptionsModel(leadtimeActiveCases));
+
+                case ReportType.FinishingCauseCustomer:
+                    var finishingCauseCustomer = this.reportService.GetFinishingCauseCustomerOptions(this.OperationContext.CustomerId);
+                    return this.PartialView(
+                                "Options/FinishingCauseCustomer",
+                                this.reportModelFactory.GetFinishingCauseCustomerOptionsModel(finishingCauseCustomer));
             }
 
             return null;
@@ -293,6 +299,30 @@
                                             LowDays);
 
             return this.PartialView("Reports/LeadtimeActiveCases", model);
+        }
+
+        [HttpPost]
+        [BadRequestOnNotValid]
+        public ActionResult GetFinishingCauseCustomerReport(FinishingCauseCustomerOptionsModel options)
+        {
+            var data = this.reportService.GetFinishingCauseCustomerData(
+                                            this.OperationContext.CustomerId,
+                                            options.DepartmentIds,
+                                            options.WorkingGroupIds,
+                                            options.CaseTypeId,
+                                            options.AdministratorId,
+                                            options.PeriodFrom,
+                                            options.PeriodUntil);
+
+            var model = this.reportModelFactory.GetFinishingCauseCustomerModel(data);
+
+            if (options.IsExcel)
+            {
+                var excel = this.excelBuilder.GetFinishingCauseCustomerExcel(model);
+                return new UnicodeFileContentResult(excel, this.excelBuilder.GetExcelFileName(ReportType.FinishingCauseCustomer));
+            }
+
+            return this.PartialView("Reports/FinishingCauseCustomer", model);
         }
     }
 }
