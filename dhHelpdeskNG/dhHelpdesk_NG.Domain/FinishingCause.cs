@@ -1,9 +1,11 @@
 ﻿namespace DH.Helpdesk.Domain
 {
+    using DH.Helpdesk.Domain.Interfaces;
+
     using global::System;
     using global::System.Collections.Generic;
 
-    public class FinishingCause : Entity
+    public class FinishingCause : Entity, ICustomerEntity, IActiveEntity
     {
         public int Customer_Id { get; set; }
         public int IsActive { get; set; }

@@ -546,6 +546,7 @@
                 var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
                 var caseTypeRep = uow.GetRepository<CaseType>();
                 var administratorRep = uow.GetRepository<User>();
+                var finishingCauseRep = uow.GetRepository<FinishingCause>();
 
                 var caseTypeIds = new List<int>();
                 if (caseTypeId.HasValue)
@@ -567,6 +568,7 @@
                 var workingGroups = workingGroupRep.GetAll().GetActiveByCustomer(customerId);
                 var caseTypes = caseTypeRep.GetAll().GetActiveByCustomer(customerId);
                 var administrators = administratorRep.GetAll().GetActiveByCustomer(customerId);
+                var finishingCauses = finishingCauseRep.GetAll().GetActiveByCustomer(customerId);
 
                 return ReportsMapper.MapToFinishingCauseCustomerData(
                                             cases,
@@ -574,6 +576,7 @@
                                             workingGroups,
                                             caseTypes,
                                             administrators,
+                                            finishingCauses,
                                             periodFrom,
                                             periodUntil);
             }

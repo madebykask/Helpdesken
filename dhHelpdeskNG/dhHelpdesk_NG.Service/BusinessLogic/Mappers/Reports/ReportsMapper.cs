@@ -4,6 +4,8 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Models.Department;
+    using DH.Helpdesk.BusinessData.Models.FinishingCause;
     using DH.Helpdesk.BusinessData.Models.ProductArea;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.FinishingCauseCustomer;
@@ -12,6 +14,7 @@
     using DH.Helpdesk.BusinessData.Models.Reports.Data.RegistratedCasesDay;
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.FinishingCause;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.ProductArea;
 
     public static class ReportsMapper
@@ -232,6 +235,7 @@
                                                 IQueryable<WorkingGroupEntity> workingGroups,
                                                 IQueryable<CaseType> caseTypes,  
                                                 IQueryable<User> administrators,
+                                                IQueryable<FinishingCause> finishingCauses, 
                                                 DateTime? periodFrom,
                                                 DateTime? periodUntil)
         {
@@ -244,12 +248,62 @@
                             from caseType in ctgj.DefaultIfEmpty()
                             from workingGroup in wggj.DefaultIfEmpty()
                             from user in ugj.DefaultIfEmpty()
-                            select new
+                            where c.Department_Id.HasValue && c.Logs.Any(l => l.FinishingType.HasValue)
+                            select new FinishingCauseCase
                             {
-                                c
+                                CaseId = c.Id,
+                                DepartmentId = c.Department_Id,
+                                FinishingCause = c.Logs.Where(l => l.FinishingType.HasValue).Select(l => l.FinishingType).FirstOrDefault()
                             }).ToList();
 
-            return new FinishingCauseCustomerData();
+            var fcs = finishingCauses.Select(f => new { f.Id, f.Parent_FinishingCause_Id, f.Name })
+                                    .ToList()
+                                    .Select(f => new FinishingCauseItem(f.Id, f.Parent_FinishingCause_Id, f.Name))
+                                    .BuildRelations();
+            var ds = departments.Select(d => new DepartmentOverview
+                                                 {
+                                                     DepartmentId = d.Id,
+                                                     DepartmentName = d.DepartmentName
+                                                 })
+                                                 .OrderBy(d => d.DepartmentName)
+                                                 .ToList();
+
+            var rows = new List<FinishingCauseRow>();
+            foreach (var fc in fcs)
+            {
+                BuildFinishingCauseRows(rows, fc, ds, entities);
+            }
+
+            return new FinishingCauseCustomerData(rows, ds);
+        }
+
+        private static void BuildFinishingCauseRows(
+                        List<FinishingCauseRow> rows,
+                        FinishingCauseItem finishingCause,
+                        List<DepartmentOverview> departments,
+                        List<FinishingCauseCase> cases)
+        {
+            var columns = new List<FinishingCauseColumn>();
+            var finishingCauseCases = cases.Where(c => c.FinishingCause == finishingCause.Id);
+            foreach (var department in departments)
+            {
+                var cs = finishingCauseCases.Where(c => c.DepartmentId == department.DepartmentId);
+                var casesNumber = cs.Count();
+                var total = finishingCauseCases.Count();
+                var column = new FinishingCauseColumn(
+                            casesNumber,
+                            total != 0 ? Math.Round(((double)casesNumber / total) * 100, 1) : 0,
+                            cs.Select(c => c.CaseId).ToList());
+                columns.Add(column);
+            }
+
+            var row = new FinishingCauseRow(finishingCause, columns);
+            rows.Add(row);
+
+            foreach (var child in finishingCause.Children)
+            {
+                BuildFinishingCauseRows(rows, child, departments, cases);
+            }
         }
     }
 }

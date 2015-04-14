@@ -209,7 +209,9 @@
     <Compile Include="Models\Accounts\AccountSettings\Read\Processing\OtherFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Processing\ProgramFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Processing\UserFieldSettings.cs" />
+    <Compile Include="Models\Department\DepartmentOverview.cs" />
     <Compile Include="Models\Error\ErrorModel.cs" />
+    <Compile Include="Models\FinishingCause\FinishingCauseItem.cs" />
     <Compile Include="Models\Grid\CaseOverviewColumnDefinition.cs" />
     <Compile Include="Models\Grid\GridColumnDefinition.cs" />
     <Compile Include="Models\Grid\GridSettingsModel.cs" />
@@ -371,7 +373,10 @@
     <Compile Include="Models\Reports\Data\CaseTypeArticleNo\CaseTypeArticleNoData.cs" />
     <Compile Include="Models\Reports\Data\CaseTypeArticleNo\CaseTypeData.cs" />
     <Compile Include="Models\Reports\Data\CaseTypeArticleNo\ProductAreaData.cs" />
+    <Compile Include="Models\Reports\Data\FinishingCauseCustomer\FinishingCauseCase.cs" />
+    <Compile Include="Models\Reports\Data\FinishingCauseCustomer\FinishingCauseColumn.cs" />
     <Compile Include="Models\Reports\Data\FinishingCauseCustomer\FinishingCauseCustomerData.cs" />
+    <Compile Include="Models\Reports\Data\FinishingCauseCustomer\FinishingCauseRow.cs" />
     <Compile Include="Models\Reports\Data\LeadtimeActiveCases\CasesTimeLeftOnSolution.cs" />
     <Compile Include="Models\Reports\Data\LeadtimeActiveCases\LeadtimeActiveCasesData.cs" />
     <Compile Include="Models\Reports\Data\LeadtimeFinishedCases\FinishedCasesLeadTime.cs" />
