@@ -3105,5 +3105,41 @@ If not exists (select * from tblTextTranslation where text_id = 1364 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1364, 2, 'Default department when cases are registered by e-mail')
 GO
 
+
+
+-- 20150414
+If not exists (select * from tbltext where id = 1365)
+	insert into tbltext (id, TextString) VALUES (1365, 'Visa FAQ på självservice startsida')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1365 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1365, 2, 'Show FAQ on Self Service start page')
+GO
+
+If not exists (select * from tbltext where id = 1366)
+	insert into tbltext (id, TextString) VALUES (1366, 'Visa dokument på självservice')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1366 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1366, 2, 'Show Documents on Self Service')
+GO
+
+If not exists (select * from tbltext where id = 1367)
+	insert into tbltext (id, TextString) VALUES (1367, 'Visa hjälp på självservice')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1367 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1367, 2, 'Show Help on Self Service')
+GO
+
+If not exists (select * from tbltext where id = 1368)
+	insert into tbltext (id, TextString) VALUES (1368, 'Visa CoWorkers på självservice')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1368 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1368, 2, 'Show CoWorkers on Self Service')
+GO
+
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

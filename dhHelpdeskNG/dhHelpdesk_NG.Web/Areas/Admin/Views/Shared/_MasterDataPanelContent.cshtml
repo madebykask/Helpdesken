@@ -190,13 +190,13 @@
     <ul class="dropdown-menu">
         <li class="@Html.ActiveTab(new string[] { "selfservicesetting" })">
             <a href="@Url.Action("index", "SelfServiceSetting", new { customerId = Model.Id, languageId = 0 })">
-               @Translation.Get("Setting", Enums.TranslationSource.TextTranslation)
+               @Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)
             </a>
         </li>
         <li class="line"></li>
         <li class="@Html.ActiveTab(new string[] { "selfservicemessages" })">
             <a href="@Url.Action("index", "infotext", new { customerId = Model.Id, languageId = 0, infoTextType = InfoTextTypes.SelfService })">
-                @Translation.Get("Messages", Enums.TranslationSource.TextTranslation)
+                @Translation.Get("Meddelande", Enums.TranslationSource.TextTranslation)
             </a>
         </li>
     </ul>
