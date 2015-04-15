@@ -3141,5 +3141,14 @@ If not exists (select * from tblTextTranslation where text_id = 1368 and Languag
 GO
 
 
+-- 20150415
+
+UPDATE tblText Set TextString = '(Du kan endast välja bredd på högst 3 kolumner).' WHERE Id=1339;
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = '(You can only select wide on a maximum of 3 columns).' WHERE Text_Id=1339 AND Language_Id=2;
+GO
+
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
