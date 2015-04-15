@@ -44,8 +44,8 @@
                                 ReportType.ReportGenerator,
                                 ReportType.LeadtimeFinishedCases,
                                 ReportType.LeadtimeActiveCases,
-                                ReportType.CaseSatisfaction/*,
-                                ReportType.FinishingCauseCustomer*/
+                                ReportType.CaseSatisfaction,
+                                ReportType.FinishingCauseCustomer
                             };
 
             // It's a new report, so we need to add it to the tblReport table

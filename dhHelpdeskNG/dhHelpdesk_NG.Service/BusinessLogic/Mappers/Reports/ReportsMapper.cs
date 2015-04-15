@@ -259,6 +259,7 @@
             var fcs = finishingCauses.Select(f => new { f.Id, f.Parent_FinishingCause_Id, f.Name })
                                     .ToList()
                                     .Select(f => new FinishingCauseItem(f.Id, f.Parent_FinishingCause_Id, f.Name))
+                                    .ToList()
                                     .BuildRelations();
             var ds = departments.Select(d => new DepartmentOverview
                                                  {
@@ -284,12 +285,11 @@
                         List<FinishingCauseCase> cases)
         {
             var columns = new List<FinishingCauseColumn>();
-            var finishingCauseCases = cases.Where(c => c.FinishingCause == finishingCause.Id);
             foreach (var department in departments)
             {
-                var cs = finishingCauseCases.Where(c => c.DepartmentId == department.DepartmentId);
+                var cs = cases.Where(c => c.FinishingCause == finishingCause.Id && c.DepartmentId == department.DepartmentId);
                 var casesNumber = cs.Count();
-                var total = finishingCauseCases.Count();
+                var total = cases.Count(c => c.DepartmentId == department.DepartmentId); 
                 var column = new FinishingCauseColumn(
                             casesNumber,
                             total != 0 ? Math.Round(((double)casesNumber / total) * 100, 1) : 0,

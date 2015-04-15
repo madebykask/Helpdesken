@@ -144,6 +144,28 @@
                 var row = 1;
                 var column = 1;
 
+                ws.SetHeader(row, column, string.Format("{0} / {1}", Translation.Get("Avslutsorsak"), Translation.Get("Avdelning")));
+                foreach (var department in data.Data.Departments)
+                {
+                    column++;
+                    ws.SetHeader(row, column, department.DepartmentName);
+                }
+
+                foreach (var r in data.Data.Rows)
+                {
+                    row++;
+                    column = 1;
+                    var level = r.FinishingCause.GetLevel();
+                    ws.SetRowHeader(row, column, r.FinishingCause.Name, level);
+                    foreach(var c in r.Columns)
+                    {
+                        column++;
+                        if (c.CasesNumber > 0)
+                        {
+                            ws.SetValue(row, column, string.Format("{0} ({1}%)", c.CasesNumber, c.CaseNumberPercents));
+                        }
+                    }
+                }
 
                 ws.AutoFit(column);
 

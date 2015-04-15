@@ -13,9 +13,10 @@
     </thead>
     <tbody>
         @foreach (var row in Model.Data.Rows)
-        {
+        {            
+            var level = row.FinishingCause.GetLevel();            
             <tr>
-                <td>
+                <td style="@(level > 0 ? string.Format("padding-left: {0}em;", 2 * level) : String.Empty)">
                     <strong>@row.FinishingCause.Name</strong>
                 </td>
                 @foreach (var column in row.Columns)
