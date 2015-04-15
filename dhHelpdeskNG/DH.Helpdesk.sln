@@ -26,6 +26,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DH.Helpdesk.NewSelfService"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DH.Helpdesk.Mobile", "dhHelpdesk_NG.Mobile\DH.Helpdesk.Mobile.csproj", "{C9A7E011-2AC1-4B43-9C99-39A58392AC26}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CommonAssembly", "CommonAssembly", "{398E5BA2-4379-4071-B6E2-F842E141E8F8}"
+	ProjectSection(SolutionItems) = preProject
+		CommonAssembly\SharedAssemblyInfo.cs = CommonAssembly\SharedAssemblyInfo.cs
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

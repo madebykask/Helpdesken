@@ -52,6 +52,9 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\CommonAssembly\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Collections\INamedObject.cs" />
     <Compile Include="Collections\NamedObjectCollection.cs" />
     <Compile Include="Constraints\NotifierConstraint.cs" />
