@@ -564,10 +564,10 @@
                         .GetActive()
                         .GetNotDeleted();
 
-                var departments = departmentRep.GetAll().GetActiveByCustomer(customerId);
-                var workingGroups = workingGroupRep.GetAll().GetActiveByCustomer(customerId);
-                var caseTypes = caseTypeRep.GetAll().GetActiveByCustomer(customerId);
-                var administrators = administratorRep.GetAll().GetActiveByCustomer(customerId);
+                var departments = departmentRep.GetAll().GetByIds(departmentIds);
+                var workingGroups = workingGroupRep.GetAll().GetByIds(workingGroupIds);
+                var caseTypes = caseTypeRep.GetAll().GetByIds(caseTypeIds);
+                var administrators = administratorRep.GetAll().GetById(administratorId);
                 var finishingCauses = finishingCauseRep.GetAll().GetActiveByCustomer(customerId);
 
                 return ReportsMapper.MapToFinishingCauseCustomerData(
