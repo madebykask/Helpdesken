@@ -45,6 +45,6 @@
 
         FinishingCauseCustomerOptionsModel GetFinishingCauseCustomerOptionsModel(FinishingCauseCustomerOptions options);
 
-        FinishingCauseCustomerModel GetFinishingCauseCustomerModel(FinishingCauseCustomerData data);
+        FinishingCauseCustomerModel GetFinishingCauseCustomerModel(FinishingCauseCustomerData data, int customerId);
     }
 }

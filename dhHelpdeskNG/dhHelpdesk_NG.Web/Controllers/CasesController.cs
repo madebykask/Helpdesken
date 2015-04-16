@@ -1507,6 +1507,22 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpGet]
+        public ViewResult CaseByIds(string caseIds, string sortBy, string sortByAsc)
+        {
+            var cases = this.GetUnfilteredCases(sortBy, sortByAsc, null, null, caseIds.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray());
+            var model = new CaseByIdsViewModel(cases, sortBy, sortByAsc.convertStringToBool(), caseIds);
+            return this.View(model);
+        }
+
+        [HttpGet]
+        public PartialViewResult CaseByIdsContent(string caseIds, string sortBy, string sortByAsc)
+        {
+            var cases = this.GetUnfilteredCases(sortBy, sortByAsc, null, null, caseIds.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray());
+            var model = new CaseByIdsViewModel(cases, sortBy, sortByAsc.convertStringToBool(), caseIds);
+            return this.PartialView(model);
+        }
+
+        [HttpGet]
         public JsonResult RelatedCasesCount(int caseId, string userId)
         {
             var count = this._caseService.GetCaseRelatedCasesCount(
@@ -1543,7 +1559,8 @@ namespace DH.Helpdesk.Web.Controllers
                     string sortBy,
                     string sortByAsc,
                     int? relatedCasesCaseId = null, 
-                    string relatedCasesUserId = null)
+                    string relatedCasesUserId = null,
+                    int[] caseIds = null)
         {
             var searchResult = new CaseSearchResultModel();
             searchResult.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(
@@ -1574,7 +1591,8 @@ namespace DH.Helpdesk.Web.Controllers
                 showRemainingTime,
                 out remainingTime,
                 relatedCasesCaseId,
-                relatedCasesUserId);
+                relatedCasesUserId,
+                caseIds);
 
             searchResult.cases = this.TreeTranslate(searchResult.cases, SessionFacade.CurrentCustomer.Id);
             searchResult.GridSettings = this.caseOverviewSettingsService.GetSettings(

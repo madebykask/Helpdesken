@@ -5,12 +5,16 @@
 
     public sealed class FinishingCauseCustomerModel
     {
-        public FinishingCauseCustomerModel(FinishingCauseCustomerData data)
+        public FinishingCauseCustomerModel(FinishingCauseCustomerData data, int customerId)
         {
+            this.CustomerId = customerId;
             this.Data = data;
         }
 
         [NotNull]
         public FinishingCauseCustomerData Data { get; private set; }
+
+        [IsId]
+        public int CustomerId { get; private set; }
     }
 }

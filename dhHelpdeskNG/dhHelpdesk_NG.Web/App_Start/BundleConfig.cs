@@ -214,6 +214,9 @@
 
             bundles.Add(new ScriptBundle("~/bundles/cases/relatedCases").Include(
                             "~/Content/js/Cases/relatedCases.logic.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/cases/caseByIds").Include(
+                            "~/Content/js/Cases/caseByIds.logic.js"));
         }
     }
 }

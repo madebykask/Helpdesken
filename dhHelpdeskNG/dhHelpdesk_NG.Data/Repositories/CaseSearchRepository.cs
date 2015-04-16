@@ -45,7 +45,8 @@
             IProductAreaNameResolver productAreaNamesResolver,
             out CaseRemainingTimeData remainingTime,
             int? relatedCasesCaseId = null,
-            string relatedCasesUserId = null);
+            string relatedCasesUserId = null,
+            int[] caseIds = null);
     }
 
     public class CaseSearchRepository : ICaseSearchRepository
@@ -98,7 +99,8 @@
                                     IProductAreaNameResolver productAreaNamesResolver,
                                     out CaseRemainingTimeData remainingTime,
                                     int? relatedCasesCaseId = null,
-                                    string relatedCasesUserId = null)
+                                    string relatedCasesUserId = null,
+                                    int[] caseIds = null)
         {
             var now = DateTime.UtcNow;
             var dsn = ConfigurationManager.ConnectionStrings["HelpdeskOleDbContext"].ConnectionString;
@@ -122,7 +124,8 @@
                                         s,
                                         applicationType,
                                         relatedCasesCaseId,
-                                        relatedCasesUserId);
+                                        relatedCasesUserId,
+                                        caseIds);
 
             if (string.IsNullOrEmpty(sql))
             {
@@ -528,7 +531,8 @@
                     ISearch s,
                     string applicationType,
                     int? relatedCasesCaseId,
-                    string relatedCasesUserId)
+                    string relatedCasesUserId,
+                    int[] caseIds)
         {
             var sql = new List<string>();
 
@@ -679,7 +683,7 @@
             else
             {
                 sql.Add(this.ReturnCaseSearchWhere(f, customerSetting, customerUserSetting, userId, userUserId, 
-                        showNotAssignedWorkingGroups, userGroupId, restrictedCasePermission, gs, relatedCasesCaseId, relatedCasesUserId));
+                        showNotAssignedWorkingGroups, userGroupId, restrictedCasePermission, gs, relatedCasesCaseId, relatedCasesUserId, caseIds));
             }
 
             // ORDER BY ...
@@ -811,7 +815,8 @@
             int restrictedCasePermission, 
             GlobalSetting gs, 
             int? relatedCasesCaseId, 
-            string relatedCasesUserId = null)
+            string relatedCasesUserId = null,
+            int[] caseIds = null)
         {
             if (f == null || customerSetting == null || gs == null)
             {
@@ -822,6 +827,12 @@
 
             // kund 
             sb.Append(" where (tblCase.Customer_Id = " + f.CustomerId + ")");
+
+            if (caseIds != null && caseIds.Any())
+            {
+                sb.AppendFormat(" AND ([tblCase].[Id] IN ({0})) ", string.Join(",", caseIds));
+                return sb.ToString();
+            }
 
             // Related cases list http://redmine.fastdev.se/issues/11257
             if (relatedCasesCaseId.HasValue)

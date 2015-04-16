@@ -219,9 +219,9 @@
                         periodUntil);
         }
 
-        public FinishingCauseCustomerModel GetFinishingCauseCustomerModel(FinishingCauseCustomerData data)
+        public FinishingCauseCustomerModel GetFinishingCauseCustomerModel(FinishingCauseCustomerData data, int customerId)
         {
-            return new FinishingCauseCustomerModel(data);
+            return new FinishingCauseCustomerModel(data, customerId);
         }
     }
 }

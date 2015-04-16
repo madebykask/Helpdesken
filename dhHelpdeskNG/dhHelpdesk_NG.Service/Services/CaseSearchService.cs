@@ -41,7 +41,8 @@
             bool calculateRemainingTime,
             out CaseRemainingTimeData remainingTime,
             int? relatedCasesCaseId = null,
-            string relatedCasesUserId = null);
+            string relatedCasesUserId = null,
+            int[] caseIds = null);
     }
 
     public class CaseSearchService : ICaseSearchService
@@ -111,7 +112,8 @@
                                 bool calculateRemainingTime,
                                 out CaseRemainingTimeData remainingTime,
                                 int? relatedCasesCaseId = null,
-                                string relatedCasesUserId = null)
+                                string relatedCasesUserId = null,
+                                int[] caseIds = null)
         {
             int productAreaId;
             var csf = new CaseSearchFilter();
@@ -140,7 +142,8 @@
                                                 this.productAreaService,
                                                 out remainingTime,
                                                 relatedCasesCaseId,
-                                                relatedCasesUserId);
+                                                relatedCasesUserId,
+                                                caseIds);
 
             var workingHours = workingDayEnd - workingDayStart;
             if (f.CaseRemainingTimeFilter.HasValue && calculateRemainingTime)

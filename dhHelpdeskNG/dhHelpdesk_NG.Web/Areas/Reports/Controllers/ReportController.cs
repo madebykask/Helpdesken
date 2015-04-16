@@ -314,7 +314,7 @@
                                             options.PeriodFrom,
                                             options.PeriodUntil);
 
-            var model = this.reportModelFactory.GetFinishingCauseCustomerModel(data);
+            var model = this.reportModelFactory.GetFinishingCauseCustomerModel(data, this.OperationContext.CustomerId);
 
             if (options.IsExcel)
             {
