@@ -22,7 +22,6 @@ a, a:hover, a:focus {
 	*border: 1px solid #cccccc;
 }
 
-
 /********************TEXT WEIGHT AND COLORS************************************************/
 .textbold {
     font-weight: bold;
@@ -1788,7 +1787,7 @@ table th.thpointer {
 .SortableRow td,
 .SortableRow label
 {
-    cursor: move;
+    cursor:move;
 }
 
 /*********************** CASE OVERVIEW PAGE END  ***********/

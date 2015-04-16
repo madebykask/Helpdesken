@@ -21,7 +21,10 @@
                                    @Html.HiddenFor(m => Model.UserId)
                                    <table class="table table-striped table-bordered table-hover" id="customerCaseSum">
                                        <thead>
-                                           <tr>                                
+                                           <tr>
+                                               <th>
+                                                   &nbsp;
+                                               </th>                                
                                                <th>
                                                    @Translation.Get("Kolumn", Enums.TranslationSource.TextTranslation)
                                                </th>                                
@@ -34,7 +37,10 @@
                                            </tr>
                                        </thead>                                                             
                                        <tbody id="dataTable">
-                                           <tr class="rowAdding">                                                                       
+                                           <tr class="rowAdding">
+                                                <td>
+                                                    &nbsp;
+                                                </td>                                                                       
                                                <td>
                                                    <input type="hidden" style="width: 80px;" name="colOrderValue" id="colOrderValue" value="99" />
                                                    <input type="hidden" style="width: 80px;" name="minWidthValue" id="minWidthValue" value="100" />
@@ -64,7 +70,10 @@
                                                var i = 0;
                                                foreach (var columnSettings in  Model.SelectedColumns)
                                                {
-                                                   <tr class="SortableRow">
+                                                   <tr>
+                                                       <td class="SortableRow">
+                                                           <i class="icon-move"></i>
+                                                       </td>
                                                        <td>
                                                            <label for="subCategoryName"> @Translation.Get(columnSettings.Name, Enums.TranslationSource.CaseTranslation, Model.CustomerId) </label>
                                                        </td>
