@@ -116,6 +116,8 @@
         public string CaseTemplateName { get; set; }
 
         public string BackUrl { get; set; }
+
+        public bool CanGetRelatedCases { get; set; }
     }
 
     public class CaseIndexViewModel

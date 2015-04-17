@@ -1998,6 +1998,7 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var m = new CaseInputViewModel();
             m.BackUrl = backUrl;
+            m.CanGetRelatedCases = SessionFacade.CurrentUser.IsAdministrator();
             SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
             var acccessToGroups = this._userService.GetWorkinggroupsForUserAndCustomer(SessionFacade.CurrentUser.Id, customerId);
             var deps = this._departmentService.GetDepartmentsByUserPermissions(userId, customerId);

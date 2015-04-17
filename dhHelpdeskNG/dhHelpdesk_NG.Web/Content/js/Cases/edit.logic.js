@@ -230,7 +230,12 @@ $(function () {
             return element;
         }
 
+        var isEmpty = function() {
+            return element.length == 0;
+        }
+
         that.getElement = getElement;
+        that.isEmpty = isEmpty;
 
         return that;
     }
@@ -369,7 +374,9 @@ $(function () {
                                 }
                             });
             }
-            checkRelatedCases();
+            if (!relatedCases.isEmpty()) {
+                checkRelatedCases();
+            }
 
             userId.getElement().keyup(function() {
                 dhHelpdesk.cases.utils.delay(checkRelatedCases, 500);

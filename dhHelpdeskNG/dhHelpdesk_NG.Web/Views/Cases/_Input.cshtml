@@ -135,7 +135,10 @@
                                                 </td>
                                                 <td>
                                                     <a href="#" id="AddNotifier" class="btn">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>
-                                                    <a href="#" data-field="relatedCases" style="display: none;" title="@Translation.Get("Relaterade ärenden")" class="btn"><i class="icon-list"></i></a>
+                                                    @if (Model.CanGetRelatedCases)
+                                                    {
+                                                        <a href="#" data-field="relatedCases" style="display: none;" title="@Translation.Get("Relaterade ärenden")" class="btn"><i class="icon-list"></i></a>                                                        
+                                                    }
                                                 </td>
                                             </tr>
                                             <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Persons_Name, CaseSolutionFields.PersonsName)">
@@ -293,18 +296,18 @@
                                                         @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.OU_Id, CaseSolutionFields.OU))
                                                         {                                                                                                                        
                                                             @Html.TextBox("OUName", Model.ous.Where(w => w.Id == Model.case_.OU_Id).Select(o => o.Name).SingleOrDefault(), new { id = "OuName", @readonly = true })
-                                                            @Html.HiddenFor(m => Model.case_.OU_Id, new { id="case__Ou_Id", name="case_.OU_Id"})                                                              
+                                                            @Html.HiddenFor(m => Model.case_.OU_Id, new { id = "case__Ou_Id", name = "case_.OU_Id" })                                                              
                                                         }
                                                         else
                                                         {
                                                             <select id="case__Ou_Id" name="case_.OU_Id" data-field="ou">
                                                                 <option value="">&nbsp;</option>
                                                                 @if (Model.ous != null)
-                                                                {                                                                   
+                                                                {
                                                                     foreach (var ou in Model.ous)
                                                                     {                                                                
                                                                         <option value="@ou.Id" @ou.Id.IdIsSelected(Model.case_.OU_Id.ToString()) >@ou.Name</option>
-                                                                    }                                                                 
+                                                                    }
                                                                 }
                                                             </select>
                                                         }                                    
@@ -364,7 +367,7 @@
                         }
                         else
                         {
-                            @Html.HiddenFor(m => Model.case_.RegLanguage_Id);   
+                            @Html.HiddenFor(m => Model.case_.RegLanguage_Id);
                         }
                         <div style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.InventoryNumber, CaseSolutionFields.InventoryNumber)"  class="computer-block hideshow">
                             <h4><a href="#" class="showbtn"><i class="icon-plus-sign"></i></a><a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a> @Translation.Get("Datorinformation")</h4>

@@ -838,7 +838,9 @@
             if (relatedCasesCaseId.HasValue)
             {
                 sb.AppendFormat(" AND ([tblCase].[Id] != {0}) AND (LOWER(LTRIM(RTRIM([tblCase].[ReportedBy]))) = LOWER(LTRIM(RTRIM('{1}')))) ", relatedCasesCaseId.Value, relatedCasesUserId);
-                if (restrictedCasePermission == 1)
+                
+                // http://redmine.fastdev.se/issues/11257
+                /*if (restrictedCasePermission == 1)
                 {
                     if (userGroupId == (int)UserGroup.Administrator)
                     {
@@ -848,7 +850,7 @@
                     {
                         sb.AppendFormat(" AND (LOWER(LTRIM(RTRIM([tblCase].[ReportedBy]))) = LOWER(LTRIM(RTRIM('{0}')))) ", userUserId);
                     }
-                }            
+                }*/            
 
                 return sb.ToString();
             }
