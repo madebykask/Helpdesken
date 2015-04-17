@@ -96,26 +96,29 @@
                    </div>
                </form>
                <script id="caseFieldRow" type="text/x-jsrender">
-    <tr class="SortableRow">
-        <td>
-            <label for="subCategoryName">{{:label}}</label>
-        </td> 
-        <td>
-            <select name="column_style" fieldid="{{:fieldId}}">
-                @foreach (SelectListItem fieldSetting in CaseColumnsSettingsModel.FieldStyles)
-                {
-                    <option value="@fieldSetting.Value">@fieldSetting.Text</option>
-                }
-            </select>
-            <input type="hidden" name="column_name" value="{{:fieldId}}"/>
-        </td>
-        <td>
-            <input class="btn btn-danger deleterow" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
-        </td>
-    </tr>
-</script>
+                <tr class="SortableRow">
+                    <td class="SortableRow">
+                        <i class="icon-move"></i>
+                    </td>
+                    <td>
+                        <label for="subCategoryName">{{:label}}</label>
+                    </td> 
+                    <td>
+                        <select name="column_style" fieldid="{{:fieldId}}">
+                            @foreach (SelectListItem fieldSetting in CaseColumnsSettingsModel.FieldStyles)
+                            {
+                                <option value="@fieldSetting.Value">@fieldSetting.Text</option>
+                            }
+                        </select>
+                        <input type="hidden" name="column_name" value="{{:fieldId}}"/>
+                    </td>
+                    <td>
+                        <input class="btn btn-danger deleterow" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
+                    </td>
+                </tr>
+            </script>
            }
            else
            {
-    <div class="nofields-msg">This customer does not have any case fields checked in Adminsitration->"Customer"->"Case overview".</div>
+    <div class="nofields-msg">@Translation.Get("Inga ärendefält har valts för denna kund, kontakta systemadministratören.")</div>
            }

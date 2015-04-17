@@ -3185,5 +3185,42 @@ If not exists (select * from tblTextTranslation where text_id = 1372 and Languag
 GO
 
 
+-- 20150417
+If not exists (select * from tbltext where id = 1369)
+	insert into tbltext (id, TextString) VALUES (1369, 'Inga standardkolumner har valts för din användare på denna kund, för att filter, klicka på fliken Inställningar och gå till Filter Ärendeöversikt.')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1369 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1369, 2, 'No default columns have been selected for your user in this customer. To display case overview filters, go to the Settings tab.')
+GO
+
+If not exists (select * from tbltext where id = 1370)
+	insert into tbltext (id, TextString) VALUES (1370, 'Inga ärendefält har valts för denna kund, kontakta systemadministratören.')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1370 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1370, 2, 'No case fields have been selected for this customer, please contact the system administrator.')
+GO
+
+If not exists (select * from tbltext where id = 1371)
+	insert into tbltext (id, TextString) VALUES (1371, 'Laddar...')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1371 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1371, 2, 'Loading...')
+GO
+
+If not exists (select * from tbltext where id = 1372)
+	insert into tbltext (id, TextString) VALUES (1372, 'Ett fel inträffade, klicka {0}här{1} för att ladda om sidan.')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1372 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1372, 2, 'An unexpected error ocurred, please {0}refresh{1}')
+GO
+
+If not exists (select * from tbltext where id = 1373)
+	insert into tbltext (id, TextString) VALUES (1373, 'Saving...')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1373 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1373, 2, 'Sparar...')
+GO
+
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
