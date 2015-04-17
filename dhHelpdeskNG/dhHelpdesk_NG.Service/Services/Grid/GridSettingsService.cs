@@ -112,9 +112,22 @@
             switch (gridId)
             {
                 case CASE_OVERVIEW_GRID_ID:
+                    var duplicates = new HashSet<string>();
                     return
+
                         this.caseSettingsService.GetAvailableCaseOverviewGridColumnSettingsByUserGroup(customerId, userGroupId)
-                            .Select(it => new GridColumnDef { id = GridColumnsDefinition.GetFieldId(it.Name), name = it.Name, cls = string.Empty })
+                        .Where(it => !duplicates.Contains(it.Name.ToLower()))
+                            .Select(
+                                it =>
+                                    {
+                                        duplicates.Add(it.Name.ToLower());
+                                        return new GridColumnDef
+                                                   {
+                                                       id = GridColumnsDefinition.GetFieldId(it.Name),
+                                                       name = it.Name,
+                                                       cls = string.Empty
+                                                   };
+                                    })
                             .ToList();
                 default:
                     throw new NotImplementedException(string.Format("GetAvailableColumnNames() is not implmented for supplyed grid_ID {0}", gridId));

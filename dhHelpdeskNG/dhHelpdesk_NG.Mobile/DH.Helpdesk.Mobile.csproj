@@ -1142,6 +1142,11 @@
     <Content Include="Content\js\plupload\plupload.js" />
     <Content Include="Content\js\plupload\plupload.silverlight.js" />
     <Content Include="Content\js\plupload\plupload.silverlight.xap" />
+    <None Include="Scripts\jquery-1.8.3.intellisense.js" />
+    <Content Include="Scripts\jquery-1.8.3.js" />
+    <Content Include="Scripts\jquery-1.8.3.min.js" />
+    <Content Include="Scripts\jquery-ui-1.9.2.js" />
+    <Content Include="Scripts\jquery-ui-1.9.2.min.js" />
     <Content Include="Views\Shared\BulletinBoardInfo.cshtml">
       <SubType>Code</SubType>
     </Content>

@@ -43,8 +43,6 @@
 
         public IList<FinishingCause> ClosingReasons { get; set; }
 
-        public bool IsClearFilters { get; set; }
-
         /// <summary>
         /// Preset string in "filter by intitator" filter field on case overview page
         /// </summary>

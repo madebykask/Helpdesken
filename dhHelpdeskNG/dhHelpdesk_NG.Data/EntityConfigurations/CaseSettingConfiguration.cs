@@ -5,6 +5,9 @@
 
     using DH.Helpdesk.Domain;
 
+    /// <summary>
+    /// Represents user settins for the "Case overview" grid.
+    /// </summary>
     public class CaseSettingConfiguration : EntityTypeConfiguration<CaseSettings>
     {
         internal CaseSettingConfiguration()

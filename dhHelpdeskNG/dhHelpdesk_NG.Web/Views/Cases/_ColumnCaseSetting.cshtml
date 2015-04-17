@@ -1,5 +1,6 @@
-﻿@using DH.Helpdesk.Web.Models.Case
-@model DH.Helpdesk.Web.Models.Case.CaseColumnsSettingsModel
+﻿@using DH.Helpdesk.BusinessData.Models
+@using DH.Helpdesk.Web.Models.Case
+@model CaseColumnsSettingsModel
            @if (Model.AvailableColumns.Any())
            {
                <form id="frmColCaseSetting" name="frmColCaseSetting">
@@ -46,7 +47,7 @@
                                                    <input type="hidden" style="width: 80px;" name="minWidthValue" id="minWidthValue" value="100" />
 
                                                    <select id="labellist">
-                                                       @foreach (var fieldSetting in Model.AvailableColumns)
+                                            @foreach (CaseOverviewGridColumnSetting fieldSetting in Model.AvailableColumns)
                                                        {
                                                            <option value="@fieldSetting.Name">@Translation.Get(fieldSetting.Name, Enums.TranslationSource.CaseTranslation, Model.CustomerId)</option>
                                                        }
@@ -54,7 +55,7 @@
                                                </td>                                           
                                                <td>
                                                    <select id="newColStyle">
-                                                       @foreach (var fieldSetting in CaseColumnsSettingsModel.FieldStyles)
+                                            @foreach (SelectListItem fieldSetting in CaseColumnsSettingsModel.FieldStyles)
                                                        {
                                                            <option value="@fieldSetting.Value">@fieldSetting.Text</option>
                                                        }
@@ -67,8 +68,8 @@
                                            </tr>     
                                            @if (Model != null)
                                            {
-                                               var i = 0;
-                                               foreach (var columnSettings in  Model.SelectedColumns)
+                                    int i = 0;
+                                    foreach (CaseOverviewGridColumnSetting columnSettings in  Model.SelectedColumns)
                                                {
                                                    <tr>
                                                        <td class="SortableRow">
@@ -78,8 +79,8 @@
                                                            <label for="subCategoryName"> @Translation.Get(columnSettings.Name, Enums.TranslationSource.CaseTranslation, Model.CustomerId) </label>
                                                        </td>
                                                        <td>
-                                                           @Html.DropDownList(String.Format("column_style", i), CaseColumnsSettingsModel.GetColStyles(columnSettings.Style))
-                                                           @Html.Hidden(String.Format("column_name", i++), @columnSettings.Name)
+                                                @Html.DropDownList(string.Format("column_style", i), CaseColumnsSettingsModel.GetColStyles(columnSettings.Style))
+                                                @Html.Hidden(string.Format("column_name", i++), @columnSettings.Name)
                                                        </td>                                     
                                                        <td>
                                                            <input class="btn btn-danger deleterow" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
@@ -91,7 +92,6 @@
                                    </table>                    
                                </div>
                            </div>
-            
                        </div>                
                    </div>
                </form>
@@ -102,7 +102,7 @@
         </td> 
         <td>
             <select name="column_style" fieldid="{{:fieldId}}">
-                @foreach (var fieldSetting in CaseColumnsSettingsModel.FieldStyles)
+                @foreach (SelectListItem fieldSetting in CaseColumnsSettingsModel.FieldStyles)
                 {
                     <option value="@fieldSetting.Value">@fieldSetting.Text</option>
                 }
@@ -117,5 +117,5 @@
            }
            else
            {
-               <div class="nofields-msg">No columns has been selected for your role for this customer in Adminsitration->"Customer"->"Case overview". Contact with your administrator.</div>
+    <div class="nofields-msg">This customer does not have any case fields checked in Adminsitration->"Customer"->"Case overview".</div>
            }

@@ -1,6 +1,5 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Grid
 {
-    using System.CodeDom;
     using System.Collections.Generic;
 
     public enum SortingDirection
@@ -13,6 +12,7 @@
     {
         private const string AscStr = "asc";
         private const string DescStr = "desc";
+
         /// <summary>
         /// Name of the field wich we use to sort data. Should point to GridColumnDef.Name
         /// </summary>

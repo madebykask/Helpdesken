@@ -40,11 +40,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Devart.Data.Oracle.Entity, Version=6.30.196.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\dotConnect\Devart.Data.Oracle.Entity.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="DH.Helpdesk.Dal, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\DH.Helpdesk.Dal.dll</HintPath>

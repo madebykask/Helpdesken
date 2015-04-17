@@ -1,6 +1,23 @@
 ﻿"use strict";
 
 $(document).ready(function () {
+    var inSaving = false;
+
+    function isWideColumnsCountExceed() {
+        var res = 0;
+        $('tr.SortableRow [name=column_style]').each(function (idx, el) {
+            if ($(arguments[1]).val() == 'colwide') {
+                res++;
+            }
+        });
+        if (res > 2) {
+            ShowToastMessage('Maximum <b>wide</b> columns in the grid is limited to 3');
+            return true;
+        }
+
+        return false;
+    }
+
     //// initialization
     $("#customerCaseSum tbody").sortable(
        {
@@ -18,17 +35,25 @@ $(document).ready(function () {
     $("#customerCaseSum tbody").disableSelection();
 
     //// bind event handlers 
-    $('#btnSaveCaseSetting').click(function (e) {
+    $('#btnSaveCaseSetting .btn').click(function (e) {
         e.preventDefault();
-        if (window.app.getGridState() !== GRID_STATE.IDLE) {
+        if (window.app.getGridState() !== GRID_STATE.IDLE || inSaving) {
             return false;
         }
+
+        inSaving = true;
+        $(this).addClass('disabled');
+        $(this).val('Saving...');
+        
         /// validation
         if ($('#dataTable tr.SortableRow').length == 0) {
             window.ShowToastMessage('You should have at least one column selected for the "Case overview" grid', 'error');
             return false;
         }
 
+        if (isWideColumnsCountExceed()) {
+            return false;
+        }
         $.post('/Cases/SaveSetting/', $("#frmCaseSetting").serialize(), function () {
             /// due to strange work with lists[] in .NET we have to send a bit different structure
             var formData = {
@@ -45,7 +70,8 @@ $(document).ready(function () {
                 contentType: 'application/json;',
                 dataType: 'json',
                 data: JSON.stringify(formData),
-                success: function() {
+                success: function () {
+                    inSaving = false;
                     window.location.href = '/cases/';
                 }
             });
@@ -83,10 +109,16 @@ $(document).ready(function () {
             label: $('#labellist option:selected').text()
         };
         var template = $.templates("#caseFieldRow");
+      
         if ($('tr.SortableRow input[type="hidden"][value="' + fieldId + '"]').length > 0) {
-            /// prevent to add duplicate columns
+            ShowToastMessage('We already have the "' + fieldInfo.label + '" column in grid');
             return false;
         }
+        
+        if (isWideColumnsCountExceed()) {
+            return false;
+        }
+
         $('#dataTable').append(template.render(fieldInfo)).find('select[fieldid*="' + fieldId + '"]').val($('#newColStyle').val());
     });
 

@@ -17,9 +17,21 @@
         /// <returns></returns>
         public static List<GridColumnDef> MapToColumnDefinitions(this IQueryable<GridSettingsEntity> columnSettions, CaseOverviewGridColumnSetting[] caseOverviewSettings)
         {
+            var duplicates = new HashSet<string>();
             return
-                caseOverviewSettings.Select(
-                    it => new GridColumnDef() { id = GridColumnsDefinition.GetFieldId(it.Name), name = it.Name, cls = it.Style }).ToList();
+                caseOverviewSettings
+                .Where(it => !duplicates.Contains(it.Name.ToLower()))
+                .Select(
+                    it =>
+                        {
+                            duplicates.Add(it.Name.ToLower());
+                            return new GridColumnDef()
+                                       {
+                                           id = GridColumnsDefinition.GetFieldId(it.Name),
+                                           name = it.Name,
+                                           cls = it.Style
+                                       };
+                        }).ToList();
         }
 
         public static CaseOverviewGridColumnSetting[] MapToCaseOverviewSettings(

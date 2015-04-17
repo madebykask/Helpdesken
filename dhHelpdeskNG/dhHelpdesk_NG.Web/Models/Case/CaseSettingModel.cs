@@ -109,11 +109,6 @@
 
     public sealed class CaseSettingModel
     {
-        public CaseSettingModel()
-        {
-            
-        }
-
         public int CustomerId { get; set; }
 
         public int UserId { get; set; }
