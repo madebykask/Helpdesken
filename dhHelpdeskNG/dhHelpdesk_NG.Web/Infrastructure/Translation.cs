@@ -2,6 +2,7 @@
 {
     using System.Linq;
     using DH.Helpdesk.Common.Extensions.String;
+    using DH.Helpdesk.Common.Enums;
 
     public static class Translation
     {
@@ -15,11 +16,19 @@
                     {
                         var translation = SessionFacade.TextTranslation.Where(x => x.TextToTranslate.ToLower() == translate.ToLower()).FirstOrDefault();
                         if(translation != null)
-                        {
-                            var text = translation.TextTranslations.Where(x => x.Language_Id == SessionFacade.CurrentLanguageId).FirstOrDefault().TextTranslated;
-                            translate = !string.IsNullOrEmpty(text) ? text : translate;
+                        {                           
+                            var trans = translation.TextTranslations.Where(x => x.Language_Id == SessionFacade.CurrentLanguageId).FirstOrDefault();
+                            var text = (trans != null ? trans.TextTranslated : string.Empty);
+                            if (string.IsNullOrEmpty(text) && SessionFacade.CurrentLanguageId != LanguageId.Swedish)
+                            {
+                                trans = translation.TextTranslations.Where(x => x.Language_Id == SessionFacade.CurrentCustomer.Language_Id).FirstOrDefault();
+                                text = (trans != null ? trans.TextTranslated : string.Empty);
+                            }
+                            
+                            translate = !string.IsNullOrEmpty(text) ? text : translate;                        
                         }
                     }
+
                     catch
                     {
                     }
@@ -58,7 +67,19 @@
                     {
                         var translation = SessionFacade.TextTranslation.Where(x => x.TextToTranslate.ToLower() == translate.ToLower()).FirstOrDefault();
                         if (translation != null)
-                            translate = translation.TextTranslations.Where(x => x.Language_Id == languageId).FirstOrDefault().TextTranslated ?? translate;
+                        {
+                            //translate = translation.TextTranslations.Where(x => x.Language_Id == languageId).FirstOrDefault().TextTranslated ?? translate;
+
+                            var trans = translation.TextTranslations.Where(x => x.Language_Id == languageId).FirstOrDefault();
+                            var text = (trans != null ? trans.TextTranslated : string.Empty);
+                            if (string.IsNullOrEmpty(text) && SessionFacade.CurrentLanguageId != LanguageId.Swedish)
+                            {
+                                trans = translation.TextTranslations.Where(x => x.Language_Id == SessionFacade.CurrentCustomer.Language_Id).FirstOrDefault();
+                                text = (trans != null ? trans.TextTranslated : string.Empty);
+                            }
+
+                            translate = !string.IsNullOrEmpty(text) ? text : translate;   
+                        }
                     }
                     catch
                     {

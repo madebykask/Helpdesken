@@ -3149,6 +3149,16 @@ GO
 UPDATE tblTextTranslation Set TextTranslation = '(You can only select wide on a maximum of 3 columns).' WHERE Text_Id=1339 AND Language_Id=2;
 GO
 
+-- 20150417
+If not exists (select * from tbltext where id = 1369)
+	insert into tbltext (id, TextString) VALUES (1369, 'Avslutsdatum sätt automatiskt till det datum då ärendet stängs (användaren kan inte ändra det)')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1369 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1369, 2, 'Closing date field is automatically set to the date of closing case (User cannot change it)')
+GO
+
+
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

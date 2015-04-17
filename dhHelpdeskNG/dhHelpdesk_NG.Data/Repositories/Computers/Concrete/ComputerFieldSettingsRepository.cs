@@ -134,7 +134,20 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                             }).ToList();
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException("languageId");
+                    mapperData =
+                        settings.Select(
+                            s =>
+                            new FieldSettingMapperData
+                            {
+                                Caption = s.Label_ENG,
+                                FieldName = s.ComputerField,
+                                ShowInList = s.ShowInList,
+                                ShowInDetails = s.Show,
+                                ReadOnly = s.ReadOnly,
+                                Required = s.Required,
+                            }).ToList();
+                    break;
+                    //throw new ArgumentOutOfRangeException("languageId");
             }
 
             var settingCollection = new NamedObjectCollection<FieldSettingMapperData>(mapperData);
@@ -177,7 +190,18 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                             }).ToList();
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException("languageId");
+                    mapperData =
+                       settings.Select(
+                           s =>
+                           new FieldSettingMapperDataForModelEdit
+                           {
+                               Caption = s.Label_ENG,
+                               FieldName = s.ComputerField,
+                               Show = s.Show,
+                               ReadOnly = s.ReadOnly,
+                               Required = s.Required,
+                           }).ToList();
+                    break;
             }
 
             var settingCollection = new NamedObjectCollection<FieldSettingMapperDataForModelEdit>(mapperData);
@@ -216,7 +240,16 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                             }).ToList();
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException("languageId");
+                    mapperData =
+                        settings.Select(
+                            s =>
+                            new FieldOverviewSettingMapperData
+                            {
+                                Caption = s.Label_ENG,
+                                FieldName = s.ComputerField,
+                                Show = s.ShowInList
+                            }).ToList();
+                    break;
             }
 
             var settingCollection = new NamedObjectCollection<FieldOverviewSettingMapperData>(mapperData);
@@ -473,12 +506,11 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             {
                 case LanguageTextId.Swedish:
                     fieldSetting.Label = updatedSetting.Caption;
-                    break;
-                case LanguageTextId.English:
+                    break;                
+                default:
                     fieldSetting.Label_ENG = updatedSetting.Caption;
                     break;
-                default:
-                    throw new ArgumentOutOfRangeException("languageTextId");
+                    
             }
         }
 
@@ -523,7 +555,16 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                             }).ToList();
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException("languageId");
+                    mapperData =
+                        settings.Select(
+                            s =>
+                            new FieldOverviewSettingMapperData
+                            {
+                                Caption = s.Label_ENG,
+                                FieldName = s.ComputerField,
+                                Show = s.Show
+                            }).ToList();
+                    break;
             }
 
             return mapperData;

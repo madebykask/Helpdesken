@@ -105,7 +105,18 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
                             }).ToList();
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException("languageId");
+                    mapperData =
+                        settings.Select(
+                            s =>
+                            new FieldSettingMapperData
+                            {
+                                Caption = s.Label_ENG,
+                                FieldName = s.ServerField,
+                                ShowInList = s.ShowInList,
+                                ShowInDetails = s.Show,
+                                Required = s.Required,
+                            }).ToList();
+                    break;
             }
 
             var settingCollection = new NamedObjectCollection<FieldSettingMapperData>(mapperData);
@@ -146,7 +157,17 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
                             }).ToList();
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException("languageId");
+                    mapperData =
+                        settings.Select(
+                            s =>
+                            new FieldSettingMapperDataForModelEdit
+                            {
+                                Caption = s.Label_ENG,
+                                FieldName = s.ServerField,
+                                Show = s.Show,
+                                Required = s.Required,
+                            }).ToList();
+                    break;
             }
 
             var settingCollection = new NamedObjectCollection<FieldSettingMapperDataForModelEdit>(mapperData);
@@ -185,7 +206,16 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
                             }).ToList();
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException("languageId");
+                     mapperData =
+                        settings.Select(
+                            s =>
+                            new FieldOverviewSettingMapperData
+                            {
+                                Caption = s.Label_ENG,
+                                FieldName = s.ServerField,
+                                Show = s.ShowInList
+                            }).ToList();
+                    break;
             }
 
             var settingCollection = new NamedObjectCollection<FieldOverviewSettingMapperData>(mapperData);
@@ -347,7 +377,8 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
                     fieldSetting.Label_ENG = updatedSetting.Caption;
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException("languageTextId");
+                    fieldSetting.Label_ENG = updatedSetting.Caption;
+                    break;
             }
         }
 
