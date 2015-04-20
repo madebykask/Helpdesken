@@ -298,12 +298,37 @@
                             from workingGroup in wggj.DefaultIfEmpty()
                             from user in ugj.DefaultIfEmpty()
                             where c.Department_Id.HasValue
-                            select new
+                            select new FinishingCauseCategoryCustomerCase
                             {
-                                c
+                                DepartmentId = c.Department_Id.Value,
+                                HasFinishingCause = c.Logs.Any(l => l.FinishingType.HasValue)
                             }).ToList();
 
-            return new FinishingCauseCategoryCustomerData();
+            var ds = departments.Select(d => new FinishingCauseCategoryCustomerDepartment
+                                                {
+                                                    DepartmentId = d.Id,
+                                                    DepartmentName = d.DepartmentName,
+                                                    NumberOfUsers = d.Users.Count
+                                                })
+                                                 .OrderBy(d => d.DepartmentName)
+                                                 .ToList();
+
+            var rows = new List<FinishingCauseCategoryCustomerRow>();
+            foreach (var department in ds)
+            {
+                var departmentCases = entities.Where(c => c.DepartmentId == department.DepartmentId);
+                var departmentCasesCount = departmentCases.Count();
+                var finishedCasesCount = departmentCases.Count(c => c.HasFinishingCause);
+                var row = new FinishingCauseCategoryCustomerRow(
+                            department.DepartmentName,
+                            department.NumberOfUsers,
+                            finishedCasesCount,
+                            department.NumberOfUsers > 0 ? Math.Round(((double)finishedCasesCount / department.NumberOfUsers) * 100, 1) : (double?)null,
+                            departmentCasesCount > 0 ? Math.Round(((double)finishedCasesCount / departmentCasesCount) * 100, 1) : (double?)null);
+                rows.Add(row);
+            }
+
+            return new FinishingCauseCategoryCustomerData(rows);
         }
 
         private static void BuildFinishingCauseRows(

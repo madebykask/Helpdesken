@@ -377,7 +377,10 @@
     <Compile Include="Models\Reports\Data\CaseTypeArticleNo\CaseTypeArticleNoData.cs" />
     <Compile Include="Models\Reports\Data\CaseTypeArticleNo\CaseTypeData.cs" />
     <Compile Include="Models\Reports\Data\CaseTypeArticleNo\ProductAreaData.cs" />
+    <Compile Include="Models\Reports\Data\FinishingCauseCategoryCustomer\FinishingCauseCategoryCustomerCase.cs" />
     <Compile Include="Models\Reports\Data\FinishingCauseCategoryCustomer\FinishingCauseCategoryCustomerData.cs" />
+    <Compile Include="Models\Reports\Data\FinishingCauseCategoryCustomer\FinishingCauseCategoryCustomerDepartment.cs" />
+    <Compile Include="Models\Reports\Data\FinishingCauseCategoryCustomer\FinishingCauseCategoryCustomerRow.cs" />
     <Compile Include="Models\Reports\Data\FinishingCauseCustomer\FinishingCauseCase.cs" />
     <Compile Include="Models\Reports\Data\FinishingCauseCustomer\FinishingCauseColumn.cs" />
     <Compile Include="Models\Reports\Data\FinishingCauseCustomer\FinishingCauseCustomerData.cs" />

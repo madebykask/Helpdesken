@@ -5,8 +5,29 @@
     <thead>
         <tr>
             <th>@Translation.Get("Avdelning")</th>
+            <th>@Translation.Get("Antal användare")</th>
+            <th>@Translation.Get("Antal avslutade ärenden")</th>
+            <th>@string.Format("{0} / {1}", Translation.Get("Ärenden"), Translation.Get("Antal användare"))</th>
+            <th>@string.Format("{0} / {1}", Translation.Get("Ärenden"), Translation.Get("Alla ärenden"))</th>            
         </tr>
     </thead>
     <tbody>
+        @foreach (var row in Model.Data.Rows)
+        {
+            <tr>
+                <td>@row.Department</td>
+                <td>@row.NumberOfUsers</td>
+                <td>@row.NumberOfFinishedCases</td>
+                <td>@(row.CasesNumberOfUsersPercents.HasValue ? string.Format("{0} %", row.CasesNumberOfUsersPercents) : "#")</td>
+                <td>@(row.CasesAllCasesPercents.HasValue ? string.Format("{0} %", row.CasesAllCasesPercents) : "#")</td>
+            </tr>
+        }
+        <tr>
+            <td></td>
+            <td><strong>@Model.Data.GetNumberOfUsersSum()</strong></td>
+            <td><strong>@Model.Data.GetNumberOfFinishedCasesSum()</strong></td>
+            <td></td>
+            <td></td>
+        </tr>
     </tbody>
 </table>
