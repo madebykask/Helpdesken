@@ -1785,9 +1785,8 @@ table th.thpointer {
     width:5%;
 }
 
-.SortableRow,
-.SortableRow td,
-.SortableRow label
+
+.SortableIcon
 {
     cursor:move;
 }
