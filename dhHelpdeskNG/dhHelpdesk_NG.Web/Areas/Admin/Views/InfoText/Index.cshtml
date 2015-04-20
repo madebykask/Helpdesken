@@ -18,7 +18,7 @@
                     break;
                     
                 case InfoTextTypes.SelfService:
-                    <li class="active"><a href="#fragment-1">@Translation.Get("SelfService Messages", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li>            
+                    <li class="active"><a href="#fragment-1">@Translation.Get("Självservice meddelande", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li>            
                     break;
             }
             
@@ -40,7 +40,7 @@
                                 <td>
                                     <a href="@Url.Action("edit", "infotext", new { area = "admin", infoTypeId = 1, customerId = Model.Customer.Id, 
                                                                                    languageId = Model.Customer.Language_Id, infoTextType = Model.InfoTextType })">
-                                        @Translation.Get("Self Service Welcome Message", Enums.TranslationSource.TextTranslation)</a>
+                                        @Translation.Get("Självservice välkommen meddelande", Enums.TranslationSource.TextTranslation)</a>
                                 </td>
                             </tr>
                         }
@@ -104,7 +104,7 @@
                             <tr>
                                 <td>
                                     <a href="@Url.Action("EditRegMessage", "SelfServiceSetting", new { customerId = Model.Customer.Id })">
-                                        @Translation.Get("Self Service Registration Message", Enums.TranslationSource.TextTranslation)</a>
+                                        @Translation.Get("Självservice registrerings meddelande", Enums.TranslationSource.TextTranslation)</a>
                                 </td>
                             </tr>
                         } 

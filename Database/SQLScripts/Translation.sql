@@ -3158,6 +3158,31 @@ If not exists (select * from tblTextTranslation where text_id = 1369 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1369, 2, 'Closing date field is automatically set to the date of closing case (User cannot change it)')
 GO
 
+--20150420
+
+If not exists (select * from tbltext where id = 1370)
+	insert into tbltext (id, TextString) VALUES (1370, 'Självservice meddelande')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1370 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1370, 2, 'Selfservice message')
+GO
+
+If not exists (select * from tbltext where id = 1371)
+	insert into tbltext (id, TextString) VALUES (1371, 'Självservice registrerings meddelande')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1371 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1371, 2, 'Self Service Registration Message')
+GO
+
+If not exists (select * from tbltext where id = 1372)
+	insert into tbltext (id, TextString) VALUES (1372, 'Självservice välkommen meddelande')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1372 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1372, 2, 'Self Service Welcome Message')
+GO
 
 
 -- *** Run this last when put translation script above this line **--
