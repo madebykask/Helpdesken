@@ -120,6 +120,12 @@
                     return this.PartialView(
                                 "Options/FinishingCauseCustomer",
                                 this.reportModelFactory.GetFinishingCauseCustomerOptionsModel(finishingCauseCustomer));
+
+                case ReportType.FinishingCauseCategoryCustomer:
+                    var finishingCauseCategoryCustomer = this.reportService.GetFinishingCauseCategoryCustomerOptions(this.OperationContext.CustomerId);
+                    return this.PartialView(
+                                "Options/FinishingCauseCategoryCustomer",
+                                this.reportModelFactory.GetFinishingCauseCategoryCustomerOptionsModel(finishingCauseCategoryCustomer));
             }
 
             return null;
@@ -323,6 +329,23 @@
             }
 
             return this.PartialView("Reports/FinishingCauseCustomer", model);
+        }
+
+        [HttpPost]
+        [BadRequestOnNotValid]
+        public PartialViewResult GetFinishingCauseCategoryCustomerReport(FinishingCauseCategoryCustomerOptionsModel options)
+        {
+            var data = this.reportService.GetFinishingCauseCategoryCustomerData(
+                                            this.OperationContext.CustomerId,
+                                            options.DepartmentIds,
+                                            options.WorkingGroupIds,
+                                            options.CaseTypeId,
+                                            options.PeriodFrom,
+                                            options.PeriodUntil);
+
+            var model = this.reportModelFactory.GetFinishingCauseCategoryCustomerModel(data);
+
+            return this.PartialView("Reports/FinishingCauseCategoryCustomer", model);
         }
     }
 }

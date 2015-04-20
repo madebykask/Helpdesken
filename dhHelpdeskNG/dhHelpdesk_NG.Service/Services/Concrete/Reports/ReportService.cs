@@ -8,6 +8,7 @@
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseSatisfaction;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.FinishingCauseCategoryCustomer;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.FinishingCauseCustomer;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeActiveCases;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeFinishedCases;
@@ -577,6 +578,76 @@
                                             caseTypes,
                                             administrators,
                                             finishingCauses,
+                                            periodFrom,
+                                            periodUntil);
+            }
+        }
+
+        #endregion
+
+        #region FinishingCauseCategoryCustomer
+
+        public FinishingCauseCategoryCustomerOptions GetFinishingCauseCategoryCustomerOptions(int customerId)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var departmentRep = uow.GetRepository<Department>();
+                var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
+                var caseTypeRep = uow.GetRepository<CaseType>();
+
+                var departments = departmentRep.GetAll().GetActiveByCustomer(customerId);
+                var workingGroups = workingGroupRep.GetAll().GetActiveByCustomer(customerId);
+                var caseTypes = caseTypeRep.GetAll().GetActiveByCustomer(customerId);
+
+                return ReportsOptionsMapper.MapToFinishingCauseCategoryCustomerOptions(
+                                            departments,
+                                            workingGroups,
+                                            caseTypes);
+            }
+        }
+
+        public FinishingCauseCategoryCustomerData GetFinishingCauseCategoryCustomerData(
+            int customerId,
+            List<int> departmentIds,
+            List<int> workingGroupIds,
+            int? caseTypeId,
+            DateTime? periodFrom,
+            DateTime? periodUntil)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var casesRep = uow.GetRepository<Case>();
+                var departmentRep = uow.GetRepository<Department>();
+                var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
+                var caseTypeRep = uow.GetRepository<CaseType>();
+                var usersRep = uow.GetRepository<User>();
+
+                var caseTypeIds = new List<int>();
+                if (caseTypeId.HasValue)
+                {
+                    LoadCaseTypeChildrenIds(caseTypeId.Value, caseTypeIds, uow);
+                }
+
+                var cases = casesRep.GetAll()
+                        .GetByCustomer(customerId)
+                        .GetByDepartments(departmentIds)
+                        .GetByWorkingGroups(workingGroupIds)
+                        .GetByCaseTypes(caseTypeIds)
+                        .GetByRegistrationPeriod(periodFrom, periodUntil)
+                        .GetActive()
+                        .GetNotDeleted();
+
+                var departments = departmentRep.GetAll().GetByIds(departmentIds);
+                var workingGroups = workingGroupRep.GetAll().GetByIds(workingGroupIds);
+                var caseTypes = caseTypeRep.GetAll().GetByIds(caseTypeIds);
+                var users = usersRep.GetAll().GetActiveByCustomer(customerId);
+
+                return ReportsMapper.MapToFinishingCauseCategoryCustomerData(
+                                            cases,
+                                            departments,
+                                            workingGroups,
+                                            caseTypes,
+                                            users,
                                             periodFrom,
                                             periodUntil);
             }

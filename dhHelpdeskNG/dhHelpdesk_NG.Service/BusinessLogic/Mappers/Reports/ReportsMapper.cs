@@ -8,6 +8,7 @@
     using DH.Helpdesk.BusinessData.Models.FinishingCause;
     using DH.Helpdesk.BusinessData.Models.ProductArea;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.FinishingCauseCategoryCustomer;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.FinishingCauseCustomer;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeActiveCases;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeFinishedCases;
@@ -276,6 +277,33 @@
             }
 
             return new FinishingCauseCustomerData(rows, ds);
+        }
+
+        public static FinishingCauseCategoryCustomerData MapToFinishingCauseCategoryCustomerData(
+                                            IQueryable<Case> cases,
+                                            IQueryable<Department> departments,
+                                            IQueryable<WorkingGroupEntity> workingGroups,
+                                            IQueryable<CaseType> caseTypes,
+                                            IQueryable<User> users,
+                                            DateTime? periodFrom,
+                                            DateTime? periodUntil)
+        {
+            var entities = (from c in cases
+                            join d in departments on c.Department_Id equals d.Id into dgj
+                            join wg in workingGroups on c.WorkingGroup_Id equals wg.Id into wggj
+                            join ct in caseTypes on c.CaseType_Id equals ct.Id into ctgj
+                            join u in users on c.Performer_User_Id equals u.Id into ugj
+                            from department in dgj.DefaultIfEmpty()
+                            from caseType in ctgj.DefaultIfEmpty()
+                            from workingGroup in wggj.DefaultIfEmpty()
+                            from user in ugj.DefaultIfEmpty()
+                            where c.Department_Id.HasValue
+                            select new
+                            {
+                                c
+                            }).ToList();
+
+            return new FinishingCauseCategoryCustomerData();
         }
 
         private static void BuildFinishingCauseRows(

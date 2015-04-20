@@ -6,6 +6,7 @@
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseSatisfaction;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.FinishingCauseCategoryCustomer;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.FinishingCauseCustomer;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeActiveCases;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeFinishedCases;
@@ -111,6 +112,16 @@
                                     List<int> workingGroupIds,
                                     int? caseTypeId,
                                     int? administratorId,
+                                    DateTime? periodFrom,
+                                    DateTime? periodUntil);
+
+        FinishingCauseCategoryCustomerOptions GetFinishingCauseCategoryCustomerOptions(int customerId);
+
+        FinishingCauseCategoryCustomerData GetFinishingCauseCategoryCustomerData(
+                                    int customerId,
+                                    List<int> departmentIds,
+                                    List<int> workingGroupIds,
+                                    int? caseTypeId,
                                     DateTime? periodFrom,
                                     DateTime? periodUntil);
     }

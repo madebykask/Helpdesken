@@ -69,6 +69,8 @@
                     return dhHelpdesk.reports.leadtimeActiveCases();
                 case dhHelpdesk.reports.reportType.FinishingCauseCustomer:
                     return dhHelpdesk.reports.finishingCauseCustomer();
+                case dhHelpdesk.reports.reportType.FinishingCauseCategoryCustomer:
+                    return dhHelpdesk.reports.finishingCauseCategoryCustomer();
                 default:
                     return null;
             }
@@ -247,6 +249,14 @@
         my = my || {};
 
         var that = dhHelpdesk.reports.report({ canExcel: true }, my);
+
+        return that;
+    }
+
+    dhHelpdesk.reports.finishingCauseCategoryCustomer = function (spec, my) {
+        my = my || {};
+
+        var that = dhHelpdesk.reports.report({}, my);
 
         return that;
     }

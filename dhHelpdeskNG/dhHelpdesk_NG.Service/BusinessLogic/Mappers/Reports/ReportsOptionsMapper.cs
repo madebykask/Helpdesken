@@ -117,6 +117,19 @@
                             options.Administrators);
         }
 
+        public static FinishingCauseCategoryCustomerOptions MapToFinishingCauseCategoryCustomerOptions(
+                                                        IQueryable<Department> departments,
+                                                        IQueryable<WorkingGroupEntity> workingGroups,
+                                                        IQueryable<CaseType> caseTypes)
+        {
+            var options = GetOptions(departments, caseTypes, workingGroups);
+
+            return new FinishingCauseCategoryCustomerOptions(
+                            options.Departments,
+                            options.CaseTypes,
+                            options.WorkingGroups);
+        }
+
         private static ReportOptions GetOptions(
                                         IQueryable<Department> departments = null,
                                         IQueryable<CaseType> caseTypes = null,

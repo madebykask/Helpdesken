@@ -7,6 +7,7 @@
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.FinishingCauseCategoryCustomer;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.FinishingCauseCustomer;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeActiveCases;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeFinishedCases;
@@ -45,7 +46,8 @@
                                 ReportType.LeadtimeFinishedCases,
                                 ReportType.LeadtimeActiveCases,
                                 ReportType.CaseSatisfaction,
-                                ReportType.FinishingCauseCustomer
+                                ReportType.FinishingCauseCustomer/*,
+                                ReportType.FinishingCauseCategoryCustomer*/
                             };
 
             // It's a new report, so we need to add it to the tblReport table
@@ -55,6 +57,7 @@
                         .Where(ready.Contains)
                         .Select(r => 
                             new ItemOverview(ReportUtils.GetReportName(r), ((int)r).ToString(CultureInfo.InvariantCulture)))
+                            .OrderBy(r => r.Name)
                             .ToList();
 
             return new ReportsOptions(WebMvcHelper.CreateListField(items, null, false));
@@ -222,6 +225,27 @@
         public FinishingCauseCustomerModel GetFinishingCauseCustomerModel(FinishingCauseCustomerData data, int customerId)
         {
             return new FinishingCauseCustomerModel(data, customerId);
+        }
+
+        public FinishingCauseCategoryCustomerOptionsModel GetFinishingCauseCategoryCustomerOptionsModel(FinishingCauseCategoryCustomerOptions options)
+        {
+            var departments = WebMvcHelper.CreateMultiSelectField(options.Departments);
+            var workingGroups = WebMvcHelper.CreateMultiSelectField(options.WorkingGroups);
+            var caseTypes = options.CaseTypes;
+            var periodFrom = DateTime.Today.AddYears(-1);
+            var periodUntil = DateTime.Today;
+
+            return new FinishingCauseCategoryCustomerOptionsModel(
+                        departments,
+                        workingGroups,
+                        caseTypes,
+                        periodFrom,
+                        periodUntil);
+        }
+
+        public FinishingCauseCategoryCustomerModel GetFinishingCauseCategoryCustomerModel(FinishingCauseCategoryCustomerData data)
+        {
+            return new FinishingCauseCategoryCustomerModel(data);
         }
     }
 }
