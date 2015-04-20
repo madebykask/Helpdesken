@@ -33,9 +33,20 @@ namespace DH.Helpdesk.Dal.Repositories.MailTemplates.Concrete
                 join l in this.DataContext.MailTemplateLanguages on m.Id equals l.MailTemplate_Id
                 where
                     m.MailID == Id && l.Language_Id == languageId
-                    && (m.Customer_Id == customerId || m.Customer_Id == null)
+                    && (m.Customer_Id == customerId)
                     orderby m.Customer_Id descending
                 select l).FirstOrDefault();
+        }
+
+        public MailTemplateLanguageEntity GetMailTemplateLanguageForCustomer(int Id, int customerId, int languageId, int orderTypeId)
+        {
+            return (from m in this.DataContext.MailTemplates
+                    join l in this.DataContext.MailTemplateLanguages on m.Id equals l.MailTemplate_Id
+                    where
+                        m.MailID == Id && l.Language_Id == languageId && 
+                        m.OrderType_Id == orderTypeId && m.Customer_Id == customerId
+                    orderby m.Customer_Id descending
+                    select l).FirstOrDefault();
         }
 
         public MailTemplate GetTemplate(int mailTemplateId, int languageId)
@@ -54,6 +65,14 @@ namespace DH.Helpdesk.Dal.Repositories.MailTemplates.Concrete
             return (from m in this.DataContext.MailTemplates
                     join l in this.DataContext.MailTemplateLanguages on m.Id equals l.MailTemplate_Id
                     where m.MailID == Id && l.Language_Id == languageId && m.Customer_Id == customerId
+                    select l).FirstOrDefault();
+        }
+
+        public MailTemplateLanguageEntity GetMailTemplateLanguageForCustomerToSave(int Id, int customerId, int languageId, int orderTypeId)
+        {
+            return (from m in this.DataContext.MailTemplates
+                    join l in this.DataContext.MailTemplateLanguages on m.Id equals l.MailTemplate_Id
+                    where m.MailID == Id && l.Language_Id == languageId && m.Customer_Id == customerId && m.OrderType_Id == orderTypeId
                     select l).FirstOrDefault();
         }
     }

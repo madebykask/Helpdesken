@@ -10,20 +10,25 @@
     using DH.Helpdesk.Dal.Repositories.MailTemplates;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.MailTemplates;
+    using DH.Helpdesk.BusinessData.Models.MailTemplates;
 
     public interface IMailTemplateService
     {        
         IDictionary<string, string> Validate(MailTemplateEntity mailTemplateToValidate);
 
         IList<MailTemplateList> GetMailTemplates(int customerId, int langaugeId);
+        IList<CustomMailTemplate> GetCustomMailTemplates(int customerId);
         MailTemplateEntity GetMailTemplate(int id, int customerId);
+        MailTemplateEntity GetMailTemplate(int id, int customerId, int orderTypeId);
         MailTemplateEntity GetMailTemplateForCustomer(int id, int customerId, int languageId);
         MailTemplateEntity GetMailTemplateForCopyCustomer(int id, int customerId);
         IList<MailTemplateIdentifierEntity> GetMailTemplateIdentifiers();
         MailTemplateLanguageEntity GetMailTemplateLanguage(int id, int languageId);
         MailTemplateLanguageEntity GetMailTemplateForCustomerAndLanguage(int customerId, int languageId, int mailTemplateId);
         MailTemplateLanguageEntity GetMailTemplateLanguageForCustomer(int id, int customerId, int languageId);
+        MailTemplateLanguageEntity GetMailTemplateLanguageForCustomer(int id, int customerId, int languageId, int orderTypeId);
         MailTemplateLanguageEntity GetMailTemplateLanguageForCustomerToSave(int id, int customerId, int languageId);
+        MailTemplateLanguageEntity GetMailTemplateLanguageForCustomerToSave(int id, int customerId, int languageId, int orderTypeId);
 
         int GetNewMailTemplateMailId();
 
@@ -66,7 +71,12 @@
 
         public IList<MailTemplateList> GetMailTemplates(int customerId, int langaugeId)
         {
-            return this._mailTemplateRepository.GetMailTemplate(customerId, langaugeId).ToList();
+            return this._mailTemplateRepository.GetMailTemplates(customerId, langaugeId).ToList();
+        }
+
+        public IList<CustomMailTemplate> GetCustomMailTemplates(int customerId)
+        {
+            return this._mailTemplateRepository.GetCustomMailTemplates(customerId);
         }
 
         public IList<MailTemplateIdentifierEntity> GetMailTemplateIdentifiers()
@@ -77,6 +87,11 @@
         public MailTemplateEntity GetMailTemplate(int id, int customerId)
         {
             return this._mailTemplateRepository.GetMany(x => x.MailID == id && x.Customer_Id == customerId).FirstOrDefault();
+        }
+
+        public MailTemplateEntity GetMailTemplate(int id, int customerId, int orderTypeId)
+        {
+            return this._mailTemplateRepository.GetMany(x => x.MailID == id && x.Customer_Id == customerId && x.OrderType_Id == orderTypeId ).FirstOrDefault();
         }
 
         public MailTemplateEntity GetMailTemplateForCopyCustomer(int id, int customerId)
@@ -99,9 +114,19 @@
             return this._mailTemplateLanguageRepository.GetMailTemplateLanguageForCustomer(id, customerId, languageId);
         }
 
+        public MailTemplateLanguageEntity GetMailTemplateLanguageForCustomer(int id, int customerId, int languageId, int orderTypeId)
+        {
+            return this._mailTemplateLanguageRepository.GetMailTemplateLanguageForCustomer(id, customerId, languageId, orderTypeId);
+        }
+
         public MailTemplateLanguageEntity GetMailTemplateLanguageForCustomerToSave(int id, int customerId, int languageId)
         {
             return this._mailTemplateLanguageRepository.GetMailTemplateLanguageForCustomerToSave(id, customerId, languageId);
+        }
+
+        public MailTemplateLanguageEntity GetMailTemplateLanguageForCustomerToSave(int id, int customerId, int languageId, int orderTypeId)
+        {
+            return this._mailTemplateLanguageRepository.GetMailTemplateLanguageForCustomerToSave(id, customerId, languageId, orderTypeId);
         }
 
         public MailTemplateLanguageEntity GetMailTemplateForCustomerAndLanguage(int customerId, int languageId, int mailTemplateId)

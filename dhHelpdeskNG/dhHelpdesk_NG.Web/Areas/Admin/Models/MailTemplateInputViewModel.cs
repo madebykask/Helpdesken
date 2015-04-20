@@ -7,6 +7,7 @@
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Accounts;
     using DH.Helpdesk.Domain.MailTemplates;
+using DH.Helpdesk.BusinessData.Models.Language.Output;
 
     public class RegularCaseInputViewModel
     {
@@ -30,6 +31,8 @@
         public IList<SelectListItem> Surveys { get; set; }
 
         public IList<SelectListItem> Languages { get; set; }
+        public IList<ActiveMailTemplateLanguage> ActiveMailTemplateLanguages { get; set; }
+        public IList<ActiveMailTemplateLanguage> ActiveOrderMailTemplateLanguages { get; set; }
 
     }
 
@@ -52,5 +55,15 @@
         public IEnumerable<CaseFieldSettingsWithLanguage> CaseFieldSettingWithLangauges { get; set; }
         public IEnumerable<OrderFieldSettings> OrderFieldSettings { get; set; }
         public IEnumerable<AccountFieldSettings> AccountFieldSettings { get; set; }
+    }
+
+    public class ActiveMailTemplateLanguage
+    {
+        //Note: Id means MailId for Regular MailTemplates and OrderTypeId for Order Mail Templates
+        public int Id {get; set;}
+
+        public string LanguageNames { get; set; }
+
+        public List<LanguageOverview> Languages {get; set;}
     }
 }
