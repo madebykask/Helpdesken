@@ -905,7 +905,9 @@ namespace DH.Helpdesk.Web.Controllers
                     var acccessToGroups = this._userService.GetWorkinggroupsForUserAndCustomer(SessionFacade.CurrentUser.Id, customerId);
                     var deps = this._departmentService.GetDepartmentsByUserPermissions(userId, customerId);
 
+                    // TODO: Should mix CustomerSettings & Setting 
                     m.CustomerSettings = this.workContext.Customer.Settings;
+                    m.Setting = cs;
                     m.EditMode = EditMode(m, ModuleName.Log, deps, acccessToGroups);
                     AddViewDataValues();
 
@@ -2077,7 +2079,7 @@ namespace DH.Helpdesk.Web.Controllers
                                                     RequestExtension.GetAbsoluteUrl(), 
                                                     cs.DontConnectUserToWorkingGroup);
 
-                m.CaseMailSetting.DontSendMailToNotifier = !_customerService.GetCustomer(customerId).CommunicateWithNotifier.ToBool();
+                m.CaseMailSetting.DontSendMailToNotifier = !customer.CommunicateWithNotifier.ToBool();
 
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()).ShowOnStartPage == 1)
                 {
@@ -2343,7 +2345,7 @@ namespace DH.Helpdesk.Web.Controllers
                 }
 
                 // check state secondary info
-                m.CaseLog.SendMailAboutCaseToNotifier = SessionFacade.CurrentCustomer.CommunicateWithNotifier.ToBool();
+                m.CaseLog.SendMailAboutCaseToNotifier = customer.CommunicateWithNotifier.ToBool();
 
                 m.Disable_SendMailAboutCaseToNotifier = false;
                 if (m.case_.StateSecondary_Id > 0)
@@ -2386,7 +2388,9 @@ namespace DH.Helpdesk.Web.Controllers
                 //    m.CaseOwnerDefaultWorkingGroup = this._workingGroupService.GetWorkingGroup(m.RegByUser.Default_WorkingGroup_Id.Value);
                 //}
 
+                // TODO: Should mix CustomerSettings & Setting                 
                 m.CustomerSettings = this.workContext.Customer.Settings;
+                m.Setting = cs;                
                 m.DynamicCase = _caseService.GetDynamicCase(m.case_.Id);
 
                 if(m.DynamicCase != null)

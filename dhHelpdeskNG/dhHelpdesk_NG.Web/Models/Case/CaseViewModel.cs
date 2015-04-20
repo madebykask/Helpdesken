@@ -44,6 +44,8 @@
         public User RegByUser { get; set; }
         public CustomerUser customerUserSetting { get; set; }
 
+        public Setting Setting { get; set; }
+
         public IList<CaseFieldSetting> caseFieldSettings { get; set; }
 
         public IEnumerable<CaseFieldSettingsWithLanguage> CaseFieldSettingWithLangauges { get; set; }

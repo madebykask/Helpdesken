@@ -69,37 +69,40 @@
                 return;
             }
 
-            string customEmailSender4 = mailSenders.DefaultOwnerWGEMail;
-            if (string.IsNullOrWhiteSpace(customEmailSender4))
-                customEmailSender4 = mailSenders.WGEmail;
-            if (string.IsNullOrWhiteSpace(customEmailSender4))
-                customEmailSender4 = mailSenders.SystemEmail;
+            if (!String.IsNullOrEmpty(template.Body) && !String.IsNullOrEmpty(template.Subject))
+            {
+                string customEmailSender4 = mailSenders.DefaultOwnerWGEMail;
+                if (string.IsNullOrWhiteSpace(customEmailSender4))
+                    customEmailSender4 = mailSenders.WGEmail;
+                if (string.IsNullOrWhiteSpace(customEmailSender4))
+                    customEmailSender4 = mailSenders.SystemEmail;
 
-            var mailMessageId = this.emailService.GetMailMessageId(customEmailSender4);
-            var notifierEmailLog = this.emailFactory.CreatEmailLog(
-                                            caseHistoryId,
-                                            (int)GlobalEnums.MailTemplates.InformNotifier,
-                                            newCase.PersonsEmail,
-                                            mailMessageId);
+                var mailMessageId = this.emailService.GetMailMessageId(customEmailSender4);
+                var notifierEmailLog = this.emailFactory.CreatEmailLog(
+                                                caseHistoryId,
+                                                (int)GlobalEnums.MailTemplates.InformNotifier,
+                                                newCase.PersonsEmail,
+                                                mailMessageId);
 
-            string site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + notifierEmailLog.EmailLogGUID.ToString();  
-            string url = "<br><a href='" + site + "'>" + site + "</a>";
-            foreach (var field in fields)
-                if (field.Key == "[#98]")
-                    field.StringValue = url;            
+                string site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + notifierEmailLog.EmailLogGUID.ToString();  
+                string url = "<br><a href='" + site + "'>" + site + "</a>";
+                foreach (var field in fields)
+                    if (field.Key == "[#98]")
+                        field.StringValue = url;            
 
-            var notifierEmailItem = this.emailFactory.CreateEmailItem(
-                                            customEmailSender4,
-                                            notifierEmailLog.EmailAddress,
-                                            template.Subject,
-                                            template.Body,
-                                            fields,
-                                            notifierEmailLog.MessageId,
-                                            log.HighPriority,
-                                            files);
-            this.emailService.SendEmail(notifierEmailItem);
-            this.emailLogRepository.Add(notifierEmailLog);
-            this.emailLogRepository.Commit();
+                var notifierEmailItem = this.emailFactory.CreateEmailItem(
+                                                customEmailSender4,
+                                                notifierEmailLog.EmailAddress,
+                                                template.Subject,
+                                                template.Body,
+                                                fields,
+                                                notifierEmailLog.MessageId,
+                                                log.HighPriority,
+                                                files);
+                this.emailService.SendEmail(notifierEmailItem);
+                this.emailLogRepository.Add(notifierEmailLog);
+                this.emailLogRepository.Commit();
+            }
         }
 
         public void InformOwnerDefaultGroupIfNeeded(
@@ -128,54 +131,57 @@
                 return;
             }
 
-            var mailMessageId = this.emailService.GetMailMessageId(helpdeskMailFromAdress);
-
-            // http://redmine.fastdev.se/issues/10997
-            /*var caseOwner = this.userService.GetUser(newCase.User_Id);
-            if (caseOwner == null || 
-                !caseOwner.Default_WorkingGroup_Id.HasValue)
+            if (!String.IsNullOrEmpty(template.Body) && !String.IsNullOrEmpty(template.Subject))
             {
-                return;
+                var mailMessageId = this.emailService.GetMailMessageId(helpdeskMailFromAdress);
+
+                // http://redmine.fastdev.se/issues/10997
+                /*var caseOwner = this.userService.GetUser(newCase.User_Id);
+                if (caseOwner == null || 
+                    !caseOwner.Default_WorkingGroup_Id.HasValue)
+                {
+                    return;
+                }
+
+                var defaultWorkingGroup = this.workingGroupService.GetWorkingGroup(caseOwner.Default_WorkingGroup_Id.Value);
+                if (defaultWorkingGroup == null || 
+                    !this.emailService.IsValidEmail(defaultWorkingGroup.EMail))
+                {
+                    return;
+                }*/
+
+                var defaultWorkingGroup = this.userService.GetUserDefaultWorkingGroup(newCase.User_Id, newCase.Customer_Id);
+                if (defaultWorkingGroup == null ||
+                    !this.emailService.IsValidEmail(defaultWorkingGroup.EMail))
+                {
+                    return;
+                }
+
+                var defaultWorkingGroupEmailLog = this.emailFactory.CreatEmailLog(
+                                                caseHistoryId,
+                                                (int)GlobalEnums.MailTemplates.InformNotifier,
+                                                defaultWorkingGroup.EMail,
+                                                mailMessageId);
+
+                string site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + defaultWorkingGroupEmailLog.EmailLogGUID.ToString();
+                string url = "<br><a href='" + site + "'>" + site + "</a>";
+                foreach (var field in fields)
+                    if (field.Key == "[#98]")
+                        field.StringValue = url;
+
+                var defaultWorkingGroupEmailItem = this.emailFactory.CreateEmailItem(
+                                                helpdeskMailFromAdress,
+                                                defaultWorkingGroupEmailLog.EmailAddress,
+                                                template.Subject,
+                                                template.Body,
+                                                fields,
+                                                defaultWorkingGroupEmailLog.MessageId,
+                                                log.HighPriority,
+                                                files);
+                this.emailService.SendEmail(defaultWorkingGroupEmailItem);
+                this.emailLogRepository.Add(defaultWorkingGroupEmailLog);
+                this.emailLogRepository.Commit();
             }
-
-            var defaultWorkingGroup = this.workingGroupService.GetWorkingGroup(caseOwner.Default_WorkingGroup_Id.Value);
-            if (defaultWorkingGroup == null || 
-                !this.emailService.IsValidEmail(defaultWorkingGroup.EMail))
-            {
-                return;
-            }*/
-
-            var defaultWorkingGroup = this.userService.GetUserDefaultWorkingGroup(newCase.User_Id, newCase.Customer_Id);
-            if (defaultWorkingGroup == null || 
-                !this.emailService.IsValidEmail(defaultWorkingGroup.EMail))
-            {
-                return;
-            }
-
-            var defaultWorkingGroupEmailLog = this.emailFactory.CreatEmailLog(
-                                            caseHistoryId,
-                                            (int)GlobalEnums.MailTemplates.InformNotifier,
-                                            defaultWorkingGroup.EMail,
-                                            mailMessageId);
-
-            string site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + defaultWorkingGroupEmailLog.EmailLogGUID.ToString();
-            string url = "<br><a href='" + site + "'>" + site + "</a>";
-            foreach (var field in fields)
-                if (field.Key == "[#98]")
-                    field.StringValue = url;
-
-            var defaultWorkingGroupEmailItem = this.emailFactory.CreateEmailItem(
-                                            helpdeskMailFromAdress,
-                                            defaultWorkingGroupEmailLog.EmailAddress,
-                                            template.Subject,
-                                            template.Body,
-                                            fields,
-                                            defaultWorkingGroupEmailLog.MessageId,
-                                            log.HighPriority,
-                                            files);
-            this.emailService.SendEmail(defaultWorkingGroupEmailItem);
-            this.emailLogRepository.Add(defaultWorkingGroupEmailLog);
-            this.emailLogRepository.Commit();
         }
 
         public void InformAboutInternalLogIfNeeded(
@@ -202,36 +208,39 @@
                 return;
             }
 
-            var to = log.EmailRecepientsInternalLog
-                                .Replace(Environment.NewLine, "|")
-                                .Split('|');
-            foreach (var t in to)
+            if (!String.IsNullOrEmpty(template.Body) && !String.IsNullOrEmpty(template.Subject))
             {
-                if (!string.IsNullOrWhiteSpace(t) && this.emailService.IsValidEmail(t))
+                var to = log.EmailRecepientsInternalLog
+                                    .Replace(Environment.NewLine, "|")
+                                    .Split('|');
+                foreach (var t in to)
                 {
-                    var internalEmailLog = this.emailFactory.CreatEmailLog(
-                                                    caseHistoryId,
-                                                    (int)GlobalEnums.MailTemplates.InternalLogNote,
-                                                    t,
-                                                    this.emailService.GetMailMessageId(helpdeskMailFromAdress));
-                    string site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + internalEmailLog.EmailLogGUID.ToString();
-                    string url = "<br><a href='" + site + "'>" + site + "</a>";
-                    foreach (var field in fields)
-                        if (field.Key == "[#98]")
-                            field.StringValue = url;
+                    if (!string.IsNullOrWhiteSpace(t) && this.emailService.IsValidEmail(t))
+                    {
+                        var internalEmailLog = this.emailFactory.CreatEmailLog(
+                                                        caseHistoryId,
+                                                        (int)GlobalEnums.MailTemplates.InternalLogNote,
+                                                        t,
+                                                        this.emailService.GetMailMessageId(helpdeskMailFromAdress));
+                        string site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + internalEmailLog.EmailLogGUID.ToString();
+                        string url = "<br><a href='" + site + "'>" + site + "</a>";
+                        foreach (var field in fields)
+                            if (field.Key == "[#98]")
+                                field.StringValue = url;
 
-                    var internalEmail = this.emailFactory.CreateEmailItem(
-                                                    helpdeskMailFromAdress,
-                                                    internalEmailLog.EmailAddress,
-                                                    template.Subject,
-                                                    template.Body,
-                                                    fields,
-                                                    internalEmailLog.MessageId,
-                                                    log.HighPriority,
-                                                    files);
-                    this.emailService.SendEmail(internalEmail);
-                    this.emailLogRepository.Add(internalEmailLog);
-                    this.emailLogRepository.Commit();
+                        var internalEmail = this.emailFactory.CreateEmailItem(
+                                                        helpdeskMailFromAdress,
+                                                        internalEmailLog.EmailAddress,
+                                                        template.Subject,
+                                                        template.Body,
+                                                        fields,
+                                                        internalEmailLog.MessageId,
+                                                        log.HighPriority,
+                                                        files);
+                        this.emailService.SendEmail(internalEmail);
+                        this.emailLogRepository.Add(internalEmailLog);
+                        this.emailLogRepository.Commit();
+                    }
                 }
             }
         }

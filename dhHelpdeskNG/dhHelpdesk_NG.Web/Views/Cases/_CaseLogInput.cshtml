@@ -208,11 +208,18 @@
                     <td>
                         @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.FinishingDate, CaseSolutionFields.FinishingDate))
                         {
-                            @Html.EditorFor(m => m.CaseLog.FinishingDate, "DatePicker", new { id = "divCaseLog_FinishingDate" })
+                            if (Model.Setting.DisableCaseEndDate == 0)
+                            {
+                                @Html.EditorFor(m => m.CaseLog.FinishingDate, "DatePicker", new { id = "divCaseLog_FinishingDate"})
+                            }
+                            else
+                            {                            
+                                @Html.EditorFor(m => m.CaseLog.FinishingDate, "DateReadOnly", new { id = "divCaseLog_FinishingDate"})                             
+                            }
                         }
                         else
                         {
-                            @Html.EditorFor(m => m.case_.FinishingDate, "DateReadOnly")
+                            @Html.EditorFor(m => m.case_.FinishingDate, "DateReadOnly")                            
                         }
                 </td>
                 </tr>
