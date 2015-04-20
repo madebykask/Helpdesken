@@ -1745,11 +1745,11 @@ UPDATE tblTextTranslation Set TextTranslation = 'Log in' WHERE Text_Id=1215 AND 
 GO
 
 If not exists (select * from tblText where Id = 1216)
-	insert into tblText (Id, Textstring) VALUES (1216, '√Ñrendehanteringsmeny')
+	insert into tblText (Id, Textstring) VALUES (1216, 'ƒrendehanteringsmeny')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1216 and Language_Id = 1)
-	INSERT INTO tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1216, 1, '√Ñrendehantering')
+	INSERT INTO tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1216, 1, 'ƒrendehantering')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1216 and Language_Id = 2)
@@ -1781,7 +1781,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1218 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1219)
-	insert into tblText (Id, Textstring) VALUES (1219, 'Till√§ggsmoduler')
+	insert into tblText (Id, Textstring) VALUES (1219, 'Till‰ggsmoduler')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1219 and Language_Id = 1)
@@ -1809,7 +1809,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1221 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1222)
-	insert into tblText (Id, Textstring) VALUES (1222, 'V√§lj artikel')
+	insert into tblText (Id, Textstring) VALUES (1222, 'V‰lj artikel')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1222 and Language_Id = 2)
@@ -1865,7 +1865,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1228 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1229)
-	insert into tblText (Id, Textstring) VALUES (1229, 'Order √∂versikt')
+	insert into tblText (Id, Textstring) VALUES (1229, 'Order ˆversikt')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1229 and Language_Id = 2)
@@ -1921,7 +1921,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1235 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1236)
-	insert into tblText (Id, Textstring) VALUES (1236, '√Ñrendefakturering')
+	insert into tblText (Id, Textstring) VALUES (1236, 'ƒrendefakturering')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1236 and Language_Id = 2)
@@ -1929,7 +1929,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1236 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1237)
-	insert into tblText (Id, Textstring) VALUES (1237, 'Mina tilldelade √§renden')
+	insert into tblText (Id, Textstring) VALUES (1237, 'Mina tilldelade ‰renden')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1237 and Language_Id = 2)
@@ -1953,7 +1953,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1239 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1240)
-	insert into tblText (Id, Textstring) VALUES (1240, 'Kopplade √§renden')
+	insert into tblText (Id, Textstring) VALUES (1240, 'Kopplade ‰renden')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1240 and Language_Id = 2)
@@ -1961,7 +1961,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1240 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1241)
-	insert into tblText (Id, Textstring) VALUES (1241, 'H√•rdvara')
+	insert into tblText (Id, Textstring) VALUES (1241, 'HÂrdvara')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1241 and Language_Id = 2)
@@ -1969,7 +1969,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1241 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1242)
-	insert into tblText (Id, Textstring) VALUES (1242, 'Endast tillg√§ngligt f√∂r')
+	insert into tblText (Id, Textstring) VALUES (1242, 'Endast tillg‰ngligt fˆr')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1242 and Language_Id = 2)
@@ -1977,7 +1977,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1242 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1243)
-            insert into tblText (Id, Textstring) VALUES (1243, 'Skicka mail till anm√§laren')
+            insert into tblText (Id, Textstring) VALUES (1243, 'Skicka mail till anm‰laren')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1243 and Language_Id = 2)
@@ -1987,7 +1987,7 @@ GO
 --UPDATE tblTextTranslation Set TextTranslation = 'Send case notifications to user' WHERE Text_Id=1243 AND Language_Id=2;
 --GO
 
---UPDATE tblText Set TextString = 'Skicka mail till anm√§laren' WHERE Id=1243;
+--UPDATE tblText Set TextString = 'Skicka mail till anm‰laren' WHERE Id=1243;
 --GO
 
 
@@ -2000,7 +2000,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1244 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1245)
-            insert into tblText (Id, Textstring) VALUES (1245, '√Ñndra startsida')
+            insert into tblText (Id, Textstring) VALUES (1245, 'ƒndra startsida')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1245 and Language_Id = 2)
@@ -2008,7 +2008,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1245 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1246)
-            insert into tblText (Id, Textstring) VALUES (1246, 'Sammanfattning - √Ñrende')
+            insert into tblText (Id, Textstring) VALUES (1246, 'Sammanfattning - ƒrende')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1246 and Language_Id = 2)
@@ -2016,7 +2016,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1246 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1247)
-            insert into tblText (Id, Textstring) VALUES (1247, 'Sammanfattning - √Ñndringshantering')
+            insert into tblText (Id, Textstring) VALUES (1247, 'Sammanfattning - ƒndringshantering')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1247 and Language_Id = 2)
@@ -2038,7 +2038,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1249 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1250)
-            insert into tblText (Id, Textstring) VALUES (1250, 'L√∂senordet har √§ndrats')
+            insert into tblText (Id, Textstring) VALUES (1250, 'Lˆsenordet har ‰ndrats')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1250 and Language_Id = 2)
@@ -2046,7 +2046,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1250 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1251)
-            insert into tblText (Id, Textstring) VALUES (1251, 'Skicka p√•minnelse')
+            insert into tblText (Id, Textstring) VALUES (1251, 'Skicka pÂminnelse')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1251 and Language_Id = 2)
@@ -2064,7 +2064,7 @@ GO
 -- New translation 2014-11-06
 
 If not exists (select * from tblText where Id = 1253)
-	insert into tblText (Id, Textstring) VALUES (1253, 'V√§lj en eller flera')
+	insert into tblText (Id, Textstring) VALUES (1253, 'V‰lj en eller flera')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1253 and Language_Id = 2)
@@ -2074,14 +2074,14 @@ GO
 --UPDATE tblTextTranslation Set TextTranslation = 'Send case notifications to user' WHERE Text_Id=1243 AND Language_Id=2;
 --GO
 
---UPDATE tblText Set TextString = 'Skicka mail till anm√§laren' WHERE Id=1243;
+--UPDATE tblText Set TextString = 'Skicka mail till anm‰laren' WHERE Id=1243;
 --GO
 
 
 -- New translation 2014-11-13
 
 If not exists (select * from tblText where Id = 1254)
-	insert into tblText (Id, Textstring) VALUES (1254, 'tr√§ffar per sida')
+	insert into tblText (Id, Textstring) VALUES (1254, 'tr‰ffar per sida')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1254 and Language_Id = 2)
@@ -2098,7 +2098,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1255 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1256)
-	insert into tblText (Id, Textstring) VALUES (1256, 'Inga tr√§ffar p√•')
+	insert into tblText (Id, Textstring) VALUES (1256, 'Inga tr‰ffar pÂ')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1256 and Language_Id = 2)
@@ -2106,7 +2106,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1256 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1257)
-	insert into tblText (Id, Textstring) VALUES (1257, 'Visa de f√∂rsta')
+	insert into tblText (Id, Textstring) VALUES (1257, 'Visa de fˆrsta')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1257 and Language_Id = 2)
@@ -2152,7 +2152,7 @@ UPDATE tblTextTranslation Set TextTranslation = 'By' WHERE Text_Id=712 AND Langu
 GO
 
 If not exists (select * from tblText where Id = 1261)
-	insert into tblText (Id, Textstring) VALUES (1261, 'Till√§gg')
+	insert into tblText (Id, Textstring) VALUES (1261, 'Till‰gg')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1261 and Language_Id = 2)
@@ -2162,7 +2162,7 @@ GO
 -- Translation 2014-12-02
 
 If not exists (select * from tblText where Id = 1262)
-	insert into tblText (Id, Textstring) VALUES (1262, '√Ötg√§rdat √§rende')
+	insert into tblText (Id, Textstring) VALUES (1262, '≈tg‰rdat ‰rende')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1262 and Language_Id = 2)
@@ -2170,7 +2170,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1262 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1263)
-	insert into tblText (Id, Textstring) VALUES (1263, 'Det √§r inte m√∂jligt att ta bort denna anv√§ndare. Var v√§nlig inaktivera anv√§ndaren ist√§llet')
+	insert into tblText (Id, Textstring) VALUES (1263, 'Det ‰r inte mˆjligt att ta bort denna anv‰ndare. Var v‰nlig inaktivera anv‰ndaren ist‰llet')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1263 and Language_Id = 2)
@@ -2178,7 +2178,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1263 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1264)
-	insert into tblText (Id, Textstring) VALUES (1264, 'Denna anv√§ndare st√•r som ansvarig/handl√§ggare p√• befintliga √§renden hos kund')
+	insert into tblText (Id, Textstring) VALUES (1264, 'Denna anv‰ndare stÂr som ansvarig/handl‰ggare pÂ befintliga ‰renden hos kund')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1264 and Language_Id = 2)
@@ -2186,7 +2186,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1264 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1265)
-	insert into tblText (Id, Textstring) VALUES (1265, 'Var v√§nlig se √∂ver de √§renden som anv√§ndaren st√•r p√•.')
+	insert into tblText (Id, Textstring) VALUES (1265, 'Var v‰nlig se ˆver de ‰renden som anv‰ndaren stÂr pÂ.')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1265 and Language_Id = 2)
@@ -2196,7 +2196,7 @@ GO
 
 -- Translation 2014-12-09
 If not exists (select * from tblText where Id = 1266)
-	insert into tblText (Id, Textstring) VALUES (1266, 'Skapa din egen hj√§lptext till f√§ltet')
+	insert into tblText (Id, Textstring) VALUES (1266, 'Skapa din egen hj‰lptext till f‰ltet')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1266 and Language_Id = 2)
@@ -2231,7 +2231,7 @@ GO
 -- Translation 2014-12-10
 
 If not exists (select * from tblText where Id = 1270)
-	insert into tblText (Id, Textstring) VALUES (1270, 'Det finns information som kan bli √§ndrad. Vill du skriva √∂ver?')
+	insert into tblText (Id, Textstring) VALUES (1270, 'Det finns information som kan bli ‰ndrad. Vill du skriva ˆver?')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1270 and Language_Id = 2)
@@ -2247,7 +2247,7 @@ GO
 -- Translation 2014-12-15
 
 If not exists (select * from tblText where Id = 1271)
-	insert into tblText (Id, Textstring) VALUES (1271, 'Skicka extern loggpost till anv√§ndare i driftgruppen')
+	insert into tblText (Id, Textstring) VALUES (1271, 'Skicka extern loggpost till anv‰ndare i driftgruppen')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1271 and Language_Id = 2)
@@ -2275,7 +2275,7 @@ GO
 
 
 If not exists (select * from tblText where Id = 1274)
-	insert into tblText (Id, Textstring) VALUES (1274, 'Du kan inte fylla i utv√§rderingen p√• grund av')
+	insert into tblText (Id, Textstring) VALUES (1274, 'Du kan inte fylla i utv‰rderingen pÂ grund av')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1274 and Language_Id = 2)
@@ -2283,15 +2283,15 @@ If not exists (select * from tblTextTranslation where Text_Id = 1274 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1275)
-	insert into tblText (Id, Textstring) VALUES (1275, '√Ñrendet kunde inte hittas')
+	insert into tblText (Id, Textstring) VALUES (1275, 'ƒrendet kunde inte hittas')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1275 and Language_Id = 2)
-	INSERT INTO tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1275, 2, 'Couldn‚Äôt find this case')
+	INSERT INTO tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1275, 2, 'Couldnít find this case')
 GO
 
 If not exists (select * from tblText where Id = 1276)
-	insert into tblText (Id, Textstring) VALUES (1276, 'Du har redan fyllt i utv√§rderingen av detta √§rende')
+	insert into tblText (Id, Textstring) VALUES (1276, 'Du har redan fyllt i utv‰rderingen av detta ‰rende')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1276 and Language_Id = 2)
@@ -2299,7 +2299,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1276 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1277)
-	insert into tblText (Id, Textstring) VALUES (1277, '√Ñrendet √§r inte st√§ngt')
+	insert into tblText (Id, Textstring) VALUES (1277, 'ƒrendet ‰r inte st‰ngt')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1277 and Language_Id = 2)
@@ -2307,7 +2307,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1277 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1278)
-	insert into tblText (Id, Textstring) VALUES (1278, 'Tack f√∂r att du deltog i unders√∂kningen')
+	insert into tblText (Id, Textstring) VALUES (1278, 'Tack fˆr att du deltog i undersˆkningen')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1278 and Language_Id = 2)
@@ -2323,7 +2323,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1279 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1280)
-	insert into tblText (Id, Textstring) VALUES (1280, 'Inte n√∂jd')
+	insert into tblText (Id, Textstring) VALUES (1280, 'Inte nˆjd')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1280 and Language_Id = 2)
@@ -2331,7 +2331,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1280 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1281)
-	insert into tblText (Id, Textstring) VALUES (1281, 'N√∂jd')
+	insert into tblText (Id, Textstring) VALUES (1281, 'Nˆjd')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1281 and Language_Id = 2)
@@ -2339,7 +2339,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1281 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1282)
-	insert into tblText (Id, Textstring) VALUES (1282, 'Mycket n√∂jd')
+	insert into tblText (Id, Textstring) VALUES (1282, 'Mycket nˆjd')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1282 and Language_Id = 2)
@@ -2349,7 +2349,7 @@ GO
 -- Translation 2015-01-09
 
 If not exists (select * from tblText where Id = 1283)
-	insert into tblText (Id, Textstring) VALUES (1283, '√Ñrendes√∂k')
+	insert into tblText (Id, Textstring) VALUES (1283, 'ƒrendesˆk')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1283 and Language_Id = 2)
@@ -2360,7 +2360,7 @@ GO
 -- Translation  2015-01-12
 
 If not exists (select * from tblText where Id = 1284)
-	insert into tblText (Id, Textstring) VALUES (1284, 'har aktiva √§renden hos kund')
+	insert into tblText (Id, Textstring) VALUES (1284, 'har aktiva ‰renden hos kund')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1284 and Language_Id = 2)
@@ -2368,7 +2368,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1284 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1285)
-	insert into tblText (Id, Textstring) VALUES (1285, 'Var v√§nlig se √∂ver dessa √§renden')
+	insert into tblText (Id, Textstring) VALUES (1285, 'Var v‰nlig se ˆver dessa ‰renden')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1285 and Language_Id = 2)
@@ -2376,7 +2376,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1285 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1286)
-	insert into tblText (Id, Textstring) VALUES (1286, 'V√§lj handl√§ggare')
+	insert into tblText (Id, Textstring) VALUES (1286, 'V‰lj handl‰ggare')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1286 and Language_Id = 2)
@@ -2393,7 +2393,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1287 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1288)
-	insert into tblText (Id, Textstring) VALUES (1288, 'V√§lj driftgrupp')
+	insert into tblText (Id, Textstring) VALUES (1288, 'V‰lj driftgrupp')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1288 and Language_Id = 2)
@@ -2404,7 +2404,7 @@ GO
 -- Translations 2015-01-14
 
 If not exists (select * from tblText where Id = 1289)
-	insert into tblText (Id, Textstring) VALUES (1289, 'anv√§ndare som ing√•r i organisationsenheten')
+	insert into tblText (Id, Textstring) VALUES (1289, 'anv‰ndare som ingÂr i organisationsenheten')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1289 and Language_Id = 2)
@@ -2414,7 +2414,7 @@ GO
 -- Translations 2015-01-19
 
 If not exists (select * from tblText where Id = 1290)
-	insert into tblText (Id, Textstring) VALUES (1290, 'Du m√•ste ange ett efternamn')
+	insert into tblText (Id, Textstring) VALUES (1290, 'Du mÂste ange ett efternamn')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1290 and Language_Id = 2)
@@ -2422,7 +2422,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1290 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1291)
-	insert into tblText (Id, Textstring) VALUES (1291, 'Du m√•ste ange ett f√∂rnamn')
+	insert into tblText (Id, Textstring) VALUES (1291, 'Du mÂste ange ett fˆrnamn')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1291 and Language_Id = 2)
@@ -2431,7 +2431,7 @@ GO
 
 
 If not exists (select * from tblText where Id = 1292)
-	insert into tblText (Id, Textstring) VALUES (1292, 'Du m√•ste ange en e-post adress')
+	insert into tblText (Id, Textstring) VALUES (1292, 'Du mÂste ange en e-post adress')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1292 and Language_Id = 2)
@@ -2439,7 +2439,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1292 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1293)
-	insert into tblText (Id, Textstring) VALUES (1293, 'Du m√•ste ange en standardkund')
+	insert into tblText (Id, Textstring) VALUES (1293, 'Du mÂste ange en standardkund')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1293 and Language_Id = 2)
@@ -2450,7 +2450,7 @@ GO
 
 --2015-01-27
 If not exists (select * from tblText where Id = 1294)
-	insert into tblText (Id, Textstring) VALUES (1294, 'Visa f√§lt - redigera')
+	insert into tblText (Id, Textstring) VALUES (1294, 'Visa f‰lt - redigera')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1294 and Language_Id = 2)
@@ -2458,7 +2458,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1294 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1295)
-	insert into tblText (Id, Textstring) VALUES (1295, 'Visa f√§lt - skrivskyddat')
+	insert into tblText (Id, Textstring) VALUES (1295, 'Visa f‰lt - skrivskyddat')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1295 and Language_Id = 2)
@@ -2466,7 +2466,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1295 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1296)
-	insert into tblText (Id, Textstring) VALUES (1296, 'D√∂lj f√§lt')
+	insert into tblText (Id, Textstring) VALUES (1296, 'Dˆlj f‰lt')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1296 and Language_Id = 2)
@@ -2475,7 +2475,7 @@ GO
 
 --2015-02-03
 If not exists (select * from tblText where Id = 1297)
-	insert into tblText (Id, Textstring) VALUES (1297, '√Ñrendet har markerats som ol√§st')
+	insert into tblText (Id, Textstring) VALUES (1297, 'ƒrendet har markerats som ol‰st')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1297 and Language_Id = 2)
@@ -2488,17 +2488,17 @@ UPDATE tblTextTranslation Set TextTranslation = 'Customer Administrator' WHERE T
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 555 and Language_Id = 1)
-	INSERT INTO tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(555, 1, 'Systemadministrat√∂r')
+	INSERT INTO tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(555, 1, 'Systemadministratˆr')
 GO
 
 -- 2015-02-10
---UPDATE tblText Set TextString = 'Avslutat √§rende' WHERE Id=1262;
+--UPDATE tblText Set TextString = 'Avslutat ‰rende' WHERE Id=1262;
 --GO
 
---UPDATE tblText Set TextString = 'Anv√§ndaren har r√§ttighet att administrera √§rendemallar' WHERE Id=818;
+--UPDATE tblText Set TextString = 'Anv‰ndaren har r‰ttighet att administrera ‰rendemallar' WHERE Id=818;
 --GO
 
---UPDATE tblText Set TextString = 'Anv√§ndaren har r√§ttighet att administrera Aktuellt' WHERE Id=1001;
+--UPDATE tblText Set TextString = 'Anv‰ndaren har r‰ttighet att administrera Aktuellt' WHERE Id=1001;
 --GO
 
 UPDATE tblTextTranslation Set TextTranslation = 'User has permission to manage Calendar' WHERE Text_Id=1001 AND Language_Id=2;
@@ -2526,7 +2526,7 @@ GO
 -- 2015-02-12
 
 If not exists (select * from tblText where Id = 1300)
-	insert into tblText (Id, Textstring) VALUES (1300, 'Det h√§r anv√§ndarnamnet √§r upptaget. Var v√§nlig anv√§nd n√•got annat.')
+	insert into tblText (Id, Textstring) VALUES (1300, 'Det h‰r anv‰ndarnamnet ‰r upptaget. Var v‰nlig anv‰nd nÂgot annat.')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1300 and Language_Id = 2)
@@ -2536,7 +2536,7 @@ GO
 -- 2015-02-13
 
 If not exists (select * from tblText where Id = 1301)
-	insert into tblText (Id, Textstring) VALUES (1301, '√Ñr du s√§ker p√• att du vill rensa denna mall')
+	insert into tblText (Id, Textstring) VALUES (1301, 'ƒr du s‰ker pÂ att du vill rensa denna mall')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1301 and Language_Id = 2)
@@ -2544,7 +2544,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1301 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1302)
-	insert into tblText (Id, Textstring) VALUES (1302, '√Ñr du s√§ker p√• att du vill ta bort denna mall')
+	insert into tblText (Id, Textstring) VALUES (1302, 'ƒr du s‰ker pÂ att du vill ta bort denna mall')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1302 and Language_Id = 2)
@@ -2552,7 +2552,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1302 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1303)
-	insert into tblText (Id, Textstring) VALUES (1303, '√Ñrendet kunde inte sparas d√• det saknas data i ett eller flera obligatoriska f√§lt. Var v√§nlig kontrollera i √§rendet.')
+	insert into tblText (Id, Textstring) VALUES (1303, 'ƒrendet kunde inte sparas dÂ det saknas data i ett eller flera obligatoriska f‰lt. Var v‰nlig kontrollera i ‰rendet.')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1303 and Language_Id = 2)
@@ -2560,7 +2560,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1303 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1304)
-	insert into tblText (Id, Textstring) VALUES (1304, 'F√∂r att begr√§nsa r√§ttigheter, markera de enheter som anv√§ndaren endast b√∂r ha tillg√•ng till')
+	insert into tblText (Id, Textstring) VALUES (1304, 'Fˆr att begr‰nsa r‰ttigheter, markera de enheter som anv‰ndaren endast bˆr ha tillgÂng till')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1304 and Language_Id = 2)
@@ -2575,7 +2575,7 @@ GO
  -- 2015-02-25
 
  If not exists (select * from tblText where Id = 1305)
-	insert into tblText (Id, Textstring) VALUES (1305, '√Ötkomst nekad')
+	insert into tblText (Id, Textstring) VALUES (1305, '≈tkomst nekad')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1305 and Language_Id = 2)
@@ -2583,15 +2583,15 @@ If not exists (select * from tblTextTranslation where Text_Id = 1305 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1306)
-	insert into tblText (Id, Textstring) VALUES (1306, 'Du har inte tillg√•ng till den h√§r delen av applikationen. Var v√§nlig kontakta systemadministrat√∂ren.')
+	insert into tblText (Id, Textstring) VALUES (1306, 'Du har inte tillgÂng till den h‰r delen av applikationen. Var v‰nlig kontakta systemadministratˆren.')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1306 and Language_Id = 2)
-	INSERT INTO tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1306, 2, 'You don‚Äôt have access to this part of the application. Please contact the system administrator.')
+	INSERT INTO tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1306, 2, 'You donít have access to this part of the application. Please contact the system administrator.')
 GO
 
 If not exists (select * from tblText where Id = 1307)
-	insert into tblText (Id, Textstring) VALUES (1307, 'Tillbaka till f√∂reg√•ende sida')
+	insert into tblText (Id, Textstring) VALUES (1307, 'Tillbaka till fˆregÂende sida')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1307 and Language_Id = 2)
@@ -2611,7 +2611,7 @@ GO
 
 
 If not exists (select * from tblText where Id = 1214)
-	insert into tblText (Id, Textstring) VALUES (1214, '√Ñndrad av')
+	insert into tblText (Id, Textstring) VALUES (1214, 'ƒndrad av')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1214 and Language_Id = 2)
@@ -2621,15 +2621,15 @@ GO
 
 -- 2015-03-05
 If not exists (select * from tblText where Id = 1309)
-	insert into tblText (Id, Textstring) VALUES (1309, 'visa endast v√§rde om anv√§ndarens standarddriftgrupp (f√§lt f√∂r andra driftgrupper visas som tomma)')
+	insert into tblText (Id, Textstring) VALUES (1309, 'visa endast v‰rde om anv‰ndarens standarddriftgrupp (f‰lt fˆr andra driftgrupper visas som tomma)')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1309 and Language_Id = 2)
-	INSERT INTO tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1309, 2, 'only display value if case is assigned to user‚Äôs default working group (field where other working group will be displayed as empty)')
+	INSERT INTO tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1309, 2, 'only display value if case is assigned to userís default working group (field where other working group will be displayed as empty)')
 GO
 
 If not exists (select * from tblText where Id = 1310)
-	insert into tblText (Id, Textstring) VALUES (1310, 'visa alltid v√§rde')
+	insert into tblText (Id, Textstring) VALUES (1310, 'visa alltid v‰rde')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1310 and Language_Id = 2)
@@ -2637,7 +2637,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1310 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1311)
-	insert into tblText (Id, Textstring) VALUES (1311, 'visa alla handl√§ggare oavsett vald driftgrupp')
+	insert into tblText (Id, Textstring) VALUES (1311, 'visa alla handl‰ggare oavsett vald driftgrupp')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1311 and Language_Id = 2)
@@ -2645,7 +2645,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1311 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1312)
-	insert into tblText (Id, Textstring) VALUES (1312, 'visa endast handl√§ggare i vald driftgrupp')
+	insert into tblText (Id, Textstring) VALUES (1312, 'visa endast handl‰ggare i vald driftgrupp')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1312 and Language_Id = 2)
@@ -2656,7 +2656,7 @@ GO
 --2015-03-09
 
 If not exists (select * from tblText where Id = 1313)
-	insert into tblText (Id, Textstring) VALUES (1313, '√Ñrendet kunde inte sparas d√• den l√§gsta m√∂jliga niv√•n p√• f√§lt')
+	insert into tblText (Id, Textstring) VALUES (1313, 'ƒrendet kunde inte sparas dÂ den l‰gsta mˆjliga nivÂn pÂ f‰lt')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1313 and Language_Id = 2)
@@ -2664,7 +2664,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1313 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1314)
-	insert into tblText (Id, Textstring) VALUES (1314, 'inte har valts. V√§nligen kontrollera √§rendet.')
+	insert into tblText (Id, Textstring) VALUES (1314, 'inte har valts. V‰nligen kontrollera ‰rendet.')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1314 and Language_Id = 2)
@@ -2674,7 +2674,7 @@ GO
 --2015-03-10
 
 If not exists (select * from tblText where Id = 1315)
-	insert into tblText (Id, Textstring) VALUES (1315, 'Spr√•k f√∂r E-mail')
+	insert into tblText (Id, Textstring) VALUES (1315, 'SprÂk fˆr E-mail')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1315 and Language_Id = 2)
@@ -2684,7 +2684,7 @@ GO
 -- 2015-02-11
 
 If not exists (select * from tblText where Id = 1316)
-	insert into tblText (Id, Textstring) VALUES (1316, 'Du m√•ste ange en √§rendetyp')
+	insert into tblText (Id, Textstring) VALUES (1316, 'Du mÂste ange en ‰rendetyp')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1316 and Language_Id = 2)
@@ -2692,7 +2692,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1316 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1317)
-	insert into tblText (Id, Textstring) VALUES (1317, 'Du m√•ste ange ett √§mnesomr√•de')
+	insert into tblText (Id, Textstring) VALUES (1317, 'Du mÂste ange ett ‰mnesomrÂde')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1317 and Language_Id = 2)
@@ -2701,7 +2701,7 @@ GO
 
 
 If not exists (select * from tblText where Id = 1318)
-	insert into tblText (Id, Textstring) VALUES (1318, 'Du m√•ste ange en br√•dskandegrad')
+	insert into tblText (Id, Textstring) VALUES (1318, 'Du mÂste ange en brÂdskandegrad')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1318 and Language_Id = 2)
@@ -2709,7 +2709,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1318 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1319)
-	insert into tblText (Id, Textstring) VALUES (1319, 'Du m√•ste ange en leverant√∂r')
+	insert into tblText (Id, Textstring) VALUES (1319, 'Du mÂste ange en leverantˆr')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1319 and Language_Id = 2)
@@ -2717,7 +2717,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1319 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1320)
-	insert into tblText (Id, Textstring) VALUES (1320, 'Du m√•ste ange ett systemnamn')
+	insert into tblText (Id, Textstring) VALUES (1320, 'Du mÂste ange ett systemnamn')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1320 and Language_Id = 2)
@@ -2725,7 +2725,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1320 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1321)
-	insert into tblText (Id, Textstring) VALUES (1321, 'Du m√•ste ange prioritet')
+	insert into tblText (Id, Textstring) VALUES (1321, 'Du mÂste ange prioritet')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1321 and Language_Id = 2)
@@ -2733,7 +2733,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1321 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1322)
-	insert into tblText (Id, Textstring) VALUES (1322, 'Du m√•ste ange ett omr√•de')
+	insert into tblText (Id, Textstring) VALUES (1322, 'Du mÂste ange ett omrÂde')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1322 and Language_Id = 2)
@@ -2742,7 +2742,7 @@ GO
 
 
 If not exists (select * from tblText where Id = 1323)
-	insert into tblText (Id, Textstring) VALUES (1323, 'Du m√•ste ange en avtalskategori')
+	insert into tblText (Id, Textstring) VALUES (1323, 'Du mÂste ange en avtalskategori')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1323 and Language_Id = 2)
@@ -2750,7 +2750,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1323 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1324)
-	insert into tblText (Id, Textstring) VALUES (1324, 'Du m√•ste ange en beskrivning')
+	insert into tblText (Id, Textstring) VALUES (1324, 'Du mÂste ange en beskrivning')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1324 and Language_Id = 2)
@@ -2758,7 +2758,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1324 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1325)
-	insert into tblText (Id, Textstring) VALUES (1325, 'Du m√•ste ange ett URL-namn')
+	insert into tblText (Id, Textstring) VALUES (1325, 'Du mÂste ange ett URL-namn')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1325 and Language_Id = 2)
@@ -2766,7 +2766,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1325 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1326)
-	insert into tblText (Id, Textstring) VALUES (1326, 'Moduler p√• startsidan')
+	insert into tblText (Id, Textstring) VALUES (1326, 'Moduler pÂ startsidan')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1326 and Language_Id = 2)
@@ -2774,7 +2774,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1326 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1327)
-	insert into tblText (Id, Textstring) VALUES (1327, 'Kunder p√• startsidan')
+	insert into tblText (Id, Textstring) VALUES (1327, 'Kunder pÂ startsidan')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1327 and Language_Id = 2)
@@ -2782,7 +2782,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1327 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1328)
-	insert into tblText (Id, Textstring) VALUES (1328, 'Du m√•ste ange en rotorsak')
+	insert into tblText (Id, Textstring) VALUES (1328, 'Du mÂste ange en rotorsak')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1328 and Language_Id = 2)
@@ -2790,7 +2790,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1328 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1329)
-	insert into tblText (Id, Textstring) VALUES (1329, 'Du m√•ste ange en p√•verkan')
+	insert into tblText (Id, Textstring) VALUES (1329, 'Du mÂste ange en pÂverkan')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1329 and Language_Id = 2)
@@ -2799,7 +2799,7 @@ GO
 
 
 If not exists (select * from tblText where Id = 1330)
-	insert into tblText (Id, Textstring) VALUES (1330, 'Anv√§ndaren har r√§ttighet att administrera √§rendemallar')
+	insert into tblText (Id, Textstring) VALUES (1330, 'Anv‰ndaren har r‰ttighet att administrera ‰rendemallar')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1330 and Language_Id = 2)
@@ -2807,29 +2807,29 @@ If not exists (select * from tblTextTranslation where Text_Id = 1330 and Languag
 GO
 
 If not exists (select * from tblText where Id = 1331)
-	insert into tblText (Id, Textstring) VALUES (1331, 'Anv√§ndaren har r√§ttighet att administrera Aktuellt')
+	insert into tblText (Id, Textstring) VALUES (1331, 'Anv‰ndaren har r‰ttighet att administrera Aktuellt')
 GO
 
 If not exists (select * from tblTextTranslation where Text_Id = 1331 and Language_Id = 2)
 	INSERT INTO tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1331, 2, 'User has permission to manage Calendar')
 GO
 
-UPDATE tblText Set TextString = 'Anv√§ndaren f√•r skapa √§rendemallar' WHERE Id=818;
+UPDATE tblText Set TextString = 'Anv‰ndaren fÂr skapa ‰rendemallar' WHERE Id=818;
 GO
 
-UPDATE tblText Set TextString = 'Anv√§ndaren har r√§ttighet till aktuellt' WHERE Id=1001;
+UPDATE tblText Set TextString = 'Anv‰ndaren har r‰ttighet till aktuellt' WHERE Id=1001;
 GO
 
 
-UPDATE tblText Set TextString = 'Anv√§ndaren har r√§ttighet att administrera √§rendemallar' WHERE Id=1330;
+UPDATE tblText Set TextString = 'Anv‰ndaren har r‰ttighet att administrera ‰rendemallar' WHERE Id=1330;
 GO
 
-UPDATE tblText Set TextString = 'Anv√§ndaren har r√§ttighet att administrera Aktuellt' WHERE Id=1331;
+UPDATE tblText Set TextString = 'Anv‰ndaren har r‰ttighet att administrera Aktuellt' WHERE Id=1331;
 GO
 
 
 if not exists (select * from tbltext where id = 1332)
-	insert into tbltext (id, TextString) VALUES (1332, 'Var v√§nlig ange tid i siffror mellan 0-24 (i. e 8-17)')
+	insert into tbltext (id, TextString) VALUES (1332, 'Var v‰nlig ange tid i siffror mellan 0-24 (i. e 8-17)')
 GO
 
 If not exists (select * from tblTextTranslation where text_id = 1332 and Language_Id = 2)
@@ -2837,7 +2837,7 @@ If not exists (select * from tblTextTranslation where text_id = 1332 and Languag
 GO
 
 if not exists (select * from tbltext where id = 1333)
-	insert into tbltext (id, TextString) VALUES (1333, 'Fakturering fr√•n √§rende')
+	insert into tbltext (id, TextString) VALUES (1333, 'Fakturering frÂn ‰rende')
 GO
 
 If not exists (select * from tblTextTranslation where text_id = 1333 and Language_Id = 2)
@@ -2848,7 +2848,7 @@ GO
 -- 2015-03-18
 
 If not exists (select * from tbltext where id = 1334)
-	insert into tbltext (id, TextString) VALUES (1334, 'Anv√§nd # f√∂r att s√∂ka efter √§rendenummer')
+	insert into tbltext (id, TextString) VALUES (1334, 'Anv‰nd # fˆr att sˆka efter ‰rendenummer')
 GO
 
 If not exists (select * from tblTextTranslation where text_id = 1334 and Language_Id = 2)
@@ -2859,7 +2859,7 @@ GO
 -- 2015-03-19
 
 If not exists (select * from tbltext where id = 1335)
-	insert into tbltext (id, TextString) VALUES (1335, 'Nedanst√•ende v√§rde √§ndras n√§r aktuell understatus v√§ljs')
+	insert into tbltext (id, TextString) VALUES (1335, 'NedanstÂende v‰rde ‰ndras n‰r aktuell understatus v‰ljs')
 GO
 
 If not exists (select * from tblTextTranslation where text_id = 1335 and Language_Id = 2)
@@ -2878,7 +2878,7 @@ GO
 -- 2015-03-23
 
 If not exists (select * from tbltext where id = 1337)
-	insert into tbltext (id, TextString) VALUES (1337, 'F√∂r att se √∂ver dessa √§renden, g√• till')
+	insert into tbltext (id, TextString) VALUES (1337, 'Fˆr att se ˆver dessa ‰renden, gÂ till')
 GO
 
 If not exists (select * from tblTextTranslation where text_id = 1337 and Language_Id = 2)
@@ -2889,7 +2889,7 @@ GO
 --2015-03-24
 
 If not exists (select * from tbltext where id = 1338)
-	insert into tbltext (id, TextString) VALUES (1338, 'V√§lj den mest l√§mpliga bredden f√∂r de kolumner som du vill visa p√• √§rende√∂versikten (beroende p√• m√§ngden information i varje kolumn).')
+	insert into tbltext (id, TextString) VALUES (1338, 'V‰lj den mest l‰mpliga bredden fˆr de kolumner som du vill visa pÂ ‰rendeˆversikten (beroende pÂ m‰ngden information i varje kolumn).')
 GO
 
 If not exists (select * from tblTextTranslation where text_id = 1338 and Language_Id = 2)
@@ -2897,7 +2897,7 @@ If not exists (select * from tblTextTranslation where text_id = 1338 and Languag
 GO
 
 If not exists (select * from tbltext where id = 1339)
-	insert into tbltext (id, TextString) VALUES (1339, '(V√§lj bred p√• h√∂gst 3 kolumner f√∂r b√§sta resultat).')
+	insert into tbltext (id, TextString) VALUES (1339, '(V‰lj bred pÂ hˆgst 3 kolumner fˆr b‰sta resultat).')
 GO
 
 If not exists (select * from tblTextTranslation where text_id = 1339 and Language_Id = 2)
@@ -2941,7 +2941,7 @@ GO
 
 
 If not exists (select * from tbltext where id = 1344)
-	insert into tbltext (id, TextString) VALUES (1344, 'Teckensnittsstorlek i tabell (ju mindre desto mer information kan visas p√• sk√§rmen).')
+	insert into tbltext (id, TextString) VALUES (1344, 'Teckensnittsstorlek i tabell (ju mindre desto mer information kan visas pÂ sk‰rmen).')
 GO
 
 If not exists (select * from tblTextTranslation where text_id = 1344 and Language_Id = 2)
@@ -2967,7 +2967,7 @@ GO
 
 
 If not exists (select * from tbltext where id = 1347)
-	insert into tbltext (id, TextString) VALUES (1347, 'Textf√§lt')
+	insert into tbltext (id, TextString) VALUES (1347, 'Textf‰lt')
 GO
 
 If not exists (select * from tblTextTranslation where text_id = 1347 and Language_Id = 2)
@@ -2979,11 +2979,11 @@ If not exists (select * from tbltext where id = 1349)
 GO
 
 If not exists (select * from tblTextTranslation where text_id = 1349 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1349, 2, 'Select box ‚Äì dropdown')
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1349, 2, 'Select box ñ dropdown')
 GO
 
 If not exists (select * from tbltext where id = 1350)
-	insert into tbltext (id, TextString) VALUES (1350, 'Datumf√§lt')
+	insert into tbltext (id, TextString) VALUES (1350, 'Datumf‰lt')
 GO
 
 If not exists (select * from tblTextTranslation where text_id = 1350 and Language_Id = 2)
@@ -2991,7 +2991,7 @@ If not exists (select * from tblTextTranslation where text_id = 1350 and Languag
 GO
 
 If not exists (select * from tbltext where id = 1351)
-	insert into tbltext (id, TextString) VALUES (1351, 'Numeriskt f√§lt')
+	insert into tbltext (id, TextString) VALUES (1351, 'Numeriskt f‰lt')
 GO
 
 If not exists (select * from tblTextTranslation where text_id = 1351 and Language_Id = 2)
@@ -3016,7 +3016,7 @@ If not exists (select * from tblTextTranslation where text_id = 1353 and Languag
 GO
 
 If not exists (select * from tbltext where id = 1354)
-	insert into tbltext (id, TextString) VALUES (1354, 'Automatisk h√§mtning')
+	insert into tbltext (id, TextString) VALUES (1354, 'Automatisk h‰mtning')
 GO
 
 If not exists (select * from tblTextTranslation where text_id = 1354 and Language_Id = 2)
@@ -3048,7 +3048,7 @@ If not exists (select * from tblTextTranslation where text_id = 1357 and Languag
 GO
 
 If not exists (select * from tbltext where id = 1358)
-	insert into tbltext (id, TextString) VALUES (1358, 'Textf√§lt ‚Äì st√∂rre')
+	insert into tbltext (id, TextString) VALUES (1358, 'Textf‰lt ñ stˆrre')
 GO
 
 If not exists (select * from tblTextTranslation where text_id = 1358 and Language_Id = 2)
@@ -3074,7 +3074,7 @@ GO
 -- 2015-03-28
 
 If not exists (select * from tbltext where id = 1361)
-	insert into tbltext (id, TextString) VALUES (1361, 'B√∂rjar med')
+	insert into tbltext (id, TextString) VALUES (1361, 'Bˆrjar med')
 GO
 
 If not exists (select * from tblTextTranslation where text_id = 1361 and Language_Id = 2)
@@ -3082,7 +3082,7 @@ If not exists (select * from tblTextTranslation where text_id = 1361 and Languag
 GO
 
 If not exists (select * from tbltext where id = 1362)
-	insert into tbltext (id, TextString) VALUES (1362, 'Inneh√•ller')
+	insert into tbltext (id, TextString) VALUES (1362, 'InnehÂller')
 GO
 
 If not exists (select * from tblTextTranslation where text_id = 1362 and Language_Id = 2)
@@ -3098,7 +3098,7 @@ If not exists (select * from tblTextTranslation where text_id = 1363 and Languag
 GO
 
 If not exists (select * from tbltext where id = 1364)
-	insert into tbltext (id, TextString) VALUES (1364, 'S√§tt avdelningen som standard p√• √§renden som registreras via e-mail')
+	insert into tbltext (id, TextString) VALUES (1364, 'S‰tt avdelningen som standard pÂ ‰renden som registreras via e-mail')
 GO
 
 If not exists (select * from tblTextTranslation where text_id = 1364 and Language_Id = 2)
@@ -3109,7 +3109,7 @@ GO
 
 -- 20150414
 If not exists (select * from tbltext where id = 1365)
-	insert into tbltext (id, TextString) VALUES (1365, 'Visa FAQ p√• sj√§lvservice startsida')
+	insert into tbltext (id, TextString) VALUES (1365, 'Visa FAQ pÂ sj‰lvservice startsida')
 GO
 
 If not exists (select * from tblTextTranslation where text_id = 1365 and Language_Id = 2)
@@ -3117,7 +3117,7 @@ If not exists (select * from tblTextTranslation where text_id = 1365 and Languag
 GO
 
 If not exists (select * from tbltext where id = 1366)
-	insert into tbltext (id, TextString) VALUES (1366, 'Visa dokument p√• sj√§lvservice')
+	insert into tbltext (id, TextString) VALUES (1366, 'Visa dokument pÂ sj‰lvservice')
 GO
 
 If not exists (select * from tblTextTranslation where text_id = 1366 and Language_Id = 2)
@@ -3125,7 +3125,7 @@ If not exists (select * from tblTextTranslation where text_id = 1366 and Languag
 GO
 
 If not exists (select * from tbltext where id = 1367)
-	insert into tbltext (id, TextString) VALUES (1367, 'Visa hj√§lp p√• sj√§lvservice')
+	insert into tbltext (id, TextString) VALUES (1367, 'Visa hj‰lp pÂ sj‰lvservice')
 GO
 
 If not exists (select * from tblTextTranslation where text_id = 1367 and Language_Id = 2)
@@ -3133,7 +3133,7 @@ If not exists (select * from tblTextTranslation where text_id = 1367 and Languag
 GO
 
 If not exists (select * from tbltext where id = 1368)
-	insert into tbltext (id, TextString) VALUES (1368, 'Visa CoWorkers p√• sj√§lvservice')
+	insert into tbltext (id, TextString) VALUES (1368, 'Visa CoWorkers pÂ sj‰lvservice')
 GO
 
 If not exists (select * from tblTextTranslation where text_id = 1368 and Language_Id = 2)
@@ -3143,7 +3143,7 @@ GO
 
 -- 20150415
 
-UPDATE tblText Set TextString = '(Du kan endast v√§lja bredd p√• h√∂gst 3 kolumner).' WHERE Id=1339;
+UPDATE tblText Set TextString = '(Du kan endast v‰lja bredd pÂ hˆgst 3 kolumner).' WHERE Id=1339;
 GO
 
 UPDATE tblTextTranslation Set TextTranslation = '(You can only select wide on a maximum of 3 columns).' WHERE Text_Id=1339 AND Language_Id=2;
@@ -3151,76 +3151,77 @@ GO
 
 -- 20150417
 If not exists (select * from tbltext where id = 1369)
-	insert into tbltext (id, TextString) VALUES (1369, 'Avslutsdatum s√§tt automatiskt till det datum d√• √§rendet st√§ngs (anv√§ndaren kan inte √§ndra det)')
+	insert into tbltext (id, TextString) VALUES (1369, 'Avslutsdatum s‰tt automatiskt till det datum dÂ ‰rendet st‰ngs (anv‰ndaren kan inte ‰ndra det)')
 GO
 
 If not exists (select * from tblTextTranslation where text_id = 1369 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1369, 2, 'Closing date field is automatically set to the date of closing case (User cannot change it)')
 GO
 
---20150420
-
-If not exists (select * from tbltext where id = 1370)
-	insert into tbltext (id, TextString) VALUES (1370, 'Sj‰lvservice meddelande')
-GO
-
-If not exists (select * from tblTextTranslation where text_id = 1370 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1370, 2, 'Selfservice message')
-GO
-
-If not exists (select * from tbltext where id = 1371)
-	insert into tbltext (id, TextString) VALUES (1371, 'Sj‰lvservice registrerings meddelande')
-GO
-
-If not exists (select * from tblTextTranslation where text_id = 1371 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1371, 2, 'Self Service Registration Message')
-GO
-
-If not exists (select * from tbltext where id = 1372)
-	insert into tbltext (id, TextString) VALUES (1372, 'Sj‰lvservice v‰lkommen meddelande')
-GO
-
-If not exists (select * from tblTextTranslation where text_id = 1372 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1372, 2, 'Self Service Welcome Message')
-GO
-
 
 -- 20150417
+If not exists (select * from tbltext where id = 1369)
+	insert into tbltext (id, TextString) VALUES (1369, 'Inga standardkolumner har valts fˆr din anv‰ndare pÂ denna kund, fˆr att filter, klicka pÂ fliken Inst‰llningar och gÂ till Filter ƒrendeˆversikt.')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1369 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1369, 2, 'No default columns have been selected for your user in this customer. To display case overview filters, go to the Settings tab.')
+GO
+
 If not exists (select * from tbltext where id = 1370)
-	insert into tbltext (id, TextString) VALUES (1370, 'Inga standardkolumner har valts f√∂r din anv√§ndare p√• denna kund, f√∂r att filter, klicka p√• fliken Inst√§llningar och g√• till Filter √Ñrende√∂versikt.')
+	insert into tbltext (id, TextString) VALUES (1370, 'Inga ‰rendef‰lt har valts fˆr denna kund, kontakta systemadministratˆren.')
 GO
 If not exists (select * from tblTextTranslation where text_id = 1370 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1370, 2, 'No default columns have been selected for your user in this customer. To display case overview filters, go to the Settings tab.')
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1370, 2, 'No case fields have been selected for this customer, please contact the system administrator.')
 GO
 
 If not exists (select * from tbltext where id = 1371)
-	insert into tbltext (id, TextString) VALUES (1371, 'Inga √§rendef√§lt har valts f√∂r denna kund, kontakta systemadministrat√∂ren.')
+	insert into tbltext (id, TextString) VALUES (1371, 'Laddar...')
 GO
 If not exists (select * from tblTextTranslation where text_id = 1371 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1371, 2, 'No case fields have been selected for this customer, please contact the system administrator.')
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1371, 2, 'Loading...')
 GO
 
 If not exists (select * from tbltext where id = 1372)
-	insert into tbltext (id, TextString) VALUES (1372, 'Laddar...')
+	insert into tbltext (id, TextString) VALUES (1372, 'Ett fel intr‰ffade, klicka {0}h‰r{1} fˆr att ladda om sidan.')
 GO
 If not exists (select * from tblTextTranslation where text_id = 1372 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1372, 2, 'Loading...')
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1372, 2, 'An unexpected error ocurred, please {0}refresh{1}')
 GO
 
 If not exists (select * from tbltext where id = 1373)
-	insert into tbltext (id, TextString) VALUES (1373, 'Ett fel intr√§ffade, klicka {0}h√§r{1} f√∂r att ladda om sidan.')
+	insert into tbltext (id, TextString) VALUES (1373, 'Saving...')
 GO
 If not exists (select * from tblTextTranslation where text_id = 1373 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1373, 2, 'An unexpected error ocurred, please {0}refresh{1}')
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1373, 2, 'Sparar...')
 GO
+
+
+
+--20150420
 
 If not exists (select * from tbltext where id = 1374)
-	insert into tbltext (id, TextString) VALUES (1374, 'Saving...')
-GO
-If not exists (select * from tblTextTranslation where text_id = 1374 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1374, 2, 'Sparar...')
+	insert into tbltext (id, TextString) VALUES (1374, 'Sj‰lvservice meddelande')
 GO
 
+If not exists (select * from tblTextTranslation where text_id = 1374 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1374, 2, 'Selfservice message')
+GO
+
+If not exists (select * from tbltext where id = 1375)
+	insert into tbltext (id, TextString) VALUES (1375, 'Sj‰lvservice registrerings meddelande')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1375 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1375, 2, 'Self Service Registration Message')
+GO
+
+If not exists (select * from tbltext where id = 1376)
+	insert into tbltext (id, TextString) VALUES (1376, 'Sj‰lvservice v‰lkommen meddelande')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1376 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1376, 2, 'Self Service Welcome Message')
+GO
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
