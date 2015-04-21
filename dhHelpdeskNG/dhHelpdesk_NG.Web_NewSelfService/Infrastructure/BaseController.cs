@@ -26,6 +26,7 @@
     using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.BusinessData.Models.Error;
     using DH.Helpdesk.NewSelfService.Infrastructure.Common.Concrete;
+    using DH.Helpdesk.Common.Tools;
     
 
     public class BaseController : Controller
@@ -47,13 +48,25 @@
         {
             var customerId = -1;
             TempData["ShowLanguageSelect"] = true;
-            SessionFacade.LastError = null;
+            SessionFacade.LastError = null;            
 
             if(filterContext.ActionParameters.Keys.Contains("customerId"))
             {
                 var customerIdPassed = filterContext.ActionParameters["customerId"];
                 if(customerIdPassed.ToString() != "")
                     customerId = int.Parse(customerIdPassed.ToString());
+            }
+
+            if (filterContext.ActionParameters.Keys.Contains("id"))
+            {
+                var _guid = filterContext.ActionParameters["id"];                
+                if (_guid!= null && _guid.ToString() != string.Empty && GuidHelper.IsGuid(_guid.ToString()))
+                {
+                    var guid = new Guid(_guid.ToString());
+                    int? tempCustomerId = _masterDataService.GetCustomerIdByEMailGUID(guid);
+                    if (tempCustomerId != null && tempCustomerId > 0)
+                        customerId = tempCustomerId.Value;
+                }
             }
 
             if (SessionFacade.CurrentCustomer == null && customerId == -1)
@@ -81,7 +94,7 @@
                 filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));                 
                 return;
             }
-            else
+            else            
             {
                 customerId = SessionFacade.CurrentCustomer.Id;
                 //ViewBag.PublicCustomerId = customerId;

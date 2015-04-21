@@ -140,6 +140,19 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             {
                 var guid = new Guid(id);
                 currentCase = _caseService.GetCaseByEMailGUID(guid);
+
+                var dynamicCases = _caseService.GetAllDynamicCases();
+                var dynamicUrl = "";
+                if (dynamicCases != null && dynamicCases.Any())
+                {
+                    dynamicUrl = dynamicCases.Where(w => w.CaseId == currentCase.Id).Select(d => "/" + d.FormPath).FirstOrDefault();
+                    if (!string.IsNullOrEmpty(dynamicUrl)) // Show Case in eform
+                    {
+                        var urlStr = dynamicUrl.SetStrParameters(currentCase.Id);
+                        var url = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, urlStr);                         
+                        return Redirect(url);
+                    }
+                }
             }
             else
             {

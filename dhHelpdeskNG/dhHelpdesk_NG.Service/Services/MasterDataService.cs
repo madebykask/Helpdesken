@@ -9,6 +9,7 @@
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.BusinessData.Models.ADFS.Input;
     using DH.Helpdesk.Dal.Repositories.ADFS;
+    using System;
 
     public interface IMasterDataService
     {
@@ -26,8 +27,8 @@
         void SaveSSOLog(NewSSOLog SSOLog);
         void SaveADFSSetting(ADFSSetting adfsSetting);
         ADFSSetting GetADFSSetting();
-
         IList<GlobalSetting> GetGlobalSettings();
+        int? GetCustomerIdByEMailGUID(Guid GUID);
         
     }
 
@@ -69,6 +70,11 @@
         {
             return this._customerRepository.CustomersForUser(userId);
         }
+
+        public int? GetCustomerIdByEMailGUID(Guid GUID)
+        {
+            return this._customerRepository.GetCustomerIdByEMailGUID(GUID);
+        }       
 
         public Customer GetCustomer(int customerId)
         {
