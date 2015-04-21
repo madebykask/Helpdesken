@@ -3160,67 +3160,67 @@ GO
 
 
 -- 20150417
-If not exists (select * from tbltext where id = 1369)
-	insert into tbltext (id, TextString) VALUES (1369, 'Inga standardkolumner har valts för din användare på denna kund, för att filter, klicka på fliken Inställningar och gå till Filter Ärendeöversikt.')
-GO
-If not exists (select * from tblTextTranslation where text_id = 1369 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1369, 2, 'No default columns have been selected for your user in this customer. To display case overview filters, go to the Settings tab.')
-GO
-
 If not exists (select * from tbltext where id = 1370)
-	insert into tbltext (id, TextString) VALUES (1370, 'Inga ärendefält har valts för denna kund, kontakta systemadministratören.')
+	insert into tbltext (id, TextString) VALUES (1370, 'Inga standardkolumner har valts för din användare på denna kund, för att filter, klicka på fliken Inställningar och gå till Filter Ärendeöversikt.')
 GO
 If not exists (select * from tblTextTranslation where text_id = 1370 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1370, 2, 'No case fields have been selected for this customer, please contact the system administrator.')
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1370, 2, 'No default columns have been selected for your user in this customer. To display case overview filters, go to the Settings tab.')
 GO
 
 If not exists (select * from tbltext where id = 1371)
-	insert into tbltext (id, TextString) VALUES (1371, 'Laddar...')
+	insert into tbltext (id, TextString) VALUES (1371, 'Inga ärendefält har valts för denna kund, kontakta systemadministratören.')
 GO
 If not exists (select * from tblTextTranslation where text_id = 1371 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1371, 2, 'Loading...')
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1371, 2, 'No case fields have been selected for this customer, please contact the system administrator.')
 GO
 
 If not exists (select * from tbltext where id = 1372)
-	insert into tbltext (id, TextString) VALUES (1372, 'Ett fel inträffade, klicka {0}här{1} för att ladda om sidan.')
+	insert into tbltext (id, TextString) VALUES (1372, 'Laddar...')
 GO
 If not exists (select * from tblTextTranslation where text_id = 1372 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1372, 2, 'An unexpected error ocurred, please {0}refresh{1}')
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1372, 2, 'Loading...')
 GO
 
 If not exists (select * from tbltext where id = 1373)
-	insert into tbltext (id, TextString) VALUES (1373, 'Saving...')
+	insert into tbltext (id, TextString) VALUES (1373, 'Ett fel inträffade, klicka {0}här{1} för att ladda om sidan.')
 GO
 If not exists (select * from tblTextTranslation where text_id = 1373 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1373, 2, 'Sparar...')
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1373, 2, 'An unexpected error ocurred, please {0}refresh{1}')
+GO
+
+If not exists (select * from tbltext where id = 1374)
+	insert into tbltext (id, TextString) VALUES (1374, 'Sparar...')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1374 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1374, 2, 'Saving...')
 GO
 
 
 
 --20150420
 
-If not exists (select * from tbltext where id = 1374)
-	insert into tbltext (id, TextString) VALUES (1374, 'Självservice meddelande')
-GO
-
-If not exists (select * from tblTextTranslation where text_id = 1374 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1374, 2, 'Selfservice message')
-GO
-
 If not exists (select * from tbltext where id = 1375)
-	insert into tbltext (id, TextString) VALUES (1375, 'Självservice registrerings meddelande')
+	insert into tbltext (id, TextString) VALUES (1375, 'Självservice meddelande')
 GO
 
 If not exists (select * from tblTextTranslation where text_id = 1375 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1375, 2, 'Self Service Registration Message')
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1375, 2, 'Selfservice message')
 GO
 
 If not exists (select * from tbltext where id = 1376)
-	insert into tbltext (id, TextString) VALUES (1376, 'Självservice välkommen meddelande')
+	insert into tbltext (id, TextString) VALUES (1376, 'Självservice registrerings meddelande')
 GO
 
 If not exists (select * from tblTextTranslation where text_id = 1376 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1376, 2, 'Self Service Welcome Message')
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1376, 2, 'Self Service Registration Message')
+GO
+
+If not exists (select * from tbltext where id = 1377)
+	insert into tbltext (id, TextString) VALUES (1377, 'Självservice välkommen meddelande')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1377 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1377, 2, 'Self Service Welcome Message')
 GO
 
 -- *** Run this last when put translation script above this line **--
