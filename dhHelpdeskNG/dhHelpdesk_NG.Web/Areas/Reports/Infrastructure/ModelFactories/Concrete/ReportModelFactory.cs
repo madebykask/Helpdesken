@@ -208,7 +208,7 @@
         public FinishingCauseCustomerOptionsModel GetFinishingCauseCustomerOptionsModel(FinishingCauseCustomerOptions options)
         {
             var departments = WebMvcHelper.CreateMultiSelectField(options.Departments);
-            var workingGroups = WebMvcHelper.CreateMultiSelectField(options.WorkingGroups);
+            var workingGroups = WebMvcHelper.CreateListField(options.WorkingGroups);
             var caseTypes = options.CaseTypes;
             var administrators = WebMvcHelper.CreateListField(options.Administrators);
             var periodFrom = DateTime.Today.AddYears(-1);

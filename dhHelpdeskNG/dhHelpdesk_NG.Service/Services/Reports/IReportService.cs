@@ -110,7 +110,7 @@
         FinishingCauseCustomerData GetFinishingCauseCustomerData(
                                     int customerId,
                                     List<int> departmentIds,
-                                    List<int> workingGroupIds,
+                                    int? workingGroupId,
                                     int? caseTypeId,
                                     int? administratorId,
                                     DateTime? periodFrom,

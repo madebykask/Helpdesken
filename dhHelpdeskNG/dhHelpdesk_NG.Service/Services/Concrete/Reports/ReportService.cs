@@ -535,7 +535,7 @@
         public FinishingCauseCustomerData GetFinishingCauseCustomerData(
             int customerId,
             List<int> departmentIds,
-            List<int> workingGroupIds,
+            int? workingGroupId,
             int? caseTypeId,
             int? administratorId,
             DateTime? periodFrom,
@@ -559,7 +559,7 @@
                 var cases = casesRep.GetAll()
                         .GetByCustomer(customerId)
                         .GetByDepartments(departmentIds)
-                        .GetByWorkingGroups(workingGroupIds)
+                        .GetByWorkingGroup(workingGroupId)
                         .GetByCaseTypes(caseTypeIds)
                         .GetByAdministrator(administratorId)
                         .GetByRegistrationPeriod(periodFrom, periodUntil)
@@ -567,7 +567,7 @@
                         .GetNotDeleted();
 
                 var departments = departmentRep.GetAll().GetByIds(departmentIds);
-                var workingGroups = workingGroupRep.GetAll().GetByIds(workingGroupIds);
+                var workingGroups = workingGroupRep.GetAll().GetById(workingGroupId);
                 var caseTypes = caseTypeRep.GetAll().GetByIds(caseTypeIds);
                 var administrators = administratorRep.GetAll().GetById(administratorId);
                 var finishingCauses = finishingCauseRep.GetAll().GetActiveByCustomer(customerId);

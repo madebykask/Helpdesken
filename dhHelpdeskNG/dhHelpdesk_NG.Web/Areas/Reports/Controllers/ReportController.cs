@@ -321,7 +321,7 @@
             var data = this.reportService.GetFinishingCauseCustomerData(
                                             this.OperationContext.CustomerId,
                                             options.DepartmentIds,
-                                            options.WorkingGroupIds,
+                                            options.WorkingGroupId,
                                             options.CaseTypeId,
                                             options.AdministratorId,
                                             options.PeriodFrom,

@@ -32,10 +32,9 @@
         <tr>
             <td class="span3">@Translation.Get("Driftgrupp")</td>
             <td>
-                @Html.DropDownListFor(m => m.WorkingGroupIds, Model.WorkingGroups,
-                    new { id = "workingGroups", multiple = "multiple", @class = "multiselect multiselect-search" })
+                @Html.DropDownListFor(m => m.WorkingGroupId, Model.WorkingGroups)
             </td>
-        </tr>
+        </tr>        
         <tr>
             <td class="span3">@Translation.Get("Handläggare")</td>
             <td>
@@ -62,7 +61,6 @@
 <script type="text/javascript">
     $(function () {
         $("#departments").multiselect();
-        $("#workingGroups").multiselect();
 
         $('#divCaseType ul.dropdown-menu li a').click(function (e) {
             e.preventDefault();

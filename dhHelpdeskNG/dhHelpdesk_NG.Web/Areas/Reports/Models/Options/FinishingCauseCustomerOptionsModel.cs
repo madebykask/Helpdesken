@@ -13,12 +13,11 @@
         public FinishingCauseCustomerOptionsModel()
         {
             this.DepartmentIds = new List<int>();
-            this.WorkingGroupIds = new List<int>();   
         }
 
         public FinishingCauseCustomerOptionsModel(
-            MultiSelectList departments, 
-            MultiSelectList workingGroups, 
+            MultiSelectList departments,
+            SelectList workingGroups, 
             List<CaseTypeItem> caseTypes, 
             SelectList administrators,
             DateTime periodFrom,
@@ -39,10 +38,10 @@
         public List<int> DepartmentIds { get; set; }
 
         [NotNull]
-        public MultiSelectList WorkingGroups { get; private set; }
+        public SelectList WorkingGroups { get; private set; }
 
         [LocalizedDisplay("Driftgrupp")]
-        public List<int> WorkingGroupIds { get; set; }
+        public int? WorkingGroupId { get; set; }
 
         [NotNull]
         public List<CaseTypeItem> CaseTypes { get; private set; }

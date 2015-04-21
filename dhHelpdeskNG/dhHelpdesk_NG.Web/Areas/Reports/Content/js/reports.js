@@ -91,7 +91,9 @@
                 case dhHelpdesk.reports.reportType.LeadtimeActiveCases:
                     return dhHelpdesk.reports.leadtimeActiveCases();
                 case dhHelpdesk.reports.reportType.FinishingCauseCustomer:
-                    return dhHelpdesk.reports.finishingCauseCustomer();
+                    return dhHelpdesk.reports.finishingCauseCustomer({
+                        workingGroupUsersRoute: workingGroupUsersRoute
+                    });
                 case dhHelpdesk.reports.reportType.FinishingCauseCategoryCustomer:
                     return dhHelpdesk.reports.finishingCauseCategoryCustomer();
                 case dhHelpdesk.reports.reportType.ClosedCasesDay:
@@ -257,6 +259,10 @@
         my = my || {};
 
         var that = dhHelpdesk.reports.report({ canExcel: true }, my);
+
+        var workingGroupUsersRoute = spec.workingGroupUsersRoute || '';
+
+        dhHelpdesk.reports.utils.initWorkingGroupUsers(workingGroupUsersRoute);
 
         return that;
     }
