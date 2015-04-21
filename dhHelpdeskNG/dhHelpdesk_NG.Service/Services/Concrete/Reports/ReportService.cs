@@ -8,6 +8,7 @@
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseSatisfaction;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.ClosedCasesDay;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.FinishingCauseCategoryCustomer;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.FinishingCauseCustomer;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeActiveCases;
@@ -650,6 +651,81 @@
                                             users,
                                             periodFrom,
                                             periodUntil);
+            }
+        }
+
+        #endregion
+
+        #region ClosedCasesDay
+
+        public ClosedCasesDayOptions GetClosedCasesDayOptions(int customerId)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var departmentRep = uow.GetRepository<Department>();
+                var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
+                var caseTypeRep = uow.GetRepository<CaseType>();
+                var administratorRep = uow.GetRepository<User>();
+
+                var departments = departmentRep.GetAll().GetActiveByCustomer(customerId);
+                var workingGroups = workingGroupRep.GetAll().GetActiveByCustomer(customerId);
+                var caseTypes = caseTypeRep.GetAll().GetActiveByCustomer(customerId);
+                var administrators = administratorRep.GetAll().GetActiveByCustomer(customerId);
+
+                return ReportsOptionsMapper.MapToClosedCasesDayOptions(
+                                            departments,
+                                            workingGroups,
+                                            caseTypes,
+                                            administrators);
+            }
+        }
+
+        public ClosedCasesDayData GetClosedCasesDayData(
+            int customerId,
+            List<int> departmentIds,
+            int? workingGroupId,
+            int? caseTypeId,
+            int? administratorId,
+            DateTime period)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var casesRep = uow.GetRepository<Case>();
+                var departmentRep = uow.GetRepository<Department>();
+                var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
+                var caseTypeRep = uow.GetRepository<CaseType>();
+                var administratorRep = uow.GetRepository<User>();
+
+                var caseTypeIds = new List<int>();
+                if (caseTypeId.HasValue)
+                {
+                    LoadCaseTypeChildrenIds(caseTypeId.Value, caseTypeIds, uow);
+                }
+
+                var from = period.RoundToMonth();
+                var until = period.AddMonths(1).RoundToMonth();
+
+                var cases = casesRep.GetAll()
+                                .GetByCustomer(customerId)
+                                .GetByDepartments(departmentIds)
+                                .GetByCaseTypes(caseTypeIds)
+                                .GetByWorkingGroup(workingGroupId)
+                                .GetByAdministrator(administratorId)
+                                .GetByRegistrationPeriod(from, until)
+                                .GetNotDeleted();
+
+                var departments = departmentRep.GetAll().GetByIds(departmentIds);
+                var workingGroups = workingGroupRep.GetAll().GetById(workingGroupId);
+                var caseTypes = caseTypeRep.GetAll().GetByIds(caseTypeIds);
+                var administrators = administratorRep.GetAll().GetById(administratorId);
+
+                return ReportsMapper.MapToClosedCasesDayData(
+                                            cases,
+                                            departments,
+                                            workingGroups,
+                                            caseTypes,
+                                            administrators,
+                                            period);
             }
         }
 

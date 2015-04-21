@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 {
     using System;
+    using System.Linq;
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models.Reports.Enums;
@@ -126,6 +127,12 @@
                     return this.PartialView(
                                 "Options/FinishingCauseCategoryCustomer",
                                 this.reportModelFactory.GetFinishingCauseCategoryCustomerOptionsModel(finishingCauseCategoryCustomer));
+
+                case ReportType.ClosedCasesDay:
+                    var closedCasesDay = this.reportService.GetClosedCasesDayOptions(this.OperationContext.CustomerId);
+                    return this.PartialView(
+                                "Options/ClosedCasesDay",
+                                this.reportModelFactory.GetClosedCasesDayOptionsModel(closedCasesDay));
             }
 
             return null;
@@ -346,6 +353,27 @@
             var model = this.reportModelFactory.GetFinishingCauseCategoryCustomerModel(data);
 
             return this.PartialView("Reports/FinishingCauseCategoryCustomer", model);
+        }
+
+        [HttpGet]
+        public UnicodeFileContentResult GetClosedCasesDayReport(
+                                    string departments,
+                                    int? caseType,
+                                    int? workingGroup,
+                                    int? administrator,
+                                    DateTime? period)
+        {
+            var data = this.reportService.GetClosedCasesDayData(
+                                    this.OperationContext.CustomerId,
+                                    departments.GetIntValues().ToList(),
+                                    caseType,
+                                    workingGroup,
+                                    administrator,
+                                    period.RoundToMonthOrGetCurrent());
+
+            var report = this.reportsBuilder.GetClosedCasesDayReport(data, period.RoundToMonthOrGetCurrent());
+
+            return new UnicodeFileContentResult(report, string.Empty);
         }
     }
 }

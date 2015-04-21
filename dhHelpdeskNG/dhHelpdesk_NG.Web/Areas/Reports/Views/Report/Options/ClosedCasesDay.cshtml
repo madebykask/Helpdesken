@@ -1,0 +1,67 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Infrastructure.Extensions
+@model DH.Helpdesk.Web.Areas.Reports.Models.Options.ClosedCasesDayOptionsModel
+
+@using (Html.BeginForm("GetClosedCasesDayReport", "Report", null, FormMethod.Post, new { id = "reportForm" }))
+{
+    <table class="tableform">    
+        <tr>
+            <td class="span3">@Translation.Get("Avdelning påverkad")</td>
+            <td>
+                @Html.DropDownListFor(m => m.DepartmentIds, Model.Departments,
+                        new { id = "departments", multiple = "multiple", @class = "multiselect multiselect-search" })
+            </td>
+        </tr>     
+        <tr>
+            <td class="span3">@Translation.Get("Ärendetyper")</td>
+            <td>
+                <div id="divCaseType" class="btn-group">
+                    <div class="btn" id="caseTypeText">@Translation.Get("--")</div>
+                    <button class="btn dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">@Translation.Get("--")</a></li>
+                        @Html.CaseTypesList(Model.CaseTypes)
+                    </ul>
+                    @Html.HiddenFor(m => m.CaseTypeId)    
+                </div>            
+            </td>
+        </tr>        
+        <tr>
+            <td class="span3">@Translation.Get("Driftgrupp")</td>
+            <td>
+                @Html.DropDownListFor(m => m.WorkingGroupId, Model.WorkingGroups)
+            </td>
+        </tr>        
+        <tr>
+            <td class="span3">@Translation.Get("Handläggare")</td>
+            <td>
+                @Html.DropDownListFor(m => m.AdministratorId, Model.Administrators)
+            </td>
+        </tr>                                   
+        <tr>
+            <td class="span3">@Translation.Get("Period")</td>
+            <td>
+                @Html.EditorFor(m => m.Period, "YearMonthPicker", new { id = "period" })
+            </td>
+        </tr>        
+    </table>        
+}
+<div id="reportContainer">    
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $("#departments").multiselect();
+
+        $('#divCaseType ul.dropdown-menu li a').click(function (e) {
+            e.preventDefault();
+            var val = $(this).attr('value');
+            $("#caseTypeText").text(getBreadcrumbs(this));
+            $("#CaseTypeId").val(val);
+        });
+
+        $('#divCaseType a[value="' + $("#CaseTypeId").val() + '"]').click();
+    })
+</script>

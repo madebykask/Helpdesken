@@ -18,10 +18,7 @@
                 case ReportType.FinishingCauseCategoryCustomer:
                     return Translation.Get("Rapport - Avslutskategori per avdelning");
                 case ReportType.ClosedCasesDay:
-                    return string.Format(
-                        "{0} - {1}",
-                        Translation.Get("Rapport"),
-                        Translation.Get("Rapport - Avslutade ärenden per dag"));
+                    return Translation.Get("Rapport - Avslutade ärenden per dag");
                 case ReportType.RegistratedCasesDay:
                     return string.Format(
                         "{0} - {1}/{2}",

@@ -130,6 +130,21 @@
                             options.WorkingGroups);
         }
 
+        public static ClosedCasesDayOptions MapToClosedCasesDayOptions(
+                                                        IQueryable<Department> departments,
+                                                        IQueryable<WorkingGroupEntity> workingGroups,
+                                                        IQueryable<CaseType> caseTypes,
+                                                        IQueryable<User> administrators)
+        {
+            var options = GetOptions(departments, caseTypes, workingGroups, administrators);
+
+            return new ClosedCasesDayOptions(
+                            options.Departments,
+                            options.CaseTypes,
+                            options.WorkingGroups,
+                            options.Administrators);
+        }
+
         private static ReportOptions GetOptions(
                                         IQueryable<Department> departments = null,
                                         IQueryable<CaseType> caseTypes = null,

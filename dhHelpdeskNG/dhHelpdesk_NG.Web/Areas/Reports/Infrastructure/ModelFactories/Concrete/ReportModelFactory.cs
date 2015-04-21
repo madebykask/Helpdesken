@@ -47,7 +47,8 @@
                                 ReportType.LeadtimeActiveCases,
                                 ReportType.CaseSatisfaction,
                                 ReportType.FinishingCauseCustomer,
-                                ReportType.FinishingCauseCategoryCustomer
+                                ReportType.FinishingCauseCategoryCustomer,
+                                ReportType.ClosedCasesDay
                             };
 
             // It's a new report, so we need to add it to the tblReport table
@@ -246,6 +247,22 @@
         public FinishingCauseCategoryCustomerModel GetFinishingCauseCategoryCustomerModel(FinishingCauseCategoryCustomerData data)
         {
             return new FinishingCauseCategoryCustomerModel(data);
+        }
+
+        public ClosedCasesDayOptionsModel GetClosedCasesDayOptionsModel(ClosedCasesDayOptions options)
+        {
+            var departments = WebMvcHelper.CreateMultiSelectField(options.Departments);
+            var workingGroups = WebMvcHelper.CreateListField(options.WorkingGroups);
+            var caseTypes = options.CaseTypes;
+            var administrators = WebMvcHelper.CreateListField(options.Administrators);
+            var period = DateTime.Today;
+
+            return new ClosedCasesDayOptionsModel(
+                        departments,
+                        workingGroups,
+                        caseTypes,
+                        administrators,
+                        period);
         }
     }
 }

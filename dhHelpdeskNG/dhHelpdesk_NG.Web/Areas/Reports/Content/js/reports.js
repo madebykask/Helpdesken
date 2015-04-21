@@ -42,6 +42,29 @@
 
         onEvent: function (event, handler) {
             $(document).on(event, handler);
+        },
+
+        initWorkingGroupUsers: function (workingGroupUsersRoute) {
+            dhHelpdesk.reports.utils.onEvent('onLoadOptions', function () {
+                var administrators = $("#AdministratorId");
+                var workingGroups = $("#WorkingGroupId");
+                var onWorkingGroupChanged = function () {
+                    administrators.prop('disabled', true);
+                    $.getJSON(workingGroupUsersRoute + '?workingGroupId=' + workingGroups.val(), function (data) {
+                        administrators.empty();
+                        administrators.append('<option />');
+                        for (var i = 0; i < data.length; i++) {
+                            var item = data[i];
+                            administrators.append("<option value='" + item.Value + "'>" + item.Name + "</option>");
+                        }
+                    })
+                    .always(function () {
+                        administrators.prop('disabled', false);
+                    });
+                }
+                workingGroups.off("change").on("change", onWorkingGroupChanged);
+                onWorkingGroupChanged();
+            });
         }
     }
 
@@ -71,6 +94,10 @@
                     return dhHelpdesk.reports.finishingCauseCustomer();
                 case dhHelpdesk.reports.reportType.FinishingCauseCategoryCustomer:
                     return dhHelpdesk.reports.finishingCauseCategoryCustomer();
+                case dhHelpdesk.reports.reportType.ClosedCasesDay:
+                    return dhHelpdesk.reports.closedCasesDay({
+                        workingGroupUsersRoute: workingGroupUsersRoute
+                    });
                 default:
                     return null;
             }
@@ -155,26 +182,7 @@
 
         var workingGroupUsersRoute = spec.workingGroupUsersRoute || '';
 
-        dhHelpdesk.reports.utils.onEvent('onLoadOptions', function () {
-            var administrators = $("#AdministratorId");
-            var workingGroups = $("#WorkingGroupId");
-            var onWorkingGroupChanged = function () {
-                administrators.prop('disabled', true);
-                $.getJSON(workingGroupUsersRoute + '?workingGroupId=' + workingGroups.val(), function (data) {
-                    administrators.empty();
-                    administrators.append('<option />');
-                    for (var i = 0; i < data.length; i++) {
-                        var item = data[i];
-                        administrators.append("<option value='" + item.Value + "'>" + item.Name + "</option>");
-                    }
-                })
-                .always(function () {
-                    administrators.prop('disabled', false);
-                });
-            }
-            workingGroups.off("change").on("change", onWorkingGroupChanged);
-            onWorkingGroupChanged();
-        });
+        dhHelpdesk.reports.utils.initWorkingGroupUsers(workingGroupUsersRoute);
 
         var getReportHandler = function () {
 
@@ -257,6 +265,44 @@
         my = my || {};
 
         var that = dhHelpdesk.reports.report({}, my);
+
+        return that;
+    }
+
+    dhHelpdesk.reports.closedCasesDay = function (spec, my) {
+        my = my || {};
+
+        var that = dhHelpdesk.reports.report(spec, my);
+
+        var workingGroupUsersRoute = spec.workingGroupUsersRoute || '';
+
+        dhHelpdesk.reports.utils.initWorkingGroupUsers(workingGroupUsersRoute);
+
+        var getReportHandler = function () {
+
+            var departments = '';
+            $("#DepartmentIds option:selected").each(function () {
+                departments += $(this).val() + ',';
+            });
+            var caseType = $("#CaseTypeId").val();;
+            var workingGroup = $("#WorkingGroupId").val();
+            var administrator = $("#AdministratorId").val();
+            var period = $("#Period").val();
+
+            return dhHelpdesk.reports.utils.buildHandler(my.baseReportsUrl + 'GetClosedCasesDayReport', [
+                                        'departments', departments,
+                                        'caseType', caseType,
+                                        'workingGroup', workingGroup,
+                                        'administrator', administrator,
+                                        'period', period]);
+        }
+
+        var buildReport = function () {
+            my.reportContent.html('<img src="' + getReportHandler() + '" />');
+        }
+
+        that.getReportHandler = getReportHandler;
+        that.buildReport = buildReport;
 
         return that;
     }

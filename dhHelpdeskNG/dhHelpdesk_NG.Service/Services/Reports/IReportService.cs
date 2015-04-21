@@ -6,6 +6,7 @@
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseSatisfaction;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.ClosedCasesDay;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.FinishingCauseCategoryCustomer;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.FinishingCauseCustomer;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeActiveCases;
@@ -124,5 +125,15 @@
                                     int? caseTypeId,
                                     DateTime? periodFrom,
                                     DateTime? periodUntil);
+
+        ClosedCasesDayOptions GetClosedCasesDayOptions(int customerId);
+
+        ClosedCasesDayData GetClosedCasesDayData(
+                                    int customerId,
+                                    List<int> departmentIds,
+                                    int? workingGroupId,
+                                    int? caseTypeId,
+                                    int? administratorId,
+                                    DateTime period);
     }
 }

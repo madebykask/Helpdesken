@@ -377,6 +377,8 @@
     <Compile Include="Models\Reports\Data\CaseTypeArticleNo\CaseTypeArticleNoData.cs" />
     <Compile Include="Models\Reports\Data\CaseTypeArticleNo\CaseTypeData.cs" />
     <Compile Include="Models\Reports\Data\CaseTypeArticleNo\ProductAreaData.cs" />
+    <Compile Include="Models\Reports\Data\ClosedCasesDay\ClosedCasesDayCase.cs" />
+    <Compile Include="Models\Reports\Data\ClosedCasesDay\ClosedCasesDayData.cs" />
     <Compile Include="Models\Reports\Data\FinishingCauseCategoryCustomer\FinishingCauseCategoryCustomerCase.cs" />
     <Compile Include="Models\Reports\Data\FinishingCauseCategoryCustomer\FinishingCauseCategoryCustomerData.cs" />
     <Compile Include="Models\Reports\Data\FinishingCauseCategoryCustomer\FinishingCauseCategoryCustomerDepartment.cs" />
@@ -396,6 +398,7 @@
     <Compile Include="Models\Reports\Enums\ShowCases.cs" />
     <Compile Include="Models\Reports\Options\CaseSatisfactionOptionsResponse.cs" />
     <Compile Include="Models\Reports\Options\CaseTypeArticleNoOptions.cs" />
+    <Compile Include="Models\Reports\Options\ClosedCasesDayOptions.cs" />
     <Compile Include="Models\Reports\Options\FinishingCauseCategoryCustomerOptions.cs" />
     <Compile Include="Models\Reports\Options\FinishingCauseCustomerOptions.cs" />
     <Compile Include="Models\Reports\Options\LeadtimeActiveCasesOptions.cs" />
