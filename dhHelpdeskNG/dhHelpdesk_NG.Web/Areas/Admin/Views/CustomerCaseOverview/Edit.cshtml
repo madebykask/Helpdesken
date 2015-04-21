@@ -8,14 +8,17 @@
     <div class="secnavs fixed">
         <div class="pull-left">
             <ul class="secnav">
-                <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", new { id = Model.Customer.Id, usergroupId = Model.CustomerCaseSummaryViewModel.UserGroupId }, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
+                <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", new 
+                                { id = Model.Customer.Id, 
+                                  usergroupId = Model.CustomerCaseSummaryViewModel.UserGroupId 
+                                }, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
                 <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "edit", new { area = "admin", controller = "Customer", action = "Edit", id = Model.Customer.Id }, new { @class = "btn" })</li>
 
             </ul>
-        </div>
+        </div>               
         @Html.Partial("_MasterDataPanel", Model.Customer)
     </div>
-}
+
 <div class="content">
     <div class="container">
         <input type="hidden" id="customerId" value="@Model.Customer.Id" />
@@ -39,6 +42,7 @@
         </div>
     </div>
 </div>
+}
 <script type="text/javascript">
 
     function changeUserGroupList(id) {

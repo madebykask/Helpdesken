@@ -10,6 +10,8 @@
     public class CustomerCaseSummaryViewModel
     {
         public int UserGroupId { get; set; }
+        public string SortedFields { get; set; }
+        public string Seperator { get; set; }
 
         public CaseSettings CSetting { get; set; }
         public Customer Customer { get; set; }
@@ -39,8 +41,7 @@
         public int NewPassword { get; set; }
         public int OrderPermission { get; set; }
         public int PasswordHis { get; set; }
-        public int CreateCaseFromOrder { get; set; }
-       
+        public int CreateCaseFromOrder { get; set; }        
 
         public Customer Customer { get; set; }
         public Setting Setting { get; set; }
@@ -70,5 +71,7 @@
         public IList<SelectListItem> CWNSelect { get; set; }
 
         public CustomerCaseSummaryViewModel CustomerCaseSummaryViewModel { get; set; }
+
+        
     }
 }
