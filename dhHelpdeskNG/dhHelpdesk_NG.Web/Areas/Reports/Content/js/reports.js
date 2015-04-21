@@ -65,6 +65,14 @@
                 workingGroups.off("change").on("change", onWorkingGroupChanged);
                 onWorkingGroupChanged();
             });
+        },
+
+        showLoader: function() {
+            $('#showReportLoader').show();
+        },
+
+        hideLoader: function() {
+            $('#showReportLoader').hide();
         }
     }
 
@@ -206,7 +214,8 @@
         }
 
         var buildReport = function () {
-            my.reportContent.html('<img src="' + getReportHandler() + '" />');
+            dhHelpdesk.reports.utils.showLoader();
+            my.reportContent.html('<img src="' + getReportHandler() + '" onload="dhHelpdesk.reports.utils.hideLoader();" />');
         }
 
         that.getReportHandler = getReportHandler;
@@ -304,7 +313,8 @@
         }
 
         var buildReport = function () {
-            my.reportContent.html('<img src="' + getReportHandler() + '" />');
+            dhHelpdesk.reports.utils.showLoader();
+            my.reportContent.html('<img src="' + getReportHandler() + '" onload="dhHelpdesk.reports.utils.hideLoader();" />');
         }
 
         that.getReportHandler = getReportHandler;
