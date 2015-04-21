@@ -66,7 +66,7 @@
                     int? tempCustomerId = _masterDataService.GetCustomerIdByEMailGUID(guid);
                     if (tempCustomerId != null && tempCustomerId > 0)
                         customerId = tempCustomerId.Value;
-                }
+                } 
             }
 
             if (SessionFacade.CurrentCustomer == null && customerId == -1)
