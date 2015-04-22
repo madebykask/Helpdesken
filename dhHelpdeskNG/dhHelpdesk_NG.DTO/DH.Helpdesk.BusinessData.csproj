@@ -373,6 +373,8 @@
     <Compile Include="Models\Questionnaire\Write\Answer.cs" />
     <Compile Include="Models\Questionnaire\Write\ParticipantForInsert.cs" />
     <Compile Include="Models\Reports\Data\CaseSatisfaction\CaseSatisfactionReportResponse.cs" />
+    <Compile Include="Models\Reports\Data\CasesInProgressDay\CasesInProgressDayCase.cs" />
+    <Compile Include="Models\Reports\Data\CasesInProgressDay\CasesInProgressDayData.cs" />
     <Compile Include="Models\Reports\Data\CaseTypeArticleNo\CasesData.cs" />
     <Compile Include="Models\Reports\Data\CaseTypeArticleNo\CaseTypeArticleNoData.cs" />
     <Compile Include="Models\Reports\Data\CaseTypeArticleNo\CaseTypeData.cs" />
@@ -397,6 +399,7 @@
     <Compile Include="Models\Reports\Data\ReportGenerator\ReportGeneratorData.cs" />
     <Compile Include="Models\Reports\Enums\ShowCases.cs" />
     <Compile Include="Models\Reports\Options\CaseSatisfactionOptionsResponse.cs" />
+    <Compile Include="Models\Reports\Options\CasesInProgressDayOptions.cs" />
     <Compile Include="Models\Reports\Options\CaseTypeArticleNoOptions.cs" />
     <Compile Include="Models\Reports\Options\ClosedCasesDayOptions.cs" />
     <Compile Include="Models\Reports\Options\FinishingCauseCategoryCustomerOptions.cs" />

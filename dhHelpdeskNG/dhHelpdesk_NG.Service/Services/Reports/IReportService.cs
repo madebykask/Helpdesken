@@ -5,6 +5,7 @@
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseSatisfaction;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.CasesInProgressDay;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.ClosedCasesDay;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.FinishingCauseCategoryCustomer;
@@ -133,6 +134,15 @@
                                     List<int> departmentIds,
                                     int? workingGroupId,
                                     int? caseTypeId,
+                                    int? administratorId,
+                                    DateTime period);
+
+        CasesInProgressDayOptions GetCasesInProgressDayOptions(int customerId);
+
+        CasesInProgressDayData GetCasesInProgressDayData(
+                                    int customerId,
+                                    int? departmentId,
+                                    int? workingGroupId,
                                     int? administratorId,
                                     DateTime period);
     }

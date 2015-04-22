@@ -7,6 +7,7 @@
     using DH.Helpdesk.BusinessData.Models.Department;
     using DH.Helpdesk.BusinessData.Models.FinishingCause;
     using DH.Helpdesk.BusinessData.Models.ProductArea;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.CasesInProgressDay;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.ClosedCasesDay;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.FinishingCauseCategoryCustomer;
@@ -357,6 +358,29 @@
 
             var list = entities.Select(e => new ClosedCasesDayCase(e.FinishingDate.Value)).ToList();
             return new ClosedCasesDayData(list);
+        }
+
+        public static CasesInProgressDayData MapToCasesInProgressDayData(
+                                    IQueryable<Case> cases,
+                                    IQueryable<Department> departments,
+                                    IQueryable<WorkingGroupEntity> workingGroups,
+                                    IQueryable<User> administrators,
+                                    DateTime period)
+        {
+            var entities = (from c in cases
+                            join d in departments on c.Department_Id equals d.Id into dgj
+                            join wg in workingGroups on c.WorkingGroup_Id equals wg.Id into wggj
+                            join u in administrators on c.Performer_User_Id equals u.Id into ugj
+                            from department in dgj.DefaultIfEmpty()
+                            from workingGroup in wggj.DefaultIfEmpty()
+                            from user in ugj.DefaultIfEmpty()
+                            select new 
+                            {
+                                c.RegTime
+                            }).ToList();
+
+            var list = entities.Select(e => new CasesInProgressDayCase(e.RegTime)).ToList();
+            return new CasesInProgressDayData(list);
         }
 
         private static void BuildFinishingCauseRows(

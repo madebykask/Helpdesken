@@ -48,7 +48,8 @@
                                 ReportType.CaseSatisfaction,
                                 ReportType.FinishingCauseCustomer,
                                 ReportType.FinishingCauseCategoryCustomer,
-                                ReportType.ClosedCasesDay
+                                ReportType.ClosedCasesDay,
+                                ReportType.CasesInProgressDay
                             };
 
             // It's a new report, so we need to add it to the tblReport table
@@ -261,6 +262,20 @@
                         departments,
                         workingGroups,
                         caseTypes,
+                        administrators,
+                        period);
+        }
+
+        public CasesInProgressDayOptionsModel GetCasesInProgressDayOptionsModel(CasesInProgressDayOptions options)
+        {
+            var departments = WebMvcHelper.CreateListField(options.Departments);
+            var workingGroups = WebMvcHelper.CreateListField(options.WorkingGroups);
+            var administrators = WebMvcHelper.CreateListField(options.Administrators);
+            var period = DateTime.Today;
+
+            return new CasesInProgressDayOptionsModel(
+                        departments,
+                        workingGroups,
                         administrators,
                         period);
         }

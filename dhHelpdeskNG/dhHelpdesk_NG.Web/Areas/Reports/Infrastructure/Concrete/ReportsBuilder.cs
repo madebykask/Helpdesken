@@ -10,6 +10,7 @@
     using System.Web.UI.DataVisualization.Charting;
     using System.Xml;
 
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.CasesInProgressDay;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.ClosedCasesDay;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.RegistratedCasesDay;
     using DH.Helpdesk.Dal.Enums;
@@ -66,6 +67,11 @@
         public byte[] GetClosedCasesDayReport(ClosedCasesDayData data, DateTime period, ReportTheme theme = null)
         {
             return GetMonthReport(data.ClosedCases.Select(c => c.Date).ToList(), period, theme);
+        }
+
+        public byte[] GetCasesInProgressDayReport(CasesInProgressDayData data, DateTime period, ReportTheme theme = null)
+        {
+            return GetMonthReport(data.Cases.Select(c => c.Date).ToList(), period, theme);
         }
 
         private static byte[] GetMonthReport(List<DateTime> data, DateTime period, ReportTheme theme = null)

@@ -1529,6 +1529,7 @@
     <Compile Include="Areas\Reports\Infrastructure\ReportTheme.cs" />
     <Compile Include="Areas\Reports\Infrastructure\Utils\ReportUtils.cs" />
     <Compile Include="Areas\Reports\Models\Options\CaseSatisfactionOptions.cs" />
+    <Compile Include="Areas\Reports\Models\Options\CasesInProgressDayOptionsModel.cs" />
     <Compile Include="Areas\Reports\Models\Options\CaseTypeArticleNoOptionsModel.cs" />
     <Compile Include="Areas\Reports\Models\Options\ClosedCasesDayOptionsModel.cs" />
     <Compile Include="Areas\Reports\Models\Options\FinishingCauseCategoryCustomerOptionsModel.cs" />
@@ -2251,6 +2252,7 @@
     <Content Include="Areas\Orders\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Orders\Views\Orders\Orders.cshtml" />
     <Content Include="Areas\Reports\Views\Report\Options\ClosedCasesDay.cshtml" />
+    <Content Include="Areas\Reports\Views\Report\Options\CasesInProgressDay.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="Scripts\jquery-1.8.3.js" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />

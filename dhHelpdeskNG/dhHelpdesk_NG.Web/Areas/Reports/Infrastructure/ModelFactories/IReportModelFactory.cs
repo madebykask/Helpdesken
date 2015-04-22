@@ -53,5 +53,7 @@
         FinishingCauseCategoryCustomerModel GetFinishingCauseCategoryCustomerModel(FinishingCauseCategoryCustomerData data);
 
         ClosedCasesDayOptionsModel GetClosedCasesDayOptionsModel(ClosedCasesDayOptions options);
+
+        CasesInProgressDayOptionsModel GetCasesInProgressDayOptionsModel(CasesInProgressDayOptions options);
     }
 }

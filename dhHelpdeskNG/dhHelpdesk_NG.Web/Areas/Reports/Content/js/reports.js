@@ -108,6 +108,10 @@
                     return dhHelpdesk.reports.closedCasesDay({
                         workingGroupUsersRoute: workingGroupUsersRoute
                     });
+                case dhHelpdesk.reports.reportType.CasesInProgressDay:
+                    return dhHelpdesk.reports.casesInProgressDay({
+                        workingGroupUsersRoute: workingGroupUsersRoute
+                    });
                 default:
                     return null;
             }
@@ -307,6 +311,40 @@
             return dhHelpdesk.reports.utils.buildHandler(my.baseReportsUrl + 'GetClosedCasesDayReport', [
                                         'departments', departments,
                                         'caseType', caseType,
+                                        'workingGroup', workingGroup,
+                                        'administrator', administrator,
+                                        'period', period]);
+        }
+
+        var buildReport = function () {
+            dhHelpdesk.reports.utils.showLoader();
+            my.reportContent.html('<img src="' + getReportHandler() + '" onload="dhHelpdesk.reports.utils.hideLoader();" />');
+        }
+
+        that.getReportHandler = getReportHandler;
+        that.buildReport = buildReport;
+
+        return that;
+    }
+
+    dhHelpdesk.reports.casesInProgressDay = function (spec, my) {
+        my = my || {};
+
+        var that = dhHelpdesk.reports.report(spec, my);
+
+        var workingGroupUsersRoute = spec.workingGroupUsersRoute || '';
+
+        dhHelpdesk.reports.utils.initWorkingGroupUsers(workingGroupUsersRoute);
+
+        var getReportHandler = function () {
+
+            var department = $("#DepartmentId").val();;
+            var workingGroup = $("#WorkingGroupId").val();
+            var administrator = $("#AdministratorId").val();
+            var period = $("#Period").val();
+
+            return dhHelpdesk.reports.utils.buildHandler(my.baseReportsUrl + 'GetCasesInProgressDayReport', [
+                                        'department', department,
                                         'workingGroup', workingGroup,
                                         'administrator', administrator,
                                         'period', period]);

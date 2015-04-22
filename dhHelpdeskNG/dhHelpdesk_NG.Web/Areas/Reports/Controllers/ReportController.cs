@@ -133,6 +133,12 @@
                     return this.PartialView(
                                 "Options/ClosedCasesDay",
                                 this.reportModelFactory.GetClosedCasesDayOptionsModel(closedCasesDay));
+
+                case ReportType.CasesInProgressDay:
+                    var casesInProgressDay = this.reportService.GetCasesInProgressDayOptions(this.OperationContext.CustomerId);
+                    return this.PartialView(
+                                "Options/CasesInProgressDay",
+                                this.reportModelFactory.GetCasesInProgressDayOptionsModel(casesInProgressDay));
             }
 
             return null;
@@ -372,6 +378,25 @@
                                     period.RoundToMonthOrGetCurrent());
 
             var report = this.reportsBuilder.GetClosedCasesDayReport(data, period.RoundToMonthOrGetCurrent());
+
+            return new UnicodeFileContentResult(report, string.Empty);
+        }
+
+        [HttpGet]
+        public UnicodeFileContentResult GetCasesInProgressDayReport(
+                                    int? department,
+                                    int? workingGroup,
+                                    int? administrator,
+                                    DateTime? period)
+        {
+            var data = this.reportService.GetCasesInProgressDayData(
+                                    this.OperationContext.CustomerId,
+                                    department,
+                                    workingGroup,
+                                    administrator,
+                                    period.RoundToMonthOrGetCurrent());
+
+            var report = this.reportsBuilder.GetCasesInProgressDayReport(data, period.RoundToMonthOrGetCurrent());
 
             return new UnicodeFileContentResult(report, string.Empty);
         }

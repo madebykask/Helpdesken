@@ -145,6 +145,19 @@
                             options.Administrators);
         }
 
+        public static CasesInProgressDayOptions MapToCasesInProgressDayOptions(
+                                                        IQueryable<Department> departments,
+                                                        IQueryable<WorkingGroupEntity> workingGroups,
+                                                        IQueryable<User> administrators)
+        {
+            var options = GetOptions(departments, null, workingGroups, administrators);
+
+            return new CasesInProgressDayOptions(
+                            options.Departments,
+                            options.WorkingGroups,
+                            options.Administrators);
+        }
+
         private static ReportOptions GetOptions(
                                         IQueryable<Department> departments = null,
                                         IQueryable<CaseType> caseTypes = null,

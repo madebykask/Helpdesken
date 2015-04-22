@@ -7,6 +7,7 @@
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseSatisfaction;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.CasesInProgressDay;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.ClosedCasesDay;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.FinishingCauseCategoryCustomer;
@@ -728,6 +729,68 @@
                                             period);
             }
         }
+
+        #endregion
+
+        #region CasesInProgressDay
+
+        public CasesInProgressDayOptions GetCasesInProgressDayOptions(int customerId)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var departmentRep = uow.GetRepository<Department>();
+                var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
+                var administratorRep = uow.GetRepository<User>();
+
+                var departments = departmentRep.GetAll().GetActiveByCustomer(customerId);
+                var workingGroups = workingGroupRep.GetAll().GetActiveByCustomer(customerId);
+                var administrators = administratorRep.GetAll().GetActiveByCustomer(customerId);
+
+                return ReportsOptionsMapper.MapToCasesInProgressDayOptions(
+                                            departments,
+                                            workingGroups,
+                                            administrators);
+            }
+        }
+
+        public CasesInProgressDayData GetCasesInProgressDayData(
+            int customerId,
+            int? departmentId,
+            int? workingGroupId,
+            int? administratorId,
+            DateTime period)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var casesRep = uow.GetRepository<Case>();
+                var departmentRep = uow.GetRepository<Department>();
+                var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
+                var administratorRep = uow.GetRepository<User>();
+
+                var from = period.RoundToMonth();
+                var until = period.AddMonths(1).RoundToMonth();
+
+                var cases = casesRep.GetAll()
+                                .GetByCustomer(customerId)
+                                .GetByDepartment(departmentId)
+                                .GetByWorkingGroup(workingGroupId)
+                                .GetByAdministrator(administratorId)
+                                .GetByRegistrationPeriod(from, until)
+                                .GetInProgress();
+
+                var departments = departmentRep.GetAll().GetById(departmentId);
+                var workingGroups = workingGroupRep.GetAll().GetById(workingGroupId);
+                var administrators = administratorRep.GetAll().GetById(administratorId);
+
+                return ReportsMapper.MapToCasesInProgressDayData(
+                                            cases,
+                                            departments,
+                                            workingGroups,
+                                            administrators,
+                                            period);
+            }
+        }
+
 
         #endregion
 
