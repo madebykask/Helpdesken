@@ -1,9 +1,10 @@
 ﻿"use strict";
 
 $(document).ready(function () {
-    var savingMsg = $('#savingMsg');
-    var maxWideColumnMsg = $('#maxWideColumnMsg');
-    var atLeastOneColumnMsg = $('#atLeastOneColumnMsg');
+    var savingMsg = $('#savingMsg').text();
+    var maxWideColumnMsg = $('#maxWideColumnMsg').text();
+    var atLeastOneColumnMsg = $('#atLeastOneColumnMsg').text();
+    var columnAlreadyExistsMsg = $('#columnAlreadyExists').text();
     var $saveBtn = $('#btnSaveCaseSetting .btn');
 
     function isWideColumnsCountExceed() {
@@ -113,7 +114,7 @@ $(document).ready(function () {
         var template = $.templates("#caseFieldRow");
       
         if ($('tr.SortableRow input[type="hidden"][value="' + fieldId + '"]').length > 0) {
-            ShowToastMessage('We already have the "' + fieldInfo.label + '" column in grid');
+            ShowToastMessage(columnAlreadyExistsMsg.replace(/\{0\}/, fieldInfo.label));
             return false;
         }
         

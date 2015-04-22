@@ -3223,5 +3223,23 @@ If not exists (select * from tblTextTranslation where text_id = 1377 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1377, 2, 'Self Service Welcome Message')
 GO
 
+
+--20150422
+If not exists (select * from tbltext where id = 1378)
+	insert into tbltext (id, TextString) VALUES (1378, ' <b>Bred</b> kan väljas på högst 3 kolumner!')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1378 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1378, 2, '<b>Wide</b> can be selected on maximum 3 columns!')
+GO
+
+If not exists (select * from tbltext where id = 1379)
+	insert into tbltext (id, TextString) VALUES (1379, 'Välj minst en kolumn för att visa ärendeöversikten!')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1379 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1379, 2, 'Please select at least one column to display the case overview!')
+GO
+
+
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
