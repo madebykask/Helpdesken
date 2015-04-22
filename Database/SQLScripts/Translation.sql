@@ -3143,10 +3143,10 @@ GO
 
 -- 20150415
 
-UPDATE tblText Set TextString = '(Du kan endast välja bredd på högst 3 kolumner).' WHERE Id=1339;
+UPDATE tblText Set TextString = '(Du kan endast välja storleken bred på högst 3 kolumner).' WHERE Id=1339;
 GO
 
-UPDATE tblTextTranslation Set TextTranslation = '(You can only select wide on a maximum of 3 columns).' WHERE Text_Id=1339 AND Language_Id=2;
+UPDATE tblTextTranslation Set TextTranslation = '(You can only select the size wide on a maximum of 3 columns).' WHERE Text_Id=1339 AND Language_Id=2;
 GO
 
 -- 20150417
@@ -3258,7 +3258,12 @@ GO
 	--insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1380, 2, 'Column "{0}" has already been selected to display in the case overview')
 --GO
 
+-- 20150422
+UPDATE tblText Set TextString = '(Du kan endast välja storleken bred på högst 3 kolumner).' WHERE Id=1339;
+GO
 
+UPDATE tblTextTranslation Set TextTranslation = '(You can only select the size wide on a maximum of 3 columns).' WHERE Text_Id=1339 AND Language_Id=2;
+GO
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
