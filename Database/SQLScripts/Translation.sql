@@ -3234,14 +3234,7 @@ GO
 
 
 UPDATE tblTextTranslation Set TextTranslation = 'Text field - larger' WHERE Text_Id=1348 AND Language_Id=2;
-If not exists (select * from tbltext where id = 1379)
-	insert into tbltext (id, TextString) VALUES (1379, 'Välj minst en kolumn för att visa ärendeöversikten!')
-GO
-
 UPDATE tblTextTranslation Set TextTranslation = 'Attach file' WHERE Text_Id=1353 AND Language_Id=2;
-If not exists (select * from tblTextTranslation where text_id = 1379 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1379, 2, 'Please select at least one column to display the case overview!')
-GO
 
 If not exists (select * from tbltext where id = 1379)
 	insert into tbltext (id, TextString) VALUES (1379, 'Fältet är redan valt i detta filter')
@@ -3250,9 +3243,20 @@ GO
 If not exists (select * from tblTextTranslation where text_id = 1379 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1379, 2, 'Field has already been added to the filter')
 GO
-If not exists (select * from tblTextTranslation where text_id = 1380 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1380, 2, 'Column "{0}" has already been selected to display in the case overview')
+
+If not exists (select * from tbltext where id = 1380)
+	insert into tbltext (id, TextString) VALUES (1380, 'Välj minst en kolumn för att visa ärendeöversikten!')
 GO
+
+If not exists (select * from tblTextTranslation where text_id = 1380 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1380, 2, 'Please select at least one column to display the case overview!')
+GO
+
+
+-- Talk to Sacha
+--If not exists (select * from tblTextTranslation where text_id = 1380 and Language_Id = 2)
+	--insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1380, 2, 'Column "{0}" has already been selected to display in the case overview')
+--GO
 
 
 
