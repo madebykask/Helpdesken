@@ -1,7 +1,10 @@
 ﻿"use strict";
 
 $(document).ready(function () {
-    var inSaving = false;
+    var savingMsg = $('#savingMsg');
+    var maxWideColumnMsg = $('#maxWideColumnMsg');
+    var atLeastOneColumnMsg = $('#atLeastOneColumnMsg');
+    var $saveBtn = $('#btnSaveCaseSetting .btn');
 
     function isWideColumnsCountExceed() {
         var res = 0;
@@ -11,7 +14,7 @@ $(document).ready(function () {
             }
         });
         if (res > 2) {
-            ShowToastMessage('Maximum <b>wide</b> columns in the grid is limited to 3');
+            ShowToastMessage(maxWideColumnMsg);
             return true;
         }
 
@@ -35,25 +38,25 @@ $(document).ready(function () {
     $("#customerCaseSum tbody").disableSelection();
 
     //// bind event handlers 
-    $('#btnSaveCaseSetting .btn').click(function (e) {
+    $saveBtn.click(function (e) {
         e.preventDefault();
-        if (window.app.getGridState() !== GRID_STATE.IDLE || inSaving) {
+        if (window.app.getGridState() !== GRID_STATE.IDLE || $saveBtn.hasClass('disabled')) {
             return false;
         }
-
-        inSaving = true;
-        $(this).addClass('disabled');
-        $(this).val('Saving...');
         
         /// validation
         if ($('#dataTable tr.SortableRow').length == 0) {
-            window.ShowToastMessage('You should have at least one column selected for the "Case overview" grid', 'error');
+            window.ShowToastMessage(atLeastOneColumnMsg, 'error');
             return false;
         }
 
         if (isWideColumnsCountExceed()) {
             return false;
         }
+        
+        $saveBtn.addClass('disabled');
+        $saveBtn.val(savingMsg);
+
         $.post('/Cases/SaveSetting/', $("#frmCaseSetting").serialize(), function () {
             /// due to strange work with lists[] in .NET we have to send a bit different structure
             var formData = {
@@ -71,7 +74,6 @@ $(document).ready(function () {
                 dataType: 'json',
                 data: JSON.stringify(formData),
                 success: function () {
-                    inSaving = false;
                     window.location.href = '/cases/';
                 }
             });
@@ -120,10 +122,14 @@ $(document).ready(function () {
         }
 
         $('#dataTable').append(template.render(fieldInfo)).find('select[fieldid*="' + fieldId + '"]').val($('#newColStyle').val());
+        $saveBtn.removeClass('disabled');
     });
 
     $('#dataTable').on('click', '.deleterow', function () {
         var tr = $(this).closest('tr');
         tr.remove();
+        if ($('tr.SortableRow').length == 0) {
+            $saveBtn.addClass('disabled');
+        }
     });
 });
