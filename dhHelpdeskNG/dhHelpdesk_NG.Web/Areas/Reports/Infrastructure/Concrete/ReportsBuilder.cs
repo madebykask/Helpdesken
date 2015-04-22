@@ -71,10 +71,10 @@
 
         public byte[] GetCasesInProgressDayReport(CasesInProgressDayData data, DateTime period, ReportTheme theme = null)
         {
-            return GetMonthReport(data.Cases.Select(c => c.Date).ToList(), period, theme);
+            return GetMonthReport(data.Cases.Select(c => c.Date).ToList(), period, theme, SeriesChartType.Line);
         }
 
-        private static byte[] GetMonthReport(List<DateTime> data, DateTime period, ReportTheme theme = null)
+        private static byte[] GetMonthReport(List<DateTime> data, DateTime period, ReportTheme theme = null, SeriesChartType type = SeriesChartType.Column)
         {
             var days = DateTime.DaysInMonth(period.Year, period.Month);
             var x = new List<int>();
@@ -92,6 +92,7 @@
             };
 
             var serie = new Series();
+            serie.ChartType = type;
             var daysArr = x.ToArray();
             var numberOfCasesArr = y.ToArray();
             for (int i = 0; i < daysArr.Length; i++)
