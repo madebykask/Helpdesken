@@ -4,20 +4,20 @@
     ViewBag.Title = "New WatchDate";
     string newwdc = Request.QueryString["newwdc"];         
 }
-@using (Html.BeginForm("newwatchdate", "globalsetting", new { id = Model.WatchDateCalendar.Id }, FormMethod.Post, new { id = "target" }))
+@using (Html.BeginForm("newwatchdate", "globalsetting", new { id = Model.WatchDateCalendar.Id, texttypeid = 0, textSearch = string.Empty, compareMethod = 1 }, FormMethod.Post, new { id = "target" }))
 {
     <div class="secnavs fixed">
         <div class="pull-left">
             <ul class="secnav">
                 @if (newwdc == "1")
                 {
-                    <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "newwatchdate", null, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
+                    <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "newwatchdate", new { texttypeid = 0, compareMethod = 1}, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
                 }
                 else
                 {
-                    <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "newwatchdate", new { id = Model.WatchDateCalendar.Id }, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
+                    <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "newwatchdate", new { id = Model.WatchDateCalendar.Id, compareMethod = 1 }, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
                 }
-                <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", new { texttypeid = 0}, new { @class = "btn" })</li>
+                <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", new { texttypeid = 0, compareMethod = 1}, new { @class = "btn" })</li>
             </ul>
         </div>
     </div>

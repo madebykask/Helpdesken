@@ -13,7 +13,7 @@
     {
         IEnumerable<Text> GetAllNewTexts(int texttypeId);
 
-        IEnumerable<TextList> GetAllTexts(int texttypeId);
+        IEnumerable<TextList> GetAllTexts(int texttypeId, int? defaultLanguage);
         List<TextList> GetAllTextsAndTranslations(int texttypeId);
         //IList<Text> SearchAndGenerateTexts(TranslationSearch SearchTranslation);
         IList<TextTranslation> GetAllTextTranslations();
@@ -67,9 +67,9 @@
             return this._textRepository.GetAll().Where(x => x.Id > 4999 && x.Type == texttypeId).OrderBy(x => x.TextToTranslate);
         }
 
-        public IEnumerable<TextList> GetAllTexts(int texttypeId)
+        public IEnumerable<TextList> GetAllTexts(int texttypeId, int? defaultLanguage)
         {
-            return this._textRepository.GetAllTexts(texttypeId).OrderBy(x => x.TextToTranslate);
+            return this._textRepository.GetAllTexts(texttypeId, defaultLanguage).OrderBy(x => x.TextToTranslate);
         }
 
         public List<TextList> GetAllTextsAndTranslations(int texttypeId)
@@ -230,7 +230,7 @@
             if (string.IsNullOrEmpty(text.TextToTranslate))
                 errors.Add("text.TextToTranslate", "Du måste ange ett ord att översätta");
 
-            var hasDublicate = this.GetAllTexts(text.Type)
+            var hasDublicate = this.GetAllTexts(text.Type, null)
                             .Any(t => t.TextToTranslate.Equals(text.TextToTranslate));
 
             if (hasDublicate)

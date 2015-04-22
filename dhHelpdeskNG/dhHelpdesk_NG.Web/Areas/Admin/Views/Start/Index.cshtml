@@ -51,7 +51,7 @@
                         <div style="text-align:center;">
                             <p><img src="@Url.Content("~/Content/img/img-settings.png")" /></p>
                             <hr />
-                            <p><a href="@Url.Action("index", "globalsetting", new { area = "admin", texttypeid = 0 })" class="btn btn-large">
+                            <p><a href="@Url.Action("index", "globalsetting", new { area = "admin", texttypeid = 0, textSearch = "", compareMethod = 1 })" class="btn btn-large">
                                     @Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)</a></p>
                         </div>
                     </div>
