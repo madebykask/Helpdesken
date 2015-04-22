@@ -56,7 +56,8 @@
             out IDictionary<string, string> errors,
             CaseInvoice[] invoices = null);
 
-        int SaveCaseHistory(Case c, int userId, string adUser, out IDictionary<string, string> errors, string defaultUser = "");
+        int SaveCaseHistory(Case c, int userId, string adUser, out IDictionary<string, string> errors, 
+                            string defaultUser = "", ExtraFieldCaseHistory extraField = null);
         void SendCaseEmail(int caseId, CaseMailSetting cms, int caseHistoryId, Case oldCase = null, CaseLog log = null, List<CaseFileDto> logFiles = null);
         void UpdateFollowUpDate(int caseId, DateTime? time);
         void MarkAsUnread(int caseId);
@@ -566,14 +567,16 @@
             return ret;
         }
 
-        public int SaveCaseHistory(Case c, int userId, string adUser, out IDictionary<string, string> errors, string defaultUser = "")
+        public int SaveCaseHistory(Case c, int userId, string adUser, out IDictionary<string, string> errors,
+                                   string defaultUser = "",
+                                   ExtraFieldCaseHistory extraField = null)
         {
             if (c == null)
                 throw new ArgumentNullException("caseHistory");
 
             errors = new Dictionary<string, string>();
 
-            CaseHistory h = this.GenerateHistoryFromCase(c, userId, adUser, defaultUser);
+            CaseHistory h = this.GenerateHistoryFromCase(c, userId, adUser, defaultUser, extraField);
             this._caseHistoryRepository.Add(h);
 
             if (errors.Count == 0)
@@ -964,7 +967,9 @@
             return ret;
         }
 
-        private CaseHistory GenerateHistoryFromCase(Case c, int userId, string adUser, string defaultUser="")
+        private CaseHistory GenerateHistoryFromCase(Case c, int userId, string adUser, 
+                                                    string defaultUser="", 
+                                                    ExtraFieldCaseHistory extraField = null)
         {
             CaseHistory h = new CaseHistory();
 
@@ -985,7 +990,8 @@
             h.ContactBeforeAction = c.ContactBeforeAction;
             h.Cost = c.Cost;
             h.CreatedDate = DateTime.UtcNow;
-            if (defaultUser != "") h.CreatedByUser = defaultUser; // used for Self Service Project
+            if (defaultUser != "") 
+                h.CreatedByUser = defaultUser; // used for Self Service Project
             else
                 h.CreatedByUser = user.FirstName + ' ' + user.SurName; 
             h.Currency = c.Currency;
@@ -1043,6 +1049,13 @@
             h.WorkingGroup_Id = c.WorkingGroup_Id;
             h.CausingPartId = c.CausingPartId;
             h.DefaultOwnerWG_Id = c.DefaultOwnerWG_Id;
+
+            if (extraField != null)
+            {
+                h.CaseFile = extraField.CaseFile;
+                h.LogFile  = extraField.LogFile;
+                h.CaseLog  = extraField.CaseLog;
+            }
 
             return h;
         }

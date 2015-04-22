@@ -1218,11 +1218,7 @@ namespace DH.Helpdesk.Web.Controllers
             if (GuidHelper.IsGuid(id))
             {
                 if (this.userTemporaryFilesStorage.FileExists(name, id, ModuleName.Cases))
-                {
-                    //return;
-                    //throw new HttpException(409 , "Already file exist!"); because it take a long time.
-
-                    //this.userTemporaryFilesStorage.DeleteFile(name, id, ModuleName.Cases);                               
+                {                    
                     name = DateTime.Now.ToString() + '-' + name;
                 }                
                 this.userTemporaryFilesStorage.AddFile(uploadedData, name, id, ModuleName.Cases);                               
@@ -1230,10 +1226,7 @@ namespace DH.Helpdesk.Web.Controllers
             else
             {
                 if (this._caseFileService.FileExists(int.Parse(id), name))
-                {
-                    //return;
-                    //throw new HttpException(409, "Already file exist!");    because it take a long time.
-                    //this._caseFileService.DeleteByCaseIdAndFileName(int.Parse(id), name);   
+                {                 
                     name =  DateTime.Now.ToString() + '_' + name;
                 }
 
@@ -1300,20 +1293,40 @@ namespace DH.Helpdesk.Web.Controllers
 
         [HttpPost]
         public void DeleteCaseFile(string id, string fileName)
-        {
+        {            
             if (GuidHelper.IsGuid(id))
                 this.userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id, ModuleName.Cases);
-            else
+            else     
+            {
                 this._caseFileService.DeleteByCaseIdAndFileName(int.Parse(id), fileName.Trim());
+                            
+                IDictionary<string, string> errors;
+                string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+                var c = this._caseService.GetCaseById(int.Parse(id));
+                var extraField = new ExtraFieldCaseHistory {CaseFile = StringTags.Delete + fileName.Trim()};
+                this._caseService.SaveCaseHistory(c, SessionFacade.CurrentUser.Id, adUser, out errors, "", extraField);
+            }
         }
 
         [HttpPost]
         public void DeleteLogFile(string id, string fileName)
-        {
+        {                        
             if (GuidHelper.IsGuid(id))
                 this.userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id, ModuleName.Log);
             else
+            {
                 this._logFileService.DeleteByLogIdAndFileName(int.Parse(id), fileName.Trim());
+                            
+                IDictionary<string, string> errors;
+                string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+                var log = this._logService.GetLogById(int.Parse(id));
+                if (log != null)
+                {
+                    var c = this._caseService.GetCaseById(log.CaseId);
+                    var extraField = new ExtraFieldCaseHistory { LogFile = StringTags.Delete + fileName.Trim() };
+                    this._caseService.SaveCaseHistory(c, SessionFacade.CurrentUser.Id, adUser, out errors, "", extraField);
+                }
+            }
         }
 
         [HttpPost]
@@ -1327,8 +1340,23 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpPost]
         public RedirectToRouteResult DeleteLog(int id, int caseId)
         {
+            var tmpLog = this._logService.GetLogById(id);
             var logGuid = this._logService.Delete(id);
             this.userTemporaryFilesStorage.ResetCacheForObject(logGuid.ToString());
+
+            IDictionary<string, string> errors;
+            string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+            var c = this._caseService.GetCaseById(caseId);
+            var logStr = string.Format("{0}{1}{2}{3}{4}", 
+                                       StringTags.Delete, 
+                                       StringTags.ExternalLog, 
+                                       tmpLog.TextExternal, 
+                                       StringTags.InternalLog, 
+                                       tmpLog.TextInternal);
+
+            var extraField = new ExtraFieldCaseHistory { CaseLog = logStr };
+            this._caseService.SaveCaseHistory(c, SessionFacade.CurrentUser.Id, adUser, out errors, "", extraField);
+
             return this.RedirectToAction("edit", "cases", new { id = caseId });
         }
 

@@ -66,6 +66,7 @@
     <Compile Include="Enums\CircularStates.cs" />
     <Compile Include="Enums\ActivationStatus.cs" />
     <Compile Include="Enums\ApplicationTypes.cs" />
+    <Compile Include="Enums\StringTags.cs" />
     <Compile Include="Enums\LoginMode.cs" />
     <Compile Include="Enums\InfoTextTypes.cs" />
     <Compile Include="Enums\LanquageNameId.cs" />

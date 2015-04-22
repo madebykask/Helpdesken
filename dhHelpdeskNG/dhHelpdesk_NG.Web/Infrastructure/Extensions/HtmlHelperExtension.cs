@@ -15,6 +15,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Web.Models;
+    using DH.Helpdesk.Common.Enums;
 
     public static class HtmlHelperExtension
     {
@@ -547,6 +548,125 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                         sb.Append(Translation.Get(cur.Status.Name, Enums.TranslationSource.TextTranslation, customerId));
                     else
                         sb.Append(ey);
+                    sb.Append("</td>");
+                    sb.Append("</tr>");
+                }
+            }
+
+            // CaseFile
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Filename.ToString()).ShowOnStartPage == 1)
+            {                 
+                if (cur.CaseFile != o.CaseFile && !string.IsNullOrEmpty(cur.CaseFile))
+                {
+                    sb.Append("<tr>");
+                    var caption = string.Empty;
+                    if (!string.IsNullOrEmpty(cur.CaseFile))
+                    {
+                        if (cur.CaseFile.StartsWith(StringTags.Add))
+                        {
+                            sb.Append(bs + Translation.Get("Lägg till") + " " + Translation.Get(GlobalEnums.TranslationCaseFields.Filename.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                            caption = cur.CaseFile.Substring(StringTags.Add.Length);
+                        }
+                        else
+                            if (cur.CaseFile.StartsWith(StringTags.Delete))
+                            {                                
+                                sb.Append(bs + Translation.Get("Ta bort") + " " + Translation.Get(GlobalEnums.TranslationCaseFields.Filename.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);                            
+                                caption = cur.CaseFile.Substring(StringTags.Delete.Length);                                
+                            }
+                            else
+                                caption = cur.CaseFile;
+                    }
+                    else
+                        caption = ey;
+                    
+                    sb.Append("<td>");
+                    sb.Append(caption);
+                    sb.Append("</td>");                                                      
+                    sb.Append("</tr>");
+                }
+            }
+
+            // LogFile
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString()).ShowOnStartPage == 1)
+            {                              
+                if (cur.LogFile != o.LogFile && !string.IsNullOrEmpty(cur.LogFile))             
+                {
+                    sb.Append("<tr>");
+                    var caption = string.Empty;                    
+                    if (!string.IsNullOrEmpty(cur.LogFile))
+                    {                        
+                        if (cur.LogFile.StartsWith(StringTags.Add))
+                        {                            
+                            sb.Append(bs + Translation.Get("Lägg till") + " " + Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);                            
+                            caption = cur.LogFile.Substring(StringTags.Add.Length);                            
+                        }
+                        else
+                            if (cur.LogFile.StartsWith(StringTags.Delete))
+                            {                                                                
+                                sb.Append(bs + Translation.Get("Ta bort") + " " + Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);                                
+
+                                caption = cur.LogFile.Substring(StringTags.Delete.Length);                                
+                            }
+                            else
+                            {                                 
+                                sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);                                
+                                caption = cur.LogFile;                                
+                            }                        
+                    }
+                    else                    
+                        caption = ey;                                         
+                    
+                    sb.Append("<td>"); 
+                    sb.Append(caption);
+                    sb.Append("</td>");                  
+                    sb.Append("</tr>");
+                }
+            }
+
+
+            // CaseLog
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString()).ShowOnStartPage == 1 ||
+                cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString()).ShowOnStartPage == 1)
+            {                
+                if (cur.CaseLog != o.CaseLog && !string.IsNullOrEmpty(cur.CaseLog))
+                {
+                    var caption = string.Empty;
+                    sb.Append("<tr>");
+                    if (!string.IsNullOrEmpty(cur.CaseLog))
+                    {
+                        if (cur.CaseLog.StartsWith(StringTags.Add))
+                        {
+                            sb.Append(bs + Translation.Get("Lägg till") + " " + Translation.Get("Ärendelogg") + be);
+                            caption = cur.CaseLog.Substring(StringTags.Add.Length)
+                                                 .Replace(StringTags.ExternalLog,
+                                                          Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + ": ")
+                                                 .Replace(StringTags.InternalLog, "<br />" +
+                                                          Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + ": ");
+                        }
+                        else                        
+                            if (cur.CaseLog.StartsWith(StringTags.Delete))
+                            {
+                                sb.Append(bs + Translation.Get("Ta bort") + " " + Translation.Get("Ärendelogg") + be);
+                                caption = cur.CaseLog.Substring(StringTags.Delete.Length)
+                                                     .Replace(StringTags.ExternalLog,
+                                                              Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + ": ")
+                                                     .Replace(StringTags.InternalLog, "<br />" +
+                                                              Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + ": ");
+                            }
+                            else
+                            {
+                                sb.Append(bs + Translation.Get("Ärendelogg") + be);
+                                caption = cur.CaseLog.Replace(StringTags.ExternalLog,
+                                                              Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + ": ")
+                                                     .Replace(StringTags.InternalLog, "<br />" +
+                                                              Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + ": ");
+                            }                        
+                    }
+                    else
+                        caption = ey;
+                    
+                    sb.Append("<td>");
+                    sb.Append(caption);
                     sb.Append("</td>");
                     sb.Append("</tr>");
                 }
