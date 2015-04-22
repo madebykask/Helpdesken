@@ -48,6 +48,7 @@ $(document).ready(function () {
         /// validation
         if ($('#dataTable tr.SortableRow').length == 0) {
             window.ShowToastMessage(atLeastOneColumnMsg, 'error');
+            window.scrollTo(0, document.body.scrollHeight);
             return false;
         }
 
@@ -123,14 +124,10 @@ $(document).ready(function () {
         }
 
         $('#dataTable').append(template.render(fieldInfo)).find('select[fieldid*="' + fieldId + '"]').val($('#newColStyle').val());
-        $saveBtn.removeClass('disabled');
     });
 
     $('#dataTable').on('click', '.deleterow', function () {
         var tr = $(this).closest('tr');
         tr.remove();
-        if ($('tr.SortableRow').length == 0) {
-            $saveBtn.addClass('disabled');
-        }
     });
 });
