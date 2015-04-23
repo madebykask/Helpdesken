@@ -6,7 +6,7 @@
 
     $(document).ready(function () {
         LogInitForm();
-    });
+    });    
 
 </script>
 }
@@ -16,34 +16,28 @@
     ViewData.Add("readonlyLog", true);
     using (Html.BeginForm("editlog", "cases", null, FormMethod.Post, new { id = "target" }))
     {    
-    <div class="secnavs fixed">
-        <div class="pull-left">
-            <ul class="secnav">
-                
-
-                @if (Model.EditMode == Enums.AccessMode.FullAccess)
-                {
-                    @*<li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "editlog", "cases", null, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>*@
-                    //if (Model.case_.CaseHistories.Where(x=>x.Id == Model.CaseLog.CaseHistoryId).Where(e=>e.Emaillogs.Count < 1).Any() || Model.CaseLog.CaseHistoryId == null)
-                    //{
+        <div class="secnavs fixed">
+            <div class="pull-left">
+                <ul class="secnav">                
+                    @if (Model.EditMode == Enums.AccessMode.FullAccess)
+                    {
                         <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "deletelog", new { id = @Model.CaseLog.Id, caseId = @Model.case_.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post?", Enums.TranslationSource.TextTranslation) })</li>
-                    //}
-                }                    
-                <li>@Html.ActionLink(Translation.Get("Stäng", Enums.TranslationSource.TextTranslation), "edit", "cases", new { Id = @Model.case_.Id }, new { @class = "btn"})</li>
-            </ul>
+                    }                    
+                    <li>@Html.ActionLink(Translation.Get("Stäng", Enums.TranslationSource.TextTranslation), "edit", "cases", new { Id = @Model.case_.Id }, new { @class = "btn"})</li>
+                </ul>
+            </div>
         </div>
-    </div>
-    <div class="content">
-        <div class="container">
-            <ul class="nav nav-tabs" id="myTab">
-                <li class="active"><a href="#fragment-1">@Translation.Get("Logg", Enums.TranslationSource.TextTranslation)</a></li>
-            </ul>    
-            <div class="tab-content">
-                <div class="tab-pane tab-pane-border active" id="logtab">
-                        @Html.Partial("_CaseLogInput", Model) 
+        <div class="content">
+            <div class="container">
+                <ul class="nav nav-tabs" id="myTab">
+                    <li class="active"><a href="#fragment-1">@Translation.Get("Logg", Enums.TranslationSource.TextTranslation)</a></li>
+                </ul>    
+                <div class="tab-content">
+                    <div class="tab-pane tab-pane-border active" id="logtab">
+                            @Html.Partial("_CaseLogInput", Model) 
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     }
 }

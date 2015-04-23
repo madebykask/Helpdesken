@@ -928,7 +928,7 @@ namespace DH.Helpdesk.Web.Controllers
                     m.EditMode = EditMode(m, ModuleName.Log, deps, acccessToGroups);
                     m.LogFileNames = string.Join("|", m.LogFilesModel.Files.ToArray());
                     AddViewDataValues();
-                    SessionFacade.CurrentCaseLanguageId = m.case_.RegLanguage_Id;
+                    SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
                     // User has not access to case/log
                     if (m.EditMode == Enums.AccessMode.NoAccess)
                         return this.RedirectToAction("index", "home");
@@ -1359,18 +1359,28 @@ namespace DH.Helpdesk.Web.Controllers
         public RedirectToRouteResult DeleteLog(int id, int caseId)
         {
             var tmpLog = this._logService.GetLogById(id);
+            var logFiles = this._logFileService.FindFileNamesByLogId(id);
+
             var logGuid = this._logService.Delete(id);
             this.userTemporaryFilesStorage.ResetCacheForObject(logGuid.ToString());
 
             IDictionary<string, string> errors;
             string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
             var c = this._caseService.GetCaseById(caseId);
-            var logStr = string.Format("{0}{1}{2}{3}{4}", 
+            
+            var logFileStr = string.Empty;
+            if (logFiles.Any())
+            {
+                logFileStr = string.Format("{0}{1}", StringTags.LogFile, string.Join(StringTags.Seperator, logFiles.ToArray()));
+            }
+
+            var logStr = string.Format("{0}{1}{2}{3}{4}{5}", 
                                        StringTags.Delete, 
                                        StringTags.ExternalLog, 
                                        tmpLog.TextExternal, 
                                        StringTags.InternalLog, 
-                                       tmpLog.TextInternal);
+                                       tmpLog.TextInternal,
+                                       logFileStr);
 
             var extraField = new ExtraFieldCaseHistory { CaseLog = logStr };
             this._caseService.SaveCaseHistory(c, SessionFacade.CurrentUser.Id, adUser, out errors, "", extraField);

@@ -62,7 +62,7 @@
                                 <select id="labellist">
                                     @foreach(var item in sortedList.OrderBy(f=> f.Value)) 
                                     {
-                                        <option id="label" value="@item.Key" displayName="@item.Value"> @item.Value </option>  
+                                        <option id="label" value="@item.Key" > @item.Value </option>  
                                     }
                                     <option value="">--------------------------</option>
                                     <option value="_temporary_.LeadTime">@Translation.Get("_temporary_.LeadTime", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id)</option>

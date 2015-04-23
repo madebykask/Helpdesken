@@ -9,5 +9,9 @@
         public const string ExternalLog = "{EL}";
 
         public const string InternalLog = "{IL}";
+
+        public const string LogFile = "{LF}";
+
+        public const string Seperator = "{SP}";
     }
 }
