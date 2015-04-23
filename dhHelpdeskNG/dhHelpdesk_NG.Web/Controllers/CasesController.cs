@@ -237,7 +237,13 @@ namespace DH.Helpdesk.Web.Controllers
 
         #region Public Methods and Operators
 
-        public ActionResult Index(int? customerId, bool? clearFilters = false, CasesCustomFilter customFilter = CasesCustomFilter.None, bool? DefaultSearch = false)
+        public ActionResult Index(
+            int? customerId, 
+            bool? clearFilters = false, 
+            CasesCustomFilter customFilter = CasesCustomFilter.None, 
+            bool? DefaultSearch = false,
+            bool? useMyCases = false,
+            bool? resetSearchForm = false)
         {                        
             if (SessionFacade.CurrentUser == null)
             {
@@ -245,6 +251,11 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             ApplicationFacade.UpdateLoggedInUser(Session.SessionID, string.Empty);
+            if (resetSearchForm.HasValue && resetSearchForm.Value == true)
+            {
+                SessionFacade.CurrentCaseSearch = null;
+                useMyCases = true;
+            }
             if (clearFilters == true)
             {
                 SessionFacade.CurrentCaseSearch = null;
@@ -323,12 +334,15 @@ namespace DH.Helpdesk.Web.Controllers
                     }
                 }
 
+                if (useMyCases.HasValue && useMyCases == true)
+                {
+                    caseSearchModel.caseSearchFilter.SearchInMyCasesOnly = true;
+                    caseSearchModel.caseSearchFilter.UserPerformer = string.Empty;
+                    caseSearchModel.caseSearchFilter.CaseProgress = "2";
+                }
+
                 switch (customFilter)
                 {
-                    case CasesCustomFilter.MyCases:
-                        caseSearchModel.caseSearchFilter.UserPerformer = string.Empty;
-                        caseSearchModel.caseSearchFilter.CaseProgress = "2";
-                        break;
                     case CasesCustomFilter.UnreadCases:
                         caseSearchModel.caseSearchFilter.CaseProgress = "4";
                         caseSearchModel.caseSearchFilter.UserPerformer = string.Empty;
@@ -424,6 +438,8 @@ namespace DH.Helpdesk.Web.Controllers
             f.CaseClosingDateEndFilter = frm.GetDate("CaseClosingDateEndFilter");
             f.CaseClosingReasonFilter = frm.ReturnFormValue("hidFilterClosingReasonId").ReturnCustomerUserValue();
             f.Initiator = frm.ReturnFormValue("CaseInitiatorFilter");
+            f.SearchInMyCasesOnly = frm.IsFormValueTrue("SearchInMyCasesOnly");
+
             int caseRemainingTimeFilter;
             if (int.TryParse(frm.ReturnFormValue("CaseRemainingTime"), out caseRemainingTimeFilter))
             {
@@ -643,6 +659,7 @@ namespace DH.Helpdesk.Web.Controllers
             fd.CaseWatchDateEndFilter = sm.caseSearchFilter.CaseWatchDateEndFilter;
             fd.CaseWatchDateStartFilter = sm.caseSearchFilter.CaseWatchDateStartFilter;
             fd.CaseInitiatorFilter = sm.caseSearchFilter.Initiator;
+            fd.SearchInMyCasesOnly = sm.caseSearchFilter.SearchInMyCasesOnly;
             
             return fd;
         }

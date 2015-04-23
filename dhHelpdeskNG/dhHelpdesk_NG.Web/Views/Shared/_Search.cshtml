@@ -1,6 +1,6 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseSearchFilterData 
 @using DH.Helpdesk.BusinessData.OldComponents
-@using DH.Helpdesk.Web.Infrastructure
+
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 
 @if (Model != null)
@@ -353,6 +353,10 @@
                 <div class="span12">
                     <table class="tableform">
                         <tr>
+                            <td>@Translation.Get("Mina ärenden")</td>
+                            <td colspan="4">@Html.CheckBoxFor(m => m.SearchInMyCasesOnly, new { @class = "switchcheckbox" })</td>
+                        </tr>
+                        <tr>
                             <td class="span3">
                                 @Translation.Get("Sök")
                             </td>
@@ -370,7 +374,7 @@
                                 </select>
                             </td>
                             <td>
-                            <input type="submit" class="submit btn" value="@Translation.Get("Sök")"/>
+                                <input type="submit" class="submit btn" value="@Translation.Get("Sök")"/>
                             </td>
                             <td class="span5">
                                 <a href="#" id="btnMore">

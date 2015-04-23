@@ -915,8 +915,7 @@
                     sb.Append(" and (coalesce(tblCase.WorkingGroup_Id, 0) in (" + f.WorkingGroup.SafeForSqlInject() + ")) ");
             }
 
-            // http://redmine.fastdev.se/issues/10422
-            if (f.CustomFilter == CasesCustomFilter.MyCases)
+            if (f.SearchInMyCasesOnly)
             {
                 sb.AppendFormat(
                     " AND ([tblCase].[Performer_User_Id] IN ({0}) OR [tblCase].[CaseResponsibleUser_Id] IN ({0}) OR [tblProblem].[ResponsibleUser_Id] IN ({0})) ", 

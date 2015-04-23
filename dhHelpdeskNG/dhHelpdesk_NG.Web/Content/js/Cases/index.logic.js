@@ -62,7 +62,7 @@ var GRID_STATE = {
         me.$noFieldsMsg = $('#search_result div.nofields-msg');
         me.$noAvailableFieldsMsg = $('#search_result div.noavailablefields-msg');
         me.$buttonsToDisableWhenGridLoads = $('ul.secnav a.btn, ul.secnav div.btn-group button, ul.secnav input[type=button], .submit, #btnClearFilter');
-        me.$buttonsToDisableWhenNoColumns = $('#btnNewCase a.btn, #btnCaseTemplate a.btn, #btnMyCases a.btn, .submit, #btnClearFilter');
+        me.$buttonsToDisableWhenNoColumns = $('#btnNewCase a.btn, #btnCaseTemplate a.btn, .submit, #btnClearFilter');
         me.$searchField = '#txtFreeTextSearch';
         me.$filterForm = $('#frmCaseSearch');
         me.$filterFormContent = $('#hiddeninfo');
@@ -78,13 +78,13 @@ var GRID_STATE = {
             me.onSearchClick.apply(me);
             return false;
         });
-        /////// moved from _Search.cshtml
+        
         $("#btnClearFilter").click(function (ev) {
             if (me.getGridState() !== window.GRID_STATE.IDLE) {
                 ev.preventDefault();
                 return false;
             }
-            window.location.href = '/Cases/Index/?clearFilters=True';
+            window.location.href = '/Cases/Index/?resetSearchForm=True';
             return false;
         });
 
@@ -100,14 +100,6 @@ var GRID_STATE = {
         });
 
         $('ul.secnav #btnNewCase a.btn').on('click', function(ev) {
-            if (window.app.getGridState() !== window.GRID_STATE.IDLE) {
-                ev.preventDefault();
-                return false;
-            }
-            return true;
-        });
-
-        $('ul.secnav #btnMyCases a.btn').on('click', function (ev) {
             if (window.app.getGridState() !== window.GRID_STATE.IDLE) {
                 ev.preventDefault();
                 return false;

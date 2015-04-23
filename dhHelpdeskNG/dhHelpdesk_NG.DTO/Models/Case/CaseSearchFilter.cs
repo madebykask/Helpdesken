@@ -56,6 +56,8 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
         public CasesCustomFilter CustomFilter { get; set; }
 
+        public bool SearchInMyCasesOnly { get; set; }
+
         public int? CaseRemainingTimeFilter { get; set; }
 
         public int? CaseRemainingTimeUntilFilter { get; set; }
@@ -103,6 +105,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
             r.CaseRemainingTimeMaxFilter = o.CaseRemainingTimeMaxFilter;
             r.CaseRemainingTimeHoursFilter = o.CaseRemainingTimeHoursFilter;
             r.Initiator = o.Initiator;
+            r.SearchInMyCasesOnly = o.SearchInMyCasesOnly;
 
             return r;
         }
