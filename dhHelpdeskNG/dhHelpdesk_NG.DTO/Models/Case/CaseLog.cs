@@ -19,7 +19,8 @@
         public int LogType { get; set; }
         public int Price { get; set; }
         public string RegUser { get; set; }
-        
+        public string FinishingTypeName { get; set; }
+
         [StringLength(3000)]
         public string TextExternal { get; set; }
 

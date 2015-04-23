@@ -17,7 +17,7 @@
         FieldOrder: '#colOrderValue',
         ControllerAddUrl:'/customercaseoverview/AddRowToCaseSettings/',
         ControllerDeleteUrl:'/customercaseoverview/DeleteRowFromCaseSettings/',
-        RepeatedMessage: '@Translation.Get("Fältet är redan valt i detta filter")!'
+        RepeatedMessage: '@Translation.Get("Kolumn \"{0}\" har redan valts att visas i ärendeöversikten")'        
     };   
     
 </script>
@@ -62,7 +62,7 @@
                                 <select id="labellist">
                                     @foreach(var item in sortedList.OrderBy(f=> f.Value)) 
                                     {
-                                        <option id="label" value="@item.Key"> @item.Value </option>  
+                                        <option id="label" value="@item.Key" displayName="@item.Value"> @item.Value </option>  
                                     }
                                     <option value="">--------------------------</option>
                                     <option value="_temporary_.LeadTime">@Translation.Get("_temporary_.LeadTime", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id)</option>

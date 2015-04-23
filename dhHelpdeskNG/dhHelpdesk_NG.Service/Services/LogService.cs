@@ -31,6 +31,7 @@
         private readonly ILogFileRepository _logFileRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IFilesStorage _filesStorage;
+        private readonly IFinishingCauseRepository _finishingCauseRepository;
 
         /// <summary>
         /// The case repository.
@@ -68,14 +69,16 @@
             IFilesStorage filesStorage,
             IUnitOfWork unitOfWork, 
             ICaseRepository caseRepository, 
-            IProblemLogService problemLogService)
+            IProblemLogService problemLogService,
+            IFinishingCauseRepository finishingCauseRepository)
         {
             this._logRepository = logRepository;
             this._unitOfWork = unitOfWork;
             this.caseRepository = caseRepository;
             this.problemLogService = problemLogService;
             this._filesStorage = filesStorage;
-            this._logFileRepository = logFileRepository; 
+            this._logFileRepository = logFileRepository;
+            this._finishingCauseRepository = finishingCauseRepository;
         }
 
         #endregion
@@ -270,6 +273,15 @@
             log.Price = l.Price;
             log.FinishingDate = l.FinishingDate;
             log.FinishingType = l.FinishingType;
+            if (l.FinishingType != null)
+            {
+                var fc = _finishingCauseRepository.GetById(l.FinishingType.Value);
+                var caption = GetFinishingCausePath(fc);                
+                log.FinishingTypeName = caption;
+            }
+            else            
+                log.FinishingTypeName = "--";            
+            
             log.SendMailAboutCaseToNotifier = l.InformCustomer == 1 ? true : false;
             log.TextExternal = string.IsNullOrWhiteSpace(l.Text_External) ? string.Empty : l.Text_External;
             log.TextInternal = string.IsNullOrWhiteSpace(l.Text_Internal) ? string.Empty : l.Text_Internal;
@@ -278,6 +290,14 @@
             log.WorkingTimeMinute = CalculateWorkingTimeMinute(l.WorkingTime);  
 
             return log;
+        }
+
+        private string GetFinishingCausePath(FinishingCause fc)
+        {
+            if (fc.Parent_FinishingCause_Id == null)
+                return fc.Name;
+            else
+                return GetFinishingCausePath(fc.ParentFinishingCause) + "-" + fc.Name;
         }
 
         private int CalculateWorkingTimeHour(int workingTime)

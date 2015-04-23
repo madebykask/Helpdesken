@@ -926,8 +926,9 @@ namespace DH.Helpdesk.Web.Controllers
                     m.CustomerSettings = this.workContext.Customer.Settings;
                     m.Setting = cs;
                     m.EditMode = EditMode(m, ModuleName.Log, deps, acccessToGroups);
+                    m.LogFileNames = string.Join("|", m.LogFilesModel.Files.ToArray());
                     AddViewDataValues();
-
+                    SessionFacade.CurrentCaseLanguageId = m.case_.RegLanguage_Id;
                     // User has not access to case/log
                     if (m.EditMode == Enums.AccessMode.NoAccess)
                         return this.RedirectToAction("index", "home");

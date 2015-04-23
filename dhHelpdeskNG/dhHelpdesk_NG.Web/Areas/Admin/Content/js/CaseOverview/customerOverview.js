@@ -27,16 +27,17 @@ $(function () {
 });
 
 function addCaseSettingRow() {    
+    var displayName = $(overviewParameters.FieldName + " option:selected").text();
     $.post(overviewParameters.ControllerAddUrl +
         '?usergroupId=' + $(overviewParameters.UserGroupId).val() +
         '&customerId=' + $(overviewParameters.CustomerId).val() +
         '&labellist=' + $(overviewParameters.FieldName).val() +
         '&linelist=1' +
         '&minWidthValue=' + $(overviewParameters.FieldWidth).val() +
-        '&colOrderValue=' + $(overviewParameters.FieldOrder).val(),
+        '&colOrderValue=' + $(overviewParameters.FieldOrder).val(),        
         function (result) {
             if (result == "Repeated")
-                ShowToastMessage(overviewParameters.RepeatedMessage, 'warning', false);
+                ShowToastMessage(overviewParameters.RepeatedMessage.replace(/\{0\}/, displayName), 'warning', false);
            else
                $(overviewParameters.UserGroupList).html(result);
         }

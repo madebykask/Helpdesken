@@ -1,4 +1,6 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel 
+@using System.Web.Optimization
+@using System.Linq;
 @using DH.Helpdesk.BusinessData.OldComponents
 @using DH.Helpdesk.Common.Enums.Settings
 @using DH.Helpdesk.Web.Infrastructure.Extensions
@@ -162,7 +164,8 @@
                 <tr>
                     <td class="span3"></td>
                     <td>
-                        <div id="divCaseLogFiles">
+                        <div id="divCaseLogFiles">       
+                            @Html.HiddenFor(model => Model.LogFileNames)                     
                             @Html.Partial("_CaseLogFiles", Model.LogFilesModel)
                         </div>
                     </td>
@@ -201,7 +204,9 @@
                                     disabled = "disabled";
                                 }
                               }
-                             <div class="btn @disabled" id="divBreadcrumbs_FinishingType">@Translation.Get("--")</div>
+                             <div class="btn @disabled" id="divBreadcrumbs_FinishingType">
+                                 @(string.IsNullOrEmpty(Model.CaseLog.FinishingTypeName)? Translation.Get("--") : Model.CaseLog.FinishingTypeName)
+                             </div>
                              <button class="btn dropdown-toggle" data-toggle="dropdown" @disabled>
                                  <span class="caret"></span>
                              </button>
@@ -209,7 +214,7 @@
                                  <li><a href="#">@Translation.Get("--")</a></li>
                                  @Html.FinishingCauseDropdownButtonString(Model.finishingCauses)
                              </ul>
-                             @Html.HiddenFor(model => model.CaseLog.FinishingType)
+                             @Html.HiddenFor(model => Model.CaseLog.FinishingType)
                         </div>
                     </td>
                 </tr>
