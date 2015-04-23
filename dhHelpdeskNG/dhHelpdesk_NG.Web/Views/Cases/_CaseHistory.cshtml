@@ -25,18 +25,18 @@
                         var current = histories[i];     
                         var previous = i < histories.Length - 1 ? histories[i + 1] : null;         
                         <tr>
-                            <td>
+                            <td style="width:15%">
                                 @Html.DisplayFor(m => current.CreatedDate, "DateAndTime") 
                             </td>
-                            <td>
+                            <td style="width:12%">
                                 @current.CreatedByUser
                             </td>
-                            <td>
+                            <td style="width:40%">
                                 <table class="tableintable">
                                     @current.GetCaseHistoryInfo(previous, Model.case_.Customer_Id, Model.DepartmentFilterFormat, Model.caseFieldSettings)
                                 </table>
                             </td>
-                            <td>
+                            <td style="width:33%">
                                 @if (current.Emaillogs != null)
                                 {
                                     <div>

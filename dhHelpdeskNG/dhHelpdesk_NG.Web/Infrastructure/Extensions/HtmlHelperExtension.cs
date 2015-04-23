@@ -292,6 +292,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             const string be = "</th>";
             const string ey = "";
             const string from = " &rarr; ";
+            const string tdMarkup = "<td style=\"width:70%\">";
 
             var o = (old != null ? old : new CaseHistory());
 
@@ -302,7 +303,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
-                    sb.Append("<td>");
+                    sb.Append(tdMarkup);
                     sb.Append(o.ReportedBy);
                     sb.Append(from);
                     sb.Append(cur.ReportedBy);
@@ -317,7 +318,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
-                    sb.Append("<td>");
+                    sb.Append(tdMarkup);
                     sb.Append(o.PersonsName);
                     sb.Append(from);
                     sb.Append(cur.PersonsName);
@@ -332,7 +333,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
-                    sb.Append("<td>");
+                    sb.Append(tdMarkup);
                     sb.Append(o.PersonsPhone);
                     sb.Append(from);
                     sb.Append(cur.PersonsPhone);
@@ -347,7 +348,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
-                    sb.Append("<td>");
+                    sb.Append(tdMarkup);
                     if (o.Department != null)
                         sb.Append(o.Department.DepartmentDescription(departmentFilterFormat));
                     else
@@ -368,7 +369,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.UserCode.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
-                    sb.Append("<td>");
+                    sb.Append(tdMarkup);
                     sb.Append(o.UserCode);
                     sb.Append(from);
                     sb.Append(cur.UserCode);
@@ -382,7 +383,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
-                    sb.Append("<td>");
+                    sb.Append(tdMarkup);
                     
                     if (o.CaseType != null)
                         sb.Append(Translation.Get(o.CaseType.Name, Enums.TranslationSource.TextTranslation, customerId));
@@ -404,7 +405,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
-                    sb.Append("<td>");
+                    sb.Append(tdMarkup);
                     if (o.ProductArea != null)
                         sb.Append(Translation.Get(o.ProductArea.Name, Enums.TranslationSource.TextTranslation, customerId));
                     else
@@ -425,7 +426,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
-                    sb.Append("<td>");
+                    sb.Append(tdMarkup);
                     sb.Append(o.ReferenceNumber);
                     sb.Append(from);
                     sb.Append(cur.ReferenceNumber);
@@ -439,7 +440,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Caption.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
-                    sb.Append("<td>");
+                    sb.Append(tdMarkup);
                     sb.Append(o.Caption);
                     sb.Append(from);
                     sb.Append(cur.Caption);
@@ -453,7 +454,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
-                    sb.Append("<td>");
+                    sb.Append(tdMarkup);
                     if (o.UserPerformer != null)
                         sb.Append(o.UserPerformer.FirstName + " " + o.UserPerformer.SurName);
                     else
@@ -474,7 +475,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
-                    sb.Append("<td>");
+                    sb.Append(tdMarkup);
                     if (o.Priority != null)
                         sb.Append(Translation.Get(o.Priority.Name, Enums.TranslationSource.TextTranslation, customerId));
                     else
@@ -496,7 +497,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                     //string value = cur.WorkingGroup != null ? cur.WorkingGroup.WorkingGroupName : ey + from + cur.WorkingGroup != null ? cur.WorkingGroup.WorkingGroupName : ey;
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
-                    sb.Append("<td>");
+                    sb.Append(tdMarkup);
                     if (o.WorkingGroup != null)
                         sb.Append(Translation.Get(o.WorkingGroup.WorkingGroupName, Enums.TranslationSource.TextTranslation, customerId));
                     else
@@ -517,7 +518,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
-                    sb.Append("<td>");
+                    sb.Append(tdMarkup);
                     if (o.StateSecondary != null)
                         sb.Append(Translation.Get(o.StateSecondary.Name, Enums.TranslationSource.TextTranslation, customerId));
                     else
@@ -538,7 +539,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
-                    sb.Append("<td>");
+                    sb.Append(tdMarkup);
                     if (o.Status != null)
                         sb.Append(Translation.Get(o.Status.Name, Enums.TranslationSource.TextTranslation, customerId));
                     else
@@ -578,8 +579,8 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                     }
                     else
                         caption = ey;
-                    
-                    sb.Append("<td>");
+
+                    sb.Append(tdMarkup);
                     sb.Append(caption);
                     sb.Append("</td>");                                                      
                     sb.Append("</tr>");
@@ -614,9 +615,9 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                             }                        
                     }
                     else                    
-                        caption = ey;                                         
-                    
-                    sb.Append("<td>"); 
+                        caption = ey;
+
+                    sb.Append(tdMarkup); 
                     sb.Append(caption);
                     sb.Append("</td>");                  
                     sb.Append("</tr>");
@@ -651,7 +652,10 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                                                      .Replace(StringTags.ExternalLog,
                                                               Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + ": ")
                                                      .Replace(StringTags.InternalLog, "<br />" +
-                                                              Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + ": ");
+                                                              Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + ": ")
+                                                     .Replace(StringTags.LogFile, "<br />" +
+                                                              Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + ": <br /> &nbsp; - ")
+                                                     .Replace(StringTags.Seperator, "<br /> &nbsp; - ");
                             }
                             else
                             {
@@ -664,8 +668,8 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                     }
                     else
                         caption = ey;
-                    
-                    sb.Append("<td>");
+
+                    sb.Append(tdMarkup);
                     sb.Append(caption);
                     sb.Append("</td>");
                     sb.Append("</tr>");

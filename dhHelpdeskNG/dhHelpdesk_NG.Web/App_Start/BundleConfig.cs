@@ -140,6 +140,9 @@
                 "~/Content/js/Cases/index.logic.js",
                 "~/Content/js/Cases/index.settings.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/cases/editLog").Include(
+                "~/Content/js/Cases/editLog.logic.js"));
+
             bundles.Add(
                 new ScriptBundle("~/bundles/cases/edit").Include(
                     "~/Content/js/Cases/edit.logic.js",
