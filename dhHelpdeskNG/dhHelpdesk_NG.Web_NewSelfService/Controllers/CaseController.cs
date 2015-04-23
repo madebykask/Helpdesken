@@ -31,6 +31,9 @@ namespace DH.Helpdesk.NewSelfService.Controllers
     using System.Net.Http.Headers;
     using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.NewSelfService.Infrastructure;
+    using DH.Helpdesk.BusinessData.Enums.Case;
+    using DH.Helpdesk.Common.Enums;
+    using DH.Helpdesk.NewSelfService.Infrastructure.Common.Concrete;
 
     public class CaseController : BaseController
     {
@@ -62,6 +65,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
         private readonly IWorkContext workContext;
 
         private const string ParentPathDefaultValue = "--";
+        private const string EnterMarkup = "<br />";
 
 
         public CaseController(ICaseService caseService,
@@ -136,22 +140,42 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             {
                 var guid = new Guid(id);
                 currentCase = _caseService.GetCaseByEMailGUID(guid);
+
+                var dynamicCases = _caseService.GetAllDynamicCases();
+                var dynamicUrl = "";
+                if (dynamicCases != null && dynamicCases.Any())
+                {
+                    dynamicUrl = dynamicCases.Where(w => w.CaseId == currentCase.Id).Select(d => "/" + d.FormPath).FirstOrDefault();
+                    if (!string.IsNullOrEmpty(dynamicUrl)) // Show Case in eform
+                    {
+                        var urlStr = dynamicUrl.SetStrParameters(currentCase.Id);
+                        var url = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, urlStr);                         
+                        return Redirect(url);
+                    }
+                }
             }
             else
             {
                 currentCase = this._caseService.GetCaseById(Int32.Parse(id));
 
-                if(currentCase == null)
-                    return RedirectToAction("Index", "Error", new { message = "Can not find the Case!" });
+                if (currentCase == null)
+                {
+                    ErrorGenerator.MakeError("Can not find the Case!");
+                    return RedirectToAction("Index", "Error");
+                }
 
-                if(currentCase != null && currentCase.RegUserId != SessionFacade.CurrentUserIdentity.UserId)
-                    return RedirectToAction("Index", "Error", new { message = "Can not find this Case in your cases!" }); ;
+                if (currentCase != null && currentCase.RegUserId != SessionFacade.CurrentUserIdentity.UserId)
+                {
+                    ErrorGenerator.MakeError("Can not find this Case in your cases!");
+                    return RedirectToAction("Index", "Error");
+                }
 
             }
 
             if(currentCase == null)
             {
-                return RedirectToAction("Index", "Error", new { message = "Can not find the Case!" });
+                ErrorGenerator.MakeError("Can not find the Case!");
+                return RedirectToAction("Index", "Error");                
             }
             else
             {
@@ -160,16 +184,19 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                     ViewBag.CurrentCaseId = currentCase.Id;
                 }
 
-                currentCase.Description = currentCase.Description.Replace("\n", "<br />");
+                currentCase.Description = currentCase.Description.Replace("\n", EnterMarkup);
                 customerId = currentCase.Customer_Id;
             }
 
             Customer currentCustomer = default(Customer);
 
-            if(SessionFacade.CurrentCustomer != null)
+            if (SessionFacade.CurrentCustomer != null)
                 currentCustomer = SessionFacade.CurrentCustomer;
             else
-                return RedirectToAction("Index", "Error", new { message = "Customer Id: " + customerId.ToString() + " is not valid!", errorCode = 108 });
+            {
+                ErrorGenerator.MakeError(string.Format("Customer Id: {0} is not valid!", customerId.ToString()), 201);
+                return RedirectToAction("Index", "Error");                
+            }
 
             currentCase.Customer = currentCustomer;
 
@@ -208,11 +235,13 @@ namespace DH.Helpdesk.NewSelfService.Controllers
         {
             // *** New Case ***
             var currentCustomer = default(Customer);
-            if(SessionFacade.CurrentCustomer != null)
+            if (SessionFacade.CurrentCustomer != null)
                 currentCustomer = SessionFacade.CurrentCustomer;
             else
-                return RedirectToAction("Index", "Error", new { message = "Customer Id: " + customerId.ToString() + " is not valid!", errorCode = 208 });
-
+            {
+                ErrorGenerator.MakeError(string.Format("Customer Id: {0} is not valid!", customerId.ToString()), 201);
+                return RedirectToAction("Index", "Error");
+            }
             var languageId = SessionFacade.CurrentLanguageId;
 
             var model = this.GetNewCaseModel(currentCustomer.Id, languageId);
@@ -302,17 +331,23 @@ namespace DH.Helpdesk.NewSelfService.Controllers
         {
 
             var currentCustomer = default(Customer);
-            if(SessionFacade.CurrentCustomer != null)
+            if (SessionFacade.CurrentCustomer != null)
                 currentCustomer = SessionFacade.CurrentCustomer;
             else
-                return RedirectToAction("Index", "Error", new { message = "Customer Id: " + customerId.ToString() + " is not valid!", errorCode = 208 });
+            {
+                ErrorGenerator.MakeError(string.Format("Customer Id: {0} is not valid!", customerId.ToString()), 201);
+                return RedirectToAction("Index", "Error");
+            }                
 
             var languageId = SessionFacade.CurrentLanguageId;
 
             UserCasesModel model = null;
 
-            if(progressId != "1" && progressId != "2")
-                return RedirectToAction("Index", "Error", new { message = "Process is not valid!", errorCode = 207 });
+            if (progressId != CaseProgressFilter.ClosedCases && progressId != CaseProgressFilter.CasesInProgress)
+            {
+                ErrorGenerator.MakeError("Process is not valid!", 202);
+                return RedirectToAction("Index", "Error");                
+            }
 
             if(SessionFacade.CurrentUserIdentity != null)
             {
@@ -322,7 +357,8 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "Error", new { message = "You don't have access to user cases! please login again.", errorCode = 204 });
+                ErrorGenerator.MakeError("You don't have access to user cases! please login again.", 203);
+                return RedirectToAction("Index", "Error");                
             }
 
             return this.View("UserCases", model);
@@ -585,8 +621,11 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                 var ascending = frm.ReturnFormValue("hidSortByAsc").convertStringToBool();
                 var id = frm.ReturnFormValue("MailGuid");
 
-                if(progressId != "1" && progressId != "2")
-                    return RedirectToAction("Index", "Error", new { message = "Process is not valid!", errorCode = 207 });
+                if (progressId != CaseProgressFilter.ClosedCases && progressId != CaseProgressFilter.CasesInProgress)
+                {                    
+                    ErrorGenerator.MakeError("Process is not valid!", 202);
+                    return RedirectToAction("Index", "Error");                                 
+                }
 
                 var model = GetUserCasesModel(customerId, languageId, userId,
                                               pharasSearch, maxRecords, progressId,
@@ -596,8 +635,8 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             }
             catch(Exception e)
             {
-                return RedirectToAction("Index", "Error", new { message = "Error in load user cases!", errorCode = 206 });
-                //return View("Error");
+                ErrorGenerator.MakeError("Error in load user cases!", 204);
+                return RedirectToAction("Index", "Error");                
             }
         }
 
@@ -695,42 +734,50 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             cs.FreeTextSearch = pharasSearch;
             cs.CaseProgress = progressId;
             cs.ReportedBy = "";
-            var LMtype = "";
+            var caseListType = string.Empty;
+            var currentApplicationType = ConfigurationManager.AppSettings[AppSettingsKey.CurrentApplicationType].ToString().ToLower();
 
-            if (ConfigurationManager.AppSettings[Enums.ApplicationKeys.CurrentApplicationType].ToString() == Enums.ApplicationTypes.LineManager)
+            if (currentApplicationType == ApplicationTypes.LineManager)
             {
-                var caseListCondition = ConfigurationManager.AppSettings[Enums.ApplicationKeys.CaseList].ToString().ToLower().Split(',');
+                var caseListCondition = ConfigurationManager.AppSettings[AppSettingsKey.CaseList].ToString().ToLower().Split(',');
 
-                if (caseListCondition.Contains(Enums.CaseListTypes.manager))
+                if (caseListCondition.Contains(CaseListTypes.ManagerCases))
                 {
-                    LMtype = "1";
+                    caseListType = CaseListTypes.ManagerCases;
                     cs.RegUserId = curUser;
                     cs.ReportedBy = "'" + SessionFacade.CurrentUserIdentity.EmployeeNumber + "'";
                 }
 
-                if (caseListCondition.Contains(Enums.CaseListTypes.coworkers))
+                if (caseListCondition.Contains(CaseListTypes.CoWorkerCases))
                 {
-                    LMtype = LMtype + "2";
+                    if (caseListType == CaseListTypes.ManagerCases)
+                        caseListType = CaseListTypes.ManagerCoWorkerCases;
+                    else
+                        caseListType = CaseListTypes.CoWorkerCases;
+                    
                     var employees = SessionFacade.CurrentCoWorkers;
-                    foreach (var emp in employees)
+                    if (employees != null)
                     {
-                        if (emp.EmployeeNumber != "")
+                        foreach (var emp in employees)
                         {
-                            if (cs.ReportedBy == "")
-                                cs.ReportedBy = "'" + emp.EmployeeNumber + "'";
-                            else
-                                cs.ReportedBy = cs.ReportedBy + "," + "'" + emp.EmployeeNumber + "'";
+                            if (emp.EmployeeNumber != "")
+                            {
+                                if (cs.ReportedBy == "")
+                                    cs.ReportedBy = "'" + emp.EmployeeNumber + "'";
+                                else
+                                    cs.ReportedBy = cs.ReportedBy + "," + "'" + emp.EmployeeNumber + "'";
+                            }
                         }
                     }
 
                 }
 
-                cs.LMCaseList = LMtype;
-            } // LineManager only 
-            else
+                cs.CaseListType = caseListType;
+            } 
+            else// Self Service 
             {
                 cs.RegUserId = curUser;
-                cs.LMCaseList = "0";
+                cs.CaseListType = CaseListTypes.UserCases;
             }
 
 
@@ -745,7 +792,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             // 1: User in Customer Setting
             srm.CaseSettings = this._caseSettingService.GetCaseSettingsByUserGroup(cusId, 1);
 
-            if (LMtype == "" && ConfigurationManager.AppSettings[Enums.ApplicationKeys.CurrentApplicationType].ToString() == Enums.ApplicationTypes.LineManager)
+            if (caseListType == string.Empty && currentApplicationType == ApplicationTypes.LineManager)
                 srm.Cases = null;
             else
             {
@@ -761,9 +808,9 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                     SessionFacade.CurrentCustomer.WorkingDayStart,
                     SessionFacade.CurrentCustomer.WorkingDayEnd,
                     null,
-                    "Line Manager").ToList(); // Take(maxRecords)
+                    currentApplicationType).ToList(); // Take(maxRecords)
 
-                if (LMtype != "" && ConfigurationManager.AppSettings[Enums.ApplicationKeys.CurrentApplicationType].ToString() == Enums.ApplicationTypes.LineManager)
+                if (currentApplicationType == ApplicationTypes.LineManager)
                 {
                     var dynamicCases = _caseService.GetAllDynamicCases();
                     model.DynamicCases = dynamicCases;

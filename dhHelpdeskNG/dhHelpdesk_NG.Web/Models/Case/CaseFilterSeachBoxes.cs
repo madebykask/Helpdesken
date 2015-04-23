@@ -29,6 +29,8 @@
         public IList<StateSecondary> filterStateSecondary { get; set; }
         public IList<Field> filterCaseProgress { get; set; }
 
+        public bool SearchInMyCasesOnly { get; set; }
+
         public DateTime? CaseRegistrationDateStartFilter { get; set; }
 
         public DateTime? CaseRegistrationDateEndFilter { get; set; }
@@ -42,8 +44,6 @@
         public DateTime? CaseClosingDateEndFilter { get; set; }
 
         public IList<FinishingCause> ClosingReasons { get; set; }
-
-        public bool IsClearFilters { get; set; }
 
         /// <summary>
         /// Preset string in "filter by intitator" filter field on case overview page

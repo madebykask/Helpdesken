@@ -22,7 +22,6 @@ a, a:hover, a:focus {
 	*border: 1px solid #cccccc;
 }
 
-
 /********************TEXT WEIGHT AND COLORS************************************************/
 .textbold {
     font-weight: bold;
@@ -1696,7 +1695,9 @@ table th.thpointer {
         color: gray;
         padding: 10px;
     }
-    .nofields-msg {
+    .noavailablefields-msg,
+    .nofields-msg 
+    {
         border: 1px solid #dddddd;
         display: none;
         left: 0px;
@@ -1705,7 +1706,9 @@ table th.thpointer {
         color: gray;
         padding: 10px;
     }
-    #fragment-4 .nofields-msg {
+    #fragment-4 .nofields-msg,
+    #fragment-4 .noavailablefields-msg
+    {
         display: block;
         position: static;
     }
@@ -1763,13 +1766,11 @@ table th.thpointer {
 .table-cases th {
     overflow-wrap:break-word;
     word-wrap: break-word;
-    -ms-word-break: break-all;
     line-height:13px;
 }
 .table-cases td {
     overflow-wrap:break-word;
     word-wrap: break-word;
-    -ms-word-break: break-all;
     line-height:13px;
 }
 
@@ -1784,11 +1785,10 @@ table th.thpointer {
     width:5%;
 }
 
-.SortableRow,
-.SortableRow td,
-.SortableRow label
+
+.SortableIcon
 {
-    cursor: move;
+    cursor:move;
 }
 
 /*********************** CASE OVERVIEW PAGE END  ***********/

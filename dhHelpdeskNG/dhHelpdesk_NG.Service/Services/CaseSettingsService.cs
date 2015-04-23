@@ -120,6 +120,7 @@
         /// <returns></returns>
         public IEnumerable<CaseOverviewGridColumnSetting> GetSelectedCaseOverviewGridColumnSettings(int customerId, int userId)
         {
+            var duplicates = new HashSet<string>();
             var res =
                 this.GetAvailableCaseOverviewGridColumnSettings(customerId)
                     .Join(
@@ -127,7 +128,7 @@
                         colSetting => colSetting.Name,
                         userSelection => userSelection.Name,
                         (colSetting, userSelection) =>
-                        new 
+                        new
                             {
                                 caseSettingsId = userSelection.Id,
                                 Name = userSelection.Name,
@@ -137,13 +138,18 @@
                     .OrderBy(it => it.Order)
                      //// data in DB can contain same values in the Order field, so sorting also by fieldId
                     .ThenBy(it => it.caseSettingsId)
+                    .Where(it => !duplicates.Contains(it.Name.ToLower()))
                     .Select(
-                        it => new CaseOverviewGridColumnSetting()
-                                  {
-                                      Name = it.Name,
-                                      Order = it.Order,
-                                      Style = it.Style
-                    });
+                        it =>
+                            {
+                                duplicates.Add(it.Name.ToLower());
+                                return new CaseOverviewGridColumnSetting()
+                                           {
+                                               Name = it.Name,
+                                               Order = it.Order,
+                                               Style = it.Style
+                                           };
+                            });
             return res;
         }
 
@@ -298,7 +304,22 @@
         public void SyncSettings(CaseOverviewGridColumnSetting[] input, int customerId, int userId, int userGroupId)
         {
             var inputDictionary = input.ToDictionary(it => it.Name, it => it);
-            var currentSettings = this.GetAvailableCaseSettings(customerId, userId).ToDictionary(it=> it.Name, it=>it);
+            var duplicatesToDelete = new HashSet<string>();
+            var currentSettings = this.GetAvailableCaseSettings(customerId, userId)
+                .Where(
+                    it =>
+                        {
+                            var nameLower = it.Name.ToLower();
+                            if (duplicatesToDelete.Contains(nameLower))
+                            {
+                                this._caseSettingRepository.Delete(it);
+                                return false;
+                            }
+
+                            duplicatesToDelete.Add(nameLower);
+                            return true;
+                        })
+                .ToDictionary(it => it.Name, it => it);
             var toUpdate = currentSettings.Where(it => inputDictionary.ContainsKey(it.Key)).ForEach(
                 it =>
                     {
@@ -333,7 +354,7 @@
         }
 
         private IEnumerable<CaseSettings> GetAvailableCaseSettings(int customerId, int userId)
-        {
+        {   
             return
                 this._caseSettingRepository.GetMany(
                     it => it.Customer_Id == customerId && it.User_Id == userId && it.Line == 1);

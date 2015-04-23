@@ -112,10 +112,9 @@
         }
 
         public List<ItemOverview> GetActiveOverviews()
-        {
-            var languageIds = new List<int> { LanguageId.Swedish, LanguageId.English };
-            var languages = this._languageRepository.FindActiveOverviewsByIds(languageIds);
-
+        {            
+            var languagesEntity = this._languageRepository.GetActiveLanguages();
+            var languages = this._languageRepository.FindActiveOverviewsByIds(languagesEntity.Select(l => l.Id).ToList());            
             return languages;
         }
 

@@ -7,7 +7,11 @@
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseSatisfaction;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.CasesInProgressDay;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.ClosedCasesDay;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.FinishingCauseCategoryCustomer;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.FinishingCauseCustomer;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeActiveCases;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeFinishedCases;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.RegistratedCasesDay;
@@ -502,6 +506,291 @@
                                     lowDays);
             }
         }
+
+        #endregion
+
+        #region FinishingCauseCustomer
+
+        public FinishingCauseCustomerOptions GetFinishingCauseCustomerOptions(int customerId)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var departmentRep = uow.GetRepository<Department>();
+                var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
+                var caseTypeRep = uow.GetRepository<CaseType>();
+                var administratorRep = uow.GetRepository<User>();
+
+                var departments = departmentRep.GetAll().GetActiveByCustomer(customerId);
+                var workingGroups = workingGroupRep.GetAll().GetActiveByCustomer(customerId);
+                var caseTypes = caseTypeRep.GetAll().GetActiveByCustomer(customerId);
+                var administrators = administratorRep.GetAll().GetActiveByCustomer(customerId);
+
+                return ReportsOptionsMapper.MapToFinishingCauseCustomerOptions(
+                                            departments,
+                                            workingGroups,
+                                            caseTypes,
+                                            administrators);
+            }
+        }
+
+        public FinishingCauseCustomerData GetFinishingCauseCustomerData(
+            int customerId,
+            List<int> departmentIds,
+            int? workingGroupId,
+            int? caseTypeId,
+            int? administratorId,
+            DateTime? periodFrom,
+            DateTime? periodUntil)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var casesRep = uow.GetRepository<Case>();
+                var departmentRep = uow.GetRepository<Department>();
+                var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
+                var caseTypeRep = uow.GetRepository<CaseType>();
+                var administratorRep = uow.GetRepository<User>();
+                var finishingCauseRep = uow.GetRepository<FinishingCause>();
+
+                var caseTypeIds = new List<int>();
+                if (caseTypeId.HasValue)
+                {
+                    LoadCaseTypeChildrenIds(caseTypeId.Value, caseTypeIds, uow);
+                }
+
+                var cases = casesRep.GetAll()
+                        .GetByCustomer(customerId)
+                        .GetByDepartments(departmentIds)
+                        .GetByWorkingGroup(workingGroupId)
+                        .GetByCaseTypes(caseTypeIds)
+                        .GetByAdministrator(administratorId)
+                        .GetByRegistrationPeriod(periodFrom, periodUntil)
+                        .GetActive()
+                        .GetNotDeleted();
+
+                var departments = departmentRep.GetAll().GetByIds(departmentIds);
+                var workingGroups = workingGroupRep.GetAll().GetById(workingGroupId);
+                var caseTypes = caseTypeRep.GetAll().GetByIds(caseTypeIds);
+                var administrators = administratorRep.GetAll().GetById(administratorId);
+                var finishingCauses = finishingCauseRep.GetAll().GetActiveByCustomer(customerId);
+
+                return ReportsMapper.MapToFinishingCauseCustomerData(
+                                            cases,
+                                            departments,
+                                            workingGroups,
+                                            caseTypes,
+                                            administrators,
+                                            finishingCauses,
+                                            periodFrom,
+                                            periodUntil);
+            }
+        }
+
+        #endregion
+
+        #region FinishingCauseCategoryCustomer
+
+        public FinishingCauseCategoryCustomerOptions GetFinishingCauseCategoryCustomerOptions(int customerId)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var departmentRep = uow.GetRepository<Department>();
+                var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
+                var caseTypeRep = uow.GetRepository<CaseType>();
+
+                var departments = departmentRep.GetAll().GetActiveByCustomer(customerId);
+                var workingGroups = workingGroupRep.GetAll().GetActiveByCustomer(customerId);
+                var caseTypes = caseTypeRep.GetAll().GetActiveByCustomer(customerId);
+
+                return ReportsOptionsMapper.MapToFinishingCauseCategoryCustomerOptions(
+                                            departments,
+                                            workingGroups,
+                                            caseTypes);
+            }
+        }
+
+        public FinishingCauseCategoryCustomerData GetFinishingCauseCategoryCustomerData(
+            int customerId,
+            List<int> departmentIds,
+            List<int> workingGroupIds,
+            int? caseTypeId,
+            DateTime? periodFrom,
+            DateTime? periodUntil)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var casesRep = uow.GetRepository<Case>();
+                var departmentRep = uow.GetRepository<Department>();
+                var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
+                var caseTypeRep = uow.GetRepository<CaseType>();
+                var usersRep = uow.GetRepository<User>();
+
+                var caseTypeIds = new List<int>();
+                if (caseTypeId.HasValue)
+                {
+                    LoadCaseTypeChildrenIds(caseTypeId.Value, caseTypeIds, uow);
+                }
+
+                var cases = casesRep.GetAll()
+                        .GetByCustomer(customerId)
+                        .GetByDepartments(departmentIds)
+                        .GetByWorkingGroups(workingGroupIds)
+                        .GetByCaseTypes(caseTypeIds)
+                        .GetByRegistrationPeriod(periodFrom, periodUntil)
+                        .GetActive()
+                        .GetNotDeleted();
+
+                var departments = departmentRep.GetAll().GetByIds(departmentIds);
+                var workingGroups = workingGroupRep.GetAll().GetByIds(workingGroupIds);
+                var caseTypes = caseTypeRep.GetAll().GetByIds(caseTypeIds);
+                var users = usersRep.GetAll().GetActiveByCustomer(customerId);
+
+                return ReportsMapper.MapToFinishingCauseCategoryCustomerData(
+                                            cases,
+                                            departments,
+                                            workingGroups,
+                                            caseTypes,
+                                            users,
+                                            periodFrom,
+                                            periodUntil);
+            }
+        }
+
+        #endregion
+
+        #region ClosedCasesDay
+
+        public ClosedCasesDayOptions GetClosedCasesDayOptions(int customerId)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var departmentRep = uow.GetRepository<Department>();
+                var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
+                var caseTypeRep = uow.GetRepository<CaseType>();
+                var administratorRep = uow.GetRepository<User>();
+
+                var departments = departmentRep.GetAll().GetActiveByCustomer(customerId);
+                var workingGroups = workingGroupRep.GetAll().GetActiveByCustomer(customerId);
+                var caseTypes = caseTypeRep.GetAll().GetActiveByCustomer(customerId);
+                var administrators = administratorRep.GetAll().GetActiveByCustomer(customerId);
+
+                return ReportsOptionsMapper.MapToClosedCasesDayOptions(
+                                            departments,
+                                            workingGroups,
+                                            caseTypes,
+                                            administrators);
+            }
+        }
+
+        public ClosedCasesDayData GetClosedCasesDayData(
+            int customerId,
+            List<int> departmentIds,
+            int? workingGroupId,
+            int? caseTypeId,
+            int? administratorId,
+            DateTime period)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var casesRep = uow.GetRepository<Case>();
+                var departmentRep = uow.GetRepository<Department>();
+                var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
+                var caseTypeRep = uow.GetRepository<CaseType>();
+                var administratorRep = uow.GetRepository<User>();
+
+                var caseTypeIds = new List<int>();
+                if (caseTypeId.HasValue)
+                {
+                    LoadCaseTypeChildrenIds(caseTypeId.Value, caseTypeIds, uow);
+                }
+
+                var from = period.RoundToMonth();
+                var until = period.AddMonths(1).RoundToMonth();
+
+                var cases = casesRep.GetAll()
+                                .GetByCustomer(customerId)
+                                .GetByDepartments(departmentIds)
+                                .GetByCaseTypes(caseTypeIds)
+                                .GetByWorkingGroup(workingGroupId)
+                                .GetByAdministrator(administratorId)
+                                .GetByRegistrationPeriod(from, until)
+                                .GetNotDeleted();
+
+                var departments = departmentRep.GetAll().GetByIds(departmentIds);
+                var workingGroups = workingGroupRep.GetAll().GetById(workingGroupId);
+                var caseTypes = caseTypeRep.GetAll().GetByIds(caseTypeIds);
+                var administrators = administratorRep.GetAll().GetById(administratorId);
+
+                return ReportsMapper.MapToClosedCasesDayData(
+                                            cases,
+                                            departments,
+                                            workingGroups,
+                                            caseTypes,
+                                            administrators,
+                                            period);
+            }
+        }
+
+        #endregion
+
+        #region CasesInProgressDay
+
+        public CasesInProgressDayOptions GetCasesInProgressDayOptions(int customerId)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var departmentRep = uow.GetRepository<Department>();
+                var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
+                var administratorRep = uow.GetRepository<User>();
+
+                var departments = departmentRep.GetAll().GetActiveByCustomer(customerId);
+                var workingGroups = workingGroupRep.GetAll().GetActiveByCustomer(customerId);
+                var administrators = administratorRep.GetAll().GetActiveByCustomer(customerId);
+
+                return ReportsOptionsMapper.MapToCasesInProgressDayOptions(
+                                            departments,
+                                            workingGroups,
+                                            administrators);
+            }
+        }
+
+        public CasesInProgressDayData GetCasesInProgressDayData(
+            int customerId,
+            int? departmentId,
+            int? workingGroupId,
+            int? administratorId,
+            DateTime period)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var casesRep = uow.GetRepository<Case>();
+                var departmentRep = uow.GetRepository<Department>();
+                var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
+                var administratorRep = uow.GetRepository<User>();
+
+                var from = period.RoundToMonth();
+                var until = period.AddMonths(1).RoundToMonth();
+
+                var cases = casesRep.GetAll()
+                                .GetByCustomer(customerId)
+                                .GetByDepartment(departmentId)
+                                .GetByWorkingGroup(workingGroupId)
+                                .GetByAdministrator(administratorId)
+                                .GetByRegistrationPeriod(from, until)
+                                .GetInProgress();
+
+                var departments = departmentRep.GetAll().GetById(departmentId);
+                var workingGroups = workingGroupRep.GetAll().GetById(workingGroupId);
+                var administrators = administratorRep.GetAll().GetById(administratorId);
+
+                return ReportsMapper.MapToCasesInProgressDayData(
+                                            cases,
+                                            departments,
+                                            workingGroups,
+                                            administrators,
+                                            period);
+            }
+        }
+
 
         #endregion
 

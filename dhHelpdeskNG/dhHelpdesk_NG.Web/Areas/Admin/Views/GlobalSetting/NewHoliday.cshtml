@@ -11,12 +11,12 @@
             <ul class="secnav">
                 @if (newholiday == "1")
                 {
-                    <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "newholiday", null, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
+                    <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "newholiday", new { texttypeid = 0, compareMethod = 1}, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
                 }
                 else {
-                    <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "newholiday", new { id = Model.HolidayHeader.Id }, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
+                    <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "newholiday", new { id = Model.HolidayHeader.Id, compareMethod = 1 }, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
                 }
-                <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", new { texttypeid = 0}, new { @class = "btn" })</li>
+                <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", new { texttypeid = 0, compareMethod = 1}, new { @class = "btn" })</li>
             </ul>
         </div>
     </div>

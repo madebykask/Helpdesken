@@ -271,12 +271,11 @@
             {
                 case LanguageId.Swedish:
                     fieldSetting.Label = updatedSetting.Caption;
-                    break;
-                case LanguageId.English:
+                    break;                
+                default:
                     fieldSetting.Label_ENG = updatedSetting.Caption;
                     break;
-                default:
-                    throw new ArgumentOutOfRangeException("languageId");
+                    //throw new ArgumentOutOfRangeException("languageId");
             }
 
             fieldSetting.Bookmark = updatedSetting.Bookmark;
@@ -297,12 +296,11 @@
             {
                 case LanguageId.Swedish:
                     fieldSetting.Label = updatedSetting.Caption;
-                    break;
-                case LanguageId.English:
-                    fieldSetting.Label_ENG = updatedSetting.Caption;
-                    break;
+                    break;                                   
                 default:
-                    throw new ArgumentOutOfRangeException("languageId");
+                    fieldSetting.Label_ENG = updatedSetting.Caption;                    
+                    break;
+                    
             }
 
             fieldSetting.Bookmark = updatedSetting.Bookmark;

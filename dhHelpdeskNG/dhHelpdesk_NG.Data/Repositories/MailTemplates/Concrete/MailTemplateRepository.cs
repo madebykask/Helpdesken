@@ -8,6 +8,8 @@ namespace DH.Helpdesk.Dal.Repositories.MailTemplates.Concrete
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain.MailTemplates;
+    using DH.Helpdesk.BusinessData.Models.MailTemplates;
+    using DH.Helpdesk.BusinessData.Models.Language.Output;
 
     #region MAILTEMPLATE
 
@@ -18,7 +20,7 @@ namespace DH.Helpdesk.Dal.Repositories.MailTemplates.Concrete
         {
         }
 
-        public IEnumerable<MailTemplateList> GetMailTemplate(int customerId, int languageId)
+        public IEnumerable<MailTemplateList> GetMailTemplates(int customerId, int languageId)
         {
             var q = from m in this.DataContext.MailTemplates
                 join l in this.DataContext.MailTemplateLanguages on m.Id equals l.MailTemplate_Id
@@ -41,6 +43,53 @@ namespace DH.Helpdesk.Dal.Repositories.MailTemplates.Concrete
                     };
 
             return q;
+        }
+
+        public List<CustomMailTemplate> GetCustomMailTemplates(int customerId)
+        {
+            var res = new List<CustomMailTemplate>();
+
+            var mailTemplateEntities = this.DataContext.MailTemplates.Where(t => t.Customer_Id == customerId).ToList();
+
+            var mailTemplateLanguageEntities = this.DataContext.MailTemplateLanguages
+                                                               .Where(tl => tl.Language.IsActive != 0).ToList();
+
+            foreach (var template in mailTemplateEntities)
+            {
+                var templateLanguages = new List<CustomMailTemplateLanguage>();
+                foreach (var templateLang in mailTemplateLanguageEntities.Where(ml=> ml.MailTemplate_Id == template.Id))
+                {
+                    var templateLanguage = new CustomMailTemplateLanguage
+                    {
+                        Subject = templateLang.Subject,
+                        Body = templateLang.Body,
+                        LanguageId = templateLang.Language_Id,
+                        Language = new LanguageOverview
+                              {
+                                  Id = templateLang.Language.Id,
+                                  LanguageId = templateLang.Language.LanguageID,
+                                  Name = templateLang.Language.Name,
+                                  IsActive = Convert.ToBoolean(templateLang.Language.IsActive)
+                              }
+                    };
+
+                    templateLanguages.Add(templateLanguage);
+                }
+                
+                var mailTemplate = new CustomMailTemplate
+                        {
+                            MailTemplateId = template.Id,
+                            CustomerId = template.Customer_Id.Value,
+                            IsStandard = template.IsStandard,
+                            MailId = template.MailID,
+                            OrderTypeId = template.OrderType_Id,
+                            TemplateLanguages = templateLanguages                            
+                        };
+
+                res.Add(mailTemplate);
+            }
+                                          
+            return res;
         }
 
         public int GetNewMailTemplateMailId()

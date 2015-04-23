@@ -80,6 +80,9 @@
         public int Deleted { get; set; }
         public int? CausingPartId { get; set; }
         public int? DefaultOwnerWG_Id { get; set; }
+        public string CaseFile { get; set; }
+        public string LogFile { get; set; }
+        public string CaseLog { get; set; }
 
         public virtual Case Case { get; set; }
         public virtual Category Category { get; set; }

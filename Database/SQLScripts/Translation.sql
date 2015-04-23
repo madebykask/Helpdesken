@@ -3105,5 +3105,175 @@ If not exists (select * from tblTextTranslation where text_id = 1364 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1364, 2, 'Default department when cases are registered by e-mail')
 GO
 
+
+
+-- 20150414
+If not exists (select * from tbltext where id = 1365)
+	insert into tbltext (id, TextString) VALUES (1365, 'Visa FAQ på självservice startsida')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1365 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1365, 2, 'Show FAQ on Self Service start page')
+GO
+
+If not exists (select * from tbltext where id = 1366)
+	insert into tbltext (id, TextString) VALUES (1366, 'Visa dokument på självservice')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1366 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1366, 2, 'Show Documents on Self Service')
+GO
+
+If not exists (select * from tbltext where id = 1367)
+	insert into tbltext (id, TextString) VALUES (1367, 'Visa hjälp på självservice')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1367 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1367, 2, 'Show Help on Self Service')
+GO
+
+If not exists (select * from tbltext where id = 1368)
+	insert into tbltext (id, TextString) VALUES (1368, 'Visa CoWorkers på självservice')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1368 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1368, 2, 'Show CoWorkers on Self Service')
+GO
+
+
+-- 20150415
+
+UPDATE tblText Set TextString = '(Du kan endast välja storleken bred på högst 3 kolumner).' WHERE Id=1339;
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = '(You can only select the size wide on a maximum of 3 columns).' WHERE Text_Id=1339 AND Language_Id=2;
+GO
+
+-- 20150417
+If not exists (select * from tbltext where id = 1369)
+	insert into tbltext (id, TextString) VALUES (1369, 'Avslutsdatum sätt automatiskt till det datum då ärendet stängs (användaren kan inte ändra det)')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1369 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1369, 2, 'Closing date field is automatically set to the date of closing case (User cannot change it)')
+GO
+
+
+-- 20150417
+If not exists (select * from tbltext where id = 1370)
+	insert into tbltext (id, TextString) VALUES (1370, 'Inga standardkolumner har valts för din användare på denna kund, för att filter, klicka på fliken Inställningar och gå till Filter Ärendeöversikt.')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1370 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1370, 2, 'No default columns have been selected for your user in this customer. To display case overview filters, go to the Settings tab.')
+GO
+
+If not exists (select * from tbltext where id = 1371)
+	insert into tbltext (id, TextString) VALUES (1371, 'Inga ärendefält har valts för denna kund, kontakta systemadministratören.')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1371 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1371, 2, 'No case fields have been selected for this customer, please contact the system administrator.')
+GO
+
+If not exists (select * from tbltext where id = 1372)
+	insert into tbltext (id, TextString) VALUES (1372, 'Laddar...')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1372 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1372, 2, 'Loading...')
+GO
+
+If not exists (select * from tbltext where id = 1373)
+	insert into tbltext (id, TextString) VALUES (1373, 'Ett fel inträffade, klicka {0}här{1} för att ladda om sidan.')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1373 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1373, 2, 'An unexpected error ocurred, please {0}refresh{1}')
+GO
+
+If not exists (select * from tbltext where id = 1374)
+	insert into tbltext (id, TextString) VALUES (1374, 'Sparar...')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1374 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1374, 2, 'Saving...')
+GO
+
+
+
+--20150420
+
+If not exists (select * from tbltext where id = 1375)
+	insert into tbltext (id, TextString) VALUES (1375, 'Självservice meddelande')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1375 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1375, 2, 'Selfservice message')
+GO
+
+If not exists (select * from tbltext where id = 1376)
+	insert into tbltext (id, TextString) VALUES (1376, 'Självservice registrerings meddelande')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1376 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1376, 2, 'Self Service Registration Message')
+GO
+
+If not exists (select * from tbltext where id = 1377)
+	insert into tbltext (id, TextString) VALUES (1377, 'Självservice välkommen meddelande')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1377 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1377, 2, 'Self Service Welcome Message')
+GO
+
+-- 20150421
+If not exists (select * from tbltext where id = 1378)
+	insert into tbltext (id, TextString) VALUES (1378, 'Engelsk översättning')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1378 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1378, 2, 'English translation')
+GO
+
+
+UPDATE tblTextTranslation Set TextTranslation = 'Text field - larger' WHERE Text_Id=1348 AND Language_Id=2;
+UPDATE tblTextTranslation Set TextTranslation = 'Attach file' WHERE Text_Id=1353 AND Language_Id=2;
+
+If not exists (select * from tbltext where id = 1379)
+	insert into tbltext (id, TextString) VALUES (1379, 'Fältet är redan valt i detta filter')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1379 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1379, 2, 'Field has already been added to the filter')
+GO
+
+If not exists (select * from tbltext where id = 1380)
+	insert into tbltext (id, TextString) VALUES (1380, 'Välj minst en kolumn för att visa ärendeöversikten!')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1380 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1380, 2, 'Please select at least one column to display the case overview!')
+GO
+
+-- 20150422
+UPDATE tblText Set TextString = '(Du kan endast välja storleken bred på högst 3 kolumner).' WHERE Id=1339;
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = '(You can only select the size wide on a maximum of 3 columns).' WHERE Text_Id=1339 AND Language_Id=2;
+GO
+
+-- 20140423
+If not exists (select * from tbltext where id = 1381)
+	insert into tbltext (id, TextString) VALUES (1381, 'Kolumn "{0}" har redan valts att visas i ärendeöversikten')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1381 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1381, 2, 'Column "{0}" has already been selected to display in the case overview')
+GO
+If not exists (select * from tbltext where id = 1382)
+	insert into tbltext (id, TextString) VALUES (1382, '<b>Bred</b> kan väljas på högst 3 kolumner!')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1382 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1382, 2, '<b>Wide</b> can be selected on maximum 3 columns!')
+GO
+UPDATE tblText Set TextString = 'Inga standardkolumner har valts för din användare på denna kund, för att visa kolumner, klicka på fliken Inställningar och gå till Filter Ärendeöversikt' WHERE Id=1370;
+
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

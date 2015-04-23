@@ -150,6 +150,8 @@ namespace DH.Helpdesk.Common.Extensions.String
                     case "closingreason": str = "Avslutsorsak"; break;
                     case "_temporary_.leadtime": str = "Tid kvar"; break;
                     case "tblproblem.responsibleuser_id": str = "Problem"; break;
+                    case "change": str = "Ändringshantering"; break;
+                    case "project": str = "Projekt"; break;
                 }
             }
             #endregion 
@@ -217,6 +219,8 @@ namespace DH.Helpdesk.Common.Extensions.String
                     case "closingreason": str = "Closing reason"; break;
                     case "_temporary_.leadtime": str = "Time left"; break;
                     case "tblproblem.responsibleuser_id": str = "Problem"; break;
+                    case "change": str = "Change"; break;
+                    case "project": str = "Project"; break;
                 }
             }
             #endregion 

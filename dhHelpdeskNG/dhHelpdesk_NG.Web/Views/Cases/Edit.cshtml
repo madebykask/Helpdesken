@@ -265,11 +265,11 @@
                                 {
                                     if (Model.case_.FollowUpDate.HasValue)
                                     {
-                                    <li><a href="/cases/followupRemove/@Model.case_.Id" >@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</a></li>
+                                    <li><a href="/cases/followupRemove/@Model.case_.Id" >@Translation.Get("Ta bort uppföljning", Enums.TranslationSource.TextTranslation)</a></li>
                                     }
                                     else
                                     {
-                                    <li><a href="/cases/followup/@Model.case_.Id" >@Translation.Get("Follow up", Enums.TranslationSource.TextTranslation)</a></li>
+                                    <li><a href="/cases/followup/@Model.case_.Id" >@Translation.Get("Följ upp", Enums.TranslationSource.TextTranslation)</a></li>
                                     }
                                 }
 
@@ -291,12 +291,7 @@
                                                         {
                                                             <i class='icon-ok'></i>
                                                         }
-                                                    </a>
-                                                    @*}
-                                                    else
-                                                    {
-                                                        <a id="@langNameId" href="#" onclick="ChandeCaseLanguageTo(@lang.Id);"> @Translation.Get(lang.Name) </a>                                                        
-                                                    }*@
+                                                    </a>                                                  
                                                 </li>
                                             }
                                         </ul>

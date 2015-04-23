@@ -1,0 +1,13 @@
+﻿namespace DH.Helpdesk.BusinessData.Models.Case
+{
+    using System;
+
+    public class ExtraFieldCaseHistory 
+    {                
+        public string CaseFile { get; set; }
+
+        public string LogFile { get; set; }
+
+        public string CaseLog { get; set; } 
+    }
+}

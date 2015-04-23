@@ -15,7 +15,7 @@
     <AssemblyName>DH.Helpdesk.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <SccProjectName>
     </SccProjectName>
     <SccLocalPath>
@@ -191,9 +191,6 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="WebActivator">
-      <HintPath>..\packages\WebActivator.1.4.1\lib\net40\WebActivator.dll</HintPath>
-    </Reference>
     <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\WebActivatorEx.2.0.5\lib\net40\WebActivatorEx.dll</HintPath>
@@ -359,10 +356,13 @@
     <Compile Include="Areas\Admin\Models\SystemInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\UrgencyInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\WorkingGroupInputViewModel.cs" />
+    <Content Include="Areas\Admin\Content\js\CaseOverview\customerOverview.js" />
+    <Content Include="Areas\Admin\Content\js\Common\common.js" />
     <Content Include="Areas\Admin\Content\js\Users\user.js" />
     <Content Include="Areas\Reports\Content\js\reports.js" />
     <Content Include="Content\bootstrap-tagsinput.css" />
     <Content Include="Content\css\bootstrap-tagsinput.css" />
+    <Content Include="Content\icons\ajax-loader.gif" />
     <Content Include="Content\img\ajax-loader.GIF" />
     <Content Include="Content\img\dh_solutions_version.png" />
     <Content Include="Content\img\glyphicons-dh.png" />
@@ -403,6 +403,7 @@
     <Content Include="Content\js\bootstrap-switch.min.js" />
     <Content Include="Content\js\bootstrap-tagsinput.min.js" />
     <Content Include="Content\js\Cases\case.templates.js" />
+    <Content Include="Content\js\Cases\caseByIds.logic.js" />
     <Content Include="Content\js\Cases\index.settings.js" />
     <Content Include="Content\js\Cases\edit.logic.js" />
     <Content Include="Content\js\Cases\index.logic.js" />
@@ -1525,7 +1526,11 @@
     <Compile Include="Areas\Reports\Infrastructure\ReportTheme.cs" />
     <Compile Include="Areas\Reports\Infrastructure\Utils\ReportUtils.cs" />
     <Compile Include="Areas\Reports\Models\Options\CaseSatisfactionOptions.cs" />
+    <Compile Include="Areas\Reports\Models\Options\CasesInProgressDayOptionsModel.cs" />
     <Compile Include="Areas\Reports\Models\Options\CaseTypeArticleNoOptionsModel.cs" />
+    <Compile Include="Areas\Reports\Models\Options\ClosedCasesDayOptionsModel.cs" />
+    <Compile Include="Areas\Reports\Models\Options\FinishingCauseCategoryCustomerOptionsModel.cs" />
+    <Compile Include="Areas\Reports\Models\Options\FinishingCauseCustomerOptionsModel.cs" />
     <Compile Include="Areas\Reports\Models\Options\LeadtimeActiveCasesOptionsModel.cs" />
     <Compile Include="Areas\Reports\Models\Options\LeadtimeFinishedCasesOptionsModel.cs" />
     <Compile Include="Areas\Reports\Models\Options\RegistratedCasesDayOptionsModel.cs" />
@@ -1535,6 +1540,8 @@
     <Compile Include="Areas\Reports\Models\Options\ReportsOptions.cs" />
     <Compile Include="Areas\Reports\Models\Reports\CaseSatisfactionReport.cs" />
     <Compile Include="Areas\Reports\Models\Reports\CaseTypeArticleNoModel.cs" />
+    <Compile Include="Areas\Reports\Models\Reports\FinishingCauseCategoryCustomerModel.cs" />
+    <Compile Include="Areas\Reports\Models\Reports\FinishingCauseCustomerModel.cs" />
     <Compile Include="Areas\Reports\Models\Reports\LeadtimeActiveCasesModel.cs" />
     <Compile Include="Areas\Reports\Models\Reports\LeadtimeFinishedCasesModel.cs" />
     <Compile Include="Areas\Reports\Models\Reports\ReportGenerator\CaseOverviewModel.cs" />
@@ -1839,6 +1846,7 @@
     <Compile Include="Models\BulletinBoardInputViewModel.cs" />
     <Compile Include="Models\CalendarInputViewModel.cs" />
     <Compile Include="Models\CaseSolutionSettingModel.cs" />
+    <Compile Include="Models\Case\CaseByIdsViewModel.cs" />
     <Compile Include="Models\Case\CaseFilesModel.cs" />
     <Compile Include="Models\Case\CaseFilterSeachBoxes.cs" />
     <Compile Include="Models\CaseSolutionInputViewModel.cs" />
@@ -2177,66 +2185,6 @@
     <Content Include="Content\templates\case-invoice-order.tmpl.html" />
     <Content Include="Content\templates\case-invoice-overview.tmpl.html" />
     <Content Include="Content\templates\case-invoice.tmpl.html" />
-    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
-    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
-    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
-    <Content Include="Content\themes\base\jquery-ui.css" />
-    <Content Include="Content\themes\base\jquery.ui.accordion.css" />
-    <Content Include="Content\themes\base\jquery.ui.all.css" />
-    <Content Include="Content\themes\base\jquery.ui.autocomplete.css" />
-    <Content Include="Content\themes\base\jquery.ui.base.css" />
-    <Content Include="Content\themes\base\jquery.ui.button.css" />
-    <Content Include="Content\themes\base\jquery.ui.core.css" />
-    <Content Include="Content\themes\base\jquery.ui.datepicker.css" />
-    <Content Include="Content\themes\base\jquery.ui.dialog.css" />
-    <Content Include="Content\themes\base\jquery.ui.menu.css" />
-    <Content Include="Content\themes\base\jquery.ui.progressbar.css" />
-    <Content Include="Content\themes\base\jquery.ui.resizable.css" />
-    <Content Include="Content\themes\base\jquery.ui.selectable.css" />
-    <Content Include="Content\themes\base\jquery.ui.slider.css" />
-    <Content Include="Content\themes\base\jquery.ui.spinner.css" />
-    <Content Include="Content\themes\base\jquery.ui.tabs.css" />
-    <Content Include="Content\themes\base\jquery.ui.theme.css" />
-    <Content Include="Content\themes\base\jquery.ui.tooltip.css" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_flat_0_aaaaaa_40x100.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_flat_75_ffffff_40x100.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_glass_55_fbf9ee_1x400.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_glass_65_ffffff_1x400.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_glass_75_dadada_1x400.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_glass_75_e6e6e6_1x400.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_glass_95_fef1ec_1x400.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
-    <Content Include="Content\themes\base\minified\images\ui-icons_222222_256x240.png" />
-    <Content Include="Content\themes\base\minified\images\ui-icons_2e83ff_256x240.png" />
-    <Content Include="Content\themes\base\minified\images\ui-icons_454545_256x240.png" />
-    <Content Include="Content\themes\base\minified\images\ui-icons_888888_256x240.png" />
-    <Content Include="Content\themes\base\minified\images\ui-icons_cd0a0a_256x240.png" />
-    <Content Include="Content\themes\base\minified\jquery-ui.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.accordion.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.autocomplete.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.button.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.core.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.datepicker.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.dialog.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.menu.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.progressbar.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.resizable.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.selectable.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.spinner.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
     <Content Include="Content\themes\flick\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\flick\images\ui-bg_flat_0_eeeeee_40x100.png" />
     <Content Include="Content\themes\flick\images\ui-bg_flat_55_ffffff_40x100.png" />
@@ -2300,6 +2248,13 @@
     <Content Include="Areas\Orders\Views\Shared\_IndexLayout.cshtml" />
     <Content Include="Areas\Orders\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Orders\Views\Orders\Orders.cshtml" />
+    <Content Include="Areas\Reports\Views\Report\Options\ClosedCasesDay.cshtml" />
+    <Content Include="Areas\Reports\Views\Report\Options\CasesInProgressDay.cshtml" />
+    <None Include="Scripts\jquery-1.8.3.intellisense.js" />
+    <Content Include="Scripts\jquery-1.8.3.js" />
+    <Content Include="Scripts\jquery-1.8.3.min.js" />
+    <Content Include="Scripts\jquery-ui-1.9.2.js" />
+    <Content Include="Scripts\jquery-ui-1.9.2.min.js" />
     <Content Include="Views\DailyReport\Index.cshtml" />
     <Content Include="Areas\Orders\Views\OrderFieldSettings\Index.cshtml" />
     <Content Include="Areas\Orders\Views\OrderFieldSettings\EditorTemplates\FullFieldSettingsModel.cshtml" />
@@ -2516,6 +2471,10 @@
     <Content Include="Areas\Reports\Views\Report\Options\LeadtimeActiveCases.cshtml" />
     <Content Include="Areas\Reports\Views\Report\Reports\LeadtimeActiveCases.cshtml" />
     <Content Include="Areas\Admin\Views\Users\Layout.cshtml" />
+    <Content Include="Areas\Reports\Views\Report\Options\FinishingCauseCustomer.cshtml" />
+    <Content Include="Areas\Reports\Views\Report\Reports\FinishingCauseCustomer.cshtml" />
+    <Content Include="Areas\Reports\Views\Report\Options\FinishingCauseCategoryCustomer.cshtml" />
+    <Content Include="Areas\Reports\Views\Report\Reports\FinishingCauseCategoryCustomer.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />
@@ -2576,8 +2535,6 @@
     <Content Include="Content\js\Shared\custom.validation.maxlengthfrom.js" />
     <Content Include="Content\js\Shared\custom.validation.requiredfrom.js" />
     <Content Include="Content\js\Shared\sortby.js" />
-    <Content Include="Content\js\jquery-1.8.3.min.js" />
-    <Content Include="Content\js\jquery-ui-1.9.2.min.js" />
     <Content Include="Content\js\jquery.toastmessage.js" />
     <Content Include="Areas\Admin\Views\CustomerCaseFieldSettings\_Input.cshtml" />
     <Content Include="Areas\Admin\Views\CustomerCaseFieldSettings\Edit.cshtml" />
@@ -2870,6 +2827,11 @@
     <Content Include="Views\Cases\IndexAjax.cshtml" />
     <Content Include="Views\Cases\RelatedCasesFullContent.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DatePickerNoJS.cshtml" />
+    <Content Include="Views\Print\CaseHtml.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Cases\CaseByIds.cshtml" />
+    <Content Include="Views\Cases\CaseByIdsContent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
@@ -3551,9 +3513,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Cases\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Shared\_Search.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -3680,7 +3639,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>52667</DevelopmentServerPort>
+          <DevelopmentServerPort>65109</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:57747/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

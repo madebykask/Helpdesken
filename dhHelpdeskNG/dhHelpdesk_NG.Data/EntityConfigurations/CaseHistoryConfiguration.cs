@@ -112,8 +112,10 @@
             this.Property(x => x.Problem_Id).IsOptional();
             this.Property(x => x.CausingPartId).IsOptional();
             this.Property(x => x.DefaultOwnerWG_Id).IsOptional();
-
-
+            this.Property(x => x.CaseFile).IsOptional();
+            this.Property(x => x.LogFile).IsOptional();
+            this.Property(x => x.CaseLog).IsOptional();
+            
             this.ToTable("tblcasehistory");
         }
     }

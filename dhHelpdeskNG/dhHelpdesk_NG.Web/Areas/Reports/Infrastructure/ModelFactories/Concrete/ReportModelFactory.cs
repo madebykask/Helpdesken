@@ -7,6 +7,8 @@
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.FinishingCauseCategoryCustomer;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.FinishingCauseCustomer;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeActiveCases;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeFinishedCases;
     using DH.Helpdesk.BusinessData.Models.Reports.Enums;
@@ -40,11 +42,14 @@
                             {
                                 ReportType.RegistratedCasesDay,
                                 ReportType.CaseTypeArticleNo,
-                                ReportType.CaseSatisfaction,
                                 ReportType.ReportGenerator,
                                 ReportType.LeadtimeFinishedCases,
                                 ReportType.LeadtimeActiveCases,
-                                ReportType.CaseSatisfaction
+                                ReportType.CaseSatisfaction,
+                                ReportType.FinishingCauseCustomer,
+                                ReportType.FinishingCauseCategoryCustomer,
+                                ReportType.ClosedCasesDay,
+                                ReportType.CasesInProgressDay
                             };
 
             // It's a new report, so we need to add it to the tblReport table
@@ -54,6 +59,7 @@
                         .Where(ready.Contains)
                         .Select(r => 
                             new ItemOverview(ReportUtils.GetReportName(r), ((int)r).ToString(CultureInfo.InvariantCulture)))
+                            .OrderBy(r => r.Name)
                             .ToList();
 
             return new ReportsOptions(WebMvcHelper.CreateListField(items, null, false));
@@ -198,6 +204,80 @@
                                         int lowDays)
         {
             return new LeadtimeActiveCasesModel(data, highHours, mediumDays, lowDays);
+        }
+
+        public FinishingCauseCustomerOptionsModel GetFinishingCauseCustomerOptionsModel(FinishingCauseCustomerOptions options)
+        {
+            var departments = WebMvcHelper.CreateMultiSelectField(options.Departments);
+            var workingGroups = WebMvcHelper.CreateListField(options.WorkingGroups);
+            var caseTypes = options.CaseTypes;
+            var administrators = WebMvcHelper.CreateListField(options.Administrators);
+            var periodFrom = DateTime.Today.AddYears(-1);
+            var periodUntil = DateTime.Today;
+
+            return new FinishingCauseCustomerOptionsModel(
+                        departments,
+                        workingGroups,
+                        caseTypes,
+                        administrators,
+                        periodFrom,
+                        periodUntil);
+        }
+
+        public FinishingCauseCustomerModel GetFinishingCauseCustomerModel(FinishingCauseCustomerData data, int customerId)
+        {
+            return new FinishingCauseCustomerModel(data, customerId);
+        }
+
+        public FinishingCauseCategoryCustomerOptionsModel GetFinishingCauseCategoryCustomerOptionsModel(FinishingCauseCategoryCustomerOptions options)
+        {
+            var departments = WebMvcHelper.CreateMultiSelectField(options.Departments);
+            var workingGroups = WebMvcHelper.CreateMultiSelectField(options.WorkingGroups);
+            var caseTypes = options.CaseTypes;
+            var periodFrom = DateTime.Today.AddYears(-1);
+            var periodUntil = DateTime.Today;
+
+            return new FinishingCauseCategoryCustomerOptionsModel(
+                        departments,
+                        workingGroups,
+                        caseTypes,
+                        periodFrom,
+                        periodUntil);
+        }
+
+        public FinishingCauseCategoryCustomerModel GetFinishingCauseCategoryCustomerModel(FinishingCauseCategoryCustomerData data)
+        {
+            return new FinishingCauseCategoryCustomerModel(data);
+        }
+
+        public ClosedCasesDayOptionsModel GetClosedCasesDayOptionsModel(ClosedCasesDayOptions options)
+        {
+            var departments = WebMvcHelper.CreateMultiSelectField(options.Departments);
+            var workingGroups = WebMvcHelper.CreateListField(options.WorkingGroups);
+            var caseTypes = options.CaseTypes;
+            var administrators = WebMvcHelper.CreateListField(options.Administrators);
+            var period = DateTime.Today;
+
+            return new ClosedCasesDayOptionsModel(
+                        departments,
+                        workingGroups,
+                        caseTypes,
+                        administrators,
+                        period);
+        }
+
+        public CasesInProgressDayOptionsModel GetCasesInProgressDayOptionsModel(CasesInProgressDayOptions options)
+        {
+            var departments = WebMvcHelper.CreateListField(options.Departments);
+            var workingGroups = WebMvcHelper.CreateListField(options.WorkingGroups);
+            var administrators = WebMvcHelper.CreateListField(options.Administrators);
+            var period = DateTime.Today;
+
+            return new CasesInProgressDayOptionsModel(
+                        departments,
+                        workingGroups,
+                        administrators,
+                        period);
         }
     }
 }

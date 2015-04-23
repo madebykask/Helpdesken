@@ -354,7 +354,7 @@ namespace DH.Helpdesk.Web.Controllers
                 model.DepartmentFilterFormat = customerSettings.DepartmentFilterFormat;
             }
 
-            return new PrintPdfResult(model, "Case");
+            return new PrintPdfResult(model, "CaseHtml");
         }
     }
 }

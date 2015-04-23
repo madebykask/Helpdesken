@@ -102,6 +102,62 @@
                             options.CaseTypes);
         }
 
+        public static FinishingCauseCustomerOptions MapToFinishingCauseCustomerOptions(
+                                                        IQueryable<Department> departments,
+                                                        IQueryable<WorkingGroupEntity> workingGroups,
+                                                        IQueryable<CaseType> caseTypes,
+                                                        IQueryable<User> administrators)
+        {
+            var options = GetOptions(departments, caseTypes, workingGroups, administrators);
+
+            return new FinishingCauseCustomerOptions(
+                            options.Departments,
+                            options.CaseTypes,
+                            options.WorkingGroups,
+                            options.Administrators);
+        }
+
+        public static FinishingCauseCategoryCustomerOptions MapToFinishingCauseCategoryCustomerOptions(
+                                                        IQueryable<Department> departments,
+                                                        IQueryable<WorkingGroupEntity> workingGroups,
+                                                        IQueryable<CaseType> caseTypes)
+        {
+            var options = GetOptions(departments, caseTypes, workingGroups);
+
+            return new FinishingCauseCategoryCustomerOptions(
+                            options.Departments,
+                            options.CaseTypes,
+                            options.WorkingGroups);
+        }
+
+        public static ClosedCasesDayOptions MapToClosedCasesDayOptions(
+                                                        IQueryable<Department> departments,
+                                                        IQueryable<WorkingGroupEntity> workingGroups,
+                                                        IQueryable<CaseType> caseTypes,
+                                                        IQueryable<User> administrators)
+        {
+            var options = GetOptions(departments, caseTypes, workingGroups, administrators);
+
+            return new ClosedCasesDayOptions(
+                            options.Departments,
+                            options.CaseTypes,
+                            options.WorkingGroups,
+                            options.Administrators);
+        }
+
+        public static CasesInProgressDayOptions MapToCasesInProgressDayOptions(
+                                                        IQueryable<Department> departments,
+                                                        IQueryable<WorkingGroupEntity> workingGroups,
+                                                        IQueryable<User> administrators)
+        {
+            var options = GetOptions(departments, null, workingGroups, administrators);
+
+            return new CasesInProgressDayOptions(
+                            options.Departments,
+                            options.WorkingGroups,
+                            options.Administrators);
+        }
+
         private static ReportOptions GetOptions(
                                         IQueryable<Department> departments = null,
                                         IQueryable<CaseType> caseTypes = null,

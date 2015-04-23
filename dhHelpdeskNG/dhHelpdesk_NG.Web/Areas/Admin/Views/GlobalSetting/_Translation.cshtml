@@ -68,8 +68,8 @@
                                 @if (newtext != null)
                                 {
                                     <tr>
-                                        <td style="width:200px">
-                                            @Html.TextBoxFor(model => model.Text.TextToTranslate, new { maxlength = "50" })
+                                        <td style="width:800px">
+                                            @Html.TextAreaFor(model => model.Text.TextToTranslate, new { maxlength = "2000" })
                                         </td>
                                     </tr>
                                 }

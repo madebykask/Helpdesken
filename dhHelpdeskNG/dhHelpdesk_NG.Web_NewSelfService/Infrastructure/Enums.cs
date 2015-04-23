@@ -53,30 +53,7 @@
         public static class DeletedItemKey
         {
             public static readonly string DeletedLogs = "DeletedLogs";
-        }
-
-        public static class ApplicationTypes
-        {
-            public static readonly string LineManager = "LineManager";
-
-            public static readonly string SelfService = "SelfService";            
-        }
-        
-        public static class CaseListTypes
-        {
-            public static readonly string manager = "manager";
-
-            public static readonly string coworkers = "coworkers";
-
-            public static readonly string ManagerCoworkers = "manager,coworkers";
-        }
-
-        public static class LoginModes
-        {
-            public static readonly string SSO = "SSO";
-
-            public static readonly string Windows = "Windows";
-        }
+        }        
 
         public static class FederationServiceKeys
         {
@@ -91,25 +68,6 @@
             public static readonly string ClaimLastName = "ClaimLastName";
 
             public static readonly string ClaimEmail = "ClaimEmail";
-        }                 
-
-        public static class ApplicationKeys
-        {
-            public static readonly string LoginMode = "LoginMode";
-
-            public static readonly string CurrentApplicationType = "CurrentApplication";
-
-            public static readonly string CaseList = "CaseList";
-
-            public static readonly string DefaultEmployeeNumber = "DefaultEmployeeNumber";
-
-            public static readonly string SSOLog = "SSOLog";
-
-            public static readonly string ApplicationId = "ApplicationId";
-
-        }
-
-        
-
+        }                                
     }
 }

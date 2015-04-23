@@ -19,7 +19,7 @@
                                 @customer.CustomerName
                             </a>
                             <div class="pull-right">
-                            <a href="@Url.Action("index", "cases", new { customerId = customer.CustomerId, clearFilters = true, customFilter = "MyCases" })" 
+                            <a href="@Url.Action("index", "cases", new { customerId = customer.CustomerId, clearFilters = true, useMyCases = true })" 
                                     class="start-tile label my" 
                                     rel="tooltip" 
                                     data-toggle="tooltip" 

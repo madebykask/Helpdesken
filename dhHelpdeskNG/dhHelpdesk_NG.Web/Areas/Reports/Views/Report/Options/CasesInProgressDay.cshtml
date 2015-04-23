@@ -1,0 +1,34 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Reports.Models.Options.CasesInProgressDayOptionsModel
+
+@using (Html.BeginForm("GetCasesInProgressDayReport", "Report", null, FormMethod.Post, new { id = "reportForm" }))
+{
+    <table class="tableform">    
+        <tr>
+            <td class="span3">@Translation.Get("Avdelning påverkad")</td>
+            <td>
+                @Html.DropDownListFor(m => m.DepartmentId, Model.Departments)
+            </td>
+        </tr>     
+        <tr>
+            <td class="span3">@Translation.Get("Driftgrupp")</td>
+            <td>
+                @Html.DropDownListFor(m => m.WorkingGroupId, Model.WorkingGroups)
+            </td>
+        </tr>        
+        <tr>
+            <td class="span3">@Translation.Get("Handläggare")</td>
+            <td>
+                @Html.DropDownListFor(m => m.AdministratorId, Model.Administrators)
+            </td>
+        </tr>                                   
+        <tr>
+            <td class="span3">@Translation.Get("Period")</td>
+            <td>
+                @Html.EditorFor(m => m.Period, "YearMonthPicker", new { id = "period" })
+            </td>
+        </tr>        
+    </table>        
+}
+<div id="reportContainer">    
+</div>

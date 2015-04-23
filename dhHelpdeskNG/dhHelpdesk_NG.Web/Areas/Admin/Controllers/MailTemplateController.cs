@@ -69,8 +69,7 @@
             if (existingmailId > 99)
             {
                 mailTemplate = new MailTemplateEntity
-                {
-                    //Id = id,
+                {                    
                     MailID = existingmailId + 1,
                     Customer_Id = customer.Id,
 
@@ -98,24 +97,16 @@
                 if (mailTemplate == null)
                 {
                     mailTemplate = new MailTemplateEntity
-                    {
-                        //Id = id,
+                    {                        
                         MailID = id,
                         Customer_Id = customerId,
-
                     };
                 }
                 var update = true;
 
 
                 var mailtemplatelanguageToSave = this._mailTemplateService.GetMailTemplateLanguageForCustomer(id, customerId, languageId);
-
-                //if (mailtemplatelanguageToSave == null)
-                //    update = false;
-
-                //mailtemplatelanguageToSave.MailTemplate = mailTemplate;
-
-                //if (mailtemplatelanguageToSave.MailTemplate_Id == 0)
+               
                 if (mailtemplatelanguageToSave == null)
                 {
 
@@ -149,40 +140,44 @@
 
             var mailTemplate = new MailTemplateEntity();
 
-            mailTemplate = this._mailTemplateService.GetMailTemplate(id, customer.Id);
+            if (ordertypeId != null)
+                // Search by OrderTypeId
+                mailTemplate = this._mailTemplateService.GetMailTemplate(id, customer.Id, ordertypeId.Value);                
+            else
+                // Search by MailID                
+                mailTemplate = this._mailTemplateService.GetMailTemplate(id, customer.Id);            
 
             if (mailTemplate == null)
             {
                 mailTemplate = new MailTemplateEntity
-                {
-                    //Id = id,
+                {                    
                     MailID = id,
-
                 };
-            }
-            //return new HttpNotFoundResult("No mail template found...");
+            }            
+            
+            var mailTemplateLanguage = new MailTemplateLanguageEntity();
+            if (ordertypeId != null)
+                // Search by OrderTypeId
+                mailTemplateLanguage = this._mailTemplateService.GetMailTemplateLanguageForCustomer(id, customer.Id, languageId, ordertypeId.Value);
+            else
+                // Search by MailID                
+                mailTemplateLanguage = this._mailTemplateService.GetMailTemplateLanguageForCustomer(id, customer.Id, languageId);
 
-            //var mailTemplateLanguage = this._mailTemplateService.GetMailTemplateLanguage(mailTemplate.Id, languageId);
-            var mailTemplateLanguage = this._mailTemplateService.GetMailTemplateLanguageForCustomer(id, customer.Id, languageId);
 
             if (mailTemplateLanguage == null)
             {
                 mailTemplateLanguage = new MailTemplateLanguageEntity
                 {
                     MailTemplate = mailTemplate,
-                    //MailTemplate_Id = id,
                     Language_Id = languageId,
                     Subject = string.Empty,
                     Body = string.Empty
-
                 };
             }
             else
             {
                 mailTemplateLanguage.MailTemplate = mailTemplate;
-            }
-
-            // return new HttpNotFoundResult("No mail template found...");
+            }            
 
             var model = this.CreateInputViewModel(mailTemplateLanguage, customer, languageId, ordertypeId, accountactivityId);
 
@@ -196,12 +191,20 @@
 
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult Edit(int id, MailTemplateLanguageEntity mailTemplateLanguage, int customerId)
+        public ActionResult Edit(int id, MailTemplateLanguageEntity mailTemplateLanguage, int customerId, int? ordertypeId)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
             var customer = this._customerService.GetCustomer(customerId);
-            var mailTemplate = this._mailTemplateService.GetMailTemplate(id, customerId);
+
+            var mailTemplate = new MailTemplateEntity();
+
+            if (ordertypeId != null)
+                // Search by OrderTypeId
+                mailTemplate = this._mailTemplateService.GetMailTemplate(id, customer.Id, ordertypeId.Value);
+            else
+                // Search by MailID                
+                mailTemplate = this._mailTemplateService.GetMailTemplate(id, customer.Id);               
 
             var customersettings = this._settingService.GetCustomerSetting(customer.Id);
 
@@ -212,22 +215,24 @@
                     //Id = id,
                     MailID = id,
                     Customer_Id = customer.Id,
-
+                    OrderType_Id = ordertypeId
                 };
             }
             var update = true;
 
-            var mailtemplatelanguageToSave = this._mailTemplateService.GetMailTemplateLanguageForCustomerToSave(id, customerId, mailTemplateLanguage.Language_Id);
+            var mailtemplatelanguageToSave = new MailTemplateLanguageEntity();
+            if (ordertypeId != null)
+                // Search by OrderTypeId
+                mailtemplatelanguageToSave =
+                    this._mailTemplateService.GetMailTemplateLanguageForCustomerToSave(id, customerId, mailTemplateLanguage.Language_Id, ordertypeId.Value);
+            else
+                // Search by MailID   
+                mailtemplatelanguageToSave = 
+                    this._mailTemplateService.GetMailTemplateLanguageForCustomerToSave(id, customerId, mailTemplateLanguage.Language_Id);
 
-            //if (mailtemplatelanguageToSave == null)
-            //    update = false;
 
-            //mailtemplatelanguageToSave.MailTemplate = mailTemplate;
-
-            //if (mailtemplatelanguageToSave.MailTemplate_Id == 0)
             if (mailtemplatelanguageToSave == null)
             {
-
                 mailtemplatelanguageToSave = new MailTemplateLanguageEntity
                 {
                     MailTemplate_Id = mailTemplate.Id,
@@ -237,7 +242,6 @@
                     Body = mailTemplateLanguage.Body,
                     MailTemplateName = mailTemplateLanguage.MailTemplateName
                 };
-
                 update = false;
             }
             else
@@ -361,7 +365,6 @@
 
             #endregion
 
-
             #region Changes
 
             List<SelectListItem> _changes = new List<SelectListItem>();
@@ -438,6 +441,46 @@
                                            .ToList());
             }
 
+            
+            var customMailTemplates = _mailTemplateService.GetCustomMailTemplates(customer.Id);
+
+            var activeMailTemplateLanguages = new List<ActiveMailTemplateLanguage>();
+            foreach (var customMailTemplate in customMailTemplates)
+            {
+                var languageNames = customMailTemplate.TemplateLanguages
+                                                      .Where(l=> !string.IsNullOrEmpty(l.Subject) && !string.IsNullOrEmpty(l.Body))
+                                                      .Select(l=> Translation.Get(l.Language.Name))
+                                                      .ToList();
+
+                var activeMailTemplateLanguage = 
+                    new ActiveMailTemplateLanguage()
+                    {
+                        Id = customMailTemplate.MailId,
+                        LanguageNames = string.Join(", ", languageNames)
+                    };
+
+                activeMailTemplateLanguages.Add(activeMailTemplateLanguage);                
+            }
+
+            var activeOrderMailTemplateLanguages = new List<ActiveMailTemplateLanguage>();
+            foreach (var customMailTemplate in customMailTemplates.Where(x=> x.OrderTypeId != null))
+            {
+                var languageNames = customMailTemplate.TemplateLanguages
+                                                      .Where(l => !string.IsNullOrEmpty(l.Subject) && !string.IsNullOrEmpty(l.Body))
+                                                      .Select(l => Translation.Get(l.Language.Name))
+                                                      .ToList();
+
+                var activeOrderMailTemplateLanguage =
+                    new ActiveMailTemplateLanguage()
+                    {
+                        Id = customMailTemplate.OrderTypeId.Value,
+                        LanguageNames = string.Join(", ", languageNames)
+                    };
+
+                activeOrderMailTemplateLanguages.Add(activeOrderMailTemplateLanguage);
+            }
+
+            // *TODO: ViewModel should be change. shouldn't pass Entity to the view
             var model = new MailTemplateIndexViewModel
             {
                 Customer = customer,
@@ -456,6 +499,8 @@
                 OperationLogs = _operationLogs,
                 RegularCases = _regularCase,
                 Surveys = _survey,
+                ActiveMailTemplateLanguages = activeMailTemplateLanguages,
+                ActiveOrderMailTemplateLanguages = activeOrderMailTemplateLanguages
             };
 
             return model;
@@ -553,11 +598,14 @@
         public string UpdateLanguageList(int id, int customerId, int mailTemplateLanguageId, int mailTemplateId, int? accountactivityId, int? ordertypeId, int mailId, string mailTemplateName)
         {
             var customer = this._customerService.GetCustomer(customerId);
-            //var mailTemplateLanguageToUpdate = this._mailTemplateService.GetMailTemplateLanguage(mailTemplateLanguageId, id);
+            var mailTemplate = new MailTemplateEntity();
 
-            //var mailTemplate = this._mailTemplateService.GetMailTemplate(mailTemplateId, customerId);
-
-            var mailTemplate = this._mailTemplateService.GetMailTemplate(id, customerId);
+            if (ordertypeId != null)
+                // Search by OrderTypeId
+                mailTemplate = this._mailTemplateService.GetMailTemplate(id, customer.Id, ordertypeId.Value);
+            else
+                // Search by MailID                
+                mailTemplate = this._mailTemplateService.GetMailTemplate(id, customer.Id);             
 
             if (mailTemplate == null)
             {
@@ -568,8 +616,17 @@
                 };
             }
 
-            //var mailTemplateLanguageToUpdate = this._mailTemplateService.GetMailTemplateLanguageForCustomer(mailTemplate.MailID, customer.Id, id);
-            var mailTemplateLanguageToUpdate = this._mailTemplateService.GetMailTemplateLanguageForCustomer(id, customer.Id, mailTemplateLanguageId);
+            var mailTemplateLanguageToUpdate = new MailTemplateLanguageEntity();
+            if (ordertypeId != null)
+                // Search by OrderTypeId
+                mailTemplateLanguageToUpdate = this._mailTemplateService.GetMailTemplateLanguageForCustomer(id, customer.Id, mailTemplateLanguageId, ordertypeId.Value);
+            else
+                // Search by MailID                
+                mailTemplateLanguageToUpdate = this._mailTemplateService.GetMailTemplateLanguageForCustomer(id, customer.Id, mailTemplateLanguageId);
+
+
+            //var mailTemplateLanguageToUpdate = this._mailTemplateService.GetMailTemplateLanguageForCustomer(id, customer.Id, mailTemplateLanguageId);
+
             if (mailTemplateLanguageToUpdate == null)
                 mailTemplateLanguageToUpdate = new MailTemplateLanguageEntity
                 {
@@ -580,13 +637,15 @@
                     Body = string.Empty,
                     MailTemplate = mailTemplate,
                     MailTemplateName = mailTemplateName
+                };            
 
+
+            var mailTemplateLanguage = new MailTemplateLanguageEntity() 
+                { Language_Id = mailTemplateLanguageId, 
+                  MailTemplate = mailTemplate 
                 };
-            //mailTemplateLanguageToUpdate = new MailTemplateLanguage() { Language_Id = id, MailTemplate = mailTemplate };
 
-
-            var mailTemplateLanguage = new MailTemplateLanguageEntity() { Language_Id = mailTemplateLanguageId, MailTemplate = mailTemplate };
-
+   
             var model = this.CreateInputViewModel(mailTemplateLanguage, customer, mailTemplateLanguageId, ordertypeId, accountactivityId);
 
             model.MailTemplateLanguage = mailTemplateLanguageToUpdate;

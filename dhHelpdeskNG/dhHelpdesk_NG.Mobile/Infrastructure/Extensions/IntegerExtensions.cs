@@ -69,12 +69,9 @@ namespace DH.Helpdesk.Mobile.Infrastructure.Extensions
                 case LanguageId.Swedish:
                     ret = "Swedish.png";
                     break;
-                case LanguageId.English:
+                default:
                     ret = "English.png";
-                    break;
-                case LanguageId.German:
-                    ret = "Germany.png";
-                    break;                   
+                    break;                
             }
             return ret;
         }

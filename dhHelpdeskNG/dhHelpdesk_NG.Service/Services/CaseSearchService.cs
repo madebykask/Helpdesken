@@ -23,7 +23,7 @@
             int workingDayStart,
             int workingDayEnd,
             WorkTimeCalculator workTimeCalculator,
-            string applicationId = null);
+            string applicationType);
 
         IList<CaseSearchResult> Search(
             CaseSearchFilter f,
@@ -37,11 +37,12 @@
             int workingDayStart,
             int workingDayEnd,
             WorkTimeCalculator workTimeCalculator,
-            string applicationId,
+            string applicationType,
             bool calculateRemainingTime,
             out CaseRemainingTimeData remainingTime,
             int? relatedCasesCaseId = null,
-            string relatedCasesUserId = null);
+            string relatedCasesUserId = null,
+            int[] caseIds = null);
     }
 
     public class CaseSearchService : ICaseSearchService
@@ -75,7 +76,7 @@
             int workingDayStart,
             int workingDayEnd,
             WorkTimeCalculator workTimeCalculator,
-            string applicationId = null)
+            string applicationType)
         {
             CaseRemainingTimeData remainingTime;
             return this.Search(
@@ -90,7 +91,7 @@
                         workingDayStart,
                         workingDayEnd,
                         workTimeCalculator,
-                        applicationId,
+                        applicationType,
                         false,
                         out remainingTime);
         }
@@ -107,11 +108,12 @@
                                 int workingDayStart,
                                 int workingDayEnd,
                                 WorkTimeCalculator workTimeCalculator,
-                                string applicationId,
+                                string applicationType,
                                 bool calculateRemainingTime,
                                 out CaseRemainingTimeData remainingTime,
                                 int? relatedCasesCaseId = null,
-                                string relatedCasesUserId = null)
+                                string relatedCasesUserId = null,
+                                int[] caseIds = null)
         {
             int productAreaId;
             var csf = new CaseSearchFilter();
@@ -135,12 +137,13 @@
                                                 this.settingService.GetCustomerSetting(f.CustomerId), 
                                                 s,
                                                 workTimeCalculator,
-                                                applicationId,
+                                                applicationType,
                                                 calculateRemainingTime,
                                                 this.productAreaService,
                                                 out remainingTime,
                                                 relatedCasesCaseId,
-                                                relatedCasesUserId);
+                                                relatedCasesUserId,
+                                                caseIds);
 
             var workingHours = workingDayEnd - workingDayStart;
             if (f.CaseRemainingTimeFilter.HasValue && calculateRemainingTime)

@@ -36,11 +36,19 @@
                             "~/Content/js/DynamicCase/container.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/common").Include(
-                            "~/Content/js/jquery-1.8.3.min.js",
+#if DEBUG
+                            "~/Scripts/jquery-1.8.3.js",
+#else
+                            "~/Scripts/jquery-1.8.3.min.js",
+#endif
                             "~/Content/js/jquery.unobtrusive-ajax.min.js",
                             "~/Content/js/jquery.validate.min.js",
                             "~/Content/js/jquery.validate.unobtrusive.min.js",
-                            "~/Content/js/jquery-ui-1.9.2.min.js",
+#if DEBUG
+                            "~/Scripts/jquery-ui-1.9.2.js",
+#else
+                            "~/Scripts/jquery-ui-1.9.2.min.js",
+#endif
                             "~/Content/js/bootstrap.js",
                             "~/Content/js/chosen.jquery.min.js",
                             "~/Content/js/bootstrap-multiselect.js",
@@ -69,7 +77,8 @@
                             "~/Content/js/dhHelpdesk.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/common/admin").Include(
-                            "~/Content/js/jquery-1.8.3.min.js",
+                            "~/Scripts/jquery-1.8.3.min.js",
+                            "~/Scripts/jquery-ui-1.9.2.min.js",
                             "~/Content/js/bootstrap.js",
                             "~/Content/js/chosen.jquery.min.js",
                             "~/Content/js/bootstrap-multiselect.js",
@@ -80,22 +89,21 @@
 #else 
                             "~/Content/js/jquery.validate.js",
 #endif
-                            "~/Content/js/jquery.validate.min.js",
+                            "~/Content/js/jquery.validate.min.js",                              
                             "~/Content/js/plupload.full.min.js",
-                            "~/Content/js/jquery.plupload.queue/jquery.plupload.queue.js",
-                            "~/Content/js/jquery-ui-1.9.2.min.js",
+                            "~/Content/js/jquery.plupload.queue/jquery.plupload.queue.js",                            
                             "~/Content/js/dhHelpdesk-head.js",
                             "~/Content/js/jquery.form.min.js",
-                            "~/Content/js/jquery.toastmessage.js",
+                            "~/Content/js/jquery.toastmessage.js",                            
                             "~/Content/js/bootstrap-switch.min.js",
                             "~/Content/js/jquery.dataTables.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/common/login").Include(
-                            "~/Content/js/jquery-1.8.3.min.js",
+                            "~/Scripts/jquery-1.8.3.min.js",
                             "~/Content/js/bootstrap.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/common/popup").Include(
-                            "~/Content/js/jquery-1.8.3.min.js",
+                            "~/Scripts/jquery-1.8.3.min.js",
                             "~/Content/js/jquery.unobtrusive-ajax.min.js",
                             "~/Content/js/jquery.validate.min.js",
                             "~/Content/js/jquery.validate.unobtrusive.min.js",
@@ -212,8 +220,15 @@
             bundles.Add(new ScriptBundle("~/bundles/admin/users").Include(
                             "~/Areas/Admin/Content/js/Users/user.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/admin/customerOverview").Include(
+                            "~/Areas/Admin/Content/js/CaseOverview/customerOverview.js",
+                            "~/Areas/Admin/Content/js/Common/common.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/cases/relatedCases").Include(
                             "~/Content/js/Cases/relatedCases.logic.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/cases/caseByIds").Include(
+                            "~/Content/js/Cases/caseByIds.logic.js"));
         }
     }
 }

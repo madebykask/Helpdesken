@@ -377,11 +377,12 @@
                     settings = this.changeFieldSettingRepository.GetEnglishFieldSettings(context.CustomerId);
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException("languageId");
+                    settings = this.changeFieldSettingRepository.GetEnglishFieldSettings(context.CustomerId);
+                    break;
             }
 
-            var languageIds = new List<int> { LanguageId.Swedish, LanguageId.English };
-            var languages = this.languageRepository.FindActiveOverviewsByIds(languageIds);
+            var languagesEntity = this.languageRepository.GetActiveLanguages();            
+            var languages = this.languageRepository.FindActiveOverviewsByIds(languagesEntity.Select(l=> l.Id).ToList());
 
             return new GetSettingsResponse(settings, languages);
         }
@@ -407,7 +408,7 @@
                 case LanguageTextId.English:
                     return this.changeFieldSettingRepository.GetEnglishEditSettings(customerId);
                 default:
-                    throw new ArgumentOutOfRangeException("languageId");
+                    return this.changeFieldSettingRepository.GetEnglishEditSettings(customerId);
             }
         }
 
@@ -422,7 +423,7 @@
                 case LanguageTextId.English:
                     return this.changeFieldSettingRepository.GetEnglishOverviewSettings(customerId, onlyListSettings);
                 default:
-                    throw new ArgumentOutOfRangeException("languageId");
+                    return this.changeFieldSettingRepository.GetEnglishOverviewSettings(customerId, onlyListSettings);
             }
         }
 
@@ -470,10 +471,9 @@
             {
                 case LanguageTextId.Swedish:
                     return this.changeFieldSettingRepository.GetSwedishSearchSettings(customerId);
-                case LanguageTextId.English:
-                    return this.changeFieldSettingRepository.GetEnglishSearchSettings(customerId);
+                    
                 default:
-                    throw new ArgumentOutOfRangeException("languageId");
+                    return this.changeFieldSettingRepository.GetEnglishSearchSettings(customerId);                    
             }
         }
 

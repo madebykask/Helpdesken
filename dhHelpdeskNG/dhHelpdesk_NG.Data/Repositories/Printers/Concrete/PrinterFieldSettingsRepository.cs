@@ -102,7 +102,18 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
                             }).ToList();
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException("languageId");
+                    mapperData =
+                        settings.Select(
+                            s =>
+                            new FieldSettingMapperData
+                            {
+                                Caption = s.Label_ENG,
+                                FieldName = s.PrinterField,
+                                ShowInList = s.ShowInList,
+                                ShowInDetails = s.Show,
+                                Required = s.Required,
+                            }).ToList();
+                    break;
             }
 
             var settingCollection = new NamedObjectCollection<FieldSettingMapperData>(mapperData);
@@ -143,7 +154,17 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
                             }).ToList();
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException("languageId");
+                    mapperData =
+                         settings.Select(
+                             s =>
+                             new FieldSettingMapperDataForModelEdit
+                             {
+                                 Caption = s.Label_ENG,
+                                 FieldName = s.PrinterField,
+                                 Show = s.Show,
+                                 Required = s.Required,
+                             }).ToList();
+                    break;
             }
 
             var settingCollection = new NamedObjectCollection<FieldSettingMapperDataForModelEdit>(mapperData);
@@ -182,7 +203,16 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
                             }).ToList();
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException("languageId");
+                    mapperData =
+                        settings.Select(
+                            s =>
+                            new FieldOverviewSettingMapperData
+                            {
+                                Caption = s.Label_ENG,
+                                FieldName = s.PrinterField,
+                                Show = s.ShowInList
+                            }).ToList();
+                    break;
             }
 
             var settingCollection = new NamedObjectCollection<FieldOverviewSettingMapperData>(mapperData);
@@ -219,7 +249,15 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
                                 }).Single();
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException("languageId");
+                    mapperData =
+                        settings.Select(
+                            s =>
+                            new
+                                {
+                                    Caption = s.Label_ENG,
+                                    s.Show
+                                }).Single();
+                    break;
             }
 
             var setting = new FieldSettingOverview(mapperData.Show == 1, mapperData.Caption);
@@ -341,7 +379,8 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
                     fieldSetting.Label_ENG = updatedSetting.Caption;
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException("languageTextId");
+                    fieldSetting.Label_ENG = updatedSetting.Caption;
+                    break;
             }
         }
 

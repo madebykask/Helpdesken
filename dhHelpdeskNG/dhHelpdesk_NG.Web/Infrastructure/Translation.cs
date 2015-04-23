@@ -2,6 +2,7 @@
 {
     using System.Linq;
     using DH.Helpdesk.Common.Extensions.String;
+    using DH.Helpdesk.Common.Enums;
 
     public static class Translation
     {
@@ -15,11 +16,19 @@
                     {
                         var translation = SessionFacade.TextTranslation.Where(x => x.TextToTranslate.ToLower() == translate.ToLower()).FirstOrDefault();
                         if(translation != null)
-                        {
-                            var text = translation.TextTranslations.Where(x => x.Language_Id == SessionFacade.CurrentLanguageId).FirstOrDefault().TextTranslated;
-                            translate = !string.IsNullOrEmpty(text) ? text : translate;
+                        {                           
+                            var trans = translation.TextTranslations.Where(x => x.Language_Id == SessionFacade.CurrentLanguageId).FirstOrDefault();
+                            var text = (trans != null ? trans.TextTranslated : string.Empty);
+                            if (string.IsNullOrEmpty(text) && SessionFacade.CurrentLanguageId != LanguageId.Swedish)
+                            {
+                                trans = translation.TextTranslations.Where(x => x.Language_Id == SessionFacade.CurrentCustomer.Language_Id).FirstOrDefault();
+                                text = (trans != null ? trans.TextTranslated : string.Empty);
+                            }
+                            
+                            translate = !string.IsNullOrEmpty(text) ? text : translate;                        
                         }
                     }
+
                     catch
                     {
                     }
@@ -32,10 +41,28 @@
                     try
                     {
                         var translation = SessionFacade.CaseTranslation.Where(x => x.Customer_Id == customerId && x.Name.ToLower() == translate.getCaseFieldName().ToLower() && x.Language_Id == SessionFacade.CurrentLanguageId).FirstOrDefault();
+
                         if (translation != null && !string.IsNullOrEmpty(translation.Label))
                             translate = translation.Label;
                         else
-                            translate = translate.GetDefaultValue(SessionFacade.CurrentLanguageId);
+                        {
+                             var translateByText = string.Empty;
+                             var instanceWord = GetInstanceWord(translate);
+                             if (instanceWord != string.Empty)
+                             {
+                                 var translationText = SessionFacade.TextTranslation.Where(x => x.TextToTranslate.ToLower() == instanceWord.ToLower()).FirstOrDefault();
+                                 if (translationText != null)
+                                 {
+                                     var trans = translationText.TextTranslations.Where(x => x.Language_Id == SessionFacade.CurrentLanguageId).FirstOrDefault();
+                                     translateByText = (trans != null ? trans.TextTranslated : string.Empty);
+                                     if (translateByText != string.Empty)
+                                         translate = translateByText;
+                                 }
+                             }
+                             
+                             if (translateByText == string.Empty)                             
+                                translate = translate.GetDefaultValue(SessionFacade.CurrentLanguageId);
+                        }
                             //Apparently this row is commented out because it is replaced by .GetDefaultValue above
                             //translate = Get(translate, Enums.TranslationSource.TextTranslation); 
                     }
@@ -48,6 +75,18 @@
             return translate;
         }
 
+        private static string GetInstanceWord(string word)
+        {
+            switch (word.ToLower())
+            {
+                case "_temporary_.leadtime":
+                    return "Tid kvar";                    
+            }
+
+            return string.Empty;
+        }
+
+
         public static string Get(string translate, int languageId, Enums.TranslationSource source = Enums.TranslationSource.TextTranslation, int customerId = 0)
         {
             if (source == Enums.TranslationSource.TextTranslation)
@@ -58,7 +97,17 @@
                     {
                         var translation = SessionFacade.TextTranslation.Where(x => x.TextToTranslate.ToLower() == translate.ToLower()).FirstOrDefault();
                         if (translation != null)
-                            translate = translation.TextTranslations.Where(x => x.Language_Id == languageId).FirstOrDefault().TextTranslated ?? translate;
+                        {                            
+                            var trans = translation.TextTranslations.Where(x => x.Language_Id == languageId).FirstOrDefault();
+                            var text = (trans != null ? trans.TextTranslated : string.Empty);
+                            if (string.IsNullOrEmpty(text) && SessionFacade.CurrentLanguageId != LanguageId.Swedish)
+                            {
+                                trans = translation.TextTranslations.Where(x => x.Language_Id == SessionFacade.CurrentCustomer.Language_Id).FirstOrDefault();
+                                text = (trans != null ? trans.TextTranslated : string.Empty);
+                            }
+
+                            translate = !string.IsNullOrEmpty(text) ? text : translate;   
+                        }
                     }
                     catch
                     {
@@ -75,8 +124,24 @@
                         if (translation != null && !string.IsNullOrEmpty(translation.Label))
                             translate = translation.Label;
                         else
-                            translate = translate.GetDefaultValue(languageId);
-                            //translate = Get(translate, Enums.TranslationSource.TextTranslation);
+                        {
+                            var translateByText = string.Empty;
+                            var instanceWord = GetInstanceWord(translate);
+                            if (instanceWord != string.Empty)
+                            {
+                                var translationText = SessionFacade.TextTranslation.Where(x => x.TextToTranslate.ToLower() == instanceWord.ToLower()).FirstOrDefault();
+                                if (translationText != null)
+                                {
+                                    var trans = translationText.TextTranslations.Where(x => x.Language_Id == languageId).FirstOrDefault();
+                                    translateByText = (trans != null ? trans.TextTranslated : string.Empty);
+                                    if (translateByText != string.Empty)
+                                        translate = translateByText;
+                                }
+                            }
+
+                            if (translateByText == string.Empty)
+                                translate = translate.GetDefaultValue(languageId);                            
+                        }                            
                     }
                     catch
                     {

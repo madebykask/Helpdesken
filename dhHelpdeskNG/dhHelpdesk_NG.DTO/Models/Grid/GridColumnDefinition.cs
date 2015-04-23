@@ -12,7 +12,7 @@
         public static int GetFieldId(string fieldName)
         {
             var map = GetNameIdMap();
-            return map[fieldName];
+            return map[fieldName.ToLower()];
         }
 
         public static string GetFieldName(int id)
@@ -39,7 +39,7 @@
             if (idNameMap == null)
             {
                 var id = 1;
-                idNameMap = collectAllField().ToDictionary(it => id++, it => it);
+                idNameMap = collectAllField().Select(it => it.ToLower()).ToDictionary(it => id++, it => it);
             }
 
             return idNameMap;
@@ -50,7 +50,7 @@
             if (nameIdMap == null)
             {
                 var id = 1;
-                nameIdMap = collectAllField().ToDictionary(it => it, it => id++);
+                nameIdMap = collectAllField().Select(it => it.ToLower()).ToDictionary(it => it, it => id++);
             }
 
             return nameIdMap;

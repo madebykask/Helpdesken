@@ -1,6 +1,27 @@
 ﻿"use strict";
 
 $(document).ready(function () {
+    var savingMsg = $('#savingMsg').text();
+    var maxWideColumnMsg = $('#maxWideColumnMsg').text();
+    var atLeastOneColumnMsg = $('#atLeastOneColumnMsg').text();
+    var columnAlreadyExistsMsg = $('#columnAlreadyExists').text();
+    var $saveBtn = $('#btnSaveCaseSetting .btn');
+
+    function isWideColumnsCountExceed() {
+        var res = 0;
+        $('tr.SortableRow [name=column_style]').each(function (idx, el) {
+            if ($(arguments[1]).val() == 'colwide') {
+                res++;
+            }
+        });
+        if (res > 2) {
+            ShowToastMessage(maxWideColumnMsg);
+            return true;
+        }
+
+        return false;
+    }
+
     //// initialization
     $("#customerCaseSum tbody").sortable(
        {
@@ -18,16 +39,25 @@ $(document).ready(function () {
     $("#customerCaseSum tbody").disableSelection();
 
     //// bind event handlers 
-    $('#btnSaveCaseSetting').click(function (e) {
+    $saveBtn.click(function (e) {
         e.preventDefault();
-        if (window.app.getGridState() !== GRID_STATE.IDLE) {
+        if (!(window.app.getGridState() === GRID_STATE.IDLE || window.app.getGridState() === GRID_STATE.NO_COL_SELECTED) || $saveBtn.hasClass('disabled')) {
             return false;
         }
+        
         /// validation
         if ($('#dataTable tr.SortableRow').length == 0) {
-            window.ShowToastMessage('You should have at least one column selected for the "Case overview" grid', 'error');
+            window.ShowToastMessage(atLeastOneColumnMsg, 'error');
+            window.scrollTo(0, document.body.scrollHeight);
             return false;
         }
+
+        if (isWideColumnsCountExceed()) {
+            return false;
+        }
+        
+        $saveBtn.addClass('disabled');
+        $saveBtn.val(savingMsg);
 
         $.post('/Cases/SaveSetting/', $("#frmCaseSetting").serialize(), function () {
             /// due to strange work with lists[] in .NET we have to send a bit different structure
@@ -45,7 +75,7 @@ $(document).ready(function () {
                 contentType: 'application/json;',
                 dataType: 'json',
                 data: JSON.stringify(formData),
-                success: function() {
+                success: function () {
                     window.location.href = '/cases/';
                 }
             });
@@ -83,10 +113,16 @@ $(document).ready(function () {
             label: $('#labellist option:selected').text()
         };
         var template = $.templates("#caseFieldRow");
+      
         if ($('tr.SortableRow input[type="hidden"][value="' + fieldId + '"]').length > 0) {
-            /// prevent to add duplicate columns
+            ShowToastMessage(columnAlreadyExistsMsg.replace(/\{0\}/, fieldInfo.label));
             return false;
         }
+        
+        if (isWideColumnsCountExceed()) {
+            return false;
+        }
+
         $('#dataTable').append(template.render(fieldInfo)).find('select[fieldid*="' + fieldId + '"]').val($('#newColStyle').val());
     });
 

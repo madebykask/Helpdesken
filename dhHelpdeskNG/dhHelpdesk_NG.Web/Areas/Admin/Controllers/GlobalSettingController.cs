@@ -37,10 +37,11 @@
             this._watchDateCalendarService = watchDateCalendarService;
         }
 
-        public ActionResult Index(int texttypeid)
+        public ActionResult Index(int texttypeid, string textSearch, int compareMethod)
         {
-            var model = this.GetGSIndexViewModel(texttypeid, 1, SessionFacade.CurrentCustomer.Language_Id);
-           
+            var searchOpt = new SearchOption { TextType = texttypeid, TextSearch = textSearch, CompareMethod = compareMethod };
+            var model = this.GetGSIndexViewModel(1, SessionFacade.CurrentCustomer.Language_Id, searchOpt);           
+
             return this.View(model);
         }
 
@@ -74,7 +75,7 @@
             this._globalSettingService.SaveGlobalSetting(changeToSave, out errors);
 
             if (errors.Count == 0)
-                return this.RedirectToAction("index", "globalsetting", new { texttypeid = 0 });
+                return this.RedirectToAction("index", "globalsetting", new { texttypeid = 0, compareMethod = 1 });
 
             var model = this.SaveGsInputViewModel(changeToSave);
             model.Tabposition = coll["activeTab"];
@@ -105,7 +106,7 @@
                 this._holidayService.SaveHolidayHeader(holidayheader, out errors);
 
                 if (errors.Count == 0)
-                    return this.RedirectToAction("index", "globalsetting", new { texttypeid = 0 });
+                    return this.RedirectToAction("index", "globalsetting", new { texttypeid = 0, compareMethod = 1 });
 
                 var model = this.SaveHolidayViewModel(holidayheader, viewModel.Year);
                 SessionFacade.ActiveTab = coll["activeTab"];
@@ -201,7 +202,7 @@
                 this._watchDateCalendarService.SaveWatchDateCalendar(watchdatecalendar, out errors);
 
                 if (errors.Count == 0)
-                    return this.RedirectToAction("index", "globalsetting", new { texttypeid = 0 });
+                    return this.RedirectToAction("index", "globalsetting", new { texttypeid = 0, compareMethod = 1 });
 
                 var model = this.SaveWatchDateViewModel(watchdatecalendar, viewModel.Year);
 
@@ -218,7 +219,7 @@
                 this._watchDateCalendarService.SaveWatchDateCalendar(watchdatecalendar, out errors);
 
                 if (errors.Count == 0)
-                    return this.RedirectToAction("index", "globalsetting", new { texttypeid = 0 });
+                    return this.RedirectToAction("index", "globalsetting", new { texttypeid = 0, compareMethod = 1 });
 
                 var model = this.SaveWatchDateViewModel(watchdatecalendar, viewModel.Year);
 
@@ -293,7 +294,7 @@
 
         public ActionResult NewTranslation(int texttypeid)
         {
-            var model = this.GetTextTranslationViewModel(new Text { }, texttypeid, SessionFacade.CurrentCustomer.Language_Id);
+            var model = this.GetTextTranslationViewModel(new Text { }, texttypeid, SessionFacade.CurrentCustomer.Language_Id, null, 1);
 
             SessionFacade.ActiveTab = "#fragment-4";
 
@@ -316,11 +317,11 @@
             this._textTranslationService.SaveNewText(text, out errors);
 
             if (errors.Count == 0)
-                return this.RedirectToAction("edittranslation", "globalsetting", new { area = "admin", id = text.Id });
+                return this.RedirectToAction("edittranslation", "globalsetting", new { area = "admin", id = text.Id, textType = 1, compareMethod = 1 });
                 //return this.RedirectToAction("index", "globalsetting", new { texttypeid = text.Type });
 
 
-            var model = this.GetTextTranslationViewModel(text, text.Type, 0);
+            var model = this.GetTextTranslationViewModel(text, text.Type, 0, null, 1);
 
             foreach (var error in errors)
             {
@@ -330,8 +331,8 @@
 
             return this.View(model);
         }
-       
-        public ActionResult EditTranslation(int id)
+
+        public ActionResult EditTranslation(int id, int textType, string textSearch, int compareMethod)
         {
             var text = this._textTranslationService.GetText(id);
 
@@ -342,7 +343,7 @@
             if (text == null)
                 return new HttpNotFoundResult("No translation found...");
 
-            var model = this.GetTextTranslationViewModel(text, text.Type, language.Id);
+            var model = this.GetTextTranslationViewModel(text, text.Type, language.Id, textSearch, compareMethod);
 
             SessionFacade.ActiveTab = "#fragment-4";
 
@@ -350,7 +351,7 @@
         }
 
         [HttpPost]
-        public ActionResult EditTranslation(int id, int texttypeid, List<TextTranslationLanguageList> TTs, FormCollection coll)
+        public ActionResult EditTranslation(int id, int texttypeid, string textSearch, int compareMethod, List<TextTranslationLanguageList> TTs, FormCollection coll)
         {
             var textToSave = this._textTranslationService.GetText(id);
 
@@ -371,9 +372,9 @@
             this._textTranslationService.SaveEditText(textToSave, TTs, out errors);
 
             if (errors.Count == 0)
-                return this.RedirectToAction("index", "globalsetting", new { texttypeid = texttypeid });
+                return this.RedirectToAction("index", "globalsetting", new { texttypeid = texttypeid, textSearch = textSearch, compareMethod = compareMethod });
 
-            var model = this.GetTextTranslationViewModel(textToSave, texttypeid, 0);
+            var model = this.GetTextTranslationViewModel(textToSave, texttypeid, 0, textSearch, compareMethod);
 
             model.Tabposition = coll["activeTab"];
 
@@ -400,28 +401,56 @@
 
             this._textTranslationService.DeleteText(text, out errors);
 
+
             SessionFacade.ActiveTab = coll["activeTab"];
-            return this.RedirectToAction("index", "globalsetting", new { texttypeid = texttypeid });
+            return this.RedirectToAction("index", "globalsetting", new { texttypeid = texttypeid, compareMethod = 1 });
         }
 
         
-        private GlobalSettingIndexViewModel GetGSIndexViewModel(int texttypeid, int holidayheaderid, int languageId)
+        private GlobalSettingIndexViewModel GetGSIndexViewModel( int holidayheaderid, int languageId, SearchOption searchOption)
         {
             var start = this._globalSettingService.GetGlobalSettings().FirstOrDefault();
 
+            //int texttypeid,
+            //string textSearch
+
             var gridModel = new TranslationGridModel();
             //gridModel.AllTexts = this._textTranslationService.GetAllTexts(texttypeid).ToList();
-            gridModel.AllTexts = this._textTranslationService.GetAllTexts(texttypeid).ToList();
-            
+            var allTexts = this._textTranslationService.GetAllTexts(searchOption.TextType, SessionFacade.CurrentCustomer.Language_Id).ToList();
+            if (string.IsNullOrEmpty(searchOption.TextSearch))
+                gridModel.AllTexts = allTexts.OrderBy(a => a.TextToTranslate).ToList();
+            else
+            {
+                switch (searchOption.CompareMethod)
+                {
+                    case 1:
+                        gridModel.AllTexts = allTexts.Where(a => (a.TextToTranslate != null && a.TextToTranslate.ToLower().StartsWith(searchOption.TextSearch.ToLower())) ||
+                                                             (a.TextTranslated != null && a.TextTranslated.ToLower().StartsWith(searchOption.TextSearch.ToLower())))
+                                                 .OrderBy(a => a.TextToTranslate).ToList();
+                        break;
+
+                    case 2:
+                        gridModel.AllTexts = allTexts.Where(a => (a.TextToTranslate != null && a.TextToTranslate.ToLower().Contains(searchOption.TextSearch.ToLower())) ||
+                                                             (a.TextTranslated != null && a.TextTranslated.ToLower().Contains(searchOption.TextSearch.ToLower())))
+                                                 .OrderBy(a => a.TextToTranslate).ToList();
+                        break;
+
+                    default:
+                        gridModel.AllTexts = allTexts.OrderBy(a => a.TextToTranslate).ToList();
+                        break;
+                }
+            }
+
+
             var model = new GlobalSettingIndexViewModel
             {
                 GlobalSettings = this._globalSettingService.GetGlobalSettings(),
                 Holidays = this._holidayService.GetHolidaysByHeaderId(holidayheaderid),
                 LanguagesToTranslateInto = this._languageService.GetLanguagesForGlobalSettings(),
-                Texts = this._textTranslationService.GetAllNewTexts(texttypeid).ToList(),
+                Texts = this._textTranslationService.GetAllNewTexts(searchOption.TextType).ToList(),
                 ListForIndex = this._textTranslationService.GetIndexListToTextTranslations(languageId),
                 WatchDateCalendarValues = this._watchDateCalendarService.GetAllWatchDateCalendarValues().ToList(),
-                TextType = this._textTranslationService.GetTextType(texttypeid),
+                TextType = this._textTranslationService.GetTextType(searchOption.TextType),
                 HolidayHeader = this._holidayService.GetHolidayHeader(1),
                 GridModel = gridModel,
                 TextTypes = this._textTranslationService.GetTextTypes().Select(x => new SelectListItem
@@ -446,22 +475,16 @@
                 }).ToList(),
             };
 
-            //model.SearchModel = Json(model.AllTexts);
-            //model.TextTypes = new List<SelectListItem>();
-            //model.TextTypes.Add(new SelectListItem { Text = "Dh Helpdesk", Value = "0" });
-            //model.TextTypes.Add(new SelectListItem { Text = "Master data", Value = "1" });
-
-            //foreach (var textype in this._textTranslationService.GetTextTypes())
-            //{
-            //    model.TextTypes.Add(new SelectListItem { Text = textype.Name, Value = textype.Id.ToString() });
-            //}
-
             model.SearchConditions = new List<SelectListItem>();
-            //model.SearchConditions.Add(new SelectListItem { Text = "--", Value = "0" });
-            model.SearchConditions.Add(new SelectListItem { Text = Translation.Get("Börjar med"), Value = "1" });
-            model.SearchConditions.Add(new SelectListItem { Text = Translation.Get("Innehåller"), Value = "2" });
+            model.SearchConditions.Add(new SelectListItem { Text = Translation.Get("Börjar med"), Value = "1"});
+            model.SearchConditions.Add(new SelectListItem { Text = Translation.Get("Innehåller"), Value = "2"});
 
+            ViewBag.SelectedSearchCondition = searchOption.CompareMethod.ToString();
 
+            model.SearchTextTr = searchOption.TextSearch;
+            
+            model.GridModel.SearchOption = searchOption;
+           
             return model;
         }
 
@@ -949,7 +972,7 @@
             return model;
         }
 
-        private GlobalSettingTextTranslationViewModel GetTextTranslationViewModel(Text text, int texttypeid, int languageId)
+        private GlobalSettingTextTranslationViewModel GetTextTranslationViewModel(Text text, int texttypeid, int languageId, string textSearch, int compareMethod)
         {
             var model = new GlobalSettingTextTranslationViewModel
             {
@@ -993,7 +1016,7 @@
             //    model.TextTypes.Add(new SelectListItem { Text = textype.Name, Value = textype.Id.ToString() });
             //}
 
-
+            model.SearchOption = new SearchOption { TextType = texttypeid, TextSearch = textSearch, CompareMethod = compareMethod };
             return model;
         }
 
@@ -1060,7 +1083,7 @@
 
 
 
-            var model = this.GetTextTranslationViewModel(text, text.Type, id);
+            var model = this.GetTextTranslationViewModel(text, text.Type, id, null, 1);
 
             var view = "~/areas/admin/views/GlobalSetting/_Translation.cshtml";
             //var view = "~/areas/admin/views/GlobalSetting/EditTranslation.cshtml";
@@ -1072,9 +1095,12 @@
         [HttpGet]
         public PartialViewResult ChangeTextType(int id)
         {
-            var model = new TranslationGridModel();            
-            model.AllTexts = this._textTranslationService.GetAllTexts(id).ToList();            
+            var model = new TranslationGridModel();
+            model.AllTexts = this._textTranslationService.GetAllTexts(id, SessionFacade.CurrentCustomer.Language_Id).ToList();            
             var view = "~/areas/admin/views/GlobalSetting/_TranslationsList.cshtml";
+
+            var searchOpt = new SearchOption { TextType = id, TextSearch = "", CompareMethod = 1 };
+            model.SearchOption = searchOpt;
 
             return this.PartialView(view , model);                                     
         }
@@ -1082,17 +1108,21 @@
         [HttpGet]
         public PartialViewResult SearchText(int textTypeId, string searchValue, int searchOption)
         {
-            var model = new TranslationGridModel();            
-            var allTexts = this._textTranslationService.GetAllTexts(textTypeId).ToList();
+            var model = new TranslationGridModel();
+            var allTexts = this._textTranslationService.GetAllTexts(textTypeId, SessionFacade.CurrentCustomer.Language_Id).ToList();
 
             switch (searchOption)
             {
                 case 1:
-                    model.AllTexts = allTexts.Where(a => a.TextToTranslate.ToLower().StartsWith(searchValue.ToLower())).OrderBy(a => a.TextToTranslate).ToList();
+                    model.AllTexts = allTexts.Where(a => (a.TextToTranslate != null && a.TextToTranslate.ToLower().StartsWith(searchValue.ToLower())) || 
+                                                         (a.TextTranslated != null && a.TextTranslated.ToLower().StartsWith(searchValue.ToLower())))
+                                             .OrderBy(a => a.TextToTranslate).ToList();
                     break;
 
-                case 2:                    
-                    model.AllTexts = allTexts.Where(a => a.TextToTranslate.ToLower().Contains(searchValue.ToLower())).OrderBy(a => a.TextToTranslate).ToList();
+                case 2:
+                    model.AllTexts = allTexts.Where(a => (a.TextToTranslate != null && a.TextToTranslate.ToLower().Contains(searchValue.ToLower())) ||
+                                                         (a.TextTranslated != null && a.TextTranslated.ToLower().Contains(searchValue.ToLower())))
+                                             .OrderBy(a => a.TextToTranslate).ToList();
                     break;
 
                 default:
@@ -1100,6 +1130,8 @@
                     break;
             }
 
+            var searchOpt = new SearchOption{TextType = textTypeId, TextSearch = searchValue, CompareMethod = searchOption} ;
+            model.SearchOption = searchOpt;
             var view = "~/areas/admin/views/GlobalSetting/_TranslationsList.cshtml";
 
             return this.PartialView(view, model);
@@ -1110,8 +1142,8 @@
         [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")]
         public string SearchTranslation()
         {
-
-            var model = this.GetGSIndexViewModel(1, 1, SessionFacade.CurrentCustomer.Language_Id);
+            var searchOpt = new SearchOption { TextType = 1, TextSearch = string.Empty, CompareMethod = 1 };
+            var model = this.GetGSIndexViewModel(1, SessionFacade.CurrentCustomer.Language_Id, searchOpt);
 
             var view = "~/areas/admin/views/GlobalSetting/_TranslationsList.cshtml";
 
@@ -1124,7 +1156,8 @@
         public string ChangeHoliday(int id)
         {
 
-            var model = this.GetGSIndexViewModel(1, id, SessionFacade.CurrentCustomer.Language_Id);
+            var searchOpt = new SearchOption { TextType = 1, TextSearch = string.Empty, CompareMethod = 1 };
+            var model = this.GetGSIndexViewModel(id, SessionFacade.CurrentCustomer.Language_Id, searchOpt);
 
             var view = "~/areas/admin/views/GlobalSetting/_Holidays.cshtml";
 

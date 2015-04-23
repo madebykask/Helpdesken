@@ -5,10 +5,12 @@
     using System.Web.Mvc;
     using System.Web.UI;
 
+    
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
     using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Web.Infrastructure.Extensions;
 
     public class CustomerCaseOverviewController : BaseAdminController
     {
@@ -18,6 +20,8 @@
         private readonly ILanguageService _languageService;
         private readonly IUserService _userService;
         private readonly ISettingService _settingService;
+
+        private readonly char _seperator;
 
         public CustomerCaseOverviewController(
             ICaseFieldSettingService caseFieldSettingService,
@@ -35,6 +39,7 @@
             this._languageService = languageService;
             this._userService = userService;
             this._settingService = settingService;
+            this._seperator = ',';
         }
 
         [CustomAuthorize(Roles = "3,4")]
@@ -45,12 +50,6 @@
 
             if (customer == null)
                 return new HttpNotFoundResult("No customer found...");
-
-           
-            //var casefieldsetting = _caseFieldSettingService.GetCaseFieldSettings(id);
-            //var caseSettings = _caseSettingsService.GenerateCSFromUGChoice(id, 1);
-            //if (caseSettings == null)
-            //
 
             var model = this.CustomerInputViewModel(customer);
             model.CustomerCaseSummaryViewModel = this.CustomerCaseSummaryViewModel(null, customer, usergroupId);
@@ -63,8 +62,16 @@
         [ValidateInput(false)]
         public ActionResult Edit(int id, Customer customer, FormCollection coll, CustomerInputViewModel vmodel, int[] UsSelected)
         {
-           
-                return this.RedirectToAction("edit", "customer", new { Id = customer.Id });
+            var caseFieldStreem = coll.ReturnFormValue("SortedFields");
+            
+            if (!string.IsNullOrEmpty(caseFieldStreem))
+            {
+                var lstCaseFieldIds = new List<string>();
+                lstCaseFieldIds = caseFieldStreem.Split(_seperator).ToList();
+                _caseSettingsService.ReOrderCaseSetting(lstCaseFieldIds);
+            }
+            
+            return this.RedirectToAction("edit", "customer", new { Id = customer.Id });
 
         }
 
@@ -83,8 +90,7 @@
 
         private CustomerIndexViewModel IndexViewModel()
         {
-            var model = new CustomerIndexViewModel { };
-            
+            var model = new CustomerIndexViewModel { };            
             return model;
         }
 
@@ -156,6 +162,10 @@
                 }).ToList(),
             };
 
+            model.Seperator = _seperator.ToString();
+            foreach (var cs in model.CaseSettings)
+                model.SortedFields +=  _seperator.ToString() + cs.Id.ToString();
+            
             return model;
         }
 
@@ -163,6 +173,12 @@
         {
             var caseSetting = new CaseSettings();
             var customer = this._customerService.GetCustomer(customerId);
+
+            var existFields = this._caseSettingsService.GetCaseSettingsByUserGroup(customerId, usergroupId)
+                                                       .Select(f => f.Name)
+                                                       .ToList();
+            if (existFields.Contains(labellist))
+                return "Repeated";
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
@@ -177,9 +193,8 @@
                 caseSetting.ColOrder = colOrderValue;
                 caseSetting.Name = labellist;
             }
-
+                        
             model.CSetting = caseSetting;
-
             this._caseSettingsService.SaveCaseSetting(model.CSetting, out errors);
 
             return this.UpdateUserGroupList(usergroupId, customerId);
@@ -241,9 +256,13 @@
             model.UserGroupId = id;
             model.Customer = customer;
 
-            this.UpdateModel(model, "caseSettings");
+            model.SortedFields = string.Empty;
+            foreach (var cs in model.CaseSettings)
+                model.SortedFields += _seperator.ToString() + cs.Id.ToString();
 
-            //return View(model);
+            model.Seperator = _seperator.ToString();
+            this.UpdateModel(model, "caseSettings");
+                        
             var view = "~/areas/admin/views/CustomerCaseOverview/_CaseSummaryPartialView.cshtml";
             return this.RenderRazorViewToString(view, model);
         }

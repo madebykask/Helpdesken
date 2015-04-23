@@ -36,12 +36,19 @@
     }
 
     public class TranslationGridModel
-    {        
+    {
+        public SearchOption SearchOption { get; set; } 
         public IList<TextList> AllTexts { get; set; }
-
         public IList<TextList> AllTextAndTranslations { get; set; }
-
     }
+
+    public class SearchOption
+    {
+        public int TextType {get; set;}
+        public string TextSearch {get; set;}
+        public int CompareMethod {get; set;}
+    }
+
     public class GlobalSettingInputViewModel : BaseTabInputViewModel
     {
         public GlobalSetting GlobalSetting { get; set; }
@@ -102,6 +109,7 @@
         public IList<SelectListItem> TextTypes { get; set; }
         public TextType TextType { get; set; }
         public string TextTypeName { get; set; }
-        
+
+        public SearchOption SearchOption { get; set; }
     }
 }

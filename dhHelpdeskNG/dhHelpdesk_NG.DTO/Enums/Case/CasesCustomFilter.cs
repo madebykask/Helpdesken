@@ -3,7 +3,6 @@
     public enum CasesCustomFilter
     {
         None,
-        MyCases,
         UnreadCases,
         HoldCases,
         InProcessCases

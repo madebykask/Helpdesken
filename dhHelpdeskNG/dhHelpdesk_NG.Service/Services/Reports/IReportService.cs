@@ -5,7 +5,11 @@
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseSatisfaction;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.CasesInProgressDay;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.ClosedCasesDay;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.FinishingCauseCategoryCustomer;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.FinishingCauseCustomer;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeActiveCases;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeFinishedCases;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.RegistratedCasesDay;
@@ -101,5 +105,45 @@
                                     int highHours,
                                     int mediumDays,
                                     int lowDays);
+
+        FinishingCauseCustomerOptions GetFinishingCauseCustomerOptions(int customerId);
+
+        FinishingCauseCustomerData GetFinishingCauseCustomerData(
+                                    int customerId,
+                                    List<int> departmentIds,
+                                    int? workingGroupId,
+                                    int? caseTypeId,
+                                    int? administratorId,
+                                    DateTime? periodFrom,
+                                    DateTime? periodUntil);
+
+        FinishingCauseCategoryCustomerOptions GetFinishingCauseCategoryCustomerOptions(int customerId);
+
+        FinishingCauseCategoryCustomerData GetFinishingCauseCategoryCustomerData(
+                                    int customerId,
+                                    List<int> departmentIds,
+                                    List<int> workingGroupIds,
+                                    int? caseTypeId,
+                                    DateTime? periodFrom,
+                                    DateTime? periodUntil);
+
+        ClosedCasesDayOptions GetClosedCasesDayOptions(int customerId);
+
+        ClosedCasesDayData GetClosedCasesDayData(
+                                    int customerId,
+                                    List<int> departmentIds,
+                                    int? workingGroupId,
+                                    int? caseTypeId,
+                                    int? administratorId,
+                                    DateTime period);
+
+        CasesInProgressDayOptions GetCasesInProgressDayOptions(int customerId);
+
+        CasesInProgressDayData GetCasesInProgressDayData(
+                                    int customerId,
+                                    int? departmentId,
+                                    int? workingGroupId,
+                                    int? administratorId,
+                                    DateTime period);
     }
 }

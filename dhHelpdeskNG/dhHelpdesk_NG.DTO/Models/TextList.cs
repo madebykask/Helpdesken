@@ -15,6 +15,8 @@ namespace DH.Helpdesk.BusinessData.Models
         public DateTime CreatedDate { get; set; }
         public string ChangedByFirstName { get; set; }
         public string ChangedByLastName { get; set; }
+
+        public string TextTranslated { get; set; }
         
         public List<TextTranlationsTextLanguageList> Translations { get; set; }
     }

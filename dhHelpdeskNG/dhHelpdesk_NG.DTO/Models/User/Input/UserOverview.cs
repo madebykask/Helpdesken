@@ -5,6 +5,8 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Domain;
 
+    using UserGroup = DH.Helpdesk.BusinessData.Enums.Admin.Users.UserGroup;
+
     public class UserOverview
     {
         public UserOverview(
@@ -143,5 +145,10 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
         public int StartPage { get; private set; }
 
         public bool ShowSolutionTime { get; set; }
+
+        public bool IsAdministrator()
+        {
+            return this.UserGroupId > (int)UserGroup.User;
+        }
     }
 }

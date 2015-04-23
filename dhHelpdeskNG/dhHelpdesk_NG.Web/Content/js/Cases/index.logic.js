@@ -3,7 +3,8 @@
 var GRID_STATE = {
     IDLE: 0,
     LOADING: 1,
-    BAD_CONFIG: 2
+    BAD_CONFIG: 2,
+    NO_COL_SELECTED: 3
 };
 
 (function($) {
@@ -12,22 +13,12 @@ var GRID_STATE = {
     var LOADING_MSG_TYPE = 1;
     var NODATA_MSG_TYPE = 2;
     var BADCONFIG_MSG_TYPE = 3;
+    var NO_COL_SELECTED_MSG_TYPE = 4;
     
     var SORT_ASC = 0;
     var SORT_DESC = 1;
     var EMPTY_STR = '';
     var JOINER = EMPTY_STR;
-
-    function getUrlParameter(sParam) {
-        var sPageURL = window.location.search.substring(1);
-        var sURLVariables = sPageURL.split('&');
-        for (var i = 0; i < sURLVariables.length; i++) {
-            var sParameterName = sURLVariables[i].split('=');
-            if (sParameterName[0] == sParam) {
-                return sParameterName[1];
-            }
-        }
-    }
 
     function strJoin() {
         return Array.prototype.join.call(arguments, JOINER);
@@ -69,7 +60,9 @@ var GRID_STATE = {
         me.$tableNoDataMsg = ' div.no-data-msg';
         me.$tableErrorMsg = ' div.error-msg';
         me.$noFieldsMsg = $('#search_result div.nofields-msg');
-        me.$buttonsToDisableWhenGridLoads = $('ul.secnav a.btn, ul.secnav div.btn-group button, ul.secnav input[type=button], #btnSearch, #btnClearFilter');
+        me.$noAvailableFieldsMsg = $('#search_result div.noavailablefields-msg');
+        me.$buttonsToDisableWhenGridLoads = $('ul.secnav a.btn, ul.secnav div.btn-group button, ul.secnav input[type=button], .submit, #btnClearFilter');
+        me.$buttonsToDisableWhenNoColumns = $('#btnNewCase a.btn, #btnCaseTemplate a.btn, .submit, #btnClearFilter');
         me.$searchField = '#txtFreeTextSearch';
         me.$filterForm = $('#frmCaseSearch');
         me.$filterFormContent = $('#hiddeninfo');
@@ -77,7 +70,7 @@ var GRID_STATE = {
         me.$remainingView = $('[data-field="caseRemainingTimeHidePlace"]');
         me.$btnExpandFilter = $("#btnMore");
         //// Bind events
-        $('#btnSearch, a.refresh-grid').on('click', function (ev) {
+        $('.submit, a.refresh-grid').on('click', function (ev) {
             ev.preventDefault();
             if (me._gridState !== window.GRID_STATE.IDLE) {
                 return false;
@@ -85,13 +78,13 @@ var GRID_STATE = {
             me.onSearchClick.apply(me);
             return false;
         });
-        /////// moved from _Search.cshtml
+        
         $("#btnClearFilter").click(function (ev) {
             if (me.getGridState() !== window.GRID_STATE.IDLE) {
                 ev.preventDefault();
                 return false;
             }
-            window.location.href = '/Cases/Index/?clearFilters=True';
+            window.location.href = '/Cases/Index/?resetSearchForm=True';
             return false;
         });
 
@@ -100,7 +93,6 @@ var GRID_STATE = {
             me.toggleFilter.call(me, !me.$filterFormContent.is(':visible'));
             return false;
         });
-
         $('#txtFreeTextSearch').keydown(function (e) {
             if (e.keyCode == 13) {
                 $("#btnSearch").click();
@@ -108,14 +100,6 @@ var GRID_STATE = {
         });
 
         $('ul.secnav #btnNewCase a.btn').on('click', function(ev) {
-            if (window.app.getGridState() !== window.GRID_STATE.IDLE) {
-                ev.preventDefault();
-                return false;
-            }
-            return true;
-        });
-
-        $('ul.secnav #btnMyCases a.btn').on('click', function (ev) {
             if (window.app.getGridState() !== window.GRID_STATE.IDLE) {
                 ev.preventDefault();
                 return false;
@@ -193,10 +177,15 @@ var GRID_STATE = {
     Page.prototype.setGridState = function(gridStateId) {
         var me = this;
         me._gridState = gridStateId;
-        if (gridStateId == window.GRID_STATE.IDLE) {
-            me.$buttonsToDisableWhenGridLoads.removeClass('disabled');
-        } else {
-            me.$buttonsToDisableWhenGridLoads.addClass('disabled');
+        switch (gridStateId) {
+            case window.GRID_STATE.IDLE:
+                me.$buttonsToDisableWhenGridLoads.removeClass('disabled');
+                break;
+            case window.GRID_STATE.NO_COL_SELECTED:
+                me.$buttonsToDisableWhenNoColumns.addClass('disabled');
+                break;
+            default:
+                me.$buttonsToDisableWhenGridLoads.addClass('disabled');
         }
     };
 
@@ -215,10 +204,16 @@ var GRID_STATE = {
             me.setSortField.call(me, $(this).attr('fieldname'), $(this));
         };
         me.gridSettings = gridSettings;
-        if (me.gridSettings.columnDefs.length == 0) {
+        if (me.gridSettings.availableColumns == 0) {
             me.showMsg(BADCONFIG_MSG_TYPE);
             me.setGridState(GRID_STATE.BAD_CONFIG);
-            return false;
+            return;
+        }
+
+        if (me.gridSettings.columnDefs.length == 0) {
+            me.showMsg(NO_COL_SELECTED_MSG_TYPE);
+            me.setGridState(GRID_STATE.NO_COL_SELECTED);
+            return;
         }
         me.visibleFieldsCount = 1; //// we have at least one column with icon
         $.each(me.gridSettings.columnDefs, function (idx, fieldSetting) {
@@ -244,7 +239,7 @@ var GRID_STATE = {
         var sortOpt = me.gridSettings.sortOptions;
         var oldCls = getClsForSortDir(sortOpt.sortDir);
         if (window.app.getGridState() !== window.GRID_STATE.IDLE) {
-            return false;
+            return;
         }
         if (sortOpt.sortBy === fieldName) {
             sortOpt.sortDir = (sortOpt.sortDir == SORT_ASC) ? SORT_DESC : SORT_ASC;
@@ -259,7 +254,7 @@ var GRID_STATE = {
         }
         $($el).find('i').addClass(getClsForSortDir(sortOpt.sortDir));
         me.fetchData();
-    },
+    };
 
     Page.prototype.showMsg = function(msgType) {
         var me = this;
@@ -278,9 +273,14 @@ var GRID_STATE = {
             $(me.$tableNoDataMsg).show();
             return;
         }
-        if (msgType === BADCONFIG_MSG_TYPE) {
+        if (msgType === NO_COL_SELECTED_MSG_TYPE) {
             me.$table.hide();
             me.$noFieldsMsg.show();
+            return;
+        }
+        if (msgType == BADCONFIG_MSG_TYPE) {
+            me.$table.hide();
+            me.$noAvailableFieldsMsg.show();
             return;
         }
         console.warn('not implemented');
@@ -414,11 +414,11 @@ var GRID_STATE = {
         var fetchParams;
         var baseParams = me.$filterForm.serializeArray();
         baseParams.push(
-            { name: 'customFilter', value: getUrlParameter('customFilter') },
             { name: 'sortBy', value: me.gridSettings.sortOptions.sortBy },
             { name: 'sortDir', value: me.gridSettings.sortOptions.sortDir },
             { name: 'pageIndex', value: me.gridSettings.pageOptions.pageIndex },
             { name: 'recPerPage', value: me.gridSettings.pageOptions.recPerPage });
+
         if (addFetchParam != null && addFetchParam.length > 0) {
             fetchParams = baseParams.concat(addFetchParam);
         } else {
@@ -430,10 +430,10 @@ var GRID_STATE = {
             type: 'POST',
             dataType: 'json',
             data: fetchParams,
-            success: function() {
+            success: function () {
                 me.onGetData.apply(me, arguments);
             },
-            error: function() {
+            error: function () {
                 me.showMsg(ERROR_MSG_TYPE);
                 me.setGridState(window.GRID_STATE.IDLE);
             }

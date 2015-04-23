@@ -50,12 +50,6 @@
                                                   customerId,
                                                   userId)
                                       };
-
-            if (colSettingModel.SelectedColumns.Count() == 0)
-            {
-                colSettingModel.SelectedColumns = colSettingModel.AvailableColumns;
-            }
-
             IList<CaseFieldSetting> userCaseFieldSettings = this.caseFieldSettingService.GetCaseFieldSettings(customerId);
             colSettingModel.CaseFieldSettings = userCaseFieldSettings;
             var li = new List<SelectListItem>

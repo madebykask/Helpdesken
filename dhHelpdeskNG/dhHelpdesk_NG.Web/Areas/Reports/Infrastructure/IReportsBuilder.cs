@@ -2,6 +2,8 @@
 {
     using System;
 
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.CasesInProgressDay;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.ClosedCasesDay;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.RegistratedCasesDay;
 
     public interface IReportsBuilder
@@ -13,5 +15,9 @@
         byte[] GetReportImageFromCache(string objectId, string fileName);
 
         string GetReportPathFromCache(string objectId, string fileName);
+
+        byte[] GetClosedCasesDayReport(ClosedCasesDayData data, DateTime period, ReportTheme theme = null);
+
+        byte[] GetCasesInProgressDayReport(CasesInProgressDayData data, DateTime period, ReportTheme theme = null);
     }
 }

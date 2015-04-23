@@ -384,7 +384,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="span12">
-                            <table id="customerOrder">                                
+                            <table id="customerOrder"  >                                
                                 <tr>
                                     <td>
                                         @Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation)
@@ -395,6 +395,24 @@
                                         <br />
                                         &nbsp;&nbsp;&nbsp;<input type="radio" name="Setting.DontConnectUserToWorkingGroup" @(Model.Setting.DontConnectUserToWorkingGroup == 0 ? "checked='checked'" : "") id="Customer_Setting_DontConnectUserToWorkingGroup2" value="0" />
                                         @Translation.Get("visa endast handläggare i vald driftgrupp", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                </tr>       
+                                <tr>
+                                    <td>
+                                        &nbsp;
+                                    </td>
+                                </tr>                                                       
+                                <tr>
+                                    <td>
+                                       <label> @Translation.Get("Avslutsdatum", Enums.TranslationSource.TextTranslation) </label>
+                                    </td>
+                                    <td>                                            
+                                        &nbsp;
+                                        <input type="checkbox" name="setting.DisableCaseEndDate" @(Model.Setting.DisableCaseEndDate == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="setting.DisableCaseEndDate" value="0" />
+                                        <span>
+                                            @Translation.Get("Avslutsdatum sätt automatiskt till det datum då ärendet stängs (användaren kan inte ändra det)", Enums.TranslationSource.TextTranslation) 
+                                        </span>                                            
                                     </td>
                                 </tr>
                             </table>

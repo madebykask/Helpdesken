@@ -1,5 +1,6 @@
 ﻿@using Microsoft.Ajax.Utilities
 @using DH.Helpdesk.Common.Enums.Cases;
+@using DH.Helpdesk.BusinessData.Enums.Case;
 @model DH.Helpdesk.NewSelfService.Models.Case.UserCasesModel         
 
 <div id="search_result">
@@ -18,11 +19,11 @@
                             {
                                 switch (Model.ProgressId)
                                 {
-                                    case "1":
+                                    case CaseProgressFilter.ClosedCases:
                                         tabTitle = Translation.Get("Finished Service Requests", Enums.TranslationSource.TextTranslation);
                                         break;
 
-                                    case "2":
+                                    case CaseProgressFilter.CasesInProgress:
                                         tabTitle = Translation.Get("Ongoing Service Requests", Enums.TranslationSource.TextTranslation);
                                         break;
                                 }

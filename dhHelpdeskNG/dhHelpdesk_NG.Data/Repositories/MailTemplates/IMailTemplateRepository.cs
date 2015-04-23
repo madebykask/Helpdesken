@@ -6,10 +6,13 @@ namespace DH.Helpdesk.Dal.Repositories.MailTemplates
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain.MailTemplates;
+    using DH.Helpdesk.BusinessData.Models.MailTemplates;
 
     public interface IMailTemplateRepository : IRepository<MailTemplateEntity>
     {
-        IEnumerable<MailTemplateList> GetMailTemplate(int customerId, int languageId);
+        IEnumerable<MailTemplateList> GetMailTemplates(int customerId, int languageId);
+
+        List<CustomMailTemplate> GetCustomMailTemplates(int customerId);
 
         int? GetTemplateId(ChangeTemplate template, int customerId);
 

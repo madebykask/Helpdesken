@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 {
     using System;
+    using System.Linq;
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models.Reports.Enums;
@@ -114,6 +115,30 @@
                     return this.PartialView(
                                 "Options/LeadtimeActiveCases",
                                 this.reportModelFactory.GetLeadtimeActiveCasesOptionsModel(leadtimeActiveCases));
+
+                case ReportType.FinishingCauseCustomer:
+                    var finishingCauseCustomer = this.reportService.GetFinishingCauseCustomerOptions(this.OperationContext.CustomerId);
+                    return this.PartialView(
+                                "Options/FinishingCauseCustomer",
+                                this.reportModelFactory.GetFinishingCauseCustomerOptionsModel(finishingCauseCustomer));
+
+                case ReportType.FinishingCauseCategoryCustomer:
+                    var finishingCauseCategoryCustomer = this.reportService.GetFinishingCauseCategoryCustomerOptions(this.OperationContext.CustomerId);
+                    return this.PartialView(
+                                "Options/FinishingCauseCategoryCustomer",
+                                this.reportModelFactory.GetFinishingCauseCategoryCustomerOptionsModel(finishingCauseCategoryCustomer));
+
+                case ReportType.ClosedCasesDay:
+                    var closedCasesDay = this.reportService.GetClosedCasesDayOptions(this.OperationContext.CustomerId);
+                    return this.PartialView(
+                                "Options/ClosedCasesDay",
+                                this.reportModelFactory.GetClosedCasesDayOptionsModel(closedCasesDay));
+
+                case ReportType.CasesInProgressDay:
+                    var casesInProgressDay = this.reportService.GetCasesInProgressDayOptions(this.OperationContext.CustomerId);
+                    return this.PartialView(
+                                "Options/CasesInProgressDay",
+                                this.reportModelFactory.GetCasesInProgressDayOptionsModel(casesInProgressDay));
             }
 
             return null;
@@ -293,6 +318,87 @@
                                             LowDays);
 
             return this.PartialView("Reports/LeadtimeActiveCases", model);
+        }
+
+        [HttpPost]
+        [BadRequestOnNotValid]
+        public ActionResult GetFinishingCauseCustomerReport(FinishingCauseCustomerOptionsModel options)
+        {
+            var data = this.reportService.GetFinishingCauseCustomerData(
+                                            this.OperationContext.CustomerId,
+                                            options.DepartmentIds,
+                                            options.WorkingGroupId,
+                                            options.CaseTypeId,
+                                            options.AdministratorId,
+                                            options.PeriodFrom,
+                                            options.PeriodUntil);
+
+            var model = this.reportModelFactory.GetFinishingCauseCustomerModel(data, this.OperationContext.CustomerId);
+
+            if (options.IsExcel)
+            {
+                var excel = this.excelBuilder.GetFinishingCauseCustomerExcel(model);
+                return new UnicodeFileContentResult(excel, this.excelBuilder.GetExcelFileName(ReportType.FinishingCauseCustomer));
+            }
+
+            return this.PartialView("Reports/FinishingCauseCustomer", model);
+        }
+
+        [HttpPost]
+        [BadRequestOnNotValid]
+        public PartialViewResult GetFinishingCauseCategoryCustomerReport(FinishingCauseCategoryCustomerOptionsModel options)
+        {
+            var data = this.reportService.GetFinishingCauseCategoryCustomerData(
+                                            this.OperationContext.CustomerId,
+                                            options.DepartmentIds,
+                                            options.WorkingGroupIds,
+                                            options.CaseTypeId,
+                                            options.PeriodFrom,
+                                            options.PeriodUntil);
+
+            var model = this.reportModelFactory.GetFinishingCauseCategoryCustomerModel(data);
+
+            return this.PartialView("Reports/FinishingCauseCategoryCustomer", model);
+        }
+
+        [HttpGet]
+        public UnicodeFileContentResult GetClosedCasesDayReport(
+                                    string departments,
+                                    int? caseType,
+                                    int? workingGroup,
+                                    int? administrator,
+                                    DateTime? period)
+        {
+            var data = this.reportService.GetClosedCasesDayData(
+                                    this.OperationContext.CustomerId,
+                                    departments.GetIntValues().ToList(),
+                                    caseType,
+                                    workingGroup,
+                                    administrator,
+                                    period.RoundToMonthOrGetCurrent());
+
+            var report = this.reportsBuilder.GetClosedCasesDayReport(data, period.RoundToMonthOrGetCurrent());
+
+            return new UnicodeFileContentResult(report, string.Empty);
+        }
+
+        [HttpGet]
+        public UnicodeFileContentResult GetCasesInProgressDayReport(
+                                    int? department,
+                                    int? workingGroup,
+                                    int? administrator,
+                                    DateTime? period)
+        {
+            var data = this.reportService.GetCasesInProgressDayData(
+                                    this.OperationContext.CustomerId,
+                                    department,
+                                    workingGroup,
+                                    administrator,
+                                    period.RoundToMonthOrGetCurrent());
+
+            var report = this.reportsBuilder.GetCasesInProgressDayReport(data, period.RoundToMonthOrGetCurrent());
+
+            return new UnicodeFileContentResult(report, string.Empty);
         }
     }
 }

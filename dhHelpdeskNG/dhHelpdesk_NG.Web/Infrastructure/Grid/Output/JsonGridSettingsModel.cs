@@ -27,6 +27,8 @@
 
         public GridPageOptions pageOptions;
 
+        public bool HasAvailableColumns;
+
         public string cls;
     }
 }

@@ -16,7 +16,7 @@
                 .WithRequired(o => o.Text)
                 .HasForeignKey(o => o.Text_Id).WillCascadeOnDelete(false);
 
-            this.Property(x => x.TextToTranslate).IsRequired().HasMaxLength(50).HasColumnName("TextString");
+            this.Property(x => x.TextToTranslate).IsRequired().HasMaxLength(2000).HasColumnName("TextString");
             this.Property(x => x.Type).IsRequired().HasColumnName("TextType");
             this.Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
