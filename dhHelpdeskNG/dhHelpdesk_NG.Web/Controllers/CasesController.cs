@@ -1610,11 +1610,15 @@ namespace DH.Helpdesk.Web.Controllers
                     string relatedCasesUserId = null,
                     int[] caseIds = null)
         {
-            var searchResult = new CaseSearchResultModel();
-            searchResult.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(
-                                    SessionFacade.CurrentCustomer.Id,
-                                    SessionFacade.CurrentUser.Id,
-                                    SessionFacade.CurrentUser.UserGroupId);
+            var searchResult = new CaseSearchResultModel
+            {
+                GridSettings =
+                    this.caseOverviewSettingsService.GetSettings(
+                        SessionFacade.CurrentCustomer.Id,
+                        SessionFacade.CurrentUser.UserGroupId,
+                        SessionFacade.CurrentUser.Id),
+                 caseSettings = this._caseSettingService.GetCaseSettingsWithUser(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId)
+            };
             var search = this.GetEmptySearchModel(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser.Id);
             search.Search.SortBy = sortBy ?? string.Empty;
             search.Search.Ascending = sortByAsc.convertStringToBool();
@@ -1643,10 +1647,6 @@ namespace DH.Helpdesk.Web.Controllers
                 caseIds);
 
             searchResult.cases = this.TreeTranslate(searchResult.cases, SessionFacade.CurrentCustomer.Id);
-            searchResult.GridSettings = this.caseOverviewSettingsService.GetSettings(
-                SessionFacade.CurrentCustomer.Id,
-                SessionFacade.CurrentUser.UserGroupId,
-                SessionFacade.CurrentUser.Id);
             search.Search.IdsForLastSearch = this.GetIdsFromSearchResult(searchResult.cases);
             searchResult.BackUrl = Url.Action("RelatedCasesFull", "Cases", new { area = string.Empty, caseId = relatedCasesCaseId, userId = relatedCasesUserId });
 

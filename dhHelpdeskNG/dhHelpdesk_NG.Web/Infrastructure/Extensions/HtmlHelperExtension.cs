@@ -1125,22 +1125,5 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
         }
 
         #endregion
-
-        #region CaseOverview class settings
-
-        public static string GetFieldCls(
-            this HtmlHelper helper,
-            string fieldName,
-            IEnumerable<CaseOverviewGridColumnSetting> columnsSettings)
-        {
-            var style = columnsSettings.FirstOrDefault(it => it.Name == fieldName);
-            if (style != null)
-            {
-                return style.Style;
-            }
-            return null;
-        }
-
-        #endregion
     }
 }
