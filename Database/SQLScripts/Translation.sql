@@ -3252,19 +3252,28 @@ If not exists (select * from tblTextTranslation where text_id = 1380 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1380, 2, 'Please select at least one column to display the case overview!')
 GO
 
-If not exists (select * from tbltext where id = 1381)
-	insert into tbltext (id, TextString) VALUES (1381, 'Kolumn "{0}" har redan valts att visas i ?rende?versikten')
-GO
-If not exists (select * from tblTextTranslation where text_id = 1381 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1381, 2, 'Column "{0}" has already been selected to display in the case overview')
-GO
-
 -- 20150422
 UPDATE tblText Set TextString = '(Du kan endast välja storleken bred på högst 3 kolumner).' WHERE Id=1339;
 GO
 
 UPDATE tblTextTranslation Set TextTranslation = '(You can only select the size wide on a maximum of 3 columns).' WHERE Text_Id=1339 AND Language_Id=2;
 GO
+
+-- 20140423
+If not exists (select * from tbltext where id = 1381)
+	insert into tbltext (id, TextString) VALUES (1381, 'Kolumn "{0}" har redan valts att visas i ärendeöversikten')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1381 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1381, 2, 'Column "{0}" has already been selected to display in the case overview')
+GO
+If not exists (select * from tbltext where id = 1382)
+	insert into tbltext (id, TextString) VALUES (1382, '<b>Bred</b> kan väljas på högst 3 kolumner!')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1382 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1382, 2, '<b>Wide</b> can be selected on maximum 3 columns!')
+GO
+UPDATE tblText Set TextString = 'Inga standardkolumner har valts för din användare på denna kund, för att visa kolumner, klicka på fliken Inställningar och gå till Filter Ärendeöversikt' WHERE Id=1370;
+
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
