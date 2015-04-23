@@ -9,8 +9,6 @@
         <div class="row" id="hiddeninfo" style="display:none">
                 <div data-field="caseRemainingTimeShowPlace" style="float: right;"></div>
                 <div class="span12">
-@*                    do not remove this submit: http://tjvantoll.com/2013/01/01/enter-should-submit-forms-stop-messing-with-that/ *@
-                    <input type="submit" class="submit btn" style="display: none" />
                     <table class="tableform">
                         <tr>
                             <td class="span3">
@@ -114,7 +112,7 @@
                                 <td>
                                     <div id="divCaseType" class="btn-group">
                                         <div class="btn" id="divBreadcrumbs_CaseType">@Model.caseSearchFilter.ParantPath_CaseType</div>
-                                        <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
                                             <span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu">
@@ -136,7 +134,7 @@
                                 <td>
                                     <div id="divProductArea" class="btn-group pull-left">
                                         <div id="divBreadcrumbs_ProductArea" class="btn">@Model.caseSearchFilter.ParantPath_ProductArea</div>
-                                        <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
                                             <span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu">
@@ -327,7 +325,7 @@
                                 <td>
                                     <div id="divClosingReason" class="btn-group pull-left">
                                         <div id="divBreadcrumbs_ClosingReason" class="btn">@Model.caseSearchFilter.ParentPathClosingReason</div>
-                                        <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
                                             <span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu">

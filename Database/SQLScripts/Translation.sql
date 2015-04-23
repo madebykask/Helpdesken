@@ -3252,11 +3252,12 @@ If not exists (select * from tblTextTranslation where text_id = 1380 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1380, 2, 'Please select at least one column to display the case overview!')
 GO
 
-
--- Talk to Sacha
---If not exists (select * from tblTextTranslation where text_id = 1380 and Language_Id = 2)
-	--insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1380, 2, 'Column "{0}" has already been selected to display in the case overview')
---GO
+If not exists (select * from tbltext where id = 1381)
+	insert into tbltext (id, TextString) VALUES (1381, 'Kolumn "{0}" har redan valts att visas i ?rende?versikten')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1381 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1381, 2, 'Column "{0}" has already been selected to display in the case overview')
+GO
 
 -- 20150422
 UPDATE tblText Set TextString = '(Du kan endast välja storleken bred på högst 3 kolumner).' WHERE Id=1339;
