@@ -31,7 +31,8 @@ namespace DH.Helpdesk.Web.Infrastructure.Print
 
         static PrintPdfView()
         {
-            var fontpath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "ARIALUNI.TTF");
+//            var fontpath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "ARIALUNI.TTF");
+            var fontpath = AppDomain.CurrentDomain.BaseDirectory + "\\Content\\fonts\\ARIALUNI.TTF";
             if (!FontFactory.IsRegistered("ARIALUNI"))
             {
                 FontFactory.Register(fontpath);
