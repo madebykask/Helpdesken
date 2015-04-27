@@ -21,6 +21,26 @@
                 <ul class="secnav">                
                     @if (Model.EditMode == Enums.AccessMode.FullAccess)
                     {
+                        <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "deletelog", new { id = @Model.CaseLog.Id, caseId = @Model.case_.Id }, 
+                        new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post",                                                                                                 
+                              Enums.TranslationSource.TextTranslation) + "?" })</li>
+                    }                    
+                    <li>@Html.ActionLink(Translation.Get("Stäng", Enums.TranslationSource.TextTranslation), "edit", "cases", new { Id = @Model.case_.Id }, new { @class = "btn"})</li>
+                </ul>
+            </div>
+        </div>
+        <div class="content">
+            <div class="container">
+                <ul class="nav nav-tabs" id="myTab">
+                    <li class="active"><a href="#fragment-1">@Translation.Get("Logg", Enums.TranslationSource.TextTranslation)</a></li>
+                </ul>    
+                <div class="tab-content">
+                    <div class="tab-pane tab-pane-border active" id="logtab">
+                            @Html.Partial("_CaseLogInput", Model) 
+                    </div>
+                </div>
+            </div>
+        </div>
                         <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "deletelog", new { id = @Model.CaseLog.Id, caseId = @Model.case_.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post?", Enums.TranslationSource.TextTranslation) })</li>
                     }                    
                     <li>@Html.ActionLink(Translation.Get("Stäng", Enums.TranslationSource.TextTranslation), "edit", "cases", new { Id = @Model.case_.Id }, new { @class = "btn"})</li>
