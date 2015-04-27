@@ -15,7 +15,7 @@
     <AssemblyName>DH.Helpdesk.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <SccProjectName>
     </SccProjectName>
     <SccLocalPath>
@@ -31,9 +31,12 @@
     <OldToolsVersion>4.0</OldToolsVersion>
     <IISExpressSSLPort>
     </IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
-    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
+    <IISExpressAnonymousAuthentication>
+    </IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>
+    </IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode>
+    </IISExpressUseClassicPipelineMode>
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
     <DontImportPostSharp>True</DontImportPostSharp>
     <TargetFrameworkProfile />
@@ -1600,6 +1603,7 @@
     <Compile Include="Infrastructure\Attributes\CustomHandleErrorAttribute.cs" />
     <Compile Include="Infrastructure\Attributes\CurrentTabAttribute.cs" />
     <Compile Include="Infrastructure\Attributes\SessionRequiredAttribute.cs" />
+    <Compile Include="Infrastructure\Attributes\UserCasePermissionsAttribute.cs" />
     <Compile Include="Infrastructure\Attributes\UserPermissionsAttribute.cs" />
     <Compile Include="Infrastructure\Binders\BinderHelper.cs" />
     <Compile Include="Infrastructure\Binders\DateTimeBinder.cs" />

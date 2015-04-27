@@ -32,6 +32,7 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Grid;
     using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Web.Infrastructure.Attributes;
     using DH.Helpdesk.Web.Infrastructure.CaseOverview;
     using DH.Helpdesk.Web.Infrastructure.Configuration;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
@@ -794,6 +795,7 @@ namespace DH.Helpdesk.Web.Controllers
             return this.RedirectToAction("new", "cases", new { customerId = case_.Customer_Id });
         }
 
+//        [UserCasePermissions]
         public ActionResult Edit(int id, string redirectFrom = "", int? moveToCustomerId = null, bool? uni = null, bool updateState = true, string backUrl = null)
         {
             CaseInputViewModel m = null;

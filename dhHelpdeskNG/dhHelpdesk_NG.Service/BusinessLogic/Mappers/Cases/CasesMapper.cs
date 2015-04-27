@@ -38,6 +38,19 @@
                                             GetCaseIcon(c.FinishingDate, c.ApprovedDate, c.RequireApproving))).ToList();
         }
 
+        public static List<int> MapToUserCaseIds(
+                                IQueryable<Case> cases)
+        {
+            var entities = (from c in cases
+                            select new
+                            {
+                                c.Id
+                            })
+                            .ToList();
+
+            return entities.Select(c => c.Id).ToList();
+        } 
+
         private static GlobalEnums.CaseIcon GetCaseIcon(
                                             DateTime? finishingDate,
                                             DateTime? approvedDate,
