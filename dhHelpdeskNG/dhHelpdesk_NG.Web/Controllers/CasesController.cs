@@ -795,7 +795,7 @@ namespace DH.Helpdesk.Web.Controllers
             return this.RedirectToAction("new", "cases", new { customerId = case_.Customer_Id });
         }
 
-//        [UserCasePermissions]
+        [UserCasePermissions]
         public ActionResult Edit(int id, string redirectFrom = "", int? moveToCustomerId = null, bool? uni = null, bool updateState = true, string backUrl = null)
         {
             CaseInputViewModel m = null;

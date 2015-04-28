@@ -193,6 +193,38 @@
             return query;
         }
 
+        public static IQueryable<Case> GetByResponsibleUser(this IQueryable<Case> query, int? responsibleUserId)
+        {
+            if (!responsibleUserId.HasValue)
+            {
+                return query;
+            }
+
+            query = query.Where(c => c.CaseResponsibleUser_Id == responsibleUserId);
+
+            return query;
+        }
+
+        public static IQueryable<Case> GetByAdministratorOrResponsibleUser(
+                                this IQueryable<Case> query, 
+                                int administratorId,
+                                int responsibleUserId)
+        {
+            query = query.Where(c => c.Performer_User_Id == administratorId || c.CaseResponsibleUser_Id == responsibleUserId);
+
+            return query;
+        }
+
+        public static IQueryable<Case> GetByReportedByOrUserId(
+                                this IQueryable<Case> query, 
+                                string reportedBy,
+                                int userId)
+        {
+            query = query.Where(c => c.ReportedBy.Trim().ToLower() == reportedBy.Trim().ToLower() || c.CaseResponsibleUser_Id == userId);
+
+            return query;
+        }
+
         public static IQueryable<Case> GetByProductArea(this IQueryable<Case> query, int? productAreaId)
         {
             if (!productAreaId.HasValue)

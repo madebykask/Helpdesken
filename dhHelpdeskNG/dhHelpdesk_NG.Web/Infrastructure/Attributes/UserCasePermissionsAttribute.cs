@@ -5,8 +5,12 @@
     using System.Web.Mvc;
     using System.Web.Routing;
 
+    using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Cases;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications.Case;
     using DH.Helpdesk.Services.Infrastructure;
 
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
@@ -31,11 +35,40 @@
             {
                 var caseId = httpContext.Request.RequestContext.RouteData.Values["id"] ?? httpContext.Request.Params["id"];
 
+                var customer = SessionFacade.CurrentCustomer;
+
                 var caseRep = uow.GetRepository<Case>();
+                var userDepartmentRep = uow.GetRepository<DepartmentUser>();
+                var userRep = uow.GetRepository<User>();
+                var customerRep = uow.GetRepository<Customer>();
+                var customerUserRep = uow.GetRepository<CustomerUser>();
 
-                var cases = caseRep.GetAll();                
+                var cases = caseRep.GetAll().GetNotDeleted();
+                var userDepartments = userDepartmentRep.GetAll();
+                var users = userRep.GetAll().GetById(user.Id);
+                var customers = customerRep.GetAll().GetById(customer.Id);
+                var customerUsers = customerUserRep.GetAll();
 
-                return true;
+                if (user.RestrictedCasePermission.ToBool())
+                {
+                    switch (user.UserGroupId)
+                    {
+                        case (int)BusinessData.Enums.Admin.Users.UserGroup.Administrator:
+                            cases = cases.GetByAdministratorOrResponsibleUser(user.Id, user.Id);
+                            break;
+                        case (int)BusinessData.Enums.Admin.Users.UserGroup.User:
+                            cases = cases.GetByReportedByOrUserId(user.UserId, user.Id);
+                            break;
+                    }
+                }
+
+                return CasesMapper.MapToUserCaseIds(
+                            cases, 
+                            userDepartments, 
+                            users, 
+                            customers,
+                            customerUsers)
+                            .Contains(int.Parse((string)caseId));
             }
         }
 
