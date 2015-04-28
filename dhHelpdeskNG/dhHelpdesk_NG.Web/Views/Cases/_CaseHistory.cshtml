@@ -28,16 +28,16 @@
                             <td style="width:15%">
                                 @Html.DisplayFor(m => current.CreatedDate, "DateAndTime") 
                             </td>
-                            <td style="width:12%">
+                            <td style="width:15%">
                                 @current.CreatedByUser
                             </td>
-                            <td style="width:40%">
+                            <td style="width:45%">
                                 <table class="tableintable">
                                     @current.GetCaseHistoryInfo(previous, Model.case_.Customer_Id, Model.DepartmentFilterFormat, Model.caseFieldSettings)
                                 </table>
                             </td>
-                            <td style="width:33%">
-                                @if (current.Emaillogs != null)
+                            <td style="width:25%">
+                                @if (current.Emaillogs != null) 
                                 {
                                     <div>
                                         @foreach (var l in current.Emaillogs)

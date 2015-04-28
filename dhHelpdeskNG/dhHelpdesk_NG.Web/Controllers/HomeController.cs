@@ -162,7 +162,7 @@
             }
 
             var customersSettings = this.userService.GetUserCustomersSettings(SessionFacade.CurrentUser.Id);
-            var currentCustomerSettings = customersSettings.First(s => s.CustomerId == this.workContext.Customer.CustomerId);
+            var currentCustomerSettings = customersSettings.FirstOrDefault(s => s.CustomerId == this.workContext.Customer.CustomerId);            
             foreach (var module in modules)
             {
                 if (!module.isVisible)
@@ -214,7 +214,7 @@
                         break;
                     case Module.ChangeManagement:
                         var customerChanges = this.changeService.GetCustomerChanges(customersIds, SessionFacade.CurrentUser.Id);
-                        var showIcon = currentCustomerSettings.IsModuleOn(Module.ChangeManagement);
+                        var showIcon = (currentCustomerSettings != null) && currentCustomerSettings.IsModuleOn(Module.ChangeManagement);
                         model.CustomerChanges = this.modulesInfoFactory.GetCustomerChangesModel(customerChanges, showIcon);
                         break;
                     case Module.Cases:

@@ -62,7 +62,10 @@ $(function () {
         faqPermission: 'faqPermission',
         calendarPermission: 'calendarPermission',
         createOrderPermission: 'createOrderPermission',
-        administerOrderPermission: 'administerOrderPermission'
+        administerOrderPermission: 'administerOrderPermission',
+        dailyReportPermission: 'dailyReportPermission',
+        bulletinBoardPermission: 'bulletinBoardPermission',
+        invoicePermission: 'invoicePermission'
     }
 
     dhHelpdesk.admin.users.object = function (spec, my) {
@@ -140,7 +143,10 @@ $(function () {
         var reportsPermissions = spec.reportsPermissions || [];
         var faqPermissions = spec.faqPermissions || [];
         var calendarPermissions = spec.calendarPermissions || [];
-        var orderPermissions = spec.orderPermissions || [];        
+        var orderPermissions = spec.orderPermissions || [];
+        var dailyReportPermissions = spec.dailyReportPermissions || [];
+        var bulletinBoardPermissions = spec.bulletinBoardPermissions || [];
+        var invoicePermissions = spec.invoicePermissions || [];
 
         var walkPermissions = function (walk) {
             var allPermissions = [
@@ -149,7 +155,10 @@ $(function () {
                             reportsPermissions,
                             faqPermissions,
                             calendarPermissions,
-                            orderPermissions];
+                            orderPermissions,
+                            dailyReportPermissions,
+                            bulletinBoardPermissions,
+                            invoicePermissions];
 
             for (var i = 0; i < allPermissions.length; i++) {
                 var permissions = allPermissions[i];
@@ -269,6 +278,18 @@ $(function () {
             return orderPermissions;
         }
 
+        var getDailyReportPermissions = function () {
+            return dailyReportPermissions;
+        }
+
+        var getBulletinBoardPermissions = function () {
+            return bulletinBoardPermissions;
+        }
+
+        var getInvoicePermissions = function () {
+            return invoicePermissions;
+        }
+
         that.getUserGroup = getUserGroup;
         that.setUserGroup = setUserGroup;
         that.getCasePermissions = getCasePermissions;
@@ -277,6 +298,9 @@ $(function () {
         that.getFaqPermissions = getFaqPermissions;
         that.getCalendarPermissions = getCalendarPermissions;
         that.getOrderPermissions = getOrderPermissions;
+        that.getDailyReportPermissions = getDailyReportPermissions;
+        that.getBulletinBoardPermissions = getBulletinBoardPermissions;
+        that.getInvoicePermissions = getInvoicePermissions;
 
         var uge = my.element.find('[data-field="userGroup"]');
         var onChangeUserGroup = function (setPermissions) {
@@ -440,17 +464,31 @@ $(function () {
         casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="restrictedCasePermission"]'), type: dhHelpdesk.admin.users.permissionType.restrictedCasePermission }));
         casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="followUpPermission"]'), type: dhHelpdesk.admin.users.permissionType.followUpPermission }));
         casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="dataSecurityPermission"]'), type: dhHelpdesk.admin.users.permissionType.dataSecurityPermission }));
+
         var caseTemplatePermissions = [];
         caseTemplatePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="caseSolutionPermission"]'), type: dhHelpdesk.admin.users.permissionType.caseSolutionPermission }));
+
         var reportsPermissions = [];
         reportsPermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="reportPermission"]'), type: dhHelpdesk.admin.users.permissionType.reportPermission }));
+
         var faqPermissions = [];
         faqPermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="faqPermission"]'), type: dhHelpdesk.admin.users.permissionType.faqPermission }));
+
         var calendarPermissions = [];
         calendarPermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="calendarPermission"]'), type: dhHelpdesk.admin.users.permissionType.calendarPermission }));
+
         var orderPermissions = [];
         orderPermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="createOrderPermission"]'), type: dhHelpdesk.admin.users.permissionType.createOrderPermission }));
         orderPermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="administerOrderPermission"]'), type: dhHelpdesk.admin.users.permissionType.administerOrderPermission }));
+
+        var dailyReportPermissions = [];
+        dailyReportPermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="dailyReportPermission"]'), type: dhHelpdesk.admin.users.permissionType.dailyReportPermission }));
+
+        var bulletinBoardPermissions = [];
+        bulletinBoardPermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="bulletinBoardPermission"]'), type: dhHelpdesk.admin.users.permissionType.bulletinBoardPermission }));
+
+        var invoicePermissions = [];
+        invoicePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="invoicePermission"]'), type: dhHelpdesk.admin.users.permissionType.invoicePermission }));
 
         var security = dhHelpdesk.admin.users.security({
             element: $('[data-user="security"]'),
@@ -459,7 +497,10 @@ $(function () {
             reportsPermissions: reportsPermissions,
             faqPermissions: faqPermissions,
             calendarPermissions: calendarPermissions,
-            orderPermissions: orderPermissions
+            orderPermissions: orderPermissions,
+            dailyReportPermissions: dailyReportPermissions,
+            bulletinBoardPermissions: bulletinBoardPermissions,
+            invoicePermissions: invoicePermissions
         });
 
         var wGs = [];

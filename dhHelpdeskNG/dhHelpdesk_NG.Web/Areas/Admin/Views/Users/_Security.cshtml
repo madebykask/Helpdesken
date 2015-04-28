@@ -269,7 +269,7 @@
                 @Translation.Get("Dagrapport", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
-                <input type="checkbox" name="User.DailyReportReminder" @(Model.User.DailyReportReminder == 1 ? "checked=checked" : "") value="1"/>
+                <input data-field="dailyReportPermission" type="checkbox" name="User.DailyReportReminder" @(Model.User.DailyReportReminder == 1 ? "checked=checked" : "") value="1"/>
                 <input type="hidden" name="User.DailyReportReminder" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Påminn användaren att skriva dagrapport när ärenden avslutas", Enums.TranslationSource.TextTranslation)
             </td>
@@ -279,7 +279,7 @@
                 @Translation.Get("Anslagstavla", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
-                <input type="checkbox" name="User.BulletinBoardPermission" @(Model.User.BulletinBoardPermission == 1 ? "checked=checked" : "") value="1"/>
+                <input data-field="bulletinBoardPermission" type="checkbox" name="User.BulletinBoardPermission" @(Model.User.BulletinBoardPermission == 1 ? "checked=checked" : "") value="1"/>
                 <input type="hidden" name="User.BulletinBoardPermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren har rättighet att administrera anslagstavlan", Enums.TranslationSource.TextTranslation)
             </td>
@@ -289,7 +289,7 @@
                 @Translation.Get("Fakturering", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
-                <input type="checkbox" name="User.InvoicePermission" @(Model.User.InvoicePermission == 1 ? "checked=checked" : "") value="1"/>
+                <input data-field="invoicePermission" type="checkbox" name="User.InvoicePermission" @(Model.User.InvoicePermission == 1 ? "checked=checked" : "") value="1"/>
                 <input type="hidden" name="User.InvoicePermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren har rättighet till fakturering", Enums.TranslationSource.TextTranslation)
             </td>
