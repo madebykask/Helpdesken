@@ -107,6 +107,7 @@
         private readonly ISettingService _settingService;
         private readonly IFilesStorage _filesStorage;
         private readonly ILogRepository _logRepository;
+        private readonly ILogService _logService;
         private readonly ILogFileRepository _logFileRepository;
         private readonly IFormFieldValueRepository _formFieldValueRepository;
 
@@ -116,6 +117,7 @@
 
         private readonly IUnitOfWorkFactory unitOfWorkFactory;
         private ISurveyService surveyService;
+        private readonly IFinishingCauseService _finishingCauseService;
 
         public CaseService(
             ICaseRepository caseRepository,
@@ -140,7 +142,9 @@
             ICaseMailer caseMailer, 
             IInvoiceArticleService invoiceArticleService, 
             IUnitOfWorkFactory unitOfWorkFactory,
-            ISurveyService surveyService)
+            ISurveyService surveyService,
+            ILogService logService,
+            IFinishingCauseService finishingCauseService)
         {
             this._unitOfWork = unitOfWork;
             this._caseRepository = caseRepository;
@@ -166,6 +170,8 @@
             this._logFileRepository = logFileRepository;
             this._formFieldValueRepository = formFieldValueRepository;
             this.surveyService = surveyService;
+            this._logService = logService;
+            this._finishingCauseService = finishingCauseService;
         }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
@@ -553,11 +559,21 @@
             if (errors.Count == 0)
                 this._caseRepository.Commit();
 
+
             // save casehistory
+
+            // FinishingCause = FinishingType = ClosingReason 
+            var extraFields = new ExtraFieldCaseHistory();
+            if (caseLog.FinishingType != null)
+            {
+                var fc = _finishingCauseService.GetFinishingTypeName(caseLog.FinishingType.Value);                                                     
+                extraFields.ClosingReason = fc ;
+            }
+
             if (userId == 0)
-                ret = this.SaveCaseHistory(c, userId, adUser, out errors, adUser);    
+                ret = this.SaveCaseHistory(c, userId, adUser, out errors, adUser, extraFields);    
             else            
-                ret = this.SaveCaseHistory(c, userId, adUser, out errors);
+                ret = this.SaveCaseHistory(c, userId, adUser, out errors, "", extraFields);
 
             if (invoices != null)
             {
@@ -1049,12 +1065,13 @@
             h.WorkingGroup_Id = c.WorkingGroup_Id;
             h.CausingPartId = c.CausingPartId;
             h.DefaultOwnerWG_Id = c.DefaultOwnerWG_Id;
-
+            
             if (extraField != null)
             {
                 h.CaseFile = extraField.CaseFile;
                 h.LogFile  = extraField.LogFile;
                 h.CaseLog  = extraField.CaseLog;
+                h.ClosingReason = extraField.ClosingReason;
             }
 
             return h;

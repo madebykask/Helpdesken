@@ -5,5 +5,12 @@
 UPDATE tblCaseSettings SET tblCaseName = Replace(tblCaseName, 'tblUsers.FirstName', 'Performer_User_Id')
 
 
+IF COL_LENGTH('dbo.tblcasehistory','ClosingReason') IS NULL
+BEGIN	 
+	ALTER TABLE [dbo].[tblcasehistory]
+	ADD [ClosingReason] nvarchar(50) NULL 
+END
+GO 
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.7'

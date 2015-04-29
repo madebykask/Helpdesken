@@ -83,6 +83,7 @@
         public string CaseFile { get; set; }
         public string LogFile { get; set; }
         public string CaseLog { get; set; }
+        public string ClosingReason { get; set; }
 
         public virtual Case Case { get; set; }
         public virtual Category Category { get; set; }

@@ -115,6 +115,7 @@
             this.Property(x => x.CaseFile).IsOptional();
             this.Property(x => x.LogFile).IsOptional();
             this.Property(x => x.CaseLog).IsOptional();
+            this.Property(x => x.ClosingReason).IsOptional();
             
             this.ToTable("tblcasehistory");
         }
