@@ -11,7 +11,8 @@
             FieldOverviewSetting owners,
             FieldOverviewSetting affectedProcesses,
             FieldOverviewSetting workingGroups,
-            FieldOverviewSetting administrators)
+            FieldOverviewSetting administrators,
+            FieldOverviewSetting responsibles)
         {
             this.Statuses = statuses;
             this.Objects = objects;
@@ -19,6 +20,7 @@
             this.AffectedProcesses = affectedProcesses;
             this.WorkingGroups = workingGroups;
             this.Administrators = administrators;
+            this.Responsibles = responsibles;
         }
 
         [NotNull]
@@ -38,5 +40,8 @@
 
         [NotNull]
         public FieldOverviewSetting Administrators { get; private set; }
+
+        [NotNull]
+        public FieldOverviewSetting Responsibles { get; private set; }
     }
 }

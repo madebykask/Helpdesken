@@ -20,6 +20,7 @@
             this.AffectedProcessIds = new List<int>();
             this.WorkingGroupIds = new List<int>();
             this.AdministratorIds = new List<int>();
+            this.ResponsibleIds = new List<int>();            
         }
 
         public SearchModel(
@@ -29,6 +30,7 @@
             ConfigurableSearchFieldModel<MultiSelectList> affectedProcesses,
             ConfigurableSearchFieldModel<MultiSelectList> workingGroups,
             ConfigurableSearchFieldModel<MultiSelectList> administrators,
+            ConfigurableSearchFieldModel<MultiSelectList> responsibles,
             string pharse,
             SelectList status,
             int recordsOnPage,
@@ -40,6 +42,7 @@
             this.AffectedProcesses = affectedProcesses;
             this.WorkingGroups = workingGroups;
             this.Administrators = administrators;
+            this.Responsibles = responsibles;
             this.Pharse = pharse;
             this.Status = status;
             this.RecordsOnPage = recordsOnPage;
@@ -82,6 +85,12 @@
         [NotNull]
         public List<int> AdministratorIds { get; set; }
 
+        [NotNull]
+        public ConfigurableSearchFieldModel<MultiSelectList> Responsibles { get; set; }
+
+        [NotNull]
+        public List<int> ResponsibleIds { get; set; }
+
         [LocalizedDisplay("Phrase")]
         public string Pharse { get; set; }
 
@@ -113,6 +122,7 @@
                 this.AffectedProcessIds,
                 this.WorkingGroupIds,
                 this.AdministratorIds,
+                this.ResponsibleIds,
                 this.Pharse,
                 this.StatusValue,
                 this.RecordsOnPage,

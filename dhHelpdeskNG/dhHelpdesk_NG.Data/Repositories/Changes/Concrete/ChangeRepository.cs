@@ -197,11 +197,17 @@
                 searchRequest = searchRequest.Where(c => parameters.AdministratorIds.Any(i => i == c.User_Id));
             }
 
+            if (parameters.ResponsibleIds.Any())
+            {
+                searchRequest = searchRequest.Where(c => parameters.ResponsibleIds.Any(i => i == c.ResponsibleUser_Id));
+            }
+
             if (!string.IsNullOrEmpty(parameters.Pharse))
             {
                 var pharse = parameters.Pharse != null ? parameters.Pharse.Trim() : parameters.Pharse;
 
                 var administrators = this.userRepository.FindUsersByName(pharse).Select(u => u.Id);
+                var responsibles = this.userRepository.FindUsersByName(pharse).Select(u => u.Id);
                 var contacts = this.changeContactRepository.FindChangeContacts(pharse).Select(c => c.ChangeId);
                 var affectedProcesses = this.changeChangeGroupRepository.FindByName(pharse).Select(cg => cg.Change_Id);
                 var affectedDepartments = this.changeDepartmentRepository.FingByName(pharse).Select(d => d.Change_Id);
@@ -223,6 +229,7 @@
                         || c.InventoryNumber.Contains(pharse)
                         || (c.WorkingGroup != null && c.WorkingGroup.WorkingGroupName.ToLower().Contains(pharse))
                         || (c.User_Id.HasValue && administrators.Contains(c.User_Id.Value))
+                        || (c.ResponsibleUser_Id.HasValue && responsibles.Contains(c.ResponsibleUser_Id.Value))
                         || contacts.Contains(c.Id)
                         || affectedProcesses.Contains(c.Id)
                         || affectedDepartments.Contains(c.Id)

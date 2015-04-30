@@ -15,7 +15,7 @@
     <AssemblyName>DH.Helpdesk.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <SccProjectName>
     </SccProjectName>
     <SccLocalPath>
@@ -31,12 +31,9 @@
     <OldToolsVersion>4.0</OldToolsVersion>
     <IISExpressSSLPort>
     </IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>
-    </IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>
-    </IISExpressWindowsAuthentication>
-    <IISExpressUseClassicPipelineMode>
-    </IISExpressUseClassicPipelineMode>
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
     <DontImportPostSharp>True</DontImportPostSharp>
     <TargetFrameworkProfile />
@@ -1587,6 +1584,7 @@
     <Compile Include="Areas\Inventory\Controllers\WorkstationController.cs" />
     <Compile Include="Enums\Changes\ChangeDeletedItem.cs" />
     <Compile Include="Enums\Changes\ClickedButton.cs" />
+    <Compile Include="Enums\Changes\FilterType.cs" />
     <Compile Include="Enums\Changes\TabName.cs" />
     <Compile Include="Enums\ColumnStyle.cs" />
     <Compile Include="Enums\Inventory\InventoryFilterMode.cs" />

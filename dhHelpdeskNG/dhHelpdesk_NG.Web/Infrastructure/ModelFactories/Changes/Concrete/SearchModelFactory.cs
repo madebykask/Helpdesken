@@ -47,6 +47,11 @@
                 response.SearchOptions.Administrators,
                 filter.AdministratorIds);
 
+            var responsibles = CreateMultiSelectField(
+                response.OverviewSettings.Responsibles,
+                response.SearchOptions.Responsibles,
+                filter.ResponsibleIds);
+
             var show = CreateShowSelectList(filter.Status);
 
             SortFieldModel sortField = null;
@@ -62,7 +67,8 @@
                 owners,
                 affectedProcesses,
                 workingGroups,
-                administrators,
+                administrators,                
+                responsibles,
                 filter.Pharse,
                 show,
                 filter.RecordsOnPage,
