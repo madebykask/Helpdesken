@@ -825,8 +825,16 @@
 
             var sb = new StringBuilder();
 
-            // kund 
-            sb.Append(" where (tblCase.Customer_Id = " + f.CustomerId + ")");
+            if (f.AdvancedSearch != null && f.AdvancedSearch.CustomerIds.Any())
+            {
+                sb.AppendFormat(" WHERE ([tblCase].[Customer_Id] IN ({0})) ", string.Join(",", f.AdvancedSearch.CustomerIds));
+            }
+            else
+            {
+                // kund 
+                sb.Append(" where (tblCase.Customer_Id = " + f.CustomerId + ")");
+                sb.Append(" and (tblCase.Deleted = 0)");
+            }
 
             if (caseIds != null && caseIds.Any())
             {
@@ -855,7 +863,6 @@
                 return sb.ToString();
             }
 
-            sb.Append(" and (tblCase.Deleted = 0)");
             sb.Append(" and (tblCustomerUser.[User_Id] = " + f.UserId + ")");
 
             // användaren får bara se avdelningar som den har behörighet till

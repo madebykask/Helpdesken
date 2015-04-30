@@ -49,5 +49,7 @@
         /// Preset string in "filter by intitator" filter field on case overview page
         /// </summary>
         public string CaseInitiatorFilter { get; set; }
+
+        public CaseAdvancedSearchParams AdvancedSearch { get; set; }
     }    
 }

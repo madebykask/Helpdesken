@@ -238,13 +238,23 @@ namespace DH.Helpdesk.Web.Controllers
 
         #region Public Methods and Operators
 
+        public ActionResult AdvancedSearch()
+        {
+            var customers = this._userService.GetUserProfileCustomersSettings(SessionFacade.CurrentUser.Id);
+            var advancedSearch = new CaseAdvancedSearchParams(customers.Select(c => c.CustomerId).ToList());
+
+            return this.Index(null, null, CasesCustomFilter.None, null, null, null, advancedSearch);
+        }
+
+
         public ActionResult Index(
             int? customerId, 
             bool? clearFilters = false, 
             CasesCustomFilter customFilter = CasesCustomFilter.None, 
             bool? DefaultSearch = false,
             bool? useMyCases = false,
-            bool? resetSearchForm = false)
+            bool? resetSearchForm = false,
+            CaseAdvancedSearchParams advancedSearch = null)
         {                        
             if (SessionFacade.CurrentUser == null)
             {
@@ -380,7 +390,7 @@ namespace DH.Helpdesk.Web.Controllers
                 }
             }
             
-            m.CaseSearchFilterData = this.CreateCaseSearchFilterData(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser.Id, customerUser, caseSearchModel);
+            m.CaseSearchFilterData = this.CreateCaseSearchFilterData(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser.Id, customerUser, caseSearchModel, advancedSearch);
             m.CaseTemplateTreeButton = this.GetCaseTemplateTreeModel(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser.Id);
             m.CaseSetting = this.GetCaseSettingModel(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser.Id);
             m.GridSettings = JsonGridSettingsMapper.ToJsonGridSettingsModel(
@@ -414,6 +424,7 @@ namespace DH.Helpdesk.Web.Controllers
                         SessionFacade.CurrentUser.Id)
             };
 
+            f.AdvancedSearch = new CaseAdvancedSearchParams(frm.ReturnFormValue("AdvancedSearch").ToIntList());            
             f.CustomerId = SessionFacade.CurrentCustomer.Id;
             f.UserId = SessionFacade.CurrentUser.Id;
             f.CaseType = frm.ReturnFormValue("hidFilterCaseTypeId").convertStringToInt();
@@ -569,13 +580,14 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
 
-        private CaseSearchFilterData CreateCaseSearchFilterData(int cusId, int userId, CustomerUser cu, CaseSearchModel sm)
+        private CaseSearchFilterData CreateCaseSearchFilterData(int cusId, int userId, CustomerUser cu, CaseSearchModel sm, CaseAdvancedSearchParams advancedSearch)
         {
             var fd = new CaseSearchFilterData
             {
                 customerUserSetting = cu,
                 customerSetting = this._settingService.GetCustomerSetting(cusId),
-                filterCustomerId = cusId
+                filterCustomerId = cusId,
+                AdvancedSearch = advancedSearch
             };
 
             //region

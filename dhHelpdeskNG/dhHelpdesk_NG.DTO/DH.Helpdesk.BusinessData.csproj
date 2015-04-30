@@ -154,6 +154,7 @@
     <Compile Include="Models\Accounts\Write\AccountForWrite.cs" />
     <Compile Include="Models\ADFS\Input\ADFSSetting.cs" />
     <Compile Include="Models\CaseType\CaseTypeItem.cs" />
+    <Compile Include="Models\Case\CaseAdvancedSearchParams.cs" />
     <Compile Include="Models\Case\CaseOverview\CaseInfoOverview.cs" />
     <Compile Include="Models\Case\CaseOverview\ComputerOverview.cs" />
     <Compile Include="Models\Case\CaseOverview\FullCaseOverview.cs" />

@@ -66,6 +66,8 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
         public bool CaseRemainingTimeHoursFilter { get; set; }
 
+        public CaseAdvancedSearchParams AdvancedSearch { get; set; }
+
         public CaseSearchFilter Copy(CaseSearchFilter o)
         {
             var r = new CaseSearchFilter();
@@ -106,6 +108,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
             r.CaseRemainingTimeHoursFilter = o.CaseRemainingTimeHoursFilter;
             r.Initiator = o.Initiator;
             r.SearchInMyCasesOnly = o.SearchInMyCasesOnly;
+            r.AdvancedSearch = o.AdvancedSearch;
 
             return r;
         }

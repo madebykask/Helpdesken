@@ -47,6 +47,10 @@
                                         <img src="@Url.Content("~/Content/icons/case.png")" />
                                         @Translation.Get("Ärendeöversikt")</a>
                                     </li>
+                                    <li><a href="@Url.Action("AdvancedSearch", "cases", new { area = "" })">
+                                        <img src="@Url.Content("~/Content/icons/case.png")" />
+                                        @Translation.Get("Avancerad sökning")</a>
+                                    </li>
                                     }
                                     if(model.IsCaseSolutionVisible())
                                     {
