@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.Attributes
 {
     using System;
+    using System.Linq;
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Routing;
@@ -12,15 +13,19 @@
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Case;
     using DH.Helpdesk.Services.Infrastructure;
+    using DH.Helpdesk.Services.Services;
 
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public class UserCasePermissionsAttribute : AuthorizeAttribute
     {
         private readonly IUnitOfWorkFactory unitOfWorkFactory;
 
+        private readonly IUserService userService;
+
         public UserCasePermissionsAttribute()
         {
             this.unitOfWorkFactory = ManualDependencyResolver.Get<IUnitOfWorkFactory>();
+            this.userService = ManualDependencyResolver.Get<IUserService>();
         }
 
         protected override bool AuthorizeCore(HttpContextBase httpContext)
@@ -35,7 +40,7 @@
             {
                 var caseId = httpContext.Request.RequestContext.RouteData.Values["id"] ?? httpContext.Request.Params["id"];
 
-                var customer = SessionFacade.CurrentCustomer;
+                var customerIds = this.userService.GetUserProfileCustomersSettings(user.Id).Select(c => c.CustomerId).ToList();
 
                 var caseRep = uow.GetRepository<Case>();
                 var userDepartmentRep = uow.GetRepository<DepartmentUser>();
@@ -43,10 +48,10 @@
                 var customerRep = uow.GetRepository<Customer>();
                 var customerUserRep = uow.GetRepository<CustomerUser>();
 
-                var cases = caseRep.GetAll().GetNotDeleted();
+                var cases = caseRep.GetAll();
                 var userDepartments = userDepartmentRep.GetAll();
                 var users = userRep.GetAll().GetById(user.Id);
-                var customers = customerRep.GetAll().GetById(customer.Id);
+                var customers = customerRep.GetAll().GetByIds(customerIds);
                 var customerUsers = customerUserRep.GetAll();
 
                 if (user.RestrictedCasePermission.ToBool())
