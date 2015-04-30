@@ -74,7 +74,7 @@ namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
         {
             EditQuestionnaireQuestion ret = null;
 
-            if (languageId == LanguageId.Swedish)
+            if (languageId == LanguageIds.Swedish)
             {
                 var questionnaireQuestion =
                     this.DbContext.QuestionnaireQuestions.Where(q => q.Id == questionId)
@@ -84,7 +84,7 @@ namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
                             {
                                 Id = q.Id,
                                 QuestionnaireId = q.Questionnaire_Id,
-                                LanguageId = LanguageId.Swedish,
+                                LanguageId = LanguageIds.Swedish,
                                 QuestionNumber = q.QuestionnaireQuestionNumber,
                                 Question = q.QuestionnaireQuestion,
                                 ShowNote = q.ShowNote,

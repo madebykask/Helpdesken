@@ -69,7 +69,7 @@
     <Compile Include="Enums\StringTags.cs" />
     <Compile Include="Enums\LoginMode.cs" />
     <Compile Include="Enums\InfoTextTypes.cs" />
-    <Compile Include="Enums\LanquageNameId.cs" />
+    <Compile Include="Enums\LanquageIds.cs" />
     <Compile Include="Enums\Settings\CaseSolutionFields.cs" />
     <Compile Include="Enums\Settings\CaseSolutionModes.cs" />
     <Compile Include="Enums\SortBy.cs" />

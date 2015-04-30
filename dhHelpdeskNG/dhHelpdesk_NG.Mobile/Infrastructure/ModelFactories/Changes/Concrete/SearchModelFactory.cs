@@ -90,11 +90,11 @@
         private static SelectList CreateShowSelectList(ChangeStatus? status)
         {
             var activeItem = new SelectListItem();
-            activeItem.Text = Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation);
+            activeItem.Text = Translation.Get("Pågående ändring", Enums.TranslationSource.TextTranslation);
             activeItem.Value = ChangeStatus.Active.ToString();
 
             var finishedItem = new SelectListItem();
-            finishedItem.Text = Translation.Get("Avslutad", Enums.TranslationSource.TextTranslation);
+            finishedItem.Text = Translation.Get("Avslutade ändring", Enums.TranslationSource.TextTranslation);
             finishedItem.Value = ChangeStatus.Finished.ToString();
 
             var noneItem = new SelectListItem();

@@ -35,12 +35,12 @@
 
         public List<QuestionnaireQuesOption> FindQuestionnaireQuestionOptions(int questionId, int languageId)
         {            
-            return this._questionnaireQuestionOptionRepository.FindQuestionnaireQuestionOptions(questionId, languageId, LanguageId.Swedish);                         
+            return this._questionnaireQuestionOptionRepository.FindQuestionnaireQuestionOptions(questionId, languageId, LanguageIds.Swedish);                         
         }
 
         public void DeleteQuestionnaireQuestionOptionById(int optionId, int languageId)
         {
-            if (languageId == LanguageId.Swedish)
+            if (languageId == LanguageIds.Swedish)
                 this._questionnaireQuestionOptionRepository.DeleteQuestionOptionById(optionId);
             else
                 this._questionnaireQuestionOptionRepository.DeleteQuestionOptionById(optionId,languageId);
@@ -52,7 +52,7 @@
         {
             switch (option.LanguageId)
             {
-                case LanguageId.Swedish:
+                case LanguageIds.Swedish:
                     this._questionnaireQuestionOptionRepository.UpdateQuestionOption(option);
                     break;
 

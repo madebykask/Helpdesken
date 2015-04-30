@@ -1,7 +1,7 @@
 ﻿
 @model DH.Helpdesk.Web.Models.Changes.SearchModel
 
-@Html.Action("Search", new { customerId = ViewData["CustomerId"], status = Model.StatusValue, area = string.Empty })
+@Html.Action("Search", new { customerId = ViewData["CustomerId"], area = string.Empty })
 <div id="changes_grid_container">
     @Html.Action("ChangesGrid", "Changes", new { searchModel = Model, customerId = ViewData["CustomerId"], area = string.Empty })
 </div>

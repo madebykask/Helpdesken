@@ -80,7 +80,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             string ret = string.Empty;
             switch (value)
             {
-                case LanguageId.Swedish:
+                case LanguageIds.Swedish:
                     ret = "Swedish.png";
                     break;
                 default:

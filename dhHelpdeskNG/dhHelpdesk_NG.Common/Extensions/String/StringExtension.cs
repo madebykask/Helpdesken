@@ -88,7 +88,7 @@ namespace DH.Helpdesk.Common.Extensions.String
             var str = value;
             
             #region SwedishValues 
-            if (languageId == LanguageId.Swedish)
+            if (languageId == LanguageIds.Swedish)
             {
                 switch (value.ToLower()) 
                 {
@@ -157,7 +157,7 @@ namespace DH.Helpdesk.Common.Extensions.String
             #endregion 
 
             #region EnglishValues 
-            if (languageId != LanguageId.Swedish)
+            if (languageId != LanguageIds.Swedish)
             {
                 switch (value.ToLower())
                 {

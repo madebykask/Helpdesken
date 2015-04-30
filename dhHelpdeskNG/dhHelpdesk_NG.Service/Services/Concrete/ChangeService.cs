@@ -568,9 +568,17 @@
             {
                 var customerRepository = uow.GetRepository<Customer>();
 
+                var customersHaveResponsible = new List<int>();
+                foreach (int customerId in customerIds)                
+                {
+                   var curSettings = this.GetChangeEditSettings(customerId, LanguageIds.Swedish);
+                   if (curSettings.Analyze.Responsible.Show)
+                        customersHaveResponsible.Add(customerId);
+                }                                
+
                 var customerChanges = customerRepository.GetAll()
                                     .GetByIds(customerIds)
-                                    .MapToCustomerChanges(userId);
+                                    .MapToCustomerChanges(userId, customersHaveResponsible);
 
                 return customerChanges;
             }

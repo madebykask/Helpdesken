@@ -68,7 +68,7 @@
 
         public string Pharse { get; private set; }
 
-        public ChangeStatus? Status { get; private set; }
+        public ChangeStatus? Status { get; set; }
 
         [MinValue(0)]
         public int RecordsOnPage { get; private set; }

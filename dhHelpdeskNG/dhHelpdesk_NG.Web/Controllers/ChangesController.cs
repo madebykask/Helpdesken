@@ -27,6 +27,7 @@
     using DH.Helpdesk.Web.Models.Changes;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
     using DH.Helpdesk.Web.Models.Changes.SettingsEdit;
+    using DH.Helpdesk.Common.Enums;
 
     public sealed class ChangesController : UserInteractionController
     {
@@ -146,14 +147,17 @@
 
             this.ViewData["CustomerId"] = customerId;
 
+           
+
             var model = new SearchModel();
             switch (filterType.ToLower())
             {
                 case FilterType.MyChanges:
-                    //if (model.Responsibles.Show)
-                    //    model.ResponsibleIds.Add(SessionFacade.CurrentUser.Id);
-                    //else
-                    //    model.AdministratorIds.Add(SessionFacade.CurrentUser.Id);
+                    var changeSettings = this.changeService.GetChangeEditSettings(SessionFacade.CurrentCustomer.Id, LanguageIds.Swedish);
+                    if (changeSettings.Analyze != null && changeSettings.Analyze.Responsible.Show)
+                        model.ResponsibleIds.Add(SessionFacade.CurrentUser.Id);
+                    else
+                        model.AdministratorIds.Add(SessionFacade.CurrentUser.Id);
                     break;
 
                 case FilterType.ActiveChanges:
@@ -169,6 +173,12 @@
             model.SortField = new Models.Shared.SortFieldModel();
             // TODO: Temporary RecordsOnPage set by hardcode 
             model.RecordsOnPage = 10;
+
+            var filters = SessionFacade.FindPageFilters<ChangesFilter>(PageName.Changes);
+            if (filters == null)
+                filters = ChangesFilter.CreateDefault();
+            filters.Status = model.StatusValue;
+            SessionFacade.SavePageFilters(PageName.Changes, filters);
 
             return this.PartialView(model);
         }
