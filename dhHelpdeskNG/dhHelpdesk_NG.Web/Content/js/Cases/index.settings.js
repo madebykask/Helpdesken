@@ -14,7 +14,7 @@ $(document).ready(function () {
                 res++;
             }
         });
-        if (res > 2) {
+        if (res > 3) {
             ShowToastMessage(maxWideColumnMsg);
             return true;
         }
