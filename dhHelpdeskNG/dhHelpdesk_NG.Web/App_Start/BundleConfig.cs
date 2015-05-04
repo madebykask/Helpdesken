@@ -227,6 +227,10 @@
                             "~/Areas/Admin/Content/js/CaseOverview/customerOverview.js",
                             "~/Areas/Admin/Content/js/Common/common.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/admin/customerCaseSettings").Include(
+                            "~/Areas/Admin/Content/js/Customer/customerCaseSettings.js",
+                            "~/Areas/Admin/Content/js/Common/common.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/cases/relatedCases").Include(
                             "~/Content/js/Cases/relatedCases.logic.js"));
 

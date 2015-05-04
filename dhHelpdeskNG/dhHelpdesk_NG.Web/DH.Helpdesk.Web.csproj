@@ -358,6 +358,7 @@
     <Compile Include="Areas\Admin\Models\WorkingGroupInputViewModel.cs" />
     <Content Include="Areas\Admin\Content\js\CaseOverview\customerOverview.js" />
     <Content Include="Areas\Admin\Content\js\Common\common.js" />
+    <Content Include="Areas\Admin\Content\js\Customer\customerCaseSettings.js" />
     <Content Include="Areas\Admin\Content\js\Users\user.js" />
     <Content Include="Areas\Reports\Content\js\reports.js" />
     <Content Include="Content\bootstrap-tagsinput.css" />
