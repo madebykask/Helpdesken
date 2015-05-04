@@ -4,7 +4,10 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 
 @if (Model != null)
-{<form id="frmCaseSearch" name="frmCaseSearch">
+{
+   var showRemainingTable = Convert.ToBoolean(ViewData["showRemainingTimeTable"]);
+    
+  <form id="frmCaseSearch" name="frmCaseSearch">
      <div class="container">
          @if (Model.AdvancedSearch != null)
          {
@@ -387,7 +390,10 @@
                      </tr>
                  </table>
              </div>
-             <div data-field="caseRemainingTimeHidePlace" style="float: right;"></div>                            
+             @if (showRemainingTable)
+             {
+                <div data-field="caseRemainingTimeHidePlace" style="float: right;"></div>
+             }
          </div>
      </div>
     </form>

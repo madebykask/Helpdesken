@@ -48,6 +48,7 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Web.Infrastructure.Grid;
     using DH.Helpdesk.Services.Services.Concrete;
     using DH.Helpdesk.Common.Enums;
+    using DH.Helpdesk.Web.Enums;
 
     public class CasesController : BaseController
     {
@@ -402,6 +403,18 @@ namespace DH.Helpdesk.Web.Controllers
             var user = this._userService.GetUser(SessionFacade.CurrentUser.Id);
             m.CaseSetting.RefreshContent = user.RefreshContent;
 
+            if (advancedSearch != null && advancedSearch.CustomerIds.Any())
+            {
+                /* In "Advance Search" mode shouldn't show cases at the begining */
+                m.GridSettings.DontFetchData = true;
+                m.OverviewType = OverviewType.AdvanceSearch;                
+            }
+            else
+            {                
+                m.GridSettings.DontFetchData = false;
+                m.OverviewType = OverviewType.CaseOverview;
+            }
+
             return this.View("IndexAjax", m);
         }
 
@@ -422,7 +435,7 @@ namespace DH.Helpdesk.Web.Controllers
                         SessionFacade.CurrentCustomer.Id,
                         SessionFacade.CurrentUser.UserGroupId,
                         SessionFacade.CurrentUser.Id)
-            };
+            };                                  
 
             f.AdvancedSearch = new CaseAdvancedSearchParams(frm.ReturnFormValue("AdvancedSearch").ToIntList());            
             f.CustomerId = SessionFacade.CurrentCustomer.Id;

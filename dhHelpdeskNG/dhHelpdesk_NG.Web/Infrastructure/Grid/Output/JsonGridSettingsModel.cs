@@ -29,6 +29,8 @@
 
         public bool HasAvailableColumns;
 
+        public bool DontFetchData;
+
         public string cls;
     }
 }

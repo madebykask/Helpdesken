@@ -1583,6 +1583,7 @@
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\UserInteractionController.cs" />
     <Compile Include="Areas\Inventory\Controllers\WorkstationController.cs" />
+    <Compile Include="Enums\Case\OverviewType.cs" />
     <Compile Include="Enums\Changes\ChangeDeletedItem.cs" />
     <Compile Include="Enums\Changes\ClickedButton.cs" />
     <Compile Include="Enums\Changes\FilterType.cs" />

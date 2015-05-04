@@ -15,6 +15,7 @@
     using DH.Helpdesk.Web.Infrastructure.Grid.Output;
     using DH.Helpdesk.Web.Models.Invoice;
     using DH.Helpdesk.Web.Models.Shared;
+using DH.Helpdesk.Web.Enums;
 
     public class CaseInputViewModel
     {
@@ -133,6 +134,8 @@
 
     public class JsonCaseIndexViewModel
     {
+        public OverviewType OverviewType { get; set; }
+
         public CaseSearchFilterData CaseSearchFilterData { get; set; }
 
         public CaseTemplateTreeModel CaseTemplateTreeButton { get; set; }

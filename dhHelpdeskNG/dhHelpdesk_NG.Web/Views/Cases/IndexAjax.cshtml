@@ -1,9 +1,26 @@
 ﻿@using System.Web.Script.Serialization
 @using System.Web.Optimization
 @using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Enums;
 @model DH.Helpdesk.Web.Models.Case.JsonCaseIndexViewModel
 @{
     var jsSerializer = new JavaScriptSerializer();
+    
+    var caseTabCaption = Translation.Get("Ärenden", Enums.TranslationSource.TextTranslation);
+    var advanceSearchMode = false;
+
+    if (Model.OverviewType == OverviewType.AdvanceSearch)
+    {
+        caseTabCaption = Translation.Get("Avancerad sökning", Enums.TranslationSource.TextTranslation);
+        advanceSearchMode = true;
+        ViewData.Add("showRemainingTimeTable", false);
+    }
+    else
+    {
+        ViewData.Add("showRemainingTimeTable", true);   
+    }
+
+    
 }
 <script type="text/javascript">
     window.gridSettings = @Html.Raw(jsSerializer.Serialize(Model.GridSettings))
@@ -12,7 +29,7 @@
     <div class="secnavs fixed">
         <div class="pull-left">
             <ul class="secnav">
-                @if (SessionFacade.CurrentUser.CreateCasePermission == 1)
+                @if (SessionFacade.CurrentUser.CreateCasePermission == 1 && !advanceSearchMode)
                 {                                        
                     <li id="btnNewCase">
                         @Html.ActionLink(Translation.Get("Skapa ärende"), "new", "cases", new { customerId = Model.CaseSearchFilterData.filterCustomerId } , new { @class = "btn" })
@@ -30,8 +47,8 @@
     <div class="content">
         <div class="container">
             <ul class="nav nav-tabs" id="myTab">
-                <li id="CasesTab"  class="active"><a href="#fragment-1">@Translation.Get("Ärenden", Enums.TranslationSource.TextTranslation)</a></li>
-                <li id="SettingTab"><a href="#fragment-4">@Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)</a></li>
+                <li id="CasesTab"  class="active"><a href="#fragment-1">@caseTabCaption</a></li>
+                <li id="SettingTab" style='@(advanceSearchMode?"display: none":"")'><a href="#fragment-4">@Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)</a></li>
             </ul>
             <div class="tab-content">
                 <div class="tab-pane tab-pane-border active" id="fragment-1">
@@ -49,7 +66,7 @@
                         <div class="error-msg">@Html.Raw(string.Format(Translation.Get("Ett fel inträffade, klicka {0}här{1} för att ladda om sidan."), "<a href=\"#refresh\" class=\"refresh-grid\">", "</a>"))</div>
                     </div>
                 </div>
-                <div class="tab-pane tab-pane-border " id="fragment-4">
+                <div class="tab-pane tab-pane-border " id="fragment-4" style='@(advanceSearchMode?"display: none":"")'>
                     <div id="setting_result" class="container">
                         @Html.Partial("_CaseSetting", Model.CaseSetting)
                     </div>

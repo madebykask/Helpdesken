@@ -230,7 +230,11 @@ var GRID_STATE = {
         me.$table.addClass([me.gridSettings.cls, hasColSpecialClass].join(' '));
         me.$tableHeader.html(out.join(JOINER));
         me.$tableHeader.find('th.thpointer').on('click', sortCallback);
-        me.fetchData();
+
+        if (me.gridSettings.DontFetchData)
+            me.showMsg(NODATA_MSG_TYPE);                    
+        else
+            me.fetchData();        
     };
 
     Page.prototype.setSortField = function(fieldName, $el) {
@@ -253,7 +257,11 @@ var GRID_STATE = {
             $(oldEl).find('i').removeClass(oldCls);
         }
         $($el).find('i').addClass(getClsForSortDir(sortOpt.sortDir));
-        me.fetchData();
+
+        if (me.gridSettings.DontFetchData)
+            me.showMsg(NODATA_MSG_TYPE);
+        else
+            me.fetchData();        
     };
 
     Page.prototype.showMsg = function(msgType) {
@@ -393,6 +401,7 @@ var GRID_STATE = {
         } else {
             $('#icoFilter').show();
         }
+        me.gridSettings.DontFetchData = false;
         me.fetchData();
     };
 
