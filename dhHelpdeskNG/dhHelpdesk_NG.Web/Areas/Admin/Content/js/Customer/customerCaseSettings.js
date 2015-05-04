@@ -2,9 +2,8 @@
 
 var properties = window.fieldProperties;
 
-
+var input = "input[name$='].";
 $(function () {
-    var input = "input[name$='].";
     $(input + properties.ShowOnStartPage).click(function () {
         var elementName = this.name.replace(properties.ShowOnStartPage, properties.ShowExternal);
         var curElement = jQuery('[name="' + elementName + '"]');
