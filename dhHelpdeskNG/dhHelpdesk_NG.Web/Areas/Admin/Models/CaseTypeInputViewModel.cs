@@ -7,7 +7,10 @@
 
     public class CaseTypeInputViewModel
     {
+        public bool CanAddSubCaseType { get; set; }
+
         public CaseType CaseType { get; set; }
+
         public Customer Customer { get; set; }
 
         public IList<SelectListItem> SystemOwners { get; set; }
