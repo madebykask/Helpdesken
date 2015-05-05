@@ -3274,6 +3274,27 @@ If not exists (select * from tblTextTranslation where text_id = 1382 and Languag
 GO
 UPDATE tblText Set TextString = 'Inga standardkolumner har valts för din användare på denna kund, för att visa kolumner, klicka på fliken Inställningar och gå till Filter Ärendeöversikt' WHERE Id=1370;
 
+--20150505
 
+If not exists (select * from tbltext where id = 1383)
+	insert into tbltext (id, TextString) VALUES (1383, 'Mina ändringar')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1383 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1383, 2, 'My changes')
+GO
+
+If not exists (select * from tbltext where id = 1384)
+	insert into tbltext (id, TextString) VALUES (1384, 'Avslutade ändringar')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1384 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1384, 2, 'Closed changes')
+GO
+
+If not exists (select * from tbltext where id = 1385)
+	insert into tbltext (id, TextString) VALUES (1385, 'Pågående ändringar')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1385 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1385, 2, 'In proceess changes')
+GO
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
