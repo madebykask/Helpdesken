@@ -1,6 +1,13 @@
 
 IF OBJECT_ID(N'FK_tblCase_tblCausingPart', 'F') IS NOT NULL 
     ALTER TABLE dbo.tblCase DROP CONSTRAINT FK_tblCase_tblCausingPart
+    
+GO
+
+IF OBJECT_ID(N'FK_tblCaseHistory_tblCausingPart', 'F') IS NOT NULL 
+    ALTER TABLE dbo.tblCaseHistory DROP CONSTRAINT FK_tblCaseHistory_tblCausingPart
+
+GO
 
 SET ANSI_NULLS ON
 GO
@@ -41,7 +48,6 @@ ALTER TABLE [dbo].[tblCausingPart]  WITH NOCHECK ADD  CONSTRAINT [FK_tblCausingP
 REFERENCES [dbo].[tblCustomer] ([Id])
 GO
 
-
 IF COL_LENGTH('dbo.tblCase','CausingPartId') IS NULL
 BEGIN
 	ALTER TABLE dbo.tblCase
@@ -53,7 +59,26 @@ BEGIN
 	REFERENCES dbo.tblCausingPart(Id)
 END
 
+GO
 
+IF OBJECT_ID(N'FK_tblCase_tblCausingPart', 'F') IS NULL 
+BEGIN
+    ALTER TABLE dbo.tblCase
+	ADD CONSTRAINT FK_tblCase_tblCausingPart
+	FOREIGN KEY (CausingPartId)
+	REFERENCES dbo.tblCausingPart(Id)
+END
+
+GO
+
+IF OBJECT_ID(N'FK_tblCaseHistory_tblCausingPart', 'F') IS NULL 
+BEGIN
+    ALTER TABLE dbo.tblCaseHistory ADD  CONSTRAINT FK_tblCaseHistory_tblCausingPart
+    FOREIGN KEY([CausingPartId])
+    REFERENCES [dbo].[tblCausingPart] ([Id])
+END
+
+GO
 
 IF OBJECT_ID (N'tblUsers_tblModule', N'U') IS NOT NULL 
 	DROP TABLE [dbo].[tblUsers_tblModule]
