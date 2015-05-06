@@ -5168,5 +5168,94 @@ GO
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[tblEvent]') AND type in (N'U'))
 DROP TABLE [dbo].[tblEvent]
+ 
+/*
+DROP Tables that isn't needed
+*/
+GO
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[CaseID]') AND type in (N'U'))
+DROP TABLE [dbo].[CaseID]
 
-GO 
+GO
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Translation]') AND type in (N'U'))
+DROP TABLE [dbo].[Translation]
+
+GO
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[TEMP_WorkingGroup_Changed]') AND type in (N'U'))
+DROP TABLE [dbo].[TEMP_WorkingGroup_Changed]
+
+/*
+DROP Columns that isn't needed
+*/
+GO
+IF EXISTS (SELECT * FROM syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+WHERE syscolumns.name = N'ECT_Initiator_MailTemplate_Id' and sysobjects.name = N'tblStateSecondary ')
+BEGIN
+	ALTER TABLE tblStateSecondary  DROP COLUMN ECT_Initiator_MailTemplate_Id
+END
+
+/*
+ADD missing columns tblDepartment
+*/
+GO
+IF NOT EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+where syscolumns.name = N'StrAddr' and sysobjects.name = N'tblDepartment')
+	ALTER TABLE tblDepartment ADD StrAddr nvarchar(300) null
+GO
+
+IF NOT EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+where syscolumns.name = N'CloseDay' and sysobjects.name = N'tblDepartment')
+	ALTER TABLE tblDepartment ADD CloseDay nvarchar(300) null
+GO
+
+IF NOT EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+where syscolumns.name = N'TelNbr' and sysobjects.name = N'tblDepartment')
+	ALTER TABLE tblDepartment ADD TelNbr nvarchar(75) null
+GO
+
+IF NOT EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+where syscolumns.name = N'Unit' and sysobjects.name = N'tblDepartment')
+	ALTER TABLE tblDepartment ADD Unit nvarchar(100) null
+GO
+
+IF NOT EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+where syscolumns.name = N'HrManager' and sysobjects.name = N'tblDepartment')
+	ALTER TABLE tblDepartment ADD HrManager nvarchar(150) null
+GO
+
+IF NOT EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+where syscolumns.name = N'StoreManager' and sysobjects.name = N'tblDepartment')
+	ALTER TABLE tblDepartment ADD StoreManager nvarchar(150) null
+GO
+
+IF NOT EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+where syscolumns.name = N'Extra' and sysobjects.name = N'tblDepartment')
+	ALTER TABLE tblDepartment ADD Extra nvarchar(1000) null
+GO
+
+IF NOT EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+where syscolumns.name = N'UpdateDate' and sysobjects.name = N'tblDepartment')
+	ALTER TABLE tblDepartment ADD UpdateDate smalldatetime null      
+
+/*
+ADD missing columns tblFormField
+*/
+GO
+IF NOT EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+where syscolumns.name = N'HCMData' and sysobjects.name = N'tblFormField')
+	ALTER TABLE tblFormField ADD HCMData bit NOT NULL default ((0))
+GO
+
+IF NOT EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+where syscolumns.name = N'ParentGVFields' and sysobjects.name = N'tblFormField')
+	ALTER TABLE tblFormField ADD ParentGVFields bit NOT NULL default ((0))
+
+/*
+ADD missing columns tblLinkGroup
+*/
+GO
+IF NOT EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+where syscolumns.name = N'LinkGuid' and sysobjects.name = N'tblLinkGroup')
+	ALTER TABLE tblLinkGroup ADD LinkGuid uniqueidentifier null
+GO
+          
