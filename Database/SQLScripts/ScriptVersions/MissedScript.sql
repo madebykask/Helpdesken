@@ -245,17 +245,40 @@ IF NOT EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id =
 where syscolumns.name = N'LinkGuid' and sysobjects.name = N'tblLinkGroup')
 	ALTER TABLE tblLinkGroup ADD LinkGuid uniqueidentifier null
 GO
-          
-IF COL_LENGTH('dbo.tblSettings','AuthenticateLDAPServer') IS NULL
-BEGIN	 
-	ALTER TABLE [dbo].[tblSettings]
-	ADD [AuthenticateLDAPServer] nvarchar(20) NULL 
-END
-GO 
 
-IF COL_LENGTH('dbo.tblSettings','AuthenticateLDAPServerType') IS NULL
-BEGIN	 
-	ALTER TABLE [dbo].[tblSettings]
-	ADD [AuthenticateLDAPServerType] int not NULL 
+/*
+DROP columns
+*/
+IF EXISTS (SELECT * FROM syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+WHERE syscolumns.name = N'AuthenticateLDAPServer' and sysobjects.name = N'tblSettings ')
+BEGIN
+	ALTER TABLE tblSettings  DROP COLUMN AuthenticateLDAPServer
 END
-GO 
+
+GO
+
+IF EXISTS (SELECT * FROM syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+WHERE syscolumns.name = N'AuthenticateLDAPServerType' and sysobjects.name = N'tblSettings ')
+BEGIN
+	ALTER TABLE tblSettings  DROP COLUMN AuthenticateLDAPServerType
+END
+
+GO
+
+IF EXISTS (SELECT * FROM syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+WHERE syscolumns.name = N'___AllocateCaseMail' and sysobjects.name = N'tblUsers ')
+BEGIN
+	ALTER TABLE tblUsers  DROP COLUMN ___AllocateCaseMail
+END
+
+GO
+
+/*
+ADD column to tblFormField
+*/
+IF NOT EXISTS (SELECT * FROM syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+WHERE syscolumns.name = N'SortOrder' and sysobjects.name = N'tblFormField ')
+BEGIN
+	ALTER TABLE tblFormField  ADD SortOrder int not null default ((0))
+END
+
