@@ -265,9 +265,11 @@ namespace DH.Helpdesk.Web.Controllers
             ApplicationFacade.UpdateLoggedInUser(Session.SessionID, string.Empty);
             if (resetSearchForm.HasValue && resetSearchForm.Value == true)
             {
+                useMyCases = (useMyCases.HasValue && useMyCases.Value)
+                             || SessionFacade.CurrentCaseSearch.caseSearchFilter.SearchInMyCasesOnly;
                 SessionFacade.CurrentCaseSearch = null;
-                useMyCases = true;
             }
+
             if (clearFilters == true)
             {
                 SessionFacade.CurrentCaseSearch = null;
