@@ -246,3 +246,16 @@ where syscolumns.name = N'LinkGuid' and sysobjects.name = N'tblLinkGroup')
 	ALTER TABLE tblLinkGroup ADD LinkGuid uniqueidentifier null
 GO
           
+IF COL_LENGTH('dbo.tblSettings','AuthenticateLDAPServer') IS NULL
+BEGIN	 
+	ALTER TABLE [dbo].[tblSettings]
+	ADD [AuthenticateLDAPServer] nvarchar(20) NULL 
+END
+GO 
+
+IF COL_LENGTH('dbo.tblSettings','AuthenticateLDAPServerType') IS NULL
+BEGIN	 
+	ALTER TABLE [dbo].[tblSettings]
+	ADD [AuthenticateLDAPServerType] int not NULL 
+END
+GO 
