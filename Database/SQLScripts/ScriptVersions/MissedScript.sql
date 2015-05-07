@@ -257,6 +257,11 @@ END
 
 GO
 
+IF OBJECT_ID(N'DF__tblSettin__Authe__0F431ABE', 'D') IS NOT NULL 
+    ALTER TABLE dbo.tblSettings DROP CONSTRAINT DF__tblSettin__Authe__0F431ABE
+    
+GO
+
 IF EXISTS (SELECT * FROM syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
 WHERE syscolumns.name = N'AuthenticateLDAPServerType' and sysobjects.name = N'tblSettings')
 BEGIN
@@ -265,12 +270,22 @@ END
 
 GO
 
+IF OBJECT_ID(N'DF_tblUsers____AllocateCaseMail', 'D') IS NOT NULL 
+    ALTER TABLE dbo.tblUsers DROP CONSTRAINT DF_tblUsers____AllocateCaseMail
+    
+GO
+
 IF EXISTS (SELECT * FROM syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
 WHERE syscolumns.name = N'___AllocateCaseMail' and sysobjects.name = N'tblUsers')
 BEGIN
 	ALTER TABLE tblUsers  DROP COLUMN ___AllocateCaseMail
 END
 
+GO
+
+IF OBJECT_ID(N'DF_tblStateSecondary_OnHold', 'D') IS NOT NULL 
+    ALTER TABLE dbo.tblStateSecondary DROP CONSTRAINT DF_tblStateSecondary_OnHold
+    
 GO
 
 IF EXISTS (SELECT * FROM syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
