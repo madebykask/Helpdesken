@@ -176,7 +176,7 @@ DROP Columns that isn't needed
 */
 GO
 IF EXISTS (SELECT * FROM syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
-WHERE syscolumns.name = N'ECT_Initiator_MailTemplate_Id' and sysobjects.name = N'tblStateSecondary ')
+WHERE syscolumns.name = N'ECT_Initiator_MailTemplate_Id' and sysobjects.name = N'tblStateSecondary')
 BEGIN
 	ALTER TABLE tblStateSecondary  DROP COLUMN ECT_Initiator_MailTemplate_Id
 END
@@ -250,7 +250,7 @@ GO
 DROP columns
 */
 IF EXISTS (SELECT * FROM syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
-WHERE syscolumns.name = N'AuthenticateLDAPServer' and sysobjects.name = N'tblSettings ')
+WHERE syscolumns.name = N'AuthenticateLDAPServer' and sysobjects.name = N'tblSettings')
 BEGIN
 	ALTER TABLE tblSettings  DROP COLUMN AuthenticateLDAPServer
 END
@@ -258,7 +258,7 @@ END
 GO
 
 IF EXISTS (SELECT * FROM syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
-WHERE syscolumns.name = N'AuthenticateLDAPServerType' and sysobjects.name = N'tblSettings ')
+WHERE syscolumns.name = N'AuthenticateLDAPServerType' and sysobjects.name = N'tblSettings')
 BEGIN
 	ALTER TABLE tblSettings  DROP COLUMN AuthenticateLDAPServerType
 END
@@ -266,9 +266,17 @@ END
 GO
 
 IF EXISTS (SELECT * FROM syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
-WHERE syscolumns.name = N'___AllocateCaseMail' and sysobjects.name = N'tblUsers ')
+WHERE syscolumns.name = N'___AllocateCaseMail' and sysobjects.name = N'tblUsers')
 BEGIN
 	ALTER TABLE tblUsers  DROP COLUMN ___AllocateCaseMail
+END
+
+GO
+
+IF EXISTS (SELECT * FROM syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+WHERE syscolumns.name = N'OnHold ' and sysobjects.name = N'tblStateSecondary')
+BEGIN
+	ALTER TABLE tblStateSecondary  DROP COLUMN OnHold 
 END
 
 GO
@@ -277,7 +285,7 @@ GO
 ADD column to tblFormField
 */
 IF NOT EXISTS (SELECT * FROM syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
-WHERE syscolumns.name = N'SortOrder' and sysobjects.name = N'tblFormField ')
+WHERE syscolumns.name = N'SortOrder' and sysobjects.name = N'tblFormField')
 BEGIN
 	ALTER TABLE tblFormField  ADD SortOrder int not null default ((0))
 END
