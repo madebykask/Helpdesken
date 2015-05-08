@@ -12,7 +12,7 @@
             this.Cases = new List<Case>();
         }
 
-        public int ChangedByUser_Id { get; set; }
+        public int? ChangedByUser_Id { get; set; }
         public int Customer_Id { get; set; }
         public int ProblemNumber { get; set; }
         public int? ResponsibleUser_Id { get; set; }

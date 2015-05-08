@@ -150,24 +150,26 @@
            
 
             var model = new SearchModel();
-            switch (filterType.ToLower())
+            if (filterType != null)
             {
-                case FilterType.MyChanges:
-                    var changeSettings = this.changeService.GetChangeEditSettings(SessionFacade.CurrentCustomer.Id, LanguageIds.Swedish);
-                    if (changeSettings.Analyze != null && changeSettings.Analyze.Responsible.Show)
-                        model.ResponsibleIds.Add(SessionFacade.CurrentUser.Id);
-                    else
-                        model.AdministratorIds.Add(SessionFacade.CurrentUser.Id);
-                    break;
+                switch (filterType.ToLower())
+                {
+                    case FilterType.MyChanges:
+                        var changeSettings = this.changeService.GetChangeEditSettings(SessionFacade.CurrentCustomer.Id, LanguageIds.Swedish);
+                        if (changeSettings.Analyze != null && changeSettings.Analyze.Responsible.Show)
+                            model.ResponsibleIds.Add(SessionFacade.CurrentUser.Id);
+                        else
+                            model.AdministratorIds.Add(SessionFacade.CurrentUser.Id);
+                        break;
 
-                case FilterType.ActiveChanges:
-                    model.StatusValue = ChangeStatus.Active;                    
-                    break;
+                    case FilterType.ActiveChanges:
+                        model.StatusValue = ChangeStatus.Active;
+                        break;
 
-                case FilterType.ClosedChanges:
-                    model.StatusValue = ChangeStatus.Finished;
-                    break;
-
+                    case FilterType.ClosedChanges:
+                        model.StatusValue = ChangeStatus.Finished;
+                        break;
+                }
             }
 
             model.SortField = new Models.Shared.SortFieldModel();

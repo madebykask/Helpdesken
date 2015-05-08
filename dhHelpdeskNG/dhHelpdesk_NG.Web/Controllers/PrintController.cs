@@ -232,7 +232,11 @@ namespace DH.Helpdesk.Web.Controllers
             }
             caseModel.Ou = selectedOU; //ous.FirstOrDefault(o => caseModel.OuId == o.Id);
             caseModel.Logs = this.logService.GetCaseLogOverviews(caseId);
-            caseModel.User = this.userService.GetUserOverview(caseModel.UserId);
+
+            if (caseModel.UserId.HasValue)
+            {
+                caseModel.User = this.userService.GetUserOverview(caseModel.UserId.Value);
+            }
 
             var caseType = this.caseTypeService.GetCaseType(caseModel.CaseTypeId);
             if (caseType != null)
@@ -270,7 +274,10 @@ namespace DH.Helpdesk.Web.Controllers
                 caseModel.CaseResponsibleUser = this.userService.GetUserOverview(caseModel.CaseResponsibleUserId.Value);
             }
 
-            caseModel.PerformerUser = this.userService.GetUserOverview(caseModel.PerformerUserId);
+            if (caseModel.PerformerUserId.HasValue)
+            {
+                caseModel.PerformerUser = this.userService.GetUserOverview(caseModel.PerformerUserId.Value);
+            }
 
             if (caseModel.StatusId.HasValue)
             {

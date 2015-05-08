@@ -201,7 +201,11 @@ namespace DH.Helpdesk.SelfService.Controllers
             var ous = this.ouService.GetOUs(customerId);
             caseModel.Ou = ous.FirstOrDefault(o => caseModel.OuId == o.Id);
             caseModel.Logs = this.logService.GetCaseLogOverviews(caseId);
-            caseModel.User = this.userService.GetUserOverview(caseModel.UserId);
+
+            if (caseModel.UserId.HasValue)
+            {
+                caseModel.User = this.userService.GetUserOverview(caseModel.UserId.Value);
+            }
 
             var caseType = this.caseTypeService.GetCaseType(caseModel.CaseTypeId);
             if (caseType != null)
@@ -239,7 +243,10 @@ namespace DH.Helpdesk.SelfService.Controllers
                 caseModel.CaseResponsibleUser = this.userService.GetUserOverview(caseModel.CaseResponsibleUserId.Value);
             }
 
-            caseModel.PerformerUser = this.userService.GetUserOverview(caseModel.PerformerUserId);
+            if (caseModel.PerformerUserId.HasValue)
+            {
+                caseModel.PerformerUser = this.userService.GetUserOverview(caseModel.PerformerUserId.Value);
+            }
 
             if (caseModel.StatusId.HasValue)
             {

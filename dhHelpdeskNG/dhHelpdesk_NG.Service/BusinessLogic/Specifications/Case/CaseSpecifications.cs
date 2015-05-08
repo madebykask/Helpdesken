@@ -71,7 +71,7 @@
         {
             if (userIds != null)
             {
-                query = query.Where(c => userIds.Contains(c.Performer_User_Id));
+                query = query.Where(c => userIds.Contains(c.Performer_User_Id.Value));
             }
 
             return query;

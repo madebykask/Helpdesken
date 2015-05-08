@@ -456,8 +456,11 @@ namespace DH.Helpdesk.SelfService.Controllers
                     }
                     else
                     {
-                        var userEmail = _userService.GetUser(currentCase.Performer_User_Id).Email;
-                        caseLog.EmailRecepientsExternalLog = userEmail;
+                        if (currentCase.Performer_User_Id.HasValue)
+                        {
+                            var userEmail = _userService.GetUser(currentCase.Performer_User_Id.Value).Email;
+                            caseLog.EmailRecepientsExternalLog = userEmail;
+                        }
                     }
                 }
                 else // Send Mail to Working Group Email  

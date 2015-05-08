@@ -5,5 +5,5 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyCompany("DH Solutions")]
 [assembly: AssemblyCopyright("© 2015 DH Solutions")]
-[assembly: AssemblyVersion("5.3.7.3")]
-[assembly: AssemblyFileVersionAttribute("5.3.7.3")]
+[assembly: AssemblyVersion("5.3.7.4")]
+[assembly: AssemblyFileVersionAttribute("5.3.7.4")]

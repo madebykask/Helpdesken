@@ -25,7 +25,7 @@
         public String InventoryType { get; set; }
         public String InventoryLocation { get; set; }
         public Decimal CaseNumber { get; set; }
-        public int User_Id { get; set; }
+        public int? User_Id { get; set; }
         public String IpAddress { get; set; }
         public int CaseType_Id { get; set; }
         public int? ProductArea_Id { get; set; }
@@ -47,7 +47,7 @@
         public int Cost { get; set; }
         public int OtherCost { get; set; }
         public String Currency { get; set; }
-        public int Performer_User_Id { get; set; }
+        public int? Performer_User_Id { get; set; }
         public int? CaseResponsibleUser_Id { get; set; }
         public int? Priority_Id { get; set; }
         public int? Status_Id { get; set; }
@@ -59,7 +59,7 @@
         public String SolutionRate { get; set; }
         public DateTime? PlanDate { get; set; }
         public DateTime? ApprovedDate { get; set; }
-        public int ApprovedBy_User_Id { get; set; }
+        public int? ApprovedBy_User_Id { get; set; }
         public DateTime? WatchDate { get; set; }
         public int? LockCaseToWorkingGroup_Id { get; set; }
         public int? WorkingGroup_Id { get; set; }

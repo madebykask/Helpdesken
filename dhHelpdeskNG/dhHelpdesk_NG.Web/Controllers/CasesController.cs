@@ -883,7 +883,7 @@ namespace DH.Helpdesk.Web.Controllers
                     m.case_.Supplier_Id = null;
                     m.case_.System_Id = null;
                     m.case_.Urgency_Id = null;
-                    m.case_.User_Id = 0;
+                    m.case_.User_Id = null;
                     m.case_.WorkingGroup_Id = null;
                     m.ParantPath_CaseType = ParentPathDefaultValue;
                     m.ParantPath_ProductArea = ParentPathDefaultValue;
@@ -2145,7 +2145,7 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     m.Logs = this._logService.GetCaseLogOverviews(caseId);
                     m.CaseFilesModel = new CaseFilesModel(caseId.ToString(global::System.Globalization.CultureInfo.InvariantCulture), this._caseFileService.GetCaseFiles(caseId).OrderBy(x=> x.CreatedDate).ToArray());
-                    m.RegByUser = this._userService.GetUser(m.case_.User_Id);
+                    m.RegByUser = this._userService.GetUser(m.case_.User_Id.Value);
                     if (m.Logs != null)
                     {
                         var finishingCauses = this._finishingCauseService.GetFinishingCauseInfos(customerId);
@@ -2260,7 +2260,11 @@ namespace DH.Helpdesk.Web.Controllers
 
                 if (caseId != 0)
                 {
-                    var admUser = _userService.GetUser(m.case_.Performer_User_Id);
+
+                    User admUser = null;
+                    if (m.case_.Performer_User_Id.HasValue)
+                        admUser = _userService.GetUser(m.case_.Performer_User_Id.Value);
+
                     if (!m.performers.Contains(admUser) && admUser != null)
                         m.performers.Insert(0, admUser);
                 }
@@ -2447,7 +2451,7 @@ namespace DH.Helpdesk.Web.Controllers
                 if (m.case_.Id == 0)  // new mode
                 {
                     m.case_.DefaultOwnerWG_Id = null;
-                    if (m.case_.User_Id != 0)
+                    if (m.case_.User_Id.HasValue && m.case_.User_Id != 0)
                     {
                         // http://redmine.fastdev.se/issues/10997
                         /*var curUser = _userService.GetUser(m.case_.User_Id);                        
@@ -2455,7 +2459,7 @@ namespace DH.Helpdesk.Web.Controllers
                         if (curUser.Default_WorkingGroup_Id != null)
                            m.case_.DefaultOwnerWG_Id = curUser.Default_WorkingGroup_Id;*/
 
-                        var userDefaultWorkingGroupId = this._userService.GetUserDefaultWorkingGroupId(m.case_.User_Id, m.case_.Customer_Id);
+                        var userDefaultWorkingGroupId = this._userService.GetUserDefaultWorkingGroupId(m.case_.User_Id.Value, m.case_.Customer_Id);
                         if (userDefaultWorkingGroupId.HasValue)
                         {
                             m.case_.DefaultOwnerWG_Id = userDefaultWorkingGroupId;

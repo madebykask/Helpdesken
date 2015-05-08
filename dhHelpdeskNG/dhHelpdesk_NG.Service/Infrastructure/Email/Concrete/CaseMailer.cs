@@ -150,7 +150,7 @@
                     return;
                 }*/
 
-                var defaultWorkingGroup = this.userService.GetUserDefaultWorkingGroup(newCase.User_Id, newCase.Customer_Id);
+                var defaultWorkingGroup = this.userService.GetUserDefaultWorkingGroup(newCase.User_Id.Value, newCase.Customer_Id);
                 if (defaultWorkingGroup == null ||
                     !this.emailService.IsValidEmail(defaultWorkingGroup.EMail))
                 {

@@ -464,7 +464,7 @@
                     m.case_.Supplier_Id = null;
                     m.case_.System_Id = null;
                     m.case_.Urgency_Id = null;
-                    m.case_.User_Id = 0;
+                    m.case_.User_Id = null;
                     m.case_.WorkingGroup_Id = null;
                     m.ParantPath_CaseType = ParentPathDefaultValue;
                     m.ParantPath_ProductArea = ParentPathDefaultValue;
@@ -1438,7 +1438,7 @@
                 {
                     m.Logs = this._logService.GetCaseLogOverviews(caseId);
                     m.CaseFilesModel = new CaseFilesModel(caseId.ToString(global::System.Globalization.CultureInfo.InvariantCulture), this._caseFileService.GetCaseFiles(caseId));
-                    m.RegByUser = this._userService.GetUser(m.case_.User_Id);
+                    m.RegByUser = this._userService.GetUser(m.case_.User_Id.Value);
                     if (m.Logs != null)
                     {
                         var finishingCauses = this._finishingCauseService.GetFinishingCauseInfos(customerId);
@@ -1666,7 +1666,7 @@
                 if (m.case_.Id == 0)  // new mode
                 {
                     m.case_.DefaultOwnerWG_Id = null;
-                    if (m.case_.User_Id != 0)
+                    if (m.case_.User_Id.HasValue && m.case_.User_Id != 0)
                     {
                         // http://redmine.fastdev.se/issues/10997
                         /*var curUser = _userService.GetUser(m.case_.User_Id);                        
@@ -1674,7 +1674,7 @@
                         if (curUser.Default_WorkingGroup_Id != null)
                            m.case_.DefaultOwnerWG_Id = curUser.Default_WorkingGroup_Id;*/
 
-                        var userDefaultWorkingGroupId = this._userService.GetUserDefaultWorkingGroupId(m.case_.User_Id, m.case_.Customer_Id);
+                        var userDefaultWorkingGroupId = this._userService.GetUserDefaultWorkingGroupId(m.case_.User_Id.Value, m.case_.Customer_Id);
                         if (userDefaultWorkingGroupId.HasValue)
                         {
                             m.case_.DefaultOwnerWG_Id = userDefaultWorkingGroupId;
