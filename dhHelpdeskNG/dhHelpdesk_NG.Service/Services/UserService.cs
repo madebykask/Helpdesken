@@ -538,10 +538,11 @@ namespace DH.Helpdesk.Services.Services
                     foreach (var uwg in UserWorkingGroups)
                     {
                         // http://redmine.fastdev.se/issues/10997
-//                        if (uwg.UserRole != 0)
-//                            user.UserWorkingGroups.Add(uwg);
+                        //Filter 0 because problem in Case
+                        if (uwg.UserRole != 0)
+                            user.UserWorkingGroups.Add(uwg);
 
-                        user.UserWorkingGroups.Add(uwg);
+                        //user.UserWorkingGroups.Add(uwg);
                     }
                 }
                 
