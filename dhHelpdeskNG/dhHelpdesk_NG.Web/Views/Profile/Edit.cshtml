@@ -1,4 +1,5 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
+@using OfficeOpenXml.FormulaParsing.Excel.Functions.Math
 @model DH.Helpdesk.Web.Models.Profile.ProfileInputViewModel
 @{
     ViewBag.Title = "Edit";
@@ -17,9 +18,7 @@
 }
 @section Scripts {
     <script type="text/javascript">
-
-        $(function () {
-
+        $(function() {
             var validator = $("#target").validate({
                 rules: {
                     "User.UserID": {
@@ -49,10 +48,11 @@
                         required: "@Translation.Get("You must specify an e-mail address", Enums.TranslationSource.TextTranslation)"
                     }
                 },
-                submitHandler: function (form) {
+                submitHandler: function(form) {
                     submitForm();
                     form.submit();
                 }
-            });
+            });           
         });
-</script>
+    </script>
+}

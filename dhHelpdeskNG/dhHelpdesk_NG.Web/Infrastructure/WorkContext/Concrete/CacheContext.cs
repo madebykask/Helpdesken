@@ -64,16 +64,17 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
         {
             get
             {
-                if (this.holidays == null)
-                {
-                    this.holidays = (IEnumerable<HolidayOverview>)HttpContext.Current.Cache[CacheHolidays];
-                    if (this.holidays == null)
-                    {
-                        HttpContext.Current.Cache[CacheHolidays] = this.holidays = this.holidayService.GetHolidayOverviews();
-                    }
-                }
-
-                return this.holidays;
+                return null;
+                //                if (this.holidays == null)
+                //                {
+                //                    this.holidays = (IEnumerable<HolidayOverview>)HttpContext.Current.Cache[CacheHolidays];
+                //                    if (this.holidays == null)
+                //                    {
+                //                        HttpContext.Current.Cache[CacheHolidays] = this.holidays = this.holidayService.GetHolidayOverviews();
+                //                    }
+                //                }
+                //
+                //                return this.holidays;
             }
         }
 

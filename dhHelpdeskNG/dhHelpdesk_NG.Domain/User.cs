@@ -81,6 +81,8 @@
         /// </summary>
         public int ShowSolutionTime { get; set; }
 
+        public string TimeZoneId { get; set; }
+
         public virtual Domain Domain { get; set; }
         public virtual Language Language { get; set; }
         public virtual User ChangedByUser { get; set; }

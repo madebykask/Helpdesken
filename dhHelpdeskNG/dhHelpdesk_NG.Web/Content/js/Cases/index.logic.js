@@ -525,7 +525,6 @@ function ShowToastMessage(message, msgType) {
         stayTime: 3000,
         inEffectDuration: 1000,
         close: function () {
-            //console.log("toast is closed ...");
         }
     });
 }

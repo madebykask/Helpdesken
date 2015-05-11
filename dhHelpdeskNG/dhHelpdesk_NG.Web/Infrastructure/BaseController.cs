@@ -5,6 +5,7 @@
     using System.Web;
     using System.Web.Mvc;
     using System.Linq;
+    using System.Web.UI.WebControls;
 
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure.Attributes;
@@ -45,7 +46,17 @@
             //called after a controller action is executed, that is after ~/UserController/index 
         {
             this.SetMasterPageModel(filterContext);
+            this.AutoDetectTimeZoneMessageCheck();
             base.OnActionExecuted(filterContext);
+        }
+
+        private void AutoDetectTimeZoneMessageCheck()
+        {
+            if (!SessionFacade.WasTimeZoneMessageDisplayed)
+            {
+                SessionFacade.WasTimeZoneMessageDisplayed = true;
+                ViewBag.AutoDetectionResult = SessionFacade.TimeZoneDetectionResult;
+            }
         }
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
@@ -61,8 +72,11 @@
             }
         }
 
+        /// <summary>
+        /// called when a process requests authorization or authorization occurs before login and before OnActionExecuting + index + OnActionExecuted 
+        /// </summary>
+        /// <param name="filterContext"></param>
         protected override void OnAuthorization(AuthorizationContext filterContext)
-            //called when a process requests authorization or authorization occurs before login and before OnActionExecuting + index + OnActionExecuted 
         {
             var redirectToUrl = "~/login/login?returnUrl=" + filterContext.HttpContext.Request.Url;            
             var curUserId = "";
@@ -87,7 +101,12 @@
                 var user = this._masterDataService.GetUserForLogin(curUserId);
                 if (user != null)
                 {
-                    /// here we have user session expired before auth session expiration
+                    if (user.TimeZoneId == null)
+                    {
+                        //throw new Exception("Need to detect time zone.");
+                        this.RedirectToAction("Logout", "Login");
+                    }
+
                     SessionFacade.CurrentUser = user;
                     var customerName = this._masterDataService.GetCustomer(user.CustomerId).Name;
                     ApplicationFacade.AddLoggedInUser(
@@ -106,39 +125,9 @@
                 {
                     filterContext.Result = new RedirectResult(redirectToUrl);
                 }
-
-                
             } // if User Session = Null
 
             base.OnAuthorization(filterContext);
-
-            if (filterContext.Result == null || (filterContext.Result.GetType() != typeof(HttpUnauthorizedResult)))
-            {
-                return;
-            }
-
-            //if (filterContext.HttpContext.Request.IsAjaxRequest())
-            //{
-
-            //    filterContext.Result = filterContext.HttpContext.Request.ContentType == "application/json"
-            //        ? (ActionResult)
-            //          new JsonResult
-            //          {
-            //              Data = new { RedirectTo = redirectToUrl },
-            //              ContentEncoding = System.Text.Encoding.UTF8,
-            //              JsonRequestBehavior = JsonRequestBehavior.DenyGet
-            //          }
-
-            //        : new ContentResult
-            //        {
-            //            Content = redirectToUrl,
-            //            ContentEncoding = System.Text.Encoding.UTF8,
-            //            ContentType = "text/html"
-            //        };
-
-            //    filterContext.HttpContext.Response.StatusCode = 530; //User Access Denied
-            //    filterContext.HttpContext.Response.TrySkipIisCustomErrors = true;
-            //}
         }
 
         protected string RenderRazorViewToString(string viewName, object model, bool partial = true)

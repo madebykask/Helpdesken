@@ -3,7 +3,7 @@
     using System;
 
     using DH.Helpdesk.Dal.Infrastructure.Context;
-    using DH.Helpdesk.Mobile.Infrastructure;
+    using DH.Helpdesk.Web.Infrastructure;
 
     using Moq;
 

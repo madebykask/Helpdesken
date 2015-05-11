@@ -15,12 +15,12 @@
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
     using DH.Helpdesk.Common.Enums.Cases;
+    using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Repositories.ProductArea;
     using DH.Helpdesk.Dal.Utils;
     using DH.Helpdesk.Domain;
     using ProductAreaEntity = DH.Helpdesk.Domain.ProductArea;
 
-    using UserGroup = DH.Helpdesk.BusinessData.Enums.Admin.Users.UserGroup;
     using DH.Helpdesk.Common.Enums;
 
     /// <summary>
@@ -39,7 +39,7 @@
             GlobalSetting gs,
             Setting customerSetting,
             ISearch s,
-            WorkTimeCalculator workTimeCalculator,
+            IWorkTimeCalculatorFactory workTimeCalcFactory,
             string applicationType,
             bool calculateRemainingTime,
             IProductAreaNameResolver productAreaNamesResolver,
@@ -63,8 +63,7 @@
         private readonly IProductAreaRepository _productAreaRepository;
 
         private readonly ICaseTypeRepository caseTypeRepository;
-
-        private readonly IFinishingCauseRepository finishingCauseRepository;
+        
 
         private readonly ILogRepository logRepository;
 
@@ -72,13 +71,11 @@
                 ICustomerUserRepository customerUserRepository, 
                 IProductAreaRepository productAreaRepository, 
                 ICaseTypeRepository caseTypeRepository, 
-                IFinishingCauseRepository finishingCauseRepository, 
                 ILogRepository logRepository)
         {
             this._customerUserRepository = customerUserRepository;
             this._productAreaRepository = productAreaRepository;
             this.caseTypeRepository = caseTypeRepository;
-            this.finishingCauseRepository = finishingCauseRepository;
             this.logRepository = logRepository;
         }
 
@@ -93,7 +90,7 @@
                                     GlobalSetting gs, 
                                     Setting customerSetting, 
                                     ISearch s,
-                                    WorkTimeCalculator workTimeCalculator,
+                                    IWorkTimeCalculatorFactory workTimeCalcFactory,
                                     string applicationType,
                                     bool calculateRemainingTime,
                                     IProductAreaNameResolver productAreaNamesResolver,
@@ -131,6 +128,8 @@
             {
                 return ret;
             }
+
+            var workTimeCalculator = this.InitCalcFromSQL(dsn, sql, workTimeCalcFactory, now);
             
             using (var con = new OleDbConnection(dsn)) 
             {
@@ -195,26 +194,24 @@
                                         //// calc time by watching date
                                         if (caseShouldBeFinishedInDate.Value > now)
                                         {
-                                            timeLeft = (int)Math.Floor((decimal)workTimeCalculator.CalcWorkTimeMinutes(
-                                                departmentId,
+                                            timeLeft = (workTimeCalculator.CalculateWorkTime(
                                                 now,
                                                 caseShouldBeFinishedInDate.Value,
-                                                timeOnPause) / 60);
+                                                departmentId) - timeOnPause) / 60;
                                         }
                                         else
                                         {
                                             //// for cases that should be closed in the past
-                                            timeLeft = -(int)Math.Floor((decimal)workTimeCalculator.CalcWorkTimeMinutes(
-                                            departmentId,
+                                            timeLeft = -(workTimeCalculator.CalculateWorkTime(
                                             caseShouldBeFinishedInDate.Value,
                                             now,
-                                            timeOnPause) / 60);
+                                            departmentId) - timeOnPause) / 60;
                                         }                                        
                                     }
                                     else if (SLAtime > 0)
                                     {
                                         //// calc by SLA value
-                                        timeLeft = (int)Math.Floor((SLAtime * 60 - (decimal)workTimeCalculator.CalcWorkTimeMinutes(departmentId, caseRegistrationDate, now, timeOnPause)) / 60);
+                                        timeLeft = (SLAtime * 60 - workTimeCalculator.CalculateWorkTime(caseRegistrationDate, now, departmentId) - timeOnPause) / 60;
                                     }
 
                                     if (timeLeft.HasValue)
@@ -330,6 +327,82 @@
             }
 
             return this.SortSearchResult(ret, s);
+        }
+
+        /// <summary>
+        /// Builds work time calculator based on cases that can be fetched using supplied SQL
+        /// </summary>
+        /// <param name="dsn"></param>
+        /// <param name="sql"></param>
+        /// <param name="calculatorFactory"></param>
+        /// <param name="utcNow"></param>
+        /// <returns></returns>
+        private WorkTimeCalculator InitCalcFromSQL(string dsn, string sql, IWorkTimeCalculatorFactory calculatorFactory, DateTime utcNow)
+        {
+            DateTime fetchRangeBegin = utcNow;
+            DateTime fetchRangeEnd = utcNow;
+            var deptIds = new HashSet<int>();
+            using (var con = new OleDbConnection(dsn))
+            {
+                using (var cmd = new OleDbCommand())
+                {
+                    try
+                    {
+                        con.Open();
+                        cmd.Connection = con;
+                        cmd.CommandType = CommandType.Text;
+                        cmd.CommandText = sql;
+
+                        var dr = cmd.ExecuteReader();
+                        if (dr != null)
+                        {
+                            if (dr.HasRows)
+                            {
+                                while (dr.Read())
+                                {
+                                    var intTmp = 0;
+                                    if (int.TryParse(dr["Department_Id"].ToString(), out intTmp) && !deptIds.Contains(intTmp))
+                                    {
+                                        deptIds.Add(intTmp);
+                                    }
+
+                                    DateTime caseRegistrationDate;
+                                    DateTime.TryParse(dr["RegTime"].ToString(), out caseRegistrationDate);
+                                    int SLAtime;
+                                    int.TryParse(dr["SolutionTime"].ToString(), out SLAtime);
+                                    DateTime watchDate;
+                                    if (DateTime.TryParse(dr["WatchDate"].ToString(), out watchDate))
+                                    {
+                                        //// calc time by watching date
+                                        if (watchDate > utcNow)
+                                        {
+                                            fetchRangeEnd = DatesHelper.Max(fetchRangeEnd, watchDate);
+                                        }
+                                        else
+                                        {
+                                            //// for cases that should be closed in the past
+                                            fetchRangeBegin = DatesHelper.Min(fetchRangeBegin, watchDate);
+                                        }                                        
+                                    }
+                                    else if (SLAtime > 0)
+                                    {
+                                        //// calc by SLA value
+                                        fetchRangeBegin = DatesHelper.Min(fetchRangeBegin, caseRegistrationDate);
+                                    }
+                                }
+                            }
+
+                            dr.Close();
+                        }
+                    }
+                    finally
+                    {
+                        con.Close();
+                    }
+                }
+            }
+
+            return calculatorFactory.Build(fetchRangeBegin, fetchRangeEnd, deptIds.ToArray());
         }
 
         private IList<CaseSearchResult> SortSearchResult(IList<CaseSearchResult> csr, ISearch s)

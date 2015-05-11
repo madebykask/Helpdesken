@@ -75,6 +75,14 @@
                 @Html.TextBoxFor(model => model.User.Email, new { maxlength = "50" })
             </td>
         </tr>
+        <tr>
+            <td>
+                @Translation.Get("Time zone", Enums.TranslationSource.TextTranslation) <span class="mandatorystar">*</span>
+            </td>
+            <td>
+                @Html.DropDownListFor(model => model.SelectedTimeZone, Model.AvailvableTimeZones,  new { style = "width: auto;" })
+            </td>
+        </tr>
         @if (Model.User.Id == null || Model.User.Id == 0 || Model.User.Id == -1)
         {
             <tr>

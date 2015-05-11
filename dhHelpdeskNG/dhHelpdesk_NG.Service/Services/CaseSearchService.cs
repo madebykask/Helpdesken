@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Services.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -8,6 +9,7 @@
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Utils;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services.Utils;
 
     public interface ICaseSearchService
     {
@@ -22,7 +24,7 @@
             ISearch s,
             int workingDayStart,
             int workingDayEnd,
-            WorkTimeCalculator workTimeCalculator,
+            TimeZoneInfo userTimeZone,
             string applicationType);
 
         IList<CaseSearchResult> Search(
@@ -36,7 +38,7 @@
             ISearch s,
             int workingDayStart,
             int workingDayEnd,
-            WorkTimeCalculator workTimeCalculator,
+            TimeZoneInfo userTimeZone,
             string applicationType,
             bool calculateRemainingTime,
             out CaseRemainingTimeData remainingTime,
@@ -52,15 +54,19 @@
         private readonly IGlobalSettingService globalSettingService;
         private readonly ISettingService settingService;
 
+        private readonly IHolidayService holidayService;
+
         public CaseSearchService(
             ICaseSearchRepository caseSearchRepository, 
             IProductAreaService productAreaService, 
             IGlobalSettingService globalSettingService, 
-            ISettingService settingService)
+            ISettingService settingService,
+            IHolidayService holidayService)
         {
             this.caseSearchRepository = caseSearchRepository;
             this.globalSettingService = globalSettingService;
             this.settingService = settingService;
+            this.holidayService = holidayService;
             this.productAreaService = productAreaService;
         }
 
@@ -75,7 +81,7 @@
             ISearch s,
             int workingDayStart,
             int workingDayEnd,
-            WorkTimeCalculator workTimeCalculator,
+            TimeZoneInfo userTimeZone,
             string applicationType)
         {
             CaseRemainingTimeData remainingTime;
@@ -90,7 +96,7 @@
                         s,
                         workingDayStart,
                         workingDayEnd,
-                        workTimeCalculator,
+                        userTimeZone,
                         applicationType,
                         false,
                         out remainingTime);
@@ -107,7 +113,7 @@
                                 ISearch s,
                                 int workingDayStart,
                                 int workingDayEnd,
-                                WorkTimeCalculator workTimeCalculator,
+                                TimeZoneInfo userTimeZone,
                                 string applicationType,
                                 bool calculateRemainingTime,
                                 out CaseRemainingTimeData remainingTime,
@@ -124,7 +130,8 @@
             {
                 csf.ProductArea = this.productAreaService.GetProductAreaWithChildren(productAreaId, ", ", "Id");
             }
-    
+
+            var workTimeFactory = new WorkTimeCalculatorFactory(this.holidayService, workingDayStart, workingDayEnd, userTimeZone);
             var result = this.caseSearchRepository.Search(
                                                 csf, 
                                                 csl, 
@@ -136,7 +143,7 @@
                                                 this.globalSettingService.GetGlobalSettings().FirstOrDefault(), 
                                                 this.settingService.GetCustomerSetting(f.CustomerId), 
                                                 s,
-                                                workTimeCalculator,
+                                                workTimeFactory,
                                                 applicationType,
                                                 calculateRemainingTime,
                                                 this.productAreaService,

@@ -1,10 +1,13 @@
 ﻿namespace DH.Helpdesk.Web.Controllers
 {
     using System;
+    using System.Linq;
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Security;
 
+    using DH.Helpdesk.BusinessData.Enums.Users;
+    using DH.Helpdesk.Services.Infrastructure.TimeZoneResolver;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Users;
     using DH.Helpdesk.Web.Infrastructure;
@@ -45,7 +48,7 @@
                 this.Session.Abandon();
             }
 
-            FormsAuthentication.SignOut();            
+            FormsAuthentication.SignOut();
             return this.View("Login");
         }
 
@@ -82,6 +85,36 @@
                     }
 
                     this.Session.Clear();
+                    int timeZoneOffsetInJan1, timeZoneOffsetInJul1;
+                    if (int.TryParse(coll["timeZoneOffsetInJan1"], out timeZoneOffsetInJan1)
+                        && int.TryParse(coll["timeZoneOffsetInJul1"], out timeZoneOffsetInJul1))
+                    {
+                        TimeZoneInfo[] tzones;
+                        SessionFacade.TimeZoneDetectionResult = TimeZoneResolver.DetectTimeZone(timeZoneOffsetInJan1, timeZoneOffsetInJul1, out tzones);
+                        if (string.IsNullOrEmpty(user.TimeZoneId))
+                        {
+                            user.TimeZoneId = SessionFacade.TimeZoneDetectionResult == TimeZoneAutodetectResult.Failure ? TimeZoneInfo.Local.Id : tzones[0].Id;
+                        }
+                        else
+                        {
+                            if (tzones.All(it => it.Id != user.TimeZoneId))
+                            {
+                                /// notice to user about to change his time zone in profile
+                                SessionFacade.TimeZoneDetectionResult = TimeZoneAutodetectResult.Notice;
+                            }
+                            else
+                            {
+                                /// no changes in users time zone was made
+                                SessionFacade.TimeZoneDetectionResult = TimeZoneAutodetectResult.None;
+                            }
+                        }
+                    }
+                    else
+                    {
+                       user.TimeZoneId = TimeZoneInfo.Local.Id;
+                       SessionFacade.TimeZoneDetectionResult = TimeZoneAutodetectResult.Failure;
+                    }
+
                     SessionFacade.CurrentUser = user;
                     SessionFacade.CurrentLanguageId = user.LanguageId;
                     SessionFacade.CurrentLoginMode = LoginMode.Application;
@@ -107,7 +140,13 @@
                             });
 
                     this.usersPasswordHistoryService.SaveHistory(user.Id, EncryptionHelper.GetMd5Hash(password));
-
+                    if (SessionFacade.TimeZoneDetectionResult == TimeZoneAutodetectResult.Failure
+                        || SessionFacade.TimeZoneDetectionResult == TimeZoneAutodetectResult.MoreThanOne)
+                    {
+                        this.RedirectFromLoginPage(userName, "~/Profile/Edit/", user.StartPage);
+                        return null;
+                    }
+                    
                     this.RedirectFromLoginPage(userName, redirectTo, user.StartPage);
                 }
                 else

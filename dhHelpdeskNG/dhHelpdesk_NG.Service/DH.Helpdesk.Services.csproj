@@ -267,6 +267,7 @@
     <Compile Include="Infrastructure\Cases\ICasesCalculator.cs" />
     <Compile Include="Infrastructure\Email\Concrete\CaseMailer.cs" />
     <Compile Include="Infrastructure\Email\ICaseMailer.cs" />
+    <Compile Include="Infrastructure\TimeZoneResolver\TimeZoneResolver.cs" />
     <Compile Include="Services\Concrete\Reports\ReportService.cs" />
     <Compile Include="Services\Concrete\Users\UsersPasswordHistoryService.cs" />
     <Compile Include="Services\Grid\GridSettingsService.cs" />
@@ -478,6 +479,7 @@
     <Compile Include="BusinessModels\Faq\NewFaq.cs" />
     <Compile Include="BusinessModels\Faq\NewFaqFile.cs" />
     <Compile Include="Services\WorkingGroupService.cs" />
+    <Compile Include="utils\WorkTimeCalculatorFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">

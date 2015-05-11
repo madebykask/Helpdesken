@@ -15,25 +15,7 @@
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment-1">
-
-                @*<div class="container">
-                    <div class="row">
-                        <div class="span12">
-                            <table class="tableform">
-                                <tr>
-                                    <td class="span3">
-                                        @Translation.Get("Id", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(model => model.User.UserID)
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                </div>*@
                 <div class="container" id="subTabContainer">
-                    
                     @Html.Partial("_General", Model)
 
                 </div>

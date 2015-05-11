@@ -12,6 +12,15 @@ BEGIN
 END
 GO 
 
+
+IF COL_LENGTH('dbo.tblUsers','TimeZoneId') IS NULL
+BEGIN	 
+	ALTER TABLE [dbo].[tblUsers]
+	ADD TimeZoneId nvarchar(64) default NULL
+END
+GO 
+
+
 ALTER TABLE tblProblem ALTER COLUMN ChangedByUser_Id int NULL
 GO
 

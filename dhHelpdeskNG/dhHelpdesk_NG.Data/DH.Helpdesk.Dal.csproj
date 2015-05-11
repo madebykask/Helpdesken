@@ -44,6 +44,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\DH.Helpdesk.Dal.dll</HintPath>
     </Reference>
+    <Reference Include="DH.Helpdesk.Services">
+      <HintPath>..\dhHelpdesk_NG.Web_SelfService\Bin\DH.Helpdesk.Services.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.6.1.0\lib\net40\EntityFramework.dll</HintPath>
     </Reference>
@@ -678,7 +681,9 @@
     <Compile Include="Repositories\VendorRepository.cs" />
     <Compile Include="Repositories\WatchDateCalendarRepository.cs" />
     <Compile Include="Repositories\WorkingGroupRepository.cs" />
+    <Compile Include="Repositories\WorkTimeCalculatorFactory.cs" />
     <Compile Include="SearchRequestBuilders\Notifiers\NotifiersSearchRequestBuilder.cs" />
+    <Compile Include="Utils\IWorkTimeCalculatorFactory.cs" />
     <Compile Include="Utils\WorkTimeCalculator.cs" />
   </ItemGroup>
   <ItemGroup>

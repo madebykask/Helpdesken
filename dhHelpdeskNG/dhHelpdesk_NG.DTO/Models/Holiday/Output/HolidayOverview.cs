@@ -16,17 +16,17 @@ namespace DH.Helpdesk.BusinessData.Models.Holiday.Output
     public sealed class HolidayOverview
     {
         /// <summary>
-        /// Gets or sets the time from.
+        /// Begin of work in holiday in users local time
         /// </summary>
         public int TimeFrom { get; set; }
 
         /// <summary>
-        /// Begin of working day in holiday
+        /// End of work in holiday in users local time
         /// </summary>
         public int TimeUntil { get; set; }
 
         /// <summary>
-        /// End of working day in holiday
+        /// Date of holiday in users local time
         /// </summary>
         public DateTime HolidayDate { get; set; }
 
@@ -34,5 +34,15 @@ namespace DH.Helpdesk.BusinessData.Models.Holiday.Output
         /// Gets or sets the holiday header.
         /// </summary>
         public int DepartmentId { get; set; }
+
+        /// <summary>
+        /// Resolves whether this holiday is a "working" holiday.
+        /// 0 - 24 means 24h working holiday
+        /// </summary>
+        /// <returns></returns>
+        public bool IsWorkingHoliday()
+        {
+            return !(this.TimeFrom == 0 && this.TimeUntil == 0);
+        }
     }
 }

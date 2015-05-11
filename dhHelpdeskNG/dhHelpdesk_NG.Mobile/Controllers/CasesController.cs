@@ -285,19 +285,6 @@
                     srm.caseSettings = css;
 
                     //srm.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(cusId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
-                    srm.cases = this._caseSearchService.Search(
-                        sm.caseSearchFilter,
-                        srm.caseSettings,
-                        SessionFacade.CurrentUser.Id,
-                        SessionFacade.CurrentUser.UserId,
-                        SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups,
-                        SessionFacade.CurrentUser.UserGroupId,
-                        SessionFacade.CurrentUser.RestrictedCasePermission,
-                        sm.Search,
-                        this.workContext.Customer.WorkingDayStart,
-                        this.workContext.Customer.WorkingDayEnd,
-                        WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext),
-                        ApplicationTypes.HelpdeskMobile);
                     m.caseSearchResult = srm;
                     m.caseSearchFilterData = fd;
                     sm.Search.IdsForLastSearch = GetIdsFromSearchResult(srm.cases);
@@ -918,20 +905,7 @@
                 m.caseSettings = css;
 
                 var workTimeCalc = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
-                m.cases = this._caseSearchService.Search(
-                    f,
-                    m.caseSettings,
-                    SessionFacade.CurrentUser.Id,
-                    SessionFacade.CurrentUser.UserId,
-                    SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups,
-                    SessionFacade.CurrentUser.UserGroupId,
-                    SessionFacade.CurrentUser.RestrictedCasePermission,
-                    sm.Search,
-                    this.workContext.Customer.WorkingDayStart,
-                    this.workContext.Customer.WorkingDayEnd,
-                    workTimeCalc,
-                    ApplicationTypes.HelpdeskMobile);
-
+                
                 sm.Search.IdsForLastSearch = GetIdsFromSearchResult(m.cases);
                 SessionFacade.CurrentCaseSearch = sm;
             }
@@ -1269,15 +1243,6 @@
                                                             case_.Customer_Id);
 
                 this.notifierService.UpdateCaseNotifier(caseNotifier);
-            }
-
-            if (case_.FinishingDate.HasValue)
-            {
-                var workTimeCalc = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
-                case_.LeadTime = workTimeCalc.CalcWorkTimeMinutes(
-                    case_.Department_Id,
-                    case_.RegTime,
-                    case_.FinishingDate.Value) - case_.ExternalTime;
             }
 
             // save log

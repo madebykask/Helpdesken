@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Runtime.Remoting.Messaging;
 
     using DH.Helpdesk.BusinessData.Models.Holiday.Output;
     using DH.Helpdesk.Dal.NewInfrastructure;
@@ -33,34 +34,48 @@
         void SaveHoliday(Holiday holiday, out IDictionary<string, string> errors);
 
         void SaveHolidayHeader(HolidayHeader holidayheader, out IDictionary<string, string> errors);
-
-        IEnumerable<HolidayOverview> GetHolidayOverviews();
-
+        
         IEnumerable<HolidayOverview> GetDefaultCalendar();
+
+        /// <summary>
+        /// Returns holidays between specified date and for specified department.
+        /// Time range should be in customers timezone.
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <param name="departmentsIds"></param>
+        /// <returns></returns>
+        IEnumerable<HolidayOverview> GetHolidayBetweenDatesForDepartments(
+            DateTime from,
+            DateTime to,
+           int[] departmentsIds);
     }
 
     public class HolidayService : IHolidayService
     {
+        /// <summary>
+        /// ID of default calendar for all customers
+        /// </summary>
+        public const int DEFAULT_CALENDAR_ID = 1;
+
         private readonly IHolidayRepository _holidayRepository;
+
         private readonly IHolidayHeaderRepository _holidayHeaderRepository;
+
         private readonly IUnitOfWork _unitOfWork;
 
-        private readonly IUnitOfWorkFactory unitOfWorkFactory;
-
-        private readonly IDepartmentRepository departmentRepository;
+        private readonly IDepartmentService departmentService;
 
         public HolidayService(
             IHolidayRepository holidayRepository,
             IHolidayHeaderRepository holidayHeaderRepository,
-            IDepartmentRepository departmentRepository,
             IUnitOfWork unitOfWork, 
-            IUnitOfWorkFactory unitOfWorkFactory)
+            IDepartmentService departmentService)
         {
             this._holidayRepository = holidayRepository;
             this._holidayHeaderRepository = holidayHeaderRepository;
             this._unitOfWork = unitOfWork;
-            this.unitOfWorkFactory = unitOfWorkFactory;
-            this.departmentRepository = departmentRepository;
+            this.departmentService = departmentService;
         }
 
         public IEnumerable<Holiday> GetAll()
@@ -78,6 +93,11 @@
             return this._holidayRepository.GetById(id);
         }
 
+        /// <summary>
+        /// @TODO: code review - implement fetching logic inside this method, not in repository
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public IEnumerable<Holiday> GetHolidaysByHeaderId(int id)
         {
             return this._holidayRepository.GetHolidaysByHeaderId(id).OrderBy(x => x.HolidayDate);
@@ -90,7 +110,6 @@
 
         public IList<Holiday> GetHolidaysByHeaderIdAndYearForList(int year, int id)
         {
-            //return this._holidayRepository.GetHolidaysByHeaderIdAndYearForList(year, id).OrderBy(x => x.HolidayDate);
             var query = (from h in this._holidayRepository.GetAll().Where(x => x.HolidayHeader_Id == id && x.HolidayDate.Year == year)
                          select h);
 
@@ -161,16 +180,28 @@
 
             return DeleteMessage.Error;
         }
-
-        public IEnumerable<HolidayOverview> GetHolidayOverviews()
-        {
-            return this.departmentRepository.GetAll().MapToOverviewsDept();
-        }
+        
 
         public IEnumerable<HolidayOverview> GetDefaultCalendar()
         {
-            const int DEFAULT_CALENDAR_ID = 1;
             return this._holidayRepository.GetHolidaysByHeaderId(DEFAULT_CALENDAR_ID).MapToOverviews();
+        }
+
+        public IEnumerable<HolidayOverview> GetHolidayBetweenDatesForDepartments(DateTime @from, DateTime to, int[] departmentsIds)
+        {
+            var res = this.departmentService.GetDepartmentsByIds(departmentsIds)
+                    .Where(it => it.HolidayHeader != null && it.HolidayHeader.Holidays.Any() && it.HolidayHeader.Holidays.Any(holiday => holiday.HolidayDate >= from && holiday.HolidayDate <= to))
+                    .SelectMany(
+                        department => department.HolidayHeader.Holidays,
+                        (department, holiday) =>
+                        new HolidayOverview()
+                            {
+                                DepartmentId = department.Id,
+                                HolidayDate = holiday.HolidayDate,
+                                TimeFrom = holiday.TimeFrom,
+                                TimeUntil = holiday.TimeUntil
+                            });
+            return res;
         }
 
         private void Commit()

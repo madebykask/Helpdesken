@@ -1,0 +1,46 @@
+﻿namespace DH.Helpdesk.Services.Infrastructure.TimeZoneResolver
+{
+    using System;
+    using System.Linq;
+
+    using DH.Helpdesk.BusinessData.Enums.Users;
+
+    public class TimeZoneResolver
+    {
+        public static TimeZoneAutodetectResult DetectTimeZone(int Jan1TimeZoneOffset, int Jul1TimeZoneOffset, out TimeZoneInfo[] detectedTimeZones)
+        {
+            Jan1TimeZoneOffset = -Jan1TimeZoneOffset;
+            Jul1TimeZoneOffset = -Jul1TimeZoneOffset;
+            
+            if (Jan1TimeZoneOffset == Jul1TimeZoneOffset)
+            {
+                /// no daylightsaving
+                detectedTimeZones =
+                    TimeZoneInfo.GetSystemTimeZones()
+                        .Where(tz => tz.BaseUtcOffset.TotalMinutes == Jan1TimeZoneOffset)
+                        .ToArray();
+            }
+            else
+            {
+                detectedTimeZones =
+                    TimeZoneInfo.GetSystemTimeZones()
+                        .Where(
+                            tz =>
+                            tz.BaseUtcOffset.TotalMinutes == Jan1TimeZoneOffset && tz.SupportsDaylightSavingTime)
+                        .ToArray();
+            }
+
+            if (detectedTimeZones.Length == 1)
+            {
+                return TimeZoneAutodetectResult.Success;
+            }
+
+            if (detectedTimeZones.Length > 1)
+            {
+                return TimeZoneAutodetectResult.MoreThanOne;
+            }
+
+            return TimeZoneAutodetectResult.Failure;
+        }
+    }
+}

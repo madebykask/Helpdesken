@@ -7,41 +7,41 @@ namespace DH.Helpdesk.Web.Controllers
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Net;
     using System.Web;
     using System.Web.Mvc;
-    using System.Web.Helpers;
-    using System.Web.UI.DataVisualization.Charting;
-    using System.Web.UI.WebControls.Expressions;
 
     using DH.Helpdesk.BusinessData.Enums.Case;
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Case;
-    using DH.Helpdesk.BusinessData.Models.Customer;
     using DH.Helpdesk.BusinessData.Models.FinishingCause;
     using DH.Helpdesk.BusinessData.Models.Grid;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+    using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Dal.Infrastructure.Context;
+    using DH.Helpdesk.Dal.Utils;
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Mobile.Infrastructure;
+    using DH.Helpdesk.Services.Infrastructure;
     using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Services.Services.Concrete;
     using DH.Helpdesk.Services.Services.Grid;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.Attributes;
     using DH.Helpdesk.Web.Infrastructure.CaseOverview;
     using DH.Helpdesk.Web.Infrastructure.Configuration;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
+    using DH.Helpdesk.Web.Infrastructure.Grid;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Case;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Invoice;
     using DH.Helpdesk.Web.Infrastructure.Mvc;
     using DH.Helpdesk.Web.Infrastructure.Tools;
     using DH.Helpdesk.Web.Models;
     using DH.Helpdesk.Web.Models.Case;
+    using DH.Helpdesk.Web.Models.Case.Input;
     using DH.Helpdesk.Web.Models.Shared;
     
     using DH.Helpdesk.Web.Models.Case.Input;
@@ -49,6 +49,7 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Services.Services.Concrete;
     using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Web.Enums;
+    using DH.Helpdesk.Services.Utils;
 
     public class CasesController : BaseController
     {
@@ -528,7 +529,6 @@ namespace DH.Helpdesk.Web.Controllers
             sm.Search.SortBy = gridSettings.sortOptions.sortBy;
             sm.Search.Ascending = gridSettings.sortOptions.sortDir == SortingDirection.Asc;
             m.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(f.CustomerId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
-            var workTimeCalc = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
             var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
             CaseRemainingTimeData remainingTimeData;
             m.cases = this._caseSearchService.Search(
@@ -542,7 +542,7 @@ namespace DH.Helpdesk.Web.Controllers
                 sm.Search,
                 this.workContext.Customer.WorkingDayStart,
                 this.workContext.Customer.WorkingDayEnd,
-                workTimeCalc,
+                TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId),
                 ApplicationTypes.Helpdesk,
                 showRemainingTime,
                 out remainingTimeData);
@@ -1663,8 +1663,6 @@ namespace DH.Helpdesk.Web.Controllers
             search.Search.SortBy = sortBy ?? string.Empty;
             search.Search.Ascending = sortByAsc.convertStringToBool();
             search.caseSearchFilter.CaseProgress = CaseProgressFilter.None;
-            var workTimeCalculator = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
-
             var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
             CaseRemainingTimeData remainingTime;
             searchResult.cases = this._caseSearchService.Search(
@@ -1678,7 +1676,7 @@ namespace DH.Helpdesk.Web.Controllers
                 search.Search,
                 this.workContext.Customer.WorkingDayStart,
                 this.workContext.Customer.WorkingDayEnd,
-                workTimeCalculator,
+                TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId),
                 ApplicationTypes.Helpdesk,
                 showRemainingTime,
                 out remainingTime,
@@ -1842,12 +1840,22 @@ namespace DH.Helpdesk.Web.Controllers
                     // calculating time spent in "inactive" state since last changing every save
                     if (caseSubState.IncludeInCaseStatistics == 0)
                     {
-                        var workTimeCalc = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
-                        var workingTimeMins = workTimeCalc.CalcWorkTimeMinutes(
-                            oldCase.Department_Id,
+                        var workTimeCalcFactory = new WorkTimeCalculatorFactory(
+                            ManualDependencyResolver.Get<IHolidayService>(),
+                            SessionFacade.CurrentCustomer.WorkingDayStart,
+                            SessionFacade.CurrentCustomer.WorkingDayStart,
+                            TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
+                        int[] deptIds = null;
+                        if (case_.Department_Id.HasValue)
+                        {
+                            deptIds = new int[] { case_.Department_Id.Value };
+                        }
+
+                        var workTimeCalc = workTimeCalcFactory.Build(oldCase.ChangeTime, DateTime.UtcNow, deptIds);
+                        case_.ExternalTime = workTimeCalc.CalculateWorkTime(
                             oldCase.ChangeTime,
-                            DateTime.UtcNow);
-                        case_.ExternalTime = oldCase.ExternalTime + workingTimeMins;
+                            DateTime.UtcNow,
+                            oldCase.Department_Id) + oldCase.ExternalTime;
                     }
                 }
             }
@@ -1909,11 +1917,22 @@ namespace DH.Helpdesk.Web.Controllers
                     case_.FinishingDate = case_.RegTime;
                 }
 
-                var workTimeCalc = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
-                case_.LeadTime = workTimeCalc.CalcWorkTimeMinutes(
-                    case_.Department_Id,
+                var workTimeCalcFactory = new WorkTimeCalculatorFactory(
+                    ManualDependencyResolver.Get<IHolidayService>(),
+                    SessionFacade.CurrentCustomer.WorkingDayStart,
+                    SessionFacade.CurrentCustomer.WorkingDayStart,
+                    TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
+                int[] deptIds = null;
+                if (case_.Department_Id.HasValue)
+                {
+                    deptIds = new int[] { case_.Department_Id.Value };
+                }
+
+                var workTimeCalc = workTimeCalcFactory.Build(case_.RegTime, case_.FinishingDate.Value, deptIds);
+                case_.LeadTime = workTimeCalc.CalculateWorkTime(
                     case_.RegTime,
-                    case_.FinishingDate.Value) - case_.ExternalTime;
+                    case_.FinishingDate.Value,
+                    case_.Department_Id) - case_.ExternalTime;
             }
 
             // save log

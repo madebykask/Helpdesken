@@ -32,19 +32,16 @@
             this.moduleService = moduleService;
         }
 
-        public ActionResult Index()
+        public ActionResult Edit()
         {
-            return this.View();
-        }
-
-        public ActionResult Edit(int id)
-        {
-            var user = this.userService.GetUser(id);
+            var user = this.userService.GetUser(SessionFacade.CurrentUser.Id);
 
             if (user == null)
             {
                 return new HttpNotFoundResult("No user found...");
             }
+
+            user.TimeZoneId = SessionFacade.CurrentUser.TimeZoneId ?? TimeZoneInfo.Local.Id;
 
             // Temporary inactive MyCases only for 27th March released #11837 
             var allModules = this.moduleService.GetAllModules()
@@ -92,7 +89,7 @@
             }
 
             modules.Modules = primaryModules;
-            var customerSettings = this.userService.GetUserProfileCustomersSettings(id);
+            var customerSettings = this.userService.GetUserProfileCustomersSettings(user.Id);
             var customerSettingsModel = new UserCustomersSettingsViewModel(customerSettings);
             var model = this.CreateInputViewModel(user, modules, customerSettingsModel);
 
@@ -132,8 +129,6 @@
                     cu.User_Id = 0;
                 }
             }
-
-            var vmodel = this.CreateInputViewModel(userToSave);
            
             if (userToSave.UserRoles != null)
             {
@@ -150,6 +145,8 @@
             }
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
+
+            userToSave.TimeZoneId = profileUserModel.SelectedTimeZone;
 
             this.userService.SaveProfileUser(userToSave, out errors);
 
@@ -240,7 +237,9 @@
                 User = user,
                 RefreshInterval = sli,
                 Modules = modules,
-                CustomersSettings = customersSettings
+                CustomersSettings = customersSettings,
+                AvailvableTimeZones = TimeZoneInfo.GetSystemTimeZones().Select(it => new SelectListItem() { Value = it.Id, Text = it.DisplayName, Selected = user.TimeZoneId == it.Id }),
+                SelectedTimeZone = user.TimeZoneId
             };
 
             return model;

@@ -5,9 +5,11 @@
     using System.Linq;
     using System.Web;
 
+    using DH.Helpdesk.BusinessData.Enums.Users;
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Grid;
     using DH.Helpdesk.BusinessData.Models.User.Input;
+    using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Computers;
     using DH.Helpdesk.Web.Infrastructure.Session;
@@ -61,6 +63,10 @@
         private const string _CURRENT_USER_IDENTITY = "CURRENT_USER_IDENTITY";
 
         private const string _CASE_OVERVIEW_SETTINGS_KEY = "CASE_OVERVIEW_SETTINGS";
+
+        private const string _TZ_DETECTION_KEY = "TZ_DETECTION_RESULT";
+
+        private const string _TZ_MSG_KEY = "TZ_MSG_RESULT";
 
         #endregion
 
@@ -470,6 +476,49 @@
                 {
                     HttpContext.Current.Session[_CASE_OVERVIEW_SETTINGS_KEY] = value;
                 }
+            }
+        }
+
+        public static TimeZoneAutodetectResult TimeZoneDetectionResult
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_TZ_DETECTION_KEY] != null)
+                {
+                    return (TimeZoneAutodetectResult)HttpContext.Current.Session[_TZ_DETECTION_KEY];
+                }
+
+                return TimeZoneAutodetectResult.None;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_TZ_DETECTION_KEY, value);
+            }
+        }
+
+        public static bool WasTimeZoneMessageDisplayed
+        {
+            get
+            {
+                return HttpContext.Current.Session[_TZ_MSG_KEY] != null && (bool)HttpContext.Current.Session[_TZ_MSG_KEY];
+            }
+
+            set
+            {
+                SaveSetKeyValue(_TZ_MSG_KEY, value);
+            }
+        }
+
+        private static void SaveSetKeyValue(string key, object value)
+        {
+            if (HttpContext.Current.Session[key] == null)
+            {
+                HttpContext.Current.Session.Add(key, value);
+            }
+            else
+            {
+                HttpContext.Current.Session[key] = value;
             }
         }
 

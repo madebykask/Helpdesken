@@ -13,14 +13,13 @@
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
 
     using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
-    using DH.Helpdesk.Common.Enums;
 
     public interface IDepartmentService
     {
         IList<Department> GetDepartmentsByUserPermissions(int userId, int customerId);
-
+        
         IList<Department> GetDepartments(int customerId, ActivationStatus isActive = ActivationStatus.Active);
-
+        
         Department GetDepartment(int id);
 
         DeleteMessage DeleteDepartment(int id);
@@ -39,6 +38,7 @@
 
         IEnumerable<Department> GetActiveDepartmentsBy(int customerId, int? regionId);
 
+        IEnumerable<Department> GetDepartmentsByIds(int[] departmentsIds);
     }
 
     public class DepartmentService : IDepartmentService
@@ -210,6 +210,12 @@
         public IEnumerable<Department> GetActiveDepartmentsBy(int customerId, int? regionId)
         {
             return departmentRepository.GetActiveDepartmentsBy(customerId, regionId);
+        }
+
+        public IEnumerable<Department> GetDepartmentsByIds(int[] departmentsIds)
+        {
+            var deptMap = departmentsIds.ToDictionary(it => it);
+            return this.departmentRepository.GetAll().Where(it => deptMap.ContainsKey(it.Id));
         }
 
         public void SaveDepartment(Department department, out IDictionary<string, string> errors)

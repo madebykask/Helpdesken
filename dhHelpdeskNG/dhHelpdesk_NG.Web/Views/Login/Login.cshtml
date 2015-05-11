@@ -40,6 +40,8 @@
                 </select>
                 -->
             <br />
+            <input type="hidden" name="timeZoneOffsetInJan1"/>
+            <input type="hidden" name="timeZoneOffsetInJul1"/>
             <input type="submit" value="Login" name="btnLogin" id="btnLogin" class="btn btn-large btn-success" style="width:100%;" />            
         }
     </div>
@@ -52,5 +54,11 @@
 </body>
 </html>
 <script type="text/javascript">
-    $("input:text:visible:first").focus();
+    $(document).ready(function () {
+        var Jan1 = new Date(2015, 0, 1);
+        var Jul1 = new Date(2015, 6, 1);
+        $("input[name=timeZoneOffsetInJan1]").val(Jan1.getTimezoneOffset());
+        $("input[name=timeZoneOffsetInJul1]").val(Jul1.getTimezoneOffset());
+        $("input:text:visible:first").focus();
+    });
 </script>

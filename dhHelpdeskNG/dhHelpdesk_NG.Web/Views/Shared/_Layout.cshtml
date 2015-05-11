@@ -196,12 +196,6 @@
                                             <img src="@Url.Content("~/Content/icons/orderaccount.png")" />
                                             @Translation.Get("Beställning kontobehörighet")</a></li>
                                     @*}*@
-                                    @if(model.IsAccountVisible())
-                                    {    
-                                        <li><a href="@Url.Action("index", "accounts", new { area = "" })">
-                                            <img src="@Url.Content("~/Content/icons/orderaccount.png")" />
-                                            @Translation.Get("Beställning kontobehörighet")</a></li>
-                                    }
 
                                     @if(model.IsCheckListVisuble())
                                     {    
@@ -224,8 +218,6 @@
                                             <img src="@Url.Content("~/Content/icons/Licens.png")" alt="license" />
                                             @Translation.Get("Licenshantering")</a></li>
                                     }
-
-
                                     <li></li>
                                 </ul>
                             </li>                            
@@ -336,5 +328,33 @@
     @RenderSection("Scripts", false)
     <input type="hidden" value="@Request.RawUrl" id="rawUrl" />
     @Html.Partial("_Translations", null)
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var timezoneAutodetectRes = "@ViewBag.AutoDetectionResult";
+
+            function ShowToastMessage(message, msgType) {
+                msgType = msgType || 'notice';
+                $().toastmessage('showToast', {
+                    text: message,
+                    sticky: false,
+                    position: 'top-center',
+                    type: msgType,
+                    closeText: '',
+                    stayTime: 10000,
+                    inEffectDuration: 1000
+                });
+            }
+
+            if (timezoneAutodetectRes === 'MoreThanOne') {
+                ShowToastMessage('We have detected more than one time zone for your UTC offset. Please, select your time zone from list and press "Save".');
+            } else if (timezoneAutodetectRes === 'Failure') {
+                ShowToastMessage('We could not detect your timezone. Please, select your time zone and press "Save".', 'warning');
+            } else if (timezoneAutodetectRes === 'Success') {
+                ShowToastMessage('We have detected your time zone based on you browser UTC offset. You can change it in your <a href="Profile/Edit/">profile settings</a>');
+            } else if (timezoneAutodetectRes === 'Notice') {
+                ShowToastMessage('We have detected that your have different time zone on your PC that you have in profile. Go to <a href="Profile/Edit/">profile settings</a> and change it.');
+            }
+        });
+    </script>
 </body>
 </html>
