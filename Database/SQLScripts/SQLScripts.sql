@@ -22,6 +22,9 @@ BEGIN
 END
 GO 
 
+Delete from tbluserworkinggroup
+where UserRole = 0 
+
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.6'
