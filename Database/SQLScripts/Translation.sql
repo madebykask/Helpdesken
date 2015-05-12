@@ -3296,5 +3296,30 @@ GO
 If not exists (select * from tblTextTranslation where text_id = 1385 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1385, 2, 'In proceess changes')
 GO
+
+-- 2015-05-12
+If not exists (select * from tbltext where id = 1386)
+	insert into tbltext (id, TextString) VALUES (1386, 'Vi kunde inte ange din tidszon. Var vänlig välj rätt tidszon och klicka på "Spara".')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1386 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1386, 2, 'We were not able to determine your time zone. Please select your time zone and press "Save".')
+GO
+
+If not exists (select * from tbltext where id = 1387)
+	insert into tbltext (id, TextString) VALUES (1387, 'Vi kunde inte ange din tidszon. Var vänlig välj rätt tidszon och klicka på "Spara".')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1387 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1387, 2, 'We have determined your time zone based on your browser. If you prefer to work towards a different time zone you can change it in the {0}Profile{1} section')
+GO
+
+If not exists (select * from tbltext where id = 1388)
+	insert into tbltext (id, TextString) VALUES (1388, 'Vi kunde inte ange din tidszon. Var vänlig välj rätt tidszon och klicka på "Spara".')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1388 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1388, 2, 'We have detected that your browser’s time zone differs from the one in your Profile. To change it go to {0}profile{1} settings')
+GO
+
+
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
