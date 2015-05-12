@@ -5,6 +5,7 @@
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Domain;
 
     public class CaseSearchFilterData
@@ -50,6 +51,8 @@
         /// </summary>
         public string CaseInitiatorFilter { get; set; }
 
-        public CaseAdvancedSearchParams AdvancedSearch { get; set; }
+        public IList<ItemOverview> FilterCustomers { get; set; } 
+
+        public bool IsAdvancedSearch { get; set; }
     }    
 }

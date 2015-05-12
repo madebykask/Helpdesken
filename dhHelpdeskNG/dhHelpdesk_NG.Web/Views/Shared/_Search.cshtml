@@ -9,10 +9,6 @@
     
   <form id="frmCaseSearch" name="frmCaseSearch">
      <div class="container">
-         @if (Model.AdvancedSearch != null)
-         {
-            <input type="hidden" name="AdvancedSearch" value="@string.Join(",", Model.AdvancedSearch.CustomerIds)" />             
-         }
          <div class="row" id="hiddeninfo" style="display:none">
              <div data-field="caseRemainingTimeShowPlace" style="float: right;"></div>
              <div class="span12">
@@ -26,6 +22,23 @@
                          <td class="span5">
                          </td>
                      </tr>
+                     @if (Model.IsAdvancedSearch)
+                     {
+                         <tr>
+                             <td>                                                                
+                                 @Translation.Get(GlobalEnums.TranslationCaseFields.Customer_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                    
+                             </td>
+                             <td>
+                                 <input id="filterCustomersAll" name="filterCustomersAll" type="hidden" value="@string.Join(",", Model.FilterCustomers.Select(c => c.Value))" />
+                                 <select id="lstFilterCustomers" name="lstFilterCustomers" data-placeholder="@Translation.Get("Välj en eller flera")" multiple="multiple" class="chosen-select">
+                                     @foreach (var customer in Model.FilterCustomers)
+                                     {
+                                         <option value="@customer.Value">@customer.Name</option>                                     
+                                     }
+                                 </select>
+                             </td>
+                         </tr>
+                     }
                      @if (Model.customerUserSetting.CaseInitiatorFilterShow)
                      {
                          <tr>

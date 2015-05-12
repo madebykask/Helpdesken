@@ -123,7 +123,8 @@ var GRID_STATE = {
     */
     Page.prototype.isFilterEmpty = function () {
         var me = this;
-        return $('#lstFilterRegion option:selected').length === 0 &&
+        return $('#lstFilterCustomers option:selected').length === 0 &&
+            $('#lstFilterRegion option:selected').length === 0 &&
             $('#lstFilterCountry option:selected').length === 0 &&
             $('#lstfilterDepartment option:selected').length === 0 &&
             $('#lstfilterUser option:selected').length === 0 &&
@@ -372,7 +373,7 @@ var GRID_STATE = {
     Page.prototype.unsetSearchFilter = function () {
         var me = this;
         /// filterRegion,filterCountry,filterDepartment,filterCaseUser, 
-        $("#lstFilterRegion, #lstFilterCountry, #lstfilterDepartment, #lstfilterUser").val('').trigger("chosen:updated");
+        $("#lstFilterCustomers, #lstFilterRegion, #lstFilterCountry, #lstfilterDepartment, #lstfilterUser").val('').trigger("chosen:updated");
         /// filterCaseType
         unsetBootstrapsDropdown('#divCaseType');
         /// filterProductArea

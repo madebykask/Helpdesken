@@ -6,6 +6,7 @@ namespace DH.Helpdesk.Web.Controllers
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Web;
     using System.Web.Mvc;
@@ -242,10 +243,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         public ActionResult AdvancedSearch()
         {
-            var customers = this._userService.GetUserProfileCustomersSettings(SessionFacade.CurrentUser.Id);
-            var advancedSearch = new CaseAdvancedSearchParams(customers.Select(c => c.CustomerId).ToList());
-
-            return this.Index(null, null, CasesCustomFilter.None, null, null, null, advancedSearch);
+            return this.Index(null, null, CasesCustomFilter.None, null, null, null, true);
         }
 
 
@@ -256,7 +254,7 @@ namespace DH.Helpdesk.Web.Controllers
             bool? DefaultSearch = false,
             bool? useMyCases = false,
             bool? resetSearchForm = false,
-            CaseAdvancedSearchParams advancedSearch = null)
+            bool advancedSearch = false)
         {                        
             if (SessionFacade.CurrentUser == null)
             {
@@ -406,7 +404,7 @@ namespace DH.Helpdesk.Web.Controllers
             var user = this._userService.GetUser(SessionFacade.CurrentUser.Id);
             m.CaseSetting.RefreshContent = user.RefreshContent;
 
-            if (advancedSearch != null && advancedSearch.CustomerIds.Any())
+            if (advancedSearch)
             {
                 /* In "Advance Search" mode shouldn't show cases at the begining */
                 m.GridSettings.DontFetchData = true;
@@ -438,9 +436,14 @@ namespace DH.Helpdesk.Web.Controllers
                         SessionFacade.CurrentCustomer.Id,
                         SessionFacade.CurrentUser.UserGroupId,
                         SessionFacade.CurrentUser.Id)
-            };                                  
+            };
+            var filterCustomers = frm.ReturnFormValue("lstFilterCustomers");
+            if (string.IsNullOrEmpty(filterCustomers))
+            {
+                filterCustomers = frm.ReturnFormValue("filterCustomersAll");
+            }
 
-            f.AdvancedSearch = new CaseAdvancedSearchParams(frm.ReturnFormValue("AdvancedSearch").ToIntList());            
+            f.AdvancedSearch = new CaseAdvancedSearchParams(filterCustomers);            
             f.CustomerId = SessionFacade.CurrentCustomer.Id;
             f.UserId = SessionFacade.CurrentUser.Id;
             f.CaseType = frm.ReturnFormValue("hidFilterCaseTypeId").convertStringToInt();
@@ -595,15 +598,21 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
 
-        private CaseSearchFilterData CreateCaseSearchFilterData(int cusId, int userId, CustomerUser cu, CaseSearchModel sm, CaseAdvancedSearchParams advancedSearch)
+        private CaseSearchFilterData CreateCaseSearchFilterData(int cusId, int userId, CustomerUser cu, CaseSearchModel sm, bool advancedSearch)
         {
             var fd = new CaseSearchFilterData
             {
                 customerUserSetting = cu,
                 customerSetting = this._settingService.GetCustomerSetting(cusId),
-                filterCustomerId = cusId,
-                AdvancedSearch = advancedSearch
+                filterCustomerId = cusId
             };
+
+            if (advancedSearch)
+            {
+                var customers = this._userService.GetUserProfileCustomersSettings(SessionFacade.CurrentUser.Id);
+                fd.FilterCustomers = customers.Select(c => new ItemOverview(c.CustomerName, c.CustomerId.ToString(CultureInfo.InvariantCulture))).ToList();
+                fd.IsAdvancedSearch = true;
+            }
 
             //region
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseRegionFilter))

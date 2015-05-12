@@ -1,22 +1,12 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Case
 {
-    using System.Collections.Generic;
-
-    using DH.Helpdesk.Common.ValidationAttributes;
-
     public sealed class CaseAdvancedSearchParams
     {
-        public CaseAdvancedSearchParams()
+        public CaseAdvancedSearchParams(string customers)
         {
-            this.CustomerIds = new List<int>();
+            this.Customers = customers;
         }
 
-        public CaseAdvancedSearchParams(List<int> customerIds)
-        {
-            this.CustomerIds = customerIds;
-        }
-
-        [NotNull]
-        public List<int> CustomerIds { get; private set; } 
+        public string Customers { get; private set; }        
     }
 }

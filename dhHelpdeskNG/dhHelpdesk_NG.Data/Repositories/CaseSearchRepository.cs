@@ -898,9 +898,9 @@
 
             var sb = new StringBuilder();
 
-            if (f.AdvancedSearch != null && f.AdvancedSearch.CustomerIds.Any())
+            if (f.AdvancedSearch != null && !string.IsNullOrEmpty(f.AdvancedSearch.Customers))
             {
-                sb.AppendFormat(" WHERE ([tblCase].[Customer_Id] IN ({0})) ", string.Join(",", f.AdvancedSearch.CustomerIds));
+                sb.AppendFormat(" WHERE ([tblCase].[Customer_Id] IN ({0})) ", f.AdvancedSearch.Customers.SafeForSqlInject());
             }
             else
             {
