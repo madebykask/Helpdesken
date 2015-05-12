@@ -130,6 +130,7 @@
                             @Html.HiddenFor(model => model.OU.Parent_OU_Id)
                             <input type="hidden" id="sdepartments" value="@Model.SDepartments.ToJavaScriptObject()" />
                             <input type="hidden" id="allAvailableOrganizationUnits" value="@Model.AllAvailableOrganizationUnits.ToJavaScriptObject()" />
+                            <input type="hidden" id="parentId" value="@Model.OU.Parent_OU_Id" />
                         </div>
                     </div>
                 </div>
@@ -217,10 +218,12 @@
             var isCreatingNew = currentOrgUnitId === 0;
             var orgUnits = jQuery.parseJSON($('#allAvailableOrganizationUnits').val()) || [];
             var out = ['<option value=""></option>'];
+            var parentId = parseInt($('#parentId').val(), 10);
             if (deptId != null) {
                 jQuery.each(orgUnits, function (i, unit) {
                     if (unit.departmentId == deptId && (isCreatingNew || (!isCreatingNew && unit.id != currentOrgUnitId))) {
-                        out.push(['<option value="', unit.id, '" >', unit.name, '</option>'].join(''));
+                        var selected = !isNaN(parentId) && parentId == unit.id ? 'selected="selected"' : '';
+                        out.push(['<option value="', unit.id, '" ', selected, '>', unit.name, '</option>'].join(''));
                     }
                 });
             }
