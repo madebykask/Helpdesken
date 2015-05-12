@@ -22,6 +22,7 @@
                                                     Show = f.ShowOnStartPage,
                                                     ShowInList = f.ShowExternal
                                                  })
+                                                 .Where(f => !string.IsNullOrEmpty(f.Caption))
                                                  .ToList();
 
             var fieldSettings = new NamedObjectCollection<CaseSettingsMapData>(entities);

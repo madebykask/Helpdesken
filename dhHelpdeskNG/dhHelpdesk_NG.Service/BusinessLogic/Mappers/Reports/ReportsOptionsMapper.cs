@@ -235,8 +235,9 @@
                                     Caption = f.CaseFieldSettingLanguages.FirstOrDefault(l => l.Language_Id == languageId).Label,
                                     FieldName = f.Name
                                 })
+                                .Where(f => !string.IsNullOrEmpty(f.Caption))
                                 .ToList()
-                                .Select(f => new ItemOverview(!string.IsNullOrEmpty(f.Caption) ? f.Caption : f.FieldName, f.Id.ToString(CultureInfo.InvariantCulture)))
+                                .Select(f => new ItemOverview(f.Caption, f.Id.ToString(CultureInfo.InvariantCulture)))
                                 .OrderBy(f => f.Name)
                                 .ToList();
             }
