@@ -39,66 +39,6 @@
             this.dailyWorkTime = defaultWorkTime;
             this.departmentsWorkTime = departmentsHolidayData;
         }
-//
-//        /// <summary>
-//        /// Calculates work time in minuts for specified range
-//        /// Time should be in UTC
-//        /// </summary>
-//        /// <param name="caseDepartmentId"></param>
-//        /// <param name="calcFrom"></param>
-//        /// <param name="calcTo"></param>
-//        /// <param name="minutesOnPause"></param>
-//        /// <returns></returns>
-//        public int CalcWorkTimeMinutes(
-//            DateTime calcFrom,
-//            DateTime calcTo,
-//            int? caseDepartmentId = null,
-//            int minutesOnPause = 0)
-//        {
-//            if (calcFrom > calcTo)
-//            {
-//                throw new ArgumentException("calcFrom can not be more than calcTo");
-//            }
-//
-//            var calcFromDay = calcFrom.RoundToDay();
-//            var calcToDay = calcTo.RoundToDay();
-//            var fullDaysCount = (calcToDay - calcFromDay).Days;
-//            if (fullDaysCount == 0)
-//            {
-//                var dailyData = this.GetDailyData(calcFromDay, caseDepartmentId);
-//                //// calculations requested for the one day
-//                return dailyData == null
-//                           ? 0
-//                           : dailyData.Sum(calcFrom, calcTo);
-//            }
-//
-//            var res = 0;
-//            var dateCounter = calcFromDay;
-//            do
-//            {
-//                var dailyData = this.GetDailyData(dateCounter, caseDepartmentId);
-//                if (dailyData != null)
-//                {
-//                    if (dateCounter == calcFromDay)
-//                    {
-//                        res += dailyData.Sum(calcFrom, calcFrom.MakeTomorrow());
-//                    }
-//                    else if (dateCounter == calcToDay)
-//                    {
-//                        res += dailyData.Sum(calcTo.RoundToDay(), calcTo);
-//                    }
-//                    else
-//                    {
-//                        res += dailyData.SummaryTime;
-//                    }
-//                }
-//
-//                dateCounter = dateCounter.AddDays(1);
-//            }
-//            while (dateCounter <= calcToDay);
-//
-//            return res;
-//        }
 
         /// <summary>
         /// Calculates work time in minutes on specified time range

@@ -331,6 +331,10 @@
     <script type="text/javascript">
         $(document).ready(function() {
             var timezoneAutodetectRes = "@ViewBag.AutoDetectionResult";
+            var moreThatOneMsg = "@Translation.Get("Vi kunde inte ange din tidszon. Var vänlig välj rätt tidszon och klicka på \"Spara\".")";
+            var failureMsg = moreThatOneMsg;
+            var successMsg = "@string.Format(Translation.Get("Vi har angett din tidszon baserat på din webbläsare. Om du föredrar att arbeta mot en annan tidszon så kan du ändra det i {0}Profil{1} i toppmenyn."), "<a href=\"Profile/Edit/\">", "</a>")";
+            var noticeMsg = "@string.Format(Translation.Get("Vi har upptäckt att din webbläsares tidszon skiljer sig från den som angetts i din Profil. Om du vill ändra tidszon som du arbetar i, gå till {0}Profil{1} i toppmenyn."), "<a href=\"Profile/Edit/\">", "</a>")";
 
             function ShowToastMessage(message, msgType) {
                 msgType = msgType || 'notice';
@@ -346,13 +350,13 @@
             }
 
             if (timezoneAutodetectRes === 'MoreThanOne') {
-                ShowToastMessage('We have detected more than one time zone for your UTC offset. Please, select your time zone from list and press "Save".');
+                ShowToastMessage(moreThatOneMsg);
             } else if (timezoneAutodetectRes === 'Failure') {
-                ShowToastMessage('We could not detect your timezone. Please, select your time zone and press "Save".', 'warning');
+                ShowToastMessage(failureMsg, 'warning');
             } else if (timezoneAutodetectRes === 'Success') {
-                ShowToastMessage('We have detected your time zone based on you browser UTC offset. You can change it in your <a href="Profile/Edit/">profile settings</a>');
+                ShowToastMessage(successMsg);
             } else if (timezoneAutodetectRes === 'Notice') {
-                ShowToastMessage('We have detected that your have different time zone on your PC that you have in profile. Go to <a href="Profile/Edit/">profile settings</a> and change it.');
+                ShowToastMessage(noticeMsg);
             }
         });
     </script>
