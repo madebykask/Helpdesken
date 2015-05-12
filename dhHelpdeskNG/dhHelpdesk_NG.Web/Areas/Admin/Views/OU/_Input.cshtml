@@ -129,6 +129,7 @@
                             @Html.HiddenFor(model => model.OU.Id)
                             @Html.HiddenFor(model => model.OU.Parent_OU_Id)
                             <input type="hidden" id="sdepartments" value="@Model.SDepartments.ToJavaScriptObject()" />
+                            <input type="hidden" id="allAvailableOrganizationUnits" value="@Model.AllAvailableOrganizationUnits.ToJavaScriptObject()" />
                         </div>
                     </div>
                 </div>
@@ -176,31 +177,26 @@
                             </tbody>
                         </table>
                     </div>
-                            
                 }
-
-
             </div>
         </div>
     </div>
 </div>
 
 <script type="text/javascript">
-
-
     $(function () {
         $("#OU_Department_Region_Id").focus();
       
         var departments = jQuery.parseJSON($("#sdepartments").val());
+        var $selDepartments = $("#OU_Department_Id");
+        var $orgUnits = $("#OU_Parent_OU_Id");
 
         var changeRegion = function () {
-
             var regionId = $("#OU_Department_Region_Id").val();
-            var selDepartments = $("#OU_Department_Id");
-            var selDepartmentId = selDepartments.val();
+            var selDepartmentId = $selDepartments.val();
             var selected;
 
-            selDepartments.empty()
+            $selDepartments.empty()
                 .append($("<option />").val("").text(""));
 
             jQuery.each(departments, function (i, v) {
@@ -209,13 +205,30 @@
                     selected = "selected='selected'";
 
                 if (regionId == undefined || regionId == "")
-                    selDepartments.append($("<option />").val(v.Id).text(v.Name));
+                    $selDepartments.append($("<option />").val(v.Id).text(v.Name));
                 else if (regionId == v.Region_Id)
-                    selDepartments.append($("<option " + selected + " />").val(v.Id).text(v.Name));
+                    $selDepartments.append($("<option " + selected + " />").val(v.Id).text(v.Name));
             });
         };
 
+        var changeDepartment = function () {
+            var deptId = $("#OU_Department_Id").val();
+            var currentOrgUnitId = parseInt($("#OU_Id").val(), 10);
+            var isCreatingNew = currentOrgUnitId === 0;
+            var orgUnits = jQuery.parseJSON($('#allAvailableOrganizationUnits').val()) || [];
+            var out = ['<option value=""></option>'];
+            if (deptId != null) {
+                jQuery.each(orgUnits, function (i, unit) {
+                    if (unit.departmentId == deptId && (isCreatingNew || (!isCreatingNew && unit.id != currentOrgUnitId))) {
+                        out.push(['<option value="', unit.id, '" >', unit.name, '</option>'].join(''));
+                    }
+                });
+            }
+            $orgUnits.empty().html(out.join(''));
+        }
+
         changeRegion();
+        changeDepartment();
 
         var validator = $("#target").validate({
             rules: {
@@ -232,16 +245,15 @@
                 },
                 "OU.Department_Id": {
                      required: "@Translation.Get("Du måste ange en avdelning", Enums.TranslationSource.TextTranslation)"
-        }
+                }
             },
             submitHandler: function (form) {
                 form.submit();
             }
         });
 
-        $("#OU_Department_Region_Id").change(function () {
-            changeRegion();
-        });
+        $("#OU_Department_Region_Id").change(changeRegion);
+        $("#OU_Department_Id").change(changeDepartment);
     });
 
 </script>

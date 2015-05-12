@@ -49,6 +49,11 @@
             return this._ouRepository.GetMany(x => x.Department_Id == departmentId).OrderBy(x => x.Name).ToList();
         }
 
+        /// <summary>
+        /// Returns all first level OUs 
+        /// </summary>
+        /// <param name="customerId"></param>
+        /// <returns></returns>
         public IList<OU> GetOUs(int customerId)
         {
             return this._ouRepository.GetMany(x => x.Parent_OU_Id == null && x.Department.Customer_Id == customerId).OrderBy(x => x.Name).ToList();

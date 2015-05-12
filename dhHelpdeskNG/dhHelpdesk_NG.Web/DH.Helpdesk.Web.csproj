@@ -15,7 +15,7 @@
     <AssemblyName>DH.Helpdesk.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <SccProjectName>
     </SccProjectName>
     <SccLocalPath>
@@ -307,7 +307,8 @@
     <Compile Include="Areas\Admin\Models\ContractCategoryIndexViewModel.cs" />
     <Compile Include="Areas\Admin\Models\AccountActivityIndexViewModel.cs" />
     <Compile Include="Areas\Admin\Models\BuildingViewModels.cs" />
-    <Compile Include="Areas\Admin\Models\SDepartment.cs" />
+    <Compile Include="Areas\Admin\Models\OrganizationHierarchy\OrganizationUnit.cs" />
+    <Compile Include="Areas\Admin\Models\OrganizationHierarchy\SDepartment.cs" />
     <Compile Include="Areas\Admin\Models\SelfServiceRegMessageViewModel.cs" />
     <Compile Include="Areas\Admin\Models\SelfServiceIndexViewModel.cs" />
     <Compile Include="Areas\Admin\Models\InfoTextViewModels.cs" />
@@ -331,7 +332,7 @@
     <Compile Include="Areas\Admin\Models\StatusInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\ImpactIndexViewModel.cs" />
     <Compile Include="Areas\Admin\Models\ImpactInputViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\OUIndexViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\OrganizationHierarchy\OUIndexViewModel.cs" />
     <Compile Include="Areas\Admin\Models\DepartmentIndexViewModel.cs" />
     <Compile Include="Areas\Admin\Models\RegionIndexViewModel.cs" />
     <Compile Include="Areas\Admin\Models\UrgencyIndexViewModel.cs" />
@@ -347,7 +348,7 @@
     <Compile Include="Areas\Admin\Models\MailTemplateInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\OperationObjectInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\OrderTypeInputViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\OUInputViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\OrganizationHierarchy\OUInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\PriorityInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\ProductAreaInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\ProgramInputViewModel.cs" />
