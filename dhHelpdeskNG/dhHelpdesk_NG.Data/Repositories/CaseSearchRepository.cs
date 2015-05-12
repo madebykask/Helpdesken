@@ -901,6 +901,10 @@
             if (f.AdvancedSearch != null && !string.IsNullOrEmpty(f.AdvancedSearch.Customers))
             {
                 sb.AppendFormat(" WHERE ([tblCase].[Customer_Id] IN ({0})) ", f.AdvancedSearch.Customers.SafeForSqlInject());
+                if (!string.IsNullOrEmpty(f.AdvancedSearch.CaseNumber))
+                {
+                    sb.AppendFormat(" AND ([tblCase].[CaseNumber] = {0})", f.AdvancedSearch.CaseNumber);
+                }
             }
             else
             {

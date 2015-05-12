@@ -443,7 +443,7 @@ namespace DH.Helpdesk.Web.Controllers
                 filterCustomers = frm.ReturnFormValue("filterCustomersAll");
             }
 
-            f.AdvancedSearch = new CaseAdvancedSearchParams(filterCustomers);            
+            f.AdvancedSearch = new CaseAdvancedSearchParams(filterCustomers, frm.ReturnFormValue("filterCaseNumber"));            
             f.CustomerId = SessionFacade.CurrentCustomer.Id;
             f.UserId = SessionFacade.CurrentUser.Id;
             f.CaseType = frm.ReturnFormValue("hidFilterCaseTypeId").convertStringToInt();

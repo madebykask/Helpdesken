@@ -54,5 +54,7 @@
         public IList<ItemOverview> FilterCustomers { get; set; } 
 
         public bool IsAdvancedSearch { get; set; }
+
+        public string CaseNumberFilter { get; set; }
     }    
 }

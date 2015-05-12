@@ -38,6 +38,14 @@
                                  </select>
                              </td>
                          </tr>
+                         <tr>
+                             <td>                                                                
+                                 @Translation.Get(GlobalEnums.TranslationCaseFields.CaseNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                    
+                             </td>
+                             <td>
+                                 <input id="filterCaseNumber" name="filterCaseNumber" type="text" class="fixed-length" value="@Model.CaseNumberFilter" />
+                             </td>
+                         </tr>
                      }
                      @if (Model.customerUserSetting.CaseInitiatorFilterShow)
                      {
