@@ -23,7 +23,7 @@
 
         int? GetDefaultId(int customerId, int userId);
 
-        List<GroupWithEmails> GetWorkingGroupsWithEmails(int customerId);
+        List<GroupWithEmails> GetWorkingGroupsWithActiveEmails(int customerId);
 
         IList<UserWorkingGroup> GetUsersForWorkingGroup(int workingGroupId);
 
@@ -115,14 +115,20 @@
             return this.workingGroupRepository.GetDefaultWorkingGroupId(customerId, userId);  
         }
 
-        public List<GroupWithEmails> GetWorkingGroupsWithEmails(int customerId)
+        public List<GroupWithEmails> GetWorkingGroupsWithActiveEmails(int customerId)
         {
             List<GroupWithEmails> workingGroupsWithEmails;
 
             var workingGroupOverviews = this.workingGroupRepository.FindActiveIdAndNameOverviews(customerId);
             var workingGroupIds = workingGroupOverviews.Select(g => g.Id).ToList();
             var workingGroupsUserIds = this.userWorkingGroupRepository.FindWorkingGroupsUserIds(workingGroupIds);
-            var userIds = workingGroupsUserIds.SelectMany(g => g.UserIds).ToList();
+            var userGroupsIdsDict = workingGroupsUserIds.SelectMany(g => g.UserIds).ToDictionary(it => it, it => true);
+            var userIds =
+                this.userRepository.GetAll()
+                    .Where(it => it.IsActive == 1 && userGroupsIdsDict.ContainsKey(it.Id))
+                    .Select(it => it.Id)
+                    .ToList();
+            
             var userIdsWithEmails = this.userRepository.FindUsersEmails(userIds);
 
             workingGroupsWithEmails = new List<GroupWithEmails>(workingGroupOverviews.Count);

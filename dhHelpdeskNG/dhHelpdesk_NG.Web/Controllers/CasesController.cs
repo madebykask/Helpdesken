@@ -2567,7 +2567,7 @@ namespace DH.Helpdesk.Web.Controllers
         private SendToDialogModel CreateNewSendToDialogModel(int customerId, IList<User> users)
         {
             var emailGroups = _emailGroupService.GetEmailGroupsWithEmails(customerId);
-            var workingGroups = _workingGroupService.GetWorkingGroupsWithEmails(customerId);
+            var workingGroups = _workingGroupService.GetWorkingGroupsWithActiveEmails(customerId);
             var administrators = new List<ItemOverview>();
 
             if (users != null)
