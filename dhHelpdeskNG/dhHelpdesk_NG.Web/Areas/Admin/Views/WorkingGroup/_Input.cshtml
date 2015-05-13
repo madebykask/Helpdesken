@@ -46,46 +46,28 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td>@Translation.Get("Använd som standard", Enums.TranslationSource.TextTranslation)</td>
                                     <td>
-                                        @Translation.Get("Standardvärde", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                    <td>
-                                         @Translation.Get("Använd som standard", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td><label class="checkbox">
+                                    <label class="checkbox">
                                         <input type="checkbox" name="workinggroup.IsDefault" @(Model.WorkingGroup.IsDefault == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="workinggroup.IsDefault" value="0" />
                                         &nbsp;@Translation.Get("Ärenderegistrering", Enums.TranslationSource.TextTranslation)
                                         </label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td><label class="checkbox">
+                                    <label class="checkbox">
                                         <input type="checkbox" name="workinggroup.IsDefaultCalendar" @(Model.WorkingGroup.IsDefaultCalendar == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="workinggroup.IsDefaultCalendar" value="0" />
                                         &nbsp;@Translation.Get("Aktuellt", Enums.TranslationSource.TextTranslation)
                                         </label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td><label class="checkbox">
+                                    
+                                    <label class="checkbox">
                                         <input type="checkbox" name="workinggroup.IsDefaultBulletinBoard" @(Model.WorkingGroup.IsDefaultBulletinBoard == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="workinggroup.IsDefaultBulletinBoard" value="0" />
                                         &nbsp;@Translation.Get("Anslagstavla", Enums.TranslationSource.TextTranslation)
                                         </label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td><label class="checkbox">
+                                    <label class="checkbox">
                                         <input type="checkbox" name="workinggroup.IsDefaultOperationLog" @(Model.WorkingGroup.IsDefaultOperationLog == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="workinggroup.IsDefaultOperationLog" value="0" />
-                                        &nbsp;@Translation.Get("Driftlogg ", Enums.TranslationSource.TextTranslation)
+                                        &nbsp;@Translation.Get("Driftlogg")
                                         </label>
                                     </td>
                                 </tr>
