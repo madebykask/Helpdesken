@@ -15,5 +15,7 @@
         public IList<SelectListItem> Priorities { get; set; }
         public IList<SelectListItem> WgAvailable { get; set; }
         public IList<SelectListItem> WgSelected { get; set; }
+
+        public bool CanAddChild { get; set; }
     }
 }

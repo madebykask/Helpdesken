@@ -133,19 +133,17 @@
             var wgSelected = productArea.WorkingGroups ?? new List<WorkingGroupEntity>();
             var wgAvailable = new List<WorkingGroupEntity>();
 
-            //if (productArea.Id != 0)
-            //{
-            //    foreach (var wg in _workingGroupService.GetWorkingGroups(customer.Id))
-            //    {
-            //        if (!wgSelected.Contains(wg))
-            //            wgAvailable.Add(wg);
-            //    }
-            //}
-
             foreach (var wg in _workingGroupService.GetWorkingGroups(customer.Id))
             {
                 if (!wgSelected.Contains(wg))
                     wgAvailable.Add(wg);
+            }
+            var pa = productArea;
+            var level = 0;
+            while (pa.ParentProductArea != null)
+            {
+                level++;
+                pa = pa.ParentProductArea;
             }
 
             var model = new ProductAreaInputViewModel
@@ -176,8 +174,8 @@
                 {
                     Text = x.WorkingGroupName,
                     Value = x.Id.ToString()
-                }).ToList()
-                
+                }).ToList(),
+                CanAddChild = level < 3
             };
 
             return model;
