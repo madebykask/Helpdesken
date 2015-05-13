@@ -130,6 +130,7 @@
 
         private ProductAreaInputViewModel CreateInputViewModel(ProductArea productArea, Customer customer)
         {
+            const int MAX_LEVEL_DEEP = 6;
             var wgSelected = productArea.WorkingGroups ?? new List<WorkingGroupEntity>();
             var wgAvailable = new List<WorkingGroupEntity>();
 
@@ -139,7 +140,7 @@
                     wgAvailable.Add(wg);
             }
             var pa = productArea;
-            var level = 0;
+            var level = 1;
             while (pa.ParentProductArea != null)
             {
                 level++;
@@ -175,7 +176,7 @@
                     Text = x.WorkingGroupName,
                     Value = x.Id.ToString()
                 }).ToList(),
-                CanAddChild = level < 3
+                CanAddChild = level < MAX_LEVEL_DEEP
             };
 
             return model;
