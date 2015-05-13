@@ -122,10 +122,18 @@
             var workingGroupOverviews = this.workingGroupRepository.FindActiveIdAndNameOverviews(customerId);
             var workingGroupIds = workingGroupOverviews.Select(g => g.Id).ToList();
             var workingGroupsUserIds = this.userWorkingGroupRepository.FindWorkingGroupsUserIds(workingGroupIds);
-            var userGroupsIdsDict = workingGroupsUserIds.SelectMany(g => g.UserIds).ToDictionary(it => it, it => true);
+            var userIdsSet = new HashSet<int>();
+            foreach (var id in workingGroupsUserIds.SelectMany(g => g.UserIds))
+            {
+                if (!userIdsSet.Contains(id))
+                {
+                    userIdsSet.Add(id);
+                }
+            }
+           
             var userIds =
                 this.userRepository.GetAll()
-                    .Where(it => it.IsActive == 1 && userGroupsIdsDict.ContainsKey(it.Id))
+                    .Where(it => it.IsActive == 1 && userIdsSet.Contains(it.Id))
                     .Select(it => it.Id)
                     .ToList();
             
