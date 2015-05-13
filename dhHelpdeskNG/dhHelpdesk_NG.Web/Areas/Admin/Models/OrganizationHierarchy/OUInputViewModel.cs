@@ -6,6 +6,7 @@
 
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Computers;
+    using DH.Helpdesk.Web.Areas.Admin.Models.OrganizationHierarchy;
 
     public class OUInputViewModel
     {
@@ -32,6 +33,8 @@
 
         public IList<SelectListItem> OUs { get; private set; }
 
+        public OrganizationUnit[] AllAvailableOrganizationUnits { get; set; }
+
         public IList<SelectListItem> Regions { get; set; }
 
         public IList<SDepartment> SDepartments { get; set; }
@@ -53,11 +56,6 @@
                     Value = ou.Id.ToString(),
                     Selected = ou.Parent_OU_Id == parentId
                 });
-                if (ou.SubOUs.Any())
-                {
-                    var subOUs = GetSelectListItem(ou.SubOUs, iteration + "-", selectedId, parentId);
-                    items.AddRange(subOUs);    
-                }
             }
 
             return items;

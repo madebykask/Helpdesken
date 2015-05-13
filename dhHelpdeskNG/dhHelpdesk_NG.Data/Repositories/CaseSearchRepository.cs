@@ -726,9 +726,11 @@
             {
                 if (customerSetting.CaseWorkingGroupSource == 0)
                 {
-                    tables.Add("left outer join tblUsers ");
-                    tables.Add(
-                        "left outer join tblWorkingGroup on tblUsers.Default_WorkingGroup_Id = tblWorkingGroup.Id on tblCase.Performer_User_Id = tblUsers.Id ");
+                    tables.Add("left outer join tblUsers on tblUsers.Id = tblCase.Performer_User_Id");
+                    tables.Add("left outer join tblWorkingGroup on " + 
+                                               " tblWorkingGroup.Id = (Select top 1 WorkingGroup_Id from tblUserWorkingGroup UW " +
+												                      "Where UW.IsDefault = 1 and UW.User_Id = tblCase.Performer_User_Id and " +
+                                                                            "UW.WorkingGroup_Id in (Select id From tblWorkingGroup where customer_Id = tblCase.Customer_Id) )");
                 }
                 else
                 {
@@ -994,7 +996,7 @@
             if (!string.IsNullOrWhiteSpace(f.WorkingGroup))
             {
                 if (customerSetting.CaseWorkingGroupSource == 0)
-                    sb.Append(" and (tblUsers.Default_WorkingGroup_Id in (" + f.WorkingGroup.SafeForSqlInject() + ")) ");
+                    sb.Append(" and (tblUserWorkingGroup.WorkingGroup_Id in (" + f.WorkingGroup.SafeForSqlInject() + ")) ");
                 else
                     sb.Append(" and (coalesce(tblCase.WorkingGroup_Id, 0) in (" + f.WorkingGroup.SafeForSqlInject() + ")) ");
             }

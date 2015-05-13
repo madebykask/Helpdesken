@@ -7,6 +7,7 @@
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Areas.Admin.Models.OrganizationHierarchy;
     using DH.Helpdesk.Web.Infrastructure;
 
     public class OUController : BaseAdminController
@@ -43,7 +44,6 @@
         {
             var customer = this._customerService.GetCustomer(customerId);
             var ou = new OU { IsActive = 1 };
-            
             var model = this.CreateInputViewModel(ou, customer);
             return this.View(model);
         }
@@ -131,6 +131,7 @@
                     Value = x.Id.ToString(),
                     Selected = ou.Department_Id.HasValue && x.Id == ou.Department_Id
                 }).ToList(),
+                AllAvailableOrganizationUnits = ous.Select(it => new OrganizationUnit {departmentId = it.Department_Id, id = it.Id, name = it.Name }).ToArray(),
                 SDepartments = departments.Select(x => new SDepartment
                 {
                     Id = x.Id,

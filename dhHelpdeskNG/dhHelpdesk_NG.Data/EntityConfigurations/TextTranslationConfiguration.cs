@@ -12,7 +12,7 @@
         {
             this.HasKey(x => x.TextTranslation_Id);
 
-            this.Property(x => x.TextTranslated).IsRequired().HasMaxLength(50).HasColumnName("TextTranslation");
+            this.Property(x => x.TextTranslated).IsRequired().HasMaxLength(1000).HasColumnName("TextTranslation");
             this.Property(x => x.Language_Id).IsRequired();
             this.Property(x => x.Text_Id).IsRequired();
             this.Property(x => x.TextTranslation_Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity).HasColumnName("Id");

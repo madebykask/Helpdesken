@@ -20,6 +20,9 @@ BEGIN
 END
 GO 
 
+Delete from tbluserworkinggroup
+where UserRole = 0 
+
 
 ALTER TABLE tblProblem ALTER COLUMN ChangedByUser_Id int NULL
 GO
