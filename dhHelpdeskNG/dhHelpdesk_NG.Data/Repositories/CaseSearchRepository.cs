@@ -985,7 +985,7 @@
             if (!string.IsNullOrWhiteSpace(f.WorkingGroup))
             {
                 if (customerSetting.CaseWorkingGroupSource == 0)
-                    sb.Append(" and (tblUserWorkingGroup.WorkingGroup_Id in (" + f.WorkingGroup.SafeForSqlInject() + ")) ");
+                    sb.Append(" and (tblWorkingGroup.Id in (" + f.WorkingGroup.SafeForSqlInject() + ")) ");
                 else
                     sb.Append(" and (coalesce(tblCase.WorkingGroup_Id, 0) in (" + f.WorkingGroup.SafeForSqlInject() + ")) ");
             }
