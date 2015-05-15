@@ -313,6 +313,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             f.CustomerId = int.Parse(frm.ReturnFormValue("currentCustomerId"));
             f.Customer = frm.ReturnFormValue("lstfilterCustomers");
+            f.CaseProgress = frm.ReturnFormValue("lstFilterCaseProgress");
             f.WorkingGroup = frm.ReturnFormValue("lstFilterWorkingGroup");
             f.UserPerformer = frm.ReturnFormValue("lstFilterPerformer");
             f.StateSecondary = frm.ReturnFormValue("lstFilterStateSecondary");
@@ -321,6 +322,7 @@ namespace DH.Helpdesk.Web.Controllers
             f.CaseRegistrationDateEndFilter = frm.GetDate("CaseRegistrationDateEndFilter");
             f.CaseClosingDateStartFilter = frm.GetDate("CaseClosingDateStartFilter");
             f.CaseClosingDateEndFilter = frm.GetDate("CaseClosingDateEndFilter");
+            
             f.UserId = SessionFacade.CurrentUser.Id;
 
             if (!string.IsNullOrEmpty(frm.ReturnFormValue("txtCaseNumberSearch")))
@@ -334,7 +336,9 @@ namespace DH.Helpdesk.Web.Controllers
             var maxRecords = this._defaultMaxRows;
             int.TryParse(frm.ReturnFormValue("lstfilterMaxRows"), out maxRecords);
             f.MaxRows = maxRecords.ToString();
-            f.CaseProgress = CaseProgressFilter.None;
+
+            if (string.IsNullOrEmpty(f.CaseProgress))
+                f.CaseProgress = CaseProgressFilter.None;
 
             CaseSearchModel sm;
             sm = this.InitAdvancedSearchModel(f.CustomerId, f.UserId);
@@ -890,7 +894,8 @@ namespace DH.Helpdesk.Web.Controllers
             fd.filterCustomers = customers;                        
             fd.filterCustomerId = cusId;                        
             fd.filterPerformer = this._userService.GetUsers(cusId);
-            
+            fd.filterCaseProgress = ObjectExtensions.GetFilterForAdvancedSearch();
+
             if (SessionFacade.CurrentUser.UserGroupId == 1 || SessionFacade.CurrentUser.RestrictedCasePermission == 0)
                 fd.filterPerformer.Insert(0, ObjectExtensions.notAssignedPerformer());
             
@@ -2233,9 +2238,9 @@ namespace DH.Helpdesk.Web.Controllers
             m = new CaseSearchModel();
 
             f.CustomerId = customerId;
-            f.UserId = userId;
-            f.StateSecondary = "";
+            f.UserId = userId;            
             f.UserPerformer = "";
+            f.CaseProgress = "";
             f.WorkingGroup = "";
             f.CaseRegistrationDateStartFilter = null;
             f.CaseRegistrationDateEndFilter = null;

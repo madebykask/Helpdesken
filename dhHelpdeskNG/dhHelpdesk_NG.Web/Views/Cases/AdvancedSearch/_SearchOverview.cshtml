@@ -70,26 +70,20 @@
                              </td>
                          </tr>                 
                      }
-                                         
-                     @if (Model.filterStateSecondary != null)
-                     {
-                         <tr>
-                             <td>                                
-                                 @Translation.Get(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                    
-                             </td>
-                             <td>
-                                 <select id="lstfilterStateSecondary" name="lstfilterStateSecondary" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
-                                     @foreach (var e in Model.filterStateSecondary)
-                                     {
-                                         if (e.IsActive == 1)
-                                         {                        
-                                             <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.StateSecondary)>@Translation.Get(e.Name, Enums.TranslationSource.TextTranslation)</option>                                         
-                                         }
-                                     }
-                                 </select>
-                             </td>
-                         </tr>                
-                     }               
+                                                              
+                    <tr>
+                        <td>                                
+                            @Translation.Get("Status"):                                    
+                        </td>
+                        <td>
+                            <select id="lstfilterCaseProgress" name="lstfilterCaseProgress" style="width:300px">
+                                @foreach (var e in Model.filterCaseProgress)
+                                {
+                                    <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.CaseProgress)>@e.StringValue</option>
+                                }
+                        </select>
+                        </td>
+                    </tr>                                     
                      
                      @if (Model.filterMaxRows != null)
                      {
