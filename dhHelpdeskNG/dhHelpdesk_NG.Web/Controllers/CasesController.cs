@@ -372,10 +372,10 @@ namespace DH.Helpdesk.Web.Controllers
                         };
                 m.caseSettings.Add(curSetting);
             }
-            
-            var workTimeCalc = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
-            var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
-            CaseRemainingTimeData remainingTimeData;
+
+            var workTimeCalc = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
+            var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;            
+            CaseRemainingTimeData remainingTimeData;            
             m.cases = this._caseSearchService.Search(
                 f,
                 m.caseSettings,
@@ -783,14 +783,7 @@ namespace DH.Helpdesk.Web.Controllers
                 customerUserSetting = cu,
                 customerSetting = this._settingService.GetCustomerSetting(cusId),
                 filterCustomerId = cusId
-            };
-
-            if (advancedSearch)
-            {
-                var customers = this._userService.GetUserProfileCustomersSettings(SessionFacade.CurrentUser.Id);
-                fd.FilterCustomers = customers.Select(c => new ItemOverview(c.CustomerName, c.CustomerId.ToString(CultureInfo.InvariantCulture))).ToList();
-                fd.IsAdvancedSearch = true;
-            }
+            };            
 
             //region
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseRegionFilter))
