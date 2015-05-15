@@ -170,10 +170,10 @@
                                     doCalcTimeLeft = doCalcTimeLeft && intTmp == 1;
                                 }
 
-                                DateTime? caseShouldBeFinishedInDate = null;
+                                DateTime? watchDate = null;
                                 if (DateTime.TryParse(dr["WatchDate"].ToString(), out dtTmp))
                                 {
-                                    caseShouldBeFinishedInDate = dtTmp;
+                                    watchDate = dtTmp;
                                 }
 
                                 int SLAtime;
@@ -189,21 +189,22 @@
                                 int? timeLeft = null;
                                 if (doCalcTimeLeft)
                                 {
-                                    if (caseShouldBeFinishedInDate.HasValue)
+                                    if (watchDate.HasValue)
                                     {
+                                        var watchDateDue = watchDate.Value.MakeTomorrow();
                                         //// calc time by watching date
-                                        if (caseShouldBeFinishedInDate.Value > now)
+                                        if (watchDateDue > now)
                                         {
                                             timeLeft = (workTimeCalculator.CalculateWorkTime(
                                                 now,
-                                                caseShouldBeFinishedInDate.Value,
+                                                watchDateDue,
                                                 departmentId) - timeOnPause) / 60;
                                         }
                                         else
                                         {
                                             //// for cases that should be closed in the past
                                             timeLeft = -(workTimeCalculator.CalculateWorkTime(
-                                            caseShouldBeFinishedInDate.Value,
+                                            watchDateDue,
                                             now,
                                             departmentId) - timeOnPause) / 60;
                                         }                                        
