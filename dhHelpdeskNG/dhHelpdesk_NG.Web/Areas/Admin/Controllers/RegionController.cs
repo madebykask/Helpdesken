@@ -74,7 +74,11 @@
         public ActionResult Edit(Region region)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            this._regionService.SaveRegion(region, out errors);
+            var regionToUpdate = this._regionService.GetRegion(region.Id);
+            regionToUpdate.Name = region.Name;
+            regionToUpdate.IsActive = region.IsActive;
+            regionToUpdate.IsDefault = region.IsDefault;
+            this._regionService.SaveRegion(regionToUpdate, out errors);
 
             if (errors.Count == 0)
                 return this.RedirectToAction("index", "region", new { customerId = region.Customer_Id });

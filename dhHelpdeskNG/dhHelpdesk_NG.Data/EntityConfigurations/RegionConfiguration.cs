@@ -17,9 +17,9 @@
             this.Property(x => x.IsDefault).IsRequired();
             this.Property(x => x.Name).IsRequired().HasMaxLength(50).HasColumnName("Region");
             this.Property(x => x.SearchKey).IsOptional().HasMaxLength(20);
-            //Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            this.Property(x => x.SearchKey).IsOptional();
 
             this.ToTable("tblregion");
         }

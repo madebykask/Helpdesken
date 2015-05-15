@@ -331,8 +331,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
             var timezoneAutodetectRes = "@ViewBag.AutoDetectionResult";
-            var moreThatOneMsg = "@Translation.Get("Vi kunde inte ange din tidszon. Var vänlig välj rätt tidszon och klicka på \"Spara\".")";
-            var failureMsg = moreThatOneMsg;
+            var failureMsg = "@Translation.Get("Vi kunde inte ange din tidszon. Var vänlig välj rätt tidszon och klicka på \"Spara\".")";
             var successMsg = "@string.Format(Translation.Get("Vi har angett din tidszon baserat på din webbläsare. Om du föredrar att arbeta mot en annan tidszon så kan du ändra det i {0}Profil{1} i toppmenyn."), "<a href=\"Profile/Edit/\">", "</a>")";
             var noticeMsg = "@string.Format(Translation.Get("Vi har upptäckt att din webbläsares tidszon skiljer sig från den som angetts i din Profil. Om du vill ändra tidszon som du arbetar i, gå till {0}Profil{1} i toppmenyn."), "<a href=\"Profile/Edit/\">", "</a>")";
 
@@ -349,9 +348,7 @@
                 });
             }
 
-            if (timezoneAutodetectRes === 'MoreThanOne') {
-                ShowToastMessage(moreThatOneMsg);
-            } else if (timezoneAutodetectRes === 'Failure') {
+            if (timezoneAutodetectRes === 'Failure') {
                 ShowToastMessage(failureMsg, 'warning');
             } else if (timezoneAutodetectRes === 'Success') {
                 ShowToastMessage(successMsg);

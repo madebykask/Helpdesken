@@ -140,8 +140,7 @@
                             });
 
                     this.usersPasswordHistoryService.SaveHistory(user.Id, EncryptionHelper.GetMd5Hash(password));
-                    if (SessionFacade.TimeZoneDetectionResult == TimeZoneAutodetectResult.Failure
-                        || SessionFacade.TimeZoneDetectionResult == TimeZoneAutodetectResult.MoreThanOne)
+                    if (SessionFacade.TimeZoneDetectionResult == TimeZoneAutodetectResult.Failure)
                     {
                         this.RedirectFromLoginPage(userName, "~/Profile/Edit/", user.StartPage);
                         return null;
