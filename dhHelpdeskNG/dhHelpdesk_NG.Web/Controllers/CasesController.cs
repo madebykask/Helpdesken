@@ -385,8 +385,8 @@ namespace DH.Helpdesk.Web.Controllers
                 m.caseSettings.Add(curSetting);
             }
 
-            var workTimeCalc = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
-            var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;            
+            var workTimeCalc = TimeZoneInfo.Local;
+            var showRemainingTime = false;            
             CaseRemainingTimeData remainingTimeData;            
             m.cases = this._caseSearchService.Search(
                 f,
@@ -397,8 +397,8 @@ namespace DH.Helpdesk.Web.Controllers
                 SessionFacade.CurrentUser.UserGroupId,
                 SessionFacade.CurrentUser.RestrictedCasePermission,
                 sm.Search,
-                this.workContext.Customer.WorkingDayStart,
-                this.workContext.Customer.WorkingDayEnd,
+                1,
+                23,
                 workTimeCalc,
                 ApplicationTypes.Helpdesk,
                 showRemainingTime,
