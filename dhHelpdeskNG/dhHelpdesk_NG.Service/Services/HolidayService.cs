@@ -189,6 +189,16 @@
 
         public IEnumerable<HolidayOverview> GetHolidayBetweenDatesForDepartments(DateTime @from, DateTime to, int[] departmentsIds)
         {
+            if (departmentsIds == null)
+            {
+                return null;
+            }
+
+            if (@from > to)
+            {
+                throw new ArgumentException("@from date can not be more that to");
+            }
+
             var res = this.departmentService.GetDepartmentsByIds(departmentsIds)
                     .Where(it => it.HolidayHeader != null && it.HolidayHeader.Holidays.Any() && it.HolidayHeader.Holidays.Any(holiday => holiday.HolidayDate >= from && holiday.HolidayDate <= to))
                     .SelectMany(
