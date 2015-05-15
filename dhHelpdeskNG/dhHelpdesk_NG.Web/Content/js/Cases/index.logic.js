@@ -232,10 +232,7 @@ var GRID_STATE = {
         me.$tableHeader.html(out.join(JOINER));
         me.$tableHeader.find('th.thpointer').on('click', sortCallback);
 
-        if (me.gridSettings.DontFetchData)
-            me.showMsg(NODATA_MSG_TYPE);                    
-        else
-            me.fetchData();        
+        me.fetchData();        
     };
 
     Page.prototype.setSortField = function(fieldName, $el) {
@@ -259,10 +256,7 @@ var GRID_STATE = {
         }
         $($el).find('i').addClass(getClsForSortDir(sortOpt.sortDir));
 
-        if (me.gridSettings.DontFetchData)
-            me.showMsg(NODATA_MSG_TYPE);
-        else
-            me.fetchData();        
+        me.fetchData();        
     };
 
     Page.prototype.showMsg = function(msgType) {
@@ -402,7 +396,7 @@ var GRID_STATE = {
         } else {
             $('#icoFilter').show();
         }
-        me.gridSettings.DontFetchData = false;
+
         me.fetchData();
     };
 

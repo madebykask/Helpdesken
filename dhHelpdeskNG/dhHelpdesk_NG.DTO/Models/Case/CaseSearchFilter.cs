@@ -34,7 +34,10 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         public string ParantPath_ProductArea { get; set; }
         public string ParantPath_CaseType { get; set; }
         public string ReportedBy { get; set; }
-        public string RegUserId { get; set; }        
+        public string RegUserId { get; set; }
+        public string Customer { get; set; }
+        public string CaseNumber { get; set; }
+        public string MaxRows { get; set; }
 
         public DateTime? CaseRegistrationDateStartFilter { get; set; }
 
@@ -65,8 +68,6 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         public int? CaseRemainingTimeMaxFilter { get; set; }
 
         public bool CaseRemainingTimeHoursFilter { get; set; }
-
-        public CaseAdvancedSearchParams AdvancedSearch { get; set; }
 
         public CaseSearchFilter Copy(CaseSearchFilter o)
         {
@@ -108,7 +109,9 @@ namespace DH.Helpdesk.BusinessData.Models.Case
             r.CaseRemainingTimeHoursFilter = o.CaseRemainingTimeHoursFilter;
             r.Initiator = o.Initiator;
             r.SearchInMyCasesOnly = o.SearchInMyCasesOnly;
-            r.AdvancedSearch = o.AdvancedSearch;
+            r.Customer = o.Customer;
+            r.CaseNumber = o.CaseNumber;
+            r.MaxRows = o.MaxRows;
 
             return r;
         }

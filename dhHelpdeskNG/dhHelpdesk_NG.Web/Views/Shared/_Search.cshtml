@@ -4,9 +4,7 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 
 @if (Model != null)
-{
-   var showRemainingTable = Convert.ToBoolean(ViewData["showRemainingTimeTable"]);
-    
+{       
   <form id="frmCaseSearch" name="frmCaseSearch">
      <div class="container">
          <div class="row" id="hiddeninfo" style="display:none">
@@ -22,31 +20,6 @@
                          <td class="span5">
                          </td>
                      </tr>
-                     @if (Model.IsAdvancedSearch)
-                     {
-                         <tr>
-                             <td>                                                                
-                                 @Translation.Get(GlobalEnums.TranslationCaseFields.Customer_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                    
-                             </td>
-                             <td>
-                                 <input id="filterCustomersAll" name="filterCustomersAll" type="hidden" value="@string.Join(",", Model.FilterCustomers.Select(c => c.Value))" />
-                                 <select id="lstFilterCustomers" name="lstFilterCustomers" data-placeholder="@Translation.Get("Välj en eller flera")" multiple="multiple" class="chosen-select">
-                                     @foreach (var customer in Model.FilterCustomers)
-                                     {
-                                         <option value="@customer.Value">@customer.Name</option>                                     
-                                     }
-                                 </select>
-                             </td>
-                         </tr>
-                         <tr>
-                             <td>                                                                
-                                 @Translation.Get(GlobalEnums.TranslationCaseFields.CaseNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                    
-                             </td>
-                             <td>
-                                 <input id="filterCaseNumber" name="filterCaseNumber" type="text" class="fixed-length" value="@Model.CaseNumberFilter" />
-                             </td>
-                         </tr>
-                     }
                      @if (Model.customerUserSetting.CaseInitiatorFilterShow)
                      {
                          <tr>
@@ -410,11 +383,8 @@
                          </td>
                      </tr>
                  </table>
-             </div>
-             @if (showRemainingTable)
-             {
-                <div data-field="caseRemainingTimeHidePlace" style="float: right;"></div>
-             }
+             </div>            
+             <div data-field="caseRemainingTimeHidePlace" style="float: right;"></div>             
          </div>
      </div>
     </form>

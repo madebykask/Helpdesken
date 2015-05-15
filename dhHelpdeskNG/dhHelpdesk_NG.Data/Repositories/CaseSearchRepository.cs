@@ -898,22 +898,11 @@
                 return string.Empty;
             }
 
-            var sb = new StringBuilder();
+            var sb = new StringBuilder();           
 
-            if (f.AdvancedSearch != null && !string.IsNullOrEmpty(f.AdvancedSearch.Customers))
-            {
-                sb.AppendFormat(" WHERE ([tblCase].[Customer_Id] IN ({0})) ", f.AdvancedSearch.Customers.SafeForSqlInject());
-                if (!string.IsNullOrEmpty(f.AdvancedSearch.CaseNumber))
-                {
-                    sb.AppendFormat(" AND ([tblCase].[CaseNumber] = {0})", f.AdvancedSearch.CaseNumber);
-                }
-            }
-            else
-            {
-                // kund 
-                sb.Append(" where (tblCase.Customer_Id = " + f.CustomerId + ")");
-                sb.Append(" and (tblCase.Deleted = 0)");
-            }
+            // kund 
+            sb.Append(" where (tblCase.Customer_Id = " + f.CustomerId + ")");
+            sb.Append(" and (tblCase.Deleted = 0)");
 
             if (caseIds != null && caseIds.Any())
             {

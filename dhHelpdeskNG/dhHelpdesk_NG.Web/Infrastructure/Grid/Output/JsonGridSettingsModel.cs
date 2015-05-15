@@ -27,9 +27,7 @@
 
         public GridPageOptions pageOptions;
 
-        public bool HasAvailableColumns;
-
-        public bool DontFetchData;
+        public bool HasAvailableColumns;        
 
         public string cls;
     }

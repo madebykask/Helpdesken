@@ -36,6 +36,8 @@
 
         private const string _CURRENT_CASE_SEARCH = "CURRENT_CASE_SEARCH";
 
+        private const string _CURRENT_ADVANCED_SEARCH = "CURRENT_ADVANCED_SEARCH";
+
         private const string _CURRENT_CUSTOMER = "CURRENT_CUSTOMER";
 
         private const string _CURRENT_DOCUMENT_SEARCH = "CURRENT_DOCUMENT_SEARCH";
@@ -64,6 +66,7 @@
 
         private const string _CASE_OVERVIEW_SETTINGS_KEY = "CASE_OVERVIEW_SETTINGS";
 
+        private const string _ADVANCED_SEARCH_OVERVIEW_SETTINGS_KEY = "ADVANCED_SEARCH_OVERVIEW_SETTINGS";
         private const string _TZ_DETECTION_KEY = "TZ_DETECTION_RESULT";
 
         private const string _TZ_MSG_KEY = "TZ_MSG_RESULT";
@@ -213,6 +216,29 @@
                 else
                 {
                     HttpContext.Current.Session[_CURRENT_CASE_SEARCH] = value;
+                }
+            }
+        }
+
+        public static CaseSearchModel CurrentAdvancedSearch
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_CURRENT_ADVANCED_SEARCH] == null)
+                {
+                    return null;
+                }
+                return (CaseSearchModel)HttpContext.Current.Session[_CURRENT_ADVANCED_SEARCH];
+            }
+            set
+            {
+                if (HttpContext.Current.Session[_CURRENT_ADVANCED_SEARCH] == null)
+                {
+                    HttpContext.Current.Session.Add(_CURRENT_ADVANCED_SEARCH, value);
+                }
+                else
+                {
+                    HttpContext.Current.Session[_CURRENT_ADVANCED_SEARCH] = value;
                 }
             }
         }
@@ -475,6 +501,26 @@
                 else
                 {
                     HttpContext.Current.Session[_CASE_OVERVIEW_SETTINGS_KEY] = value;
+                }
+            }
+        }
+
+        public static GridSettingsModel AdvancedSearchOverviewGridSettings
+        {
+            get
+            {
+                return (GridSettingsModel)HttpContext.Current.Session[_ADVANCED_SEARCH_OVERVIEW_SETTINGS_KEY];
+            }
+
+            set
+            {
+                if (HttpContext.Current.Session[_ADVANCED_SEARCH_OVERVIEW_SETTINGS_KEY] == null)
+                {
+                    HttpContext.Current.Session.Add(_ADVANCED_SEARCH_OVERVIEW_SETTINGS_KEY, value);
+                }
+                else
+                {
+                    HttpContext.Current.Session[_ADVANCED_SEARCH_OVERVIEW_SETTINGS_KEY] = value;
                 }
             }
         }

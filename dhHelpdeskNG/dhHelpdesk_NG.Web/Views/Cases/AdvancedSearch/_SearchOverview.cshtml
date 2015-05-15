@@ -1,0 +1,178 @@
+﻿@model DH.Helpdesk.Web.Models.Case.CaseSearchFilterData 
+@using DH.Helpdesk.BusinessData.OldComponents
+
+@using DH.Helpdesk.Web.Infrastructure.Extensions
+
+@if (Model != null)
+{       
+  <form id="frmAdvanceSearch" name="frmAdvanceSearch">
+     <div class="container">         
+         <div class="row">             
+             <div class="span6">
+                 <table class="tableform">                    
+                                                     
+
+                     @if (Model.filterCustomers != null)
+                     {
+                         <tr>
+                             <td>                                
+                                 @Translation.Get("Kund"): 
+                             </td>
+                             <td>
+                                 <select id="lstfilterCustomers" name="lstfilterCustomers" data-field="customers" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                     @foreach (var c in Model.filterCustomers)
+                                     {                                            
+                                         int customerId = int.Parse(c.Value);                
+                                         <option value="@customerId" @customerId.IdIsSelected(Model.caseSearchFilter.Customer)>@c.Name</option>
+                                          
+                                     }
+                                 </select>
+                             </td>
+                         </tr>                
+                     }                                                           
+                                                                               
+                     @if (Model.filterWorkingGroup != null)
+                     {
+                         <tr>
+                             <td>                                                                
+                                 @Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                    
+                             </td>
+                             <td>
+                                 <select id="lstfilterWorkingGroup" name="lstfilterWorkingGroup" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                     @foreach (var e in Model.filterWorkingGroup)
+                                     {
+                                         if (e.IsActive == 1)
+                                         {                        
+                                             <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.WorkingGroup)>@e.WorkingGroupName</option>                                         
+                                         }
+                                     }
+                                 </select>
+                             </td>
+                         </tr>                
+                     }
+                    
+                     @if (Model.filterPerformer != null)
+                     {
+                         <tr>
+                             <td>                               
+                                 @Translation.Get(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                    
+                             </td>
+                             <td>
+                                 <select id="lstfilterPerformer" name="lstfilterPerformer" data-field="administrator" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                     @foreach (var e in Model.filterPerformer)
+                                     {
+                                         if (e.IsActive == 1 && e.Performer == 1)
+                                         {                        
+                                             <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.UserPerformer)>@e.SurName @e.FirstName</option>                                         
+                                         }
+                                     }
+                                 </select>
+                             </td>
+                         </tr>                 
+                     }
+                                         
+                     @if (Model.filterStateSecondary != null)
+                     {
+                         <tr>
+                             <td>                                
+                                 @Translation.Get(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                    
+                             </td>
+                             <td>
+                                 <select id="lstfilterStateSecondary" name="lstfilterStateSecondary" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                     @foreach (var e in Model.filterStateSecondary)
+                                     {
+                                         if (e.IsActive == 1)
+                                         {                        
+                                             <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.StateSecondary)>@Translation.Get(e.Name, Enums.TranslationSource.TextTranslation)</option>                                         
+                                         }
+                                     }
+                                 </select>
+                             </td>
+                         </tr>                
+                     }               
+                     
+                     @if (Model.filterMaxRows != null)
+                     {
+                         <tr>
+                             <td>                                
+                                 @Translation.Get("Visa"):                                    
+                             </td>
+                             <td>
+                                 <select id="lstfilterMaxRows" name="lstfilterMaxRows" style="width:70px" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" >
+                                     @foreach (var r in Model.filterMaxRows)
+                                     {
+                                         var curId = int.Parse(r.Value);                                                                             
+                                         <option value="@r.Value" @curId.IdIsSelected(Model.caseSearchFilter.MaxRows)> @r.Name </option>                                                                               
+                                     }
+                                 </select>
+                                  @Translation.Get("poster i sökresultat/Kund")                                 
+                             </td>
+                         </tr>                                         
+                     }      
+                     
+                     <tr>
+                         <td>
+                             &nbsp;
+                         </td>
+                     </tr>      
+                      <tr>
+                        <td>
+                             <input type="submit" class="submit btn" value="@Translation.Get("Sök")"/>
+                        </td>                                                                          
+                     </tr>                                                                      
+                 </table>
+             </div>
+
+             <div class="span6">
+                 <table class="tableform">                                         
+                     <tr>
+                        <td>                                
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(m=>m.CaseInitiatorFilter,  new { @class = "fixed-length", id = string.Empty })
+                        </td>
+                    </tr>    
+
+                     <tr>
+                         <td class="span3">
+                             @Translation.Get(GlobalEnums.TranslationCaseFields.CaseNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):
+                         </td>
+                         <td class="span4">
+                             <input type="text" id="txtCaseNumberSearch" value="@Model.caseSearchFilter.CaseNumber" name="txtCaseNumberSearch" />
+                         </td>                         
+                     </tr>
+                     <tr>
+                         <td class="span3">
+                             @Translation.Get("Sök"):
+                         </td>
+                         <td class="span4">
+                             <input type="text" id="txtFreeTextSearch" value="@Model.caseSearchFilter.FreeTextSearch" name="txtFreeTextSearch" />
+                         </td>
+                     </tr>                   
+                     <tr class="date-block">
+                         <td>                                
+                             @Translation.Get(GlobalEnums.TranslationCaseFields.RegTime.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                    
+                         </td>
+                         <td>
+                             @Html.EditorFor(m => Model.caseSearchFilter.CaseRegistrationDateStartFilter, "DatePickerNoJs", new { name = "CaseRegistrationDateStartFilter" })
+                             @Html.EditorFor(m => Model.caseSearchFilter.CaseRegistrationDateEndFilter, "DatePickerNoJs", new { name = "CaseRegistrationDateEndFilter" })
+                         </td>
+                     </tr>                                                                            
+                     <tr class="date-block">
+                         <td>                                
+                             @Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                    
+                         </td>
+                         <td>
+                             @Html.EditorFor(m => Model.caseSearchFilter.CaseClosingDateStartFilter, "DatePickerNoJs", new { name = "CaseClosingDateStartFilter" })
+                             @Html.EditorFor(m => Model.caseSearchFilter.CaseClosingDateEndFilter, "DatePickerNoJs", new { name = "CaseClosingDateEndFilter" })
+                         </td>
+                     </tr>    
+                    
+                 </table>
+             </div>         
+
+         </div>         
+     </div>
+  </form>
+}

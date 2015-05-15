@@ -16,6 +16,7 @@
     using DH.Helpdesk.Web.Models.Invoice;
     using DH.Helpdesk.Web.Models.Shared;
 using DH.Helpdesk.Web.Enums;
+    using DH.Helpdesk.BusinessData.Models.Shared;
 
     public class CaseInputViewModel
     {
@@ -133,9 +134,7 @@ using DH.Helpdesk.Web.Enums;
     }
 
     public class JsonCaseIndexViewModel
-    {
-        public OverviewType OverviewType { get; set; }
-
+    {       
         public CaseSearchFilterData CaseSearchFilterData { get; set; }
 
         public CaseTemplateTreeModel CaseTemplateTreeButton { get; set; }
@@ -145,6 +144,11 @@ using DH.Helpdesk.Web.Enums;
         public JsonGridSettingsModel GridSettings { get; set; }
 
         public CaseRemainingTimeViewModel RemainingTime { get; set; }
+    }
+
+    public class AdvancedSearchIndexViewModel : JsonCaseIndexViewModel
+    {
+        public List<ItemOverview> SelectedCustomers { get; set; }        
     }
 
     public class CaseSearchResultModel
