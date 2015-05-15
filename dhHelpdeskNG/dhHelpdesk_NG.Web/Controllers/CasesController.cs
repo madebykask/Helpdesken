@@ -244,7 +244,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         #region Public Methods and Operators
 
-        public ActionResult AdvancedSearch(bool? clearFilters = false, bool doSearch = false)
+        public ActionResult AdvancedSearch(bool? clearFilters = false, bool doSearchAtBegining = false)
         {
             if (SessionFacade.CurrentUser == null)
             {
@@ -286,6 +286,14 @@ namespace DH.Helpdesk.Web.Controllers
             m.CaseSetting = this.GetCaseSettingModel(currentCustomerId, currentUserId);
             m.GridSettings = JsonGridSettingsMapper.GetAdvancedSearchGridSettingsModel(currentCustomerId);
 
+            if (advancedSearchModel.Search != null)
+                m.GridSettings.sortOptions = new GridSortOptions()
+                    {
+                        sortBy = advancedSearchModel.Search.SortBy,
+                        sortDir = (advancedSearchModel.Search.Ascending)? SortingDirection.Asc:SortingDirection.Desc
+                    };
+
+            m.DoSearchAtBegining = doSearchAtBegining;
             return this.View("AdvancedSearch/Index", m);
         }
 

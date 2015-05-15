@@ -8,6 +8,7 @@
 }
 <script type="text/javascript">
     window.gridSettings = @Html.Raw(jsSerializer.Serialize(Model.GridSettings))
+    window.doSearchAtBegining = @Html.Raw(jsSerializer.Serialize(Model.DoSearchAtBegining))
 </script>
 
 <div class="AdvancedSearch-overview page">    

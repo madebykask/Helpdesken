@@ -49,7 +49,7 @@ var GRID_STATE = {
     
     function Page() {};    
   
-    Page.prototype.init = function(gridInitSettings) {
+    Page.prototype.init = function(gridInitSettings, doSearchAtBegining) {
         var me = this;        
         //// Bind elements
         customerTableId = 0;
@@ -102,12 +102,15 @@ var GRID_STATE = {
                
         me.setGridState(window.GRID_STATE.IDLE);
         me.gridSettings = gridInitSettings;
-        me.sortSettings = gridInitSettings.sortOptions;        
-    
+        me.sortSettings = gridInitSettings.sortOptions;                
         $('.input-append.date').datepicker({
             format: 'yyyy-mm-dd',
             autoclose: true
         });
+
+        if (doSearchAtBegining)
+            me.onSearchClick();
+
     };
         
     Page.prototype.setGridState = function(gridStateId) {
@@ -180,7 +183,7 @@ var GRID_STATE = {
     };
               
     Page.prototype.formatCell = function (caseId, cellValue) {
-        var out = [strJoin('<td><a href="/Cases/Edit/', caseId, '?backUrl=', '/Cases/AdvancedSearch/', '">', cellValue == null ? '&nbsp;' : cellValue, '</a></td>')];
+        var out = [strJoin('<td><a href="/Cases/Edit/', caseId, '?backUrl=', '/Cases/AdvancedSearch?', 'doSearchAtBegining=true', '">', cellValue == null ? '&nbsp;' : cellValue, '</a></td>')];
         return out.join(JOINER);
     };
 
@@ -469,7 +472,7 @@ var GRID_STATE = {
     window.app = new Page();
 
     $(document).ready(function() {
-        app.init.call(window.app, window.gridSettings);
+        app.init.call(window.app, window.gridSettings, window.doSearchAtBegining);
     });
 
 })($);

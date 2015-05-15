@@ -148,6 +148,8 @@ using DH.Helpdesk.Web.Enums;
 
     public class AdvancedSearchIndexViewModel : JsonCaseIndexViewModel
     {
+        public bool DoSearchAtBegining { get; set; }
+
         public List<ItemOverview> SelectedCustomers { get; set; }        
     }
 
