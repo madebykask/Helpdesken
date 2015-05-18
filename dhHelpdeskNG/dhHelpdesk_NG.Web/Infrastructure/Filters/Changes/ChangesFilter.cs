@@ -15,6 +15,7 @@
             List<int> affectedProcessIds,
             List<int> workingGroupIds,
             List<int> administratorIds,
+            List<int> responsibleIds,
             string pharse,
             ChangeStatus? status,
             int recordsOnPage,
@@ -26,6 +27,7 @@
             this.AffectedProcessIds = affectedProcessIds;
             this.WorkingGroupIds = workingGroupIds;
             this.AdministratorIds = administratorIds;
+            this.ResponsibleIds = responsibleIds;
             this.Pharse = pharse;
             this.Status = status;
             this.RecordsOnPage = recordsOnPage;
@@ -40,6 +42,7 @@
             this.AffectedProcessIds = new List<int>(0);
             this.WorkingGroupIds = new List<int>(0);
             this.AdministratorIds = new List<int>(0);
+            this.ResponsibleIds = new List<int>(0);
         }
 
         [NotNull]
@@ -60,9 +63,12 @@
         [NotNull]
         public List<int> AdministratorIds { get; private set; }
 
+        [NotNull]
+        public List<int> ResponsibleIds { get; private set; }
+
         public string Pharse { get; private set; }
 
-        public ChangeStatus? Status { get; private set; }
+        public ChangeStatus? Status { get; set; }
 
         [MinValue(0)]
         public int RecordsOnPage { get; private set; }

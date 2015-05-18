@@ -24,12 +24,12 @@ namespace DH.Helpdesk.Dal.Infrastructure.Context
         string CustomerName { get; }
 
         /// <summary>
-        /// Gets the working day end.
+        /// Gets the working day end. In customers time
         /// </summary>
         int WorkingDayEnd { get; }
 
         /// <summary>
-        /// Gets the working day start.
+        /// Gets the working day start. In customers time
         /// </summary>
         int WorkingDayStart { get; }
 

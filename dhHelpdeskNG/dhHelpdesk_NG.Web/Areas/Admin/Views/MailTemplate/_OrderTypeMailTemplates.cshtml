@@ -8,7 +8,7 @@
         {
             var activeLangNames = Model.ActiveOrderMailTemplateLanguages
                                        .Where(m => m.Id == item.Id)
-                                       .Select(l => l.LanguageNames).SingleOrDefault();
+                                       .Select(l => l.LanguageNames).FirstOrDefault();
             
             if (item.Parent_OrderType_Id == null)
             {

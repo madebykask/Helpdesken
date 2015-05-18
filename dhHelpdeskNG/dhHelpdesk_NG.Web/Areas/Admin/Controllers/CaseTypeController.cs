@@ -14,6 +14,7 @@
         private readonly ICaseTypeService _caseTypeService;
         private readonly IUserService _userService;
         private readonly ICustomerService _customerService;
+        private const int MaxCaseTpyeLevels = 6;
 
         public CaseTypeController(
             ICaseTypeService caseTypeService,
@@ -114,8 +115,11 @@
 
         private CaseTypeInputViewModel CreateInputViewModel(CaseType caseType, Customer customer)
         {
+            var parentCount = GetCaseTypeParentsCount(caseType);
+
             var model = new CaseTypeInputViewModel
             {
+                CanAddSubCaseType = (parentCount < MaxCaseTpyeLevels),
                 CaseType = caseType,
                 Customer = customer,
                 SystemOwners = this._userService.GetAdministrators(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
@@ -127,5 +131,15 @@
 
             return model;
         }
+
+        private int GetCaseTypeParentsCount(CaseType caseType)
+        {
+            if (caseType.ParentCaseType == null)
+                return 1;
+            else
+                return GetCaseTypeParentsCount(caseType.ParentCaseType) + 1;
+        }
+
+
     }
 }

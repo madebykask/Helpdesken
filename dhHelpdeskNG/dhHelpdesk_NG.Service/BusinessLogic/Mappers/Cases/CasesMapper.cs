@@ -38,6 +38,29 @@
                                             GetCaseIcon(c.FinishingDate, c.ApprovedDate, c.RequireApproving))).ToList();
         }
 
+        public static List<int> MapToUserCaseIds(
+                                IQueryable<Case> cases,
+                                IQueryable<DepartmentUser> userDepartments,
+                                IQueryable<User> users,
+                                IQueryable<Customer> customers,
+                                IQueryable<CustomerUser> customerUsers)
+        {
+            var entities = (from c in cases
+                            join cus in customers on c.Customer_Id equals cus.Id
+                            join cu in customerUsers on cus.Id equals cu.Customer_Id
+                            join u in users on cu.User_Id equals u.Id
+                            join ud in userDepartments on c.Department_Id equals ud.Department_Id into udgj
+                            from department in udgj.DefaultIfEmpty()
+                            select new
+                            {
+                                c.Id
+                            })
+                            .Distinct()
+                            .ToList();
+
+            return entities.Select(c => c.Id).ToList();
+        } 
+
         private static GlobalEnums.CaseIcon GetCaseIcon(
                                             DateTime? finishingDate,
                                             DateTime? approvedDate,

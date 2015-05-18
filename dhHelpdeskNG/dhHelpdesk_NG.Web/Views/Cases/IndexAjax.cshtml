@@ -1,9 +1,10 @@
 ﻿@using System.Web.Script.Serialization
 @using System.Web.Optimization
 @using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Enums;
 @model DH.Helpdesk.Web.Models.Case.JsonCaseIndexViewModel
 @{
-    var jsSerializer = new JavaScriptSerializer();
+    var jsSerializer = new JavaScriptSerializer();        
 }
 <script type="text/javascript">
     window.gridSettings = @Html.Raw(jsSerializer.Serialize(Model.GridSettings))
@@ -22,7 +23,7 @@
                     </li>                
                 }                    
                 <li id="btnSaveCaseSetting" style= "display: none">                   
-                    <input type="button"  class="btn" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" /> 
+                    <input type="button" class="btn" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" /> 
                 </li>
             </ul>
         </div>

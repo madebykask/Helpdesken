@@ -49,7 +49,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case.Output
         /// <summary>
         /// Gets or sets the user_ id.
         /// </summary>
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
 
         /// <summary>
         /// Gets or sets the status_ id.
@@ -304,7 +304,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case.Output
         /// <summary>
         /// Gets or sets the performer user id.
         /// </summary>
-        public int PerformerUserId { get; set; }
+        public int? PerformerUserId { get; set; }
 
         /// <summary>
         /// Gets or sets the performer user.

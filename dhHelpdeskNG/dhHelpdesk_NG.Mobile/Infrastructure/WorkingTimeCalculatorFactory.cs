@@ -13,10 +13,10 @@
         /// <summary>
         /// Fabric method for create
         /// </summary>
-        /// <param name="workingDayStart">in local time</param>
-        /// <param name="workingDayEnd">in local time</param>
-        /// <param name="holidays"></param>
-        /// <param name="defaultHolidayCalendar"></param>
+        /// <param name="workingDayStart">In customers time zone</param>
+        /// <param name="workingDayEnd">In customers time zone</param>
+        /// <param name="holidays">In customers time zone</param>
+        /// <param name="defaultHolidayCalendar">In customers time zone</param>
         /// <returns></returns>
         public static WorkTimeCalculator MakeCalculator(
             int workingDayStart,
@@ -38,18 +38,7 @@
                 }
             }
 
-            //// due to we perform calculations in UTC, we need to conver working hours in UTC also
-            //// Due to we have only hours there is a bug with NST (3:30) or New Zealand (2:45) timezones 
-            //// TODO (Alexander Semenischev): fix bug with timezones
-            var workBeginTime = DateTime.Now.RoundToWorkDateTime(workingDayStart).ToUniversalTime();
-            var workEndTime = DateTime.Now.RoundToWorkDateTime(workingDayEnd).ToUniversalTime();
-            var workBeginUtc = (int)Math.Floor((decimal)(workBeginTime.Hour * 60 + workBeginTime.Minute * 60 + workBeginTime.Second) / 60);
-            var workEndUtc = (int)Math.Floor((decimal)(workEndTime.Hour * 60 + workEndTime.Minute * 60 + workEndTime.Second) / 60);
-            return new WorkTimeCalculator(
-                workBeginUtc,
-                workEndUtc,
-                holidayCache,
-                defaultHolidayCalendar);
+            return null;
         }
 
         public static WorkTimeCalculator CreateFromWorkContext(IWorkContext workContext)
@@ -58,7 +47,7 @@
                  workContext.Customer.WorkingDayStart,
                  workContext.Customer.WorkingDayEnd,
                  workContext.Cache.Holidays,
-                workContext.Cache.DefaultCalendarHolidays);
+                 workContext.Cache.DefaultCalendarHolidays);
         }
     }
 }

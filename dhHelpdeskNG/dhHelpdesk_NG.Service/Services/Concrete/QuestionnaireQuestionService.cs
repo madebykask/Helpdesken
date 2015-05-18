@@ -52,7 +52,7 @@
         public List<QuestionnaireQuestionsOverview> FindQuestionnaireQuestionsOverviews(int questionnaireId, int languageId)
         {
             List<QuestionnaireQuestionsOverview> ret = null;
-            ret = this._questionnaireQuestionRepository.FindQuestionnaireQuestions(questionnaireId,languageId,LanguageId.Swedish);            
+            ret = this._questionnaireQuestionRepository.FindQuestionnaireQuestions(questionnaireId,languageId,LanguageIds.Swedish);            
             return ret;
         }
 
@@ -65,7 +65,7 @@
         {
             switch (editedQuestionnaireQuestion.LanguageId)
             {
-                case LanguageId.Swedish:
+                case LanguageIds.Swedish:
                     this._questionnaireQuestionRepository.UpdateSwedishQuestionnaireQuestion(editedQuestionnaireQuestion);
                     break;
 

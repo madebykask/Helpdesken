@@ -12,7 +12,7 @@
         {
             this.HasKey(x => x.Id);
 
-            this.HasRequired(x => x.ChangedByUser)
+            this.HasOptional(x => x.ChangedByUser)
                  .WithMany()
                  .HasForeignKey(x => x.ChangedByUser_Id)
                  .WillCascadeOnDelete(false);
@@ -30,7 +30,7 @@
             this.HasMany(s => s.Cases)
                 .WithRequired(s => s.Problem).HasForeignKey(s => s.Problem_Id);
 
-            this.Property(x => x.ChangedByUser_Id).IsRequired();
+            this.Property(x => x.ChangedByUser_Id).IsOptional();
             this.Property(x => x.Customer_Id).IsRequired();
             this.Property(x => x.InventoryNumber).IsRequired().HasMaxLength(20);
             this.Property(x => x.Description).IsOptional().HasColumnName("ProblemDescription");

@@ -51,10 +51,10 @@
                             .HasForeignKey(x => x.ProductArea_Id)
                             .WillCascadeOnDelete(false);
 
-            this.HasRequired(x => x.UserPerformer)
+            this.HasOptional(x => x.UserPerformer)
                             .WithMany()
                             .HasForeignKey(x => x.Performer_User_Id)
-                            .WillCascadeOnDelete(false);
+                            .WillCascadeOnDelete(false);            
 
             this.HasOptional(x => x.WorkingGroup)
                             .WithMany()
@@ -67,7 +67,10 @@
                             .WillCascadeOnDelete(false);
   
             this.Property(x => x.AgreedDate).IsOptional();
+            this.Property(x => x.Performer_User_Id).IsOptional();
+            this.Property(x => x.User_Id).IsOptional();
             this.Property(x => x.ApprovedDate).IsOptional();
+            this.Property(x => x.ApprovedBy_User_Id).IsOptional();
             this.Property(x => x.Available).IsRequired().HasMaxLength(100);
             this.Property(x => x.Caption).IsRequired().HasMaxLength(60);
             this.Property(x => x.CaseHistoryGUID).IsRequired();
@@ -115,6 +118,7 @@
             this.Property(x => x.CaseFile).IsOptional();
             this.Property(x => x.LogFile).IsOptional();
             this.Property(x => x.CaseLog).IsOptional();
+            this.Property(x => x.ClosingReason).IsOptional();
             
             this.ToTable("tblcasehistory");
         }

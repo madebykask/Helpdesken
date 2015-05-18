@@ -32,6 +32,7 @@
         private readonly IUnitOfWork _unitOfWork;
         private readonly IFilesStorage _filesStorage;
         private readonly IFinishingCauseRepository _finishingCauseRepository;
+        private readonly IFinishingCauseService _finishingCauseService;
 
         /// <summary>
         /// The case repository.
@@ -70,7 +71,8 @@
             IUnitOfWork unitOfWork, 
             ICaseRepository caseRepository, 
             IProblemLogService problemLogService,
-            IFinishingCauseRepository finishingCauseRepository)
+            IFinishingCauseRepository finishingCauseRepository,
+            IFinishingCauseService finishingCauseService)
         {
             this._logRepository = logRepository;
             this._unitOfWork = unitOfWork;
@@ -79,6 +81,7 @@
             this._filesStorage = filesStorage;
             this._logFileRepository = logFileRepository;
             this._finishingCauseRepository = finishingCauseRepository;
+            this._finishingCauseService = finishingCauseService; 
         }
 
         #endregion
@@ -274,9 +277,8 @@
             log.FinishingDate = l.FinishingDate;
             log.FinishingType = l.FinishingType;
             if (l.FinishingType != null)
-            {
-                var fc = _finishingCauseRepository.GetById(l.FinishingType.Value);
-                var caption = GetFinishingCausePath(fc);                
+            {                
+                var caption = _finishingCauseService.GetFinishingTypeName(l.FinishingType.Value);                
                 log.FinishingTypeName = caption;
             }
             else            
@@ -292,13 +294,7 @@
             return log;
         }
 
-        private string GetFinishingCausePath(FinishingCause fc)
-        {
-            if (fc.Parent_FinishingCause_Id == null)
-                return fc.Name;
-            else
-                return GetFinishingCausePath(fc.ParentFinishingCause) + "-" + fc.Name;
-        }
+         
 
         private int CalculateWorkingTimeHour(int workingTime)
         {

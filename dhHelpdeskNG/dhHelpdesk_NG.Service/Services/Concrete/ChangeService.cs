@@ -456,9 +456,10 @@
             var affectedProcesses = changeGroups;
             var workingGroups = this.workingGroupRepository.FindActiveOverviews(context.CustomerId);
             var administrators = this.userRepository.FindActiveOverviews(context.CustomerId);
+            var responsibles = this.userRepository.FindActiveOverviews(context.CustomerId);
 
             var settings = this.GetSearchSettings(context.CustomerId, context.LanguageId);
-            var options = new SearchOptions(statuses, objects, owners, affectedProcesses, workingGroups, administrators);
+            var options = new SearchOptions(statuses, objects, owners, affectedProcesses, workingGroups, administrators, responsibles);
 
             return new GetSearchDataResponse(settings, options);
         }
@@ -567,9 +568,17 @@
             {
                 var customerRepository = uow.GetRepository<Customer>();
 
+                var customersHaveResponsible = new List<int>();
+                foreach (int customerId in customerIds)                
+                {
+                   var curSettings = this.GetChangeEditSettings(customerId, LanguageIds.Swedish);
+                   if (curSettings.Analyze.Responsible.Show)
+                        customersHaveResponsible.Add(customerId);
+                }                                
+
                 var customerChanges = customerRepository.GetAll()
                                     .GetByIds(customerIds)
-                                    .MapToCustomerChanges(userId);
+                                    .MapToCustomerChanges(userId, customersHaveResponsible);
 
                 return customerChanges;
             }

@@ -18,8 +18,9 @@
             var affectedProcesses = CreateFieldSetting(entity.FindByName(RegistrationField.AffectedProcesses));
             var workingGroups = CreateFieldSetting(entity.FindByName(GeneralField.WorkingGroup));
             var administrators = CreateFieldSetting(entity.FindByName(GeneralField.Administrator));
+            var responsibles = CreateFieldSetting(entity.FindByName(GeneralField.Responsible));
 
-            return new SearchSettings(statuses, objects, owners, affectedProcesses, workingGroups, administrators);
+            return new SearchSettings(statuses, objects, owners, affectedProcesses, workingGroups, administrators, responsibles);
         }
 
         private static FieldOverviewSetting CreateFieldSetting(FieldOverviewSettingMapperData data)

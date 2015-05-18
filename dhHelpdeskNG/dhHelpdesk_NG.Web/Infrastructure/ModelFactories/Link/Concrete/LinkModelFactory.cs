@@ -46,7 +46,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Link.Concrete
                 var categoryNames = linkOverviews
                                     .Where(l => l.CustomerId == customer.CustomerId)
                                     .Select(l => l.LinkGroupName)
-                                    .Distinct();
+                                    .Distinct()
+                                    .OrderBy(l=> l);
                 foreach (var categoryName in categoryNames)
                 {
                     var category = new LinkCategoryGroupViewModel();

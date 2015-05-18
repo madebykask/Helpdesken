@@ -1,6 +1,8 @@
 ﻿namespace DH.Helpdesk.Web.Models.Profile
 {
+    using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models.Users;
@@ -50,6 +52,10 @@
                 this.customersSettings = value;
             }
         }
+
+        public string SelectedTimeZone { get; set; }
+
+        public IEnumerable<SelectListItem> AvailvableTimeZones { get; set; }
     }
 
     public class ProfileSaveViewModel
@@ -94,5 +100,7 @@
                 this.customersSettings = value;
             }
         }
+
+        public string SelectedTimeZone { get; set; }
     }
 }

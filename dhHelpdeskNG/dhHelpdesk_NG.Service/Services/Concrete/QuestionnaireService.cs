@@ -67,7 +67,7 @@
         {
             switch (editedQuestionnaire.LanguageId)
             {
-                case LanguageId.Swedish:
+                case LanguageIds.Swedish:
                     this._questionnaireRepository.UpdateSwedishQuestionnaire(editedQuestionnaire);
                     break;
 
@@ -81,8 +81,8 @@
 
         public void DeleteQuestionnaireById(int questionnaireId)
         {
-            var questions = this._questionnaireQuestionRepository.FindQuestionnaireQuestions(questionnaireId, LanguageId.Swedish,
-                LanguageId.Swedish);
+            var questions = this._questionnaireQuestionRepository.FindQuestionnaireQuestions(questionnaireId, LanguageIds.Swedish,
+                LanguageIds.Swedish);
 
             foreach (var question in questions)
                 this._questionnaireQuestionRepository.DeleteQuestionById(question.Id);

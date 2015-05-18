@@ -409,6 +409,7 @@
         
         private GlobalSettingIndexViewModel GetGSIndexViewModel( int holidayheaderid, int languageId, SearchOption searchOption)
         {
+            const int DEFAULT_HOLIDAYS_CALENDAR_ID = 1;
             var start = this._globalSettingService.GetGlobalSettings().FirstOrDefault();
 
             //int texttypeid,
@@ -465,7 +466,7 @@
                 }).ToList(),
                 HolidayHeaders = this._holidayService.GetHolidayHeaders().Select(x => new SelectListItem
                 {
-                    Text = Translation.Get(x.Name),
+                    Text = x.Id == DEFAULT_HOLIDAYS_CALENDAR_ID ? string.Format("{0} ({1})", Translation.Get(x.Name), Translation.Get("standardkalender")) : Translation.Get(x.Name),
                     Value = x.Id.ToString()
                 }).ToList(),
                 WatchDateCalendars = this._watchDateCalendarService.GetAllWatchDateCalendars().Select(x => new SelectListItem

@@ -18,6 +18,8 @@
 
         public static readonly string Administrator = "User_Id";
 
+        public static readonly string Responsible = "ResponsibleUser_Id";
+
         public static readonly string FinishingDate = "PlannedReadyDate";
 
         public static readonly string Rss = "RSS";

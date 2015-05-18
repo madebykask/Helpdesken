@@ -8,6 +8,8 @@
 
         public string LogFile { get; set; }
 
-        public string CaseLog { get; set; } 
+        public string CaseLog { get; set; }
+
+        public string ClosingReason { get; set; } 
     }
 }

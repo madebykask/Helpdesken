@@ -4988,11 +4988,11 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 GO
 
 -- Nytt fält i tblCustomer
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Status' and sysobjects.name = N'tblCustomer')
-	begin
-		--ALTER TABLE tblCustomer ADD Status int NOT Null Default(1)
-	end
-GO
+--if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Status' and sysobjects.name = N'tblCustomer')
+--	begin
+--		--ALTER TABLE tblCustomer ADD Status int NOT Null Default(1)
+--	end
+--GO
 
 If not exists (select * from tblText where Id = 1305)
 	insert into tblText (Id, Textstring) VALUES (1305, 'Steg')
@@ -5006,3 +5006,5 @@ update tblmailtemplate_tbllanguage set body = replace(body, '[#99]', '[#98]')
 where body like '%![#99]%' ESCAPE '!'
 and body not like '%![#98]%' ESCAPE '!'
 and mailtemplate_id in (select id from tblmailtemplate where (mailid = 1 or mailid=3 or mailid=4 or mailid=5) )
+
+GO

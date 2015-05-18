@@ -71,6 +71,15 @@
             return ret;
         }
 
+        public static IList<Field> GetFilterForAdvancedSearch()
+        {
+            var ret = new List<Field>();
+            ret.Add(new Field { Id = -1, StringValue = string.Empty });
+            ret.Add(new Field { Id = 2, StringValue = Translation.Get("Pågående ärenden", Enums.TranslationSource.TextTranslation) });
+            ret.Add(new Field { Id = 1, StringValue = Translation.Get("Avslutade ärenden", Enums.TranslationSource.TextTranslation) });                        
+            return ret;
+        }
+
         public static int getPriorityMaxtime(this IList<Priority> pl)
         {
             var ret = 0; 

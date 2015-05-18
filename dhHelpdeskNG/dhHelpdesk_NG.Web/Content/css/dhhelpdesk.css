@@ -9,6 +9,18 @@ a, a:hover, a:focus {
   color: #333333;
   text-decoration: none;
 }
+/** return bootstrap style for links inside toastmessage dialgue */
+.toast-container a
+{
+  color: #0088cc;
+  text-decoration: none;
+}
+.toast-container a:hover,
+.toast-container a:focus
+{
+  color: #005580;
+  text-decoration: underline;
+}
 
 .btn
 {

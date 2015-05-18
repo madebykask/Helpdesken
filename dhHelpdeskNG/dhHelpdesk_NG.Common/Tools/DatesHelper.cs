@@ -35,6 +35,26 @@ namespace DH.Helpdesk.Common.Tools
             return new DateTime(date.Year, date.Month, date.Day);
         }
 
+        public static DateTime Min(DateTime compare1, DateTime compare2)
+        {
+            if (compare1 >= compare2)
+            {
+                return compare2;
+            }
+
+            return compare1;
+        }
+
+        public static DateTime Max(DateTime compare1, DateTime compare2)
+        {
+            if (compare1 >= compare2)
+            {
+                return compare1;
+            }
+
+            return compare2;
+        }
+
         public static DateTime RoundToWorkDateTime(this DateTime date, int workingHour)
         {
             if (workingHour < 0 || workingHour > 23)
@@ -65,6 +85,38 @@ namespace DH.Helpdesk.Common.Tools
             }
 
             return new DateTime(date.Year, date.Month, date.Day, hour, 0, 0);
+        }
+
+        /// <summary>
+        /// Difference in hours beteween usual time and daylight saving time
+        /// </summary>
+        private const int DAYLIGHTSAVING_HOUR_DIFF = 1;
+
+        public static DateTime LocalToUtc(this DateTime date, TimeZoneInfo tz, bool takeLatestIfAmbiguous = false)
+        {
+            DateTime res;
+            if (tz.IsAmbiguousTime(date))
+            {
+                res = takeLatestIfAmbiguous
+                          ? DateTime.SpecifyKind(
+                              date.AddMinutes(-(tz.BaseUtcOffset.TotalMinutes + DAYLIGHTSAVING_HOUR_DIFF * 60)),
+                              DateTimeKind.Utc)
+                          : DateTime.SpecifyKind(date - tz.BaseUtcOffset, DateTimeKind.Utc);
+            }
+            else
+            {
+                /// when begin or end of reange is inside daylight saving "lost" hour
+                try
+                {
+                    res = TimeZoneInfo.ConvertTimeToUtc(date, tz);
+                }
+                catch (ArgumentException)
+                {
+                    res = TimeZoneInfo.ConvertTimeToUtc(date.AddHours(DAYLIGHTSAVING_HOUR_DIFF), tz);
+                }
+            }
+
+            return res;
         }
 
         /// <summary>

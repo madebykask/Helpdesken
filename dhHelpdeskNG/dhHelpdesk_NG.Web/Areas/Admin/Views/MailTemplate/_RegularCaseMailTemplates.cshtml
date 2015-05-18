@@ -5,7 +5,7 @@
     {
         var activeLangNames = Model.ActiveMailTemplateLanguages
                                    .Where(m=> m.Id == int.Parse(item.Value))
-                                   .Select(l=> l.LanguageNames).SingleOrDefault();
+                                   .Select(l=> l.LanguageNames).FirstOrDefault();
         <tr>
             <td style="width:40%">
                 <a href="@Url.Action("edit", "mailtemplate", 

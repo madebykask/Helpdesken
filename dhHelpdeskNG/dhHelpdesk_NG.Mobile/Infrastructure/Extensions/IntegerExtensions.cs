@@ -66,7 +66,7 @@ namespace DH.Helpdesk.Mobile.Infrastructure.Extensions
             string ret = string.Empty;
             switch (value)
             {
-                case LanguageId.Swedish:
+                case LanguageIds.Swedish:
                     ret = "Swedish.png";
                     break;
                 default:

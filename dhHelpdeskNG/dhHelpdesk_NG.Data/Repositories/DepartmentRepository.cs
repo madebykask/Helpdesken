@@ -23,7 +23,7 @@
 
         ItemOverview FindActiveOverview(int departmentId);
 
-        IEnumerable<Department> GetActiveDepartmentsBy(int customerId, int? regionId);
+        IEnumerable<Department> GetActiveDepartmentsBy(int customerId, int? regionId = null);
     }
 
     public sealed class DepartmentRepository : RepositoryBase<Department>, IDepartmentRepository
@@ -117,16 +117,16 @@
         /// <param name="customerId"></param>
         /// <param name="regionId"></param>
         /// <returns></returns>
-        public IEnumerable<Department> GetActiveDepartmentsBy(int customerId, int? regionId)
+        public IEnumerable<Department> GetActiveDepartmentsBy(int customerId, int? regionId = null)
         {
             var query = this.DataContext.Departments.Where(d => d.Customer_Id == customerId && d.IsActive != 0 && 
                                                                (d.Region_Id == null || (d.Region != null && d.Region.IsActive != 0)));                
             if (regionId.HasValue)
             {
-                return query.Where(it => it.Region_Id == regionId.Value).OrderBy(d=> d.DepartmentName);
+                return query.Where(it => it.Region_Id == regionId.Value).OrderBy(d => d.DepartmentName);
             }
 
-            return query.OrderBy(d=> d.DepartmentName);
+            return query.OrderBy(d => d.DepartmentName);
         }
     }
 

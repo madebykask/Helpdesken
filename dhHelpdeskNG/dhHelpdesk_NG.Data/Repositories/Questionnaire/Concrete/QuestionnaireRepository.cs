@@ -52,7 +52,7 @@
         {
             EditQuestionnaire ret = null;             
 
-            if (languageId != LanguageId.Swedish)
+            if (languageId != LanguageIds.Swedish)
             {
                var questionnaires =
                     this.DbContext.QuestionnaireLanguages.Where(l => l.Questionnaire_Id == id && l.Language_Id == languageId).Select(
@@ -81,7 +81,7 @@
                                 q.Id,
                                 Name = q.QuestionnaireName,
                                 Description = q.QuestionnaireDescription,
-                                languageId = LanguageId.Swedish,
+                                languageId = LanguageIds.Swedish,
                                 CreateDate = q.CreatedDate
                             }).FirstOrDefault();
                 if (questionnaires != null)

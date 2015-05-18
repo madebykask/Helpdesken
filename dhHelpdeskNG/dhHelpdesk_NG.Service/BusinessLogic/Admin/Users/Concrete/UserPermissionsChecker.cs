@@ -37,11 +37,10 @@
                 permissions.Add(UserPermission.Performer);
             }
 
-            //Commented out because redmine 11954
-            //if (user.CreateCasePermission.ToBool())
-            //{
-            //    permissions.Add(UserPermission.CreateCasePermission);
-            //}
+            if (user.CreateCasePermission.ToBool())
+            {
+                permissions.Add(UserPermission.CreateCasePermission);
+            }
 
             if (user.CopyCasePermission.ToBool())
             {
@@ -68,16 +67,15 @@
                 permissions.Add(UserPermission.ActivateCasePermission);
             }
 
-            //Commented out because redmine 11954
-            //if (user.CloseCasePermission.ToBool())
-            //{
-            //    permissions.Add(UserPermission.CloseCasePermission);
-            //}
-            //Commented out because redmine 11954
-            //if (user.RestrictedCasePermission.ToBool())
-            //{
-            //    permissions.Add(UserPermission.RestrictedCasePermission);
-            //}
+            if (user.CloseCasePermission.ToBool())
+            {
+                permissions.Add(UserPermission.CloseCasePermission);
+            }
+
+            if (user.RestrictedCasePermission.ToBool())
+            {
+                permissions.Add(UserPermission.RestrictedCasePermission);
+            }
 
             if (user.FollowUpPermission.ToBool())
             {
@@ -130,26 +128,96 @@
             switch ((UserGroup)user.UserGroup_Id)
             {
                 case UserGroup.User:
-                    //Commented out because redmine 11954
-                    //if (!permissions.Contains(UserPermission.CreateCasePermission))
-                    //{
-                    //    wrongPermissions.Add(UserPermission.CreateCasePermission);
-                    //}
-                    //if (!permissions.Contains(UserPermission.RestrictedCasePermission))
-                    //{
-                    //    wrongPermissions.Add(UserPermission.RestrictedCasePermission);
-                    //}
 
-                    wrongPermissions.AddRange(permissions);
+                    if (permissions.Contains(UserPermission.Performer))
+                    {
+                        wrongPermissions.Add(UserPermission.Performer);
+                    }
+
+                    if (permissions.Contains(UserPermission.CopyCasePermission))
+                    {
+                        wrongPermissions.Add(UserPermission.CopyCasePermission);
+                    }
+
+                    if (permissions.Contains(UserPermission.DeleteCasePermission))
+                    {
+                        wrongPermissions.Add(UserPermission.DeleteCasePermission);
+                    }
+
+                    if (permissions.Contains(UserPermission.DeleteAttachedFilePermission))
+                    {
+                        wrongPermissions.Add(UserPermission.DeleteAttachedFilePermission);
+                    }
+
+                    if (permissions.Contains(UserPermission.MoveCasePermission))
+                    {
+                        wrongPermissions.Add(UserPermission.MoveCasePermission);
+                    }
+
+                    if (permissions.Contains(UserPermission.ActivateCasePermission))
+                    {
+                        wrongPermissions.Add(UserPermission.ActivateCasePermission);
+                    }
+
+                    if (permissions.Contains(UserPermission.FollowUpPermission))
+                    {
+                        wrongPermissions.Add(UserPermission.FollowUpPermission);
+                    }
+
+                    if (permissions.Contains(UserPermission.DataSecurityPermission))
+                    {
+                        wrongPermissions.Add(UserPermission.DataSecurityPermission);
+                    }
+
+                    if (permissions.Contains(UserPermission.CaseSolutionPermission))
+                    {
+                        wrongPermissions.Add(UserPermission.CaseSolutionPermission);
+                    }
+
+                    if (permissions.Contains(UserPermission.ReportPermission))
+                    {
+                        wrongPermissions.Add(UserPermission.ReportPermission);
+                    }
+
+                    if (permissions.Contains(UserPermission.FaqPermission))
+                    {
+                        wrongPermissions.Add(UserPermission.FaqPermission);
+                    }
+
+                    if (permissions.Contains(UserPermission.CalendarPermission))
+                    {
+                        wrongPermissions.Add(UserPermission.CalendarPermission);
+                    }
+
+                    if (permissions.Contains(UserPermission.CreateOrderPermission))
+                    {
+                        wrongPermissions.Add(UserPermission.CreateOrderPermission);
+                    }
+
+                    if (permissions.Contains(UserPermission.AdministerOrderPermission))
+                    {
+                        wrongPermissions.Add(UserPermission.AdministerOrderPermission);
+                    }
 
                     break;
                 case UserGroup.Administrator:
-                    break;
-                case UserGroup.CustomerAdministrator:
-                case UserGroup.SystemAdministrator:
                     if (!permissions.Contains(UserPermission.FaqPermission))
                     {
                         wrongPermissions.Add(UserPermission.FaqPermission);
+                    }
+
+                    break;
+                case UserGroup.CustomerAdministrator:
+                    if (permissions.Contains(UserPermission.RestrictedCasePermission))
+                    {
+                        wrongPermissions.Add(UserPermission.RestrictedCasePermission);
+                    }
+
+                    break;
+                case UserGroup.SystemAdministrator:
+                    if (permissions.Contains(UserPermission.RestrictedCasePermission))
+                    {
+                        wrongPermissions.Add(UserPermission.RestrictedCasePermission);
                     }
 
                     break;

@@ -8,11 +8,39 @@
     <div class="secnavs fixed">
         <div class="pull-left">
             <ul class="secnav">
-                <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", new { id = Model.CaseType.Id }, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
-                <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "delete",
-        new { id = Model.CaseType.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) })</li>
-                <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", new { customerId = Model.CaseType.Customer_Id }, new { @class = "btn" })</li>
-                <li>@Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Ärendetyp", Enums.TranslationSource.TextTranslation), "new", new { parentId = Model.CaseType.Id, customerId = Model.CaseType.Customer_Id }, new { @class = "btn" })</li>
+                <li>
+                    @Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", 
+                        new { id = Model.CaseType.Id }, 
+                        new { onclick = "$('#target').submit();return false;", @class = "btn" })
+                </li>
+                <li>
+                    @Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "delete",
+                        new { id = Model.CaseType.Id }, 
+                        new { @class = "btn deleteDialog", 
+                              deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) })
+                </li>
+                <li>
+                    @Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", 
+                       new { customerId = Model.CaseType.Customer_Id }, new { @class = "btn" })
+                </li>                    
+                <li>
+                    @if(Model.CanAddSubCaseType)
+                    {
+                        @Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + 
+                                         Translation.Get("Ärendetyp", Enums.TranslationSource.TextTranslation), "new",
+                                         new { parentId = Model.CaseType.Id, 
+                                               customerId = Model.CaseType.Customer_Id }, 
+                                         new { @class = "btn" })
+                    }
+                    else
+                    {
+                        <a href="#" class="btn disabled"> 
+                                @Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) 
+                                @Translation.Get("Ärendetyp", Enums.TranslationSource.TextTranslation)
+                        </a>
+                    }
+                </li>
+              
             </ul>
         </div>
     </div>
@@ -21,8 +49,7 @@
 @section Scripts {
     <script type="text/javascript">
 
-        $(function () {
-
+        $(function () {        
             var validator = $("#target").validate({
                 rules: {
                     "CaseType.Name": {

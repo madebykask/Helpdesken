@@ -5,7 +5,10 @@
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.BusinessData.Models.Shared;
+    
 
     public class CaseSearchFilterData
     {
@@ -28,6 +31,8 @@
         public IList<Status> filterStatus { get; set; }
         public IList<StateSecondary> filterStateSecondary { get; set; }
         public IList<Field> filterCaseProgress { get; set; }
+        public IList<ItemOverview> filterCustomers { get; set; }
+        public IList<ItemOverview> filterMaxRows { get; set; }
 
         public bool SearchInMyCasesOnly { get; set; }
 
@@ -49,5 +54,10 @@
         /// Preset string in "filter by intitator" filter field on case overview page
         /// </summary>
         public string CaseInitiatorFilter { get; set; }
+        
+
+        public bool IsAdvancedSearch { get; set; }
+
+        public string CaseNumberFilter { get; set; }
     }    
 }

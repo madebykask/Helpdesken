@@ -5,6 +5,7 @@
     using System.Net;
     using System.Web;
     using System.Web.Mvc;
+    using System.Linq;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Input;
@@ -26,6 +27,7 @@
     using DH.Helpdesk.Web.Models.Changes;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
     using DH.Helpdesk.Web.Models.Changes.SettingsEdit;
+    using DH.Helpdesk.Common.Enums;
 
     public sealed class ChangesController : UserInteractionController
     {
@@ -136,7 +138,7 @@
         }
 
         [HttpGet]
-        public PartialViewResult Changes(int? customerId)
+        public PartialViewResult Changes(int? customerId, string filterType)
         {
             if (customerId.HasValue)
             {
@@ -144,7 +146,43 @@
             }
 
             this.ViewData["CustomerId"] = customerId;
-            return this.PartialView();
+
+           
+
+            var model = new SearchModel();
+            if (filterType != null)
+            {
+                switch (filterType.ToLower())
+                {
+                    case FilterType.MyChanges:
+                        var changeSettings = this.changeService.GetChangeEditSettings(SessionFacade.CurrentCustomer.Id, LanguageIds.Swedish);
+                        if (changeSettings.Analyze != null && changeSettings.Analyze.Responsible.Show)
+                            model.ResponsibleIds.Add(SessionFacade.CurrentUser.Id);
+                        else
+                            model.AdministratorIds.Add(SessionFacade.CurrentUser.Id);
+                        break;
+
+                    case FilterType.ActiveChanges:
+                        model.StatusValue = ChangeStatus.Active;
+                        break;
+
+                    case FilterType.ClosedChanges:
+                        model.StatusValue = ChangeStatus.Finished;
+                        break;
+                }
+            }
+
+            model.SortField = new Models.Shared.SortFieldModel();
+            // TODO: Temporary RecordsOnPage set by hardcode 
+            model.RecordsOnPage = 10;
+
+            var filters = SessionFacade.FindPageFilters<ChangesFilter>(PageName.Changes);
+            if (filters == null)
+                filters = ChangesFilter.CreateDefault();
+            filters.Status = model.StatusValue;
+            SessionFacade.SavePageFilters(PageName.Changes, filters);
+
+            return this.PartialView(model);
         }
 
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
@@ -153,6 +191,7 @@
                             SearchModel searchModel,
                             int? customerId)
         {
+
             var filters = searchModel != null
                 ? searchModel.ExtractFilters()
                 : SessionFacade.FindPageFilters<ChangesFilter>(PageName.Changes);
@@ -167,6 +206,7 @@
                 filters.AffectedProcessIds,
                 filters.WorkingGroupIds,
                 filters.AdministratorIds,
+                filters.ResponsibleIds,
                 filters.Pharse,
                 filters.Status,
                 filters.RecordsOnPage,
@@ -319,6 +359,7 @@
                 filters.AffectedProcessIds,
                 filters.WorkingGroupIds,
                 filters.AdministratorIds,
+                filters.ResponsibleIds,
                 filters.Pharse,
                 filters.Status,
                 filters.RecordsOnPage,
@@ -398,10 +439,12 @@
             var filters = SessionFacade.FindPageFilters<ChangesFilter>(PageName.Changes);
             if (filters == null)
             {
-                filters = ChangesFilter.CreateDefault();
+                filters = ChangesFilter.CreateDefault();                
                 SessionFacade.SavePageFilters(PageName.Changes, filters);
             }
 
+            //if (status != null)
+            //    filters.Status = status;
             var searchData = this.changeService.GetSearchData(this.OperationContext);
             var model = this.searchModelFactory.Create(filters, searchData);
             return this.PartialView(model);

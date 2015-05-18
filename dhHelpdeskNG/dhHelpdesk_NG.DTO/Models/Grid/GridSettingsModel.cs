@@ -52,6 +52,8 @@
     /// </summary>
     public class GridSettingsModel
     {
+        public int CustomerId;        
+
         public List<GridColumnDef> columnDefs;
 
         public GridSortOptions sortOptions;
@@ -60,4 +62,5 @@
 
         public string cls;
     }
+    
 }

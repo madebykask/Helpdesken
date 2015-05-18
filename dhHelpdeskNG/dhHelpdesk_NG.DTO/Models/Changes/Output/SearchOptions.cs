@@ -14,7 +14,8 @@
             List<ItemOverview> owners,
             List<ItemOverview> affectedProcesses,
             List<ItemOverview> workingGroups,
-            List<ItemOverview> administrators)
+            List<ItemOverview> administrators, 
+            List<ItemOverview> responsibles)
         {
             this.Statuses = statuses;
             this.Objects = objects;
@@ -22,6 +23,7 @@
             this.AffectedProcesses = affectedProcesses;
             this.WorkingGroups = workingGroups;
             this.Administrators = administrators;
+            this.Responsibles = responsibles;
         }
 
         [NotNull]
@@ -41,5 +43,8 @@
 
         [NotNull]
         public List<ItemOverview> Administrators { get; private set; }
+
+        [NotNull]
+        public List<ItemOverview> Responsibles { get; private set; }
     }
 }

@@ -121,7 +121,8 @@
                 user.Email,
                 user.UserWorkingGroups,
                 user.StartPage,
-                user.ShowSolutionTime.ToBool());
+                user.ShowSolutionTime.ToBool(),
+                user.TimeZoneId);
         }
 
         public static List<CustomerSettings> MapToUserCustomersSettings(

@@ -2,6 +2,16 @@
 @using DH.Helpdesk.BusinessData.OldComponents
 @using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Web.Infrastructure.Extensions
+@using System.Web.Optimization
+<script type="text/javascript">    
+    window.fieldProperties = { 
+        ShowOnStartPage: 'ShowOnStartPage',
+        ShowExternal: 'ShowExternal',
+        Label: 'Label',
+        FieldHelp: 'FieldHelp'
+    };            
+</script>
+
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
@@ -1911,10 +1921,5 @@
     </div>
 </div>
 
+@Scripts.Render("~/bundles/admin/customerCaseSettings")
 
-<script>
-    $(function () {
-        $("input[name$='].Label']").attr('maxlength', '50');
-        $("input[name$='].FieldHelp']").attr('maxlength', '200');
-    });
-</script>

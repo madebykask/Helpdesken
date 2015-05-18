@@ -1,5 +1,6 @@
 namespace DH.Helpdesk.BusinessData.Models.User.Input
 {
+    using System;
     using System.Collections.Generic;
 
     using DH.Helpdesk.Common.ValidationAttributes;
@@ -41,7 +42,8 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             string email,
             ICollection<UserWorkingGroup> wgs,
             int startPage,
-            bool showSolutionTime)
+            bool showSolutionTime,
+            string timeZoneId)
         {
             this.StartPage = startPage;
             this.Id = id;
@@ -76,6 +78,7 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             this.Email = email;
             this.UserWorkingGroups = wgs;
             this.ShowSolutionTime = showSolutionTime;
+            this.TimeZoneId = timeZoneId;
         }
 
         [IsId]
@@ -145,6 +148,8 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
         public int StartPage { get; private set; }
 
         public bool ShowSolutionTime { get; set; }
+
+        public string TimeZoneId { get; set; }
 
         public bool IsAdministrator()
         {

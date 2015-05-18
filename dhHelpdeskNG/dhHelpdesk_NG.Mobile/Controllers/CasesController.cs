@@ -285,19 +285,6 @@
                     srm.caseSettings = css;
 
                     //srm.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(cusId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
-                    srm.cases = this._caseSearchService.Search(
-                        sm.caseSearchFilter,
-                        srm.caseSettings,
-                        SessionFacade.CurrentUser.Id,
-                        SessionFacade.CurrentUser.UserId,
-                        SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups,
-                        SessionFacade.CurrentUser.UserGroupId,
-                        SessionFacade.CurrentUser.RestrictedCasePermission,
-                        sm.Search,
-                        this.workContext.Customer.WorkingDayStart,
-                        this.workContext.Customer.WorkingDayEnd,
-                        WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext),
-                        ApplicationTypes.HelpdeskMobile);
                     m.caseSearchResult = srm;
                     m.caseSearchFilterData = fd;
                     sm.Search.IdsForLastSearch = GetIdsFromSearchResult(srm.cases);
@@ -464,7 +451,7 @@
                     m.case_.Supplier_Id = null;
                     m.case_.System_Id = null;
                     m.case_.Urgency_Id = null;
-                    m.case_.User_Id = 0;
+                    m.case_.User_Id = null;
                     m.case_.WorkingGroup_Id = null;
                     m.ParantPath_CaseType = ParentPathDefaultValue;
                     m.ParantPath_ProductArea = ParentPathDefaultValue;
@@ -918,20 +905,7 @@
                 m.caseSettings = css;
 
                 var workTimeCalc = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
-                m.cases = this._caseSearchService.Search(
-                    f,
-                    m.caseSettings,
-                    SessionFacade.CurrentUser.Id,
-                    SessionFacade.CurrentUser.UserId,
-                    SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups,
-                    SessionFacade.CurrentUser.UserGroupId,
-                    SessionFacade.CurrentUser.RestrictedCasePermission,
-                    sm.Search,
-                    this.workContext.Customer.WorkingDayStart,
-                    this.workContext.Customer.WorkingDayEnd,
-                    workTimeCalc,
-                    ApplicationTypes.HelpdeskMobile);
-
+                
                 sm.Search.IdsForLastSearch = GetIdsFromSearchResult(m.cases);
                 SessionFacade.CurrentCaseSearch = sm;
             }
@@ -1271,15 +1245,6 @@
                 this.notifierService.UpdateCaseNotifier(caseNotifier);
             }
 
-            if (case_.FinishingDate.HasValue)
-            {
-                var workTimeCalc = WorkingTimeCalculatorFactory.CreateFromWorkContext(this.workContext);
-                case_.LeadTime = workTimeCalc.CalcWorkTimeMinutes(
-                    case_.Department_Id,
-                    case_.RegTime,
-                    case_.FinishingDate.Value) - case_.ExternalTime;
-            }
-
             // save log
             var temporaryLogFiles = this.userTemporaryFilesStorage.FindFiles(caseLog.LogGuid.ToString(), ModuleName.Log);
             caseLog.CaseId = case_.Id;
@@ -1438,7 +1403,7 @@
                 {
                     m.Logs = this._logService.GetCaseLogOverviews(caseId);
                     m.CaseFilesModel = new CaseFilesModel(caseId.ToString(global::System.Globalization.CultureInfo.InvariantCulture), this._caseFileService.GetCaseFiles(caseId));
-                    m.RegByUser = this._userService.GetUser(m.case_.User_Id);
+                    m.RegByUser = this._userService.GetUser(m.case_.User_Id.Value);
                     if (m.Logs != null)
                     {
                         var finishingCauses = this._finishingCauseService.GetFinishingCauseInfos(customerId);
@@ -1666,7 +1631,7 @@
                 if (m.case_.Id == 0)  // new mode
                 {
                     m.case_.DefaultOwnerWG_Id = null;
-                    if (m.case_.User_Id != 0)
+                    if (m.case_.User_Id.HasValue && m.case_.User_Id != 0)
                     {
                         // http://redmine.fastdev.se/issues/10997
                         /*var curUser = _userService.GetUser(m.case_.User_Id);                        
@@ -1674,7 +1639,7 @@
                         if (curUser.Default_WorkingGroup_Id != null)
                            m.case_.DefaultOwnerWG_Id = curUser.Default_WorkingGroup_Id;*/
 
-                        var userDefaultWorkingGroupId = this._userService.GetUserDefaultWorkingGroupId(m.case_.User_Id, m.case_.Customer_Id);
+                        var userDefaultWorkingGroupId = this._userService.GetUserDefaultWorkingGroupId(m.case_.User_Id.Value, m.case_.Customer_Id);
                         if (userDefaultWorkingGroupId.HasValue)
                         {
                             m.case_.DefaultOwnerWG_Id = userDefaultWorkingGroupId;
@@ -1729,7 +1694,7 @@
         private SendToDialogModel CreateNewSendToDialogModel(int customerId, IList<User> users)
         {
             var emailGroups = _emailGroupService.GetEmailGroupsWithEmails(customerId);
-            var workingGroups = _workingGroupService.GetWorkingGroupsWithEmails(customerId);
+            var workingGroups = _workingGroupService.GetWorkingGroupsWithActiveEmails(customerId);
             var administrators = new List<ItemOverview>();
 
             if (users != null)

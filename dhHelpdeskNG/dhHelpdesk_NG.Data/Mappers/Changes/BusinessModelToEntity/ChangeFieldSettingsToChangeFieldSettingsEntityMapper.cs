@@ -269,7 +269,7 @@
         {
             switch (languageId)
             {
-                case LanguageId.Swedish:
+                case LanguageIds.Swedish:
                     fieldSetting.Label = updatedSetting.Caption;
                     break;                
                 default:
@@ -294,7 +294,7 @@
         {
             switch (languageId)
             {
-                case LanguageId.Swedish:
+                case LanguageIds.Swedish:
                     fieldSetting.Label = updatedSetting.Caption;
                     break;                                   
                 default:

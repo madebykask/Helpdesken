@@ -85,7 +85,7 @@
 
             this.Property(x => x.AgreedDate).IsOptional();
             this.Property(x => x.ApprovedDate).IsOptional();
-            this.Property(x => x.ApprovedBy_User_Id).IsRequired();
+            this.Property(x => x.ApprovedBy_User_Id).IsOptional();
             this.Property(x => x.Available).IsRequired().HasMaxLength(100);
             this.Property(x => x.Caption).IsRequired().HasMaxLength(60);
             this.Property(x => x.CaseGUID).IsRequired();
@@ -110,7 +110,7 @@
             this.Property(x => x.PersonsEmail).IsRequired().HasMaxLength(100).HasColumnName("Persons_EMail");
             this.Property(x => x.PersonsName).IsRequired().HasMaxLength(50).HasColumnName("Persons_Name");
             this.Property(x => x.PersonsPhone).IsRequired().HasMaxLength(40).HasColumnName("Persons_Phone");
-            this.Property(x => x.Performer_User_Id).IsRequired();
+            this.Property(x => x.Performer_User_Id).IsOptional();
             this.Property(x => x.Priority_Id).IsOptional();
             this.Property(x => x.Place).IsRequired().HasMaxLength(100);
             this.Property(x => x.PlanDate).IsOptional();
@@ -129,9 +129,10 @@
             this.Property(x => x.VerifiedDescription).IsOptional().HasMaxLength(200);
             this.Property(x => x.WatchDate).IsOptional();
             this.Property(x => x.ChangeTime).IsRequired();
+            this.Property(x => x.User_Id).IsOptional();
             this.Property(x => x.RegTime).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            this.HasRequired(x => x.User)
+            this.HasOptional(x => x.User)
                 .WithMany()
                 .HasForeignKey(x => x.User_Id)
                 .WillCascadeOnDelete(false);

@@ -172,7 +172,7 @@
 
             return RedirectToAction(
                 "EditQuestionnaire",
-                new { questionnaireId = newQuestionniare.Id, languageId = LanguageId.Swedish });
+                new { questionnaireId = newQuestionniare.Id, languageId = LanguageIds.Swedish });
         }
 
         [HttpPost]
@@ -194,7 +194,7 @@
                     {
                         questionnaireId = questionnaireQuestionModel.QuestionnaireId,
                         questionnaireQuestionId = newQuestionniareQuestion.Id,
-                        languageId = LanguageId.Swedish
+                        languageId = LanguageIds.Swedish
                     });
         }
 
@@ -216,12 +216,12 @@
             string currentQuestionNumber;
             int currentShowNote;
 
-            if (languageId != LanguageId.Swedish)
+            if (languageId != LanguageIds.Swedish)
             {
                 var questionnaireQuestionSwedish =
                     _questionnaireQuestionService.GetQuestionnaireQuestionById(
                         questionnaireQuestionId,
-                        LanguageId.Swedish);
+                        LanguageIds.Swedish);
                 currentQuestionNumber = questionnaireQuestionSwedish.QuestionNumber;
                 currentShowNote = questionnaireQuestionSwedish.ShowNote;
             }

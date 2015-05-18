@@ -27,7 +27,7 @@
 
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new CustomHandleErrorAttribute());
+//            filters.Add(new CustomHandleErrorAttribute());
         }
 
         public static void RegisterRoutes(RouteCollection routes)
@@ -64,6 +64,7 @@
             Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture = this.configuration.Application.DefaultCulture;
         }
 
+#if !DEBUG
         protected void Application_Error(object sender, EventArgs e)
         {
             var httpContext = ((MvcApplication)sender).Context;
@@ -130,7 +131,8 @@
 
             controller.ViewData.Model = new HandleErrorInfo(ex, currentController, currentAction);
             ((IController)controller).Execute(new RequestContext(new HttpContextWrapper(httpContext), routeData));
-        } 
+        }
+#endif
 
         /// <summary>
         /// The register binders.

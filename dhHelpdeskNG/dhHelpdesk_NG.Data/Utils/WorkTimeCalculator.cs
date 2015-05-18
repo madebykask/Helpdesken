@@ -2,380 +2,128 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Models.Holiday.Output;
+    using DH.Helpdesk.BusinessData.Models.WorkingDay;
     using DH.Helpdesk.Common.Tools;
 
-    /// <summary>
-    /// Calculator for working time for cases
-    /// @TODO (Alexander Semenischev): Due to we have only hours there is a bug with NST (3:30) or New Zealand (2:45) timezones. That should be fixed.
-    /// </summary>
     public class WorkTimeCalculator
     {
-        private readonly int workingHourBegin;
-
-        private readonly int workingHourEnd;
-
-        private readonly HolidayCache defaultCalendar;
-
-        private readonly Dictionary<int, HolidayCache> depatmentsHoliday;
+        private readonly TimeZoneInfo companyTimeZone;
 
         /// <summary>
-        /// Achtung!! workingHourBegin should be between 
+        /// This structure contains work time info including work time in default calendar (id = 1)
         /// </summary>
-        /// <param name="workingHourBegin"></param>
-        /// <param name="workingHourEnd"></param>
-        /// <param name="holidayCalendars"></param>
-        /// <param name="defaultHolidayCalendar"></param>
-        public WorkTimeCalculator(int workingHourBegin, int workingHourEnd, Dictionary<int, IList<HolidayOverview>> holidayCalendars, IEnumerable<HolidayOverview> defaultHolidayCalendar)
+        private Dictionary<DateTime, TimeRangesHolder> dailyWorkTime;
+
+        /// <summary>
+        /// Holds holiday work time information for department
+        /// </summary>
+        private DepartmentHolidayWorktimeMap departmentsWorkTime;
+
+        public WorkTimeCalculator(TimeZoneInfo companyTimeZone)
         {
-            if (!ValidateWorkingHours(ref workingHourBegin, ref workingHourEnd))
-            {
-                throw new ArgumentException();
-            }
-
-            this.workingHourBegin = workingHourBegin;
-            this.workingHourEnd = workingHourEnd;
-            this.depatmentsHoliday = new Dictionary<int, HolidayCache>();
-
-            if (holidayCalendars != null)
-            {
-                foreach (var holidayKV in holidayCalendars)
-                {
-                    if (!this.depatmentsHoliday.ContainsKey(holidayKV.Key) && holidayKV.Value.Any())
-                    {
-                        var holidayCache = new HolidayCache();
-                        foreach (var holidayOverview in holidayKV.Value)
-                        {
-                            /// checking if we have same dates in one calendar
-                            if (!holidayCache.ContainsKey(holidayOverview.HolidayDate))
-                            {
-                                holidayCache.Add(
-                                    holidayOverview.HolidayDate,
-                                    new Tuple<int, int>(holidayOverview.TimeFrom, holidayOverview.TimeUntil));
-                            }
-                        }
-
-                        this.depatmentsHoliday.Add(holidayKV.Key, holidayCache);
-                    }
-                }
-            }
-
-            if (defaultHolidayCalendar != null)
-            {
-                var holidayOverviews = defaultHolidayCalendar as HolidayOverview[] ?? defaultHolidayCalendar.ToArray();
-                if (holidayOverviews.Any())
-                {
-                    this.defaultCalendar = new HolidayCache();
-                    foreach (var el in holidayOverviews)
-                    {
-                        this.defaultCalendar.Add(el.HolidayDate, new Tuple<int, int>(el.TimeFrom, el.TimeUntil));
-                    }
-                }
-            }
-        }
-
-        public static bool ValidateWorkingHours(ref int workingHourBegin, ref int workingHourEnd)
-        {
-            //// we dont have 24 hour, but when user sets 0-24 assumes that he meant 0-0
-            if (workingHourEnd == 24)
-            {
-                workingHourEnd = 0;
-            }
-
-            return !(workingHourBegin < 0 || workingHourBegin > 23 || workingHourEnd < 0 || workingHourEnd > 23);
+            this.companyTimeZone = companyTimeZone;
+            this.departmentsWorkTime = new DepartmentHolidayWorktimeMap();
+            this.dailyWorkTime = new Dictionary<DateTime, TimeRangesHolder>();
         }
 
         /// <summary>
-        /// Returns time range intersection in minutes (inner join in terms of SQL)
+        /// Sets data to use in calculations
         /// </summary>
-        /// <param name="range1Begin"></param>
-        /// <param name="range1End"></param>
-        /// <param name="range2Begin"></param>
-        /// <param name="range2End"></param>
-        /// <returns></returns>
-        public static int GetRange1Crossing(
-            DateTime range1Begin,
-            DateTime range1End,
-            DateTime range2Begin,
-            DateTime range2End)
+        /// <param name="defaultWorkTime">default work time</param>
+        /// <param name="departmentsHolidayData"></param>
+        public void SetData(
+            Dictionary<DateTime, TimeRangesHolder> defaultWorkTime,
+            DepartmentHolidayWorktimeMap departmentsHolidayData)
         {
-            if (range1Begin > range1End)
-            {
-                throw new ArgumentException();
-            }
-
-            if (range2Begin > range2End)
-            {
-                throw new ArgumentException();
-            }
-
-            if (range1End < range2Begin || range2End < range1Begin)
-            {
-                // range1 lies before or after range2
-                return 0;
-            }
-
-            return (int)Math.Ceiling((((range1End > range2End) ? range2End : range1End) - (range1Begin > range2Begin ? range1Begin : range2Begin)).TotalMinutes);
+            this.dailyWorkTime = defaultWorkTime;
+            this.departmentsWorkTime = departmentsHolidayData;
         }
 
         /// <summary>
-        /// Calculates working time on specified time period for department
+        /// Calculates work time in minutes on specified time range
         /// </summary>
+        /// <param name="fromUTC"></param>
+        /// <param name="untilUTC"></param>
         /// <param name="caseDepartmentId"></param>
-        /// <param name="calcFrom">Period start in UTC</param>
-        /// <param name="calcTo">Period until in UTC</param>
-        /// <param name="minutesOnPause">minutes that we should not count as work time</param>
         /// <returns></returns>
-        public int CalcWorkTimeMinutes(int? caseDepartmentId, DateTime calcFrom, DateTime calcTo, int minutesOnPause = 0)
+        public int CalculateWorkTime(
+            DateTime fromUTC,
+            DateTime untilUTC,
+            int? caseDepartmentId)
         {
-            if (calcFrom > calcTo)
+            /// Achtung! when changing to daylight saving this two strings could throw exception
+            var fetchFromLocal = TimeZoneInfo.ConvertTimeFromUtc(fromUTC, this.companyTimeZone);
+            var fetchUntilLocal = TimeZoneInfo.ConvertTimeFromUtc(untilUTC, this.companyTimeZone);
+
+            var calcFromDay = fetchFromLocal.RoundToDay();
+            var calcToDay = fetchUntilLocal.RoundToDay();
+            var fullDaysCount = (calcToDay - calcFromDay).Days;
+            if (fullDaysCount == 0)
             {
-                throw new ArgumentException("calcFrom can not be more that calcTo");
+                var dailyData = this.GetDailyData(calcFromDay, caseDepartmentId);
+                //// calculations requested for the one day
+                return dailyData == null
+                           ? 0
+                           : dailyData.Sum(fetchFromLocal, fetchUntilLocal);
             }
 
-            HolidayCache holidaysCacheToUse = null;
-            if (caseDepartmentId.HasValue && this.depatmentsHoliday.ContainsKey(caseDepartmentId.Value))
+            var res = 0;
+            var dateCounter = calcFromDay;
+            do
             {
-                holidaysCacheToUse = this.depatmentsHoliday[caseDepartmentId.Value];
-            }
-            else
-            {
-                holidaysCacheToUse = this.defaultCalendar;
-            }
+                var dailyData = this.GetDailyData(dateCounter, caseDepartmentId);
+                if (dailyData != null)
+                {
+                    if (dateCounter == calcFromDay)
+                    {
+                        res += dailyData.Sum(fetchFromLocal, fetchUntilLocal.MakeTomorrow());
+                    }
+                    else if (dateCounter == calcToDay)
+                    {
+                        res += dailyData.Sum(fetchFromLocal.RoundToDay(), fetchUntilLocal);
+                    }
+                    else
+                    {
+                        res += dailyData.SummaryTime;
+                    }
+                }
 
-            var commonWorkTime = CalcWorkTimeM(this.workingHourBegin, this.workingHourEnd, calcFrom, calcTo);
-            var weekendTime = this.CalcWeekendTimeM(calcFrom, calcTo, holidaysCacheToUse);
-            var holidayTime = (holidaysCacheToUse != null)
-                                  ? this.CalcHolidayTimeM(calcFrom, calcTo, holidaysCacheToUse)
-                                  : 0;
-
-            return commonWorkTime - weekendTime - holidayTime - minutesOnPause;
-        }
-
-
-
-        private static int CalcWorkTimeM(int workingHourBegin, int workingHourEnd, DateTime calcFrom, DateTime calcTo)
-        {
-            var calcFromDay = calcFrom.RoundToDay();
-            var calcToDay = calcTo.RoundToDay();
-            var fullDaysCount = (calcToDay - calcFromDay).Days - 1;
-            if (fullDaysCount == -1)
-            {
-                var calcFromRound = calcFrom.SetToHour(workingHourBegin);
-                var calcToRound = calcFrom.SetToHour(workingHourEnd);
-                //// here we have that calcFrom date == calcTo date
-                return GetRange1Crossing(
-                    calcFrom,
-                    calcTo,
-                    calcFromRound,
-                    calcToRound);
-            }
-
-            int workingHoursPerDay;
-            int timePrefix;
-            int timePostfix;
-            if (workingHourBegin < workingHourEnd)
-            {
-                // working day like 8-18
-                workingHoursPerDay = workingHourEnd - workingHourBegin;
-                timePrefix = GetRange1Crossing(
-                    calcFrom.SetToHour(workingHourBegin),
-                    calcFrom.SetToHour(workingHourEnd),
-                    calcFrom,
-                    calcFrom.MakeTomorrow());
-                timePostfix = GetRange1Crossing(
-                    calcTo.SetToHour(workingHourBegin),
-                    calcTo.SetToHour(workingHourEnd),
-                    calcTo.RoundToDay(),
-                    calcTo);
-            }
-            else if (workingHourBegin > workingHourEnd)
-            {
-                // working day like 20-3
-                workingHoursPerDay = workingHourEnd + 24 - workingHourBegin;
-                timePrefix = GetRange1Crossing(
-                    calcFrom.SetToHour(workingHourBegin),
-                    calcFrom.SetToHour(24),
-                    calcFrom,
-                    calcFrom.MakeTomorrow());
-                timePostfix = GetRange1Crossing(
-                    calcTo.RoundToDay(),
-                    calcTo.SetToHour(workingHourEnd),
-                    calcTo.RoundToDay(),
-                    calcTo);
-            }
-            else
-            {
-                //// here we have working day 0-0 or 23-23
-                workingHoursPerDay = 24;
-                timePrefix = GetRange1Crossing(
-                   calcFrom.SetToHour(workingHourBegin),
-                   calcFrom.SetToHour(24),
-                   calcFrom,
-                   calcFrom.MakeTomorrow());
-                timePostfix = GetRange1Crossing(
-                    calcTo.RoundToDay(),
-                    calcTo.SetToHour(workingHourEnd),
-                    calcTo.RoundToDay(),
-                    calcTo);
-            }
-
-            return workingHoursPerDay * fullDaysCount * 60 + timePrefix + timePostfix;
-        }
-
-        private static bool IsWeekendDay(DateTime dateTime)
-        {
-            return dateTime.DayOfWeek == DayOfWeek.Saturday || dateTime.DayOfWeek == DayOfWeek.Sunday;
-        }
-
-        /// <summary>
-        /// Calculates work time if it would usual working day.
-        /// Works only for weeks with 2 days weekend
-        /// </summary>
-        /// <param name="calcFrom">Time in UTC</param>
-        /// <param name="calcTo">Time in UTC</param>
-        /// <param name="holidaysCache"></param>
-        /// <returns></returns>
-        private int CalcWeekendTimeM(DateTime calcFrom, DateTime calcTo, HolidayCache holidaysCache)
-        {
-            var dateCounter = calcFrom.RoundToDay();
-            var dateToRounded = calcTo.RoundToDay();
-            var wouldWorkTime = 0;
-            const int WeekLen = 7;
-
-            //// looking for the fist weekend day
-            while (!(IsWeekendDay(dateCounter) || dateCounter == dateToRounded))
-            {
                 dateCounter = dateCounter.AddDays(1);
             }
+            while (dateCounter <= calcToDay);
 
-            if (IsWeekendDay(dateCounter))
+            return res;
+        }
+
+        public class RangesPerDay : Dictionary<DateTime, TimeRangesHolder>
+        {
+        }
+
+        public class DepartmentHolidayWorktimeMap : Dictionary<int, RangesPerDay>
+        {
+        }
+
+        private TimeRangesHolder GetDailyData(DateTime onDate, int? departmentId)
+        {
+            if (departmentId.HasValue && this.departmentsWorkTime.ContainsKey(departmentId.Value))
             {
-                for (; dateCounter <= dateToRounded; dateCounter = dateCounter.AddDays((dateCounter.DayOfWeek == DayOfWeek.Sunday) ? 6 : WeekLen))
+                /// checking calendar for specific department
+                if (this.departmentsWorkTime[departmentId.Value].ContainsKey(onDate))
                 {
-                    var calcDateFrom = (calcFrom > dateCounter) ? calcFrom : dateCounter;
-                    var calcDateTo =
-                        calcDateFrom.AddDays((calcDateFrom.DayOfWeek == DayOfWeek.Sunday) ? 1 : 2).RoundToDay();
-
-                    if (holidaysCache != null)
-                    {
-                        if (holidaysCache.ContainsKey(calcDateFrom.RoundToDay()))
-                        {
-                            //// here we have a case when first weekend is redday
-                            if (calcDateFrom.DayOfWeek == DayOfWeek.Sunday)
-                            {
-                                continue;
-                            }
-
-                            if (holidaysCache.ContainsKey(calcDateFrom.AddDays(1).RoundToDay()))
-                            {
-                                //// and when second weekend is a redday too
-                                continue;
-                            }
-
-                            calcFrom = calcDateFrom.AddDays(1);
-                            calcTo = calcFrom.AddDays(1).RoundToDay();
-                        }
-                    }
-                    
-                    if (calcTo < calcDateTo)
-                    {
-                        calcDateTo = calcTo;
-                    }
-
-                    wouldWorkTime += CalcWorkTimeM(this.workingHourBegin, this.workingHourEnd, calcDateFrom, calcDateTo);
+                    return this.departmentsWorkTime[departmentId.Value][onDate];
+                }
+            }
+            else
+            {
+                /// checking "default" calendar
+                if (this.dailyWorkTime.ContainsKey(onDate))
+                {
+                    return this.dailyWorkTime[onDate];
                 }
             }
 
-            return wouldWorkTime;
-        }
-
-        /// <summary>
-        /// Calculates correction for working time in holiday
-        /// </summary>
-        /// <param name="calcFrom"></param>
-        /// <param name="calcTo"></param>
-        /// <param name="holidaysCache"></param>
-        /// <returns></returns>
-        private int CalcHolidayTimeM(DateTime calcFrom, DateTime calcTo, HolidayCache holidaysCache)
-        {
-            if (holidaysCache == null)
-            {
-                return 0;
-            }
-
-            var calcFromDay = calcFrom.RoundToDay();
-            var calcToDay = calcTo.RoundToDay();
-            
-            // holds all time that we would spent to work if no holiday
-            var workingTime = 0.0;
-
-            // holds real working time that was spent in holidays
-            var realWorkginTime = holidaysCache.Where(it => it.Key >= calcFromDay && it.Key <= calcToDay).Sum(
-                it =>
-                    {
-                        var wHourBegin = it.Value.Item1;
-                        var wHourEnd = it.Value.Item2;
-
-                        if (it.Key == calcFromDay)
-                        {
-                            if (calcFromDay == calcToDay)
-                            {
-                                // At this point we have range in range case.
-                                // this only possible if we have perform calculations in working hours in holiday 
-                                workingTime =
-                                    GetRange1Crossing(
-                                        calcFrom,
-                                        calcTo,
-                                        calcFrom.SetToHour(this.workingHourBegin),
-                                        calcTo.SetToHour(this.workingHourEnd));
-                                return GetRange1Crossing(
-                                    calcFrom,
-                                    calcTo,
-                                    calcFrom.SetToHour(wHourBegin),
-                                    calcTo.SetToHour(wHourEnd));
-                            }
-
-                            workingTime =
-                                GetRange1Crossing(
-                                    calcFrom,
-                                    calcFrom.MakeTomorrow(),
-                                    calcFrom.SetToHour(this.workingHourBegin),
-                                    calcFrom.SetToHour(this.workingHourEnd));
-                            return GetRange1Crossing(
-                                calcFrom,
-                                calcFrom.MakeTomorrow(),
-                                calcFrom.SetToHour(wHourBegin),
-                                calcFrom.SetToHour(wHourEnd));
-                        }
-                        
-                        if (it.Key == calcToDay)
-                        {
-                            workingTime =
-                               GetRange1Crossing(
-                                   calcToDay,
-                                   calcTo,
-                                   calcTo.SetToHour(this.workingHourBegin),
-                                   calcTo.SetToHour(this.workingHourEnd));
-                            return GetRange1Crossing(
-                                calcTo,
-                                calcTo.MakeTomorrow(),
-                                calcTo.SetToHour(wHourBegin),
-                                calcTo.SetToHour(wHourEnd));
-                        }
-
-                        workingTime += (this.workingHourEnd - this.workingHourBegin) * 60;
-                        return (wHourEnd - wHourBegin) * 60;
-                    });
-
-            return (int)Math.Floor(workingTime - realWorkginTime);
-        }
-    
-
-        private class HolidayCache : Dictionary<DateTime, Tuple<int, int>>
-        {
+            return null;
         }
     }
 }

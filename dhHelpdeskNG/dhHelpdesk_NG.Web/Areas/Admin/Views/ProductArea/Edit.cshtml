@@ -12,7 +12,10 @@
                 <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "delete",
          new { id = Model.ProductArea.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) })</li>
                 <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", new { customerId = Model.ProductArea.Customer_Id }, new { @class = "btn" })</li>
-                <li>@Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Produktområde", Enums.TranslationSource.TextTranslation), "new", new { parentId = Model.ProductArea.Id, customerId = Model.ProductArea.Customer_Id }, new { @class = "btn" })</li>
+                @if (Model.CanAddChild)
+                {
+                    <li>@Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Produktområde", Enums.TranslationSource.TextTranslation), "new", new { parentId = Model.ProductArea.Id, customerId = Model.ProductArea.Customer_Id }, new { @class = "btn" })</li>
+                }
             </ul>
         </div>
     </div>

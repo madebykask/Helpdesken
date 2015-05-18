@@ -22,13 +22,13 @@
                 .HasForeignKey(x => x.Customer_Id)
                 .WillCascadeOnDelete(false);
 
-            this.HasRequired(x => x.CreatedByUser)
+            this.HasOptional(x => x.CreatedByUser)
                 .WithMany()
                 .HasForeignKey(x => x.CreatedByUser_Id)
                 .WillCascadeOnDelete(false);
 
             this.Property(x => x.ChangedByUser_Id).IsOptional();
-            this.Property(x => x.CreatedByUser_Id).IsRequired();
+            this.Property(x => x.CreatedByUser_Id).IsOptional();
             this.Property(x => x.Customer_Id).IsRequired();
             this.Property(x => x.Name).IsRequired().HasMaxLength(100).HasColumnName("DocumentCategory");
             this.Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);

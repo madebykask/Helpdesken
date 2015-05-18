@@ -47,6 +47,10 @@
                                         <img src="@Url.Content("~/Content/icons/case.png")" />
                                         @Translation.Get("Ärendeöversikt")</a>
                                     </li>
+                                    <li><a href="@Url.Action("AdvancedSearch", "cases", new { area = "" })">
+                                        <img src="@Url.Content("~/Content/icons/case.png")" />
+                                        @Translation.Get("Avancerad sökning")</a>
+                                    </li>
                                     }
                                     if(model.IsCaseSolutionVisible())
                                     {
@@ -192,12 +196,6 @@
                                             <img src="@Url.Content("~/Content/icons/orderaccount.png")" />
                                             @Translation.Get("Beställning kontobehörighet")</a></li>
                                     @*}*@
-                                    @if(model.IsAccountVisible())
-                                    {    
-                                        <li><a href="@Url.Action("index", "accounts", new { area = "" })">
-                                            <img src="@Url.Content("~/Content/icons/orderaccount.png")" />
-                                            @Translation.Get("Beställning kontobehörighet")</a></li>
-                                    }
 
                                     @if(model.IsCheckListVisuble())
                                     {    
@@ -220,8 +218,6 @@
                                             <img src="@Url.Content("~/Content/icons/Licens.png")" alt="license" />
                                             @Translation.Get("Licenshantering")</a></li>
                                     }
-
-
                                     <li></li>
                                 </ul>
                             </li>                            
@@ -332,5 +328,34 @@
     @RenderSection("Scripts", false)
     <input type="hidden" value="@Request.RawUrl" id="rawUrl" />
     @Html.Partial("_Translations", null)
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var timezoneAutodetectRes = "@ViewBag.AutoDetectionResult";
+            var failureMsg = "@Translation.Get("Vi kunde inte ange din tidszon. Var vänlig välj rätt tidszon och klicka på \"Spara\".")";
+            var successMsg = "@string.Format(Translation.Get("Vi har angett din tidszon baserat på din webbläsare. Om du föredrar att arbeta mot en annan tidszon så kan du ändra det i {0}Profil{1} i toppmenyn."), "<a href=\"Profile/Edit/\">", "</a>")";
+            var noticeMsg = "@string.Format(Translation.Get("Vi har upptäckt att din webbläsares tidszon skiljer sig från den som angetts i din Profil. Om du vill ändra tidszon som du arbetar i, gå till {0}Profil{1} i toppmenyn."), "<a href=\"Profile/Edit/\">", "</a>")";
+
+            function ShowToastMessage(message, msgType) {
+                msgType = msgType || 'notice';
+                $().toastmessage('showToast', {
+                    text: message,
+                    sticky: false,
+                    position: 'top-center',
+                    type: msgType,
+                    closeText: '',
+                    stayTime: 10000,
+                    inEffectDuration: 1000
+                });
+            }
+
+            if (timezoneAutodetectRes === 'Failure') {
+                ShowToastMessage(failureMsg, 'warning');
+            } else if (timezoneAutodetectRes === 'Success') {
+                ShowToastMessage(successMsg);
+            } else if (timezoneAutodetectRes === 'Notice') {
+                ShowToastMessage(noticeMsg);
+            }
+        });
+    </script>
 </body>
 </html>

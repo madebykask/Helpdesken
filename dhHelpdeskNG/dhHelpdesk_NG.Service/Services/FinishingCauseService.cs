@@ -22,6 +22,8 @@
         DeleteMessage DeleteFinishingCauseCategory(int id);
         DeleteMessage DeleteFinishingCause(int id);
 
+        string GetFinishingTypeName(int id);        
+
         void SaveFinishingCauseCategory(FinishingCauseCategory finishingCauseCategory, out IDictionary<string, string> errors);
         void SaveFinishingCause(FinishingCause finishingCause, out IDictionary<string, string> errors);
         void Commit();
@@ -43,6 +45,20 @@
             this._finishingCauseCategoryRepository = finishingCauseCategoryRepository;
             this._finishingCauseRepository = finishingCauseRepository;
             this._unitOfWork = unitOfWork;
+        }
+
+        public string GetFinishingTypeName(int id)
+        {
+            var fc = GetFinishingCause(id);
+            return GetFinishingCausePath(fc);
+        }      
+
+        private string GetFinishingCausePath(FinishingCause fc)
+        {
+            if (fc.Parent_FinishingCause_Id == null)
+                return fc.Name;
+            else
+                return GetFinishingCausePath(fc.ParentFinishingCause) + "-" + fc.Name;
         }
 
         public IList<FinishingCauseCategory> GetFinishingCauseCategories(int customerId)

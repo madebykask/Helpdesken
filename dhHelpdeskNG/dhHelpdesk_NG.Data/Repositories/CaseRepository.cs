@@ -166,7 +166,7 @@ namespace DH.Helpdesk.Dal.Repositories
             if (cases != null)
             {
                 cases.FinishingDate = null;
-                cases.ApprovedBy_User_Id = 0;
+                cases.ApprovedBy_User_Id = null;
                 cases.ApprovedDate = null;
                 cases.LeadTime = 0;
                 cases.ChangeTime = DateTime.UtcNow;

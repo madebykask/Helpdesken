@@ -6,7 +6,7 @@
     public class DocumentCategory : Entity
     {
         public int? ChangedByUser_Id { get; set; }
-        public int CreatedByUser_Id { get; set; }
+        public int? CreatedByUser_Id { get; set; }
         public int Customer_Id { get; set; }
         public string Name { get; set; }
         public DateTime ChangedDate { get; set; }

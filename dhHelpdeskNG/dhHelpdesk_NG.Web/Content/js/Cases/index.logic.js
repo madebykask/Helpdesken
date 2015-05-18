@@ -123,7 +123,8 @@ var GRID_STATE = {
     */
     Page.prototype.isFilterEmpty = function () {
         var me = this;
-        return $('#lstFilterRegion option:selected').length === 0 &&
+        return $('#lstFilterCustomers option:selected').length === 0 &&
+            $('#lstFilterRegion option:selected').length === 0 &&
             $('#lstFilterCountry option:selected').length === 0 &&
             $('#lstfilterDepartment option:selected').length === 0 &&
             $('#lstfilterUser option:selected').length === 0 &&
@@ -230,7 +231,8 @@ var GRID_STATE = {
         me.$table.addClass([me.gridSettings.cls, hasColSpecialClass].join(' '));
         me.$tableHeader.html(out.join(JOINER));
         me.$tableHeader.find('th.thpointer').on('click', sortCallback);
-        me.fetchData();
+
+        me.fetchData();        
     };
 
     Page.prototype.setSortField = function(fieldName, $el) {
@@ -253,7 +255,8 @@ var GRID_STATE = {
             $(oldEl).find('i').removeClass(oldCls);
         }
         $($el).find('i').addClass(getClsForSortDir(sortOpt.sortDir));
-        me.fetchData();
+
+        me.fetchData();        
     };
 
     Page.prototype.showMsg = function(msgType) {
@@ -364,7 +367,7 @@ var GRID_STATE = {
     Page.prototype.unsetSearchFilter = function () {
         var me = this;
         /// filterRegion,filterCountry,filterDepartment,filterCaseUser, 
-        $("#lstFilterRegion, #lstFilterCountry, #lstfilterDepartment, #lstfilterUser").val('').trigger("chosen:updated");
+        $("#lstFilterCustomers, #lstFilterRegion, #lstFilterCountry, #lstfilterDepartment, #lstfilterUser").val('').trigger("chosen:updated");
         /// filterCaseType
         unsetBootstrapsDropdown('#divCaseType');
         /// filterProductArea
@@ -393,6 +396,7 @@ var GRID_STATE = {
         } else {
             $('#icoFilter').show();
         }
+
         me.fetchData();
     };
 
@@ -516,7 +520,6 @@ function ShowToastMessage(message, msgType) {
         stayTime: 3000,
         inEffectDuration: 1000,
         close: function () {
-            //console.log("toast is closed ...");
         }
     });
 }

@@ -16,6 +16,7 @@
             List<int> affectedProcessIds,
             List<int> workingGroupIds,
             List<int> administratorIds,
+            List<int> responsibleIds,
             string pharse,
             ChangeStatus? status,
             int selectCount,
@@ -28,6 +29,7 @@
             this.AffectedProcessIds = affectedProcessIds;
             this.WorkingGroupIds = workingGroupIds;
             this.AdministratorIds = administratorIds;
+            this.ResponsibleIds = responsibleIds;
             this.Pharse = pharse;
             this.Status = status;
             this.SelectCount = selectCount;
@@ -54,6 +56,9 @@
 
         [NotNull]
         public List<int> AdministratorIds { get; private set; }
+
+        [NotNull]
+        public List<int> ResponsibleIds { get; private set; }
 
         public string Pharse { get; private set; }
 

@@ -675,6 +675,67 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                     sb.Append("</tr>");
                 }
             }
+
+            // Closing Reason
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ClosingReason.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.ClosingReason != o.ClosingReason && cur.ClosingReason != null)
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.ClosingReason.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    sb.Append(tdMarkup);
+                    if (o.ClosingReason != null)
+                        sb.Append(o.ClosingReason);
+                    else
+                        sb.Append(ey);
+                    sb.Append(from);
+                    if (cur.ClosingReason != null)
+                        sb.Append(cur.ClosingReason);
+                    else
+                        sb.Append(ey);
+                    sb.Append("</td>");
+                    sb.Append("</tr>");
+                }
+            }
+
+            // Closing Date
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.FinishingDate.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.FinishingDate != o.FinishingDate)
+                {
+                    
+                        sb.Append("<tr>");
+                        if (o.FinishingDate == null)
+                        {
+                            sb.Append(bs + Translation.Get("Ärendet avslutat") + be);
+                            sb.Append(tdMarkup);
+                            sb.Append(from);
+                            sb.Append(cur.FinishingDate.Value.ToString("yyyy-MM-dd"));
+                        }
+                        else
+                        {
+                            if (cur.FinishingDate == null)
+                            {
+                                sb.Append(bs + Translation.Get("Ärendet aktiverat") + be);
+                                sb.Append(tdMarkup);                                
+                                sb.Append(ey);                                
+                            }
+                            else
+                            {
+                                sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                                sb.Append(tdMarkup);
+                                sb.Append(o.FinishingDate.Value.ToString("yyyy-MM-dd"));
+                                sb.Append(from);
+                                sb.Append(cur.FinishingDate.Value.ToString("yyyy-MM-dd"));
+                            }
+                        }
+                        
+                        sb.Append("</td>");
+                        sb.Append("</tr>");
+                    
+                }
+            }
+
             return new MvcHtmlString(sb.ToString());
         }
 

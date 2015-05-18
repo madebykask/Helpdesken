@@ -1,6 +1,13 @@
 
 IF OBJECT_ID(N'FK_tblCase_tblCausingPart', 'F') IS NOT NULL 
     ALTER TABLE dbo.tblCase DROP CONSTRAINT FK_tblCase_tblCausingPart
+    
+GO
+
+IF OBJECT_ID(N'FK_tblCaseHistory_tblCausingPart', 'F') IS NOT NULL 
+    ALTER TABLE dbo.tblCaseHistory DROP CONSTRAINT FK_tblCaseHistory_tblCausingPart
+
+GO
 
 SET ANSI_NULLS ON
 GO
@@ -41,7 +48,6 @@ ALTER TABLE [dbo].[tblCausingPart]  WITH NOCHECK ADD  CONSTRAINT [FK_tblCausingP
 REFERENCES [dbo].[tblCustomer] ([Id])
 GO
 
-
 IF COL_LENGTH('dbo.tblCase','CausingPartId') IS NULL
 BEGIN
 	ALTER TABLE dbo.tblCase
@@ -53,57 +59,26 @@ BEGIN
 	REFERENCES dbo.tblCausingPart(Id)
 END
 
-DELETE FROM dbo.tblCausingPart
+GO
 
-DECLARE @customerId INT
-DECLARE @customer_cursor CURSOR 
-SET @customer_cursor = CURSOR FAST_FORWARD FOR SELECT Id FROM dbo.tblCustomer
-OPEN @customer_cursor
-FETCH NEXT FROM @customer_cursor INTO @customerId
-WHILE @@FETCH_STATUS = 0
+IF OBJECT_ID(N'FK_tblCase_tblCausingPart', 'F') IS NULL 
 BEGIN
-	DECLARE @id INT
-	INSERT INTO dbo.tblCausingPart ([CustomerId], [Parent_CausingPart_Id], [Name], [Description]) VALUES (@customerId, NULL, 'Forwarder', 'Forwarder')
-	SET @id = SCOPE_IDENTITY();
-	INSERT INTO dbo.tblCausingPart ([CustomerId], [Parent_CausingPart_Id], [Name], [Description]) VALUES (@customerId, @id, 'Agility Road', 'Agility Road')
-	INSERT INTO dbo.tblCausingPart ([CustomerId], [Parent_CausingPart_Id], [Name], [Description]) VALUES (@customerId, @id, 'Alwex', 'Alwex')
-	INSERT INTO dbo.tblCausingPart ([CustomerId], [Parent_CausingPart_Id], [Name], [Description]) VALUES (@customerId, @id, 'Schenker', 'Schenker')
-	INSERT INTO dbo.tblCausingPart ([CustomerId], [Parent_CausingPart_Id], [Name], [Description]) VALUES (@customerId, @id, 'DFDS', 'DFDS')
-	INSERT INTO dbo.tblCausingPart ([CustomerId], [Parent_CausingPart_Id], [Name], [Description]) VALUES (@customerId, @id, 'DGF Air', 'DGF Air')
-	INSERT INTO dbo.tblCausingPart ([CustomerId], [Parent_CausingPart_Id], [Name], [Description]) VALUES (@customerId, @id, 'DGF Ocean', 'DGF Ocean')
-	INSERT INTO dbo.tblCausingPart ([CustomerId], [Parent_CausingPart_Id], [Name], [Description]) VALUES (@customerId, @id, 'DGF Road (including DHL Express)', 'DGF Road (including DHL Express)')
-	INSERT INTO dbo.tblCausingPart ([CustomerId], [Parent_CausingPart_Id], [Name], [Description]) VALUES (@customerId, @id, 'DHL Paket/Swednet', 'DHL Paket/Swednet')
-	INSERT INTO dbo.tblCausingPart ([CustomerId], [Parent_CausingPart_Id], [Name], [Description]) VALUES (@customerId, @id, 'DSV', 'DSV')
-	INSERT INTO dbo.tblCausingPart ([CustomerId], [Parent_CausingPart_Id], [Name], [Description]) VALUES (@customerId, @id, 'Gefco', 'Gefco')
-	INSERT INTO dbo.tblCausingPart ([CustomerId], [Parent_CausingPart_Id], [Name], [Description]) VALUES (@customerId, @id, 'Gondrand Stella', 'Gondrand Stella')
-	INSERT INTO dbo.tblCausingPart ([CustomerId], [Parent_CausingPart_Id], [Name], [Description]) VALUES (@customerId, @id, 'Gopet Trans', 'Gopet Trans')
-	INSERT INTO dbo.tblCausingPart ([CustomerId], [Parent_CausingPart_Id], [Name], [Description]) VALUES (@customerId, @id, 'Green Cargo', 'Green Cargo')
-	INSERT INTO dbo.tblCausingPart ([CustomerId], [Parent_CausingPart_Id], [Name], [Description]) VALUES (@customerId, @id, 'KAJ', 'KAJ')
-	INSERT INTO dbo.tblCausingPart ([CustomerId], [Parent_CausingPart_Id], [Name], [Description]) VALUES (@customerId, @id, 'Karlsson', 'Karlsson')
-	INSERT INTO dbo.tblCausingPart ([CustomerId], [Parent_CausingPart_Id], [Name], [Description]) VALUES (@customerId, @id, 'Lehnkering', 'Lehnkering')
-	INSERT INTO dbo.tblCausingPart ([CustomerId], [Parent_CausingPart_Id], [Name], [Description]) VALUES (@customerId, @id, 'LKW Walter', 'LKW Walter')
-	INSERT INTO dbo.tblCausingPart ([CustomerId], [Parent_CausingPart_Id], [Name], [Description]) VALUES (@customerId, @id, 'OOCL Logistics', 'OOCL Logistics')
-	INSERT INTO dbo.tblCausingPart ([CustomerId], [Parent_CausingPart_Id], [Name], [Description]) VALUES (@customerId, @id, 'PEKAES', 'PEKAES')
-	INSERT INTO dbo.tblCausingPart ([CustomerId], [Parent_CausingPart_Id], [Name], [Description]) VALUES (@customerId, @id, 'Itella', 'Itella')
-	INSERT INTO dbo.tblCausingPart ([CustomerId], [Parent_CausingPart_Id], [Name], [Description]) VALUES (@customerId, NULL, 'IMS Internal', 'IMS Internal')
-	INSERT INTO dbo.tblCausingPart ([CustomerId], [Parent_CausingPart_Id], [Name], [Description]) VALUES (@customerId, NULL, 'INTER IKEA Systems', 'INTER IKEA Systems')
-
-	INSERT INTO dbo.tblCausingPart ([CustomerId], [Parent_CausingPart_Id], [Name], [Description]) VALUES (@customerId, NULL, 'Supplier', 'Supplier')
-	SET @id = SCOPE_IDENTITY();
-	INSERT INTO dbo.tblCausingPart ([CustomerId], [Parent_CausingPart_Id], [Name], [Description]) 
-	SELECT @customerId, @id, Supplier, Supplier 
-	FROM dbo.tblSupplier
-
-	INSERT INTO dbo.tblCausingPart ([CustomerId], [Parent_CausingPart_Id], [Name], [Description]) VALUES (@customerId, NULL, 'User', 'User')
-	INSERT INTO dbo.tblCausingPart ([CustomerId], [Parent_CausingPart_Id], [Name], [Description]) VALUES (@customerId, NULL, 'WH400', 'WH400')
-	INSERT INTO dbo.tblCausingPart ([CustomerId], [Parent_CausingPart_Id], [Name], [Description]) VALUES (@customerId, NULL, 'WH650', 'WH650')
-
-	FETCH NEXT FROM @customer_cursor INTO @customerId
+    ALTER TABLE dbo.tblCase
+	ADD CONSTRAINT FK_tblCase_tblCausingPart
+	FOREIGN KEY (CausingPartId)
+	REFERENCES dbo.tblCausingPart(Id)
 END
 
-CLOSE @customer_cursor
-DEALLOCATE @customer_cursor
+GO
 
+IF OBJECT_ID(N'FK_tblCaseHistory_tblCausingPart', 'F') IS NULL 
+BEGIN
+    ALTER TABLE dbo.tblCaseHistory ADD  CONSTRAINT FK_tblCaseHistory_tblCausingPart
+    FOREIGN KEY([CausingPartId])
+    REFERENCES [dbo].[tblCausingPart] ([Id])
+END
+
+GO
 
 IF OBJECT_ID (N'tblUsers_tblModule', N'U') IS NOT NULL 
 	DROP TABLE [dbo].[tblUsers_tblModule]

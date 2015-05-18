@@ -419,7 +419,8 @@ namespace DH.Helpdesk.Dal.Repositories
                         x.Email,
                         x.UserWorkingGroups,
                         x.StartPage,
-                        x.ShowSolutionTime.ToBool())).SingleOrDefault();
+                        x.ShowSolutionTime.ToBool(),
+                        x.TimeZoneId)).SingleOrDefault();
             return u;
         }
     }

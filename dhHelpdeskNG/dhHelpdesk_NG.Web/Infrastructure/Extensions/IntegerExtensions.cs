@@ -4,6 +4,8 @@ using DH.Helpdesk.Domain;
 namespace DH.Helpdesk.Web.Infrastructure.Extensions
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
     public static class IntegerExtensions
     {
@@ -25,6 +27,18 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             if (!int.TryParse(value, out ret))
                 ret = 0;
             return ret;
+        }
+
+        public static List<int> ToIntList(this string str)
+        {
+            if (string.IsNullOrEmpty(str))
+            {
+                return new List<int>();
+            }
+
+            var arr = str.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+
+            return arr.Select(int.Parse).ToList();
         }
 
         public static string supressZero(this int value)
@@ -66,7 +80,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             string ret = string.Empty;
             switch (value)
             {
-                case LanguageId.Swedish:
+                case LanguageIds.Swedish:
                     ret = "Swedish.png";
                     break;
                 default:
