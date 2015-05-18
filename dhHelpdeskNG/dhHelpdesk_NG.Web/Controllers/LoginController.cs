@@ -93,7 +93,17 @@
                         SessionFacade.TimeZoneDetectionResult = TimeZoneResolver.DetectTimeZone(timeZoneOffsetInJan1, timeZoneOffsetInJul1, out tzones);
                         if (string.IsNullOrEmpty(user.TimeZoneId))
                         {
-                            user.TimeZoneId = SessionFacade.TimeZoneDetectionResult == TimeZoneAutodetectResult.Failure ? TimeZoneInfo.Local.Id : tzones[0].Id;
+                            if (SessionFacade.TimeZoneDetectionResult == TimeZoneAutodetectResult.Failure)
+                            {
+                                user.TimeZoneId = TimeZoneInfo.Local.Id;
+                            }
+                            else
+                            {
+                                user.TimeZoneId = tzones[0].Id;
+                                
+                                // we dont want to show any messages to user if we successfully detect his timezone
+                                SessionFacade.TimeZoneDetectionResult = TimeZoneAutodetectResult.None;
+                            }
                         }
                         else
                         {
