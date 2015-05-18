@@ -3294,7 +3294,7 @@ If not exists (select * from tbltext where id = 1385)
 	insert into tbltext (id, TextString) VALUES (1385, 'Pågående ändringar')
 GO
 If not exists (select * from tblTextTranslation where text_id = 1385 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1385, 2, 'In proceess changes')
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1385, 2, 'Changes in process')
 GO
 
 -- 2015-05-12
@@ -3335,6 +3335,15 @@ If not exists (select * from tblTextTranslation where text_id = 1390 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1390, 2, 'default calendar')
 GO
 
+If not exists (select * from tbltext where id = 1391)
+	insert into tbltext (id, TextString) VALUES (1391, 'Fritextfält')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1391 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1391, 2, 'Free text fields')
+GO
+
+
+--2015-05-18
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

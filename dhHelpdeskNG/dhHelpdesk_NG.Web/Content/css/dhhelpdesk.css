@@ -1891,6 +1891,10 @@ td.td-bottom-multiselect .btn-group {
     .start-tile.my {
         background: #62a8d1;
     }
+    .start-tile.dectivated {
+        /*background: #ccc;*/
+        background: #ca9e9e;
+    }
 
     .graph.unread {
         background: #438eb9;

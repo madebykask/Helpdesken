@@ -121,7 +121,7 @@
                  <table class="tableform">                                         
                      <tr>
                         <td>                                
-                            @Translation.Get(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):
+                            @Translation.Get("Anmälare"):
                         </td>
                         <td>
                             @Html.TextBoxFor(m=>m.CaseInitiatorFilter,  new { @class = "fixed-length", id = string.Empty })
@@ -130,7 +130,7 @@
 
                      <tr>
                          <td class="span3">
-                             @Translation.Get(GlobalEnums.TranslationCaseFields.CaseNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):
+                             @Translation.Get("Ärendenummer"):
                          </td>
                          <td class="span4">
                              <input type="text" id="txtCaseNumberSearch" value="@Model.caseSearchFilter.CaseNumber" name="txtCaseNumberSearch" />
@@ -138,7 +138,7 @@
                      </tr>
                      <tr>
                          <td class="span3">
-                             @Translation.Get("Sök"):
+                             @Translation.Get("Fritextfält"):
                          </td>
                          <td class="span4">
                              <input type="text" id="txtFreeTextSearch" value="@Model.caseSearchFilter.FreeTextSearch" name="txtFreeTextSearch" />
