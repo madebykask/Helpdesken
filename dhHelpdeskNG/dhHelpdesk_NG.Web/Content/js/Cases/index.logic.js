@@ -106,6 +106,16 @@ var GRID_STATE = {
             }
             return true;
         });
+        
+        $('#btnNewCase a, #divCaseTemplate a').click(function () {
+            if (me._creatingCase) {
+                return false;
+            }
+
+            me.$buttonsToDisableWhenGridLoads.addClass('disabled');
+            me._creatingCase = true;
+            return true;
+        });
 
         me.initSearchForm();
         me.setGridState(window.GRID_STATE.IDLE);
