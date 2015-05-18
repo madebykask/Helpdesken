@@ -107,15 +107,22 @@
                         }
                         else
                         {
-                            if (tzones.All(it => it.Id != user.TimeZoneId))
+                            if (SessionFacade.TimeZoneDetectionResult == TimeZoneAutodetectResult.Failure)
                             {
-                                /// notice to user about to change his time zone in profile
-                                SessionFacade.TimeZoneDetectionResult = TimeZoneAutodetectResult.Notice;
+                                user.TimeZoneId = TimeZoneInfo.Local.Id;
                             }
                             else
                             {
-                                /// no changes in users time zone was made
-                                SessionFacade.TimeZoneDetectionResult = TimeZoneAutodetectResult.None;
+                                if (tzones.All(it => it.Id != user.TimeZoneId))
+                                {
+                                    /// notice to user about to change his time zone in profile
+                                    SessionFacade.TimeZoneDetectionResult = TimeZoneAutodetectResult.Notice;
+                                }
+                                else
+                                {
+                                    /// no changes in users time zone was made
+                                    SessionFacade.TimeZoneDetectionResult = TimeZoneAutodetectResult.None;
+                                }
                             }
                         }
                     }
