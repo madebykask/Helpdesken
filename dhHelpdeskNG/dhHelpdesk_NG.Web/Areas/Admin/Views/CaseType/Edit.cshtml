@@ -23,24 +23,17 @@
                     @Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", 
                        new { customerId = Model.CaseType.Customer_Id }, new { @class = "btn" })
                 </li>                    
-                <li>
-                    @if(Model.CanAddSubCaseType)
-                    {
-                        @Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + 
-                                         Translation.Get("Ärendetyp", Enums.TranslationSource.TextTranslation), "new",
-                                         new { parentId = Model.CaseType.Id, 
-                                               customerId = Model.CaseType.Customer_Id }, 
-                                         new { @class = "btn" })
-                    }
-                    else
-                    {
-                        <a href="#" class="btn disabled"> 
-                                @Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) 
-                                @Translation.Get("Ärendetyp", Enums.TranslationSource.TextTranslation)
-                        </a>
-                    }
-                </li>
-              
+                
+                @if(Model.CanAddSubCaseType)
+                {
+                    <li>
+                    @Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + 
+                                        Translation.Get("Ärendetyp", Enums.TranslationSource.TextTranslation), "new",
+                                        new { parentId = Model.CaseType.Id, 
+                                            customerId = Model.CaseType.Customer_Id }, 
+                                        new { @class = "btn" })
+                    </li>
+                }                                                  
             </ul>
         </div>
     </div>

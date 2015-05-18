@@ -3294,7 +3294,7 @@ If not exists (select * from tbltext where id = 1385)
 	insert into tbltext (id, TextString) VALUES (1385, 'Pågående ändringar')
 GO
 If not exists (select * from tblTextTranslation where text_id = 1385 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1385, 2, 'Changes in process')
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1385, 2, 'Changes in progress')
 GO
 
 -- 2015-05-12
