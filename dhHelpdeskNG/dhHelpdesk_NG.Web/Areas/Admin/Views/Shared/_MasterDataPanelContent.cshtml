@@ -49,8 +49,8 @@
         <li class="@Html.ActiveTab(new string[] { "statesecondary" })"><a href="@Url.Action("index", "statesecondary", new { customerId = Model.Id })">@Translation.Get(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.Id) (@Translation.Get("Understatus", Enums.TranslationSource.TextTranslation))</a></li>
     </ul>
 </li>
-<li class="line"></li>
-<li><a href="@Url.Action("Index", "CaseInvoice", new { customerId = Model.Id })">@Translation.Get("Fakturering")</a></li>                
+@*<li class="line"></li>
+<li><a href="@Url.Action("Index", "CaseInvoice", new { customerId = Model.Id })">@Translation.Get("Fakturering")</a></li>                *@
 <li class="line"></li>
 <li class="dropdown-submenu">
     <a href="#">
@@ -182,7 +182,7 @@
         
     </ul>
 </li>
-<li class="line"></li>
+@*<li class="line"></li>
 <li class="dropdown-submenu">
     <a href="#">
         @Translation.Get("Självservice", Enums.TranslationSource.TextTranslation)
@@ -200,6 +200,6 @@
             </a>
         </li>
     </ul>
-</li>
+</li>*@
 
 <li class="line"></li>

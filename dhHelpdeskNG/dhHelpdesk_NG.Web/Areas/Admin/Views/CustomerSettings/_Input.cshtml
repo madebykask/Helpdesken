@@ -169,7 +169,7 @@
                                         </label>
                                     </td>
                                 </tr>
-                                <tr>
+                                @*<tr>
                                     <td><label class="checkbox">
                                         <input type="checkbox" name="setting.ModuleContract" @(Model.Setting.ModuleContract == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="setting.ModuleContract" value="0" />
@@ -188,14 +188,14 @@
                                         &nbsp;@Translation.Get("Checklista", Enums.TranslationSource.TextTranslation)
                                         </label>
                                     </td>
-                                </tr>
+                                </tr>*@
                                 <tr>
-                                    <td><label class="checkbox">
+                                    @*<td><label class="checkbox">
                                         <input type="checkbox" name="setting.ModuleDailyReport" @(Model.Setting.ModuleDailyReport == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="setting.ModuleDailyReport" value="0" />
                                         &nbsp;@Translation.Get("Dagrapport", Enums.TranslationSource.TextTranslation)
                                         </label>
-                                    </td>
+                                    </td>*@
                                     <td><label class="checkbox">
                                         <input type="checkbox" name="setting.ModuleDocument" @(Model.Setting.ModuleDocument == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="setting.ModuleDocument" value="0" />
@@ -210,7 +210,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><label class="checkbox">
+                                    @*<td><label class="checkbox">
                                         <input type="checkbox" name="setting.ModuleQuestionnaire" @(Model.Setting.ModuleQuestionnaire == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="setting.ModuleQuestionnaire" value="0" />
                                         &nbsp;@Translation.Get("Enkät", Enums.TranslationSource.TextTranslation)
@@ -221,7 +221,7 @@
                                         <input type="hidden" name="setting.ModuleInvoice" value="0" />
                                         &nbsp;@Translation.Get("Fakturering", Enums.TranslationSource.TextTranslation)
                                         </label>
-                                    </td>
+                                    </td>*@
                                     <td><label class="checkbox">
                                         <input type="checkbox" name="setting.ModuleFAQ" @(Model.Setting.ModuleFAQ == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="setting.ModuleFAQ" value="0" />
@@ -230,7 +230,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><label class="checkbox">
+                                    @*<td><label class="checkbox">
                                         <input type="checkbox" name="setting.ModuleInventory" @(Model.Setting.ModuleInventory == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="setting.ModuleInventory" value="0" />
                                         &nbsp;@Translation.Get("Inventarier", Enums.TranslationSource.TextTranslation)
@@ -241,7 +241,7 @@
                                         <input type="hidden" name="setting.ModuleLicense" value="0" />
                                         &nbsp;@Translation.Get("Licenshantering", Enums.TranslationSource.TextTranslation)
                                         </label>
-                                    </td>
+                                    </td>*@
                                     <td><label class="checkbox">
                                         <input type="checkbox" name="setting.ModuleProblem" @(Model.Setting.ModuleProblem == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="setting.ModuleProblem" value="0" />
@@ -250,12 +250,12 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><label class="checkbox">
+                                    @*<td><label class="checkbox">
                                         <input type="checkbox" name="setting.ModuleProject" @(Model.Setting.ModuleProject == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="setting.ModuleProject" value="0" />
                                         &nbsp;@Translation.Get("Projekt", Enums.TranslationSource.TextTranslation)
                                         </label>
-                                    </td>
+                                    </td>*@
                                     <td><label class="checkbox">
                                             <input type="checkbox" name="setting.ModuleChangeManagement" @(Model.Setting.ModuleChangeManagement == 1 ? "checked=checked" : "") value="1"/>
                                             <input type="hidden" name="setting.ModuleChangeManagement" value="0" />
@@ -264,12 +264,12 @@
                                             <input type="hidden" name="setting.ModulePlanning" value="0" />
                                         </label>
                                     </td>
-                                    <td><label class="checkbox">
+                                    @*<td><label class="checkbox">
                                         <input type="checkbox" name="setting.ModuleCaseInvoice" @(Model.Setting.ModuleCaseInvoice == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="setting.ModuleCaseInvoice" value="0" />
                                         &nbsp;@Translation.Get("Fakturering")
                                         </label>
-                                    </td>
+                                    </td>*@
                                 </tr>
                             </table>
                         </div>
