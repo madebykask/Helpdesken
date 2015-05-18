@@ -3,6 +3,71 @@
 $(function () {
     var langEl = $('#case__RegLanguage_Id'),
         doNotSendEl = $("#CaseMailSetting_DontSendMailToNotifier");
+    var page;
+
+    function Page() {};
+
+    Page.prototype.init = function () {
+        var me = this;
+        me._inSaving = false;
+        me.$form = $('#target');
+        me.$buttonsToDisable = $('.btn.save, .btn.save-close, .btn.save-new');
+
+        $('.btn.save').on('click', function() {
+            return me.onSaveClick.call(me);
+        });
+
+        $('.btn.save-close').on('click', function() {
+            return me.onSaveAndCloseClick.call(me);
+        });
+
+        $('.btn.save-new').on('click', function() {
+            return me.onSaveAndNewClick.call(me);
+        });
+    };
+
+    Page.prototype.resetSaving = function() {
+        var me = this;
+        me._inSaving = false;
+    }
+
+    Page.prototype.canSave = function() {
+        var me = this;
+        if (!me._inSaving) {
+            me._inSaving = true;
+            return true;
+        }
+        me.$buttonsToDisable.addClass('disabled');
+        return !me._inSaving;
+    };
+
+    Page.prototype.onSaveClick = function () {
+        var me = this;
+        if (me.canSave()) {
+            me.$form.submit();
+        }
+        return false;
+    };
+
+    Page.prototype.onSaveAndCloseClick = function() {
+        var me = this;
+        if (me.canSave()) {
+            me.$form.attr("action", '/Cases/NewAndClose').submit();
+        }
+        return false;
+    };
+
+    Page.prototype.onSaveAndNewClick = function () {
+        var me = this;
+        if (me.canSave()) {
+            me.$form.attr("action", '/Cases/NewAndAddCase').submit();
+        }
+        return false;
+    };
+
+    page = new Page();
+    page.init();
+
     doNotSendEl.on('change', function() {
         if ($(doNotSendEl).is(':checked')) {
             langEl.show();
@@ -781,10 +846,9 @@ $(function () {
 
         that.getCase = getCase;
 
-        // http://redmine.fastdev.se/issues/10554
-        // http://redmine.fastdev.se/issues/11179
         $('#target').submit(function () {
             if (!$(this).valid()) {
+                page.resetSaving();
                 var message = requiredFieldsMessage + '<br />' + mandatoryFieldsText + ':';
                 $('label.error:visible').each(function (key, value) {
                     var errorText = $(value).text();
@@ -795,10 +859,7 @@ $(function () {
                     
                     message += errorText;
                 });
-
                 dhHelpdesk.cases.utils.showError(message);
-
-                // http://redmine.fastdev.se/issues/11916
                 $('.date').each(function() {
                     var $this = $(this);
                     var errorLabel = $this.find('label.error:visible');
