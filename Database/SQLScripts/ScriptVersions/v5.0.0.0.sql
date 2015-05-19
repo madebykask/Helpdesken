@@ -2673,15 +2673,6 @@ GO
 DELETE FROM tblTextTranslation WHERE Text_Id=24 AND Language_Id > 2
 GO
 
--- Nytt fält
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ShowFromDate' and sysobjects.name = N'tblCalendar')
-	begin
-		ALTER TABLE tblCalendar ADD ShowFromDate datetime NULL
-
-		UPDATE tblCalendar SET ShowFromDate = CalendarDate
-	end
-GO
-
 -- Referens från tblCaseType till tblCaseType
 if not exists(select * from sysobjects WHERE Name = N'FK_tblCaseType_tblCaseType')
 	ALTER TABLE [dbo].[tblCaseType] ADD 
