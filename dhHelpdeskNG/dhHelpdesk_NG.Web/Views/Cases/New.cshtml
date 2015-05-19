@@ -42,14 +42,14 @@
                 <ul class="secnav">
                     @if (Model.templateistrue != 1)
                     {
-                        <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
+                        <li><a class="btn save" href="#">@Translation.Get("Spara")</a></li>
                     }
 
-                    <li>@Html.ActionLink(Translation.Get("Spara och stäng", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "NewCaseAndClose();return false;", @class = "btn" })</li>
+                    <li><a class="btn save-close" href="#">@Translation.Get("Spara och stäng")</a></li>
 
                     @if (Model.templateistrue != 1)
                     {
-                        <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "NewCaseAndAddCase();return false;", @class = "btn" })</li>
+                        <li><a class="btn save-new">@string.Format("{0} / {1}", Translation.Get("Spara"), Translation.Get("Nytt ärende"))</a></li>
                     }
                         <li class="secspace"></li>
                     <li>@Html.ActionLink(Translation.Get("Stäng", Enums.TranslationSource.TextTranslation), "index", new { customerId = @Model.case_.Customer_Id }, new { @class = "btn" })</li>
