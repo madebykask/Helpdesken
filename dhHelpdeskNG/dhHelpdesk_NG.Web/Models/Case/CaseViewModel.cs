@@ -133,8 +133,30 @@ using DH.Helpdesk.Web.Enums;
         public CaseSettingModel CaseSetting { get; set; }
     }
 
+    public class PageSettingsModel
+    {
+        public JsonGridSettingsModel gridSettings { get; set; }
+
+        public int refreshContent { get; set; }
+    }
+
     public class JsonCaseIndexViewModel
     {       
+        public CaseSearchFilterData CaseSearchFilterData { get; set; }
+
+        public CaseTemplateTreeModel CaseTemplateTreeButton { get; set; }
+
+        public CaseSettingModel CaseSetting { get; set; }
+
+        public PageSettingsModel PageSettings { get; set; }
+
+        public CaseRemainingTimeViewModel RemainingTime { get; set; }
+    }
+
+    public class AdvancedSearchIndexViewModel
+    {
+        public bool DoSearchAtBegining { get; set; }
+
         public CaseSearchFilterData CaseSearchFilterData { get; set; }
 
         public CaseTemplateTreeModel CaseTemplateTreeButton { get; set; }
@@ -144,11 +166,6 @@ using DH.Helpdesk.Web.Enums;
         public JsonGridSettingsModel GridSettings { get; set; }
 
         public CaseRemainingTimeViewModel RemainingTime { get; set; }
-    }
-
-    public class AdvancedSearchIndexViewModel : JsonCaseIndexViewModel
-    {
-        public bool DoSearchAtBegining { get; set; }
 
         public List<ItemOverview> SelectedCustomers { get; set; }        
     }

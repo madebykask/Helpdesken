@@ -599,15 +599,18 @@ namespace DH.Helpdesk.Web.Controllers
             m.CaseSearchFilterData = this.CreateCaseSearchFilterData(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser.Id, customerUser, caseSearchModel);
             m.CaseTemplateTreeButton = this.GetCaseTemplateTreeModel(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser.Id);
             m.CaseSetting = this.GetCaseSettingModel(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser.Id);
-            m.GridSettings = JsonGridSettingsMapper.ToJsonGridSettingsModel(
-                  SessionFacade.CaseOverviewGridSettings,
-                  SessionFacade.CurrentCustomer.Id,
-                  m.CaseSetting.ColumnSettingModel.AvailableColumns.Count());
-
-            //Set refreshcontent
             var user = this._userService.GetUser(SessionFacade.CurrentUser.Id);
-            m.CaseSetting.RefreshContent = user.RefreshContent;            
-
+            m.PageSettings = new PageSettingsModel()
+                                 {
+                                     gridSettings =
+                                         JsonGridSettingsMapper.ToJsonGridSettingsModel(
+                                             SessionFacade.CaseOverviewGridSettings,
+                                             SessionFacade.CurrentCustomer.Id,
+                                             m.CaseSetting.ColumnSettingModel.AvailableColumns.Count
+                                         ()),
+                                     refreshContent = user.RefreshContent
+                                 };
+                
             return this.View("IndexAjax", m);
         }
 

@@ -14,7 +14,7 @@ var GRID_STATE = {
     var NODATA_MSG_TYPE = 2;
     var BADCONFIG_MSG_TYPE = 3;
     var NO_COL_SELECTED_MSG_TYPE = 4;
-    
+
     var SORT_ASC = 0;
     var SORT_DESC = 1;
     var EMPTY_STR = '';
@@ -43,15 +43,22 @@ var GRID_STATE = {
         return str == null || str == EMPTY_STR;
     }
 
-    
+
     function Page() {};
 
     /**
     * Initialization method. Called when page ready
-    * @param { object } gridInitSettings
+    * @param { object } appSettings
     */
-    Page.prototype.init = function(gridInitSettings) {
+    Page.prototype.init = function(appSettings) {
         var me = this;
+        me.hXHR = null;
+        me.settings = { refreshContent: appSettings.refreshContent };
+        if (me.settings.refreshContent > 0) {
+            setInterval(function() {
+                me.autoReloadCheck.call(me);
+            }, 500);
+        }
         //// Bind elements
         me.$table = $('.table-cases');
         me.$tableHeader = $('table.table-cases thead');
@@ -70,7 +77,7 @@ var GRID_STATE = {
         me.$remainingView = $('[data-field="caseRemainingTimeHidePlace"]');
         me.$btnExpandFilter = $("#btnMore");
         //// Bind events
-        $('.submit, a.refresh-grid').on('click', function (ev) {
+        $('.submit, a.refresh-grid').on('click', function(ev) {
             ev.preventDefault();
             if (me._gridState !== window.GRID_STATE.IDLE) {
                 return false;
@@ -78,8 +85,8 @@ var GRID_STATE = {
             me.onSearchClick.apply(me);
             return false;
         });
-        
-        $("#btnClearFilter").click(function (ev) {
+
+        $("#btnClearFilter").click(function(ev) {
             if (me.getGridState() !== window.GRID_STATE.IDLE) {
                 ev.preventDefault();
                 return false;
@@ -88,30 +95,23 @@ var GRID_STATE = {
             return false;
         });
 
-        me.$btnExpandFilter.click(function (e) {
+        me.$btnExpandFilter.click(function(e) {
             e.preventDefault();
             me.toggleFilter.call(me, !me.$filterFormContent.is(':visible'));
             return false;
         });
-        $('#txtFreeTextSearch').keydown(function (e) {
+        $('#txtFreeTextSearch').keydown(function(e) {
             if (e.keyCode == 13) {
                 $("#btnSearch").click();
             }
         });
-
-        $('ul.secnav #btnNewCase a.btn').on('click', function(ev) {
-            if (window.app.getGridState() !== window.GRID_STATE.IDLE) {
-                ev.preventDefault();
-                return false;
-            }
-            return true;
-        });
-        
-        $('#btnNewCase a, #divCaseTemplate a').click(function () {
+        $('#btnNewCase a, #divCaseTemplate a').click(function() {
             if (me._creatingCase) {
                 return false;
             }
-
+            if (me.hXHR != null && me.hXHR.status == null) {
+                me.hXHR.abort();
+            }
             me.$buttonsToDisableWhenGridLoads.addClass('disabled');
             me._creatingCase = true;
             return true;
@@ -119,12 +119,27 @@ var GRID_STATE = {
 
         me.initSearchForm();
         me.setGridState(window.GRID_STATE.IDLE);
-        me.setGridSettings(gridInitSettings);
-    
+        me.setGridSettings(appSettings.gridSettings);
+
         $('.input-append.date').datepicker({
             format: 'yyyy-mm-dd',
             autoclose: true
         });
+    };
+
+    Page.prototype.autoReloadCheck = function() {
+        var me = this;
+        if (me.getGridUpdatedAgo() >= me.settings.refreshContent && me.getGridState() == window.GRID_STATE.IDLE) {
+            me.fetchData();
+        }
+    };
+
+    Page.prototype.getGridUpdatedAgo = function() {
+        var me = this;
+        if (me._gridUpdated == null) {
+            return Number.MAX_VALUE;
+        }
+        return ((new Date()).getTime() - me._gridUpdated) / 1000;
     };
 
     /**
@@ -185,19 +200,24 @@ var GRID_STATE = {
         }
     };
 
-    Page.prototype.setGridState = function(gridStateId) {
+    Page.prototype.setGridState = function(newGridState) {
         var me = this;
-        me._gridState = gridStateId;
-        switch (gridStateId) {
+        switch (newGridState) {
             case window.GRID_STATE.IDLE:
                 me.$buttonsToDisableWhenGridLoads.removeClass('disabled');
                 break;
             case window.GRID_STATE.NO_COL_SELECTED:
                 me.$buttonsToDisableWhenNoColumns.addClass('disabled');
                 break;
+            case window.GRID_STATE.LOADING:
+                if (me._gridState != window.GRID_STATE.IDLE) {
+                    me.$buttonsToDisableWhenGridLoads.addClass('disabled');
+                }
+                break;
             default:
                 me.$buttonsToDisableWhenGridLoads.addClass('disabled');
         }
+        me._gridState = newGridState;
     };
 
     Page.prototype.getGridState = function() {
@@ -440,23 +460,28 @@ var GRID_STATE = {
         }
         me.setGridState(window.GRID_STATE.LOADING);
         me.showMsg(LOADING_MSG_TYPE);
-        $.ajax('/Cases/SearchAjax', {
+        me.hXHR = $.ajax('/Cases/SearchAjax', {
             type: 'POST',
             dataType: 'json',
             data: fetchParams,
             success: function () {
+                me._gridUpdated = (new Date()).getTime();
                 me.onGetData.apply(me, arguments);
             },
             error: function () {
-                me.showMsg(ERROR_MSG_TYPE);
-                me.setGridState(window.GRID_STATE.IDLE);
+                var textStatus = arguments[1];
+                me._gridUpdated = (new Date()).getTime();
+                if (textStatus !== 'abort') {
+                    me.showMsg(ERROR_MSG_TYPE);
+                    me.setGridState(window.GRID_STATE.IDLE);
+                }
             }
         });
     };
    
     window.app = new Page();
     $(document).ready(function() {
-        app.init.call(window.app, window.gridSettings);
+        app.init.call(window.app, window.pageSettings);
     });
 })($);
 
@@ -509,13 +534,7 @@ function unsetBootstrapsDropdown(blockElementJqueryId) {
     $(blockElementJqueryId).find('.btn:first-child').text(text);
     $(blockElementJqueryId).find('input[type=hidden]').val(val);
 }
-
-
-window.onload = function () {
-    $('#btnNewCase').show();
-    $('#btnCaseTemplate').show();
-};
-
+    
 /**
 * @param { string } message
 * @param { string } msgType one of 'notice', 'warning', 'error', 'success'

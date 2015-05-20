@@ -27,7 +27,9 @@
 
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-//            filters.Add(new CustomHandleErrorAttribute());
+#if !DEBUG
+            filters.Add(new CustomHandleErrorAttribute());
+#endif
         }
 
         public static void RegisterRoutes(RouteCollection routes)

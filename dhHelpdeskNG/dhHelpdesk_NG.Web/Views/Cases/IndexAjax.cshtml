@@ -7,7 +7,7 @@
     var jsSerializer = new JavaScriptSerializer();        
 }
 <script type="text/javascript">
-    window.gridSettings = @Html.Raw(jsSerializer.Serialize(Model.GridSettings))
+    window.pageSettings = @Html.Raw(jsSerializer.Serialize(Model.PageSettings))
 </script>
 <div class="case-overview page">
     <div class="secnavs fixed">
@@ -60,25 +60,3 @@
     </div>
 </div>
 @Scripts.Render("~/bundles/cases/index")
-
-<script type="text/javascript">
-    $(function () {
-        var ReloadCaseOverview = function () {
-            var TimeBeforeReload = "@Model.CaseSetting.RefreshContent";
-            TimeBeforeReload = TimeBeforeReload / 60;
-            TimeBeforeReload = TimeBeforeReload * 60000;
-            if (TimeBeforeReload != null || TimeBeforeReload != NaN || TimeBeforeReload != "") {
-                var TimeBeforeReload = parseInt(TimeBeforeReload, 10);
-                if (TimeBeforeReload != 0) {
-                    setTimeout(function () {
-                        var CaseOverViewActive = $("#fragment-1").attr("class");
-                        if (CaseOverViewActive.indexOf("active") >= 0) {
-                            window.location.href = window.location.href;
-                        }
-                    }, TimeBeforeReload);
-                }
-            }
-        };
-        ReloadCaseOverview();
-    });
-</script>
