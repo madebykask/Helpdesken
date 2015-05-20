@@ -1024,6 +1024,12 @@ GO
 -- Nytt fält i tblSettings
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'DefaultAdministratorExternal' and sysobjects.name = N'tblSettings')
 	begin
+		ALTER TABLE tblSettings ADD DefaultAdministratorExternal int NULL			
+	end
+GO
+
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'isDefaultAdministratorExternal' and sysobjects.name = N'tblUsers')
+	begin
 		DECLARE @sql NVARCHAR(MAX)
 
     		SELECT TOP 1 @sql = N'alter table tblUsers drop constraint ['+dc.NAME+N']'
@@ -1035,9 +1041,7 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
     
 		EXEC (@sql)
 
-		ALTER TABLE tblUsers DROP COLUMN isDefaultAdministratorExternal
-
-		ALTER TABLE tblSettings ADD DefaultAdministratorExternal int NULL			
+		ALTER TABLE tblUsers DROP COLUMN isDefaultAdministratorExternal	
 	end
 GO
 
@@ -1057,6 +1061,12 @@ GO
 -- Nytt fält i tblSettings
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'DefaultAdministrator' and sysobjects.name = N'tblSettings')
 	begin
+		ALTER TABLE tblSettings ADD DefaultAdministrator int NULL			
+	end
+GO
+
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'isDefaultAdministrator' and sysobjects.name = N'tblUsers')
+	begin
 		DECLARE @sql NVARCHAR(MAX)
 
     		SELECT TOP 1 @sql = N'alter table tblUsers drop constraint ['+dc.NAME+N']'
@@ -1068,9 +1078,7 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
     
 		EXEC (@sql)
 
-		ALTER TABLE tblUsers DROP COLUMN isDefaultAdministrator
-
-		ALTER TABLE tblSettings ADD DefaultAdministrator int NULL			
+		ALTER TABLE tblUsers DROP COLUMN isDefaultAdministrator		
 	end
 GO
 
