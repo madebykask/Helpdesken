@@ -305,3 +305,36 @@ BEGIN
 	ALTER TABLE tblFormField  ADD SortOrder int not null default ((0))
 END
 
+GO
+
+/*
+ADD column to tblRegion
+*/
+IF NOT EXISTS (SELECT * FROM syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+WHERE syscolumns.name = N'Code' and sysobjects.name = N'tblRegion')
+BEGIN
+	ALTER TABLE tblRegion  ADD Code nvarchar(20) null
+END
+
+GO
+
+/*
+ADD column to tblDepartment
+*/
+IF NOT EXISTS (SELECT * FROM syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+WHERE syscolumns.name = N'Code' and sysobjects.name = N'tblDepartment')
+BEGIN
+	ALTER TABLE tblDepartment  ADD Code nvarchar(20) null
+END
+
+GO
+
+/*
+ADD column to tblOU
+*/
+IF NOT EXISTS (SELECT * FROM syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+WHERE syscolumns.name = N'Code' and sysobjects.name = N'tblOU')
+BEGIN
+	ALTER TABLE tblOU  ADD Code nvarchar(20) null
+END
+
