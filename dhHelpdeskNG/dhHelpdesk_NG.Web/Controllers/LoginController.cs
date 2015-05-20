@@ -93,19 +93,36 @@
                         SessionFacade.TimeZoneDetectionResult = TimeZoneResolver.DetectTimeZone(timeZoneOffsetInJan1, timeZoneOffsetInJul1, out tzones);
                         if (string.IsNullOrEmpty(user.TimeZoneId))
                         {
-                            user.TimeZoneId = SessionFacade.TimeZoneDetectionResult == TimeZoneAutodetectResult.Failure ? TimeZoneInfo.Local.Id : tzones[0].Id;
-                        }
-                        else
-                        {
-                            if (tzones.All(it => it.Id != user.TimeZoneId))
+                            if (SessionFacade.TimeZoneDetectionResult == TimeZoneAutodetectResult.Failure)
                             {
-                                /// notice to user about to change his time zone in profile
-                                SessionFacade.TimeZoneDetectionResult = TimeZoneAutodetectResult.Notice;
+                                user.TimeZoneId = TimeZoneInfo.Local.Id;
                             }
                             else
                             {
-                                /// no changes in users time zone was made
+                                user.TimeZoneId = tzones[0].Id;
+                                
+                                // we dont want to show any messages to user if we successfully detect his timezone
                                 SessionFacade.TimeZoneDetectionResult = TimeZoneAutodetectResult.None;
+                            }
+                        }
+                        else
+                        {
+                            if (SessionFacade.TimeZoneDetectionResult == TimeZoneAutodetectResult.Failure)
+                            {
+                                user.TimeZoneId = TimeZoneInfo.Local.Id;
+                            }
+                            else
+                            {
+                                if (tzones.All(it => it.Id != user.TimeZoneId))
+                                {
+                                    /// notice to user about to change his time zone in profile
+                                    SessionFacade.TimeZoneDetectionResult = TimeZoneAutodetectResult.Notice;
+                                }
+                                else
+                                {
+                                    /// no changes in users time zone was made
+                                    SessionFacade.TimeZoneDetectionResult = TimeZoneAutodetectResult.None;
+                                }
                             }
                         }
                     }

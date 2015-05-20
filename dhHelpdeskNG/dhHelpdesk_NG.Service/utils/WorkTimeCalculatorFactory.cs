@@ -148,9 +148,12 @@
                 {
                     if (departmentsHolidaysData.ContainsKey(deptHoliday.DepartmentId))
                     {
-                        departmentsHolidaysData[deptHoliday.DepartmentId].Add(
+                        if (!departmentsHolidaysData[deptHoliday.DepartmentId].ContainsKey(deptHoliday.HolidayDate))
+                        {
+                            departmentsHolidaysData[deptHoliday.DepartmentId].Add(
                             deptHoliday.HolidayDate,
-                            new Tuple<int, int>(deptHoliday.TimeFrom, deptHoliday.TimeUntil));
+                            new Tuple<int, int>(deptHoliday.TimeFrom, deptHoliday.TimeUntil));   
+                        }
                     }
                     else
                     {

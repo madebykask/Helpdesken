@@ -1,3 +1,5 @@
+# How to run:
+# 	powershell -ExecutionPolicy ByPass -File resolve_version.ps1
 Param ([string]$build_num)
 
 $git_version = (git describe --tags --long --match DEV_?.?.?.? | Select-String -pattern '(?<major>[0-9]+)\.(?<minor>[0-9]+)\.(?<patch>[0-9]+)\.(?<nothing>[0-9]+)-(?<commitCount>[0-9]+)-(?<hash>[a-z0-9]+)').Matches[0].Groups
