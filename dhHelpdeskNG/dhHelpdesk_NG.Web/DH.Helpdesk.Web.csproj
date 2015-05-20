@@ -745,6 +745,7 @@
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\SupplierEditModel.cs" />
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\UserEditModel.cs" />
     <Compile Include="Areas\Orders\OrdersAreaRegistration.cs" />
+    <Content Include="Content\js\dropdown_fix.js" />
     <Content Include="Content\js\lib\angular-1.3.11\angular-animate.js" />
     <Content Include="Content\js\lib\angular-1.3.11\angular-animate.min.js" />
     <Content Include="Content\js\lib\angular-1.3.11\angular-aria.js" />

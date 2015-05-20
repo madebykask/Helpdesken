@@ -143,14 +143,14 @@
             bundles.Add(new ScriptBundle("~/bundles/advancedsearch/index").Include(
                         "~/Content/js/AdvancedSearch/index.logic.js"));
 
-
             bundles.Add(new ScriptBundle("~/bundles/cases/editLog").Include(
                 "~/Content/js/Cases/editLog.logic.js"));
 
             bundles.Add(
                 new ScriptBundle("~/bundles/cases/edit").Include(
                     "~/Content/js/Cases/edit.logic.js",
-                            "~/Content/js/Cases/case.templates.js"));
+                    "~/Content/js/dropdown_fix.js",
+                    "~/Content/js/Cases/case.templates.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/casetemplates/edit").Include(
                 "~/Content/js/CaseTemplates/edit.logic.js"));
