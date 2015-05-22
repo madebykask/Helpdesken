@@ -6,6 +6,7 @@
     using DH.Helpdesk.BusinessData.Models.Holiday.Output;
     using DH.Helpdesk.Dal.Utils;
     using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Services.Utils;
 
     using Moq;
 
