@@ -71,7 +71,7 @@
             this.faqRepository.Commit();
 
             var newFaqFileDtos =
-                newFaqFiles.Select(f => new NewFaqFile(f.Content, f.Name, f.CreatedDate, newFaqDto.Id)).ToList();
+                newFaqFiles.Select(f => new NewFaqFile(f.Content, f.BasePath, f.Name, f.CreatedDate, newFaqDto.Id)).ToList();
 
             this.faqFileRepository.AddFiles(newFaqFileDtos);
             this.faqFileRepository.Commit();

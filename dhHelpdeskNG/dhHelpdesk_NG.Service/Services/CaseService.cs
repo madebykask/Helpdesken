@@ -29,6 +29,7 @@
     using DH.Helpdesk.BusinessData.Models.User.Input;
 
     using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
+    using DH.Helpdesk.Common.Enums;
 
     public interface ICaseService
     {
@@ -58,15 +59,16 @@
 
         int SaveCaseHistory(Case c, int userId, string adUser, out IDictionary<string, string> errors, 
                             string defaultUser = "", ExtraFieldCaseHistory extraField = null);
-        void SendCaseEmail(int caseId, CaseMailSetting cms, int caseHistoryId, Case oldCase = null, CaseLog log = null, List<CaseFileDto> logFiles = null);
+        void SendCaseEmail(int caseId, CaseMailSetting cms, int caseHistoryId, string basePath,
+                           Case oldCase = null, CaseLog log = null, List<CaseFileDto> logFiles = null);
         void UpdateFollowUpDate(int caseId, DateTime? time);
         void MarkAsUnread(int caseId);
         void MarkAsRead(int caseId);
-        void SendSelfServiceCaseLogEmail(int caseId, CaseMailSetting cms, int caseHistoryId, CaseLog log, List<CaseFileDto> logFiles = null);
+        void SendSelfServiceCaseLogEmail(int caseId, CaseMailSetting cms, int caseHistoryId, CaseLog log, string basePath, List<CaseFileDto> logFiles = null);
         void Activate(int caseId, int userId, string adUser, out IDictionary<string, string> errors);
         IList<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, UserOverview user);
         void Commit();
-        Guid Delete(int id);
+        Guid Delete(int id, string basePath);
 
         /// <summary>
         /// The get case overview.
@@ -209,7 +211,7 @@
             return _caseRepository.GetDynamicCase(id);
         }
 
-        public Guid Delete(int id)
+        public Guid Delete(int id, string basePath)
         {
             Guid ret = Guid.Empty; 
 
@@ -226,11 +228,12 @@
 
             // delete log files
             var logFiles = this._logFileRepository.GetLogFilesByCaseId(id); 
+
             if (logFiles != null)
-            {
+            {                
                 foreach (var f in logFiles)
                 {
-                    this._filesStorage.DeleteFile(ModuleName.Log, f.Log_Id, f.FileName);
+                    this._filesStorage.DeleteFile(ModuleName.Log, f.Log_Id, basePath, f.FileName);
                     this._logFileRepository.Delete(f);
                 }
                 this._logFileRepository.Commit();  
@@ -275,7 +278,7 @@
             {
                 foreach (var f in caseFiles)
                 {
-                    this._filesStorage.DeleteFile(ModuleName.Cases, f.Case_Id, f.FileName);
+                    this._filesStorage.DeleteFile(ModuleName.Cases, f.Case_Id, basePath, f.FileName);
                     this._caseFileRepository.Delete(f);
                 }
                 this._caseFileRepository.Commit(); 
@@ -444,7 +447,7 @@
             SaveCaseHistory(c, userId, adUser, out errors);  
         }
 
-        public void SendSelfServiceCaseLogEmail(int caseId, CaseMailSetting cms, int caseHistoryId, CaseLog log, List<CaseFileDto> logFiles = null)
+        public void SendSelfServiceCaseLogEmail(int caseId, CaseMailSetting cms, int caseHistoryId, CaseLog log, string basePath, List<CaseFileDto> logFiles = null)
         {
             if (_emailService.IsValidEmail(cms.HelpdeskMailFromAdress))
             {
@@ -463,7 +466,7 @@
                 List<string> files = null;
                 if (logFiles != null && log != null)
                     if (logFiles.Count > 0)
-                        files = logFiles.Select(f => _filesStorage.ComposeFilePath(ModuleName.Log, log.Id, f.FileName)).ToList();
+                        files = logFiles.Select(f => _filesStorage.ComposeFilePath(ModuleName.Log, log.Id, basePath, f.FileName)).ToList();
 
                 if (newCase.Administrator != null)
                 {
@@ -606,7 +609,7 @@
             return this._caseHistoryRepository.GetCaseHistoryByCaseId(caseId).ToList(); 
         }
 
-        public void SendCaseEmail(int caseId, CaseMailSetting cms, int caseHistoryId, Case oldCase = null, CaseLog log = null, List<CaseFileDto> logFiles = null)        
+        public void SendCaseEmail(int caseId, CaseMailSetting cms, int caseHistoryId, string basePath, Case oldCase = null, CaseLog log = null, List<CaseFileDto> logFiles = null)        
         {
             var isClosedMailSentToNotifier = false;
             if (_emailService.IsValidEmail(cms.HelpdeskMailFromAdress))
@@ -629,7 +632,7 @@
                 List<string> files = null;
                 if (logFiles != null && log != null)
                     if (logFiles.Count > 0)
-                        files = logFiles.Select(f => _filesStorage.ComposeFilePath(ModuleName.Log, log.Id, f.FileName)).ToList();
+                        files = logFiles.Select(f => _filesStorage.ComposeFilePath(ModuleName.Log, log.Id,basePath, f.FileName)).ToList();
 
                 // sub state should not generate email to notifier
                 if (newCase.StateSecondary != null)

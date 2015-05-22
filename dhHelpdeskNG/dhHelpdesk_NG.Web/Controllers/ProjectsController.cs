@@ -55,6 +55,8 @@
 
         private readonly IEditorStateCache userEditorValuesStorage;
 
+        private readonly IMasterDataService masterDataService;
+
         public ProjectsController(
             IMasterDataService masterDataService,
             IProjectService projectService,
@@ -72,6 +74,7 @@
             ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory)
             : base(masterDataService)
         {
+            this.masterDataService = masterDataService;
             this.projectService = projectService;
             this.userService = userService;
             this.caseService = caseService;
@@ -171,9 +174,13 @@
             this.projectService.AddCollaborator(projectBussinesModel.Id, projectEditModel.ProjectCollaboratorIds);
 
             // todo need to use mappers
-            var newRegistrationFiles = this.userTemporaryFilesStorage.FindFiles(projectEditModel.Id).Select(x => new NewProjectFile(projectBussinesModel.Id, x.Content, x.Name, DateTime.Now)).ToList();
+            var pr = this.projectService.GetProject(projectBussinesModel.Id);
+            var basePath = string.Empty;
+            if (pr != null)
+                basePath = masterDataService.GetFilePath(pr.CustomerId);            
+            var newRegistrationFiles = this.userTemporaryFilesStorage.FindFiles(projectEditModel.Id).Select(x => new NewProjectFile(projectBussinesModel.Id, x.Content, basePath, x.Name, DateTime.Now)).ToList();
             var deletedRegistrationFiles = this.userEditorValuesStorage.FindDeletedFileNames(projectEditModel.Id);
-            this.projectService.DeleteFiles(projectEditModel.Id, deletedRegistrationFiles);
+            this.projectService.DeleteFiles(projectEditModel.Id, basePath, deletedRegistrationFiles);
             this.projectService.AddFiles(newRegistrationFiles);
 
             this.userTemporaryFilesStorage.ResetCacheForObject(projectEditModel.Id);
@@ -218,8 +225,9 @@
             this.projectService.AddCollaborator(projectBussinesModel.Id, projectEditModel.ProjectCollaboratorIds);
 
             // todo need to use mappers
+            var basePath = masterDataService.GetFilePath(SessionFacade.CurrentCustomer.Id);
             var registrationFiles = this.userTemporaryFilesStorage.FindFiles(guid);
-            var files = registrationFiles.Select(x => new NewProjectFile(projectBussinesModel.Id, x.Content, x.Name, DateTime.Now)).ToList();
+            var files = registrationFiles.Select(x => new NewProjectFile(projectBussinesModel.Id, x.Content, basePath, x.Name, DateTime.Now)).ToList();
             this.projectService.AddFiles(files);
 
             this.userTemporaryFilesStorage.ResetCacheForObject(guid);
@@ -373,9 +381,10 @@
                     fileName,
                     guid);
 
+                var basePath = masterDataService.GetFilePath(SessionFacade.CurrentCustomer.Id);
                 fileContent = fileInWebStorage
                     ? this.userTemporaryFilesStorage.GetFileContent(fileName, guid)
-                    : this.projectService.GetFileContent(int.Parse(guid), fileName);
+                    : this.projectService.GetFileContent(int.Parse(guid),basePath, fileName);
             }
 
             return this.File(fileContent, "application/octet-stream", fileName);

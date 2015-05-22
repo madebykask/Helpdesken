@@ -4,7 +4,7 @@
 
     public sealed class NewFaqFile
     {
-        public NewFaqFile(byte[] content, string name, DateTime createdDate)
+        public NewFaqFile(byte[] content, string basePath, string name, DateTime createdDate)
         {
             if (content == null || content.Length == 0)
             {
@@ -17,11 +17,14 @@
             }
 
             this.Content = content;
+            this.BasePath = basePath;
             this.Name = name;
             this.CreatedDate = createdDate;
         }
 
         public byte[] Content { get; private set; }
+
+        public string BasePath { get; private set; }
 
         public string Name { get; private set; }
 

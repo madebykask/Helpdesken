@@ -17,7 +17,7 @@ namespace DH.Helpdesk.Dal.Repositories.Faq
 
         List<FaqFileOverview> FindFileOverviewsByFaqIds(List<int> faqIds); 
 
-        byte[] GetFileContentByFaqIdAndFileName(int faqId, string fileName);
+        byte[] GetFileContentByFaqIdAndFileName(int faqId, string basePath, string fileName);
 
         void AddFile(NewFaqFile newFaqFile);
 

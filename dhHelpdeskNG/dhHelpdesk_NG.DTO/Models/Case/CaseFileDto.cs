@@ -6,15 +6,17 @@
     {
         public CaseFileDto(
             byte[] content, 
+            string basePath,
             string filename, 
             DateTime createdDate, 
             int referenceId)
-            : this(content, filename, createdDate, referenceId, null)
+            : this(content, basePath, filename, createdDate, referenceId, null)
         {
         }
 
         public CaseFileDto(
             byte[] content, 
+            string basePath,
             string filename, 
             DateTime createdDate, 
             int referenceId,
@@ -36,6 +38,7 @@
             }
 
             this.Content = content;
+            this.BasePath = basePath;
             this.FileName = filename;
             this.CreatedDate = createdDate;
             this.ReferenceId = referenceId;
@@ -45,6 +48,8 @@
         public int Id { get; set; }
 
         public byte[] Content { get; private set; }
+
+        public string BasePath { get; private set; }
 
         public string FileName { get; private set; }
 

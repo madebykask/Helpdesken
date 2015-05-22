@@ -406,9 +406,9 @@ namespace DH.Helpdesk.Dal.Repositories
     {
         List<string> FindFileNamesByCaseId(int caseid);
         List<CaseFile> GetCaseFilesByCaseId(int caseid);
-        byte[] GetFileContentByIdAndFileName(int caseId, string fileName);
+        byte[] GetFileContentByIdAndFileName(int caseId, string basePath, string fileName);
         bool FileExists(int caseId, string fileName);
-        void DeleteByCaseIdAndFileName(int caseId, string fileName);
+        void DeleteByCaseIdAndFileName(int caseId, string basePath, string fileName);
         int GetCaseNumberForUploadedFile(int caseId);
 
         CaseFileModel[] GetCaseFiles(int caseId);
@@ -424,10 +424,10 @@ namespace DH.Helpdesk.Dal.Repositories
             this._filesStorage = fileStorage;
         }
 
-        public byte[] GetFileContentByIdAndFileName(int caseId, string fileName)
+        public byte[] GetFileContentByIdAndFileName(int caseId, string basePath, string fileName)
         {
             int id = GetCaseNumberForUploadedFile(caseId); 
-            return this._filesStorage.GetFileContent(ModuleName.Cases, id, fileName);
+            return this._filesStorage.GetFileContent(ModuleName.Cases, id, basePath, fileName);
         }
 
         public bool FileExists(int caseId, string fileName)
@@ -435,7 +435,7 @@ namespace DH.Helpdesk.Dal.Repositories
             return this.DataContext.CaseFiles.Any(f => f.Case_Id == caseId && f.FileName == fileName.Trim());
         }
 
-        public void DeleteByCaseIdAndFileName(int caseId, string fileName)
+        public void DeleteByCaseIdAndFileName(int caseId,string basePath, string fileName)
         {
             if (FileExists(caseId, fileName))
             {
@@ -444,7 +444,7 @@ namespace DH.Helpdesk.Dal.Repositories
                 this.Commit();
             }
             int id = GetCaseNumberForUploadedFile(caseId); 
-            this._filesStorage.DeleteFile(ModuleName.Cases, id, fileName);
+            this._filesStorage.DeleteFile(ModuleName.Cases, id, basePath, fileName);
         }
 
         public List<string> FindFileNamesByCaseId(int caseId)

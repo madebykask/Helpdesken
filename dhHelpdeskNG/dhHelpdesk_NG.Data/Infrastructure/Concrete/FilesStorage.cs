@@ -7,25 +7,23 @@
     using DH.Helpdesk.Common.Enums;
 
     public sealed class FilesStorage : IFilesStorage
-    {
-        private readonly string filesDirectory;
+    {        
 
         public FilesStorage()
-        {
-            this.filesDirectory = ConfigurationManager.AppSettings[AppSettingsKey.FilesDirectory];
+        {            
         }
 
-        public byte[] GetFileContent(string topic, int entityId, string fileName)
+        public byte[] GetFileContent(string topic, int entityId, string basePath, string fileName)
         {
-            var filePath = this.ComposeFilePath(topic, entityId, fileName);  
+            var filePath = this.ComposeFilePath(topic, entityId, basePath,  fileName);  
             return File.ReadAllBytes(filePath);
         }
 
-        public void SaveFile(byte[] content, string fileName, string topic, int entityId)
+        public void SaveFile(byte[] content, string basePath, string fileName, string topic, int entityId)
         {
-            var saveDirectory = this.ComposeDirectoryPath(topic, entityId); 
+            var saveDirectory = this.ComposeDirectoryPath(basePath, topic, entityId); 
             Directory.CreateDirectory(saveDirectory);
-            var savePath = this.ComposeFilePath(topic, entityId, fileName);
+            var savePath = this.ComposeFilePath(topic, entityId, basePath,  fileName);
 
             using (var fileStream = new FileStream(savePath, FileMode.CreateNew))
             {
@@ -33,9 +31,9 @@
             }
         }
 
-        public void DeleteFile(string topic, int entityId, string fileName)
+        public void DeleteFile(string topic, int entityId, string basePath, string fileName)
         {
-            var filePath = this.ComposeFilePath(topic, entityId, fileName);
+            var filePath = this.ComposeFilePath(topic, entityId, basePath,  fileName);
 
             if (File.Exists(filePath))
             {
@@ -43,15 +41,15 @@
             }
         }
 
-        public string ComposeFilePath(string topic, int entityId, string fileName)
+        public string ComposeFilePath(string topic, int entityId, string basePath, string fileName)
         {
-            var directoryPath = this.ComposeDirectoryPath(topic, entityId);
+            var directoryPath = this.ComposeDirectoryPath(basePath, topic, entityId);
             return Path.Combine(directoryPath, fileName.Trim());
         }
 
-        private string ComposeDirectoryPath(string topic, int entityId)
-        {
-            return Path.Combine(this.filesDirectory, topic + entityId.ToString(CultureInfo.InvariantCulture));
+        private string ComposeDirectoryPath(string basePath, string topic, int entityId)
+        {            
+            return Path.Combine(basePath, topic + entityId.ToString(CultureInfo.InvariantCulture));
         }
     }
 }

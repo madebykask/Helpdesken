@@ -56,9 +56,9 @@ namespace DH.Helpdesk.Services.Services
 
         void AddFiles(List<NewProjectFile> files);
 
-        void DeleteFiles(int projectId, List<string> deletedRegistrationFiles);
+        void DeleteFiles(int projectId, string basePath, List<string> deletedRegistrationFiles);
 
-        byte[] GetFileContent(int id, string fileName);
+        byte[] GetFileContent(int id, string basePath, string fileName);
 
         bool FileExists(int id, string fileName);
 

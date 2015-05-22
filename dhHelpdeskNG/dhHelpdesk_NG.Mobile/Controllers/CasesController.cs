@@ -78,7 +78,7 @@
         private readonly IEmailService _emailService;
         private readonly ILanguageService _languageService;
         private readonly IGlobalSettingService _globalSettingService;
-        private readonly IMasterDataService _masterDateService;
+        private readonly IMasterDataService _masterDataService;
         private const string ParentPathDefaultValue = "--";
 
         private readonly ICaseNotifierModelFactory caseNotifierModelFactory;
@@ -152,7 +152,7 @@
             IInvoiceHelper invoiceHelper)
             : base(masterDataService)
         {
-            this._masterDateService = masterDataService;
+            this._masterDataService = masterDataService;
             this._caseService = caseService;
             this._caseSearchService = caseSearchService;
             this._caseFieldSettingService = caseFieldSettingService;
@@ -241,7 +241,7 @@
                     fd.customerSetting = this._settingService.GetCustomerSetting(cusId);
                     
                     //Customers
-                    fd.Customers = this._masterDateService.GetCustomers(userId).ToList();
+                    fd.Customers = this._masterDataService.GetCustomers(userId).ToList();
                                         
                     ////utförare
                     fd.filterPerformer = this._userService.GetUsers(cusId);                                                            
@@ -736,18 +736,41 @@
         [HttpGet]
         public UnicodeFileContentResult DownloadFile(string id, string fileName)
         {
-            var fileContent = GuidHelper.IsGuid(id)
-                                  ? this.userTemporaryFilesStorage.GetFileContent(fileName, id, ModuleName.Cases)
-                                  : this._caseFileService.GetFileContentByIdAndFileName(int.Parse(id), fileName);
+            byte [] fileContent;
+            if (GuidHelper.IsGuid(id))            
+                fileContent = this.userTemporaryFilesStorage.GetFileContent(fileName, id, ModuleName.Cases);
+            else
+            {
+                var c = this._caseService.GetCaseById(int.Parse(id));
+                var basePath = string.Empty;
+                if (c != null)
+                    basePath = this._masterDataService.GetFilePath(c.Customer_Id);
+
+                fileContent = this._caseFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
+            }
             return new UnicodeFileContentResult(fileContent, fileName);
         }
 
         [HttpGet]
         public UnicodeFileContentResult DownloadLogFile(string id, string fileName)
         {
-            var fileContent = GuidHelper.IsGuid(id)
-                                  ? this.userTemporaryFilesStorage.GetFileContent(fileName, id, ModuleName.Log)
-                                  : this._logFileService.GetFileContentByIdAndFileName(int.Parse(id), fileName);
+            byte[] fileContent;
+            if (GuidHelper.IsGuid(id))
+               fileContent = this.userTemporaryFilesStorage.GetFileContent(fileName, id, ModuleName.Log);
+            else
+            {
+                var log = this._logService.GetLogById(int.Parse(id));
+                Case c = null;
+                var basePath = string.Empty;
+                if (log != null)
+                {
+                    c = this._caseService.GetCaseById(log.CaseId);
+                    if (c != null)
+                        basePath = _masterDataService.GetFilePath(c.Customer_Id);
+                }
+
+                fileContent = this._logFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
+            }
 
             return new UnicodeFileContentResult(fileContent, fileName);
         }
@@ -815,15 +838,22 @@
             }
             else
             {
+                
+                var basePath = string.Empty;
+                var c = this._caseService.GetCaseById(int.Parse(id));
+                if (c != null)
+                    basePath = _masterDataService.GetFilePath(c.Customer_Id);
+                
                 if (this._caseFileService.FileExists(int.Parse(id), name))
                 {
                     //return;
                     //throw new HttpException(409, "Already file exist!");    because it take a long time.
-                    this._caseFileService.DeleteByCaseIdAndFileName(int.Parse(id), name);
+                    this._caseFileService.DeleteByCaseIdAndFileName(int.Parse(id), basePath, name);
                 }
 
                 var caseFileDto = new CaseFileDto(
                                 uploadedData,
+                                basePath,
                                 name,
                                 DateTime.Now,
                                 int.Parse(id),
@@ -949,7 +979,7 @@
             if (GuidHelper.IsGuid(id))
                 this.userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id, ModuleName.Cases);
             else
-                this._caseFileService.DeleteByCaseIdAndFileName(int.Parse(id), fileName.Trim());
+                this._caseFileService.DeleteByCaseIdAndFileName(int.Parse(id),"¤", fileName.Trim());
         }
 
         [HttpPost]
@@ -958,13 +988,29 @@
             if (GuidHelper.IsGuid(id))
                 this.userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id, ModuleName.Log);
             else
-                this._logFileService.DeleteByLogIdAndFileName(int.Parse(id), fileName.Trim());
+            {
+                var log = this._logService.GetLogById(int.Parse(id));
+                Case c = null;
+                var basePath = string.Empty;
+                if (log != null)
+                {
+                    c = this._caseService.GetCaseById(log.CaseId);
+                    if (c != null)
+                        basePath = _masterDataService.GetFilePath(c.Customer_Id);
+                }
+                this._logFileService.DeleteByLogIdAndFileName(int.Parse(id), basePath, fileName.Trim());
+            }
         }
 
         [HttpPost]
         public RedirectToRouteResult DeleteCase(int caseId, int customerId)
-        {
-            var caseGuid = this._caseService.Delete(caseId);
+        {            
+            var basePath = string.Empty;
+            var c = this._caseService.GetCaseById(caseId);
+            if (c != null)
+                basePath = _masterDataService.GetFilePath(c.Customer_Id);
+         
+            var caseGuid = this._caseService.Delete(caseId, basePath);
             this.userTemporaryFilesStorage.ResetCacheForObject(caseGuid.ToString());
             return this.RedirectToAction("index", "cases", new { customerId = customerId });
         }
@@ -972,7 +1018,12 @@
         [HttpPost]
         public RedirectToRouteResult DeleteLog(int id, int caseId)
         {
-            var logGuid = this._logService.Delete(id);
+            var basePath = string.Empty;
+            var c = this._caseService.GetCaseById(caseId);
+            if (c != null)
+                basePath = _masterDataService.GetFilePath(c.Customer_Id);            
+
+            var logGuid = this._logService.Delete(id, basePath);
             this.userTemporaryFilesStorage.ResetCacheForObject(logGuid.ToString());
             return this.RedirectToAction("edit", "cases", new { id = caseId });
         }
@@ -1251,21 +1302,22 @@
             caseLog.CaseHistoryId = caseHistoryId;
             caseLog.Id = this._logService.SaveLog(caseLog, temporaryLogFiles.Count, out errors);
 
+            var basePath = this._masterDataService.GetFilePath(case_.Customer_Id);
             // save case files
             if (!edit)
             {
                 var temporaryFiles = this.userTemporaryFilesStorage.FindFiles(case_.CaseGUID.ToString(), ModuleName.Cases);
-                var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, f.Name, DateTime.UtcNow, case_.Id, this.workContext.User.UserId)).ToList();
+                var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, case_.Id, this.workContext.User.UserId)).ToList();
                 this._caseFileService.AddFiles(newCaseFiles);
             }
 
             // save log files
-            var newLogFiles = temporaryLogFiles.Select(f => new CaseFileDto(f.Content, f.Name, DateTime.UtcNow, caseLog.Id, this.workContext.User.UserId)).ToList();
+            var newLogFiles = temporaryLogFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseLog.Id, this.workContext.User.UserId)).ToList();
             this._logFileService.AddFiles(newLogFiles);
 
             caseMailSetting.CustomeMailFromAddress = mailSenders;
             // send emails
-            this._caseService.SendCaseEmail(case_.Id, caseMailSetting, caseHistoryId, oldCase, caseLog, newLogFiles);
+            this._caseService.SendCaseEmail(case_.Id, caseMailSetting, caseHistoryId, basePath, oldCase, caseLog, newLogFiles);
 
             // delete temp folders                
             this.userTemporaryFilesStorage.ResetCacheForObject(case_.CaseGUID.ToString());

@@ -29,6 +29,7 @@
         ADFSSetting GetADFSSetting();
         IList<GlobalSetting> GetGlobalSettings();
         int? GetCustomerIdByEMailGUID(Guid GUID);
+        string GetFilePath(int customerId);
         
     }
 
@@ -180,5 +181,22 @@
         {
             return this._adfsRepository.GetADFSSetting();
         }
+
+        public string GetFilePath(int customerId)
+        {            
+            var customerFilePath = this._settingRepository.GetAll()
+                                                          .Where(s => s.Customer_Id == customerId)
+                                                          .Select(s => s.PhysicalFilePath)
+                                                          .FirstOrDefault();
+            if (string.IsNullOrEmpty(customerFilePath))
+            {
+                var globalSetting = this._globalSettingRepository.GetAll().FirstOrDefault();
+                if (globalSetting != null)
+                    customerFilePath = globalSetting.AttachedFileFolder;
+            }
+
+            return (string.IsNullOrEmpty(customerFilePath)? string.Empty: customerFilePath);
+        }
+
     }
 }

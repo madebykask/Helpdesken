@@ -56,9 +56,9 @@ namespace DH.Helpdesk.Dal.Repositories.Projects.Concrete
                     .ToList();
         }
 
-        public byte[] GetFileContent(int projectId, string fileName)
+        public byte[] GetFileContent(int projectId, string basePath, string fileName)
         {
-            return this.filesStorage.GetFileContent(ModuleName.Project, projectId, fileName);
+            return this.filesStorage.GetFileContent(ModuleName.Project, projectId, basePath, fileName);
         }
 
         public void Add(NewProjectFile businessModel)
@@ -67,7 +67,7 @@ namespace DH.Helpdesk.Dal.Repositories.Projects.Concrete
             this.DbContext.ProjectFiles.Add(entity);
             this.InitializeAfterCommit(businessModel, entity);
 
-            this.filesStorage.SaveFile(businessModel.Content, businessModel.Name, ModuleName.Project, businessModel.ProjectId);
+            this.filesStorage.SaveFile(businessModel.Content, businessModel.BasePath, businessModel.Name, ModuleName.Project, businessModel.ProjectId);
         }
 
         public void AddFiles(List<NewProjectFile> businessModels)
@@ -78,11 +78,11 @@ namespace DH.Helpdesk.Dal.Repositories.Projects.Concrete
             }
         }
 
-        public void DeleteFiles(int projectId, List<string> fileNames)
+        public void DeleteFiles(int projectId, string basePath, List<string> fileNames)
         {
             foreach (var fileName in fileNames)
             {
-                this.Delete(projectId, fileName);
+                this.Delete(projectId, basePath, fileName);
             }
         }
 
@@ -94,11 +94,11 @@ namespace DH.Helpdesk.Dal.Repositories.Projects.Concrete
             // todo need to remove from file storage
         }
 
-        public void Delete(int projectId, string fileName)
+        public void Delete(int projectId, string basePath, string fileName)
         {
             var projectFile = this.DbContext.ProjectFiles.Single(f => f.Project_Id == projectId && f.FileName == fileName);
             this.DbContext.ProjectFiles.Remove(projectFile);
-            this.filesStorage.DeleteFile(ModuleName.Project, projectId, fileName);
+            this.filesStorage.DeleteFile(ModuleName.Project, projectId, basePath, fileName);
         }
     }
 }

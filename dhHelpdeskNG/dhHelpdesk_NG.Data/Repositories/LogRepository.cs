@@ -144,11 +144,11 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public interface ILogFileRepository : IRepository<LogFile>
     {
-        byte[] GetFileContentByIdAndFileName(int caseId, string fileName);
+        byte[] GetFileContentByIdAndFileName(int caseId, string basePath, string fileName);
         List<string> FindFileNamesByLogId(int logId);
         List<LogFile> GetLogFilesByCaseId(int caseId);
         List<LogFile> GetLogFilesByLogId(int logId);
-        void DeleteByLogIdAndFileName(int logId, string fileName);
+        void DeleteByLogIdAndFileName(int logId, string basePath, string fileName);
     }
 
     public class LogFileRepository : RepositoryBase<LogFile>, ILogFileRepository
@@ -161,9 +161,9 @@ namespace DH.Helpdesk.Dal.Repositories
             this._filesStorage = fileStorage;
         }
 
-        public byte[] GetFileContentByIdAndFileName(int logId, string fileName)
+        public byte[] GetFileContentByIdAndFileName(int logId, string basePath, string fileName)
         {
-            return this._filesStorage.GetFileContent(ModuleName.Log, logId, fileName);
+            return this._filesStorage.GetFileContent(ModuleName.Log, logId, basePath, fileName);
         }
 
         public List<string> FindFileNamesByLogId(int logId)
@@ -186,12 +186,12 @@ namespace DH.Helpdesk.Dal.Repositories
                     select f).ToList();
         }
 
-        public void DeleteByLogIdAndFileName(int logId, string fileName)
+        public void DeleteByLogIdAndFileName(int logId, string basePath, string fileName)
         {
             var lf = this.DataContext.LogFiles.Single(f => f.Log_Id == logId && f.FileName == fileName.Trim());
             this.DataContext.LogFiles.Remove(lf);
             this.Commit();
-            this._filesStorage.DeleteFile(ModuleName.Log, logId, fileName);
+            this._filesStorage.DeleteFile(ModuleName.Log, logId, basePath, fileName);
         }
     }
 

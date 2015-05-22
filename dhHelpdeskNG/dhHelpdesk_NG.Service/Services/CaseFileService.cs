@@ -11,12 +11,12 @@
     public interface ICaseFileService
     {
         //IList<CaseFile> GetCaseFiles(int caseid);
-        byte[] GetFileContentByIdAndFileName(int caseId, string fileName);
+        byte[] GetFileContentByIdAndFileName(int caseId,string basePath, string fileName);
         List<string> FindFileNamesByCaseId(int caseId);
         void AddFile(CaseFileDto caseFileDto);
         void AddFiles(List<CaseFileDto> caseFileDtos);
         bool FileExists(int caseId, string fileName);
-        void DeleteByCaseIdAndFileName(int caseId, string fileName);
+        void DeleteByCaseIdAndFileName(int caseId, string basePath, string fileName);
 
         CaseFileModel[] GetCaseFiles(int caseId);
     }
@@ -39,9 +39,9 @@
             this._filesStorage = fileStorage; 
         }
 
-        public byte[] GetFileContentByIdAndFileName(int caseId, string fileName)
+        public byte[] GetFileContentByIdAndFileName(int caseId, string basePath, string fileName)
         {
-            return this._caseFileRepository.GetFileContentByIdAndFileName(caseId, fileName);  
+            return this._caseFileRepository.GetFileContentByIdAndFileName(caseId, basePath, fileName);  
         }
 
         public void AddFiles(List<CaseFileDto> caseFileDtos)
@@ -65,12 +65,12 @@
             this._caseFileRepository.Commit();
 
             int caseNo = this._caseFileRepository.GetCaseNumberForUploadedFile(caseFileDto.ReferenceId);
-            this._filesStorage.SaveFile(caseFileDto.Content, caseFileDto.FileName, ModuleName.Cases, caseNo);
+            this._filesStorage.SaveFile(caseFileDto.Content, caseFileDto.BasePath, caseFileDto.FileName, ModuleName.Cases, caseNo);
         }
 
-        public void DeleteByCaseIdAndFileName(int caseId, string fileName)
+        public void DeleteByCaseIdAndFileName(int caseId, string basePath, string fileName)
         {
-            this._caseFileRepository.DeleteByCaseIdAndFileName(caseId, fileName);  
+            this._caseFileRepository.DeleteByCaseIdAndFileName(caseId, basePath, fileName);  
         }
 
         public CaseFileModel[] GetCaseFiles(int caseId)

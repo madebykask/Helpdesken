@@ -31,6 +31,8 @@
 
         private readonly ICaseFileService caseFileService;
 
+        private readonly IMasterDataService masterDataService;
+
         public InvoiceController(
             IMasterDataService masterDataService, 
             IInvoiceArticleService invoiceArticleService, 
@@ -42,6 +44,7 @@
             ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory)
             : base(masterDataService)
         {
+            this.masterDataService = masterDataService;
             this.invoiceArticleService = invoiceArticleService;
             this.workContext = workContext;
             this.invoiceHelper = invoiceHelper;
@@ -134,9 +137,16 @@
 
                     try
                     {
-                        fileContent = GuidHelper.IsGuid(id)
-                                          ? this.userTemporaryFilesStorage.GetFileContent(fileName, id, ModuleName.Cases)
-                                          : this.caseFileService.GetFileContentByIdAndFileName(int.Parse(id), fileName);
+                        if (GuidHelper.IsGuid(id))
+                            fileContent = this.userTemporaryFilesStorage.GetFileContent(fileName, id, ModuleName.Cases);
+                        else
+                        {
+                            var c = this.caseService.GetCaseById(int.Parse(id));
+                            var basePath = string.Empty;
+                            if (c != null)
+                                basePath = masterDataService.GetFilePath(c.Customer_Id);
+                            fileContent = this.caseFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
+                        }
                     }
                     catch (Exception)
                     {
@@ -159,9 +169,19 @@
         [HttpGet]
         public UnicodeFileContentResult CaseFile(string id, string fileName)
         {
-            var fileContent = GuidHelper.IsGuid(id)
-                                  ? this.userTemporaryFilesStorage.GetFileContent(fileName, id, ModuleName.Cases)
-                                  : this.caseFileService.GetFileContentByIdAndFileName(int.Parse(id), fileName);
+            byte[] fileContent;
+
+            if (GuidHelper.IsGuid(id))
+                fileContent = this.userTemporaryFilesStorage.GetFileContent(fileName, id, ModuleName.Cases);
+            else
+            {
+                var c = this.caseService.GetCaseById(int.Parse(id));
+                var basePath = string.Empty;
+                if (c != null)
+                    basePath = masterDataService.GetFilePath(c.Customer_Id);
+
+                fileContent = this.caseFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
+            }
 
             return new UnicodeFileContentResult(fileContent, fileName);
         }

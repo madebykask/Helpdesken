@@ -52,6 +52,8 @@
 
         private readonly IUserPermissionsChecker userPermissionsChecker;
 
+        private readonly IMasterDataService masterDataService;
+
         #endregion
 
         #region Public Methods and Operators
@@ -70,6 +72,7 @@
             IUserPermissionsChecker userPermissionsChecker)
             : base(masterDataService)
         {
+            this.masterDataService = masterDataService;
             this.editFaqModelFactory = editFaqModelFactory;
             this.faqCategoryRepository = faqCategoryRepository;
             this.faqFileRepository = faqFileRepository;
@@ -114,10 +117,20 @@
 
         [HttpGet]
         public FileContentResult DownloadFile(string faqId, string fileName)
-        {
-            var fileContent = GuidHelper.IsGuid(faqId)
-                                  ? this.userTemporaryFilesStorage.GetFileContent(fileName, faqId)
-                                  : this.faqFileRepository.GetFileContentByFaqIdAndFileName(int.Parse(faqId), fileName);
+        {            
+            byte[] fileContent;
+
+            if (GuidHelper.IsGuid(faqId))
+                fileContent = this.userTemporaryFilesStorage.GetFileContent(fileName, faqId);
+            else
+            {
+                var faq = this.faqService.FindById(int.Parse(faqId));
+                var basePath = string.Empty;
+                if (faq != null)
+                    basePath = masterDataService.GetFilePath(faq.CustomerId);
+
+                fileContent = this.faqFileRepository.GetFileContentByFaqIdAndFileName(int.Parse(faqId), basePath, fileName);
+            }
 
             return this.File(fileContent, "application/octet-stream", fileName);
         }
@@ -354,7 +367,8 @@
                 currentDateTime);
 
             var temporaryFiles = this.userTemporaryFilesStorage.FindFiles(model.Id);
-            var newFaqFiles = temporaryFiles.Select(f => new Services.BusinessModels.Faq.NewFaqFile(f.Content, f.Name, currentDateTime)).ToList();
+            var basePath = masterDataService.GetFilePath(SessionFacade.CurrentCustomer.Id);
+            var newFaqFiles = temporaryFiles.Select(f => new Services.BusinessModels.Faq.NewFaqFile(f.Content, basePath, f.Name, currentDateTime)).ToList();
             this.faqService.AddFaq(newFaq, newFaqFiles);
             return this.RedirectToAction("Index");
         }
@@ -450,7 +464,12 @@
                     throw new HttpException((int)HttpStatusCode.Conflict, null);
                 }
 
-                var newFaqFile = new NewFaqFile(uploadedData, name, DateTime.Now, int.Parse(faqId));
+                var faq = this.faqService.FindById(int.Parse(faqId));
+                var basePath = string.Empty;
+                if (faq != null)
+                    basePath = masterDataService.GetFilePath(faq.CustomerId);
+
+                var newFaqFile = new NewFaqFile(uploadedData, basePath, name, DateTime.Now, int.Parse(faqId));
                 this.faqService.AddFile(newFaqFile);
             }
         }

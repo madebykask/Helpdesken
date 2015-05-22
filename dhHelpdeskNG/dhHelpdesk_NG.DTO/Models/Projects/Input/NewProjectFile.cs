@@ -7,10 +7,11 @@
 
     public sealed class NewProjectFile : INewBusinessModel
     {
-        public NewProjectFile(int projectId, byte[] content, string name, DateTime createdDate)
+        public NewProjectFile(int projectId, byte[] content, string basePath, string name, DateTime createdDate)
         {
             this.ProjectId = projectId;
             this.Content = content;
+            this.BasePath = BasePath;
             this.Name = name;
             this.CreatedDate = createdDate;
         }
@@ -23,6 +24,9 @@
 
         [NotNullAndEmptyArray]
         public byte[] Content { get; private set; }
+
+        [NotNullAndEmpty]
+        public string BasePath { get; private set; }
 
         [NotNullAndEmpty]
         public string Name { get; private set; }

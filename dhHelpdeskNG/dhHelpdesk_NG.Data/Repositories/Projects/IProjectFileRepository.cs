@@ -16,7 +16,7 @@ namespace DH.Helpdesk.Dal.Repositories.Projects
 
         List<string> FindFileNamesExcludeSpecified(int projectId, List<string> excludeFiles);
 
-        byte[] GetFileContent(int projectId, string fileName);
+        byte[] GetFileContent(int projectId, string basePath, string fileName);
 
         void Add(NewProjectFile businessModel);
 
@@ -24,8 +24,8 @@ namespace DH.Helpdesk.Dal.Repositories.Projects
 
         void Delete(int projectId);
 
-        void Delete(int projectId, string fileName);
+        void Delete(int projectId, string basePath, string fileName);
 
-        void DeleteFiles(int projectId, List<string> fileNames);
+        void DeleteFiles(int projectId, string basePath, List<string> fileNames);
     }
 }

@@ -2,12 +2,12 @@
 {
     public interface IFilesStorage
     {
-        void SaveFile(byte[] content, string fileName, string topic, int entityId);
+        void SaveFile(byte[] content, string basePath, string fileName, string topic, int entityId);
 
-        void DeleteFile(string topic, int entityId, string fileName);
+        void DeleteFile(string topic, int entityId, string basePath, string fileName);
 
-        byte[] GetFileContent(string topic, int entityId, string fileName);
+        byte[] GetFileContent(string topic, int entityId, string basePath, string fileName);
 
-        string ComposeFilePath(string topic, int entityId, string fileName);
+        string ComposeFilePath(string topic, int entityId, string basePath, string fileName);
     }
 }

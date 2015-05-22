@@ -63,6 +63,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
         private readonly IStateSecondaryService _stateSecondaryService;
         private readonly ICaseSolutionService _caseSolutionService;
         private readonly IWorkContext workContext;
+        private readonly IMasterDataService _masterDataService;
 
         private const string ParentPathDefaultValue = "--";
         private const string EnterMarkup = "<br />";
@@ -97,6 +98,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                               ICaseSolutionService caseSolutionService)
             : base(masterDataService, caseSolutionService)
         {
+            this._masterDataService = masterDataService;
             this._caseService = caseService;
             this._logService = logService;
             this._caseFieldSettingService = caseFieldSettingService;
@@ -367,18 +369,37 @@ namespace DH.Helpdesk.NewSelfService.Controllers
         [HttpGet]
         public FileContentResult DownloadFile(string id, string fileName)
         {
-            var fileContent = GuidHelper.IsGuid(id)
-                                  ? this._userTemporaryFilesStorage.GetFileContent(fileName, id, "")
-                                  : this._caseFileService.GetFileContentByIdAndFileName(int.Parse(id), fileName);
+            byte[] fileContent;
+            if (GuidHelper.IsGuid(id))
+               fileContent = this._userTemporaryFilesStorage.GetFileContent(fileName, id, "");
+            else
+            {
+                var c = this._caseService.GetCaseById(int.Parse(id));
+                var basePath = string.Empty;
+                if (c != null)
+                    basePath = this._masterDataService.GetFilePath(c.Customer_Id);
+
+                fileContent = this._caseFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
+            }
+
             return this.File(fileContent, "application/octet-stream", fileName);
         }
 
         [HttpGet]
         public FileContentResult DownloadNewCaseFile(string id, string fileName)
         {
-            var fileContent = GuidHelper.IsGuid(id)
-                                  ? this._userTemporaryFilesStorage.GetFileContent(fileName, id, "")
-                                  : this._caseFileService.GetFileContentByIdAndFileName(int.Parse(id), fileName);
+            byte[] fileContent;
+            if (GuidHelper.IsGuid(id))
+                fileContent =  this._userTemporaryFilesStorage.GetFileContent(fileName, id, "");
+            else
+            {
+                var c = this._caseService.GetCaseById(int.Parse(id));
+                var basePath = string.Empty;
+                if (c != null)
+                    basePath = this._masterDataService.GetFilePath(c.Customer_Id);
+
+                fileContent = this._caseFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
+            }
             return this.File(fileContent, "application/octet-stream", fileName);
         }
 
@@ -437,7 +458,17 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             }
             else
             {
-                this._logFileService.DeleteByLogIdAndFileName(int.Parse(id), fileName.Trim());
+                var log = this._logService.GetLogById(int.Parse(id));
+                Case c = null;
+                var basePath = string.Empty;
+                if (log != null)
+                {
+                    c = this._caseService.GetCaseById(log.CaseId);
+                    if (c != null)
+                        basePath = _masterDataService.GetFilePath(c.Customer_Id);
+                }
+
+                this._logFileService.DeleteByLogIdAndFileName(int.Parse(id), basePath, fileName.Trim());
             }
         }
 
@@ -450,8 +481,12 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             }
             else
             {
-                this._caseFileService.DeleteByCaseIdAndFileName(int.Parse(id), fileName.Trim());
+                var c = this._caseService.GetCaseById(int.Parse(id));
+                var basePath = string.Empty;
+                if (c != null)
+                    basePath = _masterDataService.GetFilePath(c.Customer_Id);
 
+                this._caseFileService.DeleteByCaseIdAndFileName(int.Parse(id), basePath, fileName.Trim());
             }
         }
 
@@ -478,9 +513,23 @@ namespace DH.Helpdesk.NewSelfService.Controllers
         [HttpGet]
         public FileContentResult DownloadLogFile(string id, string fileName)
         {
-            var fileContent = GuidHelper.IsGuid(id)
-                                  ? this._userTemporaryFilesStorage.GetFileContent(fileName, id, ModuleName.Log)
-                                  : this._logFileService.GetFileContentByIdAndFileName(int.Parse(id), fileName);
+            byte[] fileContent;
+            if (GuidHelper.IsGuid(id))
+                fileContent = this._userTemporaryFilesStorage.GetFileContent(fileName, id, ModuleName.Log);
+            else
+            {
+                var log = this._logService.GetLogById(int.Parse(id));
+                Case c = null;
+                var basePath = string.Empty;
+                if (log != null)
+                {
+                    c = this._caseService.GetCaseById(log.CaseId);
+                    if (c != null)
+                        basePath = _masterDataService.GetFilePath(c.Customer_Id);
+                } 
+
+                fileContent = this._logFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
+            }
 
             return this.File(fileContent, "application/octet-stream", fileName);
         }
@@ -570,8 +619,9 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             var temporaryLogFiles = this._userTemporaryFilesStorage.GetFiles(currentCase.CaseGUID.ToString(), "");
             caseLog.Id = this._logService.SaveLog(caseLog, temporaryLogFiles.Count, out errors);
 
+            var basePath = this._masterDataService.GetFilePath(currentCase.Customer_Id);
             // save log files
-            var newLogFiles = temporaryLogFiles.Select(f => new CaseFileDto(f.Content, f.Name, DateTime.UtcNow, caseLog.Id)).ToList();
+            var newLogFiles = temporaryLogFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseLog.Id)).ToList();
             this._logFileService.AddFiles(newLogFiles);
 
             // send emails
@@ -582,7 +632,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                                                        cs.DontConnectUserToWorkingGroup
                                                        );
 
-            this._caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, newLogFiles);            
+            this._caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, basePath, newLogFiles);            
             //return Json(new { url = backUrlAddresss });            
         }
 
@@ -652,16 +702,17 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             // save case and case history
             int caseHistoryId = this._caseService.SaveCase(newCase, null, caseMailSetting, 0, SessionFacade.CurrentUserIdentity.UserId, out errors);
 
+            var basePath = this._masterDataService.GetFilePath(newCase.Customer_Id);
             // save case files            
             var temporaryFiles = this._userTemporaryFilesStorage.GetFiles(caseFileKey, ModuleName.Cases);
-            var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, f.Name, DateTime.UtcNow, newCase.Id)).ToList();
+            var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, newCase.Id)).ToList();
             this._caseFileService.AddFiles(newCaseFiles);
 
             // delete temp folders                
             this._userTemporaryFilesStorage.DeleteFiles(caseFileKey);
 
             // send emails
-            this._caseService.SendCaseEmail(newCase.Id, caseMailSetting, caseHistoryId);
+            this._caseService.SendCaseEmail(newCase.Id, caseMailSetting, caseHistoryId, basePath);
 
             return newCase.Id;
         }

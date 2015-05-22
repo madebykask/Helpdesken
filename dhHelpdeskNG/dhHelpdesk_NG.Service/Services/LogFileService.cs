@@ -10,9 +10,9 @@
 
     public interface ILogFileService
     {
-        byte[] GetFileContentByIdAndFileName(int logId, string fileName);
+        byte[] GetFileContentByIdAndFileName(int logId, string basePath, string fileName);
         List<string> FindFileNamesByLogId(int logId);
-        void DeleteByLogIdAndFileName(int logId, string fileName);
+        void DeleteByLogIdAndFileName(int logId, string basePath, string fileName);
         void AddFile(CaseFileDto fileDto);
         void AddFiles(List<CaseFileDto> fileDtos);
     }
@@ -33,9 +33,9 @@
             this._filesStorage = filesStorage; 
         }
 
-        public byte[] GetFileContentByIdAndFileName(int logId, string fileName)
+        public byte[] GetFileContentByIdAndFileName(int logId, string basePath, string fileName)
         {
-            return this._logFileRepository.GetFileContentByIdAndFileName(logId, fileName);  
+            return this._logFileRepository.GetFileContentByIdAndFileName(logId, basePath, fileName);  
         }
 
         public List<string> FindFileNamesByLogId(int logId)
@@ -43,9 +43,9 @@
             return this._logFileRepository.FindFileNamesByLogId(logId);  
         }
 
-        public void DeleteByLogIdAndFileName(int logId, string fileName)
+        public void DeleteByLogIdAndFileName(int logId, string basePath, string fileName)
         {
-            this._logFileRepository.DeleteByLogIdAndFileName(logId, fileName);
+            this._logFileRepository.DeleteByLogIdAndFileName(logId, basePath, fileName);
         }
 
         public void AddFiles(List<CaseFileDto> fileDtos)
@@ -67,7 +67,7 @@
 
             this._logFileRepository.Add(file);
             this._logFileRepository.Commit();
-            this._filesStorage.SaveFile(fileDto.Content, fileDto.FileName, ModuleName.Log, fileDto.ReferenceId);
+            this._filesStorage.SaveFile(fileDto.Content, fileDto.BasePath, fileDto.FileName, ModuleName.Log, fileDto.ReferenceId);
         }
 
     }

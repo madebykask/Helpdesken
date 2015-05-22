@@ -120,6 +120,8 @@
             this.Property(x => x.XMLLogLevel).IsRequired();
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             this.Property(x => x.ModuleCaseInvoice).IsRequired();
+            this.Property(x => x.PhysicalFilePath).IsOptional();
+            this.Property(x => x.VirtualFilePath).IsOptional();
 
             this.ToTable("tblsettings");
         }

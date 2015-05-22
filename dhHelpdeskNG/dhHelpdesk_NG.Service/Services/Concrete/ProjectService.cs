@@ -179,15 +179,15 @@
             this.projectFileRepository.Commit();
         }
 
-        public void DeleteFiles(int projectId, List<string> deletedRegistrationFiles)
+        public void DeleteFiles(int projectId, string basePath, List<string> deletedRegistrationFiles)
         {
-            this.projectFileRepository.DeleteFiles(projectId, deletedRegistrationFiles);
+            this.projectFileRepository.DeleteFiles(projectId, basePath, deletedRegistrationFiles);
             this.projectFileRepository.Commit();
         }
 
-        public byte[] GetFileContent(int id, string fileName)
+        public byte[] GetFileContent(int id,string basePath, string fileName)
         {
-            var fileContent = this.projectFileRepository.GetFileContent(id, fileName);
+            var fileContent = this.projectFileRepository.GetFileContent(id, basePath, fileName);
             return fileContent;
         }
 

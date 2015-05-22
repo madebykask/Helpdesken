@@ -18,7 +18,7 @@
         CaseLog InitCaseLog(int userId, string regUser);
         IList<Log> GetLogsByCaseId(int caseId);
         CaseLog GetLogById(int id);
-        Guid Delete(int id);
+        Guid Delete(int id, string basePath);
 
         IEnumerable<LogOverview> GetCaseLogOverviews(int caseId);
     }
@@ -97,7 +97,7 @@
             return errors;
         }
 
-        public Guid Delete(int id)
+        public Guid Delete(int id, string basePath)
         {
             Guid ret = Guid.Empty;
 
@@ -107,7 +107,7 @@
             {
                 foreach (var f in logFiles)
                 {
-                    this._filesStorage.DeleteFile(ModuleName.Log, f.Log_Id, f.FileName);
+                    this._filesStorage.DeleteFile(ModuleName.Log, f.Log_Id, basePath, f.FileName);
                     this._logFileRepository.Delete(f);
                 }
                 this._logFileRepository.Commit();
