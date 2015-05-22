@@ -41,16 +41,16 @@
                                     &nbsp; &nbsp; @Translation.Get("Visa FAQ på självservice", Enums.TranslationSource.TextTranslation)
                                 </td>
                             </tr>
-                            <tr style="height:40px">
+
+                            @*<tr style="height:40px">
                                 <td></td>
                                 <td>
                                     <input type="checkbox" name="customer.ShowDashboardOnExternalPage" @(Model.Customer.ShowDashboardOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
                                     <input type="hidden" name="customer.ShowDashboardOnExternalPage" value="0" />
                                     &nbsp; &nbsp; @Translation.Get("Visa Dashboard på självservice", Enums.TranslationSource.TextTranslation)
                                 </td>
-                            </tr>
+                            </tr>*@
                             
-
                             <tr style="height:40px">
                                 <td></td>
                                 <td>
@@ -68,14 +68,16 @@
                                     &nbsp; &nbsp; @Translation.Get("Visa Hjälp på självservice", Enums.TranslationSource.TextTranslation)
                                 </td>
                             </tr>
-                            <tr style="height:40px">
+
+                            @*<tr style="height:40px">
                                 <td></td>
                                 <td>
                                     <input type="checkbox" name="customer.PasswordRequiredOnExternalPage" @(Model.Customer.PasswordRequiredOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
                                     <input type="hidden" name="customer.PasswordRequiredOnExternalPage" value="0" />
                                     &nbsp; &nbsp; @Translation.Get("Självservice kräver lösenord", Enums.TranslationSource.TextTranslation)
                                 </td>
-                            </tr>
+                            </tr>*@
+
                             <tr style="height:40px">
                                 <td></td>
                                 <td>

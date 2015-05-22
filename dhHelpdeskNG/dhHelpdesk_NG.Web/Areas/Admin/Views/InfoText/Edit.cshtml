@@ -96,11 +96,13 @@
             var list = $("#languageList");
             list.html("");
             if (id != "") {
-                $.get('/InfoText/UpdateLanguageList/' + id + '?customerId=' + $("#customerId").val() +
-                                                      '&infoTypeId=' + $("#infoTypeId").val() + 
-                                                      '&infoTextType=' + $("#infoTextType").val(), function (result) {
-                    list.html(result);
-                });
+                window.location.href =  "edit?infoTypeId=" + $("#infoTypeId").val() + "&customerId=" + $("#customerId").val() + 
+                                            "&languageId=" + id + "&infoTextType=SelfService";
+                //$.get('/InfoText/UpdateLanguageList/' + id + '?customerId=' + $("#customerId").val() +
+                //                                      '&infoTypeId=' +  + 
+                //                                      '&infoTextType=' + $("#infoTextType").val(), function (result) {
+                    //list.html(result);
+                //});
             }
         }
     </script>

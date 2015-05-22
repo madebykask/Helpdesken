@@ -138,7 +138,7 @@
         }
 
         [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")]
-        public string UpdateLanguageList(int id, int customerId, int infoTypeId, InfoTextTypes infoTextType)
+        public ActionResult UpdateLanguageList(int id, int customerId, int infoTypeId, InfoTextTypes infoTextType)
         {
 
             var customer = this._customerService.GetCustomer(customerId);
@@ -151,11 +151,13 @@
             model.InfoText = infoTextToUpdate;
             model.Customer = customer;
 
-            this.UpdateModel(model, "infoText");
+            return RedirectToAction("Edit", new {infoTypeId = infoTypeId, languageId = id, infoTextType = infoTextType}); 
 
-            //return View(model);
-            var view = "~/areas/admin/views/Infotext/_InfoTextPartialView.cshtml";
-            return this.RenderRazorViewToString(view, model);
+            //this.UpdateModel(model, "infoText");
+
+            ////return View(model);
+            //var view = "~/areas/admin/views/Infotext/_InfoTextPartialView.cshtml";
+            //return this.RenderRazorViewToString(view, model);
         }
 
         private InfoTextShowViewModel CreateShowViewModel(InfoText infoText, Customer customer)

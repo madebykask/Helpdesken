@@ -99,7 +99,29 @@
                             </tr>
                         } 
 
-                         @if (Model.InfoTextType == InfoTextTypes.SelfService)
+                        @if (Model.InfoTextType == InfoTextTypes.SelfService)
+                        {
+                            <tr>
+                                <td>
+                                    <a href="@Url.Action("edit", "infotext", new { area = "admin", infoTypeId = 8, customerId = Model.Customer.Id, 
+                                                                                   languageId = Model.Customer.Language_Id, infoTextType = Model.InfoTextType })">
+                                        @Translation.Get("Help Page Content", Enums.TranslationSource.TextTranslation)</a>
+                                </td>
+                            </tr>
+                        }
+
+                        @if (Model.InfoTextType == InfoTextTypes.SelfService)
+                        {
+                            <tr>
+                                <td>
+                                    <a href="@Url.Action("edit", "infotext", new { area = "admin", infoTypeId = 9, customerId = Model.Customer.Id,
+                                                                                   languageId = Model.Customer.Language_Id, infoTextType = Model.InfoTextType })">
+                                        @Translation.Get("About Page Content", Enums.TranslationSource.TextTranslation)</a>
+                                </td>
+                            </tr>
+                        } 
+
+                        @if (Model.InfoTextType == InfoTextTypes.SelfService)
                         {
                             <tr>
                                 <td>

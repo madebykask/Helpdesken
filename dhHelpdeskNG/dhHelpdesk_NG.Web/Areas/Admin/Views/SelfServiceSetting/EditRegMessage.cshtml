@@ -29,16 +29,11 @@
                 <div class="tab-pane tab-pane-border active" id="fragment-1">
                     <h4>@Translation.Get("Registration Message", Enums.TranslationSource.TextTranslation)</h4>
                     <div class="formContainer">
-                        <table class="tableform">                            
-                            <tr>
-                                <td style="vertical-align: top">
-                                    @Translation.Get("Meddelande", Enums.TranslationSource.TextTranslation)
-                                </td>
-                                <td>
-                                    @Html.TextAreaFor(model => model.Customer.RegistrationMessage, new { style = "width:600px; height:150px;", maxlength = "1000" })
-                                </td>
-                            </tr>
-                        </table>
+                        <div class="row">
+                            <div class="span12">
+                                @Html.TextAreaFor(model => model.Customer.RegistrationMessage, new { style = "width:600px; height:300px;", maxlength = "1000", @class="richtexteditor" })
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
