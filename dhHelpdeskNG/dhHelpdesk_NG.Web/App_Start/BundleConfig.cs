@@ -66,7 +66,8 @@
                             "~/Content/js/bootstrap-switch.min.js",
                             "~/Content/js/dhHelpdesk-head.js",
                             "~/Content/js/ui/dh.ui.hierarchylist.js",
-                            "~/Content/js/jquery.dataTables.min.js"));
+                            "~/Content/js/jquery.dataTables.min.js",
+                            "~/Content/js/tinymce/tinymce.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery-typing").Include(
                             "~/Content/js/jquery.typing-0.2.0.min.js"));
