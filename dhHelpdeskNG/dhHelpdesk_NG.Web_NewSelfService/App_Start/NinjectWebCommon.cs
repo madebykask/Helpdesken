@@ -224,8 +224,9 @@ namespace DH.Helpdesk.NewSelfService
             kernel.Bind<IBulletinBoardService>().To<BulletinBoardService>();
             kernel.Bind<ICaseSolutionSettingService>().To<CaseSolutionSettingService>();
             kernel.Bind<IDocumentService>().To<DocumentService>();
-            kernel.Bind<ISurveyService>().To<SurveyService>(); 
-             
+            kernel.Bind<ISurveyService>().To<SurveyService>();
+            kernel.Bind<IHolidayService>().To<HolidayService>();
+
             // Cache
             kernel.Bind<ICacheProvider>().To<CacheProvider>();
 

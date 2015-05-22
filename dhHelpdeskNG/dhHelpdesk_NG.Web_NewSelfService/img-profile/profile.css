@@ -15,7 +15,7 @@ img
   line-height: 20px;
 }
 .toplogo {
-    background: url(../img-profile/ikea.png);
+    background: url(ikea.png);
     background-repeat: no-repeat;
     width: 261px;
     height: 28px;
@@ -171,8 +171,8 @@ img
   border-left:1px solid #fff;
 }
 
-.ico-home {
-    background: url(../img/ico-home.png);
+/*.ico-home {
+    background: url(ico-home.png);
     background-repeat: no-repeat;
     width: 51px;
     height: 40px;
@@ -180,7 +180,7 @@ img
     padding:0;
 }
 .ico-new {
-    background: url(../img/ico-new.png);
+    background: url(ico-new.png);
     background-repeat: no-repeat;
     width: 51px;
     height: 40px;
@@ -188,7 +188,7 @@ img
     padding:0;
 }
 .ico-ongoing {
-    background: url(../img/ico-ongoing.png);
+    background: url(/ico-ongoing.png);
     background-repeat: no-repeat;
     width: 51px;
     height: 40px;
@@ -196,7 +196,7 @@ img
     padding:0;
 }
 .ico-finished {
-    background: url(../img/ico-finished.png);
+    background: url(ico-finished.png);
     background-repeat: no-repeat;
     width: 51px;
     height: 40px;
@@ -204,7 +204,7 @@ img
     padding:0;
 }
 .ico-documents {
-    background: url(../img/ico-documents.png);
+    background: url(ico-documents.png);
     background-repeat: no-repeat;
     width: 51px;
     height: 40px;
@@ -213,7 +213,7 @@ img
 }
 
 .ico-coworkers {
-    background: url(../img/ico-coworkers.png);
+    background: url(ico-coworkers.png);
     background-repeat: no-repeat;
     width: 51px;
     height: 40px;
@@ -221,13 +221,13 @@ img
     padding:0;
 }
 .ico-help {
-    background: url(../img/ico-help.png);
+    background: url(ico-help.png);
     background-repeat: no-repeat;
     width: 51px;
     height: 40px;
     margin:0 auto;
     padding:0;
-}
+}*/
 
 
 
@@ -341,9 +341,6 @@ img
 }
 
 
-
-
-
 .btn-dhblue {
   color: #fff;
   background-color: #0067b2;
@@ -360,7 +357,7 @@ img
 }
     
 .bulletinimg {
-    background: url(../img-profile/ikea-peoplestart.png);
+    background: url(ikea-peoplestart.png);
     background-repeat:no-repeat;
     background-size:100% auto;
     min-height:300px;

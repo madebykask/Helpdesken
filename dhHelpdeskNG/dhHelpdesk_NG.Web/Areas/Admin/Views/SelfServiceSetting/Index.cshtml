@@ -25,12 +25,12 @@
             </ul>
             <div class="tab-content">
                 <div class="tab-pane tab-pane-border active" id="fragment-1">
-                    <h4>@Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)</h4>
+                    <h4>@Translation.Get("Självservice - Meny", Enums.TranslationSource.TextTranslation)</h4>
                     <div class="formContainer">
                         <table class="tableform">
                             <tr>
                                 <td class="span3">
-                                    @Translation.Get("Visa på självservice", Enums.TranslationSource.TextTranslation)
+                                    @Translation.Get("Visa i menyn", Enums.TranslationSource.TextTranslation)
                                 </td>
                             </tr>                            
                             <tr style="height:30px">
@@ -39,36 +39,6 @@
                                     <input type="checkbox" name="customer.ShowFAQOnExternalPage" @(Model.Customer.ShowFAQOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
                                     <input type="hidden" name="customer.ShowFAQOnExternalPage" value="0" />
                                     &nbsp; &nbsp; @Translation.Get("Visa FAQ på självservice", Enums.TranslationSource.TextTranslation)
-                                </td>
-                            </tr>
-                            <tr style="height:40px">
-                                <td></td>
-                                <td style="vertical-align:middle">
-                                    <input type="checkbox" id="chkFAQOnStartPage" name="customer.ShowFAQOnExternalStartPage" @(Model.Customer.ShowFAQOnExternalStartPage > 0 ? "checked=checked" : "") value="1"/>
-                                    <input type="hidden" name="customer.ShowFAQOnExternalStartPage" value="0" />
-                                    &nbsp; &nbsp; @Translation.Get("Visa FAQ på självservice startsida", Enums.TranslationSource.TextTranslation)
-                                    
-                                    <span id="spNums"> 
-                                        &nbsp; &nbsp; @Translation.Get("Antal rader", Enums.TranslationSource.TextTranslation):     
-                                        @Html.DropDownListFor(m => Model.Customer.ShowFAQOnExternalStartPage, Model.StartPageFAQNums, new { style = "width: 70px;" }) 
-                                        @*<select id="Customer.ShowFAQOnExternalStartPage" name="Customer.ShowFAQOnExternalStartPage">                                            
-                                            @if (Model.StartPageFAQNums != null)
-                                            {
-                                                foreach (var e in Model.StartPageFAQNums)
-                                                {
-                                                  <option value="@e.Value" @(e.Selected? "Selected" : "")> @e.Text </option>
-                                                }
-                                            }
-                                        </select>*@
-                                    </span>                                                                                                         
-                                </td>
-                            </tr>
-                            <tr style="height:40px">
-                                <td></td>
-                                <td>
-                                    <input type="checkbox" name="customer.ShowBulletinBoardOnExtPage" @(Model.Customer.ShowBulletinBoardOnExtPage == 1 ? "checked=checked" : "") value="1"/>
-                                    <input type="hidden" name="customer.ShowBulletinBoardOnExtPage" value="0" />
-                                    &nbsp; &nbsp; @Translation.Get("Visa anslagstavlan på självservice", Enums.TranslationSource.TextTranslation)
                                 </td>
                             </tr>
                             <tr style="height:40px">
@@ -95,7 +65,7 @@
                                 <td>
                                     <input type="checkbox" name="customer.ShowHelpOnExternalPage" @(Model.Customer.ShowHelpOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
                                     <input type="hidden" name="customer.ShowHelpOnExternalPage" value="0" />
-                                    &nbsp; &nbsp; @Translation.Get("Visa hjälp på självservice", Enums.TranslationSource.TextTranslation)
+                                    &nbsp; &nbsp; @Translation.Get("Visa Hjälp på självservice", Enums.TranslationSource.TextTranslation)
                                 </td>
                             </tr>
                             <tr style="height:40px">
@@ -140,6 +110,48 @@
                                     </table>                                    
                                 </td>                                
                             </tr>                            
+                        </table>
+                    </div>
+
+
+                    <h4>@Translation.Get("Inställningar - Startsida", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="formContainer">
+                        <table class="tableform">
+                            <tr>
+                                <td class="span3">
+                                    @Translation.Get("Visa på startsidan", Enums.TranslationSource.TextTranslation)
+                                </td>
+                            </tr>  
+                            <tr style="height:40px">
+                                <td></td>
+                                <td style="vertical-align:middle">
+                                    <input type="checkbox" id="chkFAQOnStartPage" name="customer.ShowFAQOnExternalStartPage" @(Model.Customer.ShowFAQOnExternalStartPage > 0 ? "checked=checked" : "") value="1"/>
+                                    <input type="hidden" name="customer.ShowFAQOnExternalStartPage" value="0" />
+                                    &nbsp; &nbsp; @Translation.Get("Visa FAQ på självservice startsida", Enums.TranslationSource.TextTranslation)
+                                    
+                                    <span id="spNums"> 
+                                        &nbsp; &nbsp; @Translation.Get("Antal rader", Enums.TranslationSource.TextTranslation):     
+                                        @Html.DropDownListFor(m => Model.Customer.ShowFAQOnExternalStartPage, Model.StartPageFAQNums, new { style = "width: 70px;" }) 
+                                        @*<select id="Customer.ShowFAQOnExternalStartPage" name="Customer.ShowFAQOnExternalStartPage">                                            
+                                            @if (Model.StartPageFAQNums != null)
+                                            {
+                                                foreach (var e in Model.StartPageFAQNums)
+                                                {
+                                                  <option value="@e.Value" @(e.Selected? "Selected" : "")> @e.Text </option>
+                                                }
+                                            }
+                                        </select>*@
+                                    </span>                                                                                                         
+                                </td>
+                            </tr>
+                            <tr style="height:40px">
+                                <td></td>
+                                <td>
+                                    <input type="checkbox" name="customer.ShowBulletinBoardOnExtPage" @(Model.Customer.ShowBulletinBoardOnExtPage == 1 ? "checked=checked" : "") value="1"/>
+                                    <input type="hidden" name="customer.ShowBulletinBoardOnExtPage" value="0" />
+                                    &nbsp; &nbsp; @Translation.Get("Visa anslagstavlan på självservice", Enums.TranslationSource.TextTranslation)
+                                </td>
+                            </tr>                              
                         </table>
                     </div>
                 </div>
