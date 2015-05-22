@@ -33,7 +33,6 @@
             bundles.Add(new ScriptBundle(ScriptNames.DynamicCase).Include(
                             "~/Content/js/DynamicCase/iframeResizer.js",
                             "~/Content/js/DynamicCase/container.js"));
-            asdfasdfasdf
             bundles.Add(new ScriptBundle("~/bundles/common").Include(
 #if DEBUG
                             "~/Scripts/jquery-1.8.3.js",
