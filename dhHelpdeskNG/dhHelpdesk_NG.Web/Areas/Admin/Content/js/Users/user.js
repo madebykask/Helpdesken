@@ -113,6 +113,11 @@ $(function () {
         var setAccess = function (hasAccess) {
             isHasAccess = hasAccess;
             my.element.prop('disabled', !isHasAccess);
+            if (isHasAccess) {
+                $(my.element).parents('td').removeClass('disabled');
+            } else {
+                $(my.element).parents('td').addClass('disabled');
+            }
         }
 
         var getIsHasAccess = function() {

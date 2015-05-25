@@ -3314,3 +3314,8 @@ div.DTFC_LeftFootWrapper table {
 .case-remaining-time {
     font-size: small;
 }
+
+td.disabled 
+{
+    color: lightgray;
+}
