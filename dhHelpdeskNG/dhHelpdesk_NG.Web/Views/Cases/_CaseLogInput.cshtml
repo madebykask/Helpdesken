@@ -9,7 +9,7 @@
 
 @{ 
     var readonlyMode = false;
-    if (ViewData.Keys.Any() && ViewData.Keys.Contains("readonlyLog"))
+    if ((ViewData.Keys.Any() && ViewData.Keys.Contains("readonlyLog")) || Model.EditMode == Enums.AccessMode.ReadOnly)
     {
         readonlyMode = Convert.ToBoolean(ViewData["readonlyLog"]);
     }
@@ -42,7 +42,7 @@
 
                 <li>
                     <div class="checkbox">
-                        @if (Model.Disable_SendMailAboutCaseToNotifier)
+                        @if (Model.Disable_SendMailAboutCaseToNotifier || Model.EditMode == Enums.AccessMode.ReadOnly)
                         {                        
                             @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier,
                                 new { @disabled = "disabled", InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool() })
@@ -58,7 +58,14 @@
                 <li class="secspace"></li>
                 <li>
                     <div class="checkbox">
-                        @Html.CheckBoxFor(model => model.CaseLog.HighPriority)
+                        @if (Model.EditMode == Enums.AccessMode.ReadOnly)
+                        {
+                            @Html.CheckBoxFor(model => model.CaseLog.HighPriority, new { @disabled = true})
+                        }
+                        else
+                        {
+                            @Html.CheckBoxFor(model => model.CaseLog.HighPriority)
+                        }
                         <span class="lbl">@Translation.Get("Hög prioritet", SessionFacade.CurrentCaseLanguageId) </span>
                     </div>
                 </li>
@@ -126,7 +133,7 @@
                     @CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, "Intern notering")
                 </td>
                 <td>
-                    @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Description, CaseSolutionFields.Description) && !readonlyMode)
+                    @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote) && !readonlyMode)
                     {
                         @Html.TextAreaFor(model => model.CaseLog.TextInternal, new { style = "height:105px;" })
                     }
@@ -139,7 +146,14 @@
                 {
                     <td>
                         <div class="checkbox">
-                            @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutLog)
+                            @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote))
+                            {
+                                @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutLog, new { @disabled = true})
+                            }
+                            else
+                            {
+                                @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutLog)
+                            }
                             <span class="lbl">@Translation.Get("Skicka intern loggpost till", SessionFacade.CurrentCaseLanguageId)</span>
                         </div>
                         <div id="divEmailRecepientsInternalLog" style="display: none">
@@ -157,7 +171,14 @@
                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Filename, "Bifogad fil")
                         </td>
                         <td>
-                            <a href="#upload_logfiles_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentCaseLanguageId)</a>
+                            @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote))
+                            {
+                                <a href="#upload_logfiles_popup" role="button" class="btn disabled" disabled="true" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentCaseLanguageId)</a>
+                            }
+                            else
+                            {
+                                <a href="#upload_logfiles_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentCaseLanguageId)</a>
+                            }
                         </td>
                     </tr>                
                 }            

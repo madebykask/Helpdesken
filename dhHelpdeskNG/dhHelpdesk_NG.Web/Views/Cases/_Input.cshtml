@@ -134,7 +134,7 @@
                                                     }
                                                 </td>
                                                 <td>
-                                                    <a href="#" id="AddNotifier" class="btn">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>
+                                                    <a href="#" id="AddNotifier" class="btn @Model.GetDisabledString(GlobalEnums.TranslationCaseFields.ReportedBy, CaseSolutionFields.UserNumber)">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>
                                                     @if (Model.CanGetRelatedCases)
                                                     {
                                                         <a href="#" data-field="relatedCases" style="display: none;" title="@Translation.Get("Relaterade ärenden")" class="btn"><i class="icon-list"></i></a>                                                        
@@ -163,7 +163,14 @@
                                                     @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Persons_EMail, "E-post")
                                                 </td>
                                                 <td class="span4">
-                                                    @Html.TextBoxFor(model => model.case_.PersonsEmail, new { maxlength = "100" })
+                                                     @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Persons_EMail, CaseSolutionFields.Email))
+                                                     {
+                                                         @Html.TextBoxFor(model => model.case_.PersonsEmail, new { maxlength = "100", @readonly = "readonly" })
+                                                     }
+                                                     else
+                                                     {
+                                                         @Html.TextBoxFor(model => model.case_.PersonsEmail, new { maxlength = "100" })
+                                                     }
                                                 </td>
                                                 <td style="@Model.GetFieldStyle(CaseSolutionFields.Email)">
                                                     <label class="checkbox">
@@ -180,7 +187,7 @@
 
                                                     @if (Model.Languages != null && Model.Languages.Count() > 1 && Model.case_.Id == 0)
                                                     {
-                                                        <select id="case__RegLanguage_Id" name="case_.RegLanguage_Id" class="span2">
+                                                        <select id="case__RegLanguage_Id" name="case_.RegLanguage_Id" class="span2" @(Model.IsReadOnly(CaseSolutionFields.Email) ? "disabled=disabled" : string.Empty)>
                                                             @foreach (var e in Model.Languages)
                                                             {
                                                                 <option value="@e.Id" @e.Id.IdIsSelected(SessionFacade.CurrentLanguageId.ToString()) >@Translation.Get(e.Name, SessionFacade.CurrentLanguageId)</option>
@@ -191,7 +198,7 @@
                                                     {
                                                         if (Model.Languages != null && Model.Languages.Count() > 1)
                                                         {                                            
-                                                        <select id="case__RegLanguage_Id" name="case_.RegLanguage_Id" class="span2">
+                                                        <select id="case__RegLanguage_Id" name="case_.RegLanguage_Id" class="span2" @(Model.IsReadOnly(CaseSolutionFields.Email) ? "disabled=disabled" : string.Empty)>
                                                             @foreach (var e in Model.Languages)
                                                             {
                                                                 <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.RegLanguage_Id.ToString()) >@Translation.Get(e.Name, SessionFacade.CurrentLanguageId)</option>
@@ -200,7 +207,7 @@
                                                         }
                                                         else
                                                         {
-                                                        @Html.HiddenFor(m => Model.case_.RegLanguage_Id);
+                                                            @Html.HiddenFor(m => Model.case_.RegLanguage_Id);
                                                         }
                                                     }
                                                 </td>
@@ -814,18 +821,22 @@
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ContactBeforeAction, "Telefonkontakt")
                                         </td>
                                         <td colspan="2">
-                                            @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.SMS, CaseSolutionFields.SMS))
+                                            @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.ContactBeforeAction, CaseSolutionFields.ContactBeforeAction))
                                             {
                                                 if (Model.customerUserSetting.ContactBeforeActionPermission == 1 || Model.case_.Id == 0)
-                                                {                                                
+                                                {
                                                     <input type="checkbox" name="case_.ContactBeforeAction" @(Model.case_.ContactBeforeAction == 1 ? "checked=checked" : "") value="1" class="switchcheckbox" />
                                                     <input type="hidden" name="case_.ContactBeforeAction" value="0" />
                                                 }
                                                 else
-                                                {                                            
+                                                {
                                                     @Model.case_.ContactBeforeAction.IntToYES_NO()
                                                     @Html.HiddenFor(model => model.case_.ContactBeforeAction)
                                                 }
+                                            }
+                                            else
+                                            {
+                                                <input type="checkbox" name="case_.ContactBeforeAction" value="@Model.case_.ContactBeforeAction" class="switchcheckbox" disabled="disabled" />
                                             }
                                         </td>
                                     </tr>
