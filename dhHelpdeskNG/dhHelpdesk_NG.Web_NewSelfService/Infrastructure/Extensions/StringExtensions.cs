@@ -315,7 +315,7 @@
                 lowerStr = res.ToLower();
             }
 
-            //User email
+            //Principal User Id
             if (lowerStr.IndexOf("[#6]") > 0 && SessionFacade.CurrentUserIdentity != null)
             {
                 res = Regex.Replace(res, @"\[#6\]", 

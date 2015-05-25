@@ -18,6 +18,22 @@
                                            })
         </td>
     </tr>
+    <tr>
+        <td>
+            @if (Model.InfoTextGroup == InfoTextGroup.SelfService)
+            {
+                <p> 
+                    <br />
+                    <h4> Paramaters:</h4> 
+                                    Cutomer Id: [#1]  <br/> Customer Name: [#2] <br/> 
+                                    Language Id: [#3] <br/> Language Name: [#4] <br/> 
+                                    Principal User: [#5] <br/> Principal User Id: [#6] <br/> 
+                                    User First Name: [#7] <br/> User Sure Name: [#8] <br/>
+                                    User Email: [#9] <br/> Domain: [#10] <br/> Employee Number: [#11] 
+                </p> 
+            }
+        </td>
+    </tr>
 </table>
 @Html.HiddenFor(model => model.InfoText.Customer_Id)
 @Html.HiddenFor(model => model.InfoText.Id)

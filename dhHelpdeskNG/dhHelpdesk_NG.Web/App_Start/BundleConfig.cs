@@ -95,7 +95,7 @@
                             "~/Content/js/jquery.toastmessage.js",                            
                             "~/Content/js/bootstrap-switch.min.js",
                             "~/Content/js/jquery.dataTables.min.js",
-                            "~/Content/js/tinymce/tinymce.min.js"));
+                            "~/Content/js/tinymce/tinymce.min.js")); //To apply changes on tinymce use>>   ?cachebuster=123
 
             bundles.Add(new ScriptBundle("~/bundles/common/login").Include(
                             "~/Scripts/jquery-1.8.3.min.js",
