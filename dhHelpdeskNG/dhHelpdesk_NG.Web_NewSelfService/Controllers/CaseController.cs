@@ -150,7 +150,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                     dynamicUrl = dynamicCases.Where(w => w.CaseId == currentCase.Id).Select(d => "/" + d.FormPath).FirstOrDefault();
                     if (!string.IsNullOrEmpty(dynamicUrl)) // Show Case in eform
                     {
-                        var urlStr = dynamicUrl.SetStrParameters(currentCase.Id);
+                        var urlStr = dynamicUrl.SetUrlParameters(currentCase.Id);
                         var url = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, urlStr);                         
                         return Redirect(url);
                     }
@@ -847,6 +847,10 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                 srm.Cases = null;
             else
             {
+                var workTimeCalc = TimeZoneInfo.Local;
+                var showRemainingTime = false;
+                CaseRemainingTimeData remainingTimeData;       
+
                 srm.Cases = this._caseSearchService.Search(
                     sm.caseSearchFilter,
                     srm.CaseSettings,
@@ -858,8 +862,10 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                     search,
                     SessionFacade.CurrentCustomer.WorkingDayStart,
                     SessionFacade.CurrentCustomer.WorkingDayEnd,
-                    null,
-                    currentApplicationType).ToList(); // Take(maxRecords)
+                    workTimeCalc,
+                    currentApplicationType,
+                    showRemainingTime,
+                    out remainingTimeData).ToList(); // Take(maxRecords)
 
                 if (currentApplicationType == ApplicationTypes.LineManager)
                 {

@@ -1,5 +1,12 @@
-﻿@{
+﻿@model DH.Helpdesk.NewSelfService.Models.Help.HelpModel
+
+@{
     ViewBag.Title = "Index";
+    var htmlArea = "";
+    if (Model.HtmlPageData != null)
+    {
+        htmlArea = Model.HtmlPageData.SetHtmlParameters();
+    }
 }
 
 <div class="container-fluid dh-container">
@@ -11,29 +18,7 @@
             <div class="container-fluid dh-container">
                 <div class="row">
                     <div class="col-md-12 table-responsive">
-                        <table class="table table-striped table-bordered table-hover">
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>
-                                        @Translation.Get("Name", Enums.TranslationSource.TextTranslation)
-                                    </th>
-                                    <th>
-                                        @Translation.Get("Description", Enums.TranslationSource.TextTranslation)
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><a href="@Url.Content("~/Content/img-profile/MyHR - Global User Guide for Line Managers.pdf")" target="_blank" class="btn btn-dhblue btn-xs"><span class="glyphicon glyphicon-file"></span></a>
-                                    </td>
-                                    <td>MyHR – Global User Guide for Line Managers
-                                    </td>
-                                    <td>A step by step user guide on how to navigate MyHR and the service request options
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                         @Html.Raw(htmlArea)
                     </div>
                 </div>
             </div>

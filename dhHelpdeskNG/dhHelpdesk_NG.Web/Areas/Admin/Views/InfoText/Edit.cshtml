@@ -1,4 +1,5 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Common.Enums;
 @model DH.Helpdesk.Web.Areas.Admin.Models.InfoTextInputViewModel
 @if (TempData["Error"] != null)
 {
@@ -16,7 +17,7 @@
             <ul class="secnav">
                 <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", new { }, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
                 <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", new { customerId = Model.InfoTextShowViewModel.Customer.Id, 
-                                                                                                                        infoTextType = Model.InfoTextShowViewModel.InfoTextType }, new { @class = "btn" })</li>
+                                                                                                                        infoTextGroup = Model.InfoTextShowViewModel.InfoTextGroup }, new { @class = "btn" })</li>
             </ul>
         </div>
     </div>
@@ -25,37 +26,46 @@
     <div class="container">
         <input type="hidden" id="customerId" name="customerId" value="@Model.Customer.Id" />
         <input type="hidden" id="infoTypeId" name="infoTypeId" value="@Model.InfoTextShowViewModel.InfoText.Type" />
-        <input type="hidden" id="infoTextType" name="infoTextType" value="@Model.InfoTextShowViewModel.InfoTextType" />
+        <input type="hidden" id="infoTextGroup" name="infoTextGroup" value="@Model.InfoTextShowViewModel.InfoTextGroup" />
 
         <ul class="nav nav-tabs" id="myTab">
             <li class="active"><a href="#fragment-1">@Translation.Get("Informationstext", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li>
         </ul>
         <div class="tab-pane tab-pane-border active" id="fragment1">
                 <div class="container">
-        @if (Model.InfoTextShowViewModel.InfoText.Type == 1)
+        @if (Model.InfoTextShowViewModel.InfoText.Type == (int?) InfoTextType.SelfServiceWelcome)
         {
             <h4>@Translation.Get("Självservice", Enums.TranslationSource.TextTranslation)</h4>
         }
-        @if (Model.InfoTextShowViewModel.InfoText.Type == 2)
+        @if (Model.InfoTextShowViewModel.InfoText.Type == (int?) InfoTextType.NewInitiator)
         {
             <h4>@Translation.Get("Ny anmälare", Enums.TranslationSource.TextTranslation)</h4>
         }
-        @if (Model.InfoTextShowViewModel.InfoText.Type == 4)
+        @if (Model.InfoTextShowViewModel.InfoText.Type == (int?) InfoTextType.Questionairy)
         {
             <h4>@Translation.Get("Enkät", Enums.TranslationSource.TextTranslation)</h4>
         }
-        @if (Model.InfoTextShowViewModel.InfoText.Type == 5)
+        @if (Model.InfoTextShowViewModel.InfoText.Type == (int?) InfoTextType.SelfServiceConfirmationMessae)
         {
             <h4>@Translation.Get("Bekräftelse självservice", Enums.TranslationSource.TextTranslation)</h4>
         }
-        @if (Model.InfoTextShowViewModel.InfoText.Type == 6)
+        @if (Model.InfoTextShowViewModel.InfoText.Type == (int?) InfoTextType.SelfServiceInformation)
         {
             <h4>@Translation.Get("Information självservice", Enums.TranslationSource.TextTranslation)</h4>
         }
-        @if (Model.InfoTextShowViewModel.InfoText.Type == 7)
+        @if (Model.InfoTextShowViewModel.InfoText.Type == (int?) InfoTextType.Order)
         {
             <h4>@Translation.Get("Beställning", Enums.TranslationSource.TextTranslation)</h4>
         }
+        @if (Model.InfoTextShowViewModel.InfoText.Type == (int?)InfoTextType.SelfServiceHelp)
+        {
+            <h4>@Translation.Get("självservice Hjälp", Enums.TranslationSource.TextTranslation)</h4>
+        }
+        @if (Model.InfoTextShowViewModel.InfoText.Type == (int?) InfoTextType.SelfServiceAbout)
+        {
+            <h4>@Translation.Get("självservice om", Enums.TranslationSource.TextTranslation)</h4>
+        }
+
         @Html.DropDownList("LanguageId", Model.Languages, new { id = "LanguageId", onchange = "changeLanguageList(this.options[this.selectedIndex].value);" })
         <div id="infotextshow_container">
             <span id="languageList">
@@ -97,12 +107,7 @@
             list.html("");
             if (id != "") {
                 window.location.href =  "edit?infoTypeId=" + $("#infoTypeId").val() + "&customerId=" + $("#customerId").val() + 
-                                            "&languageId=" + id + "&infoTextType=SelfService";
-                //$.get('/InfoText/UpdateLanguageList/' + id + '?customerId=' + $("#customerId").val() +
-                //                                      '&infoTypeId=' +  + 
-                //                                      '&infoTextType=' + $("#infoTextType").val(), function (result) {
-                    //list.html(result);
-                //});
+                                            "&languageId=" + id + "&infoTextGroup=" + $("#infoTextGroup").val();                
             }
         }
     </script>

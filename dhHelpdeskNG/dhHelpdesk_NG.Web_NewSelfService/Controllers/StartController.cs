@@ -19,6 +19,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
     using DH.Helpdesk.Dal;
     using System.Security.Claims;
     using System.Configuration;
+    using DH.Helpdesk.Common.Enums;
     
     public class StartController : BaseController
     {
@@ -44,11 +45,12 @@ namespace DH.Helpdesk.NewSelfService.Controllers
 
         public  ActionResult Index(int customerId = -1)
         {
-            var model = new StartPageModel();
-            var bb = _bulletinBoardService.GetBulletinBoards(SessionFacade.CurrentCustomer.Id,false);
+            var htmlData = _infoService.GetInfoText((int)InfoTextType.SelfServiceWelcome, SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId);
+            var model = new StartPageModel(htmlData == null ? string.Empty : htmlData.Name);
 
-            model.BulletinBoard = bb.ToList();
-            model.InfoText = _infoService.GetInfoText(1, SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId);
+            var bb = _bulletinBoardService.GetBulletinBoards(SessionFacade.CurrentCustomer.Id,false);
+            model.BulletinBoard = bb.ToList();            
+
             return this.View(model);                        
          }        
     }

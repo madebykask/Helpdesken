@@ -180,6 +180,8 @@ namespace DH.Helpdesk.NewSelfService
             kernel.Bind<IDocumentCategoryRepository>().To<DocumentCategoryRepository>();
             kernel.Bind<IFormRepository>().To<FormRepository>();
             kernel.Bind<IADFSRepository>().To<ADFSRepository>();
+            kernel.Bind<IHolidayRepository>().To<HolidayRepository>();
+            kernel.Bind<IHolidayHeaderRepository>().To<HolidayHeaderRepository>();
                                        
             // Service             
             kernel.Bind<IMasterDataService>().To<MasterDataService>();            

@@ -11,13 +11,13 @@
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
-            @switch (Model.InfoTextType)
+            @switch (Model.InfoTextGroup)
             {
-                case InfoTextTypes.Helpdesk:
+                case InfoTextGroup.Helpdesk:
                     <li class="active"><a href="#fragment-1">@Translation.Get("Informationstext", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li>
                     break;
                     
-                case InfoTextTypes.SelfService:
+                case InfoTextGroup.SelfService:
                     <li class="active"><a href="#fragment-1">@Translation.Get("Självservice meddelande", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li>            
                     break;
             }
@@ -34,94 +34,94 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if (Model.InfoTextType == InfoTextTypes.SelfService)
+                        @if (Model.InfoTextGroup == InfoTextGroup.SelfService)
                         {
                             <tr>
                                 <td>
                                     <a href="@Url.Action("edit", "infotext", new { area = "admin", infoTypeId = 1, customerId = Model.Customer.Id, 
-                                                                                   languageId = Model.Customer.Language_Id, infoTextType = Model.InfoTextType })">
+                                                                                   languageId = Model.Customer.Language_Id, infoTextGroup = Model.InfoTextGroup })">
                                         @Translation.Get("Självservice välkommen meddelande", Enums.TranslationSource.TextTranslation)</a>
                                 </td>
                             </tr>
                         }
-                        @if (Model.InfoTextType == InfoTextTypes.Helpdesk)
+                        @if (Model.InfoTextGroup == InfoTextGroup.Helpdesk)
                         {
                             <tr>
                                 <td>
                                     <a href="@Url.Action("edit", "infotext", new { area = "admin", infoTypeId = 2, customerId = Model.Customer.Id, 
-                                                                                   languageId = Model.Customer.Language_Id, infoTextType = Model.InfoTextType })">
+                                                                                   languageId = Model.Customer.Language_Id, infoTextGroup = Model.InfoTextGroup })">
                                         @Translation.Get("Ny anmälare", Enums.TranslationSource.TextTranslation)</a>
                                 </td>
                             </tr>
                         }
 
-                        @if (Model.InfoTextType == InfoTextTypes.Helpdesk)
+                        @if (Model.InfoTextGroup == InfoTextGroup.Helpdesk)
                         {
                             <tr>
                                 <td>
                                     <a href="@Url.Action("edit", "infotext", new { area = "admin", infoTypeId = 4, customerId = Model.Customer.Id,
-                                                                                   languageId = Model.Customer.Language_Id, infoTextType = Model.InfoTextType })">
+                                                                                   languageId = Model.Customer.Language_Id, infoTextGroup = Model.InfoTextGroup })">
                                         @Translation.Get("Enkät", Enums.TranslationSource.TextTranslation)</a>
                                 </td>
                             </tr>
                         }
 
-                        @if (Model.InfoTextType == InfoTextTypes.SelfService)
+                        @if (Model.InfoTextGroup == InfoTextGroup.SelfService)
                         {
                             <tr>
                                 <td>
                                     <a href="@Url.Action("edit", "infotext", new { area = "admin", infoTypeId = 5, customerId = Model.Customer.Id,
-                                                                                   languageId = Model.Customer.Language_Id, infoTextType = Model.InfoTextType })">
+                                                                                   languageId = Model.Customer.Language_Id, infoTextGroup = Model.InfoTextGroup })">
                                         @Translation.Get("Bekräftelse självservice", Enums.TranslationSource.TextTranslation)</a>
                                 </td>
                             </tr>
                         }
 
-                        @if (Model.InfoTextType == InfoTextTypes.SelfService)
+                        @if (Model.InfoTextGroup == InfoTextGroup.SelfService)
                         {
                             <tr>
                                 <td>
                                     <a href="@Url.Action("edit", "infotext", new { area = "admin", infoTypeId = 6, customerId = Model.Customer.Id, 
-                                                                                   languageId = Model.Customer.Language_Id, infoTextType = Model.InfoTextType })">
+                                                                                   languageId = Model.Customer.Language_Id, infoTextGroup = Model.InfoTextGroup })">
                                         @Translation.Get("Information självservice", Enums.TranslationSource.TextTranslation)</a>
                                 </td>
                             </tr>
                         }
 
-                        @if (Model.InfoTextType == InfoTextTypes.Helpdesk)
+                        @if (Model.InfoTextGroup == InfoTextGroup.Helpdesk)
                         {
                             <tr>
                                 <td>
                                     <a href="@Url.Action("edit", "infotext", new { area = "admin", infoTypeId = 7, customerId = Model.Customer.Id,
-                                                                                   languageId = Model.Customer.Language_Id, infoTextType = Model.InfoTextType })">
+                                                                                   languageId = Model.Customer.Language_Id, infoTextGroup = Model.InfoTextGroup })">
                                         @Translation.Get("Beställning", Enums.TranslationSource.TextTranslation)</a>
                                 </td>
                             </tr>
                         } 
 
-                        @if (Model.InfoTextType == InfoTextTypes.SelfService)
+                        @if (Model.InfoTextGroup == InfoTextGroup.SelfService)
                         {
                             <tr>
                                 <td>
                                     <a href="@Url.Action("edit", "infotext", new { area = "admin", infoTypeId = 8, customerId = Model.Customer.Id, 
-                                                                                   languageId = Model.Customer.Language_Id, infoTextType = Model.InfoTextType })">
+                                                                                   languageId = Model.Customer.Language_Id, infoTextGroup = Model.InfoTextGroup })">
                                         @Translation.Get("Help Page Content", Enums.TranslationSource.TextTranslation)</a>
                                 </td>
                             </tr>
                         }
 
-                        @if (Model.InfoTextType == InfoTextTypes.SelfService)
+                        @if (Model.InfoTextGroup == InfoTextGroup.SelfService)
                         {
                             <tr>
                                 <td>
                                     <a href="@Url.Action("edit", "infotext", new { area = "admin", infoTypeId = 9, customerId = Model.Customer.Id,
-                                                                                   languageId = Model.Customer.Language_Id, infoTextType = Model.InfoTextType })">
+                                                                                   languageId = Model.Customer.Language_Id, infoTextGroup = Model.InfoTextGroup })">
                                         @Translation.Get("About Page Content", Enums.TranslationSource.TextTranslation)</a>
                                 </td>
                             </tr>
                         } 
 
-                        @if (Model.InfoTextType == InfoTextTypes.SelfService)
+                        @if (Model.InfoTextGroup == InfoTextGroup.SelfService)
                         {
                             <tr>
                                 <td>

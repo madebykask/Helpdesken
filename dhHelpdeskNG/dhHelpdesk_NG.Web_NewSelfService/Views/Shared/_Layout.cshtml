@@ -1,4 +1,5 @@
 ﻿@using System.Collections.Generic;
+@using System.Configuration;
 @using DH.Helpdesk.NewSelfService.Infrastructure
 @using DH.Helpdesk.NewSelfService.Infrastructure.Extensions
 @using DH.Helpdesk.NewSelfService.Infrastructure.Common;
@@ -236,7 +237,7 @@
                 <div class="pull-left toplogo"></div>
              </a>
             <div class="pull-right small toplogout">            
-                <span class="toplogout-space"> | </span>               
+                               
                     <div class="dropdown"> 
                       <a href="#" type="button" class="dropdown-toggle" data-toggle="dropdown">
                         @Translation.Get("Select language", Enums.TranslationSource.TextTranslation)<span class="caret"></span>
@@ -250,18 +251,14 @@
                                     <a href="@Url.Action("ChangeLanguage", "start", new { area = "", language = lang.LanguageId, currentUrl = this.Request.Url.LocalPath, lastParams = HttpContext.Current.Request.QueryString })"> 
                                        @Translation.Get(lang.Name, Enums.TranslationSource.TextTranslation, (SessionFacade.CurrentCustomer != null ? SessionFacade.CurrentCustomer.Language_Id : 0)) @(lang.Id == SessionFacade.CurrentLanguageId ? "●" : "")
                                     </a>
-
                                 </li>
                               }                         
                           </ul>
                       }
                     </div>
-                @if(!hideMenu)
-                {
-                    @*<span class="toplogout-space"> | </span>*@
-                    <a href="#" >  @Translation.Get("User", Enums.TranslationSource.TextTranslation): @SessionFacade.CurrentSystemUser</a> 
-                     @*<span class="toplogout-space"> | </span>*@
-                    
+                @if (!hideMenu && ConfigurationManager.AppSettings[AppSettingsKey.LoginMode].ToString().ToLower() != LoginMode.Anonymous)
+                {                    
+                    <span class="toplogout-space"> | </span> <a href="#" >  @Translation.Get("User", Enums.TranslationSource.TextTranslation): @SessionFacade.CurrentSystemUser</a>                                      
                      @*<a href="@System.Configuration.ConfigurationManager.AppSettings["LogoutUrl"].ToString()">@Translation.Get("Logga ut", Enums.TranslationSource.TextTranslation)</a>*@
                 }
                 
@@ -339,7 +336,7 @@
                                             {
                                                 var tempPath = c.TemplatePath;
                                                 tempPath += "?language=[language]";
-                                                <a href="@Url.Content(tempPath.SetStrParameters())">
+                                                <a href="@Url.Content(tempPath.SetUrlParameters())">
                                                     <span class="glyphicon glyphicon-plus"></span>@c.Name
                                                     <br />
                                                     <span class="small">@c.Description</span>
@@ -385,7 +382,7 @@
                                             {
                                                 var tempPath = c.TemplatePath;
                                                 tempPath += "?language=[language]";
-                                                <a href="@Url.Content(tempPath.SetStrParameters())">                                                
+                                                <a href="@Url.Content(tempPath.SetUrlParameters())">                                                
                                                     <span class="glyphicon glyphicon-plus"></span>&nbsp;@Translation.Get(c.Name, Enums.TranslationSource.TextTranslation)
                                                     <br />
                                                     <span class="small">@Translation.Get(c.Description, Enums.TranslationSource.TextTranslation)</span>
@@ -546,7 +543,7 @@
                                             @Translation.Get(help.ObjectValue, Enums.TranslationSource.TextTranslation)
                                         </a>
                                         <ul class="dropdown-menu">
-                                            <li><a href="@Url.Action("FindYourWay", "Help", new { customerId = pCustomerId, area = "" })">@Translation.Get("Find Your Way", Enums.TranslationSource.TextTranslation)</a></li>
+                                            @*<li><a href="@Url.Action("FindYourWay", "Help", new { customerId = pCustomerId, area = "" })">@Translation.Get("Find Your Way", Enums.TranslationSource.TextTranslation)</a></li>*@
                                             <li><a href="@Url.Action("Index", "Help", new { customerId = pCustomerId, area = "" })">@Translation.Get("Help", Enums.TranslationSource.TextTranslation)</a></li>
                                             <li><a href="@Url.Action("About", "Help", new { customerId = pCustomerId, area = "" })">@Translation.Get("About", Enums.TranslationSource.TextTranslation)</a></li>
                                         </ul>
@@ -561,7 +558,7 @@
                                     @Translation.Get("Need Help", Enums.TranslationSource.TextTranslation)?                                                                                                
                                 </a>                               
                                 <ul class="dropdown-menu">
-                                    <li><a href="@Url.Action("FindYourWay", "Help", new { customerId = pCustomerId, area = "" })">@Translation.Get("Find Your Way", Enums.TranslationSource.TextTranslation)</a></li>
+                                    @*<li><a href="@Url.Action("FindYourWay", "Help", new { customerId = pCustomerId, area = "" })">@Translation.Get("Find Your Way", Enums.TranslationSource.TextTranslation)</a></li>*@
                                     <li><a href="@Url.Action("Index", "Help", new { customerId = pCustomerId, area = "" })">@Translation.Get("Help", Enums.TranslationSource.TextTranslation)</a></li>
                                     <li><a href="@Url.Action("About", "Help", new { customerId = pCustomerId, area = "" })">@Translation.Get("About", Enums.TranslationSource.TextTranslation)</a></li>
                                 </ul>                                

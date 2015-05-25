@@ -167,7 +167,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             this._customerService.SaveEditCustomer(customerToSave, setting, null, customerToSave.Language_Id, out errors);
 
             if (errors.Count == 0)                            
-                return this.RedirectToAction("Index", "InfoText", new { customerId = id, infoTextType = InfoTextTypes.SelfService });
+                return this.RedirectToAction("Index", "InfoText", new { customerId = id, infoTextGroup = InfoTextGroup.SelfService });
 
             var model = new SelfServiceRegMessageViewModel()
             {

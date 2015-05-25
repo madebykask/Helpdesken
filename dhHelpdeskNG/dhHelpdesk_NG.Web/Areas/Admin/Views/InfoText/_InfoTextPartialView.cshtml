@@ -10,7 +10,12 @@
     </tr>
     <tr>
         <td>
-            @Html.TextAreaFor(model => model.InfoText.Name, new { style = "width:600px; height:300px;",  maxlength = (Model.InfoTextType== InfoTextTypes.SelfService?"10000":"500"), @class= (Model.InfoTextType== InfoTextTypes.SelfService?"richtexteditor":"") })
+            @Html.TextAreaFor(model => model.InfoText.Name, 
+                                       new { 
+                                             style = "width:600px; height:300px;",  
+                                             maxlength = (Model.InfoTextGroup == InfoTextGroup.SelfService? "10000" : "500"), 
+                                             @class= (Model.InfoTextGroup == InfoTextGroup.SelfService? "richtexteditor" : "") 
+                                           })
         </td>
     </tr>
 </table>

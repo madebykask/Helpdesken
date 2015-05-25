@@ -1,6 +1,6 @@
 ﻿namespace DH.Helpdesk.Common.Enums
 {
-    public enum InfoTextTypes
+    public enum InfoTextGroup
     {
         Helpdesk = 0,
 

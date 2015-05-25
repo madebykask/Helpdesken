@@ -12,7 +12,7 @@
             <div class="pull-left">
                 <ul class="secnav">
                     <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "EditRegMessage", new { id = Model.Customer.Id }, new { onclick = "submitForm();return false;", @class = "btn" })</li>                
-                    <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", "InfoText", new { customerId = Model.Customer.Id, infoTextType = InfoTextTypes.SelfService }, new { @class = "btn" })</li>
+                    <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", "InfoText", new { customerId = Model.Customer.Id, infoTextGroup = InfoTextGroup.SelfService }, new { @class = "btn" })</li>
                 </ul>
             </div>
             @Html.Partial("_MasterDataPanel", Model.Customer)

@@ -3,17 +3,16 @@
 @{
     ViewBag.Title = "Index";
     var welcomePart = "";
-    if (Model.InfoText != null) 
+    if (Model.WelcomeHtml != null) 
     {   
-        welcomePart = Model.InfoText.Name.SetStrParameters();            
+        welcomePart = Model.WelcomeHtml.SetHtmlParameters();            
     }
 }
 
 <div class="container-fluid dh-container">
     <div class="row">
         <div class="col-md-6">            
-            <div class="row">
-            
+            <div class="row">            
                <div class="col-md-12">
                     <div class="panel panel-default">
                         <div class="panel-body">                             

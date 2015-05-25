@@ -162,7 +162,7 @@
     </a>
     <ul class="dropdown-menu">
         <li class="@Html.ActiveTab(new string[] { "infotext" })">
-            <a href="@Url.Action("index", "infotext", new { customerId = Model.Id, languageId = 0, infoTextType = InfoTextTypes.Helpdesk})">
+            <a href="@Url.Action("index", "infotext", new { customerId = Model.Id, languageId = 0, infoTextGroup = InfoTextGroup.Helpdesk})">
                 @Translation.Get("Informationstext", Enums.TranslationSource.TextTranslation)
             </a>
         </li>
@@ -195,7 +195,7 @@
         </li>
         <li class="line"></li>
         <li class="@Html.ActiveTab(new string[] { "selfservicemessages" })">
-            <a href="@Url.Action("index", "infotext", new { customerId = Model.Id, languageId = 0, infoTextType = InfoTextTypes.SelfService })">
+            <a href="@Url.Action("index", "infotext", new { customerId = Model.Id, languageId = 0, infoTextGroup = InfoTextGroup.SelfService })">
                 @Translation.Get("Meddelande", Enums.TranslationSource.TextTranslation)
             </a>
         </li>

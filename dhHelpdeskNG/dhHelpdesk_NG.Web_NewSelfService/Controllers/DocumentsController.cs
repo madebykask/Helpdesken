@@ -16,9 +16,8 @@ namespace DH.Helpdesk.NewSelfService.Controllers
     {
         private readonly ICustomerService _customerService;
 
-        private readonly IDocumentService _documentsService;
+        private readonly IDocumentService _documentsService;     
     
-  
         public DocumentsController(IMasterDataService masterDataService,
                                    ICustomerService customerService,
                                    ICaseSolutionService caseSolutionService,
@@ -34,11 +33,14 @@ namespace DH.Helpdesk.NewSelfService.Controllers
 
         public ActionResult Index()
         {
+            var model = new DocumentsModel();
             var customerId = SessionFacade.CurrentCustomer.Id;
 
-            var model = new DocumentsModel();
-            model.Documents = _documentsService.GetDocuments(customerId).ToList();
+            var cats = _documentsService.GetDocumentCategories(customerId).Where(d => d.ShowOnExternalPage).Select(d=> d.Id).ToList();            
+            var docs = _documentsService.GetDocuments(customerId).Where(d => d.DocumentCategory_Id.HasValue && cats.Contains(d.DocumentCategory_Id.Value))
+                                                                 .ToList();
 
+            model.Documents = docs;
             return View(model);
         }
         

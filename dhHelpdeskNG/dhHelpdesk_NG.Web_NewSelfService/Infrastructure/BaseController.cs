@@ -265,6 +265,26 @@
 
                     SessionFacade.CurrentUserIdentity = ui;
                 }
+                else
+                    if (ConfigurationManager.AppSettings[AppSettingsKey.LoginMode].ToString().ToLower() == LoginMode.Anonymous)
+                    {
+                        var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+                        SessionFacade.UserHasAccess = true;
+                        SessionFacade.CurrentCoWorkers = null;
+                        string fullName = identity.Name;
+                        string userId = fullName.GetUserFromAdPath();
+                        string userDomain = fullName.GetDomainFromAdPath();
+
+                        SessionFacade.CurrentSystemUser = userId;
+                        var ui = new UserIdentity()
+                        {
+                            UserId = "",
+                            Domain = userDomain,
+                            FirstName = "Anonymous"
+                        };
+
+                        SessionFacade.CurrentUserIdentity = ui;
+                    }
 
             this.SetTextTranslation(filterContext);
         }

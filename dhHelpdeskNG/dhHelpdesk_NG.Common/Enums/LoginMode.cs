@@ -7,6 +7,8 @@
         public const string Windows = "windows";
 
         public const string SSO = "sso";
+
+        public const string Anonymous = "anonymous";
         
     }
 }
