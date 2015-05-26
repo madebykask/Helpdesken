@@ -66,8 +66,7 @@
                             "~/Content/js/bootstrap-switch.min.js",
                             "~/Content/js/dhHelpdesk-head.js",
                             "~/Content/js/ui/dh.ui.hierarchylist.js",
-                            "~/Content/js/jquery.dataTables.min.js",
-                            "~/Content/js/tinymce/tinymce.min.js"));
+                            "~/Content/js/jquery.dataTables.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery-typing").Include(
                             "~/Content/js/jquery.typing-0.2.0.min.js"));
@@ -94,8 +93,7 @@
                             "~/Content/js/jquery.form.min.js",
                             "~/Content/js/jquery.toastmessage.js",                            
                             "~/Content/js/bootstrap-switch.min.js",
-                            "~/Content/js/jquery.dataTables.min.js",
-                            "~/Content/js/tinymce/tinymce.min.js")); //To apply changes on tinymce use>>   ?cachebuster=123
+                            "~/Content/js/jquery.dataTables.min.js")); //To apply changes on tinymce use>>   ?cachebuster=123
 
             bundles.Add(new ScriptBundle("~/bundles/common/login").Include(
                             "~/Scripts/jquery-1.8.3.min.js",
@@ -239,6 +237,13 @@
 
             bundles.Add(new ScriptBundle("~/bundles/cases/caseByIds").Include(
                             "~/Content/js/Cases/caseByIds.logic.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/common/tinymce").Include(
+                            "~/Content/js/tinymce/tinymce.min.js"));
+
+
+            
+                            
         }
     }
 }
