@@ -43,17 +43,19 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Link.Concrete
                 customer.CustomerId = c.CustomerId;
                 customer.CustomerName = c.CustomerName;
 
-                var categoryNames = linkOverviews
+                var categories = linkOverviews
                                     .Where(l => l.CustomerId == customer.CustomerId)
-                                    .Select(l => l.LinkGroupName)
+                                    .Select(l => new { LinkGroupName = l.LinkGroupName, LinkGroupId = l.LinkGroupId })
                                     .Distinct()
-                                    .OrderBy(l=> l);
-                foreach (var categoryName in categoryNames)
+                                    .OrderBy(l => l.LinkGroupName);
+
+                foreach (var cat in categories)
                 {
                     var category = new LinkCategoryGroupViewModel();
-                    category.CategoryName = categoryName;
+                    category.CategoryName = cat.LinkGroupName;
+                    category.CategoryId = cat.LinkGroupId;
                     category.Links.AddRange(linkOverviews
-                                            .Where(l => l.CustomerId == customer.CustomerId && l.LinkGroupName == categoryName)
+                                            .Where(l => l.CustomerId == customer.CustomerId && l.LinkGroupName == cat.LinkGroupName)
                                             .OrderBy(l => l.SortOrder)
                                             .ThenBy(l => l.UrlName));
                     customer.Categories.Add(category);

@@ -12,61 +12,104 @@
             <div class="box-body portlet-content">
                 <div class="box-main">
                     <div class="accordion" id="quicklinksstart">
-                        <div class="accordion-group accordion-caret">
-                            @foreach(var customerGroup in Model.CustomerGroups)
-                            {
+                        @foreach(var customerGroup in Model.CustomerGroups)
+                        {
+                            <div id="quicklinksstart@(customerGroup.CustomerId)" class="accordion-group accordion-caret">
                                 <div class="accordion-heading">
-                                    <a class="accordion-toggle accordion-caret collapsed" data-toggle="collapse" data-parent="#quicklinksstart" href="#collapseLinkInfo@(customerGroup.CustomerId)"><strong>@customerGroup.CustomerName</strong>
+                                    <a class="accordion-toggle accordion-caret collapsed" data-toggle="collapse" data-parent="#quicklinksstart" 
+                                        href="#collapseLinkInfo@(customerGroup.CustomerId)"><strong>@customerGroup.CustomerName</strong>
                                     </a>
                                 </div>
                                 <div id="collapseLinkInfo@(customerGroup.CustomerId)" class="accordion-body collapse">
                                     <div class="accordion-inner">
-                                        <ul>
+                                        <div id="parent@(customerGroup.CustomerId)">
                                             @foreach(var categoryGroup in customerGroup.Categories)
-                                            {  
-                                                <li><strong>@Translation.Get(categoryGroup.CategoryName, Enums.TranslationSource.TextTranslation)</strong></li>
-                                                <li>
-                                                    <ul>
-                                                        @foreach(var link in categoryGroup.Links)
-                                                        {
-                                                            var target = link.OpenInNewWindow ? "target=\"_blank\"" : "";
-                                                            <li>
-                                                                @if(string.IsNullOrEmpty(link.UrlAddress))
+                                            {
+                                                if(!string.IsNullOrEmpty(categoryGroup.CategoryName))
+                                                {
+                                                <div class="accordion-heading accordion-group">
+                                                    <a class="accordion-toggle accordion-caret" data-toggle="collapse" data-parent="#parent@(customerGroup.CustomerId)" 
+                                                        href="#collapseLinkInfoGroup@(categoryGroup.CategoryId)"><strong>@categoryGroup.CategoryName</strong>
+                                                    </a>
+                                                </div>
+                                                <ul id="collapseLinkInfoGroup@(categoryGroup.CategoryId)" class="accordion-body collapse">
+                                                    @foreach(var link in categoryGroup.Links)
+                                                    {
+                                                        var target = link.OpenInNewWindow ? "target=\"_blank\"" : "";
+                                                        <li style="padding-left: 18px;">
+                                                            @if(string.IsNullOrEmpty(link.UrlAddress))
+                                                            {
+                                                                if(link.DocumentId == null)
                                                                 {
-                                                                    if(link.DocumentId == null)
-                                                                    {
-                                                                    <a @target href="@Url.Action("new/", "cases", new { customerId = link.CustomerId, templateId = link.CaseSolutionId, templateistrue = 1 })">@Translation.Get(link.UrlName, Enums.TranslationSource.TextTranslation)</a>
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                    <a @target href="@Url.Action("DocumentFile", "Document", new { document = link.DocumentId })">@Translation.Get(link.UrlName, Enums.TranslationSource.TextTranslation)</a>
-                                                                    }
+                                                                <a @target href="@Url.Action("new/", "cases", new { customerId = link.CustomerId, templateId = link.CaseSolutionId, templateistrue = 1 })">@Translation.Get(link.UrlName, Enums.TranslationSource.TextTranslation)</a>
                                                                 }
                                                                 else
                                                                 {
-                                                                    var linkUrlAddress = link.UrlAddress;
-                                                                    linkUrlAddress = linkUrlAddress.Replace("[UserId]", SessionFacade.CurrentUser.UserId).Replace("[Language]", SessionFacade.CurrentLanguageCode);
-
-                                                                    if(link.OpenInNewWindow)
-                                                                    {
-                                                                        <a onclick="window.open('@linkUrlAddress', null, 'width=@link.NewWindowWidth,height=@link.NewWindowHeight,resizable=yes,scrollbars=yes');" 
-                                                                            style="cursor:pointer"><i class="icon-play-circle"></i>@Translation.Get(link.UrlName, Enums.TranslationSource.TextTranslation)</a>
-                                                                    }
-                                                                    else
-                                                                    {         
-                                                                    <a href="@linkUrlAddress"><i class="icon-play-circle"></i>@Translation.Get(link.UrlName, Enums.TranslationSource.TextTranslation)</a>
-                                                                    }
+                                                                <a @target href="@Url.Action("DocumentFile", "Document", new { document = link.DocumentId })">@Translation.Get(link.UrlName, Enums.TranslationSource.TextTranslation)</a>
                                                                 }
-                                                            </li>
-                                                        }
-                                                    </ul>
-                                                </li>
+                                                            }
+                                                            else
+                                                            {
+                                                                var linkUrlAddress = link.UrlAddress;
+                                                                linkUrlAddress = linkUrlAddress.Replace("[UserId]", SessionFacade.CurrentUser.UserId).Replace("[Language]", SessionFacade.CurrentLanguageCode);
+
+                                                                if(link.OpenInNewWindow)
+                                                                {
+                                                                <a onclick="window.open('@linkUrlAddress', null, 'width=@link.NewWindowWidth,height=@link.NewWindowHeight,resizable=yes,scrollbars=yes');" 
+                                                                            style="cursor:pointer"><i class="icon-play-circle"></i>&nbsp;@Translation.Get(link.UrlName, Enums.TranslationSource.TextTranslation)</a>
+                                                                }
+                                                                else
+                                                                {         
+                                                                <a href="@linkUrlAddress"><i class="icon-play-circle"></i>&nbsp;@Translation.Get(link.UrlName, Enums.TranslationSource.TextTranslation)</a>
+                                                                }
+                                                            }
+                                                        </li>
+                                                    }
+                                                </ul>
+                                                }
+                                                else
+                                                {
+                                                <ul>
+                                                    @foreach(var link in categoryGroup.Links)
+                                                    {
+                                                        var target = link.OpenInNewWindow ? "target=\"_blank\"" : "";
+                                                        <li>
+                                                            @if(string.IsNullOrEmpty(link.UrlAddress))
+                                                            {
+                                                                if(link.DocumentId == null)
+                                                                {
+                                                                <a @target href="@Url.Action("new/", "cases", new { customerId = link.CustomerId, templateId = link.CaseSolutionId, templateistrue = 1 })">@Translation.Get(link.UrlName, Enums.TranslationSource.TextTranslation)</a>
+                                                                }
+                                                                else
+                                                                {
+                                                                <a @target href="@Url.Action("DocumentFile", "Document", new { document = link.DocumentId })">@Translation.Get(link.UrlName, Enums.TranslationSource.TextTranslation)</a>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                var linkUrlAddress = link.UrlAddress;
+                                                                linkUrlAddress = linkUrlAddress.Replace("[UserId]", SessionFacade.CurrentUser.UserId).Replace("[Language]", SessionFacade.CurrentLanguageCode);
+
+                                                                if(link.OpenInNewWindow)
+                                                                {
+                                                                <a onclick="window.open('@linkUrlAddress', null, 'width=@link.NewWindowWidth,height=@link.NewWindowHeight,resizable=yes,scrollbars=yes');" 
+                                                                            style="cursor:pointer"><i class="icon-play-circle"></i>&nbsp;@Translation.Get(link.UrlName, Enums.TranslationSource.TextTranslation)</a>
+                                                                }
+                                                                else
+                                                                {         
+                                                                <a href="@linkUrlAddress"><i class="icon-play-circle"></i>&nbsp;@Translation.Get(link.UrlName, Enums.TranslationSource.TextTranslation)</a>
+                                                                }
+                                                            }
+                                                        </li>
+                                                    }
+                                                </ul>
+                                                }
                                             }
-                                        </ul>
+                                        </div>
                                     </div>
                                 </div>
-                            }
-                        </div>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
