@@ -28,7 +28,7 @@
                                                 if(!string.IsNullOrEmpty(categoryGroup.CategoryName))
                                                 {
                                                 <div class="accordion-heading accordion-group">
-                                                    <a class="accordion-toggle accordion-caret" data-toggle="collapse" data-parent="#parent@(customerGroup.CustomerId)" 
+                                                    <a class="accordion-toggle accordion-caret collapsed" data-toggle="collapse" data-parent="#parent@(customerGroup.CustomerId)" 
                                                         href="#collapseLinkInfoGroup@(categoryGroup.CategoryId)"><strong>@categoryGroup.CategoryName</strong>
                                                     </a>
                                                 </div>
@@ -116,3 +116,31 @@
         </div>
     </div>
 }
+
+<script type="text/javascript">
+
+    // Make the collapse correct, arrows correct... hack DL 20150526
+
+    $(document).on('click', '.accordion-toggle', function(event) {
+        event.stopPropagation();
+        var $this = $(this);
+
+        var parent = $this.data('parent');
+        var actives = parent && $(parent).find('.collapse.in');
+
+        $(parent).find('.accordion-caret').addClass('collapsed');
+
+        // From bootstrap itself
+        if (actives && actives.length) {
+            hasData = actives.data('collapse');
+            //if (hasData && hasData.transitioning) return;
+            actives.collapse('hide');
+            $this.removeClass('collapsed');
+        }
+
+        var target = $this.attr('data-target') || (href = $this.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, ''); //strip for ie7
+
+        $(target).collapse('toggle');
+    });
+
+</script>
