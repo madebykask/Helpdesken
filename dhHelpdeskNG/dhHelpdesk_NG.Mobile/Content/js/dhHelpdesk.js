@@ -495,7 +495,9 @@ function CaseInitForm() {
 
     $('#AddNotifier').click(function (e) {
         e.preventDefault();
-
+        if ($(this).hasClass('disabled')) {
+            return false;
+        }
 
         var params = "?def=1"; // this is Not applied in form 
         
@@ -765,6 +767,9 @@ function LogInitForm() {
     });
 
     $("#CaseLog_SendMailAboutLog").change(function () {
+        if ($(this).attr('readonly') != null) {
+            return false;
+        }
         $('#divEmailRecepientsInternalLog').hide();
         if (this.checked) {
             $("#divSendToDialogCase").dialog("option", "width", 450);
