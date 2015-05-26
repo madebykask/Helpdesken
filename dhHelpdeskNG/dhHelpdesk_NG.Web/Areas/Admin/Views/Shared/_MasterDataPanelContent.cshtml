@@ -25,7 +25,7 @@
     </a>
     <ul class="dropdown-menu">
         <li class="@Html.ActiveTab(new string[] { "region" })"><a href="@Url.Action("index", "region", new { customerId = Model.Id })">@Translation.Get(GlobalEnums.TranslationCaseFields.Region_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.Id) (@Translation.Get("Område", Enums.TranslationSource.TextTranslation))</a></li>
-        <li class="@Html.ActiveTab(new string[] { "department" })"><a href="@Url.Action("index", "department", new { customerId = Model.Id  })">@Translation.Get(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.Id) (@Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation))</a></li>
+        <li class="@Html.ActiveTab(new string[] { "department" })"><a href="@Url.Action("index", "department", new { customerId = Model.Id })">@Translation.Get(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.Id) (@Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation))</a></li>
         <li class="@Html.ActiveTab(new string[] { "ou" })"><a href="@Url.Action("index", "ou", new { customerId = Model.Id })">@Translation.Get(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.Id) (@Translation.Get("Organisationsenhet", Enums.TranslationSource.TextTranslation))</a></li>
     </ul>
 </li>
@@ -40,7 +40,7 @@
         <li class="@Html.ActiveTab(new string[] { "productarea" })"><a href="@Url.Action("index", "productarea", new { customerId = Model.Id })">@Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.Id) (@Translation.Get("Produktområde", Enums.TranslationSource.TextTranslation))</a></li>
         <li class="@Html.ActiveTab(new string[] { "urgency" })"><a href="@Url.Action("index", "urgency", new { customerId = Model.Id })">@Translation.Get(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.Id) (@Translation.Get("Brådskandegrad", Enums.TranslationSource.TextTranslation))</a></li>
         <li class="@Html.ActiveTab(new string[] { "impact" })"><a href="@Url.Action("index", "impact", new { customerId = Model.Id })">@Translation.Get(GlobalEnums.TranslationCaseFields.Impact_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.Id) (@Translation.Get("Påverkan", Enums.TranslationSource.TextTranslation))</a></li>
-        <li class="@Html.ActiveTab(new string[] { "category" })"><a href="@Url.Action("index", "category", new { customerId = Model.Id})">@Translation.Get(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.Id) (@Translation.Get("Kategori", Enums.TranslationSource.TextTranslation))</a></li>
+        <li class="@Html.ActiveTab(new string[] { "category" })"><a href="@Url.Action("index", "category", new { customerId = Model.Id })">@Translation.Get(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.Id) (@Translation.Get("Kategori", Enums.TranslationSource.TextTranslation))</a></li>
         <li class="@Html.ActiveTab(new string[] { "supplier" })"><a href="@Url.Action("index", "supplier", new { customerId = Model.Id })">@Translation.Get(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.Id) (@Translation.Get("Leverantörer", Enums.TranslationSource.TextTranslation))</a></li>
         <li class="@Html.ActiveTab(new string[] { "system" })"><a href="@Url.Action("index", "system", new { customerId = Model.Id })">@Translation.Get(GlobalEnums.TranslationCaseFields.System_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.Id) (@Translation.Get("System", Enums.TranslationSource.TextTranslation))</a></li>
         <li class="@Html.ActiveTab(new string[] { "workinggroup" })"><a href="@Url.Action("index", "workinggroup", new { customerId = Model.Id })">@Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.Id) (@Translation.Get("Driftgrupper", Enums.TranslationSource.TextTranslation))</a></li>
@@ -154,6 +154,28 @@
         <li class="@Html.ActiveTab(new string[] { "emailgroup" })"><a href="@Url.Action("index", "emailgroup", new { customerId = Model.Id })">@Translation.Get("E-postgrupp", Enums.TranslationSource.TextTranslation)</a></li>
     </ul>
 </li>
+
+<li class="line"></li>
+
+<li class="dropdown-submenu">
+    <a href="#">
+        @Translation.Get("Snabblänkar", Enums.TranslationSource.TextTranslation)
+    </a>
+    <ul class="dropdown-menu">
+        <li class="line"></li>
+        <li class="@Html.ActiveTab(new string[] { "quicklinkgroup" })">
+            <a href="@Url.Action("index", "quicklinkgroup", new { customerId = Model.Id })">
+                @Translation.Get("Grupp", Enums.TranslationSource.TextTranslation)
+            </a>
+        </li>
+        <li class="@Html.ActiveTab(new string[] { "quicklink" })">
+            <a href="@Url.Action("index", "quicklink", new { customerId = Model.Id })">
+                @Translation.Get("Snabblänkar", Enums.TranslationSource.TextTranslation)
+            </a>
+        </li>
+    </ul>
+</li>
+
 <li class="line"></li>
 
 <li class="dropdown-submenu">
@@ -167,11 +189,11 @@
             </a>
         </li>
         <li class="line"></li>
-        <li class="@Html.ActiveTab(new string[] { "quicklink" })">
+        @*        <li class="@Html.ActiveTab(new string[] { "quicklink" })">
             <a href="@Url.Action("index", "quicklink", new { customerId = Model.Id })">
                 @Translation.Get("Snabblänkar", Enums.TranslationSource.TextTranslation)
             </a>
-        </li>
+        </li>*@
         <li class="@Html.ActiveTab(new string[] { "program" })">
             <a href="@Url.Action("index", "program", new { customerId = Model.Id })">
                 @Translation.Get("Program", Enums.TranslationSource.TextTranslation)
@@ -179,7 +201,7 @@
         </li>
         @*<li class="@Html.ActiveTab(new string[] { "currency" })"><a href="@Url.Action("index", "currency", new { customerId = Model.Id })">@Translation.Get("Valuta", Enums.TranslationSource.TextTranslation)</a></li>
         <li class="line"></li>*@
-        
+
     </ul>
 </li>
 <li class="line"></li>
@@ -190,7 +212,7 @@
     <ul class="dropdown-menu">
         <li class="@Html.ActiveTab(new string[] { "selfservicesetting" })">
             <a href="@Url.Action("index", "SelfServiceSetting", new { customerId = Model.Id, languageId = 0 })">
-               @Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)
+                @Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)
             </a>
         </li>
         <li class="line"></li>

@@ -21,11 +21,14 @@ namespace DH.Helpdesk.Services.Services
         IList<Link> GetLinks(int customerId);
 
         Link GetLink(int id);
+        LinkGroup GetLinkGroup(int id);
 
         DeleteMessage DeleteLink(int id);
+        DeleteMessage DeleteLinkGroup(int id);
         IList<LinkGroup> GetLinkGroups(int customerId);
 
         void SaveLink(Link link, int[] us, out IDictionary<string, string> errors);
+        void SaveLinkGroup(LinkGroup linkGroup, out IDictionary<string, string> errors);
         void Commit();
 
         /// <summary>
@@ -145,9 +148,6 @@ namespace DH.Helpdesk.Services.Services
                 }
             }
 
-
-
-
             if (link.Id == 0)
                 this._linkRepository.Add(link);
             else
@@ -173,6 +173,53 @@ namespace DH.Helpdesk.Services.Services
                         .GetLinksForStartPage(customers, count, forStartPage)
                         .MapToOverviews();
             }
+        }
+
+
+        public LinkGroup GetLinkGroup(int id)
+        {
+            return _linkGroupRepository.GetById(id);
+        }
+
+        public DeleteMessage DeleteLinkGroup(int id)
+        {
+            var linkGroup = _linkGroupRepository.GetById(id);
+
+            if(linkGroup != null)
+            {
+                try
+                {
+                    _linkGroupRepository.Delete(linkGroup);
+                    Commit();
+
+                    return DeleteMessage.Success;
+                }
+                catch
+                {
+                    return DeleteMessage.UnExpectedError;
+                }
+            }
+
+            return DeleteMessage.Error;
+        }
+
+        public void SaveLinkGroup(LinkGroup linkGroup, out IDictionary<string, string> errors)
+        {
+            if(linkGroup == null)
+                throw new ArgumentNullException("linkGroup");
+
+            errors = new Dictionary<string, string>();
+
+            if(string.IsNullOrEmpty(linkGroup.LinkGroupName))
+                errors.Add("LinkGroup.LinkGroupName", "Du måste ange ett namn");
+
+            if(linkGroup.Id == 0)
+                _linkGroupRepository.Add(linkGroup);
+            else
+                _linkGroupRepository.Update(linkGroup);
+
+            if(errors.Count == 0)
+                this.Commit();
         }
     }
 }

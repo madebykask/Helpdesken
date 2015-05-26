@@ -15,7 +15,7 @@
     <AssemblyName>DH.Helpdesk.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <SccProjectName>
     </SccProjectName>
     <SccLocalPath>
@@ -29,10 +29,14 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
-    <IISExpressSSLPort>44302</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
-    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
+    <IISExpressSSLPort>
+    </IISExpressSSLPort>
+    <IISExpressAnonymousAuthentication>
+    </IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>
+    </IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode>
+    </IISExpressUseClassicPipelineMode>
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
     <DontImportPostSharp>True</DontImportPostSharp>
     <TargetFrameworkProfile />
@@ -271,6 +275,7 @@
     <Compile Include="Areas\Admin\Controllers\ProductAreaController.cs" />
     <Compile Include="Areas\Admin\Controllers\ProgramController.cs" />
     <Compile Include="Areas\Admin\Controllers\QuickLinkController.cs" />
+    <Compile Include="Areas\Admin\Controllers\QuickLinkGroupController.cs" />
     <Compile Include="Areas\Admin\Controllers\RegionController.cs" />
     <Compile Include="Areas\Admin\Controllers\RoomController.cs" />
     <Compile Include="Areas\Admin\Controllers\SelfServiceSettingController.cs" />
@@ -305,6 +310,8 @@
     <Compile Include="Areas\Admin\Models\BuildingViewModels.cs" />
     <Compile Include="Areas\Admin\Models\OrganizationHierarchy\OrganizationUnit.cs" />
     <Compile Include="Areas\Admin\Models\OrganizationHierarchy\SDepartment.cs" />
+    <Compile Include="Areas\Admin\Models\QuickLinkGroupIndexViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\QuickLinkGroupInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\SelfServiceRegMessageViewModel.cs" />
     <Compile Include="Areas\Admin\Models\SelfServiceIndexViewModel.cs" />
     <Compile Include="Areas\Admin\Models\InfoTextViewModels.cs" />
@@ -1632,6 +1639,10 @@
     <Content Include="Content\js\tinymce\skins\lightgray\fonts\tinymce.eot" />
     <Content Include="Content\js\tinymce\skins\lightgray\fonts\tinymce.ttf" />
     <Content Include="Content\js\tinymce\skins\lightgray\fonts\tinymce.woff" />
+    <Content Include="Areas\Admin\Views\QuickLinkGroup\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\QuickLinkGroup\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\QuickLinkGroup\New.cshtml" />
+    <Content Include="Areas\Admin\Views\QuickLinkGroup\_Input.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="Scripts\jquery-1.8.3.js" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />
