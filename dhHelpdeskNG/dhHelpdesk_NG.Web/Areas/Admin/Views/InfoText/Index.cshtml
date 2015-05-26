@@ -18,7 +18,7 @@
                     break;
                     
                 case InfoTextGroup.SelfService:
-                    <li class="active"><a href="#fragment-1">@Translation.Get("Självservice meddelande", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li>            
+                    <li class="active"><a href="#fragment-1">@Translation.Get("Texter - Självserviceportalen", Enums.TranslationSource.TextTranslation)</a></li>            
                     break;
             }
             
@@ -38,9 +38,9 @@
                         {
                             <tr>
                                 <td>
-                                    <a href="@Url.Action("edit", "infotext", new { area = "admin", infoTypeId = 1, customerId = Model.Customer.Id, 
+                                    <a href="@Url.Action("edit", "infotext", new { area = "admin", infoTypeId = (int) InfoTextType.SelfServiceWelcome, customerId = Model.Customer.Id, 
                                                                                    languageId = Model.Customer.Language_Id, infoTextGroup = Model.InfoTextGroup })">
-                                        @Translation.Get("Självservice välkommen meddelande", Enums.TranslationSource.TextTranslation)</a>
+                                        @Translation.Get("Välkomsttext", Enums.TranslationSource.TextTranslation)</a>
                                 </td>
                             </tr>
                         }
@@ -48,7 +48,7 @@
                         {
                             <tr>
                                 <td>
-                                    <a href="@Url.Action("edit", "infotext", new { area = "admin", infoTypeId = 2, customerId = Model.Customer.Id, 
+                                    <a href="@Url.Action("edit", "infotext", new { area = "admin", infoTypeId = (int) InfoTextType.NewInitiator, customerId = Model.Customer.Id, 
                                                                                    languageId = Model.Customer.Language_Id, infoTextGroup = Model.InfoTextGroup })">
                                         @Translation.Get("Ny anmälare", Enums.TranslationSource.TextTranslation)</a>
                                 </td>
@@ -59,7 +59,7 @@
                         {
                             <tr>
                                 <td>
-                                    <a href="@Url.Action("edit", "infotext", new { area = "admin", infoTypeId = 4, customerId = Model.Customer.Id,
+                                    <a href="@Url.Action("edit", "infotext", new { area = "admin", infoTypeId = (int) InfoTextType.Questionairy, customerId = Model.Customer.Id,
                                                                                    languageId = Model.Customer.Language_Id, infoTextGroup = Model.InfoTextGroup })">
                                         @Translation.Get("Enkät", Enums.TranslationSource.TextTranslation)</a>
                                 </td>
@@ -70,9 +70,9 @@
                         {
                             <tr>
                                 <td>
-                                    <a href="@Url.Action("edit", "infotext", new { area = "admin", infoTypeId = 5, customerId = Model.Customer.Id,
+                                    <a href="@Url.Action("edit", "infotext", new { area = "admin", infoTypeId = (int) InfoTextType.SelfServiceConfirmationMessae, customerId = Model.Customer.Id,
                                                                                    languageId = Model.Customer.Language_Id, infoTextGroup = Model.InfoTextGroup })">
-                                        @Translation.Get("Bekräftelse självservice", Enums.TranslationSource.TextTranslation)</a>
+                                        @Translation.Get("Bekräftelsetext", Enums.TranslationSource.TextTranslation)</a>
                                 </td>
                             </tr>
                         }
@@ -81,9 +81,9 @@
                         {
                             <tr>
                                 <td>
-                                    <a href="@Url.Action("edit", "infotext", new { area = "admin", infoTypeId = 6, customerId = Model.Customer.Id, 
+                                    <a href="@Url.Action("edit", "infotext", new { area = "admin", infoTypeId = (int) InfoTextType.SelfServiceInformation, customerId = Model.Customer.Id, 
                                                                                    languageId = Model.Customer.Language_Id, infoTextGroup = Model.InfoTextGroup })">
-                                        @Translation.Get("Information självservice", Enums.TranslationSource.TextTranslation)</a>
+                                        @Translation.Get("Informationstext", Enums.TranslationSource.TextTranslation)</a>
                                 </td>
                             </tr>
                         }
@@ -92,7 +92,7 @@
                         {
                             <tr>
                                 <td>
-                                    <a href="@Url.Action("edit", "infotext", new { area = "admin", infoTypeId = 7, customerId = Model.Customer.Id,
+                                    <a href="@Url.Action("edit", "infotext", new { area = "admin", infoTypeId = (int) InfoTextType.Order, customerId = Model.Customer.Id,
                                                                                    languageId = Model.Customer.Language_Id, infoTextGroup = Model.InfoTextGroup })">
                                         @Translation.Get("Beställning", Enums.TranslationSource.TextTranslation)</a>
                                 </td>
@@ -103,7 +103,7 @@
                         {
                             <tr>
                                 <td>
-                                    <a href="@Url.Action("edit", "infotext", new { area = "admin", infoTypeId = 8, customerId = Model.Customer.Id, 
+                                    <a href="@Url.Action("edit", "infotext", new { area = "admin", infoTypeId = (int) InfoTextType.SelfServiceHelp, customerId = Model.Customer.Id, 
                                                                                    languageId = Model.Customer.Language_Id, infoTextGroup = Model.InfoTextGroup })">
                                         @Translation.Get("Help Page Content", Enums.TranslationSource.TextTranslation)</a>
                                 </td>
@@ -114,7 +114,7 @@
                         {
                             <tr>
                                 <td>
-                                    <a href="@Url.Action("edit", "infotext", new { area = "admin", infoTypeId = 9, customerId = Model.Customer.Id,
+                                    <a href="@Url.Action("edit", "infotext", new { area = "admin", infoTypeId = (int) InfoTextType.SelfServiceAbout, customerId = Model.Customer.Id,
                                                                                    languageId = Model.Customer.Language_Id, infoTextGroup = Model.InfoTextGroup })">
                                         @Translation.Get("About Page Content", Enums.TranslationSource.TextTranslation)</a>
                                 </td>

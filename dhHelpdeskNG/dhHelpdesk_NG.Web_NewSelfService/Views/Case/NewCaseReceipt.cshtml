@@ -741,12 +741,12 @@
 <div class="container" >
     <div class="form-group row">
         <div class="col-md-5">         
-            <table class="tableform">
+            <table >
                 <tr>
                     @if (!string.IsNullOrEmpty(Model.ReceiptFooterMessage))
                     {
-                      <img src="@Url.Content("~/Content/img/Notice.png")" style="width: 16px; height: 16px" />                                               
-                      @Html.DisplayFor(m => Model.ReceiptFooterMessage) 
+                      @*<img src="@Url.Content("~/Content/img/Notice.png")" style="width: 16px; height: 16px" />*@
+                      @Html.Raw(Model.ReceiptFooterMessage) 
                     }
                 </tr>
                 <tr>

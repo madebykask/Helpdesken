@@ -4,12 +4,12 @@
 
 <table class="tableform">
     <tr>
-        <td class="span3">
+        <td>
             @Translation.Get("Text:", Enums.TranslationSource.TextTranslation)
         </td>
     </tr>
     <tr>
-        <td>
+        <td class="span6">
             @Html.TextAreaFor(model => model.InfoText.Name, 
                                        new { 
                                              style = "width:600px; height:300px;",  
@@ -17,20 +17,111 @@
                                              @class= (Model.InfoTextGroup == InfoTextGroup.SelfService? "richtexteditor" : "") 
                                            })
         </td>
-    </tr>
-    <tr>
-        <td>
+        <td class="span5">
             @if (Model.InfoTextGroup == InfoTextGroup.SelfService)
             {
-                <p> 
-                    <br />
-                    <h4> Paramaters:</h4> 
-                                    Cutomer Id: [#1]  <br/> Customer Name: [#2] <br/> 
-                                    Language Id: [#3] <br/> Language Name: [#4] <br/> 
-                                    Principal User: [#5] <br/> Principal User Id: [#6] <br/> 
-                                    User First Name: [#7] <br/> User Sure Name: [#8] <br/>
-                                    User Email: [#9] <br/> Domain: [#10] <br/> Employee Number: [#11] 
-                </p> 
+                <table class="table table-striped table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Translation.Get("Fält", Enums.TranslationSource.TextTranslation)
+                            </th>
+                            <th>
+                                @Translation.Get("Identifierare", Enums.TranslationSource.TextTranslation)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                Cutomer Id
+                            </td>
+                            <td>
+                                [#1]
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Customer Name
+                            </td>
+                            <td>
+                                [#2]
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Language Id
+                            </td>
+                            <td>
+                                [#3]
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Language Name
+                            </td>
+                            <td>
+                                [#4]
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Principal User
+                            </td>
+                            <td>
+                                [#5]
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Principal User Id
+                            </td>
+                            <td>
+                                [#6]
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                User First Name
+                            </td>
+                            <td>
+                                [#7]
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                User Sure Name
+                            </td>
+                            <td>
+                                [#8]
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                User Email
+                            </td>
+                            <td>
+                                [#9]
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Domain
+                            </td>
+                            <td>
+                                [#10]
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Employee Number
+                            </td>
+                            <td>
+                                [#11]
+                            </td>
+                        </tr>                        
+                    </tbody>
+                </table>                 
             }
         </td>
     </tr>

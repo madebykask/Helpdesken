@@ -2454,7 +2454,8 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     m.Logs = this._logService.GetCaseLogOverviews(caseId);
                     m.CaseFilesModel = new CaseFilesModel(caseId.ToString(global::System.Globalization.CultureInfo.InvariantCulture), this._caseFileService.GetCaseFiles(caseId).OrderBy(x=> x.CreatedDate).ToArray());
-                    m.RegByUser = this._userService.GetUser(m.case_.User_Id.Value);
+                    if (m.case_.User_Id.HasValue)
+                        m.RegByUser = this._userService.GetUser(m.case_.User_Id.Value);
                     if (m.Logs != null)
                     {
                         var finishingCauses = this._finishingCauseService.GetFinishingCauseInfos(customerId);

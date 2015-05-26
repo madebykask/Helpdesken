@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 
 namespace DH.Helpdesk.NewSelfService.Infrastructure
@@ -15,6 +16,15 @@ namespace DH.Helpdesk.NewSelfService.Infrastructure
     public static class ApplicationFacade
     {
         private const string _USER_CASE_INFO = "USER_CASE_INFO";
+
+        static ApplicationFacade()
+        {
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            Version ver = assembly.GetName().Version;
+            Version = string.Format("{0}.{1}.{2}", ver.Major, ver.Minor, ver.Build);//, ver.Revision
+        }
+
+        public static string Version { get; private set; }
 
         public static IList<UserCaseInfo> UserCaseInfo
         {

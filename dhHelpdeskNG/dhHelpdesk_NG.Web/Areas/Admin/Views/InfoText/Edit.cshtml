@@ -1,6 +1,10 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
-@using DH.Helpdesk.Common.Enums;
+@using DH.Helpdesk.Common.Enums
+@using System.Web.Optimization
 @model DH.Helpdesk.Web.Areas.Admin.Models.InfoTextInputViewModel
+
+@*@Scripts.Render("~/bundles/common/admin")*@
+
 @if (TempData["Error"] != null)
 {
     <div class="alert alert-error">@Translation.Get("Informationstext", Enums.TranslationSource.TextTranslation)
@@ -112,3 +116,4 @@
         }
     </script>
 }
+

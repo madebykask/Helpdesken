@@ -567,7 +567,7 @@
 
             // FinishingCause = FinishingType = ClosingReason 
             var extraFields = new ExtraFieldCaseHistory();
-            if (caseLog.FinishingType != null)
+            if (caseLog != null && caseLog.FinishingType != null)
             {
                 var fc = _finishingCauseService.GetFinishingTypeName(caseLog.FinishingType.Value);                                                     
                 extraFields.ClosingReason = fc ;
