@@ -227,5 +227,12 @@ namespace DH.Helpdesk.Common.Extensions.String
 
             return str.Trim();
         }
+
+        public static string showlimitedcharacters(this string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return string.Empty;
+            return value.Length > 105 ? value.Substring(0, 105) : value;
+        }
     }
 }

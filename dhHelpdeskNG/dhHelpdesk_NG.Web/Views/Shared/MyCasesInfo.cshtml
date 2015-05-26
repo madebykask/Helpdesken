@@ -1,8 +1,9 @@
 ﻿@using DH.Helpdesk.Common.Extensions.DateTime
+@using DH.Helpdesk.Common.Extensions.String
 @model DH.Helpdesk.Web.Models.Case.MyCasesModel
 
 @* Temporary inactive MyCases only for 27th March released #11837 *@
-@if (Model != null && Model.Cases != null && Model.Cases.Any() && 1==2)
+@if (Model != null && Model.Cases != null && Model.Cases.Any())
 {
     <div class="box-header portlet-header">
         <div class="start-tile-img label orange">
@@ -12,7 +13,7 @@
     </div>
     <div class="box-body portlet-content">
         <div class="box-post">
-            <table class="table table-bordered table-hover">
+            <table class="table table-bordered table-striped table-hover">
                 <tbody>
                     @foreach (var myCase in Model.Cases)
                     {  
@@ -30,7 +31,7 @@
                         </tr>
                         }
                          else      {
-                            <tr rel="tooltip" title="<p style='text-align:left'><strong>@Translation.Get("Kund"):</strong> @Html.DisplayFor(m => myCase.CustomerName)</p><p style='text-align:left'><strong>@Translation.Get("Anmälare"):</strong> @Html.DisplayFor(m => myCase.InitiatorName)</p><p class='toodesc' style='text-align:left'><strong>@Translation.Get("Beskrivning"):</strong> @Html.DisplayFor(m => myCase.Description)</p><p class='readmore'></p>" style="cursor: pointer" onclick="window.location.href = '@Url.Action("Edit", "Cases", new { id = myCase.Id })'">
+                            <tr rel="tooltip" title="<p style='text-align:left'><strong>@Translation.Get("Kund"):</strong> @Html.DisplayFor(m => myCase.CustomerName)</p><p style='text-align:left'><strong>@Translation.Get("Anmälare"):</strong> @Html.DisplayFor(m => myCase.InitiatorName)</p><p style='text-align:left'><strong>@Translation.Get("Beskrivning"):</strong> @myCase.Description.showlimitedcharacters() ...</p>" style="cursor: pointer" onclick="window.location.href = '@Url.Action("Edit", "Cases", new { id = myCase.Id })'">
                                 <td>
                                  @myCase.CaseNumber
                             </td>
