@@ -9,7 +9,7 @@
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Computers;
     using DH.Helpdesk.Dal.Repositories.Notifiers;
-    using DH.Helpdesk.Domain;
+    using DHDomain = DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Computers;
 
     public interface IComputerService
@@ -401,7 +401,7 @@
                 foreach (var delete in computerUserGroup.OUs.ToList())
                     computerUserGroup.OUs.Remove(delete);
             else
-                computerUserGroup.OUs = new List<OU>();
+                computerUserGroup.OUs = new List<DHDomain.OU>();
 
             if (ous != null)
             {

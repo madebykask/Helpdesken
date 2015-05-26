@@ -1,16 +1,19 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Web.Configuration;
     using System.Web.Mvc;
+    using DHDomain=DH.Helpdesk.Domain;
+    using System;
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Reports.Enums;
     using DH.Helpdesk.Dal.Infrastructure.Context;
-    using DH.Helpdesk.Domain;
+    
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
     using DH.Helpdesk.Web.Infrastructure;
+    using System.Collections.Generic;
+    using System.Web.Configuration;
+    
+    
 
     public class CustomerSettingsController : BaseAdminController
     {
@@ -48,12 +51,12 @@
             
             if (setting == null)
             {
-                setting = new Setting { Customer_Id = id };
+                setting = new DHDomain.Setting { Customer_Id = id };
                 setting.CaseFiles = 6;
                 setting.ComputerUserInfoListLocation = 1;
                 setting.ModuleCase = 1;
             }
-            
+
 
             var model = this.CustomerInputViewModel(customer);
 
@@ -65,7 +68,7 @@
         [CustomAuthorize(Roles = "3,4")]
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult Edit(int id, Customer customer, FormCollection coll, CustomerInputViewModel vmodel, List<ReportCustomer> ReportCustomers, int[] UsSelected)
+        public ActionResult Edit(int id, DHDomain.Customer customer, FormCollection coll, CustomerInputViewModel vmodel, List<DHDomain.ReportCustomer> ReportCustomers, int[] UsSelected)
         {
             var customerToSave = this._customerService.GetCustomer(id);
             customerToSave.NDSPath = vmodel.Customer.NDSPath;
@@ -131,7 +134,7 @@
             return model;
         }
 
-        private CustomerInputViewModel CustomerInputViewModel(Customer customer)
+        private CustomerInputViewModel CustomerInputViewModel(DHDomain.Customer customer)
         {
             if (customer.Id == 0)
             {
@@ -234,7 +237,7 @@
                 ListCustomerReports = reportList,
                 MinimumPasswordLength = sl,
                 PasswordHistory = sli,
-                Setting = this._settingService.GetCustomerSetting(customer.Id) ?? new Setting(),
+                Setting = this._settingService.GetCustomerSetting(customer.Id) ?? new DHDomain.Setting(),
                 
             };
 
@@ -267,7 +270,7 @@
 
             if (setting == null)
             {
-                setting = new Setting() { Customer_Id = id };
+                setting = new DHDomain.Setting() { Customer_Id = id };
                 setting.CaseFiles = 6;
                 setting.ComputerUserInfoListLocation = 1;
                 setting.ModuleCase = 1;

@@ -25,7 +25,7 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Dal.Utils;
-    using DH.Helpdesk.Domain;
+    using DHDomain = DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.Infrastructure;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Concrete;
@@ -376,11 +376,11 @@ namespace DH.Helpdesk.Web.Controllers
             SessionFacade.AdvancedSearchOverviewGridSettings = gridSettings;
 
             sm.Search.SortBy = gridSettings.sortOptions.sortBy;
-            sm.Search.Ascending = gridSettings.sortOptions.sortDir == SortingDirection.Asc;            
-            m.caseSettings = new List<CaseSettings>();
+            sm.Search.Ascending = gridSettings.sortOptions.sortDir == SortingDirection.Asc;
+            m.caseSettings = new List<DHDomain.CaseSettings>();
             foreach (var col in colDefs)
             {
-                var curSetting = new CaseSettings()
+                var curSetting = new DHDomain.CaseSettings()
                         {
                             Id = col.id,
                             Name = col.name                            
@@ -794,7 +794,7 @@ namespace DH.Helpdesk.Web.Controllers
             return this.Json(new { result = "success", data = data, remainingView = remainingView });
         }
 
-        private CaseSearchFilterData CreateCaseSearchFilterData(int cusId, int userId, CustomerUser cu, CaseSearchModel sm)
+        private CaseSearchFilterData CreateCaseSearchFilterData(int cusId, int userId, DHDomain.CustomerUser cu, CaseSearchModel sm)
         {
             var fd = new CaseSearchFilterData
             {
@@ -963,7 +963,7 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpPost]
         [ValidateInput(false)]
         public RedirectToRouteResult New(
-                                    Case case_, 
+                                    DHDomain.Case case_, 
                                     CaseLog caseLog, 
                                     CaseMailSetting caseMailSetting,
                                     bool? updateNotifierInformation,
@@ -980,7 +980,7 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpPost]
         [ValidateInput(false)]
         public RedirectToRouteResult NewAndClose(
-                                    Case case_, 
+                                    DHDomain.Case case_, 
                                     CaseLog caseLog, 
                                     CaseMailSetting caseMailSetting,
                                     bool? updateNotifierInformation,
@@ -997,7 +997,7 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpPost]
         [ValidateInput(false)]
         public RedirectToRouteResult NewAndAddCase(
-                                    Case case_,
+                                    DHDomain.Case case_,
                                     CaseLog caseLog,
                                     CaseMailSetting caseMailSetting,
                                     bool? updateNotifierInformation,
@@ -1014,7 +1014,7 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpPost]
         [ValidateInput(false)]
         public RedirectToRouteResult Edit(
-                                    Case case_,
+                                    DHDomain.Case case_,
                                     CaseLog caseLog,
                                     CaseMailSetting caseMailSetting,
                                     bool? updateNotifierInformation,
@@ -1027,7 +1027,7 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpPost]
         [ValidateInput(false)]
         public RedirectResult EditAndClose(
-                                    Case case_,
+                                    DHDomain.Case case_,
                                     CaseLog caseLog,
                                     CaseMailSetting caseMailSetting,
                                     bool? updateNotifierInformation,
@@ -1042,7 +1042,7 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpPost]
         [ValidateInput(false)]
         public RedirectToRouteResult EditAndAddCase(
-                                    Case case_,
+                                    DHDomain.Case case_,
                                     CaseLog caseLog,
                                     CaseMailSetting caseMailSetting,
                                     bool? updateNotifierInformation,
@@ -1199,7 +1199,7 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
-        public RedirectToRouteResult EditLog(Case case_, CaseLog caseLog)
+        public RedirectToRouteResult EditLog(DHDomain.Case case_, CaseLog caseLog)
         {
             IDictionary<string, string> errors;
             int caseHistoryId;
@@ -1292,7 +1292,7 @@ namespace DH.Helpdesk.Web.Controllers
             int ret = 0;
             if (id.HasValue)
             {
-                WorkingGroupEntity w = this._workingGroupService.GetWorkingGroup(id.Value);
+                DHDomain.WorkingGroupEntity w = this._workingGroupService.GetWorkingGroup(id.Value);
                 ret = w != null ? w.StateSecondary_Id.HasValue ? w.StateSecondary_Id.Value : 0 : 0;
             }
             return ret;
@@ -1622,7 +1622,7 @@ namespace DH.Helpdesk.Web.Controllers
             else
             {
                 var log = this._logService.GetLogById(int.Parse(id));
-                Case c = null; 
+                DHDomain.Case c = null; 
                 var basePath = string.Empty;
                 if (log != null)
                 {
@@ -2036,7 +2036,7 @@ namespace DH.Helpdesk.Web.Controllers
         }
         
         private int Save(
-                    Case case_, 
+                    DHDomain.Case case_, 
                     CaseLog caseLog, 
                     CaseMailSetting caseMailSetting, 
                     bool? updateNotifierInformation,
@@ -2077,7 +2077,7 @@ namespace DH.Helpdesk.Web.Controllers
             }
             
             // get case as it was before edit
-            Case oldCase = new Case();
+            DHDomain.Case oldCase = new DHDomain.Case();
             if (edit)
             {                
                 oldCase = this._caseService.GetDetachedCaseById(case_.Id);
@@ -2235,7 +2235,7 @@ namespace DH.Helpdesk.Web.Controllers
         private CaseSearchModel InitCaseSearchModel(int customerId, int userId)
         {
             CaseSearchModel m;
-            ISearch s = new Search();
+            DHDomain.ISearch s = new DHDomain.Search();
             var f = new CaseSearchFilter();
             m = new CaseSearchModel();
             var cu = this._customerUserService.GetCustomerSettings(customerId, userId);
@@ -2280,7 +2280,7 @@ namespace DH.Helpdesk.Web.Controllers
         private CaseSearchModel InitAdvancedSearchModel(int customerId, int userId)
         {
             CaseSearchModel m;
-            ISearch s = new Search();
+            DHDomain.ISearch s = new DHDomain.Search();
             var f = new CaseSearchFilter();
             m = new CaseSearchModel();
 
@@ -2303,8 +2303,8 @@ namespace DH.Helpdesk.Web.Controllers
         private CaseSearchModel GetEmptySearchModel(int customerId, int userId)
         {
             CaseSearchModel m;
-            
-                ISearch s = new Search();
+
+            DHDomain.ISearch s = new DHDomain.Search();
                 var f = new CaseSearchFilter();
                 m = new CaseSearchModel();
                 var cu = this._customerUserService.GetCustomerSettings(customerId, userId);
@@ -2570,7 +2570,7 @@ namespace DH.Helpdesk.Web.Controllers
                 if (caseId != 0)
                 {
 
-                    User admUser = null;
+                    DHDomain.User admUser = null;
                     if (m.case_.Performer_User_Id.HasValue)
                         admUser = _userService.GetUser(m.case_.Performer_User_Id.Value);
 
@@ -2840,7 +2840,7 @@ namespace DH.Helpdesk.Web.Controllers
             return model;
         }
 
-        private SendToDialogModel CreateNewSendToDialogModel(int customerId, IList<User> users)
+        private SendToDialogModel CreateNewSendToDialogModel(int customerId, IList<DHDomain.User> users)
         {
             var emailGroups = _emailGroupService.GetEmailGroupsWithEmails(customerId);
             var workingGroups = _workingGroupService.GetWorkingGroupsWithActiveEmails(customerId);
@@ -2890,7 +2890,7 @@ namespace DH.Helpdesk.Web.Controllers
         /// <returns>
         /// The result.
         /// </returns>
-        private Enums.AccessMode EditMode(CaseInputViewModel m, string topic, IList<Department> departmensForUser, List<CustomerWorkingGroupForUser> accessToWorkinggroups)
+        private Enums.AccessMode EditMode(CaseInputViewModel m, string topic, IList<DHDomain.Department> departmensForUser, List<CustomerWorkingGroupForUser> accessToWorkinggroups)
         {
             var gs = this._globalSettingService.GetGlobalSettings().FirstOrDefault();
 
@@ -3130,8 +3130,8 @@ namespace DH.Helpdesk.Web.Controllers
             return String.Join("|", files);
 
         }
-              
-        private CaseType TranslateCaseType(CaseType caseType)
+
+        private DHDomain.CaseType TranslateCaseType(DHDomain.CaseType caseType)
         {
             if (caseType.ParentCaseType != null)
                 caseType.ParentCaseType = TranslateCaseType(caseType.ParentCaseType);
