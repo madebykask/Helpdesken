@@ -710,8 +710,8 @@ namespace DH.Helpdesk.Web.Controllers
                 SessionFacade.CaseOverviewGridSettings =
                     this.gridSettingsService.GetForCustomerUserGrid(
                         SessionFacade.CurrentCustomer.Id,
-                        SessionFacade.CurrentUser.Id,
                         SessionFacade.CurrentUser.UserGroupId,
+                        SessionFacade.CurrentUser.Id,
                         GridSettingsService.CASE_OVERVIEW_GRID_ID);
             }
             else
