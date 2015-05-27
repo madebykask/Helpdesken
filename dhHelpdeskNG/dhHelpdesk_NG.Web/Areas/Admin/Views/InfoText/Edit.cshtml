@@ -3,7 +3,6 @@
 @using System.Web.Optimization
 @model DH.Helpdesk.Web.Areas.Admin.Models.InfoTextInputViewModel
 
-@*@Scripts.Render("~/bundles/common/admin")*@
 
 @if (TempData["Error"] != null)
 {
@@ -20,8 +19,11 @@
         <div class="pull-left">
             <ul class="secnav">
                 <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", new { }, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
-                <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", new { customerId = Model.InfoTextShowViewModel.Customer.Id, 
-                                                                                                                        infoTextGroup = Model.InfoTextShowViewModel.InfoTextGroup }, new { @class = "btn" })</li>
+                <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", new
+               {
+                   customerId = Model.InfoTextShowViewModel.Customer.Id,
+                   infoTextGroup = Model.InfoTextShowViewModel.InfoTextGroup
+               }, new { @class = "btn" })</li>
             </ul>
         </div>
     </div>
@@ -37,27 +39,27 @@
         </ul>
         <div class="tab-pane tab-pane-border active" id="fragment1">
                 <div class="container">
-        @if (Model.InfoTextShowViewModel.InfoText.Type == (int?) InfoTextType.SelfServiceWelcome)
+        @if (Model.InfoTextShowViewModel.InfoText.Type == (int?)InfoTextType.SelfServiceWelcome)
         {
             <h4>@Translation.Get("Självservice", Enums.TranslationSource.TextTranslation)</h4>
         }
-        @if (Model.InfoTextShowViewModel.InfoText.Type == (int?) InfoTextType.NewInitiator)
+        @if (Model.InfoTextShowViewModel.InfoText.Type == (int?)InfoTextType.NewInitiator)
         {
             <h4>@Translation.Get("Ny anmälare", Enums.TranslationSource.TextTranslation)</h4>
         }
-        @if (Model.InfoTextShowViewModel.InfoText.Type == (int?) InfoTextType.Questionairy)
+        @if (Model.InfoTextShowViewModel.InfoText.Type == (int?)InfoTextType.Questionairy)
         {
             <h4>@Translation.Get("Enkät", Enums.TranslationSource.TextTranslation)</h4>
         }
-        @if (Model.InfoTextShowViewModel.InfoText.Type == (int?) InfoTextType.SelfServiceConfirmationMessae)
+        @if (Model.InfoTextShowViewModel.InfoText.Type == (int?)InfoTextType.SelfServiceConfirmationMessae)
         {
             <h4>@Translation.Get("Bekräftelse självservice", Enums.TranslationSource.TextTranslation)</h4>
         }
-        @if (Model.InfoTextShowViewModel.InfoText.Type == (int?) InfoTextType.SelfServiceInformation)
+        @if (Model.InfoTextShowViewModel.InfoText.Type == (int?)InfoTextType.SelfServiceInformation)
         {
             <h4>@Translation.Get("Information självservice", Enums.TranslationSource.TextTranslation)</h4>
         }
-        @if (Model.InfoTextShowViewModel.InfoText.Type == (int?) InfoTextType.Order)
+        @if (Model.InfoTextShowViewModel.InfoText.Type == (int?)InfoTextType.Order)
         {
             <h4>@Translation.Get("Beställning", Enums.TranslationSource.TextTranslation)</h4>
         }
@@ -65,7 +67,7 @@
         {
             <h4>@Translation.Get("självservice Hjälp", Enums.TranslationSource.TextTranslation)</h4>
         }
-        @if (Model.InfoTextShowViewModel.InfoText.Type == (int?) InfoTextType.SelfServiceAbout)
+        @if (Model.InfoTextShowViewModel.InfoText.Type == (int?)InfoTextType.SelfServiceAbout)
         {
             <h4>@Translation.Get("självservice om", Enums.TranslationSource.TextTranslation)</h4>
         }
@@ -85,10 +87,22 @@
         </div>
     </div>
 }
-@section Scripts {
-    <script type="text/javascript">
 
+@section Scripts {    
+    <script type="text/javascript">
         $(function () {
+            tinymce.init({
+                selector: "textarea.richtexteditor",
+                plugins: [
+                    "advlist autolink lists link image charmap print preview anchor",
+                    "searchreplace visualblocks code fullscreen",
+                    "insertdatetime media table contextmenu paste charmap "
+                ],
+                menubar: false,
+                //toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+                toolbar: "undo redo | removeformat | fontsizeselect bold italic | bullist numlist | link unlink | charmap | code "
+            });
+
             var validator = $("#target").validate({
                 rules: {
                     "InfoText.Name": {

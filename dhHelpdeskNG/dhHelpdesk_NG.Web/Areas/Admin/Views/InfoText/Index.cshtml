@@ -105,7 +105,7 @@
                                 <td>
                                     <a href="@Url.Action("edit", "infotext", new { area = "admin", infoTypeId = (int) InfoTextType.SelfServiceHelp, customerId = Model.Customer.Id, 
                                                                                    languageId = Model.Customer.Language_Id, infoTextGroup = Model.InfoTextGroup })">
-                                        @Translation.Get("Help Page Content", Enums.TranslationSource.TextTranslation)</a>
+                                        @Translation.Get("Hjälpsida text", Enums.TranslationSource.TextTranslation)</a>
                                 </td>
                             </tr>
                         }
@@ -116,7 +116,7 @@
                                 <td>
                                     <a href="@Url.Action("edit", "infotext", new { area = "admin", infoTypeId = (int) InfoTextType.SelfServiceAbout, customerId = Model.Customer.Id,
                                                                                    languageId = Model.Customer.Language_Id, infoTextGroup = Model.InfoTextGroup })">
-                                        @Translation.Get("About Page Content", Enums.TranslationSource.TextTranslation)</a>
+                                        @Translation.Get("Omsida text", Enums.TranslationSource.TextTranslation)</a>
                                 </td>
                             </tr>
                         } 

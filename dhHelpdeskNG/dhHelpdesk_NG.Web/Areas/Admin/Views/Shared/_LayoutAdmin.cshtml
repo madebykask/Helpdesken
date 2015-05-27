@@ -15,12 +15,13 @@
         var trans_yes = '@Translation.Get("Ja", Enums.TranslationSource.TextTranslation)';
         var trans_no = '@Translation.Get("Nej", Enums.TranslationSource.TextTranslation)';
     </script>
-        
-    <script type="text/javascript" src="@Url.Content("~/Content/js/tinymce/tinymce.min.js")"></script>
-    @*@Styles.Render("~/bundles/common/tinymce")*@
+               
     @Styles.Render("~/Content/css/admin")
     @Styles.Render("~/img-profile/css")    
     @Scripts.Render("~/bundles/common/admin")
+    @*@Scripts.Render("~/bundles/common/admin/tinymce") TODO: make tinymce as bundle *@ 
+	<script type="text/javascript" src="@Url.Content("~/Content/js/tinymce/tinymce.min.js")"></script>
+	<script type="text/javascript" src="@Url.Content("~/Areas/Admin/Content/js/Common/tinymce.initiate.js")"></script>
 </head>
 
 <body>

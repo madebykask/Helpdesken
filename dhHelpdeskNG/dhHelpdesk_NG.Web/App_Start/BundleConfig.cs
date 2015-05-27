@@ -238,8 +238,9 @@
             bundles.Add(new ScriptBundle("~/bundles/cases/caseByIds").Include(
                             "~/Content/js/Cases/caseByIds.logic.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/common/tinymce").Include(
-                            "~/Content/js/tinymce/tinymce.min.js"));
+            bundles.Add(new ScriptBundle("~/bundles/common/admin/tinymce").Include(                            
+                            "~/Content/js/tinymce/tinymce.min.js",
+                            "~/Areas/Admin/Content/js/Common/tinymce.initiate.js"));
 
 
             
