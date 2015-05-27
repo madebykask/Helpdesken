@@ -35,31 +35,29 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="panel panel-default">
-                <div class="panel-heading"><span class="glyphicon glyphicon-star"></span>@Translation.Get("Bulletin Board", Enums.TranslationSource.TextTranslation) </div>
-                <div class="panel-body">
-                    @*<p></p>
-                    <!--<p><strong>Please submit all service requests relevant for September payroll by cut off day which is 17th September 3.00pm</strong></p>-->
-                    <p></p>
-                    <hr />*@
-                    @if (Model.BulletinBoard != null)
-                    {
-                        foreach (var b in Model.BulletinBoard)
-                        {                       
-                          if (DateTime.Now >= b.ShowDate && DateTime.Now <= b.ShowUntilDate )
-                          {
-                            <p> <strong> @Html.DisplayFor(m=> b.ShowDate , "Date")  </strong> <br /> &nbsp;&nbsp; @b.Text </p>
-                          }
+        @if (SessionFacade.CurrentCustomer.ShowBulletinBoardOnExtPage != 0)
+        {
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><span class="glyphicon glyphicon-star"></span>@Translation.Get("Bulletin Board", Enums.TranslationSource.TextTranslation) </div>
+                    <div class="panel-body">                    
+                        @if (Model.BulletinBoard != null)
+                        {
+                            foreach (var b in Model.BulletinBoard)
+                            {                       
+                              if (DateTime.Now >= b.ShowDate && DateTime.Now <= b.ShowUntilDate )
+                              {
+                                <p> <strong> @Html.DisplayFor(m=> b.ShowDate , "Date")  </strong> <br /> &nbsp;&nbsp; @b.Text </p>
+                              }
+                            }
                         }
-                    }
                     
-                    <div class="bulletinimg">
+                        <div class="bulletinimg">
+                        </div>                    
                     </div>
-                    @*<img src="@Url.Content("~/Content/img-profile/ikea-peoplestart.png")" />*@
                 </div>
             </div>
-        </div>
+        }
         <!--ON GOING--->
        
     </div>
