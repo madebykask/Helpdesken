@@ -3438,7 +3438,55 @@ If not exists (select * from tbltext where id = 1403)
 GO
 
 If not exists (select * from tblTextTranslation where text_id = 1403 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1403, 2, 'Information text ')
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1403, 2, 'Information text')
+GO
+
+If not exists (select * from tbltext where id = 1404)
+	insert into tbltext (id, TextString) VALUES (1404, 'Hjälpsida text')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1404 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1404, 2, 'Help Page text')
+GO
+
+If not exists (select * from tbltext where id = 1405)
+	insert into tbltext (id, TextString) VALUES (1405, 'Omsida text')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1405 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1405, 2, 'About Page text')
+GO
+
+If not exists (select * from tbltext where id = 1406)
+	insert into tbltext (id, TextString) VALUES (1406, 'Självservice – Meny')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1406 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1406, 2, 'Self service – Menu')
+GO
+
+If not exists (select * from tbltext where id = 1407)
+	insert into tbltext (id, TextString) VALUES (1407, 'Visa i menyn')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1407 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1407, 2, 'Show in menu')
+GO
+
+If not exists (select * from tbltext where id = 1408)
+	insert into tbltext (id, TextString) VALUES (1408, 'Inställningar – Startsida')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1408 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1408, 2, 'Settings – Start page')
+GO
+
+If not exists (select * from tbltext where id = 1408)
+	insert into tbltext (id, TextString) VALUES (1408, 'Visa på startsidan')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1408 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1408, 2, 'Settings – Start page')
 GO
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
