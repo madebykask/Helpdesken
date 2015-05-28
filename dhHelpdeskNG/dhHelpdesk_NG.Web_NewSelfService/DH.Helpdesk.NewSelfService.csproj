@@ -333,6 +333,7 @@
     <Content Include="Content\css\bootstrap.css" />
     <Content Include="Content\css\bootstrap.min.css" />
     <Content Include="Content\css\dhplus.css" />
+    <Content Include="Content\js\typeahead.js" />
     <Content Include="img-profile\profile.css" />
     <Content Include="Content\css\selfservice.css" />
     <Content Include="Content\dialog.css" />
@@ -872,6 +873,7 @@
     <Content Include="FormLibContent\Xmls\UnitedKingdom\VoluntaryDeductions.xml" />
     <Content Include="Global.asax" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
+    <Content Include="img-profile\SelfService-StartPage.jpg" />
     <Content Include="Scripts\jquery-1.8.3.js" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />
     <Content Include="Scripts\jquery-ui-1.9.2.js" />
