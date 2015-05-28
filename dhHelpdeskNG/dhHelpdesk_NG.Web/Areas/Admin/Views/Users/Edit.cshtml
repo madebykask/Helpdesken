@@ -47,10 +47,10 @@
                     "User.Email": {
                         required: true
                     }
-                    //,
-                    //"User.Customer_Id": {
-                    //    required: true
-                    //}
+                    ,
+                    "User.Customer_Id": {
+                        required: true
+                    }
 
                 },
                 messages: {
@@ -66,10 +66,10 @@
                     "User.Email": {
                         required: "@Translation.Get("Du måste ange en e-post adress")"
                     }
-                    @*,
+                    ,
                     "User.Customer_Id": {
                         required: "@Translation.Get("Du måste ange en standardkund", Enums.TranslationSource.TextTranslation)"
-                    }*@
+                    }
                 },
                 submitHandler: function(form) {
                     submitForm();

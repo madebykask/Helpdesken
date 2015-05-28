@@ -477,7 +477,7 @@ namespace DH.Helpdesk.Services.Services
 
             if (!user.Cs.Any(it => it.Id == user.Customer_Id))
             {
-                errors.Add("User.Customer_Id", "Du måste ange ett standardkund");
+                errors.Add("User.Customer_Id", "Du måste ange en standardkund");
             }
 
             if (user.Id == 0)
