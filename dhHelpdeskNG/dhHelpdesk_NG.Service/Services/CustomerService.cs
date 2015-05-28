@@ -32,6 +32,7 @@
         void SaveCaseFieldSettingsLangForCustomerCopy(CaseFieldSettingLanguage caseFieldSettingLanguage, out IDictionary<string, string> errors);
         void SaveEditCustomer(Customer customer, Setting setting, int[] us, int LanguageId, out IDictionary<string, string> errors);
         void SaveEditCustomer(Customer customer, out IDictionary<string, string> errors);
+        void SaveCustomerRegisterationMassage(Customer customer, string message, out IDictionary<string, string> errors);
         void SaveNewCustomerToGetId(Customer customer, out IDictionary<string, string> errors);
         void Commit();
 
@@ -185,7 +186,7 @@
 
             return DeleteMessage.Error;
         }
-        // public void SaveEditCustomer(Customer customer, Setting setting, int[] us, List<ReportCustomer> ReportCustomers, List<CaseFieldSetting> CaseFieldSettings, int LanguageId, out IDictionary<string, string> errors)
+        
         public void SaveEditCustomer(Customer customer, Setting setting, int[] us, int LanguageId, out IDictionary<string, string> errors)
         {
             if(customer == null)
@@ -241,60 +242,7 @@
                 }
             }
 
-            #endregion
-
-            //#region CaseFieldSettings
-
-            //if (customer.CaseFieldSettings != null)
-            //    foreach (var delete in customer.CaseFieldSettings.ToList())
-            //        customer.CaseFieldSettings.Remove(delete);
-            //else
-            //    customer.CaseFieldSettings = new List<CaseFieldSetting>();
-
-            ////TODO ALF: här ska jag spara ner ny och befintlig förändring i Customer, flik Case. I befintlig funkar den, men när en kund inte har några casefieldsettings på sig blir den galen!
-            //if (CaseFieldSettings != null)
-            //{
-            //    foreach (var change in CaseFieldSettings)
-            //    {
-            //        var rowCfs = _caseFieldSettingRepository.Get(x => x.Customer_Id == customer.Id);
-            //        //TODO ALF: kollar först ovan om det finns inställningar på denna kund, men annars skall den skapa nya inställningar
-            //        if (rowCfs == null)
-            //        {
-            //            rowCfs = new CaseFieldSetting() { Customer_Id = customer.Id };
-            //        }
-
-            //        var rowCfsl = _caseFieldSettingLanguageRepository.Get(x => x.Language_Id == LanguageId);
-            //        //TODO ALF: kollar först ovan om det finns översättningar på inställningar på denna kund, men annars skall den skapa nya översättningar till rätt inställningsid
-            //        if (rowCfsl == null)
-            //        {
-            //            rowCfsl = new CaseFieldSettingLanguage() { CaseFieldSettings_Id = rowCfs.Id };
-            //        }
-
-            //        foreach (var label in _caseFieldSettingRepository.GetAll().Where(x => x.Id == rowCfs.Id))
-            //        {
-            //            rowCfs.Customer_Id = customer.Id;
-            //            rowCfs.DefaultValue = change.DefaultValue;
-            //            rowCfs.FieldSize = change.FieldSize;
-            //            rowCfs.ListEdit = change.ListEdit;
-            //            rowCfs.Name = label.Name;
-            //            rowCfs.NameOrigin = label.NameOrigin;
-            //            rowCfs.RelatedField = change.RelatedField;
-            //            rowCfs.Required = change.Required;
-            //            rowCfs.ShowExternal = change.ShowExternal;
-            //            rowCfs.ShowOnStartPage = change.ShowOnStartPage;
-            //            rowCfsl.Language_Id = LanguageId;
-            //            rowCfsl.Label = label.NameOrigin;
-
-            //            if (rowCfs != null)
-            //                customer.CaseFieldSettings.Add(rowCfs);
-
-            //            if (rowCfsl != null)
-            //                _caseFieldSettingLanguageRepository.Add(rowCfsl);
-            //        }
-            //    }
-            //}
-
-            //#endregion
+            #endregion            
 
             if(customer.Id == 0)
                 this._customerRepository.Add(customer);
@@ -350,6 +298,21 @@
             if (errors.Count == 0)
                 this.Commit();            
 
+        }
+
+        public void SaveCustomerRegisterationMassage(Customer customer, string regMessage, out IDictionary<string, string> errors)
+        {
+            if (customer == null)
+                throw new ArgumentNullException("customer");
+
+            errors = new Dictionary<string, string>();
+
+            customer.RegistrationMessage = regMessage ?? string.Empty;                       
+            if (customer.Id != 0)                
+                this._customerRepository.Update(customer);
+
+            if (errors.Count == 0)
+                this.Commit();     
         }
 
         public void SaveCaseFieldSettingsForCustomer(int customerId, int languageId, IEnumerable<CaseFieldSettingsWithLanguage> caseFieldSettingWithLanguages, List<CaseFieldSetting> caseFieldSettings, out IDictionary<string, string> errors)

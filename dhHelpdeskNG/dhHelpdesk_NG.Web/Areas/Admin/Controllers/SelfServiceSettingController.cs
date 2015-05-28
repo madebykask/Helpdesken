@@ -164,7 +164,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
-            this._customerService.SaveEditCustomer(customerToSave, out errors);
+            this._customerService.SaveCustomerRegisterationMassage(customerToSave, vmodel.Customer.RegistrationMessage, out errors);
 
             if (errors.Count == 0)                            
                 return this.RedirectToAction("Index", "InfoText", new { customerId = id, infoTextGroup = InfoTextGroup.SelfService });
