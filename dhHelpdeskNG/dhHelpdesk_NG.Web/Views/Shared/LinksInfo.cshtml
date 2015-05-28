@@ -33,7 +33,7 @@
                                                     </a>
                                                 </div>
                                                 <ul id="collapseLinkInfoGroup@(categoryGroup.CategoryId)" class="accordion-body collapse">
-                                                    @foreach(var link in categoryGroup.Links)
+                                                    @foreach(var link in categoryGroup.Links.OrderBy(x=>x.SortOrder))
                                                     {
                                                         var target = link.OpenInNewWindow ? "target=\"_blank\"" : "";
                                                         <li style="padding-left: 18px;">
@@ -121,7 +121,7 @@
 
     // Make the collapse correct, arrows correct... hack DL 20150526
 
-    $(document).on('click', '.accordion-toggle', function(event) {
+    $(document).on('click', '.accordion-toggle', function (event) {
         event.stopPropagation();
         var $this = $(this);
 

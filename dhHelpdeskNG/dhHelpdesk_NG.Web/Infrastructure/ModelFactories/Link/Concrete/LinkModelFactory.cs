@@ -55,9 +55,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Link.Concrete
                     category.CategoryName = cat.LinkGroupName;
                     category.CategoryId = cat.LinkGroupId;
                     category.Links.AddRange(linkOverviews
-                                            .Where(l => l.CustomerId == customer.CustomerId && l.LinkGroupName == cat.LinkGroupName)
-                                            .OrderBy(l => l.SortOrder)
-                                            .ThenBy(l => l.UrlName));
+                                            .Where(l => l.CustomerId == customer.CustomerId && l.LinkGroupName == cat.LinkGroupName));
                     customer.Categories.Add(category);
                 }
 
