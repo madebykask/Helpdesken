@@ -190,12 +190,12 @@
                                     </td>
                                 </tr>*@
                                 <tr>
-                                    <td><label class="checkbox">
+                                    @*<td><label class="checkbox">
                                         <input type="checkbox" name="setting.ModuleDailyReport" @(Model.Setting.ModuleDailyReport == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="setting.ModuleDailyReport" value="0" />
                                         &nbsp;@Translation.Get("Dagrapport", Enums.TranslationSource.TextTranslation)
                                         </label>
-                                    </td>
+                                    </td>*@
                                     <td><label class="checkbox">
                                         <input type="checkbox" name="setting.ModuleDocument" @(Model.Setting.ModuleDocument == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="setting.ModuleDocument" value="0" />
