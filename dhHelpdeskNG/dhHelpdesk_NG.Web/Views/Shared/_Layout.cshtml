@@ -103,14 +103,14 @@
                                     <i class="icon-signal icon-white"></i><span class="mnudisplay">@Translation.Get("Rapportmeny")</span> <i class="icon-chevron-down icon-white"></i>
                                 </a>
                                 <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
-                                    @*@if(model.IsReportVisible())
+                                    @if(model.IsReportVisible())
                                     {                                        
                                         <li><a href="@Url.Action("Index", "Report", new { area = "Reports" })">
                                             <img src="@Url.Content("~/Content/icons/reports.png")" />
                                             @Translation.Get("Rapporter")</a></li>                                    
                                     }
 
-                                    @if(model.IsDailyReportVisible())
+                                    @*@if(model.IsDailyReportVisible())
                                     {    
                                         <li><a href="@Url.Action("index", "dailyreport", new { area = "" })">
                                             <img src="@Url.Content("~/Content/icons/dailyreport.png")" />
