@@ -7,21 +7,86 @@
 @using DH.Helpdesk.Common.Enums;
 @using DH.Helpdesk.NewSelfService.Models.Case;
 
+ @{
+        
+        int pCustomerId = -1;
+
+        if(SessionFacade.CurrentCustomer != null)
+        {
+            pCustomerId = SessionFacade.CurrentCustomer.Id;
+            SessionFacade.CurrentCustomerID = pCustomerId;
+        }
+
+        if(pCustomerId == -1 && SessionFacade.CurrentCustomerID > 0)
+        {
+            pCustomerId = SessionFacade.CurrentCustomerID;
+            if(SessionFacade.CurrentCustomer != null)
+            {
+                SessionFacade.CurrentCustomer.Id = pCustomerId;
+            }
+        }
+
+        var helper = ManualDependencyResolver.Get<ICommonFunctions>();
+
+        var pCaseTemplates = helper.GetCaseTemplates(pCustomerId);
+        var pActionSettings = helper.GetActionSettings(pCustomerId);
+
+        var hideMenu = false;
+
+        if(SessionFacade.UserHasAccess == false)
+        {
+            hideMenu = true;
+        }
+
+        var showLanguageSelect = false;
+        if(TempData["ShowLanguageSelect"] != null && TempData["ShowLanguageSelect"].ToString().ToLower() == "true")
+        {
+            showLanguageSelect = true;
+        }
+
+        CaseLogModel pCaseLogs = null;
+        var currentCaseId = ViewBag.CurrentCaseId;
+        if(currentCaseId != null)
+        {
+            pCaseLogs = helper.GetCaseLogs(currentCaseId);
+        }
+
+        var appType = System.Configuration.ConfigurationManager.AppSettings[AppSettingsKey.CurrentApplicationType].ToString().ToLower();
+
+        var hasError = ViewBag.HasError;
+        var pHasError = false;
+        if(hasError == "true")
+        {
+            pHasError = true;
+        } 
+        
+    }
 
 <!DOCTYPE html>
 <html>
 <head>
     <meta content="html/text; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>@Translation.Get("DH-Line Manager", Enums.TranslationSource.TextTranslation)</title>
+    
+    <title>
+        @if (appType == ApplicationTypes.LineManager)
+        {
+            @Translation.Get("DH-Line Manager", Enums.TranslationSource.TextTranslation)
+        }
+        else
+        {
+            @Translation.Get("DH-Self Service", Enums.TranslationSource.TextTranslation)
+        }
+    </title>            
 
     <link rel="stylesheet" href="@Url.Content("~/Content/css/bootstrap.css")" />
     <link rel="stylesheet" href="@Url.Content("~/Content/css/selfservice.css")" />
     <link rel="stylesheet" href="@Url.Content("~/img-profile/profile.css")" />
     <link rel="stylesheet" href="@Url.Content("~/Content/js/jquery.plupload.queue/css/jquery.plupload.queue.css")" />
 
-
-    <script type="text/javascript" src="@Url.Content("~/Content/js/jquery-1.11.0.min.js")"></script>
+    
+    <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/js/jquery-1.11.0.min.js")"></script>    
     <script type="text/javascript" src="@Url.Content("~/Content/js/jquery-ui-1.9.2.min.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Content/js/bootstrap.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Content/js/bootstrap-multiselect.js")"></script>
@@ -30,8 +95,9 @@
     <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.plupload.queue/jquery.plupload.queue.min.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Content/js/MicrosoftAjax.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Content/js/MicrosoftMvcAjax.js")"></script>
-
+    <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.validate.js")"></script>   
     <script type="text/javascript" src="@Url.Content("~/Content/js/Shared/sortby.js")"></script>
+    
 
     <!--[if lt IE 9]>
 	 <script src="@Url.Content("~/Content/js/html5shiv.js")"></script>
@@ -137,60 +203,7 @@
     <!--END COMMUNICATE SCRIPT---->
 </head>
 <body>
-    @{
-        
-        int pCustomerId = -1;
-
-        if(SessionFacade.CurrentCustomer != null)
-        {
-            pCustomerId = SessionFacade.CurrentCustomer.Id;
-            SessionFacade.CurrentCustomerID = pCustomerId;
-        }
-
-        if(pCustomerId == -1 && SessionFacade.CurrentCustomerID > 0)
-        {
-            pCustomerId = SessionFacade.CurrentCustomerID;
-            if(SessionFacade.CurrentCustomer != null)
-            {
-                SessionFacade.CurrentCustomer.Id = pCustomerId;
-            }
-        }
-
-        var helper = ManualDependencyResolver.Get<ICommonFunctions>();
-
-        var pCaseTemplates = helper.GetCaseTemplates(pCustomerId);
-        var pActionSettings = helper.GetActionSettings(pCustomerId);
-
-        var hideMenu = false;
-
-        if(SessionFacade.UserHasAccess == false)
-        {
-            hideMenu = true;
-        }
-
-        var showLanguageSelect = false;
-        if(TempData["ShowLanguageSelect"] != null && TempData["ShowLanguageSelect"].ToString().ToLower() == "true")
-        {
-            showLanguageSelect = true;
-        }
-
-        CaseLogModel pCaseLogs = null;
-        var currentCaseId = ViewBag.CurrentCaseId;
-        if(currentCaseId != null)
-        {
-            pCaseLogs = helper.GetCaseLogs(currentCaseId);
-        }
-
-        var appType = System.Configuration.ConfigurationManager.AppSettings[AppSettingsKey.CurrentApplicationType].ToString().ToLower();
-
-        var hasError = ViewBag.HasError;
-        var pHasError = false;
-        if(hasError == "true")
-        {
-            pHasError = true;
-        } 
-        
-    }
+   
    
     <!-- COMMUNICATE DIV--->
     @*<input type="button" value ="@employeeList" />*@

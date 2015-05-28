@@ -1042,6 +1042,7 @@
     </div>
 </div>
 
+
 <script type="text/javascript">
 
     $(document).ready(function () {
@@ -1218,10 +1219,7 @@
         $("#NewCaseForm").attr("action", '/Case/NewCase');
         $("#NewCaseForm").submit();
     }
-
     
-
-
     $('#divProductArea ul.dropdown-menu li a').click(function (e) {
         e.preventDefault();
         var val = $(this).attr('value');
@@ -1230,8 +1228,6 @@
         var ee = document.getElementById("NewCase_ProductArea_Id");
         ee.setAttribute('value', val);
     });
-
-    
 
     $('#divCaseType ul.dropdown-menu li a').click(function (e) {
         e.preventDefault();       
@@ -1258,226 +1254,224 @@
         ee.setAttribute('value', val);
     });
 
-
     var validator = $("#NewCaseForm").validate({
         ignore: "",
         rules: {
-            "NewCase.ReportedBy": {
-                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.ReportedBy.ToString())")
+                    "NewCase.ReportedBy": {
+                        required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.ReportedBy.ToString())")
                 },
-                "NewCase.PersonsName": {
-                    required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Persons_Name.ToString())")
+                    "NewCase.PersonsName": {
+                        required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Persons_Name.ToString())")
+                },
+                    "NewCase.PersonsEmail": {
+                        required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString())")
+                },
+                    "NewCase.PersonsCellphone": {
+                        required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString())")
+                },
+                    "NewCase.PersonsPhone": {
+                        required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString())")
+                },
+                    "NewCase.Region_Id": {
+                        required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Region_Id.ToString())")
+                },
+                    "NewCase.Department_Id": {
+                        required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Department_Id.ToString())")
+                },
+                    "NewCase.OU_Id": {
+                        required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.OU_Id.ToString())")
+                },
+                    "NewCase.Place": {
+                        required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Place.ToString())")
+                },
+                    "NewCase.UserCode": {
+                        required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.UserCode.ToString())")
+                },
+                    "NewCase.InventoryNumber": {
+                        required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString())")
+                },
+                    "NewCase.InventoryLocation": {
+                        required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString())")
+                },
+                    "NewCase.InventoryType": {
+                        required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString())")
+                },
+                    "NewCase.CaseType_Id": {
+                        required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString())")
+                },
+                    "NewCase.ProductArea_Id": {
+                        required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString())")
+                },
+                    "NewCase.System_Id": {
+                        required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.System_Id.ToString())")
+                },
+                    "NewCase.Urgency_Id": {
+                        required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString())")
+                },
+                    "NewCase.Impact_Id": {
+                        required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Impact_Id.ToString())")
+                },
+                    "NewCase.Category_Id": {
+                        required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Category_Id.ToString())")
+                },
+                    "NewCase.Supplier_Id": {
+                        required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString())")
+                },
+                    "NewCase.InvoiceNumber": {
+                        required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString())")
+                },
+                    "NewCase.ReferenceNumber": {
+                        required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString())")
+                },
+                    "NewCase.Caption": {
+                        required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Caption.ToString())")
+                },
+                    "NewCase.Description": {
+                        required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Description.ToString())")
+                },
+                    "NewCase.Miscellaneous": {
+                        required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString())")
+                },
+                    "NewCase.AgreedDate": {
+                        required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.AgreedDate.ToString())")
+                },
+                    "NewCase.Available": {
+                        required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Available.ToString())")
+                },
+                    "NewCase.WorkingGroup_Id": {
+                        required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString())")
+                },
+                    "NewCase.Performer_User_Id": {
+                        required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString())")
+                },
+                    "NewCase.CaseResponsible_User_Id": {
+                        required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString())")
+                },
+                    "NewCase.Priority_Id": {
+                        required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Priority_Id.ToString())")
+                },
+                    "NewCase.Status_Id": {
+                        required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Status_Id.ToString())")
+                },
+                    "NewCase.StateSecondary_Id": {
+                        required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString())")
+                },
+                    "NewCase.PlanDate": {
+                        required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.PlanDate.ToString())")
+                },
+                    "NewCase.WatchDate": {
+                        required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.WatchDate.ToString())")
+                },
             },
-                "NewCase.PersonsEmail": {
-                    required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString())")
-            },
-                "NewCase.PersonsCellphone": {
-                    required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString())")
-            },
-                "NewCase.PersonsPhone": {
-                    required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString())")
-            },
-                "NewCase.Region_Id": {
-                    required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Region_Id.ToString())")
-            },
-                "NewCase.Department_Id": {
-                    required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Department_Id.ToString())")
-            },
-                "NewCase.OU_Id": {
-                    required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.OU_Id.ToString())")
-            },
-                "NewCase.Place": {
-                    required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Place.ToString())")
-            },
-                "NewCase.UserCode": {
-                    required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.UserCode.ToString())")
-            },
-                "NewCase.InventoryNumber": {
-                    required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString())")
-            },
-                "NewCase.InventoryLocation": {
-                    required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString())")
-            },
-                "NewCase.InventoryType": {
-                    required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString())")
-            },
-                "NewCase.CaseType_Id": {
-                    required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString())")
-            },
-                "NewCase.ProductArea_Id": {
-                    required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString())")
-            },
-                "NewCase.System_Id": {
-                    required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.System_Id.ToString())")
-            },
-                "NewCase.Urgency_Id": {
-                    required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString())")
-            },
-                "NewCase.Impact_Id": {
-                    required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Impact_Id.ToString())")
-            },
-                "NewCase.Category_Id": {
-                    required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Category_Id.ToString())")
-            },
-                "NewCase.Supplier_Id": {
-                    required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString())")
-            },
-                "NewCase.InvoiceNumber": {
-                    required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString())")
-            },
-                "NewCase.ReferenceNumber": {
-                    required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString())")
-            },
-                "NewCase.Caption": {
-                    required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Caption.ToString())")
-            },
-                "NewCase.Description": {
-                    required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Description.ToString())")
-            },
-                "NewCase.Miscellaneous": {
-                    required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString())")
-            },
-                "NewCase.AgreedDate": {
-                    required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.AgreedDate.ToString())")
-            },
-                "NewCase.Available": {
-                    required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Available.ToString())")
-            },
-                "NewCase.WorkingGroup_Id": {
-                    required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString())")
-            },
-                "NewCase.Performer_User_Id": {
-                    required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString())")
-            },
-                "NewCase.CaseResponsible_User_Id": {
-                    required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString())")
-            },
-                "NewCase.Priority_Id": {
-                    required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Priority_Id.ToString())")
-            },
-                "NewCase.Status_Id": {
-                    required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Status_Id.ToString())")
-            },
-                "NewCase.StateSecondary_Id": {
-                    required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString())")
-            },
-                "NewCase.PlanDate": {
-                    required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.PlanDate.ToString())")
-            },
-                "NewCase.WatchDate": {
-                    required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.WatchDate.ToString())")
-            },
-            },
+
             messages: {
                 "NewCase.ReportedBy": {
                     required: "@Translation.Get(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                },
+                "NewCase.PersonsName": {
+                    required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                },
+                "NewCase.PersonsEmail": {
+                    required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                },
+                "NewCase.PersonsCellPhone": {
+                    required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                },
+                "NewCase.PersonsPhone": {
+                    required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                },
+                "NewCase.Region_Id": {
+                    required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Region_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                },
+                "NewCase.Department_Id": {
+                    required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                },
+                "NewCase.OU_Id": {
+                    required: "@Translation.Get(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                },
+                "NewCase.Place": {
+                    required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Place.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                },
+                "NewCase.UserCode": {
+                    required: "@Translation.Get(GlobalEnums.TranslationCaseFields.UserCode.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                },
+                "NewCase.InventoryNumber": {
+                    required: "@Translation.Get(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                },
+                "NewCase.InventoryLocation": {
+                    required: "@Translation.Get(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                },
+                "NewCase.InventoryType": {
+                    required: "@Translation.Get(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                },
+                "NewCase.ProductArea_Id": {
+                    required: "@Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                },
+                "NewCase.CaseType_Id": {
+                    required: "@Translation.Get(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                },
+                "NewCase.System_Id": {
+                    required: "@Translation.Get(GlobalEnums.TranslationCaseFields.System_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                },
+                "NewCase.Urgency_Id": {
+                    required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                },
+                "NewCase.Impact_Id": {
+                    required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Impact_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                },
+                "NewCase.Category_Id": {
+                    required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                },
+                "NewCase.Supplier_Id": {
+                    required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                },
+                "NewCase.InvoiceNumber": {
+                    required: "@Translation.Get(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                },
+                "NewCase.ReferenceNumber": {
+                    required: "@Translation.Get(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                },
+                "NewCase.Caption": {
+                    required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Caption.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                },
+                "NewCase.Description": {
+                    required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                },
+                "NewCase.Miscellaneous": {
+                    required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                },
+                "NewCase.AgreedDate": {
+                    required: "@Translation.Get(GlobalEnums.TranslationCaseFields.AgreedDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                },
+                "NewCase.Available": {
+                    required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Available.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                },
+                "NewCase.WorkingGroup_Id": {
+                    required: "@Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                },
+                "NewCase.Performer_User_Id": {
+                    required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                },
+                "NewCase.CaseResponsible_User_Id": {
+                    required: "@Translation.Get(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                },
+                "NewCase.Priority_Id": {
+                    required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                },
+                "NewCase.Status_Id": {
+                    required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                },
+                "NewCase.StateSecondary_Id": {
+                    required: "@Translation.Get(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                },
+                "NewCase.PlanDate": {
+                    required: "@Translation.Get(GlobalEnums.TranslationCaseFields.PlanDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                },
+                "NewCase.WatchDate": {
+                    required: "@Translation.Get(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
+                },
             },
-            "NewCase.PersonsName": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
-            },
-            "NewCase.PersonsEmail": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
-            },
-            "NewCase.PersonsCellPhone": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
-            },
-            "NewCase.PersonsPhone": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
-            },
-            "NewCase.Region_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Region_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
-            },
-            "NewCase.Department_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
-            },
-            "NewCase.OU_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
-            },
-            "NewCase.Place": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Place.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
-            },
-            "NewCase.UserCode": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.UserCode.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
-            },
-            "NewCase.InventoryNumber": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
-            },
-            "NewCase.InventoryLocation": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
-            },
-            "NewCase.InventoryType": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
-            },
-            "NewCase.ProductArea_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
-            },
-            "NewCase.CaseType_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
-            },
-            "NewCase.System_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.System_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
-            },
-            "NewCase.Urgency_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
-            },
-            "NewCase.Impact_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Impact_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
-            },
-            "NewCase.Category_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
-            },
-            "NewCase.Supplier_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
-            },
-            "NewCase.InvoiceNumber": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
-            },
-            "NewCase.ReferenceNumber": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
-            },
-            "NewCase.Caption": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Caption.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
-            },
-            "NewCase.Description": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
-            },
-            "NewCase.Miscellaneous": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
-            },
-            "NewCase.AgreedDate": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.AgreedDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
-            },
-            "NewCase.Available": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Available.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
-            },
-            "NewCase.WorkingGroup_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
-            },
-            "NewCase.Performer_User_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
-            },
-            "NewCase.CaseResponsible_User_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
-            },
-            "NewCase.Priority_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
-            },
-            "NewCase.Status_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
-            },
-            "NewCase.StateSecondary_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
-            },
-            "NewCase.PlanDate": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.PlanDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
-            },
-            "NewCase.WatchDate": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
-            },
-        },
-            //errorPlacement: function (error, element) {
-            //    alert(error.text());
-            //},
+
             submitHandler: function (form) {
                 form.submit();
             }
