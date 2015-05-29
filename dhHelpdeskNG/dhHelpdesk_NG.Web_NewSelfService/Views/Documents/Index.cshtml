@@ -49,11 +49,11 @@
                                                 var downloadUrlPath = "#";
                                                 if (!string.IsNullOrEmpty(doc.FileName))
                                                 {
-                                                    downloadUrlPath = "/Documents/DocumentFile?documentId=" + doc.Id;
+                                                    downloadUrlPath = "~/Documents/DocumentFile?documentId=" + doc.Id;
                                                 }
                                             } 
                                             
-                                            <a href="@downloadUrlPath" class="btn btn-dhblue btn-xs">
+                                            <a href="@Url.Content(downloadUrlPath)" class="btn btn-dhblue btn-xs">
                                                 <span class="glyphicon glyphicon-file"></span>    
                                             </a>                                                
                                             

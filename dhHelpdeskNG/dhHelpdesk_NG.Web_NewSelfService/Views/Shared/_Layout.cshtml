@@ -706,7 +706,7 @@
         if (note == "") {
             alert('Note text is empty!');
         } else {                                             
-            $.get('/Case/_CaseLogNote', { caseId: '@currentCaseId', note: note }, function (_CaseLogNoteMarkup) {
+            $.get('@Url.Content("~/Case/_CaseLogNote")', { caseId: '@currentCaseId', note: note }, function (_CaseLogNoteMarkup) {
                 $('#CaseLogPartial').html(_CaseLogNoteMarkup);
                 $('#myNote').val('');
             });            
