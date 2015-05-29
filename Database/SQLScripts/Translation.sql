@@ -3481,5 +3481,33 @@ If not exists (select * from tblTextTranslation where text_id = 1408 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1408, 2, 'Settings – Start page')
 GO
 
+
+
+-- 2015-05-29 New Language name ---
+If not exists (select * from tbltext where id = 1424)
+	insert into tbltext (id, TextString) VALUES (1424, 'Tjeckiska')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1424 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1424, 2, 'Czech')
+GO
+
+
+If not exists (select * from tbltext where id = 1425)
+	insert into tbltext (id, TextString) VALUES (1425, 'Ungerska')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1425 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1425, 2, 'Hungarian')
+GO
+
+If not exists (select * from tbltext where id = 1426)
+	insert into tbltext (id, TextString) VALUES (1426, 'Slovakiska')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1426 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1426, 2, 'Slovak')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
