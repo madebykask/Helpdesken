@@ -1,7 +1,13 @@
 ﻿@using Microsoft.Ajax.Utilities
 @using DH.Helpdesk.Common.Enums.Cases;
+@using DH.Helpdesk.Common.Enums;
 @using DH.Helpdesk.BusinessData.Enums.Case;
+@using System.Configuration;
 @model DH.Helpdesk.NewSelfService.Models.Case.UserCasesModel         
+
+@{
+    var appType = ConfigurationManager.AppSettings[AppSettingsKey.CurrentApplicationType].ToString().ToLower();    
+}
 
 <div id="search_result">
     <div class="container-fluid dh-container">
@@ -16,15 +22,29 @@
                         @{
                             string tabTitle = "";
                             if (Model != null)
-                            {
+                            {                                
                                 switch (Model.ProgressId)
                                 {
                                     case CaseProgressFilter.ClosedCases:
-                                        tabTitle = Translation.Get("Finished Service Requests", Enums.TranslationSource.TextTranslation);
+                                        if (appType == ApplicationTypes.LineManager)
+                                        {
+                                            tabTitle = Translation.Get("Finished Service Requests", Enums.TranslationSource.TextTranslation);
+                                        }
+                                        else
+                                        {
+                                            tabTitle = Translation.Get("Closed cases", Enums.TranslationSource.TextTranslation);
+                                        }                                        
                                         break;
 
                                     case CaseProgressFilter.CasesInProgress:
-                                        tabTitle = Translation.Get("Ongoing Service Requests", Enums.TranslationSource.TextTranslation);
+                                        if (appType == ApplicationTypes.LineManager)
+                                        {
+                                            tabTitle = Translation.Get("Ongoing Service Requests", Enums.TranslationSource.TextTranslation);
+                                        }
+                                        else
+                                        {
+                                            tabTitle = Translation.Get("Ongoing cases", Enums.TranslationSource.TextTranslation);
+                                        }                                        
                                         break;
                                 }
                             }                       

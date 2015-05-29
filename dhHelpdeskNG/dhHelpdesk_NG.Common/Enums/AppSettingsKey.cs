@@ -2,6 +2,8 @@
 {
     public static class AppSettingsKey
     {
+        public static readonly string HelpdeskPath = "dh_helpdeskaddress";
+
         public static readonly string FilesDirectory = "dh_filesDirectory";
 
         public static readonly string SmtpServer = "SmtpServer";

@@ -71,7 +71,7 @@
 
             if(SessionFacade.CurrentCustomer == null && customerId == -1)
             {
-                ErrorGenerator.MakeError("Customer Id is empty", 101);
+                ErrorGenerator.MakeError("Customer Id is empty!", 101);
                 filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
                 return;
             }
@@ -90,7 +90,7 @@
             if(SessionFacade.CurrentCustomer == null)
             {
                 SessionFacade.UserHasAccess = false;
-                ErrorGenerator.MakeError(string.Format("Invalid Customer Id! ({0})", customerId), 101);
+                ErrorGenerator.MakeError(string.Format("Customer is not valid!", customerId), 101);
                 filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
                 return;
             }

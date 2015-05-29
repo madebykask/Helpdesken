@@ -196,7 +196,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                 currentCustomer = SessionFacade.CurrentCustomer;
             else
             {
-                ErrorGenerator.MakeError(string.Format("Customer Id: {0} is not valid!", customerId.ToString()), 201);
+                ErrorGenerator.MakeError("Customer is not valid!");
                 return RedirectToAction("Index", "Error");                
             }
 
@@ -241,7 +241,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                 currentCustomer = SessionFacade.CurrentCustomer;
             else
             {
-                ErrorGenerator.MakeError(string.Format("Customer Id: {0} is not valid!", customerId.ToString()), 201);
+                ErrorGenerator.MakeError("Customer is not valid!");
                 return RedirectToAction("Index", "Error");
             }
             var languageId = SessionFacade.CurrentLanguageId;
@@ -337,7 +337,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                 currentCustomer = SessionFacade.CurrentCustomer;
             else
             {
-                ErrorGenerator.MakeError(string.Format("Customer Id: {0} is not valid!", customerId.ToString()), 201);
+                ErrorGenerator.MakeError("Customer is not valid!");
                 return RedirectToAction("Index", "Error");
             }                
 
@@ -700,6 +700,9 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             IDictionary<string, string> errors;
 
             // save case and case history
+            if (newCase.User_Id <= 0)
+                newCase.User_Id = null;
+
             int caseHistoryId = this._caseService.SaveCase(newCase, null, caseMailSetting, 0, SessionFacade.CurrentUserIdentity.UserId, out errors);
 
             var basePath = this._masterDataService.GetFilePath(newCase.Customer_Id);
