@@ -685,15 +685,16 @@
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Supplier_Id, "Leverantör")
                                         </td>
                                         @if (Model.countries != null)
-                                        {   <td>
-                                            <select id="CountryId" name="CountryId">
-                                                <option value="">&nbsp;</option>
-                                                @foreach (var e in Model.countries.Where(e => e.IsActive == 1 || Model.CountryId == e.Id))
-                                                {
-                                                    <option value="@e.Id" @e.Id.IdIsSelected(Model.CountryId.ToString()) >@e.Name</option>
-                                                }
-                                            </select>
-                                        </td> 
+                                        {
+                                            <td>
+                                                <select id="CountryId" name="CountryId" @(Model.EditMode == Enums.AccessMode.ReadOnly ? "disabled=true" : string.Empty)>
+                                                    <option value="">&nbsp;</option>
+                                                    @foreach (var e in Model.countries.Where(e => e.IsActive == 1 || Model.CountryId == e.Id))
+                                                    {
+                                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.CountryId.ToString()) >@e.Name</option>
+                                                    }
+                                                </select>
+                                            </td>
                                         }
                                         <td style="float: left;">
                                             @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Supplier_Id, CaseSolutionFields.Supplier))
@@ -862,7 +863,14 @@
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.AgreedDate, "Överenskommet datum")
                                         </td>
                                         <td colspan="2">
-                                            @Html.EditorFor(m => m.case_.AgreedDate, "DatePicker", new { id = "divCase__AgreedDate" })
+                                            @if (Model.EditMode == Enums.AccessMode.ReadOnly)
+                                            {
+                                                @Html.EditorFor(m => m.case_.AgreedDate, "DatePicker", new { id = "divCase__AgreedDate", disabled = "disabled"})
+                                            }
+                                            else
+                                            {
+                                                @Html.EditorFor(m => m.case_.AgreedDate, "DatePicker", new { id = "divCase__AgreedDate" })
+                                            }
                                         </td>
                                     </tr>
                                     <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Available, CaseSolutionFields.Available)">
@@ -995,7 +1003,7 @@
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id, "Ansvarig")
                                         </td>
                                         <td>
-                                            <select id="case__CaseResponsibleUser_Id" name="case_.CaseResponsibleUser_Id">
+                                            <select id="case__CaseResponsibleUser_Id" name="case_.CaseResponsibleUser_Id" @(Model.EditMode == Enums.AccessMode.ReadOnly?"disabled=disabled":string.Empty)>
                                                 <option value="">&nbsp;</option>
                                                 @if (Model.users != null)
                                                 {

@@ -2,6 +2,7 @@
 @model DateTime?
 @{
     var controlId = ViewData["id"];
+    var isDisabledControl = ViewData.ContainsKey("disabled");
     if (controlId == null)
     {
         throw new ArgumentNullException("id", "id must be specified.");
@@ -40,20 +41,25 @@
         controlName = name;
         htmlAttributes.Add("Name", controlName);
     }
+
+    if (isDisabledControl)
+    {
+        htmlAttributes.Add("disabled", "disabled");
+    }
+    else
+    {
+        <script type="text/javascript">
+            $(function() {
+                $('#@controlId').datepicker({
+                    format: '@Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern.ToLower()',
+                    autoclose: true
+                });
+            });
+        </script>
+    }
 }
-
-<script type="text/javascript">
-    $(function () {
-        $('#@controlId').datepicker({
-            format: '@Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern.ToLower()',
-            autoclose: true
-        });
-    });
-</script>
-
 <input type="text" style="display: none;" />
 <div id="@controlId" class="input-append date dateie">
-
     @if (!string.IsNullOrWhiteSpace(controlName))
     {
         // todo
