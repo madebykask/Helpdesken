@@ -942,10 +942,13 @@ namespace DH.Helpdesk.Web.Controllers
                      
                     m.NewModeParams = caseParam;
                     AddViewDataValues();
-                    var defWorkingGroup = m.workingGroups.Where(it => it.IsDefault == 1).FirstOrDefault();
-                    if (defWorkingGroup != null)
+                    if (m.workingGroups != null && m.workingGroups.Count > 0)
                     {
-                        m.case_.WorkingGroup_Id = defWorkingGroup.Id;    
+                        var defWorkingGroup = m.workingGroups.Where(it => it.IsDefault == 1).FirstOrDefault();
+                        if (defWorkingGroup != null)
+                        {
+                            m.case_.WorkingGroup_Id = defWorkingGroup.Id;
+                        }
                     }
                     
                     // Positive: Send Mail to...
