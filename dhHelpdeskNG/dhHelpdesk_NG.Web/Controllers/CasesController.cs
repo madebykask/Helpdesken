@@ -939,7 +939,7 @@ namespace DH.Helpdesk.Web.Controllers
                         copyFromCaseId = copyFromCaseId,
                         caseLanguageId = caseLanguageId
                     };
-
+                     
                     m.NewModeParams = caseParam;
                     AddViewDataValues();
                     var defWorkingGroup = m.workingGroups.Where(it => it.IsDefault == 1).FirstOrDefault();
