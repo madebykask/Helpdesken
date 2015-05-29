@@ -2221,7 +2221,7 @@ namespace DH.Helpdesk.Web.Controllers
             }            
 
             // save log files
-            var newLogFiles = temporaryLogFiles.Select(f => new CaseFileDto(f.Content, f.Name, basePath, DateTime.UtcNow, caseLog.Id, this.workContext.User.UserId)).ToList();
+            var newLogFiles = temporaryLogFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseLog.Id, this.workContext.User.UserId)).ToList();
             this._logFileService.AddFiles(newLogFiles);
 
             caseMailSetting.CustomeMailFromAddress = mailSenders;
