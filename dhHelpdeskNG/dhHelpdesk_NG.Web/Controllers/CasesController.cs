@@ -2237,14 +2237,13 @@ namespace DH.Helpdesk.Web.Controllers
 
         private CaseSearchModel InitCaseSearchModel(int customerId, int userId)
         {
-            CaseSearchModel m;
             DHDomain.ISearch s = new DHDomain.Search();
             var f = new CaseSearchFilter();
-            m = new CaseSearchModel();
+            var m = new CaseSearchModel();
             var cu = this._customerUserService.GetCustomerSettings(customerId, userId);
             if (cu == null)
             {
-                throw new Exception("It looks that something has happened with your session. Refresh page to fix it.");
+                throw new Exception("An error occurred, please refresh your page. Please, logout and login again.");
             }
 
             f.CustomerId = customerId;
