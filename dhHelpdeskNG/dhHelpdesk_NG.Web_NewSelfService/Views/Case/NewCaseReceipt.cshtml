@@ -708,7 +708,7 @@
                     var fieldCaption = Model.FieldSettings.Where(f => f.Name == "Filename").Select(f => f.LabelToChange).SingleOrDefault();
                                 if (string.IsNullOrEmpty(fieldCaption))
                                 {
-                                    fieldCaption = Translation.Get("File name", Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID);
+                                    fieldCaption = Translation.Get("Filename", Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID);
                                 }                                                                    
                             }
                             @fieldCaption:
