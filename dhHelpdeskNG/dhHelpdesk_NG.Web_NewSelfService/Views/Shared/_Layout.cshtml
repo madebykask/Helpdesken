@@ -213,9 +213,17 @@
     {
         <div class="siteCom">
             <div class="mapButton">
-                 @if((pCaseLogs != null) && (pCaseLogs.CaseLogs != null) && (pCaseLogs.CaseLogs.Count > 0) && (string.IsNullOrEmpty(pCaseLogs.CaseLogs.Where(l => !string.IsNullOrEmpty(l.Text_Internal.Trim())).First().RegUser)))
-                 {
-                    <div class="mapText" title="@Translation.Get("Communicate", Enums.TranslationSource.TextTranslation)"><span class="glyphicon glyphicon-comment"></span><span class="glyphicon glyphicon-certificate newcom"></span></div>
+                 @if((pCaseLogs != null) && (pCaseLogs.CaseLogs != null) && (pCaseLogs.CaseLogs.Count > 0))
+                 {                       
+                    var lastMessage = pCaseLogs.CaseLogs.Where(l => !string.IsNullOrEmpty(l.Text_Internal.Trim())).OrderBy(l => l.RegTime).LastOrDefault();
+                    if (lastMessage != null && string.IsNullOrEmpty(lastMessage.RegUser))                        
+                    {                     
+                        <div class="mapText" title="@Translation.Get("Communicate", Enums.TranslationSource.TextTranslation)"><span class="glyphicon glyphicon-comment"></span><span class="glyphicon glyphicon-certificate newcom"></span></div>
+                    }
+                    else
+                    {
+                        <div class="mapText" title="@Translation.Get("Communicate", Enums.TranslationSource.TextTranslation)"><span class="glyphicon glyphicon-comment"></span></div>
+                    }
                  }
                  else
                  {

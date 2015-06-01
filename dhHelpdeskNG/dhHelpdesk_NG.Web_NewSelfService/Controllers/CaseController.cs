@@ -703,6 +703,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             if (newCase.User_Id <= 0)
                 newCase.User_Id = null;
 
+            newCase.RegistrationSource = (int)CaseRegistrationSource.SelfService;
             int caseHistoryId = this._caseService.SaveCase(newCase, null, caseMailSetting, 0, SessionFacade.CurrentUserIdentity.UserId, out errors);
 
             var basePath = this._masterDataService.GetFilePath(newCase.Customer_Id);
