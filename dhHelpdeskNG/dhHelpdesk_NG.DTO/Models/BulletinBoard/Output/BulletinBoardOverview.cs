@@ -21,6 +21,7 @@ namespace DH.Helpdesk.BusinessData.Models.BulletinBoard.Output
         /// </summary>
         public DateTime CreatedDate { get; set; }
 
+        public DateTime? ShowDate { get; set; }
         /// <summary>
         /// Gets or sets the text.
         /// </summary>
