@@ -162,13 +162,13 @@ namespace DH.Helpdesk.NewSelfService.Controllers
 
                 if (currentCase == null)
                 {
-                    ErrorGenerator.MakeError("Can not find the Case!");
+                    ErrorGenerator.MakeError("Case not found!");
                     return RedirectToAction("Index", "Error");
                 }
 
                 if (currentCase != null && currentCase.RegUserId != SessionFacade.CurrentUserIdentity.UserId)
                 {
-                    ErrorGenerator.MakeError("Can not find this Case in your cases!");
+                    ErrorGenerator.MakeError("Case not found among your cases!");
                     return RedirectToAction("Index", "Error");
                 }
 
@@ -176,7 +176,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
 
             if(currentCase == null)
             {
-                ErrorGenerator.MakeError("Can not find the Case!");
+                ErrorGenerator.MakeError("Case not found!");
                 return RedirectToAction("Index", "Error");                
             }
             else
@@ -359,7 +359,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             }
             else
             {
-                ErrorGenerator.MakeError("You don't have access to user cases! please login again.", 203);
+                ErrorGenerator.MakeError("You don't have access to cases, please login again.", 203);
                 return RedirectToAction("Index", "Error");                
             }
 
@@ -685,7 +685,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             }
             catch(Exception e)
             {
-                ErrorGenerator.MakeError("Error in load user cases!", 204);
+                ErrorGenerator.MakeError("Not able to load user cases.", 204);
                 return RedirectToAction("Index", "Error");                
             }
         }

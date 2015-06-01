@@ -74,7 +74,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                 else
                 {
                     SessionFacade.UserHasAccess = false;
-                    ErrorGenerator.MakeError("You don't have access to the portal!", 401);
+                    ErrorGenerator.MakeError("You don't have access to the portal.", 401);
                     return RedirectToAction("Index", "Error");                                                                  
                 }
             }

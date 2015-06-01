@@ -295,7 +295,7 @@
 
 @if (Model.CaseFieldGroups.Contains("CaseInfo"))
 {
-    <h4>@Translation.Get("Case Info", Enums.TranslationSource.TextTranslation) </h4>
+    <h4>@Translation.Get("Case Information", Enums.TranslationSource.TextTranslation) </h4>
     <div class="row">
         <div class="col-md-3 dh-col">
             <div class="container form-horizontal">
@@ -708,7 +708,7 @@
                     var fieldCaption = Model.FieldSettings.Where(f => f.Name == "Filename").Select(f => f.LabelToChange).SingleOrDefault();
                                 if (string.IsNullOrEmpty(fieldCaption))
                                 {
-                                    fieldCaption = Translation.Get("Filename", Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID);
+                                    fieldCaption = Translation.Get("File name", Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID);
                                 }                                                                    
                             }
                             @fieldCaption:

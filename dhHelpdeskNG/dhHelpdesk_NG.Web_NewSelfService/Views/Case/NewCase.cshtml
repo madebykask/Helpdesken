@@ -543,7 +543,7 @@
                     
                     if (Model.CaseFieldGroups.Contains("CaseInfo"))
                     {
-                        <h4>@Translation.Get("Case Info", Enums.TranslationSource.TextTranslation) </h4>
+                        <h4>@Translation.Get("Case Information", Enums.TranslationSource.TextTranslation) </h4>
                         <div class="row">
                             <div class="col-md-3 dh-col">
                                 <div class="container form-horizontal">
@@ -881,7 +881,7 @@
                                             </label>
                                             <div class="col-md-10">
                                                 <input type="checkbox" name="NewCase.ContactBeforeAction" @(Model.NewCase.ContactBeforeAction == 1 ? "checked=checked" : "") value="1"/>
-                                                @Translation.Get("Ska anmälaren kontaktas innan åtgärd", Enums.TranslationSource.TextTranslation)
+                                                @Translation.Get("Should the initiator be contacted before action?", Enums.TranslationSource.TextTranslation)
                                                 <input type="hidden" name="NewCase.ContactBeforeAction" value="0" />
                                             </div>
                                         </div>
@@ -902,7 +902,7 @@
                                             </label>
                                             <div class="col-md-10">
                                                 <input type="checkbox" name="NewCase.SMS" @(Model.NewCase.SMS == 1 ? "checked=checked" : "") value="1"/>
-                                                @Translation.Get("Send SMS when Case become finish", Enums.TranslationSource.TextTranslation)
+                                                @Translation.Get("Send SMS when case is closed", Enums.TranslationSource.TextTranslation)
                                                 <input type="hidden" name="NewCase.SMS" value="0" />
                                             </div>
                                         </div>
@@ -930,7 +930,7 @@
                                                 {
                                                     <span class="mandatorystar">&nbsp;</span>
                                                 }
-                                                @Translation.Get("Anmälaren nås säkrast på följande tider", Enums.TranslationSource.TextTranslation)
+                                                @Translation.Get("Initiator is available during the following times", Enums.TranslationSource.TextTranslation)
                                                 <br />
                                                 &nbsp;@Html.TextBoxFor(m => Model.NewCase.Available)
                                             </div>
@@ -985,7 +985,7 @@
                                                     var fieldCaption = Model.FieldSettings.Where(f => f.Name == "Filename").Select(f => f.LabelToChange).SingleOrDefault();
                                                     if (string.IsNullOrEmpty(fieldCaption))
                                                     {
-                                                        fieldCaption = Translation.Get("Filename", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
+                                                        fieldCaption = Translation.Get("File name", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
                                                     }                                                                    
                                                   }
                                                   @fieldCaption:                                                

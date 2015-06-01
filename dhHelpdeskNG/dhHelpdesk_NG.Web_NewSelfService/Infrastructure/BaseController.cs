@@ -180,7 +180,7 @@
                     if(string.IsNullOrEmpty(userIdentity.UserId))
                     {
                         SessionFacade.UserHasAccess = false;
-                        ErrorGenerator.MakeError("You don't have access to the portal! (User Id is not specified)", 101);
+                        ErrorGenerator.MakeError("You don't have access to the portal. (User Id is not specified)", 101);
                         filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
                         return;
                     }
@@ -205,7 +205,7 @@
                                 SessionFacade.UserHasAccess = false;
                                 SessionFacade.CurrentCoWorkers = new List<SubordinateResponseItem>();
 
-                                ErrorGenerator.MakeError("You don't have access to the portal! (user is not manager for country)", 103);
+                                ErrorGenerator.MakeError("You don't have access to the portal. (User is not manager for country)", 103);
                                 filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
                                 return;
                             }
@@ -217,7 +217,7 @@
                             {
                                 SessionFacade.UserHasAccess = false;
 
-                                ErrorGenerator.MakeError("You don't have access to the portal! (EmployeeNumber is not specified)", 104);
+                                ErrorGenerator.MakeError("You don't have access to the portal. (Employee Number is not specified)", 104);
                                 filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
                                 return;
                             }
@@ -236,7 +236,7 @@
                                     SessionFacade.UserHasAccess = false;
                                     SessionFacade.CurrentCoWorkers = new List<SubordinateResponseItem>();
 
-                                    ErrorGenerator.MakeError("You don't have access to the portal! (user is not manager)", 102);
+                                    ErrorGenerator.MakeError("You don't have access to the portal. (User is not manager)", 102);
                                     filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
                                     return;
                                 }
