@@ -3958,6 +3958,19 @@ If not exists (select * from tblTextTranslation where text_id = 1480 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1480, 1, 'Anmälaren nås säkrast på följande tider')
 GO
 
+If not exists (select * from tbltext where id = 1481)
+	insert into tbltext (id, TextString, TextType) VALUES (1481, 'Add comment', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1481 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1481, 1, 'lägg till kommentar')
+GO
+
+If not exists (select * from tbltext where id = 1482)
+	insert into tbltext (id, TextString, TextType) VALUES (1482, 'Send', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1482 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1482, 1, 'Skicka')
+GO
 -- ********************   Self Service Translation *******************************
 
 
