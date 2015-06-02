@@ -71,7 +71,10 @@
         {
             <h4>@Translation.Get("självservice om", Enums.TranslationSource.TextTranslation)</h4>
         }
-
+        @if (Model.InfoTextShowViewModel.InfoText.Type == (int?)InfoTextType.SelfServiceRegistrationMessage)
+        {
+            <h4>@Translation.Get("Registrerings meddelande", Enums.TranslationSource.TextTranslation)</h4>
+        }
         @Html.DropDownList("LanguageId", Model.Languages, new { id = "LanguageId", onchange = "changeLanguageList(this.options[this.selectedIndex].value);" })
         <div id="infotextshow_container">
             <span id="languageList">

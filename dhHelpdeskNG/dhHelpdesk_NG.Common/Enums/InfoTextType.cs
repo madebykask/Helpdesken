@@ -10,6 +10,7 @@
         Order = 7,
         SelfServiceHelp = 8,
         SelfServiceAbout = 9,
+        SelfServiceRegistrationMessage = 10
 
     }
 }

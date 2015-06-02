@@ -31,8 +31,7 @@
         void SaveCaseFieldSettingsForCustomerCopy(int customerId, int languageId, CaseFieldSetting caseFieldSetting, out IDictionary<string, string> errors);
         void SaveCaseFieldSettingsLangForCustomerCopy(CaseFieldSettingLanguage caseFieldSettingLanguage, out IDictionary<string, string> errors);
         void SaveEditCustomer(Customer customer, Setting setting, int[] us, int LanguageId, out IDictionary<string, string> errors);
-        void SaveEditCustomer(Customer customer, out IDictionary<string, string> errors);
-        void SaveCustomerRegisterationMassage(Customer customer, string message, out IDictionary<string, string> errors);
+        void SaveEditCustomer(Customer customer, out IDictionary<string, string> errors);        
         void SaveNewCustomerToGetId(Customer customer, out IDictionary<string, string> errors);
         void Commit();
 
@@ -298,21 +297,6 @@
             if (errors.Count == 0)
                 this.Commit();            
 
-        }
-
-        public void SaveCustomerRegisterationMassage(Customer customer, string regMessage, out IDictionary<string, string> errors)
-        {
-            if (customer == null)
-                throw new ArgumentNullException("customer");
-
-            errors = new Dictionary<string, string>();
-
-            customer.RegistrationMessage = regMessage ?? string.Empty;                       
-            if (customer.Id != 0)                
-                this._customerRepository.Update(customer);
-
-            if (errors.Count == 0)
-                this.Commit();     
         }
 
         public void SaveCaseFieldSettingsForCustomer(int customerId, int languageId, IEnumerable<CaseFieldSettingsWithLanguage> caseFieldSettingWithLanguages, List<CaseFieldSetting> caseFieldSettings, out IDictionary<string, string> errors)

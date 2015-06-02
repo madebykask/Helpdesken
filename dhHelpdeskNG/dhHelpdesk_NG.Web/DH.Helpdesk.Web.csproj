@@ -308,7 +308,6 @@
     <Compile Include="Areas\Admin\Models\OrganizationHierarchy\SDepartment.cs" />
     <Compile Include="Areas\Admin\Models\QuickLinkGroupIndexViewModel.cs" />
     <Compile Include="Areas\Admin\Models\QuickLinkGroupInputViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\SelfServiceRegMessageViewModel.cs" />
     <Compile Include="Areas\Admin\Models\SelfServiceIndexViewModel.cs" />
     <Compile Include="Areas\Admin\Models\InfoTextViewModels.cs" />
     <Compile Include="Areas\Admin\Models\Invoice\CaseInvoiceSettingsModel.cs" />
@@ -1845,7 +1844,6 @@
     <Content Include="Areas\Reports\Views\Report\Options\LeadtimeFinishedCases.cshtml" />
     <Content Include="Areas\Reports\Views\Report\Reports\LeadtimeFinishedCases.cshtml" />
     <Content Include="Areas\Admin\Views\SelfServiceSetting\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\SelfServiceSetting\EditRegMessage.cshtml" />
     <Content Include="Areas\Reports\Views\Report\Options\LeadtimeActiveCases.cshtml" />
     <Content Include="Areas\Reports\Views\Report\Reports\LeadtimeActiveCases.cshtml" />
     <Content Include="Areas\Reports\Views\Report\Options\FinishingCauseCustomer.cshtml" />
