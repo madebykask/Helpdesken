@@ -3974,5 +3974,12 @@ GO
 -- ********************   Self Service Translation *******************************
 
 
+--20150602
+UPDATE tblText Set TextString = 'Widgets på startsidan' WHERE Id=1326;
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'Widgets on Start page' WHERE Text_Id=1326 AND Language_Id=2;
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
