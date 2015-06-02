@@ -1063,7 +1063,6 @@
                                                     {
                                                         foreach (var e in Model.priorities.Where(e => e.IsActive == 1 || Model.case_.Priority_Id == e.Id))
                                                         {
-                                                             @*<option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Priority_Id.ToString()) >@e.Name</option>*@
                                                             <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Priority_Id.ToString()) >@Translation.Get(e.Name)</option>
                                                         }
                                                     }

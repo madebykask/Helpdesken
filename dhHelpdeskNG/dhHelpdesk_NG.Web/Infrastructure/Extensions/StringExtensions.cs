@@ -317,13 +317,13 @@
                     ret = string.Empty; 
                     break;
             }
-            return ret;
 
+            return ret;
         }
 
         public static string HtmlReadOnlyFlag(this int caseId, int permission)
         {
-            return caseId == 0 ? "" : permission != 1 ? "readonly" : ""; 
+            return caseId == 0 ? string.Empty : permission != 1 ? "disabled=disabled" : string.Empty;
         }
 
         /// <summary>

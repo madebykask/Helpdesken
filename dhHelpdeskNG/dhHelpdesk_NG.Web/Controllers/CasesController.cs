@@ -2069,13 +2069,9 @@ namespace DH.Helpdesk.Web.Controllers
                       mailSenders.WGEmail = curWG.EMail;
             }
 
-            
-            //var user = _userService.GetUser(case_.User_Id);
-            //if (user.Default_WorkingGroup_Id.HasValue)            
             if (case_.DefaultOwnerWG_Id.HasValue && case_.DefaultOwnerWG_Id.Value > 0)
             {
                 var defaultWGEmail = _workingGroupService.GetWorkingGroup(case_.DefaultOwnerWG_Id.Value).EMail;
-                //var defaultWGEmail = _workingGroupService.GetWorkingGroup(user.Default_WorkingGroup_Id.Value).EMail;                
                 mailSenders.DefaultOwnerWGEMail = defaultWGEmail;
             }
             
@@ -2089,7 +2085,6 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     if (cu.UserInfoPermission == 0)
                     {
-                        // current user are not allowed to see user information, update from old case
                         case_.ReportedBy = oldCase.ReportedBy;
                         case_.Place = oldCase.Place;
                         case_.PersonsName = oldCase.PersonsName;
@@ -2100,6 +2095,16 @@ namespace DH.Helpdesk.Web.Controllers
                         case_.Department_Id = oldCase.Department_Id;
                         case_.OU_Id = oldCase.OU_Id;
                         case_.UserCode = oldCase.UserCode;
+                    }
+
+                    if (cu.PriorityPermission == 0)
+                    {
+                        case_.Priority_Id = oldCase.Priority_Id;
+                    }
+
+                    if (cu.StateSecondaryPermission == 0)
+                    {
+                        case_.StateSecondary_Id = oldCase.StateSecondary_Id;
                     }
                 }
 
