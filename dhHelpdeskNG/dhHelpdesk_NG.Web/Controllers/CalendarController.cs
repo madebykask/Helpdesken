@@ -181,6 +181,7 @@ namespace DH.Helpdesk.Web.Controllers
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult New(CalendarOverview calendar, int[] WGsSelected)
         {
             if (!ModelState.IsValid)
@@ -235,6 +236,7 @@ namespace DH.Helpdesk.Web.Controllers
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult Edit(int id, CalendarOverview calendar, int[] WGsSelected)
         {
             if (!ModelState.IsValid)

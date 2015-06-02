@@ -55,7 +55,7 @@
                                         @Translation.Get("Text")
                                     </td>
                                     <td>
-                                        @Html.TextAreaFor(model => model.Calendar.Text, new { style = "width:600px; height:250px;", maxlength = "2000" })
+                                        @Html.TextAreaFor(model => model.Calendar.Text, new { style = "width:600px; height:250px;", maxlength = "2000", @class="richtexteditor" })
                                     </td>
                                 </tr>
                                 <tr>
