@@ -39,6 +39,7 @@
                                     </td>
                                 </tr>
                             }
+
                             @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Region_Id.ToString()) == 1) 
                             { 
                                 <tr>
@@ -61,6 +62,7 @@
                                     </td>                                                        
                                 </tr>
                             }
+
                             @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.User_Id.ToString()) == 1) 
                             {                                    
                                 <tr>
@@ -83,10 +85,11 @@
                                     </td>                                                        
                                 </tr>
                             }
+
                             @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()) == 1) 
                             {                                 
                                 <tr>
-                                    <td class="span3">                                        
+                                    <td class="span3">
                                         @{
                                 var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
                                          }
@@ -110,7 +113,8 @@
                                     </td>                            
                                 </tr>
                             } 
-                           @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()) == 1)
+                            
+                            @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()) == 1)
                            {
                                 <tr>
                                     <td class="span3">                                        
@@ -137,6 +141,7 @@
                                     </td>                            
                                 </tr>             
                            } 
+
                            @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString()) == 1)
                            {                                         
                                 <tr>
@@ -159,6 +164,7 @@
                                     </td>                                                        
                                 </tr>
                            } 
+
                            @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString()) == 1)
                            {         
                                 <tr>
@@ -175,7 +181,8 @@
                                 
                                     </td>                            
                                 </tr>
-                           } 
+                           }
+                           
                            @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString()) == 1)
                            {             
                                 <tr>
@@ -197,8 +204,9 @@
                                         </select>
                                     </td>                                                        
                                 </tr> 
-                           } 
-                            @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()) == 1)
+                           }
+                            
+                           @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()) == 1)
                            {                                                         
                                 <tr>
                                     <td class="span3">                                        
@@ -219,15 +227,16 @@
                                         </select>
                                     </td>                                                                                                                
                                 </tr>
-                            }
+                           }
+                            
                             @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Status_Id.ToString()) == 1)
                             { 
                                 <tr>
                                     <td class="span3">                                        
                                         @{
-                                var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
-                                         }
-                                         @lbl:
+                                            var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
+                                        }
+                                        @lbl:
                                     </td>                            
                                     <td>
                                         @Html.CheckBoxFor(m => Model.StateCheck, new { @class = "switchcheckbox" })
@@ -237,9 +246,10 @@
                                     </td>
                                 </tr>
                             }
+
                             @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()) == 1)
                             { 
-                            <tr>
+                                <tr>
                                 <td class="span3">                                    
                                     @{
                                 var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
@@ -258,7 +268,8 @@
                                     </select>
                                 </td>                                                                                                                
                             </tr>  
-                            }        
+                            }
+                            
                             @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.RegTime.ToString()) == 1)
                             { 
                                 <tr>
@@ -276,7 +287,8 @@
                                         @Html.EditorFor(m => m.CaseRegistrationDateEndFilter, "DatePickerNoJs")
                                     </td>                                                                                                                
                                 </tr>  
-                            }        
+                            }
+
                             @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.WatchDate.ToString()) == 1)
                             { 
                                 <tr>
@@ -294,7 +306,8 @@
                                         @Html.EditorFor(m => m.CaseWatchDateEndFilter, "DatePickerNoJS")
                                     </td>                                                                                                                
                                 </tr>  
-                            }        
+                            }
+
                             @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.FinishingDate.ToString()) == 1)
                             { 
                                 <tr>
@@ -312,7 +325,8 @@
                                         @Html.EditorFor(m => m.CaseClosingDateEndFilter, "DatePickerNoJS")
                                     </td>                                                                                                                
                                 </tr>  
-                            }   
+                            }
+
                             @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.ClosingReason.ToString()) == 1)
                             {
                                 <tr>

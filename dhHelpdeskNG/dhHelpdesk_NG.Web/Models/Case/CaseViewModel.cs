@@ -13,6 +13,7 @@
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Changes;
     using DH.Helpdesk.Web.Infrastructure.Grid.Output;
+    using DH.Helpdesk.Web.Models.Case.Output;
     using DH.Helpdesk.Web.Models.Invoice;
     using DH.Helpdesk.Web.Models.Shared;
 using DH.Helpdesk.Web.Enums;
@@ -135,6 +136,11 @@ using DH.Helpdesk.Web.Enums;
 
     public class PageSettingsModel
     {
+        /// <summary>
+        /// Holds values for filter form in case overview page
+        /// </summary>
+        public JsonCaseSearchFilterData searchFilter { get; set; }
+
         public JsonGridSettingsModel gridSettings { get; set; }
 
         public int refreshContent { get; set; }

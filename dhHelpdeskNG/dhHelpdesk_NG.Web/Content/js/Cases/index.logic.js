@@ -17,12 +17,7 @@ var GRID_STATE = {
 
     var SORT_ASC = 0;
     var SORT_DESC = 1;
-    var EMPTY_STR = '';
-    var JOINER = EMPTY_STR;
 
-    function strJoin() {
-        return Array.prototype.join.call(arguments, JOINER);
-    }
 
     function getClsForSortDir(sortDir) {
         if (sortDir === SORT_ASC) {
@@ -33,16 +28,7 @@ var GRID_STATE = {
         }
         return '';
     }
-
-    /**
-    * Checks whether supplyed string empty or null
-    * @param { string } str
-    * @returns { bool }
-    */
-    function isNullOrEmpty(str) {
-        return str == null || str == EMPTY_STR;
-    }
-
+    
 
     function Page() {};
 
@@ -53,7 +39,10 @@ var GRID_STATE = {
     Page.prototype.init = function(appSettings) {
         var me = this;
         me.hXHR = null;
-        me.settings = { refreshContent: appSettings.refreshContent };
+        me.settings = {
+            filterSettings: appSettings.searchFilter.data,
+            refreshContent: appSettings.refreshContent
+        };
         if (me.settings.refreshContent > 0) {
             setInterval(function() {
                 me.autoReloadCheck.call(me);
@@ -70,61 +59,40 @@ var GRID_STATE = {
         me.$noAvailableFieldsMsg = $('#search_result div.noavailablefields-msg');
         me.$buttonsToDisableWhenGridLoads = $('ul.secnav a.btn, ul.secnav div.btn-group button, ul.secnav input[type=button], .submit, #btnClearFilter');
         me.$buttonsToDisableWhenNoColumns = $('#btnNewCase a.btn, #btnCaseTemplate a.btn, .submit, #btnClearFilter');
-        me.$searchField = '#txtFreeTextSearch';
-        me.$filterForm = $('#frmCaseSearch');
-        me.$filterFormContent = $('#hiddeninfo');
-        me.$caseFilterType = '#lstfilterCaseProgress';
+        
+        me.filterForm = new FilterForm();
+        me.filterForm.init({
+            $el: $('#frmCaseSearch'),
+            filter: appSettings.searchFilter.data,
+            onBeforeSearch: callAsMe(me.canMakeSearch, me),
+            onSearch: callAsMe(me.fetchData, me)
+        });
+        
         me.$remainingView = $('[data-field="caseRemainingTimeHidePlace"]');
-        me.$btnExpandFilter = $("#btnMore");
+        
         //// Bind events
-        $('.submit, a.refresh-grid').on('click', function(ev) {
+        $('a.refresh-grid').on('click', function(ev) {
             ev.preventDefault();
             if (me._gridState !== window.GRID_STATE.IDLE) {
                 return false;
             }
-            me.onSearchClick.apply(me);
+            me.fetchData.call(me);
             return false;
         });
+        
 
-        $("#btnClearFilter").click(function(ev) {
-            if (me.getGridState() !== window.GRID_STATE.IDLE) {
-                ev.preventDefault();
-                return false;
-            }
-            window.location.href = '/Cases/Index/?resetSearchForm=True';
-            return false;
-        });
-
-        me.$btnExpandFilter.click(function(e) {
-            e.preventDefault();
-            me.toggleFilter.call(me, !me.$filterFormContent.is(':visible'));
-            return false;
-        });
-        $('#txtFreeTextSearch').keydown(function(e) {
-            if (e.keyCode == 13) {
-                $("#btnSearch").click();
-            }
-        });
         $('#btnNewCase a, #divCaseTemplate a').click(function() {
             if (me._creatingCase) {
                 return false;
             }
-            if (me.hXHR != null && me.hXHR.status == null) {
-                me.hXHR.abort();
-            }
+            me.abortAjaxReq();
             me.$buttonsToDisableWhenGridLoads.addClass('disabled');
             me._creatingCase = true;
             return true;
         });
-
-        me.initSearchForm();
+        
         me.setGridState(window.GRID_STATE.IDLE);
         me.setGridSettings(appSettings.gridSettings);
-
-        $('.input-append.date').datepicker({
-            format: 'yyyy-mm-dd',
-            autoclose: true
-        });
     };
 
     Page.prototype.autoReloadCheck = function() {
@@ -142,63 +110,21 @@ var GRID_STATE = {
         return ((new Date()).getTime() - me._gridUpdated) / 1000;
     };
 
-    /**
-    * Resolves whether filter form fields is empty
-    * @returns { bool } 
-    */
-    Page.prototype.isFilterEmpty = function () {
+
+    Page.prototype.canMakeSearch = function() {
         var me = this;
-        return $('#lstFilterCustomers option:selected').length === 0 &&
-            $('#lstFilterRegion option:selected').length === 0 &&
-            $('#lstFilterCountry option:selected').length === 0 &&
-            $('#lstfilterDepartment option:selected').length === 0 &&
-            $('#lstfilterUser option:selected').length === 0 &&
-            isNullOrEmpty($('#hidFilterCaseTypeId').val()) &&
-            isNullOrEmpty($('#hidFilterProductAreaId').val()) &&
-            $('#lstfilterCategory option:selected').length === 0 &&
-            $('#lstfilterWorkingGroup option:selected').length === 0 &&
-            $('#lstfilterResponsible option:selected').length === 0 &&
-            $('#lstfilterPerformer option:selected').length === 0 &&
-            $('#lstfilterPriority option:selected').length === 0 &&
-            $('#lstfilterStatus option:selected').length === 0 &&
-            $('#lstfilterStateSecondary option:selected').length === 0 &&
-            isNullOrEmpty($('#hidFilterClosingReasonId').val()) &&
-            isNullOrEmpty($('[name=CaseInitiatorFilter]', me.$filterForm).val()) &&
-            isNullOrEmpty($('[name=CaseClosingDateStartFilter]', me.$filterForm).val()) &&
-            isNullOrEmpty($('[name=CaseClosingDateEndFilter]', me.$filterForm).val()) &&
-            isNullOrEmpty($('[name=CaseWatchDateStartFilter]', me.$filterForm).val()) &&
-            isNullOrEmpty($('[name=CaseWatchDateEndFilter]', me.$filterForm).val()) &&
-            isNullOrEmpty($('[name=CaseRegistrationDateStartFilter]', me.$filterForm).val()) &&
-            isNullOrEmpty($('[name=CaseRegistrationDateEndFilter]', me.$filterForm).val());
+        if (me._gridState == GRID_STATE.IDLE) {
+            return true;
+        };
+        if (me._gridState == GRID_STATE.LOADING) {
+            me.abortAjaxReq();
+            return true;
+        }
+        return false;
     };
 
-    /**
-    * @param { bool } forceShow
-    */
-    Page.prototype.toggleFilter = function(forceShow) {
-        var me = this;
-        if ((forceShow != null && forceShow !== false)
-            || (forceShow == null && me.$filterFormContent.is(':visible'))) {
-            me.$filterFormContent.show();
-            $("#icoPlus").removeClass('icon-plus-sign').addClass('icon-minus-sign');
-        } else {
-            me.$filterFormContent.hide();
-            $("#icoPlus").removeClass('icon-minus-sign').addClass('icon-plus-sign');
-        }
-    };
-    
 
-    /// initial state of search form
-    Page.prototype.initSearchForm = function () {
-        var me = this;
-        if (me.isFilterEmpty()) {
-            $('#icoFilter').hide();
-            me.toggleFilter(false);
-        } else {
-            $('#icoFilter').show();
-            me.toggleFilter(true);
-        }
-    };
+   
 
     Page.prototype.setGridState = function(newGridState) {
         var me = this;
@@ -391,41 +317,15 @@ var GRID_STATE = {
         });
     };
 
-    /**
-    * Sets search filter to empty values in sake to fetch more data as possible
-    */
-    Page.prototype.unsetSearchFilter = function () {
-        var me = this;
-        /// filterRegion,filterCountry,filterDepartment,filterCaseUser, 
-        $("#lstFilterCustomers, #lstFilterRegion, #lstFilterCountry, #lstfilterDepartment, #lstfilterUser").val('').trigger("chosen:updated");
-        /// filterCaseType
-        unsetBootstrapsDropdown('#divCaseType');
-        /// filterProductArea
-        unsetBootstrapsDropdown('#divProductArea');
-        /// filterCategory, filterWorkingGroup, filterUser, filterPerformer, filterPriority, filterStatus, filterStateSecondary
-        $('#lstfilterCategory, #lstfilterWorkingGroup, #lstfilterResponsible, #lstfilterPerformer, #lstfilterPriority, #lstfilterStatus, #lstfilterStateSecondary').val('').trigger("chosen:updated");
-        /// CaseRegistrationDateFilterShow, CaseWatchDateFilterShow, CaseClosingDateFilterShow
-        $('.date-block input[type=text]', me.$filterForm).val('');
-        //ClosingReasons
-        unsetBootstrapsDropdown('#divClosingReason');
-        /// Initiator
-        $('[name=CaseInitiatorFilter]', me.$filterForm).val('');
-    };
 
+
+
+
+
+   
     Page.prototype.onSearchClick = function () {
         var me = this;
-        var searchStr = $(me.$searchField).val();
-        if (searchStr.length > 0 && searchStr[0] === "#") {
-            /// if looking by case number - set case state filter to "All"
-            $(me.$caseFilterType).val(-1);
-            /// and reset search filter
-            me.unsetSearchFilter();
-        }
-        if (me.isFilterEmpty()) {
-            $('#icoFilter').hide();
-        } else {
-            $('#icoFilter').show();
-        }
+
 
         me.fetchData();
     };
@@ -443,10 +343,17 @@ var GRID_STATE = {
         }
     };
 
+    Page.prototype.abortAjaxReq = function() {
+        var me = this;
+        if (me.hXHR != null && me.hXHR.status == null) {
+            me.hXHR.abort();
+        }
+    };
+
     Page.prototype.fetchData = function(addFetchParam) {
         var me = this;
         var fetchParams;
-        var baseParams = me.$filterForm.serializeArray();
+        var baseParams = me.filterForm.getFilterToSend();
         baseParams.push(
             { name: 'sortBy', value: me.gridSettings.sortOptions.sortBy },
             { name: 'sortDir', value: me.gridSettings.sortOptions.sortDir },
@@ -486,29 +393,6 @@ var GRID_STATE = {
 })($);
 
 
-$('#divCaseType ul.dropdown-menu li a').click(function (e) {
-    e.preventDefault();
-    var val = $(this).attr('value');
-    $("#divBreadcrumbs_CaseType").text(getBreadcrumbs(this));
-    $("#hidFilterCaseTypeId").val(val);
-});
-
-$('#divProductArea ul.dropdown-menu li a').click(function (e) {
-    e.preventDefault();
-    var val = $(this).attr('value');
-    $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(this));
-    $("#hidFilterProductAreaId").val(val);
-});
-
-
-$('#divClosingReason ul.dropdown-menu li a').click(function (e) {
-    e.preventDefault();
-    var val = $(this).attr('value');
-    $("#divBreadcrumbs_ClosingReason").text(getBreadcrumbs(this));
-    $("#hidFilterClosingReasonId").val(val);
-});
-
-
 
 $('#SettingTab').click(function (e) {
     $('#btnSaveCaseSetting').show();
@@ -524,16 +408,7 @@ $('#CasesTab').click(function (e) {
     $('#btnSaveCaseSetting').hide();
 });
 
-/**
-* @param { blockElementJqueryId } jquery-like element id of the bootstrap dropdown t.ex "#mainblock"
-*/
-function unsetBootstrapsDropdown(blockElementJqueryId) {
-    var el = $(blockElementJqueryId).find('.dropdown-menu li a').first();
-    var text = el.text();
-    var val = el.attr('value');
-    $(blockElementJqueryId).find('.btn:first-child').text(text);
-    $(blockElementJqueryId).find('input[type=hidden]').val(val);
-}
+
     
 /**
 * @param { string } message

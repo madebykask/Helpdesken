@@ -253,11 +253,11 @@
                                             <li>
                                                 @if(customer.Id == SessionFacade.CurrentCustomer.Id)
                                                 {
-                                                    <a href="@Url.Action("Index", "cases", new { area = "", customerId = customer.Id })">@customer.Name <i class="icon-ok"></i></a>
+                                                    <a href="@Url.Action("InitFilter", "cases", new { area = "", customerId = customer.Id })">@customer.Name <i class="icon-ok"></i></a>
                                                 }
                                                 else
                                                 {
-                                                    <a href="@Url.Action("Index", "cases", new { area = "", customerId = customer.Id })">@customer.Name</a>
+                                                    <a href="@Url.Action("InitFilter", "cases", new { area = "", customerId = customer.Id })">@customer.Name</a>
                                                 }
                                             </li>
                                             }

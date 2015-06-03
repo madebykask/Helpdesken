@@ -1018,9 +1018,7 @@
             // ansvarig
             if (!string.IsNullOrWhiteSpace(f.UserResponsible))
                 sb.Append(" and (tblCase.CaseResponsibleUser_Id in (" + f.UserResponsible.SafeForSqlInject() + "))"); 
-            // land/country
-            if (!string.IsNullOrWhiteSpace(f.Country))
-                sb.Append(" and (tblDepartment.Country_Id in (" + f.Country.SafeForSqlInject() + "))"); 
+           
             // case type
             if (f.CaseType != 0)
             {

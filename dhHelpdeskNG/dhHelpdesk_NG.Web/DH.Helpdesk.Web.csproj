@@ -15,7 +15,7 @@
     <AssemblyName>DH.Helpdesk.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <SccProjectName>
     </SccProjectName>
     <SccLocalPath>
@@ -412,6 +412,12 @@
     <Content Include="Content\js\bootstrap-tagsinput.min.js" />
     <Content Include="Content\js\Cases\case.templates.js" />
     <Content Include="Content\js\Cases\caseByIds.logic.js" />
+    <Content Include="Content\js\Cases\components\BaseField.js" />
+    <Content Include="Content\js\Cases\components\DateField.js" />
+    <Content Include="Content\js\Cases\components\JQueryChosenField.js" />
+    <Content Include="Content\js\Cases\components\DropdownButtonField.js" />
+    <Content Include="Content\js\Cases\components\FilterForm.js" />
+    <Content Include="Content\js\Cases\components\Utils.js" />
     <Content Include="Content\js\Cases\editLog.logic.js" />
     <Content Include="Content\js\Cases\index.settings.js" />
     <Content Include="Content\js\Cases\edit.logic.js" />
@@ -1169,7 +1175,7 @@
     <Compile Include="Models\CaseSolutionSettingModel.cs" />
     <Compile Include="Models\Case\CaseByIdsViewModel.cs" />
     <Compile Include="Models\Case\CaseFilesModel.cs" />
-    <Compile Include="Models\Case\CaseFilterSeachBoxes.cs" />
+    <Compile Include="Models\Case\Output\CaseSeachFilterData.cs" />
     <Compile Include="Models\CaseSolutionInputViewModel.cs" />
     <Compile Include="Models\Case\CaseOverview.cs" />
     <Compile Include="Models\Case\CaseRemainingTimeItemViewModel.cs" />
@@ -1178,6 +1184,7 @@
     <Compile Include="Models\Case\CaseTemplateTreeModel.cs" />
     <Compile Include="Models\Case\CaseViewModel.cs" />
     <Compile Include="Models\Case\CaseSettingModel.cs" />
+    <Compile Include="Models\Case\Output\JsonCaseSearchFilterData.cs" />
     <Compile Include="Models\Case\CustomerCasesModel.cs" />
     <Compile Include="Models\Case\Input\CaseOverviewSettingsInput.cs" />
     <Compile Include="Models\Case\MyCasesModel.cs" />
@@ -2204,7 +2211,7 @@
     <Content Include="Views\Cases\CaseRemainingTime.cshtml" />
     <Content Include="Views\Notifiers\OrganizationUnitDropDown.cshtml" />
     <Content Include="Views\Cases\RelatedCasesFull.cshtml" />
-    <Content Include="Views\Cases\IndexAjax.cshtml" />
+    <Content Include="Views\Cases\Index.cshtml" />
     <Content Include="Views\Cases\RelatedCasesFullContent.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DatePickerNoJS.cshtml" />
     <Content Include="Views\Print\CaseHtml.cshtml">

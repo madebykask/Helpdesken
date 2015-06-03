@@ -41,6 +41,7 @@ $(document).ready(function () {
     //// bind event handlers 
     $saveBtn.click(function (e) {
         e.preventDefault();
+        window.app.abortAjaxReq();
         if (!(window.app.getGridState() === GRID_STATE.IDLE || window.app.getGridState() === GRID_STATE.NO_COL_SELECTED) || $saveBtn.hasClass('disabled')) {
             return false;
         }

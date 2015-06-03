@@ -3,14 +3,10 @@
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.Domain;
 
-    public class DefaultSearchModel
-    {
-        public ISearch Search { get; set; }
-    }
-
-    public class CaseSearchModel : DefaultSearchModel
+    public class CaseSearchModel 
     {
         public CaseSearchFilter caseSearchFilter { get; set; }
-    }
 
+        public ISearch Search { get; set; }
+    }
 }

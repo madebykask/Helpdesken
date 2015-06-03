@@ -7,6 +7,7 @@
     using System.Linq;
     using System.Web.UI.WebControls;
 
+    using DH.Helpdesk.Services.Exceptions;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure.Attributes;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
@@ -70,6 +71,10 @@
                 ApplicationFacade.RemoveCaseUserInfo(SessionFacade.CurrentUser.Id);
                 ApplicationFacade.UpdateLoggedInUserActivity(this.Session.SessionID);
             }
+            else
+            {
+                throw new Exception("[DEBUG] BusinessLogicException how it can be?");
+            }
         }
 
         /// <summary>
@@ -103,8 +108,9 @@
                 {
                     if (user.TimeZoneId == null)
                     {
-                        //throw new Exception("Need to detect time zone.");
-                        this.RedirectToAction("Logout", "Login");
+                        /// well, if we have AJAX request and user has no TimeZoneId selected in profile,
+                        /// set than local time zone (Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna)... siliently
+                        user.TimeZoneId = TimeZoneInfo.Local.Id;
                     }
 
                     SessionFacade.CurrentUser = user;
