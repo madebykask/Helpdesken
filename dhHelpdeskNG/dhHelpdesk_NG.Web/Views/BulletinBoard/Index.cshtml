@@ -75,7 +75,7 @@
                                             <span class="label label-success">@Html.DisplayFor(modelItem => item.ShowUntilDate, "Date")</span>
                                         </td>
                                         <td>
-                                            @item.Text.ForHtmlView()
+                                            @Html.Raw(item.Text)
                                         </td>
                                         <td>
                                             <span class="label @item.ShowOnStartPage.GetClassforYesNo()">@Translation.Get(item.ShowOnStartPage.TranslateBit(), Enums.TranslationSource.TextTranslation)</span>
@@ -95,7 +95,7 @@
                                             <span class="label">@Html.DisplayFor(modelItem => item.ShowUntilDate, "Date")</span>
                                         </td>
                                         <td>
-                                            <span style="color:#999;">@item.Text.ForHtmlView()</span>
+                                            <span style="color:#999;">@Html.Raw(item.Text)</span>
                                         </td>
                                         <td>
                                             <span class="label">@Translation.Get(item.ShowOnStartPage.TranslateBit(), Enums.TranslationSource.TextTranslation)</span>

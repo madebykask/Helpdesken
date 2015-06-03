@@ -14,7 +14,7 @@
                     <div class="box-post">                        
                         <div class="label purple">@calendar.CustomerName | @calendar.CalendarDate.ToFormattedDate()</div>
                         <div class="captionrow">@calendar.Caption</div>
-                        <div class="textrow">@calendar.Text</div>
+                        <div class="textrow">@Html.Raw(calendar.Text)</div>
                     </div>
                 }
             </div>

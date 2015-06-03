@@ -60,7 +60,7 @@
                     @Html.DisplayFor(modelItem => item.Caption)
                 </td>
                 <td>
-                    @item.Text.ForHtmlView()
+                    @Html.Raw(item.Text)
                 </td>
                 <td>
                     <span class="label @item.ShowOnStartPage.GetClassforBoolToYesNoYesNo()">@Translation.Get(item.ShowOnStartPage.BoolToYesNo())</span>

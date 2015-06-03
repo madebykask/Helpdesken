@@ -110,6 +110,7 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult New(BulletinBoard bulletinBoard, int[] WGsSelected)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
@@ -136,6 +137,7 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult Edit(int id, BulletinBoard bulletinBoard, int[] WGsSelected)
         {
             var bulletinBoardToSave = this._bulletinBoardService.GetBulletinBoard(id);
