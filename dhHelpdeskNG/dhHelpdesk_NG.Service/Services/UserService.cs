@@ -1018,6 +1018,9 @@ namespace DH.Helpdesk.Services.Services
         {
             switch (module)
             {
+                case Module.Cases:
+                    return false;
+
                 case Module.Statistics:
                     return false;
             }

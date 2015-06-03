@@ -44,7 +44,9 @@
         public ActionResult New(int customerId)
         {
             var customer = this._customerService.GetCustomer(customerId);
-            var link = new Link { Customer_Id = customer.Id };
+
+            // Height and width is handled via default value in database in helpdesk 4. This is a fix to satisfy KOREA IKEA requirements. TODO: Add possibility to change them for the user?
+            var link = new Link { Customer_Id = customer.Id, NewWindowHeight = 725, NewWindowWidth = 1225 };
 
             var model = this.CreateInputViewModel(link, customer);
 

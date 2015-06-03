@@ -939,13 +939,16 @@ namespace DH.Helpdesk.Web.Controllers
                         copyFromCaseId = copyFromCaseId,
                         caseLanguageId = caseLanguageId
                     };
-
+                     
                     m.NewModeParams = caseParam;
                     AddViewDataValues();
-                    var defWorkingGroup = m.workingGroups.Where(it => it.IsDefault == 1).FirstOrDefault();
-                    if (defWorkingGroup != null)
+                    if (m.workingGroups != null && m.workingGroups.Count > 0)
                     {
-                        m.case_.WorkingGroup_Id = defWorkingGroup.Id;    
+                        var defWorkingGroup = m.workingGroups.Where(it => it.IsDefault == 1).FirstOrDefault();
+                        if (defWorkingGroup != null)
+                        {
+                            m.case_.WorkingGroup_Id = defWorkingGroup.Id;
+                        }
                     }
                     
                     // Positive: Send Mail to...
@@ -2066,13 +2069,9 @@ namespace DH.Helpdesk.Web.Controllers
                       mailSenders.WGEmail = curWG.EMail;
             }
 
-            
-            //var user = _userService.GetUser(case_.User_Id);
-            //if (user.Default_WorkingGroup_Id.HasValue)            
             if (case_.DefaultOwnerWG_Id.HasValue && case_.DefaultOwnerWG_Id.Value > 0)
             {
                 var defaultWGEmail = _workingGroupService.GetWorkingGroup(case_.DefaultOwnerWG_Id.Value).EMail;
-                //var defaultWGEmail = _workingGroupService.GetWorkingGroup(user.Default_WorkingGroup_Id.Value).EMail;                
                 mailSenders.DefaultOwnerWGEMail = defaultWGEmail;
             }
             
@@ -2086,7 +2085,6 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     if (cu.UserInfoPermission == 0)
                     {
-                        // current user are not allowed to see user information, update from old case
                         case_.ReportedBy = oldCase.ReportedBy;
                         case_.Place = oldCase.Place;
                         case_.PersonsName = oldCase.PersonsName;
@@ -2097,6 +2095,16 @@ namespace DH.Helpdesk.Web.Controllers
                         case_.Department_Id = oldCase.Department_Id;
                         case_.OU_Id = oldCase.OU_Id;
                         case_.UserCode = oldCase.UserCode;
+                    }
+
+                    if (cu.PriorityPermission == 0)
+                    {
+                        case_.Priority_Id = oldCase.Priority_Id;
+                    }
+
+                    if (cu.StateSecondaryPermission == 0)
+                    {
+                        case_.StateSecondary_Id = oldCase.StateSecondary_Id;
                     }
                 }
 
@@ -2218,7 +2226,7 @@ namespace DH.Helpdesk.Web.Controllers
             }            
 
             // save log files
-            var newLogFiles = temporaryLogFiles.Select(f => new CaseFileDto(f.Content, f.Name, basePath, DateTime.UtcNow, caseLog.Id, this.workContext.User.UserId)).ToList();
+            var newLogFiles = temporaryLogFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseLog.Id, this.workContext.User.UserId)).ToList();
             this._logFileService.AddFiles(newLogFiles);
 
             caseMailSetting.CustomeMailFromAddress = mailSenders;
@@ -2234,14 +2242,13 @@ namespace DH.Helpdesk.Web.Controllers
 
         private CaseSearchModel InitCaseSearchModel(int customerId, int userId)
         {
-            CaseSearchModel m;
             DHDomain.ISearch s = new DHDomain.Search();
             var f = new CaseSearchFilter();
-            m = new CaseSearchModel();
+            var m = new CaseSearchModel();
             var cu = this._customerUserService.GetCustomerSettings(customerId, userId);
             if (cu == null)
             {
-                throw new Exception("It looks that something has happened with your session. Refresh page to fix it.");
+                throw new Exception("An error occurred, please refresh your page. Please, logout and login again.");
             }
 
             f.CustomerId = customerId;
