@@ -558,7 +558,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             return this.Json(result);
         }
 
-        public ActionResult SeachUserCase(FormCollection frm) 
+        public ActionResult SearchUserCase(FormCollection frm) 
         {
             
             try

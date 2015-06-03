@@ -52,7 +52,7 @@
     });
 
     function search() {        
-        $.post('@Url.Action("SeachUserCase", "Case")', $("#frmCaseSearch").serialize(), function (result) {
+        $.post('@Url.Action("SearchUserCase", "Case")', $("#frmCaseSearch").serialize(), function (result) {
             $('#search_result').html(result);
         });        
     }

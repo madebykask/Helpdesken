@@ -333,6 +333,7 @@
     <Content Include="Content\css\bootstrap.css" />
     <Content Include="Content\css\bootstrap.min.css" />
     <Content Include="Content\css\dhplus.css" />
+    <Content Include="Content\js\Shared\app.layout.js" />
     <Content Include="Content\js\typeahead.js" />
     <Content Include="img-profile\profile.css" />
     <Content Include="Content\css\selfservice.css" />
@@ -377,8 +378,6 @@
     <Content Include="Content\js\bootstrap-datepicker.js" />
     <Content Include="Content\js\bootstrap-multiselect.js" />
     <Content Include="Content\js\bootstrap.js" />
-    <Content Include="Content\js\Changes\change.js" />
-    <Content Include="Content\js\Changes\index.js" />
     <Content Include="Content\js\dhHelpdesk-head.js" />
     <Content Include="Content\js\dhHelpdesk.js" />
     <Content Include="Content\js\html5shiv.js" />
@@ -467,10 +466,6 @@
     <Content Include="Content\js\MicrosoftMvcValidation.js" />
     <Content Include="Content\js\Moxie.swf" />
     <Content Include="Content\js\Moxie.xap" />
-    <Content Include="Content\js\Notifiers\index.js" />
-    <Content Include="Content\js\Notifiers\notifier.js" />
-    <Content Include="Content\js\Notifiers\notifiers.js" />
-    <Content Include="Content\js\Notifiers\settings.js" />
     <Content Include="Content\js\plupload.full.min.js" />
     <Content Include="Content\js\plupload\i18n\cs.js" />
     <Content Include="Content\js\plupload\i18n\da.js" />
@@ -889,7 +884,6 @@
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Case\CasePreview.cshtml" />
   </ItemGroup>
@@ -927,9 +921,6 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Shared\_PopupLayout.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Case\_CaseLogFiles.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -955,15 +946,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Case\_CaseSearch.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Print\Case.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Print\Footer.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Print\Header.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\DisplayTemplates\DateReadOnly.cshtml" />
@@ -1207,9 +1189,7 @@
     <Content Include="Views\Help\FindYourWay.cshtml" />
     <Content Include="Views\Help\About.cshtml" />
     <Content Include="Views\CoWorkers\Index.cshtml" />
-    <Content Include="Views\Info\BulletinBoard.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <None Include="Properties\PublishProfiles\Test.pubxml" />
     <Content Include="Views\Shared\_CaseLogNote.cshtml" />
   </ItemGroup>

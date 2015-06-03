@@ -28,7 +28,7 @@
     });
 
     function search() {        
-        $.post('@Url.Action("SeachUserCase", "Case")', $("#frmUserCases").serialize(), function (result) {
+        $.post('@Url.Action("SearchUserCase", "Case")', $("#frmUserCases").serialize(), function (result) {
             $('#search_result').html(result);           
         });
     }

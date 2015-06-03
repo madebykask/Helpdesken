@@ -224,7 +224,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             }
             else
             {
-                caseOverview.ReceiptFooterMessage = currentCustomer.RegistrationMessage;
+                caseOverview.ReceiptFooterMessage = Translation.Get(currentCustomer.RegistrationMessage);
                 caseOverview.CanAddExternalNote = false;
             }
 
@@ -266,7 +266,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                 model.CaseMailSetting = new CaseMailSetting(
                     currentCustomer.NewCaseEmailList,
                     currentCustomer.HelpdeskEmail,
-                    ConfigurationManager.AppSettings["dh_helpdeskaddress"].ToString(),
+                    ConfigurationManager.AppSettings[AppSettingsKey.HelpdeskPath].ToString(),
                     cs.DontConnectUserToWorkingGroup);
 
                 model.NewCase.RegUserId = SessionFacade.CurrentUserIdentity.UserId;
@@ -300,10 +300,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                     model.NewCase.Description = caseTemplate.Description;
                     model.NewCase.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id;
                     model.NewCase.Priority_Id = caseTemplate.Priority_Id;
-                    model.NewCase.Project_Id = caseTemplate.Project_Id;
-                    //m.CaseLog.TextExternal = caseTemplate.Text_External;
-                    //m.CaseLog.TextInternal = caseTemplate.Text_Internal;
-                    //m.CaseLog.FinishingType = caseTemplate.FinishingCause_Id;
+                    model.NewCase.Project_Id = caseTemplate.Project_Id;                    
                 }
 
                 if(model.NewCase.ProductArea_Id.HasValue)
@@ -628,12 +625,11 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             var caseMailSetting = new CaseMailSetting(
                                                        currentCustomer.NewCaseEmailList,
                                                        currentCustomer.HelpdeskEmail,
-                                                       ConfigurationManager.AppSettings["dh_helpdeskaddress"].ToString(),
+                                                       ConfigurationManager.AppSettings[AppSettingsKey.HelpdeskPath].ToString(),
                                                        cs.DontConnectUserToWorkingGroup
                                                        );
 
-            this._caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, basePath, newLogFiles);            
-            //return Json(new { url = backUrlAddresss });            
+            this._caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, basePath, newLogFiles);                     
         }
 
         [HttpPost]
@@ -657,7 +653,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             return this.Json(result);
         }
 
-        public ActionResult SeachUserCase(FormCollection frm)
+        public ActionResult SearchUserCase(FormCollection frm)
         {
             try
             {
@@ -725,9 +721,9 @@ namespace DH.Helpdesk.NewSelfService.Controllers
         {
             var caseFieldSetting = _caseFieldSettingService.ListToShowOnCasePage(currentCase.Customer_Id, languageId)
                                                            .Where(c => c.ShowExternal == 1 ||
-                                                                       c.Name == "tblLog.Text_External" ||
-                                                                       c.Name == "CaseNumber" ||
-                                                                       c.Name == "RegTime")
+                                                                       c.Name == GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString() ||
+                                                                       c.Name == GlobalEnums.TranslationCaseFields.CaseNumber.ToString() ||
+                                                                       c.Name == GlobalEnums.TranslationCaseFields.RegTime.ToString())
                                                            .ToList();
 
             var caseFieldGroups = GetVisibleFieldGroups(caseFieldSetting);
@@ -936,37 +932,87 @@ namespace DH.Helpdesk.NewSelfService.Controllers
         private List<string> GetVisibleFieldGroups(List<CaseListToCase> fieldList)
         {
             List<string> ret = new List<string>();
+            var t = GlobalEnums.TranslationCaseFields.Persons_Phone.ToString();
+            string[] userInformationGroup = new string[] 
+                        {   
+                            GlobalEnums.TranslationCaseFields.ReportedBy.ToString(),                             
+                            GlobalEnums.TranslationCaseFields.Persons_Name.ToString(),
+                            GlobalEnums.TranslationCaseFields.Persons_EMail.ToString(),
+                            GlobalEnums.TranslationCaseFields.Persons_Phone.ToString(), 
+                            GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString(),
+                            GlobalEnums.TranslationCaseFields.Customer_Id.ToString(), 
+                            GlobalEnums.TranslationCaseFields.Region_Id.ToString(), 
+                            GlobalEnums.TranslationCaseFields.Department_Id.ToString(), 
+                            GlobalEnums.TranslationCaseFields.OU_Id.ToString(), 
+                            GlobalEnums.TranslationCaseFields.Place.ToString(), 
+                            GlobalEnums.TranslationCaseFields.UserCode.ToString()
+                        };
 
-            string[] userInformationGroup = new string[] {"ReportedBy", "Persons_Name", "Persons_EMail",
-                                                           "Persons_Phone", "Persons_CellPhone", "Customer_Id", "Region_Id",
-                                                           "Department_Id" , "OU_Id", "Place", "UserCode"};
+            string[] computerInformationGroup = new string[] 
+                        { 
+                            GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(), 
+                            GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString(), 
+                            GlobalEnums.TranslationCaseFields.InventoryLocation.ToString()
+                        };
+                            
+            string[] caseInfoGroup = new string[] 
+                        { 
+                            GlobalEnums.TranslationCaseFields.CaseNumber.ToString(), 
+                            GlobalEnums.TranslationCaseFields.RegTime.ToString(), 
+                            GlobalEnums.TranslationCaseFields.ChangeTime.ToString(), 
+                            GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), 
+                            GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), 
+                            GlobalEnums.TranslationCaseFields.System_Id.ToString(), 
+                            GlobalEnums.TranslationCaseFields.Urgency_Id.ToString(), 
+                            GlobalEnums.TranslationCaseFields.Impact_Id.ToString(), 
+                            GlobalEnums.TranslationCaseFields.Category_Id.ToString(), 
+                            GlobalEnums.TranslationCaseFields.Supplier_Id.ToString(), 
+                            GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString(), 
+                            GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString(), 
+                            GlobalEnums.TranslationCaseFields.Caption.ToString(), 
+                            GlobalEnums.TranslationCaseFields.Description.ToString(), 
+                            GlobalEnums.TranslationCaseFields.Miscellaneous.ToString(), 
+                            GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString(), 
+                            GlobalEnums.TranslationCaseFields.SMS.ToString(), 
+                            GlobalEnums.TranslationCaseFields.AgreedDate.ToString(), 
+                            GlobalEnums.TranslationCaseFields.Available.ToString(), 
+                            GlobalEnums.TranslationCaseFields.Cost.ToString(),
+                            GlobalEnums.TranslationCaseFields.Filename.ToString()                                                                                
+                        };
 
-            string[] computerInformationGroup = new string[] { "InventoryNumber", "ComputerType_Id", "InventoryLocation" };
+            string[] otherGroup = new string[] 
+                        { 
+                            GlobalEnums.TranslationCaseFields.PlanDate.ToString(),
+                            GlobalEnums.TranslationCaseFields.WatchDate.ToString(),
+                            GlobalEnums.TranslationCaseFields.Verified.ToString(),
+                            GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString(),
+                            GlobalEnums.TranslationCaseFields.SolutionRate.ToString(),
+                        };
 
-            string[] caseInfoGroup = new string[] { "CaseNumber", "RegTime", "ChangeTime",  "CaseType_Id", "ProductArea_Id", "System_Id", "Urgency_Id", "Impact_Id",
-                                                    "Category_Id", "Supplier_Id" , "InvoiceNumber", "ReferenceNumber", "Caption", "Description" ,
-                                                    "Miscellaneous", "ContactBeforeAction", "SMS", "AgreedDate" ,  "Available" , "Cost" ,"Filename"};
-
-            string[] otherGroup = new string[] { "PlanDate", "WatchDate", "Verified", "VerifiedDescription", "SolutionRate" };
-
-            string[] caseLogGroup = new string[] { "tblLog.Text_External", "tblLog.Filename", "FinishingDescription", "FinishingDate" };
+            string[] caseLogGroup = new string[] 
+                        { 
+                            GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(),
+                            GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString(),
+                            GlobalEnums.TranslationCaseFields.FinishingDescription.ToString(),
+                            GlobalEnums.TranslationCaseFields.FinishingDate.ToString(),
+                        };
 
             foreach(var field in fieldList)
             {
                 if(userInformationGroup.Contains(field.Name))
-                    ret.Add("UserInformation");
+                    ret.Add(Enums.CaseFieldGroups.UserInformation);
 
                 if(computerInformationGroup.Contains(field.Name))
-                    ret.Add("ComputerInformation");
+                    ret.Add(Enums.CaseFieldGroups.ComputerInformation);
 
                 if(caseInfoGroup.Contains(field.Name))
-                    ret.Add("CaseInfo");
+                    ret.Add(Enums.CaseFieldGroups.CaseInfo);
 
                 if(otherGroup.Contains(field.Name))
-                    ret.Add("Other");
+                    ret.Add(Enums.CaseFieldGroups.Other);
 
                 if(caseLogGroup.Contains(field.Name))
-                    ret.Add("CaseLog");
+                    ret.Add(Enums.CaseFieldGroups.CaseLog);
             }
 
             return ret;

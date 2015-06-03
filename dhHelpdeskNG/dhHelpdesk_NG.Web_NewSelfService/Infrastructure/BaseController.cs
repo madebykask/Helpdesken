@@ -96,9 +96,7 @@
             }
             else            
             {
-                customerId = SessionFacade.CurrentCustomer.Id;
-                //ViewBag.PublicCustomerId = customerId;
-                //ViewBag.PublicCaseTemplate = _caseSolutionService.GetCaseSolutions(customerId).ToList();
+                customerId = SessionFacade.CurrentCustomer.Id;                
             }
 
             if(SessionFacade.AllLanguages == null)
@@ -330,48 +328,7 @@
                 SessionFacade.LastCorrectUrl =
                     filterContext.HttpContext.Request.Url.AbsoluteUri;
         }
-
-        //protected override void OnAuthorization(AuthorizationContext filterContext)  //called when a process requests authorization or authorization occurs before login and before OnActionExecuting + index + OnActionExecuted 
-        //{
-        //    var redirectToUrl = "~/login/login?returnUrl=" + filterContext.HttpContext.Request.Url;
-
-        //    //if (SessionFacade.CurrentUser == null)
-        //    //{
-        //    //    var user = _masterDataService.GetUserForLogin(User.Identity.Name);
-        //    //    if (user != null)
-        //    //        SessionFacade.CurrentUser = user;
-        //    //    else
-        //    //        Response.Redirect(redirectToUrl);
-        //    //}
-        //    //base.OnAuthorization(filterContext);
-
-        //    //if (filterContext.Result == null || (filterContext.Result.GetType() != typeof(HttpUnauthorizedResult)))
-        //    //    return;
-
-        //    if (filterContext.HttpContext.Request.IsAjaxRequest())
-        //    {
-        //        filterContext.Result = filterContext.HttpContext.Request.ContentType == "application/json"
-        //            ? (ActionResult)
-        //              new JsonResult
-        //              {
-        //                  Data = new { RedirectTo = redirectToUrl },
-        //                  ContentEncoding = System.Text.Encoding.UTF8,
-        //                  JsonRequestBehavior = JsonRequestBehavior.DenyGet
-        //              }
-
-        //            : new ContentResult
-        //            {
-        //                Content = redirectToUrl,
-        //                ContentEncoding = System.Text.Encoding.UTF8,
-        //                ContentType = "text/html"
-        //            };
-
-        //        filterContext.HttpContext.Response.StatusCode = 530; //User Access Denied
-        //        filterContext.HttpContext.Response.TrySkipIisCustomErrors = true;
-        //    }
-        //}
-
-
+       
         protected string RenderRazorViewToString(string viewName, object model, bool partial = true)
         {
             var viewResult = partial ? ViewEngines.Engines.FindPartialView(this.ControllerContext, viewName) : ViewEngines.Engines.FindView(this.ControllerContext, viewName, null);
