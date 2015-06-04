@@ -7,7 +7,6 @@ $(document).ready(function() {
     $('.dropdown-menu .dropdown-submenu').on('mouseenter', function () {
         var $submenu = $(this).find('.dropdown-menu').first();
         if ($submenu.length > 0) {
-            console.log($submenu.offset().left + $submenu.width());
             if ($submenu.offset().left + $submenu.width() > $(window).width()) {
                 $submenu.css('left', '-98%');
             }
