@@ -230,13 +230,13 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    @*<td><label class="checkbox">
+                                    <td><label class="checkbox">
                                         <input type="checkbox" name="setting.ModuleInventory" @(Model.Setting.ModuleInventory == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="setting.ModuleInventory" value="0" />
                                         &nbsp;@Translation.Get("Inventarier", Enums.TranslationSource.TextTranslation)
                                         </label>
                                     </td>
-                                    <td><label class="checkbox">
+                                    @*<td><label class="checkbox">
                                         <input type="checkbox" name="setting.ModuleLicense" @(Model.Setting.ModuleLicense == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="setting.ModuleLicense" value="0" />
                                         &nbsp;@Translation.Get("Licenshantering", Enums.TranslationSource.TextTranslation)

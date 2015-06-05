@@ -581,7 +581,7 @@ function CaseInitForm() {
             url: '/Cases/UploadCaseFile',
             multipart_params: { id: $('#CaseKey').val() },
             filters: {
-                max_file_size: '30mb',
+                max_file_size: '35mb',
             },
             buttons: { browse: true, start: true, stop: true, cancel: true },
             preinit: {

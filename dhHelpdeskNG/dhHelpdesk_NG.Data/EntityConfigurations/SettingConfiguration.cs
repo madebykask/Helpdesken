@@ -53,7 +53,7 @@
             this.Property(x => x.LDAPAllUsers).IsRequired();
             this.Property(x => x.LDAPAuthenticationType).IsRequired();
             this.Property(x => x.LDAPBase).IsRequired().HasMaxLength(100);
-            this.Property(x => x.LDAPFilter).IsRequired().HasMaxLength(50);
+            this.Property(x => x.LDAPFilter).IsRequired().HasMaxLength(100);
             this.Property(x => x.LDAPLogLevel).IsRequired();
             this.Property(x => x.LDAPPassword).IsRequired().HasMaxLength(20);
             this.Property(x => x.LDAPSyncType).IsRequired();

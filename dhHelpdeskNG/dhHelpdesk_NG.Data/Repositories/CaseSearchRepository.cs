@@ -141,7 +141,7 @@
                         cmd.Connection = con;
                         cmd.CommandType = CommandType.Text;
                         cmd.CommandText = sql;
-
+                        cmd.CommandTimeout = 300;
                         var dr = cmd.ExecuteReader();
                         if (dr != null && dr.HasRows)
                         {
@@ -349,10 +349,11 @@
                 {
                     try
                     {
-                        con.Open();
+                        con.Open();                        
                         cmd.Connection = con;
                         cmd.CommandType = CommandType.Text;
                         cmd.CommandText = sql;
+                        cmd.CommandTimeout = 300;
 
                         var dr = cmd.ExecuteReader();
                         if (dr != null)

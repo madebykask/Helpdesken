@@ -20,6 +20,9 @@
     using DH.Helpdesk.Web.Infrastructure.Extensions;
     using DH.Helpdesk.Web.Infrastructure.Mvc;
     using DH.Helpdesk.Web.Infrastructure.Tools;
+    using DH.Helpdesk.BusinessData.Models.Shared;
+    using System.Collections.Generic;
+    using DH.Helpdesk.BusinessData.Models.Reports.Options;
 
     public sealed class ReportController : UserInteractionController
     {
@@ -100,6 +103,8 @@
 
                     SessionFacade.SavePageFilters(PageName.ReportsReportGenerator, reportGeneratorFilters);
                     var reportGeneratorOptions = this.reportService.GetReportGeneratorOptions(this.OperationContext.CustomerId, this.OperationContext.LanguageId);
+                    reportGeneratorOptions = TranslateReportFields(reportGeneratorOptions);                    
+
                     return this.PartialView(
                                 "Options/ReportGenerator",
                                 this.reportGeneratorModelFactory.GetReportGeneratorOptionsModel(reportGeneratorOptions, reportGeneratorFilters));
@@ -399,6 +404,27 @@
             var report = this.reportsBuilder.GetCasesInProgressDayReport(data, period.RoundToMonthOrGetCurrent());
 
             return new UnicodeFileContentResult(report, string.Empty);
+        }
+
+        public ReportGeneratorOptions TranslateReportFields(ReportGeneratorOptions reportOptions)
+        {                        
+            var translatedFields = new List<ItemOverview>();
+            foreach (ItemOverview f in reportOptions.Fields)                            
+                translatedFields.Add(new ItemOverview
+                                            (
+                                                Translation.Get(f.Name, Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id),
+                                                f.Value
+                                            ));                
+            
+
+            var ret = new ReportGeneratorOptions
+                            (
+                                translatedFields.OrderBy(f=> f.Name).ToList(), 
+                                reportOptions.Departments, 
+                                reportOptions.WorkingGroups, 
+                                reportOptions.CaseTypes
+                            );            
+            return ret;
         }
     }
 }
