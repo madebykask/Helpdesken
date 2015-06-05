@@ -182,6 +182,7 @@ namespace DH.Helpdesk.NewSelfService
             kernel.Bind<IADFSRepository>().To<ADFSRepository>();
             kernel.Bind<IHolidayRepository>().To<HolidayRepository>();
             kernel.Bind<IHolidayHeaderRepository>().To<HolidayHeaderRepository>();
+            kernel.Bind<IDomainRepository>().To<DomainRepository>();
                                        
             // Service             
             kernel.Bind<IMasterDataService>().To<MasterDataService>();            
@@ -228,6 +229,7 @@ namespace DH.Helpdesk.NewSelfService
             kernel.Bind<IDocumentService>().To<DocumentService>();
             kernel.Bind<ISurveyService>().To<SurveyService>();
             kernel.Bind<IHolidayService>().To<HolidayService>();
+            kernel.Bind<IOrganizationService>().To<OrganizationService>();
 
             // Cache
             kernel.Bind<ICacheProvider>().To<CacheProvider>();

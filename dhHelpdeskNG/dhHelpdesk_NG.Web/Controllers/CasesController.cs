@@ -121,6 +121,8 @@
 
         private readonly int _defaultMaxRows;
 
+        private readonly OrganizationJsonService _orgJsonService;
+
         #endregion
 
         #region Constructor
@@ -178,7 +180,7 @@
             CaseOverviewGridSettingsService caseOverviewSettingsService, 
             GridSettingsService gridSettingsService, 
             OutputFormatter outputFormatter,
-            IOrganizationService organizationService)
+            IOrganizationService organizationService, OrganizationJsonService orgJsonService)
             : base(masterDataService)
         {
             this._masterDataService = masterDataService;  
@@ -234,6 +236,7 @@
             this.gridSettingsService = gridSettingsService;
             this.outputFormatter = outputFormatter;
             this._organizationService = organizationService;
+            this._orgJsonService = orgJsonService;
             this._defaultMaxRows = 10;
         }
 
@@ -1191,23 +1194,7 @@
 
         public JsonResult ChangeRegion(int? id, int customerId, int departmentFilterFormat)
         {
-            var dep = this._departmentService.GetDepartmentsByUserPermissions(SessionFacade.CurrentUser.Id, customerId);
-            if (!dep.Any())
-            {
-                dep = this._departmentService.GetDepartments(customerId)
-                                             .Where(d => d.Region_Id == null || (d.Region != null && d.Region.IsActive != 0))
-                                             .ToList();
-            }
-
-            if (id.HasValue)
-            {
-                var curRegion = this._regionService.GetRegion(id.Value);
-                if (curRegion.IsActive != 0)
-                  dep = dep.Where(x => x.Region_Id == id).ToList();
-            }
-
-            var list = dep.Select(x => new { id = x.Id, name = x.DepartmentDescription(departmentFilterFormat) });
-
+            var list = this._orgJsonService.GetActiveDepartmentForRegion(id, customerId, departmentFilterFormat);
             return this.Json(new { list });
         }
 
@@ -1244,28 +1231,9 @@
             return 0;
         }
 
-        public JsonResult ChangeDepartment(int? id, int customerId, int departmentFilterFormat)
+        public JsonResult ChangeDepartment(int? id, int customerId)
         {
-            var prelist =
-            id.HasValue ?
-                this._ouService.GetOUs(customerId)
-                         .Where(e => e.IsActive == 1 && id.GetValueOrDefault() == e.Department_Id)
-                :
-                null;
-                //this._ouService.GetOUs(customerId);            
-            
-            var unionList = new Dictionary<int,string>();
-            if (prelist != null)
-            {
-                foreach (var ou in prelist)
-                {
-                    unionList.Add(ou.Id, ou.Name);
-                    foreach (var s in ou.SubOUs.Where(e => e.IsActive == 1))
-                        unionList.Add(s.Id, ou.Name + " - " + s.Name);
-                }
-            }
-
-            var list = unionList.Select(x => new { id = x.Key, name = x.Value });
+            var list = this._orgJsonService.GetActiveOUForDepartmentAsIdName(id, customerId);
             return this.Json(new { list }, JsonRequestBehavior.AllowGet);
         }
 

@@ -1,10 +1,11 @@
-﻿@using DH.Helpdesk.BusinessData.OldComponents
-@using DH.Helpdesk.Common.Extensions.Integer
-@using DH.Helpdesk.NewSelfService.Infrastructure
+﻿@using System.Web.Script.Serialization
+@using DH.Helpdesk.BusinessData.OldComponents
 @model DH.Helpdesk.NewSelfService.Models.Case.NewCaseModel
-
+@{
+    var jsSerializer = new JavaScriptSerializer();
+}
 <script type="text/javascript">
-
+    window.appOptions = @Html.Raw(jsSerializer.Serialize(Model.JsApplicationOptions));
     $(function() {
         window.alreadyExistFileIds = [];
         bindDeleteNewCaseFileBehaviorToDeleteButtons();       
@@ -114,7 +115,7 @@
                     <a href="#" class="btn btn-default">Cancel request</a>
                 </li>*@
                 <li>                    
-                    @Html.ActionLink(Translation.Get("Save and Send", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "$('#NewCaseForm').submit();return false;" , @class="btn btn-default" })
+                    @Html.ActionLink(Translation.Get("Save and Send", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "$('#NewCaseForm').submit();return false;", @class = "btn btn-default" })
                 </li>
                 
             </ul>
@@ -163,7 +164,8 @@
                     @Html.HiddenFor(l => Model.NewCase.RegLanguage_Id)     
      
                     @Html.HiddenFor(k => Model.CaseFileKey)
-        
+
+                    @Html.HiddenFor(model => model.DepartmentFilterFormat, new { data_field = "departmentFilterFormat" })
     
                     if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.UserInformation))
                     {
@@ -202,7 +204,7 @@
                                         <div class="form-group row">
                                             <label class="col-md-2">
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):
-                                                @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Persons_Name.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
+                                                @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Persons_Name.ToString()).Select(f => f.Required).FirstOrDefault() == 1)
                                                 {
                                                     <span class="mandatorystar">*</span>
                                                 }
@@ -305,6 +307,32 @@
                                             </div>
                                         </div>
                                     }
+
+                                    @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.OU_Id.ToString()))
+                                    {
+                                        <div class="form-group row">
+                                            <label class="col-md-2">                                                
+                                                @Translation.Get(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                                                
+                                                @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.OU_Id.ToString()).Select(f => f.Required).FirstOrDefault() == 1)
+                                                {
+                                                    <span class="mandatorystar">*</span>
+                                                }
+                                            </label>
+                                            <div class="col-md-10">                                                                                                
+                                                <select id="NewCase_Ou_Id" name="NewCase.OU_Id">
+                                                    <option value="">&nbsp;</option>
+                                                    @if (Model.OrganizationUnits != null)
+                                                    {
+                                                        foreach (var e in Model.OrganizationUnits.Where(e => e.IsActive == 1))
+                                                        {
+                                                            <option value="@e.Id">@e.Name </option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                    }
+
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Place.ToString()))
                                     {
                                         <div class="form-group row">
@@ -1181,3 +1209,4 @@
         return ret;
     }
 </script>
+<script src="../content/js/case/edit.js"></script>

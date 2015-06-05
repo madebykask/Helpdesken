@@ -1,39 +1,34 @@
-﻿using System;
-using System.Linq;
-using System.Web.Mvc;
-using System.Collections.Generic;
-
-using DH.Helpdesk.BusinessData.Models;
-using DH.Helpdesk.NewSelfService.Models.Case;
-using DH.Helpdesk.Domain;
-using DH.Helpdesk.Services.Services;
-using DH.Helpdesk.Dal.Enums;
-using System.Net;
-
-
-namespace DH.Helpdesk.NewSelfService.Controllers
+﻿namespace DH.Helpdesk.NewSelfService.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.Linq;
+    using System.Net;
     using System.Net;
     using System.Web;
+    using System.Web.Mvc;
     using System.Web.WebPages;
-    using System.Configuration;
 
+    using DH.Helpdesk.BusinessData.Enums.Case;
+    using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+    using DH.Helpdesk.Common.Enums;
+    using DH.Helpdesk.Common.Tools;
+    using DH.Helpdesk.Dal.Enums;
+    using DH.Helpdesk.Dal.Infrastructure.Context;
+    using DH.Helpdesk.Domain;
     using DH.Helpdesk.NewSelfService.Infrastructure;
+    using DH.Helpdesk.NewSelfService.Infrastructure.Common.Concrete;
     using DH.Helpdesk.NewSelfService.Infrastructure.Extensions;
     using DH.Helpdesk.NewSelfService.Infrastructure.Tools;
-    using DH.Helpdesk.Common.Tools;
-    using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.NewSelfService.Models;
-    using System.Threading.Tasks;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
-    using DH.Helpdesk.Dal.Infrastructure.Context;
-    using DH.Helpdesk.NewSelfService.Infrastructure;
-    using DH.Helpdesk.BusinessData.Enums.Case;
-    using DH.Helpdesk.Common.Enums;
-    using DH.Helpdesk.NewSelfService.Infrastructure.Common.Concrete;
+    using DH.Helpdesk.NewSelfService.Models.Case;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Services.Services.Concrete;
+    using DH.Helpdesk.Services.utils;
 
     public class CaseController : BaseController
     {
@@ -67,35 +62,40 @@ namespace DH.Helpdesk.NewSelfService.Controllers
 
         private const string ParentPathDefaultValue = "--";
         private const string EnterMarkup = "<br />";
+        private readonly IOrganizationService _orgService;
+        private readonly OrganizationJsonService _orgJsonService;
 
 
-        public CaseController(ICaseService caseService,
-                              ICaseFieldSettingService caseFieldSettingService,
-                              IMasterDataService masterDataService,
-                              ILogService logService,
-                              IInfoService infoService,
-                              IUserTemporaryFilesStorageFactory userTemporaryFilesStorageFactory,
-                              ICaseFileService caseFileService,
-                              IRegionService regionService,
-                              IDepartmentService departmentService,
-                              ICaseTypeService caseTypeService,
-                              IProductAreaService productAreaService,
-                              ISystemService systemService,
-                              ICategoryService categoryService,
-                              ICurrencyService currencyService,
-                              ISupplierService supplierService,
-                              ICustomerService customerService,
-                              ISettingService settingService,
-                              IComputerService computerService,
-                              ICustomerUserService customerUserService,
-                              ICaseSettingsService caseSettingService,
-                              ICaseSearchService caseSearchService,
-                              IWorkContext workContext, 
-                              IUserService userService,
-                              IWorkingGroupService workingGroupService,
-                              IStateSecondaryService stateSecondaryService,
-                              ILogFileService logFileService,
-                              ICaseSolutionService caseSolutionService)
+        public CaseController(
+            ICaseService caseService,
+            ICaseFieldSettingService caseFieldSettingService,
+            IMasterDataService masterDataService,
+            ILogService logService,
+            IInfoService infoService,
+            IUserTemporaryFilesStorageFactory userTemporaryFilesStorageFactory,
+            ICaseFileService caseFileService,
+            IRegionService regionService,
+            IDepartmentService departmentService,
+            ICaseTypeService caseTypeService,
+            IProductAreaService productAreaService,
+            ISystemService systemService,
+            ICategoryService categoryService,
+            ICurrencyService currencyService,
+            ISupplierService supplierService,
+            ICustomerService customerService,
+            ISettingService settingService,
+            IComputerService computerService,
+            ICustomerUserService customerUserService,
+            ICaseSettingsService caseSettingService,
+            ICaseSearchService caseSearchService,
+            IWorkContext workContext, 
+            IUserService userService,
+            IWorkingGroupService workingGroupService,
+            IStateSecondaryService stateSecondaryService,
+            ILogFileService logFileService,
+            ICaseSolutionService caseSolutionService,
+            IOrganizationService orgService,
+            OrganizationJsonService orgJsonService)
             : base(masterDataService, caseSolutionService)
         {
             this._masterDataService = masterDataService;
@@ -125,6 +125,8 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             this._stateSecondaryService = stateSecondaryService;
             this._caseSolutionService = caseSolutionService;
             this.workContext = workContext;
+            this._orgService = orgService;
+            this._orgJsonService = orgJsonService;
         }
 
 
@@ -325,10 +327,23 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             return this.View("NewCase", model);
         }
 
+
+        public ActionResult GetDepartmentsByRegion(int? id, int customerId, int departmentFilterFormat)
+        {
+            var list = this._orgJsonService.GetActiveDepartmentForRegion(id, customerId, departmentFilterFormat);
+            return this.Json(new { success = true, data = list }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        public ActionResult GetOrgUnitsByDepartments(int? id, int customerId)
+        {
+            var list = this._orgJsonService.GetActiveOUForDepartmentAsIdName(id, customerId);
+            return this.Json(new { success = true, data = list }, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpGet]
         public ActionResult UserCases(int customerId, string progressId)
         {
-
             var currentCustomer = default(Customer);
             if (SessionFacade.CurrentCustomer != null)
                 currentCustomer = SessionFacade.CurrentCustomer;
@@ -898,6 +913,9 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             //Department list
             var departments = this._departmentService.GetDepartments(customerId);
 
+            //Organization unit list
+            var orgUnits = this._orgService.GetOUs(customerId).ToList();
+
             //Case Type tree            
             var caseTypes = this._caseTypeService.GetCaseTypes(customerId);
 
@@ -919,8 +937,30 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             //Field Settings
             var caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(customerId);
 
-            var model = new NewCaseModel(newCase, regions, departments, caseTypes, productAreas, systems,
-                                         categories, currencies, suppliers, caseFieldGroups, caseFieldSetting, caseFile, caseFieldSettings);
+            var cs = this._settingService.GetCustomerSetting(customerId);
+            
+            var model = new NewCaseModel(
+                newCase, 
+                regions, 
+                departments,
+                orgUnits,
+                caseTypes, 
+                productAreas, 
+                systems,
+                categories, 
+                currencies, 
+                suppliers, 
+                caseFieldGroups, 
+                caseFieldSetting, 
+                caseFile, 
+                caseFieldSettings,
+                new JsApplicationOptions()
+                    {
+                        customerId = customerId,
+                        departmentFilterFormat = cs.DepartmentFilterFormat,
+                        departmentsURL = Url.Content("~/Case/GetDepartmentsByRegion"),
+                        orgUnitURL = Url.Content("~/Case/GetOrgUnitsByDepartments")
+                    });
 
             model.CaseTypeParantPath = "--";
             model.ProductAreaParantPath = "--";
@@ -928,6 +968,8 @@ namespace DH.Helpdesk.NewSelfService.Controllers
 
             return model;
         }
+
+        public object _orgUnitService { get; private set; }
 
         private List<string> GetVisibleFieldGroups(List<CaseListToCase> fieldList)
         {
