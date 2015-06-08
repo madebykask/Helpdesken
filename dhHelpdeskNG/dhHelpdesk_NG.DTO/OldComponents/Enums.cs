@@ -99,8 +99,8 @@
             UpdateNotifierInformation = 56,
             Change = 57, 
             Project = 58,
-            Problem = 59
+            Problem = 59,
+            Source = 60
         }
-
     }
 }

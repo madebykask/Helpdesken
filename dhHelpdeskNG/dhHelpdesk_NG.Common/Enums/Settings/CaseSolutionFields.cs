@@ -51,6 +51,7 @@
         UpdateNotifierInformation = 47,
         PlanDate = 48,
         CausingPart = 49,
-        FileName = 50
+        FileName = 50,
+        Source = 51
     }
 }

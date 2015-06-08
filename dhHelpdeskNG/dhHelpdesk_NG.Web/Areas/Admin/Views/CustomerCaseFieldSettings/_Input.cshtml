@@ -1,6 +1,5 @@
 ﻿@model DH.Helpdesk.Web.Areas.Admin.Models.CustomerInputViewModel
 @using DH.Helpdesk.BusinessData.OldComponents
-@using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @using System.Web.Optimization
 <script type="text/javascript">    
@@ -576,6 +575,41 @@
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[14].FieldHelp" value="@Model.CaseFieldSettingWithLangauges.getFieldHelp(GlobalEnums.TranslationCaseFields.CaseNumber.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[14].FieldHelp" value="0" />
+                            </td>
+                        </tr>
+                        @*          Source field            *@
+                        <tr>
+                            <td>
+                                <i class="dh-icon-select" rel="tooltip" title="@Translation.Get("Vallista - dropdown")"></i>
+                            </td>
+                            <td>
+                                @Translation.Get("Source")
+                            </td>
+                            <td>
+                                <input type="checkbox" name="CaseFieldSettings[55].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Source.ToString()) == 1 ? "checked=checked" : "") value="1"/>
+                                <input type="hidden" name="CaseFieldSettings[55].ShowOnStartPage" value="0" />
+                                <input type="hidden" name="CaseFieldSettings[55].Customer_Id" value="@Model.Customer.Id" />
+                                <input type="hidden" name="CaseFieldSettings[55].Name" value="Source" />
+                                <input type="hidden" name="CaseFieldSettings[55].Id" value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Source.ToString())" />
+                                <input type="hidden" name="CaseFieldSettings[55].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.Source.ToString())" />
+                            </td>
+                            <td>
+                                <input type="checkbox" name="CaseFieldSettings[55].ShowExternal" disabled="disabled"/>
+                                <input type="hidden" name="CaseFieldSettings[55].ShowExternal" value="0" />
+                            </td>
+                            <td>
+                                <input type="text" name="CaseFieldSettingWithLangauges[55].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.Source.ToString())"/>
+                                <input type="hidden" name="CaseFieldSettingWithLangauges[55].Name" value="RegTime" />
+                            </td>
+                             <td>
+                                <input type="checkbox" name="CaseFieldSettings[55].Required" @(Model.CaseFieldSettings.getRequired(GlobalEnums.TranslationCaseFields.Source.ToString()) == 1 ? "checked=checked" : "") value="1"/>
+                                <input type="hidden" name="CaseFieldSettings[55].Required" value="0" />
+                            </td>
+                            <td>&nbsp;
+                            </td>
+                            <td>
+                                <input type="text" name="CaseFieldSettingWithLangauges[55].FieldHelp" value="@Model.CaseFieldSettingWithLangauges.getFieldHelp(GlobalEnums.TranslationCaseFields.Source.ToString())"/>
+                                <input type="hidden" name="CaseFieldSettingWithLangauges[55].FieldHelp" value="0" />
                             </td>
                         </tr>
                         <tr>

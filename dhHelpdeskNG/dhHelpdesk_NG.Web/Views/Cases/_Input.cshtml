@@ -491,6 +491,33 @@
                                             <td></td>
                                         </tr>                                        
                                     }
+                                    @*                      "Source" field               *@
+                                    <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Source, CaseSolutionFields.Source)">
+                                                <td class="span3">
+                                                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Source, "Source")
+                                                </td>
+                                                <td class="span4">
+                                                    @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Source, CaseSolutionFields.Source))
+                                                    {
+                                                        var current = Model.Sources.Where(r => r.Id == Model.case_.Source_Id).SingleOrDefault();
+                                                        @Html.TextBoxFor(m => current.Name, new { @readonly = true })
+                                                        @Html.HiddenFor(m => Model.case_.Source_Id)
+                                                    }
+                                                    else
+                                                    {
+                                                         <select name="case_.Source_Id" data-field="source">
+                                                            <option value="">&nbsp;</option>                                                            
+                                                            @if (Model.Sources != null)
+                                                            {
+                                                                foreach (var e in Model.Sources)
+                                                                {
+                                                                    <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Source_Id.ToString()) >@e.Name</option>
+                                                                }
+                                                            }
+                                                        </select>
+                                                    }                                                                                                             
+                                                </td>
+                                            </tr>
                                     <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.CaseType_Id, CaseSolutionFields.CaseType)">
                                         <td>
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.CaseType_Id, "Ärendetyp")

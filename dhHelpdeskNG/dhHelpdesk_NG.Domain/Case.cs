@@ -84,6 +84,11 @@
         public int? DefaultOwnerWG_Id { get; set; }
 
         /// <summary>
+        /// Source Id of the case
+        /// </summary>
+        public int? Source_Id { get; set; }
+
+        /// <summary>
         /// Gets or sets the causing type id.
         /// </summary>
         public int? CausingPartId { get; set; }

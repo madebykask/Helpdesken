@@ -534,6 +534,7 @@
                     break;
 
                 case "statesecondary_id":
+                case "source":
                     ret = dr[col].ToString();
                     translateField = true;
                     break;
@@ -644,6 +645,7 @@
             columns.Add("tblCase.ReportedBy");
             columns.Add("tblCase.ProductArea_Id");
             columns.Add("tblCase.InvoiceNumber");
+            columns.Add("'Portal' as Source");
             columns.Add("tblCustomer.Name");
             columns.Add("tblDepartment.Department as DepertmentName");
             columns.Add("tblDepartment.DepartmentId");
@@ -676,7 +678,7 @@
             {
                 columns.Add("tblStateSecondary.StateSecondary as StateSecondary_Id");
             }
-            
+
             columns.Add("tblCase.Priority_Id");
             columns.Add("tblPriority.PriorityName");
             columns.Add("coalesce(tblPriority.SolutionTime, 0) as SolutionTime");

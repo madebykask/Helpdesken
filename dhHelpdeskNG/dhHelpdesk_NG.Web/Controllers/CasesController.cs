@@ -42,8 +42,8 @@
     using DH.Helpdesk.Web.Models.Case.Input;
     using DH.Helpdesk.Web.Models.Case.Output;
     using DH.Helpdesk.Web.Models.Shared;
-    
     using DHDomain = DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain;
 
     public class CasesController : BaseController
     {
@@ -684,7 +684,6 @@
                 ApplicationTypes.Helpdesk,
                 showRemainingTime,
                 out remainingTimeData);
-
             m.cases = this.TreeTranslate(m.cases, f.CustomerId);
             sm.Search.IdsForLastSearch = this.GetIdsFromSearchResult(m.cases);
             SessionFacade.CurrentCaseSearch = sm;
@@ -2310,11 +2309,17 @@
         /// <returns>
         /// The <see cref="CaseInputViewModel"/>.
         /// </returns>
-        private CaseInputViewModel GetCaseInputViewModel(int userId, int customerId, int caseId, int lockedByUserId = 0, 
-                                                         string redirectFrom = "", 
-                                                         string backUrl = null,
-                                                         int? templateId = null, 
-                                                         int? copyFromCaseId = null, bool updateState = true, int? templateistrue = 0)
+        private CaseInputViewModel GetCaseInputViewModel(
+            int userId, 
+            int customerId, 
+            int caseId, 
+            int lockedByUserId = 0, 
+            string redirectFrom = "", 
+            string backUrl = null,
+            int? templateId = null, 
+            int? copyFromCaseId = null, 
+            bool updateState = true, 
+            int? templateistrue = 0)
         {
             var m = new CaseInputViewModel();
             m.BackUrl = backUrl;
@@ -2357,6 +2362,7 @@
                 m.LogFilesModel = new FilesModel();
                 m.CaseFileNames = GetCaseFileNames(caseId.ToString());
                 m.CaseFileNames = GetLogFileNames(caseId.ToString());
+                m.Sources = CaseSource.GetSources(customerId);
 
                 if (caseId == 0)
                 {
@@ -2512,13 +2518,15 @@
 
                     DHDomain.User admUser = null;
                     if (m.case_.Performer_User_Id.HasValue)
+                    {
                         admUser = _userService.GetUser(m.case_.Performer_User_Id.Value);
+                    }
 
                     if (!m.performers.Contains(admUser) && admUser != null)
+                    {
                         m.performers.Insert(0, admUser);
+                    }
                 }
-
-                
 
                 m.SendToDialogModel = this.CreateNewSendToDialogModel(customerId, m.users);
                 m.CaseLog = this._logService.InitCaseLog(SessionFacade.CurrentUser.Id, string.Empty);
@@ -2571,7 +2579,10 @@
                         }
 
                         if (caseTemplate.UpdateNotifierInformation.HasValue)
-                           m.UpdateNotifierInformation = caseTemplate.UpdateNotifierInformation.Value.ToBool(); 
+                        {
+                            m.UpdateNotifierInformation = caseTemplate.UpdateNotifierInformation.Value.ToBool();
+                        }
+
                         m.case_.ReportedBy = caseTemplate.ReportedBy;
                         m.case_.Department_Id = caseTemplate.Department_Id;
                         m.CaseMailSetting.DontSendMailToNotifier = caseTemplate.NoMailToNotifier.ToBool();
@@ -2608,7 +2619,6 @@
                         m.case_.Cost = caseTemplate.Cost;
                         m.case_.OtherCost = caseTemplate.OtherCost;
                         m.case_.Available = caseTemplate.Available;
-                       // m.case_.CausingPartId = caseTemplate.FinishingCause_Id;
                         m.case_.ContactBeforeAction = caseTemplate.ContactBeforeAction;
                         m.case_.WatchDate = caseTemplate.WatchDate;
                         m.case_.Project_Id = caseTemplate.Project_Id;
@@ -2616,28 +2626,24 @@
                         m.case_.Change_Id = caseTemplate.Change_Id;
                         m.case_.FinishingDate = caseTemplate.FinishingDate;
                         m.case_.FinishingDescription = caseTemplate.FinishingDescription;
-                        //m.case_.CausingPartId = caseTemplate.FinishingCause_Id;
                         m.case_.PlanDate = caseTemplate.PlanDate;
-                      
                         m.CaseTemplateName = caseTemplate.Name;
 
                         //To get the right users for perfomers when creating a case from a template
                         if (m.case_.WorkingGroup_Id.HasValue)
-                            m.performers = this._userService.GetUsersForWorkingGroup(customerId, m.case_.WorkingGroup_Id.Value);
+                        {
+                            m.performers = this._userService.GetUsersForWorkingGroup(
+                                customerId,
+                                m.case_.WorkingGroup_Id.Value);
+                        }
 
                         // This is used for hide fields(which are not in casetemplate) in new case input
                         m.templateistrue = templateistrue;
-
                         var finishingCauses = this._finishingCauseService.GetFinishingCauseInfos(customerId);
-                       
                         m.FinishingCause = this.GetFinishingCauseFullPath(finishingCauses.ToArray(), caseTemplate.FinishingCause_Id);
-                       
-
-
                     }
                 } // Load Case Template
 
-                
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.OU_Id.ToString()).ShowOnStartPage == 1)
                 {
                     //m.ous = this._ouService.GetOUs(customerId);
@@ -2662,8 +2668,6 @@
                 if (m.case_.CaseType_Id > 0)
                 {
                     var c = this._caseTypeService.GetCaseType(m.case_.CaseType_Id);                    
-                   //c = TranslateCaseType(c);
-                    
                     if (c != null)
                     {
                         c = TranslateCaseType(c);
@@ -2693,11 +2697,11 @@
                         m.Disable_SendMailAboutCaseToNotifier = m.case_.StateSecondary.NoMailToNotifier == 1;
                     }                    
                 }
-
                 
                 m.EditMode = this.EditMode(m, ModuleName.Cases, deps, acccessToGroups);
 
-                if (m.case_.Id == 0)  // new mode
+                // new mode
+                if (m.case_.Id == 0)  
                 {
                     m.case_.DefaultOwnerWG_Id = null;
                     if (m.case_.User_Id.HasValue && m.case_.User_Id != 0)
@@ -2718,14 +2722,11 @@
                 else
                 {
                     if (m.case_.DefaultOwnerWG_Id.HasValue && m.case_.DefaultOwnerWG_Id.Value > 0)
+                    {
                         m.CaseOwnerDefaultWorkingGroup = this._workingGroupService.GetWorkingGroup(m.case_.DefaultOwnerWG_Id.Value);                
+                    }
                 }
-
-                //if (m.RegByUser != null && m.RegByUser.Default_WorkingGroup_Id.HasValue)
-                //{
-                //    m.CaseOwnerDefaultWorkingGroup = this._workingGroupService.GetWorkingGroup(m.RegByUser.Default_WorkingGroup_Id.Value);
-                //}
-
+                               
                 // TODO: Should mix CustomerSettings & Setting                 
                 m.CustomerSettings = this.workContext.Customer.Settings;
                 m.Setting = cs;                
@@ -2734,14 +2735,14 @@
                 if(m.DynamicCase != null)
                 {
                     var l = m.Languages.Where(x => x.Id == SessionFacade.CurrentLanguageId).FirstOrDefault();
-                    m.DynamicCase.FormPath = m.DynamicCase.FormPath.Replace("[CaseId]"
-                        , m.case_.Id.ToString()).Replace("[UserId]", SessionFacade.CurrentUser.UserId.ToString()).Replace("[Language]", l.LanguageId);
-                    //m.DynamicCase.FormPath += "&clearcache=1";
-                    //m.DynamicCase.FormPath += "&apa=" + (DateTime.Now.ToString("yyyyMMddHHmmssfff"));
+                    m.DynamicCase.FormPath = m.DynamicCase.FormPath
+                        .Replace("[CaseId]", m.case_.Id.ToString())
+                        .Replace("[UserId]", SessionFacade.CurrentUser.UserId.ToString())
+                        .Replace("[Language]", l.LanguageId);
                 }
             }
 
-            m.CaseTemplateTreeButton = GetCaseTemplateTreeModel(customerId, userId);
+            m.CaseTemplateTreeButton = this.GetCaseTemplateTreeModel(customerId, userId);
             return m;
         }
 
