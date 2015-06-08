@@ -23,6 +23,10 @@
     using DH.Helpdesk.BusinessData.Models.Shared;
     using System.Collections.Generic;
     using DH.Helpdesk.BusinessData.Models.Reports.Options;
+    using DH.Helpdesk.Web.Models.Shared;
+    using DH.Helpdesk.Web.Areas.Reports.Models.Reports.ReportGenerator;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.ReportGenerator;
+using DH.Helpdesk.BusinessData.Models.Shared.Input;
 
     public sealed class ReportController : UserInteractionController
     {
@@ -263,8 +267,8 @@
                                     filters.SortField,
                                     filters.RecordsOnPage);
 
-                var model = this.reportGeneratorModelFactory.GetReportGeneratorModel(data, filters.SortField);
-
+                var model = GetReportGeneratorModel(data, filters.SortField);
+                
                 if (options != null && options.IsExcel)
                 {
                     var excel = this.excelBuilder.GetReportGeneratorExcel(model);
@@ -423,6 +427,29 @@
                                 reportOptions.Departments, 
                                 reportOptions.WorkingGroups, 
                                 reportOptions.CaseTypes
+                            );            
+            return ret;
+        }
+
+        public ReportGeneratorModel GetReportGeneratorModel(ReportGeneratorData data, SortField sortfield)
+        {
+            var modelData = this.reportGeneratorModelFactory.GetReportGeneratorModel(data, sortfield);
+
+            var translatedFields = new List<GridColumnHeaderModel>();
+            foreach (var h in modelData.Headers)
+                translatedFields.Add(new GridColumnHeaderModel
+                                            (  
+                                                h.FieldName,
+                                                Translation.Get(h.FieldName, Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id)
+                                            ));
+
+
+            var ret = new ReportGeneratorModel
+                            (
+                                translatedFields.ToList(),
+                                modelData.Cases,
+                                modelData.CasesFound,
+                                modelData.SortField
                             );            
             return ret;
         }
