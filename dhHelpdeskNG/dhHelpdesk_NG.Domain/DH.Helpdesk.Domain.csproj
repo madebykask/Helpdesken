@@ -120,6 +120,7 @@
     <Compile Include="Computers\ComputerType.cs" />
     <Compile Include="CaseSource.cs" />
     <Compile Include="Grid\GridSettingsEntity.cs" />
+    <Compile Include="RegistrationSourceCustomer.cs" />
     <Compile Include="TranslationSearch.cs" />
     <Compile Include="Interfaces\IActiveEntity.cs" />
     <Compile Include="Interfaces\ICustomerEntity.cs" />

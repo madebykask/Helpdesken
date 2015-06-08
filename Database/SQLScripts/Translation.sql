@@ -3981,5 +3981,36 @@ GO
 UPDATE tblTextTranslation Set TextTranslation = 'Widgets on Start page' WHERE Text_Id=1326 AND Language_Id=2;
 GO
 
+
+--20150608
+If not exists (select * from tbltext where id = 1483)
+	insert into tbltext (id, TextString) VALUES (1483, 'Källa')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1483 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1483, 2, 'Source')
+GO
+
+If not exists (select * from tbltext where id = 1484)
+	insert into tbltext (id, TextString) VALUES (1484, 'Systemkod')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1484 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1484, 2, 'System code')
+GO
+
+If not exists (select * from tbltext where id = 1485)
+	insert into tbltext (id, TextString) VALUES (1485, 'Du måste ange en källa')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1485 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1485, 2, 'You must specify source')
+GO
+
+If not exists (select * from tbltext where id = 1486)
+	insert into tbltext (id, TextString) VALUES (1486, 'Du måste ange en systemkod')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1486 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1486, 2, 'You must specify system code')
+GO
+
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

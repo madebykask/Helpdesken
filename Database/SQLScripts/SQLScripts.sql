@@ -23,5 +23,30 @@ where t1.Customer_Id not in (
 order by customer_id
 set ansi_nulls on;
 
+if not exists(select * from sysobjects WHERE Name = N'tblRegistrationSourceCustomer')
+	begin
+		CREATE TABLE [dbo].[tblRegistrationSourceCustomer](
+			[Id] [int] IDENTITY(1,1) NOT NULL,
+			[SystemCode] INT NOT NULL,
+			[SourceName] [nvarchar](50) NOT NULL,
+			[Customer_Id] INT NOT NULL,
+			[IsDefault] INT NOT NULL,
+			[IsActive] INT NOT NULL,
+			[CreatedDate] [datetime] NOT NULL DEFAULT (getdate()),
+			[ChangedDate] [datetime] NOT NULL DEFAULT (getdate())
+		) ON [PRIMARY]
+
+		
+		ALTER TABLE tblRegistrationSourceCustomer ADD
+ 			CONSTRAINT [PK_tblRegistrationSourceCustomer] PRIMARY KEY CLUSTERED 
+			(
+				[Id]
+			) 
+
+	end
+GO
+
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.9'

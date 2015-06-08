@@ -500,7 +500,9 @@
 
         public DbSet<CaseInvoiceSettingsEntity> CaseInvoiceSettings { get; set; }
 
-        public DbSet<GridSettingsEntity> GridSettings { get; set; } 
+        public DbSet<GridSettingsEntity> GridSettings { get; set; }
+
+        public DbSet<RegistrationSourceCustomer> RegistrationSourceCustomer { get; set; }
 
         #endregion
 
@@ -668,6 +670,7 @@
             modelBuilder.Configurations.Add(new ProjectFileConfiguration());
             modelBuilder.Configurations.Add(new QuestionGroupConfiguration());
             modelBuilder.Configurations.Add(new RegionConfiguration());
+            modelBuilder.Configurations.Add(new RegistrationSourceCustomerConfiguration());
             modelBuilder.Configurations.Add(new ReportConfiguration());
             modelBuilder.Configurations.Add(new ReportCustomerConfiguration());
             modelBuilder.Configurations.Add(new RoomConfiguration());
