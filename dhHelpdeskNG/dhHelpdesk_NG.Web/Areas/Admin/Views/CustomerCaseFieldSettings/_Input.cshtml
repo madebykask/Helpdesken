@@ -434,6 +434,41 @@
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[10].FieldHelp" value="0" />
                             </td>
                         </tr>
+                        @*                        "Add" (initiator) button *@
+                        <tr>
+                            <td><i class="dh-icon-textfield" rel="tooltip" title="@Translation.Get("Knappen")"></i>
+                            </td>
+                            <td>
+                                @Translation.Get("Lägg till knappen")
+                            </td>
+                            <td>
+                                <input type="checkbox" name="CaseFieldSettings[56].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.AddUserBtn.ToString()) == 1 ? "checked=checked" : "") value="1"/>
+                                <input type="hidden" name="CaseFieldSettings[56].ShowOnStartPage" value="0" />
+                                <input type="hidden" name="CaseFieldSettings[56].Customer_Id" value="@Model.Customer.Id" />
+                                <input type="hidden" name="CaseFieldSettings[56].Name" value="AddUserBtn" />
+                                <input type="hidden" name="CaseFieldSettings[56].Id" value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.AddUserBtn.ToString())" />
+                                <input type="hidden" name="CaseFieldSettings[56].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.AddUserBtn.ToString())" />
+                            </td>
+                            <td colspan="5"></td>
+                        </tr>
+                        @*                        "Save user info" checkbox *@
+                        <tr>
+                            <td><i class="dh-icon-checkbox" rel="tooltip" title="@Translation.Get("Checkbox", Enums.TranslationSource.TextTranslation)"></i>
+                            </td>
+                            <td>
+                                @Translation.Get("Spara användaruppgifter checkbox")
+                            </td>
+                            <td>
+                                <input type="checkbox" name="CaseFieldSettings[57].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.UpdateNotifierInformation.ToString()) == 1 ? "checked=checked" : "") value="1"/>
+                                <input type="hidden" name="CaseFieldSettings[57].ShowOnStartPage" value="0" />
+                                <input type="hidden" name="CaseFieldSettings[57].Customer_Id" value="@Model.Customer.Id" />
+                                <input type="hidden" name="CaseFieldSettings[57].Name" value="UpdateNotifierInformation" />
+                                <input type="hidden" name="CaseFieldSettings[57].Id" value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.UpdateNotifierInformation.ToString())" />
+                                <input type="hidden" name="CaseFieldSettings[57].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.UpdateNotifierInformation.ToString())" />
+                            </td>
+                            <td colspan="5"></td>
+                        </tr>
+
                         <tr>
                             <th colspan="8">
                                 @Translation.Get("Datorinformation", Enums.TranslationSource.TextTranslation)

@@ -134,7 +134,10 @@
                                                     }
                                                 </td>
                                                 <td>
-                                                    <a href="#" id="AddNotifier" class="btn @Model.GetDisabledString(GlobalEnums.TranslationCaseFields.ReportedBy, CaseSolutionFields.UserNumber)">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>
+                                                    <a href="#"
+                                                       id="AddNotifier"
+                                                       style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.AddUserBtn, CaseSolutionFields.AddUserBtn)" 
+                                                       class="btn @Model.GetDisabledString(GlobalEnums.TranslationCaseFields.ReportedBy, CaseSolutionFields.UserNumber)">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>
                                                     @if (Model.CanGetRelatedCases)
                                                     {
                                                         <a href="#" data-field="relatedCases" style="display: none;" title="@Translation.Get("Relaterade ärenden")" class="btn"><i class="icon-list"></i></a>                                                        
@@ -351,7 +354,8 @@
                                                     }
                                                 </td>
                                             </tr>
-                                            <tr class="displaytr" style="@Model.GetCaseTemplateFieldStyle(GlobalEnums.TranslationCaseFields.UpdateNotifierInformation, CaseSolutionFields.UpdateNotifierInformation)">
+@*                                            Save user info checkbox*@
+                                            <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.UpdateNotifierInformation, CaseSolutionFields.UpdateNotifierInformation)">
                                                 <td class="span3">
                                                     @Translation.Get("Spara användaruppgifter", SessionFacade.CurrentLanguageId)
                                                 </td>

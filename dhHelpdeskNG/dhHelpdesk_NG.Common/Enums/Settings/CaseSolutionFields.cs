@@ -52,6 +52,7 @@
         PlanDate = 48,
         CausingPart = 49,
         FileName = 50,
-        Source = 51
+        Source = 51,
+        AddUserBtn = 52
     }
 }
