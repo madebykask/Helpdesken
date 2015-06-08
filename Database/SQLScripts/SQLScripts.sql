@@ -2,5 +2,8 @@
 
 ALTER TABLE tblSettings ALTER COLUMN LDAPFilter nvarchar(100) NOT NULL
 
+-- Temporary solution for "Source" field
+ALTER TABLE tblCase ADD source_id int not Null default 1;
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.9'
