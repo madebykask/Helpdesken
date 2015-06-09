@@ -3,6 +3,7 @@
 @using DH.Helpdesk.BusinessData.OldComponents
 @model DH.Helpdesk.NewSelfService.Models.Case.CaseOverviewModel
 
+
 @if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.UserInformation))
 {
     <input id="CaseId" type="hidden" value="@Model.CasePreview.Id"/>    
@@ -105,7 +106,7 @@
                 {
                     <div class="form-group row">
                         <label class="col-md-2">                            
-                            @Translation.Get(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);:
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):
                         </label>
                         <div class="col-md-10">
                             @Model.CasePreview.Ou.getOUParentPath()
@@ -462,25 +463,7 @@
 <!-- Case Info Fields -->
 
 
-<div class="container" >
-    <div class="form-group row">
-        <div class="col-md-5">         
-            <table >
-                <tr>
-                    @if (!string.IsNullOrEmpty(Model.ReceiptFooterMessage))
-                    {                      
-                      @Html.Raw(Model.ReceiptFooterMessage) 
-                    }
-                </tr>
-                <tr>
-                    <td>
-                        &nbsp;
-                    </td>
-                </tr>                                                                
-            </table>
-        </div>           
-    </div>       
-</div>
+
     
  
     

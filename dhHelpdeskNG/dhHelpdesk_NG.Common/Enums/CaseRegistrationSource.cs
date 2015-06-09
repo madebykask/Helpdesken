@@ -2,6 +2,7 @@
 {
     public enum CaseRegistrationSource
     {
+        Empty = 0,
         Administrator = 1,
         SelfService = 2,
         Email = 3,

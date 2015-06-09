@@ -27,6 +27,7 @@
     using DH.Helpdesk.Web.Areas.Reports.Models.Reports.ReportGenerator;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.ReportGenerator;
 using DH.Helpdesk.BusinessData.Models.Shared.Input;
+    using DH.Helpdesk.Common.Enums;
 
     public sealed class ReportController : UserInteractionController
     {
@@ -293,7 +294,7 @@ using DH.Helpdesk.BusinessData.Models.Shared.Input;
                                             options.DepartmentIds,
                                             options.CaseTypeId,
                                             options.WorkingGroupIds,
-                                            (GlobalEnums.RegistrationSource)options.RegistrationSourceId,
+                                            (CaseRegistrationSource) options.RegistrationSourceId,
                                             options.PeriodFrom,
                                             options.PeriodUntil,
                                             options.LeadTimeId,

@@ -58,6 +58,7 @@
         private readonly IStateSecondaryService _stateSecondaryService;
         private readonly ICaseSolutionService _caseSolutionService;
         private readonly IWorkContext workContext;
+        private readonly IEmailService _emailService;        
         private readonly IMasterDataService _masterDataService;
 
         private const string ParentPathDefaultValue = "--";
@@ -95,7 +96,8 @@
             ILogFileService logFileService,
             ICaseSolutionService caseSolutionService,
             IOrganizationService orgService,
-            OrganizationJsonService orgJsonService)
+            OrganizationJsonService orgJsonService,
+            IEmailService emailService)
             : base(masterDataService, caseSolutionService)
         {
             this._masterDataService = masterDataService;
@@ -127,6 +129,7 @@
             this.workContext = workContext;
             this._orgService = orgService;
             this._orgJsonService = orgJsonService;
+            this._emailService = emailService;
         }
 
 
@@ -213,20 +216,26 @@
 
             this._userTemporaryFilesStorage.DeleteFiles(caseOverview.ExLogFileGuid);
             this._userTemporaryFilesStorage.DeleteFiles(id);
-
+                        
             if(id.Is<Guid>())
             {
                 if(currentCase.StateSecondary_Id.HasValue && caseOverview.CasePreview.FinishingDate == null)
                 {
                     var stateSecondary = _stateSecondaryService.GetStateSecondary(currentCase.StateSecondary_Id.Value);
                     if(stateSecondary.NoMailToNotifier == 1)
-                        caseOverview.CasePreview.FinishingDate = DateTime.UtcNow; //model.CaseOverview.CasePreview.ChangeTime;
+                        caseOverview.CasePreview.FinishingDate = DateTime.UtcNow; 
                 }
                 caseOverview.CanAddExternalNote = true;
             }
             else
             {
-                caseOverview.ReceiptFooterMessage = Translation.Get(currentCustomer.RegistrationMessage);
+                var htmlFooterData = string.Empty;
+                var registrationInfoText = _infoService.GetInfoText((int)InfoTextType.SelfServiceRegistrationMessage, SessionFacade.CurrentCustomer.Id, languageId);
+
+                if (registrationInfoText != null && !string.IsNullOrEmpty(registrationInfoText.Name))
+                    htmlFooterData = registrationInfoText.Name;
+
+                caseOverview.ReceiptFooterMessage = htmlFooterData;
                 caseOverview.CanAddExternalNote = false;
             }
 
@@ -261,7 +270,7 @@
                     0,
                     SessionFacade.CurrentLanguageId,
                     this.Request.GetIpAddress(),
-                    GlobalEnums.RegistrationSource.Case,
+                    CaseRegistrationSource.SelfService,
                     cs, SessionFacade.CurrentUserIdentity.UserId);
 
                 model.NewCase.Customer = currentCustomer;
@@ -714,10 +723,21 @@
             if (newCase.User_Id <= 0)
                 newCase.User_Id = null;
 
-            newCase.RegistrationSource = (int)CaseRegistrationSource.SelfService;
-            int caseHistoryId = this._caseService.SaveCase(newCase, null, caseMailSetting, 0, SessionFacade.CurrentUserIdentity.UserId, out errors);
+            var mailSenders = new MailSenders();            
+            mailSenders.SystemEmail = caseMailSetting.HelpdeskMailFromAdress;
+            if (newCase.WorkingGroup_Id.HasValue)
+            {
+                var curWG = _workingGroupService.GetWorkingGroup(newCase.WorkingGroup_Id.Value);
+                if (curWG != null)
+                    if (!string.IsNullOrWhiteSpace(curWG.EMail) && _emailService.IsValidEmail(curWG.EMail))
+                        mailSenders.WGEmail = curWG.EMail;
+            }
+            caseMailSetting.CustomeMailFromAddress = mailSenders;
 
             var basePath = this._masterDataService.GetFilePath(newCase.Customer_Id);
+
+            int caseHistoryId = this._caseService.SaveCase(newCase, null, caseMailSetting, 0, SessionFacade.CurrentUserIdentity.UserId, out errors);
+            
             // save case files            
             var temporaryFiles = this._userTemporaryFilesStorage.GetFiles(caseFileKey, ModuleName.Cases);
             var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, newCase.Id)).ToList();
@@ -725,9 +745,9 @@
 
             // delete temp folders                
             this._userTemporaryFilesStorage.DeleteFiles(caseFileKey);
-
+            var oldCase = new Case();            
             // send emails
-            this._caseService.SendCaseEmail(newCase.Id, caseMailSetting, caseHistoryId, basePath);
+            this._caseService.SendCaseEmail(newCase.Id, caseMailSetting, caseHistoryId, basePath, oldCase);
 
             return newCase.Id;
         }
@@ -741,9 +761,8 @@
                                                                        c.Name == GlobalEnums.TranslationCaseFields.RegTime.ToString())
                                                            .ToList();
 
-            var caseFieldGroups = GetVisibleFieldGroups(caseFieldSetting);
-            // 6 is id of SelfService Info Text
-            var infoText = _infoService.GetInfoText(6, currentCase.Customer_Id, languageId);
+            var caseFieldGroups = GetVisibleFieldGroups(caseFieldSetting);            
+            var infoText = _infoService.GetInfoText((int) InfoTextType.SelfServiceInformation, currentCase.Customer_Id, languageId);
 
             var regions = _regionService.GetRegions(currentCase.Customer_Id);
             var suppliers = _supplierService.GetSuppliers(currentCase.Customer_Id);

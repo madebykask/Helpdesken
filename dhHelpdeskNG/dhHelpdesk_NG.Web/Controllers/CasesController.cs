@@ -2375,7 +2375,7 @@
                             userId,
                             SessionFacade.CurrentLanguageId,
                             this.Request.GetIpAddress(),
-                            GlobalEnums.RegistrationSource.Case,
+                            CaseRegistrationSource.Administrator,
                             windowsUser);
                     }
                     else
@@ -2384,8 +2384,8 @@
                             customerId, 
                             userId, 
                             SessionFacade.CurrentLanguageId, 
-                            this.Request.GetIpAddress(), 
-                            GlobalEnums.RegistrationSource.Case, 
+                            this.Request.GetIpAddress(),
+                            CaseRegistrationSource.Administrator, 
                             cs,
                             windowsUser);
                     }

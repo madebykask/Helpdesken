@@ -29,14 +29,6 @@
             SmsClosedCase = 14,
         }
 
-        public enum RegistrationSource
-        {
-            Empty = 0,
-            Case = 1,
-            SelfService = 2,
-            Mail = 3,
-        }
-
         public enum TranslationCaseFields
         {
             None = -1,

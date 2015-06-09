@@ -21,6 +21,7 @@
     using DH.Helpdesk.Web.Areas.Reports.Models.Reports;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.Tools;
+    using DH.Helpdesk.Common.Enums;
 
     public sealed class ReportModelFactory : IReportModelFactory
     {
@@ -152,10 +153,10 @@
             var registrationSources = WebMvcHelper.CreateListField(
                                                         new[]
                                                         {
-                                                            new ItemOverview(string.Empty, ((int)GlobalEnums.RegistrationSource.Empty).ToString(CultureInfo.InvariantCulture)), 
-                                                            new ItemOverview(Translation.Get("Handläggare"), ((int)GlobalEnums.RegistrationSource.Case).ToString(CultureInfo.InvariantCulture)), 
-                                                            new ItemOverview(Translation.Get("Självservice"), ((int)GlobalEnums.RegistrationSource.SelfService).ToString(CultureInfo.InvariantCulture)), 
-                                                            new ItemOverview(Translation.Get("E-post"), ((int)GlobalEnums.RegistrationSource.Mail).ToString(CultureInfo.InvariantCulture))
+                                                            new ItemOverview(string.Empty, ((int)CaseRegistrationSource.Empty).ToString(CultureInfo.InvariantCulture)), 
+                                                            new ItemOverview(Translation.Get("Handläggare"), ((int)CaseRegistrationSource.Administrator).ToString(CultureInfo.InvariantCulture)), 
+                                                            new ItemOverview(Translation.Get("Självservice"), ((int)CaseRegistrationSource.SelfService).ToString(CultureInfo.InvariantCulture)), 
+                                                            new ItemOverview(Translation.Get("E-post"), ((int)CaseRegistrationSource.Email).ToString(CultureInfo.InvariantCulture))
                                                         },
                                                         null,
                                                         false);

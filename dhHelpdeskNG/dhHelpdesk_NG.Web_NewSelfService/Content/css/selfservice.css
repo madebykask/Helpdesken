@@ -473,9 +473,9 @@ input[type=text], select, textarea {
   color:#FFF;
   z-index:2000;
   height:100%;
-  border:1px solid #0067b2;
+  border:1px solid #438eb9;
   /*background-color:#fff;*/
-  background-color:#0067b2;
+  background-color:#438eb9;
 }
 .mapText {
   color:#fff;
@@ -510,8 +510,7 @@ input[type=text], select, textarea {
 .siteCom .mapButton {
   display:block;
   color:#fff;
- /* background-color:#0067b2; */
-  background-color:#003398;
+ background-color:#438eb9;
   
   padding:8px 5px 5px 5px;
   /*height:120px;*/

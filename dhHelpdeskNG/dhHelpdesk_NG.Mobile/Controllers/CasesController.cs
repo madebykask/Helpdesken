@@ -1431,7 +1431,7 @@
                             userId,
                             SessionFacade.CurrentLanguageId,
                             this.Request.GetIpAddress(),
-                            GlobalEnums.RegistrationSource.Case,
+                            CaseRegistrationSource.Administrator,
                             windowsUser);
                     }
                     else
@@ -1441,7 +1441,7 @@
                             userId,
                             SessionFacade.CurrentLanguageId,
                             this.Request.GetIpAddress(),
-                            GlobalEnums.RegistrationSource.Case,
+                            CaseRegistrationSource.Administrator,
                             cs,
                             windowsUser);
                     }

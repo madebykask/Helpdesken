@@ -63,6 +63,9 @@
             var customer = this._customerService.GetCustomer(customerId);
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
+            if (infoText.Name == null)
+                infoText.Name = " ";
+
             if (infoText.Id == 0)
             {
                 infoText = new InfoText { Customer_Id = customerId, Type = infoTypeId, Id = 0, Language_Id = languageId, Name = infoText.Name };             
@@ -74,6 +77,7 @@
                 return this.RedirectToAction("edit", "infotext", new { infoTypeId = infoTypeId, customerId = customerId, languageId = languageId, infoTextGroup = infoTextGroup});                
 
             var model = this.InfoTextInputViewModel(customer, infoTextGroup);
+            model.InfoTextShowViewModel = this.InfoTextShowViewModel(infoText, customer, languageId, infoTextGroup);
             return this.View(model);
                       
         }

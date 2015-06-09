@@ -42,26 +42,27 @@
                             <tbody>
                                 @foreach (var doc in Model.Documents)
                                 {
+                                                    
+                                    var downloadUrlPath = "#";
+                                    if (!string.IsNullOrEmpty(doc.FileName))
+                                    {
+                                        downloadUrlPath = "~/Documents/DocumentFile?documentId=" + doc.Id;
+                                    }                                             
                                     <tr>
-                                        <td style="width:20px">
-                                            @{                      
-                                                var downloadUrlPath = "#";
-                                                if (!string.IsNullOrEmpty(doc.FileName))
-                                                {
-                                                    downloadUrlPath = "~/Documents/DocumentFile?documentId=" + doc.Id;
-                                                }
-                                            } 
-                                            
+                                        <td style="width:2%">                                                                                        
                                             <a href="@Url.Content(downloadUrlPath)" class="btn btn-dhblue btn-xs">
                                                 <span class="glyphicon glyphicon-file"></span>    
-                                            </a>                                                
-                                            
+                                            </a>                                                                                            
                                         </td>
-                                        <td>
-                                            @doc.Name
+                                        <td style="width:23%">
+                                            <a href="@Url.Content(downloadUrlPath)" >
+                                                @doc.Name   
+                                            </a>                                             
                                         </td>
-                                        <td>
-                                            @doc.Description
+                                        <td style="width:75%">
+                                            <a href="@Url.Content(downloadUrlPath)" >
+                                                @doc.Description
+                                            </a>                                            
                                         </td>
                                     </tr>
                                 }

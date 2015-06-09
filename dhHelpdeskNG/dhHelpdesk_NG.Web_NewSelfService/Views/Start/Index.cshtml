@@ -22,7 +22,7 @@
                 </div>
             </div>
         </div>
-        @if (SessionFacade.CurrentCustomer.ShowBulletinBoardOnExtPage != 0)
+        @if (SessionFacade.CurrentCustomer.ShowBulletinBoardOnExtPage != 0 && Model.BulletinBoard != null && Model.BulletinBoard.Any())
         {
             <div class="col-md-4">
                 <div class="panel panel-default">
@@ -31,11 +31,8 @@
                         @if (Model.BulletinBoard != null)
                         {
                             foreach (var b in Model.BulletinBoard)
-                            {                       
-                              if (DateTime.Now >= b.ShowDate && DateTime.Now <= b.ShowUntilDate )
-                              {
-                                <p> <strong> @Html.DisplayFor(m=> b.ShowDate , "Date")  </strong> <br /> &nbsp;&nbsp; @Html.Raw(b.Text) </p>
-                              }
+                            {                                                                                   
+                                <p> <strong> @Html.DisplayFor(m=> b.ShowDate , "Date")  </strong> <br /> &nbsp;&nbsp; @Html.Raw(b.Text) </p>                              
                             }
                         }                    
                         <div class="bulletinimg">
@@ -48,8 +45,7 @@
        
     </div>
     <div class="row">
-        <div class="col-md-10 small">
-            
+        <div class="col-md-10 small">            
             <div class="footerdhhd"><img src="@Url.Content("~/Content/img/dh_solutions_slogan.png")" />&nbsp;
                 <br /><i>@Translation.Get("Version")&nbsp;@ApplicationFacade.Version</i></div>            
         </div>

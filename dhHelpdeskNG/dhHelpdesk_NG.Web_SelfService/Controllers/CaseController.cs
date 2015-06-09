@@ -228,7 +228,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                         0,
                         SessionFacade.CurrentLanguageId,
                         this.Request.GetIpAddress(),
-                        GlobalEnums.RegistrationSource.Case,
+                        CaseRegistrationSource.SelfService,
                         cs,
                         identity.Name);
 

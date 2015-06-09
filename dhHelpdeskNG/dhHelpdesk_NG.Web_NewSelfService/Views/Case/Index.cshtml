@@ -22,11 +22,20 @@
                     @if (Model.CasePreview.FinishingDate != null)
                     {
                         <div class="alert alert-success">
-                        <span class="glyphicon glyphicon-thumbs-up"></span>
-                        @Translation.Get("Closed Case", Enums.TranslationSource.TextTranslation)
-                        @Translation.Get(": ", Enums.TranslationSource.TextTranslation)
-                        @Html.DisplayFor(m => Model.CasePreview.FinishingDate, "Date")
+                            <span class="glyphicon glyphicon-thumbs-up"></span>
+                            @Translation.Get("Closed Case", Enums.TranslationSource.TextTranslation)
+                            @Translation.Get(": ", Enums.TranslationSource.TextTranslation)
+                            @Html.DisplayFor(m => Model.CasePreview.FinishingDate, "Date")
                         </div>
+                    }
+                    else
+                    {
+                        if (!string.IsNullOrEmpty(Model.ReceiptFooterMessage))
+                        {                            
+                            <div class="alert alert-success">                                 
+                                @Html.Raw(Model.ReceiptFooterMessage.SetHtmlParameters())
+                            </div>   
+                        }
                     }
 
                     @( (Model.CanAddExternalNote) ? 
