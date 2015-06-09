@@ -14,6 +14,13 @@ namespace DH.Helpdesk.Services.Services
         IList<RegistrationSourceCustomer> GetRegistrationSources(int customerId);
         RegistrationSourceCustomer GetRegistrationSouceCustomer(int id);
 
+        /// <summary>
+        /// Retruns active case sources for specified customer
+        /// </summary>
+        /// <param name="customerId"></param>
+        /// <returns></returns>
+        IEnumerable<RegistrationSourceCustomer> GetCustomersActiveRegistrationSources(int customerId);
+
         void SaveRegistrationSourceCustomer(RegistrationSourceCustomer registrationsourcecustomer, out IDictionary<string, string> errors);
         void Commit();
         DeleteMessage DeleteRegistrationSourceCustomer(int id);
@@ -35,6 +42,11 @@ namespace DH.Helpdesk.Services.Services
         public IList<RegistrationSourceCustomer> GetRegistrationSources(int customerId)
         {
             return this._registrationSourceCustomerRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.SourceName).ToList();
+        }
+
+        public IEnumerable<RegistrationSourceCustomer> GetCustomersActiveRegistrationSources(int customerId)
+        {
+            return this._registrationSourceCustomerRepository.GetMany(x => x.Customer_Id == customerId).Where(it => it.IsActive == 1).OrderBy(x => x.SourceName).ToList();
         }
 
         public RegistrationSourceCustomer GetRegistrationSouceCustomer(int id)

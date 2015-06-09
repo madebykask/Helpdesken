@@ -2,6 +2,9 @@
 
 ALTER TABLE tblSettings ALTER COLUMN LDAPFilter nvarchar(100) NOT NULL
 
+
+-- * * * * * * *  BEGIN  * * * * * * 
+-- * we can delete this when deploying on acceptance/customer *
 -- Temporary solution for "Source" field
 IF COL_LENGTH('dbo.tblCase','source_id') IS NULL
 BEGIN
@@ -9,19 +12,24 @@ BEGIN
 END
 go
 
-set ansi_nulls off;
-insert into tblCaseFieldSettings(customer_id, casefield, show, required) 
-select t1.* from (
-	select distinct customer_id, 'source' as source, '0' as show, '0' as required
-	from tblCaseFieldSettings
-) as t1
-where t1.Customer_Id not in (
-	select customer_id 
-	from tblCaseFieldSettings
-	where CaseField = 'source'
-)
-order by customer_id
-set ansi_nulls on;
+-- we can delete this when deploying on acceptance/customer
+IF COL_LENGTH('dbo.tblCase','source_id') IS not NULL
+BEGIN
+	DELETE from tblCaseFieldSettings where casefield = 'source'
+	DECLARE @STR VARCHAR(100)
+	SET @STR = (
+		SELECT NAME
+		FROM SYSOBJECTS SO
+		JOIN SYSCONSTRAINTS SC ON SO.ID = SC.CONSTID
+		WHERE OBJECT_NAME(SO.PARENT_OBJ) = 'tblCase'
+			AND SO.XTYPE = 'D' AND SC.COLID = (SELECT COLID FROM SYSCOLUMNS
+		WHERE ID = OBJECT_ID('tblCase')	AND NAME = 'source_id')
+	)
+	SET @STR = 'ALTER TABLE tblCase DROP CONSTRAINT ' + @STR EXEC (@STR)
+	ALTER TABLE tblCase DROP column source_id
+END
+go
+-- * * * * * * *  END * * *  * * * * * 
 
 if not exists(select * from sysobjects WHERE Name = N'tblRegistrationSourceCustomer')
 	begin
@@ -46,6 +54,15 @@ if not exists(select * from sysobjects WHERE Name = N'tblRegistrationSourceCusto
 	end
 GO
 
+IF COL_LENGTH('dbo.tblCase','RegistrationSourceCustomer_Id') IS NULL
+BEGIN
+	ALTER TABLE tblCase ADD [RegistrationSourceCustomer_Id] int default NULL;
+	ALTER TABLE [dbo].[tblCase]  WITH CHECK ADD  CONSTRAINT [FK_tblCase_tblRegistrationSourceCustomer] FOREIGN KEY([RegistrationSourceCustomer_Id])
+	REFERENCES [dbo].[tblRegistrationSourceCustomer] ([Id])
+		ON UPDATE CASCADE
+		ON DELETE CASCADE	
+END
+go
 
 
 -- Last Line to update database version

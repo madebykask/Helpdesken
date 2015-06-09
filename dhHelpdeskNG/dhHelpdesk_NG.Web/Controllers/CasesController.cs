@@ -6,6 +6,7 @@
     using System.IO;
     using System.Linq;
     using System.Web;
+    using System.Web.Configuration;
     using System.Web.Mvc;
     using System.Web.Routing;
 
@@ -123,6 +124,8 @@
 
         private readonly OrganizationJsonService _orgJsonService;
 
+        private readonly IRegistrationSourceCustomerService _registrationSourceCustomerService;
+
         #endregion
 
         #region Constructor
@@ -180,7 +183,9 @@
             CaseOverviewGridSettingsService caseOverviewSettingsService, 
             GridSettingsService gridSettingsService, 
             OutputFormatter outputFormatter,
-            IOrganizationService organizationService, OrganizationJsonService orgJsonService)
+            IOrganizationService organizationService, 
+            OrganizationJsonService orgJsonService, 
+            IRegistrationSourceCustomerService registrationSourceCustomerService)
             : base(masterDataService)
         {
             this._masterDataService = masterDataService;  
@@ -237,6 +242,7 @@
             this.outputFormatter = outputFormatter;
             this._organizationService = organizationService;
             this._orgJsonService = orgJsonService;
+            this._registrationSourceCustomerService = registrationSourceCustomerService;
             this._defaultMaxRows = 10;
         }
 
@@ -898,97 +904,58 @@
             return this.RedirectToAction("index", "cases", new { id = customerId });
         }
 
+#region Case save actions
         [HttpPost]
         [ValidateInput(false)]
-        public RedirectToRouteResult New(
-                                    DHDomain.Case case_, 
-                                    CaseLog caseLog, 
-                                    CaseMailSetting caseMailSetting,
-                                    bool? updateNotifierInformation,
-                                    string caseInvoiceArticles,
-                                    int? templateId)
+        public RedirectToRouteResult New(CaseEditInput m, int? templateId)
         {
-            int caseId = this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation, caseInvoiceArticles);
-
+            int caseId = this.Save(m);
             CheckTemplateParameters(templateId, caseId);
-
-            return this.RedirectToAction("edit", "cases", new { id = caseId, redirectFrom = "save", uni = updateNotifierInformation });
+            return this.RedirectToAction("edit", "cases", new { id = caseId, redirectFrom = "save", uni = m.updateNotifierInformation });
         }
 
         [HttpPost]
         [ValidateInput(false)]
-        public RedirectToRouteResult NewAndClose(
-                                    DHDomain.Case case_, 
-                                    CaseLog caseLog, 
-                                    CaseMailSetting caseMailSetting,
-                                    bool? updateNotifierInformation,
-                                    string caseInvoiceArticles,
-                                    int? templateId)
+        public RedirectToRouteResult NewAndClose(CaseEditInput m, int? templateId)
         {
-            int caseId = this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation, caseInvoiceArticles);
-
+            int caseId = this.Save(m);
             CheckTemplateParameters(templateId, caseId);
-
-            return this.RedirectToAction("index", "cases", new { customerId = case_.Customer_Id });
+            return this.RedirectToAction("index", "cases", new { customerId = m.case_.Customer_Id });
         }
 
         [HttpPost]
         [ValidateInput(false)]
-        public RedirectToRouteResult NewAndAddCase(
-                                    DHDomain.Case case_,
-                                    CaseLog caseLog,
-                                    CaseMailSetting caseMailSetting,
-                                    bool? updateNotifierInformation,
-                                    string caseInvoiceArticles,
-                                    int? templateId)
+        public RedirectToRouteResult NewAndAddCase(CaseEditInput m, int? templateId)
         {
-            int caseId = this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation, caseInvoiceArticles);
-
+            int caseId = this.Save(m);
             CheckTemplateParameters(templateId, caseId);
-
-            return this.RedirectToAction("new", "cases", new { customerId = case_.Customer_Id });
+            return this.RedirectToAction("new", "cases", new { customerId = m.case_.Customer_Id });
         }
 
         [HttpPost]
         [ValidateInput(false)]
-        public RedirectToRouteResult Edit(
-                                    DHDomain.Case case_,
-                                    CaseLog caseLog,
-                                    CaseMailSetting caseMailSetting,
-                                    bool? updateNotifierInformation,
-                                    string caseInvoiceArticles)
+        public RedirectToRouteResult Edit(CaseEditInput m)
         {
-            int caseId = this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation, caseInvoiceArticles);
-            return this.RedirectToAction("edit", "cases", new { id = caseId, redirectFrom = "save", uni = updateNotifierInformation, updateState = false });
+            int caseId = this.Save(m);
+            return this.RedirectToAction("edit", "cases", new { id = caseId, redirectFrom = "save", uni = m.updateNotifierInformation, updateState = false });
         }
 
         [HttpPost]
         [ValidateInput(false)]
-        public RedirectResult EditAndClose(
-                                    DHDomain.Case case_,
-                                    CaseLog caseLog,
-                                    CaseMailSetting caseMailSetting,
-                                    bool? updateNotifierInformation,
-                                    string caseInvoiceArticles,
-                                    string BackUrl)
+        public RedirectResult EditAndClose(CaseEditInput m, string BackUrl)
         {
-            this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation, caseInvoiceArticles);
-
-            return string.IsNullOrEmpty(BackUrl) ? this.Redirect(Url.Action("index", "cases", new { customerId = case_.Customer_Id })) : this.Redirect(BackUrl);
+            this.Save(m);
+            return string.IsNullOrEmpty(BackUrl) ? this.Redirect(Url.Action("index", "cases", new { customerId = m.case_.Customer_Id })) : this.Redirect(BackUrl);
         }
 
         [HttpPost]
         [ValidateInput(false)]
-        public RedirectToRouteResult EditAndAddCase(
-                                    DHDomain.Case case_,
-                                    CaseLog caseLog,
-                                    CaseMailSetting caseMailSetting,
-                                    bool? updateNotifierInformation,
-                                    string caseInvoiceArticles)
+        public RedirectToRouteResult EditAndAddCase(CaseEditInput m)
         {
-            this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation, caseInvoiceArticles);
-            return this.RedirectToAction("new", "cases", new { customerId = case_.Customer_Id });
+            this.Save(m);
+            return this.RedirectToAction("new", "cases", new { customerId = m.case_.Customer_Id });
         }
+#endregion
 
         [UserCasePermissions]
         public ActionResult Edit(int id, string redirectFrom = "", int? moveToCustomerId = null, bool? uni = null, bool updateState = true, string backUrl = null)
@@ -1936,13 +1903,15 @@
             return res;
         }
         
-        private int Save(
-                    DHDomain.Case case_, 
-                    CaseLog caseLog, 
-                    CaseMailSetting caseMailSetting, 
-                    bool? updateNotifierInformation,
-                    string caseInvoiceArticles)
+        private int Save(CaseEditInput m)
         {
+            var case_ = m.case_;
+            var caseLog = m.caseLog;
+            var caseMailSetting = m.caseMailSetting;
+            var updateNotifierInformation = m.updateNotifierInformation;
+            var caseInvoiceArticles = m.caseInvoiceArticles;
+
+            case_.RegistrationSourceCustomer_Id = m.customerRegistrationSourceId;
             case_.Ou = null;
             case_.Department = null;
             case_.Region = null;
@@ -2327,7 +2296,8 @@
             SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
             var acccessToGroups = this._userService.GetWorkinggroupsForUserAndCustomer(SessionFacade.CurrentUser.Id, customerId);
             var deps = this._departmentService.GetDepartmentsByUserPermissions(userId, customerId);
-            if (caseId != 0)
+            var isCreateNewCase = caseId == 0;
+            if (!isCreateNewCase)
             {
                 var markCaseAsRead = string.IsNullOrWhiteSpace(redirectFrom);
                 m.case_ = this._caseService.GetCaseById(caseId);
@@ -2362,9 +2332,8 @@
                 m.LogFilesModel = new FilesModel();
                 m.CaseFileNames = GetCaseFileNames(caseId.ToString());
                 m.CaseFileNames = GetLogFileNames(caseId.ToString());
-                m.Sources = CaseSource.GetSources(customerId);
 
-                if (caseId == 0)
+                if (isCreateNewCase)
                 {
                     var identity = global::System.Security.Principal.WindowsIdentity.GetCurrent();
                     var windowsUser = identity != null ? identity.Name : null;
@@ -2412,7 +2381,6 @@
                     }
                 }
                 
-
                 m.CaseMailSetting = new CaseMailSetting(
                                                     customer.NewCaseEmailList, 
                                                     customer.HelpdeskEmail, 
@@ -2482,6 +2450,35 @@
                     m.workingGroups = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId);
                 }
 
+                // "RegistrationSourceCustomer" field
+                if (m.caseFieldSettings.getCaseSettingsValue(
+                        GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString()).ShowOnStartPage == 1)
+                {
+                    var customerSources =
+                        this._registrationSourceCustomerService.GetCustomersActiveRegistrationSources(customerId).ToArray();
+                    var defaultSource = customerSources.FirstOrDefault(it => it.IsDefault == 1);
+                    if (m.case_.RegistrationSourceCustomer_Id.HasValue)
+                    {
+                        m.CustomerRegistrationSourceId = m.case_.RegistrationSourceCustomer_Id.Value;
+                    }
+                    else
+                    {
+                        if (isCreateNewCase && defaultSource != null)
+                        {
+                            m.CustomerRegistrationSourceId = defaultSource.Id;
+                        }
+                    }
+
+                    m.CustomerRegistrationSources.AddRange(
+                        customerSources.Select(
+                            it => new SelectListItem()
+                            {
+                                Text = it.SourceName,
+                                Value = it.Id.ToString(),
+                                Selected = it.Id == m.CustomerRegistrationSourceId
+                            }));
+                }
+
                 if (cs.ModuleProject == 1)
                 {
                     m.projects = this._projectService.GetCustomerProjects(customerId);
@@ -2513,9 +2510,8 @@
                     m.performers = m.users;                    
                 }
 
-                if (caseId != 0)
+                if (!isCreateNewCase)
                 {
-
                     DHDomain.User admUser = null;
                     if (m.case_.Performer_User_Id.HasValue)
                     {
@@ -2546,7 +2542,7 @@
                 }
 
                 // Load template info
-                if (templateId != null && m.case_.Id == 0)
+                if (templateId != null && isCreateNewCase)
                 {
                     var caseTemplate = this._caseSolutionService.GetCaseSolution(templateId.Value);
                     var caseTemplateSettings =
@@ -2699,9 +2695,8 @@
                 }
                 
                 m.EditMode = this.EditMode(m, ModuleName.Cases, deps, acccessToGroups);
-
-                // new mode
-                if (m.case_.Id == 0)  
+                
+                if (isCreateNewCase)  
                 {
                     m.case_.DefaultOwnerWG_Id = null;
                     if (m.case_.User_Id.HasValue && m.case_.User_Id != 0)
@@ -2718,6 +2713,7 @@
                             m.case_.DefaultOwnerWG_Id = userDefaultWorkingGroupId;
                         }
                     }
+                    
                 }
                 else
                 {
@@ -2732,7 +2728,7 @@
                 m.Setting = cs;                
                 m.DynamicCase = _caseService.GetDynamicCase(m.case_.Id);
 
-                if(m.DynamicCase != null)
+                if (m.DynamicCase != null)
                 {
                     var l = m.Languages.Where(x => x.Id == SessionFacade.CurrentLanguageId).FirstOrDefault();
                     m.DynamicCase.FormPath = m.DynamicCase.FormPath
@@ -2745,7 +2741,8 @@
             m.CaseTemplateTreeButton = this.GetCaseTemplateTreeModel(customerId, userId);
             return m;
         }
-
+       
+        
         private string GetFinishingCauseFullPath(
                         FinishingCauseInfo[] finishingCauses,
                         int? finishingCauseId)

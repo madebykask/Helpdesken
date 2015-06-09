@@ -534,7 +534,6 @@
                     break;
 
                 case "statesecondary_id":
-                case "source":
                     ret = dr[col].ToString();
                     translateField = true;
                     break;
@@ -645,12 +644,12 @@
             columns.Add("tblCase.ReportedBy");
             columns.Add("tblCase.ProductArea_Id");
             columns.Add("tblCase.InvoiceNumber");
-            columns.Add("'Portal' as Source");
             columns.Add("tblCustomer.Name");
             columns.Add("tblDepartment.Department as DepertmentName");
             columns.Add("tblDepartment.DepartmentId");
             columns.Add("tblDepartment.SearchKey");
             columns.Add("tblCase.ReferenceNumber");
+            columns.Add("tblRegistrationSourceCustomer.SourceName as RegistrationSourceCustomer");
             if (customerSetting != null)
             {
                 columns.Add("coalesce(tblUsers.SurName, '') + ' ' + coalesce(tblUsers.FirstName, '') as Performer_User_Id");
@@ -725,6 +724,7 @@
             tables.Add("left outer join tblSystem on tblCase.System_Id = tblSystem.Id ");  
             tables.Add("left outer join tblUrgency on tblCase.Urgency_Id = tblUrgency.Id ");  
             tables.Add("left outer join tblImpact on tblCase.Impact_Id = tblImpact.Id ");
+            tables.Add("left outer join tblRegistrationSourceCustomer on tblCase.RegistrationSourceCustomer_Id = tblRegistrationSourceCustomer.Id");
 
             if (customerSetting != null)
             {

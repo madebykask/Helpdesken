@@ -180,6 +180,12 @@
                 .WithRequired(x => x.Case)
                 .HasForeignKey(x => x.Case_Id);
 
+            this.Property(x => x.RegistrationSourceCustomer_Id).IsOptional();
+            this.HasOptional(c => c.RegistrationSourceCustomer)
+                .WithMany()
+                .HasForeignKey(c => c.RegistrationSourceCustomer_Id)
+                .WillCascadeOnDelete(true);
+
             this.ToTable("tblcase");
         }
     }

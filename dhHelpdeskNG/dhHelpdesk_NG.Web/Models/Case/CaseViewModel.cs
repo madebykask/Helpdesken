@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Models.Case
 {
     using System.Collections.Generic;
+    using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Case;
@@ -16,12 +17,20 @@
     using DH.Helpdesk.Web.Models.Case.Output;
     using DH.Helpdesk.Web.Models.Invoice;
     using DH.Helpdesk.Web.Models.Shared;
-
+    
     public class CaseInputViewModel
     {
         public CaseInputViewModel()
         {
             this.CaseSolutionSettingModels = CaseSolutionSettingModel.CreateDefaultModel();
+            this.CustomerRegistrationSources = new List<SelectListItem>()
+                                                   {
+                                                       new SelectListItem()
+                                                           {
+                                                               Text = string.Empty,
+                                                               Value = string.Empty
+                                                           }
+                                                   };
         }
 
         public string CaseKey { get; set; }
@@ -78,9 +87,14 @@
         public IEnumerable<LogOverview> Logs { get; set; }
 
         /// <summary>
+        /// Selected case source
+        /// </summary>
+        public int CustomerRegistrationSourceId { get; set; }
+
+        /// <summary>
         /// List of available case sources
         /// </summary>
-        public IEnumerable<CaseSource> Sources { get; set; }
+        public List<SelectListItem> CustomerRegistrationSources { get; set; }
 
         /// <summary>
         /// Gets or sets the languages.

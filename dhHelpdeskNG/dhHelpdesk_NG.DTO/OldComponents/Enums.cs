@@ -92,7 +92,7 @@
             Change = 57, 
             Project = 58,
             Problem = 59,
-            Source = 60,
+            RegistrationSourceCustomer = 60,
             AddUserBtn = 61
         }
     }

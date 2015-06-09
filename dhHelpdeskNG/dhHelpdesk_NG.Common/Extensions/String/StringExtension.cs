@@ -152,6 +152,7 @@ namespace DH.Helpdesk.Common.Extensions.String
                     case "tblproblem.responsibleuser_id": str = "Problem"; break;
                     case "change": str = "Ändringshantering"; break;
                     case "project": str = "Projekt"; break;
+                    case "registrationsourcecustomer": str = "Källa"; break;
                 }
             }
             #endregion 
@@ -221,6 +222,7 @@ namespace DH.Helpdesk.Common.Extensions.String
                     case "tblproblem.responsibleuser_id": str = "Problem"; break;
                     case "change": str = "Change"; break;
                     case "project": str = "Project"; break;
+                    case "registrationsourcecustomer": str = "Source"; break;
                 }
             }
             #endregion 

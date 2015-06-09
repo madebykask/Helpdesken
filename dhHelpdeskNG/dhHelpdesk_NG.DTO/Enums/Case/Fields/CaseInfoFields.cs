@@ -46,6 +46,6 @@
 
         public const string AttachedFile = "Filename";
 
-        public const string Source = "Source";
+        public const string RegistrationSourceCustomer = "RegistrationSourceCustomer";
     }
 }

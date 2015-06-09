@@ -73,7 +73,7 @@ OtherFields.WatchDate,
 OtherFields.Verified,
 OtherFields.VerifiedDescription,
 OtherFields.WorkingGroup,
-CaseInfoFields.Source
+CaseInfoFields.RegistrationSourceCustomer
         };
 
         #endregion
