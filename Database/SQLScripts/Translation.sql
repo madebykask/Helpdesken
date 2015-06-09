@@ -4011,6 +4011,14 @@ If not exists (select * from tblTextTranslation where text_id = 1486 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1486, 2, 'You must specify system code')
 GO
 
+-- 20150609
+If not exists (select * from tbltext where id = 1487)
+	insert into tbltext (id, TextString) VALUES (1487, ' Registreringsmeddelande')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1487 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1487, 2, 'Registration Message')
+GO
+
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
