@@ -4040,5 +4040,19 @@ GO
 If not exists (select * from tblTextTranslation where text_id = 1490 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1490, 2, 'Locked field')
 GO
+
+If not exists (select * from tbltext where id = 1491)
+	insert into tbltext (id, TextString) VALUES (1491, 'Återställ')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1491 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1491, 2, 'Reset')
+GO
+
+If not exists (select * from tbltext where id = 1492)
+	insert into tbltext (id, TextString) VALUES (1492, 'Rensa alla')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1492 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1492, 2, 'Clear all')
+GO
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
