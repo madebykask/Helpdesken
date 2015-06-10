@@ -4013,12 +4013,32 @@ GO
 
 -- 20150609
 If not exists (select * from tbltext where id = 1487)
-	insert into tbltext (id, TextString) VALUES (1487, ' Registreringsmeddelande')
+	insert into tbltext (id, TextString) VALUES (1487, 'Registreringsmeddelande')
 GO
 If not exists (select * from tblTextTranslation where text_id = 1487 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1487, 2, 'Registration Message')
 GO
 
+-- 20150610
+If not exists (select * from tbltext where id = 1488)
+	insert into tbltext (id, TextString) VALUES (1488, 'Planerat körningsdatum')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1489 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1489, 2, 'Planned Run Date')
+GO
 
+If not exists (select * from tbltext where id = 1488)
+	insert into tbltext (id, TextString) VALUES (1488, 'Om e-form')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1489 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1489, 2, 'If e-form')
+GO
+
+If not exists (select * from tbltext where id = 1490)
+	insert into tbltext (id, TextString) VALUES (1490, 'Låst fält')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1490 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1490, 2, 'Locked field')
+GO
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
