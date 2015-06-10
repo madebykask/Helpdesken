@@ -78,6 +78,7 @@
         public IList<SelectListItem> UserGroups { get; set; }
 
         public IList<SelectListItem> CWNSelect { get; set; }
+        public IList<SelectListItem> LockedFieldOptions { get; set; }
 
         public CustomerCaseSummaryViewModel CustomerCaseSummaryViewModel { get; set; }
 

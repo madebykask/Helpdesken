@@ -16,6 +16,29 @@ $(function () {
         }
     });
 
+    $(input + properties.ShowOnStartPage).click(function () {
+        var _this = $(this);
+        var elemLocked = _this.closest('tr').find('select[name$=".Locked"]');
+        if (!_this[0].checked) {
+            elemLocked.prop('disabled', true);
+            elemLocked.find('option:eq(0)').prop('selected', true);
+        } else {
+            elemLocked.prop('disabled', false);
+        }
+    });
+
+    $('select[name$=".Locked"]').each(function (i, e) {
+        var _this = $(this);
+        var elemShowOnstartPage = _this.closest('tr').find('input[name$=".ShowOnStartPage"]');
+        if (!elemShowOnstartPage[0].checked) {
+            _this.prop('disabled', true);
+            _this.find('option:eq(0)').prop('selected', true);
+        } else {
+            _this.prop('disabled', false);
+        }
+
+    });
+
     $(input + properties.ShowExternal).click(function () {
         var elementName = this.name.replace(properties.ShowExternal, properties.ShowOnStartPage);
         var curElement = jQuery('[name="' + elementName + '"]');

@@ -64,6 +64,14 @@ BEGIN
 END
 go
 
+IF COL_LENGTH('dbo.tblCaseFieldSettings','Locked') IS NULL
+BEGIN
+	ALTER TABLE tblCaseFieldSettings ADD Locked int not null
+	CONSTRAINT DF_tblCaseFieldSettings_Locked DEFAULT 0
+	WITH VALUES
+END
+
+GO
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.9'

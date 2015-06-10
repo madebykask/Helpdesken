@@ -90,6 +90,25 @@
             return model;
         }
 
+        private List<SelectListItem> GetLockedFieldOptions()
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+            list.Add(new SelectListItem()
+            {
+                Text = "",
+                Value = "0",
+                Selected = false
+            });
+            list.Add(new SelectListItem()
+            {
+                Text = Translation.Get("Om e-form", Enums.TranslationSource.TextTranslation),
+                Value = "1",
+                Selected = false
+            });
+
+            return list;
+        }
+
         private CustomerInputViewModel CustomerInputViewModel(Customer customer, Language language)
         {
             if (customer.Id == 0)
@@ -116,7 +135,8 @@
                 {
                     Text = Translation.Get(x.Name),
                     Value = x.Id.ToString(),
-                }).ToList()
+                }).ToList(),
+                LockedFieldOptions = GetLockedFieldOptions() 
             };
 
             #endregion
@@ -190,7 +210,5 @@
             var view = "~/areas/admin/views/CustomerCaseFieldSettings/_Input.cshtml";
             return this.RenderRazorViewToString(view, model);
         }
-         
-
     }
 }

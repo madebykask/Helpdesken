@@ -11,6 +11,7 @@
         public int FieldSize { get; set; }
         public int ListEdit { get; set; }
         public int Required { get; set; }
+        public int Locked { get; set; }
 
         /// <summary>
         /// Now used as "available" field for this customer 
