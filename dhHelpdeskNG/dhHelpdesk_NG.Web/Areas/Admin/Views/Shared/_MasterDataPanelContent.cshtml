@@ -47,7 +47,7 @@
         <li class="@Html.ActiveTab(new string[] { "priority" })"><a href="@Url.Action("index", "priority", new { customerId = Model.Id })">@Translation.Get(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.Id) (@Translation.Get("Prioritet", Enums.TranslationSource.TextTranslation))</a></li>
         <li class="@Html.ActiveTab(new string[] { "status" })"><a href="@Url.Action("index", "status", new { customerId = Model.Id })">@Translation.Get(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.Id) (@Translation.Get("Status", Enums.TranslationSource.TextTranslation))</a></li>
         <li class="@Html.ActiveTab(new string[] { "statesecondary" })"><a href="@Url.Action("index", "statesecondary", new { customerId = Model.Id })">@Translation.Get(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.Id) (@Translation.Get("Understatus", Enums.TranslationSource.TextTranslation))</a></li>
-        <li class="@Html.ActiveTab(new string[] { "registrationsourcecustomer" })"><a href="@Url.Action("index", "registrationsourcecustomer", new { customerId = Model.Id })">@Translation.Get("Källa", Enums.TranslationSource.TextTranslation)</a></li>
+        <li class="@Html.ActiveTab(new string[] { "registrationsourcecustomer" })"><a href="@Url.Action("index", "registrationsourcecustomer", new { customerId = Model.Id })">@Translation.Get(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString(), Enums.TranslationSource.CaseTranslation, Model.Id) (@Translation.Get("Källa", Enums.TranslationSource.TextTranslation))</a></li>
     </ul>
 </li>
 <li class="line"></li>
