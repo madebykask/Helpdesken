@@ -221,7 +221,7 @@
 
             public static string GetFinishingCauseParentPath(this FinishingCause fc, string separator = " - ")
             {
-                string ret = "--";
+                string ret = string.Empty;
 
                 if (fc.ParentFinishingCause == null)
                 {
@@ -230,6 +230,11 @@
                 else
                 {
                     ret += GetFinishingCauseParentPath(fc.ParentFinishingCause, separator) + separator + fc.Name;
+                }
+
+                if (ret == string.Empty)
+                {
+                    return "--";
                 }
 
                 return ret;

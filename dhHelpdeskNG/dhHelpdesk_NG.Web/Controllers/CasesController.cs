@@ -649,6 +649,7 @@
                 f.CustomFilter = sm.caseSearchFilter.CustomFilter;
             }
 
+            this.ResolveParentPathesForFilter(f);
             sm.caseSearchFilter = f;
             if (SessionFacade.CaseOverviewGridSettings == null)
             {
