@@ -13,6 +13,7 @@
     using DH.Helpdesk.BusinessData.Enums.Case;
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.Models.Case.CaseOverview;
     using DH.Helpdesk.BusinessData.Models.FinishingCause;
     using DH.Helpdesk.BusinessData.Models.Grid;
     using DH.Helpdesk.BusinessData.Models.Shared;
@@ -769,10 +770,7 @@
             //utförare
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CasePerformerFilter))
             {
-                fd.filterPerformer = this._userService.GetUsers(cusId);
-                // visa även ej tilldelade
-                if (SessionFacade.CurrentUser.UserGroupId == 1 || SessionFacade.CurrentUser.RestrictedCasePermission == 0)
-                    fd.filterPerformer.Insert(0, ObjectExtensions.notAssignedPerformer());
+                fd.filterPerformer = this._userService.GetAdministrators(cusId);
             }
             //ärendetyp
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseCaseTypeFilter))
@@ -830,7 +828,7 @@
             
             return fd;
         }
-
+        
         private CaseSearchFilterData CreateAdvancedSearchFilterData(int cusId, int userId, CaseSearchModel sm, List<ItemOverview> customers)
         {
             var fd = new CaseSearchFilterData();
@@ -1558,7 +1556,6 @@
 
         public void SaveSetting(FormCollection frm)
         {
-
             int customerId = int.Parse(frm["CustomerId"]);
             int userId = int.Parse(frm["UserId"]);
 
@@ -2970,10 +2967,9 @@
             ret.SelectedWorkingGroup = userCaseSettings.WorkingGroup;
 
             ret.ResponsibleCheck = userCaseSettings.Responsible;
-
-            var administrators = _userService.GetAdministrators(customerId);
+            
             ret.AdministratorCheck = true;
-            ret.Administrators = administrators;
+            ret.Administrators = this._userService.GetAdministrators(customerId);
             ret.SelectedAdministrator = userCaseSettings.Administrators;
 
             var priorities = _priorityService.GetPriorities(customerId).OrderBy(p => p.Code).ToList();
