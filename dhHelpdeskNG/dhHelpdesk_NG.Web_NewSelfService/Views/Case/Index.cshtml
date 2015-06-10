@@ -30,10 +30,10 @@
                     }
                     else
                     {
-                        if (!string.IsNullOrEmpty(Model.ReceiptFooterMessage))
+                        if (!string.IsNullOrEmpty(Model.CaseRegistrationMessage) && Model.ShowRegistringMessage)
                         {                            
                             <div class="alert alert-success">                                 
-                                @Html.Raw(Model.ReceiptFooterMessage.SetHtmlParameters())
+                                @Html.Raw(Model.CaseRegistrationMessage.SetHtmlParameters())
                             </div>   
                         }
                     }

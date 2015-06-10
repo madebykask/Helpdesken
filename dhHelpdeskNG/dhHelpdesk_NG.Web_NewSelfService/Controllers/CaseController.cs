@@ -134,7 +134,7 @@
 
 
         [HttpGet]
-        public ActionResult Index(string id)
+        public ActionResult Index(string id, bool showRegistrationMessage = false)
         {
             if(string.IsNullOrEmpty(id))
                 return null;
@@ -211,6 +211,7 @@
             var languageId = SessionFacade.CurrentLanguageId;
             var caseOverview = this.GetCaseOverviewModel(currentCase, languageId);
 
+            caseOverview.ShowRegistringMessage = showRegistrationMessage;
             caseOverview.ExLogFileGuid = currentCase.CaseGUID.ToString();
             caseOverview.MailGuid = id;
 
@@ -235,7 +236,7 @@
                 if (registrationInfoText != null && !string.IsNullOrEmpty(registrationInfoText.Name))
                     htmlFooterData = registrationInfoText.Name;
 
-                caseOverview.ReceiptFooterMessage = htmlFooterData;
+                caseOverview.CaseRegistrationMessage = htmlFooterData;
                 caseOverview.CanAddExternalNote = false;
             }
 
@@ -660,7 +661,7 @@
         public RedirectToRouteResult NewCase(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey)
         {
             int caseId = Save(newCase, caseMailSetting, caseFileKey);
-            return this.RedirectToAction("Index", "case", new { id = newCase.Id });
+            return this.RedirectToAction("Index", "case", new { id = newCase.Id, showRegistrationMessage = true });
         }
 
         [HttpPost]
