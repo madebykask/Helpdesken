@@ -3,17 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.Common.Types;
-    using DH.Helpdesk.Dal.Repositories;
-    using DH.Helpdesk.Domain;
-
-    public class IdName
-    {
-        public int id;
-
-        public string name;
-    }
+    using DH.Helpdesk.BusinessData.Models;
 
     public class OrganizationJsonService
     {

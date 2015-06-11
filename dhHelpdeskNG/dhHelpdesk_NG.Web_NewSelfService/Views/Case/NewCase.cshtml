@@ -861,8 +861,7 @@
                 $('#NewCase_Place').val(item.place);
                 $('#NewCase_UserCode').val(item.usercode);
                 $('#NewCase_Region_Id').val(item.regionid);
-                $('#NewCase_Department_Id').val(item.departmentid);
-                $('#NewCase_Ou_Id').val(item.ouid);
+                window.app.setOrganizationData(item.regionid, item.departmentid, item.ouid);
 
                 return item.num;
             }

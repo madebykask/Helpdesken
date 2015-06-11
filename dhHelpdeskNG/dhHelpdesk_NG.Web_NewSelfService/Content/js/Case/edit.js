@@ -23,11 +23,38 @@
     };
 
     /**
+    * @public
+    * @param { number } regionId
+    * @param { number } departmentId
+    * @param { number } selectedOrgUnitId
+    */
+    Application.prototype.setOrganizationData = function (regionId, departmentId, selectedOrgUnitId) {
+        var me = this;
+        me.$departmentControl.children().remove();
+        me.$orgUnitControl.children().remove();
+        if (me.isIdExistsInSelect(me.$regionControl, regionId)) {
+            me.refreshDepartment(regionId, departmentId, selectedOrgUnitId);
+        }
+    };
+
+    /**
+    * @private
+    * @param { jQueryElement } $select
+    * @param { optionId } int
+    */
+    Application.prototype.isIdExistsInSelect = function($select, optionId) {
+        var keyToFind = 'option[value=' + optionId + ']';
+        var opt = $select.find(keyToFind);
+        return opt != null && opt.length > 0;
+    }
+
+    /**
     * @private
     * @param { number } regionId
-    * @param { number } filterFormat
+    * @param { number } selectedId = null
+    * @param { number } selectedOrgUnitId = null
     */
-    Application.prototype.refreshDepartment = function (regionId) {
+    Application.prototype.refreshDepartment = function (regionId, selectedId, selectedOrgUnitId) {
         var me = this;
         me.$departmentControl.val('').find('option').remove();
         me.$departmentControl.append('<option value="">&nbsp;</option>');
@@ -37,11 +64,14 @@
             'departmentFilterFormat': me.opt.departmentFilterFormat
         }, function (resp) {
             if (resp != null && resp.success) {
-                $(me.$departmentControl).append(me.makeOptionsFromIdName(resp.data));
+                me.$departmentControl.append(me.makeOptionsFromIdName(resp.data));
+                if (selectedId != null && me.isIdExistsInSelect(me.$departmentControl, selectedId)) {
+                    me.$departmentControl.val(selectedId);
+                }
             }
         }, 'json').always(function () {
             me.$departmentControl.prop('disabled', false);
-            me.refreshOrganizationUnit(me.$departmentControl.val());
+            me.refreshOrganizationUnit(me.$departmentControl.val(), selectedOrgUnitId);
         });
     };
 
@@ -49,8 +79,9 @@
     * @private
     * @param { number } selectedRegionId
     * @param { number } filterFormat department filter format
+    * @param { number } selectedId = null
     */
-    Application.prototype.refreshOrganizationUnit = function (departmentId) {
+    Application.prototype.refreshOrganizationUnit = function (departmentId, selectedId) {
         var me = this;
         me.$orgUnitControl.val('').find('option').remove();
         me.$orgUnitControl.append('<option value="">&nbsp;</option>');
@@ -61,6 +92,9 @@
         }, function (resp) {
             if (resp != null && resp.success) {
                 me.$orgUnitControl.append(me.makeOptionsFromIdName(resp.data));
+                if (selectedId != null && me.isIdExistsInSelect(me.$orgUnitControl, selectedId)) {
+                    me.$orgUnitControl.val(selectedId);
+                }
             }
         }, 'json').always(function () {
             me.$orgUnitControl.prop('disabled', false);
@@ -81,6 +115,6 @@
         return content.join('');
     }
 
-    var app = new Application();
+    window.app = new Application();
     app.init(window.appOptions);
 });
