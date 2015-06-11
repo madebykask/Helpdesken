@@ -51,6 +51,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             var bb = _bulletinBoardService.GetBulletinBoards(SessionFacade.CurrentCustomer.Id,false);
             model.BulletinBoard = bb.Where(b => b.PublicInformation != 0 && 
                                                 b.ShowDate <= DateTime.Now && b.ShowUntilDate >= DateTime.Now)
+                                    .OrderByDescending(b=> b.ShowDate)
                                     .ToList();            
 
             return this.View(model);                        
