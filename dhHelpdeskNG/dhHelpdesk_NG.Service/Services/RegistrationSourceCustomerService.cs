@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿namespace DH.Helpdesk.Services.Services
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
-namespace DH.Helpdesk.Services.Services
-{    
-    using DH.Helpdesk.BusinessData.Models.Status.Output;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
@@ -21,7 +20,7 @@ namespace DH.Helpdesk.Services.Services
         /// <returns></returns>
         IEnumerable<RegistrationSourceCustomer> GetCustomersActiveRegistrationSources(int customerId);
 
-        void SaveRegistrationSourceCustomer(RegistrationSourceCustomer registrationsourcecustomer, out IDictionary<string, string> errors);
+        void SaveRegistrationSourceCustomer(RegistrationSourceCustomer srcIntance, out IDictionary<string, string> errors);
         void Commit();
         DeleteMessage DeleteRegistrationSourceCustomer(int id);
     }
@@ -76,26 +75,75 @@ namespace DH.Helpdesk.Services.Services
             return DeleteMessage.Error;
         }
 
-        public void SaveRegistrationSourceCustomer(RegistrationSourceCustomer registrationsourcecustomer, out IDictionary<string, string> errors)
+        public void SaveRegistrationSourceCustomer(
+            RegistrationSourceCustomer srcIntance,
+            out IDictionary<string, string> errors)
         {
-            if (registrationsourcecustomer == null)
-                throw new ArgumentNullException("registrationsourcecustomer");
+            if (srcIntance == null)
+            {
+                throw new ArgumentNullException("srcIntance");
+            }
 
             errors = new Dictionary<string, string>();
-
-            if (string.IsNullOrEmpty(registrationsourcecustomer.SourceName))
+            if (string.IsNullOrEmpty(srcIntance.SourceName))
+            {
                 errors.Add("RegistratonSourceCustomer.SourceName", "Du måste ange en källa");
+            }
 
-            if (registrationsourcecustomer.Id == 0)
-                this._registrationSourceCustomerRepository.Add(registrationsourcecustomer);
+            var isCreateNew = srcIntance.Id == 0;
+            RegistrationSourceCustomer instanceToWrite;
+            if (!isCreateNew)
+            {
+                instanceToWrite = this._registrationSourceCustomerRepository.GetById(srcIntance.Id);
+                if (instanceToWrite == null)
+                {
+                    throw new ArgumentException("bad instance id");
+                }
+
+                instanceToWrite.IsActive = srcIntance.IsActive;
+                instanceToWrite.SourceName = srcIntance.SourceName;
+                instanceToWrite.SystemCode = srcIntance.SystemCode;
+                instanceToWrite.CreatedDate = srcIntance.CreatedDate;
+                instanceToWrite.ChangedDate = DateTime.UtcNow;
+            }
             else
-                this._registrationSourceCustomerRepository.Update(registrationsourcecustomer);
+            {
+                instanceToWrite = srcIntance;
+                instanceToWrite.CreatedDate = DateTime.UtcNow;
+            }
+            
+            // check items in DB with the same SystemCode as we have.
+            // It is only item with one SystemCode is alowed 
+            if (instanceToWrite.SystemCode.HasValue)
+            {
+                var itemWithSameSystemCode =
+                    this._registrationSourceCustomerRepository.GetAll()
+                        .Where(
+                            it => it.Id != instanceToWrite.Id 
+                            && it.Customer_Id == srcIntance.Customer_Id
+                            && it.SystemCode.HasValue
+                            && it.SystemCode.Value == instanceToWrite.SystemCode.Value)
+                        .FirstOrDefault();
+                if (itemWithSameSystemCode != null)
+                {
+                    itemWithSameSystemCode.SystemCode = null;
+                    this._registrationSourceCustomerRepository.Update(itemWithSameSystemCode);
+                }
+            }
 
-            //if (registrationsourcecustomer.IsDefault == 1)
-            //    this._registrationSourceCustomerRepository.ResetDefault(registrationsourcecustomer.Id);
+            if (isCreateNew)
+            {
+                this._registrationSourceCustomerRepository.Add(instanceToWrite);
+            }
+            else
+            {
+                this._registrationSourceCustomerRepository.Update(instanceToWrite);
+            }
 
             if (errors.Count == 0)
+            {
                 this.Commit();
+            }
         }
 
         public void Commit()
@@ -104,4 +152,3 @@ namespace DH.Helpdesk.Services.Services
         }
     }
 }
-

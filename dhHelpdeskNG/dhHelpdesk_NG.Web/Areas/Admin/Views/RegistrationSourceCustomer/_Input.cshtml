@@ -37,16 +37,6 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Standard", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="registrationsourcecustomer.IsDefault" @(Model.RegistrationSourceCustomer.IsDefault == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="registrationsourcecustomer.IsDefault" value="0" />
-                                        </label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
                                         @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td><label class="checkbox">

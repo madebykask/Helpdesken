@@ -1,6 +1,4 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
-@using DH.Helpdesk.Web.Infrastructure.Extensions
-@model DH.Helpdesk.Web.Areas.Admin.Models.RegistrationSourceIndexViewModel
+﻿@model DH.Helpdesk.Web.Areas.Admin.Models.RegistrationSourceIndexViewModel
 @{
     ViewBag.Title = "Index";
 }
@@ -26,7 +24,7 @@
                                 @Translation.Get("Källa", Enums.TranslationSource.TextTranslation)
                             </th>
                             <th>
-                                @Translation.Get("Standard", Enums.TranslationSource.TextTranslation)
+                                @Translation.Get("Systemkod", Enums.TranslationSource.TextTranslation)
                             </th>
                             <th>
                                 @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
@@ -38,13 +36,13 @@
                         {
                             <tr>
                                 <td>
-                                    <a href="@Url.Action("edit", "registrationsourcecustomer", new { area = "admin", id = item.Id })">@Html.DisplayFor(modelItem => item.SourceName)</a>
+                                    <a href="@Url.Action("edit", "registrationsourcecustomer", new { area = "admin", id = item.Id })">@item.SourceName</a>
                                 </td>
                                 <td>
-                                    <a href="@Url.Action("edit", "registrationsourcecustomer", new { area = "admin", id = item.Id })">@item.IsDefault.IntToYES_NO()</a>
+                                    <a href="@Url.Action("edit", "registrationsourcecustomer", new { area = "admin", id = item.Id })">@item.SystemCodeName</a>
                                 </td>
                                 <td>
-                                    <a href="@Url.Action("edit", "registrationsourcecustomer", new { area = "admin", id = item.Id })">@item.IsActive.IntToYES_NO()</a>
+                                    <a href="@Url.Action("edit", "registrationsourcecustomer", new { area = "admin", id = item.Id })">@item.IsActive</a>
                                 </td>
                             </tr>
                         }

@@ -9,9 +9,31 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Infrastructure;
 
     public class RegistrationSourceCustomerController : BaseAdminController
     {
+        private readonly Dictionary<int, string> stdRegistrationSources =
+            new Dictionary<int, string>()
+                {
+                    {
+                        (int)CaseRegistrationSource.Administrator,
+                        "Manuell registrering"
+                    },
+                    {
+                        (int)CaseRegistrationSource.CaseTemplate,
+                        "Ärendemall"
+                    },
+                    {
+                        (int)CaseRegistrationSource.Email,
+                        "Mail2Ticket"
+                    },
+                    {
+                        (int)CaseRegistrationSource.SelfService,
+                        "Självservice"
+                    },
+                };
+
         private readonly IRegistrationSourceCustomerService _registrationSourceCustomerService;
         private readonly ICustomerService _customerService;
 
@@ -29,11 +51,26 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         public ActionResult Index(int customerId)
         {
             var customer = this._customerService.GetCustomer(customerId);
-            var registrationsources = this._registrationSourceCustomerService.GetRegistrationSources(customer.Id).ToList();
+            var registrationsources = this._registrationSourceCustomerService.GetRegistrationSources(customer.Id)
+                .Select(it => new RegistrationSourceCustomerIndex() 
+                {
+                    Id = it.Id,
+                    SourceName = it.SourceName,
+                    SystemCodeName = this.ResolveSystemCodeName(it.SystemCode),
+                    IsActive = (it.IsActive == 1) ? Translation.Get("Ja") : Translation.Get("Nej")
+                })
+                .ToList();
 
             var model = new RegistrationSourceIndexViewModel { RegistrationSources = registrationsources, Customer = customer };
 
             return this.View(model);
+        }
+
+        private string ResolveSystemCodeName(int? systemCode)
+        {
+            return systemCode.HasValue && this.stdRegistrationSources.ContainsKey(systemCode.Value)
+                       ? this.stdRegistrationSources[systemCode.Value]
+                       : string.Empty;
         }
 
         public ActionResult New(int customerId)
@@ -80,15 +117,14 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         public ActionResult Edit(RegistrationSourceCustomer registrationsourcecustomer)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-
             this._registrationSourceCustomerService.SaveRegistrationSourceCustomer(registrationsourcecustomer, out errors);
-
-            if (errors.Count == 0)
+            if (errors.Count == 0) 
+            {
                 return this.RedirectToAction("index", "registrationsourcecustomer", new { customerid = registrationsourcecustomer.Customer_Id });
+            }
 
             var customer = this._customerService.GetCustomer(registrationsourcecustomer.Customer_Id);
             var model = this.CreateInputViewModel(registrationsourcecustomer, customer);
-
             return this.View(model);
         }
 
@@ -108,38 +144,11 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
         private RegistrationSourceInputViewModel CreateInputViewModel(RegistrationSourceCustomer registrationsourcecustomer, Customer customer)
         {
-            List<SelectListItem> li = new List<SelectListItem>();
-
-            li.Add(new SelectListItem()
-            {
-                Text = "Administrator",
-                Value = ((int) CaseRegistrationSource.Administrator).ToString(),
-                Selected = false
-            });
-            li.Add(new SelectListItem()
-            {
-                Text = "CaseTemplate",
-                Value = ((int)CaseRegistrationSource.CaseTemplate).ToString(),
-                Selected = false
-            });
-            li.Add(new SelectListItem()
-            {
-                Text = "Contract",
-                Value = ((int)CaseRegistrationSource.Contract).ToString(),
-                Selected = false
-            });
-            li.Add(new SelectListItem()
-            {
-                Text = "Mail2Ticket",
-                Value = ((int)CaseRegistrationSource.Email).ToString(),
-                Selected = false
-            });
-            li.Add(new SelectListItem()
-            {
-                Text = "SelfService",
-                Value = ((int) CaseRegistrationSource.SelfService).ToString(),
-                Selected = false
-            });
+            var li =
+                this.stdRegistrationSources.Select(
+                    it => new SelectListItem() { Value = it.Key.ToString(), Text = it.Value, Selected = false })
+                    .ToList();
+            li.Insert(0, new SelectListItem());
             
             var model = new RegistrationSourceInputViewModel
             {
@@ -148,7 +157,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 SystemCode = li
             };
 
-           
             return model;
         }
     }

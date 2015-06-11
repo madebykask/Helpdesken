@@ -6,14 +6,13 @@
     using System.IO;
     using System.Linq;
     using System.Web;
-    using System.Web.Configuration;
     using System.Web.Mvc;
     using System.Web.Routing;
 
     using DH.Helpdesk.BusinessData.Enums.Case;
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Case;
-    using DH.Helpdesk.BusinessData.Models.Case.CaseOverview;
+
     using DH.Helpdesk.BusinessData.Models.FinishingCause;
     using DH.Helpdesk.BusinessData.Models.Grid;
     using DH.Helpdesk.BusinessData.Models.Shared;
@@ -24,6 +23,7 @@
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Dal.Infrastructure.Context;
+    using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.Infrastructure;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Concrete;
@@ -44,8 +44,8 @@
     using DH.Helpdesk.Web.Models.Case.Input;
     using DH.Helpdesk.Web.Models.Case.Output;
     using DH.Helpdesk.Web.Models.Shared;
+
     using DHDomain = DH.Helpdesk.Domain;
-    using DH.Helpdesk.Domain;
 
     public class CasesController : BaseController
     {
@@ -2454,13 +2454,15 @@
                 {
                     var customerSources =
                         this._registrationSourceCustomerService.GetCustomersActiveRegistrationSources(customerId).ToArray();
-                    var defaultSource = customerSources.FirstOrDefault(it => it.IsDefault == 1);
+                    
                     if (m.case_.RegistrationSourceCustomer_Id.HasValue)
                     {
                         m.CustomerRegistrationSourceId = m.case_.RegistrationSourceCustomer_Id.Value;
                     }
                     else
                     {
+                        var defaultSource =
+                            customerSources.Where(it => it.SystemCode == (int)CaseRegistrationSource.Administrator).FirstOrDefault();
                         if (isCreateNewCase && defaultSource != null)
                         {
                             m.CustomerRegistrationSourceId = defaultSource.Id;

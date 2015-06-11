@@ -29,13 +29,21 @@ BEGIN
 	ALTER TABLE tblCase DROP column source_id
 END
 go
+
+if exists(select * from sys.columns 
+            where Name = N'isdefault' and Object_ID = Object_ID(N'tblRegistrationSourceCustomer'))
+BEGIN
+	ALTER TABLE [dbo].[tblRegistrationSourceCustomer] DROP COLUMN [IsDefault]
+	ALTER TABLE [dbo].[tblRegistrationSourceCustomer] ALTER COLUMN [SystemCode] INT NULL
+END
+GO
 -- * * * * * * *  END * * *  * * * * * 
 
 if not exists(select * from sysobjects WHERE Name = N'tblRegistrationSourceCustomer')
 	begin
 		CREATE TABLE [dbo].[tblRegistrationSourceCustomer](
 			[Id] [int] IDENTITY(1,1) NOT NULL,
-			[SystemCode] INT NOT NULL,
+			[SystemCode] INT NULL,
 			[SourceName] [nvarchar](50) NOT NULL,
 			[Customer_Id] INT NOT NULL,
 			[IsDefault] INT NOT NULL,
