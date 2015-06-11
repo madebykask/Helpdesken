@@ -12,14 +12,12 @@
 
         // Remove after implementing http://redmine.fastdev.se/issues/10995
         me.$regionControl.on('change', function () {
-            console.log('org chaged fired');
             me.refreshDepartment.call(me, $(this).val());
         });
 
         me.$departmentControl.on('change', function () {
             // Remove after implementing http://redmine.fastdev.se/issues/10995        
             var departmentId = $(this).val();
-            console.log('Dept chaged fired');
             me.refreshOrganizationUnit(departmentId);
         });
     };
