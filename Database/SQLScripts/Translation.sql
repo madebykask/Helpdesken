@@ -4023,12 +4023,12 @@ GO
 If not exists (select * from tbltext where id = 1488)
 	insert into tbltext (id, TextString) VALUES (1488, 'Planerat körningsdatum')
 GO
-If not exists (select * from tblTextTranslation where text_id = 1489 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1489, 2, 'Planned Run Date')
+If not exists (select * from tblTextTranslation where text_id = 1488 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1488, 2, 'Planned Run Date')
 GO
 
-If not exists (select * from tbltext where id = 1488)
-	insert into tbltext (id, TextString) VALUES (1488, 'Om e-form')
+If not exists (select * from tbltext where id = 1489)
+	insert into tbltext (id, TextString) VALUES (1489, 'Om e-form')8
 GO
 If not exists (select * from tblTextTranslation where text_id = 1489 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1489, 2, 'If e-form')
