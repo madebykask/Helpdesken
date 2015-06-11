@@ -489,6 +489,7 @@
                         rowCfs.Required = change.Required;
                         rowCfs.ShowExternal = change.ShowExternal;
                         rowCfs.ShowOnStartPage = change.ShowOnStartPage;
+                        rowCfs.Locked = change.Locked;
                         //rowCfsl.Language_Id = LanguageId;
                         //rowCfsl.Label = label.NameOrigin;
 

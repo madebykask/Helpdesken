@@ -123,6 +123,11 @@
             return fields.getCaseSettingsValue(field.ToString()).ShowOnStartPage != 0;
         }
 
+        public static bool IsFieldLocked(this IList<CaseFieldSetting> fields, GlobalEnums.TranslationCaseFields field)
+        {
+            return fields.getCaseSettingsValue(field.ToString()).Locked == 1;
+        }
+
         public static CaseFieldSetting getCaseSettingsValue(this IList<CaseFieldSetting> cfs, string valueToFind)
         {
             var ret = new CaseFieldSetting();  
@@ -189,6 +194,11 @@
         public static int getShowOnStartPage(this IList<CaseFieldSetting> cfs, string valueToFind)
         {
            return cfs.getCaseSettingsValue(valueToFind).ShowOnStartPage;
+        }
+
+        public static int getLocked(this IList<CaseFieldSetting> cfs, string valueToFind)
+        {
+            return cfs.getCaseSettingsValue(valueToFind).Locked;
         }
 
         public static int getShowExternal(this IEnumerable<CaseFieldSetting> cfs, string valueToFind)

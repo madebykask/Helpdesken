@@ -112,7 +112,11 @@
             bool isGlobalVisibility = model.caseFieldSettings.IsFieldVisible(caseFieldName);
             var fieldSetting = model.CaseSolutionSettingModels.FirstOrDefault(x => x.CaseSolutionField == caseTemplateFieldName);
             bool isLocalVisibility = (fieldSetting != null) && fieldSetting.CaseSolutionMode != CaseSolutionModes.Hide;
-            if (!isGlobalVisibility || !isLocalVisibility)
+            
+            if(model.DynamicCase != null && model.caseFieldSettings.IsFieldLocked(caseFieldName))
+                return true;
+
+            if(!isGlobalVisibility || !isLocalVisibility)
             {
                 return false;
             }

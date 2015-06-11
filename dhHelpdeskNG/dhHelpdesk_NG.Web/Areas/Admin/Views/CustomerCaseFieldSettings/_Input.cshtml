@@ -113,7 +113,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[0].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.ReportedBy.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[0].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[0].Locked", Model.CaseFieldSettings[0].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[0].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.ReportedBy.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[0].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.ReportedBy.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[0].Name" value="ReportedBy" />
@@ -146,7 +146,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[1].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Persons_Name.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[1].ShowExternal" value="@Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Persons_Name.ToString())" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[1].Locked", Model.CaseFieldSettings[1].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[1].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.Persons_Name.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[1].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.Persons_Name.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[1].Name" value="Persons_Name" />
@@ -180,7 +180,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[2].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[2].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[2].Locked", Model.CaseFieldSettings[2].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[2].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[2].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[2].Name" value="Persons_EMail" />
@@ -214,7 +214,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[3].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[3].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[3].Locked", Model.CaseFieldSettings[3].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[3].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[3].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[3].Name" value="Persons_Phone" />
@@ -248,7 +248,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[4].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[4].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[4].Locked", Model.CaseFieldSettings[4].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[4].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[4].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[4].Name" value="Persons_CellPhone" />
@@ -282,7 +282,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[5].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Customer_Id.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[5].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[5].Locked", Model.CaseFieldSettings[5].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[5].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.Customer_Id.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[5].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.Customer_Id.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[5].Name" value="Customer_Id" />
@@ -316,7 +316,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[6].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Region_Id.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[6].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[6].Locked", Model.CaseFieldSettings[6].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[6].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.Region_Id.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[6].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.Region_Id.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[6].Name" value="Region_Id" />
@@ -350,7 +350,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[7].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Department_Id.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[7].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[7].Locked", Model.CaseFieldSettings[7].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[7].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.Department_Id.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[7].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.Department_Id.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[7].Name" value="Department_Id" />
@@ -384,7 +384,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[8].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.OU_Id.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[8].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[8].Locked", Model.CaseFieldSettings[8].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[8].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.OU_Id.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[8].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.OU_Id.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[8].Name" value="OU_Id" />
@@ -418,7 +418,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[9].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Place.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[9].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[9].Locked", Model.CaseFieldSettings[9].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[9].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.Place.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[9].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.Place.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[9].Name" value="Place" />
@@ -452,7 +452,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[10].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.UserCode.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[10].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[10].Locked", Model.CaseFieldSettings[10].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[10].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.UserCode.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[10].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.UserCode.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[10].Name" value="UserCode" />
@@ -526,7 +526,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[11].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[11].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[11].Locked", Model.CaseFieldSettings[11].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[11].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[11].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[11].Name" value="InventoryNumber" />
@@ -561,7 +561,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[12].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[12].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[12].Locked", Model.CaseFieldSettings[12].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[12].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[12].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[12].Name" value="ComputerType_Id" />
@@ -595,7 +595,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[13].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[13].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[13].Locked", Model.CaseFieldSettings[13].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[13].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[13].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[13].Name" value="InventoryLocation" />
@@ -634,7 +634,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[14].ShowExternal" disabled="disabled" />
                                 <input type="hidden" name="CaseFieldSettings[14].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[14].Locked", Model.CaseFieldSettings[14].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[14].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.CaseNumber.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[14].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.CaseNumber.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[14].Name" value="CaseNumber" />
@@ -670,7 +670,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[55].ShowExternal" disabled="disabled" />
                                 <input type="hidden" name="CaseFieldSettings[55].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[55].Locked", Model.CaseFieldSettings[55].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[55].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[55].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[55].Name" value="RegistrationSourceCustomer" />
@@ -704,7 +704,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[15].ShowExternal" disabled="disabled" />
                                 <input type="hidden" name="CaseFieldSettings[15].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[15].Locked", Model.CaseFieldSettings[15].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[15].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.RegTime.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[15].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.RegTime.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[15].Name" value="RegTime" />
@@ -738,7 +738,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[16].ShowExternal" disabled="disabled" />
                                 <input type="hidden" name="CaseFieldSettings[16].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[16].Locked", Model.CaseFieldSettings[16].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[16].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.ChangeTime.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[16].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.ChangeTime.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[16].Name" value="ChangeTime" />
@@ -772,7 +772,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[17].ShowExternal" disabled="disabled" />
                                 <input type="hidden" name="CaseFieldSettings[17].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[17].Locked", Model.CaseFieldSettings[17].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[17].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.User_Id.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[17].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.User_Id.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[17].Name" value="User_Id" />
@@ -806,7 +806,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[18].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[18].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[18].Locked", Model.CaseFieldSettings[18].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[18].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[18].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[18].Name" value="CaseType_Id" />
@@ -840,7 +840,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[19].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[19].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[19].Locked", Model.CaseFieldSettings[19].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[19].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[19].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[19].Name" value="ProductArea_Id" />
@@ -874,7 +874,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[20].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.System_Id.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[20].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[20].Locked", Model.CaseFieldSettings[20].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[20].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.System_Id.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[20].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.System_Id.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[20].Name" value="System_Id" />
@@ -908,7 +908,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[21].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[21].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[21].Locked", Model.CaseFieldSettings[21].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[21].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[21].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[21].Name" value="Urgency_Id" />
@@ -942,7 +942,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[22].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Impact_Id.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[22].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[22].Locked", Model.CaseFieldSettings[22].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[22].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.Impact_Id.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[22].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.Impact_Id.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[22].Name" value="Impact_Id" />
@@ -976,7 +976,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[23].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Category_Id.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[23].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[23].Locked", Model.CaseFieldSettings[23].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[23].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.Category_Id.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[23].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.Category_Id.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[23].Name" value="Category_Id" />
@@ -1010,7 +1010,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[24].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[24].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[24].Locked", Model.CaseFieldSettings[24].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[24].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[24].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[24].Name" value="Supplier_Id" />
@@ -1044,7 +1044,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[25].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[25].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[25].Locked", Model.CaseFieldSettings[25].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[25].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[25].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[25].Name" value="InvoiceNumber" />
@@ -1078,7 +1078,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[26].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[26].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[26].Locked", Model.CaseFieldSettings[26].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[26].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[26].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[26].Name" value="ReferenceNumber" />
@@ -1112,7 +1112,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[27].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Caption.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[27].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[27].Locked", Model.CaseFieldSettings[27].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[27].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.Caption.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[27].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.Caption.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[27].Name" value="Caption" />
@@ -1146,7 +1146,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[28].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Description.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[28].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[28].Locked", Model.CaseFieldSettings[28].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[28].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.Description.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[28].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.Description.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[28].Name" value="Description" />
@@ -1181,7 +1181,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[29].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[29].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[29].Locked", Model.CaseFieldSettings[29].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[29].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[29].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[29].Name" value="Miscellaneous" />
@@ -1215,7 +1215,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[30].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[30].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[30].Locked", Model.CaseFieldSettings[30].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[30].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[30].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[30].Name" value="ContactBeforeAction" />
@@ -1249,7 +1249,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[31].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.SMS.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[31].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[31].Locked", Model.CaseFieldSettings[31].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[31].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.SMS.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[31].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.SMS.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[31].Name" value="SMS" />
@@ -1283,7 +1283,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[32].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.AgreedDate.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[32].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[32].Locked", Model.CaseFieldSettings[32].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[32].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.AgreedDate.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[32].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.AgreedDate.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[32].Name" value="AgreedDate" />
@@ -1317,7 +1317,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[33].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Available.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[33].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[33].Locked", Model.CaseFieldSettings[33].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[33].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.Available.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[33].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.Available.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[33].Name" value="Available" />
@@ -1351,7 +1351,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[34].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Cost.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[34].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[34].Locked", Model.CaseFieldSettings[34].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[34].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.Cost.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[34].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.Cost.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[34].Name" value="Cost" />
@@ -1385,7 +1385,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[35].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Filename.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[35].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[35].Locked", Model.CaseFieldSettings[35].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[35].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.Filename.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[35].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.Filename.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[35].Name" value="Filename" />
@@ -1424,7 +1424,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[36].ShowExternal" disabled="disabled" />
                                 <input type="hidden" name="CaseFieldSettings[36].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[36].Locked", Model.CaseFieldSettings[36].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[36].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[36].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[36].Name" value="WorkingGroup_Id" />
@@ -1458,7 +1458,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[37].ShowExternal" disabled="disabled" />
                                 <input type="hidden" name="CaseFieldSettings[37].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[37].Locked", Model.CaseFieldSettings[37].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[37].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[37].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[37].Name" value="CaseResponsibleUser_Id" />
@@ -1492,7 +1492,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[38].ShowExternal" disabled="disabled" />
                                 <input type="hidden" name="CaseFieldSettings[38].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[38].Locked", Model.CaseFieldSettings[38].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[38].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[38].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[38].Name" value="Performer_User_Id" />
@@ -1526,7 +1526,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[39].ShowExternal" disabled="disabled" />
                                 <input type="hidden" name="CaseFieldSettings[39].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[39].Locked", Model.CaseFieldSettings[39].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[39].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[39].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.Priority_Id.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[39].Name" value="Priority_Id" />
@@ -1560,7 +1560,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[40].ShowExternal" disabled="disabled" />
                                 <input type="hidden" name="CaseFieldSettings[40].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[40].Locked", Model.CaseFieldSettings[40].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[40].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.Status_Id.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[40].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.Status_Id.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[40].Name" value="Status_Id" />
@@ -1594,7 +1594,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[41].ShowExternal" disabled="disabled" />
                                 <input type="hidden" name="CaseFieldSettings[41].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[41].Locked", Model.CaseFieldSettings[41].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[41].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[41].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[41].Name" value="StateSecondary_Id" />
@@ -1628,7 +1628,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[42].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.PlanDate.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[42].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[42].Locked", Model.CaseFieldSettings[42].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[42].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.PlanDate.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[42].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.PlanDate.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[42].Name" value="PlanDate" />
@@ -1662,7 +1662,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[43].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.WatchDate.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[43].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[43].Locked", Model.CaseFieldSettings[43].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[43].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.WatchDate.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[43].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.WatchDate.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[43].Name" value="WatchDate" />
@@ -1696,7 +1696,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[44].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Verified.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[44].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[44].Locked", Model.CaseFieldSettings[44].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[44].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.Verified.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[44].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.Verified.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[44].Name" value="Verified" />
@@ -1730,7 +1730,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[45].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[45].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[45].Locked", Model.CaseFieldSettings[45].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[45].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[45].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[45].Name" value="VerifiedDescription" />
@@ -1764,7 +1764,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[46].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.SolutionRate.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[46].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[46].Locked", Model.CaseFieldSettings[46].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[46].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.SolutionRate.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[46].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.SolutionRate.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[46].Name" value="SolutionRate" />
@@ -1798,7 +1798,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[53].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.CausingPart.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[53].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[53].Locked", Model.CaseFieldSettings[53].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[53].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.CausingPart.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[53].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.CausingPart.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[53].Name" value="CausingPart" />
@@ -1837,7 +1837,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[47].ShowExternal" disabled="disabled" />
                                 <input type="hidden" name="CaseFieldSettings[47].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[47].Locked", Model.CaseFieldSettings[47].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[47].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[47].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[47].Name" value="tblLog.Text_Internal" />
@@ -1871,7 +1871,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[48].ShowExternal" disabled="disabled" />
                                 <input type="hidden" name="CaseFieldSettings[48].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[48].Locked", Model.CaseFieldSettings[48].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[48].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[48].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[48].Name" value="tblLog.Text_External" />
@@ -1905,7 +1905,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[49].ShowExternal" disabled="disabled" />
                                 <input type="hidden" name="CaseFieldSettings[49].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[49].Locked", Model.CaseFieldSettings[49].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[49].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.tblLog_Charge.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[49].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.tblLog_Charge.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[49].Name" value="tblLog.Charge" />
@@ -1939,7 +1939,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[50].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[50].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[50].Locked", Model.CaseFieldSettings[50].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[50].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[50].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[50].Name" value="tblLog.Filename" />
@@ -1973,7 +1973,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[51].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[51].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[51].Locked", Model.CaseFieldSettings[51].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[51].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[51].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[51].Name" value="FinishingDescription" />
@@ -2007,7 +2007,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[52].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.FinishingDate.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[52].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[52].Locked", Model.CaseFieldSettings[52].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[52].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.FinishingDate.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[52].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.FinishingDate.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[52].Name" value="FinishingDate" />
@@ -2041,7 +2041,7 @@
                                 <input type="checkbox" name="CaseFieldSettings[54].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.ClosingReason.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                                 <input type="hidden" name="CaseFieldSettings[54].ShowExternal" value="0" />
                             </td>
-                            <td>@RenderLockedFieldOption("CaseFieldSettings[54].Locked", Model.CaseFieldSettings[54].Locked)</td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[54].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.ClosingReason.ToString()))</td>
                             <td>
                                 <input type="text" name="CaseFieldSettingWithLangauges[54].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.ClosingReason.ToString())"/>
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[54].Name" value="ClosingReason" />

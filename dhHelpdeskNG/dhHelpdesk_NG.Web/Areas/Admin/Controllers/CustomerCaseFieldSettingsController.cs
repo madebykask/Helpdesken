@@ -42,7 +42,7 @@
             if (customer == null)
                 return new HttpNotFoundResult("No customer found...");
 
-            var casefieldsetting = this._caseFieldSettingService.GetCaseFieldSettings(customerId);
+            //var casefieldsetting = this._caseFieldSettingService.GetCaseFieldSettings(customerId);
 
             var model = this.CustomerInputViewModel(customer, language);
             
