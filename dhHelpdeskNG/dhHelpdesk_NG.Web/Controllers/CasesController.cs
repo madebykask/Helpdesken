@@ -2859,7 +2859,7 @@
                         if (!accessToDepartments.Contains(m.case_.Department_Id.Value))
                         {
                             return Enums.AccessMode.NoAccess;
-                        }                                            
+                        }
                     }
                 }
             }
@@ -2895,20 +2895,11 @@
                 return Enums.AccessMode.ReadOnly;
             }
 
-            if (SessionFacade.CurrentUser.UserGroupId < 2)
+            if (topic == ModuleName.Log
+                && SessionFacade.CurrentUser.UserGroupId == (int)BusinessData.Enums.Admin.Users.UserGroup.Administrator
+                && SessionFacade.CurrentUser.Id != m.CaseLog.UserId)
             {
                 return Enums.AccessMode.ReadOnly;
-            }
-
-            if (topic == ModuleName.Log)
-            {
-                if (SessionFacade.CurrentUser.UserGroupId == 2)
-                {
-                    if (SessionFacade.CurrentUser.Id != m.CaseLog.UserId)
-                    {
-                        return Enums.AccessMode.ReadOnly;
-                    }                                    
-                }
             }
 
             return Enums.AccessMode.FullAccess;
