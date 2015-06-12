@@ -82,7 +82,7 @@ var GRID_STATE = {
         
 
         $('#btnNewCase a, #divCaseTemplate a').click(function() {
-            if (me._creatingCase) {
+            if (me._creatingCase || $(this).hasClass('disabled')) {
                 return false;
             }
             me.abortAjaxReq();
