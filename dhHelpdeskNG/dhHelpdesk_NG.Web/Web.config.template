@@ -104,8 +104,11 @@
       <requestFiltering>
         <!-- for iis 7 >. 50 mb in bytes -->
         <requestLimits maxAllowedContentLength="38000000" />
-      </requestFiltering>
+      </requestFiltering>   
     </security> 
+    <staticContent>
+	<mimeMap fileExtension=".woff" mimeType="application/x-woff" />
+    </staticContent>
   </system.webServer>
   <runtime>
     <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
