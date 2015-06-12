@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-
-namespace DH.Helpdesk.Web.Areas.Admin.Controllers
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
 
     using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Domain;
@@ -145,8 +144,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private RegistrationSourceInputViewModel CreateInputViewModel(RegistrationSourceCustomer registrationsourcecustomer, Customer customer)
         {
             var li =
-                this.stdRegistrationSources.Select(
-                    it => new SelectListItem() { Value = it.Key.ToString(), Text = it.Value, Selected = false })
+                this.stdRegistrationSources.Select(it => new SelectListItem() { Value = it.Key.ToString(), Text = Translation.Get(it.Value), Selected = false })
                     .ToList();
             li.Insert(0, new SelectListItem());
             

@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Collections.Specialized;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Web;
@@ -515,8 +516,8 @@
                 caseSearchModel.caseSearchFilter.CustomFilter = customFilter;
                 SessionFacade.CurrentCaseSearch = caseSearchModel;
 
-            return new RedirectResult("~/Cases/Index");
-            }
+            return new RedirectResult("~/cases");
+        }
 
 
         public ActionResult Index()
@@ -785,10 +786,8 @@
                     fd.filterWorkingGroup = this._workingGroupService.GetAllWorkingGroupsForCustomer(cusId);
                 else
                     fd.filterWorkingGroup = this._workingGroupService.GetWorkingGroups(cusId);
-                // visa även ej tilldelade
-                if (SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups == 1)
-                    fd.filterWorkingGroup.Insert(0, ObjectExtensions.notAssignedWorkingGroup());
             }
+
             //produktonmråde
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseProductAreaFilter))
                 fd.filterProductArea = this._productAreaService.GetTopProductAreas(cusId);
@@ -861,20 +860,29 @@
             return fd;
         }
 
-        public ActionResult New(int customerId, int? templateId, int? copyFromCaseId, int? caseLanguageId, int? templateistrue)
+        public ActionResult New(int? customerId, int? templateId, int? copyFromCaseId, int? caseLanguageId, int? templateistrue)
         {
-            CaseInputViewModel m = null;                      
+            CaseInputViewModel m = null;
+            if (!customerId.HasValue)
+            {
+                if (SessionFacade.CurrentCustomer == null)
+                {
+                    return new RedirectResult("~/Error/Unathorized");
+                }
 
-            SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;          
+                customerId = SessionFacade.CurrentCustomer.Id;
+            }
+
+            SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
             if (SessionFacade.CurrentUser != null)
                 if (SessionFacade.CurrentUser.CreateCasePermission == 1)
                 {
                     var userId = SessionFacade.CurrentUser.Id;
-                    m = this.GetCaseInputViewModel(userId, customerId, 0, 0, string.Empty, null, templateId, copyFromCaseId, false, templateistrue);
+                    m = this.GetCaseInputViewModel(userId, customerId.Value, 0, 0, string.Empty, null, templateId, copyFromCaseId, false, templateistrue);
 
                     var caseParam = new NewCaseParams
                     {
-                        customerId = customerId,
+                        customerId = customerId.Value,
                         templateId = templateId,
                         copyFromCaseId = copyFromCaseId,
                         caseLanguageId = caseLanguageId
@@ -882,14 +890,6 @@
                      
                     m.NewModeParams = caseParam;
                     AddViewDataValues();
-                    if (m.workingGroups != null && m.workingGroups.Count > 0)
-                    {
-                        var defWorkingGroup = m.workingGroups.Where(it => it.IsDefault == 1).FirstOrDefault();
-                        if (defWorkingGroup != null)
-                        {
-                            m.case_.WorkingGroup_Id = defWorkingGroup.Id;
-                        }
-                    }
                     
                     // Positive: Send Mail to...
                     if (m.CaseMailSetting.DontSendMailToNotifier == false)
@@ -1918,6 +1918,11 @@
 
             var mailSenders = new MailSenders();
 
+            if (case_.RegLanguage_Id == 0)
+            {
+                case_.RegLanguage_Id = SessionFacade.CurrentLanguageId;
+            }
+
             // Positive: Send Mail to...
             if (caseMailSetting.DontSendMailToNotifier == false)
                 caseMailSetting.DontSendMailToNotifier = true;
@@ -2448,6 +2453,15 @@
                     m.workingGroups = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId);
                 }
 
+                if (m.workingGroups != null && m.workingGroups.Count > 0)
+                {
+                    var defWorkingGroup = m.workingGroups.Where(it => it.IsDefault == 1).FirstOrDefault();
+                    if (defWorkingGroup != null)
+                    {
+                        m.case_.WorkingGroup_Id = defWorkingGroup.Id;
+                    }
+                }
+
                 // "RegistrationSourceCustomer" field
                 if (m.caseFieldSettings.getCaseSettingsValue(
                         GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString()).ShowOnStartPage == 1)
@@ -2857,12 +2871,13 @@
                         if (!accessToDepartments.Contains(m.case_.Department_Id.Value))
                         {
                             return Enums.AccessMode.NoAccess;
-                        }                                            
+                        }
                     }
                 }
             }
 
-            if (accessToWorkinggroups != null)
+            // In new case shouldn't check
+            if (accessToWorkinggroups != null && m.case_.Id != 0)
             {
                 if (SessionFacade.CurrentUser.UserGroupId < 3)
                 {
@@ -2892,20 +2907,11 @@
                 return Enums.AccessMode.ReadOnly;
             }
 
-            if (SessionFacade.CurrentUser.UserGroupId < 2)
+            if (topic == ModuleName.Log
+                && SessionFacade.CurrentUser.UserGroupId == (int)BusinessData.Enums.Admin.Users.UserGroup.Administrator
+                && SessionFacade.CurrentUser.Id != m.CaseLog.UserId)
             {
                 return Enums.AccessMode.ReadOnly;
-            }
-
-            if (topic == ModuleName.Log)
-            {
-                if (SessionFacade.CurrentUser.UserGroupId == 2)
-                {
-                    if (SessionFacade.CurrentUser.Id != m.CaseLog.UserId)
-                    {
-                        return Enums.AccessMode.ReadOnly;
-                    }                                    
-                }
             }
 
             return Enums.AccessMode.FullAccess;

@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "About";
+
     var htmlArea = "";
     if (Model.HtmlPageData != null)
     {
@@ -10,14 +11,15 @@
 }
 
 <div class="container-fluid dh-container">
-    <div class="row">
-        <div class="col-md-7">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            @Html.Raw(htmlArea)
-                        </div>
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#home" data-toggle="tab">@Translation.Get("Om", Enums.TranslationSource.TextTranslation)</a></li>
+    </ul>
+    <div class="content">
+        <div class="tab-pane active" id="home">
+            <div class="container-fluid dh-container">
+                <div class="row">
+                    <div class="col-md-12 table-responsive">                        
+                          @Html.Raw(htmlArea)                                                  
                     </div>
                 </div>
             </div>

@@ -17,12 +17,10 @@
         {
             var entities = query.Select(f => new CaseSettingsMapData
                                                  {
-                                                    FieldName = f.Name,
-                                                    Caption = f.CaseFieldSettingLanguages.FirstOrDefault(l => l.Language_Id == languageId).Label,
+                                                    FieldName = f.Name,                                                    
                                                     Show = f.ShowOnStartPage,
                                                     ShowInList = f.ShowExternal
-                                                 })
-                                                 .Where(f => !string.IsNullOrEmpty(f.Caption))
+                                                 })                                                 
                                                  .ToList();
 
             var fieldSettings = new NamedObjectCollection<CaseSettingsMapData>(entities);

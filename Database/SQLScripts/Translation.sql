@@ -3509,6 +3509,33 @@ If not exists (select * from tblTextTranslation where text_id = 1426 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1426, 2, 'Slovak')
 GO
 
+If not exists (select * from tbltext where id = 1409)
+	insert into tbltext (id, TextString, TextType) VALUES (1409, 'Start', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1409 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1409, 1, 'Start')
+GO
+
+If not exists (select * from tbltext where id = 1410)
+	insert into tbltext (id, TextString, TextType) VALUES (1410, 'Initiate a case', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1410 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1410, 1, 'Skapa ett ärende')
+GO
+
+If not exists (select * from tbltext where id = 1411)
+	insert into tbltext (id, TextString, TextType) VALUES (1411, 'Ongoing cases', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1411 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1411, 1, 'Pågående ärenden')
+GO
+
+If not exists (select * from tbltext where id = 1412)
+	insert into tbltext (id, TextString, TextType) VALUES (1412, 'Documents', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1412 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1412, 1, 'Dokument')
+GO
 
 If not exists (select * from tbltext where id = 1413)
 	insert into tbltext (id, TextString, TextType) VALUES (1413, 'Need Help?', 300)
@@ -4028,7 +4055,7 @@ If not exists (select * from tblTextTranslation where text_id = 1488 and Languag
 GO
 
 If not exists (select * from tbltext where id = 1489)
-	insert into tbltext (id, TextString) VALUES (1489, 'Om e-form')8
+	insert into tbltext (id, TextString) VALUES (1489, 'Om e-form')
 GO
 If not exists (select * from tblTextTranslation where text_id = 1489 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1489, 2, 'If e-form')
@@ -4071,7 +4098,17 @@ If not exists (select * from tbltext where id = 1495)
 	insert into tbltext (id, TextString) VALUES (1495, 'Självservice')
 GO
 If not exists (select * from tblTextTranslation where text_id = 1495 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1495, 2, 'Self-service')
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1495, 2, 'Self service')
+ELSE 
+	update tblTextTranslation set TextTranslation = 'Self service' where text_id = 1495 and Language_Id = 2
 GO
+
+If not exists (select * from tbltext where id = 1496)
+	insert into tbltext (id, TextString) VALUES (1496, 'Sätt när')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1496 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1496, 2, 'Default to')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

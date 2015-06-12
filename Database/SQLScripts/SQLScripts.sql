@@ -3,42 +3,6 @@
 ALTER TABLE tblSettings ALTER COLUMN LDAPFilter nvarchar(100) NOT NULL
 
 
--- * * * * * * *  BEGIN  * * * * * * 
--- * we can delete this when deploying on acceptance/customer *
--- Temporary solution for "Source" field
-IF COL_LENGTH('dbo.tblCase','source_id') IS NULL
-BEGIN
-	ALTER TABLE tblCase ADD source_id int not Null default 1;
-END
-go
-
--- we can delete this when deploying on acceptance/customer
-IF COL_LENGTH('dbo.tblCase','source_id') IS not NULL
-BEGIN
-	DELETE from tblCaseFieldSettings where casefield = 'source'
-	DECLARE @STR VARCHAR(100)
-	SET @STR = (
-		SELECT NAME
-		FROM SYSOBJECTS SO
-		JOIN SYSCONSTRAINTS SC ON SO.ID = SC.CONSTID
-		WHERE OBJECT_NAME(SO.PARENT_OBJ) = 'tblCase'
-			AND SO.XTYPE = 'D' AND SC.COLID = (SELECT COLID FROM SYSCOLUMNS
-		WHERE ID = OBJECT_ID('tblCase')	AND NAME = 'source_id')
-	)
-	SET @STR = 'ALTER TABLE tblCase DROP CONSTRAINT ' + @STR EXEC (@STR)
-	ALTER TABLE tblCase DROP column source_id
-END
-go
-
-if exists(select * from sys.columns 
-            where Name = N'isdefault' and Object_ID = Object_ID(N'tblRegistrationSourceCustomer'))
-BEGIN
-	ALTER TABLE [dbo].[tblRegistrationSourceCustomer] DROP COLUMN [IsDefault]
-	ALTER TABLE [dbo].[tblRegistrationSourceCustomer] ALTER COLUMN [SystemCode] INT NULL
-END
-GO
--- * * * * * * *  END * * *  * * * * * 
-
 if not exists(select * from sysobjects WHERE Name = N'tblRegistrationSourceCustomer')
 	begin
 		CREATE TABLE [dbo].[tblRegistrationSourceCustomer](
@@ -46,12 +10,10 @@ if not exists(select * from sysobjects WHERE Name = N'tblRegistrationSourceCusto
 			[SystemCode] INT NULL,
 			[SourceName] [nvarchar](50) NOT NULL,
 			[Customer_Id] INT NOT NULL,
-			[IsDefault] INT NOT NULL,
 			[IsActive] INT NOT NULL,
 			[CreatedDate] [datetime] NOT NULL DEFAULT (getdate()),
 			[ChangedDate] [datetime] NOT NULL DEFAULT (getdate())
-		) ON [PRIMARY]
-
+		) ON [PRIMARY]   
 		
 		ALTER TABLE tblRegistrationSourceCustomer ADD
  			CONSTRAINT [PK_tblRegistrationSourceCustomer] PRIMARY KEY CLUSTERED 

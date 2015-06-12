@@ -2,7 +2,7 @@
 @using DH.Helpdesk.NewSelfService.Infrastructure
 @model DH.Helpdesk.NewSelfService.Models.Case.CaseOverviewModel
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Index";    
 }
 
 <div class="container-fluid dh-container">    
@@ -35,7 +35,7 @@
                             <div class="alert alert-success">                                 
                                 @Html.Raw(Model.CaseRegistrationMessage.SetHtmlParameters())
                             </div>   
-                        }
+                        }                      
                     }
 
                     @( (Model.CanAddExternalNote) ? 

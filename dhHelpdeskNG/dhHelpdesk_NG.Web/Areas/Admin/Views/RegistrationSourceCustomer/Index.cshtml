@@ -36,10 +36,10 @@
                         {
                             <tr>
                                 <td>
-                                    <a href="@Url.Action("edit", "registrationsourcecustomer", new { area = "admin", id = item.Id })">@item.SourceName</a>
+                                    <a href="@Url.Action("edit", "registrationsourcecustomer", new { area = "admin", id = item.Id })">@Translation.Get(item.SourceName)</a>
                                 </td>
                                 <td>
-                                    <a href="@Url.Action("edit", "registrationsourcecustomer", new { area = "admin", id = item.Id })">@item.SystemCodeName</a>
+                                    <a href="@Url.Action("edit", "registrationsourcecustomer", new { area = "admin", id = item.Id })">@Translation.Get(item.SystemCodeName)</a>
                                 </td>
                                 <td>
                                     <a href="@Url.Action("edit", "registrationsourcecustomer", new { area = "admin", id = item.Id })">@item.IsActive</a>

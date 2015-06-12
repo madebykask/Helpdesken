@@ -212,7 +212,9 @@
                                     else if (SLAtime > 0)
                                     {
                                         //// calc by SLA value
-                                        timeLeft = (SLAtime * 60 - workTimeCalculator.CalculateWorkTime(caseRegistrationDate, now, departmentId) - timeOnPause) / 60;
+                                        var dtFrom = DatesHelper.Min(caseRegistrationDate, now);
+                                        var dtTo = DatesHelper.Min(caseRegistrationDate, now);
+                                        timeLeft = (SLAtime * 60 - workTimeCalculator.CalculateWorkTime(dtFrom, dtTo, departmentId) - timeOnPause) / 60;
                                     }
 
                                     if (timeLeft.HasValue)

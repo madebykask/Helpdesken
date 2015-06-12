@@ -6,7 +6,7 @@ namespace DH.Helpdesk.Web.Models
 
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.Common.Enums.Settings;
-
+    
     public class CaseSolutionSettingModel
     {
         public CaseSolutionSettingModel()
@@ -17,6 +17,12 @@ namespace DH.Helpdesk.Web.Models
         {
             this.CaseSolutionField = caseSolutionField;
             this.CaseSolutionMode = caseSolutionMode;
+        }
+
+        public static bool IsFieldAlwaysVisible(CaseSolutionFields fieldId)
+        {
+            return fieldId == CaseSolutionFields.CaseType || fieldId == CaseSolutionFields.Administrator
+                   || fieldId == CaseSolutionFields.Priority || fieldId == CaseSolutionFields.InternalLogNote;
         }
 
         public int Id { get; set; }
