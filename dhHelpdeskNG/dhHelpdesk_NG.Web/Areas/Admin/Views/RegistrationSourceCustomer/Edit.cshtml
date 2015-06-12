@@ -33,16 +33,6 @@
                         required: "@Translation.Get("Du måste ange en källa", Enums.TranslationSource.TextTranslation)"
                     }
                 },
-                @*rules: {
-                    "RegistrationSourceCustomer.SystemCode": {
-                        required: true
-                    }
-                },
-                messages: {
-                    "RegistrationSourceCustomer.SystemCode": {
-                        required: "@Translation.Get("Du måste ange en systemkod", Enums.TranslationSource.TextTranslation)"
-                    }
-                },*@
                 submitHandler: function (form) {
                     form.submit();
                 }

@@ -4098,7 +4098,17 @@ If not exists (select * from tbltext where id = 1495)
 	insert into tbltext (id, TextString) VALUES (1495, 'Självservice')
 GO
 If not exists (select * from tblTextTranslation where text_id = 1495 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1495, 2, 'Self-service')
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1495, 2, 'Self service')
+ELSE 
+	update tblTextTranslation set TextTranslation = 'Self service' where text_id = 1495 and Language_Id = 2
 GO
+
+If not exists (select * from tbltext where id = 1496)
+	insert into tbltext (id, TextString) VALUES (1496, 'Sätt när')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1496 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1496, 2, 'Default to')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
