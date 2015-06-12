@@ -785,10 +785,8 @@
                     fd.filterWorkingGroup = this._workingGroupService.GetAllWorkingGroupsForCustomer(cusId);
                 else
                     fd.filterWorkingGroup = this._workingGroupService.GetWorkingGroups(cusId);
-                // visa även ej tilldelade
-                if (SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups == 1)
-                    fd.filterWorkingGroup.Insert(0, ObjectExtensions.notAssignedWorkingGroup());
             }
+
             //produktonmråde
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseProductAreaFilter))
                 fd.filterProductArea = this._productAreaService.GetTopProductAreas(cusId);
