@@ -9,6 +9,7 @@
     using DH.Helpdesk.Common.Enums.Settings;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Web.Models.Case;
+    using DH.Helpdesk.Web.Models;
 
     public static class GeneralExtensions
     {
@@ -73,15 +74,15 @@
 
         public static string GetFieldStyle(this CaseInputViewModel model, GlobalEnums.TranslationCaseFields caseFieldName, CaseSolutionFields caseTemplateFieldName)
         {
-            bool isGlobalVisibility = model.caseFieldSettings.IsFieldVisible(caseFieldName);
             var fieldSetting = model.CaseSolutionSettingModels.FirstOrDefault(x => x.CaseSolutionField == caseTemplateFieldName);
-            bool isLocalVisibility = (fieldSetting != null) && fieldSetting.CaseSolutionMode != CaseSolutionModes.Hide;
-            if (!isGlobalVisibility || !isLocalVisibility)
+            if (model.caseFieldSettings.IsFieldRequiredOrVisible(caseFieldName) || CaseSolutionSettingModel.IsFieldAlwaysVisible(caseTemplateFieldName) 
+                || fieldSetting == null 
+                || fieldSetting.CaseSolutionMode != CaseSolutionModes.Hide)
             {
-                return "display:none";
+                return string.Empty;
             }
 
-            return string.Empty;
+            return "display:none";
         }
 
         public static string GetCaseTemplateFieldStyle(this CaseInputViewModel model, GlobalEnums.TranslationCaseFields caseFieldName, CaseSolutionFields caseTemplateFieldName)

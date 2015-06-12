@@ -190,7 +190,7 @@
 
                                                     @if (Model.Languages != null && Model.Languages.Count() > 1 && Model.case_.Id == 0)
                                                     {
-                                                        <select id="case__RegLanguage_Id" name="case_.RegLanguage_Id" class="span2" @(Model.IsReadOnly(CaseSolutionFields.Email) ? "disabled=disabled" : string.Empty)>
+                                                        <select id="case__RegLanguage_Id" name="case_.RegLanguage_Id" class="span2">
                                                             @foreach (var e in Model.Languages)
                                                             {
                                                                 <option value="@e.Id" @e.Id.IdIsSelected(SessionFacade.CurrentLanguageId.ToString()) >@Translation.Get(e.Name, SessionFacade.CurrentLanguageId)</option>
@@ -199,9 +199,9 @@
                                                     }
                                                     else
                                                     {
-                                                        if (Model.Languages != null && Model.Languages.Count() > 1)
+                                                        if (Model.Languages != null && Model.Languages.Count() > 1 && !Model.IsReadOnly(CaseSolutionFields.Email))
                                                         {                                            
-                                                        <select id="case__RegLanguage_Id" name="case_.RegLanguage_Id" class="span2" @(Model.IsReadOnly(CaseSolutionFields.Email) ? "disabled=disabled" : string.Empty)>
+                                                        <select id="case__RegLanguage_Id" name="case_.RegLanguage_Id" class="span2">
                                                             @foreach (var e in Model.Languages)
                                                             {
                                                                 <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.RegLanguage_Id.ToString()) >@Translation.Get(e.Name, SessionFacade.CurrentLanguageId)</option>
@@ -772,7 +772,8 @@
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Caption, "Rubrik")
                                         </td>
                                         <td colspan="2">
-                                            @if ((Model.customerUserSetting.CaptionPermission == 1 || Model.case_.Id == 0) && !Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Caption, CaseSolutionFields.Caption))
+                                            @if ((Model.customerUserSetting.CaptionPermission == 1 && !Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Caption, CaseSolutionFields.Caption) 
+                                                || Model.case_.Id == 0))
                                             {                                                
                                                 @Html.TextBoxFor(model => model.case_.Caption, new { maxlength = "60", @class = "width90" })
                                             }
@@ -1102,7 +1103,7 @@
                                         <td>
                                             @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Status_Id, CaseSolutionFields.Status))
                                             {
-                                                    <select id="case_.Status_Id" name="case_.Status_Id">
+                                                    <select id="case__Status_Id" name="case_.Status_Id">
                                                         <option value="">&nbsp;</option>
                                                         @if (Model.statuses != null)
                                                         {

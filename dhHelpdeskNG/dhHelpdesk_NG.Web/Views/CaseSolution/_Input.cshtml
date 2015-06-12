@@ -584,6 +584,7 @@
                                         @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.WorkingGroup, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.WorkingGroup_Id)
                                     </td>
                                 </tr>
+@*                                "Handläggare" aka Performer*@
                                 <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString())">
                                     <td>
                                         @Translation.Get(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)

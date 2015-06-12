@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Collections.Specialized;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Web;
@@ -515,8 +516,8 @@
                 caseSearchModel.caseSearchFilter.CustomFilter = customFilter;
                 SessionFacade.CurrentCaseSearch = caseSearchModel;
 
-            return new RedirectResult("~/Cases/Index");
-            }
+            return new RedirectResult("~/cases");
+        }
 
 
         public ActionResult Index()
@@ -859,20 +860,29 @@
             return fd;
         }
 
-        public ActionResult New(int customerId, int? templateId, int? copyFromCaseId, int? caseLanguageId, int? templateistrue)
+        public ActionResult New(int? customerId, int? templateId, int? copyFromCaseId, int? caseLanguageId, int? templateistrue)
         {
-            CaseInputViewModel m = null;                      
+            CaseInputViewModel m = null;
+            if (!customerId.HasValue)
+            {
+                if (SessionFacade.CurrentCustomer == null)
+                {
+                    return new RedirectResult("~/Error/Unathorized");
+                }
 
-            SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;          
+                customerId = SessionFacade.CurrentCustomer.Id;
+            }
+
+            SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
             if (SessionFacade.CurrentUser != null)
                 if (SessionFacade.CurrentUser.CreateCasePermission == 1)
                 {
                     var userId = SessionFacade.CurrentUser.Id;
-                    m = this.GetCaseInputViewModel(userId, customerId, 0, 0, string.Empty, null, templateId, copyFromCaseId, false, templateistrue);
+                    m = this.GetCaseInputViewModel(userId, customerId.Value, 0, 0, string.Empty, null, templateId, copyFromCaseId, false, templateistrue);
 
                     var caseParam = new NewCaseParams
                     {
-                        customerId = customerId,
+                        customerId = customerId.Value,
                         templateId = templateId,
                         copyFromCaseId = copyFromCaseId,
                         caseLanguageId = caseLanguageId
@@ -880,7 +890,6 @@
                      
                     m.NewModeParams = caseParam;
                     AddViewDataValues();
-                    
                     
                     // Positive: Send Mail to...
                     if (m.CaseMailSetting.DontSendMailToNotifier == false)
@@ -1908,6 +1917,11 @@
             IDictionary<string, string> errors;
 
             var mailSenders = new MailSenders();
+
+            if (case_.RegLanguage_Id == 0)
+            {
+                case_.RegLanguage_Id = SessionFacade.CurrentLanguageId;
+            }
 
             // Positive: Send Mail to...
             if (caseMailSetting.DontSendMailToNotifier == false)
