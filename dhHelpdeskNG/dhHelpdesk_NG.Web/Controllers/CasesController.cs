@@ -882,14 +882,7 @@
                      
                     m.NewModeParams = caseParam;
                     AddViewDataValues();
-                    if (m.workingGroups != null && m.workingGroups.Count > 0)
-                    {
-                        var defWorkingGroup = m.workingGroups.Where(it => it.IsDefault == 1).FirstOrDefault();
-                        if (defWorkingGroup != null)
-                        {
-                            m.case_.WorkingGroup_Id = defWorkingGroup.Id;
-                        }
-                    }
+                    
                     
                     // Positive: Send Mail to...
                     if (m.CaseMailSetting.DontSendMailToNotifier == false)
@@ -2448,6 +2441,15 @@
                     m.workingGroups = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId);
                 }
 
+                if (m.workingGroups != null && m.workingGroups.Count > 0)
+                {
+                    var defWorkingGroup = m.workingGroups.Where(it => it.IsDefault == 1).FirstOrDefault();
+                    if (defWorkingGroup != null)
+                    {
+                        m.case_.WorkingGroup_Id = defWorkingGroup.Id;
+                    }
+                }
+
                 // "RegistrationSourceCustomer" field
                 if (m.caseFieldSettings.getCaseSettingsValue(
                         GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString()).ShowOnStartPage == 1)
@@ -2862,7 +2864,8 @@
                 }
             }
 
-            if (accessToWorkinggroups != null)
+            // In new case shouldn't check
+            if (accessToWorkinggroups != null && m.case_.Id != 0)
             {
                 if (SessionFacade.CurrentUser.UserGroupId < 3)
                 {
