@@ -1,11 +1,26 @@
-﻿@model DH.Helpdesk.NewSelfService.Models.Documents.DocumentsModel
+﻿@using System.Configuration;
+@using DH.Helpdesk.Common.Enums;
+@model DH.Helpdesk.NewSelfService.Models.Documents.DocumentsModel
+
 @{    
     ViewBag.Title = "Documents";
+    var appType = ConfigurationManager.AppSettings[AppSettingsKey.CurrentApplicationType].ToString().ToLower();    
 }
 
 <div class="container-fluid dh-container">
     <ul class="nav nav-tabs">
-        <li class="active"><a href="#home" data-toggle="tab">@Translation.Get("HR Documents", Enums.TranslationSource.TextTranslation)</a></li>
+        <li class="active">
+            <a href="#home" data-toggle="tab">
+                @if (appType == ApplicationTypes.SelfService)
+                {
+                    @Translation.Get("Documents", Enums.TranslationSource.TextTranslation)
+                }
+                else
+                {
+                    @Translation.Get("HR Documents", Enums.TranslationSource.TextTranslation)
+                }                                    
+            </a>
+        </li>
     </ul>
     <div class="content">
         <div class="tab-pane active" id="home">
@@ -27,15 +42,27 @@
                             <tbody>
                                 @foreach (var doc in Model.Documents)
                                 {
+                                                    
+                                    var downloadUrlPath = "#";
+                                    if (!string.IsNullOrEmpty(doc.FileName))
+                                    {
+                                        downloadUrlPath = "~/Documents/DocumentFile?documentId=" + doc.Id;
+                                    }                                             
                                     <tr>
-                                        <td style="width:20px">
-                                            <a href="@Url.Content("~/Content/img-profile/Pay query form.xlsm")" target="_blank" class="btn btn-dhblue btn-xs"><span class="glyphicon glyphicon-file"></span></a>
+                                        <td style="width:2%">                                                                                        
+                                            <a href="@Url.Content(downloadUrlPath)" class="btn btn-dhblue btn-xs">
+                                                <span class="glyphicon glyphicon-file"></span>    
+                                            </a>                                                                                            
                                         </td>
-                                        <td>
-                                            @doc.Name
+                                        <td style="width:23%">
+                                            <a href="@Url.Content(downloadUrlPath)" >
+                                                @doc.Name   
+                                            </a>                                             
                                         </td>
-                                        <td>
-                                            @doc.Description
+                                        <td style="width:75%">
+                                            <a href="@Url.Content(downloadUrlPath)" >
+                                                @doc.Description
+                                            </a>                                            
                                         </td>
                                     </tr>
                                 }

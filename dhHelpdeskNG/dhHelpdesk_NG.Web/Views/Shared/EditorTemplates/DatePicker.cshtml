@@ -52,7 +52,9 @@
             $(function() {
                 $('#@controlId').datepicker({
                     format: '@Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern.ToLower()',
-                    autoclose: true
+            clearBtn: true,
+            autoclose: true,
+            weekStart: 1
                 });
             });
         </script>

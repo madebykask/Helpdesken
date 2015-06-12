@@ -228,7 +228,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                         0,
                         SessionFacade.CurrentLanguageId,
                         this.Request.GetIpAddress(),
-                        GlobalEnums.RegistrationSource.Case,
+                        CaseRegistrationSource.SelfService,
                         cs,
                         identity.Name);
 
@@ -558,7 +558,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             return this.Json(result);
         }
 
-        public ActionResult SeachUserCase(FormCollection frm) 
+        public ActionResult SearchUserCase(FormCollection frm) 
         {
             
             try

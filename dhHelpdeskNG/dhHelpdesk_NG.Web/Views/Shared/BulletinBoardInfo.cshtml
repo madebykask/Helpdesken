@@ -12,8 +12,8 @@
                 @foreach (var bulletinBoard in Model)
                 {
                     <div class="box-post">                        
-                        <div class="label blue">@bulletinBoard.CustomerName | @bulletinBoard.CreatedDate.ToFormattedDate()</div>
-                        <div class="textrow">@bulletinBoard.Text</div>
+                        <div class="label blue">@bulletinBoard.CustomerName | @(bulletinBoard.ShowDate.HasValue? bulletinBoard.ShowDate.Value.ToFormattedDate():"")</div>
+                        <div class="textrow">@Html.Raw(bulletinBoard.Text)</div>
                     </div>
                 }
             </div>

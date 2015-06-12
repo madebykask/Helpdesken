@@ -256,7 +256,9 @@ namespace DH.Helpdesk.Services.Services
                                 d.Size,
                                 d.ChangedDate,
                                 d.ChangedByUser,
-                                d.DocumentCategory_Id                                             
+                                d.DocumentCategory_Id,
+                                d.FileName,
+                                d.Description
                             })
                         .OrderBy(d => d.Name)
                         .ToList();
@@ -268,7 +270,9 @@ namespace DH.Helpdesk.Services.Services
                                 Size = d.Size,
                                 ChangedDate = d.ChangedDate,
                                 ChangedByUser = d.ChangedByUser,
-                                DocumentCategory_Id = d.DocumentCategory_Id                                             
+                                DocumentCategory_Id = d.DocumentCategory_Id,
+                                FileName = d.FileName,
+                                Description = d.Description
                             }).ToList();
             }
         }

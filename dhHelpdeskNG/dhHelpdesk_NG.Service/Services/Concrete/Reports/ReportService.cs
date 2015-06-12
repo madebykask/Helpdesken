@@ -30,6 +30,7 @@
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Case;
     using DH.Helpdesk.Services.Services.Reports;
+    using DH.Helpdesk.Common.Enums;
 
     public sealed class ReportService : IReportService
     {
@@ -417,7 +418,7 @@
             List<int> departmentIds,
             int? caseTypeId,
             List<int> workingGroupIds,
-            GlobalEnums.RegistrationSource registrationSource,
+            CaseRegistrationSource registrationSource,
             DateTime? periodFrom,
             DateTime? periodUntil,
             int leadTime,

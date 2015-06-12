@@ -1,8 +1,8 @@
-﻿namespace DH.Helpdesk.Web.Models
-{
-    using System.Collections.Generic;
-    using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
 
+namespace DH.Helpdesk.Web.Models
+{    
     using DH.Helpdesk.Domain;
 
     public class BulletinBoardIndexViewModel

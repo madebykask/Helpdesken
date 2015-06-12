@@ -1,7 +1,6 @@
-﻿namespace DH.Helpdesk.Services.BusinessLogic.Mappers.BulletinBoards
-{
-    using System.Linq;
-
+﻿using System.Linq;
+namespace DH.Helpdesk.Services.BusinessLogic.Mappers.BulletinBoards
+{    
     using DH.Helpdesk.BusinessData.Models.BulletinBoard.Output;
     using DH.Helpdesk.Domain;
 
@@ -13,6 +12,7 @@
                                         {
                                             b.CreatedDate,
                                             b.Text,
+                                            b.ShowDate,
                                             b.Customer
                                         }).ToArray();
 
@@ -20,6 +20,7 @@
                                         {
                                             CreatedDate = b.CreatedDate,
                                             Text = b.Text,
+                                            ShowDate = b.ShowDate,
                                             CustomerName = b.Customer.Name
                                         }).ToArray();
         }

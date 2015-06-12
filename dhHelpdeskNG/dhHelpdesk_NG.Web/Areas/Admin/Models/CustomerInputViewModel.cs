@@ -35,6 +35,15 @@
         public IList<Customer> Customers { get; set; }
     }
 
+    public class OutputCaseField
+    {
+        public string Label { get; set; }
+
+        public bool Enabled { get; set; }
+
+        public string FieldName { get; set; }
+    }
+
     public class CustomerInputViewModel : BaseTabInputViewModel
     {
         public int ConfirmPassword { get; set; }
@@ -69,6 +78,7 @@
         public IList<SelectListItem> UserGroups { get; set; }
 
         public IList<SelectListItem> CWNSelect { get; set; }
+        public IList<SelectListItem> LockedFieldOptions { get; set; }
 
         public CustomerCaseSummaryViewModel CustomerCaseSummaryViewModel { get; set; }
 

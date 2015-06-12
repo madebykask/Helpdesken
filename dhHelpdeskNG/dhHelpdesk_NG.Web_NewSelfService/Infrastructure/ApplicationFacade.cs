@@ -21,7 +21,7 @@ namespace DH.Helpdesk.NewSelfService.Infrastructure
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
             Version ver = assembly.GetName().Version;
-            Version = string.Format("{0}.{1}.{2}", ver.Major, ver.Minor, ver.Build);//, ver.Revision
+            Version = string.Format("{0}.{1}.{2}.{3}", ver.Major, ver.Minor, ver.Build, ver.Revision);
         }
 
         public static string Version { get; private set; }

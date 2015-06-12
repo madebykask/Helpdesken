@@ -20,6 +20,14 @@
     using DH.Helpdesk.Web.Infrastructure.Extensions;
     using DH.Helpdesk.Web.Infrastructure.Mvc;
     using DH.Helpdesk.Web.Infrastructure.Tools;
+    using DH.Helpdesk.BusinessData.Models.Shared;
+    using System.Collections.Generic;
+    using DH.Helpdesk.BusinessData.Models.Reports.Options;
+    using DH.Helpdesk.Web.Models.Shared;
+    using DH.Helpdesk.Web.Areas.Reports.Models.Reports.ReportGenerator;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.ReportGenerator;
+using DH.Helpdesk.BusinessData.Models.Shared.Input;
+    using DH.Helpdesk.Common.Enums;
 
     public sealed class ReportController : UserInteractionController
     {
@@ -100,6 +108,8 @@
 
                     SessionFacade.SavePageFilters(PageName.ReportsReportGenerator, reportGeneratorFilters);
                     var reportGeneratorOptions = this.reportService.GetReportGeneratorOptions(this.OperationContext.CustomerId, this.OperationContext.LanguageId);
+                    reportGeneratorOptions = TranslateReportFields(reportGeneratorOptions);                    
+
                     return this.PartialView(
                                 "Options/ReportGenerator",
                                 this.reportGeneratorModelFactory.GetReportGeneratorOptionsModel(reportGeneratorOptions, reportGeneratorFilters));
@@ -258,8 +268,8 @@
                                     filters.SortField,
                                     filters.RecordsOnPage);
 
-                var model = this.reportGeneratorModelFactory.GetReportGeneratorModel(data, filters.SortField);
-
+                var model = GetReportGeneratorModel(data, filters.SortField);
+                
                 if (options != null && options.IsExcel)
                 {
                     var excel = this.excelBuilder.GetReportGeneratorExcel(model);
@@ -284,7 +294,7 @@
                                             options.DepartmentIds,
                                             options.CaseTypeId,
                                             options.WorkingGroupIds,
-                                            (GlobalEnums.RegistrationSource)options.RegistrationSourceId,
+                                            (CaseRegistrationSource) options.RegistrationSourceId,
                                             options.PeriodFrom,
                                             options.PeriodUntil,
                                             options.LeadTimeId,
@@ -399,6 +409,50 @@
             var report = this.reportsBuilder.GetCasesInProgressDayReport(data, period.RoundToMonthOrGetCurrent());
 
             return new UnicodeFileContentResult(report, string.Empty);
+        }
+
+        public ReportGeneratorOptions TranslateReportFields(ReportGeneratorOptions reportOptions)
+        {                        
+            var translatedFields = new List<ItemOverview>();
+            foreach (ItemOverview f in reportOptions.Fields)                            
+                translatedFields.Add(new ItemOverview
+                                            (
+                                                Translation.Get(f.Name, Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id),
+                                                f.Value
+                                            ));                
+            
+
+            var ret = new ReportGeneratorOptions
+                            (
+                                translatedFields.OrderBy(f=> f.Name).ToList(), 
+                                reportOptions.Departments, 
+                                reportOptions.WorkingGroups, 
+                                reportOptions.CaseTypes
+                            );            
+            return ret;
+        }
+
+        public ReportGeneratorModel GetReportGeneratorModel(ReportGeneratorData data, SortField sortfield)
+        {
+            var modelData = this.reportGeneratorModelFactory.GetReportGeneratorModel(data, sortfield);
+
+            var translatedFields = new List<GridColumnHeaderModel>();
+            foreach (var h in modelData.Headers)
+                translatedFields.Add(new GridColumnHeaderModel
+                                            (  
+                                                h.FieldName,
+                                                Translation.Get(h.FieldName, Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id)
+                                            ));
+
+
+            var ret = new ReportGeneratorModel
+                            (
+                                translatedFields.ToList(),
+                                modelData.Cases,
+                                modelData.CasesFound,
+                                modelData.SortField
+                            );            
+            return ret;
         }
     }
 }

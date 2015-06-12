@@ -16,6 +16,13 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return Translation.Get("Nej", Enums.TranslationSource.TextTranslation);
         }
 
+        public static string GetClassforYesNo(this int i)
+        {
+            if (i == 1)
+                return "label-success";
+            return "";
+        }
+
         public static string RoundQty(this int quantity)
         {
             return Math.Round(quantity / 1024.0, 0, MidpointRounding.AwayFromZero).ToString() + " kb";
@@ -73,6 +80,10 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
         public static string BoolToYesNo(this bool value)
         {
             return value ? Translation.Get("Ja") : Translation.Get("Nej"); 
+        }
+        public static string GetClassforBoolToYesNoYesNo(this bool value)
+        {
+            return value ? "label-success" : "";
         }
 
         public static string GetLanguageIconFileName(this int value)

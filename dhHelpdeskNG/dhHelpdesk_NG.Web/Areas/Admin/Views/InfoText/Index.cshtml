@@ -65,7 +65,7 @@
                                 </td>
                             </tr>
                         }
-
+                        @*
                         @if (Model.InfoTextGroup == InfoTextGroup.SelfService)
                         {
                             <tr>
@@ -87,7 +87,7 @@
                                 </td>
                             </tr>
                         }
-
+                        *@
                         @if (Model.InfoTextGroup == InfoTextGroup.Helpdesk)
                         {
                             <tr>
@@ -124,12 +124,14 @@
                         @if (Model.InfoTextGroup == InfoTextGroup.SelfService)
                         {
                             <tr>
-                                <td>
-                                    <a href="@Url.Action("EditRegMessage", "SelfServiceSetting", new { customerId = Model.Customer.Id })">
-                                        @Translation.Get("Självservice registrerings meddelande", Enums.TranslationSource.TextTranslation)</a>
+                                <td>                                    
+                                    <a href="@Url.Action("edit", "infotext", new { area = "admin", infoTypeId = (int) InfoTextType.SelfServiceRegistrationMessage, customerId = Model.Customer.Id,
+                                                                                   languageId = Model.Customer.Language_Id, infoTextGroup = Model.InfoTextGroup })">
+                                        @Translation.Get("Registreringsmeddelande", Enums.TranslationSource.TextTranslation)
+                                    </a>
                                 </td>
                             </tr>
-                        } 
+                        }
                     </tbody>
                 </table>
             </div>

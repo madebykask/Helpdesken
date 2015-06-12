@@ -51,6 +51,8 @@
         UpdateNotifierInformation = 47,
         PlanDate = 48,
         CausingPart = 49,
-        FileName = 50
+        FileName = 50,
+        RegistrationSourceCustomer = 51,
+        AddUserBtn = 52
     }
 }

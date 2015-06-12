@@ -115,6 +115,7 @@
             this.Bind<ICaseInvoiceSettingsService>().To<CaseInvoiceSettingsService>();
             this.Bind<ICheckListsService>().To<CheckListsService>();
             this.Bind<IUsersPasswordHistoryService>().To<UsersPasswordHistoryService>();
+            this.Bind<IRegistrationSourceCustomerService>().To<RegistrationSourceCustomerService>();
 
             // Liceneses module services
             this.Bind<IProductsService>().To<ProductsService>();

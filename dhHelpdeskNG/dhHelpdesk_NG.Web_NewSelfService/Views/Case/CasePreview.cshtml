@@ -1,4 +1,5 @@
-﻿@model DH.Helpdesk.NewSelfService.Models.Case.CaseOverviewModel
+﻿@using DH.Helpdesk.BusinessData.OldComponents;
+@model DH.Helpdesk.NewSelfService.Models.Case.CaseOverviewModel
 
 <script type="text/javascript">
 
@@ -121,97 +122,62 @@
 
 </script>
 
-@if (Model.CaseFieldGroups.Contains("UserInformation"))
+@if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.UserInformation))
 {
     <input id="CaseId" type="hidden" value="@Model.CasePreview.Id"/>    
     <h4>@Translation.Get("User Information", Enums.TranslationSource.TextTranslation)</h4>
     <div class="row">
         <div class="col-md-3 dh-col">
             <div class="container form-horizontal">
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("ReportedBy"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.ReportedBy.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                                var fieldCaption = Model.FieldSettings.Where(f => f.Name == "ReportedBy").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("ReportedBy", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                            
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                            
                         </label>
                         <div class="col-md-10">
                             @Model.CasePreview.ReportedBy
                         </div>
                     </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("Persons_Name"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Persons_Name.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "Persons_Name").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("Persons_Name", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                            
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):
                         </label>
                         <div class="col-md-10">
                             @Model.CasePreview.PersonsName
                         </div>
                     </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("Persons_EMail"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                                var fieldCaption = Model.FieldSettings.Where(f => f.Name == "Persons_EMail").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {  
-                                    fieldCaption = Translation.Get("Persons_EMail", Enums.TranslationSource.TextTranslation);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                           
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString(), Enums.TranslationSource.TextTranslation):                            
                         </label>
                         <div class="col-md-10">
                             @Model.CasePreview.PersonsEmail
                         </div>
                     </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("Persons_Phone"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "Persons_Phone").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("Persons_Phone", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                            
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                            
                         </label>
                         <div class="col-md-10">
                             @Model.CasePreview.PersonsPhone
                         </div>
                     </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("Persons_CellPhone"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "Persons_CellPhone").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("Persons_CellPhone", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                            
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                            
 
                         </label>
                         <div class="col-md-10">
@@ -219,54 +185,33 @@
                         </div>
                     </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("Customer_Id"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Customer_Id.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "Customer_Id").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("Customer_Id", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                            
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.Customer_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                            
                         </label>
                         <div class="col-md-10">
                             @Model.CasePreview.Customer.Name
                         </div>
                     </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("Region_Id"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Region_Id.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "Region_Id").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("Region_Id", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                            
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.Region_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                            
                         </label>
                         <div class="col-md-10">
                             @Model.Regions.Where(r => r.Id == Model.CasePreview.Region_Id).Select(r => r.Name).FirstOrDefault()
                         </div>
                     </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("Department_Id"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Department_Id.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "Department_Id").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("Department_Id", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                            
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                            
                         </label>
                         <div class="col-md-10">
                             @if (Model.CasePreview.Department != null)
@@ -276,54 +221,33 @@
                         </div>
                     </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("OU_Id"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.OU_Id.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "OU_Id").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("OU_Id", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                            
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                            
                         </label>
                         <div class="col-md-10">
                             @Model.CasePreview.OU_Id
                         </div>
                     </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("Place"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Place.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "Place").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("Place", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                            
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.Place.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                            
                         </label>
                         <div class="col-md-10">
                             @Model.CasePreview.Place
                         </div>
                     </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("UserCode"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.UserCode.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "UserCode").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("UserCode", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                       
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.UserCode.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                            
                         </label>
                         <div class="col-md-10">
                             @Model.CasePreview.UserCode
@@ -336,60 +260,39 @@
 }
 <!-- User Information Fields -->
 
-@if (Model.CaseFieldGroups.Contains("ComputerInformation"))
+@if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.ComputerInformation))
 {
     <h4>@Translation.Get("computer Information", Enums.TranslationSource.TextTranslation)</h4>
     <div class="row">
         <div class="col-md-3 dh-col">
             <div class="container form-horizontal">
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("InventoryNumber"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "InventoryNumber").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("InventoryNumber", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                            
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                            
                         </label>
                         <div class="col-md-10">
                             @Model.CasePreview.InventoryNumber
                         </div>
                     </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("ComputerType_Id"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "ComputerType_Id").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("ComputerType_Id", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                            
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                            
                         </label>
                         <div class="col-md-10">
                             @Model.CasePreview.InventoryType
                         </div>
                     </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("InventoryLocation"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "InventoryLocation").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("InventoryLocation", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                            
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                            
                         </label>
                         <div class="col-md-10">
                             @Model.CasePreview.InventoryLocation
@@ -402,96 +305,61 @@
 }
 <!-- Computer Information Fields -->
 
-@if (Model.CaseFieldGroups.Contains("CaseInfo"))
+@if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.CaseInfo))
 {
-    <h4>@Translation.Get("Case Info", Enums.TranslationSource.TextTranslation) </h4>
+    <h4>@Translation.Get("Case Information", Enums.TranslationSource.TextTranslation) </h4>
     <div class="row">
         <div class="col-md-3 dh-col">
             <div class="container form-horizontal">
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("CaseNumber"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.CaseNumber.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "CaseNumber").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("CaseNumber", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                            
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.CaseNumber.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                            
                         </label>
                         <div class="col-md-10">
                             @Model.CasePreview.CaseNumber
                         </div>
                     </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("RegTime"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.RegTime.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "RegTime").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("RegTime", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                            
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.RegTime.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                            
                         </label>
                         <div class="col-md-10">
                             @Html.DisplayFor(r => Model.CasePreview.RegTime, "DateAndTime")
                         </div>
                     </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("ChangeTime"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.ChangeTime.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "ChangeTime").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("ChangeTime", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                            
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.ChangeTime.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                            
                         </label>
                         <div class="col-md-10">
                             @Html.DisplayFor(c => Model.CasePreview.ChangeTime, "DateAndTime")
                         </div>
                     </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("CaseType_Id"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "CaseType_Id").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("CaseType_Id", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                                                        
+                        <label class="col-md-2">                            
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                                                        
                         </label>
                         <div class="col-md-10">
                             @Model.CasePreview.CaseType.Name
                         </div>
                     </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("ProductArea_Id"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "ProductArea_Id").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("ProductArea_Id", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                            
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                            
                         </label>
                         <div class="col-md-10">
                             @if (Model.CasePreview.ProductArea != null)
@@ -501,36 +369,22 @@
                         </div>
                     </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("System_Id"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.System_Id.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "System_Id").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("System_Id", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                           
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.System_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                            
                         </label>
                         <div class="col-md-10">
                             @Model.Systems.Where(s => s.Id == Model.CasePreview.System_Id).Select(s => s.SystemName).FirstOrDefault()
                         </div>
                     </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("Urgency_Id"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "Urgency_Id").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("Urgency_Id", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                            
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                            
                         </label>
                         <div class="col-md-10">
                             @if (Model.CasePreview.Urgency != null)
@@ -540,36 +394,22 @@
                         </div>
                     </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("Impact_Id"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Impact_Id.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "Impact_Id").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("Impact_Id", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                            
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.Impact_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                            
                         </label>
                         <div class="col-md-10">
                             @Model.CasePreview.Impact_Id
                         </div>
                     </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("Category_Id"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Category_Id.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                                var fieldCaption = Model.FieldSettings.Where(f => f.Name == "Category_Id").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("Category_Id", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                            
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                            
                         </label>
                         <div class="col-md-10">
                             @if (Model.CasePreview.Category != null)
@@ -579,198 +419,121 @@
                         </div>
                     </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("Supplier_Id"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "Supplier_Id").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("Supplier_Id", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                           
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                            
                         </label>
                         <div class="col-md-10">
                             @Model.Suppliers.Where(s => s.Id == Model.CasePreview.Supplier_Id).Select(s => s.Name).FirstOrDefault()
                         </div>
                     </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("InvoiceNumber"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "InvoiceNumber").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("InvoiceNumber", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                           
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                            
                         </label>
                         <div class="col-md-10">
                             @Model.CasePreview.InvoiceNumber
                         </div>
                     </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("ReferenceNumber"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "ReferenceNumber").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("ReferenceNumber", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                            
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                            
                         </label>
                         <div class="col-md-10">
                             @Model.CasePreview.ReferenceNumber
                         </div>
                     </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("Caption"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Caption.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "Caption").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("Caption", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                           
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.Caption.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                            
                         </label>
                         <div class="col-md-10">
                             @Model.CasePreview.Caption
                         </div>
                     </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("Description"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Description.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "Description").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("Description", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                           
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                            
                         </label>
                         <div class="col-md-10">
                             @Html.Raw(Model.CasePreview.Description)
                         </div>
                     </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("Miscellaneous"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "Miscellaneous").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("Miscellaneous", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                           
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                            
                         </label>
                         <div class="col-md-10">
                             @Model.CasePreview.Miscellaneous
                         </div>
                     </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("ContactBeforeAction"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "ContactBeforeAction").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("ContactBeforeAction", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                            
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                            
                         </label>
                         <div class="col-md-10">
                             @Model.CasePreview.ContactBeforeAction
                         </div>
                     </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("SMS"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.SMS.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "SMS").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("SMS", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                            
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.SMS.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                            
                         </label>
                         <div class="col-md-10">
                             @Model.CasePreview.SMS
                         </div>
                     </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("AgreedDate"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.AgreedDate.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "AgreedDate").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("AgreedDate", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                            
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.AgreedDate.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                            
                         </label>
                         <div class="col-md-10">
                             @Html.DisplayFor(a => Model.CasePreview.AgreedDate, "DateAndTime")
                         </div>
                     </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("Available"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Available.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "Available").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("Available", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                            
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.Available.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                            
                         </label>
                         <div class="col-md-10">
                             @Model.CasePreview.Available
                         </div>
                     </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("Cost"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Cost.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "Cost").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("Cost", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                            
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.Cost.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                            
                         </label>
                         <div class="col-md-10">
                             <table class="table table-striped table-bordered table-hover">
@@ -789,18 +552,11 @@
                         </div>
                     </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("Filename"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "Filename").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("Filename", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                            
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.Filename.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                            
                         </label>
                         <div class="col-md-10">
                             <table id="case_files_table" class="table table-striped table-bordered table-hover">
@@ -825,96 +581,61 @@
 }
 <!-- Case Info Fields -->
 
-@if (Model.CaseFieldGroups.Contains("Other"))
+@if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.Other))
 {
     <h4>@Translation.Get("Other", Enums.TranslationSource.TextTranslation)</h4>
     <div class="row">
         <div class="col-md-3 dh-col">
             <div class="container form-horizontal">
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("PlanDate"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.PlanDate.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "PlanDate").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("PlanDate", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                           
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.PlanDate.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                            
                         </label>
                         <div class="col-md-10">
                             @Html.DisplayFor(p => Model.CasePreview.PlanDate, "DateAndTime")
                         </div>
                     </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("WatchDate"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.WatchDate.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "WatchDate").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("WatchDate", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                            
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                            
                         </label>
                         <div class="col-md-10">
                             @Html.DisplayFor(w => Model.CasePreview.WatchDate, "DateAndTime")
                         </div>
                     </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("Verified"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Verified.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "Verified").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("Verified", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                            
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.Verified.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                            
                         </label>
                         <div class="col-md-10">
                             @Model.CasePreview.Verified
                         </div>
                     </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("VerifiedDescription"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "VerifiedDescription").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("VerifiedDescription", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                            
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                            
                         </label>
                         <div class="col-md-10">
                             @Model.CasePreview.VerifiedDescription
                         </div>
                     </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("SolutionRate"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.SolutionRate.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-2">
-                            @{ 
-                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "SolutionRate").Select(f => f.LabelToChange).SingleOrDefault();
-                                if (string.IsNullOrEmpty(fieldCaption))
-                                {
-                                    fieldCaption = Translation.Get("SolutionRate", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
-                                }                                                                    
-                            }
-                            @fieldCaption:                            
+                        <label class="col-md-2">                            
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.SolutionRate.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                            
                         </label>
                         <div class="col-md-10">
                             @Model.CasePreview.SolutionRate
@@ -927,13 +648,13 @@
 }
 <!--Other Fields -->
 
-@if (Model.CaseFieldGroups.Contains("CaseLog"))
+@if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.CaseLog))
 {
     <h4>@Translation.Get("Case Log", Enums.TranslationSource.TextTranslation)</h4>
     <div class="row">
         <div class="col-md-12 table-responsive">
             <table class="table table-striped table-bordered table-hover">
-                @if (Model.FieldSettings.Select(f => f.Name).Contains("tblLog.Text_External"))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString()))
                 {
                     <thead>
                         <tr>
@@ -941,7 +662,7 @@
                                 @Translation.Get("Date", Enums.TranslationSource.TextTranslation)
                             </th>
                             <th>
-                                @Model.FieldSettings.Where(f => f.Name == "tblLog.Text_External").Select(f => f.LabelToChange).SingleOrDefault()
+                                @Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString()).Select(f => f.LabelToChange).SingleOrDefault()
                             </th>
                         </tr>
                     </thead>
@@ -1012,7 +733,7 @@
                     <div class="form-group row">
                         <label class="col-md-12">
                             <img src="@Url.Content("~/Content/img/Notice.png")" style="width: 16px; height: 16px" />
-                            @Translation.Get("Om du vill komplettera med någon information gör det i fälten nedan", Enums.TranslationSource.TextTranslation)
+                            @Translation.Get("If you want to add information, please enter it in the fields below:", Enums.TranslationSource.TextTranslation)
                         </label>
                     </div>
                     <div class="form-group row">

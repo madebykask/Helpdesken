@@ -68,6 +68,20 @@
             public static readonly string ClaimLastName = "ClaimLastName";
 
             public static readonly string ClaimEmail = "ClaimEmail";
-        }                                
+        }
+
+        public static class CaseFieldGroups
+        {
+            public static readonly string UserInformation = "UserInformation";
+
+            public static readonly string ComputerInformation = "ComputerInformation";
+
+            public static readonly string CaseInfo = "CaseInfo";
+
+            public static readonly string Other = "Other";
+
+            public static readonly string CaseLog = "CaseLog";
+            
+        }          
     }
 }

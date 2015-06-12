@@ -1,4 +1,5 @@
-﻿@model DH.Helpdesk.Web.Models.Case.CaseSearchFilterData 
+﻿@model DH.Helpdesk.Web.Models.Case.Output.CaseSearchFilterData 
+@using DH.Helpdesk.BusinessData.Models.Case
 @using DH.Helpdesk.BusinessData.OldComponents
 
 @using DH.Helpdesk.Web.Infrastructure.Extensions
@@ -7,7 +8,7 @@
 {       
   <form id="frmCaseSearch" name="frmCaseSearch">
      <div class="container">
-         <div class="row" id="hiddeninfo" style="display:none">
+         <div class="row hideable" style="display:none">
              <div data-field="caseRemainingTimeShowPlace" style="float: right;"></div>
              <div class="span12">
                  <table class="tableform">
@@ -31,6 +32,7 @@
                              </td>
                          </tr>                
                      }
+
                      @if (Model.filterRegion != null)
                      {
                          <tr>
@@ -38,7 +40,7 @@
                                  @Translation.Get(GlobalEnums.TranslationCaseFields.Region_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                
                              </td>
                              <td>
-                                 <select id="lstFilterRegion" name="lstFilterRegion" data-field="region" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                 <select id="lstFilterRegion" name="@CaseSearchFilter.RegionNameAttribute" data-field="region" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                      @foreach (var e in Model.filterRegion)
                                      {
                                          if (e.IsActive == 1)
@@ -50,25 +52,7 @@
                              </td>
                          </tr>                
                      }
-                     @if (Model.filterCountry != null)
-                     {
-                         <tr>
-                             <td>
-                                 @Translation.Get("Country", Enums.TranslationSource.TextTranslation)
-                             </td>
-                             <td>
-                                 <select id="lstFilterCountry" name="lstFilterRegion" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
-                                     @foreach (var e in Model.filterCountry)
-                                     {
-                                         if (e.IsActive == 1)
-                                         {                        
-                                             <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.Country)>@e.Name</option>
-                                         }
-                                     }
-                                 </select>
-                             </td>
-                         </tr>                
-                     }
+                    
                      @if (Model.filterDepartment != null)
                      {
                          <tr>
@@ -76,7 +60,7 @@
                                  @Translation.Get(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                    
                              </td>
                              <td>
-                                 <select id="lstfilterDepartment" name="lstfilterDepartment" data-field="department" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                 <select id="lstfilterDepartment" name="@CaseSearchFilter.DepartmentNameAttribute" data-field="department" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                      @foreach (var e in Model.filterDepartment)
                                      {
                                          if (e.IsActive == 1)
@@ -95,7 +79,7 @@
                                  @Translation.Get(GlobalEnums.TranslationCaseFields.User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                
                              </td>
                              <td>
-                                 <select id="lstfilterUser" name="lstfilterUser" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                 <select id="lstfilterUser" name="@CaseSearchFilter.RegisteredByNameAttribute" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                      @foreach (var e in Model.filterCaseUser)
                                      {
                                          <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.User)>@e.Name</option>
@@ -112,7 +96,7 @@
                              </td>
                              <td>
                                  <div id="divCaseType" class="btn-group">
-                                     <div class="btn" id="divBreadcrumbs_CaseType">@Model.caseSearchFilter.ParantPath_CaseType</div>
+                                     <div class="btn breadcrumbs">@Model.caseSearchFilter.ParantPath_CaseType</div>
                                      <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
                                          <span class="caret"></span>
                                      </button>
@@ -120,7 +104,7 @@
                                          <li><a href="#">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
                                          @Html.CaseTypeDropdownButtonString(Model.filterCaseType)
                                      </ul>
-                                     <input type="hidden" class="hidden" value="@Model.caseSearchFilter.CaseType.supressZero()" id="hidFilterCaseTypeId" name="hidFilterCaseTypeId" />
+                                     <input type="hidden" class="hidden" value="@Model.caseSearchFilter.CaseType.supressZero()" id="hidFilterCaseTypeId" name="@CaseSearchFilter.CaseTypeIdNameAttribute" />
                                  </div>
 
                              </td>
@@ -134,7 +118,7 @@
                              </td>
                              <td>
                                  <div id="divProductArea" class="btn-group pull-left">
-                                     <div id="divBreadcrumbs_ProductArea" class="btn">@Model.caseSearchFilter.ParantPath_ProductArea</div>
+                                     <div class="btn breadcrumbs">@Model.caseSearchFilter.ParantPath_ProductArea</div>
                                      <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
                                          <span class="caret"></span>
                                      </button>
@@ -142,7 +126,7 @@
                                          <li><a href="#">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
                                          @Html.ProductAreaDropdownButtonString(Model.filterProductArea)
                                      </ul>
-                                     <input type="hidden" class="hidden" value="@Model.caseSearchFilter.ProductArea" id="hidFilterProductAreaId" name="hidFilterProductAreaId" />
+                                     <input type="hidden" class="hidden" value="@Model.caseSearchFilter.ProductArea" id="hidFilterProductAreaId" name="@CaseSearchFilter.ProductAreaIdNameAttribute" />
                                  </div>
                              </td>
                          </tr>                
@@ -154,7 +138,7 @@
                                  @Translation.Get(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                 
                              </td>
                              <td>
-                                 <select id="lstfilterCategory" name="lstfilterCategory" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                 <select id="lstfilterCategory" name="@CaseSearchFilter.CategoryNameAttribute" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                      @foreach (var e in Model.filterCategory)
                                      {
                                          if (e.IsActive == 1)
@@ -173,7 +157,7 @@
                                  @Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                    
                              </td>
                              <td>
-                                 <select id="lstfilterWorkingGroup" name="lstfilterWorkingGroup" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                 <select id="lstfilterWorkingGroup" name="@CaseSearchFilter.WorkingGroupNameAttribute" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                      @foreach (var e in Model.filterWorkingGroup)
                                      {
                                          if (e.IsActive == 1)
@@ -193,7 +177,7 @@
                                  @Translation.Get(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                 
                              </td>
                              <td>
-                                 <select id="lstfilterResponsible" name="lstfilterResponsible" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                 <select id="lstfilterResponsible" name="@CaseSearchFilter.ResponsibleNameAttribute" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                      @foreach (var e in Model.filterUser)
                                      {
                                          if (e.IsActive == 1 && e.Performer == 1)
@@ -212,7 +196,7 @@
                                  @Translation.Get(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                    
                              </td>
                              <td>
-                                 <select id="lstfilterPerformer" name="lstfilterPerformer" data-field="administrator" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                 <select id="lstfilterPerformer" name="@CaseSearchFilter.PerformerNameAttribute" data-field="administrator" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                      @foreach (var e in Model.filterPerformer)
                                      {
                                          if (e.IsActive == 1 && e.Performer == 1)
@@ -231,7 +215,7 @@
                                  @Translation.Get(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                    
                              </td>
                              <td>
-                                 <select id="lstfilterPriority" name="lstfilterPriority" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                 <select id="lstfilterPriority" name="@CaseSearchFilter.PriorityNameAttribute" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                      @foreach (var e in Model.filterPriority)
                                      {
                                          if (e.IsActive == 1)
@@ -250,7 +234,7 @@
                                  @Translation.Get(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                    
                              </td>
                              <td>
-                                 <select id="lstfilterStatus" name="lstfilterStatus" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                 <select id="lstfilterStatus" name="@CaseSearchFilter.StatusNameAttribute" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                      @foreach (var e in Model.filterStatus)
                                      {
                                          if (e.IsActive == 1)
@@ -269,7 +253,7 @@
                                  @Translation.Get(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                    
                              </td>
                              <td>
-                                 <select id="lstfilterStateSecondary" name="lstfilterStateSecondary" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                 <select id="lstfilterStateSecondary" name="@CaseSearchFilter.StateSecondaryNameAttribute" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                      @foreach (var e in Model.filterStateSecondary)
                                      {
                                          if (e.IsActive == 1)
@@ -325,7 +309,7 @@
                              </td>
                              <td>
                                  <div id="divClosingReason" class="btn-group pull-left">
-                                     <div id="divBreadcrumbs_ClosingReason" class="btn">@Model.caseSearchFilter.ParentPathClosingReason</div>
+                                     <div class="btn breadcrumbs">@Model.caseSearchFilter.ParentPathClosingReason</div>
                                      <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
                                          <span class="caret"></span>
                                      </button>
@@ -333,16 +317,16 @@
                                          <li><a href="#">@Translation.Get("--")</a></li>
                                          @Html.FinishingCauseDropdownButtonString(Model.ClosingReasons)
                                      </ul>
-                                     <input type="hidden" class="hidden" value="@Model.caseSearchFilter.CaseClosingReasonFilter" id="hidFilterClosingReasonId" name="hidFilterClosingReasonId" />
+                                     <input type="hidden" class="hidden" value="@Model.caseSearchFilter.CaseClosingReasonFilter" id="hidFilterClosingReasonId" name="@CaseSearchFilter.ClosingReasonNameAttribute" />
                                  </div>
                              </td>
                          </tr>                
                      }
                      <tr>
-                         <td>                            
-                         </td>
+                         <td>@Translation.Get("Filter")</td>
                          <td>
-                             <input type="button" id="btnClearFilter" name="btnClearFilter" class="btn" value='@Translation.Get("Rensa")'>
+                             <button class="btn btn-reset">@Translation.Get("Återställ")</button>
+                             <button class="btn btn-clear">@Translation.Get("Rensa alla")</button>
                          </td>
                      </tr>
                  </table>
@@ -360,12 +344,12 @@
                              @Translation.Get("Sök")
                          </td>
                          <td class="span4">
-                             <input type="text" id="txtFreeTextSearch" value="@Model.caseSearchFilter.FreeTextSearch" name="txtFreeTextSearch" 
+                             <input type="text" id="txtFreeTextSearch" value="@Model.caseSearchFilter.FreeTextSearch" name="@CaseSearchFilter.FreeTextSearchNameAttribute" 
                                     rel="tooltip" 
                                     title="@Translation.Get("Använd # för att söka efter ärendenummer")" />
                          </td>
                          <td>
-                             <select id="lstfilterCaseProgress" name="lstfilterCaseProgress">
+                             <select id="lstfilterCaseProgress" name="@CaseSearchFilter.FilterCaseProgressNameAttribute">
                                  @foreach (var e in Model.filterCaseProgress)
                                  {
                                      <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.CaseProgress)>@e.StringValue</option>

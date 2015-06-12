@@ -20,7 +20,10 @@ namespace DH.Helpdesk.NewSelfService.Models.Case
         }
 
         public CaseOverviewModel(string infoText, Case casePreview, List<string> caseFieldGroups, List<Log> caseLogs, List<CaseListToCase> fieldSettings,
-                                 IList<Region> regions, IList<System> systems, IList<Supplier> suppliers )
+                                 IList<Region> regions, IList<System> systems, 
+                                 IList<Supplier> suppliers,
+                                 bool showRegistringMessage
+            )
         {
             this.InfoText = infoText;            
             this.CasePreview = casePreview;
@@ -30,7 +33,10 @@ namespace DH.Helpdesk.NewSelfService.Models.Case
             this.Regions = regions;
             this.Systems = systems;
             this.Suppliers = suppliers;
+            this.ShowRegistringMessage = showRegistringMessage;
         }
+
+        public bool ShowRegistringMessage { get; set; }
 
         public bool CanAddExternalNote { get; set; }
 
@@ -38,7 +44,7 @@ namespace DH.Helpdesk.NewSelfService.Models.Case
 
         public string InfoText { get; set; }        
 
-        public string ReceiptFooterMessage { get; set; }
+        public string CaseRegistrationMessage { get; set; }
 
         public string MailGuid { get; set; }        
 

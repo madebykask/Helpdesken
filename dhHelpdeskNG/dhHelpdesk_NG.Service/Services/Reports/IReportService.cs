@@ -19,6 +19,7 @@
     using DH.Helpdesk.BusinessData.Models.Reports.Print;
     using DH.Helpdesk.BusinessData.Models.Shared.Input;
     using DH.Helpdesk.BusinessData.OldComponents;
+    using DH.Helpdesk.Common.Enums;
 
     public interface IReportService
     {
@@ -90,7 +91,7 @@
                                     List<int> departmentIds,
                                     int? caseTypeId,
                                     List<int> workingGroupIds,
-                                    GlobalEnums.RegistrationSource registrationSource,
+                                    CaseRegistrationSource registrationSource,
                                     DateTime? periodFrom,
                                     DateTime? periodUntil,
                                     int leadTime,

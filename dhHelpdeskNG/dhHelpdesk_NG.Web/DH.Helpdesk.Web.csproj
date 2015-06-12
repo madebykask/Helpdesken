@@ -29,10 +29,14 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
-    <IISExpressSSLPort>44302</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
-    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
+    <IISExpressSSLPort>
+    </IISExpressSSLPort>
+    <IISExpressAnonymousAuthentication>
+    </IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>
+    </IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode>
+    </IISExpressUseClassicPipelineMode>
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
     <DontImportPostSharp>True</DontImportPostSharp>
     <TargetFrameworkProfile />
@@ -273,6 +277,7 @@
     <Compile Include="Areas\Admin\Controllers\QuickLinkController.cs" />
     <Compile Include="Areas\Admin\Controllers\QuickLinkGroupController.cs" />
     <Compile Include="Areas\Admin\Controllers\RegionController.cs" />
+    <Compile Include="Areas\Admin\Controllers\RegistrationSourceCustomerController.cs" />
     <Compile Include="Areas\Admin\Controllers\RoomController.cs" />
     <Compile Include="Areas\Admin\Controllers\SelfServiceSettingController.cs" />
     <Compile Include="Areas\Admin\Controllers\SettingsController.cs" />
@@ -304,11 +309,12 @@
     <Compile Include="Areas\Admin\Models\ContractCategoryIndexViewModel.cs" />
     <Compile Include="Areas\Admin\Models\AccountActivityIndexViewModel.cs" />
     <Compile Include="Areas\Admin\Models\BuildingViewModels.cs" />
+    <Compile Include="Areas\Admin\Models\RegistrationSourceInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\OrganizationHierarchy\OrganizationUnit.cs" />
     <Compile Include="Areas\Admin\Models\OrganizationHierarchy\SDepartment.cs" />
     <Compile Include="Areas\Admin\Models\QuickLinkGroupIndexViewModel.cs" />
     <Compile Include="Areas\Admin\Models\QuickLinkGroupInputViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\SelfServiceRegMessageViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\RegistrationSourceIndexViewModel.cs" />
     <Compile Include="Areas\Admin\Models\SelfServiceIndexViewModel.cs" />
     <Compile Include="Areas\Admin\Models\InfoTextViewModels.cs" />
     <Compile Include="Areas\Admin\Models\Invoice\CaseInvoiceSettingsModel.cs" />
@@ -409,6 +415,12 @@
     <Content Include="Content\js\bootstrap-tagsinput.min.js" />
     <Content Include="Content\js\Cases\case.templates.js" />
     <Content Include="Content\js\Cases\caseByIds.logic.js" />
+    <Content Include="Content\js\Cases\components\BaseField.js" />
+    <Content Include="Content\js\Cases\components\DateField.js" />
+    <Content Include="Content\js\Cases\components\JQueryChosenField.js" />
+    <Content Include="Content\js\Cases\components\DropdownButtonField.js" />
+    <Content Include="Content\js\Cases\components\FilterForm.js" />
+    <Content Include="Content\js\Cases\components\Utils.js" />
     <Content Include="Content\js\Cases\editLog.logic.js" />
     <Content Include="Content\js\Cases\index.settings.js" />
     <Content Include="Content\js\Cases\edit.logic.js" />
@@ -820,6 +832,7 @@
     <Content Include="Content\js\tinymce\skins\lightgray\skin.ie7.min.css" />
     <Content Include="Content\js\tinymce\skins\lightgray\skin.min.css" />
     <Content Include="Content\js\tinymce\themes\modern\theme.min.js" />
+    <Content Include="Content\js\tinymce\tinymce.initiate.js" />
     <Content Include="Content\js\tinymce\tinymce.min.js" />
     <Content Include="Content\templates\case-invoice-case-files.tmpl.html" />
     <Compile Include="Areas\Reports\Controllers\ReportController.cs" />
@@ -1165,7 +1178,8 @@
     <Compile Include="Models\CaseSolutionSettingModel.cs" />
     <Compile Include="Models\Case\CaseByIdsViewModel.cs" />
     <Compile Include="Models\Case\CaseFilesModel.cs" />
-    <Compile Include="Models\Case\CaseFilterSeachBoxes.cs" />
+    <Compile Include="Models\Case\Input\CaseEditInput.cs" />
+    <Compile Include="Models\Case\Output\CaseSeachFilterData.cs" />
     <Compile Include="Models\CaseSolutionInputViewModel.cs" />
     <Compile Include="Models\Case\CaseOverview.cs" />
     <Compile Include="Models\Case\CaseRemainingTimeItemViewModel.cs" />
@@ -1174,6 +1188,7 @@
     <Compile Include="Models\Case\CaseTemplateTreeModel.cs" />
     <Compile Include="Models\Case\CaseViewModel.cs" />
     <Compile Include="Models\Case\CaseSettingModel.cs" />
+    <Compile Include="Models\Case\Output\JsonCaseSearchFilterData.cs" />
     <Compile Include="Models\Case\CustomerCasesModel.cs" />
     <Compile Include="Models\Case\Input\CaseOverviewSettingsInput.cs" />
     <Compile Include="Models\Case\MyCasesModel.cs" />
@@ -1640,6 +1655,10 @@
     <Content Include="Areas\Admin\Views\QuickLinkGroup\Index.cshtml" />
     <Content Include="Areas\Admin\Views\QuickLinkGroup\New.cshtml" />
     <Content Include="Areas\Admin\Views\QuickLinkGroup\_Input.cshtml" />
+    <Content Include="Areas\Admin\Views\RegistrationSourceCustomer\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\RegistrationSourceCustomer\New.cshtml" />
+    <Content Include="Areas\Admin\Views\RegistrationSourceCustomer\_Input.cshtml" />
+    <Content Include="Areas\Admin\Views\RegistrationSourceCustomer\Edit.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="Scripts\jquery-1.8.3.js" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />
@@ -1845,7 +1864,6 @@
     <Content Include="Areas\Reports\Views\Report\Options\LeadtimeFinishedCases.cshtml" />
     <Content Include="Areas\Reports\Views\Report\Reports\LeadtimeFinishedCases.cshtml" />
     <Content Include="Areas\Admin\Views\SelfServiceSetting\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\SelfServiceSetting\EditRegMessage.cshtml" />
     <Content Include="Areas\Reports\Views\Report\Options\LeadtimeActiveCases.cshtml" />
     <Content Include="Areas\Reports\Views\Report\Reports\LeadtimeActiveCases.cshtml" />
     <Content Include="Areas\Reports\Views\Report\Options\FinishingCauseCustomer.cshtml" />
@@ -2201,7 +2219,7 @@
     <Content Include="Views\Cases\CaseRemainingTime.cshtml" />
     <Content Include="Views\Notifiers\OrganizationUnitDropDown.cshtml" />
     <Content Include="Views\Cases\RelatedCasesFull.cshtml" />
-    <Content Include="Views\Cases\IndexAjax.cshtml" />
+    <Content Include="Views\Cases\Index.cshtml" />
     <Content Include="Views\Cases\RelatedCasesFullContent.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DatePickerNoJS.cshtml" />
     <Content Include="Views\Print\CaseHtml.cshtml">

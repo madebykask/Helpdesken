@@ -231,14 +231,11 @@
             {
                 fieldsResult = fields.Select(f => new
                                 {
-                                    f.Id,
-                                    Caption = f.CaseFieldSettingLanguages.FirstOrDefault(l => l.Language_Id == languageId).Label,
+                                    f.Id,                                    
                                     FieldName = f.Name
-                                })
-                                .Where(f => !string.IsNullOrEmpty(f.Caption))
+                                })                                
                                 .ToList()
-                                .Select(f => new ItemOverview(f.Caption, f.Id.ToString(CultureInfo.InvariantCulture)))
-                                .OrderBy(f => f.Name)
+                                .Select(f => new ItemOverview(f.FieldName, f.Id.ToString(CultureInfo.InvariantCulture)))                                
                                 .ToList();
             }
 

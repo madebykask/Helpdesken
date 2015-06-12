@@ -134,6 +134,12 @@
                             "~/Content/js/Invoice/invoice.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/cases/index").Include(
+                "~/Content/js/Cases/components/Utils.js",
+                "~/Content/js/Cases/components/BaseField.js",
+                "~/Content/js/Cases/components/DropdownButtonField.js",
+                "~/Content/js/Cases/components/JQueryChosenField.js",
+                "~/Content/js/Cases/components/DateField.js",
+                "~/Content/js/Cases/components/FilterForm.js",
                 "~/Content/js/Cases/index.logic.js",
                 "~/Content/js/Cases/index.settings.js"));
 
@@ -207,20 +213,6 @@
             bundles.Add(new ScriptBundle("~/bundles/report").Include(
                             "~/Areas/Reports/Content/js/reports.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/angularjs").Include(
-                            "~/Content/js/lib/angular-1.3.11/angular.min.js",
-                            "~/Content/js/lib/angular-1.3.11/angular-animate.js",
-                            "~/Content/js/lib/angular-1.3.11/angular-aria.min.js",
-                            "~/Content/js/lib/angular-1.3.11/angular-cookies.min.js",
-                            "~/Content/js/lib/angular-1.3.11/angular-loader.min.js",
-                            "~/Content/js/lib/angular-1.3.11/angular-messages.min.js",
-                            "~/Content/js/lib/angular-1.3.11/angular-mocks.js",
-                            "~/Content/js/lib/angular-1.3.11/angular-resource.min.js",
-                            "~/Content/js/lib/angular-1.3.11/angular-route.min.js",
-                            "~/Content/js/lib/angular-1.3.11/angular-sanitize.min.js",
-                            "~/Content/js/lib/angular-1.3.11/angular-scenario.js",
-                            "~/Content/js/lib/angular-1.3.11/angular-touch.min.js"));
-
             bundles.Add(new ScriptBundle("~/bundles/admin/users").Include(
                             "~/Areas/Admin/Content/js/Users/user.js"));
 
@@ -238,13 +230,9 @@
             bundles.Add(new ScriptBundle("~/bundles/cases/caseByIds").Include(
                             "~/Content/js/Cases/caseByIds.logic.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/common/admin/tinymce").Include(                            
-                            "~/Content/js/tinymce/tinymce.min.js",
-                            "~/Areas/Admin/Content/js/Common/tinymce.initiate.js"));
-
-
-            
-                            
+            //bundles.Add(new ScriptBundle("~/bundles/common/admin/tinymce").Include(                            
+            //                "~/Content/js/tinymce/tinymce.min.js",
+            //                "~/Areas/Admin/Content/js/Common/tinymce.initiate.js"));
         }
     }
 }

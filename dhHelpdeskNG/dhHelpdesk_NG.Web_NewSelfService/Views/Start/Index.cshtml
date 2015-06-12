@@ -16,26 +16,13 @@
                <div class="col-md-12">
                     <div class="panel panel-default">
                         <div class="panel-body">                             
-                             @Html.Raw(welcomePart)
-                             @*<div class="row">
-                                <div class="col-md-5">
-                                    <h3 style="margin-top: 1px;">@Translation.Get("Welcome", Enums.TranslationSource.TextTranslation) @SessionFacade.CurrentUserIdentity.FirstName                                        
-                                        @Translation.Get("to the MyHRportal", Enums.TranslationSource.TextTranslation) </h3>
-                                    <p> @Translation.Get("Here you can create a new service request", Enums.TranslationSource.TextTranslation). </p> 
-                                    <p> @Translation.Get("You can also view your ongoing or completed requests", Enums.TranslationSource.TextTranslation).</p>
-                                    <p> @Translation.Get("Need help? Start with Find your way", Enums.TranslationSource.TextTranslation)</p>
-                                    <p><img src="@Url.Content("~/img-profile/ikea-map.png")" /></p>
-                                </div>
-                                <div class="col-md-7">
-                                    <img src="@Url.Content("~/img-profile/ikea-notepad.png")" />
-                                </div>
-                            </div>*@
+                             @Html.Raw(welcomePart)                             
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        @if (SessionFacade.CurrentCustomer.ShowBulletinBoardOnExtPage != 0)
+        @if (SessionFacade.CurrentCustomer.ShowBulletinBoardOnExtPage != 0 && Model.BulletinBoard != null && Model.BulletinBoard.Any())
         {
             <div class="col-md-4">
                 <div class="panel panel-default">
@@ -44,11 +31,8 @@
                         @if (Model.BulletinBoard != null)
                         {
                             foreach (var b in Model.BulletinBoard)
-                            {                       
-                              if (DateTime.Now >= b.ShowDate && DateTime.Now <= b.ShowUntilDate )
-                              {
-                                <p> <strong> @Html.DisplayFor(m=> b.ShowDate , "Date")  </strong> <br /> &nbsp;&nbsp; @b.Text </p>
-                              }
+                            {                                                                                   
+                                <p> <strong> @Html.DisplayFor(m=> b.ShowDate , "Date")  </strong> <br /> &nbsp;&nbsp; @Html.Raw(b.Text) </p>                              
                             }
                         }                    
                         <div class="bulletinimg">
@@ -61,8 +45,7 @@
        
     </div>
     <div class="row">
-        <div class="col-md-10 small">
-            
+        <div class="col-md-10 small">            
             <div class="footerdhhd"><img src="@Url.Content("~/Content/img/dh_solutions_slogan.png")" />&nbsp;
                 <br /><i>@Translation.Get("Version")&nbsp;@ApplicationFacade.Version</i></div>            
         </div>

@@ -10,8 +10,11 @@ namespace DH.Helpdesk.NewSelfService.Models.Documents
     {
         public DocumentsModel()
         {             
+
         }
-        
+
+        public string BaseFilePath { get; set; }
+
         public List<Document> Documents { get; set; }
                        
     }

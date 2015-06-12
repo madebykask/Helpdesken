@@ -369,6 +369,14 @@
                 lowerStr = res.ToLower();
             }
 
+            //Version Number
+            if (lowerStr.IndexOf("[#12]") > 0)
+            {
+                
+                res = Regex.Replace(res, @"\[#12\]", ApplicationFacade.Version, RegexOptions.IgnoreCase);
+                lowerStr = res.ToLower();
+            }
+
             return res;
         }
 

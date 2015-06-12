@@ -174,9 +174,17 @@
             this.Property(x => x.CausingPartId).IsOptional();
             this.Property(x => x.DefaultOwnerWG_Id).IsOptional();
 
+            this.Property(x => x.Status_Id).IsOptional();
+
             this.HasMany(x => x.Logs)
                 .WithRequired(x => x.Case)
                 .HasForeignKey(x => x.Case_Id);
+
+            this.Property(x => x.RegistrationSourceCustomer_Id).IsOptional();
+            this.HasOptional(c => c.RegistrationSourceCustomer)
+                .WithMany()
+                .HasForeignKey(c => c.RegistrationSourceCustomer_Id)
+                .WillCascadeOnDelete(true);
 
             this.ToTable("tblcase");
         }

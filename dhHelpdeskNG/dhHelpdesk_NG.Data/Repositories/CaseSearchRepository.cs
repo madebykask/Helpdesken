@@ -141,7 +141,7 @@
                         cmd.Connection = con;
                         cmd.CommandType = CommandType.Text;
                         cmd.CommandText = sql;
-
+                        cmd.CommandTimeout = 300;
                         var dr = cmd.ExecuteReader();
                         if (dr != null && dr.HasRows)
                         {
@@ -349,10 +349,11 @@
                 {
                     try
                     {
-                        con.Open();
+                        con.Open();                        
                         cmd.Connection = con;
                         cmd.CommandType = CommandType.Text;
                         cmd.CommandText = sql;
+                        cmd.CommandTimeout = 300;
 
                         var dr = cmd.ExecuteReader();
                         if (dr != null)
@@ -648,6 +649,7 @@
             columns.Add("tblDepartment.DepartmentId");
             columns.Add("tblDepartment.SearchKey");
             columns.Add("tblCase.ReferenceNumber");
+            columns.Add("tblRegistrationSourceCustomer.SourceName as RegistrationSourceCustomer");
             if (customerSetting != null)
             {
                 columns.Add("coalesce(tblUsers.SurName, '') + ' ' + coalesce(tblUsers.FirstName, '') as Performer_User_Id");
@@ -675,7 +677,7 @@
             {
                 columns.Add("tblStateSecondary.StateSecondary as StateSecondary_Id");
             }
-            
+
             columns.Add("tblCase.Priority_Id");
             columns.Add("tblPriority.PriorityName");
             columns.Add("coalesce(tblPriority.SolutionTime, 0) as SolutionTime");
@@ -722,6 +724,7 @@
             tables.Add("left outer join tblSystem on tblCase.System_Id = tblSystem.Id ");  
             tables.Add("left outer join tblUrgency on tblCase.Urgency_Id = tblUrgency.Id ");  
             tables.Add("left outer join tblImpact on tblCase.Impact_Id = tblImpact.Id ");
+            tables.Add("left outer join tblRegistrationSourceCustomer on tblCase.RegistrationSourceCustomer_Id = tblRegistrationSourceCustomer.Id");
 
             if (customerSetting != null)
             {
@@ -1018,9 +1021,7 @@
             // ansvarig
             if (!string.IsNullOrWhiteSpace(f.UserResponsible))
                 sb.Append(" and (tblCase.CaseResponsibleUser_Id in (" + f.UserResponsible.SafeForSqlInject() + "))"); 
-            // land/country
-            if (!string.IsNullOrWhiteSpace(f.Country))
-                sb.Append(" and (tblDepartment.Country_Id in (" + f.Country.SafeForSqlInject() + "))"); 
+           
             // case type
             if (f.CaseType != 0)
             {

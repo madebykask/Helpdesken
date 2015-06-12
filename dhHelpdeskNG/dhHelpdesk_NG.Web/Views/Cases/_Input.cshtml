@@ -134,7 +134,10 @@
                                                     }
                                                 </td>
                                                 <td>
-                                                    <a href="#" id="AddNotifier" class="btn @Model.GetDisabledString(GlobalEnums.TranslationCaseFields.ReportedBy, CaseSolutionFields.UserNumber)">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>
+                                                    <a href="#"
+                                                       id="AddNotifier"
+                                                       style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.AddUserBtn, CaseSolutionFields.AddUserBtn)" 
+                                                       class="btn @Model.GetDisabledString(GlobalEnums.TranslationCaseFields.ReportedBy, CaseSolutionFields.UserNumber)">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>
                                                     @if (Model.CanGetRelatedCases)
                                                     {
                                                         <a href="#" data-field="relatedCases" style="display: none;" title="@Translation.Get("Relaterade ärenden")" class="btn"><i class="icon-list"></i></a>                                                        
@@ -351,7 +354,8 @@
                                                     }
                                                 </td>
                                             </tr>
-                                            <tr class="displaytr" style="@Model.GetCaseTemplateFieldStyle(GlobalEnums.TranslationCaseFields.UpdateNotifierInformation, CaseSolutionFields.UpdateNotifierInformation)">
+@*                                            Save user info checkbox*@
+                                            <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.UpdateNotifierInformation, CaseSolutionFields.UpdateNotifierInformation)">
                                                 <td class="span3">
                                                     @Translation.Get("Spara användaruppgifter", SessionFacade.CurrentLanguageId)
                                                 </td>
@@ -491,6 +495,15 @@
                                             <td></td>
                                         </tr>                                        
                                     }
+                                    @*                      "CustomerRegistrationSource" field               *@
+                                    <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer, CaseSolutionFields.RegistrationSourceCustomer)">
+                                        <td class="span3">
+                                            @CaseFieldCaption(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer, "Källa")
+                                        </td>
+                                        <td class="span4">
+                                            @Html.DropDownListFor(m=>m.CustomerRegistrationSourceId, Model.CustomerRegistrationSources, @Model.IsReadOnly(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer, CaseSolutionFields.RegistrationSourceCustomer)? new {@disabled = true} : null)
+                                        </td>
+                                    </tr>
                                     <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.CaseType_Id, CaseSolutionFields.CaseType)">
                                         <td>
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.CaseType_Id, "Ärendetyp")
@@ -520,7 +533,7 @@
                                         <td colspan="2">
                                             <div id="divProductArea" class="btn-group">
                                                 @{
-                                    string disabledProductArea = Model.GetDisabledString(GlobalEnums.TranslationCaseFields.ProductArea_Id, CaseSolutionFields.ProductArea);
+                                                    string disabledProductArea = Model.GetDisabledString(GlobalEnums.TranslationCaseFields.ProductArea_Id, CaseSolutionFields.ProductArea);
                                                 }
                                                 <div class="btn @disabledProductArea" id="divBreadcrumbs_ProductArea">@Model.ParantPath_ProductArea</div>
                                                 <button class="btn dropdown-toggle" data-toggle="dropdown" @disabledProductArea>
@@ -534,7 +547,7 @@
                                             </div>
                                             @if (Model.CustomerSettings.ModuleCaseInvoice)
                                             {
-                                                @Html.CaseInvoiceArticles(
+                                                  @Html.CaseInvoiceArticles(
                                                     Model.InvoiceArticles,
                                                     "product-area-id",
                                                     Model.case_.Id,

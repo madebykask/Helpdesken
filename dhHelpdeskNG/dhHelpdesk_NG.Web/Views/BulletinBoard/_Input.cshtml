@@ -40,7 +40,7 @@
                                         @Translation.Get("Anslagstavla", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @Html.TextAreaFor(model => model.BulletinBoard.Text, new { style = "width:600px; height:250px;" })
+                                        @Html.TextAreaFor(model => model.BulletinBoard.Text, new { style = "width:600px; height:250px;", @class="richtexteditor" })
                                     </td>
                                 </tr>
                                 <tr>

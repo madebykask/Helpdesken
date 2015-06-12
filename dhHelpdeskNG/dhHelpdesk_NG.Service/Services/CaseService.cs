@@ -36,9 +36,9 @@
         IList<Case> GetCases();
 
         IList<Case> GetCasesByCustomers(IEnumerable<int> customerIds);
-        
-        Case InitCase(int customerId, int userId, int languageId, string ipAddress, GlobalEnums.RegistrationSource source, Setting customerSetting, string adUser);
-        Case Copy(int copyFromCaseid, int userId, int languageId, string ipAddress, GlobalEnums.RegistrationSource source, string adUser);
+
+        Case InitCase(int customerId, int userId, int languageId, string ipAddress, CaseRegistrationSource source, Setting customerSetting, string adUser);
+        Case Copy(int copyFromCaseid, int userId, int languageId, string ipAddress, CaseRegistrationSource source, string adUser);
         Case GetCaseById(int id, bool markCaseAsRead = false);
         Case GetDetachedCaseById(int id);
         Case GetCaseByGUID(Guid GUID);
@@ -354,7 +354,7 @@
             }
         }
 
-        public Case Copy(int copyFromCaseid, int userId, int languageId, string ipAddress, GlobalEnums.RegistrationSource source, string adUser)
+        public Case Copy(int copyFromCaseid, int userId, int languageId, string ipAddress, CaseRegistrationSource source, string adUser)
         {
             var c = this._caseRepository.GetDetachedCaseById(copyFromCaseid);
             c.IpAddress = ipAddress;
@@ -385,7 +385,7 @@
             return this._caseRepository.GetRelatedCases(id, customerId, reportedBy, user).OrderByDescending(c => c.Id).ToList();      
         }
 
-        public Case InitCase(int customerId, int userId, int languageId, string ipAddress, GlobalEnums.RegistrationSource source, Setting customerSetting, string adUser)
+        public Case InitCase(int customerId, int userId, int languageId, string ipAddress, CaseRegistrationSource source, Setting customerSetting, string adUser)
         {
             var c = new Case();
 
@@ -468,9 +468,9 @@
                     if (logFiles.Count > 0)
                         files = logFiles.Select(f => _filesStorage.ComposeFilePath(ModuleName.Log, log.Id, basePath, f.FileName)).ToList();
 
-                if (newCase.Administrator != null)
+                if (newCase.PersonsEmail != null)
                 {
-                    if (log.SendMailAboutCaseToNotifier && _emailService.IsValidEmail(newCase.Administrator.Email) && newCase.FinishingDate == null)
+                    if (log.SendMailAboutCaseToNotifier && _emailService.IsValidEmail(newCase.PersonsEmail) && newCase.FinishingDate == null)
                     {
                         // Inform notifier about external lognote
                         int mailTemplateId = (int)GlobalEnums.MailTemplates.CaseIsUpdated;
@@ -479,7 +479,7 @@
                         {
                             if (!String.IsNullOrEmpty(m.Body) && !String.IsNullOrEmpty(m.Subject))
                             {
-                                var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.Administrator.Email, _emailService.GetMailMessageId(helpdeskMailFromAdress));
+                                var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                 _emailLogRepository.Add(el);
                                 _emailLogRepository.Commit();
                                 _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, log.HighPriority, files);

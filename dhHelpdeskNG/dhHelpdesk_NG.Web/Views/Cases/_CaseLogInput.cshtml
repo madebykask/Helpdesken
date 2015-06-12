@@ -110,7 +110,7 @@
                 <td>
                     @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Description, CaseSolutionFields.Description) && !readonlyMode)
                     {
-                        @Html.TextAreaFor(model => model.CaseLog.TextExternal, new { style = "height:105px;" })
+                        @Html.TextAreaFor(model => Model.CaseLog.TextExternal, new { style = "height:105px;" })
                     }
                     else
                     {
@@ -135,7 +135,7 @@
                 <td>
                     @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote) && !readonlyMode)
                     {
-                        @Html.TextAreaFor(model => model.CaseLog.TextInternal, new { style = "height:105px;" })
+                        @Html.TextAreaFor(model => Model.CaseLog.TextInternal, new { style = "height:105px;" })
                     }
                     else
                     {

@@ -1,7 +1,9 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Grid
 {
     using System.Collections.Generic;
-    
+
+    using DH.Helpdesk.BusinessData.Enums.Case.Fields;
+
     /// <summary>
     /// Here we will store relations between field id and field name to know what settings is applied for what field case GridSettingsEntity.FieldId.
     /// I used this sql to fetch all availavble columns:
@@ -14,63 +16,64 @@
         #region "Case overview" grid
 
         private static readonly string[] caseOverviewColumns = {
-"AgreedDate",
-"Available",
-"Caption",
-"CaseNumber",
-"CaseResponsibleUser_Id",
-"CaseType_Id",
-"Category_Id",
-"CausingPart",
-"ChangeTime",
-"ClosingReason",
-"ComputerType_Id",
-"ContactBeforeAction",
-"Cost",
-"Customer_Id",
-"Department_Id",
-"Description",
-"Filename",
+            CaseInfoFields.AgreedDate,
+CaseInfoFields.Available,
+CaseInfoFields.Caption,
+CaseInfoFields.Case,
+OtherFields.Responsible,
+CaseInfoFields.CaseType,
+CaseInfoFields.Category,
+OtherFields.CausingPart,
+CaseInfoFields.ChangeDate,
+LogFields.FinishingCause,
+ComputerFields.ComputerType,
+CaseInfoFields.PhoneContact,
+CaseInfoFields.Cost,
+UserFields.Customer,
+UserFields.Department,
+CaseInfoFields.Description,
+CaseInfoFields.AttachedFile,
 "FinishingCause_Id",
-"FinishingDate",
-"FinishingDescription",
-"Impact_Id",
-"InventoryLocation",
-"InventoryNumber",
-"InvoiceNumber",
-"Miscellaneous",
-"OU_Id",
-"Performer_User_Id",
-"Persons_CellPhone",
-"Persons_EMail",
-"Persons_Name",
-"Persons_Phone",
-"Place",
-"PlanDate",
-"Priority_Id",
-"ProductArea_Id",
-"ReferenceNumber",
-"Region_Id",
-"RegTime",
-"ReportedBy",
-"SMS",
-"SolutionRate",
-"StateSecondary_Id",
-"Status_Id",
-"Supplier_Id",
-"System_Id",
-"tblLog.Charge",
-"tblLog.Filename",
-"tblLog.Text_External",
-"tblLog.Text_Internal",
+LogFields.FinishingDate,
+LogFields.FinishingDescription,
+CaseInfoFields.Impact,
+ComputerFields.Place,
+ComputerFields.PcNumber,
+CaseInfoFields.InvoiceNumber,
+CaseInfoFields.Other,
+UserFields.Unit,
+OtherFields.Administrator,
+UserFields.CellPhone,
+UserFields.Email,
+UserFields.Notifier,
+UserFields.Phone,
+UserFields.Place,
+OtherFields.PlannedActionDate,
+OtherFields.Priority,
+CaseInfoFields.ProductArea,
+CaseInfoFields.ReferenceNumber,
+UserFields.Region,
+CaseInfoFields.RegistrationDate,
+UserFields.User,
+CaseInfoFields.Sms,
+OtherFields.SolutionRate,
+OtherFields.SubState,
+OtherFields.State,
+CaseInfoFields.Supplier,
+CaseInfoFields.System,
+LogFields.Debiting,
+LogFields.AttachedFile,
+LogFields.ExternalLogNote,
+LogFields.InternalLogNote,
 "TMDDate",
-"Urgency_Id",
-"User_Id",
-"UserCode",
-"WatchDate",
-"Verified",
-"VerifiedDescription",
-"WorkingGroup_Id"
+CaseInfoFields.UrgentDegree,
+CaseInfoFields.RegistratedBy,
+UserFields.OrdererCode,
+OtherFields.WatchDate,
+OtherFields.Verified,
+OtherFields.VerifiedDescription,
+OtherFields.WorkingGroup,
+CaseInfoFields.RegistrationSourceCustomer
         };
 
         #endregion
@@ -83,6 +86,6 @@
         /// <summary>
         /// List of case names that we can not use in case overview grid
         /// </summary>
-        public static readonly HashSet<string> NotAvailableField = new HashSet<string> { "Filename", "text_internal", "tblLog.Text_External", "tblLog.Text_Internal", "tblLog.Charge", "tblLog.Filename", "FinishingCause_Id" };
+        public static readonly HashSet<string> NotAvailableField = new HashSet<string> { CaseInfoFields.AttachedFile, "text_internal", LogFields.ExternalLogNote, LogFields.InternalLogNote, LogFields.Debiting, LogFields.AttachedFile, "FinishingCause_Id" };
     }
 }

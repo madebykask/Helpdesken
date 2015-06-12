@@ -45,5 +45,7 @@
         public const string Cost = "Cost";
 
         public const string AttachedFile = "Filename";
+
+        public const string RegistrationSourceCustomer = "RegistrationSourceCustomer";
     }
 }

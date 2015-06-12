@@ -71,7 +71,7 @@
 
             if(SessionFacade.CurrentCustomer == null && customerId == -1)
             {
-                ErrorGenerator.MakeError("Customer Id is empty", 101);
+                ErrorGenerator.MakeError("Customer Id is empty!", 101);
                 filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
                 return;
             }
@@ -90,15 +90,13 @@
             if(SessionFacade.CurrentCustomer == null)
             {
                 SessionFacade.UserHasAccess = false;
-                ErrorGenerator.MakeError(string.Format("Invalid Customer Id! ({0})", customerId), 101);
+                ErrorGenerator.MakeError(string.Format("Customer is not valid!", customerId), 101);
                 filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
                 return;
             }
             else            
             {
-                customerId = SessionFacade.CurrentCustomer.Id;
-                //ViewBag.PublicCustomerId = customerId;
-                //ViewBag.PublicCaseTemplate = _caseSolutionService.GetCaseSolutions(customerId).ToList();
+                customerId = SessionFacade.CurrentCustomer.Id;                
             }
 
             if(SessionFacade.AllLanguages == null)
@@ -180,7 +178,7 @@
                     if(string.IsNullOrEmpty(userIdentity.UserId))
                     {
                         SessionFacade.UserHasAccess = false;
-                        ErrorGenerator.MakeError("You don't have access to the portal! (User Id is not specified)", 101);
+                        ErrorGenerator.MakeError("You don't have access to the portal. (User Id is not specified)", 101);
                         filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
                         return;
                     }
@@ -205,7 +203,7 @@
                                 SessionFacade.UserHasAccess = false;
                                 SessionFacade.CurrentCoWorkers = new List<SubordinateResponseItem>();
 
-                                ErrorGenerator.MakeError("You don't have access to the portal! (user is not manager for country)", 103);
+                                ErrorGenerator.MakeError("You don't have access to the portal. (User is not manager for country)", 103);
                                 filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
                                 return;
                             }
@@ -217,7 +215,7 @@
                             {
                                 SessionFacade.UserHasAccess = false;
 
-                                ErrorGenerator.MakeError("You don't have access to the portal! (EmployeeNumber is not specified)", 104);
+                                ErrorGenerator.MakeError("You don't have access to the portal. (Employee Number is not specified)", 104);
                                 filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
                                 return;
                             }
@@ -236,7 +234,7 @@
                                     SessionFacade.UserHasAccess = false;
                                     SessionFacade.CurrentCoWorkers = new List<SubordinateResponseItem>();
 
-                                    ErrorGenerator.MakeError("You don't have access to the portal! (user is not manager)", 102);
+                                    ErrorGenerator.MakeError("You don't have access to the portal. (User is not manager)", 102);
                                     filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
                                     return;
                                 }
@@ -330,48 +328,7 @@
                 SessionFacade.LastCorrectUrl =
                     filterContext.HttpContext.Request.Url.AbsoluteUri;
         }
-
-        //protected override void OnAuthorization(AuthorizationContext filterContext)  //called when a process requests authorization or authorization occurs before login and before OnActionExecuting + index + OnActionExecuted 
-        //{
-        //    var redirectToUrl = "~/login/login?returnUrl=" + filterContext.HttpContext.Request.Url;
-
-        //    //if (SessionFacade.CurrentUser == null)
-        //    //{
-        //    //    var user = _masterDataService.GetUserForLogin(User.Identity.Name);
-        //    //    if (user != null)
-        //    //        SessionFacade.CurrentUser = user;
-        //    //    else
-        //    //        Response.Redirect(redirectToUrl);
-        //    //}
-        //    //base.OnAuthorization(filterContext);
-
-        //    //if (filterContext.Result == null || (filterContext.Result.GetType() != typeof(HttpUnauthorizedResult)))
-        //    //    return;
-
-        //    if (filterContext.HttpContext.Request.IsAjaxRequest())
-        //    {
-        //        filterContext.Result = filterContext.HttpContext.Request.ContentType == "application/json"
-        //            ? (ActionResult)
-        //              new JsonResult
-        //              {
-        //                  Data = new { RedirectTo = redirectToUrl },
-        //                  ContentEncoding = System.Text.Encoding.UTF8,
-        //                  JsonRequestBehavior = JsonRequestBehavior.DenyGet
-        //              }
-
-        //            : new ContentResult
-        //            {
-        //                Content = redirectToUrl,
-        //                ContentEncoding = System.Text.Encoding.UTF8,
-        //                ContentType = "text/html"
-        //            };
-
-        //        filterContext.HttpContext.Response.StatusCode = 530; //User Access Denied
-        //        filterContext.HttpContext.Response.TrySkipIisCustomErrors = true;
-        //    }
-        //}
-
-
+       
         protected string RenderRazorViewToString(string viewName, object model, bool partial = true)
         {
             var viewResult = partial ? ViewEngines.Engines.FindPartialView(this.ControllerContext, viewName) : ViewEngines.Engines.FindView(this.ControllerContext, viewName, null);

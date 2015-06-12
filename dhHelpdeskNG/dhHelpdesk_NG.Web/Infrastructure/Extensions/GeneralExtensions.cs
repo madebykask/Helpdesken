@@ -74,11 +74,8 @@
         public static string GetFieldStyle(this CaseInputViewModel model, GlobalEnums.TranslationCaseFields caseFieldName, CaseSolutionFields caseTemplateFieldName)
         {
             bool isGlobalVisibility = model.caseFieldSettings.IsFieldVisible(caseFieldName);
-            //bool isLocalVisibility = model.CaseSolutionSettingModels.Single(x => x.CaseSolutionField == caseTemplateFieldName).CaseSolutionMode != CaseSolutionModes.Hide;
-
             var fieldSetting = model.CaseSolutionSettingModels.FirstOrDefault(x => x.CaseSolutionField == caseTemplateFieldName);
-            bool isLocalVisibility = (fieldSetting == null) ? false : fieldSetting.CaseSolutionMode != CaseSolutionModes.Hide;
-
+            bool isLocalVisibility = (fieldSetting != null) && fieldSetting.CaseSolutionMode != CaseSolutionModes.Hide;
             if (!isGlobalVisibility || !isLocalVisibility)
             {
                 return "display:none";
@@ -115,7 +112,11 @@
             bool isGlobalVisibility = model.caseFieldSettings.IsFieldVisible(caseFieldName);
             var fieldSetting = model.CaseSolutionSettingModels.FirstOrDefault(x => x.CaseSolutionField == caseTemplateFieldName);
             bool isLocalVisibility = (fieldSetting != null) && fieldSetting.CaseSolutionMode != CaseSolutionModes.Hide;
-            if (!isGlobalVisibility || !isLocalVisibility)
+            
+            if(model.DynamicCase != null && model.caseFieldSettings.IsFieldLocked(caseFieldName))
+                return true;
+
+            if(!isGlobalVisibility || !isLocalVisibility)
             {
                 return false;
             }

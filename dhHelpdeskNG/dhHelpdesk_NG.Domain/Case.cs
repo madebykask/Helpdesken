@@ -67,6 +67,17 @@
         public String FinishingDescription { get; set; }
         public DateTime? FollowUpDate { get; set; }
         public int RegistrationSource { get; set; }
+
+        /// <summary>
+        /// Id of extended case source for specific customer
+        /// </summary>
+        public int? RegistrationSourceCustomer_Id { get; set; }
+
+        /// <summary>
+        /// Exteded case source
+        /// </summary>
+        public virtual RegistrationSourceCustomer RegistrationSourceCustomer { get; set; }
+
         public int RelatedCaseNumber { get; set; }
         public int? Problem_Id { get; set; }
         public int? Change_Id { get; set; }

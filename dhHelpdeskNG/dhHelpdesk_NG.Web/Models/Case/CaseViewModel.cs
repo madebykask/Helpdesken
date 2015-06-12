@@ -1,28 +1,36 @@
 ﻿namespace DH.Helpdesk.Web.Models.Case
 {
     using System.Collections.Generic;
+    using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models.Customer;
-    using DH.Helpdesk.BusinessData.Models.Grid;
     using DH.Helpdesk.BusinessData.Models.Language.Output;
     using DH.Helpdesk.BusinessData.Models.Logs.Output;
     using DH.Helpdesk.BusinessData.Models.Problem.Output;
     using DH.Helpdesk.BusinessData.Models.Projects.Output;
+    using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Changes;
     using DH.Helpdesk.Web.Infrastructure.Grid.Output;
+    using DH.Helpdesk.Web.Models.Case.Output;
     using DH.Helpdesk.Web.Models.Invoice;
     using DH.Helpdesk.Web.Models.Shared;
-using DH.Helpdesk.Web.Enums;
-    using DH.Helpdesk.BusinessData.Models.Shared;
-
+    
     public class CaseInputViewModel
     {
         public CaseInputViewModel()
         {
             this.CaseSolutionSettingModels = CaseSolutionSettingModel.CreateDefaultModel();
+            this.CustomerRegistrationSources = new List<SelectListItem>()
+                                                   {
+                                                       new SelectListItem()
+                                                           {
+                                                               Text = string.Empty,
+                                                               Value = string.Empty
+                                                           }
+                                                   };
         }
 
         public string CaseKey { get; set; }
@@ -79,6 +87,16 @@ using DH.Helpdesk.Web.Enums;
         public IEnumerable<LogOverview> Logs { get; set; }
 
         /// <summary>
+        /// Selected case source
+        /// </summary>
+        public int CustomerRegistrationSourceId { get; set; }
+
+        /// <summary>
+        /// List of available case sources
+        /// </summary>
+        public List<SelectListItem> CustomerRegistrationSources { get; set; }
+
+        /// <summary>
         /// Gets or sets the languages.
         /// </summary>
         public IEnumerable<LanguageOverview> Languages { get; set; }
@@ -90,6 +108,7 @@ using DH.Helpdesk.Web.Enums;
         public CaseFilesModel CaseFilesModel { get; set; }
 
         public string CaseFileNames { get; set; }
+
         public string LogFileNames { get; set; }
 
         /// <summary>
@@ -135,6 +154,11 @@ using DH.Helpdesk.Web.Enums;
 
     public class PageSettingsModel
     {
+        /// <summary>
+        /// Holds values for filter form in case overview page
+        /// </summary>
+        public JsonCaseSearchFilterData searchFilter { get; set; }
+
         public JsonGridSettingsModel gridSettings { get; set; }
 
         public int refreshContent { get; set; }

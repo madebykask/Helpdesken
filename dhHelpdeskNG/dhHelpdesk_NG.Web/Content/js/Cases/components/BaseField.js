@@ -1,0 +1,52 @@
+﻿'use strict';
+
+function BaseField() {
+}
+
+/**
+* @public
+* @param { object } opt 
+* @returns BaseField 
+*/
+BaseField.prototype.init = function (opt) {
+    var me = this;
+    opt = opt || {};
+    me.$el = opt.$el;
+    if (me.$el == null || me.$el.length == 0) {
+        throw Error('me.$el should be JQuery element');
+    }
+    return me;
+};
+
+/**
+* @public
+*/
+BaseField.prototype.setValue = function (value) {
+    var me = this;
+    me.$el.val(value);
+};
+
+/**
+* @public
+*/
+BaseField.prototype.getValue = function () {
+    var me = this;
+    return me.$el.val();
+}
+
+/**
+* @public
+*/
+BaseField.prototype.isValueEmpty = function () {
+    var me = this;
+    return window.isNullOrEmpty(me.$el.val());
+};
+
+/**
+* @public
+* Sets empty value for dropdown button group
+*/
+BaseField.prototype.clear = function () {
+    var me = this;
+    me.setValue(window.EMTPY_STR);
+};

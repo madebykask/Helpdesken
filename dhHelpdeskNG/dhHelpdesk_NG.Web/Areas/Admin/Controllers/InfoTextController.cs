@@ -60,28 +60,26 @@
         [ValidateInput(false)]
         public ActionResult Edit(InfoText infoText, int customerId, int languageId, int infoTypeId, InfoTextGroup infoTextGroup)
         {
-
             var customer = this._customerService.GetCustomer(customerId);
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
+            if (infoText.Name == null)
+                infoText.Name = " ";
+
             if (infoText.Id == 0)
             {
-
-                infoText = new InfoText { Customer_Id = customerId, Type = infoTypeId, Id = 0, Language_Id = languageId, Name = infoText.Name };
-             
+                infoText = new InfoText { Customer_Id = customerId, Type = infoTypeId, Id = 0, Language_Id = languageId, Name = infoText.Name };             
             }
-
            
             this._infoService.SaveInfoText(infoText, out errors);
 
             if (errors.Count == 0)
-                return this.RedirectToAction("edit", "infotext", new { infoTypeId = infoTypeId, customerId = customerId, languageId = languageId, infoTextGroup = infoTextGroup});
-                //return this.RedirectToAction("index", "infotext", new { customerId = customer.Id });
+                return this.RedirectToAction("edit", "infotext", new { infoTypeId = infoTypeId, customerId = customerId, languageId = languageId, infoTextGroup = infoTextGroup});                
 
             var model = this.InfoTextInputViewModel(customer, infoTextGroup);
+            model.InfoTextShowViewModel = this.InfoTextShowViewModel(infoText, customer, languageId, infoTextGroup);
             return this.View(model);
-          
-            
+                      
         }
 
         private InfoTextInputViewModel CreateInputViewModel(InfoText infoText, Customer customer)
@@ -151,13 +149,7 @@
             model.InfoText = infoTextToUpdate;
             model.Customer = customer;
 
-            return RedirectToAction("Edit", new {infoTypeId = infoTypeId, languageId = id, infoTextGroup = infoTextGroup}); 
-
-            //this.UpdateModel(model, "infoText");
-
-            ////return View(model);
-            //var view = "~/areas/admin/views/Infotext/_InfoTextPartialView.cshtml";
-            //return this.RenderRazorViewToString(view, model);
+            return RedirectToAction("Edit", new {infoTypeId = infoTypeId, languageId = id, infoTextGroup = infoTextGroup});            
         }
 
         private InfoTextShowViewModel CreateShowViewModel(InfoText infoText, Customer customer)

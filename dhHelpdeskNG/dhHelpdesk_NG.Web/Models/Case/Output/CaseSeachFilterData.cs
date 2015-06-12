@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Models.Case
+﻿namespace DH.Helpdesk.Web.Models.Case.Output
 {
     using System;
     using System.Collections.Generic;
@@ -7,8 +7,6 @@
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.BusinessData.Models.Shared;
-    
 
     public class CaseSearchFilterData
     {
@@ -17,11 +15,14 @@
         public Customer customer { get; set; }
         public CaseSearchFilter caseSearchFilter { get; set; }
         public int filterCustomerId { get; set; }
-        public IList<Country> filterCountry { get; set; }
         public IList<Region> filterRegion { get; set; }
         public IList<Department> filterDepartment { get; set; }
         public IList<User> filterUser { get; set; }
         public IList<User> filterPerformer { get; set; }
+
+        /// <summary>
+        /// Case "registered by" field
+        /// </summary>
         public IList<UserLists> filterCaseUser { get; set; }
         public IList<CaseType> filterCaseType { get; set; }
         public IList<ProductArea> filterProductArea { get; set; }

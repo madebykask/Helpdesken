@@ -1,9 +1,9 @@
-﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
-{
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 
+namespace DH.Helpdesk.Web.Areas.Admin.Controllers
+{    
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;

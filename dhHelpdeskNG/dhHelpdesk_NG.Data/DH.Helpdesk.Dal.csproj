@@ -109,6 +109,7 @@
     <Compile Include="EntityConfigurations\Orders\OrderLogConfiguration.cs" />
     <Compile Include="EntityConfigurations\Orders\OrderPropertyConfiguration.cs" />
     <Compile Include="EntityConfigurations\ADFS\SSOLogConfiguration.cs" />
+    <Compile Include="EntityConfigurations\RegistrationSourceCustomerConfiguration.cs" />
     <Compile Include="EntityConfigurations\SurveyConfiguration.cs" />
     <Compile Include="EntityConfigurations\Users\ModuleConfiguration.cs" />
     <Compile Include="EntityConfigurations\Users\UserModuleConfiguration.cs" />
@@ -605,6 +606,7 @@
     <Compile Include="Repositories\Questionnaire\ICircularRepository.cs" />
     <Compile Include="Repositories\Questionnaire\IQuestionnaireQuestionOptionRepository.cs" />
     <Compile Include="Repositories\Questionnaire\IQuestionnaireQuestionRepository.cs" />
+    <Compile Include="Repositories\RegistrationSourceCustomerRepository.cs" />
     <Compile Include="Repositories\Servers\IServerFieldSettingsRepository.cs" />
     <Compile Include="Repositories\Servers\IServerLogicalDriveRepository.cs" />
     <Compile Include="Repositories\Servers\IServerRepository.cs" />

@@ -1,10 +1,10 @@
-﻿namespace DH.Helpdesk.Web.Controllers
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 
+namespace DH.Helpdesk.Web.Controllers
+{    
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
@@ -110,6 +110,7 @@
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult New(BulletinBoard bulletinBoard, int[] WGsSelected)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
@@ -136,6 +137,7 @@
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult Edit(int id, BulletinBoard bulletinBoard, int[] WGsSelected)
         {
             var bulletinBoardToSave = this._bulletinBoardService.GetBulletinBoard(id);

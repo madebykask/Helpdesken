@@ -86,9 +86,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             customerToSave.ShowDocumentsOnExternalPage = vmodel.Customer.ShowDocumentsOnExternalPage;
             customerToSave.ShowFAQOnExternalStartPage = vmodel.Customer.ShowFAQOnExternalStartPage;
             customerToSave.ShowCoWorkersOnExternalPage = vmodel.Customer.ShowCoWorkersOnExternalPage;
-            customerToSave.ShowHelpOnExternalPage = vmodel.Customer.ShowHelpOnExternalPage;
-
-            //var setting = this._settingService.GetCustomerSetting(id);            
+            customerToSave.ShowHelpOnExternalPage = vmodel.Customer.ShowHelpOnExternalPage;           
 
             if (customerToSave == null)
                 throw new Exception("No customer found...");
@@ -135,48 +133,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             return this.View(model);
         }
-
-
-        public ActionResult EditRegMessage(int customerId)
-        {
-            var customer = _customerService.GetCustomer(customerId);
-
-            var model = new SelfServiceRegMessageViewModel()
-            {
-                Customer = customer                
-            };
-
-            return View(model);
-        }
-        
-        [HttpPost, ValidateInput(false)]
-        public ActionResult EditRegMessage(int id, SelfServiceRegMessageViewModel vmodel)
-        {
-            var customerToSave = this._customerService.GetCustomer(id);            
-            customerToSave.RegistrationMessage = vmodel.Customer.RegistrationMessage;
-
-            var setting = this._settingService.GetCustomerSetting(id);
-
-            var CaseFieldSettingLanguages = this._caseFieldSettingService.GetCaseFieldSettingLanguages();
-
-            if (customerToSave == null)
-                throw new Exception("No customer found...");
-
-            IDictionary<string, string> errors = new Dictionary<string, string>();
-
-            this._customerService.SaveCustomerRegisterationMassage(customerToSave, vmodel.Customer.RegistrationMessage, out errors);
-
-            if (errors.Count == 0)                            
-                return this.RedirectToAction("Index", "InfoText", new { customerId = id, infoTextGroup = InfoTextGroup.SelfService });
-
-            var model = new SelfServiceRegMessageViewModel()
-            {
-                Customer = customerToSave
-            };
-
-            return this.View(model);
-        }
-
-        
+                                
     }
 }

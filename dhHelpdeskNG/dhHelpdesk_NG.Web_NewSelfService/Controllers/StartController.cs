@@ -49,7 +49,10 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             var model = new StartPageModel(htmlData == null ? string.Empty : htmlData.Name);
 
             var bb = _bulletinBoardService.GetBulletinBoards(SessionFacade.CurrentCustomer.Id,false);
-            model.BulletinBoard = bb.ToList();            
+            model.BulletinBoard = bb.Where(b => b.PublicInformation != 0 && 
+                                                b.ShowDate <= DateTime.Now && b.ShowUntilDate >= DateTime.Now)
+                                    .OrderByDescending(b=> b.ShowDate)
+                                    .ToList();            
 
             return this.View(model);                        
          }        

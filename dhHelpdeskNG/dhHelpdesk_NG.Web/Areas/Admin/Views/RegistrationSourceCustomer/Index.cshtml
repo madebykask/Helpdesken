@@ -1,0 +1,56 @@
+﻿@model DH.Helpdesk.Web.Areas.Admin.Models.RegistrationSourceIndexViewModel
+@{
+    ViewBag.Title = "Index";
+}
+<div class="secnavs fixed">
+    <div class="pull-left">
+        <ul class="secnav">
+            <li>@Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Källa", Enums.TranslationSource.TextTranslation), "new", new { customerId = Model.Customer.Id}, new { @class = "btn" })</li>
+        </ul>
+    </div>
+    @Html.Partial("_MasterDataPanel", Model.Customer)
+</div>
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#fragment-1">@Translation.Get("Källa", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment-1">
+                <table class="table table-striped table-bordered table-hover" id="tblstatus">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Translation.Get("Källa", Enums.TranslationSource.TextTranslation)
+                            </th>
+                            <th>
+                                @Translation.Get("Systemkod", Enums.TranslationSource.TextTranslation)
+                            </th>
+                            <th>
+                                @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.RegistrationSources)
+                        {
+                            <tr>
+                                <td>
+                                    <a href="@Url.Action("edit", "registrationsourcecustomer", new { area = "admin", id = item.Id })">@item.SourceName</a>
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("edit", "registrationsourcecustomer", new { area = "admin", id = item.Id })">@item.SystemCodeName</a>
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("edit", "registrationsourcecustomer", new { area = "admin", id = item.Id })">@item.IsActive</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+

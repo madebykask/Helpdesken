@@ -18,6 +18,11 @@
         public string CaseProductAreaFilter { get; set; }
         public string CaseRegionFilter { get; set; }
         public string CaseStateSecondaryFilter { get; set; }
+
+        /// <summary>
+        /// Filter cases by "registred by" field
+        /// List of user ids sparated by ','.
+        /// </summary>
         public string CaseUserFilter { get; set; }
         public string CaseWorkingGroupFilter { get; set; }
         public string CaseCaseTypeFilter { get; set; }

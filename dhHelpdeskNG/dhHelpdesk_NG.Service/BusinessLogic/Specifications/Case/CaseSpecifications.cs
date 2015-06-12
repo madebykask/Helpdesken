@@ -311,9 +311,9 @@
 
         public static IQueryable<Case> GetByRegistrationSource(
                                         this IQueryable<Case> query,
-                                        GlobalEnums.RegistrationSource registrationSource)
+                                        CaseRegistrationSource registrationSource)
         {
-            if (registrationSource != GlobalEnums.RegistrationSource.Empty)
+            if (registrationSource != CaseRegistrationSource.Empty)
             {
                 query = query.Where(c => c.RegistrationSource == (int)registrationSource);                
             }

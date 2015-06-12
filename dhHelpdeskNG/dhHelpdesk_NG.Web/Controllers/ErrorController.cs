@@ -27,8 +27,16 @@
             return this.View();
         }
 
+        public ViewResult Forbidden()
+        {
+            Response.StatusCode = 403; // Forbidden 
+            return this.View("Unathorized");
+        }
+
+
         public ViewResult Unathorized()
         {
+            Response.StatusCode = 401; // unauthorized
             return this.View();
         }
     }
