@@ -12,33 +12,6 @@ BEGIN
 END
 go
 
--- we can delete this when deploying on acceptance/customer
-IF COL_LENGTH('dbo.tblCase','source_id') IS not NULL
-BEGIN
-	DELETE from tblCaseFieldSettings where casefield = 'source'
-	DECLARE @STR VARCHAR(100)
-	SET @STR = (
-		SELECT NAME
-		FROM SYSOBJECTS SO
-		JOIN SYSCONSTRAINTS SC ON SO.ID = SC.CONSTID
-		WHERE OBJECT_NAME(SO.PARENT_OBJ) = 'tblCase'
-			AND SO.XTYPE = 'D' AND SC.COLID = (SELECT COLID FROM SYSCOLUMNS
-		WHERE ID = OBJECT_ID('tblCase')	AND NAME = 'source_id')
-	)
-	SET @STR = 'ALTER TABLE tblCase DROP CONSTRAINT ' + @STR EXEC (@STR)
-	ALTER TABLE tblCase DROP column source_id
-END
-go
-
-if exists(select * from sys.columns 
-            where Name = N'isdefault' and Object_ID = Object_ID(N'tblRegistrationSourceCustomer'))
-BEGIN
-	ALTER TABLE [dbo].[tblRegistrationSourceCustomer] DROP COLUMN [IsDefault]
-	ALTER TABLE [dbo].[tblRegistrationSourceCustomer] ALTER COLUMN [SystemCode] INT NULL
-END
-GO
--- * * * * * * *  END * * *  * * * * * 
-
 if not exists(select * from sysobjects WHERE Name = N'tblRegistrationSourceCustomer')
 	begin
 		CREATE TABLE [dbo].[tblRegistrationSourceCustomer](

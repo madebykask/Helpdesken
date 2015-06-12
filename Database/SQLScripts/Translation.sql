@@ -4028,7 +4028,7 @@ If not exists (select * from tblTextTranslation where text_id = 1488 and Languag
 GO
 
 If not exists (select * from tbltext where id = 1489)
-	insert into tbltext (id, TextString) VALUES (1489, 'Om e-form')8
+	insert into tbltext (id, TextString) VALUES (1489, 'Om e-form')
 GO
 If not exists (select * from tblTextTranslation where text_id = 1489 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1489, 2, 'If e-form')
