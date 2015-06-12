@@ -4054,5 +4054,24 @@ GO
 If not exists (select * from tblTextTranslation where text_id = 1492 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1492, 2, 'Clear all')
 GO
+
+If not exists (select * from tbltext where id = 1493)
+	insert into tbltext (id, TextString) VALUES (1493, 'Manuell registrering')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1493 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1493, 2, 'Manual registration')
+GO
+If not exists (select * from tbltext where id = 1494)
+	insert into tbltext (id, TextString) VALUES (1494, 'Ärendemall')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1494 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1494, 2, 'Case template')
+GO
+If not exists (select * from tbltext where id = 1495)
+	insert into tbltext (id, TextString) VALUES (1495, 'Självservice')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1495 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1495, 2, 'Self-service')
+GO
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

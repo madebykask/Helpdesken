@@ -3,15 +3,6 @@
 ALTER TABLE tblSettings ALTER COLUMN LDAPFilter nvarchar(100) NOT NULL
 
 
--- * * * * * * *  BEGIN  * * * * * * 
--- * we can delete this when deploying on acceptance/customer *
--- Temporary solution for "Source" field
-IF COL_LENGTH('dbo.tblCase','source_id') IS NULL
-BEGIN
-	ALTER TABLE tblCase ADD source_id int not Null default 1;
-END
-go
-
 if not exists(select * from sysobjects WHERE Name = N'tblRegistrationSourceCustomer')
 	begin
 		CREATE TABLE [dbo].[tblRegistrationSourceCustomer](
@@ -19,12 +10,10 @@ if not exists(select * from sysobjects WHERE Name = N'tblRegistrationSourceCusto
 			[SystemCode] INT NULL,
 			[SourceName] [nvarchar](50) NOT NULL,
 			[Customer_Id] INT NOT NULL,
-			[IsDefault] INT NOT NULL,
 			[IsActive] INT NOT NULL,
 			[CreatedDate] [datetime] NOT NULL DEFAULT (getdate()),
 			[ChangedDate] [datetime] NOT NULL DEFAULT (getdate())
-		) ON [PRIMARY]
-
+		) ON [PRIMARY]   
 		
 		ALTER TABLE tblRegistrationSourceCustomer ADD
  			CONSTRAINT [PK_tblRegistrationSourceCustomer] PRIMARY KEY CLUSTERED 
