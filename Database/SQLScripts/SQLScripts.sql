@@ -40,8 +40,17 @@ BEGIN
 	CONSTRAINT DF_tblCaseFieldSettings_Locked DEFAULT 0
 	WITH VALUES
 END
-
 GO
+
+insert into  tblcasefieldsettings (Customer_Id, CaseField, Show, [Required], ShowExternal, FieldSize, RelatedField, DefaultValue, ListEdit, EmailIdentifier, CreatedDate, ChangedDate, Locked)
+(select id, 'AddUserBtn', 1, 0, 0, 0, '', Null, 0, null , getdate(), getdate(), 0 from tblcustomer 
+   where id not in  (select customer_Id from tblcasefieldsettings where (Casefield = 'AddUserBtn')))
+Go
+
+insert into  tblcasefieldsettings (Customer_Id, CaseField, Show, [Required], ShowExternal, FieldSize, RelatedField, DefaultValue, ListEdit, EmailIdentifier, CreatedDate, ChangedDate, Locked)
+(select id, 'UpdateNotifierInformation', 1, 0, 0, 0, '', Null, 0, null , getdate(), getdate(), 0 from tblcustomer 
+   where id not in  (select customer_Id from tblcasefieldsettings where (Casefield = 'UpdateNotifierInformation')))
+Go
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.9'
