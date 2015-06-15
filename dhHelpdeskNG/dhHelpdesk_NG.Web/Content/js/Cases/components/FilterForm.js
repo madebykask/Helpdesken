@@ -18,11 +18,21 @@ FilterForm.prototype.init = function (opt) {
     me.$filteredMarker = $('#icoFilter');
     me.$btnExpandFilter = $("#btnMore");
     me.$expandIcon = $('#icoPlus');
-    me.$caseFilterType = '#lstfilterCaseProgress';
-    me.$btnResetFilter = me.$el.find(".btn-reset");
-    me.$btnClearFilter = me.$el.find(".btn-clear");
+    me.$caseFilterType = $('#lstfilterCaseProgress');
+    me.$btnResetFilter = me.$el.find('.btn-reset');
+    me.$btnClearFilter = me.$el.find('.btn-clear');
+    me.$searchField = me.$el.find('#txtFreeTextSearch');
+    me.$searchOnlyInMyCases = $('#SearchInMyCasesOnly');
 
     /************** EVENTS BINDING ************************/
+    me.$searchField.keydown(function (ev) {
+        if (ev.keyCode == 13) {
+            ev.preventDefault();
+            me.onSearchClick.call(me);
+            return false;
+        }
+    });
+
     me.$btnResetFilter.click(function(ev) {
         ev.preventDefault();
         me.reset();
@@ -43,7 +53,7 @@ FilterForm.prototype.init = function (opt) {
         return false;
     });
 
-    $('#SearchInMyCasesOnly').on('switchChange.bootstrapSwitch', function () {
+    me.$searchOnlyInMyCases.on('switchChange.bootstrapSwitch', function () {
         if ($(this).prop('checked')) {
             me.clear();
         } else {
@@ -53,9 +63,7 @@ FilterForm.prototype.init = function (opt) {
 
     $('.submit').on('click', function (ev) {
         ev.preventDefault();
-        if (me.opt.onBeforeSearch()) {
-            me.opt.onSearch();
-        }
+        me.onSearchClick.call(me);
         return false;
     });
 
@@ -152,19 +160,27 @@ FilterForm.prototype.getControlByFieldName = function(fieldName) {
     return me.controlsMap[fieldName];
 };
 
+/**
+* @private
+* Key halndler on "Search" button
+*/
 FilterForm.prototype.onSearchClick = function () {
     var me = this;
-    var searchStr = me.getControlByFieldName('txtFreeTextSearch').getValue();
-    if (searchStr.length > 0 && searchStr[0] === "#") {
-        /// if looking by case number - set case state filter to "All"
-        $(me.$caseFilterType).val(-1);
-        /// and reset search filter
-        me.clear();
-    }
-    if (me.isFilterEmpty()) {
-        $('#icoFilter').hide();
-    } else {
-        $('#icoFilter').show();
+    var searchStr = me.$searchField.val();
+    if (me.opt.onBeforeSearch()) {
+        if (searchStr.length > 0 && searchStr[0] === '#') {
+            /// if looking by case number - set case state filter to "All"
+            me.$caseFilterType.val(-1);
+            /// and reset search filter
+            me.$searchOnlyInMyCases.bootstrapSwitch('state', false);
+            me.clear();
+        }
+        if (me.isFilterEmpty()) {
+            $('#icoFilter').hide();
+        } else {
+            $('#icoFilter').show();
+        }
+        me.opt.onSearch();
     }
 };
 
@@ -181,7 +197,7 @@ FilterForm.prototype.initControlsMap = function() {
         'hidFilterClosingReasonId',
         'CaseRegistrationDateStartFilter', 'CaseRegistrationDateEndFilter',
         'CaseWatchDateStartFilter', 'CaseWatchDateEndFilter',
-        'CaseClosingDateStartFilter','CaseClosingDateEndFilter'
+        'CaseClosingDateStartFilter', 'CaseClosingDateEndFilter'
     ];
     $.each(controlsId, function(id, controlName) {
         var control;
@@ -189,6 +205,7 @@ FilterForm.prototype.initControlsMap = function() {
         var searchEl = '[name=' + controlName + ']';
         switch(controlName) {
             case 'CaseInitiatorFilter':
+            case 'txtFreeTextSearch':
                 $el = me.$el.find(searchEl);
                 if (!window.is$ElEmpty($el)) {
                     control = CreateInstance(BaseField, { $el: $el });    
