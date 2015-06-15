@@ -1123,7 +1123,22 @@
         [HttpPost]
         public ActionResult Search_User(string query, int customerId)
         {
+
             var result = this._computerService.SearchComputerUsers(customerId, query);
+
+            var ComputerUserSearchRestriction = _settingService.GetCustomerSetting(customerId).ComputerUserSearchRestriction;
+            if (ComputerUserSearchRestriction == 1)
+            {
+                var departmentIds = this._departmentService.GetDepartmentsByUserPermissions(SessionFacade.CurrentUser.Id, customerId).Select(x => x.Id).ToList();
+                //user has no departments checked == access to all departments. TODO: change getdepartmentsbyuserpermissions to actually reflect the "none selected"
+                if (departmentIds.Count == 0)
+                {
+                    departmentIds = this._departmentService.GetDepartments(customerId).Select(x => x.Id).ToList();
+                }
+
+                result = this._computerService.SearchComputerUsersByDepartments(customerId, query, departmentIds);
+            }
+
             return this.Json(result);
         }
 

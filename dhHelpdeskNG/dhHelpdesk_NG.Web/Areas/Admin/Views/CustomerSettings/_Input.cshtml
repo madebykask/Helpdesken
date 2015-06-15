@@ -384,7 +384,18 @@
                 <div class="container">
                     <div class="row">
                         <div class="span12">
-                            <table id="customerOrder"  >                                
+                            <table id="customerOrder">
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td >
+                                        &nbsp;&nbsp;
+                                        <input type="checkbox" name="setting.ComputerUserSearchRestriction" @(Model.Setting.ComputerUserSearchRestriction == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="setting.ComputerUserSearchRestriction" value="0" />
+                                        @Translation.Get("begränsa sök per avdelning", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                </tr>
                                 <tr>
                                     <td>
                                         @Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation)

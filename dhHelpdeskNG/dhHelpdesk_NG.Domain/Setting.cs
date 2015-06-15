@@ -15,6 +15,7 @@ namespace DH.Helpdesk.Domain
         public int ComplexPassword { get; set; }
         public int ComputerDepartmentSource { get; set; }
         public int ComputerLog { get; set; }
+        public int ComputerUserSearchRestriction { get; set; }
         public int ComputerUserInfoListLocation { get; set; }  //READ ONLY, DON'T CHANGE IT FROM PROJECT- ONLY IN DB IF NECESSARY!
         public int ComputerUserLog { get; set; }
         public int CreateCaseFromOrder { get; set; }

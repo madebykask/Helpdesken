@@ -19,6 +19,7 @@
         IList<ComputerUser> GetComputerUsers(int customerId);
         IList<ComputerUser> SearchSortAndGenerateComputerUsers(int customerId, IComputerUserSearch searchComputerUsers);
         IList<UserSearchResults> SearchComputerUsers(int customerId, string searchFor);
+        IList<UserSearchResults> SearchComputerUsersByDepartments(int customerId, string query, List<int> departmentIds);
         IList<ComputerUserFieldSettings> GetComputerUserFieldSettings(int customerId);
         IList<ComputerUserFieldSettings> GetComputerUserFieldSettingsForDefaultCust();
         IList<ComputerUserGroup> GetComputerUserGroups(int customerId);
@@ -44,6 +45,7 @@
         void SaveComputerUserGroup(ComputerUserGroup computerUserGroup, int[] ous, out IDictionary<string, string> errors);
         void UpdateComputerUsersBlackList(ComputerUsersBlackList computerUsersBlackList);
         void Commit();
+
     }
 
     public class ComputerService : IComputerService
@@ -147,6 +149,11 @@
         public IList<UserSearchResults> SearchComputerUsers(int customerId, string searchFor)
         {
             return this._computerUserRepository.Search(customerId, searchFor);
+        }
+        public IList<UserSearchResults> SearchComputerUsersByDepartments(int customerId, string searchFor, List<int> departmentIds)
+        {
+            var results = this._computerUserRepository.Search(customerId, searchFor).Where(x=>departmentIds.Contains(x.Department_Id ?? 0));
+            return results.Where(x => x.Department_Id != 0).ToList();
         }
 
         public IList<ComputerResults> SearchComputer(int customerId, string searchFor)
