@@ -86,6 +86,17 @@ CaseInfoFields.RegistrationSourceCustomer
         /// <summary>
         /// List of case names that we can not use in case overview grid
         /// </summary>
-        public static readonly HashSet<string> NotAvailableField = new HashSet<string> { CaseInfoFields.AttachedFile, "text_internal", LogFields.ExternalLogNote, LogFields.InternalLogNote, LogFields.Debiting, LogFields.AttachedFile, "FinishingCause_Id" };
+        public static readonly HashSet<string> NotAvailableField = new HashSet<string>
+                                                                       {
+                                                                           CaseInfoFields.AttachedFile, 
+                                                                           "text_internal", 
+                                                                           LogFields.ExternalLogNote, 
+                                                                           LogFields.InternalLogNote, 
+                                                                           LogFields.Debiting, 
+                                                                           LogFields.AttachedFile, 
+                                                                           "FinishingCause_Id",
+                                                                           "AddUserBtn",
+                                                                           "UpdateNotifierInformation"
+                                                                       };
     }
 }
