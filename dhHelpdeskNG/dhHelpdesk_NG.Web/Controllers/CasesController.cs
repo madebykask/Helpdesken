@@ -2361,6 +2361,7 @@
                             cs,
                             windowsUser);
                     }
+
                     var defaultStateSecondary = this._stateSecondaryService.GetDefaultOverview(customerId);
                     if (defaultStateSecondary != null)
                     {
@@ -2448,12 +2449,13 @@
                     m.urgencies = this._urgencyService.GetUrgencies(customerId);
                 }
 
+                // "Workging group" field
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString()).ShowOnStartPage == 1)
                 {
                     m.workingGroups = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId);
                 }
 
-                if (m.workingGroups != null && m.workingGroups.Count > 0)
+                if (isCreateNewCase && m.workingGroups != null && m.workingGroups.Count > 0)
                 {
                     var defWorkingGroup = m.workingGroups.Where(it => it.IsDefault == 1).FirstOrDefault();
                     if (defWorkingGroup != null)
