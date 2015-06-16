@@ -738,7 +738,6 @@
                 }
                 else
                 {
-                    tables.Add("left outer join tblUsers on tblCase.Performer_user_Id = tblUsers.Id ");
                     tables.Add("left outer join tblWorkingGroup on tblCase.WorkingGroup_Id = tblWorkingGroup.Id ");
                 }
             }
