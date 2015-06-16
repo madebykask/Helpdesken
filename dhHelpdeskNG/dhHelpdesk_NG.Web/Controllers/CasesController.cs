@@ -1159,7 +1159,12 @@
 
         public JsonResult ChangeRegion(int? id, int customerId, int departmentFilterFormat)
         {
-            var list = this._orgJsonService.GetActiveDepartmentForRegion(id, customerId, departmentFilterFormat);
+            if (SessionFacade.CurrentUser == null)
+            {
+                return this.Json(new { success = false, message = "Access denied" });
+            }
+
+            var list = this._orgJsonService.GetActiveDepartmentForUserByRegion(id, SessionFacade.CurrentUser.Id, customerId, departmentFilterFormat);
             return this.Json(new { list });
         }
 
