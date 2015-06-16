@@ -9,7 +9,14 @@ namespace DH.Helpdesk.Domain
         public int CaseDateFormat { get; set; }
         public int CaseSMS { get; set; }
         public int CaseFiles { get; set; }  //READ ONLY, DON'T CHANGE IT FROM PROJECT- ONLY IN DB IF NECESSARY!
+
+        /// <summary>
+        /// Mode of displaying workging group [(http://localhost/admin/customersettings/edit/4) "Case Overview" secion]
+        /// 0 - only display value if case is assigned to user’s default working group (field where other working group will be displayed as empty)
+        /// 1 - always display value
+        /// </summary>
         public int CaseWorkingGroupSource { get; set; }
+
         public int? CloseCase_finishingCause_Id { get; set; }
         public int? CloseOrder_OrderState_Id { get; set; }
         public int ComplexPassword { get; set; }
