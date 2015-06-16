@@ -4088,26 +4088,36 @@ GO
 If not exists (select * from tblTextTranslation where text_id = 1493 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1493, 2, 'Manual registration')
 GO
+
+--If not exists (select * from tbltext where id = 1494)
+--	insert into tbltext (id, TextString) VALUES (1494, 'Ärendemall')
+--GO
+--If not exists (select * from tblTextTranslation where text_id = 1494 and Language_Id = 2)
+--	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1494, 2, 'Case template')
+--GO
+--If not exists (select * from tbltext where id = 1495)
+--	insert into tbltext (id, TextString) VALUES (1495, 'Självservice')
+--GO
+--If not exists (select * from tblTextTranslation where text_id = 1495 and Language_Id = 2)
+--	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1495, 2, 'Self service')
+--ELSE 
+--	update tblTextTranslation set TextTranslation = 'Self service' where text_id = 1495 and Language_Id = 2
+--GO
+
 If not exists (select * from tbltext where id = 1494)
-	insert into tbltext (id, TextString) VALUES (1494, 'Ärendemall')
+	insert into tbltext (id, TextString) VALUES (1494, 'Sätt när')
 GO
 If not exists (select * from tblTextTranslation where text_id = 1494 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1494, 2, 'Case template')
-GO
-If not exists (select * from tbltext where id = 1495)
-	insert into tbltext (id, TextString) VALUES (1495, 'Självservice')
-GO
-If not exists (select * from tblTextTranslation where text_id = 1495 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1495, 2, 'Self service')
-ELSE 
-	update tblTextTranslation set TextTranslation = 'Self service' where text_id = 1495 and Language_Id = 2
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1494, 2, 'Default to')
 GO
 
-If not exists (select * from tbltext where id = 1496)
-	insert into tbltext (id, TextString) VALUES (1496, 'Sätt när')
+
+-- 20150616
+If not exists (select * from tbltext where id = 1495)
+	insert into tbltext (id, TextString) VALUES (1495, 'begränsa sök per avdelning')
 GO
-If not exists (select * from tblTextTranslation where text_id = 1496 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1496, 2, 'Default to')
+If not exists (select * from tblTextTranslation where text_id = 1495 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1495, 2, 'restrict search by department')
 GO
 
 -- *** Run this last when put translation script above this line **--
