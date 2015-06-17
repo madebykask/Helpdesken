@@ -21,8 +21,10 @@
     @Styles.Render("~/img-profile/css")
     @RenderSection("Styles", false)
     @Scripts.Render("~/bundles/common")
-    <script type="text/javascript" src="@Url.Content("~/Content/js/tinymce/tinymce.min.js?cachebuster=123")"></script>
-	<script type="text/javascript" src="@Url.Content("~/Content/js/tinymce/tinymce.initiate.js?cachebuster=123")"></script>
+
+    @*Use this to apply changes in tinymce ?cachebuster=123*@
+    <script type="text/javascript" src="@Url.Content("~/Content/js/tinymce/tinymce.min.js")"></script>
+	<script type="text/javascript" src="@Url.Content("~/Content/js/tinymce/tinymce.initiate.js")"></script>
 </head>
 
 <body>

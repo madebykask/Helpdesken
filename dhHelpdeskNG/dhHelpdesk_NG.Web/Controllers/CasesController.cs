@@ -1174,7 +1174,12 @@
 
         public JsonResult ChangeRegion(int? id, int customerId, int departmentFilterFormat)
         {
-            var list = this._orgJsonService.GetActiveDepartmentForRegion(id, customerId, departmentFilterFormat);
+            if (SessionFacade.CurrentUser == null)
+            {
+                return this.Json(new { success = false, message = "Access denied" });
+            }
+
+            var list = this._orgJsonService.GetActiveDepartmentForUserByRegion(id, SessionFacade.CurrentUser.Id, customerId, departmentFilterFormat);
             return this.Json(new { list });
         }
 
@@ -2376,6 +2381,7 @@
                             cs,
                             windowsUser);
                     }
+
                     var defaultStateSecondary = this._stateSecondaryService.GetDefaultOverview(customerId);
                     if (defaultStateSecondary != null)
                     {
@@ -2463,12 +2469,13 @@
                     m.urgencies = this._urgencyService.GetUrgencies(customerId);
                 }
 
+                // "Workging group" field
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString()).ShowOnStartPage == 1)
                 {
                     m.workingGroups = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId);
                 }
 
-                if (m.workingGroups != null && m.workingGroups.Count > 0)
+                if (isCreateNewCase && m.workingGroups != null && m.workingGroups.Count > 0)
                 {
                     var defWorkingGroup = m.workingGroups.Where(it => it.IsDefault == 1).FirstOrDefault();
                     if (defWorkingGroup != null)

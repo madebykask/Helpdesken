@@ -612,6 +612,7 @@
         public void SendCaseEmail(int caseId, CaseMailSetting cms, int caseHistoryId, string basePath, Case oldCase = null, CaseLog log = null, List<CaseFileDto> logFiles = null)        
         {
             var isClosedMailSentToNotifier = false;
+            var isItNewCase = oldCase == null || oldCase.Id == 0;
             if (_emailService.IsValidEmail(cms.HelpdeskMailFromAdress))
             {
                 // get new case information
@@ -766,47 +767,65 @@
                     }
 
                 // send email working group has changed
-                if (newCase.FinishingDate == null && oldCase != null && oldCase.Id > 0)
-                    if (newCase.WorkingGroup_Id != oldCase.WorkingGroup_Id)
+                if (newCase.FinishingDate == null 
+                    && newCase.Workinggroup != null
+                    && (isItNewCase || (oldCase != null && oldCase.Id > 0 && newCase.WorkingGroup_Id != oldCase.WorkingGroup_Id)))
+                {
+                    int mailTemplateId = (int)GlobalEnums.MailTemplates.AssignedCaseToWorkinggroup;
+                    MailTemplateLanguageEntity m =
+                        _mailTemplateService.GetMailTemplateForCustomerAndLanguage(
+                            newCase.Customer_Id,
+                            newCase.RegLanguage_Id,
+                            mailTemplateId);
+                    if (m != null)
                     {
-                        if (newCase.Workinggroup != null)
+                        if (!String.IsNullOrEmpty(m.Body) && !String.IsNullOrEmpty(m.Subject))
                         {
-                            int mailTemplateId = (int)GlobalEnums.MailTemplates.AssignedCaseToWorkinggroup;
-                            MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
-                            if (m != null)
+                            string wgEmails = string.Empty;
+
+                            if (newCase.Workinggroup.AllocateCaseMail == 1)
                             {
-                                if (!String.IsNullOrEmpty(m.Body) && !String.IsNullOrEmpty(m.Subject))
-                                {
-                                    string wgEmails = string.Empty;
-
-                                    if (newCase.Workinggroup.AllocateCaseMail == 1)
-                                        wgEmails = newCase.Workinggroup.EMail;
-                                    else
+                                wgEmails = newCase.Workinggroup.EMail;
+                            }
+                            else
+                            {
+                                if (newCase.Workinggroup.UserWorkingGroups != null
+                                    && newCase.Workinggroup.AllocateCaseMail == 1)
+                                    foreach (var ur in newCase.Workinggroup.UserWorkingGroups) //TODO behöver vi kolla avdelning?                                
                                     {
-                                        if (newCase.Workinggroup.UserWorkingGroups != null && newCase.Workinggroup.AllocateCaseMail == 1)
-                                            foreach (var ur in newCase.Workinggroup.UserWorkingGroups)  //TODO behöver vi kolla avdelning?                                
-                                            {
-                                                if (ur.UserRole == 2)
-                                                    if (ur.User != null)
-                                                        if (ur.User.IsActive == 1 && ur.User.AllocateCaseMail == 1 && _emailService.IsValidEmail(ur.User.Email))
-                                                        {
-                                                            wgEmails = wgEmails + ur.User.Email + ";";
-                                                        }
-                                            }
+                                        if (ur.UserRole == 2)
+                                            if (ur.User != null)
+                                                if (ur.User.IsActive == 1 && ur.User.AllocateCaseMail == 1
+                                                    && _emailService.IsValidEmail(ur.User.Email))
+                                                {
+                                                    wgEmails = wgEmails + ur.User.Email + ";";
+                                                }
                                     }
+                            }
 
-                                    if (!string.IsNullOrWhiteSpace(wgEmails))
-                                    {
-                                        var el = new EmailLog(caseHistoryId, mailTemplateId, wgEmails, _emailService.GetMailMessageId(helpdeskMailFromAdress));
-                                        _emailLogRepository.Add(el);
-                                        _emailLogRepository.Commit();
-                                        fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 6);
-                                        _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
-                                    }
-                                }
+                            if (!string.IsNullOrWhiteSpace(wgEmails))
+                            {
+                                var el = new EmailLog(
+                                    caseHistoryId,
+                                    mailTemplateId,
+                                    wgEmails,
+                                    _emailService.GetMailMessageId(helpdeskMailFromAdress));
+                                _emailLogRepository.Add(el);
+                                _emailLogRepository.Commit();
+                                fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 6);
+                                _emailService.SendEmail(
+                                    helpdeskMailFromAdress,
+                                    el.EmailAddress,
+                                    m.Subject,
+                                    m.Body,
+                                    fields,
+                                    el.MessageId);
                             }
                         }
                     }
+                }
+                    
+                
 
                 // send email when product area is set
                 if (newCase.FinishingDate == null && oldCase != null && oldCase.Id > 0)

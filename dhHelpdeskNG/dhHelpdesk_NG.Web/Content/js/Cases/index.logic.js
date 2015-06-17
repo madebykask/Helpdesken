@@ -110,7 +110,10 @@ var GRID_STATE = {
         return ((new Date()).getTime() - me._gridUpdated) / 1000;
     };
 
-
+    /**
+    * @private
+    * @returns bool
+    */
     Page.prototype.canMakeSearch = function() {
         var me = this;
         if (me._gridState == GRID_STATE.IDLE) {
@@ -122,9 +125,6 @@ var GRID_STATE = {
         }
         return false;
     };
-
-
-   
 
     Page.prototype.setGridState = function(newGridState) {
         var me = this;
@@ -317,16 +317,11 @@ var GRID_STATE = {
         });
     };
 
-
-
-
-
-
-   
+    /**
+    * @private
+    */
     Page.prototype.onSearchClick = function () {
         var me = this;
-
-
         me.fetchData();
     };
 

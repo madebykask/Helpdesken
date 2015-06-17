@@ -727,20 +727,17 @@
             tables.Add("left outer join tblUrgency on tblCase.Urgency_Id = tblUrgency.Id ");  
             tables.Add("left outer join tblImpact on tblCase.Impact_Id = tblImpact.Id ");
             tables.Add("left outer join tblRegistrationSourceCustomer on tblCase.RegistrationSourceCustomer_Id = tblRegistrationSourceCustomer.Id");
-
+            tables.Add("left outer join tblUsers on tblUsers.Id = tblCase.Performer_User_Id");
             if (customerSetting != null)
             {
-                if (customerSetting.CaseWorkingGroupSource == 0)
+                const int SHOW_IF_DEFAULT_USER_GROUP = 0;
+                if (customerSetting.CaseWorkingGroupSource == SHOW_IF_DEFAULT_USER_GROUP)
                 {
-                    tables.Add("left outer join tblUsers on tblUsers.Id = tblCase.Performer_User_Id");
-                    tables.Add("left outer join tblWorkingGroup on " + 
-                                               " tblWorkingGroup.Id = (Select top 1 WorkingGroup_Id from tblUserWorkingGroup UW " +
-												                      "Where UW.IsDefault = 1 and UW.User_Id = tblCase.Performer_User_Id and " +
-                                                                            "UW.WorkingGroup_Id in (Select id From tblWorkingGroup where customer_Id = tblCase.Customer_Id) )");
+                    tables.Add(string.Format("left join tblUserWorkingGroup as defGroup on defGroup.User_Id = {0} and defGroup.IsDefault = 1 and defGroup.WorkingGroup_Id = tblCase.WorkingGroup_Id", userId));
+                    tables.Add("left join tblWorkingGroup on tblWorkingGroup.id = defgroup.WorkingGroup_Id");
                 }
                 else
                 {
-                    tables.Add("left outer join tblUsers on tblCase.Performer_user_Id = tblUsers.Id ");
                     tables.Add("left outer join tblWorkingGroup on tblCase.WorkingGroup_Id = tblWorkingGroup.Id ");
                 }
             }
