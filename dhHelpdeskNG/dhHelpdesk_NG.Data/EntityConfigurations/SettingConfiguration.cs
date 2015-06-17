@@ -96,6 +96,7 @@
             this.Property(x => x.PasswordHistory).IsRequired();
             this.Property(x => x.PlanDateFormat).IsRequired();
             this.Property(x => x.POP3DebugLevel).IsRequired();
+            this.Property(x => x.POP3Port).IsRequired();
             this.Property(x => x.POP3EMailPrefix).IsRequired().HasMaxLength(20);
             this.Property(x => x.POP3Password).IsRequired().HasMaxLength(20);
             this.Property(x => x.POP3Server).IsRequired().HasMaxLength(50);
