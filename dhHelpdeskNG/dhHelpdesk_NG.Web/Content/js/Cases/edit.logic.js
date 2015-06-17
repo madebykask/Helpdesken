@@ -1,15 +1,24 @@
 ﻿"use strict";
 
 $(function () {
+    var params = window.parameters;
+
     var langEl = $('#case__RegLanguage_Id'),
         doNotSendEl = $("#CaseMailSetting_DontSendMailToNotifier");
+
+    var productAreaObjName = "divProductArea",
+        productAreaChildObj = $("#ProductAreaHasChild");
+
+    var productAreaErrorMessage = params.productAreaErrorMessage;
     var page;
 
     function Page() {};
 
+    
+
     Page.prototype.init = function () {
         var me = this;
-        me._inSaving = false;
+        me._inSaving = false;        
         me.$form = $('#target');
         me.$buttonsToDisable = $('.btn.save, .btn.save-close, .btn.save-new');
 
@@ -41,18 +50,41 @@ $(function () {
         return !me._inSaving;
     };
 
-    Page.prototype.onSaveClick = function () {
+    Page.prototype.isProductAreaValid = function () {
         var me = this;
+        var res = productAreaChildObj.val();
+        if (res == '1')
+            return false
+        else
+            return true;
+    };
+
+    Page.prototype.onSaveClick = function () {
+        var me = this;        
         if (me.canSave()) {
-            me.$form.submit();
+            if (me.isProductAreaValid())
+                me.$form.submit();
+            else {                
+                page.resetSaving();
+                document.getElementById(productAreaObjName).classList.add("error");
+                dhHelpdesk.cases.utils.showError(productAreaErrorMessage);
+                return false;
+            }            
         }
         return false;
     };
 
     Page.prototype.onSaveAndCloseClick = function() {
-        var me = this;
+        var me = this;                
         if (me.canSave()) {
-            me.$form.attr("action", '/Cases/NewAndClose').submit();
+            if (me.isProductAreaValid())
+                me.$form.attr("action", '/Cases/NewAndClose').submit();
+            else {
+                page.resetSaving();
+                document.getElementById(productAreaObjName).classList.add("error");
+                dhHelpdesk.cases.utils.showError(productAreaErrorMessage);
+                return false;
+            }
         }
         return false;
     };
@@ -60,7 +92,14 @@ $(function () {
     Page.prototype.onSaveAndNewClick = function () {
         var me = this;
         if (me.canSave()) {
-            me.$form.attr("action", '/Cases/NewAndAddCase').submit();
+            if (me.isProductAreaValid())
+                me.$form.attr("action", '/Cases/NewAndAddCase').submit();
+            else {
+                page.resetSaving();
+                document.getElementById(productAreaObjName).classList.add("error");
+                dhHelpdesk.cases.utils.showError(productAreaErrorMessage);
+                return false;
+            }
         }
         return false;
     };
@@ -750,6 +789,7 @@ $(function () {
         var noText = spec.noText || '';
         var validationMessages = spec.validationMessages || [];
         var mandatoryFieldsText = spec.mandatoryFieldsText || '';
+        
 
         dhHelpdesk.cases.utils.init(okText, cancelText, yesText, noText);
 
@@ -846,7 +886,7 @@ $(function () {
 
         that.getCase = getCase;
 
-        $('#target').submit(function () {
+        $('#target').submit(function () {           
             if (!$(this).valid()) {
                 page.resetSaving();
                 var message = requiredFieldsMessage + '<br />' + mandatoryFieldsText + ':';
@@ -870,7 +910,8 @@ $(function () {
                         }
                     }
                 });
-            } 
+            }            
+            
         });
 
         return that;
