@@ -48,55 +48,54 @@
         {
             var customerId = -1;
             TempData["ShowLanguageSelect"] = true;
-            SessionFacade.LastError = null;            
-
+            SessionFacade.LastError = null;                        
             if(filterContext.ActionParameters.Keys.Contains("customerId"))
-            {
+            {                
                 var customerIdPassed = filterContext.ActionParameters["customerId"];
                 if(customerIdPassed.ToString() != "")
-                    customerId = int.Parse(customerIdPassed.ToString());
+                    customerId = int.Parse(customerIdPassed.ToString());             
             }
 
             if (filterContext.ActionParameters.Keys.Contains("id"))
-            {
+            {                
                 var _guid = filterContext.ActionParameters["id"];                
                 if (_guid!= null && _guid.ToString() != string.Empty && GuidHelper.IsGuid(_guid.ToString()))
-                {
+                {                    
                     var guid = new Guid(_guid.ToString());
                     int? tempCustomerId = _masterDataService.GetCustomerIdByEMailGUID(guid);
                     if (tempCustomerId != null && tempCustomerId > 0)
-                        customerId = tempCustomerId.Value;
+                        customerId = tempCustomerId.Value;                 
                 } 
             }
 
             if(SessionFacade.CurrentCustomer == null && customerId == -1)
-            {
+            {             
                 ErrorGenerator.MakeError("Customer Id is empty!", 101);
-                filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
+                filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));             
                 return;
             }
 
             // CustomerId has been changed by user
             if((SessionFacade.CurrentCustomer != null && SessionFacade.CurrentCustomer.Id != customerId && customerId != -1) ||
                 (SessionFacade.CurrentCustomer == null && customerId != -1))
-            {
+            {                
                 var newCustomer = this._masterDataService.GetCustomer(customerId);
-                SessionFacade.CurrentCustomer = newCustomer;
-
+                SessionFacade.CurrentCustomer = newCustomer;                
                 // Customer changed > clear sessions
                 SessionFacade.CurrentCoWorkers = null;
             }
 
             if(SessionFacade.CurrentCustomer == null)
-            {
+            {             
                 SessionFacade.UserHasAccess = false;
                 ErrorGenerator.MakeError(string.Format("Customer is not valid!", customerId), 101);
                 filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
                 return;
             }
             else            
-            {
-                customerId = SessionFacade.CurrentCustomer.Id;                
+            {                
+                customerId = SessionFacade.CurrentCustomer.Id;
+                SessionFacade.CurrentCustomerID = customerId;                
             }
 
             if(SessionFacade.AllLanguages == null)
@@ -245,14 +244,13 @@
             } // SSO Login
             else
                 if(ConfigurationManager.AppSettings[AppSettingsKey.LoginMode].ToString().ToLower() == LoginMode.Windows)
-                {
+                {                    
                     var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
                     SessionFacade.UserHasAccess = true;
                     SessionFacade.CurrentCoWorkers = null;
                     string fullName = identity.Name;
                     string userId = fullName.GetUserFromAdPath();
-                    string userDomain = fullName.GetDomainFromAdPath();
-
+                    string userDomain = fullName.GetDomainFromAdPath();                 
                     SessionFacade.CurrentSystemUser = userId;
                     var ui = new UserIdentity()
                     {
@@ -283,7 +281,7 @@
 
                         SessionFacade.CurrentUserIdentity = ui;
                     }
-
+            
             this.SetTextTranslation(filterContext);
         }
 

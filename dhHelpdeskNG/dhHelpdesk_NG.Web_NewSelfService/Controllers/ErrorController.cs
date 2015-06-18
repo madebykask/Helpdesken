@@ -16,14 +16,16 @@ namespace DH.Helpdesk.NewSelfService.Controllers
         [HttpGet]        
         public ActionResult Index() 
         {            
-            var model = new Error()
+            var model = new Error();
+            if (SessionFacade.LastError != null)
             {
-                ErrorCode = SessionFacade.LastError.ErrorCode.ToString(),
-                ErrorMessage = SessionFacade.LastError.Message,
-                BackURL = SessionFacade.LastCorrectUrl
+                model.ErrorCode = SessionFacade.LastError.ErrorCode.ToString();
+                model.ErrorMessage = SessionFacade.LastError.Message;               
             };
+
+            model.BackURL = SessionFacade.LastCorrectUrl;
+
             
-            ViewBag.HasError = "true";
             return View(model);
         }
 
