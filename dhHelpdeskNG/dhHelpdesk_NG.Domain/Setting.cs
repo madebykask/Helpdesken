@@ -81,6 +81,7 @@ namespace DH.Helpdesk.Domain
         public int PasswordHistory { get; set; }
         public int PlanDateFormat { get; set; }
         public int POP3DebugLevel { get; set; }
+        public int POP3Port { get; set; }
         public int PriorityFormat { get; set; }
         public int ProductAreaFilterFormat { get; set; }
         public int ProductAreaFormat { get; set; }

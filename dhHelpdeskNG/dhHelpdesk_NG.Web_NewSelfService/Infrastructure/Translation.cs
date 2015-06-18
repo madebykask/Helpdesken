@@ -100,11 +100,11 @@
                         {
                             var trans = translation.TextTranslations.Where(x => x.Language_Id == languageId).FirstOrDefault();
                             var text = (trans != null ? trans.TextTranslated : string.Empty);
-                            if (string.IsNullOrEmpty(text) && SessionFacade.CurrentLanguageId != LanguageIds.Swedish)
-                            {
-                                trans = translation.TextTranslations.Where(x => x.Language_Id == SessionFacade.CurrentCustomer.Language_Id).FirstOrDefault();
-                                text = (trans != null ? trans.TextTranslated : string.Empty);
-                            }
+                            //if (string.IsNullOrEmpty(text) && SessionFacade.CurrentLanguageId != LanguageIds.Swedish)
+                            //{
+                            //    trans = translation.TextTranslations.Where(x => x.Language_Id == SessionFacade.CurrentCustomer.Language_Id).FirstOrDefault();
+                            //    text = (trans != null ? trans.TextTranslated : string.Empty);
+                            //}
 
                             translate = !string.IsNullOrEmpty(text) ? text : translate;
                         }

@@ -5,8 +5,15 @@
 @using DH.Helpdesk.Common.Enums.Settings
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
-@Scripts.Render("~/bundles/invoices", "~/bundles/cases/edit")
 
+<script type="text/javascript">
+    window.parameters = {
+        productAreaErrorMessage:'@Translation.Get("Ärendet kunde inte sparas då den lägsta möjliga nivån på fält")' + " [" +
+                                '@Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)' + "] " +
+                                    '@Translation.Get("inte har valts. Vänligen kontrollera ärendet.")'
+    };  
+</script>
+@Scripts.Render("~/bundles/invoices", "~/bundles/cases/edit")
 @{  
     var pDepartmentVisible = false;
     if (Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Department_Id, CaseSolutionFields.Department) == string.Empty)
@@ -1778,31 +1785,23 @@
         //errorPlacement: function (error, element) {
         //    alert(error.text());
         //},
-        submitHandler: function(form) {
-            
+        submitHandler: function(form) { 
             if (isProductAreaValid())
-                form.submit();
-            else                
-                return false;            
-                
+                form.submit();   
+            else
+                return false;
         }
     });
 
     function isProductAreaValid() {
         var ret = true;
         var res = $("#ProductAreaHasChild").val();
-
         if (res == '1') {
-            var msgTxt = '@Translation.Get("Ärendet kunde inte sparas då den lägsta möjliga nivån på fält")' + " [" +
-                         '@Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)' + "] " +
-                         '@Translation.Get("inte har valts. Vänligen kontrollera ärendet.")';
-            document.getElementById("divProductArea").classList.add("error");
-            ShowToastMessage(msgTxt, "error", true);
             ret = false;
+            ShowToastMessage(window.parameters.productAreaErrorMessage, "error", true);
         }
-
-    return ret;
-}
+        return ret;
+    }
 
     function FieldIsRequired(value) {
         var ret = false;
@@ -1888,7 +1887,8 @@
             yesText: '@Translation.Get("Ja")',
             noText: '@Translation.Get("Nej")',
             validationMessages: ['@Translation.Get("måste anges")'],
-            mandatoryFieldsText: '@Translation.Get("Obligatoriska fält")'
-        });
+            mandatoryFieldsText: '@Translation.Get("Obligatoriska fält")',            
+        });        
+        
     });
 </script>

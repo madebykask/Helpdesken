@@ -90,9 +90,22 @@
             vmodel.Setting.CaseFiles = setting.CaseFiles;
             vmodel.Setting.Customer_Id = setting.Customer_Id;
             vmodel.Setting.LDAPPassword = setting.LDAPPassword.ToString();
-
+            vmodel.Setting.POP3Server = setting.POP3Server.ToString();
             vmodel.Setting.ComputerUserInfoListLocation = setting.ComputerUserInfoListLocation;
             vmodel.Setting.ModuleCase = setting.ModuleCase;
+
+            vmodel.Setting.POP3Port = setting.POP3Port;
+            vmodel.Setting.POP3UserName = setting.POP3UserName.ToString();
+            vmodel.Setting.POP3Password = setting.POP3Password.ToString();
+            vmodel.Setting.POP3DebugLevel = setting.POP3DebugLevel;
+            vmodel.Setting.MailServerProtocol = setting.MailServerProtocol;
+            vmodel.Setting.EMailAnswerSeparator = setting.EMailAnswerSeparator.ToString();
+            vmodel.Setting.EMailSubjectPattern = setting.EMailSubjectPattern.ToString();
+            vmodel.Setting.LDAPSyncType = setting.LDAPSyncType;
+            vmodel.Setting.LDAPLogLevel = setting.LDAPLogLevel;
+            vmodel.Setting.PhysicalFilePath = setting.PhysicalFilePath;
+            vmodel.Setting.VirtualFilePath = setting.VirtualFilePath;
+
             //vmodel.Setting.PasswordHistory = returnPasswordHistoryForSave(vmodel);
           
 

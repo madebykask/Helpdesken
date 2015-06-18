@@ -557,30 +557,25 @@
         }
 
         [HttpGet]
-        public PartialViewResult _CaseLogNote(int caseId, string note)
-        {
+        public ActionResult _CaseLogNote(int caseId, string note)
+        {            
             SaveExternalMessage(caseId, note);            
-
             CaseLogModel model = new CaseLogModel()
                   {
                       CaseId = caseId,
                       CaseLogs = this._logService.GetLogsByCaseId(caseId).OrderByDescending(l=> l.RegTime).ToList()
-                  };
-
+                  };            
             return this.PartialView(model);
         }
         
         private void SaveExternalMessage(int caseId, string extraNote) 
         {
-            IDictionary<string, string> errors;
-
+            IDictionary<string, string> errors;            
             var currentCase = _caseService.GetCaseById(caseId);
             var currentCustomer = _customerService.GetCustomer(currentCase.Customer_Id);
-            var cs = this._settingService.GetCustomerSetting(currentCustomer.Id);
-
+            var cs = this._settingService.GetCustomerSetting(currentCustomer.Id);            
             // save case history            
-            int caseHistoryId = this._caseService.SaveCaseHistory(currentCase, 0, currentCase.PersonsEmail, out errors, SessionFacade.CurrentUserIdentity.UserId);
-            
+            int caseHistoryId = this._caseService.SaveCaseHistory(currentCase, 0, currentCase.PersonsEmail, out errors, SessionFacade.CurrentUserIdentity.UserId);            
             // save log
             var caseLog = new CaseLog
                               {
@@ -599,8 +594,7 @@
                                   SendMailAboutCaseToNotifier = true,
                                   SendMailAboutLog = true
                               };
-
-
+            
             if(currentCase.WorkingGroup_Id != null)
             {
                 var curWorkingGroup = _workingGroupService.GetWorkingGroup(currentCase.WorkingGroup_Id.Value);
@@ -608,8 +602,7 @@
                 {
                     // Send Mail to all working group users
                     var usersInWorkingGroup = _userService.GetUsersForWorkingGroup(currentCase.WorkingGroup_Id.Value).Where(u => u.Email.Trim() != string.Empty).ToList();
-                    var emailTo = new List<string>();
-
+                    var emailTo = new List<string>();                    
                     if(usersInWorkingGroup != null && usersInWorkingGroup.Count > 0)
                     {
                         if(currentCase.Department_Id.HasValue)
@@ -628,33 +621,28 @@
                             }
                         }
                         else
-                        {
+                        {                            
                             emailTo = usersInWorkingGroup.Select(u => u.Email).ToList();
                         }
-                    }
-
+                    }                    
                     if(emailTo.Count > 0)
                         caseLog.EmailRecepientsExternalLog = string.Join(Environment.NewLine, emailTo);
                 }
-            }
-
+            }            
             var temporaryLogFiles = this._userTemporaryFilesStorage.GetFiles(currentCase.CaseGUID.ToString(), "");
-            caseLog.Id = this._logService.SaveLog(caseLog, temporaryLogFiles.Count, out errors);
-
+            caseLog.Id = this._logService.SaveLog(caseLog, temporaryLogFiles.Count, out errors);            
             var basePath = this._masterDataService.GetFilePath(currentCase.Customer_Id);
             // save log files
             var newLogFiles = temporaryLogFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseLog.Id)).ToList();
-            this._logFileService.AddFiles(newLogFiles);
-
+            this._logFileService.AddFiles(newLogFiles);            
             // send emails
             var caseMailSetting = new CaseMailSetting(
                                                        currentCustomer.NewCaseEmailList,
                                                        currentCustomer.HelpdeskEmail,
                                                        ConfigurationManager.AppSettings[AppSettingsKey.HelpdeskPath].ToString(),
                                                        cs.DontConnectUserToWorkingGroup
-                                                       );
-
-            this._caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, basePath, newLogFiles);                     
+                                                     );            
+            this._caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, basePath, newLogFiles);            
         }
 
         [HttpPost]
