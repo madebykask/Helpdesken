@@ -21,6 +21,15 @@
                     m.ToTable("tblCustomerUser");
                 });
 
+            this.HasMany(u => u.UsersAvailable)
+                .WithMany(c => c.CusomersAvailable)
+                .Map(m =>
+                {
+                    m.MapLeftKey("Customer_Id");
+                    m.MapRightKey("User_Id");
+                    m.ToTable("tblCustomerAvailableUser");
+                });
+
             this.HasRequired(x => x.Language)
                 .WithMany()
                 .HasForeignKey(x => x.Language_Id)

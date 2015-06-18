@@ -62,7 +62,16 @@
         public virtual ICollection<ReportCustomer> ReportCustomers { get; set; }
         public virtual ICollection<Document> Documents { get; set; }
         public virtual ICollection<FaqEntity> FAQs { get; set; }
+
+        /// <summary>
+        /// Users selected for this customer
+        /// </summary>
         public virtual ICollection<User> Users { get; set; }
+
+        /// <summary>
+        /// Users available for this customer
+        /// </summary>
+        public virtual ICollection<User> UsersAvailable { get; set; }
 
         public virtual ICollection<Product> Products { get; set; } 
 

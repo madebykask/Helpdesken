@@ -73,28 +73,7 @@
 
             bundles.Add(new ScriptBundle("~/bundles/dhhelpdesk").Include(
                             "~/Content/js/dhHelpdesk.js"));
-
-            bundles.Add(new ScriptBundle("~/bundles/common/admin").Include(
-                            "~/Scripts/jquery-1.8.3.min.js",
-                            "~/Scripts/jquery-ui-1.9.2.min.js",
-                            "~/Content/js/bootstrap.js",
-                            "~/Content/js/chosen.jquery.min.js",
-                            "~/Content/js/bootstrap-multiselect.js",
-                            "~/Content/js/bootstrap-datepicker.js",
-                            "~/Content/js/bootstrap-tagsinput.js",
-#if DEBUG
-                            "~/Content/js/jquery.validate.js",
-#else 
-                            "~/Content/js/jquery.validate.min.js",
-#endif
-                            "~/Content/js/plupload.full.min.js",
-                            "~/Content/js/jquery.plupload.queue/jquery.plupload.queue.js",                            
-                            "~/Content/js/dhHelpdesk-head.js",
-                            "~/Content/js/jquery.form.min.js",
-                            "~/Content/js/jquery.toastmessage.js",                            
-                            "~/Content/js/bootstrap-switch.min.js",
-                            "~/Content/js/jquery.dataTables.min.js")); //To apply changes on tinymce use>>   ?cachebuster=123
-
+            
             bundles.Add(new ScriptBundle("~/bundles/common/login").Include(
                             "~/Scripts/jquery-1.8.3.min.js",
                             "~/Content/js/bootstrap.js"));
@@ -213,8 +192,33 @@
             bundles.Add(new ScriptBundle("~/bundles/report").Include(
                             "~/Areas/Reports/Content/js/reports.js"));
 
+            #region Admin scripts
+
+            bundles.Add(new ScriptBundle("~/bundles/common/admin").Include(
+                           "~/Scripts/jquery-1.8.3.min.js",
+                           "~/Scripts/jquery-ui-1.9.2.min.js",
+                           "~/Content/js/bootstrap.js",
+                           "~/Content/js/chosen.jquery.min.js",
+                           "~/Content/js/bootstrap-multiselect.js",
+                           "~/Content/js/bootstrap-datepicker.js",
+                           "~/Content/js/bootstrap-tagsinput.js",
+                        #if DEBUG
+                            "~/Content/js/jquery.validate.js",
+                        #else 
+                                                    "~/Content/js/jquery.validate.min.js",
+                        #endif
+                            "~/Content/js/plupload.full.min.js",
+                           "~/Content/js/jquery.plupload.queue/jquery.plupload.queue.js",
+                           "~/Content/js/dhHelpdesk-head.js",
+                           "~/Content/js/jquery.form.min.js",
+                           "~/Content/js/jquery.toastmessage.js",
+                           "~/Content/js/bootstrap-switch.min.js",
+                           "~/Content/js/jquery.dataTables.min.js")); //To apply changes on tinymce use>>   ?cachebuster=123
+
             bundles.Add(new ScriptBundle("~/bundles/admin/users").Include(
                             "~/Areas/Admin/Content/js/Users/user.js"));
+            bundles.Add(new ScriptBundle("~/bundles/admin/users/_input").Include(
+                            "~/Areas/Admin/Content/js/Users/_input.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/admin/customerOverview").Include(
                             "~/Areas/Admin/Content/js/CaseOverview/customerOverview.js",
@@ -229,10 +233,7 @@
 
             bundles.Add(new ScriptBundle("~/bundles/cases/caseByIds").Include(
                             "~/Content/js/Cases/caseByIds.logic.js"));
-
-            //bundles.Add(new ScriptBundle("~/bundles/common/admin/tinymce").Include(                            
-            //                "~/Content/js/tinymce/tinymce.min.js",
-            //                "~/Areas/Admin/Content/js/Common/tinymce.initiate.js"));
+            #endregion
         }
     }
 }

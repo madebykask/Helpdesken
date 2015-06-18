@@ -14,6 +14,8 @@
     using DH.Helpdesk.Web.Areas.Admin.Models;
     using DH.Helpdesk.Web.Infrastructure;
 
+    using UserGroup = DH.Helpdesk.BusinessData.Enums.Admin.Users.UserGroup;
+
     public class UsersController : BaseController
     {
         private readonly IAccountActivityService _accountActivityService;
@@ -141,7 +143,6 @@
                 FAQPermission = 1,
                 IsActive = 1,
                 Language_Id = SessionFacade.CurrentLanguageId,
-                // MenuSettings = string.Empty,
                 MoveCasePermission = 1,
                 PasswordChangedDate = DateTime.Now,
                 Performer = 1,
@@ -162,14 +163,17 @@
 
         [CustomAuthorize(Roles = "3,4")]
         [HttpPost]
-        public ActionResult New(UserInputViewModel userInputViewModel, int[] AAsSelected, int[] CsSelected, int[] OTsSelected, string NewPassword, string ConfirmPassword, FormCollection coll)
+        public ActionResult New(
+            UserInputViewModel userInputViewModel, 
+            int[] AAsSelected, 
+            int[] CsSelected, 
+            int[] OTsSelected, 
+            string NewPassword, 
+            string ConfirmPassword, 
+            FormCollection coll)
         {
-            IDictionary<string, string> errors = new Dictionary<string, string>();
-           
+            IDictionary<string, string> errors;
             var user = this.returnCaseInfoMailForNewSave(userInputViewModel);
-
-            //returnUserRoleForNewSave(userInputViewModel); TODO: Save userrole correct! geht nichts momental
-
             userInputViewModel.User.ActivateCasePermission = 1;
             userInputViewModel.User.BulletinBoardDate = DateTime.Now;
             userInputViewModel.User.ChangeTime = DateTime.Now;
@@ -179,17 +183,13 @@
             userInputViewModel.User.FAQPermission = 1;
             userInputViewModel.User.IsActive = 1;
             userInputViewModel.User.MoveCasePermission = 1;
-            //userInputViewModel.User.Password = this.NewUserPassword(SessionFacade.CurrentUser.Id, NewPassword, ConfirmPassword);
             userInputViewModel.User.Password = NewPassword;
             userInputViewModel.User.PasswordChangedDate = DateTime.Now;
             userInputViewModel.User.Performer = 1;
             userInputViewModel.User.RegTime = DateTime.Now;
             userInputViewModel.User.ReportPermission = 1;
             userInputViewModel.User.SetPriorityPermission = 1;
-            //userInputViewModel.UsersUserRole.User_Id = SessionFacade.CurrentUser.Id;
-            //userInputViewModel.User.UserGroup_Id = 4;
-
-            if (userInputViewModel.User.UserGroup_Id == 1)
+            if (userInputViewModel.User.UserGroup_Id == (int)UserGroup.User)
             {
                 userInputViewModel.User.Performer = 0;
                 userInputViewModel.User.CloseCasePermission = 0;
@@ -202,12 +202,16 @@
                 userInputViewModel.User.ActivateCasePermission = 0;
             }
 
+            // validating available projects
+            if (SessionFacade.CurrentUser.UserGroupId != (int)UserGroup.SystemAdministrator)
+            {
+                var availableCustomersHash = this._userService.GetUser(SessionFacade.CurrentUser.Id).CusomersAvailable.ToDictionary(it => it.Id, it => true);
+                CsSelected = CsSelected.Where(availableCustomersHash.ContainsKey).ToArray();
+            }
+
             this._userService.SaveNewUser(user, AAsSelected, CsSelected, OTsSelected, null, out errors);
-
-
             if (errors.Count == 0)
             {
-                //return this.RedirectToAction("index", "users");
                 return this.RedirectToAction("edit", "users", new { id = user.Id });
             }
 
@@ -216,6 +220,7 @@
             {
                 ModelState.AddModelError(error.Key, Translation.Get(error.Value));
             }
+
             return this.View(model);
         }
 
@@ -244,9 +249,7 @@
                 model.User.CellPhone = string.Empty;
                 model.User.Email = string.Empty;
                 model.User.Password = string.Empty;
-
                 model.CopyUserid = id;
-
             }
 
             return this.View(model);
@@ -254,7 +257,17 @@
 
         [CustomAuthorize(Roles = "3,4")]
         [HttpPost]
-        public ActionResult Edit(int id, int[] AAsSelected, int[] CsSelected, int[] OTsSelected, int[] Departments, List<UserWorkingGroup> UserWorkingGroups, UserSaveViewModel userModel, string NewPassword, string ConfirmPassword, FormCollection coll)
+        public ActionResult Edit(
+            int id, 
+            int[] AAsSelected,
+            int[] CsSelected, 
+            int[] OTsSelected, 
+            int[] Departments, 
+            List<UserWorkingGroup> UserWorkingGroups, 
+            UserSaveViewModel userModel, 
+            string NewPassword, 
+            string ConfirmPassword, 
+            FormCollection coll)
         {
             IDictionary<string, string> errors;
 
@@ -263,14 +276,16 @@
             if (id != -1)
             {
                 userToSave = this._userService.GetUser(id);
+                if (SessionFacade.CurrentUser.UserGroupId != (int)UserGroup.SystemAdministrator
+                    && (SessionFacade.CurrentUser.UserGroupId < userToSave.UserGroup_Id || userModel.User.UserGroup_Id > SessionFacade.CurrentUser.UserGroupId))
+                {
+                    return this.RedirectToAction("Forbidden", "Error", new { area = string.Empty });
+                }
 
                 userToSave.OrderPermission = this.returnOrderPermissionForSave(userModel);
                 userToSave.CaseInfoMail = this.returnCaseInfoMailForEditSave(userModel);
-               
                 this.TryUpdateModel(userToSave, "user");
-
                 var allCustomers = _customerService.GetAllCustomers();
-
                 string err = "";
                 List<string> customersAlert = new List<string>(); 
                 if (userToSave.IsActive == 0)
@@ -282,17 +297,6 @@
                              customersAlert.Add(c.Name);
                     }                                       
                 }
-                //else
-                //{
-                //    if (UserWorkingGroups != null && UserWorkingGroups.Any())
-                //    {
-                //        foreach (var c in allCustomers)
-                //        {
-                //            if (_userService.UserHasCase(c.Id, userToSave.Id, UserWorkingGroups.Where(w => w.UserRole != 0).Select(w => w.WorkingGroup_Id).ToList()))
-                //                customersAlert.Add(c.Name);
-                //        }
-                //    }                       
-                //}
 
                 if (customersAlert.Any())
                 {
@@ -319,7 +323,39 @@
                     }
                 }
 
-                this._userService.SaveEditUser(userToSave, AAsSelected, CsSelected, OTsSelected, Departments, UserWorkingGroups, out errors);
+                var customersAvailableHash = this.GetAvaliableCustomersFor(userToSave).ToDictionary(it => it.Id, it => true);
+                var customersSelected = CsSelected.Where(customersAvailableHash.ContainsKey).ToArray();
+                if (SessionFacade.CurrentUser.Id == userToSave.Id)
+                {
+                    this._userService.SaveEditUser(
+                       userToSave,
+                       AAsSelected,
+                       customersSelected.ToArray(),
+                       customersAvailableHash.Keys.ToArray(),
+                       OTsSelected,
+                       Departments,
+                       UserWorkingGroups,
+                       out errors);
+                }
+                else
+                {
+                    // when user updates info about other user it is possible that second user has own selected customers that first user does not have
+                    var usersOwnCustomer =
+                        userToSave.CusomersAvailable.Where(it => !customersAvailableHash.ContainsKey(it.Id))
+                            .Select(it => it.Id)
+                            .ToList();
+                    usersOwnCustomer.AddRange(customersSelected);
+                    this._userService.SaveEditUser(
+                        userToSave,
+                        AAsSelected,
+                        customersSelected.ToArray(),
+                        usersOwnCustomer.ToArray(),
+                        OTsSelected,
+                        Departments,
+                        UserWorkingGroups,
+                        out errors);
+                }
+                
 
                 if (errors.Count == 0)
                 {
@@ -332,13 +368,12 @@
                     //SessionFacade.CurrentUser = UsersMapper.MapToOverview(userToSave);
                     return this.RedirectToAction("edit", "users", new { id = id });
                 }
-                else
+                
+                foreach (var error in errors)
                 {
-                    foreach (var error in errors)
-                    {
-                        ModelState.AddModelError(error.Key, Translation.Get(error.Value));
-                    }
+                    ModelState.AddModelError(error.Key, Translation.Get(error.Value));
                 }
+                
                 var model = this.CreateInputViewModel(userToSave);
 
                 return this.View(model);
@@ -510,12 +545,6 @@
             }
         }
 
-        [CustomAuthorize(Roles = "3,4")]
-        public ActionResult SignedInUsers()
-        {
-            return this.PartialView("_SignedInUsers");
-        }
-
         private UserIndexViewModel IndexInputViewModel()
         {
             var user = this._userService.GetUser(SessionFacade.CurrentUser.Id);
@@ -572,22 +601,17 @@
 
             var aasSelected = user.AAs ?? new List<AccountActivity>();
             var aasAvailable = new List<AccountActivity>();
-
             foreach (var aa in this._accountActivityService.GetAccountActivities(SessionFacade.CurrentCustomer.Id))
             {
                 if (!aasSelected.Contains(aa))
                     aasAvailable.Add(aa);
             }
-
-            var csSelected = user.Cs ?? new List<Customer>();
-            var csAvailable = new List<Customer>();
-
-            foreach (var c in this._customerService.GetAllCustomers())
-            {
-                if (!csSelected.Contains(c))
-                    csAvailable.Add(c);
-            }
-
+            
+            var customersSelected = user.Cs ?? new List<Customer>();
+            var selectedCustomersHash = customersSelected.ToDictionary(it => it.Id, it => true);
+            var customersAvailable = this.GetAvaliableCustomersFor(user)
+                .Where(it => !selectedCustomersHash.ContainsKey(it.Id))
+                .OrderBy(it => it.Name);
             var otsSelected = user.OTs ?? new List<OrderType>();
             var otsAvailable = new List<OrderType>();
 
@@ -689,10 +713,9 @@
                 CaseInfoMailList = li,
                 RefreshInterval = sli,
                 StartPageShowList = lis,
-                CustomerUsers = (user.CustomerUsers == null? this._userService.GetCustomerUserForUser(user.Id) : user.CustomerUsers),
+                CustomerUsers = user.CustomerUsers ?? this._userService.GetCustomerUserForUser(user.Id),
                 Departments = this._userService.GetDepartmentsForUser(user.Id),
                 ListWorkingGroupsForUser = this._userService.GetListToUserWorkingGroup(user.Id),
-                //UserColumns = _caseSettingsService.GetCaseSettingsWithUser(user.Customer_Id, user.Id, SessionFacade.CurrentUser.UserGroupId),
                 Customers = this._customerService.GetAllCustomers().Select(x => new SelectListItem
                 {
                     Text = x.Name,
@@ -724,16 +747,16 @@
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                CsAvailable = csAvailable.Select(x => new SelectListItem
+                CsAvailable = customersAvailable.Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                CsSelected = csSelected.Select(x => new SelectListItem
+                CsSelected = customersSelected.Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
-                }).ToList(),
+                }).OrderBy(it => it.Text).ToList(),
                 OTsAvailable = otsAvailable.Select(x => new SelectListItem
                 {
                     Text = x.Name,
@@ -751,25 +774,14 @@
                 }).ToList()
             };
 
-            
-            //If systemadministrator: select all. Else: do not select system administrator.
-            //Stopping customer administrators from changing users to system administrators.
-            if (SessionFacade.CurrentUser.UserGroupId == 4)
+            model.UserGroups = this._userService.GetUserGroups()
+                .Where(it => it.Id <= SessionFacade.CurrentUser.UserGroupId)
+                .OrderBy(x => x.Id)
+                .Select(x => new SelectListItem
             {
-                model.UserGroups = this._userService.GetUserGroups().OrderBy(x => x.Id).Select(x => new SelectListItem
-                {
-                    Text = Translation.Get(x.Name, Enums.TranslationSource.TextTranslation),
-                    Value = x.Id.ToString()
-                }).ToList();
-            }
-            else
-            {
-                model.UserGroups = this._userService.GetUserGroups().OrderBy(x => x.Id).Where(x => x.Id != 4).Select(x => new SelectListItem
-                {
-                Text = Translation.Get(x.Name, Enums.TranslationSource.TextTranslation),
-                    Value = x.Id.ToString()
-                }).ToList();
-            }
+                Text = Translation.Get(x.Name),
+                Value = x.Id.ToString()
+            }).ToList();
 
             #endregion
 
@@ -781,11 +793,6 @@
                     model.UserRights = model.User.UserRoles.FirstOrDefault().Id;
                 else
                     model.UserRights = 0;
-
-                //if (user.MenuSettings != null)
-                //{
-                //    model.MenuSetting = model.User.MenuSettings.Split(';');
-                //}
             }
 
 
@@ -820,30 +827,36 @@
 
             #endregion
 
-            #region SetStrings
-
-
-
-
-            //if (user.CaseStateSecondaryColor != null)
-            //{
-            //    if (user.CaseStateSecondaryColor == "#000000")
-            //    {
-            //        model.StateStatusCase = 1;
-            //    }
-            //    else if (user.CaseStateSecondaryColor == "#008000")
-            //    {
-            //        model.StateStatusCase = 2;
-            //    }
-            //    else
-            //    {
-            //        model.StateStatusCase = 0;
-            //    }
-            //}
-
-            #endregion
-
             return model;
+        }
+
+        private IEnumerable<Customer> GetAvaliableCustomersFor(User user)
+        {
+            if (SessionFacade.CurrentUser.UserGroupId == (int)UserGroup.SystemAdministrator)
+            {
+                return this._customerService.GetAllCustomers().ToArray();
+            }
+            
+            if (user.IsNew())
+            {
+                return this._userService.GetUser(SessionFacade.CurrentUser.Id).CusomersAvailable.OrderBy(it => it.Name).ToList();
+            }
+
+            if (SessionFacade.CurrentUser.Id == user.Id)
+            {
+                return user.CusomersAvailable.ToArray();
+            }
+
+            var combinedAvailableCustomers = this._userService.GetUser(SessionFacade.CurrentUser.Id).CusomersAvailable.ToDictionary(it => it.Id, it => it);
+            foreach (var customer in user.CusomersAvailable.ToArray())
+            {
+                if (!combinedAvailableCustomers.ContainsKey(customer.Id))
+                {
+                    combinedAvailableCustomers.Add(customer.Id, customer);
+                }
+            }
+
+            return combinedAvailableCustomers.Select(it => it.Value).ToArray();
         }
 
         private User returnCaseInfoMailForNewSave(UserInputViewModel userInputViewModel)
