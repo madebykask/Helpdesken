@@ -2953,7 +2953,7 @@ If not exists (select * from tbltext where id = 1345)
 GO
 
 If not exists (select * from tblTextTranslation where text_id = 1345 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1345, 2, 'Small')
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1345, 2, 'Smaller')
 GO
 
 
@@ -2962,7 +2962,7 @@ If not exists (select * from tbltext where id = 1346)
 GO
 
 If not exists (select * from tblTextTranslation where text_id = 1346 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1346, 2, 'Smaller')
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1346, 2, 'Smallest')
 GO
 
 
@@ -3023,29 +3023,32 @@ If not exists (select * from tblTextTranslation where text_id = 1354 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1354, 2, 'Automated')
 GO
 
-If not exists (select * from tbltext where id = 1355)
-	insert into tbltext (id, TextString) VALUES (1355, 'Normal')
-GO
+-- Already added id 1341
+--If not exists (select * from tbltext where id = 1355)
+	--insert into tbltext (id, TextString) VALUES (1355, 'Normal')
+--GO
 
-If not exists (select * from tblTextTranslation where text_id = 1355 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1355, 2, 'Normal')
-GO
+--If not exists (select * from tblTextTranslation where text_id = 1355 and Language_Id = 2)
+	--insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1355, 2, 'Normal')
+--GO
 
-If not exists (select * from tbltext where id = 1356)
-	insert into tbltext (id, TextString) VALUES (1356, 'Mindre')
-GO
+-- Already added id 1345
+--If not exists (select * from tbltext where id = 1356)
+	--insert into tbltext (id, TextString) VALUES (1356, 'Mindre')
+--GO
 
-If not exists (select * from tblTextTranslation where text_id = 1356 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1356, 2, 'Smaller')
-GO
+--If not exists (select * from tblTextTranslation where text_id = 1356 and Language_Id = 2)
+--	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1356, 2, 'Smaller')
+--GO
 
-If not exists (select * from tbltext where id = 1357)
-	insert into tbltext (id, TextString) VALUES (1357, 'Minst')
-GO
+-- Already added id 1346
+--If not exists (select * from tbltext where id = 1357)
+	--insert into tbltext (id, TextString) VALUES (1357, 'Minst')
+--GO
 
-If not exists (select * from tblTextTranslation where text_id = 1357 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1357, 2, 'Smallest')
-GO
+--If not exists (select * from tblTextTranslation where text_id = 1357 and Language_Id = 2)
+	--insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1357, 2, 'Smallest')
+--GO
 
 If not exists (select * from tbltext where id = 1358)
 	insert into tbltext (id, TextString) VALUES (1358, 'Textfält – större')
@@ -3055,14 +3058,15 @@ If not exists (select * from tblTextTranslation where text_id = 1358 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1358, 2, 'Text area')
 GO
 
-If not exists (select * from tbltext where id = 1359)
-	insert into tbltext (id, TextString) VALUES (1359, 'Bred')
-GO
+--If not exists (select * from tbltext where id = 1359)
+	--insert into tbltext (id, TextString) VALUES (1359, 'Bred')
+--GO
 
-If not exists (select * from tblTextTranslation where text_id = 1359 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1359, 2, 'Wide')
-GO
+--If not exists (select * from tblTextTranslation where text_id = 1359 and Language_Id = 2)
+	--insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1359, 2, 'Wide')
+--GO
 
+-- Already added id 1342
 If not exists (select * from tbltext where id = 1360)
 	insert into tbltext (id, TextString) VALUES (1360, 'Small')
 GO
@@ -3433,13 +3437,13 @@ If not exists (select * from tblTextTranslation where text_id = 1402 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1402, 2, 'Confirmation text')
 GO
 
-If not exists (select * from tbltext where id = 1403)
-	insert into tbltext (id, TextString) VALUES (1403, 'Informationstext')
-GO
+--If not exists (select * from tbltext where id = 1403)
+--	insert into tbltext (id, TextString) VALUES (1403, 'Informationstext')
+--GO
 
-If not exists (select * from tblTextTranslation where text_id = 1403 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1403, 2, 'Information text')
-GO
+--If not exists (select * from tblTextTranslation where text_id = 1403 and Language_Id = 2)
+--	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1403, 2, 'Information text')
+--
 
 If not exists (select * from tbltext where id = 1404)
 	insert into tbltext (id, TextString) VALUES (1404, 'Hjälpsida text')
