@@ -3555,19 +3555,19 @@ If not exists (select * from tblTextTranslation where text_id = 1414 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1414, 1, 'Anslagstavla')
 GO
 
-If not exists (select * from tbltext where id = 1415)
-	insert into tbltext (id, TextString, TextType) VALUES (1415, 'Ongoing cases', 300)
-GO
-If not exists (select * from tblTextTranslation where text_id = 1415 and Language_Id = 1)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1415, 1, 'Pågående ärenden')
-GO
+--If not exists (select * from tbltext where id = 1415)
+	--insert into tbltext (id, TextString, TextType) VALUES (1415, 'Ongoing cases', 300)
+--GO
+--If not exists (select * from tblTextTranslation where text_id = 1415 and Language_Id = 1)
+	--insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1415, 1, 'Pågående ärenden')
+--GO
 
-If not exists (select * from tbltext where id = 1416)
-	insert into tbltext (id, TextString, TextType) VALUES (1416, 'Closed cases', 300)
-GO
-If not exists (select * from tblTextTranslation where text_id = 1416 and Language_Id = 1)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1416, 1, 'Avslutade ärenden')
-GO
+--If not exists (select * from tbltext where id = 1416)
+	--insert into tbltext (id, TextString, TextType) VALUES (1416, 'Closed cases', 300)
+--GO
+--If not exists (select * from tblTextTranslation where text_id = 1416 and Language_Id = 1)
+	--insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1416, 1, 'Avslutade ärenden')
+--GO
 
 If not exists (select * from tbltext where id = 1417)
 	insert into tbltext (id, TextString, TextType) VALUES (1417, 'Search', 300)
@@ -3597,12 +3597,12 @@ If not exists (select * from tblTextTranslation where text_id = 1420 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1420, 1, 'Om')
 GO
 
-If not exists (select * from tbltext where id = 1421)
-	insert into tbltext (id, TextString, TextType) VALUES (1421, 'Closed cases', 300)
-GO
-If not exists (select * from tblTextTranslation where text_id = 1421 and Language_Id = 1)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1421, 1, 'Avslutade ärenden')
-GO
+--If not exists (select * from tbltext where id = 1421)
+	--insert into tbltext (id, TextString, TextType) VALUES (1421, 'Closed cases', 300)
+--GO
+--If not exists (select * from tblTextTranslation where text_id = 1421 and Language_Id = 1)
+	--insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1421, 1, 'Avslutade ärenden')
+--GO
 
 If not exists (select * from tbltext where id = 1422)
 	insert into tbltext (id, TextString, TextType) VALUES (1422, 'User', 300)
@@ -3842,12 +3842,12 @@ If not exists (select * from tblTextTranslation where text_id = 1459 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1459, 1, 'Beskrivning')
 GO
 
-If not exists (select * from tbltext where id = 1460)
-	insert into tbltext (id, TextString, TextType) VALUES (1460, 'Documents', 300)
-GO
-If not exists (select * from tblTextTranslation where text_id = 1460 and Language_Id = 1)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1460, 1, 'Dokument')
-GO
+--If not exists (select * from tbltext where id = 1460)
+	--insert into tbltext (id, TextString, TextType) VALUES (1460, 'Documents', 300)
+--GO
+--If not exists (select * from tblTextTranslation where text_id = 1460 and Language_Id = 1)
+	--insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1460, 1, 'Dokument')
+--GO
 
 If not exists (select * from tbltext where id = 1461)
 	insert into tbltext (id, TextString, TextType) VALUES (1461, 'HR Documents', 300)
@@ -3982,8 +3982,11 @@ If not exists (select * from tblTextTranslation where text_id = 1479 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1479, 1, 'Ska anmälaren kontaktas innan åtgärd?')
 GO
 
+
 If not exists (select * from tbltext where id = 1480)
-	insert into tbltext (id, TextString, TextType) VALUES (1480, 'Should the initiator be contacted before action?', 300)
+	insert into tbltext (id, TextString, TextType) VALUES (1480, 'Initiator is available during the following times', 300)
+else
+	update tbltext set textstring = 'Initiator is available during the following times' where id = 1480
 GO
 If not exists (select * from tblTextTranslation where text_id = 1480 and Language_Id = 1)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1480, 1, 'Anmälaren nås säkrast på följande tider')
