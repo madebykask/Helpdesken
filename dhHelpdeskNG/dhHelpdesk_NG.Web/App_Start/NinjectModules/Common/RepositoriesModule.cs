@@ -263,6 +263,7 @@
             this.Bind<IModulesRepository>().To<ModulesRepository>();
             this.Bind<IADFSRepository>().To<ADFSRepository>();
             this.Bind<IRegistrationSourceCustomerRepository>().To<RegistrationSourceCustomerRepository>();
+            this.Bind<ICaseLockRepository>().To<CaseLockRepository>();
         }
 
         #endregion

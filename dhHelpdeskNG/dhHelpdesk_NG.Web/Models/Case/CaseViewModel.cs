@@ -40,10 +40,9 @@
         public string ParantPath_OU { get; set; }
         public int DepartmentFilterFormat { get; set; }
         public int? CountryId { get; set; }
-        public int ShowInvoiceFields { get; set; }
-        public int CaseIsLockedByUserId { get; set; }
-        public int MinWorkingTime { get; set; }
-        public string CaseIsLockedByUserName { get; set; }
+        public int ShowInvoiceFields { get; set; }                
+        public CaseLockModel CaseLock { get; set; }
+        public int MinWorkingTime { get; set; }        
         public Infrastructure.Enums.AccessMode EditMode { get; set; } //(-1,0,1)
         public bool Disable_SendMailAboutCaseToNotifier { get; set; }
         public int ProductAreaHasChild { get; set; }

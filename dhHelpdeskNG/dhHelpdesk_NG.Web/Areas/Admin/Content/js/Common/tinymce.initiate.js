@@ -9,6 +9,6 @@ $(function () {
             "insertdatetime media table contextmenu paste charmap "
         ],
         menubar: false,
-        toolbar: "undo redo | removeformat | fontsizeselect bold italic | bullist numlist | link unlink | charmap "
+        toolbar: "undo redo | removeformat | fontsizeselect bold italic | bullist numlist | link unlink | charmap | code"
     });
 });

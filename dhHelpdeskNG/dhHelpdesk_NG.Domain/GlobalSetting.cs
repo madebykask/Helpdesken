@@ -23,7 +23,8 @@ namespace DH.Helpdesk.Domain
         public string ServerName { get; set; }
         public string SMTPServer { get; set; }
         public string ExternalSite { get; set; }
-        
+        public int CaseLockTimer { get; set; }
+        public int CaseLockBufferTime { get; set; }
 
         public virtual Language DefaultLanguage { get; set; }
     }

@@ -38,7 +38,9 @@
     using DH.Helpdesk.Web.Infrastructure.Grid;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Case;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Invoice;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.CaseLockMappers;
     using DH.Helpdesk.Web.Infrastructure.Mvc;
+    using DH.Helpdesk.Web.Infrastructure.Tools;
     using DH.Helpdesk.Web.Infrastructure.Tools;
     using DH.Helpdesk.Web.Models;
     using DH.Helpdesk.Web.Models.Case;
@@ -120,13 +122,19 @@
 
         private readonly IOrganizationService _organizationService;
 
-        private readonly IMasterDataService _masterDataService;
-
-        private readonly int _defaultMaxRows;
+        private readonly IMasterDataService _masterDataService;        
 
         private readonly OrganizationJsonService _orgJsonService;
 
         private readonly IRegistrationSourceCustomerService _registrationSourceCustomerService;
+
+        private readonly ICaseLockService _caseLockService;
+
+        private readonly int _defaultMaxRows;
+
+        private readonly int _defaultCaseLockBufferTime;
+
+        private readonly int _defaultExtendCaseLockTime;
 
         #endregion
 
@@ -187,7 +195,8 @@
             OutputFormatter outputFormatter,
             IOrganizationService organizationService, 
             OrganizationJsonService orgJsonService, 
-            IRegistrationSourceCustomerService registrationSourceCustomerService)
+            IRegistrationSourceCustomerService registrationSourceCustomerService,
+            ICaseLockService caseLockService)
             : base(masterDataService)
         {
             this._masterDataService = masterDataService;  
@@ -245,7 +254,10 @@
             this._organizationService = organizationService;
             this._orgJsonService = orgJsonService;
             this._registrationSourceCustomerService = registrationSourceCustomerService;
+            this._caseLockService = caseLockService;
             this._defaultMaxRows = 10;
+            this._defaultCaseLockBufferTime = 30; // Second
+            this._defaultExtendCaseLockTime = 60; // Second
         }
 
         #endregion
@@ -860,6 +872,27 @@
             return fd;
         }
 
+        public JsonResult UnLockCase(string lockGUID)
+        {
+            if (!string.IsNullOrEmpty(lockGUID))
+                this._caseLockService.UnlockCaseByGUID(new Guid(lockGUID));
+            return Json("Success");
+        }
+
+        public JsonResult IsCaseAvailable(int caseId, string lockGuid)
+        {            
+            var caseLock = this._caseLockService.GetCaseLockByCaseId(caseId);
+            if (caseLock != null && caseLock.LockGUID == new Guid(lockGuid) && caseLock.ExtendedTime >= DateTime.Now)
+                return Json(true);
+            else
+                return Json(false);
+        }
+
+        public JsonResult ReExtendCaseLock(string lockGuid, int extendValue)
+        {
+            return Json(this._caseLockService.ReExtendLockCase(new Guid(lockGuid), extendValue));            
+        }
+
         public ActionResult New(int? customerId, int? templateId, int? copyFromCaseId, int? caseLanguageId, int? templateistrue)
         {
             CaseInputViewModel m = null;
@@ -878,7 +911,8 @@
                 if (SessionFacade.CurrentUser.CreateCasePermission == 1)
                 {
                     var userId = SessionFacade.CurrentUser.Id;
-                    m = this.GetCaseInputViewModel(userId, customerId.Value, 0, 0, string.Empty, null, templateId, copyFromCaseId, false, templateistrue);
+                    var caseLockModel = new CaseLockModel();
+                    m = this.GetCaseInputViewModel(userId, customerId.Value, 0, caseLockModel, string.Empty, null, templateId, copyFromCaseId, false, templateistrue);
 
                     var caseParam = new NewCaseParams
                     {
@@ -902,6 +936,7 @@
 
             return this.RedirectToAction("index", "cases", new { id = customerId });
         }
+
 
 #region Case save actions
         [HttpPost]
@@ -964,29 +999,16 @@
             if (SessionFacade.CurrentUser != null)
             {
                 var userId = SessionFacade.CurrentUser.Id;
-                int lockedByUserId = 0;
-
-                var caseUserInfo = ApplicationFacade.GetUserCaseInfo(id);
-                if (caseUserInfo == null)
-                    ApplicationFacade.AddCaseUserInfo(userId, id);
-
-                caseUserInfo = ApplicationFacade.GetUserCaseInfo(id);
-                if (caseUserInfo != null && caseUserInfo.UserId != userId)
-                {
-                    lockedByUserId = caseUserInfo.UserId;
-                }
-
+                                              
+                var caseLockViewModel = GetCaseLockModel(id, userId);
                 int customerId = moveToCustomerId.HasValue ? moveToCustomerId.Value : _caseService.GetCaseById(id).Customer_Id;
-
-
-                m = this.GetCaseInputViewModel(userId, customerId, id, lockedByUserId, redirectFrom, backUrl, null, null, updateState);
+                m = this.GetCaseInputViewModel(userId, customerId, id, caseLockViewModel, redirectFrom, backUrl, null, null, updateState);
                 if (uni.HasValue)
                 {
                     m.UpdateNotifierInformation = uni.Value;                    
                 }
-
-                if(lockedByUserId == userId || lockedByUserId == 0)
-                    ApplicationFacade.UpdateLoggedInUser(Session.SessionID, m.case_.CaseNumber.ToString(), m.case_.Id);
+                
+                ApplicationFacade.UpdateLoggedInUser(Session.SessionID, string.Empty);
 
                 // User has not access to case
                 if (m.EditMode == Enums.AccessMode.NoAccess)
@@ -2114,7 +2136,7 @@
                 var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, case_.Id, this.workContext.User.UserId)).ToList();
                 this._caseFileService.AddFiles(newCaseFiles);
             }            
-
+            
             // save log files
             var newLogFiles = temporaryLogFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseLog.Id, this.workContext.User.UserId)).ToList();
             this._logFileService.AddFiles(newLogFiles);
@@ -2122,6 +2144,10 @@
             caseMailSetting.CustomeMailFromAddress = mailSenders;
             // send emails
             this._caseService.SendCaseEmail(case_.Id, caseMailSetting, caseHistoryId, basePath, oldCase, caseLog, newLogFiles);
+
+            //Unlock Case            
+            if (m.caseLock != null && !string.IsNullOrEmpty(m.caseLock.LockGUID))
+                this._caseLockService.UnlockCaseByGUID(new Guid(m.caseLock.LockGUID));
 
             // delete temp folders                
             this.userTemporaryFilesStorage.ResetCacheForObject(case_.CaseGUID.ToString());
@@ -2305,7 +2331,7 @@
             int userId, 
             int customerId, 
             int caseId, 
-            int lockedByUserId = 0, 
+            CaseLockModel caseLocked, 
             string redirectFrom = "", 
             string backUrl = null,
             int? templateId = null, 
@@ -2320,6 +2346,7 @@
             var acccessToGroups = this._userService.GetWorkinggroupsForUserAndCustomer(SessionFacade.CurrentUser.Id, customerId);
             var deps = this._departmentService.GetDepartmentsByUserPermissions(userId, customerId);
             var isCreateNewCase = caseId == 0;
+            m.CaseLock = caseLocked;
             if (!isCreateNewCase)
             {
                 var markCaseAsRead = string.IsNullOrWhiteSpace(redirectFrom);
@@ -2341,8 +2368,7 @@
             else
             {
                 var customer = this._customerService.GetCustomer(customerId);
-                var cs = this._settingService.GetCustomerSetting(customerId);
-                m.CaseIsLockedByUserId = lockedByUserId;
+                var cs = this._settingService.GetCustomerSetting(customerId);                
                 m.customerUserSetting = cu;
                 m.caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(customerId);
                 m.CaseFieldSettingWithLangauges = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customerId, SessionFacade.CurrentLanguageId);
@@ -2354,8 +2380,7 @@
                 m.CaseFilesModel = new CaseFilesModel();
                 m.LogFilesModel = new FilesModel();
                 m.CaseFileNames = GetCaseFileNames(caseId.ToString());
-                m.CaseFileNames = GetLogFileNames(caseId.ToString());
-
+                m.CaseFileNames = GetLogFileNames(caseId.ToString());                
                 if (isCreateNewCase)
                 {
                     var identity = global::System.Security.Principal.WindowsIdentity.GetCurrent();
@@ -2563,13 +2588,7 @@
                 m.SendToDialogModel = this.CreateNewSendToDialogModel(customerId, m.users);
                 m.CaseLog = this._logService.InitCaseLog(SessionFacade.CurrentUser.Id, string.Empty);
                 m.CaseKey = m.case_.Id == 0 ? m.case_.CaseGUID.ToString() : m.case_.Id.ToString(global::System.Globalization.CultureInfo.InvariantCulture);
-                m.LogKey = m.CaseLog.LogGuid.ToString();
-
-                if (lockedByUserId > 0)
-                {
-                    var lbu = this._userService.GetUser(lockedByUserId);
-                    m.CaseIsLockedByUserName = lbu != null ? lbu.FirstName + " " + lbu.SurName : string.Empty;
-                }
+                m.LogKey = m.CaseLog.LogGuid.ToString();                
 
                 if (m.case_.Supplier_Id > 0 && m.suppliers != null)
                 {
@@ -2924,7 +2943,7 @@
                 return Enums.AccessMode.ReadOnly;
             }
 
-            if (m.CaseIsLockedByUserId > 0)
+            if (m.CaseLock != null && m.CaseLock.IsLocked)
             {
                 return Enums.AccessMode.ReadOnly;
             }
@@ -3144,7 +3163,51 @@
             ret.Add(new ItemOverview("100", "100"));
             ret.Add(new ItemOverview("200", "200"));
             return ret;
-        }        
+        }
+
+        private CaseLockModel GetCaseLockModel(int caseId, int userId)
+        {
+            var caseLock = this._caseLockService.GetCaseLockByCaseId(caseId);
+            var caseIsLocked = true;
+            var gs = this._globalSettingService.GetGlobalSettings().FirstOrDefault();
+            var extendedSec = (gs != null && gs.CaseLockTimer > 0 ? gs.CaseLockTimer : this._defaultExtendCaseLockTime);
+            var bufferTime = (gs != null && gs.CaseLockBufferTime > 0 ? gs.CaseLockBufferTime : this._defaultCaseLockBufferTime);
+            var caseLockGUID = string.Empty;
+            var nowTime = DateTime.Now;
+            if (caseLock == null)
+            {
+                // Case is not locked 
+                caseIsLocked = false;
+            }
+            else
+            {
+                if ((caseLock.ExtendedTime.AddSeconds(bufferTime) < nowTime) ||
+                    (caseLock.ExtendedTime.AddSeconds(bufferTime) >= nowTime &&
+                     caseLock.UserId == userId &&
+                     caseLock.BrowserSession == Session.SessionID))
+                {
+                    // Unlock case because user has leaved the Case in anormal way (Close browser/reset computer)
+                    // Unlock case because current user was opened this case last time and recently
+                    this._caseLockService.UnlockCaseByCaseId(caseId);
+                    caseIsLocked = false;
+                }
+            }
+            
+            if (!caseIsLocked)            
+            {
+                // Lock Case if it's not locked
+                var now = DateTime.Now;                
+                var extendedLockTime = now.AddSeconds(extendedSec);
+                var newLockGUID = Guid.NewGuid();
+                caseLockGUID = newLockGUID.ToString();
+                var user = this._userService.GetUser(userId);
+                var newCaseLock = new CaseLock(caseId, userId, newLockGUID, Session.SessionID, now, extendedLockTime, user);
+                this._caseLockService.LockCase(newCaseLock);
+                caseLock = newCaseLock;
+            }
+
+            return caseLock.MapToViewModel(caseIsLocked, extendedSec);
+        }
 
         #endregion
     }

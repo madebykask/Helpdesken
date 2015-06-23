@@ -120,6 +120,7 @@
         private readonly IUnitOfWorkFactory unitOfWorkFactory;
         private ISurveyService surveyService;
         private readonly IFinishingCauseService _finishingCauseService;
+        private readonly ICaseLockService _caseLockService;
 
         public CaseService(
             ICaseRepository caseRepository,
@@ -146,7 +147,8 @@
             IUnitOfWorkFactory unitOfWorkFactory,
             ISurveyService surveyService,
             ILogService logService,
-            IFinishingCauseService finishingCauseService)
+            IFinishingCauseService finishingCauseService,
+            ICaseLockService caseLockService)
         {
             this._unitOfWork = unitOfWork;
             this._caseRepository = caseRepository;
@@ -174,6 +176,7 @@
             this.surveyService = surveyService;
             this._logService = logService;
             this._finishingCauseService = finishingCauseService;
+            this._caseLockService = caseLockService;
         }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
@@ -271,6 +274,10 @@
                 }
                 this._caseHistoryRepository.Commit(); 
             }
+
+            //delete case lock
+            this._caseLockService.UnlockCaseByCaseId(id);
+
 
             // delete case files
             var caseFiles = this._caseFileRepository.GetCaseFilesByCaseId(id);

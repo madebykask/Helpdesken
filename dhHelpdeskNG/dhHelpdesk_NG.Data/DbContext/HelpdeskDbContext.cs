@@ -98,6 +98,8 @@
 
         public DbSet<CaseHistory> CaseHistories { get; set; }
 
+        public DbSet<CaseLockEntity> CaseLock { get; set; }
+
         public DbSet<CaseInvoiceRow> CaseInvoiceRows { get; set; }
 
         public DbSet<CaseQuestionCategory> CaseQuestionCategories { get; set; }
@@ -294,7 +296,7 @@
 
         public DbSet<Link> Links { get; set; }
 
-        public DbSet<LocalAdmin> LocalAdmins { get; set; }
+        public DbSet<LocalAdmin> LocalAdmins { get; set; }        
 
         public DbSet<LogFile> LogFiles { get; set; }
 
@@ -564,6 +566,7 @@
             modelBuilder.Configurations.Add(new CaseFieldSettingLanguageConfiguration());
             modelBuilder.Configurations.Add(new CaseFileConfiguration());
             modelBuilder.Configurations.Add(new CaseHistoryConfiguration());
+            modelBuilder.Configurations.Add(new CaseLockConfiguration());
             modelBuilder.Configurations.Add(new CaseInvoiceRowConfiguration());
             modelBuilder.Configurations.Add(new CaseQuestionCategoryConfiguration());
             modelBuilder.Configurations.Add(new CaseQuestionConfiguration());
@@ -628,7 +631,7 @@
             modelBuilder.Configurations.Add(new InfoTextConfiguration());
             modelBuilder.Configurations.Add(new LanguageConfiguration());
             modelBuilder.Configurations.Add(new LinkConfiguration());
-            modelBuilder.Configurations.Add(new LinkGroupConfiguration());
+            modelBuilder.Configurations.Add(new LinkGroupConfiguration());            
             modelBuilder.Configurations.Add(new LogConfiguration());
             modelBuilder.Configurations.Add(new LogFileConfiguration());
             modelBuilder.Configurations.Add(new MailTemplateConfiguration());

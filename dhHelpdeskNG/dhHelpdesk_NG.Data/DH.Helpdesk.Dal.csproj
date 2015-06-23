@@ -85,6 +85,7 @@
     <Compile Include="EntityConfigurations\ADFS\ADFSSettingConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CaseSolutionSettingConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CausingPartConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Cases\CaseLockConfiguration.cs" />
     <Compile Include="EntityConfigurations\Changes\ChangeCouncilConfiguration.cs" />
     <Compile Include="EntityConfigurations\CheckLists\CheckListsConfiguration.cs" />
     <Compile Include="EntityConfigurations\DailyReport\DailyReportConfiguration.cs" />
@@ -178,6 +179,8 @@
     <Compile Include="Mappers\Calendars\EntityToBusinessModel\CalendarToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Cases\BusinessModelToEntity\CaseNotifierToEntityMapper.cs" />
     <Compile Include="Mappers\Cases\BusinessModelToEntity\CausingPartToEntityMapper.cs" />
+    <Compile Include="Mappers\Cases\BusinessModelToEntity\CaseLockToEntityMapper.cs" />
+    <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseLockToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CausingPartToOverviewMapper.cs" />
     <Compile Include="Mappers\Changes\BusinessModelToEntity\HistoryToChangeHistoryEntityMapper.cs" />
@@ -336,7 +339,9 @@
     <Compile Include="Repositories\ADFS\IADFSRepository.cs" />
     <Compile Include="Repositories\CaseHistoryRepository.cs" />
     <Compile Include="Repositories\Cases\CaseSolutionSettingRepository.cs" />
+    <Compile Include="Repositories\Cases\Concrete\CaseLockRepository.cs" />
     <Compile Include="Repositories\Cases\Concrete\CausingPartRepository.cs" />
+    <Compile Include="Repositories\Cases\ICaseLockRepository.cs" />
     <Compile Include="Repositories\Cases\ICaseSolutionSettingRepository.cs" />
     <Compile Include="Repositories\Cases\ICausingPartRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeChangeGroupRepository.cs" />
