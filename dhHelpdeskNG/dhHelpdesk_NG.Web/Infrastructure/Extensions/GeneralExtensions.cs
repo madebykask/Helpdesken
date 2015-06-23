@@ -75,7 +75,11 @@
         public static string GetFieldStyle(this CaseInputViewModel model, GlobalEnums.TranslationCaseFields caseFieldName, CaseSolutionFields caseTemplateFieldName)
         {
             var fieldSetting = model.CaseSolutionSettingModels.FirstOrDefault(x => x.CaseSolutionField == caseTemplateFieldName);
-            if ((model.caseFieldSettings.IsFieldVisible(caseFieldName) && (fieldSetting != null && fieldSetting.CaseSolutionMode == CaseSolutionModes.Hide))
+            
+            if (!model.caseFieldSettings.IsFieldRequired(caseFieldName) && fieldSetting != null && fieldSetting.CaseSolutionMode == CaseSolutionModes.Hide)
+                return "display:none";
+
+            if ((model.caseFieldSettings.IsFieldVisible(caseFieldName))
                 || (CaseSolutionSettingModel.IsFieldAlwaysVisible(caseTemplateFieldName) || model.caseFieldSettings.IsFieldRequiredOrVisible(caseFieldName)))
             {
                 return string.Empty;
