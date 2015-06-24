@@ -15,7 +15,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.CaseLockMappers
                                       isLocked, 
                                       businessModel.CaseId,
                                       businessModel.UserId,
-                                      businessModel.LockGUID.ToString(),
+                                      (isLocked? Guid.NewGuid().ToString() : businessModel.LockGUID.ToString()),
                                       businessModel.BrowserSession,
                                       businessModel.CreatedTime,
                                       businessModel.ExtendedTime,
