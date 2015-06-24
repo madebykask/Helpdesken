@@ -52,5 +52,7 @@ insert into  tblcasefieldsettings (Customer_Id, CaseField, Show, [Required], Sho
    where id not in  (select customer_Id from tblcasefieldsettings where (Casefield = 'UpdateNotifierInformation')))
 Go
 
+update tblusers set DailyReportReminder = 0 where UserGroup_Id = 4
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.9'
