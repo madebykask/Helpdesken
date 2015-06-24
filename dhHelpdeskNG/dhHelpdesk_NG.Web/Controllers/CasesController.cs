@@ -2607,7 +2607,11 @@
                         m.case_.Caption = caseTemplate.Caption;
                         m.case_.Description = caseTemplate.Description;
                         m.case_.Miscellaneous = caseTemplate.Miscellaneous;
-                        m.case_.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id;
+
+                        if (caseTemplate.CaseWorkingGroup_Id != null)
+                        {
+                            m.case_.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id;
+                        }
                         m.case_.Priority_Id = caseTemplate.Priority_Id;
                         m.case_.Project_Id = caseTemplate.Project_Id;
                         m.CaseLog.TextExternal = caseTemplate.Text_External;
