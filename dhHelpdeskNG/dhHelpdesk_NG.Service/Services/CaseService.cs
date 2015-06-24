@@ -284,6 +284,12 @@
                 this._caseFileRepository.Commit(); 
             }
 
+            // delete File View Log
+            this._caseFileRepository.DeleteFileViewLogs(id);
+            this._caseFileRepository.Commit();
+
+
+            // delete Invoice
             this.invoiceArticleService.DeleteCaseInvoices(id);
 
             var c = this._caseRepository.GetById(id);

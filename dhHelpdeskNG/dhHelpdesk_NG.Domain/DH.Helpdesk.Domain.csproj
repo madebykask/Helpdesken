@@ -119,6 +119,7 @@
     <Compile Include="Computers\ComputerModel.cs" />
     <Compile Include="Computers\ComputerType.cs" />
     <Compile Include="CaseSource.cs" />
+    <Compile Include="FileViewLogEntity.cs" />
     <Compile Include="Grid\GridSettingsEntity.cs" />
     <Compile Include="RegistrationSourceCustomer.cs" />
     <Compile Include="TranslationSearch.cs" />

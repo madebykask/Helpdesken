@@ -87,6 +87,7 @@
     <Compile Include="EntityConfigurations\Cases\CausingPartConfiguration.cs" />
     <Compile Include="EntityConfigurations\Changes\ChangeCouncilConfiguration.cs" />
     <Compile Include="EntityConfigurations\CheckLists\CheckListsConfiguration.cs" />
+    <Compile Include="EntityConfigurations\FileViewLogConfiguration.cs" />
     <Compile Include="EntityConfigurations\DailyReport\DailyReportConfiguration.cs" />
     <Compile Include="EntityConfigurations\Grid\GridSettingsEntityConfiguration.cs" />
     <Compile Include="EntityConfigurations\Invoice\CaseInvoiceArticleConfiguration.cs" />

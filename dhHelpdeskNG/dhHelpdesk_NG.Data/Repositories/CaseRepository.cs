@@ -409,9 +409,9 @@ namespace DH.Helpdesk.Dal.Repositories
         byte[] GetFileContentByIdAndFileName(int caseId, string basePath, string fileName);
         bool FileExists(int caseId, string fileName);
         void DeleteByCaseIdAndFileName(int caseId, string basePath, string fileName);
-        int GetCaseNumberForUploadedFile(int caseId);
-
+        int GetCaseNumberForUploadedFile(int caseId);        
         CaseFileModel[] GetCaseFiles(int caseId);
+        void DeleteFileViewLogs(int caseId);
     }
 
     public class CaseFileRepository : RepositoryBase<CaseFile>, ICaseFileRepository
@@ -497,6 +497,13 @@ namespace DH.Helpdesk.Dal.Repositories
                                         f.CreatedDate,
                                         f.UserName))
                                         .ToArray();
+        }
+
+        public void DeleteFileViewLogs(int caseId)
+        {
+            var fileViewLogEntities = this.DataContext.FileViewLogs.Where(f => f.Case_Id == caseId).ToList();
+            foreach (var fileViewLogEntity in fileViewLogEntities)
+                this.DataContext.FileViewLogs.Remove(fileViewLogEntity);
         }
     }
 

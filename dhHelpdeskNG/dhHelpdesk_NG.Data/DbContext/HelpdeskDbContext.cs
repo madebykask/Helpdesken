@@ -254,6 +254,8 @@
 
         public DbSet<Floor> Floors { get; set; }
 
+        public DbSet<FileViewLogEntity> FileViewLogs { get; set; }
+
         public DbSet<FormField> FormField { get; set; }
 
         public DbSet<FormFieldValue> FormFieldValue { get; set; }
@@ -615,6 +617,7 @@
             modelBuilder.Configurations.Add(new FaqConfiguration());
             modelBuilder.Configurations.Add(new FaqFileConfiguration());
             modelBuilder.Configurations.Add(new FaqLanguageConfiguration());
+            modelBuilder.Configurations.Add(new FileViewLogConfiguration());
             modelBuilder.Configurations.Add(new FinishingCauseCategoryConfiguration());
             modelBuilder.Configurations.Add(new FinishingCauseConfiguration());
             modelBuilder.Configurations.Add(new FormConfiguration());
