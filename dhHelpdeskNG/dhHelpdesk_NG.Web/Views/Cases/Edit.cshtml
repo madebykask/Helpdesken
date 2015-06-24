@@ -168,7 +168,7 @@
             $.post('@Url.Content("~/Cases/UnLockCase/")', { lockGUID: lockGuid }, function (data) {                
                 if (data != "Success")
                 {                    
-                    ShowToastMessage('@Translation.Get("Error in unlock Case")', "Error");
+                    ShowToastMessage('@Translation.Get("An error has occurred during releasing the case.")', "Error");
                 }
             });
         };
