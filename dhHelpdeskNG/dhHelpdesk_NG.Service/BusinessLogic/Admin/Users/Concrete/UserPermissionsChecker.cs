@@ -201,11 +201,7 @@
 
                     break;
                 case UserGroup.Administrator:
-                    if (!permissions.Contains(UserPermission.FaqPermission))
-                    {
-                        wrongPermissions.Add(UserPermission.FaqPermission);
-                    }
-
+                    // add permissions for Handläggare here
                     break;
                 case UserGroup.CustomerAdministrator:
                     if (permissions.Contains(UserPermission.RestrictedCasePermission))
