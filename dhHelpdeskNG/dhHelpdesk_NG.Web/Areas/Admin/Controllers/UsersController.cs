@@ -180,7 +180,11 @@
             userInputViewModel.User.CloseCasePermission = 1;
             userInputViewModel.User.CopyCasePermission = 1;
             userInputViewModel.User.DeleteCasePermission = 1;
-            userInputViewModel.User.FAQPermission = 1;
+            if (userInputViewModel.User.UserGroup_Id != (int)UserGroup.Administrator)
+            {
+                userInputViewModel.User.FAQPermission = 1;
+            }
+
             userInputViewModel.User.IsActive = 1;
             userInputViewModel.User.MoveCasePermission = 1;
             userInputViewModel.User.Password = NewPassword;

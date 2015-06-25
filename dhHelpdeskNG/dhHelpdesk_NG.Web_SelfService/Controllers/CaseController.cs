@@ -690,11 +690,13 @@ namespace DH.Helpdesk.SelfService.Controllers
             sm.caseSearchFilter = cs;
 
             // 1: User in Customer Setting
-            srm.CaseSettings = this._caseSettingService.GetCaseSettingsByUserGroup(cusId, 1);            
+            srm.CaseSettings = this._caseSettingService.GetCaseSettingsByUserGroup(cusId, 1);
+            var caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(cusId).ToArray();
 
             srm.Cases = this._caseSearchService.Search(
                 sm.caseSearchFilter,
                 srm.CaseSettings,
+                caseFieldSettings,
                 -1,
                 curUser,
                 1,
