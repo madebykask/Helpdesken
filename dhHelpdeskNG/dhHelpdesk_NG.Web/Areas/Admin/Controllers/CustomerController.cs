@@ -448,12 +448,12 @@
                             new
                                 {
                                     Id = UserFirstLastNameModes.LastFirstNameMode,
-                                    Name = Translation.Get(UserFirstLastNameModes.LastFirstNameMode.ToString())
+                                    Name = Translation.Get("Enligt efternamn")
                                 },
                             new
                                 {
                                     Id = UserFirstLastNameModes.FirstLastNameMode,
-                                    Name = Translation.Get(UserFirstLastNameModes.FirstLastNameMode.ToString())
+                                    Name = Translation.Get("Enligt förnamn")
                                 }
                         },
                     "Id",

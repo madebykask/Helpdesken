@@ -4111,10 +4111,20 @@ If not exists (select * from tblTextTranslation where text_id = 1495 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1495, 2, 'restrict search by department')
 GO
 
--- 20150616
 -- fix obsolete translation with id = 1387
-update tbltext set TextString = 'Sortera Handläggarlistan på förnamn' where id = 1387;
-update tblTextTranslation set TextTranslation = 'Sort Administrator list by first name' where text_id = 1387 and Language_Id = 2;
+update tbltext set TextString = 'Lista användaren' where id = 1387;
+update tblTextTranslation set TextTranslation = 'List user' where text_id = 1387 and Language_Id = 2;
+
+-- fix obsolete translation with id = 1388
+update tbltext set TextString = 'Enligt förnamn' where id = 1388;
+update tblTextTranslation set TextTranslation = 'By first name' where text_id = 1388 and Language_Id = 2;
+
+If not exists (select * from tbltext where id = 1496)
+	insert into tbltext (id, TextString) VALUES (1496, 'Enligt efternamn')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1496 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1496, 2, 'By last name')
+GO
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
