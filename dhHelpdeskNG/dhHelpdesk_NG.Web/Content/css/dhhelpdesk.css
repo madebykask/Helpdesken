@@ -1233,6 +1233,10 @@ table th.thpointer {
   background-color: #f2f7fe;
 }
 
+#customerOrder tr td:first-child
+{
+	width: 100px;	
+}
 
 /*************************DIV TABLE DIV INSTEAD***************************************/
 .profile-user-info

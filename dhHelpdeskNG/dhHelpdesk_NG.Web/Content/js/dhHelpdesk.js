@@ -377,7 +377,7 @@ function CaseInitForm() {
     });
 
     $('#case__CaseType_Id').change(function () {
-        SelectValueInOtherDropdownOnChange($(this).val(), '/Cases/ChangeCaseType/', '#case__Performer_User_Id');
+        SelectValueInOtherDropdownOnChange($(this).val(), '/Cases/ChangeCaseType/', '#Performer_Id');
     });
 
     $('#case__Priority_Id').change(function () {
@@ -430,7 +430,7 @@ function CaseInitForm() {
         // filter administrators
         var DontConnectUserToWorkingGroup = $('#CaseMailSetting_DontConnectUserToWorkingGroup').val();
         if (DontConnectUserToWorkingGroup == 0) {
-            CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeWorkingGroupFilterUser/', '#case__Performer_User_Id', $('#DepartmentFilterFormat').val());
+            CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeWorkingGroupFilterUser/', '#Performer_Id', $('#DepartmentFilterFormat').val());
         }
         //set state secondery
         SelectValueInOtherDropdownOnChange($(this).val(), '/Cases/ChangeWorkingGroupSetStateSecondary/', '#case__StateSecondary_Id')

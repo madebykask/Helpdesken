@@ -1,8 +1,17 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.Output.CaseSearchFilterData 
+@using System.Web.Script.Serialization
 @using DH.Helpdesk.BusinessData.Models.Case
 @using DH.Helpdesk.BusinessData.OldComponents
 
 @using DH.Helpdesk.Web.Infrastructure.Extensions
+
+@{
+    var jsSerializer = new JavaScriptSerializer();
+    var i18n = new { selectOneOrMore = Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation) };
+}
+<script type="text/javascript">
+    window.i18n = @Html.Raw(jsSerializer.Serialize(i18n))
+</script>
 
 @if (Model != null)
 {       
@@ -28,7 +37,7 @@
                                  @Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                    
                              </td>
                              <td>
-                                 @Html.TextBoxFor(m=>m.CaseInitiatorFilter,  new { @class = "fixed-length", id = string.Empty })
+                                 @Html.TextBoxFor(m => m.CaseInitiatorFilter, new { @class = "fixed-length", id = string.Empty })
                              </td>
                          </tr>                
                      }
@@ -72,19 +81,14 @@
                              </td>
                          </tr>                
                      }
-                     @if (Model.filterCaseUser != null)
+                     @if (Model.RegisteredByUserList != null)
                      {
                          <tr>
                              <td>                                                               
                                  @Translation.Get(GlobalEnums.TranslationCaseFields.User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                
                              </td>
                              <td>
-                                 <select id="lstfilterUser" name="@CaseSearchFilter.RegisteredByNameAttribute" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
-                                     @foreach (var e in Model.filterCaseUser)
-                                     {
-                                         <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.User)>@e.Name</option>
-                                     }
-                                 </select>
+                                 @Html.ListBoxFor(m => m.lstfilterUser, Model.RegisteredByUserList, new { id = "lstfilterUser", @class = "chosen-select", multiple = "multiple" })
                              </td>
                          </tr>                
                      }
@@ -170,44 +174,28 @@
 
                          </tr>                
                      }
-                     @if (Model.filterUser != null)
+                     @if (Model.ResponsibleUserList != null)
                      {
                          <tr>
                              <td>                                
                                  @Translation.Get(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                 
                              </td>
                              <td>
-                                 <select id="lstfilterResponsible" name="@CaseSearchFilter.ResponsibleNameAttribute" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
-                                     @foreach (var e in Model.filterUser)
-                                     {
-                                         if (e.IsActive == 1 && e.Performer == 1)
-                                         {                        
-                                             <option value="@e.Id @e.Id.IdIsSelected(Model.caseSearchFilter.UserResponsible)">@e.SurName @e.FirstName</option>
-                                         }
-                                     }
-                                 </select>
+                                  @Html.ListBoxFor(m => m.lstfilterResponsible, Model.ResponsibleUserList, new { id = "lstfilterResponsible", @class = "chosen-select", multiple = "multiple" })
                              </td>
                          </tr>                 
-                     }
-                     @if (Model.filterPerformer != null)
-                     {
-                         <tr>
-                             <td>                               
-                                 @Translation.Get(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                    
-                             </td>
-                             <td>
-                                 <select id="lstfilterPerformer" name="@CaseSearchFilter.PerformerNameAttribute" data-field="administrator" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
-                                     @foreach (var e in Model.filterPerformer)
-                                     {
-                                         if (e.IsActive == 1 && e.Performer == 1)
-                                         {                        
-                                             <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.UserPerformer)>@e.SurName @e.FirstName</option>
-                                         }
-                                     }
-                                 </select>
-                             </td>
-                         </tr>                 
-                     }
+                     }  
+                    @if (Model.AvailablePerformersList != null)
+                    {
+                    <tr>
+                        <td>                               
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                    
+                        </td>
+                        <td>
+                            @Html.ListBoxFor(m => m.lstfilterPerformer, Model.AvailablePerformersList, new { id = "lstfilterPerformer", @class = "chosen-select", multiple = "multiple" })
+                        </td>
+                    </tr>                 
+                    }
                      @if (Model.filterPriority != null)
                      {
                          <tr>

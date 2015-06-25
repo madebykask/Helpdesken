@@ -38,7 +38,7 @@ namespace DH.Helpdesk.Dal.Repositories
         IList<CustomerWorkingGroupForUser> ListForWorkingGroupsInUser(int userId);
         IList<CustomerWorkingGroupForUser> GetWorkinggroupsForUserAndCustomer(int userId, int customerId);
         IList<LoggedOnUsersOnIndexPage> LoggedOnUsers();
-        IList<UserLists> GetUserOnCases(int customer);
+
         IList<User> GetUsersForUserSettingList(UserSearch searchUser);
         UserOverview Login(string uId, string pwd);
         UserOverview GetUser(int userid);
@@ -338,22 +338,7 @@ namespace DH.Helpdesk.Dal.Repositories
             var user = this.GetUser(x => x.Id == userid);
             return user;
         }
-
-        public IList<UserLists> GetUserOnCases(int customerId)
-        {
-            var query = from u in this.DataContext.Users
-                        join ca in this.DataContext.Cases on u.Id equals ca.User_Id
-                        where (ca.Customer_Id == customerId)
-                        group u by new { u.Id, u.FirstName, u.SurName } into g
-                        select new UserLists
-                        {
-                            Id = g.Key.Id,
-                            Name = g.Key.SurName + " " + g.Key.FirstName
-                        };
-
-            return query.OrderBy(x => x.Name).ToList();
-        }
-
+        
         public UserOverview GetUserByLogin(string IdName)
         {
             var user = this.GetUser(x => x.UserID == IdName && x.IsActive == 1);

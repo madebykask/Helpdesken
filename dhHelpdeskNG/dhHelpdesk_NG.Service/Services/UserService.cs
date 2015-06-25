@@ -46,6 +46,16 @@
         IList<User> GetSystemOwners(int customerId);
         IList<User> GetUsers();
         IList<User> GetUsers(int customerId);
+
+        /// <summary>
+        /// Fetches active users with performer flag.
+        /// If userId is supplied appends to list user with this id without checking first condition
+        /// </summary>
+        /// <param name="customerId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        IList<User> GetAvailablePerformersOrUserId(int customerId, int? userId = null);
+
         IList<User> SearchSortAndGenerateUsers(UserSearch SearchUsers);
         IList<UserGroup> GetUserGroups();
         IList<UserRole> GetUserRoles();
@@ -178,6 +188,7 @@
         private readonly ITranslator translator;
 
         private readonly IEntityToBusinessModelMapper<Setting, CustomerSettings> customerSettingsToBusinessModelMapper;
+        
 
         public UserService(
             IAccountActivityRepository accountActivityRepository,
@@ -197,7 +208,7 @@
             IUserModuleRepository userModuleRepository, 
             IUnitOfWorkFactory unitOfWorkFactory, 
             IUserPermissionsChecker userPermissionsChecker, 
-            ITranslator translator, 
+            ITranslator translator,
             IEntityToBusinessModelMapper<Setting, CustomerSettings> customerSettingsToBusinessModelMapper)
         {
             this._accountActivityRepository = accountActivityRepository;
@@ -285,7 +296,19 @@
 
         public IList<UserLists> GetUserOnCases(int customerId)
         {
-            return this._userRepository.GetUserOnCases(customerId);  
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var caseRepository = uow.GetRepository<Case>();
+
+                var query = from u in this._userRepository.GetAll()
+                            join ca in caseRepository.GetAll() on u.Id equals ca.User_Id
+                            where (ca.Customer_Id == customerId)
+                            group u by new { u.Id, u.FirstName, u.SurName }
+                            into g
+                            select
+                                new UserLists { Id = g.Key.Id, FirstName = g.Key.FirstName, LastName = g.Key.SurName };
+                return query.ToList();
+            }
         }
 
         public IList<User> GetUsers()
@@ -296,6 +319,14 @@
         public IList<User> GetUsers(int customerId)
         {
             return this._userRepository.GetUsers(customerId).OrderBy(x => x.SurName).ThenBy(x => x.FirstName).ToList();
+        }
+
+        public IList<User> GetAvailablePerformersOrUserId(int customerId, int? userId = null)
+        {
+            return
+                this._userRepository.GetUsers(customerId)
+                    .Where(e => e.IsActive == 1 && (e.Performer == 1 || (userId.HasValue && e.Id == userId)))
+                    .ToList();
         }
 
         public IList<User> SearchSortAndGenerateUsers(UserSearch searchUsers)

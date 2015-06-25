@@ -79,5 +79,14 @@ if not exists(select * from sysobjects WHERE Name = N'tblCaseLock')
 	end
 GO
 
+-- 2015-06-22
+IF COL_LENGTH('dbo.tblSettings','IsUserFirstLastNameRepresentation') IS NULL
+BEGIN	 
+	ALTER TABLE [dbo].[tblSettings]
+	ADD IsUserFirstLastNameRepresentation int default 0 not null
+END
+GO
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.10'

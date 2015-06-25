@@ -1,6 +1,5 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
-@using DH.Helpdesk.Web.Infrastructure.Extensions
-@model DH.Helpdesk.Web.Models.CaseSolutionIndexViewModel
+﻿@using DH.Helpdesk.Web.Infrastructure.Extensions
+@model DH.Helpdesk.Web.Models.CaseSolution.CaseSolutionIndexViewModel
 @{
     ViewBag.Title = "Index";
 }
@@ -89,11 +88,6 @@
                                     @{CurIcon = "Caption";}
                                     <i class="@CurIcon.SetCaseSolutionSortIcon()"></i>
                                 </th>
-                                @*<th sort-data="Description" onclick="submit();" style="cursor: pointer; cursor: hand">
-                                    @Translation.Get("Beskrivning", Enums.TranslationSource.TextTranslation)
-                                    @{CurIcon = "Description";}
-                                    <i class="@CurIcon.SetCaseSolutionSortIcon()"></i>
-                                </th>*@
                                 <th sort-data="PerformerUser" style="cursor: pointer; cursor: hand;width:10%">
                                     @Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation)
                                     @{CurIcon = "PerformerUser";}
@@ -104,40 +98,27 @@
                                     @{CurIcon = "Priority";}
                                     <i class="@CurIcon.SetCaseSolutionSortIcon()"></i>
                                 </th>
-                                @*<th sort-data="FinishingCause" onclick="submit();" style="cursor: pointer; cursor: hand">
-                                    @Translation.Get("Avslutsorsak", Enums.TranslationSource.TextTranslation)
-                                    @{CurIcon = "FinishingCause";}
-                                    <i class="@CurIcon.SetCaseSolutionSortIcon()"></i>
-                                </th>*@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model.CaseSolutions)
+                            @foreach (var item in Model.Rows)
                             {                               
                                 <tr>
                                     <td>
                                         <a href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.Name)</a>
                                     </td>
                                     <td>
-                                        <a href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.CaseSolutionCategory.Name)</a>
+                                        <a href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.CategoryName)</a>
                                     </td>
                                     <td>
-                                        <a href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.Caption)</a>
-                                    </td>
-                                    @*<td>
-                                        <a href="@Url.Action("edit", "casesolution", new { id = item.Id })">@item.Description.ForHtmlView()</a>
-                                    </td>*@
-                                    <td>
-                                        <a href="@Url.Action("edit", "casesolution", new { id = item.Id })">
-                                            @Html.DisplayFor(modelItem => item.PerformerUser.SurName) @Html.DisplayFor(modelItem => item.PerformerUser.FirstName)
-                                        </a>
+                                        <a href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.CaseCaption)</a>
                                     </td>
                                     <td>
-                                        <a href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.Priority.Name)</a>
+                                        <a href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.PerormerUserName)</a>
                                     </td>
-                                    @*<td>
-                                        <a href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.FinishingCause.Name)</a>
-                                    </td>*@
+                                    <td>
+                                        <a href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.PriorityName)</a>
+                                    </td>
                                 </tr>
                             }
                         </tbody>

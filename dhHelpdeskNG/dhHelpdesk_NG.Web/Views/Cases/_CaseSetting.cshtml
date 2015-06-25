@@ -76,12 +76,7 @@
                                         @Html.CheckBoxFor(m => Model.RegisteredByCheck, new { @class = "switchcheckbox" })
                                     </td>                            
                                     <td colspan="2">
-                                        <select id="lstRegisterBys" name="lstRegisterBy" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
-                                            @foreach (var e in Model.RegisteredBy)
-                                            {                                                                                                      
-                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedRegisteredBy)>@e.SurName @e.FirstName</option>                                       
-                                            }
-                                        </select>
+                                          @Html.ListBoxFor(m => m.lstRegisterBy, Model.RegisteredByUserList, new { id = "lstRegisterBys", @class = "chosen-select", multiple = "multiple" })
                                     </td>                                                        
                                 </tr>
                             }
@@ -196,12 +191,7 @@
                                         @Html.CheckBoxFor(m => Model.AdministratorCheck, new { disabled = "1", @class = "switchcheckbox" })
                                     </td>
                                     <td colspan="2">
-                                        <select id="lstAdministrators" name="lstAdministrator" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
-                                            @foreach (var e in Model.Administrators)
-                                            {                                                                                                      
-                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedAdministrator)>@e.SurName @e.FirstName</option>                                       
-                                            }
-                                        </select>
+                                        @Html.ListBoxFor(m => m.lstAdministrator, Model.AvailablePerformersList, new { id = "lstAdministrators", @class = "chosen-select", multiple = "multiple" })
                                     </td>                                                        
                                 </tr> 
                            }

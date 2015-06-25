@@ -1,11 +1,24 @@
 ﻿namespace DH.Helpdesk.Web.Models.Case.Input
 {
+    using System;
+
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.Domain;
 
     public class CaseEditInput
     {
+        [Obsolete("Move used case properties into this model")]
         public Case case_ { get; set; }
+
+        /// <summary>
+        /// Responsible user ID
+        /// </summary>
+        public int? ResponsibleUser_Id { get; set; }
+
+        /// <summary>
+        /// Case adminstrator user ID
+        /// </summary>
+        public int? Performer_Id { get; set; }
 
         public CaseLog caseLog { get; set; }
 

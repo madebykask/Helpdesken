@@ -799,7 +799,7 @@
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Caption, "Rubrik")
                                         </td>
                                         <td colspan="2">
-                                            @if ((Model.customerUserSetting.CaptionPermission == 1 && !Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Caption, CaseSolutionFields.Caption) 
+                                            @if ((Model.customerUserSetting.CaptionPermission == 1 && !Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Caption, CaseSolutionFields.Caption)
                                                 || Model.case_.Id == 0))
                                             {                                                
                                                 @Html.TextBoxFor(model => model.case_.Caption, new { maxlength = "60", @class = "width90" })
@@ -1044,22 +1044,15 @@
                                         <td>
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id, "Ansvarig")
                                         </td>
-                                        <td>
-                                            <select id="case__CaseResponsibleUser_Id" name="case_.CaseResponsibleUser_Id" @(Model.EditMode == Enums.AccessMode.ReadOnly ? "disabled=disabled" : string.Empty)>
-                                                <option value="">&nbsp;</option>
-                                                @if (Model.users != null)
-                                                {
-                                                    if (Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString()) == "display:none")
-                                                    {
-                                                        Model.case_.CaseResponsibleUser_Id = null;
-                                                    }
-
-                                                    foreach (var e in Model.users.Where(e => e.IsActive == 1 && e.Performer == 1 || Model.case_.CaseResponsibleUser_Id == e.Id))
-                                                    {
-                                                    <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.CaseResponsibleUser_Id.ToString()) >@e.SurName @e.FirstName</option>
-                                                    }
-                                                }
-                                            </select>
+                                         <td>
+                                            @if (Model.EditMode != Enums.AccessMode.ReadOnly)
+                                            {
+                                                @Html.DropDownListFor(m => m.ResponsibleUser_Id, Model.ResponsibleUsersAvailable)
+                                            }
+                                            else
+                                            {
+                                                @Html.DropDownListFor(m => m.ResponsibleUser_Id, Model.ResponsibleUsersAvailable, new { disabled="disabled" })
+                                            }
                                         </td>
                                     </tr>
                                     <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Performer_User_Id, CaseSolutionFields.Administrator)">
@@ -1069,26 +1062,11 @@
                                         <td>
                                             @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Performer_User_Id, CaseSolutionFields.Administrator))
                                             {
-                                                <select id="case__Performer_User_Id" name="case_.Performer_User_Id" data-field="administrator">
-                                                    <option value="">&nbsp;</option>
-                                                    @if (Model.performers != null)
-                                                    {
-                                                        foreach (var e in Model.performers.Where(e => e.IsActive == 1 && e.Performer == 1 || Model.case_.Performer_User_Id == e.Id))
-                                                        {
-                                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Performer_User_Id.ToString()) >@e.SurName @e.FirstName</option>
-                                                        }
-                                                    }
-                                                </select>
+                                                @Html.DropDownListFor(m => m.Performer_Id, Model.Performers, new { data_field = "administrator" })
                                             }
                                             else
                                             {
-                                                var performer = Model.performers.SingleOrDefault(x => x.Id == Model.case_.Performer_User_Id);
-                                                if (performer != null)
-                                                {
-                                                    var performerName = string.Format("{0} {1}", performer.SurName, performer.FirstName);
-                                                @Html.TextBoxFor(m => performerName, new { @readonly = true })
-                                                }
-                                                @Html.HiddenFor(x => x.case_.Performer_User_Id)
+                                                @Html.DropDownListFor(m => m.Performer_Id, Model.Performers, new { data_field = "administrator", disabled="disabled" })
                                             }
                                         </td>
                                     </tr>
@@ -1623,11 +1601,11 @@
             "case_.WorkingGroup_Id": {
                 required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.WorkingGroup_Id, CaseSolutionFields.WorkingGroup))  
                 },
-            "case_.Performer_User_Id": {
-                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Performer_User_Id, CaseSolutionFields.Administrator))  
-                },
-            "case_.CaseResponsible_User_Id": {
+            "ResponsibleUser_Id": {
                 required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString())")
+            },
+            "Performer_Id": {
+                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Performer_User_Id, CaseSolutionFields.Administrator))  
             },
             "case_.Priority_Id": {
                 required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Priority_Id, CaseSolutionFields.Priority))  

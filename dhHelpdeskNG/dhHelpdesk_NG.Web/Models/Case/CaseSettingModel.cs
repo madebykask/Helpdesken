@@ -118,8 +118,6 @@
         public string SelectedRegion { get; set; }
 
         public bool RegisteredByCheck { get; set; }
-        public IList<User> RegisteredBy { get; set; }
-        public string SelectedRegisteredBy { get; set; }
 
         public bool CaseTypeCheck { get; set; }
 
@@ -141,8 +139,6 @@
         public bool ResponsibleCheck { get; set; }
 
         public bool AdministratorCheck { get; set; }
-        public IList<User> Administrators { get; set; }
-        public string SelectedAdministrator { get; set; }
 
         public bool PriorityCheck { get; set; }
         public IList<Priority> Priorities { get; set; }
@@ -186,5 +182,25 @@
         /// Flag to display "filter by intitator" field on case overview page
         /// </summary>
         public bool CaseInitiatorFilterShow { get; set; }
+
+        /// <summary>
+        /// Available users for "registered by" case field in search settings
+        /// </summary>
+        public SelectList RegisteredByUserList { get; set; }
+
+        /// <summary>
+        /// Selected users in search settings for "Registered by" case field
+        /// </summary>
+        public int[] lstRegisterBy { get; set; }        
+        
+        /// <summary>
+        /// Available users for "Administrator" case field in search settings
+        /// </summary>
+        public SelectList AvailablePerformersList { get; set; }
+
+        /// <summary>
+        /// Selected users in search settings for "Adminsitrator" case field
+        /// </summary>
+        public int[] lstAdministrator { get; set; }
     }
 }

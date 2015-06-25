@@ -4103,7 +4103,6 @@ If not exists (select * from tblTextTranslation where text_id = 1494 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1494, 2, 'Default to')
 GO
 
-
 -- 20150616
 If not exists (select * from tbltext where id = 1495)
 	insert into tbltext (id, TextString) VALUES (1495, 'begränsa sök per avdelning')
@@ -4111,6 +4110,11 @@ GO
 If not exists (select * from tblTextTranslation where text_id = 1495 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1495, 2, 'restrict search by department')
 GO
+
+-- 20150616
+-- fix obsolete translation with id = 1387
+update tbltext set TextString = 'Sortera Handläggarlistan på förnamn' where id = 1387;
+update tblTextTranslation set TextTranslation = 'Sort Administrator list by first name' where text_id = 1387 and Language_Id = 2;
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

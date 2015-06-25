@@ -390,7 +390,6 @@
                                         @Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td >
-                                        &nbsp;&nbsp;
                                         <input type="checkbox" name="setting.ComputerUserSearchRestriction" @(Model.Setting.ComputerUserSearchRestriction == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="setting.ComputerUserSearchRestriction" value="0" />
                                         @Translation.Get("begränsa sök per avdelning", Enums.TranslationSource.TextTranslation)
@@ -401,10 +400,10 @@
                                         @Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        &nbsp;&nbsp;&nbsp;<input type="radio" name="Setting.DontConnectUserToWorkingGroup" @(Model.Setting.DontConnectUserToWorkingGroup == 1 ? "checked='checked'" : "") id="Customer_Setting_DontConnectUserToWorkingGroup1" value="1" />
+                                        <input type="radio" name="Setting.DontConnectUserToWorkingGroup" @(Model.Setting.DontConnectUserToWorkingGroup == 1 ? "checked='checked'" : "") id="Customer_Setting_DontConnectUserToWorkingGroup1" value="1" />
                                         @Translation.Get("visa alla handläggare oavsett vald driftgrupp", Enums.TranslationSource.TextTranslation)
                                         <br />
-                                        &nbsp;&nbsp;&nbsp;<input type="radio" name="Setting.DontConnectUserToWorkingGroup" @(Model.Setting.DontConnectUserToWorkingGroup == 0 ? "checked='checked'" : "") id="Customer_Setting_DontConnectUserToWorkingGroup2" value="0" />
+                                        <input type="radio" name="Setting.DontConnectUserToWorkingGroup" @(Model.Setting.DontConnectUserToWorkingGroup == 0 ? "checked='checked'" : "") id="Customer_Setting_DontConnectUserToWorkingGroup2" value="0" />
                                         @Translation.Get("visa endast handläggare i vald driftgrupp", Enums.TranslationSource.TextTranslation)
                                     </td>
                                 </tr>       
@@ -417,8 +416,7 @@
                                     <td>
                                        <label> @Translation.Get("Avslutsdatum", Enums.TranslationSource.TextTranslation) </label>
                                     </td>
-                                    <td>                                            
-                                        &nbsp;
+                                    <td>
                                         <input type="checkbox" name="setting.DisableCaseEndDate" @(Model.Setting.DisableCaseEndDate == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="setting.DisableCaseEndDate" value="0" />
                                         <span>

@@ -80,8 +80,27 @@
         public IList<Supplier> suppliers { get; set; }
         public IList<Helpdesk.Domain.System> systems { get; set; }
         public IList<Urgency> urgencies { get; set; }
-        public IList<User> users { get; set; }
-        public IList<User> performers { get; set; }
+        
+        /// <summary>
+        /// user id for "Administrator" field
+        /// </summary>
+        public int Performer_Id { get; set; }
+
+        /// <summary>
+        /// Available  "Adminstrators" for the case
+        /// </summary>
+        public SelectList Performers { get; set; }
+
+        /// <summary>
+        /// user id for "Responsible" field
+        /// </summary>
+        public int ResponsibleUser_Id { get; set; }
+
+        /// <summary>
+        /// Available users for "Responsible" case field
+        /// </summary>
+        public SelectList ResponsibleUsersAvailable { get; set; }
+
         public IList<WorkingGroupEntity> workingGroups { get; set; }
         public IEnumerable<LogOverview> Logs { get; set; }
 

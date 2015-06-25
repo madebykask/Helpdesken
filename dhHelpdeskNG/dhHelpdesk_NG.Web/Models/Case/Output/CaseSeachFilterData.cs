@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Case;
@@ -17,13 +18,7 @@
         public int filterCustomerId { get; set; }
         public IList<Region> filterRegion { get; set; }
         public IList<Department> filterDepartment { get; set; }
-        public IList<User> filterUser { get; set; }
-        public IList<User> filterPerformer { get; set; }
 
-        /// <summary>
-        /// Case "registered by" field
-        /// </summary>
-        public IList<UserLists> filterCaseUser { get; set; }
         public IList<CaseType> filterCaseType { get; set; }
         public IList<ProductArea> filterProductArea { get; set; }
         public IList<Category> filterCategory { get; set; }
@@ -60,5 +55,35 @@
         public bool IsAdvancedSearch { get; set; }
 
         public string CaseNumberFilter { get; set; }
+
+        /// <summary>
+        /// Available users for "registered by" search field
+        /// </summary>
+        public SelectList RegisteredByUserList { get; set; }
+
+        /// <summary>
+        /// Selected user ids for "registered by" search field
+        /// </summary>
+        public int[] lstfilterUser { get; set; }
+
+        /// <summary>
+        /// Available users for "responsible" search field
+        /// </summary>
+        public SelectList ResponsibleUserList { get; set; }
+
+        /// <summary>
+        /// Selected user ids for "Responsible" search field
+        /// </summary>
+        public int[] lstfilterResponsible { get; set; }
+
+        /// <summary>
+        /// List of available performers for "Administrator" case field in search form
+        /// </summary>
+        public SelectList AvailablePerformersList { get; set; }
+
+        /// <summary>
+        /// List of selected performers for "Administrator" case field in search form
+        /// </summary>
+        public int[] lstfilterPerformer { get; set; }
     }    
 }
