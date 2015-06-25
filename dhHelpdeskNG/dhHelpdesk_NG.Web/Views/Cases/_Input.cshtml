@@ -1062,11 +1062,12 @@
                                             else
                                             {
                                                 var performer = Model.performers.SingleOrDefault(x => x.Id == Model.case_.Performer_User_Id);
+                                                var performerName = string.Empty;
                                                 if (performer != null)
                                                 {
-                                                    var performerName = string.Format("{0} {1}", performer.SurName, performer.FirstName);
-                                                @Html.TextBoxFor(m => performerName, new { @readonly = true })
+                                                    performerName = string.Format("{0} {1}", performer.SurName, performer.FirstName);
                                                 }
+                                                @Html.TextBoxFor(m => performerName, new { @readonly = true })                                                
                                                 @Html.HiddenFor(x => x.case_.Performer_User_Id)
                                             }
                                         </td>
