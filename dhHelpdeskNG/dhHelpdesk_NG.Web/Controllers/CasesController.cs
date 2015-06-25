@@ -2694,15 +2694,6 @@
                             m.case_.FinishingDescription = caseTemplate.FinishingDescription;
                             m.case_.PlanDate = caseTemplate.PlanDate;
                             m.CaseTemplateName = caseTemplate.Name;
-
-                            //To get the right users for perfomers when creating a case from a template
-                            if (m.case_.WorkingGroup_Id.HasValue)
-                            {
-                                performersList = this._userService.GetUsersForWorkingGroup(
-                                    customerId,
-                                    m.case_.WorkingGroup_Id.Value);
-                            }
-
                             // This is used for hide fields(which are not in casetemplate) in new case input
                             m.templateistrue = templateistrue;
                             var finishingCauses = this._finishingCauseService.GetFinishingCauseInfos(customerId);
@@ -2711,28 +2702,25 @@
                                 caseTemplate.FinishingCause_Id);
                         }
                     }
-
                     #endregion
                 }
-                else
+              
+                DHDomain.User admUser = null;
+                if (m.case_.Performer_User_Id.HasValue)
                 {
-                    DHDomain.User admUser = null;
-                    if (m.case_.Performer_User_Id.HasValue)
-                    {
-                        admUser = this._userService.GetUser(m.case_.Performer_User_Id.Value);
-                    }
-
-                    if (cs.DontConnectUserToWorkingGroup == 0 && m.case_.WorkingGroup_Id > 0)
-                    {
-                        performersList = this._userService.GetUsersForWorkingGroup(customerId, m.case_.WorkingGroup_Id.Value);
-                    }
-
-                    if (!performersList.Contains(admUser) && admUser != null)
-                    {
-                        performersList.Insert(0, admUser);
-                    }
+                    admUser = this._userService.GetUser(m.case_.Performer_User_Id.Value);
                 }
-                
+
+                if (cs.DontConnectUserToWorkingGroup == 0 && m.case_.WorkingGroup_Id > 0)
+                {
+                    performersList = this._userService.GetUsersForWorkingGroup(customerId, m.case_.WorkingGroup_Id.Value);
+                }
+
+                if (!performersList.Contains(admUser) && admUser != null)
+                {
+                    performersList.Insert(0, admUser);
+                }
+
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.OU_Id.ToString()).ShowOnStartPage == 1)
                 {
                     //m.ous = this._ouService.GetOUs(customerId);
