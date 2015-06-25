@@ -5,7 +5,7 @@ $(function () {
         selector: "textarea.richtexteditor",
         plugins: [
             "advlist autolink lists link image charmap print preview anchor",
-            "searchreplace visualblocks fullscreen",
+            "searchreplace visualblocks code fullscreen",
             "insertdatetime media table contextmenu paste charmap "
         ],
         menubar: false,
