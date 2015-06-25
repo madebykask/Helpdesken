@@ -5,9 +5,9 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Repositories;
-    using DH.Helpdesk.Dal.Utils;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.Utils;
 
@@ -16,6 +16,7 @@
         IList<CaseSearchResult> Search(
             CaseSearchFilter f,
             IList<CaseSettings> csl,
+            CaseFieldSetting[] customerCaseFieldsSettings,
             int userId,
             string userUserId,
             int showNotAssignedWorkingGroups,
@@ -30,6 +31,7 @@
         IList<CaseSearchResult> Search(
             CaseSearchFilter f,
             IList<CaseSettings> csl,
+            CaseFieldSetting[] customerCaseFieldsSettings,
             int userId,
             string userUserId,
             int showNotAssignedWorkingGroups,
@@ -73,6 +75,7 @@
         public IList<CaseSearchResult> Search(
             CaseSearchFilter f,
             IList<CaseSettings> csl,
+            CaseFieldSetting[] customerCaseFieldsSettings,
             int userId,
             string userUserId,
             int showNotAssignedWorkingGroups,
@@ -88,6 +91,7 @@
             return this.Search(
                         f,
                         csl,
+                        customerCaseFieldsSettings,
                         userId,
                         userUserId,
                         showNotAssignedWorkingGroups,
@@ -105,6 +109,7 @@
         public IList<CaseSearchResult> Search(
                                 CaseSearchFilter f, 
                                 IList<CaseSettings> csl, 
+                                CaseFieldSetting[] customerCaseFieldsSettings,
                                 int userId, 
                                 string userUserId, 
                                 int showNotAssignedWorkingGroups, 
@@ -132,9 +137,13 @@
             }
 
             var workTimeFactory = new WorkTimeCalculatorFactory(this.holidayService, workingDayStart, workingDayEnd, userTimeZone);
+            var resonisbleFieldSettings = customerCaseFieldsSettings.Where(it => it.Name == GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString()).FirstOrDefault();
+            var isFieldResponsibleVisible =
+                resonisbleFieldSettings != null && resonisbleFieldSettings.ShowOnStartPage == 1;
             var result = this.caseSearchRepository.Search(
                                                 csf, 
                                                 csl, 
+                                                isFieldResponsibleVisible,
                                                 userId, 
                                                 userUserId, 
                                                 showNotAssignedWorkingGroups, 

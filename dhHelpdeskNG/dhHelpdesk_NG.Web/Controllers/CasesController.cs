@@ -407,10 +407,12 @@
 
             var workTimeCalc = TimeZoneInfo.Local;
             var showRemainingTime = false;            
-            CaseRemainingTimeData remainingTimeData;            
+            CaseRemainingTimeData remainingTimeData;
+            var caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(f.CustomerId).ToArray();
             m.cases = this._caseSearchService.Search(
                 f,
                 m.caseSettings,
+                caseFieldSettings,
                 SessionFacade.CurrentUser.Id,
                 SessionFacade.CurrentUser.UserId,
                 SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups,
@@ -690,11 +692,13 @@
             sm.Search.SortBy = gridSettings.sortOptions.sortBy;
             sm.Search.Ascending = gridSettings.sortOptions.sortDir == SortingDirection.Asc;
             m.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(f.CustomerId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
+            var caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(f.CustomerId).ToArray();
             var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
             CaseRemainingTimeData remainingTimeData;
             m.cases = this._caseSearchService.Search(
                 f,
                 m.caseSettings,
+                caseFieldSettings,
                 SessionFacade.CurrentUser.Id,
                 SessionFacade.CurrentUser.UserId,
                 SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups,
@@ -1866,9 +1870,11 @@
             search.caseSearchFilter.CaseProgress = CaseProgressFilter.None;
             var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
             CaseRemainingTimeData remainingTime;
+            var caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id).ToArray();
             searchResult.cases = this._caseSearchService.Search(
                 search.caseSearchFilter,
                 searchResult.caseSettings,
+                caseFieldSettings,
                 SessionFacade.CurrentUser.Id,
                 SessionFacade.CurrentUser.UserId,
                 SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups,

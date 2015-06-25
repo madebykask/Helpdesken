@@ -30,7 +30,8 @@
     {
         IList<CaseSearchResult> Search(
             CaseSearchFilter f,
-            IList<CaseSettings> csl,
+            IList<CaseSettings> userCaseSettings,
+            bool isFieldResponsibleVisible,
             int userId,
             string userUserId,
             int showNotAssignedWorkingGroups,
@@ -81,7 +82,8 @@
 
         public IList<CaseSearchResult> Search(
                                     CaseSearchFilter f, 
-                                    IList<CaseSettings> csl, 
+                                    IList<CaseSettings> userCaseSettings,
+                                    bool isFieldResponsibleVisible,
                                     int userId, 
                                     string userUserId, 
                                     int showNotAssignedWorkingGroups, 
@@ -105,12 +107,13 @@
             IList<ProductAreaEntity> pal = this._productAreaRepository.GetMany(x => x.Customer_Id == f.CustomerId).OrderBy(x => x.Name).ToList(); 
             IList<CaseSearchResult> ret = new List<CaseSearchResult>();
             var caseTypes = this.caseTypeRepository.GetCaseTypeOverviews(f.CustomerId).ToArray();
-            var displayLeftTime = csl.Any(it => it.Name == TimeLeftColumn);
+            var displayLeftTime = userCaseSettings.Any(it => it.Name == TimeLeftColumn);
             remainingTime = new CaseRemainingTimeData();
             var sql = this.ReturnCaseSearchSql(
                                         f, 
                                         customerSetting, 
                                         customerUserSetting, 
+                                        isFieldResponsibleVisible,
                                         userId, 
                                         userUserId, 
                                         showNotAssignedWorkingGroups, 
@@ -226,7 +229,7 @@
                                     }
                                 }
 
-                                foreach (var c in csl)
+                                foreach (var c in userCaseSettings)
                                 {
                                     Field field = null;
                                     for (var i = 0; i < dr.FieldCount; i++)
@@ -597,7 +600,8 @@
         private string ReturnCaseSearchSql(
                     CaseSearchFilter f, 
                     Setting customerSetting, 
-                    CustomerUser customerUserSetting, 
+                    CustomerUser customerUserSetting,
+                    bool isFieldResponsibleVisible,
                     int userId, 
                     string userUserId, 
                     int showNotAssignedWorkingGroups, 
@@ -769,7 +773,7 @@
             }
             else
             {
-                sql.Add(this.ReturnCaseSearchWhere(f, customerSetting, customerUserSetting, userId, userUserId, 
+                sql.Add(this.ReturnCaseSearchWhere(f, customerSetting, customerUserSetting, isFieldResponsibleVisible, userId, userUserId, 
                         showNotAssignedWorkingGroups, userGroupId, restrictedCasePermission, gs, relatedCasesCaseId, relatedCasesUserId, caseIds));
             }
 
@@ -895,6 +899,7 @@
             CaseSearchFilter f, 
             Setting customerSetting, 
             CustomerUser customerUserSetting, 
+            bool isFieldResponsibleVisible,
             int userId, 
             string userUserId, 
             int showNotAssignedWorkingGroups, 
@@ -1004,9 +1009,15 @@
 
             if (f.SearchInMyCasesOnly)
             {
+                var preparedUserIds = userId.ToString(CultureInfo.InvariantCulture).SafeForSqlInject();
                 sb.AppendFormat(
-                    " AND ([tblCase].[Performer_User_Id] IN ({0}) OR [tblCase].[CaseResponsibleUser_Id] IN ({0}) OR [tblProblem].[ResponsibleUser_Id] IN ({0})) ", 
-                    userId.ToString(CultureInfo.InvariantCulture).SafeForSqlInject());
+                    " AND ([tblCase].[Performer_User_Id] IN ({0}) OR [tblProblem].[ResponsibleUser_Id] IN ({0}) ", preparedUserIds);
+                if (isFieldResponsibleVisible)
+                {
+                    sb.AppendFormat("OR [tblCase].[CaseResponsibleUser_Id] IN ({0})", preparedUserIds);
+                }
+
+                sb.Append(") ");
             }
 
             // performer/utförare
@@ -1023,7 +1034,6 @@
                 {
                     sb.Append(" and (tblCase.Performer_User_Id in (" + f.UserPerformer.SafeForSqlInject() + ")) ");
                 }
-                
             }
 
             // ansvarig
