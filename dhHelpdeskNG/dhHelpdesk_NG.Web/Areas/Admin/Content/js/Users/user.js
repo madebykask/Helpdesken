@@ -233,9 +233,9 @@ $(function () {
                         var type = permission.getType();
                         var hasAccess = type != dhHelpdesk.admin.users.permissionType.restrictedCasePermission;
                         permission.setAccess(hasAccess);
-
                         if (setPermissions || !permission.getIsHasAccess()) {
-                            var hasPermission = type != dhHelpdesk.admin.users.permissionType.restrictedCasePermission;
+                            var hasPermission = !(type == dhHelpdesk.admin.users.permissionType.restrictedCasePermission 
+                                || type == dhHelpdesk.admin.users.permissionType.dailyReportPermission);
                             permission.setHasPermission(hasPermission);
                         }
 
