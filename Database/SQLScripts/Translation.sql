@@ -4133,5 +4133,56 @@ If not exists (select * from tblTextTranslation where text_id = 1497 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1497, 2, 'Are you sure you want to delete this case')
 GO
 
+
+-- New translations 20150626
+If not exists (select * from tbltext where id = 1498)
+	insert into tbltext (id, TextString) VALUES (1498, 'Ärendet kunde inte sparas då det är öppet hos en annan användare.')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1498 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1498, 2, 'The case  cannot be saved because it is opened by another user.')
+GO
+
+If not exists (select * from tbltext where id = 1499)
+	insert into tbltext (id, TextString) VALUES (1499, 'Ärendet kan inte tas bort då det är öppet hos en annan användare.')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1499 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1499, 2, 'The case cannot be deleted because it is opened by another user.')
+GO
+
+If not exists (select * from tbltext where id = 1500)
+	insert into tbltext (id, TextString) VALUES (1500, 'Ärendet kan inte flyttas då det är öppet hos en annan användare.')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1500 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1500, 2, 'The case cannot be moved because it is opened by another user.')
+GO
+
+If not exists (select * from tbltext where id = 1501)
+	insert into tbltext (id, TextString) VALUES (1501, 'Ärendet kan inte ändras då det är öppet hos en annan användare')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1501 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1501, 2, 'The case cannot be changed because it is opened by another user.')
+GO
+
+If not exists (select * from tbltext where id = 1502)
+	insert into tbltext (id, TextString) VALUES (1502, 'OBS! Du har redan öppnat detta ärende i en annan session.')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1502 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1502, 2, 'Please note! You have already opened this case in another session.')
+GO
+
+If not exists (select * from tbltext where id = 1503)
+	insert into tbltext (id, TextString) VALUES (1503, 'OBS! Detta ärende är öppnat av')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1503 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1503, 2, 'Please note! This case is opened by')
+GO
+
+If not exists (select * from tbltext where id = 1504)
+	insert into tbltext (id, TextString) VALUES (1504, 'Ett fel inträffade när ärendet skulle låsas upp automatiskt. Var vänlig kontakta systemadministratören.')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1504 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1504, 2, 'An error occurred when unlocking this case automatically. Please contact the system administrator.')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
