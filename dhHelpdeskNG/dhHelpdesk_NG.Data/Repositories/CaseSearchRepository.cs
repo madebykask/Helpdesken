@@ -215,7 +215,7 @@
                                     {
                                         //// calc by SLA value
                                         var dtFrom = DatesHelper.Min(caseRegistrationDate, now);
-                                        var dtTo = DatesHelper.Min(caseRegistrationDate, now);
+                                        var dtTo = DatesHelper.Max(caseRegistrationDate, now);
                                         timeLeft = (SLAtime * 60 - workTimeCalculator.CalculateWorkTime(dtFrom, dtTo, departmentId) - timeOnPause) / 60;
                                     }
 

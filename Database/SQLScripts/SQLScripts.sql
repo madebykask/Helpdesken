@@ -88,5 +88,7 @@ END
 GO
 
 
+update tblusers set DailyReportReminder = 0 where UserGroup_Id = 4
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.10'

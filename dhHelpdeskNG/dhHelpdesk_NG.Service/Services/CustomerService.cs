@@ -527,33 +527,32 @@
             #region ReportCustomers
 
             if (customer.ReportCustomers != null && ReportCustomers != null)
-            {
-                //TODO ALF: precis samma problem som finns på casefieldsettings finns här! fixar du det?
-                if (customer.ReportCustomers.Count == 0)
+            {            
+                var currentExistReports = this._reportCustomerRepository.GetAll().Where(rc => rc.Customer_Id == customer.Id).ToList();
+                foreach (var change in ReportCustomers)
                 {
-                    foreach (var r in ReportCustomers)
+                    var existingReport = currentExistReports.Where(r => r.Report_Id == change.Report_Id).FirstOrDefault();
+                    if (existingReport == null)
                     {
-                        if (r.ShowOnPage == 1)
-                        {
-                            this._reportCustomerRepository.Add(r);
-                        }
+                        this._reportCustomerRepository.Add(change);
                     }
+                    else
+                    {
+                        if (existingReport.ShowOnPage != change.ShowOnPage)
+                        {
+                            var reportForUpdate = customer.ReportCustomers.Where(r => r.Customer_Id == change.Customer_Id && r.Report_Id == change.Report_Id).FirstOrDefault();
+                            if (reportForUpdate != null)
+                            {
+                                reportForUpdate.ShowOnPage = change.ShowOnPage;
+                                this._reportCustomerRepository.Update(reportForUpdate);
+                            }
+                        }
+                    }                                        
                 }
-
-                foreach (var rc in customer.ReportCustomers)
-                {
-                    foreach (var change in ReportCustomers.Where(x => x.Customer_Id == rc.Customer_Id && x.Report_Id == rc.Report_Id))
-                    {
-                        if (change.ShowOnPage != rc.ShowOnPage)
-                        {
-                            rc.ShowOnPage = change.ShowOnPage;
-                            this._reportCustomerRepository.Update(rc);
-                        }
-                    }
-                }                
             }            
 
             #endregion
+            
             customer.NDSPath = customer.NDSPath ?? string.Empty;
             this._settingService.SaveSetting(setting, out errors);
 

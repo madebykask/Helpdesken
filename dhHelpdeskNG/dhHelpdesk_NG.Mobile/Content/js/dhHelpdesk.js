@@ -1326,7 +1326,7 @@ function InitDataTable(tableUniqId, perText, showingText) {
 }
 // TABLE PAGING END
 
-
+ 
 
 // YES and NO SWITCH FOR CHECKBOXES
 $('.switchcheckbox').bootstrapSwitch('onText', trans_yes);

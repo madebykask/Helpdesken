@@ -245,9 +245,8 @@ $(function () {
                 case dhHelpdesk.admin.users.userGroup.systemAdministrator:
                     walkPermissions(function (permission) {
                         var type = permission.getType();
-
-                        permission.setAccess(false);
-
+                        var hasAccess = type == dhHelpdesk.admin.users.permissionType.dailyReportPermission;
+                        permission.setAccess(hasAccess);
                         if (setPermissions || !permission.getIsHasAccess()) {
                             var hasPermission = type != dhHelpdesk.admin.users.permissionType.restrictedCasePermission;
                             permission.setHasPermission(hasPermission);
@@ -259,7 +258,6 @@ $(function () {
                 default:
                     walkPermissions(function (permission) {
                         permission.setAccess(false);
-
                         if (setPermissions || !permission.getIsHasAccess()) {
                             permission.setHasPermission(false);
                         }
