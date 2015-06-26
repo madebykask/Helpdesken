@@ -17,9 +17,9 @@
         extendValue: '@Model.CaseLock.ExtendValue',
         caseLockChecker: '@Url.Content("~/Cases/IsCaseAvailable/")',
         caseLockExtender: '@Url.Content("~/Cases/ReExtendCaseLock/")',
-        saveLockedCaseMessage: '@Translation.Get("You can't save this case, it is already opened by someone else!")',
-        deleteLockedCaseMessage: '@Translation.Get("You can't delete this case, it is already opened by someone else!")',
-        moveLockedCaseMessage: '@Translation.Get("You can't move this case, it is already opened by someone else!")'
+        saveLockedCaseMessage: '@Translation.Get("Ärendet kunde inte sparas då det är öppet hos en annan användare.")',
+        deleteLockedCaseMessage: '@Translation.Get("Ärendet kan inte tas bort då det är öppet hos en annan användare.")',
+        moveLockedCaseMessage: '@Translation.Get("Ärendet kan inte flyttas då det är öppet hos en annan användare.")'
     };  
 
 </script>
@@ -78,13 +78,13 @@
                     if (Model.CaseLock.UserId == SessionFacade.CurrentUser.Id)
                     {
                         <li class="notice">
-                            <a>@Translation.Get("OBS! Ärendet är öppnat av")&nbsp; yourself in another session</a>
+                            <a>@Translation.Get("OBS! Du har redan öppnat detta ärende i en annan session.")</a>
                         </li>
                     }
                     else
                     {
                         <li class="notice">
-                            <a>@Translation.Get("OBS! Ärendet är öppnat av")&nbsp; @Model.CaseLock.User.UserID</a>
+                            <a>@Translation.Get("OBS! Detta ärende är öppnat av")&nbsp; @Model.CaseLock.User.UserID</a>
                         </li>
                     }
                 }
