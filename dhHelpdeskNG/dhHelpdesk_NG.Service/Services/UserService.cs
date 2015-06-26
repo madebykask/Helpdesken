@@ -56,6 +56,8 @@
         /// <returns></returns>
         IList<User> GetAvailablePerformersOrUserId(int customerId, int? userId = null);
 
+        IList<User> GetAvailablePerformersForWorkingGroup(int customerId, int? workingGroup = null);
+
         IList<User> SearchSortAndGenerateUsers(UserSearch SearchUsers);
         IList<UserGroup> GetUserGroups();
         IList<UserRole> GetUserRoles();
@@ -327,6 +329,19 @@
                 this._userRepository.GetUsers(customerId)
                     .Where(e => e.IsActive == 1 && (e.Performer == 1 || (userId.HasValue && e.Id == userId)))
                     .ToList();
+        }
+
+        public IList<User> GetAvailablePerformersForWorkingGroup(int customerId, int? workingGroup = null)
+        {
+            if (workingGroup.HasValue)
+            {
+                return
+                    this.GetUsersForWorkingGroup(customerId, workingGroup.Value)
+                        .Where(it => it.IsActive == 1 && it.Performer == 1)
+                        .ToList();
+            }
+
+            return this.GetAvailablePerformersOrUserId(customerId);
         }
 
         public IList<User> SearchSortAndGenerateUsers(UserSearch searchUsers)

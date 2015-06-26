@@ -4126,5 +4126,12 @@ If not exists (select * from tblTextTranslation where text_id = 1496 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1496, 2, 'By last name')
 GO
 
+If not exists (select * from tbltext where id = 1497)
+	insert into tbltext (id, TextString) VALUES (1497, 'Är du säker på att du vill radera detta ärende')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1497 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1497, 2, 'Are you sure you want to delete this case')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

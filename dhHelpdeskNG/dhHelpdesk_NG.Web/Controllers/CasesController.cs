@@ -1237,14 +1237,51 @@
 
         public JsonResult ChangeWorkingGroupFilterUser(int? id, int customerId)
         {
-            var list = id.HasValue
-                           ? this._userService.GetUsersForWorkingGroup(customerId, id.GetValueOrDefault())
-                                 .Where(x => x.IsActive == 1)
-                                 .Select(x => new { id = x.Id, name = x.SurName + ' ' + x.FirstName })
-                           : this._userService.GetUsers(customerId)
-                                 .Where(x => x.IsActive == 1)
-                                 .Select(x => new { id = x.Id, name = x.SurName + ' ' + x.FirstName });
-            return this.Json(new { list });
+            IList<User> performersList;
+            var customerSettings = this._settingService.GetCustomerSetting(customerId);
+            if (customerSettings.DontConnectUserToWorkingGroup == 0 && id > 0)
+            {
+                performersList = this._userService.GetAvailablePerformersForWorkingGroup(customerId, id);
+            }
+            else
+            {
+                performersList = this._userService.GetAvailablePerformersOrUserId(customerId);
+            }
+
+            if (customerSettings.IsUserFirstLastNameRepresentation == 1)
+            {
+                return
+                    this.Json(
+                        new
+                            {
+                                list =
+                                    performersList.OrderBy(it => it.FirstName)
+                                        .ThenBy(it => it.SurName)
+                                        .Select(
+                                            it =>
+                                            new IdName
+                                                {
+                                                    id = it.Id,
+                                                    name = string.Format("{0} {1}", it.FirstName, it.SurName)
+                                                })
+                            });
+            }
+
+            return
+                this.Json(
+                    new
+                        {
+                            list =
+                                performersList.OrderBy(it => it.SurName)
+                                    .ThenBy(it => it.FirstName)
+                                    .Select(
+                                        it =>
+                                        new IdName
+                                            {
+                                                id = it.Id,
+                                                name = string.Format("{0} {1}", it.SurName, it.FirstName)
+                                            })
+                        });
         }
 
         public int ChangeWorkingGroupSetStateSecondary(int? id)
@@ -2604,9 +2641,7 @@
                     var sup = m.suppliers.FirstOrDefault(x => x.Id == m.case_.Supplier_Id.GetValueOrDefault());
                     m.CountryId = sup.Country_Id.GetValueOrDefault();
                 }
-
-                var performersList = responsibleUsersList;
-
+                
                 if (isCreateNewCase)
                 {
                     #region New case initialize
@@ -2711,9 +2746,10 @@
                     admUser = this._userService.GetUser(m.case_.Performer_User_Id.Value);
                 }
 
+                var performersList = responsibleUsersList;
                 if (cs.DontConnectUserToWorkingGroup == 0 && m.case_.WorkingGroup_Id > 0)
                 {
-                    performersList = this._userService.GetUsersForWorkingGroup(customerId, m.case_.WorkingGroup_Id.Value);
+                    performersList = this._userService.GetAvailablePerformersForWorkingGroup(customerId, m.case_.WorkingGroup_Id);
                 }
 
                 if (!performersList.Contains(admUser) && admUser != null)
