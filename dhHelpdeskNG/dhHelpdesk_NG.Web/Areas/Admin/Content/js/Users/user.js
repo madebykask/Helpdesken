@@ -153,6 +153,9 @@ $(function () {
         var bulletinBoardPermissions = spec.bulletinBoardPermissions || [];
         var invoicePermissions = spec.invoicePermissions || [];
 
+        /**
+        * @param { fn } walk
+        */
         var walkPermissions = function (walk) {
             var allPermissions = [
                             casePermissions,
@@ -180,10 +183,13 @@ $(function () {
             return userGroup;
         }
 
+        /**
+        * Handler when user group was changed
+        */
         var setUserGroup = function (ug, sp) {
-            userGroup = ug;
-
+            var permissions = dhHelpdesk.admin.users.permissionType;
             var setPermissions = sp !== 'undefined' ? sp : true;
+            userGroup = ug;
 
             switch (ug) {
                 case dhHelpdesk.admin.users.userGroup.user:
@@ -207,11 +213,16 @@ $(function () {
                 case dhHelpdesk.admin.users.userGroup.administrator:
                     walkPermissions(function (permission) {
                         var type = permission.getType();
-                        var hasAccess = type != dhHelpdesk.admin.users.permissionType.faqPermission;
-                        permission.setAccess(hasAccess);
-
+                      
+                        permission.setAccess(true);
                         if (setPermissions || !permission.getIsHasAccess()) {
-                            permission.setHasPermission(true);
+                            var isChecked = type == permissions.performerPermission
+                           || type == permissions.createCasePermission
+                           || type == permissions.copyCasePermission
+                           || type == permissions.activateCasePermission
+                           || type == permissions.closeCasePermission
+                           || type == permissions.reportPermission;
+                            permission.setHasPermission(isChecked);
                         }
 
                         return true;
@@ -222,9 +233,9 @@ $(function () {
                         var type = permission.getType();
                         var hasAccess = type != dhHelpdesk.admin.users.permissionType.restrictedCasePermission;
                         permission.setAccess(hasAccess);
-
                         if (setPermissions || !permission.getIsHasAccess()) {
-                            var hasPermission = type != dhHelpdesk.admin.users.permissionType.restrictedCasePermission;
+                            var hasPermission = !(type == dhHelpdesk.admin.users.permissionType.restrictedCasePermission 
+                                || type == dhHelpdesk.admin.users.permissionType.dailyReportPermission);
                             permission.setHasPermission(hasPermission);
                         }
 
@@ -234,9 +245,8 @@ $(function () {
                 case dhHelpdesk.admin.users.userGroup.systemAdministrator:
                     walkPermissions(function (permission) {
                         var type = permission.getType();
-
-                        permission.setAccess(false);
-
+                        var hasAccess = type == dhHelpdesk.admin.users.permissionType.dailyReportPermission;
+                        permission.setAccess(hasAccess);
                         if (setPermissions || !permission.getIsHasAccess()) {
                             var hasPermission = type != dhHelpdesk.admin.users.permissionType.restrictedCasePermission;
                             permission.setHasPermission(hasPermission);
@@ -248,7 +258,6 @@ $(function () {
                 default:
                     walkPermissions(function (permission) {
                         permission.setAccess(false);
-
                         if (setPermissions || !permission.getIsHasAccess()) {
                             permission.setHasPermission(false);
                         }

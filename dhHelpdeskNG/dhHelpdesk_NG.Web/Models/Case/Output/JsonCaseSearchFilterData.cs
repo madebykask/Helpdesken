@@ -66,7 +66,7 @@
                 res.data.Add(new JsonCaseSearchFilterItem()
                 {
                     attrName = CaseSearchFilter.RegisteredByNameAttribute,
-                    value = SaveExtractArray(defaultSearchFilter.SelectedRegisteredBy)
+                    value = defaultSearchFilter.lstRegisterBy
                 });
             }
 
@@ -114,7 +114,7 @@
                 res.data.Add(new JsonCaseSearchFilterItem()
                 {
                     attrName = CaseSearchFilter.PerformerNameAttribute,
-                    value = SaveExtractArray(defaultSearchFilter.SelectedAdministrator)
+                    value = defaultSearchFilter.lstAdministrator
                 });
             }
 

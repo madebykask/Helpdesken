@@ -120,6 +120,7 @@
         private readonly IUnitOfWorkFactory unitOfWorkFactory;
         private ISurveyService surveyService;
         private readonly IFinishingCauseService _finishingCauseService;
+        private readonly ICaseLockService _caseLockService;
 
         public CaseService(
             ICaseRepository caseRepository,
@@ -146,7 +147,8 @@
             IUnitOfWorkFactory unitOfWorkFactory,
             ISurveyService surveyService,
             ILogService logService,
-            IFinishingCauseService finishingCauseService)
+            IFinishingCauseService finishingCauseService,
+            ICaseLockService caseLockService)
         {
             this._unitOfWork = unitOfWork;
             this._caseRepository = caseRepository;
@@ -174,6 +176,7 @@
             this.surveyService = surveyService;
             this._logService = logService;
             this._finishingCauseService = finishingCauseService;
+            this._caseLockService = caseLockService;
         }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
@@ -272,6 +275,10 @@
                 this._caseHistoryRepository.Commit(); 
             }
 
+            //delete case lock
+            this._caseLockService.UnlockCaseByCaseId(id);
+
+
             // delete case files
             var caseFiles = this._caseFileRepository.GetCaseFilesByCaseId(id);
             if (caseFiles != null)
@@ -284,6 +291,12 @@
                 this._caseFileRepository.Commit(); 
             }
 
+            // delete File View Log
+            this._caseFileRepository.DeleteFileViewLogs(id);
+            this._caseFileRepository.Commit();
+
+
+            // delete Invoice
             this.invoiceArticleService.DeleteCaseInvoices(id);
 
             var c = this._caseRepository.GetById(id);
@@ -916,32 +929,33 @@
                     }
                 }
 
-                // State Secondary Email TODO ikea ims only?? 
-                if (!cms.DontSendMailToNotifier && !dontSendMailToNotfier && !isClosedMailSentToNotifier && oldCase != null && oldCase.Id > 0)  
-                    if (newCase.StateSecondary_Id != oldCase.StateSecondary_Id && newCase.StateSecondary_Id > 0)
-                        if (_emailService.IsValidEmail(newCase.PersonsEmail))
-                        {
-                            int mailTemplateId = (int)GlobalEnums.MailTemplates.ClosedCase;
+                // State Secondary Email TODO ikea ims only??
+                // Commented out for now, will be added later with a better solution decided 20150626
+                //if (!cms.DontSendMailToNotifier && !dontSendMailToNotfier && !isClosedMailSentToNotifier && oldCase != null && oldCase.Id > 0)  
+                //    if (newCase.StateSecondary_Id != oldCase.StateSecondary_Id && newCase.StateSecondary_Id > 0)
+                //        if (_emailService.IsValidEmail(newCase.PersonsEmail))
+                //        {
+                //            int mailTemplateId = (int)GlobalEnums.MailTemplates.ClosedCase;
 
-                            string customEmailSender3 = cms.CustomeMailFromAddress.DefaultOwnerWGEMail;
-                            if (string.IsNullOrWhiteSpace(customEmailSender3))
-                                customEmailSender3 = cms.CustomeMailFromAddress.WGEmail;
-                            if (string.IsNullOrWhiteSpace(customEmailSender3))
-                                customEmailSender3 = cms.CustomeMailFromAddress.SystemEmail;
+                //            string customEmailSender3 = cms.CustomeMailFromAddress.DefaultOwnerWGEMail;
+                //            if (string.IsNullOrWhiteSpace(customEmailSender3))
+                //                customEmailSender3 = cms.CustomeMailFromAddress.WGEmail;
+                //            if (string.IsNullOrWhiteSpace(customEmailSender3))
+                //                customEmailSender3 = cms.CustomeMailFromAddress.SystemEmail;
 
-                            MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
-                            if (m != null)
-                            {
-                                if (!String.IsNullOrEmpty(m.Body) && !String.IsNullOrEmpty(m.Subject))
-                                {
-                                    var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(customEmailSender3));
-                                    _emailLogRepository.Add(el);
-                                    _emailLogRepository.Commit();
-                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 11);
-                                    _emailService.SendEmail(customEmailSender3, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
-                                }
-                            }
-                        }
+                //            MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
+                //            if (m != null)
+                //            {
+                //                if (!String.IsNullOrEmpty(m.Body) && !String.IsNullOrEmpty(m.Subject))
+                //                {
+                //                    var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(customEmailSender3));
+                //                    _emailLogRepository.Add(el);
+                //                    _emailLogRepository.Commit();
+                //                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 11);
+                //                    _emailService.SendEmail(customEmailSender3, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                //                }
+                //            }
+                //        }
 
                 this.caseMailer.InformNotifierIfNeeded(
                                             caseHistoryId,

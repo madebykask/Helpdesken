@@ -872,11 +872,12 @@
             {
                 var workTimeCalc = TimeZoneInfo.Local;
                 var showRemainingTime = false;
-                CaseRemainingTimeData remainingTimeData;       
-
+                CaseRemainingTimeData remainingTimeData;
+                var caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(cusId).ToArray();
                 srm.Cases = this._caseSearchService.Search(
                     sm.caseSearchFilter,
                     srm.CaseSettings,
+                    caseFieldSettings,
                     -1,
                     curUser,
                     1,

@@ -30,7 +30,8 @@
     {
         IList<CaseSearchResult> Search(
             CaseSearchFilter f,
-            IList<CaseSettings> csl,
+            IList<CaseSettings> userCaseSettings,
+            bool isFieldResponsibleVisible,
             int userId,
             string userUserId,
             int showNotAssignedWorkingGroups,
@@ -81,7 +82,8 @@
 
         public IList<CaseSearchResult> Search(
                                     CaseSearchFilter f, 
-                                    IList<CaseSettings> csl, 
+                                    IList<CaseSettings> userCaseSettings,
+                                    bool isFieldResponsibleVisible,
                                     int userId, 
                                     string userUserId, 
                                     int showNotAssignedWorkingGroups, 
@@ -105,13 +107,13 @@
             IList<ProductAreaEntity> pal = this._productAreaRepository.GetMany(x => x.Customer_Id == f.CustomerId).OrderBy(x => x.Name).ToList(); 
             IList<CaseSearchResult> ret = new List<CaseSearchResult>();
             var caseTypes = this.caseTypeRepository.GetCaseTypeOverviews(f.CustomerId).ToArray();
-            var displayLeftTime = csl.Any(it => it.Name == TimeLeftColumn);
+            var displayLeftTime = userCaseSettings.Any(it => it.Name == TimeLeftColumn);
             remainingTime = new CaseRemainingTimeData();
-
             var sql = this.ReturnCaseSearchSql(
                                         f, 
                                         customerSetting, 
                                         customerUserSetting, 
+                                        isFieldResponsibleVisible,
                                         userId, 
                                         userUserId, 
                                         showNotAssignedWorkingGroups, 
@@ -213,7 +215,7 @@
                                     {
                                         //// calc by SLA value
                                         var dtFrom = DatesHelper.Min(caseRegistrationDate, now);
-                                        var dtTo = DatesHelper.Min(caseRegistrationDate, now);
+                                        var dtTo = DatesHelper.Max(caseRegistrationDate, now);
                                         timeLeft = (SLAtime * 60 - workTimeCalculator.CalculateWorkTime(dtFrom, dtTo, departmentId) - timeOnPause) / 60;
                                     }
 
@@ -227,7 +229,7 @@
                                     }
                                 }
 
-                                foreach (var c in csl)
+                                foreach (var c in userCaseSettings)
                                 {
                                     Field field = null;
                                     for (var i = 0; i < dr.FieldCount; i++)
@@ -598,7 +600,8 @@
         private string ReturnCaseSearchSql(
                     CaseSearchFilter f, 
                     Setting customerSetting, 
-                    CustomerUser customerUserSetting, 
+                    CustomerUser customerUserSetting,
+                    bool isFieldResponsibleVisible,
                     int userId, 
                     string userUserId, 
                     int showNotAssignedWorkingGroups, 
@@ -654,9 +657,19 @@
             columns.Add("tblRegistrationSourceCustomer.SourceName as RegistrationSourceCustomer");
             if (customerSetting != null)
             {
-                columns.Add("coalesce(tblUsers.SurName, '') + ' ' + coalesce(tblUsers.FirstName, '') as Performer_User_Id");
-                columns.Add("coalesce(tblUsers2.Surname, '') + ' ' + coalesce(tblUsers2.Firstname, '') as User_Id");
-                columns.Add("coalesce(tblUsers3.Surname, '') + ' ' + coalesce(tblUsers3.Firstname, '') as CaseResponsibleUser_Id");
+                if (customerSetting.IsUserFirstLastNameRepresentation == 1)
+                {
+                    columns.Add("coalesce(tblUsers.FirstName, '') + ' ' + coalesce(tblUsers.SurName, '') as Performer_User_Id");
+                    columns.Add("coalesce(tblUsers2.FirstName, '') + ' ' + coalesce(tblUsers2.SurName, '') as User_Id");
+                    columns.Add("coalesce(tblUsers3.FirstName, '') + ' ' + coalesce(tblUsers3.SurName, '') as CaseResponsibleUser_Id");
+                }
+                else
+                {
+                    columns.Add("coalesce(tblUsers.SurName, '') + ' ' + coalesce(tblUsers.FirstName, '') as Performer_User_Id");
+                    columns.Add("coalesce(tblUsers2.Surname, '') + ' ' + coalesce(tblUsers2.Firstname, '') as User_Id");
+                    columns.Add("coalesce(tblUsers3.Surname, '') + ' ' + coalesce(tblUsers3.Firstname, '') as CaseResponsibleUser_Id");
+                }
+
                 columns.Add("coalesce(tblUsers4.Surname, '') + ' ' + coalesce(tblUsers4.Firstname, '') as tblProblem_ResponsibleUser_Id");
             }
 
@@ -760,7 +773,7 @@
             }
             else
             {
-                sql.Add(this.ReturnCaseSearchWhere(f, customerSetting, customerUserSetting, userId, userUserId, 
+                sql.Add(this.ReturnCaseSearchWhere(f, customerSetting, customerUserSetting, isFieldResponsibleVisible, userId, userUserId, 
                         showNotAssignedWorkingGroups, userGroupId, restrictedCasePermission, gs, relatedCasesCaseId, relatedCasesUserId, caseIds));
             }
 
@@ -886,6 +899,7 @@
             CaseSearchFilter f, 
             Setting customerSetting, 
             CustomerUser customerUserSetting, 
+            bool isFieldResponsibleVisible,
             int userId, 
             string userUserId, 
             int showNotAssignedWorkingGroups, 
@@ -995,9 +1009,15 @@
 
             if (f.SearchInMyCasesOnly)
             {
+                var preparedUserIds = userId.ToString(CultureInfo.InvariantCulture).SafeForSqlInject();
                 sb.AppendFormat(
-                    " AND ([tblCase].[Performer_User_Id] IN ({0}) OR [tblCase].[CaseResponsibleUser_Id] IN ({0}) OR [tblProblem].[ResponsibleUser_Id] IN ({0})) ", 
-                    userId.ToString(CultureInfo.InvariantCulture).SafeForSqlInject());
+                    " AND ([tblCase].[Performer_User_Id] IN ({0}) OR [tblProblem].[ResponsibleUser_Id] IN ({0}) ", preparedUserIds);
+                if (isFieldResponsibleVisible)
+                {
+                    sb.AppendFormat("OR [tblCase].[CaseResponsibleUser_Id] IN ({0})", preparedUserIds);
+                }
+
+                sb.Append(") ");
             }
 
             // performer/utförare
@@ -1014,7 +1034,6 @@
                 {
                     sb.Append(" and (tblCase.Performer_User_Id in (" + f.UserPerformer.SafeForSqlInject() + ")) ");
                 }
-                
             }
 
             // ansvarig

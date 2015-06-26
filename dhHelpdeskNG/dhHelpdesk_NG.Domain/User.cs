@@ -87,7 +87,17 @@
         public virtual Language Language { get; set; }
         public virtual User ChangedByUser { get; set; }
         public virtual UserGroup UserGroup { get; set; }
+
+        /// <summary>
+        /// Cusomers selected for user. Should be equal to/included by this.CusomersAvailable
+        /// </summary>
         public virtual ICollection<Customer> Cs { get; set; }
+
+        /// <summary>
+        /// Customers available for this user
+        /// </summary>
+        public virtual ICollection<Customer> CusomersAvailable { get; set; }
+
         public virtual ICollection<CustomerUser> CustomerUsers { get; set; }
         public virtual ICollection<Department> Departments { get; set; }
         public virtual ICollection<DepartmentUser> DUs { get; set; }

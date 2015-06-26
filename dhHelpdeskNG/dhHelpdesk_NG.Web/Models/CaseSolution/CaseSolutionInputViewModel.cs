@@ -1,36 +1,10 @@
-﻿namespace DH.Helpdesk.Web.Models
+﻿namespace DH.Helpdesk.Web.Models.CaseSolution
 {
     using System.Collections.Generic;
     using System.Web.Mvc;
 
-    using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.Web.Models.Case;
-    using DH.Helpdesk.BusinessData.Models.Projects.Output;
-    using DH.Helpdesk.BusinessData.Models.Problem.Output;
-    using DH.Helpdesk.Domain.Changes;
-
-    public class CaseSolutionIndexViewModel
-    {
-        public CaseSolutionIndexViewModel(string activeTab)
-        {
-            this.ActiveTab = activeTab;
-        }
-
-        public string SearchCss { get; set; }
-
-        public CaseSolution CaseSolution { get; set; }
-
-        public IEnumerable<CaseSolution> CSolutions { get; set; }
-
-        public IList<CaseSolution> CaseSolutions { get; set; }
-
-        public IList<CaseSolutionCategory> CaseSolutionCategories { get; set; }
-
-        public string ActiveTab { get; set; }
-
-    }
 
     public class CaseSolutionInputViewModel
     {
@@ -67,7 +41,12 @@
         public IList<SelectListItem> Categories { get; set; }
         public IList<SelectListItem> Departments { get; set; }
         public IList<FinishingCause> FinishingCauses { get; set; }
-        public IList<SelectListItem> PerformerUsers { get; set; }
+
+        /// <summary>
+        /// List of available case administrators
+        /// </summary>
+        public SelectList PerformerUsers { get; set; }
+
         public IList<SelectListItem> Priorities { get; set; }
         public IList<ProductArea> ProductAreas { get; set; }
         public IList<SelectListItem> projects { get; set; }

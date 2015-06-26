@@ -76,7 +76,15 @@
 
         public IList<SelectListItem> AAsAvailable { get; set; }
         public IList<SelectListItem> AAsSelected { get; set; }
+
+        /// <summary>
+        /// Customers available  for this user
+        /// </summary>
         public IList<SelectListItem> CsAvailable { get; set; }
+
+        /// <summary>
+        /// Customers selected for this user
+        /// </summary>
         public IList<SelectListItem> CsSelected { get; set; }
         public IList<SelectListItem> Customers { get; set; }
         public IList<SelectListItem> Domains { get; set; }
@@ -85,6 +93,10 @@
         public IList<SelectListItem> OTsSelected { get; set; }
         public IList<SelectListItem> RefreshInterval { get; set; }
         public IList<SelectListItem> StartPageShowList { get; set; }
+
+        /// <summary>
+        /// Available groups to select
+        /// </summary>
         public IList<SelectListItem> UserGroups { get; set; }
         public IList<SelectListItem> UserRoles { get; set; }
         public IList<SelectListItem> WorkingGroups { get; set; }

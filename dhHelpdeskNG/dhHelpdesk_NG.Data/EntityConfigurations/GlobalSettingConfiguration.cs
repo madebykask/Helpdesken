@@ -36,6 +36,8 @@
             this.Property(x => x.ServerPort).IsRequired();
             this.Property(x => x.SMTPServer).IsRequired().HasMaxLength(20);
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            this.Property(x => x.CaseLockTimer).IsRequired();
+            this.Property(x => x.CaseLockBufferTime).IsRequired();
 
             this.ToTable("tblglobalsettings");
         }

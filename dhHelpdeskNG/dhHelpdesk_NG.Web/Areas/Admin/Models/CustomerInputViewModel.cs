@@ -5,6 +5,7 @@
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Web.Enums;
     using DH.Helpdesk.Web.Infrastructure;
 
     public class CustomerCaseSummaryViewModel
@@ -82,6 +83,14 @@
 
         public CustomerCaseSummaryViewModel CustomerCaseSummaryViewModel { get; set; }
 
-        
+        /// <summary>
+        /// Availiable representation modes of users first last name
+        /// </summary>
+        public SelectList UserFirstLastNameRepresentationList { get; set; }
+
+        /// <summary>
+        /// Selected representation modes of users first last name 
+        /// </summary>
+        public UserFirstLastNameModes UserFirstLastNameRepresentationId { get; set; }
     }
 }

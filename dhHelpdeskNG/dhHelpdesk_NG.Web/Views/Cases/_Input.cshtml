@@ -8,10 +8,20 @@
 
 <script type="text/javascript">
     window.parameters = {
+        currentCaseId: '@Model.case_.Id',
         productAreaErrorMessage:'@Translation.Get("Ärendet kunde inte sparas då den lägsta möjliga nivån på fält")' + " [" +
                                 '@Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)' + "] " +
-                                    '@Translation.Get("inte har valts. Vänligen kontrollera ärendet.")'
+                                '@Translation.Get("inte har valts. Vänligen kontrollera ärendet.")',
+        caseLockGuid: '@Model.CaseLock.LockGUID',
+        userCaseLocker: '@Model.CaseLock.UserId',
+        extendValue: '@Model.CaseLock.ExtendValue',
+        caseLockChecker: '@Url.Content("~/Cases/IsCaseAvailable/")',
+        caseLockExtender: '@Url.Content("~/Cases/ReExtendCaseLock/")',
+        saveLockedCaseMessage: '@Translation.Get("You can't save this case, it is already opened by someone else!")',
+        deleteLockedCaseMessage: '@Translation.Get("You can't delete this case, it is already opened by someone else!")',
+        moveLockedCaseMessage: '@Translation.Get("You can't move this case, it is already opened by someone else!")'
     };  
+
 </script>
 @Scripts.Render("~/bundles/invoices", "~/bundles/cases/edit")
 @{  
@@ -63,11 +73,20 @@
                     }
                 }
 
-                @if (Model.CaseIsLockedByUserId > 0)
+                @if (Model.CaseLock != null && Model.CaseLock.IsLocked && Model.CaseLock.User != null)
                 {
-                    <li class="notice">
-                        <a>@Translation.Get("OBS! Ärendet är öppnat av")&nbsp; @Model.CaseIsLockedByUserName</a>
-                    </li>
+                    if (Model.CaseLock.UserId == SessionFacade.CurrentUser.Id)
+                    {
+                        <li class="notice">
+                            <a>@Translation.Get("OBS! Ärendet är öppnat av")&nbsp; yourself in another session</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="notice">
+                            <a>@Translation.Get("OBS! Ärendet är öppnat av")&nbsp; @Model.CaseLock.User.UserID</a>
+                        </li>
+                    }
                 }
             </ul>
             <div class="tab-content">
@@ -110,6 +129,7 @@
                         @Html.Hidden("Today", DateTime.Now.ToShortDateString())
                         @Html.Hidden("CurLanguageId", SessionFacade.CurrentLanguageId)
                         @Html.Hidden("SelectedValueCarrier", "")
+                        @Html.HiddenFor(model => Model.CaseLock.LockGUID)                        
 
                         @if (Model.customerUserSetting.UserInfoPermission == 1)
                         {                                                        
@@ -508,7 +528,7 @@
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer, "Källa")
                                         </td>
                                         <td class="span4">
-                                            @Html.DropDownListFor(m=>m.CustomerRegistrationSourceId, Model.CustomerRegistrationSources, @Model.IsReadOnly(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer, CaseSolutionFields.RegistrationSourceCustomer)? new {@disabled = true} : null)
+                                            @Html.DropDownListFor(m => m.CustomerRegistrationSourceId, Model.CustomerRegistrationSources, @Model.IsReadOnly(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer, CaseSolutionFields.RegistrationSourceCustomer) ? new { @disabled = true } : null)
                                         </td>
                                     </tr>
                                     <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.CaseType_Id, CaseSolutionFields.CaseType)">
@@ -540,7 +560,7 @@
                                         <td colspan="2">
                                             <div id="divProductArea" class="btn-group">
                                                 @{
-                                                    string disabledProductArea = Model.GetDisabledString(GlobalEnums.TranslationCaseFields.ProductArea_Id, CaseSolutionFields.ProductArea);
+                                    string disabledProductArea = Model.GetDisabledString(GlobalEnums.TranslationCaseFields.ProductArea_Id, CaseSolutionFields.ProductArea);
                                                 }
                                                 <div class="btn @disabledProductArea" id="divBreadcrumbs_ProductArea">@Model.ParantPath_ProductArea</div>
                                                 <button class="btn dropdown-toggle" data-toggle="dropdown" @disabledProductArea>
@@ -779,7 +799,7 @@
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Caption, "Rubrik")
                                         </td>
                                         <td colspan="2">
-                                            @if ((Model.customerUserSetting.CaptionPermission == 1 && !Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Caption, CaseSolutionFields.Caption) 
+                                            @if ((Model.customerUserSetting.CaptionPermission == 1 && !Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Caption, CaseSolutionFields.Caption)
                                                 || Model.case_.Id == 0))
                                             {                                                
                                                 @Html.TextBoxFor(model => model.case_.Caption, new { maxlength = "60", @class = "width90" })
@@ -886,7 +906,7 @@
                                         <td colspan="2">
                                             @if (Model.EditMode == Enums.AccessMode.ReadOnly)
                                             {
-                                                @Html.EditorFor(m => m.case_.AgreedDate, "DatePicker", new { id = "divCase__AgreedDate", disabled = "disabled"})
+                                                @Html.EditorFor(m => m.case_.AgreedDate, "DatePicker", new { id = "divCase__AgreedDate", disabled = "disabled" })
                                             }
                                             else
                                             {
@@ -954,7 +974,8 @@
                                             </table>
                                         </td>
                                     </tr>
-                                    <tr class="displaytr" style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Filename.ToString())">
+                                    <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Filename, CaseSolutionFields.FileName)">
+                                    @*<tr class="displaytr" style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Filename.ToString())">*@
                                         <td>
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Filename, "Bifogad fil")
                                         </td>
@@ -1023,22 +1044,15 @@
                                         <td>
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id, "Ansvarig")
                                         </td>
-                                        <td>
-                                            <select id="case__CaseResponsibleUser_Id" name="case_.CaseResponsibleUser_Id" @(Model.EditMode == Enums.AccessMode.ReadOnly?"disabled=disabled":string.Empty)>
-                                                <option value="">&nbsp;</option>
-                                                @if (Model.users != null)
-                                                {
-                                                    if (Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString()) == "display:none")
-                                                    {
-                                                        Model.case_.CaseResponsibleUser_Id = null;
-                                                    }
-
-                                                    foreach (var e in Model.users.Where(e => e.IsActive == 1 && e.Performer == 1 || Model.case_.CaseResponsibleUser_Id == e.Id))
-                                                    {
-                                                    <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.CaseResponsibleUser_Id.ToString()) >@e.SurName @e.FirstName</option>
-                                                    }
-                                                }
-                                            </select>
+                                         <td>
+                                            @if (Model.EditMode != Enums.AccessMode.ReadOnly)
+                                            {
+                                                @Html.DropDownListFor(m => m.ResponsibleUser_Id, Model.ResponsibleUsersAvailable)
+                                            }
+                                            else
+                                            {
+                                                @Html.DropDownListFor(m => m.ResponsibleUser_Id, Model.ResponsibleUsersAvailable, new { disabled="disabled" })
+                                            }
                                         </td>
                                     </tr>
                                     <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Performer_User_Id, CaseSolutionFields.Administrator)">
@@ -1048,26 +1062,11 @@
                                         <td>
                                             @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Performer_User_Id, CaseSolutionFields.Administrator))
                                             {
-                                                <select id="case__Performer_User_Id" name="case_.Performer_User_Id" data-field="administrator">
-                                                    <option value="">&nbsp;</option>
-                                                    @if (Model.performers != null)
-                                                    {
-                                                        foreach (var e in Model.performers.Where(e => e.IsActive == 1 && e.Performer == 1 || Model.case_.Performer_User_Id == e.Id))
-                                                        {
-                                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Performer_User_Id.ToString()) >@e.SurName @e.FirstName</option>
-                                                        }
-                                                    }
-                                                </select>
+                                                @Html.DropDownListFor(m => m.Performer_Id, Model.Performers, new { data_field = "administrator" })
                                             }
                                             else
                                             {
-                                                var performer = Model.performers.SingleOrDefault(x => x.Id == Model.case_.Performer_User_Id);
-                                                if (performer != null)
-                                                {
-                                                    var performerName = string.Format("{0} {1}", performer.SurName, performer.FirstName);
-                                                @Html.TextBoxFor(m => performerName, new { @readonly = true })
-                                                }
-                                                @Html.HiddenFor(x => x.case_.Performer_User_Id)
+                                                @Html.DropDownListFor(m => m.Performer_Id, Model.Performers, new { data_field = "administrator", disabled = "disabled" })
                                             }
                                         </td>
                                     </tr>
@@ -1465,9 +1464,9 @@
                         }
                         else
                         {
-                            if (Model.CaseIsLockedByUserId == 0)
+                            if (Model.CaseLock == null || (Model.CaseLock != null && !Model.CaseLock.IsLocked))
                             {
-                            @Html.Partial("_CaseLogInput", Model)
+                                @Html.Partial("_CaseLogInput", Model)
                             }
                         }
                     </div>
@@ -1506,9 +1505,6 @@
                     Model.case_.Customer_Id,
                     SessionFacade.CurrentLanguageId,
                     defaultCaption);
-
-        //if (string.IsNullOrEmpty(res))
-        //    res = Translation.Get(defaultCaption, SessionFacade.CurrentCaseLanguageId);
 
         return res;
     }
@@ -1605,11 +1601,11 @@
             "case_.WorkingGroup_Id": {
                 required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.WorkingGroup_Id, CaseSolutionFields.WorkingGroup))  
                 },
-            "case_.Performer_User_Id": {
-                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Performer_User_Id, CaseSolutionFields.Administrator))  
-                },
-            "case_.CaseResponsible_User_Id": {
+            "ResponsibleUser_Id": {
                 required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString())")
+            },
+            "Performer_Id": {
+                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Performer_User_Id, CaseSolutionFields.Administrator))  
             },
             "case_.Priority_Id": {
                 required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Priority_Id, CaseSolutionFields.Priority))  
@@ -1667,7 +1663,7 @@
             },
             "CaseLog.TextInternal": {
                 maxlength: 3000
-            }
+            }            
         },
         messages: {
             "case_.ReportedBy": {
@@ -1780,16 +1776,33 @@
             },
             "CaseLog.FinishingDate": {
                 required: "@Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-            }
+            }          
         },
         //errorPlacement: function (error, element) {
         //    alert(error.text());
         //},
-        submitHandler: function(form) { 
-            if (isProductAreaValid())
-                form.submit();   
-            else
+        submitHandler: function(form) {             
+            
+            if (!isProductAreaValid())            
                 return false;
+            
+            if (window.parameters.currentCaseId > 0)
+            {
+                $.post(window.parameters.caseLockChecker, { caseId: window.parameters.currentCaseId, 
+                                                            lockGuid: window.parameters.caseLockGuid },
+                    function (data) {
+                        if (data == true)
+                            form.submit();   
+                        else
+                        {
+                            //Case is Locked
+                            ShowToastMessage(window.parameters.saveLockedCaseMessage, "error", true);
+                            return false;                    
+                        }
+                    });   
+            }
+            else
+                form.submit();   
         }
     });
 

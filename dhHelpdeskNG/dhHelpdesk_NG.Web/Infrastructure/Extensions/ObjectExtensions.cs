@@ -129,6 +129,12 @@
             return fieldSettings.ShowOnStartPage != 0 || fieldSettings.Required != 0;
         }
 
+        public static bool IsFieldRequired(this IList<CaseFieldSetting> fields, GlobalEnums.TranslationCaseFields field)
+        {
+            var fieldSettings = fields.getCaseSettingsValue(field.ToString());
+            return fieldSettings.Required != 0;
+        }
+
         public static bool IsFieldLocked(this IList<CaseFieldSetting> fields, GlobalEnums.TranslationCaseFields field)
         {
             return fields.getCaseSettingsValue(field.ToString()).Locked == 1;

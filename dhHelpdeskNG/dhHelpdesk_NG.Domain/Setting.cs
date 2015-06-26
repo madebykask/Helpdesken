@@ -22,6 +22,7 @@ namespace DH.Helpdesk.Domain
         public int ComplexPassword { get; set; }
         public int ComputerDepartmentSource { get; set; }
         public int ComputerLog { get; set; }
+        public int ComputerUserSearchRestriction { get; set; }
         public int ComputerUserInfoListLocation { get; set; }  //READ ONLY, DON'T CHANGE IT FROM PROJECT- ONLY IN DB IF NECESSARY!
         public int ComputerUserLog { get; set; }
         public int CreateCaseFromOrder { get; set; }
@@ -119,5 +120,10 @@ namespace DH.Helpdesk.Domain
         public virtual OrderState CloseOrderState { get; set; }
 
         public int ModuleCaseInvoice { get; set; }
+
+        /// <summary>
+        /// If 1 - indicates that users should be presented(and sorted by) as "FirstName LastName", and vice versa
+        /// </summary>
+        public int IsUserFirstLastNameRepresentation { get; set; }
     }
 }

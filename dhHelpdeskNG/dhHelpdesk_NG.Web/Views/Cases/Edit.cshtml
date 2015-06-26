@@ -6,6 +6,7 @@
    t.Add("isJS", "true");
 }
 
+
 @section Styles {
 
     @if (Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
@@ -51,6 +52,7 @@
 @section Scripts {
 
     <script type="text/javascript">
+        
         $(document).ready(function () {
 
             CaseInitForm();
@@ -117,12 +119,12 @@
             }
 
             $("#case-action-save-and-close").click(function (e) {
-                e.preventDefault();
+                e.preventDefault();                
                 invoiceArticlesBeforeClose(EditCaseAndClose, openInvoiceWindow);
             });
 
             $("#case-action-save-and-new").click(function (e) {
-                e.preventDefault();
+                e.preventDefault();                
                 invoiceArticlesBeforeClose(EditCaseAndAddCase, openInvoiceWindow);
             });
 
@@ -130,27 +132,47 @@
                 e.preventDefault();
                 var targetUrl = $(this).attr("href");
                 invoiceArticlesBeforeClose(function (){ window.location.href = targetUrl; }, openInvoiceWindow);
+                if ('@Model.CaseLock.LockGUID' != '')
+                    UnLockCase('@Model.CaseLock.LockGUID');
             });
 
-            $("#case-action-delete").click(function () {
+            $("#case-action-delete").click(function (e) {                               
                 if (hasNotInvoicedArticles()) {
                     messageDialog(dc('@Translation.Get("You may not delete a case with selected articles in the order section. Please review your orders.")'));
                     return false;
                 }
-                return true;
-            });
+                return true;                       
+            })
         });
+     
 
-        function MakeAsUnread() {
-            $.post('/cases/markasunread/', { id: '@Model.case_.Id', customerId: '@Model.case_.Customer_Id' }, function (data) {
-                if (data == "Success")
-                {
-                    $('#case__Unread').val(1);
-                    ShowToastMessage('@Translation.Get("Ärendet har markerats som oläst")', "notice");
+        function MakeAsUnread() {             
+            $.post('@Url.Content("~/Cases/IsCaseAvailable/")', { caseId: '@Model.CaseLock.CaseId', lockGuid: '@Model.CaseLock.LockGUID' },
+                function (data) {
+                    if (data == true) {
+                        $.post('/cases/markasunread/', { id: '@Model.case_.Id', customerId: '@Model.case_.Customer_Id' }, function (data) {
+                            if (data == "Success") {
+                                $('#case__Unread').val(1);
+                                ShowToastMessage('@Translation.Get("Ärendet har markerats som oläst")', "notice");
+                            }
+                        });
+                    }
+                    else {
+                        ShowToastMessage('@Translation.Get("You can't change this case, it is already opened by someone else!")', "error", false);                        
+                    }
+                });            
+        };
+
+        
+        function UnLockCase(lockGuid) {            
+            $.post('@Url.Content("~/Cases/UnLockCase/")', { lockGUID: lockGuid }, function (data) {                
+                if (data != "Success")
+                {                    
+                    ShowToastMessage('@Translation.Get("An error has occurred during releasing the case.")', "Error");
                 }
             });
         };
-        
+                
         //HIDE SHOW
         $( ".hidebtn" ).on( "click", function() {
             $( this ).parents( ".notifier-block" ).addClass( "hideshow" );
@@ -188,7 +210,7 @@
 
     <script type="text/javascript">
         $(function () {
-            var currentpage = new dhform({ url: '@Model.DynamicCase.FormPath', modal: @Model.DynamicCase.Modal.ToJavaScriptBool() });
+            var currentpage = new dhform({ url: '@Model.DynamicCase.FormPath', modal: '@Model.DynamicCase.Modal.ToJavaScriptBool()' });
         });
     </script>
 }
@@ -214,7 +236,7 @@
                     <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "DeleteCase",
                                 new { caseId = @Model.case_.Id, customerId = @Model.case_.Customer_Id }, new
                                 {
-                                    @class = "btn deleteDialog",
+                                    @class = "btn caseDeleteDialog",
                                     id = "case-action-delete",
                                     deleteDialogText = Translation.Get("Är du säker på att du vill radera detta ärende", Enums.TranslationSource.TextTranslation) + '?'
                                 })</li>
@@ -225,7 +247,7 @@
                     <li>@Html.ActionLink(Translation.Get("Stäng", Enums.TranslationSource.TextTranslation), "Index", new { customerId = @Model.case_.Customer_Id }, new { @class = "btn", id = "case-action-close" })</li>
                 }
                 else
-                {
+                {                   
                     <li><a id="case-action-close" class = "btn" href="@Model.BackUrl">@Translation.Get("Stäng")</a></li>
                 }
 
@@ -339,11 +361,12 @@
                 {                                                            
                     <li><a href="#" title="@Translation.Get("Visa inventarie", Enums.TranslationSource.TextTranslation)" class="btn"><i class="icon-th-large"></i></a></li>
                 }
-                <li><a href="@Model.case_.Id.GetUrlForNavigationBetweenCases()" title="@Translation.Get("Föregående ärende", Enums.TranslationSource.TextTranslation)" class="btn"><i class="icon-chevron-left"></i></a></li>
-                <li><a href="@Model.case_.Id.GetUrlForNavigationBetweenCases(true)"  title="@Translation.Get("Nästa ärende", Enums.TranslationSource.TextTranslation)" class="btn"><i class="icon-chevron-right"></i></a></li>
+                <li><a onclick="UnLockCase('@Model.CaseLock.LockGUID')" href="@Model.case_.Id.GetUrlForNavigationBetweenCases()" title="@Translation.Get("Föregående ärende", Enums.TranslationSource.TextTranslation)" class="btn"><i class="icon-chevron-left"></i></a></li>
+                <li><a onclick="UnLockCase('@Model.CaseLock.LockGUID')" href="@Model.case_.Id.GetUrlForNavigationBetweenCases(true)"  title="@Translation.Get("Nästa ärende", Enums.TranslationSource.TextTranslation)" class="btn"><i class="icon-chevron-right"></i></a></li>
             </ul>
         </div>
     </div>
+    
     <div class="editmode">
         @Html.Partial("_Input", Model)
     </div>

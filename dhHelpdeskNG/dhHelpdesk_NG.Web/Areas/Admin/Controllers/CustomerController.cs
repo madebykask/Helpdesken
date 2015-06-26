@@ -10,6 +10,7 @@
     using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Enums;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Domain.MailTemplates;
     using DH.Helpdesk.Domain.Computers;
@@ -311,9 +312,19 @@
         [CustomAuthorize(Roles = "3,4")]
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult Edit(int id, Customer customer, FormCollection coll, CustomerInputViewModel vmodel, int[] UsSelected)
+        public ActionResult Edit(
+            int id, 
+            Customer customer, 
+            FormCollection coll, 
+            CustomerInputViewModel vmodel, 
+            int[] UsSelected)
         {
             var customerToSave = this._customerService.GetCustomer(id);
+            if (customerToSave == null)
+            {
+                throw new Exception("No customer found...");
+            }
+
             customerToSave.OrderPermission = this.returnOrderPermissionForSave(id, vmodel);
             customerToSave.OverwriteFromMasterDirectory = vmodel.Customer.OverwriteFromMasterDirectory;            
             customerToSave.CommunicateWithNotifier = vmodel.Customer.CommunicateWithNotifier;
@@ -329,25 +340,21 @@
                 setting.ModuleCase = 1;
             }
 
-            if (setting != null && vmodel.Setting != null)
+            if (vmodel.Setting != null)
             {
                 setting.DefaultAdministrator = vmodel.Setting.DefaultAdministrator;
                 setting.DefaultAdministratorExternal = vmodel.Setting.DefaultAdministratorExternal;
                 setting.CreateCaseFromOrder = vmodel.Setting.CreateCaseFromOrder;
                 setting.ComplexPassword = vmodel.Setting.ComplexPassword;
+                setting.IsUserFirstLastNameRepresentation = vmodel.UserFirstLastNameRepresentationId == UserFirstLastNameModes.LastFirstNameMode ? 0 : 1;
             }
 
-            var CaseFieldSettingLanguages = this._caseFieldSettingService.GetCaseFieldSettingLanguages();
-
-            if (customerToSave == null)
-                throw new Exception("No customer found...");
-
-            IDictionary<string, string> errors = new Dictionary<string, string>();
-
+            IDictionary<string, string> errors;
             this._customerService.SaveEditCustomer(customerToSave, setting, UsSelected, customer.Language_Id, out errors);
-
             if (errors.Count == 0)
+            {
                 return this.RedirectToAction("edit", "customer");
+            }
 
             var model = this.CustomerInputViewModel(customerToSave);
 
@@ -434,6 +441,24 @@
                 Selected = false
             });
 
+            var userFirstLastNameSelectList =
+                new SelectList(
+                    new[]
+                        {
+                            new
+                                {
+                                    Id = UserFirstLastNameModes.LastFirstNameMode,
+                                    Name = Translation.Get("Enligt efternamn")
+                                },
+                            new
+                                {
+                                    Id = UserFirstLastNameModes.FirstLastNameMode,
+                                    Name = Translation.Get("Enligt förnamn")
+                                }
+                        },
+                    "Id",
+                    "Name");
+
             #endregion
 
             //#region Reports
@@ -500,6 +525,7 @@
 
             #region Model
 
+            var settings = this._settingService.GetCustomerSetting(customer.Id) ?? new Setting();
             var model = new CustomerInputViewModel
             {
                 CustomerCaseSummaryViewModel = new CustomerCaseSummaryViewModel(),
@@ -511,7 +537,7 @@
                 PasswordHistory = sli,
                 CWNSelect = cn,
                 Regions = this._regionService.GetRegions(customer.Id),
-                Setting = this._settingService.GetCustomerSetting(customer.Id) ?? new Setting(),
+                Setting = settings,
                 Customers = this._customerService.GetAllCustomers().Select(x => new SelectListItem
                 {
                     Text = x.Name,
@@ -538,6 +564,8 @@
                     Text = x.Name,
                     Value = x.Id.ToString(),
                 }).ToList(),
+                UserFirstLastNameRepresentationList = userFirstLastNameSelectList,
+                UserFirstLastNameRepresentationId = settings.IsUserFirstLastNameRepresentation.AsUserFirstLastNameMode()
             };
 
             #endregion

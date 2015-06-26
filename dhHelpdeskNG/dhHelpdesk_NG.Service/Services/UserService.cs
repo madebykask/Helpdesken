@@ -1,37 +1,35 @@
-﻿using DH.Helpdesk.BusinessData.Enums.Users;
-using DH.Helpdesk.BusinessData.Models.Users.Input;
-using DH.Helpdesk.BusinessData.Models.Users.Output;
-using DH.Helpdesk.Dal.Repositories.Users;
-
-namespace DH.Helpdesk.Services.Services
+﻿namespace DH.Helpdesk.Services.Services
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Enums.Admin.Users;
+    using DH.Helpdesk.BusinessData.Enums.Users;
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Customer;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.BusinessData.Models.User.Input;
     using DH.Helpdesk.BusinessData.Models.Users;
+    using DH.Helpdesk.BusinessData.Models.Users.Input;
+    using DH.Helpdesk.BusinessData.Models.Users.Output;
     using DH.Helpdesk.Common.Extensions.Boolean;
     using DH.Helpdesk.Common.Extensions.String;
     using DH.Helpdesk.Dal.Infrastructure.Translate;
     using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Dal.Repositories;
+    using DH.Helpdesk.Dal.Repositories.Users;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Accounts;
     using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Users;
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
-    using DH.Helpdesk.Services.Localization;
-
-    using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
-
     using DH.Helpdesk.Services.BusinessLogic.Specifications.User;
 
+    using LinqLib.Operators;
+
+    using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
     using UserGroup = DH.Helpdesk.Domain.UserGroup;
 
     public interface IUserService
@@ -48,6 +46,18 @@ namespace DH.Helpdesk.Services.Services
         IList<User> GetSystemOwners(int customerId);
         IList<User> GetUsers();
         IList<User> GetUsers(int customerId);
+
+        /// <summary>
+        /// Fetches active users with performer flag.
+        /// If userId is supplied appends to list user with this id without checking first condition
+        /// </summary>
+        /// <param name="customerId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        IList<User> GetAvailablePerformersOrUserId(int customerId, int? userId = null);
+
+        IList<User> GetAvailablePerformersForWorkingGroup(int customerId, int? workingGroup = null);
+
         IList<User> SearchSortAndGenerateUsers(UserSearch SearchUsers);
         IList<UserGroup> GetUserGroups();
         IList<UserRole> GetUserRoles();
@@ -63,7 +73,17 @@ namespace DH.Helpdesk.Services.Services
         DeleteMessage DeleteUser(int id);
 
         void SavePassword(int id, string password);
-        void SaveEditUser(User user, int[] aas, int[] cs, int[] ots, int[] dus, List<UserWorkingGroup> UserWorkingGroups, out IDictionary<string, string> errors);
+
+        void SaveEditUser(
+            User user,
+            int[] aas,
+            int[] customersSelected,
+            int[] customersAvailable,
+            int[] ots,
+            int[] dus,
+            List<UserWorkingGroup> userWorkingGroups,
+            out IDictionary<string, string> errors);
+        
         void SaveNewUser(User user, int[] aas, int[] cs, int[] ots, List<UserWorkingGroup> UserWorkingGroups, out IDictionary<string, string> errors);
         void SaveProfileUser(User user, out IDictionary<string, string> errors);
         void Commit();
@@ -170,6 +190,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly ITranslator translator;
 
         private readonly IEntityToBusinessModelMapper<Setting, CustomerSettings> customerSettingsToBusinessModelMapper;
+        
 
         public UserService(
             IAccountActivityRepository accountActivityRepository,
@@ -189,7 +210,7 @@ namespace DH.Helpdesk.Services.Services
             IUserModuleRepository userModuleRepository, 
             IUnitOfWorkFactory unitOfWorkFactory, 
             IUserPermissionsChecker userPermissionsChecker, 
-            ITranslator translator, 
+            ITranslator translator,
             IEntityToBusinessModelMapper<Setting, CustomerSettings> customerSettingsToBusinessModelMapper)
         {
             this._accountActivityRepository = accountActivityRepository;
@@ -277,7 +298,19 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<UserLists> GetUserOnCases(int customerId)
         {
-            return this._userRepository.GetUserOnCases(customerId);  
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var caseRepository = uow.GetRepository<Case>();
+
+                var query = from u in this._userRepository.GetAll()
+                            join ca in caseRepository.GetAll() on u.Id equals ca.User_Id
+                            where (ca.Customer_Id == customerId)
+                            group u by new { u.Id, u.FirstName, u.SurName }
+                            into g
+                            select
+                                new UserLists { Id = g.Key.Id, FirstName = g.Key.FirstName, LastName = g.Key.SurName };
+                return query.ToList();
+            }
         }
 
         public IList<User> GetUsers()
@@ -288,6 +321,27 @@ namespace DH.Helpdesk.Services.Services
         public IList<User> GetUsers(int customerId)
         {
             return this._userRepository.GetUsers(customerId).OrderBy(x => x.SurName).ThenBy(x => x.FirstName).ToList();
+        }
+
+        public IList<User> GetAvailablePerformersOrUserId(int customerId, int? userId = null)
+        {
+            return
+                this._userRepository.GetUsers(customerId)
+                    .Where(e => e.IsActive == 1 && (e.Performer == 1 || (userId.HasValue && e.Id == userId)))
+                    .ToList();
+        }
+
+        public IList<User> GetAvailablePerformersForWorkingGroup(int customerId, int? workingGroup = null)
+        {
+            if (workingGroup.HasValue)
+            {
+                return
+                    this.GetUsersForWorkingGroup(customerId, workingGroup.Value)
+                        .Where(it => it.IsActive == 1 && it.Performer == 1)
+                        .ToList();
+            }
+
+            return this.GetAvailablePerformersOrUserId(customerId);
         }
 
         public IList<User> SearchSortAndGenerateUsers(UserSearch searchUsers)
@@ -395,15 +449,24 @@ namespace DH.Helpdesk.Services.Services
             this.Commit();
         }
 
-        public void SaveEditUser(User user, int[] aas, int[] cs, int[] ots, int[] dus, List<UserWorkingGroup> UserWorkingGroups, out IDictionary<string, string> errors)
+        public void SaveEditUser(
+            User user,
+            int[] aas, 
+            int[] customersSelected, 
+            int[] customersAvailable, 
+            int[] ots, 
+            int[] dus, 
+            List<UserWorkingGroup> userWorkingGroups, 
+            out IDictionary<string, string> errors)
         {
             if (user == null)
+            {
                 throw new ArgumentNullException("user");
-         
+            }
+
             user.Address = user.Address ?? string.Empty;
             user.ArticleNumber = user.ArticleNumber ?? string.Empty;
             user.BulletinBoardDate = user.BulletinBoardDate ?? DateTime.Now;
-            //user.CaseStateSecondaryColor = user.CaseStateSecondaryColor ?? string.Empty;
             user.ChangeTime = DateTime.Now;
             user.CellPhone = user.CellPhone ?? string.Empty;
             user.Email = user.Email ?? string.Empty;
@@ -454,24 +517,39 @@ namespace DH.Helpdesk.Services.Services
                 }
             }
 
+            if (user.CusomersAvailable != null)
+            {
+                foreach (var delete in user.CusomersAvailable.ToArray())
+                {
+                    user.CusomersAvailable.Remove(delete);
+                }
+            }
+            else
+            {
+                user.CusomersAvailable = new List<Customer>();
+            }
 
             if (user.Cs != null)
                 foreach (var delete in user.Cs.ToList())
                     user.Cs.Remove(delete);
             else
                 user.Cs = new List<Customer>();
-
+            
             if (user.Id != 0)
             {
-                if (cs != null)
+                var allCustomersMap = this._customerRepository.GetAll().ToDictionary(it => it.Id, it => it);
+                if (customersAvailable != null)
                 {
-                    foreach (int id in cs)
-                    {
-                        var c = this._customerRepository.GetById(id);
+                    customersAvailable.Where(allCustomersMap.ContainsKey)
+                        .Select(it => allCustomersMap[it])
+                        .ForEach(it => user.CusomersAvailable.Add(it));
+                }
 
-                        if (c != null)
-                            user.Cs.Add(c);
-                    }
+                if (customersSelected != null)
+                {
+                    customersAvailable.Where(allCustomersMap.ContainsKey)
+                        .Select(it => allCustomersMap[it])
+                        .ForEach(it => user.Cs.Add(it));
                 }
             }
 
@@ -505,7 +583,6 @@ namespace DH.Helpdesk.Services.Services
                         user.OTs.Add(ot);
                 }
             }
-
            
             if (user.Departments != null)
                 foreach (var delete in user.Departments.ToList())
@@ -523,8 +600,7 @@ namespace DH.Helpdesk.Services.Services
                         user.Departments.Add(dep);
                 }
             }
-
-           
+            
             if (user.UserWorkingGroups != null)
                 foreach (var delete in user.UserWorkingGroups.ToList())
                     user.UserWorkingGroups.Remove(delete);
@@ -533,16 +609,16 @@ namespace DH.Helpdesk.Services.Services
 
             if (user != null)
             {
-                if (UserWorkingGroups != null)
+                if (userWorkingGroups != null)
                 {
-                    foreach (var uwg in UserWorkingGroups)
+                    foreach (var uwg in userWorkingGroups)
                     {
                         // http://redmine.fastdev.se/issues/10997
                         //Filter 0 because problem in Case
                         if (uwg.UserRole != 0)
                             user.UserWorkingGroups.Add(uwg);
 
-                        //user.UserWorkingGroups.Add(uwg);
+                        //user.userWorkingGroups.Add(uwg);
                     }
                 }
                 
@@ -566,7 +642,7 @@ namespace DH.Helpdesk.Services.Services
             if (errors.Count == 0)
                 this.Commit();
         }
-
+        
         public void SaveNewUser(User user, int[] aas, int[] cs, int[] ots, List<UserWorkingGroup> UserWorkingGroups, out IDictionary<string, string> errors)
         {
             if (user == null)
@@ -638,13 +714,10 @@ namespace DH.Helpdesk.Services.Services
 
             if (cs != null)
             {
-                foreach (int id in cs)
-                {
-                    var c = this._customerRepository.GetById(id);
-
-                    if (c != null)
-                        user.Cs.Add(c);
-                }
+                var customerIdsHash = cs.ToDictionary(it => it, it => true);
+                this._customerRepository.GetAll()
+                    .Where(it => customerIdsHash.ContainsKey(it.Id))
+                    .ForEach(it => user.Cs.Add(it));
             }
 
             if (!user.Cs.Any(it => it.Id == user.Customer_Id))

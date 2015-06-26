@@ -51,22 +51,14 @@
                          </tr>                
                      }*@
                     
-                     @if (Model.filterPerformer != null)
+                     @if (Model.AvailablePerformersList != null)
                      {
                          <tr>
                              <td>                               
                                  @Translation.Get(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                    
                              </td>
                              <td>
-                                 <select id="lstfilterPerformer" name="lstfilterPerformer" data-field="administrator" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
-                                     @foreach (var e in Model.filterPerformer)
-                                     {
-                                         if (e.IsActive == 1 && e.Performer == 1)
-                                         {                        
-                                             <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.UserPerformer)>@e.SurName @e.FirstName</option>                                         
-                                         }
-                                     }
-                                 </select>
+                                 @Html.ListBoxFor(m => m.lstfilterPerformer, Model.AvailablePerformersList, new { id = "lstfilterPerformer", @class = "chosen-select", multiple = "multiple" })
                              </td>
                          </tr>                 
                      }

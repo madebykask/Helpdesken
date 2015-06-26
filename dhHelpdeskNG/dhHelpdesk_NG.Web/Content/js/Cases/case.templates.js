@@ -68,7 +68,7 @@ function IsWillBeOverwritten(fieldId, val) {
             return IsWillBeOverwrittenByValue('#case__WorkingGroup_Id', '#case__WorkingGroup_Id', val);
             break;
         case 'PerformerUser_Id':
-            return IsWillBeOverwrittenByValue('#case__Performer_User_Id', '#case__Performer_User_Id', val);
+            return IsWillBeOverwrittenByValue('#Performer_Id', '#case__Performer_User_Id', val);
             break;
         case 'Priority_Id':
             return IsWillBeOverwrittenByValue('#case__Priority_Id', '#case__Priority_Id', val);
@@ -166,7 +166,7 @@ function ApplyTemplate(data, doOverwrite) {
                 SetValueIfElVisible(el, val, cfg);
                 break;
             case 'PerformerUser_Id':
-                el = $('#case__Performer_User_Id');
+                el = $('#Performer_Id');
                 SetValueIfElVisible(el, val, cfg);
                 break;
             case 'Priority_Id':
@@ -231,7 +231,7 @@ function IsValueApplicableFor(templateFieldId, val) {
             return $("#case__WorkingGroup_Id").is(':visible');
             break;
         case 'PerformerUser_Id':
-            return $('#case__Performer_User_Id').is(':visible');
+            return $('#Performer_Id').is(':visible');
             break;
         case 'Priority_Id':
             return $("#case__Priority_Id").is(':visible');

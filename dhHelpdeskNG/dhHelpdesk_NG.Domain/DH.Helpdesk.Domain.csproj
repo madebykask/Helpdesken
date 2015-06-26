@@ -78,6 +78,7 @@
     <Compile Include="CaseSolutionSchedule.cs" />
     <Compile Include="CaseSolutionSearch.cs" />
     <Compile Include="Cases\CaseSolutionSetting.cs" />
+    <Compile Include="Cases\CaseLockEntity.cs" />
     <Compile Include="CaseType.cs" />
     <Compile Include="Cases\CausingPart.cs" />
     <Compile Include="Changes\ChangeChangeEntity.cs" />
@@ -119,6 +120,7 @@
     <Compile Include="Computers\ComputerModel.cs" />
     <Compile Include="Computers\ComputerType.cs" />
     <Compile Include="CaseSource.cs" />
+    <Compile Include="FileViewLogEntity.cs" />
     <Compile Include="Grid\GridSettingsEntity.cs" />
     <Compile Include="RegistrationSourceCustomer.cs" />
     <Compile Include="TranslationSearch.cs" />
