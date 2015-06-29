@@ -792,12 +792,15 @@
                 if (gs.LockCaseToWorkingGroup == 0)
                     fd.filterWorkingGroup = this._workingGroupService.GetAllWorkingGroupsForCustomer(cusId);
                 else
-                    fd.filterWorkingGroup = this._workingGroupService.GetWorkingGroups(cusId);
+                    fd.filterWorkingGroup = this._workingGroupService.GetWorkingGroups(cusId, false);
             }
 
             //produktonmråde
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseProductAreaFilter))
-                fd.filterProductArea = this._productAreaService.GetTopProductAreas(cusId);
+            {
+                fd.filterProductArea = this._productAreaService.GetTopProductAreas(cusId, false);
+            }
+
             //kategori                        
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseCategoryFilter))
                 fd.filterCategory = this._categoryService.GetCategories(cusId);
@@ -836,7 +839,7 @@
             //användare
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseUserFilter))
             {
-                var registeredByUsers = this._userService.GetUserOnCases(cusId).AsEnumerable();
+                var registeredByUsers = this._userService.GetUsers(cusId).AsEnumerable();
                 fd.RegisteredByUserList = registeredByUsers.MapToSelectList(fd.customerSetting);
                 if (!string.IsNullOrEmpty(fd.caseSearchFilter.User))
                 {
@@ -847,7 +850,7 @@
             //ansvarig
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseResponsibleFilter))
             {
-                fd.ResponsibleUserList = this._userService.GetAvailablePerformersOrUserId(cusId).MapToSelectList(fd.customerSetting);
+                fd.ResponsibleUserList = this._userService.GetAllPerformers(cusId).MapToSelectList(fd.customerSetting);
                 if (!string.IsNullOrEmpty(fd.caseSearchFilter.UserResponsible))
                 {
                     fd.lstfilterResponsible = fd.caseSearchFilter.UserResponsible.Split(',').Select(int.Parse).ToArray();
@@ -857,7 +860,7 @@
             //ansvarig
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CasePerformerFilter))
             {
-                fd.AvailablePerformersList = this._userService.GetAvailablePerformersOrUserId(cusId).MapToSelectList(fd.customerSetting);
+                fd.AvailablePerformersList = this._userService.GetAllPerformers(cusId).MapToSelectList(fd.customerSetting);
                 if (!string.IsNullOrEmpty(fd.caseSearchFilter.UserPerformer))
                 {
                     fd.lstfilterPerformer = fd.caseSearchFilter.UserPerformer.Split(',').Select(int.Parse).ToArray();
@@ -889,7 +892,7 @@
             if (gs.LockCaseToWorkingGroup == 0)
                 fd.filterWorkingGroup = this._workingGroupService.GetAllWorkingGroupsForCustomer(cusId);
             else
-                fd.filterWorkingGroup = this._workingGroupService.GetWorkingGroups(cusId);
+                fd.filterWorkingGroup = this._workingGroupService.GetWorkingGroups(cusId, false);
                         
             fd.filterWorkingGroup.Insert(0, ObjectExtensions.notAssignedWorkingGroup());
             
@@ -3073,7 +3076,7 @@
                 }
             }
 
-            ret.ProductAreas = this._productAreaService.GetTopProductAreas(customerId);
+            ret.ProductAreas = this._productAreaService.GetTopProductAreas(customerId, false);
             ret.ProductAreaPath = "--";
          
             int pa;
@@ -3082,7 +3085,6 @@
 
             if (pa > 0)
             {
-
                 var p = this._productAreaService.GetProductArea(ret.ProductAreaId);
                 if (p != null)
                     ret.ProductAreaPath = string.Join(" - ", this._productAreaService.GetParentPath(p.Id, customerId));
@@ -3092,7 +3094,7 @@
             var userWorkingGroup =
                 _userService.GetUserWorkingGroups().Where(u => u.User_Id == userId).Select(x => x.WorkingGroup_Id);
             var workingGroups =
-                _workingGroupService.GetWorkingGroups(customerId).Where(w => userWorkingGroup.Contains(w.Id)).ToList();
+                _workingGroupService.GetWorkingGroups(customerId, false).Where(w => userWorkingGroup.Contains(w.Id)).ToList();
             ret.WorkingGroupCheck = (userCaseSettings.WorkingGroup != string.Empty);
             ret.WorkingGroups = workingGroups;
             ret.SelectedWorkingGroup = userCaseSettings.WorkingGroup;
@@ -3100,7 +3102,7 @@
             ret.ResponsibleCheck = userCaseSettings.Responsible;
             
             ret.AdministratorCheck = true;
-            ret.AvailablePerformersList = this._userService.GetAvailablePerformersOrUserId(customerId).MapToSelectList(customerSettings);
+            ret.AvailablePerformersList = this._userService.GetAllPerformers(customerId).MapToSelectList(customerSettings);
             if (!string.IsNullOrEmpty(userCaseSettings.Administrators))
             {
                 ret.lstAdministrator = userCaseSettings.Administrators.Split(',').Select(int.Parse).ToArray();

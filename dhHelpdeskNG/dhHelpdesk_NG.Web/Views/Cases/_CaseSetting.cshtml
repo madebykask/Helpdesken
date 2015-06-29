@@ -101,7 +101,7 @@
                                             </button>
                                             <ul class="dropdown-menu">
                                                 <li><a href="#">@Translation.Get("--")</a></li>
-                                                @Html.CaseTypeDropdownButtonString(Model.CaseTypes)
+                                                @Html.CaseTypeDropdownButtonString(Model.CaseTypes, false)
                                             </ul>
                                             @Html.HiddenFor(model => model.CaseTypeId)
                                         </div>
@@ -129,7 +129,7 @@
                                             </button>
                                             <ul class="dropdown-menu">
                                                 <li><a href="#">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
-                                                @Html.ProductAreaDropdownButtonString(Model.ProductAreas)
+                                                @Html.ProductAreaDropdownButtonString(Model.ProductAreas, false)
                                             </ul>
                                             @Html.HiddenFor(model => model.ProductAreaId)
                                         </div>
@@ -337,7 +337,7 @@
                                             </button>
                                             <ul class="dropdown-menu">
                                                 <li><a href="#">@Translation.Get("--")</a></li>
-                                                @Html.FinishingCauseDropdownButtonString(Model.ClosingReasons)
+                                                @Html.FinishingCauseDropdownButtonString(Model.ClosingReasons, false)
                                             </ul>
                                             @Html.HiddenFor(model => model.ClosingReasonId)
                                         </div>
