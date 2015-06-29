@@ -1114,7 +1114,8 @@
                     m.LogFilesModel = new FilesModel(id.ToString(), this._logFileService.FindFileNamesByLogId(id));
                     var isAddEmpty = !m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString()).Required.ToBool();
                     var responsibleUsersAvailable = this._userService.GetAvailablePerformersOrUserId(customerId, m.case_.CaseResponsibleUser_Id);
-                    m.ResponsibleUsersAvailable = responsibleUsersAvailable.MapToSelectList(m.Setting, isAddEmpty);
+                    var customerSettings = this._settingService.GetCustomerSetting(customerId);
+                    m.ResponsibleUsersAvailable = responsibleUsersAvailable.MapToSelectList(customerSettings, isAddEmpty);
                     m.SendToDialogModel = this.CreateNewSendToDialogModel(customerId, responsibleUsersAvailable.ToList());
                     m.CaseLog.SendMailAboutCaseToNotifier = false;
                     m.MinWorkingTime = cs.MinRegWorkingTime != 0 ? cs.MinRegWorkingTime : 30;

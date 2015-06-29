@@ -984,6 +984,7 @@
     <Compile Include="Infrastructure\BusinessModelFactories\Changes\Concrete\UpdatedSettingsFactory.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Notifiers\Concrete\UpdatedSettingsFactory.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Notifiers\IUpdatedSettingsFactory.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\UserFormatterExtension.cs" />
     <Compile Include="Infrastructure\SelectListMapper.cs" />
     <Compile Include="Infrastructure\Enums.cs" />
     <Compile Include="Infrastructure\Extensions\BooleanExtansions.cs" />
