@@ -217,8 +217,12 @@
 
             bundles.Add(new ScriptBundle("~/bundles/admin/users").Include(
                             "~/Areas/Admin/Content/js/Users/user.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/admin/users/_input").Include(
                             "~/Areas/Admin/Content/js/Users/_input.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/admin/users/index").Include(
+                           "~/Areas/Admin/Content/js/Users/index.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/admin/customerOverview").Include(
                             "~/Areas/Admin/Content/js/CaseOverview/customerOverview.js",
