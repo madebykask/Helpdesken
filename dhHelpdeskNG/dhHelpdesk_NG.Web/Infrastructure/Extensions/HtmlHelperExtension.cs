@@ -779,55 +779,33 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 
             foreach (CaseType item in caseTypes)
             {
-                    var childs = new List<CaseType>();
-                    if (item.SubCaseTypes != null)
-                    {
-                        childs = isTakeOnlyActive
-                                     ? item.SubCaseTypes.Where(p => p.IsActive != 0).ToList()
-                                     : item.SubCaseTypes.ToList();
-                    }
-
-                    if (childs.Count > 0)
-                    {
-                        res.Append("<li class='dropdown-submenu'>");
-                    }
-                    else
-                    {
-                        res.Append("<li>");
-                    }
-
-                    res.AppendFormat("<a href='#' value='{0}'>{1}</a>", item.Id.ToString(), Translation.Get(item.Name, SessionFacade.CurrentLanguageId));
-                    if (childs.Count > 0)
-                    {
-                        res.Append("<ul class='dropdown-menu'>");
-                        res.Append(BuildCaseTypeDropdownButton(childs.OrderBy(p => Translation.Get(p.Name)).ToList(), isTakeOnlyActive));
-                        res.Append("</ul>");
-                    }
-
-                    res.Append("</li>");
+                var childs = new List<CaseType>();
+                if (item.SubCaseTypes != null)
+                {
+                    childs = isTakeOnlyActive
+                                    ? item.SubCaseTypes.Where(p => p.IsActive != 0).ToList()
+                                    : item.SubCaseTypes.ToList();
                 }
-//                if (caseType.IsActive == 1) 
-//                {
-//                    bool hasChild = false;
-//                    if (caseType.SubCaseTypes != null)
-//                        if (caseType.SubCaseTypes.Count > 0)
-//                            hasChild = true;
-//
-//                    if (hasChild)
-//                        htmlOutput += "<li class='dropdown-submenu'>";
-//                    else
-//                        htmlOutput += "<li>";
-//
-//                    htmlOutput += "<a href='#' value=" + caseType.Id.ToString() + ">" + Translation.Get(caseType.Name, SessionFacade.CurrentLanguageId) + "</a>";
-//                    if (hasChild)
-//                    {
-//                        htmlOutput += "<ul class='dropdown-menu'>";
-//                        htmlOutput += BuildCaseTypeDropdownButton(caseType.SubCaseTypes.ToList());
-//                        htmlOutput += "</ul>";
-//                    }
-//                    htmlOutput += "</li>";
-//                }
-//            }
+
+                if (childs.Count > 0)
+                {
+                    res.Append("<li class='dropdown-submenu'>");
+                }
+                else
+                {
+                    res.Append("<li>");
+                }
+
+                res.AppendFormat("<a href='#' value='{0}'>{1}</a>", item.Id.ToString(), Translation.Get(item.Name, SessionFacade.CurrentLanguageId));
+                if (childs.Count > 0)
+                {
+                    res.Append("<ul class='dropdown-menu'>");
+                    res.Append(BuildCaseTypeDropdownButton(childs.OrderBy(p => Translation.Get(p.Name)).ToList(), isTakeOnlyActive));
+                    res.Append("</ul>");
+                }
+
+                res.Append("</li>");
+           }
 
             return new MvcHtmlString(res.ToString());
         }
