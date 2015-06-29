@@ -297,7 +297,7 @@
                 this.userPermission = value;
             }
         }
-
+        
         #region Methods
 
         protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
