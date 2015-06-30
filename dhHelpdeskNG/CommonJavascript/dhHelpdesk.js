@@ -1341,6 +1341,5 @@ $('.switchcheckbox').bootstrapSwitch('onColor', 'success');
 $(".chosen-select").chosen({
     width: "300px",
     'placeholder_text_multiple': placeholder_text_multiple,
-    'placeholder_text_single': placeholder_text_single,
     'no_results_text': no_results_text
 });
