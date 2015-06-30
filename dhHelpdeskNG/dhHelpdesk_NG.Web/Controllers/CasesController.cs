@@ -1112,7 +1112,7 @@
                     m.finishingCauses = this._finishingCauseService.GetFinishingCauses(customerId);
                     m.case_ = this._caseService.GetCaseById(m.CaseLog.CaseId);
                     m.LogFilesModel = new FilesModel(id.ToString(), this._logFileService.FindFileNamesByLogId(id));
-                    var isAddEmpty = !m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString()).Required.ToBool();
+                    const bool isAddEmpty = true;
                     var responsibleUsersAvailable = this._userService.GetAvailablePerformersOrUserId(customerId, m.case_.CaseResponsibleUser_Id);
                     var customerSettings = this._settingService.GetCustomerSetting(customerId);
                     m.ResponsibleUsersAvailable = responsibleUsersAvailable.MapToSelectList(customerSettings, isAddEmpty);
@@ -2851,12 +2851,11 @@
 
                 // "Responsible"
                 m.ResponsibleUser_Id = m.case_.CaseResponsibleUser_Id ?? 0;
-                var isAddEmpty = !m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString()).Required.ToBool();
+                const bool isAddEmpty = true;
                 m.ResponsibleUsersAvailable = responsibleUsersList.MapToSelectList(m.Setting, isAddEmpty);
 
                 // "Administrator" (Performer)
                 m.Performer_Id = m.case_.Performer_User_Id ?? 0;
-                isAddEmpty = !m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString()).Required.ToBool();
                 m.Performers = performersList.Where(it => it.IsActive == 1 && (it.Performer == 1 || it.Id == m.Performer_Id))
                     .MapToSelectList(m.Setting, isAddEmpty);
 
