@@ -1067,6 +1067,7 @@
                                             else
                                             {
                                                 @Html.DropDownListFor(m => m.Performer_Id, Model.Performers, new { data_field = "administrator", disabled = "disabled" })
+                                                @Html.HiddenFor(m => m.Performer_Id)
                                             }
                                         </td>
                                     </tr>
