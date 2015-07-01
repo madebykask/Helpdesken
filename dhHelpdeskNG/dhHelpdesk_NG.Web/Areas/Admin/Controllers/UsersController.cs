@@ -10,11 +10,13 @@
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Accounts;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Users;
-    using DH.Helpdesk.Services.Services;
-    using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Services.Services;    
     using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Areas.Admin.Infrastructure.Mappers;
 
     using UserGroup = DH.Helpdesk.BusinessData.Enums.Admin.Users.UserGroup;
+    using DH.Helpdesk.BusinessData.Models.Case.CaseLock;
 
     public class UsersController : BaseController
     {
@@ -27,7 +29,8 @@
         private readonly IOrderTypeService _orderTypeService;
         private readonly IUserService _userService;
         private readonly IWorkingGroupService _workingGroupService;
-        private readonly ICaseSettingsService _caseSettingsService;        
+        private readonly ICaseSettingsService _caseSettingsService;
+        private readonly ICaseLockService _caseLockService;        
 
         public UsersController(
             IAccountActivityService accountActivityService,
@@ -39,7 +42,8 @@
             IOrderTypeService orderTypeService,
             IUserService userService,
             IWorkingGroupService workingGroupService,
-            ICaseSettingsService caseSettingsService,            
+            ICaseSettingsService caseSettingsService,
+            ICaseLockService caseLockService,
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
@@ -52,7 +56,8 @@
             this._orderTypeService = orderTypeService;
             this._userService = userService;
             this._workingGroupService = workingGroupService;
-            this._caseSettingsService = caseSettingsService;            
+            this._caseSettingsService = caseSettingsService;
+            this._caseLockService = caseLockService;
         }
 
         [CustomAuthorize(Roles = "3,4")]
@@ -72,7 +77,7 @@
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [CustomAuthorize(Roles = "3,4")]
-        public ActionResult Index() //string alertMessage = ""
+        public ActionResult Index()
         {
             var model = this.IndexInputViewModel();
             if (this.Session["UserSearch"] == null)
@@ -86,13 +91,6 @@
                 model.Users = this._userService.SearchSortAndGenerateUsers(filter);
                 model.StatusUsers.FirstOrDefault(x => x.Value == filter.StatusId.ToString()).Selected = true;
             }
-
-            /*if (!string.IsNullOrEmpty(alertMessage))
-            {
-                TempData["AlertMessage"] = alertMessage;
-                alertMessage = "";
-            }
-             */ 
             
             return this.View(model);
         }
@@ -367,9 +365,7 @@
                     {
                         this.TempData["AlertMessage"] = err;
                     }
-
-                    // Save changes into the current session
-                    //SessionFacade.CurrentUser = UsersMapper.MapToOverview(userToSave);
+                    
                     return this.RedirectToAction("edit", "users", new { id = id });
                 }
                 
@@ -549,6 +545,21 @@
             }
         }
 
+        [HttpGet]
+        public PartialViewResult UnlockCase(int caseId, int? selectedCustomerId = null, decimal caseNumber = 0, string searchText = "")
+        {
+            _caseLockService.UnlockCaseByCaseId(caseId);
+            var model = GetLockedCaseModel(selectedCustomerId, caseNumber, searchText);
+            return PartialView("Index/_LockedCaseOverview", model);
+        }
+
+        [HttpGet]
+        public PartialViewResult FilterLockedCases(int? selectedCustomerId = null, decimal caseNumber = 0, string searchText = "")
+        {            
+            var model = GetLockedCaseModel(selectedCustomerId, caseNumber, searchText);
+            return PartialView("Index/_LockedCaseOverview", model);
+
+        }
         private UserIndexViewModel IndexInputViewModel()
         {
             var user = this._userService.GetUser(SessionFacade.CurrentUser.Id);
@@ -583,18 +594,47 @@
                 Selected = false
             });
 
+            //Locked Cases
+            var lockedCasesModel = GetLockedCaseModel();
+                        
             var model = new UserIndexViewModel
             {
                 User = user,
                 StatusUsers = sli,
+                LockedCaseModel = lockedCasesModel,
                 ListLoggedInUsers = ApplicationFacade.GetLoggedInUsers(SessionFacade.CurrentCustomer.Id),
                 CsSelected = csSelected.Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
-                }).ToList()
+                }).ToList()                
             };
 
+            return model;
+        }
+
+        private LockedCaseOverviewModel GetLockedCaseModel(int? selectedCustomerId = null, decimal caseNumber = 0, string searchText = "")
+        {           
+            var customers = this._customerService.GetAllCustomers();
+            var customerList = customers.Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString(),
+                    Selected = (selectedCustomerId != null && x.Id == selectedCustomerId.Value)
+                }).ToList();     
+
+
+            var lockedCases = new List<LockedCaseOverview>();
+            if (caseNumber > 0)
+                lockedCases = this._caseLockService.GetLockedCases(selectedCustomerId, caseNumber);
+            else
+                if (searchText != string.Empty)
+                    lockedCases = this._caseLockService.GetLockedCases(selectedCustomerId, searchText);
+                else
+                    lockedCases = this._caseLockService.GetLockedCases(selectedCustomerId);
+
+            var lockedCaseModel = lockedCases.Select(l => l.MapToViewModel()).ToList();
+            var model = new LockedCaseOverviewModel(customerList, selectedCustomerId, caseNumber, searchText, lockedCaseModel);
 
             return model;
         }
@@ -884,20 +924,6 @@
             return user;
         }
 
-        //private UserRole returnUserRoleForNewSave(UserSaveViewModel userModel)
-        //{
-        //    var userRoles = new UserRole();
-
-        //    if (userModel.UserRights.HasValue)
-        //    {
-        //         userRoles = this._userService.GetUserRoles();
-        //    }
-
-        //    return userRoles;
-        //}
-
-
-
         private int returnCaseInfoMailForEditSave(UserSaveViewModel userModel)
         {
             int sendMail = 0;
@@ -941,16 +967,6 @@
             return userModel.UserOrderPermission;
         }
 
-        //private void returnMenuSettingsForSave(UserInputViewModel userInputViewModel, ref User user)
-        //{
-        //    user.MenuSettings = "";
-
-        //    for (int i = 0; i < userInputViewModel.MenuSetting.Length; i++)
-        //    {
-        //        user.MenuSettings += i + ":" + userInputViewModel.MenuSetting[i] + ((i == userInputViewModel.MenuSetting.Length - 1) ? "" : ";");
-        //    }
-        //}
-
         private string NewUserPassword(int id, string newPassword, string confirmPassword)
         {
             var user = this._userService.GetUser(id);
@@ -964,25 +980,6 @@
 
             return user.Password;
         }
-
-
-        //private string returnCaseStateSecondaryColorForSave(int id, UserSaveViewModel userModel)
-        //{
-        //    userModel.CaseStateSecondaryColor = "";
-
-        //    if (userModel.StateStatusCase == 1)
-        //    {
-        //        userModel.CaseStateSecondaryColor = "#000000";
-        //    }
-        //    else if (userModel.StateStatusCase == 2)
-        //    {
-        //        userModel.CaseStateSecondaryColor = "#008000";
-        //    }
-        //    else
-        //        userModel.CaseStateSecondaryColor = "";
-
-        //    return userModel.CaseStateSecondaryColor;
-        //}
 
         [HttpPost]
         public void EditUserPassword(int id, string newPassword, string confirmPassword)

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DH.Helpdesk.Web.Models.Case
+namespace DH.Helpdesk.Web.Models.CaseLock
 {
     using DH.Helpdesk.Domain;
 

@@ -155,6 +155,7 @@
     <Compile Include="Models\Accounts\Write\AccountForWrite.cs" />
     <Compile Include="Models\ADFS\Input\ADFSSetting.cs" />
     <Compile Include="Models\CaseType\CaseTypeItem.cs" />
+    <Compile Include="Models\Case\CaseLock\LockedCaseOverview.cs" />
     <Compile Include="Models\Case\CaseOverview\CaseInfoOverview.cs" />
     <Compile Include="Models\Case\CaseOverview\ComputerOverview.cs" />
     <Compile Include="Models\Case\CaseOverview\FullCaseOverview.cs" />
@@ -170,7 +171,7 @@
     <Compile Include="Models\Case\CaseSettingsOverview\LogSettings.cs" />
     <Compile Include="Models\Case\CaseSettingsOverview\OtherSettings.cs" />
     <Compile Include="Models\Case\CaseSettingsOverview\UserSettings.cs" />
-    <Compile Include="Models\Case\CaseLock.cs" />
+    <Compile Include="Models\Case\CaseLock\CaseLock.cs" />
     <Compile Include="Models\Case\ExtraFieldCaseHistory.cs" />
     <Compile Include="Models\Case\RelatedCase.cs" />
     <Compile Include="Models\Checklists\Output\ActionsForServiceBM.cs" />

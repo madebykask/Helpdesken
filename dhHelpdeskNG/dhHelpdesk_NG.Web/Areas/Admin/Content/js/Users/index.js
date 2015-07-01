@@ -5,7 +5,7 @@ $(function () {
     var userSearchForm = window.parameters.userSearchForm;
     var customerList = window.parameters.customerList;
     var userStatusList = window.parameters.userStatusList;
-
+    
     $(document).ready(function () {
         var newLine = "<br>";
         var e = alertMessage;
@@ -14,7 +14,7 @@ $(function () {
             ShowToastMessage(e, "warning");
         }
     });
-
+ 
     function replaceAll (string, omit, place, prevstring) {
         if (prevstring && string === prevstring)
             return string;

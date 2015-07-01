@@ -6,6 +6,7 @@
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.BusinessData.Models.Case.CaseLock;
 
     public class ChangeUserPasswordModel
     {
@@ -43,15 +44,21 @@
         }
 
         public User User { get; set; }
+        
         public Customer Customer { get; set; }
 
         public IEnumerable<User> Users { get; set; }
 
         public IList<LoggedInUsers> ListLoggedInUsers { get; set; }
 
+        public LockedCaseOverviewModel LockedCaseModel { get; set; }
+
         public IList<SelectListItem> CsSelected { get; set; }
+
         public IList<SelectListItem> StatusUsers { get; set; }
+
         public IList<SelectListItem> Customers { get; set; }
+        
     }
 
     public class UserInputViewModel
@@ -68,12 +75,9 @@
 
         public User User { get; set; }
         public UsersUserRole UsersUserRole { get; set; }
-
         public IEnumerable<CustomerUser> CustomerUsers { get; set; }
-
         public IList<Department> Departments { get; set; }
         public IList<CustomerWorkingGroupForUser> ListWorkingGroupsForUser { get; set; }
-
         public IList<SelectListItem> AAsAvailable { get; set; }
         public IList<SelectListItem> AAsSelected { get; set; }
 

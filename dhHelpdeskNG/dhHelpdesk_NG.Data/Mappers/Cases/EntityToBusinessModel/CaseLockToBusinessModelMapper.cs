@@ -1,6 +1,6 @@
 ﻿namespace DH.Helpdesk.Dal.Mappers.Cases.BusinessModelToEntity
 {
-    using DH.Helpdesk.BusinessData.Models.Case;    
+    using DH.Helpdesk.BusinessData.Models.Case.CaseLock;    
     using DH.Helpdesk.Domain.Cases;
 
     public sealed class CaseLockToBusinessModelMapper : IEntityToBusinessModelMapper<CaseLockEntity, CaseLock>

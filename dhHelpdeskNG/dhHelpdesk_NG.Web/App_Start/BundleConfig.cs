@@ -222,6 +222,9 @@
             bundles.Add(new ScriptBundle("~/bundles/admin/users/_input").Include(
                             "~/Areas/Admin/Content/js/Users/_input.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/admin/users/index_lockedcases").Include(
+                           "~/Areas/Admin/Content/js/Users/index.lockedcase.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/admin/users/index").Include(
                            "~/Areas/Admin/Content/js/Users/index.js"));
 

@@ -1,6 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.NinjectModules.Modules
 {
-    using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.Models.Case.CaseLock;
     using DH.Helpdesk.BusinessData.Models.Case.Input;
     using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.Dal.Mappers;

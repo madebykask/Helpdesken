@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Case
+﻿namespace DH.Helpdesk.BusinessData.Models.Case.CaseLock
 {
     using System;
     using DH.Helpdesk.Domain;
