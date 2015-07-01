@@ -197,7 +197,7 @@
                             var config = (ECT.FormLib.Configurable.AccessManagment)System.Configuration.ConfigurationManager.GetSection("formLibConfigurable/accessManagment");
                             var country = config.Countries.Where(x => x.HelpdeskCustomerId == SessionFacade.CurrentCustomer.Id.ToString()).FirstOrDefault();
 
-                            if(contry == null || (country != null && !userIdentity.EmployeeNumber.StartsWith(country.EmployeePrefix)))
+                            if (country == null || (country != null && !userIdentity.EmployeeNumber.StartsWith(country.EmployeePrefix)))
                             {
                                 SessionFacade.UserHasAccess = false;
                                 SessionFacade.CurrentCoWorkers = new List<SubordinateResponseItem>();
