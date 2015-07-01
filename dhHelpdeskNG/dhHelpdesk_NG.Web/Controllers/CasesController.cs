@@ -544,7 +544,7 @@
                 {
                 return new RedirectResult("~/Error/Unathorized");
                 }
-
+              
             ApplicationFacade.UpdateLoggedInUser(Session.SessionID, string.Empty);
 
             if (SessionFacade.CaseOverviewGridSettings == null)
@@ -688,6 +688,11 @@
                 SessionFacade.CaseOverviewGridSettings.sortOptions.sortDir = (!string.IsNullOrEmpty(frm.ReturnFormValue("sortDir"))
                                    && int.TryParse(frm.ReturnFormValue("sortDir"), out sortDir)
                                    && sortDir == (int)SortingDirection.Asc) ? SortingDirection.Asc : SortingDirection.Desc;
+                this.gridSettingsService.SaveCaseoviewSettings(
+                    SessionFacade.CaseOverviewGridSettings,
+                    SessionFacade.CurrentCustomer.Id,
+                    SessionFacade.CurrentUser.Id,
+                    SessionFacade.CurrentUser.UserGroupId);
             }
 
             var gridSettings = SessionFacade.CaseOverviewGridSettings;

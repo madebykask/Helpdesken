@@ -94,7 +94,7 @@
                 res.columnDefs.AddRange(this.GetDefaultColumns(customerId, userGroupId, gridId));
             }
 
-            if (IsSortFieldAvailable(res.sortOptions.sortBy, res.columnDefs))
+            if (!IsSortFieldAvailable(res.sortOptions.sortBy, res.columnDefs))
             {
                 res.sortOptions.sortBy = string.Empty;
             }
@@ -162,6 +162,7 @@
                 /// records per page
                 if (inputModel.pageOptions != null)
                 {
+                    repository.DeleteWhere(it => it.CustomerId == customerId && it.UserId == userId && it.GridId == CASE_OVERVIEW_GRID_ID && it.Parameter == RECORDS_PER_PAGE_KEY);
                     repository.Add(
                         new GridSettingsEntity
                             {
@@ -175,6 +176,8 @@
                 //// sortBy and sortOrder
                 if (inputModel.sortOptions != null && IsSortFieldAvailable(inputModel.sortOptions.sortBy, inputModel.columnDefs))
                 {
+                    repository.DeleteWhere(it => it.CustomerId == customerId && it.UserId == userId && it.GridId == CASE_OVERVIEW_GRID_ID 
+                        && (it.Parameter == SORT_BY_KEY || it.Parameter == CASE_OVERVIEW_GRID_ID));
                     repository.Add(
                         new GridSettingsEntity
                             {

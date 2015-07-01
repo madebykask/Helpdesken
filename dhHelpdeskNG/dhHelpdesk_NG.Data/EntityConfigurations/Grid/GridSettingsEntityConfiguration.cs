@@ -17,7 +17,7 @@
             this.Property(x => x.Value).IsRequired();
             
 
-            this.ToTable("UserGridSettings");
+            this.ToTable("tblUserGridSettings");
         }
     }
 }
