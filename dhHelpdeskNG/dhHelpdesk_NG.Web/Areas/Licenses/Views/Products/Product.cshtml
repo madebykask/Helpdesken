@@ -7,9 +7,6 @@
         <li>
             @Html.ActionLink(Translation.Get("Spara"), null, null, new { id = "btnSave", @class = "btn" })
         </li>
-        <li>
-            @Html.ActionLink(Translation.Get("Avbryt"), "Index", "Products", null, new { @class = "btn" })
-        </li>
         @if (!Model.IsNew())
         {
             <li>
@@ -17,6 +14,9 @@
                     new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuellt program/applikation") })
             </li>                
         }
+        <li>
+            @Html.ActionLink(Translation.Get("Avbryt"), "Index", "Products", null, new { @class = "btn" })
+        </li>
     </ul>    
 }
 
