@@ -1338,4 +1338,8 @@ $('.switchcheckbox').bootstrapSwitch('onColor', 'success');
 // YES and NO SWITCH FOR CHECKBOXES END
 
 
-$(".chosen-select").chosen({ width: "300px" });
+$(".chosen-select").chosen({
+    width: "300px",
+    'placeholder_text_multiple': placeholder_text_multiple,
+    'no_results_text': no_results_text
+});

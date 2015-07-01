@@ -1,7 +1,6 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel 
-@using DH.Helpdesk.BusinessData.Models.Changes.Output
 @using DH.Helpdesk.BusinessData.OldComponents
-@using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 
 @if (Model != null && Model.Logs != null)
 {    
@@ -27,7 +26,7 @@
                             <a href="@GetLogLink(r)">@Html.DisplayFor(m => r.LogDate, "DateAndTime") </a>
                         </td>
                         <td>
-                            <a href="@GetLogLink(r)">@(r.User == null ? r.RegUser : r.User.FirstName + " " + r.User.SurName)</a>
+                            <a href="@GetLogLink(r)">@(r.User == null ? r.RegUser : Html.FormatUserName(r.User, Model.Setting))</a>
                         </td>
                         <td>
                             <a href="@GetLogLink(r)">@r.TextExternal.ForHtmlView()</a>
@@ -83,6 +82,5 @@
         }
         return Url.Action("editlog", "cases", new { area = "", id = log.Id, customerId = Model.case_.Customer_Id });
     }
-    
 
 }

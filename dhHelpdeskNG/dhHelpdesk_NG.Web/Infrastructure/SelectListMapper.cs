@@ -21,7 +21,7 @@
                     userCollection.OrderBy(it => it.SurName)
                         .ThenBy(it => it.FirstName)
                         .Select(
-                            it => new IdName() { Id = it.Id, Name = string.Format("{0} {1}", it.SurName, it.FirstName) })
+                            it => new IdName() { Id = it.Id.ToString(), Name = string.Format("{0} {1}", it.SurName, it.FirstName) })
                         .ToList();
             }
             else
@@ -30,13 +30,13 @@
                     userCollection.OrderBy(it => it.FirstName)
                         .ThenBy(it => it.SurName)
                         .Select(
-                            it => new IdName() { Id = it.Id, Name = string.Format("{0} {1}", it.FirstName, it.SurName) })
+                            it => new IdName() { Id = it.Id.ToString(), Name = string.Format("{0} {1}", it.FirstName, it.SurName) })
                         .ToList();
             }
 
             if (addEmpty)
             {
-                options.Insert(0, new IdName() { Id = 0, Name = string.Empty });
+                options.Insert(0, new IdName() { Id = string.Empty, Name = string.Empty });
             }
 
             return new SelectList(options, "Id", "Name");
@@ -54,7 +54,7 @@
                     userCollection.OrderBy(it => it.LastName)
                         .ThenBy(it => it.FirstName)
                         .Select(
-                            it => new IdName() { Id = it.Id, Name = string.Format("{0} {1}", it.LastName, it.FirstName) })
+                            it => new IdName() { Id = it.Id.ToString(), Name = string.Format("{0} {1}", it.LastName, it.FirstName) })
                         .ToList();
             }
             else
@@ -63,13 +63,13 @@
                     userCollection.OrderBy(it => it.FirstName)
                         .ThenBy(it => it.LastName)
                         .Select(
-                            it => new IdName() { Id = it.Id, Name = string.Format("{0} {1}", it.FirstName, it.LastName) })
+                            it => new IdName() { Id = it.Id.ToString(), Name = string.Format("{0} {1}", it.FirstName, it.LastName) })
                         .ToList();
             }
 
             if (addEmpty)
             {
-                options.Insert(0, new IdName() { Id = 0, Name = string.Empty });
+                options.Insert(0, new IdName() { Id = string.Empty, Name = string.Empty });
             }
 
             return new SelectList(options, "Id", "Name");
@@ -77,7 +77,7 @@
 
         private class IdName
         {
-            public int Id { get; set; }
+            public string Id { get; set; }
             
             public string Name { get; set; }
         }

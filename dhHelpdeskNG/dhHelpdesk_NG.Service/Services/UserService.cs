@@ -557,7 +557,7 @@
 
                 if (customersSelected != null)
                 {
-                    customersAvailable.Where(allCustomersMap.ContainsKey)
+                    customersSelected.Where(allCustomersMap.ContainsKey)
                         .Select(it => allCustomersMap[it])
                         .ForEach(it => user.Cs.Add(it));
                 }

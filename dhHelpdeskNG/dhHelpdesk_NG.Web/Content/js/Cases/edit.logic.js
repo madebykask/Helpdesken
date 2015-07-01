@@ -86,7 +86,8 @@ $(function () {
         doNotSendEl = $("#CaseMailSetting_DontSendMailToNotifier");
 
     var productAreaObjName = "divProductArea",
-        productAreaChildObj = $("#ProductAreaHasChild");
+        productAreaChildObj = $("#ProductAreaHasChild"),
+        productAreaErrorMessage = window.parameters.productAreaErrorMessage;
 
     var moveCaseButton = $("#btnMoveCase");
   
@@ -1009,8 +1010,8 @@ $(function () {
 
                         $.each(validationMessages, function (index, validationMessage) {
                             errorText = '<br />' + '[' + dhHelpdesk.cases.utils.replaceAll(errorText, validationMessage, '').trim() + ']';
-                        });
-
+                        });                        
+                        
                         message += errorText;
                     });
                     dhHelpdesk.cases.utils.showError(message);

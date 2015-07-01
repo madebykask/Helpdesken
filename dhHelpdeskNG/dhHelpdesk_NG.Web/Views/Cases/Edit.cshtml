@@ -158,7 +158,7 @@
                         });
                     }
                     else {
-                        ShowToastMessage('@Translation.Get("You can't change this case, it is already opened by someone else!")', "error", false);                        
+                        ShowToastMessage('@Translation.Get("Ärendet kan inte ändras då det är öppet hos en annan användare.")', "error", false);                        
                     }
                 });            
         };
@@ -168,7 +168,7 @@
             $.post('@Url.Content("~/Cases/UnLockCase/")', { lockGUID: lockGuid }, function (data) {                
                 if (data != "Success")
                 {                    
-                    ShowToastMessage('@Translation.Get("An error has occurred during releasing the case.")', "Error");
+                    ShowToastMessage('@Translation.Get("Ett fel inträffade när ärendet skulle låsas upp automatiskt. Var vänlig kontakta systemadministratören.")', "Error");
                 }
             });
         };

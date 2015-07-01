@@ -9,17 +9,17 @@
 <script type="text/javascript">
     window.parameters = {
         currentCaseId: '@Model.case_.Id',
-        productAreaErrorMessage:'@Translation.Get("Ärendet kunde inte sparas då den lägsta möjliga nivån på fält")' + " [" +
-                                '@Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)' + "] " +
-                                '@Translation.Get("inte har valts. Vänligen kontrollera ärendet.")',
+        productAreaErrorMessage:'@Html.Raw(Translation.Get("Ärendet kunde inte sparas då den lägsta möjliga nivån på fält") + " [" +
+                                           Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) + "] " +
+                                           Translation.Get("inte har valts. Vänligen kontrollera ärendet."))',
         caseLockGuid: '@Model.CaseLock.LockGUID',
         userCaseLocker: '@Model.CaseLock.UserId',
         extendValue: '@Model.CaseLock.ExtendValue',
         caseLockChecker: '@Url.Content("~/Cases/IsCaseAvailable/")',
         caseLockExtender: '@Url.Content("~/Cases/ReExtendCaseLock/")',
-        saveLockedCaseMessage: '@Translation.Get("You can't save this case, it is already opened by someone else!")',
-        deleteLockedCaseMessage: '@Translation.Get("You can't delete this case, it is already opened by someone else!")',
-        moveLockedCaseMessage: '@Translation.Get("You can't move this case, it is already opened by someone else!")'
+        saveLockedCaseMessage: '@Translation.Get("Ärendet kunde inte sparas då det är öppet hos en annan användare.")',
+        deleteLockedCaseMessage: '@Translation.Get("Ärendet kan inte tas bort då det är öppet hos en annan användare.")',
+        moveLockedCaseMessage: '@Translation.Get("Ärendet kan inte flyttas då det är öppet hos en annan användare.")'
     };  
 
 </script>
@@ -78,13 +78,13 @@
                     if (Model.CaseLock.UserId == SessionFacade.CurrentUser.Id)
                     {
                         <li class="notice">
-                            <a>@Translation.Get("OBS! Ärendet är öppnat av")&nbsp; yourself in another session</a>
+                            <a>@Translation.Get("OBS! Du har redan öppnat detta ärende i en annan session.")</a>
                         </li>
                     }
                     else
                     {
                         <li class="notice">
-                            <a>@Translation.Get("OBS! Ärendet är öppnat av")&nbsp; @Model.CaseLock.User.UserID</a>
+                            <a>@Translation.Get("OBS! Detta ärende är öppnat av")&nbsp; @Model.CaseLock.User.UserID</a>
                         </li>
                     }
                 }
@@ -1067,6 +1067,7 @@
                                             else
                                             {
                                                 @Html.DropDownListFor(m => m.Performer_Id, Model.Performers, new { data_field = "administrator", disabled = "disabled" })
+                                                @Html.HiddenFor(m => m.Performer_Id)
                                             }
                                         </td>
                                     </tr>
@@ -1737,7 +1738,7 @@
             },
             "case_.Description": {
                 required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-            },
+            }, 
             "case_.Miscellaneous": {
                 required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
             },
@@ -1750,10 +1751,10 @@
             "case_.WorkingGroup_Id": {
                 required: "@Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
             },
-            "case_.Performer_User_Id": {
+            "Performer_Id": {               
                 required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
             },
-            "case_.CaseResponsible_User_Id": {
+            "ResponsibleUser_Id": {
                 required: "@Translation.Get(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
             },
             "case_.Priority_Id": {
@@ -1811,6 +1812,7 @@
         var res = $("#ProductAreaHasChild").val();
         if (res == '1') {
             ret = false;
+            document.getElementById('divProductArea').classList.add("error");
             ShowToastMessage(window.parameters.productAreaErrorMessage, "error", true);
         }
         return ret;
@@ -1899,7 +1901,7 @@
             cancelText: '@Translation.Get("Avbryt")',
             yesText: '@Translation.Get("Ja")',
             noText: '@Translation.Get("Nej")',
-            validationMessages: ['@Translation.Get("måste anges")'],
+            validationMessages:  ['@Html.Raw(Translation.Get("måste anges"))'],
             mandatoryFieldsText: '@Translation.Get("Obligatoriska fält")',            
         });        
         

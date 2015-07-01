@@ -4184,5 +4184,12 @@ If not exists (select * from tblTextTranslation where text_id = 1504 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1504, 2, 'An error occurred when unlocking this case automatically. Please contact the system administrator.')
 GO
 
+If not exists (select * from tbltext where id = 1505)
+	insert into tbltext (id, TextString) VALUES (1505, 'Inga resultat matchar')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1505 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1505, 2, 'No results match')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

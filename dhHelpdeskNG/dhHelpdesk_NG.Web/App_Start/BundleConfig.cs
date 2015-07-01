@@ -44,11 +44,12 @@
                             "~/Content/js/jquery.validate.unobtrusive.min.js",
 #if DEBUG
                             "~/Scripts/jquery-ui-1.9.2.js",
+                            "~/Content/js/chosen.jquery.js",
 #else
                             "~/Scripts/jquery-ui-1.9.2.min.js",
+                            "~/Content/js/chosen.jquery.min.js",
 #endif
                             "~/Content/js/bootstrap.js",
-                            "~/Content/js/chosen.jquery.min.js",
                             "~/Content/js/bootstrap-multiselect.js",
                             "~/Content/js/bootstrap-datepicker.js",
                             "~/Content/js/bootstrap-timepicker.min.js",

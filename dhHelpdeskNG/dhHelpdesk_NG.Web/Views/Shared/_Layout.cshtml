@@ -16,6 +16,8 @@
     <script type="text/javascript">
         var trans_yes = '@Translation.Get("Ja", Enums.TranslationSource.TextTranslation)';
         var trans_no = '@Translation.Get("Nej", Enums.TranslationSource.TextTranslation)';
+        var placeholder_text_multiple = '@Html.Raw(Translation.Get("Välj en eller flera"))';
+        var no_results_text = '@Translation.Get("Inga resultat matchar")';
     </script>
     @Styles.Render("~/Content/bundles/css")
     @Styles.Render("~/img-profile/css")
@@ -113,7 +115,6 @@
                                             <img src="@Url.Content("~/Content/icons/reports.png")" />
                                             @Translation.Get("Rapporter")</a></li>                                    
                                     }
-
                                     @*@if(model.IsDailyReportVisible())
                                     {    
                                         <li><a href="@Url.Action("index", "dailyreport", new { area = "" })">
@@ -161,12 +162,12 @@
                                             @Translation.Get("Aktuellt")</a></li>
                                     }
 
-                                    @if(model.IsQuestionnaireVisible())
+                                    @*@if(model.IsQuestionnaireVisible())
                                     {                                    
                                         <li><a href="@Url.Action("index", "questionnaire", new { area = "" })">
                                             <img src="@Url.Content("~/Content/icons/questionnaire.png")" />
                                             @Translation.Get("Enkät")</a></li>
-                                    }
+                                    }*@
 
                                     @if(model.IsDocumentVisible())
                                     {                                    
