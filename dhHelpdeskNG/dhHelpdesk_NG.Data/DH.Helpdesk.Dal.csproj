@@ -605,7 +605,6 @@
     <Compile Include="Repositories\Printers\IPrinterFieldSettingsRepository.cs" />
     <Compile Include="Repositories\Printers\IPrinterRepository.cs" />
     <Compile Include="Repositories\Printers\Concrete\PrinterFieldSettingsRepository.cs" />
-    <Compile Include="Repositories\ProductArea\IProductAreaNameResolver.cs" />
     <Compile Include="Repositories\Questionnaire\Concrete\CircularRepository.cs" />
     <Compile Include="Repositories\Questionnaire\Concrete\QuestionnaireQuestionOptionRepository.cs" />
     <Compile Include="Repositories\Questionnaire\Concrete\QuestionnaireQuestionRepository.cs" />
@@ -691,8 +690,6 @@
     <Compile Include="Repositories\WorkingGroupRepository.cs" />
     <Compile Include="Repositories\WorkTimeCalculatorFactory.cs" />
     <Compile Include="SearchRequestBuilders\Notifiers\NotifiersSearchRequestBuilder.cs" />
-    <Compile Include="Utils\IWorkTimeCalculatorFactory.cs" />
-    <Compile Include="Utils\WorkTimeCalculator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">

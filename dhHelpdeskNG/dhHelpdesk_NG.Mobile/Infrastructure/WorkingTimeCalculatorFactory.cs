@@ -1,12 +1,10 @@
 ﻿namespace DH.Helpdesk.Mobile.Infrastructure
 {
-    using System;
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models.Holiday.Output;
-    using DH.Helpdesk.Common.Tools;
+    using DH.Helpdesk.BusinessData.Models.WorktimeCalculator;
     using DH.Helpdesk.Dal.Infrastructure.Context;
-    using DH.Helpdesk.Dal.Utils;
 
     public static class WorkingTimeCalculatorFactory
     {

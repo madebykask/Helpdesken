@@ -11,43 +11,26 @@
 
     using DH.Helpdesk.BusinessData.Enums.Case;
     using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.Models.Case.CaseSearch;
     using DH.Helpdesk.BusinessData.Models.Case.Output;
+    using DH.Helpdesk.BusinessData.Models.Grid;
+    using DH.Helpdesk.BusinessData.Models.ProductArea;
+    using DH.Helpdesk.BusinessData.Models.WorktimeCalculator;
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+    using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Common.Enums.Cases;
     using DH.Helpdesk.Common.Tools;
-    using DH.Helpdesk.Dal.Repositories.ProductArea;
-    using DH.Helpdesk.Dal.Utils;
     using DH.Helpdesk.Domain;
-    using ProductAreaEntity = DH.Helpdesk.Domain.ProductArea;
 
-    using DH.Helpdesk.Common.Enums;
+    using ProductAreaEntity = DH.Helpdesk.Domain.ProductArea;
 
     /// <summary>
     /// The CaseSearchRepository interface.
     /// </summary>
     public interface ICaseSearchRepository
     {
-        IList<CaseSearchResult> Search(
-            CaseSearchFilter f,
-            IList<CaseSettings> userCaseSettings,
-            bool isFieldResponsibleVisible,
-            int userId,
-            string userUserId,
-            int showNotAssignedWorkingGroups,
-            int userGroupId,
-            int restrictedCasePermission,
-            GlobalSetting gs,
-            Setting customerSetting,
-            ISearch s,
-            IWorkTimeCalculatorFactory workTimeCalcFactory,
-            string applicationType,
-            bool calculateRemainingTime,
-            IProductAreaNameResolver productAreaNamesResolver,
-            out CaseRemainingTimeData remainingTime,
-            int? relatedCasesCaseId = null,
-            string relatedCasesUserId = null,
-            int[] caseIds = null);
+        IList<CaseSearchResult> Search(CaseSearchContext context, out CaseRemainingTimeData remainingTime);
     }
 
     public class CaseSearchRepository : ICaseSearchRepository
@@ -80,29 +63,21 @@
             this.logRepository = logRepository;
         }
 
-        public IList<CaseSearchResult> Search(
-                                    CaseSearchFilter f, 
-                                    IList<CaseSettings> userCaseSettings,
-                                    bool isFieldResponsibleVisible,
-                                    int userId, 
-                                    string userUserId, 
-                                    int showNotAssignedWorkingGroups, 
-                                    int userGroupId, 
-                                    int restrictedCasePermission, 
-                                    GlobalSetting gs, 
-                                    Setting customerSetting, 
-                                    ISearch s,
-                                    IWorkTimeCalculatorFactory workTimeCalcFactory,
-                                    string applicationType,
-                                    bool calculateRemainingTime,
-                                    IProductAreaNameResolver productAreaNamesResolver,
-                                    out CaseRemainingTimeData remainingTime,
-                                    int? relatedCasesCaseId = null,
-                                    string relatedCasesUserId = null,
-                                    int[] caseIds = null)
+        public IList<CaseSearchResult> Search(CaseSearchContext context, out CaseRemainingTimeData remainingTime)
         {
             var now = DateTime.UtcNow;
             var dsn = ConfigurationManager.ConnectionStrings["HelpdeskOleDbContext"].ConnectionString;
+            
+            /// shortcuts for context fields
+            var f = context.f;
+            var userId = f.UserId;
+            var userCaseSettings = context.userCaseSettings;
+            var workTimeCalcFactory = context.workTimeCalcFactory;
+            var calculateRemainingTime = context.calculateRemainingTime;
+            var customerSetting = context.customerSetting;
+            var productAreaNamesResolver = context.productAreaNamesResolver;
+            var s = context.s;
+
             var customerUserSetting = this._customerUserRepository.GetCustomerSettings(f.CustomerId, userId);
             IList<ProductAreaEntity> pal = this._productAreaRepository.GetMany(x => x.Customer_Id == f.CustomerId).OrderBy(x => x.Name).ToList(); 
             IList<CaseSearchResult> ret = new List<CaseSearchResult>();
@@ -110,21 +85,22 @@
             var displayLeftTime = userCaseSettings.Any(it => it.Name == TimeLeftColumn);
             remainingTime = new CaseRemainingTimeData();
             var sql = this.ReturnCaseSearchSql(
-                                        f, 
-                                        customerSetting, 
-                                        customerUserSetting, 
-                                        isFieldResponsibleVisible,
-                                        userId, 
-                                        userUserId, 
-                                        showNotAssignedWorkingGroups, 
-                                        userGroupId, 
-                                        restrictedCasePermission, 
-                                        gs, 
-                                        s,
-                                        applicationType,
-                                        relatedCasesCaseId,
-                                        relatedCasesUserId,
-                                        caseIds);
+                                        context.f,
+                                        context.customerSetting,
+                                        customerUserSetting,
+                                        context.isFieldResponsibleVisible,
+                                        context.userId,
+                                        context.userUserId,
+                                        context.showNotAssignedWorkingGroups,
+                                        context.userGroupId,
+                                        context.restrictedCasePermission,
+                                        context.gs,
+                                        context.s,
+                                        context.applicationType,
+                                        context.relatedCasesCaseId,
+                                        context.relatedCasesUserId,
+                                        context.caseIds,
+                                        context.userCaseSettings);
 
             if (string.IsNullOrEmpty(sql))
             {
@@ -607,15 +583,16 @@
                     int showNotAssignedWorkingGroups, 
                     int userGroupId, 
                     int restrictedCasePermission, 
-                    GlobalSetting gs, 
+                    GlobalSetting gs,
                     ISearch s,
                     string applicationType,
                     int? relatedCasesCaseId,
                     string relatedCasesUserId,
-                    int[] caseIds)
+                    int[] caseIds,
+                    IList<CaseSettings> userCaseSettings)
         {
             var sql = new List<string>();
-
+            var caseSettings = userCaseSettings.ToDictionary(it => it.Name, it => it);
             // fields
             sql.Add("select distinct");
 
@@ -626,6 +603,7 @@
             }
 
             var columns = new List<string>();
+            #region adding columns in SELECT
             columns.Add("tblCase.Id");
             columns.Add("tblCase.CaseNumber");
             columns.Add("tblCase.Place");
@@ -725,10 +703,16 @@
             columns.Add("tblCase.LeadTime");
             columns.Add(string.Format("'0' as [{0}]", TimeLeftColumn));
             columns.Add("tblStateSecondary.IncludeInCaseStatistics");
+            if (caseSettings.ContainsKey(GlobalEnums.TranslationCaseFields.CausingPart.ToString()))
+            {
+                columns.Add("tblCausingPart.Name as CausingPart");
+            }
+            #endregion
             sql.Add(string.Join(",", columns));
 
             /// tables and joins
             var tables = new List<string>();
+            #region adding tables into FROM section
             tables.Add("from tblCase");
             tables.Add("inner join tblCustomer on tblCase.Customer_Id = tblCustomer.Id "); 
             tables.Add("inner join tblCustomerUser on tblCase.Customer_Id = tblCustomerUser.Customer_Id ");  
@@ -764,6 +748,11 @@
             tables.Add("left outer join tblUsers as tblUsers3 on tblCase.CaseResponsibleUser_Id = tblUsers3.Id "); 
             tables.Add("left outer join tblProblem on tblCase.Problem_Id = tblProblem.Id ");
             tables.Add("left outer join tblUsers as tblUsers4 on tblProblem.ResponsibleUser_Id = tblUsers4.Id ");
+            if (caseSettings.ContainsKey(GlobalEnums.TranslationCaseFields.CausingPart.ToString()))
+            {
+                tables.Add("left outer join tblCausingPart on (tblCase.CausingPartId = tblCausingPart.Id)");
+            }
+            #endregion
             sql.Add(string.Join(" ", tables));
 
             /// WHERE ..
@@ -778,7 +767,7 @@
             }
 
             // ORDER BY ...
-            var orderBy = new List<string> { "order by" };
+           var orderBy = new List<string> { "order by" };
             string sort = (s != null && !string.IsNullOrEmpty(s.SortBy)) ? s.SortBy.Replace("_temporary_.", string.Empty) : string.Empty;
             if (string.IsNullOrEmpty(sort))
             {

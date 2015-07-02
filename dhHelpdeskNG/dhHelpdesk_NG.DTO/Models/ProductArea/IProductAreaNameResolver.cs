@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Dal.Repositories.ProductArea
+﻿namespace DH.Helpdesk.BusinessData.Models.ProductArea
 {
     using System.Collections.Generic;
 

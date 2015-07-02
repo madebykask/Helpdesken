@@ -683,16 +683,22 @@
             {
                 //////////////////////////////////////////////////////////////////////////
                 //// @TODO (alexander.semenischev): put validation for sortOpt.sortBy
-                SessionFacade.CaseOverviewGridSettings.sortOptions.sortBy = frm.ReturnFormValue("sortBy");
-                var sortDir = 0;
-                SessionFacade.CaseOverviewGridSettings.sortOptions.sortDir = (!string.IsNullOrEmpty(frm.ReturnFormValue("sortDir"))
-                                   && int.TryParse(frm.ReturnFormValue("sortDir"), out sortDir)
-                                   && sortDir == (int)SortingDirection.Asc) ? SortingDirection.Asc : SortingDirection.Desc;
-                this.gridSettingsService.SaveCaseoviewSettings(
-                    SessionFacade.CaseOverviewGridSettings,
-                    SessionFacade.CurrentCustomer.Id,
-                    SessionFacade.CurrentUser.Id,
-                    SessionFacade.CurrentUser.UserGroupId);
+                var sortBy = frm.ReturnFormValue("sortBy");
+                var sortDirInt = 0;
+                var sortDir = (!string.IsNullOrEmpty(frm.ReturnFormValue("sortDir"))
+                                   && int.TryParse(frm.ReturnFormValue("sortDir"), out sortDirInt)
+                                   && sortDirInt == (int)SortingDirection.Asc) ? SortingDirection.Asc : SortingDirection.Desc;
+                if (sortBy != SessionFacade.CaseOverviewGridSettings.sortOptions.sortBy
+                    || sortDir != SessionFacade.CaseOverviewGridSettings.sortOptions.sortDir)
+                {
+                    SessionFacade.CaseOverviewGridSettings.sortOptions.sortBy = sortBy;
+                    SessionFacade.CaseOverviewGridSettings.sortOptions.sortDir = sortDir;
+                    this.gridSettingsService.SaveCaseoviewSettings(
+                        SessionFacade.CaseOverviewGridSettings,
+                        SessionFacade.CurrentCustomer.Id,
+                        SessionFacade.CurrentUser.Id,
+                        SessionFacade.CurrentUser.UserGroupId);
+                }
             }
 
             var gridSettings = SessionFacade.CaseOverviewGridSettings;

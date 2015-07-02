@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Dal.Utils
+﻿namespace DH.Helpdesk.BusinessData.Models.WorktimeCalculator
 {
     using System;
 
