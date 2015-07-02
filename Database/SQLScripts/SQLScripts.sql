@@ -1,10 +1,11 @@
 -- update DB from 5.3.10.XX to 5.3.11.xx version
 
-if not exists(Select A.name IndexName,A.index_id,c.name ColumnName 
-    From sys.indexes A  
-    Inner Join sys.index_columns B On A.object_id = B.object_id And A.index_id = B.index_id 
-    Inner Join sys.columns C On c.object_id = B.object_id  And C.column_id  = B.column_id 
-    Where A.Object_ID = OBJECT_ID('UserGridSettings') and a.name = 'PK_UserGridSettings' and c.name = 'id')
+if exists(select * from sysobjects WHERE Name = N'UserGridSettings') 
+	AND not exists(Select A.name IndexName,A.index_id,c.name ColumnName     
+		From sys.indexes A  
+		Inner Join sys.index_columns B On A.object_id = B.object_id And A.index_id = B.index_id 
+		Inner Join sys.columns C On c.object_id = B.object_id  And C.column_id  = B.column_id 
+		Where A.Object_ID = OBJECT_ID('UserGridSettings') and a.name = 'PK_UserGridSettings' and c.name = 'id')
 BEGIN
 	ALTER TABLE [dbo].[UserGridSettings] DROP CONSTRAINT [PK_UserGridSettings];
 
@@ -19,6 +20,7 @@ BEGIN
 	(
 		[Id] ASC	
 	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY];
+END
 GO
 
 
