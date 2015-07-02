@@ -26,8 +26,8 @@
             <div class="span7">
                 <table class="tableform" id="tblLockedCase" >
                     <tr>
-                        <td style="width:100px">
-                            @Translation.Get("Kunder", Enums.TranslationSource.TextTranslation):
+                        <td style="width:120px">
+                            @Translation.Get("Kund", Enums.TranslationSource.TextTranslation)
                         </td>
                         <td>
                             @Html.DropDownListFor(model => Model.FilterCustomerId, Model.Customers, "", new { id = "filterbycustomerid" })
@@ -35,7 +35,7 @@
                     </tr>
                     <tr>
                         <td>
-                            @Translation.Get("Ärende", Enums.TranslationSource.TextTranslation) @Translation.Get("nummer", Enums.TranslationSource.TextTranslation):
+                            @Translation.Get("Ärende", Enums.TranslationSource.TextTranslation) @Translation.Get("nummer", Enums.TranslationSource.TextTranslation)
                         </td>
                         <td>
                             @Html.EditorFor(model => Model.FilterCaseNumber, new { id = "filterbycasenumber" })
@@ -43,7 +43,7 @@
                     </tr>
                     <tr>
                         <td>
-                            @Translation.Get("Search", Enums.TranslationSource.TextTranslation):
+                            @Translation.Get("Sök", Enums.TranslationSource.TextTranslation)
                         </td>
                         <td>
                             @Html.EditorFor(model => Model.FilterText, new { id = "filterbytext" })
@@ -71,7 +71,7 @@
                             @Translation.Get("Ärende", Enums.TranslationSource.TextTranslation)
                         </th>                    
                         <th>
-                            @Translation.Get("Lock Started Time", Enums.TranslationSource.TextTranslation)
+                            @Translation.Get("Låst datum", Enums.TranslationSource.TextTranslation)
                         </th>
                         <th>
                             @Translation.Get("Rensa", Enums.TranslationSource.TextTranslation)
@@ -81,7 +81,7 @@
                 <tbody>
                     @foreach (var lc in Model.LockedCasesModels)
                     {
-                        var buttonName = "releaseButton_" + lc.User_Id.ToString();
+                        var buttonName =  "releaseButton_" + lc.User_Id.ToString();
                         var lockTimeTextName = "currentCaseLockedTime_" + lc.User_Id.ToString();                        
                         <tr>
                             <td>
