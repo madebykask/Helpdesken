@@ -2,7 +2,7 @@
 body {
   /*background:#ffffff;*/
   background: #f2f7fe;
-  /*min-width:1350px !important;*/
+  min-width:1350px !important;
 }
 
 a, a:hover, a:focus {
