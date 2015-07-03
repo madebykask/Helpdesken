@@ -101,8 +101,11 @@
                             "~/Content/js/plupload.full.min.js",
                             "~/Content/js/jquery.plupload.queue/jquery.plupload.queue.min.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/licenses").Include(
+            bundles.Add(new ScriptBundle("~/bundles/licenses").Include(                            
                             "~/Content/js/Licenses/license.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/licensesedit").Include(
+                            "~/Content/js/Licenses/license.editlogic.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/licenses/products").Include(
                             "~/Content/js/Licenses/products.js"));

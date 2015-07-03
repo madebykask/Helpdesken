@@ -4,20 +4,32 @@
 
 @section Scripts
 {
+    
     @Scripts.Render("~/bundles/licenses")
-
     <script type="text/javascript">
         $(function () {
             var parameters = {
                 languageId: '@SessionFacade.CurrentLanguageId',
                 id: '@Model.Files.EntityId',
                 uploadFileUrl: '@Url.Action("UploadFile")',
-                deleteFileUrl: '@Url.Action("DeleteFile")'
+                deleteFileUrl: '@Url.Action("DeleteFile")',                
+                regionControlName: "#RegionId",
+                departmentControlName: "#DepartmentId",
+                refreshDepartmentUrl: '@Url.Content("~/Licenses/Licenses/GetJsonDepartmentsFor")'
             };
 
             applyBehavior(parameters);
         });
+
+        window.parameters = {
+              regionControlName: "#RegionId",
+              departmentControlName: "#DepartmentId",
+              refreshDepartmentUrl: '@Url.Content("~/Licenses/Licenses/GetJsonDepartmentsFor")'
+        };
+
     </script>    
+    
+    @Scripts.Render("~/bundles/licensesedit")
 }
 
 @section Actions
@@ -25,7 +37,7 @@
     <ul class="secnav">               
         <li>
             @Html.ActionLink(Translation.Get("Spara"), null, null, new { id = "btnSave", @class = "btn" })
-        </li>
+        </li>       
         @if (!Model.IsNew())
         {
             <li>
@@ -44,166 +56,195 @@
     {
         @Html.HiddenFor(m => m.Id, Model.Id)
         <h4>@Translation.Get("Allmänt")</h4>
-        <table class="tableform">
-            <tr>
-                <td class="span3">
-                    @Translation.Get("Produkt")
-                </td>
-                <td class="span9">
-                    @Html.DropDownListFor(m => m.ProductId, Model.Products, new { @class = "license-product" })
-                    @Html.ValidationMessageFor(m => m.ProductId)
-                </td>
-            </tr>
-            <tr>
-                <td class="span3">
-                    @Translation.Get("Licensnummer")
-                </td>
-                <td class="span9">
-                    @Html.TextBoxFor(m => m.LicenseNumber, Model.LicenseNumber)
-                    @Html.ValidationMessageFor(m => m.LicenseNumber)
-                </td>
-            </tr>
-            <tr>
-                <td class="span3">
-                    @Translation.Get("Antal licenser")
-                </td>
-                <td class="span9">
-                    @Html.TextBoxFor(m => m.NumberOfLicenses, Model.NumberOfLicenses)
-                    @Html.ValidationMessageFor(m => m.NumberOfLicenses)
-                </td>
-            </tr>
-            <tr>
-                <td class="span3">
-                    @Translation.Get("Område")
-                </td>
-                <td class="span9">
-                    @Html.DropDownListFor(m => m.RegionId, Model.Regions)
-                    @Html.ValidationMessageFor(m => m.RegionId)
-                </td>
-            </tr>
-            <tr>
-                <td class="span3">
-                    @Translation.Get("Avdelning")
-                </td>
-                <td class="span9">
-                    @Html.DropDownListFor(m => m.DepartmentId, Model.Departments)
-                    @Html.ValidationMessageFor(m => m.DepartmentId)
-                </td>
-            </tr>
-        </table>                
+        <div class="row">
+            <div class="span12">
+                <table class="tableform">
+                    <tr>
+                        <td class="span3">
+                            @Translation.Get("Produkt")
+                        </td>
+                        <td class="span9">
+                            @Html.DropDownListFor(m => m.ProductId, Model.Products, new { @class = "license-product" })
+                            @Html.ValidationMessageFor(m => m.ProductId)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="span3">
+                            @Translation.Get("Licensnummer")
+                        </td>
+                        <td class="span9">
+                            @Html.TextBoxFor(m => m.LicenseNumber, Model.LicenseNumber)
+                            @Html.ValidationMessageFor(m => m.LicenseNumber)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="span3">
+                            @Translation.Get("Antal licenser")
+                        </td>
+                        <td class="span9">
+                            @Html.TextBoxFor(m => m.NumberOfLicenses, Model.NumberOfLicenses)
+                            @Html.ValidationMessageFor(m => m.NumberOfLicenses)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="span3">
+                            @Translation.Get("Område")
+                        </td>
+                        <td class="span9">
+                            @Html.DropDownListFor(m => Model.RegionId, Model.Regions)
+                            @Html.ValidationMessageFor(m => m.RegionId)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="span3">
+                            @Translation.Get("Avdelning")
+                        </td>
+                        <td class="span9">
+                            @Html.DropDownListFor(m => Model.DepartmentId, Model.Departments)
+                            @Html.ValidationMessageFor(m => m.DepartmentId)
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
         <h4>@Translation.Get("Inköp")</h4>
-        <table class="tableform">
-            <tr>
-                <td class="span3">
-                    @Translation.Get("Inköpsdatum")
-                </td>
-                <td class="span9">
-                    @Html.EditorFor(m => m.PurchaseDate, "DatePicker", new { id = "PurchaseDate" })
-                    @Html.ValidationMessageFor(m => m.PurchaseDate)
-                </td>
-            </tr>
-            <tr>
-                <td class="span3">
-                    @Translation.Get("Inköpspris")
-                </td>
-                <td class="span9">
-                    @Html.TextBoxFor(m => m.Price, Model.Price)
-                    @Html.ValidationMessageFor(m => m.Price)
-                </td>
-            </tr>
-            <tr>
-                <td class="span3">
-                    @Translation.Get("Inköpsunderlag")
-                </td>
-                <td class="span9">
-                    @Html.TextBoxFor(m => m.PurchaseInfo, Model.PurchaseInfo)
-                    @Html.ValidationMessageFor(m => m.PurchaseInfo)
-                </td>
-            </tr>
-            <tr>
-                <td class="span3">
-                    @Translation.Get("Giltig t.o.m")
-                </td>
-                <td class="span9">
-                    @Html.EditorFor(m => m.ValidDate, "DatePicker", new { id = "ValidDate" })
-                    @Html.ValidationMessageFor(m => m.ValidDate)
-                </td>
-            </tr>
-            <tr>
-                <td class="span3">
-                    @Translation.Get("Försäljare")
-                </td>
-                <td class="span9">
-                    @Html.DropDownListFor(m => m.VendorId, Model.Vendors)
-                    @Html.ValidationMessageFor(m => m.VendorId)
-                </td>
-            </tr>
-        </table>                
+        <div class="row">
+            <div class="span12">                
+                <table class="tableform">
+                    <tr>
+                        <td class="span3">
+                            @Translation.Get("Inköpsdatum")
+                        </td>
+                        <td class="span9">
+                            @Html.EditorFor(m => m.PurchaseDate, "DatePicker", new { id = "PurchaseDate" })
+                            @Html.ValidationMessageFor(m => m.PurchaseDate)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="span3">
+                            @Translation.Get("Inköpspris")
+                        </td>
+                        <td class="span9">
+                            @Html.TextBoxFor(m => m.Price, Model.Price)
+                            @Html.ValidationMessageFor(m => m.Price)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="span3">
+                            @Translation.Get("Inköpsunderlag")
+                        </td>
+                        <td class="span9">
+                            @Html.TextBoxFor(m => m.PurchaseInfo, Model.PurchaseInfo)
+                            @Html.ValidationMessageFor(m => m.PurchaseInfo)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="span3">
+                            @Translation.Get("Giltig t.o.m")
+                        </td>
+                        <td class="span9">
+                            @Html.EditorFor(m => m.ValidDate, "DatePicker", new { id = "ValidDate" })
+                            @Html.ValidationMessageFor(m => m.ValidDate)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="span3">
+                            @Translation.Get("Försäljare")
+                        </td>
+                        <td class="span9">
+                            @Html.DropDownListFor(m => m.VendorId, Model.Vendors)
+                            @Html.ValidationMessageFor(m => m.VendorId)
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>         
+        
         <h4>@Translation.Get("Filer")</h4>
-        <table class="tableform">
-            <tr>
-                <td class="span3">
-                    @Translation.Get("Bifogad fil")
-                </td>
-                <td class="span9">
-                    <a href="#license_files_uploader_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till")</a>
-                    <div id="license_files_uploader_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                            <h3>&nbsp;</h3>
-                        </div>
-                        <div class="modal-body">
-                            <div id="license_files_uploader"></div>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Avsluta")</button>
-                        </div>
-                    </div>                    
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    @Html.Partial("AttachedFiles", Model.Files)
-                </td>
-            </tr>
-        </table>                
+        <div class="row">
+            <div class="span12">                
+                <table class="tableform">
+                    <tr>
+                        <td class="span3">
+                            @Translation.Get("Bifogad fil")
+                        </td>
+                        <td class="span9">
+                            <a href="#license_files_uploader_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till")</a>
+                            <div id="license_files_uploader_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                    <h3>&nbsp;</h3>
+                                </div>
+                                <div class="modal-body">
+                                    <div id="license_files_uploader"></div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Avsluta")</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            @Html.Partial("AttachedFiles", Model.Files)
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>            
+        
         <h4>@Translation.Get("Service")</h4>
-        <table class="tableform">
-            <tr>
-                <td class="span3">
-                    @Translation.Get("Årlig kostnad")
-                </td>
-                <td class="span9">
-                    @Html.TextBoxFor(m => m.PriceYear)
-                    @Html.ValidationMessageFor(m => m.PriceYear)
-                </td>
-            </tr>
-        </table>                
+        <div class="row">
+            <div class="span12">                
+                <table class="tableform">
+                    <tr>
+                        <td class="span3">
+                            @Translation.Get("Årlig kostnad")
+                        </td>
+                        <td class="span9">
+                            @Html.TextBoxFor(m => m.PriceYear)
+                            @Html.ValidationMessageFor(m => m.PriceYear)
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>        
+        
         <h4>@Translation.Get("Uppgradering")</h4>
-        <table class="tableform">
-            <tr>
-                <td class="span3">
-                    @Translation.Get("Uppgradering av")
-                </td>
-                <td class="span9">
-                    @Html.DropDownListFor(m => m.UpgradeLicenseId, Model.UpgradeLicenses)
-                    @Html.ValidationMessageFor(m => m.UpgradeLicenseId)
-                </td>
-            </tr>
-        </table>                
+        <div class="row">
+            <div class="span12">
+                <table class="tableform">
+                    <tr>
+                        <td class="span3">
+                            @Translation.Get("Uppgradering av")
+                        </td>
+                        <td class="span9">
+                            @Html.DropDownListFor(m => m.UpgradeLicenseId, Model.UpgradeLicenses)
+                            @Html.ValidationMessageFor(m => m.UpgradeLicenseId)
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
         <h4>@Translation.Get("Övrigt")</h4>
-        <table class="tableform">
-            <tr>
-                <td class="span3">
-                    @Translation.Get("Kommentar")
-                </td>
-                <td class="span9">
-                    @Html.TextAreaFor(m => m.Info, Model.Info)
-                    @Html.ValidationMessageFor(m => m.Info)
-                </td>
-            </tr>
-        </table>                
+        <div class="row">
+            <div class="span12">
+                <table class="tableform">
+                    <tr>
+                        <td class="span3">
+                            @Translation.Get("Kommentar")
+                        </td>
+                        <td class="span9">
+                            @Html.TextAreaFor(m => m.Info, Model.Info)
+                            @Html.ValidationMessageFor(m => m.Info)
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>               
     } 
     <script type="text/javascript">
         $(function() {

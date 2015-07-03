@@ -4230,6 +4230,13 @@ GO
 Update tblTextTranslation Set TextTranslation = 'Search'
 Where Text_id = (select id from tbltext where TextString = 'Sök' and TextType = 0) And Language_Id = 2
 
+If not exists (select * from tbltext where id = 1511)
+	insert into tbltext (id, TextString) VALUES (1511, 'Är du säker på att du vill ta bort aktuell post')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1511 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1511, 2, 'Are you sure you want to delete selected post')
+GO
+
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

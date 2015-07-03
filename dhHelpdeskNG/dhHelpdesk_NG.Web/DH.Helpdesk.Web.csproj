@@ -757,6 +757,7 @@
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\UserEditModel.cs" />
     <Compile Include="Areas\Orders\OrdersAreaRegistration.cs" />
     <Content Include="Content\js\dropdown_fix.js" />
+    <Content Include="Content\js\Licenses\license.editlogic.js" />
     <Content Include="Content\js\Notifiers\edit.js" />
     <Content Include="Areas\Admin\Content\js\Common\tinymce.initiate.js" />
     <Content Include="Content\js\tinymce\license.txt" />

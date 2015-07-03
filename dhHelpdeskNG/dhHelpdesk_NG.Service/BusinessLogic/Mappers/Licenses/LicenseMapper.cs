@@ -8,6 +8,7 @@
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
+    using System.Collections.Generic;
 
     public static class LicenseMapper
     {
@@ -135,32 +136,32 @@
         public static LicenseData MapToData(
                         LicenseModel license,
                         IQueryable<Product> products,
-                        IQueryable<Region> regions,
-                        IQueryable<Department> departments,
+                        List<Region> regions,
+                        List<Department> departments,
                         IQueryable<Vendor> vendors,
                         IQueryable<License> upgradeLicenses)
         {
             var separator = Guid.NewGuid().ToString();
 
-            var overviews = products.Select(p => new { p.Id, p.Name, Type = "Product" }).Union(
-                            regions.Select(r => new { r.Id, r.Name, Type = "Region" }).Union(
-                            departments.Select(d => new { d.Id, Name = d.DepartmentName, Type = "Department" }).Union(
+            var overviews = products.Select(p => new { p.Id, p.Name, Type = "Product" }).Union(                            
                             vendors.Select(v => new { v.Id, v.Name, Type = "Vendor" }).Union(
                             upgradeLicenses.Select(l => new
                                                 {
                                                     l.Id, 
                                                     Name = l.PurshaseDate.HasValue ? l.PurshaseDate.Value + separator + l.Product.Name : l.Product.Name, 
-                                                    Type = "UpgradeLicense"
-                                                })))))
+                                                    Type = "UpgradeLicense"                         
+                                                })))
                                                 .OrderBy(o => o.Type)
                                                 .ThenBy(o => o.Name)
                                                 .ToArray();
 
+            
+
             return new LicenseData(
                             license,
                             overviews.Where(o => o.Type == "Product").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
-                            overviews.Where(o => o.Type == "Region").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
-                            overviews.Where(o => o.Type == "Department").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
+                            regions.Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
+                            departments.Select(d => new ItemOverview(d.DepartmentName, d.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),                            
                             overviews.Where(o => o.Type == "Vendor").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
                             overviews.Where(o => o.Type == "UpgradeLicense").Select(o => 
                                 {

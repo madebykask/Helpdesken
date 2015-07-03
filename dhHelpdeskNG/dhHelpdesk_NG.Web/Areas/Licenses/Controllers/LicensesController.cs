@@ -17,6 +17,7 @@
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.ActionFilters;
     using DH.Helpdesk.Web.Infrastructure.Tools;
+    using DH.Helpdesk.BusinessData.Models.Shared;  
 
     public sealed class LicensesController : BaseController
     {
@@ -41,8 +42,7 @@
         {
             this.licensesService = licensesService;
             this.workContext = workContext;
-            this.licensesModelFactory = licensesModelFactory;
-
+            this.licensesModelFactory = licensesModelFactory;            
             this.filesStateStore = editorStateCacheFactory.CreateForModule(ModuleName.Licenses);
             this.filesStore = temporaryFilesCacheFactory.CreateForModule(ModuleName.Licenses);
         }
@@ -82,7 +82,7 @@
         {
             var data = this.licensesService.GetLicenseData(
                                             this.workContext.Customer.CustomerId,
-                                            licenseId);
+                                            licenseId);          
 
             if (licenseId.HasValue)
             {
@@ -97,7 +97,7 @@
                 }
 
                 this.filesStateStore.ClearObjectDeletedFiles(licenseId.Value);
-            }  
+            }            
 
             var model = this.licensesModelFactory.GetEditModel(data);
             return this.View(model);
@@ -227,5 +227,16 @@
 
             return this.RedirectToAction("AttachedFiles", new { entityId });
         }
+
+        [HttpPost]
+        public JsonResult GetJsonDepartmentsFor(int? regionId)
+        {
+            if (regionId.HasValue && regionId.Value == 0)
+                regionId = null;
+
+            var deps = this.licensesService.GetDepartmentsFor(this.workContext.Customer.CustomerId, regionId).ToList();
+            return Json(deps.Select(d => new ItemOverview(d.DepartmentName, d.Id.ToString())).OrderBy(d=> d.Name).ToList());
+        }
+
     }
 }
