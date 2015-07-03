@@ -852,7 +852,7 @@
             //användare
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseUserFilter))
             {
-                var registeredByUsers = this._userService.GetUsers(cusId).AsEnumerable();
+                var registeredByUsers = this._userService.GetUsers(cusId).ToList();
                 fd.RegisteredByUserList = registeredByUsers.MapToSelectList(fd.customerSetting);
                 if (!string.IsNullOrEmpty(fd.caseSearchFilter.User))
                 {
@@ -871,13 +871,12 @@
             }
 
             //ansvarig
-            if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CasePerformerFilter))
+            var performers = this._userService.GetAllPerformers(cusId);
+            performers.Insert(0, ObjectExtensions.notAssignedPerformer());
+            fd.AvailablePerformersList = performers.MapToSelectList(fd.customerSetting);
+            if (!string.IsNullOrEmpty(fd.caseSearchFilter.UserPerformer))
             {
-                fd.AvailablePerformersList = this._userService.GetAllPerformers(cusId).MapToSelectList(fd.customerSetting);
-                if (!string.IsNullOrEmpty(fd.caseSearchFilter.UserPerformer))
-                {
-                    fd.lstfilterPerformer = fd.caseSearchFilter.UserPerformer.Split(',').Select(int.Parse).ToArray();
-                }
+                fd.lstfilterPerformer = fd.caseSearchFilter.UserPerformer.Split(',').Select(int.Parse).ToArray();
             }
 
             return fd;
@@ -1715,9 +1714,9 @@
 
             bool responsibleCheck = frm.IsFormValueTrue("ResponsibleCheck");
 
-            //bool administratorCheck = frm["AdministratorCheck"].Contains("true"); it is always true  
+            // we always show administrator filter field
             var administrator = (frm.ReturnFormValue("lstAdministrator") == string.Empty)
-                ? "0"
+                ? " "
                 : frm.ReturnFormValue("lstAdministrator");
 
             bool priorityCheck = frm.IsFormValueTrue("PriorityCheck");
