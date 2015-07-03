@@ -4,7 +4,7 @@
     @Html.HiddenFor(m => m.InventoryDynamicFieldSettingModel.Id)
 </td>
 <td>@Html.TextBoxFor(m => m.InventoryDynamicFieldSettingModel.Caption)</td>
-<td>@Html.TextBoxFor(m => m.InventoryDynamicFieldSettingModel.Position)</td>
+<td>@Html.TextBoxFor(m => m.InventoryDynamicFieldSettingModel.Position, new { style = "width:50px;" })</td>
 <td>@Html.DropDownListFor(x => x.InventoryDynamicFieldSettingModel.FieldType, Model.FieldTypes, new { @class = "inventory_field_type_class" })
 </td>
 <td>@Html.TextBoxFor(m => m.InventoryDynamicFieldSettingModel.PropertySize, new { @class = "inventory_property_size_class" })</td>

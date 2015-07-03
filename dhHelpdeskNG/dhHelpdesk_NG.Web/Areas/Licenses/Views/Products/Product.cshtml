@@ -11,7 +11,7 @@
         {
             <li>
                 @Html.ActionLink(Translation.Get("Ta bort"), "Delete", "Products", new { id = Model.Id },
-                    new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuellt program/applikation") })
+                    new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuellt program/applikation") + "?" })
             </li>                
         }
         <li>

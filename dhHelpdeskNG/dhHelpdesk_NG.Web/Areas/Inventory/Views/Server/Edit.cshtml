@@ -11,8 +11,8 @@
         <li id="menu1">
             <input type="submit" value="@Translation.Get("Spara")" class="btn" onclick=" $('#server_edit_form').submit(); "/>
         </li>
-        <li id="menu2">@Html.ActionLink(Translation.Get("Avbryt"), "Index", null, new { @class = "btn" })</li>
         <li id="menu3">@Html.ActionLink(Translation.Get("Ta bort"), "Delete", new { id = Model.ServerViewModel.Id }, new { @class = "btn" })</li>
+        <li id="menu2">@Html.ActionLink(Translation.Get("Avbryt"), "Index", null, new { @class = "btn" })</li>
     </ul>
 }
 
