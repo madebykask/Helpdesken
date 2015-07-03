@@ -2,5 +2,5 @@
 
 [assembly: AssemblyCompany("DH Solutions")]
 [assembly: AssemblyCopyright("© 2015 DH Solutions")]
-[assembly: AssemblyVersion("5.3.11.1")]
-[assembly: AssemblyFileVersionAttribute("5.3.11.1")]
+[assembly: AssemblyVersion("5.3.11.2")]
+[assembly: AssemblyFileVersionAttribute("5.3.11.2")]

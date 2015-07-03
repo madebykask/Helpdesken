@@ -4191,5 +4191,45 @@ If not exists (select * from tblTextTranslation where text_id = 1505 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1505, 2, 'No results match')
 GO
 
+If not exists (select * from tbltext where id = 1506)
+	insert into tbltext (id, TextString) VALUES (1506, 'Inga resultat matchar')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1506 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1506, 2, 'No results match')
+GO
+
+
+If not exists (select * from tbltext where id = 1507)
+	insert into tbltext (id, TextString) VALUES (1507, 'Inställningarna sparades')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1507 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1507, 2, 'Settings saved successfully')
+GO
+
+If not exists (select * from tbltext where id = 1508)
+	insert into tbltext (id, TextString) VALUES (1508, 'Lås upp')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1508 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1508, 2, 'Unlock')
+GO
+
+If not exists (select * from tbltext where id = 1509)
+	insert into tbltext (id, TextString) VALUES (1509, 'Låsta ärenden')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1509 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1509, 2, 'Locked cases')
+GO
+
+If not exists (select * from tbltext where id = 1510)
+	insert into tbltext (id, TextString) VALUES (1510, 'Låst')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1510 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1510, 2, 'Locked')
+GO
+
+Update tblTextTranslation Set TextTranslation = 'Search'
+Where Text_id = (select id from tbltext where TextString = 'Sök' and TextType = 0) And Language_Id = 2
+
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
