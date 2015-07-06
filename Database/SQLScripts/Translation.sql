@@ -4237,6 +4237,12 @@ If not exists (select * from tblTextTranslation where text_id = 1511 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1511, 2, 'Are you sure you want to delete selected post')
 GO
 
+If not exists (select * from tbltext where id = 1512)
+	insert into tbltext (id, TextString) VALUES (1512, 'Din sökning resulterade inte i några träffar.')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1512 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1512, 2, 'Your search returned no matching results.')
+GO
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

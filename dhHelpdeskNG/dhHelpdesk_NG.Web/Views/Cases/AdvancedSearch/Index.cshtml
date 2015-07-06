@@ -26,7 +26,7 @@
                     @Html.Partial("AdvancedSearch/_SearchOverview", Model.CaseSearchFilterData)
                     <div class="container" id="search_result">
                         <div class="customer-cases-area">
-                            @*Here we will have grouped customer cases*@
+                            @*Here we will have cases grouped by customer*@
                         </div>                        
                         <div class="nofields-msg">@Translation.Get("Inga standardkolumner har valts för din användare på denna kund, för att visa kolumner, klicka på fliken Inställningar och gå till Filter Ärendeöversikt")</div>
                         <div class="noavailablefields-msg">@Translation.Get("Inga ärendefält har valts för denna kund, kontakta systemadministratören.")</div>
@@ -34,10 +34,10 @@
                             <div class="content-wrapper">
                                 <div class="loader">@Translation.Get("Laddar...")</div>
                             </div>
-                        </div>
-                        @*<div class="no-data-msg">&nbsp;</div>*@
+                        </div>                        
+                        <div class="no-data-msg">&nbsp;@Translation.Get("Din sökning resulterade inte i några träffar.") </div>
                         <div class="error-msg">@Html.Raw(string.Format(Translation.Get("Ett fel inträffade, klicka {0}här{1} för att ladda om sidan."), "<a href=\"#refresh\" class=\"refresh-grid\">", "</a>"))</div>
-                    </div>
+                    </div>                    
                 </div>
             </div>
         </div>

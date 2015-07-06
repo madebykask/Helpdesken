@@ -76,7 +76,7 @@ var GRID_STATE = {
         });
         
         me.$table = [];
-
+        
         me.hideMessage();        
         $('.submit, a.refresh-grid').on('click', function (ev) {
             ev.preventDefault();
@@ -221,7 +221,7 @@ var GRID_STATE = {
         } else {
             me.showMsg(NODATA_MSG_TYPE);
         }
-        me.setGridState(window.GRID_STATE.IDLE);                        
+        me.setGridState(window.GRID_STATE.IDLE);        
     };
      
     Page.prototype.unsetSearchFilter = function () {
@@ -342,7 +342,7 @@ var GRID_STATE = {
 
     Page.prototype.DrawTables = function (callBack) {
         var me = this;
-        
+        var hasData = false;
         if (customerTableRepository.length > 0) {
             customerTableRepository.sort(function (element1, element2) {
                 return element1.CustomerName > element2.CustomerName
@@ -353,14 +353,17 @@ var GRID_STATE = {
                 if (tableData != '') {
                     me.$customerCaseArea.append(tableData);
                     me.$customerCaseArea.find('th.thpointer.' + tableId).on('click', callBack);
+                    hasData = true;
                 }
-            });
-        };
+            });            
+        };       
 
         customerTableId = 0;
         currentCustomerTable = '';
         globalCounter = 0;
         me.hideMessage();
+        if (!hasData)
+            me.showMsg(NODATA_MSG_TYPE);
         me.setGridState(window.GRID_STATE.IDLE);       
     };
 
