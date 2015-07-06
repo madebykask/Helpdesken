@@ -1,6 +1,8 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Licenses.Products
 {
     using DH.Helpdesk.Common.ValidationAttributes;
+    using System.Collections.Generic;
+    using System.Linq;
 
     public sealed class ProductOverview
     {
@@ -8,14 +10,14 @@
                 int productId, 
                 string productName, 
                 string[] regions, 
-                string[] departments,
-                int licencesNumber, 
+                string[] departments,                
+                int[] licencesNumbers, 
                 int usedLicencesNumber)
         {
             this.Departments = departments;
             this.Regions = regions;
             this.UsedLicencesNumber = usedLicencesNumber;
-            this.LicencesNumber = licencesNumber;
+            this.LicencesNumbers = licencesNumbers;
             this.ProductName = productName;
             this.ProductId = productId;
         }
@@ -30,13 +32,13 @@
         [NotNull]
         public string[] Departments { get; private set; }
 
-        public int LicencesNumber { get; private set; }
+        public int[] LicencesNumbers { get; private set; }
 
         public int UsedLicencesNumber { get; private set; }
 
         public int GetLicensesDifference()
         {
-            return this.LicencesNumber - this.UsedLicencesNumber;
+            return this.LicencesNumbers.Sum() - this.UsedLicencesNumber;
         }
     }
 }

@@ -25,7 +25,7 @@
                                                     LicencesNumber = p.Licenses.Select(l => l.NumberOfLicenses),
                                                     UsedLicencesNumber = 
                                                         computers.Count(c => software.Where(s => p.Applications.Select(a => a.Name).Contains(s.Name)).Select(s => s.Computer_Id).Contains(c.Id))
-                                                })
+                                                })                                                
                                                 .OrderBy(p => p.ProductName)
                                                 .ToArray();
 
@@ -34,7 +34,7 @@
                                                     p.ProductName,
                                                     p.Regions.ToArray(),
                                                     p.Departments.ToArray(),
-                                                    p.LicencesNumber.Sum(),
+                                                    p.LicencesNumber.ToArray(),
                                                     p.UsedLicencesNumber)).ToArray();
 
             return overviews;

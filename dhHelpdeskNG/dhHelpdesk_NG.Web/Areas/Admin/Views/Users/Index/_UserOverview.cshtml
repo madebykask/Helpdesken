@@ -2,9 +2,9 @@
 @model DH.Helpdesk.Web.Areas.Admin.Models.UserIndexViewModel
 
 @using (Html.BeginForm("index", "users", FormMethod.Post, new { id = "searchUsers" }))
-{
+{    
     <div class="container">
-        <div class="row">
+        <div class="row"> 
             <div class="span12">
                 <table class="tableform">
                     <tr>
@@ -12,7 +12,7 @@
                             @Translation.Get("Kund")
                         </td>
                         <td class="span4">
-                            @Html.DropDownListFor(m => m.Filter.CustomerId, Model.CsSelected, new { id = "customerDDL" })
+                            @Html.DropDownListFor(m => Model.Filter.CustomerId, Model.CsSelected, new { id = "customerDDL" })
                         </td>
                         <td class="span5"></td>
                     </tr>

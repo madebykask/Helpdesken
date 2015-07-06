@@ -15,11 +15,16 @@
     <tbody>
         @foreach (var product in Model.Products)
         {
+            var hasGrouped = (product.Regions.Any() || product.Departments.Any());
             <tr>
                 <td onclick="window.location.href='@Url.Action("Product", new RouteValueDictionary { { "productId", product.ProductId } })'">
                     @product.ProductName
                 </td>
-                <td onclick="window.location.href='@Url.Action("Product", new RouteValueDictionary { { "productId", product.ProductId } })'">
+                <td onclick="window.location.href='@Url.Action("Product", new RouteValueDictionary { { "productId", product.ProductId } })'">                    
+                    @if (hasGrouped)
+                    {
+                        <br/>
+                    }
                     @for (var i = 0; i < product.Regions.Length; i++)
                     {
                         if (i > 0)
@@ -29,7 +34,11 @@
                         @product.Regions[i];
                     }
                 </td>                
-                <td onclick="window.location.href='@Url.Action("Product", new RouteValueDictionary { { "productId", product.ProductId } })'">
+                <td onclick="window.location.href='@Url.Action("Product", new RouteValueDictionary { { "productId", product.ProductId } })'">                    
+                    @if (hasGrouped)
+                    {
+                        <br/>
+                    }
                     @for (var i = 0; i < product.Departments.Length; i++)
                     {
                         if (i > 0)
@@ -40,7 +49,19 @@
                     }
                 </td>                
                 <td onclick="window.location.href='@Url.Action("Product", new RouteValueDictionary { { "productId", product.ProductId } })'">
-                    @product.LicencesNumber
+                    @if (hasGrouped)
+                    {
+                        @product.LicencesNumbers.Sum()
+                        <br/>
+                    }
+                    @for (var i = 0; i < product.LicencesNumbers.Length; i++)
+                    {
+                        if (i > 0)
+                        {
+                            <br/>
+                        }                        
+                        @product.LicencesNumbers[i];
+                    }                    
                 </td>
                 @if (product.UsedLicencesNumber > 0)
                 {

@@ -594,9 +594,18 @@
                 Selected = false
             });
 
-            //Locked Cases
-            var lockedCasesModel = GetLockedCaseModel();
-                        
+            //Locked Cases                        
+            var lockedCasesModel = GetLockedCaseModel(SessionFacade.CurrentCustomer.Id);
+
+            var filter = (UserSearch)this.Session["UserSearch"];
+            if (filter == null)
+            {
+                filter = new UserSearch { CustomerId = SessionFacade.CurrentCustomer.Id };
+            }
+            else
+                if (filter.CustomerId == 0)
+                    filter.CustomerId = SessionFacade.CurrentCustomer.Id;
+
             var model = new UserIndexViewModel
             {
                 User = user,
@@ -607,22 +616,36 @@
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
-                }).ToList()                
+                })
+                .OrderBy(c => c.Text)
+                .ToList()                
             };
 
             return model;
         }
 
         private LockedCaseOverviewModel GetLockedCaseModel(int? selectedCustomerId = null, decimal caseNumber = 0, string searchText = "")
-        {           
-            var customers = this._customerService.GetAllCustomers();
-            var customerList = customers.Select(x => new SelectListItem
+        {
+            var user = this._userService.GetUser(SessionFacade.CurrentUser.Id);
+
+            var csSelected = user.Cs ?? new List<Customer>();
+            var csAvailable = new List<Customer>();
+
+
+            foreach (var c in this._customerService.GetAllCustomers())
+            {
+                if (!csSelected.Contains(c))
+                    csAvailable.Add(c);
+            }
+
+            var customerList = csSelected.Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString(),
                     Selected = (selectedCustomerId != null && x.Id == selectedCustomerId.Value)
-                }).ToList();     
-
+                })
+                .OrderBy(c=> c.Text)
+                .ToList();           
 
             var lockedCases = new List<LockedCaseOverview>();
             if (caseNumber > 0)
@@ -633,7 +656,7 @@
                 else
                     lockedCases = this._caseLockService.GetLockedCases(selectedCustomerId);
 
-            var lockedCaseModel = lockedCases.Select(l => l.MapToViewModel()).ToList();
+            var lockedCaseModel = lockedCases.Select(l => l.MapToViewModel()).OrderBy(u=> u.UserId).ToList();
             var model = new LockedCaseOverviewModel(customerList, selectedCustomerId, caseNumber, searchText, lockedCaseModel);
 
             return model;
