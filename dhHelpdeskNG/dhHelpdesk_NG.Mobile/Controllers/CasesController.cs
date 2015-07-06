@@ -1389,7 +1389,14 @@
         /// <returns>
         /// The <see cref="CaseInputViewModel"/>.
         /// </returns>
-        private CaseInputViewModel GetCaseInputViewModel(int userId, int customerId, int caseId, int lockedByUserId = 0, string redirectFrom = "", int? templateId = null, int? copyFromCaseId = null)
+        private CaseInputViewModel GetCaseInputViewModel(
+            int userId, 
+            int customerId, 
+            int caseId, 
+            int lockedByUserId = 0, 
+            string redirectFrom = "", 
+            int? templateId = null, 
+            int? copyFromCaseId = null)
         {
             var m = new CaseInputViewModel();
 
@@ -1500,7 +1507,7 @@
 
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()).ShowOnStartPage == 1)
                 {
-                    m.productAreas = this._productAreaService.GetTopProductAreas(customerId);
+                    m.productAreas = this._productAreaService.GetTopProductAreasForUser(customerId, SessionFacade.CurrentUser);
                 }
 
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Region_Id.ToString()).ShowOnStartPage == 1)

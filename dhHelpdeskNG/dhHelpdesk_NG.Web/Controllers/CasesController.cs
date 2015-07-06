@@ -17,6 +17,7 @@
     using DH.Helpdesk.BusinessData.Models.FinishingCause;
     using DH.Helpdesk.BusinessData.Models.Grid;
     using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.BusinessData.Models.User.Input;
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
     using DH.Helpdesk.Common.Enums;
@@ -564,7 +565,7 @@
             
             var m = new JsonCaseIndexViewModel();
             var customerUser = this._customerUserService.GetCustomerSettings(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser.Id);
-            m.CaseSearchFilterData = this.CreateCaseSearchFilterData(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser.Id, customerUser, SessionFacade.CurrentCaseSearch);
+            m.CaseSearchFilterData = this.CreateCaseSearchFilterData(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser, customerUser, SessionFacade.CurrentCaseSearch);
             m.CaseTemplateTreeButton = this.GetCaseTemplateTreeModel(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser.Id);
             m.CaseSetting = this.GetCaseSettingModel(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser.Id);
             var user = this._userService.GetUser(SessionFacade.CurrentUser.Id);
@@ -759,8 +760,9 @@
             return this.Json(new { result = "success", data = data, remainingView = remainingView });
         }
 
-        private CaseSearchFilterData CreateCaseSearchFilterData(int cusId, int userId, DHDomain.CustomerUser cu, CaseSearchModel sm)
+        private CaseSearchFilterData CreateCaseSearchFilterData(int cusId, UserOverview userOverview, DHDomain.CustomerUser cu, CaseSearchModel sm)
         {
+            var userId = userOverview.Id;
             var fd = new CaseSearchFilterData
             {
                 customerUserSetting = cu,
@@ -788,7 +790,6 @@
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseWorkingGroupFilter))
             {
                 var gs = _globalSettingService.GetGlobalSettings().FirstOrDefault();
-
                 if (gs.LockCaseToWorkingGroup == 0)
                     fd.filterWorkingGroup = this._workingGroupService.GetAllWorkingGroupsForCustomer(cusId);
                 else
@@ -797,7 +798,14 @@
 
             //produktonmråde
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseProductAreaFilter))
-                fd.filterProductArea = this._productAreaService.GetTopProductAreas(cusId);
+            {
+                const bool isTakeOnlyActive = false;
+                fd.filterProductArea = this._productAreaService.GetTopProductAreasForUser(
+                    cusId,
+                    SessionFacade.CurrentUser,
+                    isTakeOnlyActive);
+            }
+
             //kategori                        
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseCategoryFilter))
                 fd.filterCategory = this._categoryService.GetCategories(cusId);
@@ -2531,7 +2539,9 @@
                 
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()).ShowOnStartPage == 1)
                 {
-                    m.productAreas = this._productAreaService.GetTopProductAreas(customerId);
+                    m.productAreas = this._productAreaService.GetTopProductAreasForUser(
+                        customerId,
+                        SessionFacade.CurrentUser);
                 }
 
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Region_Id.ToString()).ShowOnStartPage == 1)
@@ -3073,7 +3083,10 @@
                 }
             }
 
-            ret.ProductAreas = this._productAreaService.GetTopProductAreas(customerId);
+            ret.ProductAreas = this._productAreaService.GetTopProductAreasForUser(
+                    customerId,
+                    SessionFacade.CurrentUser,
+                    false);
             ret.ProductAreaPath = "--";
          
             int pa;

@@ -5,6 +5,7 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
+    using DH.Helpdesk.BusinessData.Models.User.Input;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.ProductArea;
@@ -13,12 +14,15 @@
 
     using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
     using ProductAreaEntity = DH.Helpdesk.Domain.ProductArea;
+    using UserGroup = DH.Helpdesk.BusinessData.Enums.Admin.Users.UserGroup;
 
     public interface IProductAreaService : IProductAreaNameResolver
     {
         ProductAreaEntity[] GetProductAreasForCustomer(int customerId);
 
-        IList<ProductAreaEntity> GetTopProductAreas(int customerId);
+        IList<ProductAreaEntity> GetTopProductAreas(int customerId, bool isOnlyActive = true);
+
+        IList<ProductAreaEntity> GetTopProductAreasForUser(int customerId, UserOverview user, bool isOnlyActive = true);
 
         IList<ProductAreaEntity> GetAllProductAreas(int customerId);
 
@@ -115,9 +119,35 @@
             }
         }
 
-        public IList<ProductAreaEntity> GetTopProductAreas(int customerId)
+        public IList<ProductAreaEntity> GetTopProductAreas(int customerId, bool isOnlyActive = true)
         {
-            return this.productAreaRepository.GetMany(x => x.Customer_Id == customerId && x.Parent_ProductArea_Id == null && x.IsActive != 0).OrderBy(x => x.Name).ToList();
+            return
+                this.productAreaRepository.GetMany(
+                    x =>
+                    x.Customer_Id == customerId && x.Parent_ProductArea_Id == null
+                    && ((isOnlyActive && x.IsActive != 0) || !isOnlyActive)).OrderBy(x => x.Name).ToList();
+        }
+
+        public IList<ProductAreaEntity> GetTopProductAreasForUser(int customerId, UserOverview user, bool isOnlyActive = true)
+        {
+            var res =
+                this.productAreaRepository.GetMany(
+                    x =>
+                    x.Customer_Id == customerId && x.Parent_ProductArea_Id == null
+                    && ((isOnlyActive && x.IsActive != 0) || !isOnlyActive));
+
+            if (user.UserGroupId < (int)UserGroup.CustomerAdministrator)
+            {
+                var groupsMap = user.UserWorkingGroups.ToDictionary(it => it.WorkingGroup_Id, it => true);
+                res = res.Where(
+                    it => it.WorkingGroups.Count == 0 || it.WorkingGroups.Any(productAreaWorkingGroup => groupsMap.ContainsKey(productAreaWorkingGroup.Id)));
+            }
+            else
+            {
+                res = res.Where(it => it.WorkingGroup_Id == null);
+            }
+
+            return res.OrderBy(x => x.Name).ToList();
         }
 
         public IList<ProductAreaEntity> GetAllProductAreas(int customerId)
