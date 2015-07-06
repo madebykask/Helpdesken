@@ -495,7 +495,9 @@
             var selectedCt = selectedCtOrginal.ToList();
 
 
-            var productAreaOrginal = _productAreaService.GetTopProductAreas(SessionFacade.CurrentCustomer.Id);
+            var productAreaOrginal = this._productAreaService.GetTopProductAreasForUser(
+                    SessionFacade.CurrentCustomer.Id,
+                    SessionFacade.CurrentUser);
             var availablePa =
                 productAreaOrginal.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() }).ToList();
 

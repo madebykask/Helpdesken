@@ -92,6 +92,9 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
         [IsId]
         public int LanguageId { get; set; }
 
+        /// <summary>
+        /// One of DH.Helpdesk.BusinessData.Enums.Admin.Users.UserGroup enum
+        /// </summary>
         [IsId]
         public int UserGroupId { get; set; }
 

@@ -17,6 +17,8 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
     using DH.Helpdesk.Web.Models;
     using DH.Helpdesk.Common.Enums;
 
+    using UserGroup = DH.Helpdesk.BusinessData.Enums.Admin.Users.UserGroup;
+
     public static class HtmlHelperExtension
     {
         /// <summary>
@@ -889,20 +891,41 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return MvcHtmlString.Create(result.ToString());
         }
 
+        private static Dictionary<int, bool> userGroupDictionary = null;
+
         private static MvcHtmlString BuildProcuctAreaDropdownButton(IList<ProductArea> pal, bool isTakeOnlyActive = true)
         {
             string htmlOutput = string.Empty;
+            var user = SessionFacade.CurrentUser;
+
+            if (userGroupDictionary == null)
+            {
+                userGroupDictionary = user.UserWorkingGroups.ToDictionary(it => it.WorkingGroup_Id, it => true);
+            }
+
             foreach (ProductArea pa in pal)
             {
-                var childs = new List<ProductArea>();
+                List<ProductArea> childList = null;
                 if (pa.SubProductAreas != null)
                 {
-                    childs = isTakeOnlyActive
-                                 ? pa.SubProductAreas.Where(p => p.IsActive != 0).ToList()
-                                 : pa.SubProductAreas.ToList();
+                    var childs = isTakeOnlyActive
+                                 ? pa.SubProductAreas.Where(p => p.IsActive != 0)
+                                 : pa.SubProductAreas;
+
+                    if (user.UserGroupId < (int)UserGroup.CustomerAdministrator)
+                    {
+                        childs =
+                            childs.Where(
+                                it =>
+                                it.WorkingGroups.Count == 0
+                                || it.WorkingGroups.Any(
+                                    productAreaWorkingGroup =>
+                                    userGroupDictionary.ContainsKey(productAreaWorkingGroup.Id)));
+                    }
+                    childList = childs.ToList();
                 }
 
-                if (childs.Count > 0)
+                if (childList != null && childList.Count > 0)
                 {
                     htmlOutput += "<li class='dropdown-submenu'>";
                 }
@@ -912,10 +935,10 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 }
 
                 htmlOutput += "<a href='#' value=" + pa.Id.ToString() + ">" + Translation.Get(pa.Name) + "</a>";
-                if (childs.Count > 0)
+                if (childList != null && childList.Count > 0)
                 {
                     htmlOutput += "<ul class='dropdown-menu'>";
-                    htmlOutput += BuildProcuctAreaDropdownButton(childs.OrderBy(p => Translation.Get(p.Name)).ToList(), isTakeOnlyActive);
+                    htmlOutput += BuildProcuctAreaDropdownButton(childList.OrderBy(p => Translation.Get(p.Name)).ToList(), isTakeOnlyActive);
                     htmlOutput += "</ul>";
                 }
 
