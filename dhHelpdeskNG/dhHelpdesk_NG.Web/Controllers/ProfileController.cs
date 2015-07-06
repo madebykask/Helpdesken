@@ -43,8 +43,6 @@
 
             user.TimeZoneId = SessionFacade.CurrentUser.TimeZoneId ?? TimeZoneInfo.Local.Id;
 
-            // Temporary inactive MyCases only for 27th March released #11837 
-            //.Where(m => m.Id != 12 && m.Name != "Mina tilldelade ärenden"); 
             var allModules = this.moduleService.GetAllModules();                                                
                                           
             var modules = new UserModulesViewModel();

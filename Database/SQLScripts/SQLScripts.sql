@@ -73,5 +73,48 @@ BEGIN
 		ON UPDATE CASCADE
 END
 GO
+
+
+ SET IDENTITY_INSERT tblModule ON
+
+  if not exists(Select * from tblModule where id = 1) 
+	INSERT tblModule (Id, Name, [Description]) VALUES (1, 'Ärendeöversikt', 'Case Summary')
+
+  if not exists(Select * from tblModule where id = 2) 
+	INSERT tblModule (Id, Name, [Description]) VALUES (2, 'Problem', 'Problem')
+
+  if not exists(Select * from tblModule where id = 3) 
+	INSERT tblModule (Id, Name, [Description]) VALUES (3, 'Statistik', 'Statistics')
+
+  if not exists(Select * from tblModule where id = 4) 
+	INSERT tblModule (Id, Name, [Description]) VALUES (4, 'Anslagstavla', 'Bulletin Board')
+
+  if not exists(Select * from tblModule where id = 5) 
+	INSERT tblModule (Id, Name, [Description]) VALUES (5, 'Aktuellt', 'Calendar')
+
+  if not exists(Select * from tblModule where id = 6) 
+	INSERT tblModule (Id, Name, [Description]) VALUES (6, 'FAQ', 'FAQ')
+
+  if not exists(Select * from tblModule where id = 7) 
+	INSERT tblModule (Id, Name, [Description]) VALUES (7, 'Driftlogg', 'Operational Log')
+
+  if not exists(Select * from tblModule where id = 8) 
+	INSERT tblModule (Id, Name, [Description]) VALUES (8, 'Dagrapport', 'Problem')
+
+  if not exists(Select * from tblModule where id = 9) 
+	INSERT tblModule (Id, Name, [Description]) VALUES (9, 'Snabblänk', 'Quick Link')
+
+  if not exists(Select * from tblModule where id = 10) 
+	INSERT tblModule (Id, Name, [Description]) VALUES (10, 'Dokument', 'Document')
+
+  if not exists(Select * from tblModule where id = 11) 
+	INSERT tblModule (Id, Name, [Description]) VALUES (11, 'Ändringshantering', 'Change Management')
+
+  if not exists(Select * from tblModule where id = 12) 
+	INSERT tblModule (Id, Name, [Description]) VALUES (12, 'Mina tilldelade ärenden', 'My cases')  
+
+  SET IDENTITY_INSERT tblModule OFF
+
+  Go
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.11'
