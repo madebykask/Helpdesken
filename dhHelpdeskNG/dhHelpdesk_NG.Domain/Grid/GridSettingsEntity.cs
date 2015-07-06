@@ -13,7 +13,7 @@
         /// <summary>
         /// ID of the grid, for ex. case_overview
         /// </summary>
-        public string GridId { get; set; }
+        public int GridId { get; set; }
 
         /// <summary>
         /// ID of the field from DH.Helpdesk.BusionessData.Models.Grid.GridColumnsDefinition

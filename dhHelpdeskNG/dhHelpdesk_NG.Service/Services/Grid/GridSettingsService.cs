@@ -15,7 +15,7 @@
     /// </summary>
     public class GridSettingsService
     {
-        public const string CASE_OVERVIEW_GRID_ID = "case_overview";
+        public const int CASE_OVERVIEW_GRID_ID = 1;
 
         #region Constants for default values
 
@@ -66,7 +66,7 @@
         /// <param name="userId"></param>
         /// <param name="gridId"></param>
         /// <returns></returns>
-        public GridSettingsModel GetForCustomerUserGrid(int customerId, int userGroupId, int userId, string gridId)
+        public GridSettingsModel GetForCustomerUserGrid(int customerId, int userGroupId, int userId, int gridId)
         {
             var res = new GridSettingsModel();
             using (IUnitOfWork uow = this.unitOfWorkFactory.Create())
@@ -109,7 +109,7 @@
         /// <param name="userGroupId"></param>
         /// <param name="gridId"></param>
         /// <returns></returns>
-        public List<GridColumnDef> GetDefaultColumns(int customerId, int userGroupId, string gridId)
+        public List<GridColumnDef> GetDefaultColumns(int customerId, int userGroupId, int gridId)
         {
             switch (gridId)
             {
@@ -177,7 +177,7 @@
                 if (inputModel.sortOptions != null && IsSortFieldAvailable(inputModel.sortOptions.sortBy, inputModel.columnDefs))
                 {
                     repository.DeleteWhere(it => it.CustomerId == customerId && it.UserId == userId && it.GridId == CASE_OVERVIEW_GRID_ID 
-                        && (it.Parameter == SORT_BY_KEY || it.Parameter == CASE_OVERVIEW_GRID_ID));
+                        && (it.Parameter == SORT_BY_KEY || it.Parameter == SORT_DIR_KEY));
                     repository.Add(
                         new GridSettingsEntity
                             {
