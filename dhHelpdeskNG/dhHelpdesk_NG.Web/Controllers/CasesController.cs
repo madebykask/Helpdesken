@@ -2109,7 +2109,7 @@
                         var workTimeCalcFactory = new WorkTimeCalculatorFactory(
                             ManualDependencyResolver.Get<IHolidayService>(),
                             SessionFacade.CurrentCustomer.WorkingDayStart,
-                            SessionFacade.CurrentCustomer.WorkingDayStart,
+                            SessionFacade.CurrentCustomer.WorkingDayEnd,
                             TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
                         int[] deptIds = null;
                         if (case_.Department_Id.HasValue)
@@ -2186,7 +2186,7 @@
                 var workTimeCalcFactory = new WorkTimeCalculatorFactory(
                     ManualDependencyResolver.Get<IHolidayService>(),
                     SessionFacade.CurrentCustomer.WorkingDayStart,
-                    SessionFacade.CurrentCustomer.WorkingDayStart,
+                    SessionFacade.CurrentCustomer.WorkingDayEnd,
                     TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
                 int[] deptIds = null;
                 if (case_.Department_Id.HasValue)
