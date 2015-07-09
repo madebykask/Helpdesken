@@ -3,6 +3,7 @@
     using System.Web.Mvc;
     using DHDomain=DH.Helpdesk.Domain;
     using System;
+    using System.Linq;
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Reports.Enums;
     using DH.Helpdesk.Dal.Infrastructure.Context;
@@ -179,10 +180,16 @@
             #endregion
              #region Reports
 
-            var reports = this._customerService.GetAllReports();
-            var customerReports = this._customerService.GetCustomerReportList(customer.Id);
+            /* Hide unfinished report options Redmine #13433 */
+            //var reports = this._customerService.GetAllReports();
+            //var customerReports = this._customerService.GetCustomerReportList(customer.Id);
+
+            var reports = this._customerService.GetAllReports().Where(r => r.Id == 18);
+            var customerReports = this._customerService.GetCustomerReportList(customer.Id).Where(r => r.ReportId == 18);
             var reportList = new List<CustomerReportList>();
 
+            
+            
             foreach (var rep in reports)
             {
                 var o = new CustomerReportList
