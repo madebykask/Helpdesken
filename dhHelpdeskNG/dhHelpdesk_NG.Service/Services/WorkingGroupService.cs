@@ -217,7 +217,19 @@
             }
             else
             {
-                this.workingGroupRepository.Update(workingGroup);
+                var entityToUpdate = this.workingGroupRepository.GetById(workingGroup.Id);
+                entityToUpdate.WorkingGroupName = workingGroup.WorkingGroupName;
+                entityToUpdate.Code = workingGroup.Code;
+                entityToUpdate.EMail = workingGroup.EMail;
+                entityToUpdate.IsDefault = workingGroup.IsDefault;
+                entityToUpdate.IsDefaultCalendar = workingGroup.IsDefaultCalendar;
+                entityToUpdate.IsDefaultBulletinBoard = workingGroup.IsDefaultBulletinBoard;
+                entityToUpdate.IsDefaultOperationLog = workingGroup.IsDefaultOperationLog;
+                entityToUpdate.IsActive = workingGroup.IsActive;
+                entityToUpdate.AllocateCaseMail = workingGroup.AllocateCaseMail;
+                entityToUpdate.SendExternalEmailToWGUsers = workingGroup.SendExternalEmailToWGUsers;
+                entityToUpdate.StateSecondary_Id = workingGroup.StateSecondary_Id;
+                this.workingGroupRepository.Update(entityToUpdate);
             }
 
             if (workingGroup.IsDefault == 1)
