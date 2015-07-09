@@ -39,20 +39,25 @@
 
         public ReportsOptions GetReportsOptions(List<ReportType> reports)
         {
-            var ready = new List<ReportType>
-                            {
-                                ReportType.RegistratedCasesDay,
-                                ReportType.CaseTypeArticleNo,
-                                ReportType.ReportGenerator,
-                                ReportType.LeadtimeFinishedCases,
-                                ReportType.LeadtimeActiveCases,
-                                ReportType.CaseSatisfaction,
-                                ReportType.FinishingCauseCustomer,
-                                ReportType.FinishingCauseCategoryCustomer,
-                                ReportType.ClosedCasesDay,
-                                ReportType.CasesInProgressDay
-                            };
+            /* Hide unfinished report options Redmine #13433 */
+            //var ready = new List<ReportType>
+            //                {
+            //                    ReportType.RegistratedCasesDay,
+            //                    ReportType.CaseTypeArticleNo,
+            //                    ReportType.ReportGenerator,
+            //                    ReportType.LeadtimeFinishedCases,
+            //                    ReportType.LeadtimeActiveCases,
+            //                    ReportType.CaseSatisfaction,
+            //                    ReportType.FinishingCauseCustomer,
+            //                    ReportType.FinishingCauseCategoryCustomer,
+            //                    ReportType.ClosedCasesDay,
+            //                    ReportType.CasesInProgressDay
+            //                };
 
+            var ready = new List<ReportType>
+                            {                                
+                                ReportType.ReportGenerator                             
+                            };
             // It's a new report, so we need to add it to the tblReport table
             //reports.Add(ReportType.CaseSatisfaction);
 
