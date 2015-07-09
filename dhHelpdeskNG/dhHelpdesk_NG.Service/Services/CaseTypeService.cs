@@ -33,13 +33,17 @@
         private readonly ICaseTypeRepository caseTypeRepository;
 
         private readonly IUnitOfWork unitOfWork;
+
+        private readonly ICaseRepository _caseRepository;
         
         public CaseTypeService(
             ICaseTypeRepository caseTypeRepository,
+            ICaseRepository caseRepository,
             IUnitOfWork unitOfWork)            
         {
             this.caseTypeRepository = caseTypeRepository;
             this.unitOfWork = unitOfWork;
+            this._caseRepository = caseRepository;
         }
 
         public IList<CaseType> GetCaseTypes(int customerId)
@@ -66,8 +70,8 @@
         public DeleteMessage DeleteCaseType(int id)
         {
             var caseType = this.caseTypeRepository.GetById(id);
-
-            if (caseType != null)
+            
+            if (caseType != null && !this._caseRepository.GetAll().Where(c=> c.CaseType_Id == id).Any())
             {
                 try
                 {
