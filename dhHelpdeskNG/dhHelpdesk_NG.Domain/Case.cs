@@ -85,6 +85,7 @@
         public int Unread { get; set; }
         public int RegLanguage_Id { get; set; }
         public String RegUserId { get; set; }
+        public String RegUserName { get; set; }
         public String RegUserDomain { get; set; }
         public int? ProductAreaQuestionVersion_Id { get; set; }
         public int LeadTime { get; set; }
