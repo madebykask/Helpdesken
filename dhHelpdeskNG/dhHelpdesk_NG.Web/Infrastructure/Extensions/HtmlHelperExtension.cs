@@ -918,9 +918,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return MvcHtmlString.Create(result.ToString());
         }
 
-        private static Dictionary<int, bool> userGroupDictionary = null;
-
-        private static MvcHtmlString BuildProcuctAreaDropdownButton(IList<ProductArea> pal, bool isTakeOnlyActive = true)
+        private static MvcHtmlString BuildProcuctAreaDropdownButton(IList<ProductArea> pal, bool isTakeOnlyActive = true, Dictionary<int, bool> userGroupDictionary = null)
         {
             string htmlOutput = string.Empty;
             var user = SessionFacade.CurrentUser;
@@ -949,6 +947,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                                     productAreaWorkingGroup =>
                                     userGroupDictionary.ContainsKey(productAreaWorkingGroup.Id)));
                     }
+
                     childList = childs.ToList();
                 }
 
@@ -965,7 +964,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 if (childList != null && childList.Count > 0)
                 {
                     htmlOutput += "<ul class='dropdown-menu'>";
-                    htmlOutput += BuildProcuctAreaDropdownButton(childList.OrderBy(p => Translation.Get(p.Name)).ToList(), isTakeOnlyActive);
+                    htmlOutput += BuildProcuctAreaDropdownButton(childList.OrderBy(p => Translation.Get(p.Name)).ToList(), isTakeOnlyActive, userGroupDictionary);
                     htmlOutput += "</ul>";
                 }
 
