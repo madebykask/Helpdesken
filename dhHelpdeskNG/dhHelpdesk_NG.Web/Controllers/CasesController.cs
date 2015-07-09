@@ -139,6 +139,8 @@
 
         private readonly int _defaultExtendCaseLockTime;
 
+        private readonly IWatchDateCalendarService watchDateCalendarServcie;
+
         #endregion
 
         #region Constructor
@@ -199,7 +201,8 @@
             IOrganizationService organizationService, 
             OrganizationJsonService orgJsonService, 
             IRegistrationSourceCustomerService registrationSourceCustomerService,
-            ICaseLockService caseLockService)
+            ICaseLockService caseLockService, 
+            IWatchDateCalendarService watchDateCalendarServcie)
             : base(masterDataService)
         {
             this._masterDataService = masterDataService;  
@@ -258,6 +261,7 @@
             this._orgJsonService = orgJsonService;
             this._registrationSourceCustomerService = registrationSourceCustomerService;
             this._caseLockService = caseLockService;
+            this.watchDateCalendarServcie = watchDateCalendarServcie;
             this._defaultMaxRows = 10;
             this._defaultCaseLockBufferTime = 30; // Second
             this._defaultExtendCaseLockTime = 60; // Second
@@ -929,7 +933,12 @@
             return Json(this._caseLockService.ReExtendLockCase(new Guid(lockGuid), extendValue));            
         }
 
-        public ActionResult New(int? customerId, int? templateId, int? copyFromCaseId, int? caseLanguageId, int? templateistrue)
+        public ActionResult New(
+            int? customerId, 
+            int? templateId, 
+            int? copyFromCaseId, 
+            int? caseLanguageId, 
+            int? templateistrue)
         {
             CaseInputViewModel m = null;
             if (!customerId.HasValue)
@@ -944,31 +953,41 @@
 
             SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
             if (SessionFacade.CurrentUser != null)
+            {
                 if (SessionFacade.CurrentUser.CreateCasePermission == 1)
                 {
                     var userId = SessionFacade.CurrentUser.Id;
                     var caseLockModel = new CaseLockModel();
-                    m = this.GetCaseInputViewModel(userId, customerId.Value, 0, caseLockModel, string.Empty, null, templateId, copyFromCaseId, false, templateistrue);
+                    m = this.GetCaseInputViewModel(
+                        userId,
+                        customerId.Value,
+                        0,
+                        caseLockModel,
+                        string.Empty,
+                        null,
+                        templateId,
+                        copyFromCaseId,
+                        false,
+                        templateistrue);
 
                     var caseParam = new NewCaseParams
-                    {
-                        customerId = customerId.Value,
-                        templateId = templateId,
-                        copyFromCaseId = copyFromCaseId,
-                        caseLanguageId = caseLanguageId
-                    };
-                     
+                                        {
+                                            customerId = customerId.Value,
+                                            templateId = templateId,
+                                            copyFromCaseId = copyFromCaseId,
+                                            caseLanguageId = caseLanguageId
+                                        };
+
                     m.NewModeParams = caseParam;
                     AddViewDataValues();
-                    
+
                     // Positive: Send Mail to...
-                    if (m.CaseMailSetting.DontSendMailToNotifier == false)
-                        m.CaseMailSetting.DontSendMailToNotifier = true;
-                    else
-                        m.CaseMailSetting.DontSendMailToNotifier = false;
+                    if (m.CaseMailSetting.DontSendMailToNotifier == false) m.CaseMailSetting.DontSendMailToNotifier = true;
+                    else m.CaseMailSetting.DontSendMailToNotifier = false;
 
                     return this.View(m);
                 }
+            }
 
             return this.RedirectToAction("index", "cases", new { id = customerId });
         }
@@ -1028,7 +1047,12 @@
 #endregion
 
         [UserCasePermissions]
-        public ActionResult Edit(int id, string redirectFrom = "", int? moveToCustomerId = null, bool? uni = null, bool updateState = true, string backUrl = null)
+        public ActionResult Edit(int id, 
+            string redirectFrom = "", 
+            int? moveToCustomerId = null, 
+            bool? uni = null, 
+            bool updateState = true, 
+            string backUrl = null)
         {
             CaseInputViewModel m = null;
 
@@ -1291,6 +1315,18 @@
                                                 name = string.Format("{0} {1}", it.SurName, it.FirstName)
                                             })
                         });
+        }
+
+        public JsonResult GetWatchDateByDepartment(int departmentId)
+        {
+            var dept = this._departmentService.GetDepartment(departmentId);
+            DateTime? res = null;
+            if (dept != null && dept.WatchDateCalendar_Id.HasValue)
+            {
+                res = this.watchDateCalendarServcie.GetClosestDateTo(dept.WatchDateCalendar_Id.Value, DateTime.UtcNow);
+            }
+
+            return this.Json(new { result = "success", data = res }, JsonRequestBehavior.AllowGet);
         }
 
         public int ChangeWorkingGroupSetStateSecondary(int? id)
@@ -2703,10 +2739,11 @@
                             m.case_.Description = caseTemplate.Description;
                             m.case_.Miscellaneous = caseTemplate.Miscellaneous;
 
-                        if (caseTemplate.CaseWorkingGroup_Id != null)
-                        {
-                            m.case_.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id;
-                        }
+                            if (caseTemplate.CaseWorkingGroup_Id != null)
+                            {
+                                m.case_.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id;
+                            }
+
                             m.case_.Priority_Id = caseTemplate.Priority_Id;
                             m.case_.Project_Id = caseTemplate.Project_Id;
                             m.CaseLog.TextExternal = caseTemplate.Text_External;
@@ -2736,7 +2773,24 @@
                             m.case_.OtherCost = caseTemplate.OtherCost;
                             m.case_.Available = caseTemplate.Available;
                             m.case_.ContactBeforeAction = caseTemplate.ContactBeforeAction;
-                            m.case_.WatchDate = caseTemplate.WatchDate;
+                            
+                            // "watch date" 
+                            if (caseTemplate.WatchDate.HasValue)
+                            {
+                                m.case_.WatchDate = caseTemplate.WatchDate;
+                            }
+                            else
+                            {
+                                if (m.case_.Department_Id.HasValue)
+                                {
+                                    var dept = this._departmentService.GetDepartment(m.case_.Department_Id.Value);
+                                    m.case_.WatchDate =
+                                        this.watchDateCalendarServcie.GetClosestDateTo(
+                                                dept.WatchDateCalendar_Id.Value, 
+                                                DateTime.UtcNow);
+                                }
+                            }
+
                             m.case_.Project_Id = caseTemplate.Project_Id;
                             m.case_.Problem_Id = caseTemplate.Problem_Id;
                             m.case_.Change_Id = caseTemplate.Change_Id;

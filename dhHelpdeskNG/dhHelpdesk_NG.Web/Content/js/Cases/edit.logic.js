@@ -118,10 +118,15 @@ $(function () {
 
     Page.prototype.init = function () {
         var me = this;        
-        me._inSaving = false;        
+        me._inSaving = false;
+
+        /// controls binding
         me.$form = $('#target');
+        me.$departments = $('.departments-list');
+        me.$watchDate = $('#divCase__WatchDate');
         me.$buttonsToDisable = $('.btn.save, .btn.save-close, .btn.save-new');
 
+        /// events binding
         $('.btn.save').on('click', function() {
             return me.onSaveClick.call(me);
         });
@@ -134,25 +139,54 @@ $(function () {
             return me.onSaveAndNewClick.call(me);
         });
 
+        me.$departments.on('change', function (ev) {
+            var deptId = parseInt(ev.target.value, 10);
+            if (!isNaN(deptId)) {
+                return me.fetchWatchDateByDept.call(me, deptId);
+            }
+
+            return false;
+        });
         // Timer for case in edit mode (every 1 minutes)
         if (_parameters.currentCaseId > 0)
            timerId = setInterval(me.ReExtendCaseLock, 60000);
     };
 
-    Page.prototype.ReExtendCaseLock = function () {
+    /**
+    * @private
+    * @param { Number } deptId
+    */
+    Page.prototype.fetchWatchDateByDept = function (deptId) {
+        var me = this;
+        if (deptId == null) {
+            return;
+        }
+
+        $.getJSON(
+            '/cases/GetWatchDateByDepartment', 
+            { 'departmentId': deptId },
+            function(response) {
+                if (response.result === 'success' && response.data != null) {
+                    var dt = new Date(parseInt(response.data.replace("/Date(", "").replace(")/",""), 10));
+                    me.$watchDate.datepicker('update', dt);
+                }
+            });
+    };
+
+    Page.prototype.ReExtendCaseLock = function() {
         var me = this;
         $.post(_parameters.caseLockExtender, { lockGuid: _parameters.caseLockGuid, extendValue: _parameters.extendValue },
-                   function (data) {
-                       if (data == false) {
-                          clearInterval(timerId);
-                       }                       
-                   });
-    }
+            function(data) {
+                if (data == false) {
+                    clearInterval(timerId);
+                }
+            });
+    };
 
     Page.prototype.resetSaving = function() {
         var me = this;
         me._inSaving = false;
-    }
+    };
 
     Page.prototype.canSave = function() {
         var me = this;
@@ -168,7 +202,7 @@ $(function () {
         var me = this;
         var res = productAreaChildObj.val();
         if (res == '1')
-            return false
+            return false;
         else
             return true;
     };

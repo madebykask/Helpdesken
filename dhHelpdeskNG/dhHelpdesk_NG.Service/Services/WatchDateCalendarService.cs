@@ -24,6 +24,9 @@
 
         void SaveWatchDateCalendar(WatchDateCalendar watchDateCalendar, out IDictionary<string, string> errors);
         void SaveWatchDateCalendarValue(WatchDateCalendarValue watchDateCalendarValue, out IDictionary<string, string> errors);
+
+        DateTime? GetClosestDateTo(int calendarId, DateTime now);
+
         void Commit();
     }
 
@@ -123,6 +126,20 @@
                 this.Commit();
         }
 
+        public DateTime? GetClosestDateTo(int calendarId, DateTime now)
+        {
+            var watchDateCalendarValue =
+                this._watchDateCalendarValueRepository.GetAll()
+                    .Where(it => it.WatchDateCalendar_Id == calendarId && it.WatchDate > now)
+                    .OrderBy(it => it.WatchDate)
+                    .FirstOrDefault();
+            if (watchDateCalendarValue != null)
+            {
+                return watchDateCalendarValue.WatchDate;
+            }
+
+            return null;
+        }
 
         public DeleteMessage DeleteWDCV(int id)
         {
