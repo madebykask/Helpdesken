@@ -27,6 +27,11 @@
     </script>    
     
     @Scripts.Render("~/bundles/licensesedit")
+    
+}
+
+@{    
+    var requiredMessage = " " + Translation.Get("måste anges");
 }
 
 @section Actions
@@ -62,7 +67,7 @@
                         </td>
                         <td class="span9">
                             @Html.DropDownListFor(m => m.ProductId, Model.Products, new { @class = "license-product" })
-                            @Html.ValidationMessageFor(m => m.ProductId)
+                            @Html.ValidationMessageFor(m => m.ProductId, Translation.Get("Produkt") + requiredMessage)
                         </td>
                     </tr>
                     <tr>
@@ -71,7 +76,7 @@
                         </td>
                         <td class="span9">
                             @Html.TextBoxFor(m => m.LicenseNumber, Model.LicenseNumber)
-                            @Html.ValidationMessageFor(m => m.LicenseNumber)
+                            @Html.ValidationMessageFor(m => m.LicenseNumber, Translation.Get("Licensnummer") + requiredMessage)
                         </td>
                     </tr>
                     <tr>
@@ -80,7 +85,7 @@
                         </td>
                         <td class="span9">
                             @Html.TextBoxFor(m => m.NumberOfLicenses, Model.NumberOfLicenses)
-                            @Html.ValidationMessageFor(m => m.NumberOfLicenses)
+                            @Html.ValidationMessageFor(m => m.NumberOfLicenses, Translation.Get("Antal licenser") + requiredMessage)
                         </td>
                     </tr>
                     <tr>
@@ -89,7 +94,7 @@
                         </td>
                         <td class="span9">
                             @Html.DropDownListFor(m => Model.RegionId, Model.Regions)
-                            @Html.ValidationMessageFor(m => m.RegionId)
+                            @Html.ValidationMessageFor(m => m.RegionId, Translation.Get("Område") + requiredMessage)
                         </td>
                     </tr>
                     <tr>
@@ -98,7 +103,7 @@
                         </td>
                         <td class="span9">
                             @Html.DropDownListFor(m => Model.DepartmentId, Model.Departments)
-                            @Html.ValidationMessageFor(m => m.DepartmentId)
+                            @Html.ValidationMessageFor(m => m.DepartmentId, Translation.Get("Avdelning") + requiredMessage)
                         </td>
                     </tr>
                 </table>
@@ -115,7 +120,7 @@
                         </td>
                         <td class="span9">
                             @Html.EditorFor(m => m.PurchaseDate, "DatePicker", new { id = "PurchaseDate" })
-                            @Html.ValidationMessageFor(m => m.PurchaseDate)
+                            @Html.ValidationMessageFor(m => m.PurchaseDate, Translation.Get("Inköpsdatum") + requiredMessage)
                         </td>
                     </tr>
                     <tr>
@@ -124,7 +129,7 @@
                         </td>
                         <td class="span9">
                             @Html.TextBoxFor(m => m.Price, Model.Price)
-                            @Html.ValidationMessageFor(m => m.Price)
+                            @Html.ValidationMessageFor(m => m.Price, Translation.Get("Inköpspris") + requiredMessage)
                         </td>
                     </tr>
                     <tr>
@@ -133,7 +138,7 @@
                         </td>
                         <td class="span9">
                             @Html.TextBoxFor(m => m.PurchaseInfo, Model.PurchaseInfo)
-                            @Html.ValidationMessageFor(m => m.PurchaseInfo)
+                            @Html.ValidationMessageFor(m => m.PurchaseInfo, Translation.Get("Inköpsunderlag") + requiredMessage)
                         </td>
                     </tr>
                     <tr>
@@ -142,7 +147,7 @@
                         </td>
                         <td class="span9">
                             @Html.EditorFor(m => m.ValidDate, "DatePicker", new { id = "ValidDate" })
-                            @Html.ValidationMessageFor(m => m.ValidDate)
+                            @Html.ValidationMessageFor(m => m.ValidDate, Translation.Get("Giltig t.o.m") + requiredMessage)
                         </td>
                     </tr>
                     <tr>
@@ -151,7 +156,7 @@
                         </td>
                         <td class="span9">
                             @Html.DropDownListFor(m => m.VendorId, Model.Vendors)
-                            @Html.ValidationMessageFor(m => m.VendorId)
+                            @Html.ValidationMessageFor(m => m.VendorId, Translation.Get("Försäljare") + requiredMessage)
                         </td>
                     </tr>
                 </table>
@@ -202,7 +207,7 @@
                         </td>
                         <td class="span9">
                             @Html.TextBoxFor(m => m.PriceYear)
-                            @Html.ValidationMessageFor(m => m.PriceYear)
+                            @Html.ValidationMessageFor(m => m.PriceYear, Translation.Get("Årlig kostnad") + requiredMessage)
                         </td>
                     </tr>
                 </table>
@@ -219,7 +224,7 @@
                         </td>
                         <td class="span9">
                             @Html.DropDownListFor(m => m.UpgradeLicenseId, Model.UpgradeLicenses)
-                            @Html.ValidationMessageFor(m => m.UpgradeLicenseId)
+                            @Html.ValidationMessageFor(m => m.UpgradeLicenseId, Translation.Get("Uppgradering av") + requiredMessage)
                         </td>
                     </tr>
                 </table>
@@ -236,7 +241,7 @@
                         </td>
                         <td class="span9">
                             @Html.TextAreaFor(m => m.Info, Model.Info)
-                            @Html.ValidationMessageFor(m => m.Info)
+                            @Html.ValidationMessageFor(m => m.Info, Translation.Get("Kommentar") + requiredMessage)
                         </td>
                     </tr>
                 </table>

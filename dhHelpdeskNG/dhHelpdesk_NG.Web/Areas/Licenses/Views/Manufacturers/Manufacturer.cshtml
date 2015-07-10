@@ -19,6 +19,9 @@
         </li>
     </ul>    
 }
+@{    
+    var requiredMessage = " " + Translation.Get("måste anges");
+}
 
 @section Content {
     @using (Html.BeginForm("Manufacturer", "Manufacturers", FormMethod.Post, new { id = "edit_form" }))
@@ -33,7 +36,7 @@
                 </td>
                 <td class="span9">
                     @Html.TextBoxFor(m => m.ManufacturerName, Model.ManufacturerName)
-                    @Html.ValidationMessageFor(m => m.ManufacturerName)
+                    @Html.ValidationMessageFor(m => m.ManufacturerName, Translation.Get("Tillverkare") + requiredMessage)
                 </td>
             </tr>
         </table>                

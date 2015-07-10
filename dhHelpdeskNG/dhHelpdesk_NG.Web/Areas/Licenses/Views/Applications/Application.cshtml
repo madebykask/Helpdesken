@@ -20,6 +20,10 @@
     </ul>    
 }
 
+@{    
+    var requiredMessage = " " + Translation.Get("måste anges");
+}
+
 @section Content {
     @using (Html.BeginForm("Application", "Applications", FormMethod.Post, new { id = "edit_form" }))
     {
@@ -33,7 +37,7 @@
                 </td>
                 <td class="span9">
                     @Html.TextBoxFor(m => m.ApplicationName)
-                    @Html.ValidationMessageFor(m => m.ApplicationName)
+                    @Html.ValidationMessageFor(m => m.ApplicationName, Translation.Get("Applikation") + requiredMessage)
                 </td>
             </tr>
             <tr>
@@ -42,7 +46,7 @@
                 </td>
                 <td class="span9">
                     @Html.DropDownListFor(m => m.ProductId, Model.Products)
-                    @Html.ValidationMessageFor(m => m.ProductId)
+                    @Html.ValidationMessageFor(m => m.ProductId, Translation.Get("Produkt") + requiredMessage)
                 </td>
             </tr>
         </table>                
