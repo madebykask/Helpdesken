@@ -2240,6 +2240,8 @@
     <Content Include="Views\Cases\CaseByIdsContent.cshtml" />
     <Content Include="Views\Cases\AdvancedSearch\Index.cshtml" />
     <Content Include="Views\Cases\AdvancedSearch\_SearchOverview.cshtml" />
+    <Content Include="Views\Print\_CaseLogSection.cshtml" />
+    <Content Include="Views\Print\_CaseHistorySection.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
