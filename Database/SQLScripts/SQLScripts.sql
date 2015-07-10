@@ -90,5 +90,12 @@ GO
 
 update tblusers set DailyReportReminder = 0 where UserGroup_Id = 4
 
+IF COL_LENGTH('dbo.tblCase','RegUserName') IS NULL
+BEGIN	 
+	ALTER TABLE [dbo].[tblCase]
+	ADD [RegUserName] nvarchar(200) NULL 
+END
+GO 
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.10'
