@@ -24,8 +24,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DH.Helpdesk.Tests", "DH.Hel
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DH.Helpdesk.NewSelfService", "dhHelpdesk_NG.Web_NewSelfService\DH.Helpdesk.NewSelfService.csproj", "{9DBE7D20-DEE8-427C-9A68-FC338B1108FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DH.Helpdesk.Mobile", "dhHelpdesk_NG.Mobile\DH.Helpdesk.Mobile.csproj", "{C9A7E011-2AC1-4B43-9C99-39A58392AC26}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CommonAssembly", "CommonAssembly", "{398E5BA2-4379-4071-B6E2-F842E141E8F8}"
 	ProjectSection(SolutionItems) = preProject
 		CommonAssembly\SharedAssemblyInfo.cs = CommonAssembly\SharedAssemblyInfo.cs
@@ -130,16 +128,6 @@ Global
 		{9DBE7D20-DEE8-427C-9A68-FC338B1108FC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{9DBE7D20-DEE8-427C-9A68-FC338B1108FC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{9DBE7D20-DEE8-427C-9A68-FC338B1108FC}.Release|x86.ActiveCfg = Release|Any CPU
-		{C9A7E011-2AC1-4B43-9C99-39A58392AC26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C9A7E011-2AC1-4B43-9C99-39A58392AC26}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C9A7E011-2AC1-4B43-9C99-39A58392AC26}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{C9A7E011-2AC1-4B43-9C99-39A58392AC26}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{C9A7E011-2AC1-4B43-9C99-39A58392AC26}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{C9A7E011-2AC1-4B43-9C99-39A58392AC26}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C9A7E011-2AC1-4B43-9C99-39A58392AC26}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C9A7E011-2AC1-4B43-9C99-39A58392AC26}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{C9A7E011-2AC1-4B43-9C99-39A58392AC26}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{C9A7E011-2AC1-4B43-9C99-39A58392AC26}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
