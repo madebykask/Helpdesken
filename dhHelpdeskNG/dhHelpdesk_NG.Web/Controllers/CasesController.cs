@@ -422,13 +422,11 @@
                 SessionFacade.CurrentUser.UserGroupId,
                 SessionFacade.CurrentUser.RestrictedCasePermission,
                 sm.Search,
-                1,
-                23,
+                0,
+                0,
                 workTimeCalc,
-                ApplicationTypes.Helpdesk,
-                showRemainingTime,
-                out remainingTimeData).Take(maxRecords)
-                                      .ToList();
+                ApplicationTypes.Helpdesk                
+                ).Take(maxRecords).ToList();
 
             m.cases = this.TreeTranslate(m.cases, currentCustomerId);
             sm.Search.IdsForLastSearch = this.GetIdsFromSearchResult(m.cases);

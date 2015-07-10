@@ -27,10 +27,9 @@
             {
                 var productsRepository = uow.GetRepository<Product>();
                 var softwareRep = uow.GetRepository<Software>();
-                var computersRep = uow.GetRepository<Computer>();
-
+                var computersRep = uow.GetRepository<Computer>();                
                 var computers = computersRep.GetAll()
-                                    .GetByNullableCustomer(customerId);
+                                    .GetByNullableCustomer(customerId);                                                
 
                 var overviews = productsRepository.GetAll()
                                 .GetByCustomer(customerId)
