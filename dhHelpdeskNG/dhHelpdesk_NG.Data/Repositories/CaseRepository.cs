@@ -191,7 +191,6 @@ namespace DH.Helpdesk.Dal.Repositories
             if (cases != null)
             {
                 cases.FollowUpDate = time;
-                cases.ChangeTime = DateTime.UtcNow;
                 this.Update(cases);
                 this.Commit();
             }
