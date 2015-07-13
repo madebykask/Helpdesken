@@ -1,5 +1,7 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseSettingModel
 @using DH.Helpdesk.BusinessData.OldComponents
+@using DH.Helpdesk.Services.BusinessLogic.Mappers.Cases.Data
+@using DH.Helpdesk.Web.Models.Case
 <form id="frmCaseSetting" name="frmCaseSetting">
     <div class="tab-content overflow-visible">
         <div class="tab-pane tab-pane-border active" id="fragment-1">
@@ -57,6 +59,26 @@
                                             @foreach (var e in Model.Regions)
                                             {                                                                                                      
                                                 <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedRegion)>@e.Name</option>                                       
+                                            }
+                                        </select>
+                                    </td>                                                        
+                                </tr>
+                            }
+@*                            "Department" field *@
+                            @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Department_Id.ToString()) == 1) 
+                            { 
+                                <tr>
+                                    <td class="span3">                                        
+                                        @Translation.Get(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id):
+                                    </td>                            
+                                    <td>
+                                        @Html.CheckBoxFor(m => Model.IsDepartmentChecked, new { @class = "switchcheckbox" })                                   
+                                    </td>                            
+                                    <td colspan="2">
+                                        <select name="@CaseSettingModel.DepartmentsControlName" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                            @foreach (var e in Model.Departments)
+                                            {                                                                                                      
+                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedDepartments)>@e.DepartmentName</option>                                       
                                             }
                                         </select>
                                     </td>                                                        

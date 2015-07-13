@@ -2,12 +2,15 @@
 {
     using System;
 
+    using DH.Helpdesk.Domain;
+
     public class UserCaseSetting 
     {
         public UserCaseSetting(
                     int customerId, 
                     int userId, 
                     string region, 
+                    string department, 
                     string registeredBy, 
                     string caseType, 
                     string productArea, 
@@ -42,6 +45,7 @@
             this.CustomerId = customerId;
             this.UserId = userId;
             this.Region = region;
+            this.Departments = department;
             this.RegisteredBy = registeredBy;
             this.CaseType = caseType;
             this.ProductArea = productArea;
@@ -59,6 +63,8 @@
         public int UserId { get; private set; }
 
         public string Region { get; private set; }
+
+        public string Departments { get; private set; }
 
         public string RegisteredBy { get; private set; }
 

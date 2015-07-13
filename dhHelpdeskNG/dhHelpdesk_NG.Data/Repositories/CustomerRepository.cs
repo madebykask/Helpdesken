@@ -217,6 +217,9 @@ using System;
             if (userSettingEntity != null)
             {
                 userSettingEntity.CaseRegionFilter = (newSetting.Region == string.Empty) ? null : newSetting.Region;
+                userSettingEntity.CaseDepartmentFilter = (newSetting.Departments == string.Empty)
+                                                             ? null
+                                                             : newSetting.Departments;
                 userSettingEntity.CaseUserFilter = (newSetting.RegisteredBy == string.Empty)
                     ? null
                     : newSetting.RegisteredBy;

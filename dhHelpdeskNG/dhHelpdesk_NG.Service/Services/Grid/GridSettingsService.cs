@@ -145,11 +145,13 @@
         /// <param name="userGroupId"></param>
         public void SaveCaseoviewSettings(GridSettingsModel inputModel, int customerId, int userId, int userGroupId)
         {
+            var oldModel = this.GetForCustomerUserGrid(customerId, userGroupId, userId, CASE_OVERVIEW_GRID_ID);
+
             //// in case when we have "Case overview" grid we should save settings into different talbes
             using (IUnitOfWork uow = this.unitOfWorkFactory.Create())
             {
                 var repository = uow.GetRepository<GridSettingsEntity>();
-                repository.DeleteWhere(it => it.CustomerId == customerId && it.UserId == userId && it.GridId == CASE_OVERVIEW_GRID_ID);
+                repository.DeleteWhere(it => it.CustomerId == customerId && it.UserId == userId && it.GridId == CASE_OVERVIEW_GRID_ID && it.Parameter == GRID_CLS_KEY);
                 /// add class of the grid
                 repository.Add(new GridSettingsEntity
                                         {
@@ -173,11 +175,18 @@
                                 Value = inputModel.pageOptions.recPerPage.ToString()
                             });
                 }
+                
                 //// sortBy and sortOrder
-                if (inputModel.sortOptions != null && IsSortFieldAvailable(inputModel.sortOptions.sortBy, inputModel.columnDefs))
+                if (inputModel.sortOptions != null || !IsSortFieldAvailable(oldModel.sortOptions.sortBy, inputModel.columnDefs))
                 {
-                    repository.DeleteWhere(it => it.CustomerId == customerId && it.UserId == userId && it.GridId == CASE_OVERVIEW_GRID_ID 
+                    repository.DeleteWhere(it => it.CustomerId == customerId 
+                        && it.UserId == userId 
+                        && it.GridId == CASE_OVERVIEW_GRID_ID
                         && (it.Parameter == SORT_BY_KEY || it.Parameter == SORT_DIR_KEY));
+                }
+
+                if (inputModel.sortOptions != null)
+                {
                     repository.Add(
                         new GridSettingsEntity
                             {

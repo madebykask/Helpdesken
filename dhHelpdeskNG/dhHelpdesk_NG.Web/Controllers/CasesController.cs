@@ -785,15 +785,26 @@
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseRegionFilter))
                 fd.filterRegion = this._regionService.GetRegions(cusId);
 
-            // avdelningar per användare, är den tom så visa alla som kopplade till kunden
-            fd.filterDepartment = this._departmentService.GetDepartmentsByUserPermissions(userId, cusId);
-            if (!fd.filterDepartment.Any())
+            if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseDepartmentFilter))
             {
-                fd.filterDepartment = this._departmentService.GetDepartments(cusId)
-                                                                .Where(d => d.Region_Id == null || (d.Region != null && d.Region.IsActive != 0))
-                                                                .ToList();
+                const bool IsTakeOnlyActive = false;
+                fd.filterDepartment = this._departmentService.GetDepartmentsByUserPermissions(
+                    userId,
+                    cusId,
+                    IsTakeOnlyActive);
+                if (!fd.filterDepartment.Any())
+                {
+                    fd.filterDepartment =
+                        this._departmentService.GetDepartments(cusId)
+                            .Where(
+                                d =>
+                                d.Region_Id == null
+                                || IsTakeOnlyActive == false 
+                                || (IsTakeOnlyActive && d.Region != null && d.Region.IsActive != 0))
+                            .ToList();
+                }
             }
-        
+
             //ärendetyp
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseCaseTypeFilter))
                 fd.filterCaseType = this._caseTypeService.GetCaseTypes(cusId);
@@ -1694,6 +1705,11 @@
                 ? ((frm.ReturnFormValue("lstRegions") == string.Empty) ? "0" : frm.ReturnFormValue("lstRegions"))
                 : string.Empty;
 
+            bool departmentsCheck = frm.IsFormValueTrue("IsDepartmentChecked");
+            var departments = departmentsCheck
+                 ? ((frm.ReturnFormValue(CaseSettingModel.DepartmentsControlName) == string.Empty) ? "0" : frm.ReturnFormValue(CaseSettingModel.DepartmentsControlName))
+                : string.Empty;
+
             bool registerByCheck = frm.IsFormValueTrue("RegisteredByCheck");
             var registerBy = (registerByCheck)
                 ? ((frm.ReturnFormValue("lstRegisterBy") == string.Empty) ? "0" : frm.ReturnFormValue("lstRegisterBy"))
@@ -1744,6 +1760,7 @@
                             customerId,
                             userId,
                             regions,
+                            departments,
                             registerBy,
                             caseType,
                             productArea,
@@ -2264,6 +2281,7 @@
             f.Priority = cu.CasePriorityFilter.ReturnCustomerUserValue();
             f.ProductArea = cu.CaseProductAreaFilter.ReturnCustomerUserValue();
             f.Region = cu.CaseRegionFilter.ReturnCustomerUserValue();
+            f.Department = cu.CaseDepartmentFilter.ReturnCustomerUserValue();
             f.StateSecondary = cu.CaseStateSecondaryFilter.ReturnCustomerUserValue();
             f.Status = cu.CaseStatusFilter.ReturnCustomerUserValue();
             f.User = cu.CaseUserFilter.ReturnCustomerUserValue();
@@ -3065,10 +3083,15 @@
 
             var userCaseSettings = _customerUserService.GetUserCaseSettings(customerId, userId);
 
-            var regions = _regionService.GetRegions(customerId);
-            ret.RegionCheck = (userCaseSettings.Region != string.Empty);
+            var regions = this._regionService.GetRegions(customerId);
+            ret.RegionCheck = userCaseSettings.Region != string.Empty;
             ret.Regions = regions;
             ret.SelectedRegion = userCaseSettings.Region;
+
+            var departments = this._departmentService.GetDepartments(customerId, ActivationStatus.All);
+            ret.IsDepartmentChecked = userCaseSettings.Departments != string.Empty;
+            ret.Departments = departments;
+            ret.SelectedDepartments = userCaseSettings.Departments;
 
             var customerSettings = this._settingService.GetCustomerSetting(customerId);
             ret.RegisteredByCheck = userCaseSettings.RegisteredBy != string.Empty;

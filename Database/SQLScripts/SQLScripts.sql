@@ -116,5 +116,13 @@ GO
   SET IDENTITY_INSERT tblModule OFF
 
   Go
+
+-- https://redmine.fastdev.se/issues/13442
+IF COL_LENGTH('dbo.tblCustomerUser','CaseDepartmentFilter') IS NULL
+BEGIN
+	ALTER TABLE [dbo].[tblCustomerUser] add [CaseDepartmentFilter] [nvarchar](50) NULL;
+END
+	
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.11'
