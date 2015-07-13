@@ -5,6 +5,7 @@
     using System.Web.Mvc;
     using System.Web.UI;
 
+    using DH.Helpdesk.BusinessData.Models.MailTemplates;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.MailTemplates;
     using DH.Helpdesk.Services.Services;
@@ -66,14 +67,13 @@
 
             var existingmailId = this._mailTemplateService.GetNewMailTemplateMailId();
 
-            if (existingmailId > 99)
+            if (existingmailId > MailTemplate.UserTemplatesMinID)
             {
-                mailTemplate = new MailTemplateEntity
-                {                    
-                    MailID = existingmailId + 1,
-                    Customer_Id = customer.Id,
-
-                };
+                mailTemplate = new MailTemplateEntity { MailID = existingmailId + 1, Customer_Id = customer.Id, };
+            }
+            else
+            {
+                mailTemplate = new MailTemplateEntity { MailID = MailTemplate.UserTemplatesMinID, Customer_Id = customer.Id, };
             }
 
             var mailTemplateLanguage = new MailTemplateLanguageEntity() { Language_Id = customer.Language_Id, MailTemplate = mailTemplate };
