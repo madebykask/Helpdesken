@@ -2781,13 +2781,18 @@
                             }
                             else
                             {
-                                if (m.case_.Department_Id.HasValue)
+                                if (m.case_.Department_Id.HasValue && m.case_.Priority_Id.HasValue)
                                 {
                                     var dept = this._departmentService.GetDepartment(m.case_.Department_Id.Value);
-                                    m.case_.WatchDate =
+                                    var priority =
+                                        m.priorities.Where(it => it.Id == m.case_.Priority_Id && it.IsActive == 1).FirstOrDefault();
+                                    if (dept != null && priority != null && priority.SolutionTime == 0)
+                                    {
+                                        m.case_.WatchDate =
                                         this.watchDateCalendarServcie.GetClosestDateTo(
                                                 dept.WatchDateCalendar_Id.Value, 
                                                 DateTime.UtcNow);
+                                    }
                                 }
                             }
 

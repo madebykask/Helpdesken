@@ -122,11 +122,14 @@ $(function () {
 
         /// controls binding
         me.$form = $('#target');
-        me.$departments = $('.departments-list');
+        me.$watchDateChangers = $('.departments-list, #case__Priority_Id');
+        me.$department = $('.departments-list');
+        me.$SLASelect = $('#case__Priority_Id');
+        me.$SLAInput = $('input.sla-value');
         me.$watchDate = $('#divCase__WatchDate');
         me.$buttonsToDisable = $('.btn.save, .btn.save-close, .btn.save-new');
 
-        /// events binding
+        ///////////////////////     events binding      /////////////////////////////////
         $('.btn.save').on('click', function() {
             return me.onSaveClick.call(me);
         });
@@ -138,10 +141,17 @@ $(function () {
         $('.btn.save-new').on('click', function() {
             return me.onSaveAndNewClick.call(me);
         });
+        
+        
 
-        me.$departments.on('change', function (ev) {
-            var deptId = parseInt(ev.target.value, 10);
-            if (!isNaN(deptId)) {
+        me.$watchDateChangers.on('change', function () {
+            var deptId = parseInt(me.$department.val(), 10);
+            var SLA = parseInt(me.$SLASelect.find('option:selected').attr('data-sla'), 10);
+            if (isNaN(SLA)) {
+                SLA = parseInt(me.$SLAInput.attr('data-sla'), 10);
+            }
+            
+            if (!isNaN(deptId) && (!isNaN(SLA) && SLA === 0)) {
                 return me.fetchWatchDateByDept.call(me, deptId);
             }
 
