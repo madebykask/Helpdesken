@@ -1141,11 +1141,29 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                     sb.Append("<li>");
 
                 if (f.IsRootTemplate)
-                    sb.Append("<a href='cases/new/?customerId=" + customerId.ToString() + "&templateId=" + f.CategoryId.ToString() + "&templateistrue=1" + "' value=" + f.CategoryId.ToString() + ">" +
-                           Translation.Get(f.CategoryName, Enums.TranslationSource.TextTranslation) + "</a>");
+                {
+                    sb.AppendFormat(
+                        "<a href='cases/new/?customerId={0}&templateId={1}&templateistrue=1' value={1}>{2}</a>",
+                        customerId,
+                        f.CategoryId,
+                        Translation.Get(f.CategoryName));
+                }
                 else
-                    sb.Append("<a href='#' value=" + f.CategoryId.ToString() + ">" +
-                           Translation.Get(f.CategoryName, Enums.TranslationSource.TextTranslation) + "</a>");
+                {
+                    // separator
+                    if (f.CategoryId == 0)
+                    {
+                        sb.AppendFormat("<li class='divider'></li>");
+                    }
+                    else
+                    {
+                        sb.AppendFormat(
+                       "<a href='cases/new/?customerId={0}&templateId={1}&templateistrue=1' value={1}>{2}</a>",
+                       customerId,
+                       f.CategoryId,
+                       Translation.Get(f.CategoryName));
+                    }
+                }
 
                 if (hasChild)
                 {
@@ -1153,8 +1171,8 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                     sb.Append(BuildCaseSolutionDropdownButton(f.CaseTemplates.ToList(), customerId));
                     sb.Append("</ul>");
                 }
-                sb.Append("</li>");
 
+                sb.Append("</li>");
             }
 
             return new MvcHtmlString(sb.ToString());
