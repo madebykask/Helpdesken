@@ -308,7 +308,7 @@
                                                     {
                                                         var curDep = Model.departments.Where(d => d.Id == Model.case_.Department_Id).SingleOrDefault();
                                                         @Html.TextBoxFor(m => curDep.DepartmentName, new { id = "DepartmentName", @readonly = true })
-                                                        @Html.HiddenFor(m => Model.case_.Department_Id) 
+                                                        @Html.HiddenFor(m => Model.case_.Department_Id, new {@class="departments-list"}) 
                                                     }
                                                     else
                                                     {                                                        

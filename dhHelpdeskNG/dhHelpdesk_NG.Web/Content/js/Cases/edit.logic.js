@@ -141,8 +141,6 @@ $(function () {
         $('.btn.save-new').on('click', function() {
             return me.onSaveAndNewClick.call(me);
         });
-        
-        
 
         me.$watchDateChangers.on('change', function () {
             var deptId = parseInt(me.$department.val(), 10);
@@ -153,6 +151,8 @@ $(function () {
             
             if (!isNaN(deptId) && (!isNaN(SLA) && SLA === 0)) {
                 return me.fetchWatchDateByDept.call(me, deptId);
+            } else {
+                me.$watchDate.datepicker('update', '');
             }
 
             return false;
@@ -176,9 +176,14 @@ $(function () {
             '/cases/GetWatchDateByDepartment', 
             { 'departmentId': deptId },
             function(response) {
-                if (response.result === 'success' && response.data != null) {
-                    var dt = new Date(parseInt(response.data.replace("/Date(", "").replace(")/",""), 10));
-                    me.$watchDate.datepicker('update', dt);
+                if (response.result === 'success') {
+                    if (response.data != null) {
+                        var dt = new Date(parseInt(response.data.replace("/Date(", "").replace(")/", ""), 10));
+                        me.$watchDate.datepicker('update', dt);
+                    } else {
+                        me.$watchDate.datepicker('update', '');
+                    }
+                    
                 }
             });
     };
