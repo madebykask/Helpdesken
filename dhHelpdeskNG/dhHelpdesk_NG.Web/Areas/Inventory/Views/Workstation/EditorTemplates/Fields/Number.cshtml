@@ -1,10 +1,14 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Computer.ConfigurableFieldModel<int>
 @if (!Model.Show)
 {
     return;
 }
 
+@{
+    var validationMessage = string.Format(" {0} {1}", Html.PureFieldCaption(Model), Translation.Get("måste anges"));
+}
 <tr>
     <td class="span3">
         @Html.FieldCaption(Model)
@@ -14,7 +18,7 @@
         {
             @Html.TextBoxFor(m => m.Value, new Dictionary<string, object> { { "data-dh-is-required", Model.IsRequired } })
             @Html.HiddenFor(m => m.IsRequired)
-            @Html.ValidationMessageFor(m => m.Value)
+            @Html.ValidationMessageFor(m => m.Value, validationMessage)
         }
         else
         {

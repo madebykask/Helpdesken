@@ -24,7 +24,7 @@
         }
 
         [NotNull]
-        [LocalizedDisplay("Created Date")]
+        [LocalizedDisplay("Skapad datum")]
         public FieldSettingModel CreatedDateFieldSettingModel { get; set; }
 
         [LocalizedDisplay("Changed Date")]

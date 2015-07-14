@@ -83,8 +83,9 @@
                     }
                     else
                     {
+                        var userName = string.Format("{0} {1} ({2})", Model.CaseLock.User.FirstName, Model.CaseLock.User.SurName, Model.CaseLock.User.UserID);
                         <li class="notice">
-                            <a>@Translation.Get("OBS! Detta ärende är öppnat av")&nbsp; @Model.CaseLock.User.UserID</a>
+                            <a>@Translation.Get("OBS! Detta ärende är öppnat av")&nbsp; @userName</a>
                         </li>
                     }
                 }
