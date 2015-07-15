@@ -7,7 +7,7 @@
         @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
     </div>    
 }
-<div class="content">
+<div class="bulletinboard content">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
             <li class="active"><a href="#fragment-1">@Translation.Get("Anslagstavla", Enums.TranslationSource.TextTranslation)</a></li>
@@ -104,22 +104,23 @@
         </div>
     </div>
 </div>
-<script type="text/javascript">
 
-    $(function () {
+<script type="text/javascript">
+    $(document).ready(function() {
         if ($("#chkSecurity").is(":checked"))
             $("#securityOptions").show();
-
-        $("#chkSecurity").click(function () {
-            $("#securityOptions").toggle();
-        });
     });
 
-    function submitForm() {
+    $('.btn.save').on('click', function () {
         $("#WGsSelected option").attr("selected", "selected");
         $("#target").submit();
-    }
+        return false;
+    });
 
+    $("#chkSecurity").click(function () {
+        $("#securityOptions").toggle();
+    });
+   
     $("#addWGs").click(function () {
         $("#WGsAvailable option:selected").remove().appendTo("#WGsSelected");
         $("#WGsAvailable").get(0).selectedIndex = -1;
@@ -134,35 +135,40 @@
         return false;
     });
 
-
     $("#LimitWGs").change(function () {
         if ($("#LimitWGs").attr("checked")) {
             $("#WGsAvailable").attr("disabled", false);
             $("#WGsSelected").attr("disabled", false);
-        }
-        else {
+        } else {
             $("#WGsSelected option").remove().appendTo("#WGsAvailable");
             $("#WGsAvailable").attr("disabled", true);
             $("#WGsSelected").attr("disabled", true);
         }
     });
 
-    $(function () {
-        if ($("#WGsSelected option").length > 0) {
-            $("#LimitWGs").attr("checked", true)
-            $("#WGsAvailable").attr("disabled", false);
-            $("#WGsSelected").attr("disabled", false);
-        }
-        else {
-            $("#WGsAvailable").attr("disabled", true);
-            $("#WGsSelected").attr("disabled", true);
-        }
+    if ($("#WGsSelected option").length > 0) {
+        $("#LimitWGs").attr("checked", true)
+        $("#WGsAvailable").attr("disabled", false);
+        $("#WGsSelected").attr("disabled", false);
+    } else {
+        $("#WGsAvailable").attr("disabled", true);
+        $("#WGsSelected").attr("disabled", true);
+    }
 
-        
-        var validator = $("#target").validate({
+    var validator = $("#target")
+        .submit(function() {
+            // update underlying textarea before submit validation
+            tinyMCE.triggerSave();
+        })
+        .validate({
+            ignore: "",
             rules: {
-                "BulletinBoard.Text": {
-                    required: true
+                "BulletinBoard.Text": 'required',
+                "BulletinBoard.ShowDate": {
+                    date: true
+                },
+                "BulletinBoard.ShowUntilDate": {
+                    date: true
                 }
             },
             messages: {
@@ -170,13 +176,32 @@
                     required: "@Translation.Get("Du måste ange en anslagstavla", Enums.TranslationSource.TextTranslation)"
                 }
             },
+            errorPlacement: function (error, element) {
+                if (element.is("textarea")) {
+                    element.parent().prepend(error);
+                } else if (element.parent().hasClass('date')) {
+                    element.parent().append(error);
+                } else {
+                    error.insertAfter(element);
+                }
+            },
             submitHandler: function (form) {
                 form.submit();
             }
         });
-    });
-
-
-
-
+    validator.focusInvalid = function() {
+        // put focus on tinymce on submit validation
+        if (this.settings.focusInvalid) {
+            try {
+                var toFocus = $(this.findLastActive() || this.errorList.length && this.errorList[0].element || []);
+                if (toFocus.is("textarea")) {
+                    tinyMCE.get(toFocus.attr("id")).focus();
+                } else {
+                    toFocus.filter(":visible").focus();
+                }
+            } catch (e) {
+                // ignore IE throwing errors when focusing hidden elements
+            }
+        }
+    };
 </script>

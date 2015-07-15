@@ -36,14 +36,17 @@
             bundles.Add(new ScriptBundle("~/bundles/common").Include(
 #if DEBUG
                             "~/Scripts/jquery-1.8.3.js",
+                            "~/Content/js/jquery.unobtrusive-ajax.min.js",
+                            "~/Content/js/jquery.validate.js",
 #else
                             "~/Scripts/jquery-1.8.3.min.js",
-#endif
                             "~/Content/js/jquery.unobtrusive-ajax.min.js",
                             "~/Content/js/jquery.validate.min.js",
-                            "~/Content/js/jquery.validate.unobtrusive.min.js",
+#endif
+                "~/Content/js/jquery.unobtrusive-ajax.min.js",
+                "~/Content/js/jquery.validate.unobtrusive.min.js",
 #if DEBUG
-                            "~/Scripts/jquery-ui-1.9.2.js",
+ "~/Scripts/jquery-ui-1.9.2.js",
                             "~/Content/js/chosen.jquery.js",
 #else
                             "~/Scripts/jquery-ui-1.9.2.min.js",

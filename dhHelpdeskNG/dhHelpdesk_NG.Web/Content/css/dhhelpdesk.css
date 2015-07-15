@@ -1042,6 +1042,12 @@ input[type=text].error, select.error, textarea.error,  .btn-group.error .btn
     color: #ff0000 !important;
 }
 
+.date label.error 
+{
+    display: inline;
+    line-height: 30px;
+}
+
 /*******************************************************************************************/
 .navbar-inner
 {
