@@ -21,26 +21,36 @@
         public static ProductOverview[] MapToOverviews(
                                 this IQueryable<Product> query, 
                                 IQueryable<Software> software,
-                                IQueryable<Computer> computers)
+                                IQueryable<Computer> computers,
+                                int[] regionsFilter, int[] departmentsFilter)
         {           
 
             var entities = query.Select(p => new
                         {
                             ProductId = p.Id,
                             ProductName = p.Name,
-                            Regions = p.Licenses.Select(l => l.Region.Name).Distinct(),
-                            Departments = p.Licenses.Select(l => new { Id = l.Department.Id, Name = l.Department.DepartmentName }).Distinct(),
-                            LicencesNumber = p.Licenses.GroupBy(ls => ls.Department_Id != null ? ls.Department_Id : 0)
-                                                        .Select(l => new
-                                                        {
-                                                            DepartmentId = l.Key,                                                                                   
-                                                            LicensesCount = l.Sum(nl => nl.NumberOfLicenses)
-                                                        }).ToList(),
+                            Regions = p.Licenses.Where(l=> (departmentsFilter.Any()? departmentsFilter.Contains(l.Department_Id.Value):true))
+                                                .Select(l => l.Region.Name)
+                                                .Distinct(),
+
+                            Departments = p.Licenses.Where(l => (departmentsFilter.Any() ? departmentsFilter.Contains(l.Department_Id.Value) : true))
+                                                    .Select(l => new { Id = l.Department.Id, Name = l.Department.DepartmentName })
+                                                    .Distinct(),
+
+                            LicencesNumber = p.Licenses.Where(l => (departmentsFilter.Any() ? departmentsFilter.Contains(l.Department_Id.Value) : true))
+                                                       .GroupBy(ls => ls.Department_Id != null ? ls.Department_Id : 0)
+                                                       .Select(l => new
+                                                            {
+                                                                DepartmentId = l.Key,                                                                                   
+                                                                LicensesCount = l.Sum(nl => nl.NumberOfLicenses)
+                                                            })
+                                                       .ToList(),
                            
                             UsedLicencesNumber = computers.Select(c => new { DepartmentId = (c.User.Department_Id != null) ? c.User.Department_Id.Value : 0, 
                                                                              DepartmentName = c.User.Department.DepartmentName, 
                                                                              ComputerId = c.Id  
                                                                            })
+                                                          .Where(c => (departmentsFilter.Any() ? departmentsFilter.Contains(c.DepartmentId) : true))
                                                           .Where(c => software.Where(s => p.Applications.Select(a => a.Name).Contains(s.Name))
                                                                               .Select(s=> s.Computer_Id)
                                                                               .Contains(c.ComputerId))

@@ -30,12 +30,13 @@
                 var computersRep = uow.GetRepository<Computer>();                
                 var computers = computersRep.GetAll()
                                     .GetByNullableCustomer(customerId);                                                
+                var softwares = softwareRep.GetAll();
 
                 var overviews = productsRepository.GetAll()
                                 .GetByCustomer(customerId)
                                 .GetRegionsProducts(regions)
-                                .GetDepartmentsProducts(departments)
-                                .MapToOverviews(softwareRep.GetAll(), computers);
+                                .GetDepartmentsProducts(departments, softwares, computers)
+                                .MapToOverviews(softwares, computers, regions, departments);
 
                 return overviews;
             }
