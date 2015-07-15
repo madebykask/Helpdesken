@@ -4244,6 +4244,7 @@ If not exists (select * from tblTextTranslation where text_id = 1512 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1512, 2, 'Your search returned no matching results.')
 GO
 
+--2015-07-15
 -----------------------
 If not exists (select * from tbltext where id = 1513)
 	insert into tbltext (id, TextString) VALUES (1513, 'Streckkod')
@@ -4350,6 +4351,12 @@ If not exists (select * from tblTextTranslation where text_id = 1527 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1527, 2, 'Synchronization Date')
 GO
 
+If not exists (select * from tbltext where id = 1528)
+	insert into tbltext (id, TextString) VALUES (1528, 'Användare ID')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1528 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1528, 2, 'User ID')
+GO
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
