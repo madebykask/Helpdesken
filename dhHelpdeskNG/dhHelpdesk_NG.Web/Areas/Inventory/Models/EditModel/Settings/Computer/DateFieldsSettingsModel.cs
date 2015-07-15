@@ -27,16 +27,16 @@
         [LocalizedDisplay("Skapad datum")]
         public FieldSettingModel CreatedDateFieldSettingModel { get; set; }
 
-        [LocalizedDisplay("Changed Date")]
+        [LocalizedDisplay("Senast ändrad datum")]
         public FieldSettingModel ChangedDateFieldSettingModel { get; set; }
 
-        [LocalizedDisplay("Synchronize Changed Date")]
+        [LocalizedDisplay("Synkroniseringsdatum")]
         public FieldSettingModel SyncChangedDateSettingModel { get; set; }
 
-        [LocalizedDisplay("Scan Date")]
+        [LocalizedDisplay("Scanningsdatum")]
         public FieldSettingModel ScanDateFieldSettingModel { get; set; }
 
-        [LocalizedDisplay("Path Directory")]
+        [LocalizedDisplay("Sökväg katalog")]
         public FieldSettingModel PathDirectoryFieldSettingModel { get; set; }
     }
 }

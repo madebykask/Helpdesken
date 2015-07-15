@@ -24,15 +24,15 @@
         }
 
         [NotNull]
-        [LocalizedDisplay("Network Adapter")]
+        [LocalizedDisplay("Nätverkskort")]
         public FieldSettingModel NetworkAdapterFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("IP Address")]
+        [LocalizedDisplay("IP adress")]
         public FieldSettingModel IPAddressFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Mac Address")]
+        [LocalizedDisplay("MAC adress")]
         public FieldSettingModel MacAddressFieldSettingModel { get; set; }
 
         [NotNull]
@@ -40,7 +40,7 @@
         public FieldSettingModel RASFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Novell Client")]
+        [LocalizedDisplay("Novellklient")]
         public FieldSettingModel NovellClientFieldSettingModel { get; set; }
     }
 }

@@ -15,7 +15,7 @@
         }
 
         [NotNull]
-        [LocalizedDisplay("Video Card")]
+        [LocalizedDisplay("Grafikkort")]
         public FieldSettingModel VideoCardFieldSettingModel { get; set; }
     }
 }

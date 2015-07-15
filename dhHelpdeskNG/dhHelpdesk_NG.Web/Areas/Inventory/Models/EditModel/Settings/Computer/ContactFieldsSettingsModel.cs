@@ -20,15 +20,15 @@
         }
 
         [NotNull]
-        [LocalizedDisplay("Name")]
+        [LocalizedDisplay("Namn")]
         public FieldSettingModel NameFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Phone")]
+        [LocalizedDisplay("Telefon")]
         public FieldSettingModel PhoneFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Email")]
+        [LocalizedDisplay("E-post")]
         public FieldSettingModel EmailFieldSettingModel { get; set; }
     }
 }

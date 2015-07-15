@@ -24,11 +24,11 @@
         public FieldSettingModel DepartmentFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Domain")]
+        [LocalizedDisplay("Domän")]
         public FieldSettingModel DomainFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Unit")]
+        [LocalizedDisplay("Enhet")]
         public FieldSettingModel UnitFieldSettingModel { get; set; }
     }
 }

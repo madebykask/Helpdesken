@@ -15,7 +15,7 @@
         }
 
         [NotNull]
-        [LocalizedDisplay("Sound Card")]
+        [LocalizedDisplay("Ljudkort")]
         public FieldSettingModel SoundCardFieldSettingModel { get; set; }
     }
 }

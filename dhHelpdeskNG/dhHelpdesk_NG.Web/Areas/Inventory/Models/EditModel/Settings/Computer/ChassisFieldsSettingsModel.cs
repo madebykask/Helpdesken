@@ -15,7 +15,7 @@
         }
 
         [NotNull]
-        [LocalizedDisplay("Chassis")]
+        [LocalizedDisplay("Chassi")]
         public FieldSettingModel ChassisFieldSettingModel { get; set; }
     }
 }

@@ -36,47 +36,47 @@
         }
 
         [NotNull]
-        [LocalizedDisplay("Contract Status")]
+        [LocalizedDisplay("Avtalsstatus")]
         public FieldSettingModel ContractStatusFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Contract Number")]
+        [LocalizedDisplay("Avtalsnummer")]
         public FieldSettingModel ContractNumberFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Contract Start Date")]
+        [LocalizedDisplay("Avtalsstart")]
         public FieldSettingModel ContractStartDateFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Contract End Date")]
+        [LocalizedDisplay("Avtalsslut")]
         public FieldSettingModel ContractEndDateFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Purchase Price")]
+        [LocalizedDisplay("Inköpspris")]
         public FieldSettingModel PurchasePriceFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Accounting Dimension1")]
+        [LocalizedDisplay("Kontodimension 1")]
         public FieldSettingModel AccountingDimension1FieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Accounting Dimension2")]
+        [LocalizedDisplay("Kontodimension 2")]
         public FieldSettingModel AccountingDimension2FieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Accounting Dimension3")]
+        [LocalizedDisplay("Kontodimension 3")]
         public FieldSettingModel AccountingDimension3FieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Accounting Dimension4")]
+        [LocalizedDisplay("Kontodimension 4")]
         public FieldSettingModel AccountingDimension4FieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Accounting Dimension5")]
+        [LocalizedDisplay("Kontodimension 5")]
         public FieldSettingModel AccountingDimension5FieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Documents")]
+        [LocalizedDisplay("Dokument")]
         public FieldSettingModel DocumentsFieldSettingModel { get; set; }
     }
 }
