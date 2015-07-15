@@ -2039,7 +2039,7 @@ td.td-bottom-multiselect .btn-group {
 
 /************************MISC********************************************/
 
-h4
+h4:not(.alert-header)
 	{
 		font-size: 14px;
 		font-weight: bold;

@@ -1,4 +1,5 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
+﻿@using System.Web.Optimization
+@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Admin.Models.MailTemplateInputViewModel
 @{              
     ViewBag.Title = "Edit";
@@ -58,6 +59,7 @@
         </span>
     </div>
 }
+@Scripts.Render("~/bundles/admin/_input")
 @section Scripts {
     <script type="text/javascript">
         changeLanguageList('@SessionFacade.CurrentLanguageId');

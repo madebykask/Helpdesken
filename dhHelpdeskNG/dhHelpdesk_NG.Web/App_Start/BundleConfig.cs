@@ -247,6 +247,8 @@
 
             bundles.Add(new ScriptBundle("~/bundles/cases/caseByIds").Include(
                             "~/Content/js/Cases/caseByIds.logic.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/admin/_input").Include("~/Areas/Admin/Content/js/Mailtemplate/_input.js"));
             #endregion
         }
     }
