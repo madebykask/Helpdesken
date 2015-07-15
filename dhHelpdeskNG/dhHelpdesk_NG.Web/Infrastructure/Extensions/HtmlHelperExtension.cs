@@ -8,6 +8,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
     using System.Web.Mvc;
     using System.Web.Routing;
 
+    using DH.Helpdesk.BusinessData.Enums.Users;
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.BusinessData.Models.CaseType;
@@ -925,7 +926,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 
             if (userGroupDictionary == null)
             {
-                userGroupDictionary = user.UserWorkingGroups.ToDictionary(it => it.WorkingGroup_Id, it => true);
+                userGroupDictionary = user.UserWorkingGroups.Where(it => it.UserRole == WorkingGroupUserPermission.ADMINSTRATOR).ToDictionary(it => it.WorkingGroup_Id, it => true);
             }
 
             foreach (ProductArea pa in pal)

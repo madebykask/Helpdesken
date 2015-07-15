@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Enums.Users;
     using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
     using DH.Helpdesk.BusinessData.Models.User.Input;
     using DH.Helpdesk.Dal.NewInfrastructure;
@@ -138,7 +139,7 @@
 
             if (user.UserGroupId < (int)UserGroup.CustomerAdministrator)
             {
-                var groupsMap = user.UserWorkingGroups.ToDictionary(it => it.WorkingGroup_Id, it => true);
+                var groupsMap = user.UserWorkingGroups.Where(it => it.UserRole == WorkingGroupUserPermission.ADMINSTRATOR).ToDictionary(it => it.WorkingGroup_Id, it => true);
                 res = res.Where(
                     it => it.WorkingGroups.Count == 0 || it.WorkingGroups.Any(productAreaWorkingGroup => groupsMap.ContainsKey(productAreaWorkingGroup.Id)));
             }
