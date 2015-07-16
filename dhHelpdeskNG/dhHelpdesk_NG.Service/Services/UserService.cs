@@ -298,19 +298,7 @@
 
         public IList<UserLists> GetUserOnCases(int customerId)
         {
-            using (var uow = this.unitOfWorkFactory.Create())
-            {
-                var caseRepository = uow.GetRepository<Case>();
-
-                var query = from u in this._userRepository.GetAll()
-                            join ca in caseRepository.GetAll() on u.Id equals ca.User_Id
-                            where (ca.Customer_Id == customerId)
-                            group u by new { u.Id, u.FirstName, u.SurName }
-                            into g
-                            select
-                                new UserLists { Id = g.Key.Id, FirstName = g.Key.FirstName, LastName = g.Key.SurName };
-                return query.ToList();
-            }
+            return this._userRepository.GetUserOnCases(customerId);
         }
 
         public IList<User> GetUsers()

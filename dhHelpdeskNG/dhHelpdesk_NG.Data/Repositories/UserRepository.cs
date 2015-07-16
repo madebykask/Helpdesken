@@ -42,6 +42,9 @@ namespace DH.Helpdesk.Dal.Repositories
         IList<User> GetUsersForUserSettingList(UserSearch searchUser);
         UserOverview Login(string uId, string pwd);
         UserOverview GetUser(int userid);
+
+        IList<UserLists> GetUserOnCases(int customerId);
+
         UserOverview GetUserByLogin(string IdName);
 
         UserName GetUserName(int userId);
@@ -338,7 +341,18 @@ namespace DH.Helpdesk.Dal.Repositories
             var user = this.GetUser(x => x.Id == userid);
             return user;
         }
-        
+
+        public IList<UserLists> GetUserOnCases(int customerId)
+        {
+            var query = from u in this.DataContext.Users
+                        join ca in this.DataContext.Cases on u.Id equals ca.User_Id
+                        where (ca.Customer_Id == customerId)
+                        group u by new { u.Id, u.FirstName, u.SurName } into g
+                        select new UserLists { Id = g.Key.Id, FirstName = g.Key.FirstName, LastName = g.Key.SurName };
+
+            return query.ToList();
+        }
+
         public UserOverview GetUserByLogin(string IdName)
         {
             var user = this.GetUser(x => x.UserID == IdName && x.IsActive == 1);
