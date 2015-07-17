@@ -13,8 +13,7 @@
     @Scripts.Render("~/bundles/common/login")
     <title>@ViewBag.Title</title>
 </head>
-<body class="login">
-    
+<body class="login" onload="catchTime()">
     <div class="form-signin">
         @using (Html.BeginForm("Login", "Login", null, FormMethod.Post, new { id = "frmLogin", name = "frmLogin" }))
         {
@@ -40,8 +39,8 @@
                 </select>
                 -->
             <br />
-            <input type="hidden" name="timeZoneOffsetInJan1"/>
-            <input type="hidden" name="timeZoneOffsetInJul1"/>
+            <input type="hidden" id="timeZoneOffsetInJan1" name="timeZoneOffsetInJan1"/>
+            <input type="hidden" id="timeZoneOffsetInJul1" name="timeZoneOffsetInJul1"/>
             <input type="submit" value="Login" name="btnLogin" id="btnLogin" class="btn btn-large btn-success" style="width:100%;" />            
         }
     </div>
@@ -52,13 +51,13 @@
         <a href="http://www.dhsolutions.se" target="_blank">www.dhsolutions.se</a>
     </div>
 </body>
-</html>
 <script type="text/javascript">
-    $(document).ready(function () {
+    function catchTime() {
         var Jan1 = new Date(2015, 0, 1);
         var Jul1 = new Date(2015, 6, 1);
-        $("input[name=timeZoneOffsetInJan1]").val(Jan1.getTimezoneOffset());
-        $("input[name=timeZoneOffsetInJul1]").val(Jul1.getTimezoneOffset());
+        document.getElementById('timeZoneOffsetInJan1').value = Jan1.getTimezoneOffset();
+        document.getElementById('timeZoneOffsetInJul1').value = Jul1.getTimezoneOffset();
         $("input:text:visible:first").focus();
-    });
+    };
 </script>
+</html>
