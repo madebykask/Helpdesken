@@ -297,7 +297,6 @@ function refreshOrganizationUnit(departmentId, departmentFilterFormat, selectedO
     $(publicOUControlName).prop('disabled', true);    
     $(publicOUControlName).append('<option value="">&nbsp;</option>');   
     $.post(publicChangeDepartment, { 'id': departmentId, 'customerId': publicCustomerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {
-        
         if (data != undefined) {
             for (var i = 0; i < data.list.length; i++) {
                 var item = data.list[i];
@@ -882,8 +881,8 @@ function GetComputerUserSearchOptions() {
 
             $('#case__Region_Id').val(item.regionid);
             $('#RegionName').val(item.regionname);
-
-            $(publicDepartmentControlName).val(item.departmentid);
+            $(publicDepartmentControlName).val(item.departmentid).trigger('change');
+             
             refreshDepartment(item.regionid, departmentFilterFormat, item.departmentid, item.ouid);                                 
 
             return item.num;
