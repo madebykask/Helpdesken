@@ -25,6 +25,11 @@
 
         IList<ProductAreaEntity> GetTopProductAreasForUser(int customerId, UserOverview user, bool isOnlyActive = true);
 
+        IList<ProductAreaEntity> GetTopProductAreasForUserOnCase(
+            int customerId,
+            int? productAreaIdToInclude,
+            UserOverview user);
+
         IList<ProductAreaEntity> GetAllProductAreas(int customerId);
 
         ProductAreaEntity GetProductArea(int id);
@@ -149,6 +154,60 @@
             }
 
             return res.OrderBy(x => x.Name).ToList();
+        }
+
+        private ProductAreaEntity GetTopMostAreaForChild(int id)
+        {
+            var areas = this.productAreaRepository.GetAll()
+                .Where(it => it.IsActive == 1)
+                .ToDictionary(it => it.Id, it => it);
+            var areaIdParentIdMap = areas.ToDictionary(kv => kv.Key, kv => kv.Value.Parent_ProductArea_Id);
+            var topMostId = id;
+            while (areaIdParentIdMap.ContainsKey(topMostId) && areaIdParentIdMap[topMostId].HasValue)
+            {
+                var removeId = topMostId;
+                topMostId = areaIdParentIdMap[removeId].Value;
+                areaIdParentIdMap.Remove(removeId);
+            }
+
+            if (areaIdParentIdMap.ContainsKey(topMostId) && areaIdParentIdMap[topMostId] == null && areas.ContainsKey(topMostId))
+            {
+                return areas[topMostId];
+            }
+
+            return null;
+        }
+        
+        public IList<ProductAreaEntity> GetTopProductAreasForUserOnCase(int customerId, int? productAreaIdToInclude, UserOverview user)
+        {
+            var res =
+                this.productAreaRepository.GetMany(
+                    x =>
+                    x.Customer_Id == customerId && x.Parent_ProductArea_Id == null
+                    && x.IsActive != 0);
+
+            if (user.UserGroupId < (int)UserGroup.CustomerAdministrator)
+            {
+                var groupsMap = user.UserWorkingGroups.Where(it => it.UserRole == WorkingGroupUserPermission.ADMINSTRATOR).ToDictionary(it => it.WorkingGroup_Id, it => true);
+                res = res.Where(
+                    it => it.WorkingGroups.Count == 0 || it.WorkingGroups.Any(productAreaWorkingGroup => groupsMap.ContainsKey(productAreaWorkingGroup.Id)));
+                var resultMap = res.ToDictionary(it => it.Id, it => it);
+                if (productAreaIdToInclude.HasValue)
+                {
+                    if (!resultMap.ContainsKey(productAreaIdToInclude.Value))
+                    {
+                        var productAreaToInclude = this.GetTopMostAreaForChild(productAreaIdToInclude.Value);
+                        if (productAreaToInclude != null && !resultMap.ContainsKey(productAreaToInclude.Id))
+                        {
+                            resultMap.Add(productAreaToInclude.Id, productAreaToInclude);
+                        }
+                    }
+                }
+
+                return resultMap.Values.OrderBy(x => x.Name).ToList();
+            }
+
+            return res.Where(it => it.WorkingGroup_Id == null).OrderBy(x => x.Name).ToList();
         }
 
         public IList<ProductAreaEntity> GetAllProductAreas(int customerId)

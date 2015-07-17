@@ -2575,8 +2575,9 @@
                 
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()).ShowOnStartPage == 1)
                 {
-                    m.productAreas = this._productAreaService.GetTopProductAreasForUser(
+                    m.productAreas = this._productAreaService.GetTopProductAreasForUserOnCase(
                         customerId,
+                        m.case_.ProductArea_Id,
                         SessionFacade.CurrentUser);
                 }
 
