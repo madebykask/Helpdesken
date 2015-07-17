@@ -3285,6 +3285,7 @@
         private IList<CaseSearchResult> TreeTranslate(IList<CaseSearchResult> cases, int customerId)
         {
             var ret = cases;
+            var productareaCache = this._productAreaService.GetProductAreasForCustomer(customerId).ToDictionary(it => it.Id, it => true);
             foreach (CaseSearchResult r in ret)
             {
                 foreach (var c in r.Columns)
@@ -3294,12 +3295,12 @@
                         switch (c.Key.ToLower())
                         {
                             case "productarea_id":
-                                var p = _productAreaService.GetProductArea(c.Id);
-                                if (p != null)
+                                if (productareaCache.ContainsKey(c.Id))
                                 {
-                                    var names = this._productAreaService.GetParentPath(p.Id, customerId).Select(name => Translation.Get(name));
+                                    var names = this._productAreaService.GetParentPath(c.Id, customerId).Select(name => Translation.Get(name));
                                     c.StringValue = string.Join(" - ", names);
                                 }
+
                                 break;
                         }
                     }
