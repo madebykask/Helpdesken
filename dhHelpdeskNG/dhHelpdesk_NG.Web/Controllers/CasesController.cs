@@ -848,8 +848,7 @@
             //användare
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseUserFilter))
             {
-                var registeredByUsers = this._userService.GetUserOnCases(cusId).AsEnumerable();
-                fd.RegisteredByUserList = registeredByUsers.MapToSelectList(fd.customerSetting);
+                fd.RegisteredByUserList = this._userService.GetUsers(cusId).MapToSelectList(fd.customerSetting);
                 if (!string.IsNullOrEmpty(fd.caseSearchFilter.User))
                 {
                     fd.lstfilterUser = fd.caseSearchFilter.User.Split(',').Select(int.Parse).ToArray();
