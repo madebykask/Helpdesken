@@ -49,6 +49,10 @@
         public string Region { get; set; }
         public string Department { get; set; }
         public string User { get; set; }
+
+        /// <summary>
+        /// List of case adminstrators id joined with ','
+        /// </summary>
         public string UserPerformer { get; set; }
         public string UserResponsible { get; set; }
 

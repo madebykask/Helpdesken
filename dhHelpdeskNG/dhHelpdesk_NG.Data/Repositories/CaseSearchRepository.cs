@@ -93,7 +93,6 @@
                                         context.userUserId,
                                         context.showNotAssignedWorkingGroups,
                                         context.userGroupId,
-                                        context.restrictedCasePermission,
                                         context.gs,
                                         context.s,
                                         context.applicationType,
@@ -582,7 +581,6 @@
                     string userUserId, 
                     int showNotAssignedWorkingGroups, 
                     int userGroupId, 
-                    int restrictedCasePermission, 
                     GlobalSetting gs,
                     ISearch s,
                     string applicationType,
@@ -763,7 +761,7 @@
             else
             {
                 sql.Add(this.ReturnCaseSearchWhere(f, customerSetting, customerUserSetting, isFieldResponsibleVisible, userId, userUserId, 
-                        showNotAssignedWorkingGroups, userGroupId, restrictedCasePermission, gs, relatedCasesCaseId, relatedCasesUserId, caseIds));
+                        showNotAssignedWorkingGroups, userGroupId, gs, relatedCasesCaseId, relatedCasesUserId, caseIds));
             }
 
             // ORDER BY ...
@@ -884,6 +882,23 @@
             return sb.ToString();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="f"></param>
+        /// <param name="customerSetting"></param>
+        /// <param name="customerUserSetting"></param>
+        /// <param name="isFieldResponsibleVisible"></param>
+        /// <param name="userId"></param>
+        /// <param name="userUserId"></param>
+        /// <param name="showNotAssignedWorkingGroups"></param>
+        /// <param name="userGroupId"></param>
+        /// <param name="restrictedCasePermission"> User has permission to see own cases only </param>
+        /// <param name="gs"></param>
+        /// <param name="relatedCasesCaseId"></param>
+        /// <param name="relatedCasesUserId"></param>
+        /// <param name="caseIds"></param>
+        /// <returns></returns>
         private string ReturnCaseSearchWhere(
             CaseSearchFilter f, 
             Setting customerSetting, 
@@ -893,7 +908,6 @@
             string userUserId, 
             int showNotAssignedWorkingGroups, 
             int userGroupId, 
-            int restrictedCasePermission, 
             GlobalSetting gs, 
             int? relatedCasesCaseId, 
             string relatedCasesUserId = null,
@@ -945,6 +959,7 @@
             sb.Append(") ");
 
             // finns kryssruta på användaren att den bara får se sina egna ärenden
+            var restrictedCasePermission = customerUserSetting.User.RestrictedCasePermission;
             if (restrictedCasePermission == 1)
             {
                 if (userGroupId == 2)
@@ -1012,16 +1027,36 @@
             // performer/utförare
             if (!string.IsNullOrWhiteSpace(f.UserPerformer))
             {
-                //ShowNotAssignedCases
-                if (customerUserSetting.User.ShowNotAssignedCases == 1 && restrictedCasePermission != 1 && f.UserPerformer == userId.ToString())
+                var performersDict = f.UserPerformer.Split(',').ToDictionary(it => it, it => true);
+                var searchingUnassigned = restrictedCasePermission != 1 && customerUserSetting.User.ShowNotAssignedCases == 1 && performersDict.ContainsKey("0");
+                if (searchingUnassigned)
                 {
-                    sb.Append(" and (tblCase.Performer_User_Id in (" + f.UserPerformer.SafeForSqlInject() + ") OR tblCase.Performer_User_Id = 0) ");
-                    //sb.Append(" OR tblCase.Performer_User_Id = 0 ");
-                    //sb.Append(") ");
+                    performersDict.Remove("0");
                 }
-                else
+
+                if (performersDict.Count > 0 || searchingUnassigned)
                 {
-                    sb.Append(" and (tblCase.Performer_User_Id in (" + f.UserPerformer.SafeForSqlInject() + ")) ");
+                    sb.Append(" AND (");
+                }
+                
+                if (performersDict.Count > 0)
+                {
+                    sb.AppendFormat("tblCase.Performer_User_Id in ({0}) ", string.Join(",", performersDict.Keys).SafeForSqlInject());
+                }
+
+                if (searchingUnassigned)
+                {
+                    if (performersDict.Count > 0)
+                    {
+                        sb.AppendFormat(" OR ");
+                    }
+
+                    sb.Append("tblCase.Performer_User_Id is NULL");
+                }
+
+                if (performersDict.Count > 0 || searchingUnassigned)
+                {
+                    sb.Append(") ");
                 }
             }
 
