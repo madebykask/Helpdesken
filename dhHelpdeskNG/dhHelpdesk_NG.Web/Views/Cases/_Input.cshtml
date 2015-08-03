@@ -309,11 +309,11 @@
                                                         {
                                                             var curDep = Model.departments.Where(d => d.Id == Model.case_.Department_Id).SingleOrDefault();
                                                             @Html.TextBoxFor(m => curDep.DepartmentName, new { id = "DepartmentName", @readonly = true })
-                                                            @Html.HiddenFor(m => Model.case_.Department_Id) 
+                                                        @Html.HiddenFor(m => Model.case_.Department_Id, new {@class="departments-list"}) 
                                                         }
                                                         else
                                                         {                                                        
-                                                            <select id="case__Department_Id" name="case_.Department_Id" data-field="department">
+                                                            <select id="case__Department_Id" class="departments-list" name="case_.Department_Id" data-field="department">
                                                                 <option value="">&nbsp;</option>
                                                                 @if (Model.departments != null)
                                                                 {
@@ -514,10 +514,18 @@
                                                     <span>&nbsp;-&nbsp;@Model.CaseOwnerDefaultWorkingGroup.WorkingGroupName</span>
                                                     }
                                                 }
-                                                @if (!string.IsNullOrEmpty(Model.case_.RegUserId))
+                                                    else
                                                 {
+                                                        if(!string.IsNullOrEmpty(Model.case_.RegUserName))
+                                                        {
+                                                        <span>&nbsp;(@Model.case_.RegUserName)</span>
+                                                        }
+                                                        
+                                                        if(!string.IsNullOrEmpty(Model.case_.RegUserId))
+                                                        {
                                                     <span>&nbsp;(@Model.case_.RegUserId)</span>
                                                 }
+                                                    }
                                                 <span>&nbsp;(@Model.case_.IpAddress)</span>
                                             </td>
                                             <td></td>
@@ -1085,21 +1093,22 @@
                                                     {
                                                         foreach (var e in Model.priorities.Where(e => e.IsActive == 1 || Model.case_.Priority_Id == e.Id))
                                                         {
-                                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Priority_Id.ToString()) >@Translation.Get(e.Name)</option>
+                                                            <option value="@e.Id" data-sla="@e.SolutionTime" @e.Id.IdIsSelected(Model.case_.Priority_Id.ToString()) >@Translation.Get(e.Name)</option>
                                                         }
                                                     }
                                                 </select>
                                             }
                                             else
                                             {
-                                                if (!Model.case_.Priority_Id.HasValue)
+                                                    var priority = Model.case_.Priority_Id.HasValue ? Model.priorities.SingleOrDefault(x => x.Id == Model.case_.Priority_Id): null;
+                                                    if(priority == null)
                                                 {
                                                 @Html.TextBoxFor(m => m.case_.Priority_Id, new { @readonly = true })
                                                 }
                                                 else
                                                 {
-                                                @Html.TextBoxFor(m => m.priorities.SingleOrDefault(x => x.Id == Model.case_.Priority_Id).Name, new { @readonly = true })
-                                                @Html.HiddenFor(x => x.case_.Priority_Id)
+                                                        @Html.TextBoxFor(m => priority.Name, new { @readonly = true})
+                                                        @Html.HiddenFor(x => x.case_.Priority_Id, new { @class="sla-value", data_sla = priority.SolutionTime })
                                                 }
                                             }
                                         </td>

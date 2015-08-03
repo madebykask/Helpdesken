@@ -191,7 +191,6 @@ namespace DH.Helpdesk.Dal.Repositories
             if (cases != null)
             {
                 cases.FollowUpDate = time;
-                cases.ChangeTime = DateTime.UtcNow;
                 this.Update(cases);
                 this.Commit();
             }
@@ -392,7 +391,6 @@ namespace DH.Helpdesk.Dal.Repositories
         {
             var cases = this.DataContext.Cases.Single(c => c.Id == id);
             cases.Unread = unread;
-            cases.ChangeTime = DateTime.UtcNow;
             this.Update(cases);
             this.Commit();
         }

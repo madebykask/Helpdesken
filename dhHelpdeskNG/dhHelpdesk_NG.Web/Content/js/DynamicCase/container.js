@@ -43,7 +43,7 @@ var dhform = function (options) {
                              '</div>';
 
     (function () {
-        if (_this._options.modal == false) {
+        if (_this._options.modal == "false") {
             $('#loadContainer').on('click', function (event) {
                 event.preventDefault();
                 _this.load({ url: _this._options.url });

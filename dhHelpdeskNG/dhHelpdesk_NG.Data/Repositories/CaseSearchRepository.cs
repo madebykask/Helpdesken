@@ -175,15 +175,15 @@
                                             timeLeft = (workTimeCalculator.CalculateWorkTime(
                                                 now,
                                                 watchDateDue,
-                                                departmentId) - timeOnPause) / 60;
+                                                departmentId) + timeOnPause) / 60;
                                         }
                                         else
                                         {
                                             //// for cases that should be closed in the past
-                                            timeLeft = -(workTimeCalculator.CalculateWorkTime(
+                                            timeLeft = (-workTimeCalculator.CalculateWorkTime(
                                             watchDateDue,
                                             now,
-                                            departmentId) - timeOnPause) / 60;
+                                            departmentId) + timeOnPause) / 60;
                                         }                                        
                                     }
                                     else if (SLAtime > 0)
@@ -191,7 +191,8 @@
                                         //// calc by SLA value
                                         var dtFrom = DatesHelper.Min(caseRegistrationDate, now);
                                         var dtTo = DatesHelper.Max(caseRegistrationDate, now);
-                                        timeLeft = (SLAtime * 60 - workTimeCalculator.CalculateWorkTime(dtFrom, dtTo, departmentId) - timeOnPause) / 60;
+                                        var calcTime = workTimeCalculator.CalculateWorkTime(dtFrom, dtTo, departmentId);
+                                        timeLeft = (SLAtime * 60 - calcTime + timeOnPause) / 60;
                                     }
 
                                     if (timeLeft.HasValue)

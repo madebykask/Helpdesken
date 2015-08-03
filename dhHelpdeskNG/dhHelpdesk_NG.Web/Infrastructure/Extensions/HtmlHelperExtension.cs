@@ -8,6 +8,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
     using System.Web.Mvc;
     using System.Web.Routing;
 
+    using DH.Helpdesk.BusinessData.Enums.Users;
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.BusinessData.Models.CaseType;
@@ -890,17 +891,18 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 
             return MvcHtmlString.Create(result.ToString());
         }
-
-        private static Dictionary<int, bool> userGroupDictionary = null;
-
-        private static MvcHtmlString BuildProcuctAreaDropdownButton(IList<ProductArea> pal, bool isTakeOnlyActive = true)
+        
+        private static MvcHtmlString BuildProcuctAreaDropdownButton(
+            IList<ProductArea> pal,
+            bool isTakeOnlyActive = true,
+            Dictionary<int, bool> userGroupDictionary = null)
         {
             string htmlOutput = string.Empty;
             var user = SessionFacade.CurrentUser;
 
             if (userGroupDictionary == null)
             {
-                userGroupDictionary = user.UserWorkingGroups.ToDictionary(it => it.WorkingGroup_Id, it => true);
+                userGroupDictionary = user.UserWorkingGroups.Where(it => it.UserRole == WorkingGroupUserPermission.ADMINSTRATOR).ToDictionary(it => it.WorkingGroup_Id, it => true);
             }
 
             foreach (ProductArea pa in pal)
@@ -922,6 +924,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                                     productAreaWorkingGroup =>
                                     userGroupDictionary.ContainsKey(productAreaWorkingGroup.Id)));
                     }
+
                     childList = childs.ToList();
                 }
 
@@ -938,7 +941,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 if (childList != null && childList.Count > 0)
                 {
                     htmlOutput += "<ul class='dropdown-menu'>";
-                    htmlOutput += BuildProcuctAreaDropdownButton(childList.OrderBy(p => Translation.Get(p.Name)).ToList(), isTakeOnlyActive);
+                    htmlOutput += BuildProcuctAreaDropdownButton(childList.OrderBy(p => Translation.Get(p.Name)).ToList(), isTakeOnlyActive, userGroupDictionary);
                     htmlOutput += "</ul>";
                 }
 

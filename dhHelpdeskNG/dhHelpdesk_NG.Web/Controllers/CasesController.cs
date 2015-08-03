@@ -141,6 +141,8 @@
 
         private readonly int _defaultExtendCaseLockTime;
 
+        private readonly IWatchDateCalendarService watchDateCalendarServcie;
+
         #endregion
 
         #region Constructor
@@ -201,7 +203,8 @@
             IOrganizationService organizationService, 
             OrganizationJsonService orgJsonService, 
             IRegistrationSourceCustomerService registrationSourceCustomerService,
-            ICaseLockService caseLockService)
+            ICaseLockService caseLockService, 
+            IWatchDateCalendarService watchDateCalendarServcie)
             : base(masterDataService)
         {
             this._masterDataService = masterDataService;  
@@ -260,6 +263,7 @@
             this._orgJsonService = orgJsonService;
             this._registrationSourceCustomerService = registrationSourceCustomerService;
             this._caseLockService = caseLockService;
+            this.watchDateCalendarServcie = watchDateCalendarServcie;
             this._defaultMaxRows = 10;
             this._defaultCaseLockBufferTime = 30; // Second
             this._defaultExtendCaseLockTime = 60; // Second
@@ -867,8 +871,7 @@
             //användare
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseUserFilter))
             {
-                var registeredByUsers = this._userService.GetUsers(cusId).ToList();
-                fd.RegisteredByUserList = registeredByUsers.MapToSelectList(fd.customerSetting);
+                fd.RegisteredByUserList = this._userService.GetUsers(cusId).MapToSelectList(fd.customerSetting);
                 if (!string.IsNullOrEmpty(fd.caseSearchFilter.User))
                 {
                     fd.lstfilterUser = fd.caseSearchFilter.User.Split(',').Select(int.Parse).ToArray();
@@ -951,7 +954,12 @@
             return Json(this._caseLockService.ReExtendLockCase(new Guid(lockGuid), extendValue));            
         }
 
-        public ActionResult New(int? customerId, int? templateId, int? copyFromCaseId, int? caseLanguageId, int? templateistrue)
+        public ActionResult New(
+            int? customerId, 
+            int? templateId, 
+            int? copyFromCaseId, 
+            int? caseLanguageId, 
+            int? templateistrue)
         {
             CaseInputViewModel m = null;
             if (!customerId.HasValue)
@@ -966,11 +974,22 @@
 
             SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
             if (SessionFacade.CurrentUser != null)
+            {
                 if (SessionFacade.CurrentUser.CreateCasePermission == 1)
                 {
                     var userId = SessionFacade.CurrentUser.Id;
                     var caseLockModel = new CaseLockModel();
-                    m = this.GetCaseInputViewModel(userId, customerId.Value, 0, caseLockModel, string.Empty, null, templateId, copyFromCaseId, false, templateistrue);
+                    m = this.GetCaseInputViewModel(
+                        userId,
+                        customerId.Value,
+                        0,
+                        caseLockModel,
+                        string.Empty,
+                        null,
+                        templateId,
+                        copyFromCaseId,
+                        false,
+                        templateistrue);
 
                     var caseParam = new NewCaseParams
                     {
@@ -984,13 +1003,12 @@
                     AddViewDataValues();
                     
                     // Positive: Send Mail to...
-                    if (m.CaseMailSetting.DontSendMailToNotifier == false)
-                        m.CaseMailSetting.DontSendMailToNotifier = true;
-                    else
-                        m.CaseMailSetting.DontSendMailToNotifier = false;
+                    if (m.CaseMailSetting.DontSendMailToNotifier == false) m.CaseMailSetting.DontSendMailToNotifier = true;
+                    else m.CaseMailSetting.DontSendMailToNotifier = false;
 
                     return this.View(m);
                 }
+            }
 
             return this.RedirectToAction("index", "cases", new { id = customerId });
         }
@@ -1050,7 +1068,12 @@
 #endregion
 
         [UserCasePermissions]
-        public ActionResult Edit(int id, string redirectFrom = "", int? moveToCustomerId = null, bool? uni = null, bool updateState = true, string backUrl = null)
+        public ActionResult Edit(int id, 
+            string redirectFrom = "", 
+            int? moveToCustomerId = null, 
+            bool? uni = null, 
+            bool updateState = true, 
+            string backUrl = null)
         {
             CaseInputViewModel m = null;
 
@@ -1313,6 +1336,18 @@
                                                 name = string.Format("{0} {1}", it.SurName, it.FirstName)
                                             })
                         });
+        }
+
+        public JsonResult GetWatchDateByDepartment(int departmentId)
+        {
+            var dept = this._departmentService.GetDepartment(departmentId);
+            DateTime? res = null;
+            if (dept != null && dept.WatchDateCalendar_Id.HasValue)
+            {
+                res = this.watchDateCalendarServcie.GetClosestDateTo(dept.WatchDateCalendar_Id.Value, DateTime.UtcNow);
+            }
+
+            return this.Json(new { result = "success", data = res }, JsonRequestBehavior.AllowGet);
         }
 
         public int ChangeWorkingGroupSetStateSecondary(int? id)
@@ -2137,7 +2172,7 @@
                         var workTimeCalcFactory = new WorkTimeCalculatorFactory(
                             ManualDependencyResolver.Get<IHolidayService>(),
                             SessionFacade.CurrentCustomer.WorkingDayStart,
-                            SessionFacade.CurrentCustomer.WorkingDayStart,
+                            SessionFacade.CurrentCustomer.WorkingDayEnd,
                             TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
                         int[] deptIds = null;
                         if (case_.Department_Id.HasValue)
@@ -2214,7 +2249,7 @@
                 var workTimeCalcFactory = new WorkTimeCalculatorFactory(
                     ManualDependencyResolver.Get<IHolidayService>(),
                     SessionFacade.CurrentCustomer.WorkingDayStart,
-                    SessionFacade.CurrentCustomer.WorkingDayStart,
+                    SessionFacade.CurrentCustomer.WorkingDayEnd,
                     TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
                 int[] deptIds = null;
                 if (case_.Department_Id.HasValue)
@@ -2568,8 +2603,9 @@
                 
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()).ShowOnStartPage == 1)
                 {
-                    m.productAreas = this._productAreaService.GetTopProductAreasForUser(
+                    m.productAreas = this._productAreaService.GetTopProductAreasForUserOnCase(
                         customerId,
+                        m.case_.ProductArea_Id,
                         SessionFacade.CurrentUser);
                 }
 
@@ -2736,6 +2772,7 @@
                         {
                             m.case_.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id;
                         }
+
                             m.case_.Priority_Id = caseTemplate.Priority_Id;
                             m.case_.Project_Id = caseTemplate.Project_Id;
                             m.CaseLog.TextExternal = caseTemplate.Text_External;
@@ -2765,7 +2802,29 @@
                             m.case_.OtherCost = caseTemplate.OtherCost;
                             m.case_.Available = caseTemplate.Available;
                             m.case_.ContactBeforeAction = caseTemplate.ContactBeforeAction;
+                            
+                            // "watch date" 
+                            if (caseTemplate.WatchDate.HasValue)
+                            {
                             m.case_.WatchDate = caseTemplate.WatchDate;
+                            }
+                            else
+                            {
+                                if (m.case_.Department_Id.HasValue && m.case_.Priority_Id.HasValue)
+                                {
+                                    var dept = this._departmentService.GetDepartment(m.case_.Department_Id.Value);
+                                    var priority =
+                                        m.priorities.Where(it => it.Id == m.case_.Priority_Id && it.IsActive == 1).FirstOrDefault();
+                                    if (dept != null && priority != null && priority.SolutionTime == 0)
+                                    {
+                                        m.case_.WatchDate =
+                                        this.watchDateCalendarServcie.GetClosestDateTo(
+                                                dept.WatchDateCalendar_Id.Value, 
+                                                DateTime.UtcNow);
+                                    }
+                                }
+                            }
+
                             m.case_.Project_Id = caseTemplate.Project_Id;
                             m.case_.Problem_Id = caseTemplate.Problem_Id;
                             m.case_.Change_Id = caseTemplate.Change_Id;
@@ -3258,6 +3317,7 @@
         private IList<CaseSearchResult> TreeTranslate(IList<CaseSearchResult> cases, int customerId)
         {
             var ret = cases;
+            var productareaCache = this._productAreaService.GetProductAreasForCustomer(customerId).ToDictionary(it => it.Id, it => true);
             foreach (CaseSearchResult r in ret)
             {
                 foreach (var c in r.Columns)
@@ -3267,12 +3327,12 @@
                         switch (c.Key.ToLower())
                         {
                             case "productarea_id":
-                                var p = _productAreaService.GetProductArea(c.Id);
-                                if (p != null)
+                                if (productareaCache.ContainsKey(c.Id))
                                 {
-                                    var names = this._productAreaService.GetParentPath(p.Id, customerId).Select(name => Translation.Get(name));
+                                    var names = this._productAreaService.GetParentPath(c.Id, customerId).Select(name => Translation.Get(name));
                                     c.StringValue = string.Join(" - ", names);
                                 }
+
                                 break;
                         }
                     }

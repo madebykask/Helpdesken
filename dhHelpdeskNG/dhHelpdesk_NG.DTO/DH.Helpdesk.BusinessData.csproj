@@ -140,6 +140,7 @@
     <Compile Include="Enums\Projects\ProjectFields.cs" />
     <Compile Include="Enums\Users\StartPage.cs" />
     <Compile Include="Enums\Users\TimeZoneAutodetectResult.cs" />
+    <Compile Include="Enums\Users\WorkingGroupUserPermission.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\ModelEdit\HeadersFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Overview\AccountFieldsSettingsOverviewWithActivity.cs" />
     <Compile Include="Models\Accounts\Read\Overview\AccountInformation.cs" />

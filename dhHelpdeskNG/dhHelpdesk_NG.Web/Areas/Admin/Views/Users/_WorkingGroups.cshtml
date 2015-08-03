@@ -1,4 +1,5 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
+﻿@using DH.Helpdesk.BusinessData.Enums.Users
+@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Admin.Models.UserInputViewModel
 <div class="container">
     
@@ -39,12 +40,12 @@
                                 @Translation.Get(uwg.WorkingGroupName, Enums.TranslationSource.TextTranslation)
                             </td>
                             <td>
-                                <input type="checkbox" name="@string.Format("UserWorkingGroups[{0}].UserRole", i)" id="UserWorkingGroup_[@i]_2" @(uwg.RoleToUWG == 2 ? "checked=checked" : "") data-field-id="@i" class="userRole" value="2" />
+                                <input type="checkbox" name="@string.Format("UserWorkingGroups[{0}].UserRole", i)" id="UserWorkingGroup_[@i]_2" @(uwg.RoleToUWG == WorkingGroupUserPermission.ADMINSTRATOR? "checked=checked" : "") data-field-id="@i" class="userRole" value="2" />
                                 <input type="hidden" name="@string.Format("UserWorkingGroups[{0}].User_Id", i)" value="@uwg.User_Id" />
                                 <input type="hidden" name="@string.Format("UserWorkingGroups[{0}].WorkingGroup_Id", i)" value="@uwg.WorkingGroup_Id" />
                             </td>
                             <td>
-                                <input type="checkbox" name="@string.Format("UserWorkingGroups[{0}].UserRole", i)" id="UserWorkingGroup_[@i]_1" @(uwg.RoleToUWG == 1 ? "checked=checked" : "") data-field-id="@i" class="userRole" value="1" />
+                                <input type="checkbox" name="@string.Format("UserWorkingGroups[{0}].UserRole", i)" id="UserWorkingGroup_[@i]_1" @(uwg.RoleToUWG == WorkingGroupUserPermission.READ_ONLY  ? "checked=checked" : "") data-field-id="@i" class="userRole" value="1" />
                             </td>
                             <td>
                                 <input type="radio" name="@uwg.CustomerId" data-field="userWorkingGroup" data-field-id="@i" value="@uwg.IsStandard" @(uwg.IsStandard == 1 && enabledDefWG ? "checked=checked" : "") @(enabledDefWG? "" : "disabled") id="UserWorkingGroup_[@i]_Def"/>

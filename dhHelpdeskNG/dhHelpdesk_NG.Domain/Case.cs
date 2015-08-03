@@ -85,11 +85,16 @@
         public int Unread { get; set; }
         public int RegLanguage_Id { get; set; }
         public String RegUserId { get; set; }
+        public String RegUserName { get; set; }
         public String RegUserDomain { get; set; }
         public int? ProductAreaQuestionVersion_Id { get; set; }
         public int LeadTime { get; set; }
         public int? CaseCleanUp_Id { get; set; }
         public DateTime RegTime { get; set; }
+
+        /// <summary>
+        /// Warning! when change this value, usually, ExternalTime field should be updated also
+        /// </summary>
         public DateTime ChangeTime { get; set; }
         public int? ChangeByUser_Id { get; set; }
         public int? DefaultOwnerWG_Id { get; set; }
