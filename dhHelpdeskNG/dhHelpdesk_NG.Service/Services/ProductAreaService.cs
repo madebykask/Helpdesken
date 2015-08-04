@@ -207,7 +207,7 @@
                 return resultMap.Values.OrderBy(x => x.Name).ToList();
             }
 
-            return res.Where(it => it.WorkingGroup_Id == null).OrderBy(x => x.Name).ToList();
+            return res.OrderBy(x => x.Name).ToList();
         }
 
         public IList<ProductAreaEntity> GetAllProductAreas(int customerId)
