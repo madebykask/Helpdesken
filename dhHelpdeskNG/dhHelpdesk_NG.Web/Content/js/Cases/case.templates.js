@@ -188,6 +188,7 @@ function ApplyTemplate(data, doOverwrite) {
                 SetValueIfElVisible(el, val, cfg);
                 break;
             case 'FinishingCause_Id':
+                $('#divFinishingType ul.dropdown-menu li a').trigger('click');
                 SetValueToBtnGroup('#divFinishingType', "#divBreadcrumbs_FinishingType", "#CaseLog_FinishingType", val, doOverwrite);
                 break;
             }

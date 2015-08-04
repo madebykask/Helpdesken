@@ -2781,6 +2781,8 @@
                             m.CaseLog.TextExternal = caseTemplate.Text_External;
                             m.CaseLog.TextInternal = caseTemplate.Text_Internal;
                             m.CaseLog.FinishingType = caseTemplate.FinishingCause_Id;
+                            if (m.CaseLog.FinishingType.HasValue)
+                                m.CaseLog.FinishingDate = DateTime.UtcNow;
                             m.case_.PersonsName = caseTemplate.PersonsName;
                             m.case_.PersonsPhone = caseTemplate.PersonsPhone;
                             m.case_.Region_Id = caseTemplate.Region_Id;
