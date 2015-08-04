@@ -9,9 +9,7 @@
      <div class="container">         
          <div class="row">             
              <div class="span6">
-                 <table class="tableform">                    
-                                                     
-
+                 <table class="tableform">                                                                         
                      @if (Model.filterCustomers != null)
                      {
                          <tr>
@@ -23,8 +21,7 @@
                                      @foreach (var c in Model.filterCustomers)
                                      {                                            
                                          int customerId = int.Parse(c.Value);                
-                                         <option value="@customerId" @customerId.IdIsSelected(Model.caseSearchFilter.Customer)>@c.Name</option>
-                                          
+                                         <option value="@customerId" @customerId.IdIsSelected(Model.caseSearchFilter.Customer)>@c.Name</option>                                          
                                      }
                                  </select>
                              </td>
@@ -94,18 +91,8 @@
                                   @Translation.Get("poster i sökresultat/Kund")                                 
                              </td>
                          </tr>                                         
-                     }      
-                     
-                     <tr>
-                         <td>
-                             &nbsp;
-                         </td>
-                     </tr>      
-                      <tr>
-                        <td>
-                             <input type="submit" class="submit btn" value="@Translation.Get("Sök")"/>
-                        </td>                                                                          
-                     </tr>                                                                      
+                     }                                                
+                      
                  </table>
              </div>
 

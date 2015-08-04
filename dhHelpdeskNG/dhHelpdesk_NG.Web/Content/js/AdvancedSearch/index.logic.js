@@ -8,7 +8,8 @@ var GRID_STATE = {
 };
 
 
-(function ($) {
+(function ($) {    
+
     /// message types
     var ERROR_MSG_TYPE = 0;
     var LOADING_MSG_TYPE = 1;
@@ -476,8 +477,32 @@ var GRID_STATE = {
 
     $(document).ready(function() {
         app.init.call(window.app, window.gridSettings, window.doSearchAtBegining);
+        SetSpecificConditionTab();
     });
 
+    $('#lstfilterCustomers.chosen-select').on('change', function (evt, params) {
+        SetSpecificConditionTab();
+    });
+
+    function SetSpecificConditionTab() {
+        var selectedCustomers = $('#lstfilterCustomers.chosen-select option');
+        var selectedCount = 0;
+        var customerId = 0;
+        $.each(selectedCustomers, function (idx, value) {
+            if (value.selected) {
+                customerId = value.value;
+                selectedCount++;
+            }
+        });
+        if (selectedCount == 1) {
+            $('#AdvanceSearchSpecificTab').attr('style', '');
+            $('#AdvanceSearchSpecificTab').attr('data-field', customerId);            
+        }
+        else {            
+            $('#AdvanceSearchSpecificTab').attr('style', 'display:none');
+            $('#AdvanceSearchSpecificTab').attr('data-field', '');
+        }
+    }
 })($);
 
 
