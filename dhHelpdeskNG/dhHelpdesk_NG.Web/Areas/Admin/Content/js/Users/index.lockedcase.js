@@ -43,7 +43,8 @@ $(function () {
                 caseId: caseId,
                 selectedCustomerId: customerId,
                 caseNumber: caseNumber,
-                searchText: searchText
+                searchText: searchText,
+                curTime:new Date()
             }, function (_LockedCases) {
                 $(lockedCasePartialName).html(_LockedCases);
             });
@@ -71,7 +72,8 @@ $(function () {
                 {
                     selectedCustomerId: customerId,
                     caseNumber: caseNumber,
-                    searchText: searchText
+                    searchText: searchText,
+                    curTime: new Date()
                 }, function (_LockedCases) {
             $(lockedCasePartialName).html(_LockedCases);
         });
