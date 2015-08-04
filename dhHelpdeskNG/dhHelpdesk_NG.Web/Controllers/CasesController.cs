@@ -292,10 +292,12 @@
             var m = new AdvancedSearchIndexViewModel();
             var availableCustomers = customers.Select(c => new ItemOverview(c.CustomerName, c.CustomerId.ToString())).OrderBy(c => c.Name).ToList();            
 
-            m.SelectedCustomers = availableCustomers;            
+            m.SelectedCustomers = availableCustomers;     
             
             CaseSearchModel advancedSearchModel;
-            if ((clearFilters != null && clearFilters.Value) || SessionFacade.CurrentAdvancedSearch == null)
+            if ((clearFilters != null && clearFilters.Value) 
+                || SessionFacade.CurrentAdvancedSearch == null
+                || SessionFacade.CurrentAdvancedSearch.caseSearchFilter.Customer != currentCustomerId.ToString())
             {
                 SessionFacade.CurrentAdvancedSearch = null;
                 advancedSearchModel = this.InitAdvancedSearchModel(currentCustomerId, currentUserId);
@@ -2391,7 +2393,8 @@
                             CaseRegistrationDateStartFilter = null,
                             CaseRegistrationDateEndFilter = null,
                             CaseClosingDateStartFilter = null,
-                            CaseClosingDateEndFilter = null
+                            CaseClosingDateEndFilter = null,
+                            Customer = customerId.ToString()
                         };
 
             s.SortBy = "CaseNumber";
