@@ -296,8 +296,7 @@
             
             CaseSearchModel advancedSearchModel;
             if ((clearFilters != null && clearFilters.Value) 
-                || SessionFacade.CurrentAdvancedSearch == null
-                || SessionFacade.CurrentAdvancedSearch.caseSearchFilter.Customer != currentCustomerId.ToString())
+                || SessionFacade.CurrentAdvancedSearch == null)
             {
                 SessionFacade.CurrentAdvancedSearch = null;
                 advancedSearchModel = this.InitAdvancedSearchModel(currentCustomerId, currentUserId);
