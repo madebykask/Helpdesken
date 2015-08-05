@@ -592,7 +592,7 @@
                                         @Translation.Get(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                     </td>
                                     <td>
-                                        @Html.DropDownListFor(model => model.CaseSolution.PerformerUser_Id, Model.PerformerUsers, "", new { id = "PerformerUser" })
+                                        @Html.DropDownListFor(model => model.CaseSolution.PerformerUser_Id, Model.PerformerUsers, new { id = "PerformerUser" })
                                     </td>
                                     <td class="span9">
                                         @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.Administrator, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.Performer_User_Id)

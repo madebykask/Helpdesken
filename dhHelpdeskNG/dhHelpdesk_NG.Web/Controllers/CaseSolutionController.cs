@@ -497,6 +497,13 @@ namespace DH.Helpdesk.Web.Controllers
                                              Text = x.Name,
                                              Value = x.Value
                                          }).ToList();
+            var isCreatingNew = caseSolution.Id == 0;
+            var performersList = isCreatingNew ?
+                                     this._userService.GetAvailablePerformersOrUserId(SessionFacade.CurrentCustomer.Id)
+                                         .MapToSelectList(cs, true)
+                                     : this._userService.GetAvailablePerformersForWorkingGroup(
+                                         SessionFacade.CurrentCustomer.Id,
+                                         caseSolution.CaseWorkingGroup_Id).MapToSelectList(cs, true);
 
             var model = new CaseSolutionInputViewModel
             {
@@ -526,7 +533,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                 FinishingCauses = this._finishingCauseService.GetFinishingCauses(SessionFacade.CurrentCustomer.Id),
                 
-                PerformerUsers = this._userService.GetAvailablePerformersOrUserId(SessionFacade.CurrentCustomer.Id).MapToSelectList(cs, true),
+                PerformerUsers = performersList,
 
                 Priorities = this._priorityService.GetPriorities(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
