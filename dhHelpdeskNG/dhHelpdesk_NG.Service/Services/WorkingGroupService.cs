@@ -83,7 +83,7 @@
         public IList<WorkingGroupEntity> GetAllWorkingGroupsForCustomer(int customerId)
         {
             return this.workingGroupRepository
-                .GetMany(x => x.Customer_Id == customerId)
+                .GetMany(x => x.Customer_Id == customerId && x.IsActive == 1)
                 .OrderBy(x => x.WorkingGroupName).ToList();
         }
 
