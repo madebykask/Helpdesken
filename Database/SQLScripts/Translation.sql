@@ -4373,5 +4373,14 @@ If not exists (select * from tblTextTranslation where text_id = 1530 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1530, 2, 'Please enter a valid date')
 GO
 
+-- New translatin 20150805
+If not exists (select * from tbltext where id = 1531)
+	insert into tbltext (id, TextString) VALUES (1531, 'Vi har upptäckt att din webbläsares tidszon skiljer sig från den som angetts i din Profil. Om du vill ändra tidszon som du arbetar i, gå till Profil i toppmenyn.')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1531 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1531, 2, 'We have detected that your browser’s time zone differs from the one in your Profile. To change it go to profile settings.')
+GO
+
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
