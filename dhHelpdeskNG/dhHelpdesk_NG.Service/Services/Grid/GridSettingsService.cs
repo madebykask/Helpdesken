@@ -94,10 +94,7 @@
                 res.columnDefs.AddRange(this.GetDefaultColumns(customerId, userGroupId, gridId));
             }
 
-            if (!IsSortFieldAvailable(res.sortOptions.sortBy, res.columnDefs))
-            {
-                res.sortOptions.sortBy = string.Empty;
-            }
+            res.sortOptions.sortBy = string.Empty;
 
             return res;
         }
