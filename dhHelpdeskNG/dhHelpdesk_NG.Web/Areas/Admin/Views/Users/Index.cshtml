@@ -12,7 +12,10 @@
         alertMessage: '@AMessage',
         userSearchForm: '#searchUsers',
         customerList: '#customerDDL',
-        userStatusList: '#statusDDL'      
+        userStatusList: '#statusDDL',
+        loggedInUser_CustomerList: '#customerChange',
+        loggedInUser_Partial: '#loggedInUsersPartial',
+        loggedInUser_Url: '@Url.Content("~/Admin/Users/GetLoggedInUsers")'
     };
 </script>
 
@@ -30,7 +33,7 @@
         <ul class="nav nav-tabs" id="myTab">
             <li class="active"><a href="#fragment-1">@Translation.Get("Användare", Enums.TranslationSource.TextTranslation)</a></li>
             <li><a href="#fragment-2">@Translation.Get("Låsta ärenden", Enums.TranslationSource.TextTranslation)</a></li>
-            <li><a href="#fragment-3">@Translation.Get("Inloggade användare", Enums.TranslationSource.TextTranslation)</a></li>
+            @*<li><a href="#fragment-3">@Translation.Get("Inloggade användare", Enums.TranslationSource.TextTranslation)</a></li>*@
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment-1">
@@ -40,9 +43,9 @@
                 
                 @Html.Partial("Index/_LockedCaseOverview", Model.LockedCaseModel)
             </div>
-            <div class="tab-pane tab-pane-border" id="fragment-3">                
+            @*<div class="tab-pane tab-pane-border" id="fragment-3">                
                 @Html.Partial("Index/_OnlineUserOverview", Model)
-            </div>
+            </div>*@
         </div>
     </div>
 </div>

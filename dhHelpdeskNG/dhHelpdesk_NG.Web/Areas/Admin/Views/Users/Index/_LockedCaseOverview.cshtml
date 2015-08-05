@@ -68,6 +68,9 @@
                             @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)
                         </th>                     
                         <th>
+                            @Translation.Get("Kund", Enums.TranslationSource.TextTranslation)
+                        </th>                    
+                        <th>
                             @Translation.Get("Ärende", Enums.TranslationSource.TextTranslation)
                         </th>                    
                         <th>
@@ -81,36 +84,36 @@
                 <tbody>
                     @foreach (var lc in Model.LockedCasesModels)
                     {
-                        var buttonName =  "releaseButton_" + lc.User_Id.ToString();
-                        var lockTimeTextName = "currentCaseLockedTime_" + lc.User_Id.ToString();                        
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => lc.UserId)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => lc.UserFirstName) @Html.DisplayFor(modelItem => lc.UserSureName)
-                            </td>
-                            <td>
-                                 <select id="caseList_'@lc.User_Id'"  class="lockedcaselist" rowid="@lc.User_Id">
-                                    <option value="">&nbsp;</option>
-                                    @if (lc.LockedInfo != null)
-                                    {
-                                        foreach (var li in lc.LockedInfo.OrderBy(l=> l.CustomerId))
-                                        {
-                                            <option lockedtime="@li.CreatedTime.ToString()" value="@li.CaseId">
-                                                @li.CustomerName - @Translation.Get("Ärende", Enums.TranslationSource.TextTranslation): @li.CaseNumber
-                                            </option>
-                                        }
-                                    }
-                                </select>
-                            </td>
-                            <td>
-                                <label id="@lockTimeTextName"> </label>
-                            </td>
-                            <td>
-                                <input type="button" id="@buttonName" selectedcaseid="" value="@Translation.Get("Lås upp", Enums.TranslationSource.TextTranslation)" style="display:none" class="btn releasecase" />
-                            </td>                        
-                        </tr>
+                        if (lc.LockedInfo != null)
+                        {
+                            foreach (var li in lc.LockedInfo.OrderBy(l => l.CreatedTime))
+                            {
+                                var buttonName = "releaseButton_" + lc.User_Id.ToString();
+                                var lockTimeTextName = "currentCaseLockedTime_" + lc.User_Id.ToString();
+                                // Convert server time to the user local time
+                                var lockTime = TimeZoneInfo.ConvertTime(li.CreatedTime, TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => lc.UserId)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => lc.UserFirstName) @Html.DisplayFor(modelItem => lc.UserSureName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => li.CustomerName)                                        
+                                    </td>
+                                    <td>
+                                        @Convert.ToInt64(li.CaseNumber)
+                                    </td>
+                                    <td>
+                                         @Html.DisplayFor(modelItem => lockTime)                                                                             
+                                    </td>
+                                    <td>
+                                        <input type="button" id="@buttonName" selectedcaseid="@li.CaseId" value="@Translation.Get("Lås upp", Enums.TranslationSource.TextTranslation)" class="btn releasecase" />
+                                    </td>
+                                </tr>
+                            }
+                        }
                     }
                 </tbody>
             </table>

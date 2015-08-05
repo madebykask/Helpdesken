@@ -2,8 +2,7 @@
 @model DH.Helpdesk.Web.Areas.Admin.Models.UserIndexViewModel
 
 @using (Html.BeginForm("index", "users", FormMethod.Post, new { id = "searchOnlineUsers" }))
-{
-        
+{        
     <div class="container">
         <div class="row">
             <div class="span7">
@@ -20,58 +19,7 @@
             </div>
         </div>
     </div>
-    <div class="container">
-        <table class="table table-striped table-bordered table-hover table-cases" id="tblUsersLoggedIn">
-            <thead>
-                <tr>
-                    <th>
-                        @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)
-                    </th>
-                    <th>
-                        @Translation.Get("Kund", Enums.TranslationSource.TextTranslation)
-                    </th>
-                    <th>
-                        @Translation.Get("Senast inloggad", Enums.TranslationSource.TextTranslation)
-                    </th>
-                    @*<th>
-                        @Translation.Get("Ärende", Enums.TranslationSource.TextTranslation)
-                    </th>*@
-                    <th>
-                        @Translation.Get("Senaste aktivitet", Enums.TranslationSource.TextTranslation)
-                    </th>
-                    @*<th>
-                        @Translation.Get("Rensa", Enums.TranslationSource.TextTranslation)
-                    </th>*@
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.ListLoggedInUsers)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.UserFirstName) @Html.DisplayFor(modelItem => item.UserLastName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.CustomerName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LoggedOnLastTime, "DateAndTime")
-                        </td>
-                        @*<td>
-                            @Html.DisplayFor(modelItem => item.CaseNumber)
-                        </td>*@
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LatestActivity, "DateAndTime")
-                        </td>
-                        @*<td>
-                            @if (item.CaseId != 0)
-                            {
-                                <a class="btn" href="@Url.Action("RemoveUserFromCase", new { caseId = item.CaseId, userId = item.User_Id, sessionId = item.SessionId })">@Translation.Get("Rensa", Enums.TranslationSource.TextTranslation)</a>
-                            }
-                        </td>*@
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>        
+    <div id="loggedInUsersPartial">
+         @Html.Partial("index/_OnlineUserList", Model.ListLoggedInUsers)
+    </div> 
 }

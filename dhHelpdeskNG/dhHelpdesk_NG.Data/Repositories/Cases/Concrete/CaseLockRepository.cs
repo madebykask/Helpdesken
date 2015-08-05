@@ -170,9 +170,11 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 
         private List<TempLockInfo> GetAlllockedCaseEntities()
         {
+           // Get cases which were locked atleast at 3 seconds ago
+           var curTime = DateTime.Now.AddSeconds(-3);
            return (from cl in this.DbContext.CaseLock
                    join c in this.DbContext.Cases on cl.Case_Id equals c.Id
-                   where (cl.ExtendedTime > DateTime.Now)
+                   where (cl.ExtendedTime > curTime)
                    select new TempLockInfo
                     {
                         LockEntity = cl,

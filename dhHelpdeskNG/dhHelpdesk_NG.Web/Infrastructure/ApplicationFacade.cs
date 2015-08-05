@@ -112,6 +112,15 @@ namespace DH.Helpdesk.Web.Infrastructure
             return loggedInUsers;
         }
 
+        public static IList<LoggedInUsers> GetAllLoggedInUsers()
+        {
+            if (LoggedInUsers == null) return null;
+
+            var loggedInUsers = LoggedInUsers.ToList();
+
+            return loggedInUsers;
+        }
+
         public static void AddLoggedInUser(LoggedInUsers loggedInUsers)
         {
             if (LoggedInUsers == null)

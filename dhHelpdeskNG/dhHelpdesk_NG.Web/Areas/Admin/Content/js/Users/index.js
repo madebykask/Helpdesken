@@ -5,6 +5,9 @@ $(function () {
     var userSearchForm = window.parameters.userSearchForm;
     var customerList = window.parameters.customerList;
     var userStatusList = window.parameters.userStatusList;
+    var loggedInUser_Customers = window.parameters.loggedInUser_CustomerList;
+    var loggedInUser_Partial = window.parameters.loggedInUser_Partial;
+    var loggedInUser_Url = window.parameters.loggedInUser_Url;
     
     $(document).ready(function () {
         var newLine = "<br>";
@@ -41,8 +44,21 @@ $(function () {
     $(customerList).change(function () {
         $(userSearchForm).submit();
     });
+
     $(userStatusList).change(function () {
         $(userSearchForm).submit();
+    });
+
+    $(loggedInUser_Customers).change(function () {        
+        var customerId = $(loggedInUser_Customers).val();
+        
+        $.get(loggedInUser_Url, {            
+            selectedCustomerId: customerId,            
+            curTime: new Date().getTime()
+        }, function (_loggedInUsers) {
+            $(loggedInUser_Partial).html(_loggedInUsers);
+        });
+        
     });
     
     $('#myTab a[href="' + $('#activeTab').val() + '"]').tab('show');

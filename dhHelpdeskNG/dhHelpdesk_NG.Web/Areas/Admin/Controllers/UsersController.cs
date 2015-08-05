@@ -554,6 +554,18 @@
         }
 
         [HttpGet]
+        public PartialViewResult GetLoggedInUsers(int? selectedCustomerId = null)
+        {            
+            var model = new List<LoggedInUsers>();
+            if (selectedCustomerId.HasValue)
+                model = ApplicationFacade.GetLoggedInUsers(selectedCustomerId.Value).ToList();                
+            else
+                model = ApplicationFacade.GetAllLoggedInUsers().ToList();                
+
+            return PartialView("Index/_OnlineUserList", model);
+        }
+
+        [HttpGet]
         public PartialViewResult FilterLockedCases(int? selectedCustomerId = null, decimal caseNumber = 0, string searchText = "")
         {            
             var model = GetLockedCaseModel(selectedCustomerId, caseNumber, searchText);
