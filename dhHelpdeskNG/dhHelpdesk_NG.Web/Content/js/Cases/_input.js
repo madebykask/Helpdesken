@@ -3,11 +3,26 @@
 var _parameters = window.parameters;
    
 $(function () {
-   
-    $(".caseDeleteDialog").live("click", function (e) {
-        
-        e.preventDefault();
+    var $userId = $('#case__ReportedBy');
+    var $updateUserInfo = $('#UpdateNotifierInformation');
 
+    function hideShowSaveUserInfoBtn(userId) {
+        if (userId && userId.length > 0) {
+            $updateUserInfo.bootstrapSwitch('readonly', false);
+        } else {
+            $updateUserInfo.bootstrapSwitch('state', false).bootstrapSwitch('readonly', true);
+        }
+    }
+
+    hideShowSaveUserInfoBtn($userId.val());
+
+    $userId.on('change', function(ev) {
+        var userId = $(ev.target).val();
+        hideShowSaveUserInfoBtn(userId);
+    });
+
+    $(".caseDeleteDialog").live("click", function (e) {
+        e.preventDefault();
         var action = $(this).attr("href");
         var text = $(this).attr("deleteDialogText");
         var btnType = $(this).attr("buttonTypes");

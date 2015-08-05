@@ -132,14 +132,25 @@
             bundles.Add(new ScriptBundle("~/bundles/advancedsearch/index").Include(
                         "~/Content/js/AdvancedSearch/index.logic.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/cases/editLog").Include(
-                "~/Content/js/Cases/editLog.logic.js"));
+            #region Case editing
+            bundles.Add(new StyleBundle("~/cases/dynamic-cases").Include(
+                         "~/Content/css/custom/dynamic-cases.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/cases/new").Include(
+                "~/Content/js/Cases/caseInitForm.js"));
+            
+            bundles.Add(new ScriptBundle("~/bundles/cases/edit").Include(
+                "~/Content/js/Cases/caseInitForm.js"));
 
             bundles.Add(
-                new ScriptBundle("~/bundles/cases/edit").Include(
-                    "~/Content/js/Cases/edit.logic.js",
+                new ScriptBundle("~/bundles/cases/_input").Include(
+                    "~/Content/js/Cases/_input.js",
                     "~/Content/js/dropdown_fix.js",
                     "~/Content/js/Cases/case.templates.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/cases/editLog").Include("~/Content/js/Cases/editLog.logic.js"));
+
+            #endregion
 
             bundles.Add(new ScriptBundle("~/bundles/casetemplates/edit").Include(
                 "~/Content/js/CaseTemplates/edit.logic.js"));

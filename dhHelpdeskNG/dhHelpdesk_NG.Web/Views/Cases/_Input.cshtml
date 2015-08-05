@@ -23,7 +23,7 @@
     };  
 
 </script>
-@Scripts.Render("~/bundles/invoices", "~/bundles/cases/edit")
+@Scripts.Render("~/bundles/invoices", "~/bundles/cases/_input")
 @{  
     var pDepartmentVisible = false;
     if (Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Department_Id, CaseSolutionFields.Department) == string.Empty)

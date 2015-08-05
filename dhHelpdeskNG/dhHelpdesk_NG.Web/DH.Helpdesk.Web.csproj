@@ -372,6 +372,7 @@
     <Content Include="Areas\Reports\Content\js\reports.js" />
     <Content Include="Content\bootstrap-tagsinput.css" />
     <Content Include="Content\css\bootstrap-tagsinput.css" />
+    <Content Include="Content\css\custom\dynamic-cases.css" />
     <Content Include="Content\icons\ajax-loader.gif" />
     <Content Include="Content\img\ajax-loader.GIF" />
     <Content Include="Content\img\dh_solutions_version.png" />
@@ -424,9 +425,10 @@
     <Content Include="Content\js\Cases\components\Utils.js" />
     <Content Include="Content\js\Cases\editLog.logic.js" />
     <Content Include="Content\js\Cases\index.settings.js" />
-    <Content Include="Content\js\Cases\edit.logic.js" />
+    <Content Include="Content\js\Cases\_input.js" />
     <Content Include="Content\js\Cases\index.logic.js" />
     <Content Include="Content\js\Cases\relatedCases.logic.js" />
+    <Content Include="Content\js\Cases\caseInitForm.js" />
     <Content Include="Content\js\CaseTemplates\edit.logic.js" />
     <Content Include="Content\js\Changes\inventoryDialog.js" />
     <Compile Include="Areas\Inventory\Controllers\ComputerInventoryBaseController.cs" />
@@ -757,6 +759,7 @@
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\SupplierEditModel.cs" />
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\UserEditModel.cs" />
     <Compile Include="Areas\Orders\OrdersAreaRegistration.cs" />
+    <Content Include="Content\js\dhHelpdesk.js" />
     <Content Include="Content\js\dropdown_fix.js" />
     <Content Include="Content\js\Licenses\license.editlogic.js" />
     <Content Include="Content\js\Notifiers\edit.js" />
@@ -1359,9 +1362,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\CommonJavascript\dhHelpdesk.js">
-      <Link>Content\js\dhHelpdesk.js</Link>
-    </Content>
     <Content Include="Content\base.css" />
     <Content Include="Content\bootstrap-datepicker.css" />
     <Content Include="Content\bootstrap-datepicker3.css" />
