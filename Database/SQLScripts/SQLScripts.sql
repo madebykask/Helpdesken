@@ -123,13 +123,5 @@ BEGIN
 	ALTER TABLE [dbo].[tblCustomerUser] add [CaseDepartmentFilter] [nvarchar](50) NULL;
 END
 	
-
-IF COL_LENGTH('dbo.tblCase','RegUserName') IS NULL
-BEGIN	 
-	ALTER TABLE [dbo].[tblCase]
-	ADD [RegUserName] nvarchar(200) NULL 
-END
-GO 
-
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.11'
