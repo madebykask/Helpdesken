@@ -310,7 +310,8 @@
                                                         currentUserId, 
                                                         advancedSearchModel, 
                                                         availableCustomers);
-            
+            m.SpecificSearchFilterData = CreateAdvancedSearchSpecificFilterData(currentCustomerId, currentUserId);// new AdvancedSearchSpecificFilterData();
+
             m.CaseSetting = this.GetCaseSettingModel(currentCustomerId, currentUserId);
             m.GridSettings = JsonGridSettingsMapper.GetAdvancedSearchGridSettingsModel(currentCustomerId);
 
@@ -323,6 +324,13 @@
 
             m.DoSearchAtBegining = doSearchAtBegining;
             return this.View("AdvancedSearch/Index", m);
+        }
+
+        [HttpGet]
+        public PartialViewResult GetCustomerSpecificFilter(int selectedCustomerId)
+        {
+            var model = CreateAdvancedSearchSpecificFilterData(selectedCustomerId, SessionFacade.CurrentUser.Id);
+            return PartialView("AdvancedSearch/_SpecificSearchTab", model);
         }
 
         public ActionResult DoAdvancedSearch(FormCollection frm)
@@ -932,6 +940,43 @@
             fd.filterMaxRows = GetMaxRowsFilter();
             
             return fd;
+        }
+
+        private AdvancedSearchSpecificFilterData CreateAdvancedSearchSpecificFilterData(int cusId, int userId)
+        {
+            var specificFilter = new AdvancedSearchSpecificFilterData();
+
+            specificFilter.CustomerId = cusId;
+            specificFilter.CustomerSetting = this._settingService.GetCustomerSetting(cusId);
+                        
+            const bool IsTakeOnlyActive = false;
+            specificFilter.DepartmentList = this._departmentService.GetDepartmentsByUserPermissions(
+                userId,
+                cusId,
+                IsTakeOnlyActive);
+            if (!specificFilter.DepartmentList.Any())
+            {
+                specificFilter.DepartmentList =
+                    this._departmentService.GetDepartments(cusId)
+                        .Where(
+                            d =>
+                            d.Region_Id == null
+                            || IsTakeOnlyActive == false 
+                            || (IsTakeOnlyActive && d.Region != null && d.Region.IsActive != 0))
+                        .ToList();
+            }
+
+            specificFilter.StateSecondaryList = this._stateSecondaryService.GetStateSecondaries(cusId);
+            specificFilter.PriorityList = this._priorityService.GetPriorities(cusId);
+            specificFilter.ClosingReasonList = this._finishingCauseService.GetFinishingCauses(cusId);
+            specificFilter.CaseTypeList = this._caseTypeService.GetCaseTypes(cusId);
+            const bool isTakeOnlyActive = false;
+            specificFilter.ProductAreaList = this._productAreaService.GetTopProductAreasForUser(
+                cusId,
+                SessionFacade.CurrentUser,
+                isTakeOnlyActive);
+
+            return specificFilter;
         }
 
         public JsonResult UnLockCase(string lockGUID)

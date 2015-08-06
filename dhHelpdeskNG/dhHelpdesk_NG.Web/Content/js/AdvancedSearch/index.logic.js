@@ -8,7 +8,10 @@ var GRID_STATE = {
 };
 
 
+
 (function ($) {    
+
+    
 
     /// message types
     var ERROR_MSG_TYPE = 0;
@@ -477,7 +480,7 @@ var GRID_STATE = {
 
     $(document).ready(function() {
         app.init.call(window.app, window.gridSettings, window.doSearchAtBegining);
-        SetSpecificConditionTab();
+        SetSpecificConditionTab();        
     });
 
     $('#lstfilterCustomers.chosen-select').on('change', function (evt, params) {
@@ -488,13 +491,23 @@ var GRID_STATE = {
         var selectedCustomers = $('#lstfilterCustomers.chosen-select option');
         var selectedCount = 0;
         var customerId = 0;
+
         $.each(selectedCustomers, function (idx, value) {
             if (value.selected) {
                 customerId = value.value;
                 selectedCount++;
             }
         });
-        if (selectedCount == 1) {
+
+        if (selectedCount == 1) {            
+            $.get(window.getSpecificFilterDataUrl,
+                    {
+                        selectedCustomerId: customerId,
+                        curTime: new Date().getTime()
+                    }, function (_SpecificFilterData) {
+                        $("#SpecificFilterDataPartial").html(_SpecificFilterData);
+            });
+
             $('#AdvanceSearchSpecificTab').attr('style', '');
             $('#AdvanceSearchSpecificTab').attr('data-field', customerId);            
         }
@@ -504,6 +517,7 @@ var GRID_STATE = {
         }
     }
 })($);
+
 
 
 $('#divCaseType ul.dropdown-menu li a').click(function (e) {

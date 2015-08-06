@@ -202,6 +202,8 @@
 
         public CaseSearchFilterData CaseSearchFilterData { get; set; }
 
+        public AdvancedSearchSpecificFilterData SpecificSearchFilterData { get; set; }
+
         public CaseTemplateTreeModel CaseTemplateTreeButton { get; set; }
 
         public CaseSettingModel CaseSetting { get; set; }

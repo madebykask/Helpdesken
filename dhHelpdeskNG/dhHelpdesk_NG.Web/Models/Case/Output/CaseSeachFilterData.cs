@@ -85,5 +85,40 @@
         /// List of selected performers for "Administrator" case field in search form
         /// </summary>
         public int[] lstfilterPerformer { get; set; }
-    }    
+    }
+
+    public class AdvancedSearchSpecificFilterData
+    {
+        public AdvancedSearchSpecificFilterData()
+        {
+        }
+        
+        public int CustomerId { get; set; }
+
+        public Setting CustomerSetting { get; set; }
+
+        public IList<Department> DepartmentList { get; set; }
+
+        public string FilteredDepartment { get; set; }
+
+        public IList<CaseType> CaseTypeList { get; set; }
+
+        public string FilteredCaseType { get; set; }
+
+        public IList<ProductArea> ProductAreaList { get; set; }
+
+        public string FilteredProductArea { get; set; }
+
+        public IList<Priority> PriorityList { get; set; }
+
+        public string FilteredPriority { get; set; }
+
+        public IList<StateSecondary> StateSecondaryList { get; set; }
+
+        public string FilteredStateSecondary { get; set; }
+
+        public IList<FinishingCause> ClosingReasonList { get; set; }
+
+        public string FilteredClosingReason { get; set; }
+    }
 }
