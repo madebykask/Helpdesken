@@ -170,6 +170,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\CommonAssembly\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="App_Start\NinjectModules\Modules\CommonModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\EmailModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\NotifiersModule.cs" />
@@ -275,7 +278,6 @@
     <Compile Include="Models\SearchModel.cs" />
     <Compile Include="Models\SelfService\SelfServiceConfigurationModel.cs" />
     <Compile Include="Models\SelfService\SelfServiceModel.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\base.css" />
