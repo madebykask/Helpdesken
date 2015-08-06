@@ -498,6 +498,7 @@
             {
                 SessionFacade.CurrentCustomer = this._customerService.GetCustomer(customerId.Value);
                 SessionFacade.CaseOverviewGridSettings = null;
+                SessionFacade.CurrentAdvancedSearch = null;
             }
             else
             {
@@ -505,6 +506,7 @@
                 {
                     SessionFacade.CurrentCustomer = this._customerService.GetCustomer(SessionFacade.CurrentUser.CustomerId);
                     SessionFacade.CaseOverviewGridSettings = null;
+                    SessionFacade.CurrentAdvancedSearch = null;
                 }
             }
 
