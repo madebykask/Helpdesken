@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<PropertyGroup>
-	       <AssemblyFileName>CommonAssemblyInfo.cs</AssemblyFileName>
+	       <AssemblyFileName>..\dhHelpdeskNG\CommonAssembly\SharedAssemblyInfo.cs</AssemblyFileName>
 		<!-- If changing this, change var match.. in C# code also  -->
 		<TagMatchTemplate>v*.*.*</TagMatchTemplate>
 		<ExitCode>0</ExitCode>
@@ -93,7 +93,7 @@
       
     <PropertyGroup>
       <VersionString Condition="'$(VersionString)'==''">0.0.0.0</VersionString>
-       <AssemblyFileName Condition="'$(AssemblyFileName)'==''">CommonAssemblyInfo.cs</AssemblyFileName>
+       <AssemblyFileName Condition="'$(AssemblyFileName)'==''">..\dhHelpdeskNG\CommonAssembly\SharedAssemblyInfo.cs</AssemblyFileName>
     </PropertyGroup>
 
     <Message Importance="High" Text="Creating $(ProjectDir)$(AssemblyFileName) with version $(FullVersion)" />
