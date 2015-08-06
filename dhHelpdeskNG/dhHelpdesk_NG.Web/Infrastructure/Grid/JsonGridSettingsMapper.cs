@@ -44,8 +44,14 @@
             var ret = new List<JsonGridColumnDef>();            
             string[] fieldNames = new string[] 
                     { 
-                        "CaseNumber", "ReportedBy", "Caption", "Description",
-                        "Performer_User_Id", "WorkingGroup_Id", "Department_Id", "RegTime" 
+                        GlobalEnums.TranslationCaseFields.CaseNumber.ToString(), 
+                        GlobalEnums.TranslationCaseFields.Persons_Name.ToString(),
+                        GlobalEnums.TranslationCaseFields.Caption.ToString(),
+                        GlobalEnums.TranslationCaseFields.Description.ToString(),
+                        GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(),
+                        GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(),
+                        GlobalEnums.TranslationCaseFields.Department_Id.ToString(),
+                        GlobalEnums.TranslationCaseFields.RegTime.ToString() 
                     };
                         
             foreach (var fieldName in fieldNames)
