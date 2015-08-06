@@ -1,9 +1,9 @@
-﻿using DH.Helpdesk.BusinessData.Models.Case;
-using DH.Helpdesk.Web.Models.Case;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using DH.Helpdesk.BusinessData.Models.Case.CaseLock;
+using DH.Helpdesk.Web.Models.CaseLock;
 
 namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.CaseLockMappers
 {  
@@ -24,4 +24,5 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.CaseLockMappers
                                     );
         }
     }
+    
 }

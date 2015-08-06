@@ -5,6 +5,8 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.Models.Case.CaseSearch;
+    using DH.Helpdesk.BusinessData.Models.Grid;
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Repositories;
@@ -140,26 +142,28 @@
             var resonisbleFieldSettings = customerCaseFieldsSettings.Where(it => it.Name == GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString()).FirstOrDefault();
             var isFieldResponsibleVisible =
                 resonisbleFieldSettings != null && resonisbleFieldSettings.ShowOnStartPage == 1;
-            var result = this.caseSearchRepository.Search(
-                                                csf, 
-                                                csl, 
-                                                isFieldResponsibleVisible,
-                                                userId, 
-                                                userUserId, 
-                                                showNotAssignedWorkingGroups, 
-                                                userGroupId, 
-                                                restrictedCasePermission, 
-                                                this.globalSettingService.GetGlobalSettings().FirstOrDefault(), 
-                                                this.settingService.GetCustomerSetting(f.CustomerId), 
-                                                s,
-                                                workTimeFactory,
-                                                applicationType,
-                                                calculateRemainingTime,
-                                                this.productAreaService,
-                                                out remainingTime,
-                                                relatedCasesCaseId,
-                                                relatedCasesUserId,
-                                                caseIds);
+            var context = new CaseSearchContext()
+                              {
+                                    f = csf,
+                                    userCaseSettings = csl,
+                                    isFieldResponsibleVisible = isFieldResponsibleVisible,
+                                    userId = userId,
+                                    userUserId = userUserId,
+                                    showNotAssignedWorkingGroups = showNotAssignedWorkingGroups,
+                                    userGroupId = userGroupId,
+                                    restrictedCasePermission = restrictedCasePermission,
+                                    gs = this.globalSettingService.GetGlobalSettings().FirstOrDefault(),
+                                    customerSetting = this.settingService.GetCustomerSetting(f.CustomerId),
+                                    s = s,
+                                    workTimeCalcFactory = workTimeFactory,
+                                    applicationType = applicationType,
+                                    calculateRemainingTime = calculateRemainingTime,
+                                    productAreaNamesResolver = this.productAreaService,
+                                    relatedCasesCaseId = relatedCasesCaseId,
+                                    relatedCasesUserId = relatedCasesUserId,
+                                    caseIds = caseIds
+                              };
+            var result = this.caseSearchRepository.Search(context, out remainingTime);
 
             var workingHours = workingDayEnd - workingDayStart;
             if (f.CaseRemainingTimeFilter.HasValue && calculateRemainingTime)

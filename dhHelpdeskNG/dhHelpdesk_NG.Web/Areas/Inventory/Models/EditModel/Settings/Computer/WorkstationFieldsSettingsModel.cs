@@ -34,43 +34,43 @@
         }
 
         [NotNull]
-        [LocalizedDisplay("Name")]
+        [LocalizedDisplay("Datornamn")]
         public FieldSettingModel NameFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Manufacturer")]
+        [LocalizedDisplay("Tillverkare")]
         public FieldSettingModel ManufacturerFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Model")]
+        [LocalizedDisplay("Datormodell")]
         public FieldSettingModel ModelFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Serial Number")]
+        [LocalizedDisplay("Serienummer")]
         public FieldSettingModel SerialNumberFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("BIOS Version")]
+        [LocalizedDisplay("BIOS version")]
         public FieldSettingModel BIOSVersionFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("BIOS Date")]
+        [LocalizedDisplay("BIOS datum")]
         public FieldSettingModel BIOSDateFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Theftmark")]
+        [LocalizedDisplay("Stöldmärkning")]
         public FieldSettingModel TheftmarkFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Care Pack Number")]
+        [LocalizedDisplay("CarePack Nummer")]
         public FieldSettingModel CarePackNumberFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Computer Type")]
+        [LocalizedDisplay("Datortyp")]
         public FieldSettingModel ComputerTypeFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Location")]
+        [LocalizedDisplay("Placering")]
         public FieldSettingModel LocationFieldSettingModel { get; set; }
     }
 }

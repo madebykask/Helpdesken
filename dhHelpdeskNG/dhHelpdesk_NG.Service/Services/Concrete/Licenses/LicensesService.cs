@@ -16,9 +16,17 @@
     {
         private readonly IUnitOfWorkFactory unitOfWorkFactory;
 
-        public LicensesService(IUnitOfWorkFactory unitOfWorkFactory)
+        private readonly IRegionService _regionService;
+
+        private readonly IDepartmentService _departmentService;
+
+        public LicensesService(IUnitOfWorkFactory unitOfWorkFactory,
+                               IRegionService regionService,
+                               IDepartmentService departmentService)
         {
             this.unitOfWorkFactory = unitOfWorkFactory;
+            this._regionService = regionService;
+            this._departmentService = departmentService;
         }
 
         public LicenseOverview[] GetLicenses(int customerId)
@@ -59,11 +67,13 @@
                 var products = productRepository.GetAll()
                                 .GetByCustomer(customerId);
                 
-                var regions = regionRepository.GetAll()
-                                .GetByCustomer(customerId);
 
-                var departments = departmentRepository.GetAll()
-                                .GetByCustomer(customerId);
+                var regionId = (license.RegionId.HasValue && license.RegionId.Value > 0)? license.RegionId : null;
+                var regions = this._regionService.GetAllRegions()
+                                                 .Where(r => r.Customer_Id == customerId && r.IsActive != 0)
+                                                 .ToList();                                                                         
+                
+                var departments = this._departmentService.GetActiveDepartmentsBy(customerId, regionId).ToList();
 
                 var vendors = vendorRepository.GetAll()
                                 .GetByCustomer(customerId);
@@ -200,5 +210,14 @@
                         .ToArray();
             }
         }
+        
+        public List<Department> GetDepartmentsFor(int customerId, int? regionId)
+        {
+            if (regionId.HasValue && regionId.Value == 0)
+                regionId = null;
+
+            return this._departmentService.GetActiveDepartmentsBy(customerId, regionId).ToList();            
+        }
+
     }
 }

@@ -2,8 +2,9 @@
 {
     using System;
 
-    using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.Models.Case;    
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Web.Models.CaseLock;
 
     public class CaseEditInput
     {

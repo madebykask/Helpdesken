@@ -226,7 +226,8 @@
                                 }
                               }
                              <div class="btn @disabled" id="divBreadcrumbs_FinishingType">
-                                 @(string.IsNullOrEmpty(Model.CaseLog.FinishingTypeName)? Translation.Get("--") : Model.CaseLog.FinishingTypeName)
+                                
+                                 @(string.IsNullOrEmpty(Model.FinishingCause)? Translation.Get("--") : Model.FinishingCause)
                              </div>
                              <button class="btn dropdown-toggle" data-toggle="dropdown" @disabled>
                                  <span class="caret"></span>

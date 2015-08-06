@@ -16,7 +16,7 @@
 
     public interface IDepartmentService
     {
-        IList<Department> GetDepartmentsByUserPermissions(int userId, int customerId);
+        IList<Department> GetDepartmentsByUserPermissions(int userId, int customerId, bool isOnlyActive = true);
         
         IList<Department> GetDepartments(int customerId, ActivationStatus isActive = ActivationStatus.Active);
         
@@ -69,7 +69,7 @@
             return this.departmentRepository.GetMany(x => x.Customer_Id == customerId && x.IsActive == (int)isActive).OrderBy(x => x.DepartmentName).ToList();
         }
 
-        public IList<Department> GetDepartmentsByUserPermissions(int userId, int customerId)
+        public IList<Department> GetDepartmentsByUserPermissions(int userId, int customerId, bool isOnlyActive = true)
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {
@@ -88,7 +88,7 @@
                                         customers,
                                         departments,
                                         userDepartments);
-                return deps.Where(d=> d.Region_Id == null || (d.Region != null && d.Region.IsActive != 0))
+                return deps.Where(d => d.Region_Id == null || (isOnlyActive && d.Region != null && d.Region.IsActive != 0))
                            .ToList();
             }
         }

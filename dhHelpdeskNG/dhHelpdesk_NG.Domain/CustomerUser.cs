@@ -17,6 +17,12 @@
         public string CasePerformerFilter { get; set; }
         public string CaseProductAreaFilter { get; set; }
         public string CaseRegionFilter { get; set; }
+
+        /// <summary>
+        /// List of departments speartated by ','
+        /// </summary>
+        public string CaseDepartmentFilter { get; set; }
+
         public string CaseStateSecondaryFilter { get; set; }
 
         /// <summary>

@@ -15,7 +15,7 @@
         }
 
         [NotNull]
-        [LocalizedDisplay("Proccesor")]
+        [LocalizedDisplay("Processor")]
         public FieldSettingModel ProccesorFieldSettingModel { get; set; }
     }
 }

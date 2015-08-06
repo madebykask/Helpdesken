@@ -34,17 +34,19 @@
 
         public ActionResult Edit()
         {
-            var user = this.userService.GetUser(SessionFacade.CurrentUser.Id);
+            if (SessionFacade.CurrentUser == null)
+            {
+                return this.RedirectToAction("Unathorized", "Error");
+            }
 
+            var user = this.userService.GetUser(SessionFacade.CurrentUser.Id);
             if (user == null)
             {
-                return new HttpNotFoundResult("No user found...");
+                return this.RedirectToAction("Unathorized", "Error");
             }
 
             user.TimeZoneId = SessionFacade.CurrentUser.TimeZoneId ?? TimeZoneInfo.Local.Id;
 
-            // Temporary inactive MyCases only for 27th March released #11837 
-            //.Where(m => m.Id != 12 && m.Name != "Mina tilldelade ärenden"); 
             var allModules = this.moduleService.GetAllModules();                                                
                                           
             var modules = new UserModulesViewModel();
@@ -98,38 +100,24 @@
 
         [HttpPost]
         public ActionResult Edit(
-                        int id, 
                         string NewPassword, 
                         string ConfirmPassword, 
                         ProfileSaveViewModel profileUserModel, 
                         FormCollection coll)
         {
-            var userToSave = new User();
-
-            if (id != -1)
+            if (SessionFacade.CurrentUser == null)
             {
-                userToSave = this.userService.GetUser(id);
+                return this.RedirectToAction("Unathorized", "Error");
+            }
+
+            var userToSave = this.userService.GetUser(SessionFacade.CurrentUser.Id);
+            if (userToSave == null)
+            {
+                return this.RedirectToAction("Unathorized", "Error");
             }
 
             var b = this.TryUpdateModel(userToSave, "user");
-
-            if (id == -1)
-            {
-                userToSave.Id = 0;
-                userToSave.Password = NewPassword;
-                userToSave.UserRoles = this.userService.GetUserRoles();
-
-                if (userToSave.Language_Id == 0)
-                {
-                    userToSave.Language_Id = 2;
-                }
-
-                foreach (var cu in userToSave.CustomerUsers)
-                {
-                    cu.User_Id = 0;
-                }
-            }
-           
+            
             if (userToSave.UserRoles != null)
             {
                 foreach (var delete in userToSave.UserRoles.ToList())
@@ -138,7 +126,7 @@
                 }
             }
 
-            if (profileUserModel.UserRights.HasValue)
+            if (profileUserModel.UserRights.HasValue && userToSave.UserRoles != null)
             {
                 var userRight = this.userService.GetUserRoleById(profileUserModel.UserRights.Value);
                 userToSave.UserRoles.Add(userRight);
@@ -153,7 +141,7 @@
             if (errors.Count == 0)
             {
                 this.userService.UpdateUserModules(profileUserModel.Modules);
-                this.userService.UpdateUserProfileCustomerSettings(id, profileUserModel.CustomersSettings);
+                this.userService.UpdateUserProfileCustomerSettings(SessionFacade.CurrentUser.Id, profileUserModel.CustomersSettings);
                 this.workContext.Refresh();
 
                 return this.RedirectToAction("edit", "profile", new { id = userToSave.Id});

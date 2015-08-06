@@ -1,0 +1,33 @@
+﻿.tab-content {
+    overflow: hidden !important;
+}
+
+#dh-form-area.tab-pane-border {
+    padding: 0px !important;
+}
+
+.hidden2 {
+    visibility: hidden;
+}
+
+.hide {
+    display: none;
+}
+
+#openContainer {
+    cursor: pointer;
+}
+
+#dh-modal-form-area {
+    padding: 0;
+    margin: 0;
+}
+
+#dh-modal-form-area #loading {
+    position: absolute;
+    left: 0;
+    top: 20px;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+}

@@ -2,7 +2,7 @@
 body {
   /*background:#ffffff;*/
   background: #f2f7fe;
-  /*min-width:1350px !important;*/
+  min-width:1350px !important;
 }
 
 a, a:hover, a:focus {
@@ -1042,6 +1042,12 @@ input[type=text].error, select.error, textarea.error,  .btn-group.error .btn
     color: #ff0000 !important;
 }
 
+.date label.error 
+{
+    display: inline;
+    line-height: 30px;
+}
+
 /*******************************************************************************************/
 .navbar-inner
 {
@@ -2033,7 +2039,7 @@ td.td-bottom-multiselect .btn-group {
 
 /************************MISC********************************************/
 
-h4
+h4:not(.alert-header)
 	{
 		font-size: 14px;
 		font-weight: bold;
@@ -2103,7 +2109,7 @@ h4
     }
 
     .datepicker table {
-        /*width: 100%;*/
+        width: 100%;
         margin: 0;
     }
 

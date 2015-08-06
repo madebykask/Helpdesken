@@ -7,6 +7,8 @@ $(function () {
             editor.on('change', function (e) {
                 //define local variables
                 var tinymax, tinylen, htmlcount;
+                tinyMCE.triggerSave();
+                $("#" + editor.id).valid();
                 //alert('ok');
                 //setting our max character limit
                 tinymax = 1998;

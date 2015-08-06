@@ -3,6 +3,7 @@
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models.Licenses.Licenses;
+    using DH.Helpdesk.Domain;
 
     public interface ILicensesService
     {
@@ -21,5 +22,7 @@
         List<string> FindFileNamesExcludeSpecified(int licenseId, List<string> excludeFiles);
 
         string[] GetLicenseFileNames(int licenseId);
+
+        List<Department> GetDepartmentsFor(int customerId, int? regionId);
     }
 }

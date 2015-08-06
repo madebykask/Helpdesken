@@ -56,6 +56,8 @@
         /// <returns></returns>
         IList<User> GetAvailablePerformersOrUserId(int customerId, int? userId = null);
 
+        IList<User> GetAllPerformers(int customerId);
+
         IList<User> GetAvailablePerformersForWorkingGroup(int customerId, int? workingGroup = null);
 
         IList<User> SearchSortAndGenerateUsers(UserSearch SearchUsers);
@@ -316,6 +318,14 @@
             return
                 this._userRepository.GetUsers(customerId)
                     .Where(e => e.IsActive == 1 && (e.Performer == 1 || (userId.HasValue && e.Id == userId)))
+                    .ToList();
+        }
+
+        public IList<User> GetAllPerformers(int customerId)
+        {
+            return
+                this._userRepository.GetUsers(customerId)
+                    .Where(e => e.Performer == 1)
                     .ToList();
         }
 

@@ -1,56 +1,18 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel
-@using DH.Helpdesk.Web.Infrastructure
-@using DH.Helpdesk.BusinessData.OldComponents
+@using System.Web.Optimization
 
 @{ var t = new ViewDataDictionary();
    t.Add("isJS", "true");
 }
 
-
-@section Styles {
-
-    @if (Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
-    {
-        <style type="text/css">
-            .tab-content {
-                overflow: hidden !important;
-            }
-
-            #dh-form-area.tab-pane-border {
-                padding: 0px !important;
-            }
-
-            .hidden2 {
-                visibility: hidden;
-            }
-
-            .hide {
-                display: none;
-            }
-
-            #openContainer {
-                cursor: pointer;
-            }
-
-            #dh-modal-form-area {
-                padding: 0;
-                margin: 0;
-            }
-
-                #dh-modal-form-area #loading {
-                    position: absolute;
-                    left: 0;
-                    top: 20px;
-                    right: 0;
-                    bottom: 0;
-                    margin: auto;
-                }
-        </style>
-    }
+@if (Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
+{
+    @Styles.Render("~/cases/dynamic-cases")
 }
 
-@section Scripts {
+@Scripts.Render("~/bundles/cases/edit")
 
+@section Scripts {
     <script type="text/javascript">
         
         $(document).ready(function () {

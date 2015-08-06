@@ -4191,5 +4191,196 @@ If not exists (select * from tblTextTranslation where text_id = 1505 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1505, 2, 'No results match')
 GO
 
+If not exists (select * from tbltext where id = 1506)
+	insert into tbltext (id, TextString) VALUES (1506, 'Inga resultat matchar')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1506 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1506, 2, 'No results match')
+GO
+
+
+If not exists (select * from tbltext where id = 1507)
+	insert into tbltext (id, TextString) VALUES (1507, 'Inställningarna sparades')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1507 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1507, 2, 'Settings saved successfully')
+GO
+
+If not exists (select * from tbltext where id = 1508)
+	insert into tbltext (id, TextString) VALUES (1508, 'Lås upp')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1508 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1508, 2, 'Unlock')
+GO
+
+If not exists (select * from tbltext where id = 1509)
+	insert into tbltext (id, TextString) VALUES (1509, 'Låsta ärenden')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1509 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1509, 2, 'Locked cases')
+GO
+
+If not exists (select * from tbltext where id = 1510)
+	insert into tbltext (id, TextString) VALUES (1510, 'Låst')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1510 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1510, 2, 'Locked')
+GO
+
+Update tblTextTranslation Set TextTranslation = 'Search'
+Where Text_id = (select id from tbltext where TextString = 'Sök' and TextType = 0) And Language_Id = 2
+
+If not exists (select * from tbltext where id = 1511)
+	insert into tbltext (id, TextString) VALUES (1511, 'Är du säker på att du vill ta bort aktuell post')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1511 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1511, 2, 'Are you sure you want to delete selected post')
+GO
+
+If not exists (select * from tbltext where id = 1512)
+	insert into tbltext (id, TextString) VALUES (1512, 'Din sökning resulterade inte i några träffar.')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1512 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1512, 2, 'Your search returned no matching results.')
+GO
+
+--2015-07-15
+-----------------------
+If not exists (select * from tbltext where id = 1513)
+	insert into tbltext (id, TextString) VALUES (1513, 'Streckkod')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1513 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1513, 2, 'BarCode')
+GO
+
+If not exists (select * from tbltext where id = 1514)
+	insert into tbltext (id, TextString) VALUES (1514, 'Novellklient')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1514 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1514, 2, 'Novell Client')
+GO
+
+If not exists (select * from tbltext where id = 1515)
+	insert into tbltext (id, TextString) VALUES (1515, 'Grafikkort')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1515 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1515, 2, 'Video Card')
+GO
+
+If not exists (select * from tbltext where id = 1516)
+	insert into tbltext (id, TextString) VALUES (1516, 'Ljudkort')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1516 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1516, 2, 'Sound Card')
+GO
+
+If not exists (select * from tbltext where id = 1517)
+	insert into tbltext (id, TextString) VALUES (1517, 'Avtalsstatus')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1517 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1517, 2, 'Contract Status')
+GO
+
+If not exists (select * from tbltext where id = 1518)
+	insert into tbltext (id, TextString) VALUES (1518, 'Avtalsnummer')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1518 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1518, 2, 'Contract Number')
+GO
+
+If not exists (select * from tbltext where id = 1519)
+	insert into tbltext (id, TextString) VALUES (1519, 'Avtalsstart')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1519 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1519, 2, 'Contract Start Date')
+GO
+
+If not exists (select * from tbltext where id = 1520)
+	insert into tbltext (id, TextString) VALUES (1520, 'Avtalsslut')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1520 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1520, 2, 'Contract End Date')
+GO
+
+If not exists (select * from tbltext where id = 1521)
+	insert into tbltext (id, TextString) VALUES (1521, 'Kontodimension 1')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1521 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1521, 2, 'Accounting Dimension 1')
+GO
+
+If not exists (select * from tbltext where id = 1522)
+	insert into tbltext (id, TextString) VALUES (1522, 'Kontodimension 2')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1522 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1522, 2, 'Accounting Dimension 2')
+GO
+
+If not exists (select * from tbltext where id = 1523)
+	insert into tbltext (id, TextString) VALUES (1523, 'Kontodimension 3')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1523 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1523, 2, 'Accounting Dimension 3')
+GO
+
+If not exists (select * from tbltext where id = 1524)
+	insert into tbltext (id, TextString) VALUES (1524, 'Kontodimension 4')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1524 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1524, 2, 'Accounting Dimension 4')
+GO
+
+If not exists (select * from tbltext where id = 1525)
+	insert into tbltext (id, TextString) VALUES (1525, 'Kontodimension 5')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1525 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1525, 2, 'Accounting Dimension 5')
+GO
+
+If not exists (select * from tbltext where id = 1526)
+	insert into tbltext (id, TextString) VALUES (1526, 'Placering 2')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1526 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1526, 2, 'Placement 2')
+GO
+
+If not exists (select * from tbltext where id = 1527)
+	insert into tbltext (id, TextString) VALUES (1527, 'Synkroniseringsdatum')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1527 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1527, 2, 'Synchronization Date')
+GO
+
+If not exists (select * from tbltext where id = 1528)
+	insert into tbltext (id, TextString) VALUES (1528, 'Användare ID')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1528 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1528, 2, 'User ID')
+GO
+
+-- New Translation 20150803
+If not exists (select * from tbltext where id = 1529)
+	insert into tbltext (id, TextString) VALUES (1529, 'Finska')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1529 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1529, 2, 'Finnish')
+GO
+
+If not exists (select * from tbltext where id = 1530)
+	insert into tbltext (id, TextString) VALUES (1530, 'Var vänlig ange ett giltigt datum')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1530 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1530, 2, 'Please enter a valid date')
+GO
+
+-- New translatin 20150805
+If not exists (select * from tbltext where id = 1531)
+	insert into tbltext (id, TextString) VALUES (1531, 'Vi har upptäckt att din webbläsares tidszon skiljer sig från den som angetts i din Profil. Om du vill ändra tidszon som du arbetar i, gå till Profil i toppmenyn.')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1531 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1531, 2, 'We have detected that your browser’s time zone differs from the one in your Profile. To change it go to profile settings.')
+GO
+
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

@@ -156,6 +156,7 @@
     <Compile Include="Models\Accounts\Write\AccountForWrite.cs" />
     <Compile Include="Models\ADFS\Input\ADFSSetting.cs" />
     <Compile Include="Models\CaseType\CaseTypeItem.cs" />
+    <Compile Include="Models\Case\CaseLock\LockedCaseOverview.cs" />
     <Compile Include="Models\Case\CaseOverview\CaseInfoOverview.cs" />
     <Compile Include="Models\Case\CaseOverview\ComputerOverview.cs" />
     <Compile Include="Models\Case\CaseOverview\FullCaseOverview.cs" />
@@ -165,13 +166,14 @@
     <Compile Include="Models\Case\CaseOverview\UserOverview.cs" />
     <Compile Include="Models\Case\CaseRemainingTime.cs" />
     <Compile Include="Models\Case\CaseRemainingTimeData.cs" />
+    <Compile Include="Models\Case\CaseSearch\CaseSearchContext.cs" />
     <Compile Include="Models\Case\CaseSettingsOverview\CaseInfoSettings.cs" />
     <Compile Include="Models\Case\CaseSettingsOverview\ComputerSettings.cs" />
     <Compile Include="Models\Case\CaseSettingsOverview\FullCaseSettings.cs" />
     <Compile Include="Models\Case\CaseSettingsOverview\LogSettings.cs" />
     <Compile Include="Models\Case\CaseSettingsOverview\OtherSettings.cs" />
     <Compile Include="Models\Case\CaseSettingsOverview\UserSettings.cs" />
-    <Compile Include="Models\Case\CaseLock.cs" />
+    <Compile Include="Models\Case\CaseLock\CaseLock.cs" />
     <Compile Include="Models\Case\ExtraFieldCaseHistory.cs" />
     <Compile Include="Models\Case\RelatedCase.cs" />
     <Compile Include="Models\Checklists\Output\ActionsForServiceBM.cs" />
@@ -367,6 +369,7 @@
     <Compile Include="Models\Orders\Order\OrderHistoryFields\SupplierHistoryFields.cs" />
     <Compile Include="Models\Orders\Order\OrderHistoryFields\UserHistoryFields.cs" />
     <Compile Include="Models\Orders\Order\UpdateOrderRequest.cs" />
+    <Compile Include="Models\ProductArea\IProductAreaNameResolver.cs" />
     <Compile Include="Models\ProductArea\ProductAreaItem.cs" />
     <Compile Include="Models\Projects\Output\ProjectOverviewSorting.cs" />
     <Compile Include="Models\Questionnaire\Participant.cs" />
@@ -426,8 +429,8 @@
     <Compile Include="Models\Case\CaseLog.cs" />
     <Compile Include="Models\Case\CaseMailSetting.cs" />
     <Compile Include="Models\Case\CaseRelation.cs" />
-    <Compile Include="Models\Case\CaseSearchResults.cs" />
-    <Compile Include="Models\Case\CaseSearchFilter.cs" />
+    <Compile Include="Models\Case\CaseSearch\CaseSearchResults.cs" />
+    <Compile Include="Models\Case\CaseSearch\CaseSearchFilter.cs" />
     <Compile Include="Models\Case\DynamicCase.cs" />
     <Compile Include="Models\Case\Input\CaseNotifier.cs" />
     <Compile Include="Models\Case\Output\CaseOverview.cs" />
@@ -922,6 +925,8 @@
     <Compile Include="Enums\Changes\ChangeStatus.cs" />
     <Compile Include="Enums\Changes\Subtopic.cs" />
     <Compile Include="Models\Users\UserProfileCustomerSettings.cs" />
+    <Compile Include="Models\WorktimeCalculator\IWorkTimeCalculatorFactory.cs" />
+    <Compile Include="Models\WorktimeCalculator\WorkTimeCalculator.cs" />
     <Compile Include="Models\WorkingDay\TimeRangesHolder.cs" />
     <Compile Include="OldComponents\DbUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -8,7 +8,11 @@ var GRID_STATE = {
 };
 
 
-(function ($) {
+
+(function ($) {    
+
+    
+
     /// message types
     var ERROR_MSG_TYPE = 0;
     var LOADING_MSG_TYPE = 1;
@@ -76,7 +80,7 @@ var GRID_STATE = {
         });
         
         me.$table = [];
-
+        
         me.hideMessage();        
         $('.submit, a.refresh-grid').on('click', function (ev) {
             ev.preventDefault();
@@ -221,7 +225,7 @@ var GRID_STATE = {
         } else {
             me.showMsg(NODATA_MSG_TYPE);
         }
-        me.setGridState(window.GRID_STATE.IDLE);                        
+        me.setGridState(window.GRID_STATE.IDLE);        
     };
      
     Page.prototype.unsetSearchFilter = function () {
@@ -342,7 +346,7 @@ var GRID_STATE = {
 
     Page.prototype.DrawTables = function (callBack) {
         var me = this;
-        
+        var hasData = false;
         if (customerTableRepository.length > 0) {
             customerTableRepository.sort(function (element1, element2) {
                 return element1.CustomerName > element2.CustomerName
@@ -353,14 +357,17 @@ var GRID_STATE = {
                 if (tableData != '') {
                     me.$customerCaseArea.append(tableData);
                     me.$customerCaseArea.find('th.thpointer.' + tableId).on('click', callBack);
+                    hasData = true;
                 }
-            });
-        };
+            });            
+        };       
 
         customerTableId = 0;
         currentCustomerTable = '';
         globalCounter = 0;
         me.hideMessage();
+        if (!hasData)
+            me.showMsg(NODATA_MSG_TYPE);
         me.setGridState(window.GRID_STATE.IDLE);       
     };
 
@@ -473,9 +480,44 @@ var GRID_STATE = {
 
     $(document).ready(function() {
         app.init.call(window.app, window.gridSettings, window.doSearchAtBegining);
+        SetSpecificConditionTab();        
     });
 
+    $('#lstfilterCustomers.chosen-select').on('change', function (evt, params) {
+        SetSpecificConditionTab();
+    });
+
+    function SetSpecificConditionTab() {
+        var selectedCustomers = $('#lstfilterCustomers.chosen-select option');
+        var selectedCount = 0;
+        var customerId = 0;
+
+        $.each(selectedCustomers, function (idx, value) {
+            if (value.selected) {
+                customerId = value.value;
+                selectedCount++;
+            }
+        });
+
+        if (selectedCount == 1) {            
+            $.get(window.getSpecificFilterDataUrl,
+                    {
+                        selectedCustomerId: customerId,
+                        curTime: new Date().getTime()
+                    }, function (_SpecificFilterData) {
+                        $("#SpecificFilterDataPartial").html(_SpecificFilterData);
+            });
+
+            $('#AdvanceSearchSpecificTab').attr('style', '');
+            $('#AdvanceSearchSpecificTab').attr('data-field', customerId);            
+        }
+        else {            
+            $('#AdvanceSearchSpecificTab').attr('style', 'display:none');
+            $('#AdvanceSearchSpecificTab').attr('data-field', '');
+        }
+    }
 })($);
+
 
 
 $('#divCaseType ul.dropdown-menu li a').click(function (e) {

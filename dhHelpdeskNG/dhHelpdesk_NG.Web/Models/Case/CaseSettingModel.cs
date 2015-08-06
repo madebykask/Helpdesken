@@ -109,6 +109,10 @@
 
     public sealed class CaseSettingModel
     {
+        #region HTML Inputs names
+        public const string DepartmentsControlName = "selectedDepartments";
+        #endregion
+
         public int CustomerId { get; set; }
 
         public int UserId { get; set; }
@@ -116,6 +120,21 @@
         public bool RegionCheck { get; set; }
         public IList<Region> Regions { get; set; }
         public string SelectedRegion { get; set; }
+
+        /// <summary>
+        /// Checkbox value for departments
+        /// </summary>
+        public bool IsDepartmentChecked { get; set; }
+
+        /// <summary>
+        /// List of available values for departments
+        /// </summary>
+        public IList<Department> Departments { get; set; }
+        
+        /// <summary>
+        /// Selected values for departments represented as "1,2,44" string
+        /// </summary>
+        public string SelectedDepartments { get; set; }
 
         public bool RegisteredByCheck { get; set; }
 

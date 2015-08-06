@@ -24,23 +24,23 @@
         }
 
         [NotNull]
-        [LocalizedDisplay("State")]
+        [LocalizedDisplay("Status")]
         public FieldSettingModel StateFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Stolen")]
+        [LocalizedDisplay("Stulen")]
         public FieldSettingModel StolenFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Replaced With")]
+        [LocalizedDisplay("Ersatt med")]
         public FieldSettingModel ReplacedWithFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Send Back")]
+        [LocalizedDisplay("Retur")]
         public FieldSettingModel SendBackFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Scrap Date")]
+        [LocalizedDisplay("Skrotad datum")]
         public FieldSettingModel ScrapDateFieldSettingModel { get; set; }
     }
 }

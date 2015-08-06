@@ -2,6 +2,8 @@
 {
     public sealed class MailTemplate
     {
+        public const int UserTemplatesMinID = 301;
+
         public MailTemplate(string subject, string body)
         {
             this.Subject = subject;

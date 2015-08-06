@@ -5,8 +5,8 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.WorkingDay;
+    using DH.Helpdesk.BusinessData.Models.WorktimeCalculator;
     using DH.Helpdesk.Common.Tools;
-    using DH.Helpdesk.Dal.Utils;
     using DH.Helpdesk.Services.Services;
 
     /// <summary>

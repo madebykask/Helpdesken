@@ -46,6 +46,10 @@
         public int PlanDateMail { get; set; }
         public int RefreshContent { get; set; }
         public int ReportPermission { get; set; }
+
+        /// <summary>
+        /// User has permission to see own cases only
+        /// </summary>
         public int RestrictedCasePermission { get; set; }
         public int SessionTimeout { get; set; }
         public int SetPriorityPermission { get; set; }

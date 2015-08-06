@@ -29,10 +29,8 @@
                     if (this.Model.HasFaqs)
                     {
                         <li>
-                            <div class="well well-small">
-                                <a class="btn">@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</a>
-                                @Translation.Get("Det går inte att ta bort en kategori som är kopplat till en eller flera FAQ", Enums.TranslationSource.TextTranslation)
-                            </div>
+                                @Html.ActionLink(Translation.Get("Ta bort"), "#", new { id = Model.Id },
+                                new { @class = "btn deleteDeniedDialog", deleteDialogText = Translation.Get("Det går inte att ta bort en kategori som är kopplat till en eller flera FAQ") })
                         </li>
                     }
                     else

@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
 
-    using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.Models.Case.CaseLock;
     using DH.Helpdesk.Dal.Repositories.Cases;
     using DH.Helpdesk.Domain;
 
@@ -17,9 +17,19 @@
             this._caseLockRepository = caseLockRepository;
         }
 
-        public IEnumerable<CaseLock> GetAllLockedCases()
+        public List<LockedCaseOverview> GetLockedCases(int? customerId)
         {
-            return this._caseLockRepository.GetAllLockedCases();
+            return this._caseLockRepository.GetLockedCases(customerId);
+        }
+
+        public List<LockedCaseOverview> GetLockedCases(int? customerId, decimal caseNumber)
+        {
+            return this._caseLockRepository.GetLockedCases(customerId, caseNumber);
+        }
+
+        public List<LockedCaseOverview> GetLockedCases(int? customerId, string searchText)
+        {
+            return this._caseLockRepository.GetLockedCases(customerId, searchText);
         }
         
         public CaseLock GetCaseLockByGUID(Guid lockGUID)

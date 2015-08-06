@@ -285,6 +285,7 @@
     <Compile Include="Areas\Admin\Controllers\SystemController.cs" />
     <Compile Include="Areas\Admin\Controllers\UrgencyController.cs" />
     <Compile Include="Areas\Admin\Controllers\WorkingGroupController.cs" />
+    <Compile Include="Areas\Admin\Infrastructure\Mappers\CaseLockMapper.cs" />
     <Compile Include="Areas\Admin\Infrastructure\ModelFactories\CaseInvoiceFactory.cs" />
     <Compile Include="Areas\Admin\Infrastructure\ModelFactories\ICaseInvoiceFactory.cs" />
     <Compile Include="Areas\Admin\Models\AccountActivityInputViewModel.cs" />
@@ -364,10 +365,14 @@
     <Content Include="Areas\Admin\Content\js\CaseOverview\customerOverview.js" />
     <Content Include="Areas\Admin\Content\js\Common\common.js" />
     <Content Include="Areas\Admin\Content\js\Customer\customerCaseSettings.js" />
+    <Content Include="Areas\Admin\Content\js\Mailtemplate\_input.js" />
+    <Content Include="Areas\Admin\Content\js\Users\index.lockedcase.js" />
+    <Content Include="Areas\Admin\Content\js\Users\index.js" />
     <Content Include="Areas\Admin\Content\js\Users\user.js" />
     <Content Include="Areas\Reports\Content\js\reports.js" />
     <Content Include="Content\bootstrap-tagsinput.css" />
     <Content Include="Content\css\bootstrap-tagsinput.css" />
+    <Content Include="Content\css\custom\dynamic-cases.css" />
     <Content Include="Content\icons\ajax-loader.gif" />
     <Content Include="Content\img\ajax-loader.GIF" />
     <Content Include="Content\img\dh_solutions_version.png" />
@@ -420,9 +425,10 @@
     <Content Include="Content\js\Cases\components\Utils.js" />
     <Content Include="Content\js\Cases\editLog.logic.js" />
     <Content Include="Content\js\Cases\index.settings.js" />
-    <Content Include="Content\js\Cases\edit.logic.js" />
+    <Content Include="Content\js\Cases\_input.js" />
     <Content Include="Content\js\Cases\index.logic.js" />
     <Content Include="Content\js\Cases\relatedCases.logic.js" />
+    <Content Include="Content\js\Cases\caseInitForm.js" />
     <Content Include="Content\js\CaseTemplates\edit.logic.js" />
     <Content Include="Content\js\Changes\inventoryDialog.js" />
     <Compile Include="Areas\Inventory\Controllers\ComputerInventoryBaseController.cs" />
@@ -753,7 +759,9 @@
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\SupplierEditModel.cs" />
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\UserEditModel.cs" />
     <Compile Include="Areas\Orders\OrdersAreaRegistration.cs" />
+    <Content Include="Content\js\dhHelpdesk.js" />
     <Content Include="Content\js\dropdown_fix.js" />
+    <Content Include="Content\js\Licenses\license.editlogic.js" />
     <Content Include="Content\js\Notifiers\edit.js" />
     <Content Include="Areas\Admin\Content\js\Common\tinymce.initiate.js" />
     <Content Include="Content\js\tinymce\license.txt" />
@@ -1176,11 +1184,12 @@
     <Compile Include="Infrastructure\ModelFactories\CaseLockMappers\CaseLockMapper.cs" />
     <Compile Include="Models\BulletinBoardInputViewModel.cs" />
     <Compile Include="Models\CalendarInputViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\LockedCaseOverviewModel.cs" />
     <Compile Include="Models\CaseSolutionSettingModel.cs" />
     <Compile Include="Models\CaseSolution\CaseSolutionIndex.cs" />
     <Compile Include="Models\Case\CaseByIdsViewModel.cs" />
     <Compile Include="Models\Case\CaseFilesModel.cs" />
-    <Compile Include="Models\Case\CaseLockModel.cs" />
+    <Compile Include="Models\CaseLock\CaseLockModel.cs" />
     <Compile Include="Models\Case\Input\CaseEditInput.cs" />
     <Compile Include="Models\Case\Output\CaseSeachFilterData.cs" />
     <Compile Include="Models\CaseSolution\CaseSolutionInputViewModel.cs" />
@@ -1353,9 +1362,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\CommonJavascript\dhHelpdesk.js">
-      <Link>Content\js\dhHelpdesk.js</Link>
-    </Content>
     <Content Include="Content\base.css" />
     <Content Include="Content\bootstrap-datepicker.css" />
     <Content Include="Content\bootstrap-datepicker3.css" />
@@ -1662,6 +1668,10 @@
     <Content Include="Areas\Admin\Views\RegistrationSourceCustomer\New.cshtml" />
     <Content Include="Areas\Admin\Views\RegistrationSourceCustomer\_Input.cshtml" />
     <Content Include="Areas\Admin\Views\RegistrationSourceCustomer\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\Index\_UserOverview.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\Index\_LockedCaseOverview.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\Index\_OnlineUserOverview.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\Index\_OnlineUserList.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="Scripts\jquery-1.8.3.js" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />
@@ -2232,6 +2242,9 @@
     <Content Include="Views\Cases\CaseByIdsContent.cshtml" />
     <Content Include="Views\Cases\AdvancedSearch\Index.cshtml" />
     <Content Include="Views\Cases\AdvancedSearch\_SearchOverview.cshtml" />
+    <Content Include="Views\Print\_CaseLogSection.cshtml" />
+    <Content Include="Views\Print\_CaseHistorySection.cshtml" />
+    <Content Include="Views\Cases\AdvancedSearch\_SpecificSearchTab.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

@@ -7,17 +7,21 @@
         <li>
             @Html.ActionLink(Translation.Get("Spara"), null, null, new { id = "btnSave", @class = "btn" })
         </li>
-        <li>
-            @Html.ActionLink(Translation.Get("Avbryt"), "Index", "Vendors", null, new { @class = "btn" })
-        </li>
         @if (!Model.IsNew())
         {
             <li>
                 @Html.ActionLink(Translation.Get("Ta bort"), "Delete", "Vendors", new { id = Model.Id }, 
-                    new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Are you sure?") })
+                    new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post") + "?" })
             </li>                
         }
+        <li>
+            @Html.ActionLink(Translation.Get("Avbryt"), "Index", "Vendors", null, new { @class = "btn" })
+        </li>
     </ul>    
+}
+
+@{    
+    var requiredMessage = " " + Translation.Get("måste anges");
 }
 
 @section Content {
@@ -33,7 +37,7 @@
                 </td>
                 <td class="span9">
                     @Html.TextBoxFor(m => m.VendorName, Model.VendorName)
-                    @Html.ValidationMessageFor(m => m.VendorName)
+                    @Html.ValidationMessageFor(m => m.VendorName, Translation.Get("Försäljare") + requiredMessage)
                 </td>
             </tr>
             <tr>
@@ -42,7 +46,7 @@
                 </td>
                 <td class="span9">
                     @Html.TextBoxFor(m => m.Contact, Model.Contact)
-                    @Html.ValidationMessageFor(m => m.Contact)
+                    @Html.ValidationMessageFor(m => m.Contact, Translation.Get("Kontakt") + requiredMessage)
                 </td>
             </tr>
             <tr>
@@ -51,7 +55,7 @@
                 </td>
                 <td class="span9">
                     @Html.TextBoxFor(m => m.Address, Model.Address)
-                    @Html.ValidationMessageFor(m => m.Address)
+                    @Html.ValidationMessageFor(m => m.Address, Translation.Get("Adress") + requiredMessage)
                 </td>
             </tr>
             <tr>
@@ -60,7 +64,7 @@
                 </td>
                 <td class="span9">
                     @Html.TextBoxFor(m => m.PostalCode, Model.PostalCode)
-                    @Html.ValidationMessageFor(m => m.PostalCode)
+                    @Html.ValidationMessageFor(m => m.PostalCode, Translation.Get("Postnummer") + requiredMessage)
                 </td>
             </tr>
             <tr>
@@ -69,7 +73,7 @@
                 </td>
                 <td class="span9">
                     @Html.TextBoxFor(m => m.PostalAddress, Model.PostalAddress)
-                    @Html.ValidationMessageFor(m => m.PostalAddress)
+                    @Html.ValidationMessageFor(m => m.PostalAddress, Translation.Get("Postadress") + requiredMessage)
                 </td>
             </tr>
             <tr>
@@ -78,7 +82,7 @@
                 </td>
                 <td class="span9">
                     @Html.TextBoxFor(m => m.Phone, Model.Phone)
-                    @Html.ValidationMessageFor(m => m.Phone)
+                    @Html.ValidationMessageFor(m => m.Phone, Translation.Get("Telefon") + requiredMessage)
                 </td>
             </tr>
             <tr>
@@ -87,7 +91,7 @@
                 </td>
                 <td class="span9">
                     @Html.TextBoxFor(m => m.Email, Model.Email)
-                    @Html.ValidationMessageFor(m => m.Email)
+                    @Html.ValidationMessageFor(m => m.Email, Translation.Get("E-post") + requiredMessage)
                 </td>
             </tr>
             <tr>
@@ -96,7 +100,7 @@
                 </td>
                 <td class="span9">
                     @Html.TextBoxFor(m => m.HomePage, Model.HomePage)
-                    @Html.ValidationMessageFor(m => m.HomePage)
+                    @Html.ValidationMessageFor(m => m.HomePage, Translation.Get("Hemsida") + requiredMessage)
                 </td>
             </tr>
         </table>                

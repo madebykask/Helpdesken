@@ -15,7 +15,7 @@
     {
         IList<WorkingGroupEntity> GetAllWorkingGroups();
 
-        IList<WorkingGroupEntity> GetWorkingGroups(int customerId);
+        IList<WorkingGroupEntity> GetWorkingGroups(int customerId, bool isTakeOnlyActive = true);
 
         IList<WorkingGroupEntity> GetAllWorkingGroupsForCustomer(int customerId);
 
@@ -83,7 +83,7 @@
         public IList<WorkingGroupEntity> GetAllWorkingGroupsForCustomer(int customerId)
         {
             return this.workingGroupRepository
-                .GetMany(x => x.Customer_Id == customerId)
+                .GetMany(x => x.Customer_Id == customerId && x.IsActive == 1)
                 .OrderBy(x => x.WorkingGroupName).ToList();
         }
 
@@ -93,13 +93,14 @@
         /// <param name="customerId">
         /// The customer id.
         /// </param>
+        /// <param name="isTakeOnlyActive"></param>
         /// <returns>
         /// The result.
         /// </returns>
-        public IList<WorkingGroupEntity> GetWorkingGroups(int customerId)
+        public IList<WorkingGroupEntity> GetWorkingGroups(int customerId, bool isTakeOnlyActive = true)
         {
             return this.workingGroupRepository
-                    .GetMany(x => x.Customer_Id == customerId && x.IsActive == 1)
+                    .GetMany(x => x.Customer_Id == customerId && (!isTakeOnlyActive || (isTakeOnlyActive && x.IsActive == 1)))
                     .OrderBy(x => x.WorkingGroupName).ToList();
         }
 

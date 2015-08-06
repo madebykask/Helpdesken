@@ -70,6 +70,7 @@
                   customerId,
                   userId,
                   (userSetting.CaseRegionFilter != null) ? userSetting.CaseRegionFilter.Replace(" ", string.Empty) : string.Empty,
+                  (userSetting.CaseDepartmentFilter != null) ? userSetting.CaseDepartmentFilter.Replace(" ", string.Empty) : string.Empty,
                   (userSetting.CaseUserFilter != null) ? userSetting.CaseUserFilter.Replace(" ", string.Empty) : string.Empty,
                   userSetting.CaseCaseTypeFilter != null ? userSetting.CaseCaseTypeFilter.Replace(" ", string.Empty) : string.Empty,
                   (userSetting.CaseProductAreaFilter != null) ? userSetting.CaseProductAreaFilter.Replace(" ", string.Empty) : string.Empty,

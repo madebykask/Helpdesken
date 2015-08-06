@@ -163,21 +163,21 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 
         #region TreeString
 
-        public static MvcHtmlString CaseTypeDropdownButtonString(this HtmlHelper helper, IList<CaseType> caseTypes)
+        public static MvcHtmlString CaseTypeDropdownButtonString(this HtmlHelper helper, IList<CaseType> caseTypes, bool isTakeOnlyActive = true)
         {
             if (caseTypes != null)
             {
-                return BuildCaseTypeDropdownButton(caseTypes) ;
+                return BuildCaseTypeDropdownButton(caseTypes, isTakeOnlyActive);
             }
             else
                 return new MvcHtmlString(string.Empty);
         }
 
-        public static MvcHtmlString ProductAreaDropdownButtonString(this HtmlHelper helper, IList<ProductArea> pal)
+        public static MvcHtmlString ProductAreaDropdownButtonString(this HtmlHelper helper, IList<ProductArea> pal, bool isTakeOnlyActive = true)
         {
             if (pal != null)
             {
-                return BuildProcuctAreaDropdownButton(pal);
+                return BuildProcuctAreaDropdownButton(pal, isTakeOnlyActive);
             }
             else
                 return new MvcHtmlString(string.Empty);
@@ -193,11 +193,11 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return caseTypes == null ? MvcHtmlString.Empty : BuildCaseTypesList(caseTypes);
         }
 
-        public static MvcHtmlString FinishingCauseDropdownButtonString(this HtmlHelper helper, IList<FinishingCause> causes)
+        public static MvcHtmlString FinishingCauseDropdownButtonString(this HtmlHelper helper, IList<FinishingCause> causes, bool isTakeOnlyActive = true)
         {
             if (causes != null)
             {
-                return BuildFinishingCauseDropdownButton(causes);
+                return BuildFinishingCauseDropdownButton(causes, isTakeOnlyActive);
             }
             else
                 return new MvcHtmlString(string.Empty);
@@ -776,76 +776,50 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return new MvcHtmlString(htmlOutput);
         }
 
-        private static MvcHtmlString BuildCaseTypeDropdownButton(IList<CaseType> caseTypes)
+        private static MvcHtmlString BuildCaseTypeDropdownButton(IList<CaseType> caseTypes, bool isTakeOnlyActive = true)
         {
-            string htmlOutput = string.Empty;
+            var res = new StringBuilder();
 
-            foreach (CaseType caseType in caseTypes)
+            foreach (CaseType item in caseTypes)
             {
-                if (caseType.IsActive == 1) 
+                var childs = new List<CaseType>();
+                if (item.SubCaseTypes != null)
                 {
-                    bool hasChild = false;
-                    if (caseType.SubCaseTypes != null)
-                        if (caseType.SubCaseTypes.Count > 0)
-                            hasChild = true;
-
-                    if (hasChild)
-                        htmlOutput += "<li class='dropdown-submenu'>";
-                    else
-                        htmlOutput += "<li>";
-
-                    htmlOutput += "<a href='#' value=" + caseType.Id.ToString() + ">" + Translation.Get(caseType.Name, SessionFacade.CurrentLanguageId) + "</a>";
-                    if (hasChild)
-                    {
-                        htmlOutput += "<ul class='dropdown-menu'>";
-                        htmlOutput += BuildCaseTypeDropdownButton(caseType.SubCaseTypes.ToList());
-                        htmlOutput += "</ul>";
-                    }
-                    htmlOutput += "</li>";
+                    childs = isTakeOnlyActive
+                                    ? item.SubCaseTypes.Where(p => p.IsActive != 0).ToList()
+                                    : item.SubCaseTypes.ToList();
                 }
-            }
 
-            return new MvcHtmlString(htmlOutput);
-        }
-
-        private static MvcHtmlString BuildOUDropdownButton(IList<OU> ous)
-        {
-            string htmlOutput = string.Empty;
-
-            foreach (OU ou in ous)
-            {
-                if (ou.IsActive == 1)
+                if (childs.Count > 0)
                 {
-                    bool hasChild = false;
-                    if (ou.SubOUs != null)
-                        if (ou.SubOUs.Count > 0)
-                            hasChild = true;
-
-                    if (hasChild)
-                        htmlOutput += "<li class='dropdown-submenu'>";
-                    else
-                        htmlOutput += "<li>";
-
-                    htmlOutput += "<a href='#' value=" + ou.Id.ToString() + ">" + Translation.Get(ou.Name, Enums.TranslationSource.TextTranslation) + "</a>";
-                    if (hasChild)
-                    {
-                        htmlOutput += "<ul class='dropdown-menu'>";
-                        htmlOutput += BuildOUDropdownButton(ou.SubOUs.ToList());
-                        htmlOutput += "</ul>";
-                    }
-                    htmlOutput += "</li>";
+                    res.Append("<li class='dropdown-submenu'>");
                 }
-            }
+                else
+                {
+                    res.Append("<li>");
+                }
 
-            return new MvcHtmlString(htmlOutput);
+                res.AppendFormat("<a href='#' value='{0}'>{1}</a>", item.Id.ToString(), Translation.Get(item.Name, SessionFacade.CurrentLanguageId));
+                if (childs.Count > 0)
+                {
+                    res.Append("<ul class='dropdown-menu'>");
+                    res.Append(BuildCaseTypeDropdownButton(childs.OrderBy(p => Translation.Get(p.Name)).ToList(), isTakeOnlyActive));
+                    res.Append("</ul>");
+                }
+
+                res.Append("</li>");
+           }
+
+            return new MvcHtmlString(res.ToString());
         }
-        private static MvcHtmlString BuildFinishingCauseDropdownButton(IList<FinishingCause> causes)
+        
+        private static MvcHtmlString BuildFinishingCauseDropdownButton(IList<FinishingCause> causes, bool isTakeOnlyActive = true)
         {
             StringBuilder sb = new StringBuilder();
 
             foreach (FinishingCause f in causes)
             {
-                if (f.IsActive == 1)
+                if (!isTakeOnlyActive || (isTakeOnlyActive && f.IsActive == 1))
                 {
                     bool hasChild = false;
                     if (f.SubFinishingCauses != null)
@@ -861,7 +835,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                     if (hasChild)
                     {
                         sb.Append("<ul class='dropdown-menu'>");
-                        sb.Append(BuildFinishingCauseDropdownButton(f.SubFinishingCauses.ToList()));
+                        sb.Append(BuildFinishingCauseDropdownButton(f.SubFinishingCauses.ToList(), isTakeOnlyActive));
                         sb.Append("</ul>");
                     }
                     sb.Append("</li>");
@@ -880,8 +854,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 var hasChild = productArea.Children != null && productArea.Children.Any();
 
                 result.Append(hasChild ? "<li class='dropdown-submenu'>" : "<li>");
-
-                result.Append("<a href='#' value=" + productArea.Id + ">" + Translation.Get(productArea.Name, Enums.TranslationSource.TextTranslation) + "</a>");
+                result.AppendFormat("<a href='#' value='{0}'>{1}</a>", productArea.Id, Translation.Get(productArea.Name));
                 if (hasChild)
                 {
                     result.Append("<ul class='dropdown-menu'>");
@@ -918,8 +891,11 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 
             return MvcHtmlString.Create(result.ToString());
         }
-
-        private static MvcHtmlString BuildProcuctAreaDropdownButton(IList<ProductArea> pal, bool isTakeOnlyActive = true, Dictionary<int, bool> userGroupDictionary = null)
+        
+        private static MvcHtmlString BuildProcuctAreaDropdownButton(
+            IList<ProductArea> pal,
+            bool isTakeOnlyActive = true,
+            Dictionary<int, bool> userGroupDictionary = null)
         {
             string htmlOutput = string.Empty;
             var user = SessionFacade.CurrentUser;
@@ -932,7 +908,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             foreach (ProductArea pa in pal)
             {
                 List<ProductArea> childList = null;
-                if (pa.SubProductAreas != null)                                    
+                if (pa.SubProductAreas != null)
                 {
                     var childs = isTakeOnlyActive
                                  ? pa.SubProductAreas.Where(p => p.IsActive != 0)
@@ -1168,11 +1144,29 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                     sb.Append("<li>");
 
                 if (f.IsRootTemplate)
-                    sb.Append("<a href='cases/new/?customerId=" + customerId.ToString() + "&templateId=" + f.CategoryId.ToString() + "&templateistrue=1" + "' value=" + f.CategoryId.ToString() + ">" +
-                           Translation.Get(f.CategoryName, Enums.TranslationSource.TextTranslation) + "</a>");
+                {
+                    sb.AppendFormat(
+                        "<a href='cases/new/?customerId={0}&templateId={1}&templateistrue=1' value={1}>{2}</a>",
+                        customerId,
+                        f.CategoryId,
+                        Translation.Get(f.CategoryName));
+                }
                 else
-                    sb.Append("<a href='#' value=" + f.CategoryId.ToString() + ">" +
-                           Translation.Get(f.CategoryName, Enums.TranslationSource.TextTranslation) + "</a>");
+                {
+                    // separator
+                    if (f.CategoryId == 0)
+                    {
+                        sb.AppendFormat("<li class='divider'></li>");
+                    }
+                    else
+                    {
+                        sb.AppendFormat(
+                       "<a href='cases/new/?customerId={0}&templateId={1}&templateistrue=1' value={1}>{2}</a>",
+                       customerId,
+                       f.CategoryId,
+                       Translation.Get(f.CategoryName));
+                    }
+                }
 
                 if (hasChild)
                 {
@@ -1180,8 +1174,8 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                     sb.Append(BuildCaseSolutionDropdownButton(f.CaseTemplates.ToList(), customerId));
                     sb.Append("</ul>");
                 }
-                sb.Append("</li>");
 
+                sb.Append("</li>");
             }
 
             return new MvcHtmlString(sb.ToString());

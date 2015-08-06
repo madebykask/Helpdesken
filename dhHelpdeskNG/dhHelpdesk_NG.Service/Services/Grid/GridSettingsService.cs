@@ -15,7 +15,7 @@
     /// </summary>
     public class GridSettingsService
     {
-        public const string CASE_OVERVIEW_GRID_ID = "case_overview";
+        public const int CASE_OVERVIEW_GRID_ID = 1;
 
         #region Constants for default values
 
@@ -66,7 +66,7 @@
         /// <param name="userId"></param>
         /// <param name="gridId"></param>
         /// <returns></returns>
-        public GridSettingsModel GetForCustomerUserGrid(int customerId, int userGroupId, int userId, string gridId)
+        public GridSettingsModel GetForCustomerUserGrid(int customerId, int userGroupId, int userId, int gridId)
         {
             var res = new GridSettingsModel();
             using (IUnitOfWork uow = this.unitOfWorkFactory.Create())
@@ -94,10 +94,7 @@
                 res.columnDefs.AddRange(this.GetDefaultColumns(customerId, userGroupId, gridId));
             }
 
-            if (IsSortFieldAvailable(res.sortOptions.sortBy, res.columnDefs))
-            {
-                res.sortOptions.sortBy = string.Empty;
-            }
+            res.sortOptions.sortBy = string.Empty;
 
             return res;
         }
@@ -109,7 +106,7 @@
         /// <param name="userGroupId"></param>
         /// <param name="gridId"></param>
         /// <returns></returns>
-        public List<GridColumnDef> GetDefaultColumns(int customerId, int userGroupId, string gridId)
+        public List<GridColumnDef> GetDefaultColumns(int customerId, int userGroupId, int gridId)
         {
             switch (gridId)
             {
@@ -145,11 +142,13 @@
         /// <param name="userGroupId"></param>
         public void SaveCaseoviewSettings(GridSettingsModel inputModel, int customerId, int userId, int userGroupId)
         {
+            var oldModel = this.GetForCustomerUserGrid(customerId, userGroupId, userId, CASE_OVERVIEW_GRID_ID);
+
             //// in case when we have "Case overview" grid we should save settings into different talbes
             using (IUnitOfWork uow = this.unitOfWorkFactory.Create())
             {
                 var repository = uow.GetRepository<GridSettingsEntity>();
-                repository.DeleteWhere(it => it.CustomerId == customerId && it.UserId == userId && it.GridId == CASE_OVERVIEW_GRID_ID);
+                repository.DeleteWhere(it => it.CustomerId == customerId && it.UserId == userId && it.GridId == CASE_OVERVIEW_GRID_ID && it.Parameter == GRID_CLS_KEY);
                 /// add class of the grid
                 repository.Add(new GridSettingsEntity
                                         {
@@ -162,6 +161,7 @@
                 /// records per page
                 if (inputModel.pageOptions != null)
                 {
+                    repository.DeleteWhere(it => it.CustomerId == customerId && it.UserId == userId && it.GridId == CASE_OVERVIEW_GRID_ID && it.Parameter == RECORDS_PER_PAGE_KEY);
                     repository.Add(
                         new GridSettingsEntity
                             {
@@ -172,8 +172,17 @@
                                 Value = inputModel.pageOptions.recPerPage.ToString()
                             });
                 }
+                
                 //// sortBy and sortOrder
-                if (inputModel.sortOptions != null && IsSortFieldAvailable(inputModel.sortOptions.sortBy, inputModel.columnDefs))
+                if (inputModel.sortOptions != null || !IsSortFieldAvailable(oldModel.sortOptions.sortBy, inputModel.columnDefs))
+                {
+                    repository.DeleteWhere(it => it.CustomerId == customerId 
+                        && it.UserId == userId 
+                        && it.GridId == CASE_OVERVIEW_GRID_ID
+                        && (it.Parameter == SORT_BY_KEY || it.Parameter == SORT_DIR_KEY));
+                }
+
+                if (inputModel.sortOptions != null)
                 {
                     repository.Add(
                         new GridSettingsEntity

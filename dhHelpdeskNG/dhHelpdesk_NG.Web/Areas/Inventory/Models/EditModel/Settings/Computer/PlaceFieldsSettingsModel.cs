@@ -26,28 +26,28 @@
         }
 
         [NotNull]
-        [LocalizedDisplay("Room")]
+        [LocalizedDisplay("Rum")]
         public FieldSettingModel RoomFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Address")]
+        [LocalizedDisplay("Adress")]
         public FieldSettingModel AddressFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Postal Code")]
+        [LocalizedDisplay("Postnummer")]
         public FieldSettingModel PostalCodeFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Postal Address")]
+        [LocalizedDisplay("Postadress")]
         public FieldSettingModel PostalAddressFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Location")]
+        [LocalizedDisplay("Placering")]
 
         public FieldSettingModel PlaceFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Location2")]
+        [LocalizedDisplay("Placering 2")]
         public FieldSettingModel Place2FieldSettingModel { get; set; }
     }
 }

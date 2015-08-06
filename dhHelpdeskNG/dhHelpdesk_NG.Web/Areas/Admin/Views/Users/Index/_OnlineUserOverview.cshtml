@@ -1,0 +1,25 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Admin.Models.UserIndexViewModel
+
+@using (Html.BeginForm("index", "users", FormMethod.Post, new { id = "searchOnlineUsers" }))
+{        
+    <div class="container">
+        <div class="row">
+            <div class="span7">
+                <table class="tableform" id="tblLoggedOnUsers">
+                    <tr>
+                        <td class="span1">
+                            @Translation.Get("Kunder", Enums.TranslationSource.TextTranslation):
+                        </td>
+                        <td>
+                            @Html.DropDownListFor(model => model.User.Customer_Id, Model.CsSelected, "", new { style = "width: 205px;", id = "customerChange" })
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div id="loggedInUsersPartial">
+         @Html.Partial("index/_OnlineUserList", Model.ListLoggedInUsers)
+    </div> 
+}

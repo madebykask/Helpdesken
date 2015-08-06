@@ -181,7 +181,7 @@
                         }
 
 
-                        @*@if(model.IsSettingsModulesVisible())
+                        @if(model.IsSettingsModulesVisible())
                         {
                             <li class="pink">
                                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">
@@ -196,7 +196,7 @@
                                             <img src="@Url.Content("~/Content/icons/order.png")" />
                                             @Translation.Get("Beställningar")</a></li>
                                     }
-                                    @if (model.IsAccountVisible())
+                                    @*@if (model.IsAccountVisible())
                                     {    
                                         <li><a href="@Url.Action("Index", "Orders", new { area = "OrderAccounts" })">
                                             <img src="@Url.Content("~/Content/icons/orderaccount.png")" />
@@ -208,7 +208,7 @@
                                         <li><a href="@Url.Action("index", "checklist", new { area = "" })">
                                             <img src="@Url.Content("~/Content/icons/checklist.png")" />
                                             @Translation.Get("Checklista")</a></li>
-                                    }
+                                    }*@
 
 
                                     @if(model.IsInventoryVisible())
@@ -227,7 +227,7 @@
                                     <li></li>
                                 </ul>
                             </li>                            
-                        }*@
+                        }
                         
 
                         <li class="light-blue">
@@ -339,8 +339,8 @@
             var timezoneAutodetectRes = "@ViewBag.AutoDetectionResult";
             var failureMsg = "@Translation.Get("Vi kunde inte ange din tidszon. Var vänlig välj rätt tidszon och klicka på \"Spara\".")";
             var successMsg = "@string.Format(Translation.Get("Vi har angett din tidszon baserat på din webbläsare. Om du föredrar att arbeta mot en annan tidszon så kan du ändra det i {0}Profil{1} i toppmenyn."), "<a href=\"Profile/Edit/\">", "</a>")";
-            var noticeMsg = "@string.Format(Translation.Get("Vi har upptäckt att din webbläsares tidszon skiljer sig från den som angetts i din Profil. Om du vill ändra tidszon som du arbetar i, gå till {0}Profil{1} i toppmenyn."), "<a href=\"Profile/Edit/\">", "</a>")";
-
+            @*var noticeMsg = "@string.Format(Translation.Get("Vi har upptäckt att din webbläsares tidszon skiljer sig från den som angetts i din Profil. Om du vill ändra tidszon som du arbetar i, gå till Profil i toppmenyn"), "<a href=\"Profile/Edit/\">", "</a>")";*@
+            var noticeMsg = "@Translation.Get("Vi har upptäckt att din webbläsares tidszon skiljer sig från den som angetts i din Profil. Om du vill ändra tidszon som du arbetar i, gå till Profil i toppmenyn.")";
             function ShowToastMessage(message, msgType) {
                 msgType = msgType || 'notice';
                 $().toastmessage('showToast', {

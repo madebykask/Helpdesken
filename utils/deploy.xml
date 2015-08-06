@@ -1,0 +1,95 @@
+<!-- 
+How to run: 
+	%WINDIR%\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe /toolsversion:4.0 deploy.xml
+-->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" Tools="2.0">
+	<PropertyGroup>		
+		<PublishedFolder>C:\Download\published\</PublishedFolder>
+		<DevPath>\\dhutvas3\Websites\dhHelpdesk\</DevPath>
+		<AcctPath>\\dhutvas3\Websites\dhHelpdeskAcct\</AcctPath>
+		<TestPath>I:\tmp\_testdeploy\</TestPath>
+		<TargetPath>$(TestPath)</TargetPath>
+		<AppOfflineDisabled>$(TargetPath)\_app_offline.htm</AppOfflineDisabled>
+		<AppOfflineEnabled>$(TargetPath)\app_offline.htm</AppOfflineEnabled>
+		<BackupFolder>$(TargetPath)\bak\</BackupFolder>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- Files and folders to backup -->
+
+		<Backup Include="$(TargetPath)\**\*" 
+			Exclude="$(TargetPath)\*.*;
+				$(TargetPath)\bak\**\*;
+				$(TargetPath)\App_Data\**\*;
+				$(TargetPath)\Documents\**\*;
+				$(TargetPath)\ExportedInvoice\**\*;
+				$(TargetPath)\img-profile\**\*;
+				$(TargetPath)\uploaded_file\**\*;
+				$(TargetPath)\_app_offline.htm;
+				$(TargetPath)\app_offline.htm;
+				$(TargetPath)\log4net.config;
+				$(TargetPath)\Web.config" />
+
+		<!--Backup Include="$(TargetPath)\Areas\**\*;
+				$(TargetPath)\bin\**\*;
+				$(TargetPath)\Content\**\*;
+				$(TargetPath)\Views\**\*;
+				$(TargetPath)\Scripts\**\*" /-->	
+
+
+
+		<Backup_Areas Include="$(TargetPath)\Areas\**\*" />
+		<Backup_Bin Include="$(TargetPath)\bin\**\*" />
+		<Backup_Content Include="$(TargetPath)\Content\**\*" />
+		<Backup_Views Include="$(TargetPath)\Views\**\*" />
+		<Backup_Scripts Include="$(TargetPath)\Scripts\**\*" />
+		<!-- Files and folders to deploy -->
+		<Deploy_Areas Include="$(PublishedFolder)\Areas\**\*" />
+		<Deploy_Bin Include="$(PublishedFolder)\bin\**\*" />
+		<Deploy_Content Include="$(PublishedFolder)\Content\**\*" />
+		<Deploy_Views Include="$(PublishedFolder)\Views\**\*" />
+		<Deploy_Scripts Include="$(PublishedFolder)\Scripts\**\*" />
+
+		<FilesToZip Include="\\servername\f$\web\example.com\wwwroot\**\*.*" />	
+	</ItemGroup>
+
+<!--
+  		<Copy SourceFiles="@(Backup_Areas)" DestinationFolder="$(BackupFolder)\Areas\" />
+		<Copy SourceFiles="@(Backup_Bin)" DestinationFolder="$(BackupFolder)\bin\" />
+		<Copy SourceFiles="@(Backup_Content)" DestinationFolder="$(BackupFolder)\Content\" />
+		<Copy SourceFiles="@(Backup_Views)" DestinationFolder="$(BackupFolder)\bin\Views\" />
+		<Copy SourceFiles="@(Backup_Scripts)" DestinationFolder="$(BackupFolder)\bin\Scripts\" />
+-->
+
+	<Target Name="Deploy">
+		<Message Text="Deploying here..." />
+	</Target>
+
+	<Target Name="Backup" BeforeTargets="Deploy">
+		<!--Message Text="Backing up old content $(BackupFolder)\%(Backup.RecursiveDir)"/ -->
+		<RemoveDir Directories="$(BackupFolder)" />
+		<MakeDir Directories="$(BackupFolder)" />
+		<Move SourceFiles="@(Backup)" DestinationFolder="$(BackupFolder)\%(RecursiveDir)" /> 
+		<RemoveDir Directories="@(Backup->'%(RootDir)%(Directory)');$(TargetPath)\Areas\" />	
+	</Target>
+
+	<Target Name="TakeOffline" BeforeTargets="Backup">
+		<Message Text="========== Set site to offline =============="/>
+		<Move SourceFiles="$(AppOfflineDisabled)" DestinationFiles="$(AppOfflineEnabled)" />			
+	</Target>
+
+	<Target Name="TakeOnline" AfterTargets="Deploy">
+		<Message Text="========== Set site to online =============="/>
+		<Move SourceFiles="$(AppOfflineEnabled)" DestinationFiles="$(AppOfflineDisabled)" />		
+	</Target>
+
+	<Target Name="Zip">
+		<Zip Files="@(FilesToZip)" 
+			ZipFileName="\\servername\f$\web\example.com\backup$(Timestamp).zip"
+			WorkingDirectory="\\servername\f$\web\example.com\wwwroot" />
+	</Target>
+ 
+     <Target Name="Build" DependsOnTargets="Clean">
+	<Message Text="Clean"/>
+     </Target>
+</Project>

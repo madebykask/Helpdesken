@@ -1,5 +1,7 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseSettingModel
 @using DH.Helpdesk.BusinessData.OldComponents
+@using DH.Helpdesk.Services.BusinessLogic.Mappers.Cases.Data
+@using DH.Helpdesk.Web.Models.Case
 <form id="frmCaseSetting" name="frmCaseSetting">
     <div class="tab-content overflow-visible">
         <div class="tab-pane tab-pane-border active" id="fragment-1">
@@ -62,6 +64,26 @@
                                     </td>                                                        
                                 </tr>
                             }
+@*                            "Department" field *@
+                            @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Department_Id.ToString()) == 1) 
+                            { 
+                                <tr>
+                                    <td class="span3">                                        
+                                        @Translation.Get(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id):
+                                    </td>                            
+                                    <td>
+                                        @Html.CheckBoxFor(m => Model.IsDepartmentChecked, new { @class = "switchcheckbox" })                                   
+                                    </td>                            
+                                    <td colspan="2">
+                                        <select name="@CaseSettingModel.DepartmentsControlName" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                            @foreach (var e in Model.Departments)
+                                            {                                                                                                      
+                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedDepartments)>@e.DepartmentName</option>                                       
+                                            }
+                                        </select>
+                                    </td>                                                        
+                                </tr>
+                            }
 
                             @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.User_Id.ToString()) == 1) 
                             {                                    
@@ -101,7 +123,7 @@
                                             </button>
                                             <ul class="dropdown-menu">
                                                 <li><a href="#">@Translation.Get("--")</a></li>
-                                                @Html.CaseTypeDropdownButtonString(Model.CaseTypes)
+                                                @Html.CaseTypeDropdownButtonString(Model.CaseTypes, false)
                                             </ul>
                                             @Html.HiddenFor(model => model.CaseTypeId)
                                         </div>
@@ -129,7 +151,7 @@
                                             </button>
                                             <ul class="dropdown-menu">
                                                 <li><a href="#">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
-                                                @Html.ProductAreaDropdownButtonString(Model.ProductAreas)
+                                                @Html.ProductAreaDropdownButtonString(Model.ProductAreas, false)
                                             </ul>
                                             @Html.HiddenFor(model => model.ProductAreaId)
                                         </div>
@@ -337,7 +359,7 @@
                                             </button>
                                             <ul class="dropdown-menu">
                                                 <li><a href="#">@Translation.Get("--")</a></li>
-                                                @Html.FinishingCauseDropdownButtonString(Model.ClosingReasons)
+                                                @Html.FinishingCauseDropdownButtonString(Model.ClosingReasons, false)
                                             </ul>
                                             @Html.HiddenFor(model => model.ClosingReasonId)
                                         </div>

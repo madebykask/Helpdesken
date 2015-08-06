@@ -1,0 +1,34 @@
+﻿@using DH.Helpdesk.BusinessData.OldComponents
+@model DH.Helpdesk.Web.Models.Print.Case.CasePrintModel
+<table style="border-collapse: collapse">
+    <tr><td><span style="font-size: 14px; font-weight: bold;">@Translation.Get("Historik")</span></td></tr>
+    @{
+        var o = (Model.EmptyCaseHistory ?? new DH.Helpdesk.Domain.CaseHistory());
+        foreach (var h in Model.Case.CaseHistories.OrderBy(x => x.CreatedDate))
+        {
+            <tr border="1" frame="above"><td><table border="0"><tr><td style="width: 200px;"><span style="font-weight: bold;">@Translation.Get("Registrerad av")</span><br />@Html.DisplayFor(m => h.CreatedDate, "DateAndTime"), @h.CreatedByUser</td></tr>
+                @if (h.Emaillogs != null && h.Emaillogs.Any())
+                {
+                    <tr><td style="width: 200px;"><span style="font-weight: bold;">@Translation.Get("E-post")</span>@foreach (var l in h.Emaillogs) { <div>@l.EmailAddress (@l.MailId.GetMailTemplateName())</div> }</td></tr>
+                }<tr><td><span style="font-weight: bold;">@Translation.Get("Historik")</span><table><tr><td>
+                    @if (Model.IsReportedByVisible && h.ReportedBy != o.ReportedBy){<div>@(Translation.GetForCase(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Model.Case.CustomerId) + " " + o.ReportedBy + " -> " + h.ReportedBy)</div>}                                                                                               
+                    @if (Model.IsPersonsNameVisible && h.PersonsName != o.PersonsName){<div>@(Translation.GetForCase(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Model.Case.CustomerId) + " " + o.PersonsName + " -> " + h.PersonsName)  </div>}                                                                                               
+                    @if (Model.IsPersonsPhoneVisible && h.PersonsPhone != o.PersonsPhone){<div>@(Translation.GetForCase(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString(), Model.Case.CustomerId) + " " + o.PersonsPhone + " -> " + h.PersonsPhone)  </div>}                                                                                               
+                    @if (Model.IsDepartmentVisible && h.Department_Id != o.Department_Id){<div>@(Translation.GetForCase(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Model.Case.CustomerId) + " " + (o.Department != null ? o.Department.DepartmentDescription(Model.DepartmentFilterFormat) : null) + " -> " + (h.Department != null ? h.Department.DepartmentDescription(Model.DepartmentFilterFormat) : null))  </div>}                                                   
+                    @if (Model.IsUserCodeVisible && h.UserCode != o.UserCode){<div>@(Translation.GetForCase(GlobalEnums.TranslationCaseFields.UserCode.ToString(), Model.Case.CustomerId) + " " + o.UserCode + " -> " + h.UserCode)  </div>}                                                                                                                                                                           
+                    @if (Model.IsCaseTypeVisible && h.CaseType_Id != o.CaseType_Id){<div>@(Translation.GetForCase(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Model.Case.CustomerId) + " " + (o.CaseType != null ? o.CaseType.Name : null) + " -> " + (h.CaseType != null ? h.CaseType.Name : null)) </div>}                                                                                   
+                    @if (Model.IsProductAreaVisible && h.ProductArea_Id != o.ProductArea_Id){<div>@(Translation.GetForCase(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Model.Case.CustomerId) + " " + (o.ProductArea != null ? o.ProductArea.Name : null) + " -> " + (h.ProductArea != null ? h.ProductArea.Name : null))  </div>} 
+                    @if (Model.IsReferenceNumberVisible && h.ReferenceNumber != o.ReferenceNumber){<div>@(Translation.GetForCase(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString(), Model.Case.CustomerId) + " " + o.ReferenceNumber + " -> " + h.ReferenceNumber)  </div>}                                                                                                                                                                                                                                                                                             
+                    @if (Model.IsCaptionVisible && h.Caption != o.Caption){<div>@(Translation.GetForCase(GlobalEnums.TranslationCaseFields.Caption.ToString(), Model.Case.CustomerId) + " " + o.Caption + " -> " + h.Caption)  </div>}
+                    @if (Model.IsPerformerUserVisible && h.Performer_User_Id != o.Performer_User_Id){<div>@(Translation.GetForCase(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Model.Case.CustomerId) + " " + (o.UserPerformer != null ? o.UserPerformer.FirstName + " " + o.UserPerformer.SurName : null) + " -> " + (h.UserPerformer != null ? h.UserPerformer.FirstName + " " + h.UserPerformer.SurName : null))  </div>}     
+                    @if (Model.IsPriorityVisible && h.Priority_Id != o.Priority_Id){<div>@(Translation.GetForCase(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Model.Case.CustomerId) + " " + (o.Priority != null ? o.Priority.Name : null) + " -> " + (h.Priority != null ? h.Priority.Name : null))  </div>}     
+                    @if (Model.IsWorkingGroupVisible && h.WorkingGroup_Id != o.WorkingGroup_Id){<div>@(Translation.GetForCase(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Model.Case.CustomerId) + " " + (o.WorkingGroup != null ? o.WorkingGroup.WorkingGroupName : null) + " -> " + (h.WorkingGroup != null ? h.WorkingGroup.WorkingGroupName : null))  </div>}
+                    @if (Model.IsStateSecondaryVisible && h.StateSecondary_Id != o.StateSecondary_Id){<div>@(Translation.GetForCase(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Model.Case.CustomerId) + " " + (o.StateSecondary != null ? o.StateSecondary.Name : null) + " -> " + (h.StateSecondary != null ? h.StateSecondary.Name : null))  </div>}
+                    @if (Model.IsStatusVisible && h.Status_Id != o.Status_Id){<div>@(Translation.GetForCase(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Model.Case.CustomerId) + " " + (o.Status != null ? o.Status.Name : null) + " -> " + (h.Status != null ? h.Status.Name : null))  </div>}                                                                                                                                                                                                                                                                                                                                                                                                                       
+                    </td></tr>
+                </table>
+            </td></tr>
+        </table></td></tr>
+        }
+    }
+</table>

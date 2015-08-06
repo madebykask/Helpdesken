@@ -15,7 +15,7 @@
         }
 
         [NotNull]
-        [LocalizedDisplay("User Id")]
+        [LocalizedDisplay("Användare ID")]
         public FieldSettingModel UserIdFieldSettingModel { get; set; }
     }
 }

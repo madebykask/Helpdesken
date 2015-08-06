@@ -17,6 +17,7 @@
     using DH.Helpdesk.Web.Models.Case.Output;
     using DH.Helpdesk.Web.Models.Invoice;
     using DH.Helpdesk.Web.Models.Shared;
+    using DH.Helpdesk.Web.Models.CaseLock;
     
     public class CaseInputViewModel
     {
@@ -200,6 +201,8 @@
         public bool DoSearchAtBegining { get; set; }
 
         public CaseSearchFilterData CaseSearchFilterData { get; set; }
+
+        public AdvancedSearchSpecificFilterData SpecificSearchFilterData { get; set; }
 
         public CaseTemplateTreeModel CaseTemplateTreeButton { get; set; }
 

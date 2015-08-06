@@ -162,8 +162,9 @@ function ApplyTemplate(data, doOverwrite) {
                 break;
             case 'CaseWorkingGroup_Id':
                 el = $("#case__WorkingGroup_Id");
-                cfg['doNotTriggerEvent'] = true;
-                SetValueIfElVisible(el, val, cfg);
+                //#13311(redmine) Case template_list of administrators doesn´t narrows depending on the choice of working group
+                //cfg['doNotTriggerEvent'] = true;
+                SetValueIfElVisible(el, val, cfg);                
                 break;
             case 'PerformerUser_Id':
                 el = $('#Performer_Id');
@@ -187,6 +188,7 @@ function ApplyTemplate(data, doOverwrite) {
                 SetValueIfElVisible(el, val, cfg);
                 break;
             case 'FinishingCause_Id':
+                $('#divFinishingType ul.dropdown-menu li a').trigger('click');
                 SetValueToBtnGroup('#divFinishingType', "#divBreadcrumbs_FinishingType", "#CaseLog_FinishingType", val, doOverwrite);
                 break;
             }

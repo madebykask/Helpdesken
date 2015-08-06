@@ -1,5 +1,5 @@
 ﻿using System;
-using Ninject;
+
 using System.Linq;
 using System.Web.Mvc;
 using System.Collections.Generic;

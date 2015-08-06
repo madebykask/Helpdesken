@@ -36,14 +36,17 @@
             bundles.Add(new ScriptBundle("~/bundles/common").Include(
 #if DEBUG
                             "~/Scripts/jquery-1.8.3.js",
+                            "~/Content/js/jquery.unobtrusive-ajax.min.js",
+                            "~/Content/js/jquery.validate.js",
 #else
                             "~/Scripts/jquery-1.8.3.min.js",
-#endif
                             "~/Content/js/jquery.unobtrusive-ajax.min.js",
                             "~/Content/js/jquery.validate.min.js",
-                            "~/Content/js/jquery.validate.unobtrusive.min.js",
+#endif
+                "~/Content/js/jquery.unobtrusive-ajax.min.js",
+                "~/Content/js/jquery.validate.unobtrusive.min.js",
 #if DEBUG
-                            "~/Scripts/jquery-ui-1.9.2.js",
+ "~/Scripts/jquery-ui-1.9.2.js",
                             "~/Content/js/chosen.jquery.js",
 #else
                             "~/Scripts/jquery-ui-1.9.2.min.js",
@@ -101,8 +104,11 @@
                             "~/Content/js/plupload.full.min.js",
                             "~/Content/js/jquery.plupload.queue/jquery.plupload.queue.min.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/licenses").Include(
+            bundles.Add(new ScriptBundle("~/bundles/licenses").Include(                            
                             "~/Content/js/Licenses/license.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/licensesedit").Include(
+                            "~/Content/js/Licenses/license.editlogic.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/licenses/products").Include(
                             "~/Content/js/Licenses/products.js"));
@@ -126,14 +132,25 @@
             bundles.Add(new ScriptBundle("~/bundles/advancedsearch/index").Include(
                         "~/Content/js/AdvancedSearch/index.logic.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/cases/editLog").Include(
-                "~/Content/js/Cases/editLog.logic.js"));
+            #region Case editing
+            bundles.Add(new StyleBundle("~/cases/dynamic-cases").Include(
+                         "~/Content/css/custom/dynamic-cases.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/cases/new").Include(
+                "~/Content/js/Cases/caseInitForm.js"));
+            
+            bundles.Add(new ScriptBundle("~/bundles/cases/edit").Include(
+                "~/Content/js/Cases/caseInitForm.js"));
 
             bundles.Add(
-                new ScriptBundle("~/bundles/cases/edit").Include(
-                    "~/Content/js/Cases/edit.logic.js",
+                new ScriptBundle("~/bundles/cases/_input").Include(
+                    "~/Content/js/Cases/_input.js",
                     "~/Content/js/dropdown_fix.js",
                     "~/Content/js/Cases/case.templates.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/cases/editLog").Include("~/Content/js/Cases/editLog.logic.js"));
+
+            #endregion
 
             bundles.Add(new ScriptBundle("~/bundles/casetemplates/edit").Include(
                 "~/Content/js/CaseTemplates/edit.logic.js"));
@@ -218,8 +235,15 @@
 
             bundles.Add(new ScriptBundle("~/bundles/admin/users").Include(
                             "~/Areas/Admin/Content/js/Users/user.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/admin/users/_input").Include(
                             "~/Areas/Admin/Content/js/Users/_input.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/admin/users/index_lockedcases").Include(
+                           "~/Areas/Admin/Content/js/Users/index.lockedcase.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/admin/users/index").Include(
+                           "~/Areas/Admin/Content/js/Users/index.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/admin/customerOverview").Include(
                             "~/Areas/Admin/Content/js/CaseOverview/customerOverview.js",
@@ -234,6 +258,8 @@
 
             bundles.Add(new ScriptBundle("~/bundles/cases/caseByIds").Include(
                             "~/Content/js/Cases/caseByIds.logic.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/admin/_input").Include("~/Areas/Admin/Content/js/Mailtemplate/_input.js"));
             #endregion
         }
     }

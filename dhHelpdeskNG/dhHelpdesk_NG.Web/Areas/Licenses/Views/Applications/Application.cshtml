@@ -7,17 +7,21 @@
         <li>
             @Html.ActionLink(Translation.Get("Spara"), null, null, new { id = "btnSave", @class = "btn" })
         </li>
-        <li>
-            @Html.ActionLink(Translation.Get("Avbryt"), "Index", "Applications", null, new { @class = "btn" })
-        </li>
         @if (!Model.IsNew())
         {
             <li>
                 @Html.ActionLink(Translation.Get("Ta bort"), "Delete", "Applications", new { id = Model.Id }, 
-                    new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuellt program/applikation") })
+                    new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuellt program/applikation") + "?" })
             </li>                
         }
+        <li>
+            @Html.ActionLink(Translation.Get("Avbryt"), "Index", "Applications", null, new { @class = "btn" })
+        </li>
     </ul>    
+}
+
+@{    
+    var requiredMessage = " " + Translation.Get("måste anges");
 }
 
 @section Content {
@@ -33,7 +37,7 @@
                 </td>
                 <td class="span9">
                     @Html.TextBoxFor(m => m.ApplicationName)
-                    @Html.ValidationMessageFor(m => m.ApplicationName)
+                    @Html.ValidationMessageFor(m => m.ApplicationName, Translation.Get("Applikation") + requiredMessage)
                 </td>
             </tr>
             <tr>
@@ -42,7 +46,7 @@
                 </td>
                 <td class="span9">
                     @Html.DropDownListFor(m => m.ProductId, Model.Products)
-                    @Html.ValidationMessageFor(m => m.ProductId)
+                    @Html.ValidationMessageFor(m => m.ProductId, Translation.Get("Produkt") + requiredMessage)
                 </td>
             </tr>
         </table>                

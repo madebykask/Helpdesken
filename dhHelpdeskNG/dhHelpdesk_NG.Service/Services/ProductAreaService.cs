@@ -4,12 +4,12 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Models.ProductArea;
     using DH.Helpdesk.BusinessData.Enums.Users;
     using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
     using DH.Helpdesk.BusinessData.Models.User.Input;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Dal.Repositories;
-    using DH.Helpdesk.Dal.Repositories.ProductArea;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.utils;
 
@@ -133,7 +133,7 @@
                     x.Customer_Id == customerId && x.Parent_ProductArea_Id == null
                     && ((isOnlyActive && x.IsActive != 0) || !isOnlyActive)).OrderBy(x => x.Name).ToList();
         }
-
+        
         public IList<ProductAreaEntity> GetTopProductAreasForUser(int customerId, UserOverview user, bool isOnlyActive = true)
         {
             var res =
@@ -207,7 +207,7 @@
                 return resultMap.Values.OrderBy(x => x.Name).ToList();
             }
 
-            return res.Where(it => it.WorkingGroup_Id == null).OrderBy(x => x.Name).ToList();
+            return res.OrderBy(x => x.Name).ToList();
         }
 
         public IList<ProductAreaEntity> GetAllProductAreas(int customerId)

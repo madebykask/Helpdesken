@@ -8,34 +8,73 @@
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Computers;
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
+    using System.Collections.Generic;
+    
+    public class myproducts
+    {
+        public int? Key {get; set;}
+        public int value {get; set;} 
+    }
 
     public static class ProductMapper
     {
         public static ProductOverview[] MapToOverviews(
                                 this IQueryable<Product> query, 
                                 IQueryable<Software> software,
-                                IQueryable<Computer> computers)
-        {
-            var entities = query.Select(p => new 
-                                                {
-                                                    ProductId = p.Id,
-                                                    ProductName = p.Name,
-                                                    Regions = p.Licenses.Select(l => l.Region.Name).Distinct(),
-                                                    Departments = p.Licenses.Select(l => l.Department.DepartmentName).Distinct(),
-                                                    LicencesNumber = p.Licenses.Select(l => l.NumberOfLicenses),
-                                                    UsedLicencesNumber = 
-                                                        computers.Count(c => software.Where(s => p.Applications.Select(a => a.Name).Contains(s.Name)).Select(s => s.Computer_Id).Contains(c.Id))
-                                                })
-                                                .OrderBy(p => p.ProductName)
-                                                .ToArray();
+                                IQueryable<Computer> computers,
+                                int[] regionsFilter, int[] departmentsFilter)
+        {           
+
+            var entities = query.Select(p => new
+                        {
+                            ProductId = p.Id,
+                            ProductName = p.Name,
+                            Regions = p.Licenses.Where(l=> (departmentsFilter.Any()? departmentsFilter.Contains(l.Department_Id.Value):true))
+                                                .Select(l => l.Region.Name)
+                                                .Distinct(),
+
+                            Departments = p.Licenses.Where(l => (departmentsFilter.Any() ? departmentsFilter.Contains(l.Department_Id.Value) : true))
+                                                    .Select(l => new { Id = l.Department.Id, Name = l.Department.DepartmentName })
+                                                    .Distinct(),
+
+                            LicencesNumber = p.Licenses.Where(l => (departmentsFilter.Any() ? departmentsFilter.Contains(l.Department_Id.Value) : true))
+                                                       .GroupBy(ls => ls.Department_Id != null ? ls.Department_Id : 0)
+                                                       .Select(l => new
+                                                            {
+                                                                DepartmentId = l.Key,                                                                                   
+                                                                LicensesCount = l.Sum(nl => nl.NumberOfLicenses)
+                                                            })
+                                                       .ToList(),
+                           
+                            UsedLicencesNumber = computers.Select(c => new { DepartmentId = (c.User.Department_Id != null) ? c.User.Department_Id.Value : 0, 
+                                                                             DepartmentName = c.User.Department.DepartmentName, 
+                                                                             ComputerId = c.Id  
+                                                                           })
+                                                          .Where(c => (departmentsFilter.Any() ? departmentsFilter.Contains(c.DepartmentId) : true))
+                                                          .Where(c => software.Where(s => p.Applications.Select(a => a.Name).Contains(s.Name))
+                                                                              .Select(s=> s.Computer_Id)
+                                                                              .Contains(c.ComputerId))
+                                                          .ToList()
+                        })
+                        .OrderBy(p => p.ProductName)
+                        .ToArray();
+                        
 
             var overviews = entities.Select(p => new ProductOverview(
                                                     p.ProductId,
                                                     p.ProductName,
                                                     p.Regions.ToArray(),
-                                                    p.Departments.ToArray(),
-                                                    p.LicencesNumber.Sum(),
-                                                    p.UsedLicencesNumber)).ToArray();
+                                                    p.Departments.Select(d => new KeyValuePair<int, string>(d.Id, d.Name))
+                                                                 .Union(p.UsedLicencesNumber.Where(ul=> !p.Departments.Select(d=> d.Id).Contains(ul.DepartmentId))
+                                                                                            .Select(ul=> new KeyValuePair<int, string>(ul.DepartmentId, ul.DepartmentName))).ToArray(),
+
+                                                    p.LicencesNumber.Where(ln => ln != null)
+                                                                    .Select(ln => new KeyValuePair<int?,int>(ln.DepartmentId, ln.LicensesCount))
+                                                                    .Union(p.UsedLicencesNumber.Where(ul => !p.LicencesNumber.Select(l => l.DepartmentId).Contains(ul.DepartmentId))
+                                                                                               .Select(ul => new KeyValuePair<int?, int>(ul.DepartmentId, 0))).ToArray(),
+
+                                                    p.UsedLicencesNumber.Select(un => new KeyValuePair<int?, int>(un.DepartmentId, un.ComputerId)).ToArray()
+                                                    )).ToArray();
 
             return overviews;
         }

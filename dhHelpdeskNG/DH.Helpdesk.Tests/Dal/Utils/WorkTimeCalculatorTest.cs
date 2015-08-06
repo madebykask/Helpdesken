@@ -4,7 +4,7 @@
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models.Holiday.Output;
-    using DH.Helpdesk.Dal.Utils;
+    using DH.Helpdesk.BusinessData.Models.WorktimeCalculator;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Utils;
 

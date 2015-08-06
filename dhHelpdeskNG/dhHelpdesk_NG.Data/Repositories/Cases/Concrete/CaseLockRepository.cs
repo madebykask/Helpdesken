@@ -5,15 +5,27 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
     using System.Collections.Generic;
     using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.Models.Case.CaseLock;
     using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Dal.Mappers;
+    using DH.Helpdesk.Dal.Mappers;    
     using DH.Helpdesk.Domain.Cases;
     using DH.Helpdesk.Dal.Dal;
+    using DH.Helpdesk.Domain;
+       
     
-
     public sealed class CaseLockRepository : Repository, ICaseLockRepository
     {
+        public class TempLockInfo
+        {
+            public TempLockInfo()
+            {
+            }
+
+            public Case CaseEntity { get; set; }
+
+            public CaseLockEntity LockEntity { get; set; } 
+        }
+
         private readonly IEntityToBusinessModelMapper<CaseLockEntity, CaseLock> _caseLockToBusinessModelMapper;
 
         private readonly IBusinessModelToEntityMapper<CaseLock, CaseLockEntity> _caseLockToEntityMapper;
@@ -28,16 +40,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             this._caseLockToEntityMapper = caseLockToEntityMapper;
         }
 
-        public IEnumerable<CaseLock> GetAllLockedCases()
-        {
-            var entities = this.DbContext.CaseLock.OrderBy(l => l.User_Id)
-                                                  .ThenBy(l=> l.CreatedTime)
-                                                  .ToList();
-
-            return entities
-                .Select(this._caseLockToBusinessModelMapper.Map);
-        }
-        
+    
         public CaseLock GetCaseLockByGUID(Guid lockGUID)
         {
             var entity = this.DbContext.CaseLock.Where(l => l.LockGUID == lockGUID)
@@ -128,5 +131,81 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             }
         }
 
+        public List<LockedCaseOverview> GetLockedCases(int? customerId)
+        {            
+            var lockedCases = GetAlllockedCaseEntities();
+            if (customerId.HasValue)
+                lockedCases = lockedCases.Where(l => l.CaseEntity.Customer_Id == customerId.Value).ToList();
+          
+            return MapEntityToOverview(lockedCases);
+        }
+
+        public List<LockedCaseOverview> GetLockedCases(int? customerId, decimal caseNumber)
+        {          
+            var lockedCases = GetAlllockedCaseEntities();
+            if (customerId.HasValue)
+                lockedCases = lockedCases.Where(l => l.CaseEntity.Customer_Id == customerId.Value).ToList();
+
+            if (caseNumber > 0)
+                lockedCases = lockedCases.Where(l => l.CaseEntity.CaseNumber == caseNumber).ToList();
+
+            return MapEntityToOverview(lockedCases);
+        }
+
+        public List<LockedCaseOverview> GetLockedCases(int? customerId, string searchText)
+        {
+            searchText = searchText.ToLower();
+            var lockedCases = GetAlllockedCaseEntities();            
+            var ret = new List<LockedCaseOverview>();
+            if (customerId.HasValue)
+                lockedCases = lockedCases.Where(l => l.CaseEntity.Customer_Id == customerId.Value).ToList();
+
+            if (!string.IsNullOrEmpty(searchText))
+                lockedCases = lockedCases.Where(l => l.LockEntity.User.FirstName.ToLower().Contains(searchText) ||
+                                                     l.LockEntity.User.SurName.ToLower().Contains(searchText) ||
+                                                     l.LockEntity.User.UserID.ToLower().Contains(searchText)).ToList();
+
+            return MapEntityToOverview(lockedCases);
+        }
+
+        private List<TempLockInfo> GetAlllockedCaseEntities()
+        {
+           // Get cases which were locked atleast at 3 seconds ago
+           var curTime = DateTime.Now.AddSeconds(-3);
+           return (from cl in this.DbContext.CaseLock
+                   join c in this.DbContext.Cases on cl.Case_Id equals c.Id
+                   where (cl.ExtendedTime > curTime)
+                   select new TempLockInfo
+                    {
+                        LockEntity = cl,
+                        CaseEntity = c
+                    }).ToList();
+        }
+
+        private List<LockedCaseOverview> MapEntityToOverview(List<TempLockInfo> lockedCases)
+        {
+            var ret = new List<LockedCaseOverview>();
+            var existUsers = new List<int>();
+
+            foreach (var lc in lockedCases)
+            {
+                if (!existUsers.Contains(lc.LockEntity.User_Id))
+                {
+                    ret.Add(new LockedCaseOverview(lc.LockEntity.User,
+                                                   lockedCases.Where(l => l.LockEntity.User_Id == lc.LockEntity.User_Id)
+                                                              .Select(l => new LockInfo(
+                                                                               l.LockEntity.Case_Id,
+                                                                               l.CaseEntity.CaseNumber,
+                                                                               l.CaseEntity.Customer_Id,
+                                                                               l.CaseEntity.Customer.Name,
+                                                                               l.LockEntity.CreatedTime)
+                                                                      )
+                                                            .ToList()));
+                    existUsers.Add(lc.LockEntity.User_Id);
+                }
+            }           
+
+            return ret;
+        }
     }
 }
