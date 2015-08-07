@@ -8,11 +8,10 @@ var GRID_STATE = {
 };
 
 
+var defaultFocusObj = window.Params.DefaultFocusObject;
 
 (function ($) {    
-
-    
-
+        
     /// message types
     var ERROR_MSG_TYPE = 0;
     var LOADING_MSG_TYPE = 1;
@@ -51,8 +50,10 @@ var GRID_STATE = {
         return str == null || str == EMPTY_STR;
     }
     
-    function Page() {};    
-  
+    function Page() { };
+
+    SetSpecificConditionTab(false);
+
     Page.prototype.init = function(gridInitSettings, doSearchAtBegining) {
         var me = this;        
         //// Bind elements
@@ -65,7 +66,7 @@ var GRID_STATE = {
         me.$noAvailableFieldsMsg = $('#search_result div.noavailablefields-msg');
         me.$buttonsToDisableWhenGridLoads = $('ul.secnav a.btn, ul.secnav div.btn-group button, ul.secnav input[type=button], .submit, #btnClearFilter');        
         me.$searchField = '#txtFreeTextSearch';
-        me.$filterForm = $('#frmAdvanceSearch');
+        me.$filterForm = $('#frmAdvanceSearch');        
         me.$availableCustomer = [];
         $('#lstfilterCustomers option').each(function () {
             me.$availableCustomer.push({
@@ -83,8 +84,7 @@ var GRID_STATE = {
         
         me.hideMessage();        
         $('.submit, a.refresh-grid').on('click', function (ev) {
-            ev.preventDefault();
-            
+            ev.preventDefault();                        
             if (me._gridState !== window.GRID_STATE.IDLE) {
                 return false;
             }
@@ -113,7 +113,8 @@ var GRID_STATE = {
         });
 
         if (doSearchAtBegining)
-            me.onSearchClick();
+            me.onSearchClick();                
+
 
     };
         
@@ -202,7 +203,7 @@ var GRID_STATE = {
             
         if (data && data.length > 0) {            
             $.each(data, function (idx, record) {
-                var firstCell = strJoin('<td><a href="/Cases/Edit/', record.case_id, '"><img title="', record.caseIconTitle, '" alt="', record.caseIconTitle, '" src="', record.caseIconUrl, '" /></a></td>');
+                var firstCell = strJoin('<td><a href="/Cases/Edit/', record.case_id, '?backUrl=', '/Cases/AdvancedSearch?', 'doSearchAtBegining=true', '"><img title="', record.caseIconTitle, '" alt="', record.caseIconTitle, '" src="', record.caseIconUrl, '" /></a></td>');
                 var rowOut = [strJoin('<tr class="', me.getClsRow(record), '" caseid="', record.case_id, '">'), firstCell];
                 $.each(me.gridSettings.columnDefs, function (idx, columnSettings) {
                     if (!columnSettings.isHidden) {
@@ -248,10 +249,10 @@ var GRID_STATE = {
         globalCounter = 0;
     }
 
-    // DoSearch By Buttton
+    // DoSearch By Button
     Page.prototype.onSearchClick = function () {        
         var me = this;
-        var searchStr = $(me.$searchField).val();
+        var searchStr = $(me.$searchField).val();        
 
         var curCustomerId = 0;
         var curCustomerName = '';
@@ -313,6 +314,9 @@ var GRID_STATE = {
         } else {
             fetchParams = baseParams;
         }
+
+        
+
         me.setGridState(window.GRID_STATE.LOADING);                
 
         $.ajax('/Cases/DoAdvancedSearch', {
@@ -341,6 +345,7 @@ var GRID_STATE = {
                 me.DrawTables(sortCallback);
             }
             customerTableId += 1;
+            $("#btnSearch").focus();
         });
     };
 
@@ -479,15 +484,14 @@ var GRID_STATE = {
     window.app = new Page();
 
     $(document).ready(function() {
-        app.init.call(window.app, window.gridSettings, window.doSearchAtBegining);
-        SetSpecificConditionTab();        
+        app.init.call(window.app, window.gridSettings, window.doSearchAtBegining);            
     });
 
     $('#lstfilterCustomers.chosen-select').on('change', function (evt, params) {
-        SetSpecificConditionTab();
+        SetSpecificConditionTab(true);
     });
 
-    function SetSpecificConditionTab() {
+    function SetSpecificConditionTab(resetFilterObjs) {
         var selectedCustomers = $('#lstfilterCustomers.chosen-select option');
         var selectedCount = 0;
         var customerId = 0;
@@ -503,6 +507,7 @@ var GRID_STATE = {
             $.get(window.getSpecificFilterDataUrl,
                     {
                         selectedCustomerId: customerId,
+                        resetFilter: resetFilterObjs,
                         curTime: new Date().getTime()
                     }, function (_SpecificFilterData) {
                         $("#SpecificFilterDataPartial").html(_SpecificFilterData);
@@ -514,32 +519,24 @@ var GRID_STATE = {
         else {            
             $('#AdvanceSearchSpecificTab').attr('style', 'display:none');
             $('#AdvanceSearchSpecificTab').attr('data-field', '');
-        }
+        }       
     }
+
 })($);
 
 
 
-$('#divCaseType ul.dropdown-menu li a').click(function (e) {
-    e.preventDefault();
-    var val = $(this).attr('value');
-    $("#divBreadcrumbs_CaseType").text(getBreadcrumbs(this));
-    $("#hidFilterCaseTypeId").val(val);
-});
 
-$('#divProductArea ul.dropdown-menu li a').click(function (e) {
-    e.preventDefault();
-    var val = $(this).attr('value');
-    $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(this));
-    $("#hidFilterProductAreaId").val(val);
-});
+$(defaultFocusObj).focus();
 
-$('#divClosingReason ul.dropdown-menu li a').click(function (e) {
-    e.preventDefault();
-    var val = $(this).attr('value');
-    $("#divBreadcrumbs_ClosingReason").text(getBreadcrumbs(this));
-    $("#hidFilterClosingReasonId").val(val);
-});
+function getBreadcrumbs(a) {
+    var path = $(a).text(), $parent = $(a).parents("li").eq(1).find("a:first");
+
+    if ($parent.length == 1) {
+        path = getBreadcrumbs($parent) + " - " + path;
+    }
+    return path;
+}
 
 
 /**

@@ -379,6 +379,7 @@
     <Content Include="Content\img\glyphicons-dh.png" />
     <Content Include="Content\js\Account\order.js" />
     <Content Include="Areas\Admin\Content\js\Users\_input.js" />
+    <Content Include="Content\js\AdvancedSearch\index.specialfilter.js" />
     <Content Include="Content\js\AdvancedSearch\index.logic.js" />
     <Content Include="Content\js\bootstrap-tagsinput.js" />
     <Content Include="Content\bundles\chosen-sprite%402x.png" />

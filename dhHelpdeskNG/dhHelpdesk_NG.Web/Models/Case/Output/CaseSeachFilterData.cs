@@ -103,15 +103,19 @@
 
         public IList<CaseType> CaseTypeList { get; set; }
 
-        public string FilteredCaseType { get; set; }
+        public int FilteredCaseType { get; set; }
+
+        public string FilteredCaseTypeText { get; set; }
 
         public IList<ProductArea> ProductAreaList { get; set; }
 
         public string FilteredProductArea { get; set; }
 
+        public string FilteredProductAreaText { get; set; }
+
         public IList<Priority> PriorityList { get; set; }
 
-        public string FilteredPriority { get; set; }
+        public string FilteredPriority { get; set; }        
 
         public IList<StateSecondary> StateSecondaryList { get; set; }
 
@@ -120,5 +124,7 @@
         public IList<FinishingCause> ClosingReasonList { get; set; }
 
         public string FilteredClosingReason { get; set; }
+
+        public string FilteredClosingReasonText { get; set; }
     }
 }

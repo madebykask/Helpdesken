@@ -9,9 +9,14 @@
 <script type="text/javascript">
     window.gridSettings = @Html.Raw(jsSerializer.Serialize(Model.GridSettings))
     window.doSearchAtBegining = @Html.Raw(jsSerializer.Serialize(Model.DoSearchAtBegining))
-    window.getSpecificFilterDataUrl = '@Url.Content("~/Cases/GetCustomerSpecificFilter")'
-</script>
+    window.getSpecificFilterDataUrl = '@Url.Content("~/Cases/GetCustomerSpecificFilter")';
 
+    window.Params = {
+        DefaultFocusObject: "#btnSearch"       
+    };
+
+</script>
+<form id="frmAdvanceSearch" name="frmAdvanceSearch">
 <div class="AdvancedSearch-overview page">    
     <div class="content">
         <div class="container">
@@ -21,23 +26,24 @@
                         @Translation.Get("Avancerad sökning", Enums.TranslationSource.TextTranslation)
                     </a>
                 </li>  
-                <li id="AdvanceSearchSpecificTab" data-field="" style="display:none">
+                <li id="AdvanceSearchSpecificTab" data-field="" >
                     <a href="#fragment-2">
                         @Translation.Get("Customer specific conditions", Enums.TranslationSource.TextTranslation)
                     </a>
                 </li>                
             </ul>
+            
             <div class="tab-content">
                 <div class="tab-pane tab-pane-border active" id="fragment-1" >
-                    @Html.Partial("AdvancedSearch/_SearchOverview", Model.CaseSearchFilterData)
-                    <input type="submit" class="submit btn" value="@Translation.Get("Sök")" id="btnDoSearch"/>
+                    @Html.Partial("AdvancedSearch/_SearchOverview", Model.CaseSearchFilterData)                    
+                    <input type="submit" class="submit btn" value="@Translation.Get("Sök")" id="btnSearch"/> 
                 </div>                   
                 <div class="tab-pane tab-pane-border" id="fragment-2" >
                     @Html.Partial("AdvancedSearch/_SpecificSearchTab", Model.SpecificSearchFilterData)
-                    <input type="submit" class="submit btn" value="@Translation.Get("Sök")" id="btnDoSearch"/>
+                    <input type="submit" class="submit btn" value="@Translation.Get("Sök")" />
                 </div>
                 
-            </div>
+            </div>          
              <div class="tab-content">
                 <div class="tab-pane tab-pane-border active" >
                     
@@ -61,4 +67,5 @@
         </div>
     </div>
 </div>
+</form>
 @Scripts.Render("~/bundles/advancedsearch/index")

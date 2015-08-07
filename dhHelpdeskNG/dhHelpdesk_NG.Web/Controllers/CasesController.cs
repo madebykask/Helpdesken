@@ -310,7 +310,8 @@
                                                         currentUserId, 
                                                         advancedSearchModel, 
                                                         availableCustomers);
-            m.SpecificSearchFilterData = CreateAdvancedSearchSpecificFilterData(currentCustomerId, currentUserId);// new AdvancedSearchSpecificFilterData();
+
+            m.SpecificSearchFilterData = CreateAdvancedSearchSpecificFilterData(currentUserId);
 
             m.CaseSetting = this.GetCaseSettingModel(currentCustomerId, currentUserId);
             m.GridSettings = JsonGridSettingsMapper.GetAdvancedSearchGridSettingsModel(currentCustomerId);
@@ -327,9 +328,14 @@
         }
 
         [HttpGet]
-        public PartialViewResult GetCustomerSpecificFilter(int selectedCustomerId)
+        public PartialViewResult GetCustomerSpecificFilter(int selectedCustomerId, bool resetFilter = false)
         {
-            var model = CreateAdvancedSearchSpecificFilterData(selectedCustomerId, SessionFacade.CurrentUser.Id);
+            CaseSearchModel csm = null;
+
+            if (!resetFilter)
+                selectedCustomerId = 0;
+
+            var model = CreateAdvancedSearchSpecificFilterData(SessionFacade.CurrentUser.Id, selectedCustomerId);
             return PartialView("AdvancedSearch/_SpecificSearchTab", model);
         }
 
@@ -358,7 +364,18 @@
             f.CaseRegistrationDateEndFilter = frm.GetDate("CaseRegistrationDateEndFilter");
             f.CaseClosingDateStartFilter = frm.GetDate("CaseClosingDateStartFilter");
             f.CaseClosingDateEndFilter = frm.GetDate("CaseClosingDateEndFilter");
-            
+
+            //Apply & save specific filters only when user has selected one customer 
+            if (!string.IsNullOrEmpty(f.Customer)  &&  !f.Customer.Contains(","))
+            {
+                f.Department = frm.ReturnFormValue("lstfilterDepartment");
+                f.Priority = frm.ReturnFormValue("lstfilterPriority");
+                f.StateSecondary = frm.ReturnFormValue("lstfilterStateSecondary");
+                f.CaseType = frm.ReturnFormValue("hid_CaseTypeDropDown").convertStringToInt();
+                f.ProductArea = f.ProductArea = frm.ReturnFormValue("hid_ProductAreaDropDown").ReturnCustomerUserValue();
+                f.CaseClosingReasonFilter = frm.ReturnFormValue("hid_ClosingReasonDropDown").ReturnCustomerUserValue();                
+            }
+
             f.UserId = SessionFacade.CurrentUser.Id;
 
             if (!string.IsNullOrEmpty(frm.ReturnFormValue("txtCaseNumberSearch")))
@@ -944,8 +961,17 @@
             return fd;
         }
 
-        private AdvancedSearchSpecificFilterData CreateAdvancedSearchSpecificFilterData(int cusId, int userId)
+        private AdvancedSearchSpecificFilterData CreateAdvancedSearchSpecificFilterData(int userId, int cusId = 0)
         {
+            var csm = new CaseSearchModel();
+                        
+            // While customer is not changed (cusId == 0), should use session values for default filter
+            if (cusId == 0)
+            {
+                csm = SessionFacade.CurrentAdvancedSearch;
+                cusId = csm.caseSearchFilter.CustomerId;
+            }            
+
             var specificFilter = new AdvancedSearchSpecificFilterData();
 
             specificFilter.CustomerId = cusId;
@@ -977,6 +1003,55 @@
                 cusId,
                 SessionFacade.CurrentUser,
                 isTakeOnlyActive);
+
+            specificFilter.FilteredCaseTypeText = ParentPathDefaultValue;
+            specificFilter.FilteredProductAreaText= ParentPathDefaultValue;
+            specificFilter.FilteredClosingReasonText = ParentPathDefaultValue;
+
+            if (csm != null && csm.caseSearchFilter != null)
+            {
+                specificFilter.FilteredDepartment = csm.caseSearchFilter.Department;
+                specificFilter.FilteredPriority = csm.caseSearchFilter.Priority;
+                specificFilter.FilteredStateSecondary = csm.caseSearchFilter.StateSecondary;
+                specificFilter.FilteredCaseType = csm.caseSearchFilter.CaseType;                
+                if (specificFilter.FilteredCaseType > 0)
+                {
+                    var c = this._caseTypeService.GetCaseType(specificFilter.FilteredCaseType);
+                    if (c != null)                    
+                        specificFilter.FilteredCaseTypeText = c.getCaseTypeParentPath();                    
+                }
+
+                specificFilter.FilteredProductArea = csm.caseSearchFilter.ProductArea;
+                if (!string.IsNullOrWhiteSpace(specificFilter.FilteredProductArea))
+                {
+                    if (specificFilter.FilteredProductArea != "0")
+                    {
+                        var p = this._productAreaService.GetProductArea(specificFilter.FilteredProductArea.convertStringToInt());
+                        if (p != null)
+                        {
+                            specificFilter.FilteredProductAreaText = string.Join(
+                                " - ",
+                                this._productAreaService.GetParentPath(p.Id, cusId));
+                        }
+                    }
+                }
+
+                specificFilter.FilteredClosingReason = csm.caseSearchFilter.CaseClosingReasonFilter;
+                if (!string.IsNullOrWhiteSpace(specificFilter.FilteredClosingReason))
+                {
+                    if (specificFilter.FilteredClosingReason != "0")
+                    {
+                        var fc =
+                            this._finishingCauseService.GetFinishingCause(
+                                specificFilter.FilteredClosingReason.convertStringToInt());
+                        if (fc != null)
+                        {
+                            specificFilter.FilteredClosingReasonText = fc.GetFinishingCauseParentPath();
+                        }
+                    }
+                }
+
+            }
 
             return specificFilter;
         }
