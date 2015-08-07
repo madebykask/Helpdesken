@@ -63,6 +63,10 @@
         public DateTime? WatchDate { get; set; }
         public int? LockCaseToWorkingGroup_Id { get; set; }
         public int? WorkingGroup_Id { get; set; }
+
+        /// <summary>
+        /// In UTC
+        /// </summary>
         public DateTime? FinishingDate { get; set; }
         public String FinishingDescription { get; set; }
         public DateTime? FollowUpDate { get; set; }

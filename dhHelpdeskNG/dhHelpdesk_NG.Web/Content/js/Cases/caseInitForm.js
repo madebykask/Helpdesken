@@ -19,7 +19,6 @@ function LogInitForm() {
         }
         else {
             if ($("#CaseLog_FinishingDate").val() == '') {
-                //var today = $("#Today").val();
                 $("#CaseLog_FinishingDate").val(today());
             }
         }

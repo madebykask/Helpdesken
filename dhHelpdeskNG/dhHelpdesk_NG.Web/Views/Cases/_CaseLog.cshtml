@@ -3,7 +3,8 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 
 @if (Model != null && Model.Logs != null)
-{    
+{
+    var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
     <div class="tab-pane tab-pane-border active" id="logtab">
         <table class="table table-striped table-bordered table-hover">
             @if (Model.Logs.Any())
@@ -23,6 +24,9 @@
                 {
                     <tr>
                         <td>
+                            @{
+                                r.LogDate = TimeZoneInfo.ConvertTimeFromUtc(r.LogDate, userTimeZone);
+                            }
                             <a href="@GetLogLink(r)">@Html.DisplayFor(m => r.LogDate, "DateAndTime") </a>
                         </td>
                         <td>

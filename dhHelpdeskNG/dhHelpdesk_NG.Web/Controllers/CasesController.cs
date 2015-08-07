@@ -34,6 +34,7 @@
     using DH.Helpdesk.Services.Utils;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.Attributes;
+    using DH.Helpdesk.Web.Infrastructure.Case;
     using DH.Helpdesk.Web.Infrastructure.CaseOverview;
     using DH.Helpdesk.Web.Infrastructure.Configuration;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
@@ -438,9 +439,7 @@
                 m.caseSettings.Add(curSetting);
             }
 
-            var workTimeCalc = TimeZoneInfo.Local;
-            var showRemainingTime = false;            
-            CaseRemainingTimeData remainingTimeData;
+            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
             var caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(f.CustomerId).ToArray();
             m.cases = this._caseSearchService.Search(
                 f,
@@ -454,7 +453,7 @@
                 sm.Search,
                 0,
                 0,
-                workTimeCalc,
+                userTimeZone,
                 ApplicationTypes.Helpdesk                
                 ).Take(maxRecords).ToList();
 
@@ -491,7 +490,7 @@
                     var searchCol = searchRow.Columns.FirstOrDefault(it => it.Key == col.name);
                     if (searchCol != null)
                     {
-                        jsRow.Add(col.name, this.outputFormatter.FormatField(searchCol));
+                        jsRow.Add(col.name, this.outputFormatter.FormatField(searchCol, userTimeZone));
                     }
                     else
                     {
@@ -739,6 +738,7 @@
             var caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(f.CustomerId).ToArray();
             var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
             CaseRemainingTimeData remainingTimeData;
+            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
             m.cases = this._caseSearchService.Search(
                 f,
                 m.caseSettings,
@@ -751,7 +751,7 @@
                 sm.Search,
                 this.workContext.Customer.WorkingDayStart,
                 this.workContext.Customer.WorkingDayEnd,
-                TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId),
+                userTimeZone,
                 ApplicationTypes.Helpdesk,
                 showRemainingTime,
                 out remainingTimeData);
@@ -781,7 +781,7 @@
                     var searchCol = searchRow.Columns.FirstOrDefault(it => it.Key == col.name);
                     if (searchCol != null)
                     {
-                        jsRow.Add(col.name, this.outputFormatter.FormatField(searchCol));
+                        jsRow.Add(col.name, this.outputFormatter.FormatField(searchCol, userTimeZone));
                     }
                     else
                     {
@@ -2214,6 +2214,7 @@
             var caseMailSetting = m.caseMailSetting;
             var updateNotifierInformation = m.updateNotifierInformation;
             var caseInvoiceArticles = m.caseInvoiceArticles;
+            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
             case_.Performer_User_Id = m.Performer_Id;
             case_.CaseResponsibleUser_Id = m.ResponsibleUser_Id;
             case_.RegistrationSourceCustomer_Id = m.customerRegistrationSourceId;
@@ -2634,6 +2635,7 @@
             }
             else
             {
+                var case_ = m.case_;
                 var customer = this._customerService.GetCustomer(customerId);
                 var cs = this._settingService.GetCustomerSetting(customerId);                
                 m.customerUserSetting = cu;
@@ -3092,6 +3094,9 @@
                         .Replace("[UserId]", SessionFacade.CurrentUser.UserId.ToString())
                         .Replace("[Language]", l.LanguageId);
                 }
+
+                var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
+                m.MapCaseToCaseInputViewModel(case_, userTimeZone);
             }
 
             m.CaseTemplateTreeButton = this.GetCaseTemplateTreeModel(customerId, userId);

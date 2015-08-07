@@ -9,7 +9,7 @@
 
     public class OutputFormatter
     {
-        public string FormatField(Field field)
+        public string FormatField(Field field, TimeZoneInfo userTimeZone)
         {
             switch (field.FieldType)
             {
@@ -22,9 +22,7 @@
                 case FieldTypes.Time:
                     if (field.DateTimeValue.HasValue)
                     {
-                        /// this was taken from DH.Helpdesk.Common.Extensions.DateTime and it is sad (((
-                        return field.DateTimeValue.Value.ToLocalTime()
-                            .ToString("g", Thread.CurrentThread.CurrentUICulture);
+                        return TimeZoneInfo.ConvertTimeFromUtc(field.DateTimeValue.Value, userTimeZone).ToString("g", Thread.CurrentThread.CurrentUICulture);
                     }
                     break;
                 case FieldTypes.NullableHours:

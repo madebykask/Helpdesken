@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.Models.Case
 {
+    using System;
     using System.Collections.Generic;
     using System.Web.Mvc;
 
@@ -47,8 +48,12 @@
         public Infrastructure.Enums.AccessMode EditMode { get; set; } //(-1,0,1)
         public bool Disable_SendMailAboutCaseToNotifier { get; set; }
         public int ProductAreaHasChild { get; set; }
+
+        [Obsolete("Put all fields that you required into this CaseInputViewModel model")]
         public Case case_  { get; set; }
+
         public CaseLog CaseLog { get; set; }
+
         public SendToDialogModel SendToDialogModel { get; set; }
         public CaseMailSetting CaseMailSetting { get; set; }
         public User RegByUser { get; set; }
@@ -160,6 +165,13 @@
         public string BackUrl { get; set; }
 
         public bool CanGetRelatedCases { get; set; }
+
+
+        #region Date field from case_. Converted to user time zone
+
+        public DateTime RegTime { get; set; }
+
+        #endregion
     }
 
     public class CaseIndexViewModel
