@@ -10,13 +10,15 @@
     window.gridSettings = @Html.Raw(jsSerializer.Serialize(Model.GridSettings))
     window.doSearchAtBegining = @Html.Raw(jsSerializer.Serialize(Model.DoSearchAtBegining))
     window.getSpecificFilterDataUrl = '@Url.Content("~/Cases/GetCustomerSpecificFilter")';
-
-    window.Params = {
-        DefaultFocusObject: "#btnSearch"       
-    };
-    
+    //window.Params = {
+    //    DefaultFocusObject: "#btnSearch"       
+    //};    
 </script>
-<form id="frmAdvanceSearch" name="frmAdvanceSearch">
+<div class="secnavs fixed">
+    <div class="pull-left">       
+    </div>
+</div>
+ <form id="frmAdvanceSearch" name="frmAdvanceSearch">
 <div class="AdvancedSearch-overview page">    
     <div class="content">
         <div class="container">

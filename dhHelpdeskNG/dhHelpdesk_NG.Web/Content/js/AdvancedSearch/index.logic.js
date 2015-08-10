@@ -8,8 +8,6 @@ var GRID_STATE = {
 };
 
 
-var defaultFocusObj = window.Params.DefaultFocusObject;
-
 (function ($) {    
         
     /// message types
@@ -518,9 +516,7 @@ var defaultFocusObj = window.Params.DefaultFocusObject;
                         curTime: new Date().getTime()
                     }, function (_SpecificFilterData) {
                         $("#SpecificFilterDataPartial").html(_SpecificFilterData);
-                       
-            }).done(function () {
-                $("#btnSearch").focus();                
+
             });
 
             $('#SpecificFilterDataPartial').attr('style', '');
@@ -607,16 +603,13 @@ $(function () {
 });
 
 
-(function ($) {
-    var defaultFocusObj = window.Params.DefaultFocusObject;
+(function ($) {    
     var caseTypeDropDown = window.Params.CaseTypeDropDown;
     var productAreaDropDown = window.Params.ProductAreaDropDown;
     var closingReasonDropDown = window.Params.ClosingReasonDropDown;
 
     var breadCrumbsPrefix = "#divBreadcrumbs_";
-    var hiddenPrefix = "#hid_";
-
-    $(defaultFocusObj).focus();   
+    var hiddenPrefix = "#hid_";    
 
     $('#' + caseTypeDropDown + ' ul.dropdown-menu li a').click(function (e) {
         e.preventDefault();
