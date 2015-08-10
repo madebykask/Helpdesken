@@ -25,7 +25,7 @@
                     <tr>
                         <td>
                             @{
-                                r.LogDate = TimeZoneInfo.ConvertTimeFromUtc(r.LogDate, userTimeZone);
+                                r.LogDate = TimeZoneInfo.ConvertTimeFromUtc(r.LogDate.ToUniversalTime(), userTimeZone);
                             }
                             <a href="@GetLogLink(r)">@Html.DisplayFor(m => r.LogDate, "DateAndTime") </a>
                         </td>

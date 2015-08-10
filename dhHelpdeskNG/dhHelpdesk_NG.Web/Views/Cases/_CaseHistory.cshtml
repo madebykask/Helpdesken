@@ -27,7 +27,7 @@
                         <tr>
                             <td style="width:15%">
                                 @{
-                                    current.CreatedDate = TimeZoneInfo.ConvertTimeFromUtc(current.CreatedDate, userTimeZone);
+                                    current.CreatedDate = TimeZoneInfo.ConvertTimeFromUtc(current.CreatedDate.ToUniversalTime(), userTimeZone);
                                 }
                                 @Html.DisplayFor(m => current.CreatedDate, "DateAndTime") 
                             </td>
