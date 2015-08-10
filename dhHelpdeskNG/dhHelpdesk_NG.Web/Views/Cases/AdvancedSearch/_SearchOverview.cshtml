@@ -1,4 +1,4 @@
-﻿@model DH.Helpdesk.Web.Models.Case.Output.CaseSearchFilterData 
+﻿@model DH.Helpdesk.Web.Models.Case.AdvancedSearchIndexViewModel
 @using DH.Helpdesk.BusinessData.OldComponents
 @using System.Web.Optimization
 @using DH.Helpdesk.Web.Infrastructure.Extensions
@@ -6,10 +6,60 @@
 @if (Model != null)
 {        
      <div class="container">         
-         <div class="row">             
+         <div class="row"> 
              <div class="span6">
-                 <table class="tableform">                                                                         
-                     @if (Model.filterCustomers != null)
+                 <table class="tableform">                                         
+                     <tr>
+                        <td>                                
+                            @Translation.Get("Anmälare")
+                        </td>
+                        <td>
+                            @*@Html.TextBoxFor(m=> m.CaseSearchFilterData.CaseInitiatorFilter,  new { @class = "fixed-length", id = "CaseInitiatorFilter", name="CaseInitiatorFilter"})*@
+                            <input type="text" id="CaseInitiatorFilter" value="@Model.CaseSearchFilterData.CaseInitiatorFilter" name="CaseInitiatorFilter" />
+                        </td>
+                    </tr>    
+
+                     <tr>
+                         <td class="span3">
+                             @Translation.Get("Ärendenummer")
+                         </td>
+                         <td class="span4">
+                             <input type="text" id="txtCaseNumberSearch" value="@Model.CaseSearchFilterData.caseSearchFilter.CaseNumber" name="txtCaseNumberSearch" />
+                         </td>                         
+                     </tr>
+                     <tr>
+                         <td class="span3">
+                             @Translation.Get("Fritextfält")
+                         </td>
+                         <td class="span4">
+                             <input type="text" id="txtFreeTextSearch" value="@Model.CaseSearchFilterData.caseSearchFilter.FreeTextSearch" name="txtFreeTextSearch" />
+                         </td>
+                     </tr>                   
+                     <tr class="date-block">
+                         <td>                                
+                             @Translation.Get(GlobalEnums.TranslationCaseFields.RegTime.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSearchFilterData.filterCustomerId)                                   
+                         </td>
+                         <td>
+                             @Html.EditorFor(m => Model.CaseSearchFilterData.caseSearchFilter.CaseRegistrationDateStartFilter, "DatePickerNoJs", new { name = "CaseRegistrationDateStartFilter" })
+                             @Html.EditorFor(m => Model.CaseSearchFilterData.caseSearchFilter.CaseRegistrationDateEndFilter, "DatePickerNoJs", new { name = "CaseRegistrationDateEndFilter" })
+                         </td>
+                     </tr>                                                                            
+                     <tr class="date-block">
+                         <td>                                
+                             @Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSearchFilterData.filterCustomerId)                                   
+                         </td>
+                         <td>
+                             @Html.EditorFor(m => Model.CaseSearchFilterData.caseSearchFilter.CaseClosingDateStartFilter, "DatePickerNoJs", new { name = "CaseClosingDateStartFilter" })
+                             @Html.EditorFor(m => Model.CaseSearchFilterData.caseSearchFilter.CaseClosingDateEndFilter, "DatePickerNoJs", new { name = "CaseClosingDateEndFilter" })
+                         </td>
+                     </tr>    
+                    
+                 </table>
+             </div>     
+                         
+             <div class="span6">
+                 <table class="tableform">                      
+                     @if (Model.CaseSearchFilterData.filterCustomers != null)
                      {
                          <tr>
                              <td>                                
@@ -17,43 +67,43 @@
                              </td>
                              <td>
                                  <select id="lstfilterCustomers" name="lstfilterCustomers" data-field="customers" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
-                                     @foreach (var c in Model.filterCustomers)
+                                     @foreach (var c in Model.CaseSearchFilterData.filterCustomers)
                                      {                                            
                                          int customerId = int.Parse(c.Value);                
-                                         <option value="@customerId" @customerId.IdIsSelected(Model.caseSearchFilter.Customer)>@c.Name</option>                                          
+                                         <option value="@customerId" @customerId.IdIsSelected(Model.CaseSearchFilterData.caseSearchFilter.Customer)>@c.Name</option>                                          
                                      }
                                  </select>
                              </td>
                          </tr>                
-                     }                                                                                                                                                             
-                    
-                     @if (Model.AvailablePerformersList != null)
+                     }                     
+
+                     @if (Model.CaseSearchFilterData.AvailablePerformersList != null)
                      {
                          <tr>
                              <td>                               
-                                 @Translation.Get(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId)                                  
+                                 @Translation.Get(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSearchFilterData.filterCustomerId)                                  
                              </td>
                              <td>
-                                 @Html.ListBoxFor(m => m.lstfilterPerformer, Model.AvailablePerformersList, new { id = "lstfilterPerformer", @class = "chosen-select", multiple = "multiple" })
+                                 @Html.ListBoxFor(m => m.CaseSearchFilterData.lstfilterPerformer, Model.CaseSearchFilterData.AvailablePerformersList, new { id = "lstfilterPerformer", @class = "chosen-select", multiple = "multiple" })
                              </td>
                          </tr>                 
                      }
-                                                              
+                                        
                     <tr>
                         <td>                                
                             @Translation.Get("Status")                                   
                         </td>
                         <td>
                             <select id="lstfilterCaseProgress" name="lstfilterCaseProgress" style="width:300px">
-                                @foreach (var e in Model.filterCaseProgress)
+                                @foreach (var e in Model.CaseSearchFilterData.filterCaseProgress)
                                 {
-                                    <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.CaseProgress)>@e.StringValue</option>
+                                    <option value="@e.Id" @e.Id.IdIsSelected(Model.CaseSearchFilterData.caseSearchFilter.CaseProgress)>@e.StringValue</option>
                                 }
                         </select>
                         </td>
                     </tr>                                     
                      
-                     @if (Model.filterMaxRows != null)
+                     @if (Model.CaseSearchFilterData.filterMaxRows != null)
                      {
                          <tr>
                              <td>                                
@@ -61,10 +111,10 @@
                              </td>
                              <td>
                                  <select id="lstfilterMaxRows" name="lstfilterMaxRows" style="width:70px" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" >
-                                     @foreach (var r in Model.filterMaxRows)
+                                     @foreach (var r in Model.CaseSearchFilterData.filterMaxRows)
                                      {
                                          var curId = int.Parse(r.Value);                                                                             
-                                         <option value="@r.Value" @curId.IdIsSelected(Model.caseSearchFilter.MaxRows)> @r.Name </option>                                                                               
+                                         <option value="@r.Value" @curId.IdIsSelected(Model.CaseSearchFilterData.caseSearchFilter.MaxRows)> @r.Name </option>                                                                               
                                      }
                                  </select>
                                   @Translation.Get("poster i sökresultat/Kund")                                 
@@ -74,56 +124,8 @@
                       
                  </table>
              </div>
-
-             <div class="span6">
-                 <table class="tableform">                                         
-                     <tr>
-                        <td>                                
-                            @Translation.Get("Anmälare")
-                        </td>
-                        <td>
-                            @Html.TextBoxFor(m=>m.CaseInitiatorFilter,  new { @class = "fixed-length", id = string.Empty })
-                        </td>
-                    </tr>    
-
-                     <tr>
-                         <td class="span3">
-                             @Translation.Get("Ärendenummer")
-                         </td>
-                         <td class="span4">
-                             <input type="text" id="txtCaseNumberSearch" value="@Model.caseSearchFilter.CaseNumber" name="txtCaseNumberSearch" />
-                         </td>                         
-                     </tr>
-                     <tr>
-                         <td class="span3">
-                             @Translation.Get("Fritextfält")
-                         </td>
-                         <td class="span4">
-                             <input type="text" id="txtFreeTextSearch" value="@Model.caseSearchFilter.FreeTextSearch" name="txtFreeTextSearch" />
-                         </td>
-                     </tr>                   
-                     <tr class="date-block">
-                         <td>                                
-                             @Translation.Get(GlobalEnums.TranslationCaseFields.RegTime.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId)                                   
-                         </td>
-                         <td>
-                             @Html.EditorFor(m => Model.caseSearchFilter.CaseRegistrationDateStartFilter, "DatePickerNoJs", new { name = "CaseRegistrationDateStartFilter" })
-                             @Html.EditorFor(m => Model.caseSearchFilter.CaseRegistrationDateEndFilter, "DatePickerNoJs", new { name = "CaseRegistrationDateEndFilter" })
-                         </td>
-                     </tr>                                                                            
-                     <tr class="date-block">
-                         <td>                                
-                             @Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId)                                   
-                         </td>
-                         <td>
-                             @Html.EditorFor(m => Model.caseSearchFilter.CaseClosingDateStartFilter, "DatePickerNoJs", new { name = "CaseClosingDateStartFilter" })
-                             @Html.EditorFor(m => Model.caseSearchFilter.CaseClosingDateEndFilter, "DatePickerNoJs", new { name = "CaseClosingDateEndFilter" })
-                         </td>
-                     </tr>    
-                    
-                 </table>
-             </div>         
-
+                            
+             @Html.Partial("AdvancedSearch/_SpecificSearchTab", Model.SpecificSearchFilterData)            
          </div>         
      </div>
 }

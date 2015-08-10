@@ -14,7 +14,7 @@
     window.Params = {
         DefaultFocusObject: "#btnSearch"       
     };
-
+    
 </script>
 <form id="frmAdvanceSearch" name="frmAdvanceSearch">
 <div class="AdvancedSearch-overview page">    
@@ -25,24 +25,14 @@
                     <a href="#fragment-1">
                         @Translation.Get("Avancerad sökning", Enums.TranslationSource.TextTranslation)
                     </a>
-                </li>  
-                <li id="AdvanceSearchSpecificTab" data-field="" >
-                    <a href="#fragment-2">
-                        @Translation.Get("Customer specific conditions", Enums.TranslationSource.TextTranslation)
-                    </a>
-                </li>                
+                </li>                        
             </ul>
             
             <div class="tab-content">
                 <div class="tab-pane tab-pane-border active" id="fragment-1" >
-                    @Html.Partial("AdvancedSearch/_SearchOverview", Model.CaseSearchFilterData)                    
-                    <input type="submit" class="submit btn" value="@Translation.Get("Sök")" id="btnSearch"/> 
-                </div>                   
-                <div class="tab-pane tab-pane-border" id="fragment-2" >
-                    @Html.Partial("AdvancedSearch/_SpecificSearchTab", Model.SpecificSearchFilterData)
-                    <input type="submit" class="submit btn" value="@Translation.Get("Sök")" />
-                </div>
-                
+                    @Html.Partial("AdvancedSearch/_SearchOverview", Model)                                        
+                    <input type="submit" class="submit btn" value="@Translation.Get("Sök")" id="btnSearch"/>                      
+                </div>                                   
             </div>          
              <div class="tab-content">
                 <div class="tab-pane tab-pane-border active" >
@@ -69,3 +59,5 @@
 </div>
 </form>
 @Scripts.Render("~/bundles/advancedsearch/index")
+
+

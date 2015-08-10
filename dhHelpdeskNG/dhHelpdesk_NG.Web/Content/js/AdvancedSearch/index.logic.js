@@ -53,9 +53,7 @@ var defaultFocusObj = window.Params.DefaultFocusObject;
     function Page() { };
 
     SetSpecificConditionTab(false);
-
     
-
     Page.prototype.init = function(gridInitSettings, doSearchAtBegining) {
         var me = this;        
         //// Bind elements
@@ -94,6 +92,12 @@ var defaultFocusObj = window.Params.DefaultFocusObject;
             return false;
         });                
 
+        $('#CaseInitiatorFilter').keydown(function (e) {
+            if (e.keyCode == 13) {
+                $("#btnSearch").click();
+            }
+        });
+
         $('#txtFreeTextSearch').keydown(function (e) {
             if (e.keyCode == 13) {
                 $("#btnSearch").click();
@@ -102,7 +106,7 @@ var defaultFocusObj = window.Params.DefaultFocusObject;
 
         $('#txtCaseNumberSearch').keydown(function (e) {
             if (e.keyCode == 13) {
-                $("#btnSearch").click();
+                $("#btnSearch").click();                
             }
         });
                
@@ -116,8 +120,7 @@ var defaultFocusObj = window.Params.DefaultFocusObject;
 
         if (doSearchAtBegining)
             me.onSearchClick();                
-       
-        $("#btnSearch").focus();
+               
     };
         
     Page.prototype.setGridState = function(gridStateId) {
@@ -229,18 +232,7 @@ var defaultFocusObj = window.Params.DefaultFocusObject;
             me.showMsg(NODATA_MSG_TYPE);
         }
         me.setGridState(window.GRID_STATE.IDLE);        
-    };
-     
-    Page.prototype.unsetSearchFilter = function () {
-        var me = this;        
-        $('#lstfilterCustomers, #lstfilterWorkingGroup, #lstfilterPerformer, #lstfilterStateSecondary').val('').trigger("chosen:updated");        
-        $('.date-block input[type=text]', me.$filterForm).val('');
-       
-        /// Initiator
-        $('[name=CaseInitiatorFilter]', me.$filterForm).val('');
-        $('[name=txtCaseNumberSearch]', me.$filterForm).val('');
-        $('[name=txtFreeTextSearch]', me.$filterForm).val('');        
-    };
+    };         
 
     Page.prototype.resetSearch = function () {
         var me = this;
@@ -347,7 +339,7 @@ var defaultFocusObj = window.Params.DefaultFocusObject;
                 me.DrawTables(sortCallback);
             }
             customerTableId += 1;
-            
+            $("#btnSearch").focus();
         });
     };
 
@@ -499,7 +491,7 @@ var defaultFocusObj = window.Params.DefaultFocusObject;
     window.app = new Page();
 
     $(document).ready(function() {
-        app.init.call(window.app, window.gridSettings, window.doSearchAtBegining);            
+        app.init.call(window.app, window.gridSettings, window.doSearchAtBegining);        
     });
 
     $('#lstfilterCustomers.chosen-select').on('change', function (evt, params) {
@@ -527,17 +519,19 @@ var defaultFocusObj = window.Params.DefaultFocusObject;
                     }, function (_SpecificFilterData) {
                         $("#SpecificFilterDataPartial").html(_SpecificFilterData);
                        
+            }).done(function () {
+                $("#btnSearch").focus();                
             });
 
-            $('#AdvanceSearchSpecificTab').attr('style', '');
-            $('#AdvanceSearchSpecificTab').attr('data-field', customerId);            
+            $('#SpecificFilterDataPartial').attr('style', '');
+            $('#SpecificFilterDataPartial').attr('data-field', customerId);
         }
         else {            
-            $('#AdvanceSearchSpecificTab').attr('style', 'display:none');
-            $('#AdvanceSearchSpecificTab').attr('data-field', '');
+            $('#SpecificFilterDataPartial').attr('style', 'display:none');
+            $('#SpecificFilterDataPartial').attr('data-field', '');
         }
 
-        $(defaultFocusObj).focus();
+        
     }
     
 })($);
@@ -615,3 +609,39 @@ $(function () {
         return that;
     }   
 });
+
+
+(function ($) {
+    var defaultFocusObj = window.Params.DefaultFocusObject;
+    var caseTypeDropDown = window.Params.CaseTypeDropDown;
+    var productAreaDropDown = window.Params.ProductAreaDropDown;
+    var closingReasonDropDown = window.Params.ClosingReasonDropDown;
+
+    var breadCrumbsPrefix = "#divBreadcrumbs_";
+    var hiddenPrefix = "#hid_";
+
+    $(defaultFocusObj).focus();   
+
+    $('#' + caseTypeDropDown + ' ul.dropdown-menu li a').click(function (e) {
+        e.preventDefault();
+        var val = $(this).attr('value');
+        $(breadCrumbsPrefix + caseTypeDropDown).text(getBreadcrumbs(this));
+        $(hiddenPrefix + caseTypeDropDown).val(val);
+    });
+
+    $('#' + productAreaDropDown + ' ul.dropdown-menu li a').click(function (e) {
+        e.preventDefault();
+        var val = $(this).attr('value');
+        $(breadCrumbsPrefix + productAreaDropDown).text(getBreadcrumbs(this));
+        $(hiddenPrefix + productAreaDropDown).val(val);
+    });
+
+    $('#' + closingReasonDropDown + ' ul.dropdown-menu li a').click(function (e) {
+        e.preventDefault();
+        var val = $(this).attr('value');
+        $(breadCrumbsPrefix + closingReasonDropDown).text(getBreadcrumbs(this));
+        $(hiddenPrefix + closingReasonDropDown).val(val);
+    });
+
+
+})($);
