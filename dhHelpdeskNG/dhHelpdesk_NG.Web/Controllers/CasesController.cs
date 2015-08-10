@@ -367,14 +367,23 @@
             f.CaseClosingDateEndFilter = frm.GetDate("CaseClosingDateEndFilter");
 
             //Apply & save specific filters only when user has selected one customer 
-            if (!string.IsNullOrEmpty(f.Customer)  &&  !f.Customer.Contains(","))
+            if (!string.IsNullOrEmpty(f.Customer) && !f.Customer.Contains(","))
             {
                 f.Department = frm.ReturnFormValue("lstfilterDepartment");
                 f.Priority = frm.ReturnFormValue("lstfilterPriority");
                 f.StateSecondary = frm.ReturnFormValue("lstfilterStateSecondary");
                 f.CaseType = frm.ReturnFormValue("hid_CaseTypeDropDown").convertStringToInt();
                 f.ProductArea = f.ProductArea = frm.ReturnFormValue("hid_ProductAreaDropDown").ReturnCustomerUserValue();
-                f.CaseClosingReasonFilter = frm.ReturnFormValue("hid_ClosingReasonDropDown").ReturnCustomerUserValue();                
+                f.CaseClosingReasonFilter = frm.ReturnFormValue("hid_ClosingReasonDropDown").ReturnCustomerUserValue();
+            }
+            else
+            {
+                f.Department = string.Empty;
+                f.Priority = string.Empty;
+                f.StateSecondary = string.Empty;
+                f.CaseType = 0;
+                f.ProductArea = string.Empty;
+                f.CaseClosingReasonFilter = string.Empty;
             }
 
             f.UserId = SessionFacade.CurrentUser.Id;
@@ -961,53 +970,84 @@
             return fd;
         }
 
-        private AdvancedSearchSpecificFilterData CreateAdvancedSearchSpecificFilterData(int userId, int cusId = 0)
+        private AdvancedSearchSpecificFilterData CreateAdvancedSearchSpecificFilterData(int userId, int customerId = 0)
         {
             var csm = new CaseSearchModel();
                         
             // While customer is not changed (cusId == 0), should use session values for default filter
-            if (cusId == 0)
+            if (customerId == 0)
             {
                 csm = SessionFacade.CurrentAdvancedSearch;
-                cusId = csm.caseSearchFilter.CustomerId;
+                customerId = csm.caseSearchFilter.CustomerId;
             }            
 
             var specificFilter = new AdvancedSearchSpecificFilterData();
 
-            specificFilter.CustomerId = cusId;
-            specificFilter.CustomerSetting = this._settingService.GetCustomerSetting(cusId);
-                        
-            const bool IsTakeOnlyActive = false;
-            specificFilter.DepartmentList = this._departmentService.GetDepartmentsByUserPermissions(
-                userId,
-                cusId,
-                IsTakeOnlyActive);
-            if (!specificFilter.DepartmentList.Any())
-            {
-                specificFilter.DepartmentList =
-                    this._departmentService.GetDepartments(cusId)
-                        .Where(
-                            d =>
-                            d.Region_Id == null
-                            || IsTakeOnlyActive == false 
-                            || (IsTakeOnlyActive && d.Region != null && d.Region.IsActive != 0))
-                        .ToList();
-            }
-
-            specificFilter.StateSecondaryList = this._stateSecondaryService.GetStateSecondaries(cusId);
-            specificFilter.PriorityList = this._priorityService.GetPriorities(cusId);
-            specificFilter.ClosingReasonList = this._finishingCauseService.GetFinishingCauses(cusId);
-            specificFilter.CaseTypeList = this._caseTypeService.GetCaseTypes(cusId);
-            const bool isTakeOnlyActive = false;
-            specificFilter.ProductAreaList = this._productAreaService.GetTopProductAreasForUser(
-                cusId,
-                SessionFacade.CurrentUser,
-                isTakeOnlyActive);
+            specificFilter.CustomerId = customerId;
+            specificFilter.CustomerSetting = this._settingService.GetCustomerSetting(customerId);
 
             specificFilter.FilteredCaseTypeText = ParentPathDefaultValue;
-            specificFilter.FilteredProductAreaText= ParentPathDefaultValue;
+            specificFilter.FilteredProductAreaText = ParentPathDefaultValue;
             specificFilter.FilteredClosingReasonText = ParentPathDefaultValue;
 
+            var customerfieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(customerId);
+
+            if (customerfieldSettings.Where(fs => fs.Name == GlobalEnums.TranslationCaseFields.Department_Id.ToString() && 
+                                                  fs.ShowOnStartPage != 0).Any())
+            {
+                const bool IsTakeOnlyActive = false;
+                specificFilter.DepartmentList = this._departmentService.GetDepartmentsByUserPermissions(
+                    userId,
+                    customerId,
+                    IsTakeOnlyActive);
+                if (!specificFilter.DepartmentList.Any())
+                {
+                    specificFilter.DepartmentList =
+                        this._departmentService.GetDepartments(customerId)
+                            .Where(
+                                d =>
+                                d.Region_Id == null
+                                || IsTakeOnlyActive == false
+                                || (IsTakeOnlyActive && d.Region != null && d.Region.IsActive != 0))
+                            .ToList();
+                }
+            }
+
+            if (customerfieldSettings.Where(fs => fs.Name == GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString() &&
+                                                  fs.ShowOnStartPage != 0).Any())
+            {
+                specificFilter.StateSecondaryList = this._stateSecondaryService.GetStateSecondaries(customerId);
+            }
+
+            if (customerfieldSettings.Where(fs => fs.Name == GlobalEnums.TranslationCaseFields.Priority_Id.ToString() &&
+                                                  fs.ShowOnStartPage != 0).Any())
+            {
+                specificFilter.PriorityList = this._priorityService.GetPriorities(customerId);
+            }
+
+            if (customerfieldSettings.Where(fs => fs.Name == GlobalEnums.TranslationCaseFields.ClosingReason.ToString() &&
+                                                  fs.ShowOnStartPage != 0).Any())
+            {
+                specificFilter.ClosingReasonList = this._finishingCauseService.GetFinishingCauses(customerId);
+            }
+
+            if (customerfieldSettings.Where(fs => fs.Name == GlobalEnums.TranslationCaseFields.CaseType_Id.ToString() &&
+                                                  fs.ShowOnStartPage != 0).Any())
+            {
+                
+                specificFilter.CaseTypeList = this._caseTypeService.GetCaseTypes(customerId);
+            }
+
+            if (customerfieldSettings.Where(fs => fs.Name == GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString() &&
+                                                  fs.ShowOnStartPage != 0).Any())
+            {
+                const bool isTakeOnlyActive = false;
+                specificFilter.ProductAreaList = this._productAreaService.GetTopProductAreasForUser(
+                    customerId,
+                    SessionFacade.CurrentUser,
+                    isTakeOnlyActive);
+            }
+                        
             if (csm != null && csm.caseSearchFilter != null)
             {
                 specificFilter.FilteredDepartment = csm.caseSearchFilter.Department;
@@ -1031,7 +1071,7 @@
                         {
                             specificFilter.FilteredProductAreaText = string.Join(
                                 " - ",
-                                this._productAreaService.GetParentPath(p.Id, cusId));
+                                this._productAreaService.GetParentPath(p.Id, customerId));
                         }
                     }
                 }

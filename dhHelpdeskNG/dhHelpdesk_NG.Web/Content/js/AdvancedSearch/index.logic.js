@@ -54,6 +54,8 @@ var defaultFocusObj = window.Params.DefaultFocusObject;
 
     SetSpecificConditionTab(false);
 
+    
+
     Page.prototype.init = function(gridInitSettings, doSearchAtBegining) {
         var me = this;        
         //// Bind elements
@@ -114,8 +116,8 @@ var defaultFocusObj = window.Params.DefaultFocusObject;
 
         if (doSearchAtBegining)
             me.onSearchClick();                
-
-
+       
+        $("#btnSearch").focus();
     };
         
     Page.prototype.setGridState = function(gridStateId) {
@@ -345,17 +347,30 @@ var defaultFocusObj = window.Params.DefaultFocusObject;
                 me.DrawTables(sortCallback);
             }
             customerTableId += 1;
-            $("#btnSearch").focus();
+            
         });
     };
 
     Page.prototype.DrawTables = function (callBack) {
         var me = this;
         var hasData = false;
+        
         if (customerTableRepository.length > 0) {
-            customerTableRepository.sort(function (element1, element2) {
-                return element1.CustomerName > element2.CustomerName
-            });
+            // Sort customers by name
+            var length = customerTableRepository.length - 1;
+            do {
+                var swapped = false;
+                for (var i = 0; i < length; ++i) {                    
+                    if (customerTableRepository[i].CustomerName.toLowerCase() > customerTableRepository[i + 1].CustomerName.toLowerCase()) {
+                        var temp = customerTableRepository[i];
+                        customerTableRepository[i] = customerTableRepository[i + 1];
+                        customerTableRepository[i + 1] = temp;
+                        swapped = true;
+                    }
+                }
+            }
+            while (swapped == true)
+
             $.each(customerTableRepository, function (idx, value) {
                 var tableId = value.TableId;
                 var tableData = value.TableData;
@@ -365,7 +380,7 @@ var defaultFocusObj = window.Params.DefaultFocusObject;
                     hasData = true;
                 }
             });            
-        };       
+        }
 
         customerTableId = 0;
         currentCustomerTable = '';
@@ -511,6 +526,7 @@ var defaultFocusObj = window.Params.DefaultFocusObject;
                         curTime: new Date().getTime()
                     }, function (_SpecificFilterData) {
                         $("#SpecificFilterDataPartial").html(_SpecificFilterData);
+                       
             });
 
             $('#AdvanceSearchSpecificTab').attr('style', '');
@@ -519,15 +535,17 @@ var defaultFocusObj = window.Params.DefaultFocusObject;
         else {            
             $('#AdvanceSearchSpecificTab').attr('style', 'display:none');
             $('#AdvanceSearchSpecificTab').attr('data-field', '');
-        }       
-    }
+        }
 
+        $(defaultFocusObj).focus();
+    }
+    
 })($);
 
 
 
 
-$(defaultFocusObj).focus();
+
 
 function getBreadcrumbs(a) {
     var path = $(a).text(), $parent = $(a).parents("li").eq(1).find("a:first");
