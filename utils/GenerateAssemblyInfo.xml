@@ -5,6 +5,7 @@
 		<!-- If changing this, change var match.. in C# code also  -->
 		<TagMatchTemplate>v*.*.*</TagMatchTemplate>
 		<ExitCode>0</ExitCode>
+		<GitExe>C:\Program Files (x86)\Git\bin\git.exe</GitExe>	
 	</PropertyGroup>
 
   <UsingTask
@@ -70,23 +71,19 @@
   <Target Name="CreateCommonVersionInfo" BeforeTargets="CoreCompile">
     <Message Importance="high" Text="CreateCommonVersionInfo" />
 
-    <ExistsInPath FileName="git.exe">
-      <Output TaskParameter="Exists" PropertyName="GitExists"/>
-    </ExistsInPath>
-    <Message Importance="High" Text="git not found!" Condition="!$(GitExists)"/>
       
-    <Exec Command="git describe --tags --long --match $(TagMatchTemplate) > $(ProjectDir)version.txt" Outputs="$(ProjectDir)version.txt" WorkingDirectory="$(SolutionDir)" IgnoreExitCode="true" Condition="$(GitExists)">
+    <Exec Command="&quot;$(GitExe)&quot; describe --tags --long --match $(TagMatchTemplate) > $(ProjectDir)version.txt" Outputs="$(ProjectDir)version.txt" WorkingDirectory="$(SolutionDir)" IgnoreExitCode="true" >
       <Output TaskParameter="ExitCode" PropertyName="ExitCode" />
     </Exec>
-    <Message Importance="high" Text="Calling git failed with exit code $(ExitCode)" Condition="$(GitExists) And '$(ExitCode)'!='0'" />
+    <Message Importance="high" Text="Calling git failed with exit code $(ExitCode)" Condition="'$(ExitCode)'!='0'" />
     
-    <ReadLinesFromFile File="$(ProjectDir)version.txt" Condition="$(GitExists) And '$(ExitCode)'=='0'">
+    <ReadLinesFromFile File="$(ProjectDir)version.txt" Condition="'$(ExitCode)'=='0'">
       <Output TaskParameter="Lines" ItemName="OutputLines"/>
-    </ReadLinesFromFile>
-    <Message Importance="High" Text="Tags: @(OutputLines)" Condition="$(GitExists) And '$(ExitCode)'=='0'"/>
+    </ReadLinesFromFile>    
+    <Message Importance="High" Text="Tags: @(OutputLines)" Condition="'$(ExitCode)'=='0'"/>
     <Delete Condition="Exists('$(ProjectDir)version.txt')" Files="$(ProjectDir)version.txt"/>
 
-    <GetVersion VersionString="@(OutputLines)" Condition="$(GitExists) And '$(ExitCode)'=='0'">
+    <GetVersion VersionString="@(OutputLines)" Condition="'$(ExitCode)'=='0'">
       <Output TaskParameter="Version" PropertyName="VersionString"/>
       <Output TaskParameter="FullVersion" PropertyName="FullVersion"/>
     </GetVersion>
