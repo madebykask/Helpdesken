@@ -8,14 +8,14 @@
 
     var breadCrumbsPrefix = "#divBreadcrumbs_";
     var hiddenPrefix = "#hid_";
-    
+        
     $(".chosen-select").chosen({
         width: "300px",
         'placeholder_text_multiple': placeholder_text_multiple,
         'no_results_text': no_results_text
-    });
+    });       
 
-    $(defaultFocusObj).focus();
+    setTimeout(function () { $(defaultFocusObj).focus(); }, 100);
 
     $('#' + caseTypeDropDown + ' ul.dropdown-menu li a').click(function (e) {
         e.preventDefault();

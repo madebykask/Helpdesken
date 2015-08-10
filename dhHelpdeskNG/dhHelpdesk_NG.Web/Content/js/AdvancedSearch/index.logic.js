@@ -537,10 +537,6 @@ var defaultFocusObj = window.Params.DefaultFocusObject;
 })($);
 
 
-
-
-
-
 function getBreadcrumbs(a) {
     var path = $(a).text(), $parent = $(a).parents("li").eq(1).find("a:first");
 

@@ -6,15 +6,83 @@
 @if (Model != null)
 {        
      <div class="container">         
-         <div class="row"> 
+         <div class="row">             
+                         
              <div class="span6">
+                 <table class="tableform">                      
+                     @if (Model.CaseSearchFilterData.filterCustomers != null)
+                     {
+                         <tr>
+                             <td>                                
+                                 @Translation.Get("Kund")
+                             </td>
+                             <td>
+                                 <select id="lstfilterCustomers" name="lstfilterCustomers" data-field="customers" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                     @foreach (var c in Model.CaseSearchFilterData.filterCustomers)
+                                     {                                            
+                                         int customerId = int.Parse(c.Value);                
+                                         <option value="@customerId" @customerId.IdIsSelected(Model.CaseSearchFilterData.caseSearchFilter.Customer)>@c.Name</option>                                          
+                                     }
+                                 </select>
+                             </td>
+                         </tr>                
+                     }                     
+
+                     @if (Model.CaseSearchFilterData.AvailablePerformersList != null)
+                     {
+                         <tr>
+                             <td>                               
+                                 @Translation.Get(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSearchFilterData.filterCustomerId)                                  
+                             </td>
+                             <td>
+                                @Html.ListBoxFor(m => m.CaseSearchFilterData.lstfilterPerformer, Model.CaseSearchFilterData.AvailablePerformersList, new { id = "lstfilterPerformer", @class = "chosen-select", multiple = "multiple", name="lstfilterPerformer" })                                  
+                             </td>
+                         </tr>                 
+                     }
+                                        
+                    <tr>
+                        <td>                                
+                            @Translation.Get("Status")                                   
+                        </td>
+                        <td>
+                            <select id="lstfilterCaseProgress" name="lstfilterCaseProgress" style="width:300px">
+                                @foreach (var e in Model.CaseSearchFilterData.filterCaseProgress)
+                                {
+                                    <option value="@e.Id" @e.Id.IdIsSelected(Model.CaseSearchFilterData.caseSearchFilter.CaseProgress)>@e.StringValue</option>
+                                }
+                        </select>
+                        </td>
+                    </tr>                                     
+                     
+                     @if (Model.CaseSearchFilterData.filterMaxRows != null)
+                     {
+                         <tr>
+                             <td>                                
+                                 @Translation.Get("Visa")                                
+                             </td>
+                             <td>
+                                 <select id="lstfilterMaxRows" name="lstfilterMaxRows" style="width:70px" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" >
+                                     @foreach (var r in Model.CaseSearchFilterData.filterMaxRows)
+                                     {
+                                         var curId = int.Parse(r.Value);                                                                             
+                                         <option value="@r.Value" @curId.IdIsSelected(Model.CaseSearchFilterData.caseSearchFilter.MaxRows)> @r.Name </option>                                                                               
+                                     }
+                                 </select>
+                                  @Translation.Get("poster i sökresultat/Kund")                                 
+                             </td>
+                         </tr>                                         
+                     }                                                
+                      
+                 </table>
+             </div>
+
+              <div class="span6">
                  <table class="tableform">                                         
                      <tr>
                         <td>                                
                             @Translation.Get("Anmälare")
                         </td>
-                        <td>
-                            @*@Html.TextBoxFor(m=> m.CaseSearchFilterData.CaseInitiatorFilter,  new { @class = "fixed-length", id = "CaseInitiatorFilter", name="CaseInitiatorFilter"})*@
+                        <td>                            
                             <input type="text" id="CaseInitiatorFilter" value="@Model.CaseSearchFilterData.CaseInitiatorFilter" name="CaseInitiatorFilter" />
                         </td>
                     </tr>    
@@ -56,74 +124,6 @@
                     
                  </table>
              </div>     
-                         
-             <div class="span6">
-                 <table class="tableform">                      
-                     @if (Model.CaseSearchFilterData.filterCustomers != null)
-                     {
-                         <tr>
-                             <td>                                
-                                 @Translation.Get("Kund")
-                             </td>
-                             <td>
-                                 <select id="lstfilterCustomers" name="lstfilterCustomers" data-field="customers" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
-                                     @foreach (var c in Model.CaseSearchFilterData.filterCustomers)
-                                     {                                            
-                                         int customerId = int.Parse(c.Value);                
-                                         <option value="@customerId" @customerId.IdIsSelected(Model.CaseSearchFilterData.caseSearchFilter.Customer)>@c.Name</option>                                          
-                                     }
-                                 </select>
-                             </td>
-                         </tr>                
-                     }                     
-
-                     @if (Model.CaseSearchFilterData.AvailablePerformersList != null)
-                     {
-                         <tr>
-                             <td>                               
-                                 @Translation.Get(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSearchFilterData.filterCustomerId)                                  
-                             </td>
-                             <td>
-                                 @Html.ListBoxFor(m => m.CaseSearchFilterData.lstfilterPerformer, Model.CaseSearchFilterData.AvailablePerformersList, new { id = "lstfilterPerformer", @class = "chosen-select", multiple = "multiple" })
-                             </td>
-                         </tr>                 
-                     }
-                                        
-                    <tr>
-                        <td>                                
-                            @Translation.Get("Status")                                   
-                        </td>
-                        <td>
-                            <select id="lstfilterCaseProgress" name="lstfilterCaseProgress" style="width:300px">
-                                @foreach (var e in Model.CaseSearchFilterData.filterCaseProgress)
-                                {
-                                    <option value="@e.Id" @e.Id.IdIsSelected(Model.CaseSearchFilterData.caseSearchFilter.CaseProgress)>@e.StringValue</option>
-                                }
-                        </select>
-                        </td>
-                    </tr>                                     
-                     
-                     @if (Model.CaseSearchFilterData.filterMaxRows != null)
-                     {
-                         <tr>
-                             <td>                                
-                                 @Translation.Get("Visa")                                
-                             </td>
-                             <td>
-                                 <select id="lstfilterMaxRows" name="lstfilterMaxRows" style="width:70px" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" >
-                                     @foreach (var r in Model.CaseSearchFilterData.filterMaxRows)
-                                     {
-                                         var curId = int.Parse(r.Value);                                                                             
-                                         <option value="@r.Value" @curId.IdIsSelected(Model.CaseSearchFilterData.caseSearchFilter.MaxRows)> @r.Name </option>                                                                               
-                                     }
-                                 </select>
-                                  @Translation.Get("poster i sökresultat/Kund")                                 
-                             </td>
-                         </tr>                                         
-                     }                                                
-                      
-                 </table>
-             </div>
                             
              @Html.Partial("AdvancedSearch/_SpecificSearchTab", Model.SpecificSearchFilterData)            
          </div>         

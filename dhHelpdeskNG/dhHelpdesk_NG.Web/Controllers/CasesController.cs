@@ -358,7 +358,7 @@
             f.Customer = frm.ReturnFormValue("lstfilterCustomers");
             f.CaseProgress = frm.ReturnFormValue("lstFilterCaseProgress");
             f.WorkingGroup = frm.ReturnFormValue("lstFilterWorkingGroup");
-            f.UserPerformer = frm.ReturnFormValue("lstFilterPerformer");
+            f.UserPerformer = frm.ReturnFormValue("CaseSearchFilterData.lstFilterPerformer");
             f.StateSecondary = frm.ReturnFormValue("lstFilterStateSecondary");
             f.Initiator = frm.ReturnFormValue("CaseInitiatorFilter");            
             f.CaseRegistrationDateStartFilter = frm.GetDate("CaseRegistrationDateStartFilter");
