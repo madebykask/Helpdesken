@@ -3136,7 +3136,10 @@
                 }
 
                 var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
-                m.MapCaseToCaseInputViewModel(case_, userTimeZone);
+                if (case_ != null)
+                {
+                    m.MapCaseToCaseInputViewModel(case_, userTimeZone);
+                }
             }
 
             m.CaseTemplateTreeButton = this.GetCaseTemplateTreeModel(customerId, userId);
