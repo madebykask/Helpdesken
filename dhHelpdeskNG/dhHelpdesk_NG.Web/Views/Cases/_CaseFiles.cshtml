@@ -24,15 +24,17 @@
     var i = 0;
     var caseInactive = false;
     caseInactive = (ViewData["CaseInactive"] != null? (bool) ViewData["CaseInactive"]:false);
+                var userTimezone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
     
     foreach (var file in Model.Files)
     {
+        var date = TimeZoneInfo.ConvertTimeFromUtc(file.CreatedDate.ToUniversalTime(), userTimezone);
                 <tr data-field="caseFile" data-field-id="@Model.ObjectId" data-field-name="@file.FileName">
                     <td>
                         <a href="@Url.Action("DownloadFile", new RouteValueDictionary { { "id", Model.ObjectId }, { "fileName", file.FileName } })"><i class="icon-file"></i>@file.FileName</a>
                     </td>
                     <td>
-                        @file.CreatedDate.ToFormattedDateTime()
+                        @date.ToFormattedDateTime()
                     </td>
                     <td>
                         @file.UserName
