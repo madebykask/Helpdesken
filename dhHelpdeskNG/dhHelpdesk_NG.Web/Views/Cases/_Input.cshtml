@@ -811,11 +811,11 @@
                                             @if ((Model.customerUserSetting.CaptionPermission == 1 && !Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Caption, CaseSolutionFields.Caption)
                                                 || Model.case_.Id == 0))
                                             {                                                
-                                                @Html.TextBoxFor(model => model.case_.Caption, new { maxlength = "60", @class = "width90" })
+                                                @Html.TextBoxFor(model => model.case_.Caption, new { maxlength = "100", @class = "width90" })
                                             }
                                             else
                                             {                                            
-                                                @Html.TextBoxFor(model => model.case_.Caption, new { maxlength = "60", @readonly = "readonly", @class = "width90" })
+                                                @Html.TextBoxFor(model => model.case_.Caption, new { maxlength = "100", @readonly = "readonly", @class = "width90" })
                                             }
                                         </td>
                                     </tr>

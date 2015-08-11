@@ -122,6 +122,13 @@ IF COL_LENGTH('dbo.tblCustomerUser','CaseDepartmentFilter') IS NULL
 BEGIN
 	ALTER TABLE [dbo].[tblCustomerUser] add [CaseDepartmentFilter] [nvarchar](50) NULL;
 END
-	
+
+-- http://helpdesk5.dhsolutions.se/Cases/Edit/53106
+-- 200 bytes for 100 nvarchar (https://msdn.microsoft.com/en-us/library/ms188732.aspx)
+if COL_LENGTH('tblCase','Caption') != 200
+BEGIN	
+	alter table tblCase alter column Caption nvarchar(100);
+END
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.11'
