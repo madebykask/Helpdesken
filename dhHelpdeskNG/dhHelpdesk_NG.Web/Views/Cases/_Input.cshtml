@@ -1442,7 +1442,7 @@
                                                 <th class="span5"></th>
                                             </tr>
                                         </thead>
-                                        <tr>
+                                        <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ClosingReason, CaseSolutionFields.FinishingCause)">
                                             <td>
                                                 @Translation.Get("Avslutsorsak", SessionFacade.CurrentLanguageId)
                                             </td>
@@ -1451,7 +1451,7 @@
                                             </td>
                                             <td></td>
                                         </tr>
-                                        <tr>
+                                        <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.FinishingDate, CaseSolutionFields.FinishingDate)">
                                             <td>
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.FinishingDate, "Avslutsdatum")
                                             </td>
@@ -1460,7 +1460,7 @@
                                             </td>
                                             <td></td>
                                         </tr>
-                                        <tr>
+                                        <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.FinishingDescription, CaseSolutionFields.FinishingDescription)">
                                             <td>
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.FinishingDescription, "Avslutsbeskrivning")
                                             </td>
