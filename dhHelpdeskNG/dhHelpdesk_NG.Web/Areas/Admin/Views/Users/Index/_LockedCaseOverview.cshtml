@@ -23,13 +23,13 @@
 <div id="lockedCasePartial">
     <div class="container">
         <div class="row">
-            <div class="span7">
+            <div class="span12">
                 <table class="tableform" id="tblLockedCase" >
                     <tr>
-                        <td style="width:120px">
+                        <td class="span3">
                             @Translation.Get("Kund", Enums.TranslationSource.TextTranslation)
                         </td>
-                        <td>
+                        <td class="span4">
                             @Html.DropDownListFor(model => Model.FilterCustomerId, Model.Customers, "", new { id = "filterbycustomerid" })
                         </td>
                     </tr>
@@ -47,6 +47,8 @@
                         </td>
                         <td>
                             @Html.EditorFor(model => Model.FilterText, new { id = "filterbytext" })
+                        </td>
+                        <td class="span5">
                             <input type="button" id="doSearch" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" class="btn" />
                         </td>                      
                     </tr>                    
