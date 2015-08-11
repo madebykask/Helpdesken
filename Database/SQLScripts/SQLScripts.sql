@@ -129,6 +129,11 @@ if COL_LENGTH('tblCase','Caption') != 200
 BEGIN	
 	alter table tblCase alter column Caption nvarchar(100);
 END
+if COL_LENGTH('tblCaseHistory','Caption') != 200
+BEGIN
+	alter table tblCase alter column Caption nvarchar(100);
+END
+
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.11'
