@@ -2853,11 +2853,14 @@
                             m.case_.OtherCost = caseTemplate.OtherCost;
                             m.case_.Available = caseTemplate.Available;
                             m.case_.ContactBeforeAction = caseTemplate.ContactBeforeAction;
-                            
+                            //m.case_.RegistrationSourceCustomer_Id = caseTemplate.RegistrationSource;
+                            if (caseTemplate.RegistrationSource > 0)
+                                m.CustomerRegistrationSourceId = caseTemplate.RegistrationSource;
+
                             // "watch date" 
                             if (caseTemplate.WatchDate.HasValue)
                             {
-                            m.case_.WatchDate = caseTemplate.WatchDate;
+                                m.case_.WatchDate = caseTemplate.WatchDate;
                             }
                             else
                             {
@@ -2870,7 +2873,7 @@
                                     {
                                         m.case_.WatchDate =
                                         this.watchDateCalendarServcie.GetClosestDateTo(
-                                                dept.WatchDateCalendar_Id.Value, 
+                                                dept.WatchDateCalendar_Id.Value,
                                                 DateTime.UtcNow);
                                     }
                                 }

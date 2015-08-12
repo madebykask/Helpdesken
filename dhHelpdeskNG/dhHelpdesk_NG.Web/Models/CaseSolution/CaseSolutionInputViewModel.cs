@@ -65,6 +65,7 @@
         public IList<SelectListItem> problems{ get; set; }
         public IList<SelectListItem> changes { get; set; }
         public IList<SelectListItem> CausingParts { get; set; }
+        public IList<SelectListItem> RegistrationSources { get; set; }
 
         public Infrastructure.Enums.AccessMode EditMode { get; set; }
         public CaseFilesModel CaseFilesModel { get; set; }

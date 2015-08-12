@@ -52,7 +52,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IChangeService _changeService;
         private readonly ICausingPartService _causingPartService;
         private readonly IOrganizationService _organizationService;
-
+        private readonly IRegistrationSourceCustomerService _registrationSourceCustomerService;
         
 
         private readonly ICaseSolutionSettingService caseSolutionSettingService;
@@ -86,7 +86,8 @@ namespace DH.Helpdesk.Web.Controllers
             IProblemService problemService,
             IChangeService changeService,
             ICausingPartService causingPartService,
-            IOrganizationService organizationService)
+            IOrganizationService organizationService,
+            IRegistrationSourceCustomerService registrationSourceCustomerService)
             : base(masterDataService)
         {
             this._caseFieldSettingService = caseFieldSettingService;
@@ -117,6 +118,7 @@ namespace DH.Helpdesk.Web.Controllers
             this._changeService = changeService;
             this._causingPartService = causingPartService;
             this._organizationService = organizationService;
+            this._registrationSourceCustomerService = registrationSourceCustomerService;
         }
 
         [HttpPost]
@@ -325,7 +327,8 @@ namespace DH.Helpdesk.Web.Controllers
                                      caseSolution.Project_Id,
                                      caseSolution.Text_External,
                                      caseSolution.Text_Internal,
-                                     caseSolution.FinishingCause_Id
+                                     caseSolution.FinishingCause_Id,
+                                     caseSolution.RegistrationSource
                                  });
         }
 
@@ -595,7 +598,13 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
-                }).ToList()
+                }).ToList(),
+
+                RegistrationSources = this._registrationSourceCustomerService.GetCustomersActiveRegistrationSources(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                {
+                    Text = x.SourceName,
+                    Value = x.Id.ToString()
+                }).ToList(),
             };
 
             if (model.CaseSolution.Id == 0)

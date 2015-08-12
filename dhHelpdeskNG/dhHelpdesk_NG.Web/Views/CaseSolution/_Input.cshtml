@@ -283,6 +283,20 @@
                                 </tr>
                                 @if (Model.CaseFieldSettings.Count() != 0)
                                 {
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString())" >
+                                        <td class="span3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
+                                        </td>
+                                        <td class="span9">
+                                            @Html.DropDownListFor(model => model.CaseSolution.RegistrationSource, Model.RegistrationSources, "", new { id = "RegistrationSource" })
+                                        </td>
+                                        <td class="span9">
+                                            @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.RegistrationSourceCustomer, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer)
+                                        </td>
+                                    </tr>
+                                }
+                                @if (Model.CaseFieldSettings.Count() != 0)
+                                {
                                     <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString())" >
                                         <td class="span3">
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
