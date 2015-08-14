@@ -13,7 +13,7 @@
     {
         public static FullCaseSettings MapToCaseSettings(
                             this IQueryable<CaseFieldSetting> query,
-                            int languageId)
+                            int languageId, bool hasLeadTime = false)
         {
             var entities = query.Select(f => new CaseSettingsMapData
                                                  {
@@ -23,6 +23,16 @@
                                                  })                                                 
                                                  .ToList();
 
+            // Add LeadTime calculation field manually 
+            if (hasLeadTime)
+            {
+                entities.Add(new CaseSettingsMapData
+                {
+                    FieldName = CaseInfoFields.LeadTime,
+                    Show = 1,
+                    ShowInList = 1
+                });
+            }
             var fieldSettings = new NamedObjectCollection<CaseSettingsMapData>(entities);
 
             return CreateCaseSettings(fieldSettings);
@@ -108,6 +118,7 @@
             var available = CreateFieldSetting(fieldSettings.FindByName(CaseInfoFields.Available));
             var cost = CreateFieldSetting(fieldSettings.FindByName(CaseInfoFields.Cost));
             var attachedFile = CreateFieldSetting(fieldSettings.FindByName(CaseInfoFields.AttachedFile));
+            var leadTime = CreateFieldSetting(fieldSettings.FindByName(CaseInfoFields.LeadTime));
 
             return new CaseInfoSettings(
                         caseNumber,
@@ -131,7 +142,8 @@
                         agreedDate,
                         available,
                         cost,
-                        attachedFile);
+                        attachedFile,
+                        leadTime);
         }
 
         private static OtherSettings CreateOtherSettings(NamedObjectCollection<CaseSettingsMapData> fieldSettings)

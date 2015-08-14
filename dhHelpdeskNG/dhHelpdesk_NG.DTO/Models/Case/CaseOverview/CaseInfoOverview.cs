@@ -26,7 +26,8 @@
                 DateTime? agreedDate, 
                 string available, 
                 int cost, 
-                string attachedFile)
+                string attachedFile,
+                int? solvedInTime)
         {
             this.AttachedFile = attachedFile;
             this.Cost = cost;
@@ -50,6 +51,7 @@
             this.ChangeDate = changeDate;
             this.RegistrationDate = registrationDate;
             this.Case = caseNumber;
+            this.SolvedInTime = solvedInTime;
         }
 
         public decimal? Case { get; private set; }
@@ -95,5 +97,7 @@
         public int Cost { get; private set; }
 
         public string AttachedFile { get; private set; }
+
+        public int? SolvedInTime { get; private set; }
     }
 }

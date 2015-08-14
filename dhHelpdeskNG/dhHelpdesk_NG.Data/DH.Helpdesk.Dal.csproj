@@ -339,7 +339,6 @@
     <Compile Include="Repositories\CaseHistoryRepository.cs" />
     <Compile Include="Repositories\Cases\CaseSolutionSettingRepository.cs" />
     <Compile Include="Repositories\Cases\Concrete\CaseLockRepository.cs" />
-    <Compile Include="Repositories\Cases\Concrete\CaseStatisticRepository.cs" />
     <Compile Include="Repositories\Cases\Concrete\CausingPartRepository.cs" />
     <Compile Include="Repositories\Cases\ICaseLockRepository.cs" />
     <Compile Include="Repositories\Cases\ICaseSolutionSettingRepository.cs" />

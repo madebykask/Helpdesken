@@ -15,9 +15,9 @@
 
     public static class CaseOverviewMapper
     {
-        public static List<FullCaseOverview> MapToCaseOverviews(this IQueryable<Case> query)
+        public static List<FullCaseOverview> MapToCaseOverviews(this IQueryable<Case> query, IQueryable<CaseStatistic> caseStatisticsQuery)
         {
-            var separator = Guid.NewGuid().ToString();
+            var separator = Guid.NewGuid().ToString();            
             var entities = query.SelectIncluding(new List<Expression<Func<Case, object>>>
                                                      {
                                                          c => c.ProductArea.Name,
@@ -155,16 +155,17 @@
                                                     });
                         }
 
-                        return CreateFullOverview(caseEntity);
+                        var caseStatistic = caseStatisticsQuery.Where(cs => cs.CaseId == caseEntity.Id).FirstOrDefault();
+                        return CreateFullOverview(caseEntity, caseStatistic);
                     }).ToList();
         }
 
-        private static FullCaseOverview CreateFullOverview(Case entity)
-        {
+        private static FullCaseOverview CreateFullOverview(Case entity, CaseStatistic caseStatistic)
+        {                        
             var id = entity.Id;
             var user = CreateUserOverview(entity);
             var computer = CreateComputerOverview(entity);
-            var caseInfo = CreateCaseInfoOverview(entity);
+            var caseInfo = CreateCaseInfoOverview(entity, caseStatistic);
             var other = CreateOtherOverview(entity);
             var log = CreateLogOverview(entity);
 
@@ -201,10 +202,11 @@
                         entity.InventoryLocation);
         }
 
-        private static CaseInfoOverview CreateCaseInfoOverview(Case entity)
+        private static CaseInfoOverview CreateCaseInfoOverview(Case entity, CaseStatistic caseStatistics)
         {
             var registratedBy = new UserName(entity.User.FirstName, entity.User.SurName);
             var attachedFile = entity.CaseFiles.Any() ? entity.CaseFiles.First().FileName : string.Empty;
+            var solvedInTime = (caseStatistics != null ? caseStatistics.WasSolvedInTime : null);
 
             return new CaseInfoOverview(
                         entity.CaseNumber,
@@ -228,7 +230,8 @@
                         entity.AgreedDate,
                         entity.Available,
                         entity.Cost,
-                        attachedFile);
+                        attachedFile,
+                        solvedInTime);
         }
 
         private static OtherOverview CreateOtherOverview(Case entity)

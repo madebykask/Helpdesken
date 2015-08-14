@@ -9,6 +9,10 @@
 
     public static class FieldSettingsHelper
     {
+        private static string SOLVED_IN_TIME = "Rätt tid";
+        private static string NOT_SOLVED_IN_TIME = "Ej rätt tid";
+        private static string SOLVED_TIME_IS_NOT_CALCULATED = " - ";
+
         public static void CreateHeaderIfNeeded(
             FieldOverviewSetting setting,
             string fieldName,
@@ -86,6 +90,27 @@
 
             var fieldValue = new NewGridRowCellValueModel(fieldName, value);
             values.Add(fieldValue);
-        }         
+        }
+
+        public static void CreateSolvedTimeValueIfNeeded(
+            FieldOverviewSetting setting,
+            string fieldName,
+            int? value,
+            List<NewGridRowCellValueModel> values)
+        {
+            var tempValue = string.Empty;             
+
+            if (value == null)
+                tempValue = SOLVED_TIME_IS_NOT_CALCULATED;
+            else
+            {
+                if (value == 0)
+                    tempValue = Translation.Get(NOT_SOLVED_IN_TIME);            
+                else 
+                    tempValue = Translation.Get(SOLVED_IN_TIME);
+            }
+            var displayValue = new StringDisplayValue(tempValue);
+            CreateValueIfNeeded(setting, fieldName, displayValue, values);
+        }
     }
 }

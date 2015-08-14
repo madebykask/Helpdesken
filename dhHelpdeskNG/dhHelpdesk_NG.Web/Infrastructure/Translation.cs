@@ -80,7 +80,10 @@
             switch (word.ToLower())
             {
                 case "_temporary_.leadtime":
-                    return "Tid kvar";                    
+                    return "Tid kvar";
+
+                case "ledtid":
+                    return "Ledtid";
             }
 
             return string.Empty;

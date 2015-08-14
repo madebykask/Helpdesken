@@ -440,7 +440,7 @@ using DH.Helpdesk.BusinessData.Models.Shared.Input;
             foreach (var h in modelData.Headers)
                 translatedFields.Add(new GridColumnHeaderModel
                                             (  
-                                                h.FieldName,
+                                                h.FieldName,                                                
                                                 Translation.Get(h.FieldName, Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id)
                                             ));
 

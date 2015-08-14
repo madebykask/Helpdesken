@@ -47,5 +47,7 @@
         public const string AttachedFile = "Filename";
 
         public const string RegistrationSourceCustomer = "RegistrationSourceCustomer";
+
+        public const string LeadTime = "Ledtid";
     }
 }
