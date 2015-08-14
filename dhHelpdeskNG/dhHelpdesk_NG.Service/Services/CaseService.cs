@@ -10,11 +10,15 @@
     using DH.Helpdesk.BusinessData.Models.Invoice;
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+    using DH.Helpdesk.Common.Extensions.Boolean;
+    using DH.Helpdesk.Dal.DbContext;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Enums;
+    using DH.Helpdesk.Dal.Repositories.Cases.Concrete;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Cases;
     using DH.Helpdesk.Domain.MailTemplates;
     using DH.Helpdesk.Domain.Problems;
     using DH.Helpdesk.Services.BusinessLogic.MailTools.TemplateFormatters;
@@ -25,6 +29,7 @@
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Customers;
     using DH.Helpdesk.Services.Infrastructure.Email;
     using DH.Helpdesk.Services.Localization;
+    using DH.Helpdesk.Services.Services.CaseStatistic;
     using DH.Helpdesk.Services.utils;
     using DH.Helpdesk.BusinessData.Models.User.Input;
 
@@ -122,6 +127,8 @@
         private readonly IFinishingCauseService _finishingCauseService;
         private readonly ICaseLockService _caseLockService;
 
+        private readonly CaseStatisticService _caseStatService;
+
         public CaseService(
             ICaseRepository caseRepository,
             ICaseFileRepository caseFileRepository,
@@ -148,7 +155,7 @@
             ISurveyService surveyService,
             ILogService logService,
             IFinishingCauseService finishingCauseService,
-            ICaseLockService caseLockService)
+            ICaseLockService caseLockService, CaseStatisticService caseStatService)
         {
             this._unitOfWork = unitOfWork;
             this._caseRepository = caseRepository;
@@ -177,6 +184,7 @@
             this._logService = logService;
             this._finishingCauseService = finishingCauseService;
             this._caseLockService = caseLockService;
+            this._caseStatService = caseStatService;
         }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
@@ -457,6 +465,7 @@
         {
             this._caseRepository.Activate(caseId);
             var c = _caseRepository.GetDetachedCaseById(caseId);
+            this._caseStatService.UpdateCaseStatistic(c);
             SaveCaseHistory(c, userId, adUser, out errors);  
         }
 
@@ -544,7 +553,6 @@
                 throw new ArgumentNullException("cases");
 
             Case c = this.ValidateCaseRequiredValues(cases, caseLog); 
-            errors = new Dictionary<string, string>();
 
             // unread/status flag update if not case is closed and not changed by adminsitrator 
             //c.Unread = 0;
@@ -555,6 +563,7 @@
             {
                 c.RegTime = DateTime.UtcNow;
                 c.ChangeTime = DateTime.UtcNow;
+                
                 this._caseRepository.Add(c);
             }
             else
@@ -568,16 +577,14 @@
                 {
                     c.ChangeByUser_Id = userId;
                 }
-
+                
                 this._caseRepository.Update(c);
             }
 
-            if (errors.Count == 0)
-                this._caseRepository.Commit();
-
-
+            this._caseRepository.Commit();
+            this._caseStatService.UpdateCaseStatistic(c);
+            
             // save casehistory
-
             // FinishingCause = FinishingType = ClosingReason 
             var extraFields = new ExtraFieldCaseHistory();
             if (caseLog != null && caseLog.FinishingType != null)
@@ -1004,18 +1011,7 @@
             ret.Miscellaneous = string.IsNullOrWhiteSpace(c.Miscellaneous) ? string.Empty : c.Miscellaneous;
             ret.Available = string.IsNullOrWhiteSpace(c.Available) ? string.Empty : c.Available;
             ret.IpAddress = string.IsNullOrWhiteSpace(c.IpAddress) ? string.Empty : c.IpAddress;
-
-            if (caseLog != null)
-                if (caseLog.FinishingType > 0 && c.FinishingDate == null)
-                {
-                    if (!caseLog.FinishingDate.HasValue) 
-                        caseLog.FinishingDate  = DateTime.UtcNow;    
-                    c.FinishingDate = caseLog.FinishingDate.HasValue ? caseLog.FinishingDate : DateTime.UtcNow;
-                    // för att få med klockslag
-                    if (caseLog.FinishingDate.Value.ToShortDateString() == DateTime.Today.ToShortDateString() )  
-                        c.FinishingDate = DateTime.UtcNow; 
-                }
-
+            
             return ret;
         }
 

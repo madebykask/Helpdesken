@@ -508,6 +508,8 @@
 
         public DbSet<RegistrationSourceCustomer> RegistrationSourceCustomer { get; set; }
 
+        public DbSet<CaseStatistic> CaseStatistics { get; set; }
+
         #endregion
 
         #region Public Methods and Operators
@@ -569,6 +571,8 @@
             modelBuilder.Configurations.Add(new CaseFileConfiguration());
             modelBuilder.Configurations.Add(new CaseHistoryConfiguration());
             modelBuilder.Configurations.Add(new CaseLockConfiguration());
+            modelBuilder.Configurations.Add(new CaseStatisticConfiguration());
+
             modelBuilder.Configurations.Add(new CaseInvoiceRowConfiguration());
             modelBuilder.Configurations.Add(new CaseQuestionCategoryConfiguration());
             modelBuilder.Configurations.Add(new CaseQuestionConfiguration());

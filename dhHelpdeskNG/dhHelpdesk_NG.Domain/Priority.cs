@@ -14,6 +14,10 @@
         public int? MailID_Change { get; set; }
         public int SLA { get; set; }
         public int SMSNotification { get; set; }
+
+        /// <summary>
+        /// Time in hours to close case with this priority
+        /// </summary>
         public int SolutionTime { get; set; }
         public string Code { get; set; }
         public string Description { get; set; }

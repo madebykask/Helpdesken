@@ -14,7 +14,6 @@
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models.Case.CaseLock;
-    using DH.Helpdesk.BusinessData.Models.Customer;
     using DH.Helpdesk.BusinessData.Models.FinishingCause;
     using DH.Helpdesk.BusinessData.Models.Grid;
     using DH.Helpdesk.BusinessData.Models.Shared;
@@ -39,19 +38,16 @@
     using DH.Helpdesk.Web.Infrastructure.Extensions;
     using DH.Helpdesk.Web.Infrastructure.Grid;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Case;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Invoice;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.CaseLockMappers;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Invoice;
     using DH.Helpdesk.Web.Infrastructure.Mvc;
-    using DH.Helpdesk.Web.Infrastructure.Tools;
     using DH.Helpdesk.Web.Infrastructure.Tools;
     using DH.Helpdesk.Web.Models;
     using DH.Helpdesk.Web.Models.Case;
-    using DH.Helpdesk.Web.Models.CaseLock;
     using DH.Helpdesk.Web.Models.Case.Input;
     using DH.Helpdesk.Web.Models.Case.Output;
+    using DH.Helpdesk.Web.Models.CaseLock;
     using DH.Helpdesk.Web.Models.Shared;
-
-    using Ninject.Infrastructure.Language;
 
     using DHDomain = DH.Helpdesk.Domain;
 
@@ -2134,6 +2130,7 @@
         
         private int Save(CaseEditInput m)
         {
+            var utcNow = DateTime.UtcNow;
             var case_ = m.case_;
             var caseLog = m.caseLog;
             var caseMailSetting = m.caseMailSetting;
@@ -2180,7 +2177,8 @@
             // get case as it was before edit
             DHDomain.Case oldCase = new DHDomain.Case();
             if (edit)
-            {                
+            {
+                #region Editing existing case
                 oldCase = this._caseService.GetDetachedCaseById(case_.Id);
                 var cu = this._customerUserService.GetCustomerSettings(case_.Customer_Id, SessionFacade.CurrentUser.Id);
                 if (cu != null)
@@ -2217,29 +2215,75 @@
                     // calculating time spent in "inactive" state since last changing every save
                     if (caseSubState.IncludeInCaseStatistics == 0)
                     {
-                        var workTimeCalcFactory = new WorkTimeCalculatorFactory(
-                            ManualDependencyResolver.Get<IHolidayService>(),
-                            SessionFacade.CurrentCustomer.WorkingDayStart,
-                            SessionFacade.CurrentCustomer.WorkingDayEnd,
-                            TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
+                        var workTimeCalcFactory =
+                            new WorkTimeCalculatorFactory(
+                                ManualDependencyResolver.Get<IHolidayService>(),
+                                SessionFacade.CurrentCustomer.WorkingDayStart,
+                                SessionFacade.CurrentCustomer.WorkingDayEnd,
+                                TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
                         int[] deptIds = null;
                         if (case_.Department_Id.HasValue)
                         {
                             deptIds = new int[] { case_.Department_Id.Value };
                         }
 
-                        var workTimeCalc = workTimeCalcFactory.Build(oldCase.ChangeTime, DateTime.UtcNow, deptIds);
+                        var workTimeCalc = workTimeCalcFactory.Build(oldCase.ChangeTime, utcNow, deptIds);
                         case_.ExternalTime = workTimeCalc.CalculateWorkTime(
                             oldCase.ChangeTime,
-                            DateTime.UtcNow,
+                            utcNow,
                             oldCase.Department_Id) + oldCase.ExternalTime;
                     }
                 }
+
+                case_.RegTime = DateTime.SpecifyKind(oldCase.RegTime, DateTimeKind.Utc);
+#endregion
+            }
+            else
+            {
+                #region NewCase
+
+                case_.RegTime = utcNow;
+
+                #endregion
             }
 
-            if (caseLog.FinishingDate != null)
+            if (caseLog != null && caseLog.FinishingType > 0)
             {
-                case_.FinishingDate = caseLog.FinishingDate;
+                if (caseLog.FinishingDate == null)
+                {
+                    caseLog.FinishingDate = utcNow;
+                }
+                else
+                {
+                    // för att få med klockslag
+                    if (caseLog.FinishingDate.Value.ToShortDateString() == DateTime.Today.ToShortDateString())
+                    {
+                        caseLog.FinishingDate = utcNow;
+                    } 
+                    else
+                    {
+                        caseLog.FinishingDate = DateTime.SpecifyKind(caseLog.FinishingDate.Value, DateTimeKind.Local).ToUniversalTime();
+                    }
+                }
+
+                case_.FinishingDate = DatesHelper.Max(case_.RegTime, caseLog.FinishingDate.Value);
+
+                var workTimeCalcFactory = new WorkTimeCalculatorFactory(
+                    ManualDependencyResolver.Get<IHolidayService>(),
+                    SessionFacade.CurrentCustomer.WorkingDayStart,
+                    SessionFacade.CurrentCustomer.WorkingDayEnd,
+                    TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
+                int[] deptIds = null;
+                if (case_.Department_Id.HasValue)
+                {
+                    deptIds = new int[] { case_.Department_Id.Value };
+                }
+
+                var workTimeCalc = workTimeCalcFactory.Build(case_.RegTime, case_.FinishingDate.Value, deptIds);
+                case_.LeadTime = workTimeCalc.CalculateWorkTime(
+                    case_.RegTime,
+                    case_.FinishingDate.Value.ToUniversalTime(),
+                    case_.Department_Id) - case_.ExternalTime;
             }
 
             // save case and case history
@@ -2285,31 +2329,6 @@
                                                             case_.Customer_Id);
 
                 this.notifierService.UpdateCaseNotifier(caseNotifier);
-            }
-
-            if (case_.FinishingDate.HasValue)
-            {
-                if (case_.RegTime > case_.FinishingDate)
-                {
-                    case_.FinishingDate = case_.RegTime;
-                }
-
-                var workTimeCalcFactory = new WorkTimeCalculatorFactory(
-                    ManualDependencyResolver.Get<IHolidayService>(),
-                    SessionFacade.CurrentCustomer.WorkingDayStart,
-                    SessionFacade.CurrentCustomer.WorkingDayEnd,
-                    TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
-                int[] deptIds = null;
-                if (case_.Department_Id.HasValue)
-                {
-                    deptIds = new int[] { case_.Department_Id.Value };
-                }
-
-                var workTimeCalc = workTimeCalcFactory.Build(case_.RegTime, case_.FinishingDate.Value, deptIds);
-                case_.LeadTime = workTimeCalc.CalculateWorkTime(
-                    case_.RegTime,
-                    case_.FinishingDate.Value,
-                    case_.Department_Id) - case_.ExternalTime;
             }
 
             // save log
