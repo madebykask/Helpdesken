@@ -90,6 +90,16 @@ a, a:hover, a:focus {
     margin-top:-5px;
 }
 
+/**********************     Report page        *********************/
+.content.report-page .multiselect-container .options-holder 
+{
+    margin-left: 20px;
+    max-height: 200px;
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+
 /************************  Content Error page *******************************************/
 .content.error-page 
 {
