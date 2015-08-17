@@ -1901,6 +1901,17 @@ td.td-bottom-multiselect .btn-group {
 
 
 /***********************************STARTPAGE***************************/
+.cases.portlet table
+{
+    table-layout: fixed;
+}
+.cases.portlet table th,
+.cases.portlet table td
+{
+    overflow-wrap:break-word;
+    word-wrap: break-word;
+}
+
 .start-tile {
     margin-left: 10px;
     padding: 5px;
@@ -2049,7 +2060,7 @@ td.td-bottom-multiselect .btn-group {
 
 /************************MISC********************************************/
 
-h4:not(.alert-header)
+h4
 	{
 		font-size: 14px;
 		font-weight: bold;

@@ -32,5 +32,12 @@
         public int? customerRegistrationSourceId { get; set; }
 
         public CaseLockModel caseLock { get; set; }
+
+
+        #region Date field from case_. Converted to user time zone
+
+        public DateTime? RegTime { get; set; }
+
+        #endregion
     }
 }

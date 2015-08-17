@@ -72,7 +72,7 @@
             this.Property(x => x.ApprovedDate).IsOptional();
             this.Property(x => x.ApprovedBy_User_Id).IsOptional();
             this.Property(x => x.Available).IsRequired().HasMaxLength(100);
-            this.Property(x => x.Caption).IsRequired().HasMaxLength(60);
+            this.Property(x => x.Caption).IsRequired().HasMaxLength(100);
             this.Property(x => x.CaseHistoryGUID).IsRequired();
             this.Property(x => x.CaseNumber).IsRequired();
             this.Property(x => x.ContactBeforeAction).IsRequired();

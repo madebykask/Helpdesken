@@ -25,6 +25,17 @@ BEGIN
 	ALTER TABLE [dbo].[tblCaseStatistics] CHECK CONSTRAINT [FK_tblCaseStatistics_tblCase];
 END
 
-	
+-- http://helpdesk5.dhsolutions.se/Cases/Edit/53106
+-- 200 bytes for 100 nvarchar (https://msdn.microsoft.com/en-us/library/ms188732.aspx)
+if COL_LENGTH('tblCase','Caption') != 200
+BEGIN	
+	alter table tblCase alter column Caption nvarchar(100);
+END
+if COL_LENGTH('tblCaseHistory','Caption') != 200
+BEGIN
+	alter table tblCase alter column Caption nvarchar(100);
+END
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.12'

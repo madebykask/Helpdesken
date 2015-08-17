@@ -1,4 +1,5 @@
-﻿@using DH.Helpdesk.Web.Infrastructure.Extensions
+﻿@using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.BusinessData.OldComponents
 @model DH.Helpdesk.Web.Areas.Admin.Models.MailTemplateInputViewModel
 @if (TempData["Error"] != null)
@@ -19,7 +20,6 @@
                 <div class="container">
                     <div class="row">
                         <div class="span12">
-                            <div class="alert alert-block @( string.IsNullOrEmpty(Model.MailTemplateLanguage.Body) || string.IsNullOrEmpty(Model.MailTemplateLanguage.Body) ? "" : "hide")"><h4 class="alert-header">@Translation.Get("OBS!")</h4>@Translation.Get("This template is inactive unless subject or body is emtpy.")</div>
                             <table class="tableform">
                                 <tr>
                                     <td class="span3">

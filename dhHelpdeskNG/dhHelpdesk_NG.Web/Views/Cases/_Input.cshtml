@@ -17,9 +17,9 @@
         extendValue: '@Model.CaseLock.ExtendValue',
         caseLockChecker: '@Url.Content("~/Cases/IsCaseAvailable/")',
         caseLockExtender: '@Url.Content("~/Cases/ReExtendCaseLock/")',
-        saveLockedCaseMessage: '@Translation.Get("Ärendet kunde inte sparas då det är öppet hos en annan användare.")',
-        deleteLockedCaseMessage: '@Translation.Get("Ärendet kan inte tas bort då det är öppet hos en annan användare.")',
-        moveLockedCaseMessage: '@Translation.Get("Ärendet kan inte flyttas då det är öppet hos en annan användare.")'
+        saveLockedCaseMessage: '@Translation.Get("Ärendet kan inte uppdateras då det är upplåst. Stäng ärendet och försök igen.")',
+        deleteLockedCaseMessage: '@Translation.Get("Ärendet kan inte uppdateras då det är upplåst. Stäng ärendet och försök igen.")',
+        moveLockedCaseMessage: '@Translation.Get("Ärendet kan inte uppdateras då det är upplåst. Stäng ärendet och försök igen.")'        
     };  
 
 </script>
@@ -498,7 +498,7 @@
                                                 @Translation.Get("Registreringsdatum")
                                             </td>
                                             <td colspan="2">
-                                                @Html.DisplayFor(m => m.case_.RegTime, "DateAndTime")
+                                                @Html.DisplayFor(m => m.RegTime, "DateAndTime")
                                             </td>
                                         </tr>                                             
                                         <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.User_Id.ToString())">
@@ -811,11 +811,11 @@
                                             @if ((Model.customerUserSetting.CaptionPermission == 1 && !Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Caption, CaseSolutionFields.Caption)
                                                 || Model.case_.Id == 0))
                                             {                                                
-                                                @Html.TextBoxFor(model => model.case_.Caption, new { maxlength = "60", @class = "width90" })
+                                                @Html.TextBoxFor(model => model.case_.Caption, new { maxlength = "100", @class = "width90" })
                                             }
                                             else
                                             {                                            
-                                                @Html.TextBoxFor(model => model.case_.Caption, new { maxlength = "60", @readonly = "readonly", @class = "width90" })
+                                                @Html.TextBoxFor(model => model.case_.Caption, new { maxlength = "100", @readonly = "readonly", @class = "width90" })
                                             }
                                         </td>
                                     </tr>

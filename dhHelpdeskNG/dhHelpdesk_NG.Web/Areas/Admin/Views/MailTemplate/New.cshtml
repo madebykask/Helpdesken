@@ -1,4 +1,4 @@
-﻿@using System.Web.Optimization
+﻿@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Admin.Models.MailTemplateInputViewModel
 @{
     ViewBag.Title = "New"; 
@@ -15,9 +15,10 @@
     </div>
     @Html.Partial("_Input", Model)
 }
-@Scripts.Render("~/bundles/admin/_input")
 <script type="text/javascript">
+
     $("input:text:visible:first").focus();
+
     $(function () {
         var validator = $("#target").validate({
             rules: {

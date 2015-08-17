@@ -148,10 +148,6 @@
                 res = res.Where(
                     it => it.WorkingGroups.Count == 0 || it.WorkingGroups.Any(productAreaWorkingGroup => groupsMap.ContainsKey(productAreaWorkingGroup.Id)));
             }
-            else
-            {
-                res = res.Where(it => it.WorkingGroup_Id == null);
-            }
 
             return res.OrderBy(x => x.Name).ToList();
         }

@@ -369,7 +369,6 @@
     <Content Include="Areas\Admin\Content\js\CaseOverview\customerOverview.js" />
     <Content Include="Areas\Admin\Content\js\Common\common.js" />
     <Content Include="Areas\Admin\Content\js\Customer\customerCaseSettings.js" />
-    <Content Include="Areas\Admin\Content\js\Mailtemplate\_input.js" />
     <Content Include="Areas\Admin\Content\js\Users\index.lockedcase.js" />
     <Content Include="Areas\Admin\Content\js\Users\index.js" />
     <Content Include="Areas\Admin\Content\js\Users\user.js" />
@@ -377,12 +376,14 @@
     <Content Include="Content\bootstrap-tagsinput.css" />
     <Content Include="Content\css\bootstrap-tagsinput.css" />
     <Content Include="Content\css\custom\dynamic-cases.css" />
+    <Content Include="Content\icons\advanced_search.png" />
     <Content Include="Content\icons\ajax-loader.gif" />
     <Content Include="Content\img\ajax-loader.GIF" />
     <Content Include="Content\img\dh_solutions_version.png" />
     <Content Include="Content\img\glyphicons-dh.png" />
     <Content Include="Content\js\Account\order.js" />
     <Content Include="Areas\Admin\Content\js\Users\_input.js" />
+    <Content Include="Content\js\AdvancedSearch\index.specialfilter.js" />
     <Content Include="Content\js\AdvancedSearch\index.logic.js" />
     <Content Include="Content\js\bootstrap-tagsinput.js" />
     <Content Include="Content\bundles\chosen-sprite%402x.png" />
@@ -966,6 +967,7 @@
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\ServerBulider.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\PrinterBuilder.cs" />
     <Compile Include="Infrastructure\CaseOverview\OutputFormatter.cs" />
+    <Compile Include="Infrastructure\Case\CaseViewMapper.cs" />
     <Compile Include="Infrastructure\Configuration\Concrete\ApplicationConfiguration.cs" />
     <Compile Include="Infrastructure\ActionFilters\BadRequestOnNotValidAttribute.cs" />
     <Compile Include="Infrastructure\Configuration\Concrete\Configuration.cs" />
