@@ -128,7 +128,7 @@
                                                          c => c.Logs.Select(l => l.Charge),
                                                          c => c.Logs.Select(l => l.LogFiles.FirstOrDefault().FileName),
                                                          c => c.Logs.Select(l => l.FinishingDate),
-                                                         c => c.Logs.Select(l => l.FinishingTypeEntity.Id)
+                                                         c => c.Logs.Select(l => l.FinishingTypeEntity != null? l.FinishingTypeEntity.Id : 0)
                                                      })
                                                      .ToList();
 

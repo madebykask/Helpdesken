@@ -246,7 +246,7 @@
                 var fields = fieldRep.GetAll().GetByNullableCustomer(customerId).GetShowable();
                 var departments = departmentRep.GetAll().GetActiveByCustomer(customerId);
                 var workingGroups = workingGroupRep.GetAll().GetActiveByCustomer(customerId);
-                var caseTypes = caseTypeRep.GetAll().GetActiveByCustomer(customerId);
+                var caseTypes = caseTypeRep.GetAll().GetByCustomer(customerId);
 
                 return ReportsOptionsMapper.MapToReportGeneratorOptions(
                                             fields,
