@@ -928,16 +928,21 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                     childList = childs.ToList();
                 }
 
+                var cls = pa.IsActive == 1 ? string.Empty : "inactive";
                 if (childList != null && childList.Count > 0)
                 {
-                    htmlOutput += "<li class='dropdown-submenu'>";
+                    htmlOutput += string.Format("<li class=\"dropdown-submenu {0}\">", cls);
                 }
                 else
                 {
-                    htmlOutput += "<li>";
+                    htmlOutput += string.Format("<li class=\"{0}\">", cls);
                 }
 
-                htmlOutput += "<a href='#' value=" + pa.Id.ToString() + ">" + Translation.Get(pa.Name) + "</a>";
+                htmlOutput +=
+                    string.Format(
+                        "<a href='#' value=\"{0}\">{1}</a>",
+                        pa.Id,
+                        Translation.Get(pa.Name));
                 if (childList != null && childList.Count > 0)
                 {
                     htmlOutput += "<ul class='dropdown-menu'>";
