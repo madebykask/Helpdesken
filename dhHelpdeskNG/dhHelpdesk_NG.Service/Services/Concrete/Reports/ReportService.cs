@@ -276,6 +276,10 @@
                 var fieldRep = uow.GetRepository<CaseFieldSetting>();
                 var caseStatisticEntity = uow.GetRepository<CaseStatistic>();
                 var hasLeadTime = fieldIds.Contains(Convert.ToInt32(CalculationFields.LeadTime));
+                var caseTypeQuery = uow.GetRepository<CaseType>().GetAll();
+                var productAreaQuery = uow.GetRepository<ProductArea>().GetAll();
+                var closingReasonQuery = uow.GetRepository<FinishingCause>().GetAll();
+                var organizationUnitQuery = uow.GetRepository<OU>().GetAll();
 
                 var settings = fieldRep.GetAll()
                             .GetByNullableCustomer(customerId)
@@ -301,7 +305,11 @@
                                                text,
                                                sort,
                                                selectCount)
-                                       .MapToCaseOverviews(caseStatistics);
+                                       .MapToCaseOverviews(caseTypeQuery, 
+                                                           productAreaQuery, 
+                                                           closingReasonQuery,
+                                                           organizationUnitQuery,
+                                                           caseStatistics);
 
                 return new ReportGeneratorData(settings, overviews);
             }

@@ -15,7 +15,75 @@
 
     public static class CaseOverviewMapper
     {
-        public static List<FullCaseOverview> MapToCaseOverviews(this IQueryable<Case> query, IQueryable<CaseStatistic> caseStatisticsQuery)
+        public static string GetCaseTypeFullName(this int caseTypeId, IQueryable<CaseType> caseTypeQuery)
+        {
+            var res = string.Empty;
+            var ct = caseTypeQuery.Where(c => c.Id == caseTypeId).FirstOrDefault();
+            if (ct != null)
+            {
+                if (ct.Parent_CaseType_Id.HasValue)
+                    res = ct.Parent_CaseType_Id.Value.GetCaseTypeFullName(caseTypeQuery) + " - " + ct.Name;
+                else
+                    res = ct.Name;
+            }
+            return res;
+        }
+
+        public static string GetProductAreaFullName(this int? productId, IQueryable<ProductArea> productAreaQuery)
+        {
+            if (productId == null)
+                return string.Empty;
+
+            var res = string.Empty;            
+            var pa = productAreaQuery.Where(p => p.Id == productId).FirstOrDefault();
+            if (pa != null)
+            {
+                if (pa.Parent_ProductArea_Id.HasValue)
+                    res = pa.Parent_ProductArea_Id.GetProductAreaFullName(productAreaQuery) + " - " + pa.Name;
+                else
+                    res = pa.Name;
+            }
+            return res;
+        }
+
+        public static string GetOUFullName(this int? ouId, IQueryable<OU> organizationUnitQuery)
+        {
+            if (ouId == null)
+                return string.Empty;
+
+            var res = string.Empty;
+            var ou = organizationUnitQuery.Where(o => o.Id == ouId).FirstOrDefault();
+            if (ou != null)
+            {
+                if (ou.Parent_OU_Id.HasValue)
+                    res = ou.Parent_OU_Id.GetOUFullName(organizationUnitQuery) + " - " + ou.Name;
+                else
+                    res = ou.Name;
+            }
+            return res;
+        }
+
+
+        public static string GetClosingReasonFullName(this int closingReasonId, IQueryable<FinishingCause> closingReasonQuery)
+        {            
+            var res = string.Empty;
+            var cr = closingReasonQuery.Where(c => c.Id == closingReasonId).FirstOrDefault();
+            if (cr != null)
+            {
+                if (cr.Parent_FinishingCause_Id.HasValue)
+                    res = cr.Parent_FinishingCause_Id.Value.GetClosingReasonFullName(closingReasonQuery) + " - " + cr.Name;
+                else
+                    res = cr.Name;
+            }
+            return res;
+        }
+
+        public static List<FullCaseOverview> MapToCaseOverviews(this IQueryable<Case> query, 
+                                                                IQueryable<CaseType> caseTypeQuery,
+                                                                IQueryable<ProductArea> productAreaQuery,
+                                                                IQueryable<FinishingCause> closingReasonQuery,
+                                                                IQueryable<OU> organizationUnitQuery,
+                                                                IQueryable<CaseStatistic> caseStatisticsQuery)
         {
             var separator = Guid.NewGuid().ToString();            
             var entities = query.SelectIncluding(new List<Expression<Func<Case, object>>>
@@ -60,7 +128,7 @@
                                                          c => c.Logs.Select(l => l.Charge),
                                                          c => c.Logs.Select(l => l.LogFiles.FirstOrDefault().FileName),
                                                          c => c.Logs.Select(l => l.FinishingDate),
-                                                         c => c.Logs.Select(l => l.FinishingTypeEntity.Name)
+                                                         c => c.Logs.Select(l => l.FinishingTypeEntity.Id)
                                                      })
                                                      .ToList();
 
@@ -85,14 +153,14 @@
                         caseEntity.CaseFiles = ((List<string>)e.f15).Select(f => new CaseFile { FileName = f }).ToList();
                         caseEntity.Region = new Region { Name = e.f16 };
                         caseEntity.CausingPart = new CausingPart { Name = e.f17 };
-                        caseEntity.Ou = new OU { Name = e.f18 };
+                        caseEntity.Ou = new OU { Name =  e.f18 };
                         caseEntity.System = new System { SystemName = e.f19 };
                         caseEntity.Impact = new Impact { Name = e.f20 };
                         caseEntity.Supplier = new Supplier { Name = e.f21 };
                         caseEntity.CaseResponsibleUser = new User { FirstName = e.f22, SurName = e.f23 };
                         caseEntity.Status = new Status { Name = e.f24 };
                         caseEntity.User = new User { FirstName = e.f25, SurName = e.f26 };
-
+                        
                         // http://redmine.fastdev.se/issues/10639
                         /*caseEntity.Logs = ((List<string>)e.f27).Select(
                             l =>
@@ -133,7 +201,7 @@
                         var charges = (List<int>)e.f29;
                         var files = (List<string>)e.f30;
                         var finishingDates = (List<DateTime?>)e.f31;
-                        var finishingTypes = (List<string>)e.f32;
+                        var finishingTypes = (List<int>)e.f32;
                         for (var i = 0; i < internalLogNotes.Count; i++)
                         {
                             var logFiles = new List<LogFile>();
@@ -142,7 +210,7 @@
                                 logFiles.Add(new LogFile { FileName = files[i] });
                             }
 
-                            var finishingType = new FinishingCause { Name = finishingTypes[i] };
+                            var finishingType = new FinishingCause { Name = finishingTypes[i].GetClosingReasonFullName(closingReasonQuery) };
 
                             caseEntity.Logs.Add(new Log
                                                     {
@@ -155,7 +223,12 @@
                                                     });
                         }
 
-                        var caseStatistic = caseStatisticsQuery.Where(cs => cs.CaseId == caseEntity.Id).FirstOrDefault();
+                        
+                        caseEntity.CaseType.Name = caseEntity.CaseType_Id.GetCaseTypeFullName(caseTypeQuery);
+                        caseEntity.ProductArea.Name = caseEntity.ProductArea_Id.GetProductAreaFullName(productAreaQuery);
+                        caseEntity.Ou.Name = caseEntity.OU_Id.GetOUFullName(organizationUnitQuery);
+
+                        var caseStatistic = caseStatisticsQuery.Where(cs => cs.CaseId == caseEntity.Id).FirstOrDefault();                        
                         return CreateFullOverview(caseEntity, caseStatistic);
                     }).ToList();
         }
@@ -263,8 +336,7 @@
                                                 l.LogFiles.Any() ? l.LogFiles.First().FileName : string.Empty,
                                                 entity.FinishingDescription,
                                                 l.FinishingDate,
-                                                l.FinishingTypeEntity.Name))
-                                                .ToList();
+                                                l.FinishingTypeEntity.Name)).ToList();
             return new LogsOverview(logs);
         }
     }
