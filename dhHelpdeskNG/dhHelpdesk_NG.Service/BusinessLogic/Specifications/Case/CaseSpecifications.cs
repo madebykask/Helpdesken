@@ -254,7 +254,7 @@
                                         DateTime? from,
                                         DateTime? until)
         {
-            if (from.HasValue && until.HasValue && from.Value == until.Value)
+            if (until.HasValue)
             {
                 until = until.Value.AddMonths(1);
             }
