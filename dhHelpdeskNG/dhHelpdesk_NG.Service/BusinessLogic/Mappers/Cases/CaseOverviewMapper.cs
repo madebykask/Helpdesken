@@ -128,7 +128,8 @@
                                                          c => c.Logs.Select(l => l.Charge),
                                                          c => c.Logs.Select(l => l.LogFiles.FirstOrDefault().FileName),
                                                          c => c.Logs.Select(l => l.FinishingDate),
-                                                         c => c.Logs.Select(l => l.FinishingTypeEntity != null? l.FinishingTypeEntity.Id : 0)
+                                                         c => c.Logs.Select(l => l.FinishingTypeEntity != null? l.FinishingTypeEntity.Id : 0),
+                                                         c => c.Logs.Select(l => l.LogDate)                                                                
                                                      })
                                                      .ToList();
 
@@ -202,6 +203,8 @@
                         var files = (List<string>)e.f30;
                         var finishingDates = (List<DateTime?>)e.f31;
                         var finishingTypes = (List<int>)e.f32;
+                        var logDates = (List<DateTime>)e.f33;
+
                         for (var i = 0; i < internalLogNotes.Count; i++)
                         {
                             var logFiles = new List<LogFile>();
@@ -219,7 +222,8 @@
                                                         Charge = charges[i],
                                                         LogFiles = logFiles,
                                                         FinishingDate = finishingDates[i],
-                                                        FinishingTypeEntity = finishingType
+                                                        FinishingTypeEntity = finishingType,
+                                                        LogDate = logDates[i]
                                                     });
                         }
 
@@ -329,14 +333,21 @@
 
         private static LogsOverview CreateLogOverview(Case entity)
         {
-            var logs = entity.Logs.Select(l => new LogOverview(
-                                                l.Text_Internal,
-                                                l.Text_External,
-                                                l.Charge.ToBool(),
-                                                l.LogFiles.Any() ? l.LogFiles.First().FileName : string.Empty,
+            var logs = new List<LogOverview>();
+            var lastLog = entity.Logs.OrderByDescending(l=> l.LogDate).FirstOrDefault();
+            if (lastLog != null)
+            {
+                var lastLogOverview = new LogOverview(
+                                                lastLog.Text_Internal,
+                                                lastLog.Text_External,
+                                                lastLog.Charge.ToBool(),
+                                                lastLog.LogFiles.Any() ? lastLog.LogFiles.First().FileName : string.Empty,
                                                 entity.FinishingDescription,
-                                                l.FinishingDate,
-                                                l.FinishingTypeEntity.Name)).ToList();
+                                                lastLog.FinishingDate,
+                                                lastLog.FinishingTypeEntity.Name);
+                logs.Add(lastLogOverview);
+            }
+                                
             return new LogsOverview(logs);
         }
     }
