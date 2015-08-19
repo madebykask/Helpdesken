@@ -255,11 +255,11 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 return new MvcHtmlString(string.Empty);
         }
 
-        public static MvcHtmlString ProductAreaTreeString(this HtmlHelper helper, IList<ProductArea> productAreas)
+        public static MvcHtmlString ProductAreaTreeString(this HtmlHelper helper, IList<ProductArea> productAreas, bool isShowOnlyActive = false)
         {
             if (productAreas != null)
             {
-                return BuildProductAreaTreeRow(productAreas, 0);
+                return BuildProductAreaTreeRow(productAreas, 0, isShowOnlyActive);
             }
             else
                 return new MvcHtmlString(string.Empty);
@@ -1042,22 +1042,34 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return new MvcHtmlString(htmlOutput);
         }
 
-        private static MvcHtmlString BuildProductAreaTreeRow(IList<ProductArea> productAreas, int iteration)
+        private static MvcHtmlString BuildProductAreaTreeRow(
+            IList<ProductArea> productAreas,
+            int iteration,
+            bool isShowOnlyActive = true,
+            bool isParentInactive = false)
         {
             string htmlOutput = string.Empty;
+            var productAreaToDisplay = isShowOnlyActive ? productAreas.Where(it => it.IsActive == 1) : productAreas;
 
-            foreach (ProductArea productArea in productAreas)
+            foreach (ProductArea productArea in productAreaToDisplay)
             {
-                htmlOutput += "<tr>";
+                var isInactive = productArea.IsActive != 1 || isParentInactive;
+                htmlOutput += string.Format("<tr class=\"{0}\">", isInactive ? "inactive" : string.Empty);
                 htmlOutput += "<td><a href='/admin/productarea/edit/" + productArea.Id + "' style='padding-left: " + iteration + "px'><i class='icon-resize-full icon-dh'></i>" + productArea.Name + "</a></td>";
                 htmlOutput += "<td><a href='/admin/productarea/edit/" + productArea.Id + "'>" + productArea.IsActive.TranslateBit() + "</a></td>";
                 htmlOutput += "</tr>";
 
                 if (productArea.SubProductAreas != null)
                 {
-                    if (productArea.SubProductAreas.Count > 0)
+                    if (productArea.SubProductAreas.Count > 0 && (
+                        (isShowOnlyActive && !isInactive) 
+                        || !isShowOnlyActive))
                     {
-                        htmlOutput += BuildProductAreaTreeRow(productArea.SubProductAreas.OrderBy(x=>x.Name).ToList(), iteration + 20);
+                        htmlOutput += BuildProductAreaTreeRow(
+                            productArea.SubProductAreas.OrderBy(x => x.Name).ToList(),
+                            iteration + 20,
+                            isShowOnlyActive,
+                            isInactive);
                     }
                 }
             }

@@ -369,6 +369,7 @@
     <Content Include="Areas\Admin\Content\js\CaseOverview\customerOverview.js" />
     <Content Include="Areas\Admin\Content\js\Common\common.js" />
     <Content Include="Areas\Admin\Content\js\Customer\customerCaseSettings.js" />
+    <Content Include="Areas\Admin\Content\js\ProductArea\index.js" />
     <Content Include="Areas\Admin\Content\js\Users\index.lockedcase.js" />
     <Content Include="Areas\Admin\Content\js\Users\index.js" />
     <Content Include="Areas\Admin\Content\js\Users\user.js" />
