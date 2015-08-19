@@ -24,7 +24,7 @@
 
         public static bool IsAvailavbleToViewInCaseoverview(string fieldName)
         {
-            return NotAvailableField.Contains(fieldName);
+            return !NotAvailableField.Contains(fieldName);
         }
 
         private static string[] collectAllField()

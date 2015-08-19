@@ -6,6 +6,7 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Grid;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseSatisfaction;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CasesInProgressDay;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
@@ -242,8 +243,11 @@
                 var departmentRep = uow.GetRepository<Department>();
                 var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
                 var caseTypeRep = uow.GetRepository<CaseType>();
-
-                var fields = fieldRep.GetAll().GetByNullableCustomer(customerId).GetShowable();
+                var fields = fieldRep.GetAll().GetByNullableCustomer(customerId)
+                    .GetShowable()
+                    .ToList()
+                    .Where(it => GridColumnsDefinition.IsAvailavbleToViewInCaseoverview(it.Name))
+                    .AsQueryable();
                 var departments = departmentRep.GetAll().GetActiveByCustomer(customerId);
                 var workingGroups = workingGroupRep.GetAll().GetActiveByCustomer(customerId);
                 var caseTypes = caseTypeRep.GetAll().GetByCustomer(customerId);
