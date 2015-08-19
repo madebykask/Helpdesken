@@ -403,7 +403,7 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpPost]
         public RedirectToRouteResult Delete(int id, int pageId)
         {
-            if (this._caseSolutionService.DeleteCaseSolution(id) == DeleteMessage.Success)
+            if (this._caseSolutionService.DeleteCaseSolution(id, SessionFacade.CurrentCustomer.Id) == DeleteMessage.Success)
             {
                 switch (pageId)
                 {

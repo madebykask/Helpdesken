@@ -19,9 +19,11 @@ namespace DH.Helpdesk.Services.Services
     public interface ILinkService
     {
         IList<Link> GetLinks(int customerId);
+        IList<Link> GetLinksBySolutionIdAndCustomer(int id, int customerId);
 
         Link GetLink(int id);
         LinkGroup GetLinkGroup(int id);
+        Link GetLinkByCustomerAndSolution(int id, int customerId);
 
         DeleteMessage DeleteLink(int id);
         DeleteMessage DeleteLinkGroup(int id);
@@ -89,6 +91,16 @@ namespace DH.Helpdesk.Services.Services
         public Link GetLink(int id)
         {
             return this._linkRepository.GetById(id);
+        }
+
+        public IList<Link> GetLinksBySolutionIdAndCustomer(int id, int customerId)
+        {
+            return this._linkRepository.GetMany(x => x.Customer_Id == customerId && x.CaseSolution_Id == id).ToList();
+        }
+
+        public Link GetLinkByCustomerAndSolution(int id, int customerId)
+        {
+            return this._linkRepository.Get(x => x.CaseSolution_Id == id && x.Customer_Id == customerId);
         }
 
         public DeleteMessage DeleteLink(int id)
