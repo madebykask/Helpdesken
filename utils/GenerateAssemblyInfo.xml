@@ -33,7 +33,7 @@
           Int32.TryParse(match.Groups["patch"].Value, out patch);
           Int32.TryParse(match.Groups["revision"].Value, out revision);
           _Version = new Version(major, minor, patch, revision).ToString();
-	  _FullVersion = string.Format("{0}.{1}.{2}-{3}-{4}", major, minor, patch, revision, match.Groups["commit"].Value);
+	  _FullVersion = string.Format("{0}.{1}.{2}.{3}-{4}", major, minor, patch, revision, match.Groups["commit"].Value);
         ]]>
       </Code>
     </Task>
