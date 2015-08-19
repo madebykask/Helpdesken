@@ -170,18 +170,18 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><label class="checkbox">
+                                    @*<td><label class="checkbox">
                                         <input type="checkbox" name="setting.ModuleContract" @(Model.Setting.ModuleContract == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="setting.ModuleContract" value="0" />
                                         &nbsp;@Translation.Get("Avtal", Enums.TranslationSource.TextTranslation)
                                         </label>
-                                    </td>
-                                    @*<td><label class="checkbox">
+                                    </td>*@
+                                    <td><label class="checkbox">
                                         <input type="checkbox" name="setting.ModuleOrder" @(Model.Setting.ModuleOrder == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="setting.ModuleOrder" value="0" />
                                         &nbsp;@Translation.Get("Beställningar", Enums.TranslationSource.TextTranslation)
                                         </label>
-                                    </td>*@
+                                    </td>
                                     @*<td><label class="checkbox">
                                         <input type="checkbox" name="setting.ModuleChecklist" @(Model.Setting.ModuleChecklist == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="setting.ModuleChecklist" value="0" />
