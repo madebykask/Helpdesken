@@ -427,7 +427,7 @@ using DH.Helpdesk.BusinessData.Models.Shared.Input;
                                 translatedFields.OrderBy(f=> f.Name).ToList(), 
                                 reportOptions.Departments, 
                                 reportOptions.WorkingGroups, 
-                                reportOptions.CaseTypes
+                                reportOptions.CaseTypes.OrderBy(ct=> ct.Name).ToList()
                             );            
             return ret;
         }
