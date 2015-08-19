@@ -37,5 +37,17 @@ BEGIN
 END
 
 
+-- Script for update old templates with new fields at case
+insert into tblcasesolutionfieldsettings  
+select casesolution_id, 51, 1, getdate(), getdate() 
+from tblcasesolutionfieldsettings 
+where casesolution_id 
+	not in (select casesolution_id from tblcasesolutionfieldsettings
+			where fieldname_id = 51)
+group by casesolution_id
+Go
+
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.12'
