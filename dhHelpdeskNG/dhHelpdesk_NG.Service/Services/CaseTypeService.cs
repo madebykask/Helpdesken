@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Runtime.Remoting.Messaging;
 
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Dal.Infrastructure;
@@ -11,7 +12,7 @@
 
     public interface ICaseTypeService
     {
-        IList<CaseType> GetCaseTypes(int customerId);
+        IList<CaseType> GetCaseTypes(int customerId, bool isTakeOnlyActive = false);
 
         CaseType GetCaseType(int id);
 
@@ -46,9 +47,16 @@
             this._caseRepository = caseRepository;
         }
 
-        public IList<CaseType> GetCaseTypes(int customerId)
+        public IList<CaseType> GetCaseTypes(int customerId, bool isTakeOnlyActive = false)
         {
-            return this.caseTypeRepository.GetMany(x => x.Customer_Id == customerId && x.Parent_CaseType_Id == null).OrderBy(x => x.Name).ToList();
+            var query = this.caseTypeRepository.GetMany(
+                x => x.Customer_Id == customerId && x.Parent_CaseType_Id == null);
+            if (isTakeOnlyActive)
+            {
+                query = query.Where(it => it.IsActive == 1);
+            }
+
+            return query.OrderBy(x => x.Name).ToList();
         }
 
         public CaseType GetCaseType(int id)
