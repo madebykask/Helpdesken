@@ -36,12 +36,18 @@
             this._priorityService = priorityService;
         }
 
+        public JsonResult SetShowOnlyActiveProductAreasInAdmin(bool value)
+        {
+            SessionFacade.ShowOnlyActiveProductAreasInAdmin = value;
+            return this.Json(new { result = "success" });
+        }
+
         public ActionResult Index(int customerId)
         {
             var customer = this._customerService.GetCustomer(customerId);
             var productAreas = this._productAreaService.GetAllProductAreas(customer.Id).OrderBy(x => x.Name).ToList();
-            
-            var model = new ProductAreaIndexViewModel { ProductAreas = productAreas, Customer = customer };
+
+            var model = new ProductAreaIndexViewModel { ProductAreas = productAreas, Customer = customer, IsShowOnlyActive = SessionFacade.ShowOnlyActiveProductAreasInAdmin };
 
             return this.View(model);
         }

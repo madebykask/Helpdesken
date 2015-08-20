@@ -67,9 +67,12 @@
         private const string _CASE_OVERVIEW_SETTINGS_KEY = "CASE_OVERVIEW_SETTINGS";
 
         private const string _ADVANCED_SEARCH_OVERVIEW_SETTINGS_KEY = "ADVANCED_SEARCH_OVERVIEW_SETTINGS";
+
         private const string _TZ_DETECTION_KEY = "TZ_DETECTION_RESULT";
 
         private const string _TZ_MSG_KEY = "TZ_MSG_RESULT";
+
+        private const string _SHOW_ACTIVE_PRODUCT_AREAS_IN_ADMIN = "SHOW_ACTIVE_PRODUCT_AREAS_IN_ADMIN";
 
         #endregion
 
@@ -540,6 +543,24 @@
             set
             {
                 SaveSetKeyValue(_TZ_DETECTION_KEY, value);
+            }
+        }
+
+        public static bool ShowOnlyActiveProductAreasInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_PRODUCT_AREAS_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_PRODUCT_AREAS_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_PRODUCT_AREAS_IN_ADMIN, value);
             }
         }
 
