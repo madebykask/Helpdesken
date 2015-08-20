@@ -90,23 +90,14 @@ var GRID_STATE = {
             return false;
         });                
 
-        $('#CaseInitiatorFilter').keydown(function (e) {
+        $('#CaseInitiatorFilter, #txtFreeTextSearch, #txtCaseNumberSearch').keydown(function (e) {
             if (e.keyCode == 13) {
+                e.preventDefault();
                 $("#btnSearch").click();
+                return false;
             }
         });
 
-        $('#txtFreeTextSearch').keydown(function (e) {
-            if (e.keyCode == 13) {
-                $("#btnSearch").click();
-            }
-        });
-
-        $('#txtCaseNumberSearch').keydown(function (e) {
-            if (e.keyCode == 13) {
-                $("#btnSearch").click();                
-            }
-        });
                
         me.setGridState(window.GRID_STATE.IDLE);
         me.gridSettings = gridInitSettings;
