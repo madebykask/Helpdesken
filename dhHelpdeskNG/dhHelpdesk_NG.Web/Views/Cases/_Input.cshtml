@@ -309,7 +309,7 @@
                                                         {
                                                             var curDep = Model.departments.Where(d => d.Id == Model.case_.Department_Id).SingleOrDefault();
                                                             @Html.TextBoxFor(m => curDep.DepartmentName, new { id = "DepartmentName", @readonly = true })
-                                                        @Html.HiddenFor(m => Model.case_.Department_Id, new {@class="departments-list"}) 
+                                                        @Html.HiddenFor(m => Model.case_.Department_Id, new { @class = "departments-list" }) 
                                                         }
                                                         else
                                                         {                                                        
@@ -514,18 +514,18 @@
                                                     <span>&nbsp;-&nbsp;@Model.CaseOwnerDefaultWorkingGroup.WorkingGroupName</span>
                                                     }
                                                 }
-                                                    else
+                                                else
                                                 {
-                                                        if(!string.IsNullOrEmpty(Model.case_.RegUserName))
-                                                        {
+                                                    if (!string.IsNullOrEmpty(Model.case_.RegUserName))
+                                                    {
                                                         <span>&nbsp;(@Model.case_.RegUserName)</span>
-                                                        }
-                                                        
-                                                        if(!string.IsNullOrEmpty(Model.case_.RegUserId))
-                                                        {
-                                                    <span>&nbsp;(@Model.case_.RegUserId)</span>
-                                                }
                                                     }
+
+                                                    if (!string.IsNullOrEmpty(Model.case_.RegUserId))
+                                                    {
+                                                    <span>&nbsp;(@Model.case_.RegUserId)</span>
+                                                    }
+                                                }
                                                 <span>&nbsp;(@Model.case_.IpAddress)</span>
                                             </td>
                                             <td></td>
@@ -537,8 +537,16 @@
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer, "Källa")
                                         </td>
                                         <td class="span4">
-                                            @Html.DropDownListFor(m => m.CustomerRegistrationSourceId, Model.CustomerRegistrationSources, @Model.IsReadOnly(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer, CaseSolutionFields.RegistrationSourceCustomer) ? new { @disabled = true } : null)
-                                        </td>
+                                            @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer, CaseSolutionFields.RegistrationSourceCustomer))
+                                            {
+                                                @Html.TextBoxFor(m => m.SelectedCustomerRegistrationSource, new { disabled = true })
+                                                @Html.HiddenFor(model => model.CustomerRegistrationSourceId)
+                                            }
+                                            else
+                                            {
+                                                @Html.DropDownListFor(m => m.CustomerRegistrationSourceId, Model.CustomerRegistrationSources)
+                                            }                                            
+                                        </td>                                        
                                     </tr>
                                     <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.CaseType_Id, CaseSolutionFields.CaseType)">
                                         <td>
@@ -547,7 +555,7 @@
                                         <td colspan="2">
                                             <div id="divCaseType" class="btn-group">
                                                 @{
-                                    string disabledCaseType = Model.GetDisabledString(GlobalEnums.TranslationCaseFields.CaseType_Id, CaseSolutionFields.CaseType);
+                                            string disabledCaseType = Model.GetDisabledString(GlobalEnums.TranslationCaseFields.CaseType_Id, CaseSolutionFields.CaseType);
                                                 }
                                                 <div class="btn @disabledCaseType" id="divBreadcrumbs_CaseType">@Model.ParantPath_CaseType</div>
                                                 <button class="btn dropdown-toggle" data-toggle="dropdown" @disabledCaseType>
@@ -569,7 +577,7 @@
                                         <td colspan="2">
                                             <div id="divProductArea" class="btn-group">
                                                 @{
-                                    string disabledProductArea = Model.GetDisabledString(GlobalEnums.TranslationCaseFields.ProductArea_Id, CaseSolutionFields.ProductArea);
+                                            string disabledProductArea = Model.GetDisabledString(GlobalEnums.TranslationCaseFields.ProductArea_Id, CaseSolutionFields.ProductArea);
                                                 }
                                                 <div class="btn @disabledProductArea" id="divBreadcrumbs_ProductArea">@Model.ParantPath_ProductArea</div>
                                                 <button class="btn dropdown-toggle" data-toggle="dropdown" @disabledProductArea>
@@ -1060,7 +1068,7 @@
                                             }
                                             else
                                             {
-                                                @Html.DropDownListFor(m => m.ResponsibleUser_Id, Model.ResponsibleUsersAvailable, new { disabled="disabled" })
+                                                @Html.DropDownListFor(m => m.ResponsibleUser_Id, Model.ResponsibleUsersAvailable, new { disabled = "disabled" })
                                             }
                                         </td>
                                     </tr>
@@ -1100,15 +1108,15 @@
                                             }
                                             else
                                             {
-                                                    var priority = Model.case_.Priority_Id.HasValue ? Model.priorities.SingleOrDefault(x => x.Id == Model.case_.Priority_Id): null;
-                                                    if(priority == null)
+                                                var priority = Model.case_.Priority_Id.HasValue ? Model.priorities.SingleOrDefault(x => x.Id == Model.case_.Priority_Id) : null;
+                                                if (priority == null)
                                                 {
                                                 @Html.TextBoxFor(m => m.case_.Priority_Id, new { @readonly = true })
                                                 }
                                                 else
                                                 {
-                                                        @Html.TextBoxFor(m => priority.Name, new { @readonly = true})
-                                                        @Html.HiddenFor(x => x.case_.Priority_Id, new { @class="sla-value", data_sla = priority.SolutionTime })
+                                                        @Html.TextBoxFor(m => priority.Name, new { @readonly = true })
+                                                        @Html.HiddenFor(x => x.case_.Priority_Id, new { @class = "sla-value", data_sla = priority.SolutionTime })
                                                 }
                                             }
                                         </td>

@@ -2850,6 +2850,7 @@
                     if (m.case_.RegistrationSourceCustomer_Id.HasValue)
                     {
                         m.CustomerRegistrationSourceId = m.case_.RegistrationSourceCustomer_Id.Value;
+                        m.SelectedCustomerRegistrationSource = m.case_.RegistrationSourceCustomer.SourceName;
                     }
                     else
                     {
@@ -2858,6 +2859,7 @@
                         if (isCreateNewCase && defaultSource != null)
                         {
                             m.CustomerRegistrationSourceId = defaultSource.Id;
+                            m.SelectedCustomerRegistrationSource = defaultSource.SourceName;
                         }
                     }
 
