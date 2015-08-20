@@ -201,10 +201,12 @@
                         var externalLogNotes = (List<string>)e.f28;
                         var charges = (List<int>)e.f29;
                         var files = (List<string>)e.f30;
-                        var finishingDates = (List<DateTime?>)e.f31;                        
+                        //var finishingDates = (List<DateTime?>)e.f31;
+                        //Show current closing date Case #52681
+                        var curFinishingDate = caseEntity.FinishingDate;
                         var finishingTypes = (List<int>)e.f32;
                         var logDates = (List<DateTime>)e.f33;
-                        var curFinishingDate = caseEntity.FinishingDate;
+                        
 
                         for (var i = 0; i < internalLogNotes.Count; i++)
                         {
@@ -222,7 +224,7 @@
                                                         Text_External = externalLogNotes[i],
                                                         Charge = charges[i],
                                                         LogFiles = logFiles,
-                                                        FinishingDate = curFinishingDate,// finishingDates[i],
+                                                        FinishingDate = curFinishingDate,
                                                         FinishingTypeEntity = finishingType,
                                                         LogDate = logDates[i]
                                                     });
