@@ -129,7 +129,7 @@
                                                          c => c.Logs.Select(l => l.LogFiles.FirstOrDefault().FileName),
                                                          c => c.Logs.Select(l => l.FinishingDate),
                                                          c => c.Logs.Select(l => l.FinishingTypeEntity != null? l.FinishingTypeEntity.Id : 0),
-                                                         c => c.Logs.Select(l => l.LogDate)                                                                
+                                                         c => c.Logs.Select(l => l.LogDate)
                                                      })
                                                      .ToList();
 
@@ -201,9 +201,10 @@
                         var externalLogNotes = (List<string>)e.f28;
                         var charges = (List<int>)e.f29;
                         var files = (List<string>)e.f30;
-                        var finishingDates = (List<DateTime?>)e.f31;
+                        var finishingDates = (List<DateTime?>)e.f31;                        
                         var finishingTypes = (List<int>)e.f32;
                         var logDates = (List<DateTime>)e.f33;
+                        var curFinishingDate = caseEntity.FinishingDate;
 
                         for (var i = 0; i < internalLogNotes.Count; i++)
                         {
@@ -221,7 +222,7 @@
                                                         Text_External = externalLogNotes[i],
                                                         Charge = charges[i],
                                                         LogFiles = logFiles,
-                                                        FinishingDate = finishingDates[i],
+                                                        FinishingDate = curFinishingDate,// finishingDates[i],
                                                         FinishingTypeEntity = finishingType,
                                                         LogDate = logDates[i]
                                                     });
