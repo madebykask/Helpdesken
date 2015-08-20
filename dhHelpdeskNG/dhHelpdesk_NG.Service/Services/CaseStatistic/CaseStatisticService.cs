@@ -5,6 +5,7 @@
     using System.Linq;
 
     using DH.Helpdesk.Common.Extensions.Boolean;
+    using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Cases;
@@ -24,7 +25,7 @@
 
             if (watchDate.HasValue)
             {
-                res = (finishDate <= watchDate.Value).ToInt();
+                res = (finishDate.RoundToDay() <= watchDate.Value.RoundToDay()).ToInt();
             }
             else if (SLA != 0)
             {
@@ -46,7 +47,7 @@
         {
             if (@case.Id <= 0)
             {
-                throw new ArgumentException("Bad newCaseStatistic value: caseId can not be less or equal to 0");
+                throw new ArgumentException("Bad value: caseId can not be less or equal to 0");
             }
 
             using (var uow = this.unitOfWorkFactory.Create())
