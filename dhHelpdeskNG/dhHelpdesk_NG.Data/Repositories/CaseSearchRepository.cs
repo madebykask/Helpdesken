@@ -1176,15 +1176,8 @@
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblDepartment].[DepartmentId]", text));
                     sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblLog] WHERE [tblLog].[Text_Internal] LIKE '%{0}%' OR [tblLog].[Text_External] LIKE '%{0}%'))", text);
                     sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblFormFieldValue] WHERE {0}))", this.GetSqlLike("FormFieldValue", text));
-                    if (caseSettingsMap.ContainsKey(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString()))
-                    {
-                        sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[ReferenceNumber]", text));
-                    }
-
-                    if (caseSettingsMap.ContainsKey(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString()))
-                    {
-                        sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[InvoiceNumber]", text));
-                    }
+                    sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[ReferenceNumber]", text));
+                    sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[InvoiceNumber]", text));
             
                     sb.Append(") ");
                 }
