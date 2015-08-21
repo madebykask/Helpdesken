@@ -84,6 +84,7 @@
         public string LogFile { get; set; }
         public string CaseLog { get; set; }
         public string ClosingReason { get; set; }
+        public int? RegistrationSourceCustomer_Id { get; set; }
 
         public virtual Case Case { get; set; }
         public virtual Category Category { get; set; }
@@ -97,6 +98,7 @@
         public virtual User UserPerformer { get; set; }
         public virtual Status Status { get; set; }
         public virtual WorkingGroupEntity WorkingGroup { get; set; }
+        public virtual RegistrationSourceCustomer RegistrationSourceCustomer { get; set; }
         //public virtual Urgency Urgency { get; set; }
     }
 }

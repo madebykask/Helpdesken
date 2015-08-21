@@ -56,9 +56,6 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\CommonAssembly\SharedAssemblyInfo.cs">
-      <Link>Properties\SharedAssemblyInfo.cs</Link>
-    </Compile>
     <Compile Include="Accounts\Account.cs" />
     <Compile Include="Accounts\AccountActivity.cs" />
     <Compile Include="Accounts\AccountActivityGroup.cs" />
@@ -79,6 +76,7 @@
     <Compile Include="CaseSolutionSearch.cs" />
     <Compile Include="Cases\CaseSolutionSetting.cs" />
     <Compile Include="Cases\CaseLockEntity.cs" />
+    <Compile Include="Cases\CaseStatistic.cs" />
     <Compile Include="CaseType.cs" />
     <Compile Include="Cases\CausingPart.cs" />
     <Compile Include="Changes\ChangeChangeEntity.cs" />

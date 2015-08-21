@@ -254,6 +254,11 @@
                                         DateTime? from,
                                         DateTime? until)
         {
+            if (until.HasValue)
+            {
+                until = until.Value.AddMonths(1);
+            }
+
             if (from.HasValue)
             {
                 query = query.Where(c => c.RegTime >= from);

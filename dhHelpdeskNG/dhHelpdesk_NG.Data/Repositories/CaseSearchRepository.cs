@@ -761,8 +761,20 @@
             }
             else
             {
-                sql.Add(this.ReturnCaseSearchWhere(f, customerSetting, customerUserSetting, isFieldResponsibleVisible, userId, userUserId, 
-                        showNotAssignedWorkingGroups, userGroupId, gs, relatedCasesCaseId, relatedCasesUserId, caseIds));
+                sql.Add(this.ReturnCaseSearchWhere(
+                    f, 
+                    customerSetting, 
+                    customerUserSetting, 
+                    isFieldResponsibleVisible, 
+                    userId, 
+                    userUserId, 
+                    showNotAssignedWorkingGroups, 
+                    userGroupId, 
+                    gs, 
+                    relatedCasesCaseId, 
+                    caseSettings,
+                    relatedCasesUserId, 
+                    caseIds));
             }
 
             // ORDER BY ...
@@ -894,25 +906,14 @@
         /// <param name="userUserId"></param>
         /// <param name="showNotAssignedWorkingGroups"></param>
         /// <param name="userGroupId"></param>
-        /// <param name="restrictedCasePermission"> User has permission to see own cases only </param>
         /// <param name="gs"></param>
         /// <param name="relatedCasesCaseId"></param>
         /// <param name="relatedCasesUserId"></param>
         /// <param name="caseIds"></param>
+        /// <param name="caseSettings"></param>
+        /// <param name="restrictedCasePermission"> User has permission to see own cases only </param>
         /// <returns></returns>
-        private string ReturnCaseSearchWhere(
-            CaseSearchFilter f, 
-            Setting customerSetting, 
-            CustomerUser customerUserSetting, 
-            bool isFieldResponsibleVisible,
-            int userId, 
-            string userUserId, 
-            int showNotAssignedWorkingGroups, 
-            int userGroupId, 
-            GlobalSetting gs, 
-            int? relatedCasesCaseId, 
-            string relatedCasesUserId = null,
-            int[] caseIds = null)
+        private string ReturnCaseSearchWhere(CaseSearchFilter f, Setting customerSetting, CustomerUser customerUserSetting, bool isFieldResponsibleVisible, int userId, string userUserId, int showNotAssignedWorkingGroups, int userGroupId, GlobalSetting gs, int? relatedCasesCaseId, Dictionary<string, CaseSettings> caseSettingsMap, string relatedCasesUserId = null, int[] caseIds = null)
         {
             if (f == null || customerSetting == null || gs == null)
             {
@@ -1175,6 +1176,9 @@
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblDepartment].[DepartmentId]", text));
                     sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblLog] WHERE [tblLog].[Text_Internal] LIKE '%{0}%' OR [tblLog].[Text_External] LIKE '%{0}%'))", text);
                     sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblFormFieldValue] WHERE {0}))", this.GetSqlLike("FormFieldValue", text));
+                    sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[ReferenceNumber]", text));
+                    sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[InvoiceNumber]", text));
+            
                     sb.Append(") ");
                 }
             }

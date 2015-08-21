@@ -22,7 +22,14 @@
 
         public override string GetDisplayValue()
         {
-            return this.Value.HasValue ? this.Value.Value.ToShortDateString() : null;
+            if (this.Value.HasValue)
+            {
+                var old = this.Value;
+                var newv = DateTime.SpecifyKind(this.Value.Value, DateTimeKind.Utc).ToLocalTime();
+                return newv.ToShortDateString();
+            }
+
+            return null;
         }
 
         #endregion

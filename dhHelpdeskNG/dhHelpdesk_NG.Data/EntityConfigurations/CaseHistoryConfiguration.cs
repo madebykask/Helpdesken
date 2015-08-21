@@ -65,7 +65,12 @@
                             .WithMany()
                             .HasForeignKey(x => x.Status_Id)
                             .WillCascadeOnDelete(false);
-  
+
+            this.HasOptional(x => x.RegistrationSourceCustomer)
+                           .WithMany()
+                           .HasForeignKey(x => x.RegistrationSourceCustomer_Id)
+                           .WillCascadeOnDelete(false);            
+
             this.Property(x => x.AgreedDate).IsOptional();
             this.Property(x => x.Performer_User_Id).IsOptional();
             this.Property(x => x.User_Id).IsOptional();
@@ -119,6 +124,7 @@
             this.Property(x => x.LogFile).IsOptional();
             this.Property(x => x.CaseLog).IsOptional();
             this.Property(x => x.ClosingReason).IsOptional();
+            
             
             this.ToTable("tblcasehistory");
         }

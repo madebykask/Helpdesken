@@ -52,9 +52,6 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\CommonAssembly\SharedAssemblyInfo.cs">
-      <Link>Properties\SharedAssemblyInfo.cs</Link>
-    </Compile>
     <Compile Include="Collections\INamedObject.cs" />
     <Compile Include="Collections\NamedObjectCollection.cs" />
     <Compile Include="Constraints\NotifierConstraint.cs" />
@@ -67,6 +64,7 @@
     <Compile Include="Enums\ActivationStatus.cs" />
     <Compile Include="Enums\ApplicationTypes.cs" />
     <Compile Include="Enums\CaseRegistrationSource.cs" />
+    <Compile Include="Enums\CalculationFields.cs" />
     <Compile Include="Enums\InfoTextType.cs" />
     <Compile Include="Enums\StringTags.cs" />
     <Compile Include="Enums\LoginMode.cs" />

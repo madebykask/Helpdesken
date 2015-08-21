@@ -57,8 +57,11 @@
                                     <td colspan="2">
                                         <select id="lstRegions" name="lstRegions" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                             @foreach (var e in Model.Regions)
-                                            {                                                                                                      
-                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedRegion)>@e.Name</option>                                       
+                                            {   
+                                                if (e.IsActive != 0)
+                                                {                                                                                                                        
+                                                  <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedRegion)>@e.Name</option>                                       
+                                                }
                                             }
                                         </select>
                                     </td>                                                        
@@ -77,8 +80,11 @@
                                     <td colspan="2">
                                         <select name="@CaseSettingModel.DepartmentsControlName" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                             @foreach (var e in Model.Departments)
-                                            {                                                                                                      
+                                            {             
+                                                if (e.IsActive != 0)
+                                                {                                                                                         
                                                 <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedDepartments)>@e.DepartmentName</option>                                       
+                                                }
                                             }
                                         </select>
                                     </td>                                                        
@@ -123,7 +129,7 @@
                                             </button>
                                             <ul class="dropdown-menu">
                                                 <li><a href="#">@Translation.Get("--")</a></li>
-                                                @Html.CaseTypeDropdownButtonString(Model.CaseTypes, false)
+                                                @Html.CaseTypeDropdownButtonString(Model.CaseTypes, true)
                                             </ul>
                                             @Html.HiddenFor(model => model.CaseTypeId)
                                         </div>
@@ -151,7 +157,7 @@
                                             </button>
                                             <ul class="dropdown-menu">
                                                 <li><a href="#">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
-                                                @Html.ProductAreaDropdownButtonString(Model.ProductAreas, false)
+                                                @Html.ProductAreaDropdownButtonString(Model.ProductAreas, true)
                                             </ul>
                                             @Html.HiddenFor(model => model.ProductAreaId)
                                         </div>
@@ -174,8 +180,11 @@
                                     <td colspan="2">
                                         <select id="lstWorkingGroups" name="lstWorkingGroup" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                             @foreach (var e in Model.WorkingGroups)
-                                            {                                                                                                      
+                                            {   
+                                                if (e.IsActive != 0)
+                                                {                                                                                                   
                                                 <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedWorkingGroup)>@e.WorkingGroupName</option>                                       
+                                                }
                                             }
                                         </select>
                                     </td>                                                        
@@ -233,8 +242,11 @@
                                     <td colspan="2">
                                         <select id="lstPriorities" name="lstPriority" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                             @foreach (var e in Model.Priorities)
-                                            {                                                                                                      
+                                            {          
+                                                if (e.IsActive != 0)
+                                                {                                                                                            
                                                 <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedPriority)>@e.Code. @e.Name </option>                                       
+                                                }
                                             }
                                         </select>
                                     </td>                                                                                                                
@@ -274,8 +286,11 @@
                                 <td colspan="2">
                                     <select id="lstSubStates" name="lstSubState" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                         @foreach (var e in Model.SubStates)
-                                        {                                                                                                      
-                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedSubState)>@e.Name </option>                                       
+                                        {     
+                                            if (e.IsActive != 0)                                                                                                 
+                                            {
+                                              <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedSubState)>@e.Name </option>                                       
+                                            }
                                         }
                                     </select>
                                 </td>                                                                                                                
@@ -359,7 +374,7 @@
                                             </button>
                                             <ul class="dropdown-menu">
                                                 <li><a href="#">@Translation.Get("--")</a></li>
-                                                @Html.FinishingCauseDropdownButtonString(Model.ClosingReasons, false)
+                                                @Html.FinishingCauseDropdownButtonString(Model.ClosingReasons, true)
                                             </ul>
                                             @Html.HiddenFor(model => model.ClosingReasonId)
                                         </div>

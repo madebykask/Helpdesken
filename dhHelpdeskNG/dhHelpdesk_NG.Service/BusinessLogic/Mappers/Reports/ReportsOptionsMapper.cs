@@ -15,6 +15,8 @@
     using DH.Helpdesk.Services.BusinessLogic.Mappers.ProductArea;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Reports.Data;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Shared.Data;
+    using DH.Helpdesk.BusinessData.Enums.Case.Fields;
+    using DH.Helpdesk.Common.Enums;
 
     public static class ReportsOptionsMapper
     {
@@ -237,6 +239,10 @@
                                 .ToList()
                                 .Select(f => new ItemOverview(f.FieldName, f.Id.ToString(CultureInfo.InvariantCulture)))                                
                                 .ToList();
+
+                // Add calculation fields manually to the available fields
+                var leadTimeId = Convert.ToInt32(CalculationFields.LeadTime).ToString();
+                fieldsResult.Add(new ItemOverview(CaseInfoFields.LeadTime, leadTimeId));
             }
 
             var overviews = query != null ? query

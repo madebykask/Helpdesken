@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Web;
-
-namespace DH.Helpdesk.NewSelfService.Infrastructure
+﻿namespace DH.Helpdesk.NewSelfService.Infrastructure
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web;
+
     public class UserCaseInfo
     {
         public int UserId { get; set; }
@@ -19,9 +18,7 @@ namespace DH.Helpdesk.NewSelfService.Infrastructure
 
         static ApplicationFacade()
         {
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            Version ver = assembly.GetName().Version;
-            Version = string.Format("{0}.{1}.{2}.{3}", ver.Major, ver.Minor, ver.Build, ver.Revision);
+            Version = DH.Helpdesk.Version.FULL_VERSION;
         }
 
         public static string Version { get; private set; }

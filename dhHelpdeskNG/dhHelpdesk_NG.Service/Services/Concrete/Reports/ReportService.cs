@@ -6,6 +6,7 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Grid;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseSatisfaction;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CasesInProgressDay;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
@@ -25,6 +26,7 @@
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Cases;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Cases;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Reports;
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
@@ -241,11 +243,14 @@
                 var departmentRep = uow.GetRepository<Department>();
                 var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
                 var caseTypeRep = uow.GetRepository<CaseType>();
-
-                var fields = fieldRep.GetAll().GetByNullableCustomer(customerId).GetShowable();
+                var fields = fieldRep.GetAll().GetByNullableCustomer(customerId)
+                    .GetShowable()
+                    .ToList()
+                    .Where(it => GridColumnsDefinition.IsAvailavbleToViewInCaseoverview(it.Name))
+                    .AsQueryable();
                 var departments = departmentRep.GetAll().GetActiveByCustomer(customerId);
                 var workingGroups = workingGroupRep.GetAll().GetActiveByCustomer(customerId);
-                var caseTypes = caseTypeRep.GetAll().GetActiveByCustomer(customerId);
+                var caseTypes = caseTypeRep.GetAll().GetByCustomer(customerId);
 
                 return ReportsOptionsMapper.MapToReportGeneratorOptions(
                                             fields,
@@ -273,30 +278,42 @@
             {
                 var caseRep = uow.GetRepository<Case>();
                 var fieldRep = uow.GetRepository<CaseFieldSetting>();
+                var caseStatisticEntity = uow.GetRepository<CaseStatistic>();
+                var hasLeadTime = fieldIds.Contains(Convert.ToInt32(CalculationFields.LeadTime));
+                var caseTypeQuery = uow.GetRepository<CaseType>().GetAll();
+                var productAreaQuery = uow.GetRepository<ProductArea>().GetAll();
+                var closingReasonQuery = uow.GetRepository<FinishingCause>().GetAll();
+                var organizationUnitQuery = uow.GetRepository<OU>().GetAll();
 
                 var settings = fieldRep.GetAll()
                             .GetByNullableCustomer(customerId)
                             .GetByIds(fieldIds)
                             .GetShowable()
-                            .MapToCaseSettings(languageId);
+                            .MapToCaseSettings(languageId, hasLeadTime);                
 
                 var caseTypeIds = new List<int>();
                 if (caseTypeId.HasValue)
                 {
                     LoadCaseTypeChildrenIds(caseTypeId.Value, caseTypeIds, uow);
                 }
-
-                var overviews = caseRep.GetAll().Search(
-                                    customerId,
-                                    departmentIds,
-                                    workingGroupIds,
-                                    caseTypeIds,
-                                    periodFrom,
-                                    periodUntil,
-                                    text,
-                                    sort,
-                                    selectCount)
-                                    .MapToCaseOverviews();
+                
+                var caseStatistics = caseStatisticEntity.GetAll();
+                
+                var overviews = caseRep.GetAll()
+                                       .Search(customerId,
+                                               departmentIds,
+                                               workingGroupIds,
+                                               caseTypeIds,
+                                               periodFrom,
+                                               periodUntil,
+                                               text,
+                                               sort,
+                                               selectCount)
+                                       .MapToCaseOverviews(caseTypeQuery, 
+                                                           productAreaQuery, 
+                                                           closingReasonQuery,
+                                                           organizationUnitQuery,
+                                                           caseStatistics);
 
                 return new ReportGeneratorData(settings, overviews);
             }

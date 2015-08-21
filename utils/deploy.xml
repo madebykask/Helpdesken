@@ -8,7 +8,7 @@ How to run:
 		<DevPath>\\dhutvas3\Websites\dhHelpdesk\</DevPath>
 		<AcctPath>\\dhutvas3\Websites\dhHelpdeskAcct\</AcctPath>
 		<TestPath>I:\tmp\_testdeploy\</TestPath>
-		<TargetPath>$(TestPath)</TargetPath>
+		<TargetPath>$(TestPath)</TargetPath>                               	
 		<AppOfflineDisabled>$(TargetPath)\_app_offline.htm</AppOfflineDisabled>
 		<AppOfflineEnabled>$(TargetPath)\app_offline.htm</AppOfflineEnabled>
 		<BackupFolder>$(TargetPath)\bak\</BackupFolder>
@@ -16,7 +16,6 @@ How to run:
 
 	<ItemGroup>
 		<!-- Files and folders to backup -->
-
 		<Backup Include="$(TargetPath)\**\*" 
 			Exclude="$(TargetPath)\*.*;
 				$(TargetPath)\bak\**\*;
@@ -52,14 +51,6 @@ How to run:
 
 		<FilesToZip Include="\\servername\f$\web\example.com\wwwroot\**\*.*" />	
 	</ItemGroup>
-
-<!--
-  		<Copy SourceFiles="@(Backup_Areas)" DestinationFolder="$(BackupFolder)\Areas\" />
-		<Copy SourceFiles="@(Backup_Bin)" DestinationFolder="$(BackupFolder)\bin\" />
-		<Copy SourceFiles="@(Backup_Content)" DestinationFolder="$(BackupFolder)\Content\" />
-		<Copy SourceFiles="@(Backup_Views)" DestinationFolder="$(BackupFolder)\bin\Views\" />
-		<Copy SourceFiles="@(Backup_Scripts)" DestinationFolder="$(BackupFolder)\bin\Scripts\" />
--->
 
 	<Target Name="Deploy">
 		<Message Text="Deploying here..." />

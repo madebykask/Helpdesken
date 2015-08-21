@@ -427,7 +427,7 @@ using DH.Helpdesk.BusinessData.Models.Shared.Input;
                                 translatedFields.OrderBy(f=> f.Name).ToList(), 
                                 reportOptions.Departments, 
                                 reportOptions.WorkingGroups, 
-                                reportOptions.CaseTypes
+                                reportOptions.CaseTypes.OrderBy(ct=> ct.Name).ToList()
                             );            
             return ret;
         }
@@ -440,7 +440,7 @@ using DH.Helpdesk.BusinessData.Models.Shared.Input;
             foreach (var h in modelData.Headers)
                 translatedFields.Add(new GridColumnHeaderModel
                                             (  
-                                                h.FieldName,
+                                                h.FieldName,                                                
                                                 Translation.Get(h.FieldName, Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id)
                                             ));
 

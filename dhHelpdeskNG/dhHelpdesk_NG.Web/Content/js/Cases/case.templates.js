@@ -85,6 +85,9 @@ function IsWillBeOverwritten(fieldId, val) {
         case 'FinishingCause_Id':
             return IsWillBeOverwrittenByValue('#divFinishingType', "#CaseLog_FinishingType", val);
             break;
+        case 'RegistrationSource':
+            return IsWillBeOverwrittenByValue('#CustomerRegistrationSourceId', "#CustomerRegistrationSourceId", val);
+            break;
     }
     return false;
 }
@@ -191,6 +194,10 @@ function ApplyTemplate(data, doOverwrite) {
                 $('#divFinishingType ul.dropdown-menu li a').trigger('click');
                 SetValueToBtnGroup('#divFinishingType', "#divBreadcrumbs_FinishingType", "#CaseLog_FinishingType", val, doOverwrite);
                 break;
+            case 'RegistrationSource':
+                el = $("#CustomerRegistrationSourceId");
+                SetValueIfElVisible(el, val, cfg);
+                break;
             }
         }
     }
@@ -249,6 +256,9 @@ function IsValueApplicableFor(templateFieldId, val) {
             break;
         case 'FinishingCause_Id':
             return $("#divFinishingType").is(':visible') && $("#divFinishingType").find('a[value="' + val + '"]');
+            break;
+        case 'RegistrationSource':
+            return $("#CustomerRegistrationSourceId").is(':visible') && $("#CustomerRegistrationSourceId").find('a[value="' + val + '"]');
             break;
         }
     return false;

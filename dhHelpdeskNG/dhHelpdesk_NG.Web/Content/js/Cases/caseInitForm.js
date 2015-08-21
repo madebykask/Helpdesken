@@ -373,26 +373,25 @@ function CaseInitForm() {
     });
 
     $('#case__ProductArea_Id').change(function () {
+        var $workingGroup = $("#case__WorkingGroup_Id");
         $("#ProductAreaHasChild").val(0);
         document.getElementById("divProductArea").classList.remove("error");
         if ($(this).val() > 0) {
-            $.post('/Cases/ChangeProductArea/', { 'id': $(this).val() }, function (data) {
-                //alert(JSON.stringify(data));
+            $.post('/Cases/ChangeProductArea/', { 'id': $(this).val() }, 'json').done(function(data) {
                 if (data != undefined) {
-                    //debugger
-                    var exists = $('#case__WorkingGroup_Id option[value=' + data.WorkingGroup_Id + ']').length;
+                    var exists = $workingGroup.find('option[value=' + data.WorkingGroup_Id + ']').length;
                     if (exists > 0 && data.WorkingGroup_Id > 0) {
-                        $("#case__WorkingGroup_Id").val(data.WorkingGroup_Id);
+                        $workingGroup.val(data.WorkingGroup_Id).trigger('change');
                     }
+
                     exists = $('#case__Priority_Id option[value=' + data.Priority_Id + ']').length;
                     if (exists > 0 && data.Priority_Id > 0) {
                         $("#case__Priority_Id").val(data.Priority_Id);
                     }
 
                     $("#ProductAreaHasChild").val(data.HasChild);
-
                 }
-            }, 'json');
+            });
         }
     });
 

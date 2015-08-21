@@ -116,6 +116,11 @@
         public int CustomerRegistrationSourceId { get; set; }
 
         /// <summary>
+        /// Selected case source name
+        /// </summary>
+        public string SelectedCustomerRegistrationSource { get; set; }
+
+        /// <summary>
         /// List of available case sources
         /// </summary>
         public List<SelectListItem> CustomerRegistrationSources { get; set; }

@@ -288,7 +288,7 @@
 
             _regularCase.Add(new SelectListItem()
             {
-                Text = Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation),
+                Text = Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation) + ")" + " (" + Translation.Get("Grunddata", Enums.TranslationSource.TextTranslation) + ")",
                 Value = "1",
 
             });
@@ -306,13 +306,13 @@
             });
             _regularCase.Add(new SelectListItem()
             {
-                Text = Translation.Get("Ärendet avslutat", Enums.TranslationSource.TextTranslation),
+                Text = Translation.Get("Ärendet avslutat", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation) + ")" + " (" + Translation.Get("Grunddata", Enums.TranslationSource.TextTranslation) + ")",
                 Value = "3",
 
             });
             _regularCase.Add(new SelectListItem()
             {
-                Text = Translation.Get("Informera anmälaren om åtgärden", Enums.TranslationSource.TextTranslation),
+                Text = Translation.Get("Informera anmälaren om åtgärden", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation) + ")",
                 Value = "4",
             });
             _regularCase.Add(new SelectListItem()
@@ -322,27 +322,27 @@
             });
             _regularCase.Add(new SelectListItem()
             {
-                Text = Translation.Get("Anmälaren uppdaterat ärende", Enums.TranslationSource.TextTranslation),
+                Text = Translation.Get("Anmälaren uppdaterat ärende", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation) + ")",
                 Value = "10",
             });
             _regularCase.Add(new SelectListItem()
             {
-                Text = Translation.Get("Anmälaren aktiverat ärende", Enums.TranslationSource.TextTranslation),
+                Text = Translation.Get("Anmälaren aktiverat ärende", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation) + ")",
                 Value = "15",
             });
             _regularCase.Add(new SelectListItem()
             {
-                Text = Translation.Get("Bevakningsdatum inträffar", Enums.TranslationSource.TextTranslation),
+                Text = Translation.Get("Bevakningsdatum inträffar", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation) + ")",
                 Value = "9",
             });
             _regularCase.Add(new SelectListItem()
             {
-                Text = Translation.Get("Skicka mail när planerat åtgärdsdatum inträffar", Enums.TranslationSource.TextTranslation),
+                Text = Translation.Get("Skicka mail när planerat åtgärdsdatum inträffar", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation) + ")",
                 Value = "12",
             });
             _regularCase.Add(new SelectListItem()
             {
-                Text = Translation.Get("Prioritet", Enums.TranslationSource.TextTranslation),
+                Text = Translation.Get("Prioritet", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Grunddata", Enums.TranslationSource.TextTranslation) + ")",
                 Value = "13",
             });
 

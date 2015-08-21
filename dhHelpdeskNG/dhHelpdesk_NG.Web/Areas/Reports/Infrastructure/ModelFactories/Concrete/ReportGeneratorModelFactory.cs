@@ -114,6 +114,7 @@
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.Available, CaseInfoFields.Available, headers);
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.Cost, CaseInfoFields.Cost, headers);
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.AttachedFile, CaseInfoFields.AttachedFile, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.LeadTime, CaseInfoFields.LeadTime, headers);
         }
 
         private static void CreateOtherHeaders(OtherSettings settings, List<GridColumnHeaderModel> headers)
@@ -205,6 +206,8 @@
             FieldSettingsHelper.CreateValueIfNeeded(settings.Available, CaseInfoFields.Available, fields.Available, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.Cost, CaseInfoFields.Cost, fields.Cost, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.AttachedFile, CaseInfoFields.AttachedFile, fields.AttachedFile, values);
+            FieldSettingsHelper.CreateSolvedTimeValueIfNeeded(settings.LeadTime, CaseInfoFields.LeadTime, fields.SolvedInTime, values);
+
         }
 
         private static void CreateOtherValues(OtherSettings settings, OtherOverview fields, List<NewGridRowCellValueModel> values)
@@ -230,7 +233,7 @@
             var debiting = fields.Logs.Select(l => l.Debiting.BoolToYesNo()).ToArray();
             var attachedFiles = fields.Logs.Select(l => l.AttachedFile).ToArray();
             var finishingDescription = fields.Logs.Select(l => l.FinishingDescription).ToArray();
-            var finishingDate = fields.Logs.Select(l => l.FinishingDate.HasValue ? l.FinishingDate.Value.ToShortDateString() : string.Empty).ToArray();
+            //var finishingDate = fields.Logs.Select(l => l.FinishingDate.HasValue ? l.FinishingDate.Value.ToShortDateString() : string.Empty).ToArray();
             var finishingCause = fields.Logs.Select(l => l.FinishingCause).ToArray();
 
             FieldSettingsHelper.CreateValueIfNeeded(settings.InternalLogNote, LogFields.InternalLogNote, internalLogNotes, values);
@@ -238,7 +241,7 @@
             FieldSettingsHelper.CreateValueIfNeeded(settings.Debiting, LogFields.Debiting, debiting, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.AttachedFile, LogFields.AttachedFile, attachedFiles, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.FinishingDescription, LogFields.FinishingDescription, finishingDescription, values);
-            FieldSettingsHelper.CreateValueIfNeeded(settings.FinishingDate, LogFields.FinishingDate, finishingDate, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.FinishingDate, LogFields.FinishingDate, fields.Logs.Select(l => l.FinishingDate).FirstOrDefault(), values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.FinishingCause, LogFields.FinishingCause, finishingCause, values);
         }
 

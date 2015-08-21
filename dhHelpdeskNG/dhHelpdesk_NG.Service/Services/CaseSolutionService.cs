@@ -23,7 +23,7 @@ namespace DH.Helpdesk.Services.Services
         CaseSolutionCategory GetCaseSolutionCategory(int id);
         CaseSolutionSchedule GetCaseSolutionSchedule(int id);
 
-        DeleteMessage DeleteCaseSolution(int id);
+        DeleteMessage DeleteCaseSolution(int id, int customerId);
         DeleteMessage DeleteCaseSolutionCategory(int id);
 
         List<CaseTemplateCategoryNode> GetCaseSolutionCategoryTree(int customerId, int userId);
@@ -41,7 +41,8 @@ namespace DH.Helpdesk.Services.Services
 
         private readonly ICaseSolutionSettingRepository caseSolutionSettingRepository;
         private readonly IFormRepository _formRepository;
-
+        private readonly ILinkService _linkService;
+        private readonly ILinkRepository _linkRepository; 
         private readonly IUnitOfWork _unitOfWork;
 
         public CaseSolutionService(
@@ -50,12 +51,16 @@ namespace DH.Helpdesk.Services.Services
             ICaseSolutionScheduleRepository caseSolutionScheduleRepository,
             ICaseSolutionSettingRepository caseSolutionSettingRepository,
             IFormRepository formRepository,
+            ILinkRepository linkRepository,
+            ILinkService linkService,
             IUnitOfWork unitOfWork)
         {
             this._caseSolutionRepository = caseSolutionRepository;
             this._caseSolutionCategoryRepository = caseSolutionCategoryRepository;
             this._caseSolutionScheduleRepository = caseSolutionScheduleRepository;
             this.caseSolutionSettingRepository = caseSolutionSettingRepository;
+            this._linkRepository = linkRepository;
+            this._linkService = linkService;
             _formRepository = formRepository;
             this._unitOfWork = unitOfWork;
         }
@@ -252,7 +257,7 @@ namespace DH.Helpdesk.Services.Services
             return this._caseSolutionScheduleRepository.GetById(id);
         }
 
-        public DeleteMessage DeleteCaseSolution(int id)
+        public DeleteMessage DeleteCaseSolution(int id, int customerId)
         {
             var caseSolution = this._caseSolutionRepository.GetById(id);
 
@@ -267,6 +272,11 @@ namespace DH.Helpdesk.Services.Services
 
                     if (caseSolutionSchedule != null)
                         this._caseSolutionScheduleRepository.Delete(caseSolutionSchedule);
+
+                    var caseSolutionLinks = this._linkService.GetLinksBySolutionIdAndCustomer(id, customerId);
+                    if (caseSolutionLinks.Count > 0)
+                        foreach (var link in caseSolutionLinks)
+                            this._linkRepository.Delete(x => x.Id == link.Id);
 
                     this._caseSolutionRepository.Delete(caseSolution);
 

@@ -68,9 +68,6 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\CommonAssembly\SharedAssemblyInfo.cs">
-      <Link>Properties\SharedAssemblyInfo.cs</Link>
-    </Compile>
     <Compile Include="Attributes\Orders\CreateMissingOrderFieldSettingsAttribute.cs" />
     <Compile Include="BusinessLogic\Accounts\OrderAccountDefaultSettingsCreator.cs" />
     <Compile Include="BusinessLogic\Admin\Users\Concrete\UserPermissionsChecker.cs" />
@@ -268,6 +265,7 @@
     <Compile Include="Infrastructure\Email\Concrete\CaseMailer.cs" />
     <Compile Include="Infrastructure\Email\ICaseMailer.cs" />
     <Compile Include="Infrastructure\TimeZoneResolver\TimeZoneResolver.cs" />
+    <Compile Include="Services\CaseStatistic\CaseStatisticService.cs" />
     <Compile Include="Services\Concrete\CaseLockService.cs" />
     <Compile Include="Services\Concrete\OrganizationJsonService.cs" />
     <Compile Include="Services\Concrete\Reports\ReportService.cs" />

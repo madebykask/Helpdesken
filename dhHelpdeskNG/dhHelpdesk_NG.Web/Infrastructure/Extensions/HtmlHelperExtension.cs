@@ -255,11 +255,11 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 return new MvcHtmlString(string.Empty);
         }
 
-        public static MvcHtmlString ProductAreaTreeString(this HtmlHelper helper, IList<ProductArea> productAreas)
+        public static MvcHtmlString ProductAreaTreeString(this HtmlHelper helper, IList<ProductArea> productAreas, bool isShowOnlyActive = false)
         {
             if (productAreas != null)
             {
-                return BuildProductAreaTreeRow(productAreas, 0);
+                return BuildProductAreaTreeRow(productAreas, 0, isShowOnlyActive);
             }
             else
                 return new MvcHtmlString(string.Empty);
@@ -550,6 +550,32 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                     sb.Append(from);
                     if (cur.Status != null)
                         sb.Append(Translation.Get(cur.Status.Name, Enums.TranslationSource.TextTranslation, customerId));
+                    else
+                        sb.Append(ey);
+                    sb.Append("</td>");
+                    sb.Append("</tr>");
+                }
+            }
+
+            // Registration Source
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.RegistrationSourceCustomer_Id != o.RegistrationSourceCustomer_Id)
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    sb.Append(tdMarkup);
+                    if (o.RegistrationSourceCustomer != null)
+                        //should be active in v 5.3.13.xx
+                        //sb.Append(Translation.Get(o.RegistrationSourceCustomer.SourceName, Enums.TranslationSource.TextTranslation, customerId));
+                        sb.Append(o.RegistrationSourceCustomer.SourceName);
+                    else
+                        sb.Append(ey);
+                    sb.Append(from);
+                    if (cur.RegistrationSourceCustomer != null)
+                        //should be active in v 5.3.13.xx
+                        //sb.Append(Translation.Get(cur.RegistrationSourceCustomer.SourceName, Enums.TranslationSource.TextTranslation, customerId));
+                        sb.Append(cur.RegistrationSourceCustomer.SourceName);
                     else
                         sb.Append(ey);
                     sb.Append("</td>");
@@ -928,16 +954,21 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                     childList = childs.ToList();
                 }
 
+                var cls = pa.IsActive == 1 ? string.Empty : "inactive";
                 if (childList != null && childList.Count > 0)
                 {
-                    htmlOutput += "<li class='dropdown-submenu'>";
+                    htmlOutput += string.Format("<li class=\"dropdown-submenu {0}\">", cls);
                 }
                 else
                 {
-                    htmlOutput += "<li>";
+                    htmlOutput += string.Format("<li class=\"{0}\">", cls);
                 }
 
-                htmlOutput += "<a href='#' value=" + pa.Id.ToString() + ">" + Translation.Get(pa.Name) + "</a>";
+                htmlOutput +=
+                    string.Format(
+                        "<a href='#' value=\"{0}\">{1}</a>",
+                        pa.Id,
+                        Translation.Get(pa.Name));
                 if (childList != null && childList.Count > 0)
                 {
                     htmlOutput += "<ul class='dropdown-menu'>";
@@ -1037,22 +1068,34 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return new MvcHtmlString(htmlOutput);
         }
 
-        private static MvcHtmlString BuildProductAreaTreeRow(IList<ProductArea> productAreas, int iteration)
+        private static MvcHtmlString BuildProductAreaTreeRow(
+            IList<ProductArea> productAreas,
+            int iteration,
+            bool isShowOnlyActive = true,
+            bool isParentInactive = false)
         {
             string htmlOutput = string.Empty;
+            var productAreaToDisplay = isShowOnlyActive ? productAreas.Where(it => it.IsActive == 1) : productAreas;
 
-            foreach (ProductArea productArea in productAreas)
+            foreach (ProductArea productArea in productAreaToDisplay)
             {
-                htmlOutput += "<tr>";
+                var isInactive = productArea.IsActive != 1 || isParentInactive;
+                htmlOutput += string.Format("<tr class=\"{0}\">", isInactive ? "inactive" : string.Empty);
                 htmlOutput += "<td><a href='/admin/productarea/edit/" + productArea.Id + "' style='padding-left: " + iteration + "px'><i class='icon-resize-full icon-dh'></i>" + productArea.Name + "</a></td>";
                 htmlOutput += "<td><a href='/admin/productarea/edit/" + productArea.Id + "'>" + productArea.IsActive.TranslateBit() + "</a></td>";
                 htmlOutput += "</tr>";
 
                 if (productArea.SubProductAreas != null)
                 {
-                    if (productArea.SubProductAreas.Count > 0)
+                    if (productArea.SubProductAreas.Count > 0 && (
+                        (isShowOnlyActive && !isInactive) 
+                        || !isShowOnlyActive))
                     {
-                        htmlOutput += BuildProductAreaTreeRow(productArea.SubProductAreas.OrderBy(x=>x.Name).ToList(), iteration + 20);
+                        htmlOutput += BuildProductAreaTreeRow(
+                            productArea.SubProductAreas.OrderBy(x => x.Name).ToList(),
+                            iteration + 20,
+                            isShowOnlyActive,
+                            isInactive);
                     }
                 }
             }

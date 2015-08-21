@@ -50,11 +50,10 @@
             string helpdeskMailFromAdress, 
             List<string> files,
             MailSenders mailSenders)
-        {
+        {            
             if (log == null || log.Id <= 0 || string.IsNullOrWhiteSpace(log.TextExternal) ||
                 !log.SendMailAboutCaseToNotifier ||
-                dontSendMailToNotfier ||
-                !this.emailService.IsValidEmail(newCase.PersonsEmail) ||
+                dontSendMailToNotfier ||                
                 newCase.FinishingDate != null)
             {
                 return;
@@ -70,38 +69,46 @@
             }
 
             if (!String.IsNullOrEmpty(template.Body) && !String.IsNullOrEmpty(template.Subject))
-            {
-                string customEmailSender4 = mailSenders.DefaultOwnerWGEMail;
-                if (string.IsNullOrWhiteSpace(customEmailSender4))
-                    customEmailSender4 = mailSenders.WGEmail;
-                if (string.IsNullOrWhiteSpace(customEmailSender4))
-                    customEmailSender4 = mailSenders.SystemEmail;
+            {                
+                var to = newCase.PersonsEmail.Split(';', ',');
+                foreach (var t in to)
+                {
+                    var curMail = t.Trim();
+                    if (!string.IsNullOrWhiteSpace(curMail) && this.emailService.IsValidEmail(curMail))
+                    {
+                        string customEmailSender4 = mailSenders.DefaultOwnerWGEMail;
+                        if (string.IsNullOrWhiteSpace(customEmailSender4))
+                            customEmailSender4 = mailSenders.WGEmail;
+                        if (string.IsNullOrWhiteSpace(customEmailSender4))
+                            customEmailSender4 = mailSenders.SystemEmail;
 
-                var mailMessageId = this.emailService.GetMailMessageId(customEmailSender4);
-                var notifierEmailLog = this.emailFactory.CreatEmailLog(
-                                                caseHistoryId,
-                                                (int)GlobalEnums.MailTemplates.InformNotifier,
-                                                newCase.PersonsEmail,
-                                                mailMessageId);
+                        var mailMessageId = this.emailService.GetMailMessageId(customEmailSender4);
+                        var notifierEmailLog = this.emailFactory.CreatEmailLog(
+                                                        caseHistoryId,
+                                                        (int)GlobalEnums.MailTemplates.InformNotifier,
+                                                        curMail,
+                                                        mailMessageId);
 
-                string site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + notifierEmailLog.EmailLogGUID.ToString();  
-                string url = "<br><a href='" + site + "'>" + site + "</a>";
-                foreach (var field in fields)
-                    if (field.Key == "[#98]")
-                        field.StringValue = url;            
+                        string site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + notifierEmailLog.EmailLogGUID.ToString();
+                        string url = "<br><a href='" + site + "'>" + site + "</a>";
+                        foreach (var field in fields)
+                            if (field.Key == "[#98]")
+                                field.StringValue = url;
 
-                var notifierEmailItem = this.emailFactory.CreateEmailItem(
-                                                customEmailSender4,
-                                                notifierEmailLog.EmailAddress,
-                                                template.Subject,
-                                                template.Body,
-                                                fields,
-                                                notifierEmailLog.MessageId,
-                                                log.HighPriority,
-                                                files);
-                this.emailService.SendEmail(notifierEmailItem);
-                this.emailLogRepository.Add(notifierEmailLog);
-                this.emailLogRepository.Commit();
+                        var notifierEmailItem = this.emailFactory.CreateEmailItem(
+                                                        customEmailSender4,
+                                                        notifierEmailLog.EmailAddress,
+                                                        template.Subject,
+                                                        template.Body,
+                                                        fields,
+                                                        notifierEmailLog.MessageId,
+                                                        log.HighPriority,
+                                                        files);
+                        this.emailService.SendEmail(notifierEmailItem);
+                        this.emailLogRepository.Add(notifierEmailLog);
+                        this.emailLogRepository.Commit();
+                    }
+                }
             }
         }
 

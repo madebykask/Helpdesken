@@ -7,4 +7,17 @@
             return value ? 1 : 0;
         }
     }
+
+    public static class ToNullableIntExtension
+    {
+        public static int? ToNullableInt(this bool? value)
+        {
+            if (value == null)
+            {
+                return null;
+            }
+
+            return value.Value.ToInt();
+        }
+    }
 }
