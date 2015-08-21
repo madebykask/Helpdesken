@@ -1127,7 +1127,8 @@
             h.WorkingGroup_Id = c.WorkingGroup_Id;
             h.CausingPartId = c.CausingPartId;
             h.DefaultOwnerWG_Id = c.DefaultOwnerWG_Id;
-            
+            h.RegistrationSourceCustomer_Id = c.RegistrationSourceCustomer_Id;
+
             if (extraField != null)
             {
                 h.CaseFile = extraField.CaseFile;

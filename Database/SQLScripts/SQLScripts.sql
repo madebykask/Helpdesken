@@ -48,6 +48,15 @@ group by casesolution_id
 Go
 
 
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'RegistrationSourceCustomer_Id' and sysobjects.name = N'tblCaseHistory')
+begin
+	ALTER TABLE tblCaseHistory ADD RegistrationSourceCustomer_Id int NULL
+
+	ALTER TABLE [dbo].[tblCaseHistory]  WITH CHECK ADD  
+			CONSTRAINT [FK_tblCaseHistory_tblRegistrationSourceCustomer] FOREIGN KEY([RegistrationSourceCustomer_Id])
+				REFERENCES [dbo].[tblRegistrationSourceCustomer] ([Id])
+end
+GO
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.12'

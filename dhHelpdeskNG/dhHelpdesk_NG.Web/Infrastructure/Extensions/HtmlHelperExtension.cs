@@ -557,6 +557,28 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 }
             }
 
+            // Registration Source
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.RegistrationSourceCustomer_Id != o.RegistrationSourceCustomer_Id)
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    sb.Append(tdMarkup);
+                    if (o.RegistrationSourceCustomer != null)
+                        sb.Append(Translation.Get(o.RegistrationSourceCustomer.SourceName, Enums.TranslationSource.TextTranslation, customerId));
+                    else
+                        sb.Append(ey);
+                    sb.Append(from);
+                    if (cur.RegistrationSourceCustomer != null)
+                        sb.Append(Translation.Get(cur.RegistrationSourceCustomer.SourceName, Enums.TranslationSource.TextTranslation, customerId));
+                    else
+                        sb.Append(ey);
+                    sb.Append("</td>");
+                    sb.Append("</tr>");
+                }
+            }
+
             // CaseFile
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Filename.ToString()).ShowOnStartPage == 1)
             {                 
