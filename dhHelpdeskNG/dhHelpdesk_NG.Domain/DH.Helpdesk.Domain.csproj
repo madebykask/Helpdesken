@@ -56,6 +56,9 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\CommonAssembly\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Accounts\Account.cs" />
     <Compile Include="Accounts\AccountActivity.cs" />
     <Compile Include="Accounts\AccountActivityGroup.cs" />
