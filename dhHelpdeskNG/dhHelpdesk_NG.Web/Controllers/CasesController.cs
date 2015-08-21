@@ -849,7 +849,7 @@
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseWorkingGroupFilter))
             {
                 var gs = _globalSettingService.GetGlobalSettings().FirstOrDefault();
-                const bool isTakeOnlyActive = false;
+                const bool isTakeOnlyActive = true;
                 if (gs.LockCaseToWorkingGroup == 0)
                     fd.filterWorkingGroup = this._workingGroupService.GetAllWorkingGroupsForCustomer(cusId);
                 else
@@ -859,7 +859,7 @@
             //produktonmråde
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseProductAreaFilter))
             {
-                const bool isTakeOnlyActive = false;
+                const bool isTakeOnlyActive = true;
                 fd.filterProductArea = this._productAreaService.GetTopProductAreasForUser(
                     cusId,
                     SessionFacade.CurrentUser,
@@ -904,7 +904,7 @@
             //användare
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseUserFilter))
             {
-                fd.RegisteredByUserList = this._userService.GetUsers(cusId).MapToSelectList(fd.customerSetting);
+                fd.RegisteredByUserList = this._userService.GetUserOnCases(cusId).MapToSelectList(fd.customerSetting);
                 if (!string.IsNullOrEmpty(fd.caseSearchFilter.User))
                 {
                     fd.lstfilterUser = fd.caseSearchFilter.User.Split(',').Select(int.Parse).ToArray();
@@ -914,7 +914,7 @@
             //ansvarig
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseResponsibleFilter))
             {
-                fd.ResponsibleUserList = this._userService.GetAllPerformers(cusId).MapToSelectList(fd.customerSetting);
+                fd.ResponsibleUserList = this._userService.GetAvailablePerformersOrUserId(cusId).MapToSelectList(fd.customerSetting);
                 if (!string.IsNullOrEmpty(fd.caseSearchFilter.UserResponsible))
                 {
                     fd.lstfilterResponsible = fd.caseSearchFilter.UserResponsible.Split(',').Select(int.Parse).ToArray();
@@ -922,7 +922,7 @@
             }
 
             //ansvarig
-            var performers = this._userService.GetAllPerformers(cusId);
+            var performers = this._userService.GetAvailablePerformersOrUserId(cusId);
             performers.Insert(0, ObjectExtensions.notAssignedPerformer());
             fd.AvailablePerformersList = performers.MapToSelectList(fd.customerSetting);
             if (!string.IsNullOrEmpty(fd.caseSearchFilter.UserPerformer))
@@ -955,7 +955,7 @@
             if (gs.LockCaseToWorkingGroup == 0)
                 fd.filterWorkingGroup = this._workingGroupService.GetAllWorkingGroupsForCustomer(cusId);
             else
-                fd.filterWorkingGroup = this._workingGroupService.GetWorkingGroups(cusId, false);
+                fd.filterWorkingGroup = this._workingGroupService.GetWorkingGroups(cusId, true);
                         
             fd.filterWorkingGroup.Insert(0, ObjectExtensions.notAssignedWorkingGroup());
             
@@ -1037,7 +1037,7 @@
             if (customerfieldSettings.Where(fs => fs.Name == GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString() &&
                                                   fs.ShowOnStartPage != 0).Any())
             {
-                const bool isTakeOnlyActive = false;
+                const bool isTakeOnlyActive = true;
                 specificFilter.ProductAreaList = this._productAreaService.GetTopProductAreasForUser(
                     customerId,
                     SessionFacade.CurrentUser,
@@ -3358,7 +3358,7 @@
 
             var customerSettings = this._settingService.GetCustomerSetting(customerId);
             ret.RegisteredByCheck = userCaseSettings.RegisteredBy != string.Empty;
-            ret.RegisteredByUserList = this._userService.GetUsers(customerId).MapToSelectList(customerSettings);
+            ret.RegisteredByUserList = this._userService.GetUserOnCases(customerId).MapToSelectList(customerSettings);
 
             if (!string.IsNullOrEmpty(userCaseSettings.RegisteredBy))
             {
@@ -3383,7 +3383,7 @@
             ret.ProductAreas = this._productAreaService.GetTopProductAreasForUser(
                     customerId,
                     SessionFacade.CurrentUser,
-                    false);
+                    true);
             ret.ProductAreaPath = "--";
          
             int pa;
@@ -3401,7 +3401,8 @@
             var userWorkingGroup =
                 _userService.GetUserWorkingGroups().Where(u => u.User_Id == userId).Select(x => x.WorkingGroup_Id);
             var workingGroups =
-                _workingGroupService.GetWorkingGroups(customerId, false).Where(w => userWorkingGroup.Contains(w.Id)).ToList();
+                _workingGroupService.GetWorkingGroups(customerId, true).ToList();
+            //.Where(w => userWorkingGroup.Contains(w.Id))
             ret.WorkingGroupCheck = (userCaseSettings.WorkingGroup != string.Empty);
             ret.WorkingGroups = workingGroups;
             ret.SelectedWorkingGroup = userCaseSettings.WorkingGroup;
@@ -3409,7 +3410,7 @@
             ret.ResponsibleCheck = userCaseSettings.Responsible;
             
             ret.AdministratorCheck = true;
-            ret.AvailablePerformersList = this._userService.GetAllPerformers(customerId).MapToSelectList(customerSettings);
+            ret.AvailablePerformersList = this._userService.GetAvailablePerformersOrUserId(customerId).MapToSelectList(customerSettings);
             if (!string.IsNullOrEmpty(userCaseSettings.Administrators))
             {
                 ret.lstAdministrator = userCaseSettings.Administrators.Split(',').Select(int.Parse).ToArray();
