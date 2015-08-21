@@ -2994,7 +2994,12 @@
                             m.case_.ContactBeforeAction = caseTemplate.ContactBeforeAction;
                             //m.case_.RegistrationSourceCustomer_Id = caseTemplate.RegistrationSource;
                             if (caseTemplate.RegistrationSource > 0)
+                            {
                                 m.CustomerRegistrationSourceId = caseTemplate.RegistrationSource;
+                                var RegistrationSource = this._registrationSourceCustomerService.GetRegistrationSouceCustomer(caseTemplate.RegistrationSource);
+                                m.SelectedCustomerRegistrationSource = RegistrationSource.SourceName;
+
+                            }
 
                             // "watch date" 
                             if (caseTemplate.WatchDate.HasValue)
