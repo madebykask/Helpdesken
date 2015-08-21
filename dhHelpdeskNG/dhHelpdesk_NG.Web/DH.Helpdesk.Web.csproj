@@ -2251,6 +2251,7 @@
     <Content Include="Views\Print\_CaseLogSection.cshtml" />
     <Content Include="Views\Print\_CaseHistorySection.cshtml" />
     <Content Include="Views\Cases\AdvancedSearch\_SpecificSearchTab.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\DateLocalTZ.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
