@@ -109,7 +109,7 @@ namespace DH.Helpdesk.Dal.Repositories
                             CaseId = ffv.Case_Id,
                             FormPath = externalSite + f.FormPath,
                             FormName = f.FormName,
-                            Modal = f.Modal,
+                            ViewMode = f.ViewMode,
                             ExternalPage = f.ExternalPage == 1 ? true : false
                         };
 
