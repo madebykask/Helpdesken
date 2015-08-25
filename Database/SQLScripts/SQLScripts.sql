@@ -84,5 +84,30 @@ group by casesolution_id
 Go
 
 
+DECLARE @CustomerId int
+
+DECLARE MY_CURSOR CURSOR 
+  LOCAL STATIC READ_ONLY FORWARD_ONLY
+FOR 
+SELECT DISTINCT Id 
+FROM tblCustomer
+
+OPEN MY_CURSOR
+FETCH NEXT FROM MY_CURSOR INTO @CustomerId
+WHILE @@FETCH_STATUS = 0
+BEGIN 
+    --Do something with Id here
+
+	if not exists (select * from tblcomputeruserfieldsettings where ComputerUserField = 'CostCentre' and Customer_Id = @CustomerId)
+	begin
+		insert into tblcomputeruserfieldsettings (Customer_Id, ComputerUserField, Show, [Required], MinLength, ShowInList, LDAPAttribute)
+		values (@CustomerId, 'CostCentre', 0, 0, 0, 0, '')
+	end
+    FETCH NEXT FROM MY_CURSOR INTO @CustomerId
+END
+CLOSE MY_CURSOR
+DEALLOCATE MY_CURSOR
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.13'
