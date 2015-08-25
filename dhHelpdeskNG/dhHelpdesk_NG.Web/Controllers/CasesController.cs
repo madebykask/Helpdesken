@@ -1288,24 +1288,24 @@
 
                 var caseInvoices = this.invoiceArticleService.GetCaseInvoices(id);
                 m.InvoiceArticles = this.invoiceArticlesModelFactory.CreateCaseInvoiceArticlesModel(caseInvoices);
-                foreach (var invoice in m.InvoiceArticles.Invoices)
-                {
-                    foreach (var order in invoice.Orders)
-                    {
-                        var UserId = 0;
-                        if (order.InvoicedByUserId.HasValue && order.InvoicedByUserId != 0)
-                        {
-                            UserId = order.InvoicedByUserId.Value;
-                            var user = _userService.GetUser(UserId);
-                            order.InvoicedByUser = user.FirstName + " " + user.SurName;
-                        }
-                        else
-                        {
-                            order.InvoicedByUser = "";
-                        }
+                //foreach (var invoice in m.InvoiceArticles.Invoices)
+                //{
+                //    foreach (var order in invoice.Orders)
+                //    {
+                //        var UserId = 0;
+                //        if (order.InvoicedByUserId.HasValue && order.InvoicedByUserId != 0)
+                //        {
+                //            UserId = order.InvoicedByUserId.Value;
+                //            var user = _userService.GetUser(UserId);
+                //            order.InvoicedByUser = user.FirstName + " " + user.SurName;
+                //        }
+                //        else
+                //        {
+                //            order.InvoicedByUser = "";
+                //        }
                         
-                    }
-                }
+                //    }
+                //}
                 m.CustomerSettings = this.workContext.Customer.Settings;
             }            
 
