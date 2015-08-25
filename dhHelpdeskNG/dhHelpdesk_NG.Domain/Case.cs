@@ -19,6 +19,7 @@
         public int? Region_Id { get; set; }
         public int? Department_Id { get; set; }
         public int? OU_Id { get; set; }
+        public String CostCentre { get; set; }
         public String Place { get; set; }
         public String UserCode { get; set; }
         public String InventoryNumber { get; set; }

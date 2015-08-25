@@ -47,6 +47,7 @@
             var department = CreateDisplayRule(settings, OrganizationField.Department);
             var unit = CreateDisplayRule(settings, OrganizationField.Unit);
             var organizationUnit = CreateDisplayRule(settings, OrganizationField.OrganizationUnit);
+            var costCentre = CreateDisplayRule(settings, OrganizationField.CostCentre);
             var division = CreateDisplayRule(settings, OrganizationField.Division);
             var manager = CreateDisplayRule(settings, OrganizationField.Manager);
             var group = CreateDisplayRule(settings, OrganizationField.Group);
@@ -74,6 +75,7 @@
                 department,
                 unit,
                 organizationUnit,
+                costCentre,
                 division,
                 manager,
                 group,
@@ -140,6 +142,7 @@
             var department = this.CreateDisplayFieldSetting(settings, OrganizationField.Department, languageId);
             var unit = this.CreateDisplayFieldSetting(settings, OrganizationField.Unit, languageId);
             var organizationUnit = this.CreateDisplayFieldSetting(settings, OrganizationField.OrganizationUnit, languageId);
+            var costCentre = this.CreateDisplayFieldSetting(settings, OrganizationField.CostCentre, languageId);
             var division = this.CreateDisplayFieldSetting(settings, OrganizationField.Division, languageId);
             var manager = this.CreateDisplayFieldSetting(settings, OrganizationField.Manager, languageId);
             var group = this.CreateDisplayFieldSetting(settings, OrganizationField.Group, languageId);
@@ -170,6 +173,7 @@
                 department,
                 unit,
                 organizationUnit,
+                costCentre,
                 division,
                 manager,
                 group,
@@ -210,6 +214,7 @@
             var department = this.CreateFieldSetting(settings, OrganizationField.Department, languageId, OrganizationFieldLable.Department);
             var unit = this.CreateFieldSetting(settings, OrganizationField.Unit, languageId, OrganizationFieldLable.Unit);
             var organizationUnit = this.CreateFieldSetting(settings, OrganizationField.OrganizationUnit, languageId, OrganizationFieldLable.OrganizationUnit);
+            var costCentre = this.CreateFieldSetting(settings, OrganizationField.CostCentre, languageId, OrganizationFieldLable.CostCentre);
             var division = this.CreateFieldSetting(settings, OrganizationField.Division, languageId, OrganizationFieldLable.Division);
             var manager = this.CreateFieldSetting(settings, OrganizationField.Manager, languageId, OrganizationFieldLable.Manager);
             var group = this.CreateFieldSetting(settings, OrganizationField.Group, languageId, OrganizationFieldLable.Group);
@@ -242,6 +247,7 @@
                 department,
                 unit,
                 organizationUnit,
+                costCentre,
                 division,
                 manager,
                 group,

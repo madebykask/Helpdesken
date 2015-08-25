@@ -25,6 +25,7 @@
             FieldOverviewSetting department,
             FieldOverviewSetting unit,
             FieldOverviewSetting organizationUnit,
+            FieldOverviewSetting costCentre,
             FieldOverviewSetting division,
             FieldOverviewSetting manager,
             FieldOverviewSetting group,
@@ -54,6 +55,7 @@
             this.Department = department;
             this.Unit = unit;
             this.OrganizationUnit = organizationUnit;
+            this.CostCentre = costCentre;
             this.Division = division;
             this.Manager = manager;
             this.Group = @group;
@@ -123,6 +125,9 @@
 
         [NotNull]
         public FieldOverviewSetting OrganizationUnit { get; private set; }
+
+        [NotNull]
+        public FieldOverviewSetting CostCentre { get; private set; }
 
         [NotNull]
         public FieldOverviewSetting Division { get; private set; }

@@ -351,6 +351,21 @@
                                                         }                                    
                                                 </td>                                                
                                             </tr>
+                                            <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.CostCentre, CaseSolutionFields.CostCentre)">
+                                                <td class="span3">
+                                                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.CostCentre, "Kostnadsställe")
+                                                </td>
+                                                <td class="span4">
+                                                    @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.CostCentre, CaseSolutionFields.CostCentre))
+                                                    {
+                                                        @Html.TextBoxFor(model => model.case_.CostCentre, new { maxlength = "30" })
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.TextBoxFor(model => model.case_.CostCentre, new { maxlength = "30", @readonly = "readonly" })
+                                                    }
+                                                </td>
+                                            </tr>
                                             <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Place, CaseSolutionFields.Place)">
                                                 <td class="span3">
                                                     @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Place, "Placering")
@@ -1571,9 +1586,12 @@
             },
             "case_.Department_Id": {
                 required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Department_Id, CaseSolutionFields.Department))  
-                },
+            },
             "case_.OU_Id": {
                 required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.OU_Id.ToString())")
+            },
+            "case_.CostCentre":{
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.CostCentre.ToString())")
             },
             "case_.Place": {
                 required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Place.ToString())")
@@ -1723,6 +1741,9 @@
             },
             "case_.OU_Id": {
                 required: "@Translation.Get(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
+            },
+            "case_.CostCentre":{
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.CostCentre.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
             },
             "case_.Place": {
                 required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Place.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
