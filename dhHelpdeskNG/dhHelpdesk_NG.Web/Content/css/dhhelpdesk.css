@@ -3381,3 +3381,11 @@ td.disabled
 {
     color: lightgray;
 }
+
+
+/******CALENDAR SHOWING YEAR/MONTH********/
+.datepicker td span.month {
+    width:42px;
+    height:42px;
+    line-height:42px;
+}
