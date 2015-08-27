@@ -1,15 +1,15 @@
-﻿namespace DH.Helpdesk.Web.Controllers
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.Specialized;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Linq;
-    using System.Web;
-    using System.Web.Mvc;
-    using System.Web.Routing;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Routing;
 
+namespace DH.Helpdesk.Web.Controllers
+{
     using DH.Helpdesk.BusinessData.Enums.Case;
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Case;
@@ -2979,7 +2979,7 @@
 
                             m.case_.ReportedBy = caseTemplate.ReportedBy;
                             m.case_.Department_Id = caseTemplate.Department_Id;
-                            m.CaseMailSetting.DontSendMailToNotifier = caseTemplate.NoMailToNotifier.ToBool();
+                            //m.CaseMailSetting.DontSendMailToNotifier = caseTemplate.NoMailToNotifier.ToBool();
                             m.case_.ProductArea_Id = caseTemplate.ProductArea_Id;
                             m.case_.Caption = caseTemplate.Caption;
                             m.case_.Description = caseTemplate.Description;
@@ -3065,6 +3065,8 @@
                             m.FinishingCause = this.GetFinishingCauseFullPath(
                                 finishingCauses.ToArray(),
                                 caseTemplate.FinishingCause_Id);
+
+                            
                         }
                     }
                     #endregion

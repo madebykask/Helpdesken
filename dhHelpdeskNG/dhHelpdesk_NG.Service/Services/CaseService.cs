@@ -1,9 +1,10 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
+
+namespace DH.Helpdesk.Services.Services
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Configuration;
-    using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models.Case.Output;
