@@ -31,6 +31,7 @@
                 model.DepartmentId,
                 StringFieldModel.GetValueOrDefault(model.Unit),
                 model.OrganizationUnitId,
+                StringFieldModel.GetValueOrDefault(model.CostCentre),
                 model.DivisionId,
                 model.ManagerId,
                 model.GroupId,
