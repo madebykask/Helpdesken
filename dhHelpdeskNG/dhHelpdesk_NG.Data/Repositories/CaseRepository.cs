@@ -170,6 +170,12 @@ namespace DH.Helpdesk.Dal.Repositories
                 cases.ApprovedDate = null;
                 cases.LeadTime = 0;
                 cases.ChangeTime = DateTime.UtcNow;
+                
+                foreach (var log in cases.Logs)
+                {
+                    log.FinishingType = null;
+                }
+
                 this.Update(cases);
                 this.Commit();
             }
