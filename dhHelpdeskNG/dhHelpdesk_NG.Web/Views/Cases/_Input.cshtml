@@ -831,9 +831,8 @@
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Caption, "Rubrik")
                                         </td>
                                         <td colspan="2">
-                                            @if ((Model.customerUserSetting.CaptionPermission == 1 && !Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Caption, CaseSolutionFields.Caption)
-                                                || Model.case_.Id == 0))
-                                            {                                                
+                                            @if ((Model.customerUserSetting.CaptionPermission == 1 && !Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Caption, CaseSolutionFields.Caption)))
+                                            {                                               
                                                 @Html.TextBoxFor(model => model.case_.Caption, new { maxlength = "100", @class = "width90" })
                                             }
                                             else
