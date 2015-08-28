@@ -207,7 +207,7 @@ namespace DH.Helpdesk.Dal.Repositories
         {
             var query = from u in this.DataContext.Users
                         join uw in this.DataContext.UserWorkingGroups on u.Id equals uw.User_Id
-                        where u.CustomerUsers.Any(c => c.Customer_Id == customerId) && uw.WorkingGroup_Id == workingGroupId //u.Customer_Id == customerId
+                        where u.CustomerUsers.Any(c => c.Customer_Id == customerId) && uw.WorkingGroup_Id == workingGroupId && uw.UserRole != 1 //u.Customer_Id == customerId
                         select u;
             return query;
         }
