@@ -672,7 +672,8 @@ namespace DH.Helpdesk.Services.Services
                 dontSendMailToNotfier = newCase.StateSecondary.NoMailToNotifier == 1 ? true : false; 
 
             // send email about new case to notifier or tblCustomer.NewCaseEmailList
-            if (!isClosingCase && !isCreatingCase)
+            //if (!isClosingCase && !isCreatingCase) Why this????
+            if (!isClosingCase && isCreatingCase)
             {
                 // get mail template 
                 int mailTemplateId = (int)GlobalEnums.MailTemplates.NewCase;
