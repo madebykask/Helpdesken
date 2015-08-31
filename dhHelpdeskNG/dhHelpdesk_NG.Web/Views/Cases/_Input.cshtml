@@ -19,7 +19,22 @@
         caseLockExtender: '@Url.Content("~/Cases/ReExtendCaseLock/")',
         saveLockedCaseMessage: '@Translation.Get("Ärendet kan inte uppdateras då det är upplåst. Stäng ärendet och försök igen.")',
         deleteLockedCaseMessage: '@Translation.Get("Ärendet kan inte uppdateras då det är upplåst. Stäng ärendet och försök igen.")',
-        moveLockedCaseMessage: '@Translation.Get("Ärendet kan inte uppdateras då det är upplåst. Stäng ärendet och försök igen.")'        
+        moveLockedCaseMessage: '@Translation.Get("Ärendet kan inte uppdateras då det är upplåst. Stäng ärendet och försök igen.")',
+        casesScopeInitParameters: {
+            requiredFieldsMessage: '@Translation.Get("Ärendet kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ärendet.")',
+            getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax")',
+            getDepartmentUsersUrl: '@Url.Action("GetDepartmentUsers", "Ajax")',
+            relatedCasesUrl: '@Url.Action("RelatedCasesFull", "Cases")',
+            relatedCasesCountUrl: '@Url.Action("RelatedCasesCount", "Cases")',
+            getDepartmentOusUrl: '@Url.Action("ChangeDepartment", "Cases")',
+            deleteCaseFileConfirmMessage: '@Translation.Get("Är du säker på att du vill ta bort bifogad fil")' + '?',
+            okText: '@Translation.Get("OK")',
+            cancelText: '@Translation.Get("Avbryt")',
+            yesText: '@Translation.Get("Ja")',
+            noText: '@Translation.Get("Nej")',
+            validationMessages:  ['@Html.Raw(Translation.Get("måste anges"))'],
+            mandatoryFieldsText: '@Translation.Get("Obligatoriska fält")',            
+        }
     };  
 
 </script>
@@ -1832,32 +1847,8 @@
                 required: "@Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
             }          
         },
-        //errorPlacement: function (error, element) {
-        //    alert(error.text());
-        //},
-        submitHandler: function(form) {             
-            
-            if (!isProductAreaValid())            
-                return false;
-            
-            if (window.parameters.currentCaseId > 0)
-            {
-                $.post(window.parameters.caseLockChecker, { caseId: window.parameters.currentCaseId, 
-                    lockGuid: window.parameters.caseLockGuid },
-                    function (data) {
-                        if (data == true)
-                            form.submit();   
-                        else
-                        {
-                            //Case is Locked
-                            ShowToastMessage(window.parameters.saveLockedCaseMessage, "error", true);
-                            return false;                    
-                        }
-                    });   
-            }
-            else
-                form.submit();   
-        }
+//        submitHandler: function(form) {
+//        }
     });
 
     function isProductAreaValid() {
@@ -1942,21 +1933,6 @@
         </text>
         }
 
-        var scope = dhHelpdesk.cases.scope({
-            requiredFieldsMessage: '@Translation.Get("Ärendet kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ärendet.")',
-            getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax")',
-            getDepartmentUsersUrl: '@Url.Action("GetDepartmentUsers", "Ajax")',
-            relatedCasesUrl: '@Url.Action("RelatedCasesFull", "Cases")',
-            relatedCasesCountUrl: '@Url.Action("RelatedCasesCount", "Cases")',
-            getDepartmentOusUrl: '@Url.Action("ChangeDepartment", "Cases")',
-            deleteCaseFileConfirmMessage: '@Translation.Get("Är du säker på att du vill ta bort bifogad fil")' + '?',
-            okText: '@Translation.Get("OK")',
-            cancelText: '@Translation.Get("Avbryt")',
-            yesText: '@Translation.Get("Ja")',
-            noText: '@Translation.Get("Nej")',
-            validationMessages:  ['@Html.Raw(Translation.Get("måste anges"))'],
-            mandatoryFieldsText: '@Translation.Get("Obligatoriska fält")',            
-        });        
-        
+        var scope = dhHelpdesk.cases.scope(window.parameters.casesScopeInitParameters);
     });
 </script>

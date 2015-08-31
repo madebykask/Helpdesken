@@ -87,7 +87,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                                                     LockGUID = existingLock.LockGUID,
                                                     BrowserSession = existingLock.BrowserSession,
                                                     CreatedTime = existingLock.CreatedTime,
-                                                    ExtendedTime = existingLock.ExtendedTime.AddSeconds(extendedTimeInSecond)
+                                                    ExtendedTime = DateTime.Now.AddSeconds(extendedTimeInSecond)
                                                 };
 
                 this.DbContext.CaseLock.Add(entity);

@@ -147,6 +147,8 @@
 
             bundles.Add(
                 new ScriptBundle("~/bundles/cases/_input").Include(
+                    "~/Content/js/Cases/components/Utils.js",
+                    "~/Content/js/Cases/components/EditPage.js",
                     "~/Content/js/Cases/_input.js",
                     "~/Content/js/dropdown_fix.js",
                     "~/Content/js/Cases/case.templates.js"));

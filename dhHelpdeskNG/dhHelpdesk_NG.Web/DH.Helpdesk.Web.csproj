@@ -425,6 +425,7 @@
     <Content Include="Content\js\Cases\caseByIds.logic.js" />
     <Content Include="Content\js\Cases\components\BaseField.js" />
     <Content Include="Content\js\Cases\components\DateField.js" />
+    <Content Include="Content\js\Cases\components\EditPage.js" />
     <Content Include="Content\js\Cases\components\JQueryChosenField.js" />
     <Content Include="Content\js\Cases\components\DropdownButtonField.js" />
     <Content Include="Content\js\Cases\components\FilterForm.js" />
