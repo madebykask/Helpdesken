@@ -201,14 +201,14 @@
                                         <li><a href="@Url.Action("Index", "Orders", new { area = "OrderAccounts" })">
                                             <img src="@Url.Content("~/Content/icons/orderaccount.png")" />
                                             @Translation.Get("Beställning kontobehörighet")</a></li>
-                                    }
+                                    }*@
 
                                     @if(model.IsCheckListVisuble())
                                     {    
                                         <li><a href="@Url.Action("index", "checklist", new { area = "" })">
                                             <img src="@Url.Content("~/Content/icons/checklist.png")" />
                                             @Translation.Get("Checklista")</a></li>
-                                    }*@
+                                    }
 
 
                                     @if(model.IsInventoryVisible())

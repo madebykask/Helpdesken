@@ -53,7 +53,7 @@
             this.Bind<ICaseSearchService>().To<CaseSearchService>();
             this.Bind<ICategoryService>().To<CategoryService>();
             this.Bind<IChecklistActionService>().To<ChecklistActionService>();
-            this.Bind<IChecklistServiceService>().To<ChecklistServiceService>();
+            this.Bind<ICheckListServiceService>().To<CheckListServiceService>();
             this.Bind<IComputerService>().To<ComputerService>();
             this.Bind<IContractCategoryService>().To<ContractCategoryService>();
             this.Bind<ICountryService>().To<CountryService>();

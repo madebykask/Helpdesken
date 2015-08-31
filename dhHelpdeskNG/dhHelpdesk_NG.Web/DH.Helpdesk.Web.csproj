@@ -1249,9 +1249,10 @@
     <Compile Include="Models\Changes\SettingsEdit\TextFieldSettingModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\ConfigurableFieldModel.cs" />
     <Compile Include="Models\CheckLists\CheckListIndexViewModel.cs" />
-    <Compile Include="Models\CheckLists\ChecklistInputModel.cs" />
+    <Compile Include="Models\CheckLists\CheckListInputModel.cs" />
     <Compile Include="Models\CheckLists\CheckListserviceModel.cs" />
-    <Compile Include="Models\CheckLists\ServicesActionsModel.cs" />
+    <Compile Include="Models\CheckLists\CheckListActionsInputModel.cs" />
+    <Compile Include="Models\CheckLists\CheckListsModel.cs" />
     <Compile Include="Models\CheckLists\WorkingGroupMapperModel.cs" />
     <Compile Include="Models\DailyReports\DailyReportHistoryModel.cs" />
     <Compile Include="Models\DailyReports\DailyReportInputModel.cs" />
@@ -2228,7 +2229,6 @@
     <Content Include="Views\CheckList\_ServiceInput.cshtml" />
     <Content Include="Views\CheckList\New.cshtml" />
     <Content Include="Views\CheckList\_NewServices.cshtml" />
-    <Content Include="Views\Survey\Vote.cshtml" />
     <Content Include="Views\Survey\VoteError.cshtml" />
     <Content Include="Views\Shared\_Version.cshtml" />
     <Content Include="Views\Error\Unathorized.cshtml" />
@@ -2252,6 +2252,8 @@
     <Content Include="Views\Print\_CaseHistorySection.cshtml" />
     <Content Include="Views\Cases\AdvancedSearch\_SpecificSearchTab.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\DateLocalTZ.cshtml" />
+    <Content Include="Views\CheckList\Edit.cshtml" />
+    <Content Include="Views\CheckList\_Actions.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

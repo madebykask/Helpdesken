@@ -7,25 +7,25 @@ using System.Web.Mvc;
 
 namespace DH.Helpdesk.Web.Models.CheckLists
 {
-    public class ChecklistInputModel
+    public class CheckListInputModel
     {
        
-        public ChecklistInputModel()
+        public CheckListInputModel()
         { }
 
-        public ChecklistInputModel(
+        public CheckListInputModel(
             int checkListId, 
             int wgId, 
             string checklistName,
-            List<SelectListItem> workingGroups
-            //,CheckListserviceModel listOfServices
+            List<SelectListItem> workingGroups,
+            CheckListServiceModel services
             )
         {
             this.CheckListId = checkListId;
             this.WGId = wgId;
             this.CheckListName = checklistName;
             this.WorkingGroups = workingGroups;
-            //this.ListOfServices = listOfServices;
+            this.Services = services;
         }
 
                
@@ -37,7 +37,7 @@ namespace DH.Helpdesk.Web.Models.CheckLists
              
         public List<SelectListItem> WorkingGroups {get; set;}
 
-        //public CheckListserviceModel ListOfServices { get; set; }
+        public CheckListServiceModel Services { get; set; }
 
         
     }

@@ -28,6 +28,10 @@ namespace DH.Helpdesk.Dal.Repositories
 
         void SaveCheckList(CheckListBM checklist);
 
+        void DeleteCheckList(int checkListId);
+
+        void UpdateCheckList(CheckListBM checklist);
+
         List<CheckListBM> GetChecklists(int customerId);
         
         CheckListBM GetChecklist(int checkListId);
@@ -54,11 +58,14 @@ namespace DH.Helpdesk.Dal.Repositories
         {
             var checkListEntity =
                 this.DbContext.CheckLists.Where(c => c.Id == checkListId).FirstOrDefault();
-
-            return new CheckListBM(checkListEntity.Customer_Id,
+            var checkListbm = new CheckListBM(checkListEntity.Customer_Id,
                                    checkListEntity.WorkingGroup_Id, checkListEntity.ChecklistName,
                                    checkListEntity.ChangedDate,
-                                   checkListEntity.CreatedDate);
+                                   checkListEntity.CreatedDate)
+                                   {
+                                       Id = checkListId
+                                   };
+            return checkListbm;
         }
 
         public List<CheckListBM> GetChecklists(int customerId)
@@ -80,17 +87,30 @@ namespace DH.Helpdesk.Dal.Repositories
                 ChangedDate = checklist.ChangedDate
             };
 
-            //if (checklistsEntity.IsNew())
-            //{
-               this.DbContext.CheckLists.Add(checklistsEntity);               
-            //}
-            //else
-            //{
-            //    this.DbContext.Checklists.(checklistsEntity);
-            //}            
-
+                      
+            this.DbContext.CheckLists.Add(checklistsEntity);               
+                   
             this.InitializeAfterCommit(checklist, checklistsEntity);            
         }
+
+        public void DeleteCheckList(int checkListId)
+        {
+          var checkListEntity =
+                this.DbContext.CheckLists.Find(checkListId);
+
+          this.DbContext.CheckLists.Remove(checkListEntity);
+        }
+
+        public void UpdateCheckList(CheckListBM checklist)
+        {
+            var checkListEntity =
+                  this.DbContext.CheckLists.Find(checklist.Id);
+            
+            checkListEntity.ChecklistName = checklist.ChecklistName;            
+            checkListEntity.WorkingGroup_Id = checklist.WorkingGroupId;
+            checkListEntity.ChangedDate = checklist.ChangedDate;       
+        }
+
     }
 
     #endregion

@@ -22,6 +22,8 @@ namespace DH.Helpdesk.Services.Services
         //IList<Checklist> GetChecklistDates(int customerId);
 
          void SaveCheckList(CheckListBM checklist);
+         void DeleteCheckListByID(int checkListId);
+         void UpdateCheckList(CheckListBM checklist);
 
         //void Commit();
     }
@@ -54,24 +56,15 @@ namespace DH.Helpdesk.Services.Services
         }
 
         public List<CheckListBM> GetChecklists(int customerId)
-        {
-            //var query = this._checklistsRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.ChecklistName).ToList();
-            //return CheckListsMapper.MapToOverviews(query);
+        {           
             return this._checkListsRepository.GetChecklists(customerId);           
         }
        
         public CheckListBM GetChecklist(int checkListId)
         {
-            //var entity = this._checkListsRepository.GetChecklist(checkListId);
-            //return CheckListsMapper.MapToOverview(entity);
-            return null;
+            return this._checkListsRepository.GetChecklist(checkListId);
         }
-
-        //public IList<Checklist> GetChecklistDates(int customerId)
-        //{
-        //    //return this._checklistRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Id).ToList();
-        //}
-
+       
         public void SaveCheckList(CheckListBM checklist)
         {
 
@@ -81,6 +74,18 @@ namespace DH.Helpdesk.Services.Services
             this._checkListsRepository.SaveCheckList(checklist);
             this._checkListsRepository.Commit();
 
+        }
+
+        public void DeleteCheckListByID(int checkListId)
+        {
+            this._checkListsRepository.DeleteCheckList(checkListId);
+            this._checkListsRepository.Commit();
+        }
+
+        public void UpdateCheckList(CheckListBM checklist)
+        {
+            this._checkListsRepository.UpdateCheckList(checklist);
+            this._checkListsRepository.Commit();
         }
 
         public void Commit()

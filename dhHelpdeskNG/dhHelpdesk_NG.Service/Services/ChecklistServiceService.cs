@@ -5,87 +5,42 @@ using System.Linq;
 namespace DH.Helpdesk.Services.Services
 {
 
-
     using DH.Helpdesk.BusinessData.Models.Checklists.Output;
     using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Dal.Repositories;
-    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Dal.Repositories;    
     using DH.Helpdesk.Services.BusinessLogic.Mappers;
 
-    public interface IChecklistServiceService
-    {
-        IDictionary<string, string> Validate(ChecklistService checklistServiceToValidate);
-
-        IList<ChecklistService> GetChecklistServices(int customerId);
-
-        ChecklistService GetChecklistService(int id, int customerId);
-
-        IList<ChecklistService> GetChecklistServiceByCheckListID(int id, int customerId);
-
-        void DeleteChecklistService(ChecklistService checklistService);
-        void NewChecklistService(ChecklistServiceBM checklistService);
-        void UpdateChecklistService(ChecklistService checklistService);
-        void Commit();
+    public interface ICheckListServiceService
+    {        
+        List<CheckListServiceBM> GetCheckListServices(int checkListId);
+        void SaveCheckListService(CheckListServiceBM checkListService);
     }
 
-    public class ChecklistServiceService : IChecklistServiceService
+    public class CheckListServiceService : ICheckListServiceService
     {
-        private readonly IChecklistServiceRepository _checklistServiceRepository;
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly ICheckListServiceRepository _checkListServiceRepository;        
 
-        public ChecklistServiceService(
-            IChecklistServiceRepository checklistServiceRepository,
-            IUnitOfWork unitOfWork)
+        public CheckListServiceService(
+            ICheckListServiceRepository checkListServiceRepository)
         {
-            this._checklistServiceRepository = checklistServiceRepository;
-            this._unitOfWork = unitOfWork;
+            this._checkListServiceRepository = checkListServiceRepository;            
         }
 
-        public IDictionary<string, string> Validate(ChecklistService checklistServiceToValidate)
+
+        public List<CheckListServiceBM> GetCheckListServices(int checkListId)
         {
-            if (checklistServiceToValidate == null)
-                throw new ArgumentNullException("checklistservicetovalidate");
-
-            var errors = new Dictionary<string, string>();
-
-            return errors;
+            return this._checkListServiceRepository.GetCheckListServices(checkListId);
         }
 
-        public IList<ChecklistService> GetChecklistServices(int customerId)
+        public void SaveCheckListService(CheckListServiceBM checklistService)
         {
-            return this._checklistServiceRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
-        }
+            if (checklistService == null)
+                throw new ArgumentNullException("CheckListService");
 
-        public ChecklistService GetChecklistService(int id, int customerId)
-        {
-            return this._checklistServiceRepository.Get(x => x.Id == id && x.Customer_Id == customerId);
+            this._checkListServiceRepository.SaveCheckListService(checklistService);
+            this._checkListServiceRepository.Commit();
         }
-
-        public IList<ChecklistService> GetChecklistServiceByCheckListID(int id, int customerId)
-        {
-            return this._checklistServiceRepository.GetMany(x => x.Id == id && x.Customer_Id == customerId).ToList();
-        }
-
-        public void DeleteChecklistService(ChecklistService checklistService)
-        {
-            this._checklistServiceRepository.Delete(checklistService);
-        }
-
-        public void NewChecklistService(ChecklistServiceBM checklistServiceBM)
-        {
-            //var readyToAdd = CheckListsMapper.MapServicesToEntity(checklistServiceBM);
-            //this._checklistServiceRepository.Add(readyToAdd);
-        }
-
-        public void UpdateChecklistService(ChecklistService checklistService)
-        {
-            this._checklistServiceRepository.Update(checklistService);
-        }
-
-        public void Commit()
-        {
-            this._unitOfWork.Commit();
-        }
+       
         
     }
 }
