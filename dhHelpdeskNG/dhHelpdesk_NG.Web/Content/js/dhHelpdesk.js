@@ -643,11 +643,7 @@ function DestroyDataTable(tableUniqId) {
 };
 
 function InitDataTable(tableUniqId, perText, showingText) {
-    //alert('init: ' + tableUniqId);
-
     $('#' + tableUniqId).dataTable({
-        stateSave: true,
-        //stateDuration: 10,
         "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
         "sPaginationType": "bootstrap",
         "oLanguage": {
@@ -658,8 +654,6 @@ function InitDataTable(tableUniqId, perText, showingText) {
                 "sLast": "Last",
                 "sNext": "",
                 "sPrevious":""
-                //"sNext": "@Translation.Get('Nästa', Enums.TranslationSource.TextTranslation)",
-                //"sPrevious": "@Translation.Get('Föregående', Enums.TranslationSource.TextTranslation)"
             }
         }
     });
