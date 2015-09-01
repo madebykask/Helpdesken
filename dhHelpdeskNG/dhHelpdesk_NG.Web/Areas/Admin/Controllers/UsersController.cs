@@ -278,14 +278,20 @@
             if (id != -1)
             {
                 userToSave = this._userService.GetUser(id);
+
+                var currentUserData = this._userService.GetUser(id);
+
                 if (SessionFacade.CurrentUser.UserGroupId != (int)UserGroup.SystemAdministrator
                     && (SessionFacade.CurrentUser.UserGroupId < userToSave.UserGroup_Id || userModel.User.UserGroup_Id > SessionFacade.CurrentUser.UserGroupId))
                 {
                     return this.RedirectToAction("Forbidden", "Error", new { area = string.Empty });
                 }
 
+                userModel.User.CustomerUsers = currentUserData.CustomerUsers;
+
                 userToSave.OrderPermission = this.returnOrderPermissionForSave(userModel);
                 userToSave.CaseInfoMail = this.returnCaseInfoMailForEditSave(userModel);
+
                 this.TryUpdateModel(userToSave, "user");
                 var allCustomers = _customerService.GetAllCustomers();
                 string err = "";
@@ -452,6 +458,11 @@
                 if (ccu.CaseStateSecondaryFilter != null)
                 {
                     cu.CaseStateSecondaryFilter = "0";
+                }
+
+                if (ccu.CaseDepartmentFilter != null)
+                {
+                    cu.CaseDepartmentFilter = "0";
                 }
 
                 if (ccu.CaseStatusFilter != null)
