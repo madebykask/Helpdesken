@@ -60,9 +60,13 @@ $(function () {
         });
         
     });
-    
-    $('#myTab a[href="' + $('#activeTab').val() + '"]').tab('show');
 
+    var   activeTab = $.cookie('admin.users.active_tab');
+    $('#myTab a[href="' + activeTab + '"]').tab('show');
+    $('#myTab a').on('click', function(ev) {
+        ev.preventDefault();
+        $.cookie('admin.users.active_tab', $(ev.target).attr('href'));
+    });
 });
 
 $(function () {
@@ -103,7 +107,4 @@ $(function () {
             return dhHelpdesk.admin.users.utils.replaceAll(prevstring, omit, place, string);
         }
     }
-
-
-
 });

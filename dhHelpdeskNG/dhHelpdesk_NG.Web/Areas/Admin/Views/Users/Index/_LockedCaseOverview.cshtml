@@ -26,7 +26,7 @@
                 <table class="tableform" id="tblLockedCase" >
                     <tr>
                         <td class="span3">
-                            @Translation.Get("Standardkund")
+                            @Translation.Get("Kund", Enums.TranslationSource.TextTranslation)
                         </td>
                         <td class="span4">
                             @Html.DropDownListFor(model => Model.FilterCustomerId, Model.Customers, "", new { id = "filterbycustomerid" })

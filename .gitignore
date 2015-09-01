@@ -30,3 +30,4 @@ dhHelpdeskNG/dhHelpdesk_NG.Web/log4net.config
 dhHelpdeskNG/packages/*
 dhHelpdeskNG/dhHelpdesk_NG.Web_NewSelfService/Web.config
 dhHelpdeskNG/CommonAssembly/SharedAssemblyInfo.cs
+dhHelpdeskNG/dhHelpdesk_NG.Web/Scripts/**

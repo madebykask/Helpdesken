@@ -249,6 +249,7 @@
                            "~/Areas/Admin/Content/js/Users/index.lockedcase.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/admin/users/index").Include(
+                           "~/Scripts/jquery.cookie.js",
                            "~/Areas/Admin/Content/js/Users/index.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/admin/customerOverview").Include(

@@ -1688,6 +1688,7 @@
     <Content Include="Scripts\jquery-1.8.3.min.js" />
     <Content Include="Scripts\jquery-ui-1.9.2.js" />
     <Content Include="Scripts\jquery-ui-1.9.2.min.js" />
+    <Content Include="Scripts\jquery.cookie.js" />
     <Content Include="Views\DailyReport\Index.cshtml" />
     <Content Include="Areas\Orders\Views\OrderFieldSettings\Index.cshtml" />
     <Content Include="Areas\Orders\Views\OrderFieldSettings\EditorTemplates\FullFieldSettingsModel.cshtml" />
