@@ -124,6 +124,7 @@
                             UserLastName = user.SurName,
                             CustomerName = customerName,
                             LoggedOnLastTime = DateTime.UtcNow,
+                            LatestActivity = DateTime.UtcNow,
                             SessionId = this.Session.SessionID
                         });
                 }
