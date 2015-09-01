@@ -97,11 +97,16 @@ EditPage.prototype.doSave = function(submitUrl) {
     me.$buttonsToDisable.addClass('disabled');
     me.$form.attr("action", action);
     if (me.isFormValid()) {
+        if (me.case.isNew()) {
+            me.$form.submit();
+            return false;
+        } 
+
         $.post(window.parameters.caseLockChecker, {
                 caseId: me.p.currentCaseId,
                 lockGuid: me.p.caseLockGuid
             },
-            function(data) {
+            function (data) {
                 if (data == true) {
                     me.$form.submit();
                 } else {
@@ -136,10 +141,10 @@ EditPage.prototype.onSaveAndNewClick = function () {
 /**
 * Page initialization 
 */
-EditPage.prototype.init = function (_parameters) {
+EditPage.prototype.init = function (p) {
     var me = this;
     me._inSaving = false;
-    me.p = _parameters;
+    me.p = p;
     /// controls binding
     me.$form = $('#target');
     me.$watchDateChangers = $('.departments-list, #case__Priority_Id');
@@ -183,13 +188,13 @@ EditPage.prototype.init = function (_parameters) {
     
     me.$moveCaseButton.click(function (e) {
         e.preventDefault();
-        $.post(_parameters.caseLockChecker,
-            { caseId: _parameters.currentCaseId, lockGuid: _parameters.caseLockGuid },
+        $.post(p.caseLockChecker,
+            { caseId: p.currentCaseId, lockGuid: p.caseLockGuid },
             function (data) {
                 if (data == true) {
-                    window.moveCase(_parameters.currentCaseId);
+                    window.moveCase(p.currentCaseId);
                 } else {
-                    ShowToastMessage(_parameters.moveLockedCaseMessage, "error", true);
+                    ShowToastMessage(p.moveLockedCaseMessage, "error", true);
                 }
         });
     });
@@ -205,8 +210,9 @@ EditPage.prototype.init = function (_parameters) {
         }
     });
     //////// init actions end ///////////
+    me.case = new Case({id: parseInt(p.currentCaseId, 10)});
     // Timer for case in edit mode (every 1 minutes)
-    if (_parameters.currentCaseId > 0) {
+    if (p.currentCaseId > 0) {
         me.timerId = setInterval(callAsMe(me.ReExtendCaseLock, me), 60000);
     }
 };

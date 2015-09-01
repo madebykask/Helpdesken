@@ -433,6 +433,7 @@
     <Content Include="Content\js\Cases\components\Utils.js" />
     <Content Include="Content\js\Cases\editLog.logic.js" />
     <Content Include="Content\js\Cases\index.settings.js" />
+    <Content Include="Content\js\Cases\models\Case.js" />
     <Content Include="Content\js\Cases\_input.js" />
     <Content Include="Content\js\Cases\index.logic.js" />
     <Content Include="Content\js\Cases\relatedCases.logic.js" />
