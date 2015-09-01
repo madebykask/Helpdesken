@@ -259,7 +259,8 @@
                             "~/Areas/Admin/Content/js/Common/common.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/admin/ProductArea/index").Include(
-                            "~/Areas/Admin/Content/js/ProductArea/index.js"));
+                "~/Areas/Admin/Content/js/Common/ToggableInactiveList.js",
+                "~/Areas/Admin/Content/js/ProductArea/index.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/cases/relatedCases").Include(
                             "~/Content/js/Cases/relatedCases.logic.js"));
