@@ -1134,7 +1134,7 @@ namespace DH.Helpdesk.Web.Controllers
             SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
             if (SessionFacade.CurrentUser != null)
             {
-                if (SessionFacade.CurrentUser.CreateCasePermission == 1)
+                if (SessionFacade.CurrentUser.CreateCasePermission == 1 || templateistrue == 1)
                 {
                     var userId = SessionFacade.CurrentUser.Id;
                     var caseLockModel = new CaseLockModel();
