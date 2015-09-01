@@ -580,7 +580,7 @@
         public PartialViewResult FilterLockedCases(int? selectedCustomerId = null, decimal caseNumber = 0, string searchText = "")
         {            
             var model = GetLockedCaseModel(selectedCustomerId, caseNumber, searchText);
-            return PartialView("Index/_LockedCaseOverview", model);
+            return PartialView("Index/_LockedCaseTable", model.LockedCasesModels);
 
         }
         private UserIndexViewModel IndexInputViewModel()
