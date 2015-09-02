@@ -8,7 +8,7 @@ How to run:
 		<DevPath>\\dhutvas3\Websites\dhHelpdesk\</DevPath>
 		<AcctPath>\\dhutvas3\Websites\dhHelpdeskAcct\</AcctPath>
 		<TestPath>I:\tmp\_testdeploy\</TestPath>
-		<TargetPath>$(TestPath)</TargetPath>                               	
+		<TargetPath>$(DevPath)</TargetPath>                               	
 		<AppOfflineDisabled>$(TargetPath)\_app_offline.htm</AppOfflineDisabled>
 		<AppOfflineEnabled>$(TargetPath)\app_offline.htm</AppOfflineEnabled>
 		<BackupFolder>$(TargetPath)\bak\</BackupFolder>
@@ -29,31 +29,25 @@ How to run:
 				$(TargetPath)\log4net.config;
 				$(TargetPath)\Web.config" />
 
-		<!--Backup Include="$(TargetPath)\Areas\**\*;
-				$(TargetPath)\bin\**\*;
-				$(TargetPath)\Content\**\*;
-				$(TargetPath)\Views\**\*;
-				$(TargetPath)\Scripts\**\*" /-->	
-
-
-
-		<Backup_Areas Include="$(TargetPath)\Areas\**\*" />
-		<Backup_Bin Include="$(TargetPath)\bin\**\*" />
-		<Backup_Content Include="$(TargetPath)\Content\**\*" />
-		<Backup_Views Include="$(TargetPath)\Views\**\*" />
-		<Backup_Scripts Include="$(TargetPath)\Scripts\**\*" />
-		<!-- Files and folders to deploy -->
-		<Deploy_Areas Include="$(PublishedFolder)\Areas\**\*" />
-		<Deploy_Bin Include="$(PublishedFolder)\bin\**\*" />
-		<Deploy_Content Include="$(PublishedFolder)\Content\**\*" />
-		<Deploy_Views Include="$(PublishedFolder)\Views\**\*" />
-		<Deploy_Scripts Include="$(PublishedFolder)\Scripts\**\*" />
+		<FilesToDeploy Include="$(PublishedFolder)\**\*"
+			Exclude="$(PublishedFolder)\*.*;
+				$(PublishedFolder)\bak\**\*;
+				$(PublishedFolder)\App_Data\**\*;
+				$(PublishedFolder)\Documents\**\*;
+				$(PublishedFolder)\ExportedInvoice\**\*;
+				$(PublishedFolder)\img-profile\**\*;
+				$(PublishedFolder)\uploaded_file\**\*;
+				$(PublishedFolder)\_app_offline.htm;
+				$(PublishedFolder)\app_offline.htm;
+				$(PublishedFolder)\log4net.config;
+				$(PublishedFolder)\Web.config" />
 
 		<FilesToZip Include="\\servername\f$\web\example.com\wwwroot\**\*.*" />	
 	</ItemGroup>
 
 	<Target Name="Deploy">
-		<Message Text="Deploying here..." />
+		<Message Text="==========  Starting copying content to target  ============" />
+		<Move SourceFiles="@(FilesToDeploy)" DestinationFolder="$(TargetPath)\%(RecursiveDir)" /> 
 	</Target>
 
 	<Target Name="Backup" BeforeTargets="Deploy">
