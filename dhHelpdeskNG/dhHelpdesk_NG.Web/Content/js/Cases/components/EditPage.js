@@ -211,8 +211,7 @@ EditPage.prototype.init = function (p) {
     });
     //////// init actions end ///////////
     me.case = new Case({id: parseInt(p.currentCaseId, 10)});
-    // Timer for case in edit mode (every 1 minutes)
     if (p.currentCaseId > 0) {
-        me.timerId = setInterval(callAsMe(me.ReExtendCaseLock, me), 60000);
+        me.timerId = setInterval(callAsMe(me.ReExtendCaseLock, me), me.p.extendValue * 1000);
     }
 };
