@@ -69,6 +69,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="..\CommonAssembly\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="BusinessData\Shared\ItemOverviewTests.cs" />
     <Compile Include="Common\Extensions\Boolean\ToIntExtensionTests.cs" />
     <Compile Include="Common\Extensions\Integer\ToBoolExtensionTests.cs" />
