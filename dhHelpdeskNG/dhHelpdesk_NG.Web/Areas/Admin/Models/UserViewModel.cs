@@ -58,7 +58,9 @@
         public IList<SelectListItem> StatusUsers { get; set; }
 
         public IList<SelectListItem> Customers { get; set; }
-        
+
+
+        public int OnlineUsersTabSelectedCustomerId { get; set; }
     }
 
     public class UserInputViewModel

@@ -10,7 +10,8 @@
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Accounts;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Users;
-    using DH.Helpdesk.Services.Services;    
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Services.utils;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Areas.Admin.Models;
     using DH.Helpdesk.Web.Areas.Admin.Infrastructure.Mappers;
@@ -568,10 +569,15 @@
         public PartialViewResult GetLoggedInUsers(int? selectedCustomerId = null)
         {            
             var model = new List<LoggedInUsers>();
+            SessionFacade.AdminUsersPageLoggedInUsersTabSelectedCustomerId = selectedCustomerId;
             if (selectedCustomerId.HasValue)
-                model = ApplicationFacade.GetLoggedInUsers(selectedCustomerId.Value).ToList();                
+            {
+                model = ApplicationFacade.GetLoggedInUsers(selectedCustomerId.Value).ToList();
+            }
             else
-                model = ApplicationFacade.GetAllLoggedInUsers().ToList();                
+            {
+                model = ApplicationFacade.GetAllLoggedInUsers().ToList();
+            }
 
             return PartialView("Index/_OnlineUserList", model);
         }
@@ -580,16 +586,15 @@
         public PartialViewResult FilterLockedCases(int? selectedCustomerId = null, decimal caseNumber = 0, string searchText = "")
         {            
             var model = GetLockedCaseModel(selectedCustomerId, caseNumber, searchText);
+            SessionFacade.AdminUsersPageLockedCasesTabSelectedCustomerId = selectedCustomerId;
             return PartialView("Index/_LockedCaseTable", model.LockedCasesModels);
 
         }
         private UserIndexViewModel IndexInputViewModel()
         {
             var user = this._userService.GetUser(SessionFacade.CurrentUser.Id);
-
             var csSelected = user.Cs ?? new List<Customer>();
             var csAvailable = new List<Customer>();
-
 
             foreach (var c in this._customerService.GetAllCustomers())
             {
@@ -616,32 +621,39 @@
                 Value = "3",
                 Selected = false
             });
-
+            
             //Locked Cases                        
-            var lockedCasesModel = GetLockedCaseModel(SessionFacade.CurrentCustomer.Id);
-
-            var filter = (UserSearch)this.Session["UserSearch"];
-            if (filter == null)
+            int AdminUsersPageLockedCasesTabSelectedCustomerId = 0;
+            if (!SessionFacade.AdminUsersPageLockedCasesTabSelectedCustomerId.HasValue)
             {
-                filter = new UserSearch { CustomerId = SessionFacade.CurrentCustomer.Id };
+                SessionFacade.AdminUsersPageLockedCasesTabSelectedCustomerId = SessionFacade.CurrentUser.CustomerId;
             }
-            else
-                if (filter.CustomerId == 0)
-                    filter.CustomerId = SessionFacade.CurrentCustomer.Id;
 
+            AdminUsersPageLockedCasesTabSelectedCustomerId = SessionFacade.AdminUsersPageLockedCasesTabSelectedCustomerId.Value;
+            var lockedCasesModel = this.GetLockedCaseModel(AdminUsersPageLockedCasesTabSelectedCustomerId);
+
+            int AdminUsersPageLoggedInUsersTabSelectedCustomerId = 0;
+            if (!SessionFacade.AdminUsersPageLoggedInUsersTabSelectedCustomerId.HasValue)
+            {
+                SessionFacade.AdminUsersPageLoggedInUsersTabSelectedCustomerId = SessionFacade.CurrentUser.CustomerId;
+            }
+
+            AdminUsersPageLoggedInUsersTabSelectedCustomerId = SessionFacade.AdminUsersPageLoggedInUsersTabSelectedCustomerId.Value;
             var model = new UserIndexViewModel
             {
                 User = user,
                 StatusUsers = sli,
                 LockedCaseModel = lockedCasesModel,
-                ListLoggedInUsers = ApplicationFacade.GetLoggedInUsers(SessionFacade.CurrentCustomer.Id),
+                ListLoggedInUsers = AdminUsersPageLockedCasesTabSelectedCustomerId == 0 ? ApplicationFacade.GetAllLoggedInUsers() : ApplicationFacade.GetLoggedInUsers(AdminUsersPageLockedCasesTabSelectedCustomerId),
+                Filter = new UserSearch { CustomerId = AdminUsersPageLockedCasesTabSelectedCustomerId },
                 CsSelected = csSelected.Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 })
                 .OrderBy(c => c.Text)
-                .ToList()                
+                .ToList(),
+                OnlineUsersTabSelectedCustomerId = AdminUsersPageLoggedInUsersTabSelectedCustomerId
             };
 
             return model;

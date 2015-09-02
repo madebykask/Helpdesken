@@ -9,11 +9,12 @@
                 <table class="tableform" id="tblLoggedOnUsers">
                     <tr>
                         <td class="span3">
-                            @Translation.Get("Kunder", Enums.TranslationSource.TextTranslation):
+                            @Translation.Get("Standardkund", Enums.TranslationSource.TextTranslation)
                         </td>
-                        <td>
-                            @Html.DropDownListFor(model => model.User.Customer_Id, Model.CsSelected, "", new { style = "width: 205px;", id = "customerChange" })
+                        <td class="span4">
+                            @Html.DropDownListFor(model => model.OnlineUsersTabSelectedCustomerId, Model.CsSelected, "", new { id = "customerChange" })
                         </td>
+                         <td class="span5"></td>
                     </tr>
                 </table>
             </div>

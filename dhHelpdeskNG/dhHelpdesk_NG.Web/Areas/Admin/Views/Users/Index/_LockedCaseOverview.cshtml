@@ -29,7 +29,7 @@
                             @Translation.Get("Kund", Enums.TranslationSource.TextTranslation)
                         </td>
                         <td class="span4">
-                            @Html.DropDownListFor(model => Model.FilterCustomerId, Model.Customers, "", new { id = "filterbycustomerid" })
+                            @Html.DropDownListFor(model => Model.LockedCaseFilterCustomerId, Model.Customers, "", new { id = "filterbycustomerid" })
                         </td>
                     </tr>
                     <tr>
