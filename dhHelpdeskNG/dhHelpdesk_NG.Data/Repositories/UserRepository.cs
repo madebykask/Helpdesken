@@ -43,7 +43,7 @@ namespace DH.Helpdesk.Dal.Repositories
         UserOverview Login(string uId, string pwd);
         UserOverview GetUser(int userid);
 
-        IList<UserLists> GetUserOnCases(int customerId);
+        IList<UserLists> GetUserOnCases(int customerId, bool isTakeOnlyActive = false);
 
         UserOverview GetUserByLogin(string IdName);
 
@@ -342,11 +342,11 @@ namespace DH.Helpdesk.Dal.Repositories
             return user;
         }
 
-        public IList<UserLists> GetUserOnCases(int customerId)
+        public IList<UserLists> GetUserOnCases(int customerId, bool isTakeOnlyActive = false)
         {
             var query = from u in this.DataContext.Users
                         join ca in this.DataContext.Cases on u.Id equals ca.User_Id
-                        where (ca.Customer_Id == customerId)
+                        where (ca.Customer_Id == customerId && (!isTakeOnlyActive || (isTakeOnlyActive && u.IsActive == 1)))
                         group u by new { u.Id, u.FirstName, u.SurName } into g
                         select new UserLists { Id = g.Key.Id, FirstName = g.Key.FirstName, LastName = g.Key.SurName };
 

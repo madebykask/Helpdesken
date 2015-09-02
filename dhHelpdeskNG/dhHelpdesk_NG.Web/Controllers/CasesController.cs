@@ -844,7 +844,11 @@ namespace DH.Helpdesk.Web.Controllers
 
             //ärendetyp
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseCaseTypeFilter))
-                fd.filterCaseType = this._caseTypeService.GetCaseTypes(cusId);
+            {
+                const bool IsTakeOnlyActive = true;
+                fd.filterCaseType = this._caseTypeService.GetCaseTypes(cusId, IsTakeOnlyActive);
+            }
+                
             //working group
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseWorkingGroupFilter))
             {
@@ -904,7 +908,8 @@ namespace DH.Helpdesk.Web.Controllers
             //användare
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseUserFilter))
             {
-                fd.RegisteredByUserList = this._userService.GetUserOnCases(cusId).MapToSelectList(fd.customerSetting);
+                const bool IsTakeOnlyActive = true;
+                fd.RegisteredByUserList = this._userService.GetUserOnCases(cusId, IsTakeOnlyActive).MapToSelectList(fd.customerSetting);
                 if (!string.IsNullOrEmpty(fd.caseSearchFilter.User))
                 {
                     fd.lstfilterUser = fd.caseSearchFilter.User.Split(',').Select(int.Parse).ToArray();
@@ -3388,16 +3393,16 @@ namespace DH.Helpdesk.Web.Controllers
             ret.SelectedDepartments = userCaseSettings.Departments;
 
             var customerSettings = this._settingService.GetCustomerSetting(customerId);
+            const bool IsTakeOnlyActive = true;
             ret.RegisteredByCheck = userCaseSettings.RegisteredBy != string.Empty;
-            ret.RegisteredByUserList = this._userService.GetUserOnCases(customerId).MapToSelectList(customerSettings);
-
+            ret.RegisteredByUserList = this._userService.GetUserOnCases(customerId, IsTakeOnlyActive).MapToSelectList(customerSettings);
             if (!string.IsNullOrEmpty(userCaseSettings.RegisteredBy))
             {
                 ret.lstRegisterBy = userCaseSettings.RegisteredBy.Split(',').Select(int.Parse).ToArray();
             }
 
             ret.CaseTypeCheck = userCaseSettings.CaseType != string.Empty;
-            ret.CaseTypes = this._caseTypeService.GetCaseTypes(customerId);
+            ret.CaseTypes = this._caseTypeService.GetCaseTypes(customerId, IsTakeOnlyActive);
             ret.CaseTypePath = "--";
             int caseType;
             int.TryParse(userCaseSettings.CaseType, out caseType);
