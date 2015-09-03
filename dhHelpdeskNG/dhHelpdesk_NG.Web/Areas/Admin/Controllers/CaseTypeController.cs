@@ -28,12 +28,18 @@
             this._customerService = customerService;
         }
 
+        public JsonResult SetShowOnlyActiveCaseTypesInAdmin(bool value)
+        {
+            SessionFacade.ShowOnlyActiveCaseTypesInAdmin = value;
+            return this.Json(new { result = "success" });
+        }
+
         public ActionResult Index(int customerId)
         {
             var customer = this._customerService.GetCustomer(customerId);
             var caseTypes = this._caseTypeService.GetCaseTypes(customer.Id);
 
-            var model = new CaseTypeIndexViewModel { CaseTypes = caseTypes, Customer = customer };
+            var model = new CaseTypeIndexViewModel { CaseTypes = caseTypes, Customer = customer, IsShowOnlyActive = SessionFacade.ShowOnlyActiveCaseTypesInAdmin };
 
             return this.View(model);
         }

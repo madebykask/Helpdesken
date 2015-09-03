@@ -78,6 +78,10 @@
 
         private const string _AdminUsersPageLockedCasesTabSelectedCustomerId = "AdminUsersPageLockedCasesTabSelectedCustomerId";
 
+        private const string _SHOW_ACTIVE_CASE_TYPES_IN_ADMIN = "SHOW_ACTIVE_CASE_TYPES_IN_ADMIN";
+
+        private const string _SHOW_ACTIVE_WORKING_GROUPS_IN_ADMIN = "SHOW_ACTIVE_WORKING_GROUPS_IN_ADMIN";
+
         #endregion
 
         #region Public Properties
@@ -565,6 +569,42 @@
             set
             {
                 SaveSetKeyValue(_SHOW_ACTIVE_PRODUCT_AREAS_IN_ADMIN, value);
+            }
+        }
+
+        public static bool ShowOnlyActiveCaseTypesInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_CASE_TYPES_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_CASE_TYPES_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_CASE_TYPES_IN_ADMIN, value);
+            }
+        }
+
+        public static bool ShowOnlyActiveWorkingGroupsInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_WORKING_GROUPS_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_WORKING_GROUPS_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_WORKING_GROUPS_IN_ADMIN, value);
             }
         }
 

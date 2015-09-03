@@ -781,13 +781,19 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 return new MvcHtmlString(string.Empty);
         }
 
-        private static MvcHtmlString BuildCaseTypeTreeRow(IList<CaseType> caseTypes, int iteration)
+        private static MvcHtmlString BuildCaseTypeTreeRow(IList<CaseType> caseTypes, 
+            int iteration, 
+            bool isShowOnlyActive = true,
+            bool isParentInactive = false)
         {
             string htmlOutput = string.Empty;
+            var caseTypeToDisplay = isShowOnlyActive ? caseTypes.Where(it => it.IsActive == 1) : caseTypes;
 
             foreach (CaseType caseType in caseTypes)
             {
-                htmlOutput += "<tr>";
+                var isInactive = caseType.IsActive != 1 || isParentInactive;
+                //htmlOutput += "<tr>";
+                htmlOutput += string.Format("<tr class=\"{0}\">", isInactive ? "inactive" : string.Empty);
                 htmlOutput += "<td><a href='/admin/casetype/edit/" + caseType.Id + "' style='padding-left: " + iteration + "px'><i class='icon-resize-full icon-dh'></i>" + caseType.Name + "</a></td>";
                 htmlOutput += "<td><a href='/admin/casetype/edit/" + caseType.Id + "'>" + caseType.IsDefault.TranslateBit() + "</a></td>";
                 htmlOutput += "<td><a href='/admin/casetype/edit/" + caseType.Id + "'>" + caseType.RequireApproving.TranslateBit() + "</a></td>";
@@ -795,8 +801,22 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 htmlOutput += "</tr>";
 
                 if (caseType.SubCaseTypes != null)
-                    if (caseType.SubCaseTypes.Count > 0)
-                        htmlOutput += BuildCaseTypeTreeRow(caseType.SubCaseTypes.ToList(), iteration + 20);
+                {
+                    if (caseType.SubCaseTypes.Count > 0 && (
+                        (isShowOnlyActive && !isInactive)
+                        || !isShowOnlyActive))
+                    {
+                        htmlOutput += BuildCaseTypeTreeRow(
+                            caseType.SubCaseTypes.OrderBy(x => x.Name).ToList(),
+                            iteration + 20,
+                            isShowOnlyActive,
+                            isInactive);
+                    }
+                }
+
+                //if (caseType.SubCaseTypes != null)
+                //    if (caseType.SubCaseTypes.Count > 0)
+                //        htmlOutput += BuildCaseTypeTreeRow(caseType.SubCaseTypes.ToList(), iteration + 20);
             }
 
             return new MvcHtmlString(htmlOutput);

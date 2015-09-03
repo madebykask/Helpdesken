@@ -25,7 +25,7 @@ ToggableInactiveList.prototype.init = function (opt) {
         me.onCheckboxChange.call(me);
     });
     //// initialization actions
-    if (value) {
+    if ( me.$checkbox.prop('checked')) {
         me.$itemsHolder.find('tr.inactive').hide();
     } else {
         me.$itemsHolder.find('tr.inactive').show();

@@ -3377,7 +3377,9 @@ td.disabled
 
 /********************    ADMIN PART   *********************/
 /********************************   Admin part -> product area    ******************************/
-.product-area.admin.content .inactive *
+.product-area.admin.content .inactive *,
+.case-type.admin.content .inactive *,
+.working-group.admin.content .inactive *
 {
     color: lightgray;
 }
