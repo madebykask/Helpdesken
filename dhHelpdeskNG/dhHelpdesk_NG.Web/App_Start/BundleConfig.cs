@@ -76,7 +76,8 @@
                             "~/Content/js/jquery.typing-0.2.0.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/dhhelpdesk").Include(
-                            "~/Content/js/dhHelpdesk.js"));
+                            "~/Content/js/dhHelpdesk.js",
+                            "~/Content/js/clickmultimenu_dropdown.js"));
             
             bundles.Add(new ScriptBundle("~/bundles/common/login").Include(
                             "~/Scripts/jquery-1.8.3.min.js",
