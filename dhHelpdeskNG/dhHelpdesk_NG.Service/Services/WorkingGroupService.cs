@@ -17,7 +17,7 @@
 
         IList<WorkingGroupEntity> GetWorkingGroups(int customerId, bool isTakeOnlyActive = true);
 
-        IList<WorkingGroupEntity> GetAllWorkingGroupsForCustomer(int customerId);
+        IList<WorkingGroupEntity> GetAllWorkingGroupsForCustomer(int customerId, bool isTakeOnlyActive = true);
 
         IList<WorkingGroupEntity> GetWorkingGroupsForIndexPage(int customerId);
 
@@ -80,10 +80,10 @@
             return this.workingGroupRepository.ListUserForWorkingGroup(workingGroupId);
         }
 
-        public IList<WorkingGroupEntity> GetAllWorkingGroupsForCustomer(int customerId)
+        public IList<WorkingGroupEntity> GetAllWorkingGroupsForCustomer(int customerId, bool isTakeOnlyActive = true)
         {
             return this.workingGroupRepository
-                .GetMany(x => x.Customer_Id == customerId && x.IsActive == 1)
+                .GetMany(x => x.Customer_Id == customerId && ((isTakeOnlyActive && x.IsActive == 1) || !isTakeOnlyActive))
                 .OrderBy(x => x.WorkingGroupName).ToList();
         }
 

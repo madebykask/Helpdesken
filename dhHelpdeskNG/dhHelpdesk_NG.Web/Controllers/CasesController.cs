@@ -957,10 +957,15 @@ namespace DH.Helpdesk.Web.Controllers
 
             //Working group            
             var gs = _globalSettingService.GetGlobalSettings().FirstOrDefault();
+            const bool IsTakeOnlyActive = false;
             if (gs.LockCaseToWorkingGroup == 0)
-                fd.filterWorkingGroup = this._workingGroupService.GetAllWorkingGroupsForCustomer(cusId);
+            {
+                fd.filterWorkingGroup = this._workingGroupService.GetAllWorkingGroupsForCustomer(cusId, IsTakeOnlyActive);
+            }
             else
-                fd.filterWorkingGroup = this._workingGroupService.GetWorkingGroups(cusId, true);
+            {
+                fd.filterWorkingGroup = this._workingGroupService.GetWorkingGroups(cusId, IsTakeOnlyActive);
+            }
 
             fd.filterWorkingGroup.Insert(0, ObjectExtensions.notAssignedWorkingGroup());
 
@@ -1004,13 +1009,8 @@ namespace DH.Helpdesk.Web.Controllers
                 if (!specificFilter.DepartmentList.Any())
                 {
                     specificFilter.DepartmentList =
-                        this._departmentService.GetDepartments(customerId)
-                            .Where(
-                                d =>
-                                d.Region_Id == null
-                                || IsTakeOnlyActive == false
-                                || (IsTakeOnlyActive && d.Region != null && d.Region.IsActive != 0))
-                            .ToList();
+                        this._departmentService.GetDepartments(customerId, ActivationStatus.All)
+                        .ToList();
                 }
             }
 
@@ -1042,7 +1042,7 @@ namespace DH.Helpdesk.Web.Controllers
             if (customerfieldSettings.Where(fs => fs.Name == GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString() &&
                                                   fs.ShowOnStartPage != 0).Any())
             {
-                const bool isTakeOnlyActive = true;
+                const bool isTakeOnlyActive = false;
                 specificFilter.ProductAreaList = this._productAreaService.GetTopProductAreasForUser(
                     customerId,
                     SessionFacade.CurrentUser,

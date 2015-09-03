@@ -1,4 +1,5 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.AdvancedSearchIndexViewModel
+@using DH.Helpdesk.BusinessData.Models.Case
 @using DH.Helpdesk.BusinessData.OldComponents
 @using System.Web.Optimization
 @using DH.Helpdesk.Web.Infrastructure.Extensions
@@ -39,8 +40,26 @@
                              </td>
                          </tr>                 
                      }
+@*                     Working group control*@
+                     @if (Model.CaseSearchFilterData.filterWorkingGroup != null)
+                     {
+                         <tr>
+                             <td>                                                                
+                                 @Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSearchFilterData.filterCustomerId)
+                             </td>
+                             <td>
+                                 <select id="lstfilterWorkingGroup" name="@CaseSearchFilter.WorkingGroupNameAttribute" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                     @foreach (var e in Model.CaseSearchFilterData.filterWorkingGroup)
+                                     {
+                                         <option value="@e.Id" @e.Id.IdIsSelected(Model.CaseSearchFilterData.caseSearchFilter.WorkingGroup)>@e.WorkingGroupName</option>
+                                     }
+                                 </select>
+                             </td>
+
+                         </tr>                
+                     }
                                         
-                    <tr>
+                     <tr>
                         <td>                                
                             @Translation.Get("Status")                                   
                         </td>
