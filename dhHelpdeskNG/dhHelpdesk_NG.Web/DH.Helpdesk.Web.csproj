@@ -1684,6 +1684,7 @@
     <Content Include="Areas\Admin\Views\Users\Index\_LockedCaseOverview.cshtml" />
     <Content Include="Areas\Admin\Views\Users\Index\_OnlineUserOverview.cshtml" />
     <Content Include="Areas\Admin\Views\Users\Index\_OnlineUserList.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\Index\_UserGrid.cshtml" />
     <Content Include="Areas\Admin\Views\Users\Index\_LockedCaseTable.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="Scripts\jquery-1.8.3.js" />

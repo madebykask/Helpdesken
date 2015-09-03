@@ -19,6 +19,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
     using DH.Helpdesk.Common.Enums;
 
     using UserGroup = DH.Helpdesk.BusinessData.Enums.Admin.Users.UserGroup;
+using DH.Helpdesk.Web.Areas.Admin.Models;
 
     public static class HtmlHelperExtension
     {
@@ -1275,5 +1276,14 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
         }
 
         #endregion
+
+        public static MvcHtmlString GetSortIcon(this HtmlHelper helper, UserSort sorting)
+        {
+            if (sorting.IsAsc)
+            {
+                return new MvcHtmlString("<i class=\"icon-chevron-up\"></i>");
+            }
+            return new MvcHtmlString("<i class=\"icon-chevron-down\"></i>");
+        }
     }
 }
