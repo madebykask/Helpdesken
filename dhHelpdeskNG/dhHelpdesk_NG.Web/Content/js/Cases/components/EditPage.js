@@ -169,17 +169,25 @@ EditPage.prototype.showDeleteConfirmationDlg = function () {
     return false;
 };
 
+EditPage.prototype.MakeDeleteParams = function(c) {
+    var res = {
+        caseId: c.id
+    };
+    if (c.customerId != 0) {
+        res.customerId = c.customerId;
+    }
+    if (c.parentCaseId != 0) {
+        res.parentCaseId = c.parentCaseId;
+    }
+    return res;
+};
+
 /**
 * @param { Case } c
 */
 EditPage.prototype.doDeleteCase = function(c) {
     var me = this;
-    var submitData = {
-        caseId: c.id,
-        customerId: c.customerId,
-        parentCaseId: c.parentCaseId
-    };
-    var $form = $(['<form action="', me.DELETE_CASE_URL, '?', $.param(submitData), '" method="post"></form>'].join(''));
+    var $form = $(['<form action="', me.DELETE_CASE_URL, '?', $.param(me.MakeDeleteParams(c)), '" method="post"></form>'].join(String.EMPTY));
     $('body').append($form);
     $form.submit();
 };
