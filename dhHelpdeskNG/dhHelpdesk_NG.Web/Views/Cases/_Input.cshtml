@@ -9,6 +9,9 @@
 <script type="text/javascript">
     window.parameters = {
         currentCaseId: '@Model.case_.Id',
+        customerId: '@Model.case_.Customer_Id',
+        parentCaseId: '@(Model.ParentCaseInfo != null? Model.ParentCaseInfo.ParentId.ToString() : "null")',
+        isAnyNotClosedChild: '@Model.IsAnyNotClosedChild().ToString()',
         productAreaErrorMessage:'@Html.Raw(Translation.Get("Ärendet kunde inte sparas då den lägsta möjliga nivån på fält") + " [" +
                                            Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) + "] " +
                                            Translation.Get("inte har valts. Vänligen kontrollera ärendet."))',
@@ -52,10 +55,6 @@
         <div class="container">
             <ul class="nav nav-tabs" id="myTab">
                 <li class="active">
-                    @*<a id="case-tab" href="#case" class="case">@Translation.Get("Ärende")
-                        @if (Model.case_.Id != 0)
-                        {@Model.case_.CaseNumber }
-                    </a>*@
                     @if (Model.CaseTemplateName != null)
                     {
                         <a id="case-tab" href="#case" class="case">@Model.CaseTemplateName</a>
@@ -69,8 +68,11 @@
                             }                            
                         </a>
                     }
-
                 </li>
+                @if (Model.IsItParentCase())
+                {
+                    <li><a href="#childcases-tab">@string.Format("{0} ({1})", Translation.Get("Child cases"), Model.ChildCaseList.Length)</a></li>
+                }
 
                 @if (Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
                 {
@@ -107,7 +109,7 @@
             </ul>
             <div class="tab-content">
                 <div class="tab-pane tab-pane-border active" id="case">
-                    <div class="container">
+                    <div class="container"> 
                         @Html.HiddenFor(model => model.case_.Id, new { data_field = "caseId" })
                         @Html.HiddenFor(model => model.case_.CaseGUID)
                         @Html.HiddenFor(model => model.case_.Customer_Id, new { data_field = "customerId" })
@@ -145,8 +147,20 @@
                         @Html.Hidden("Today", DateTime.Now.ToShortDateString())
                         @Html.Hidden("CurLanguageId", SessionFacade.CurrentLanguageId)
                         @Html.Hidden("SelectedValueCarrier", "")
-                        @Html.HiddenFor(model => Model.CaseLock.LockGUID)                        
-
+                        @Html.HiddenFor(model => Model.CaseLock.LockGUID)
+                        
+                        @if (Model.IsItChildCase())
+                        {
+                            <input type="hidden" name="ParentId" value="@Model.ParentCaseInfo.ParentId" />
+                            <div class="alert alert-info">
+                                @Translation.Get("Dett är underärender till ärende")&nbsp;<a href="@Url.Action("Edit", new { id = Model.ParentCaseInfo.ParentId })"><strong>@Model.ParentCaseInfo.CaseNumber</strong></a>. 
+                                @if (!string.IsNullOrEmpty(Model.ParentCaseInfo.Administrator))
+                                {
+                                    @Translation.Get("Händlagare")
+                                    <strong>@Model.ParentCaseInfo.Administrator</strong>
+                                }
+                            </div>
+                        }
                         @if (Model.customerUserSetting.UserInfoPermission == 1)
                         {                                                        
                             <div style="@Model.caseFieldSettings.displayUserInfoHtml()"  class="notifier-block hideshow">
@@ -1538,6 +1552,10 @@
                 {
                     <div id="dh-form-area" class="tab-pane tab-pane-border">
                     </div>
+                }
+                @if (Model.IsItParentCase())
+                {
+                    @Html.Partial("_ChildCases", Model.ChildCaseList);
                 }
             </div>
         </div>

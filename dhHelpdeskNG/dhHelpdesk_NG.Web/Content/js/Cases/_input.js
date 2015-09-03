@@ -21,88 +21,194 @@ $(function () {
         hideShowSaveUserInfoBtn(userId);
     });
 
-    $(".caseDeleteDialog").live("click", function (e) {
-        e.preventDefault();
-        var action = $(this).attr("href");
-        var text = $(this).attr("deleteDialogText");
-        var btnType = $(this).attr("buttonTypes");
-
-        var txtDelete = "";
-        var txtCancel = "";
-
-        if (btnType == 'YesNo') {
-            txtDelete = $("#DeleteDialogYesButtonText").val();
-            txtCancel = $("#DeleteDialogNoButtonText").val();
-        }
-        else {
-            txtDelete = $("#DeleteDialogDeleteButtonText").val();
-            txtCancel = $("#DeleteDialogCancelButtonText").val();
-        }
-
-        var NewDialog = $('<div id="myModal" class="modal fade">\
-                                        <div class="modal-dialog">\
-                                            <form method="post" id="deleteDialogForm" class="modal-content">\
-                                                <div class="modal-body">\
-                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>\
-                                                    <p class="alert alert-info infop">\Infotext kommer här, ta ej bort</p>\
-                                                </div>\
-                                                <div class="modal-footer">\
-                                                    <button type="button" class="btn btn-ok">Ta bort</button>\
-                                                    <button type="button" class="btn btn-cancel">Avbryt</button>\
-                                                </div>\
-                                            </form>\
-                                        </div>\
-                                    </div>');
-
-        NewDialog.on("show", function () {
-            NewDialog.find("form").attr("action", action);
-            NewDialog.find("p:eq(0)").text(text);
-            NewDialog.find("button:eq(1)").text(txtDelete);
-            NewDialog.find("button:eq(2)").text(txtCancel);
-
-            NewDialog.find(".btn-cancel").on("click", function (e) {                
-                NewDialog.modal('hide');
-            });
-
-            NewDialog.find(".btn-ok").on("click", function (e) {
-                $.post(_parameters.caseLockChecker, { caseId: _parameters.currentCaseId, lockGuid: _parameters.caseLockGuid },
-                   function (data) {                       
-                       if (data == true) {
-                           $("#deleteDialogForm").submit();
-                           NewDialog.modal('hide');
-                       }
-                       else {
-                           NewDialog.modal('hide');
-                           ShowToastMessage(_parameters.deleteLockedCaseMessage, "error", true);
-                           return false;
-                       }
-                   });                
-            });
-        });
-
-        NewDialog.on("hide", function () {
-            $("#myModal .btn-ok").off("click");
-            $("#myModal .btn-cancel").off("click");
-        });
-
-        NewDialog.on("hidden", function () {
-            $("#myModal").remove();
-        });
-
-        NewDialog.modal({
-            "backdrop": "static",
-            "keyboard": true,
-            "show": true
-        });
-    });
-    // Delete dialog end
-
     var langEl = $('#case__RegLanguage_Id'),
         doNotSendEl = $("#CaseMailSetting_DontSendMailToNotifier");
 
     var page = new EditPage();
     page.init(window.parameters);
 
+    /*var moveCaseButton = $("#btnMoveCase");
+    
+    var timerId = 0;
+
+    var page;
+
+  
+    moveCaseButton.click(function (e) {
+        e.preventDefault();        
+        $.post(_parameters.caseLockChecker, { caseId: _parameters.currentCaseId, lockGuid: _parameters.caseLockGuid },
+            function (data) {
+                if (data == true) {
+                    moveCase(_parameters.currentCaseId);
+                } else {
+                    ShowToastMessage(_parameters.moveLockedCaseMessage, "error", true);
+                    return false;
+                }
+            });
+    });
+
+    Page.prototype.init = function () {
+        var me = this;
+        me._inSaving = false;
+
+        /// controls binding
+        me.$form = $('#target');
+        me.$watchDateChangers = $('.departments-list, #case__Priority_Id');
+        me.$department = $('.departments-list');
+        me.$SLASelect = $('#case__Priority_Id');
+        me.$SLAInput = $('input.sla-value');
+        me.$watchDate = $('#divCase__WatchDate');
+        me.$btnDelete = $('.caseDeleteDialog.btn');
+        
+       
+
+        me.$buttonsToDisable = $('.btn.save, .btn.save-close, .btn.save-new');
+        if (me.isAnyNotClosedChild()) {
+            me.$btnDelete.addClass('disabled');
+        }
+        ///////////////////////     events binding      /////////////////////////////////        
+        $('.btn.save').on('click', function() {
+            return me.onSaveClick.call(me);
+        });
+
+        $('.btn.save-close').on('click', function() {
+            return me.onSaveAndCloseClick.call(me);
+        });
+
+        $('.btn.save-new').on('click', function() {
+            return me.onSaveAndNewClick.call(me);
+        });
+
+        me.$watchDateChangers.on('change', function () {
+            var deptId = parseInt(me.$department.val(), 10);
+            var SLA = parseInt(me.$SLASelect.find('option:selected').attr('data-sla'), 10);
+            if (isNaN(SLA)) {
+                SLA = parseInt(me.$SLAInput.attr('data-sla'), 10);
+            }
+            
+            if (!isNaN(deptId) && (!isNaN(SLA) && SLA === 0)) {
+                return me.fetchWatchDateByDept.call(me, deptId);
+            } else {
+                me.$watchDate.datepicker('update', '');
+            }
+
+            return false;
+        });
+        // Timer for case in edit mode (every 1 minutes)
+        if (_parameters.currentCaseId > 0)
+           timerId = setInterval(me.ReExtendCaseLock, 60000);
+    };
+
+    Page.prototype.fetchWatchDateByDept = function (deptId) {
+        var me = this;
+        if (deptId == null) {
+            return;
+        }
+
+        $.getJSON(
+            '/cases/GetWatchDateByDepartment', 
+            { 'departmentId': deptId },
+            function(response) {
+                if (response.result === 'success') {
+                    if (response.data != null) {
+                        var dt = new Date(parseInt(response.data.replace("/Date(", "").replace(")/", ""), 10));
+                        me.$watchDate.datepicker('update', dt);
+                    } else {
+                        me.$watchDate.datepicker('update', '');
+                    }
+                    
+                }
+            });
+    };
+
+    Page.prototype.ReExtendCaseLock = function() {
+        var me = this;
+        $.post(_parameters.caseLockExtender, { lockGuid: _parameters.caseLockGuid, extendValue: _parameters.extendValue },
+            function(data) {
+                if (data == false) {
+                    clearInterval(timerId);
+                }
+            });
+    };
+
+    Page.prototype.resetSaving = function() {
+        var me = this;
+        me._inSaving = false;
+    };
+
+    Page.prototype.canSave = function() {
+        var me = this;
+        if (!me._inSaving) {
+            me._inSaving = true;
+            return true;
+        }
+        me.$buttonsToDisable.addClass('disabled');
+        return !me._inSaving;
+    };
+
+    Page.prototype.isProductAreaValid = function () {
+        var me = this;
+        var res = productAreaChildObj.val();
+        if (res == '1')
+            return false;
+        else
+            return true;
+    };
+
+   
+
+   
+
+
+
+    Page.prototype.onSaveClick = function () {
+        var me = this;        
+        if (me.canSave()) {
+            if (me.isProductAreaValid())
+                me.$form.submit();
+            else {                
+                page.resetSaving();
+                document.getElementById(productAreaObjName).classList.add("error");
+                dhHelpdesk.cases.utils.showError(productAreaErrorMessage);
+                return false;
+            }            
+        }
+        return false;
+    };
+
+    Page.prototype.onSaveAndCloseClick = function() {
+        var me = this;
+        if (me.canSave()) {
+            if (me.isProductAreaValid())
+                me.$form.attr("action", '/Cases/NewAndClose').submit();
+            else {
+                page.resetSaving();
+                document.getElementById(productAreaObjName).classList.add("error");
+                dhHelpdesk.cases.utils.showError(productAreaErrorMessage);
+                return false;
+            }
+        }
+        return false;
+    };
+
+    Page.prototype.onSaveAndNewClick = function () {
+        var me = this;            
+        if (me.canSave()) {
+            if (me.isProductAreaValid())
+                me.$form.attr("action", '/Cases/NewAndAddCase').submit();
+            else {
+                page.resetSaving();
+                document.getElementById(productAreaObjName).classList.add("error");
+                dhHelpdesk.cases.utils.showError(productAreaErrorMessage);
+                return false;
+            }
+        }
+        return false;
+    };
+
+    page = new Page();
+    page.init();
+*/
     doNotSendEl.on('change', function() {
         if ($(doNotSendEl).is(':checked')) {
             langEl.show();

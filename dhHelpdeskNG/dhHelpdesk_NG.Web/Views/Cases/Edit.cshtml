@@ -1,5 +1,6 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel
 @using System.Web.Optimization
+@using DH.Helpdesk.Web
 
 @{ var t = new ViewDataDictionary();
    t.Add("isJS", "true");
@@ -182,7 +183,7 @@
 
 @if (Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
 {
-    @System.Web.Optimization.Scripts.Render(DH.Helpdesk.Web.BundleConfig.ScriptNames.DynamicCase)
+    @System.Web.Optimization.Scripts.Render(BundleConfig.ScriptNames.DynamicCase)
 
     <script type="text/javascript">
         $(function () {
@@ -242,7 +243,12 @@
                                         @Translation.Get("Markera ärendet som oläst", Enums.TranslationSource.TextTranslation)
                                     </a>
                                 </li>
-                                @if (SessionFacade.CurrentUser.ActivateCasePermission == 1 && Model.case_.FinishingDate.HasValue)
+                                @if (!Model.IsItChildCase())
+                                {
+                                    <li>@Html.ActionLink(Translation.Get("Skapa underärende"), "NewChildCase", new { parentCaseId = Model.case_.Id})</li>
+                                }
+                                @if (SessionFacade.CurrentUser.ActivateCasePermission == 1 && Model.case_.FinishingDate.HasValue
+                                    && (!Model.IsItChildCase() || (Model.IsItChildCase() && !Model.ParentCaseInfo.IsCaseClosed)))
                                 {   
                                     <li>@Html.ActionLink(Translation.Get("Aktivera"), "Activate", "Cases", new { id = Model.case_.Id, backUrl = Model.BackUrl }, new { @class="btn" })</li>                             
                                 }
@@ -323,7 +329,8 @@
                 else
                 {
 
-                    if (SessionFacade.CurrentUser.ActivateCasePermission == 1 && Model.case_.FinishingDate.HasValue)
+                    if (SessionFacade.CurrentUser.ActivateCasePermission == 1 && Model.case_.FinishingDate.HasValue
+                        && (!Model.IsItChildCase() || (Model.IsItChildCase() && !Model.ParentCaseInfo.IsCaseClosed)))
                     {                                
                         <li>@Html.ActionLink(Translation.Get("Aktivera"), "Activate", "Cases", new { id = Model.case_.Id, backUrl = Model.BackUrl }, new { @class="btn" })</li>                             
                     }

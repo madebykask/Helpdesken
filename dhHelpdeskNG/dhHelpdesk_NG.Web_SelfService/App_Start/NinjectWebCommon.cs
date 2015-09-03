@@ -11,6 +11,7 @@ namespace DH.Helpdesk.SelfService
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Dal.Repositories;
+    using DH.Helpdesk.Dal.Repositories.Cases;
     using DH.Helpdesk.Dal.Repositories.Computers;
     using DH.Helpdesk.Dal.Repositories.Computers.Concrete;
     using DH.Helpdesk.Dal.Repositories.MailTemplates;

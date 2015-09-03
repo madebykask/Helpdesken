@@ -172,6 +172,16 @@
             return Get(translate, Enums.TranslationSource.CaseTranslation, customerId);
         }
 
+        /// <summary>
+        /// Returns tranlstion for case using SessionFacade.CurrentCustomer.Id
+        /// </summary>
+        /// <param name="translate"></param>
+        /// <returns></returns>
+        public static string CaseString(string translate)
+        {
+            return Get(translate, Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
+        }
+
         public static string getCaseFieldName(this string value)
         {
             return value.Replace("tblLog_", "tblLog.");

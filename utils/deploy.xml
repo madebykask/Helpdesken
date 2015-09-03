@@ -1,8 +1,9 @@
 <!-- 
 How to run: 
 	%WINDIR%\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe /toolsversion:4.0 deploy.xml
+	/t:Stackoverflow /p:BuildCmd=Clean
 -->
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" Tools="2.0">
+<Project DefaultTargets="Help" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" Tools="2.0">
 	<PropertyGroup>		
 		<PublishedFolder>C:\Download\published\</PublishedFolder>
 		<DevPath>\\dhutvas3\Websites\dhHelpdesk\</DevPath>
@@ -42,16 +43,18 @@ How to run:
 				$(PublishedFolder)\log4net.config;
 				$(PublishedFolder)\Web.config" />
 
-		<FilesToZip Include="\\servername\f$\web\example.com\wwwroot\**\*.*" />	
-	</ItemGroup>
+	<Target Name="Acct">
+		<CreateProperty Value="$(AcctPath)">
+	            <Output TaskParameter="Value" PropertyName="TargetPath" />
+	        </CreateProperty>
+	</Target>                     
 
 	<Target Name="Deploy">
 		<Message Text="==========  Starting copying content to target  ============" />
 		<Move SourceFiles="@(FilesToDeploy)" DestinationFolder="$(TargetPath)\%(RecursiveDir)" /> 
 	</Target>
 
-	<Target Name="Backup" BeforeTargets="Deploy">
-		<!--Message Text="Backing up old content $(BackupFolder)\%(Backup.RecursiveDir)"/ -->
+	<!--Target Name="Backup" BeforeTargets="Deploy">
 		<RemoveDir Directories="$(BackupFolder)" />
 		<MakeDir Directories="$(BackupFolder)" />
 		<Move SourceFiles="@(Backup)" DestinationFolder="$(BackupFolder)\%(RecursiveDir)" /> 
@@ -66,7 +69,7 @@ How to run:
 	<Target Name="TakeOnline" AfterTargets="Deploy">
 		<Message Text="========== Set site to online =============="/>
 		<Move SourceFiles="$(AppOfflineEnabled)" DestinationFiles="$(AppOfflineDisabled)" />		
-	</Target>
+	</Target -->
 
 	<Target Name="Zip">
 		<Zip Files="@(FilesToZip)" 
@@ -74,7 +77,13 @@ How to run:
 			WorkingDirectory="\\servername\f$\web\example.com\wwwroot" />
 	</Target>
  
-     <Target Name="Build" DependsOnTargets="Clean">
-	<Message Text="Clean"/>
+     <Target Name="Help">
+	<Message Text="Copies project from $(PublishedFolder) to target site. 
+	Specify target you want by using parameter:
+	  - /t:Debug debugging mode in $(TestPath) folder;
+	  - /t:Dev deploy on DEV environment;
+	  - /t:Acct deploy on ACCT environment;
+	
+	P.S.: does not increases version and does not perform SQL queries"/>
      </Target>
 </Project>

@@ -147,12 +147,17 @@
 
             bundles.Add(
                 new ScriptBundle("~/bundles/cases/_input").Include(
+                    "~/Content/js/Cases/components/ConfirmationDialog.js",
                     "~/Content/js/Cases/models/Case.js",
                     "~/Content/js/Cases/components/Utils.js",
                     "~/Content/js/Cases/components/EditPage.js",
                     "~/Content/js/Cases/_input.js",
                     "~/Content/js/dropdown_fix.js",
                     "~/Content/js/Cases/case.templates.js"));
+
+            bundles.Add(
+                new ScriptBundle("~/bundles/Cases/_ChildCases").Include(
+                    "~/Content/js/Cases/_childCases"));
 
             bundles.Add(new ScriptBundle("~/bundles/cases/editLog").Include("~/Content/js/Cases/editLog.logic.js"));
 

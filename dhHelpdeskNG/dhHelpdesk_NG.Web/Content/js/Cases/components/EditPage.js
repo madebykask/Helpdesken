@@ -1,6 +1,11 @@
 ﻿"use strict";
 
-function EditPage() { };
+function EditPage() {
+    this.DELETE_CASE_URL = '/Cases/DeleteCase';
+    this.NEW_CLOSE_CASE_URL = '/Cases/NewAndClose';
+    this.EDIT_CASE_URL = '/Cases/Edit';
+    this.SAVE_ADD_CASE_URL = '/Cases/NewAndAddCase';
+};
 
 /**
 * @private
@@ -60,15 +65,19 @@ EditPage.prototype.getValidationErrorMessage = function () {
     var validationMessages = me.p.casesScopeInitParameters.validationMessages || '';
     var requiredFieldsMessage = me.p.casesScopeInitParameters.requiredFieldsMessage || '';
     var mandatoryFieldsText = me.p.casesScopeInitParameters.mandatoryFieldsText || '';
-    var message = requiredFieldsMessage + '<br />' + mandatoryFieldsText + ':';
-    $('label.error:visible').each(function (key, value) {
-        var errorText = $(value).text();
+    var messages = [requiredFieldsMessage, '<br />', mandatoryFieldsText, ':'];
+    $('label.error').each(function (key, el) {
+        var errorText;
+        if ($(el).css('display') === 'none') {
+            return true;
+        }
+        errorText = $(el).text();
         $.each(validationMessages, function (index, validationMessage) {
             errorText = '<br />' + '[' + dhHelpdesk.cases.utils.replaceAll(errorText, validationMessage, '').trim() + ']';
         });
-        message += errorText;
+        messages.push(errorText);
     });
-    return message;
+    return messages.join('');
 };
 
 EditPage.prototype.isFormValid = function() {
@@ -89,7 +98,7 @@ EditPage.prototype.isFormValid = function() {
 
 EditPage.prototype.doSave = function(submitUrl) {
     var me = this;
-    var action = submitUrl || '/Cases/Edit';
+    var action = submitUrl || me.EDIT_CASE_URL;
     if (me._inSaving) {
         return false;
     }
@@ -130,13 +139,89 @@ EditPage.prototype.onSaveClick = function () {
 
 EditPage.prototype.onSaveAndCloseClick = function () {
     var me = this;
-    return me.doSave('/Cases/NewAndClose');
+    return me.doSave(me.NEW_CLOSE_CASE_URL);
 };
 
 EditPage.prototype.onSaveAndNewClick = function () {
     var me = this;
-    return me.doSave('/Cases/NewAndAddCase');
+    return me.doSave(me.SAVE_ADD_CASE_URL);
 };
+
+EditPage.prototype.canDeleteCase = function () {
+    var me = this;
+    return !(me.$btnDelete.hasClass('disabled') || me.case.isAnyNotClosedChild());
+};
+
+
+EditPage.prototype.closeDeleteConfirmationDlg = function () {
+    var me = this;
+    me.deleteDlg.hide();
+    return me.deleteDlg;
+};
+
+
+EditPage.prototype.showDeleteConfirmationDlg = function () {
+    var me = this;
+    if (!me.canDeleteCase()) {
+        return false;
+    }
+    me.deleteDlg.show();
+    return false;
+};
+
+/**
+* @param { Case } c
+*/
+EditPage.prototype.doDeleteCase = function(c) {
+    var me = this;
+    var submitData = {
+        caseId: c.id,
+        customerId: c.customerId,
+        parentCaseId: c.parentCaseId
+    };
+    var $form = $(['<form action="', me.DELETE_CASE_URL, '?', $.param(submitData), '" method="post"></form>'].join(''));
+    $('body').append($form);
+    $form.submit();
+};
+
+EditPage.prototype.onDeleteDlgClick = function () {
+    var me = this;
+    if (!me.canDeleteCase()) {
+        return false;
+    }
+    $.post(_parameters.caseLockChecker, { caseId: _parameters.currentCaseId, lockGuid: _parameters.caseLockGuid })
+        .done(callAsMe(function(data) {
+            me.showDeleteConfirmationDlg();
+            if (data == true) {
+                me.doDeleteCase(me.case);
+            } else {
+                ShowToastMessage(_parameters.deleteLockedCaseMessage, "error", true);
+            }
+        }));
+    return true;
+};
+
+/**
+* @private
+* @param { Case c }
+*/
+EditPage.prototype.initDeleteConfirmationDlg = function (c) {
+    var me = this;
+    // Delete case confirmation dialogue
+    var deleteDlgOptions = {
+        btnYesText: $("#DeleteDialogDeleteButtonText").val(),
+        btnNoText: $("#DeleteDialogCancelButtonText").val(),
+        onYesClick: callAsMe(me.onDeleteDlgClick, me),
+        onNoClick: callAsMe(me.closeDeleteConfirmationDlg, me),
+        dlgText: me.$btnDelete.attr('deleteDialogText'),
+//        dlgAction: me.DELETE_CASE_URL + '?' + $.param(deleteActionData)
+    };
+    if (me.$btnDelete.attr("buttonTypes") === 'YesNo') {
+        deleteDlgOptions.btnYesText = $("#DeleteDialogYesButtonText").val();
+        deleteDlgOptions.btnNoText = $("#DeleteDialogNoButtonText").val();
+    }
+    return CreateInstance(ConfirmationDialog, deleteDlgOptions);
+}
 
 /**
 * Page initialization 
@@ -157,16 +242,21 @@ EditPage.prototype.init = function (p) {
     me.$productAreaChildObj = $('#ProductAreaHasChild');
     me.productAreaErrorMessage = me.p.productAreaErrorMessage;
     me.$moveCaseButton = $("#btnMoveCase");
+    me.$buttonsToDisable = $('.btn.save, .btn.save-close, .btn.save-new');
+    me.$btnSave = $('.btn.save');
+    me.$btnSaveClose = $('.btn.save-close');
+    me.$btnSaveNew = $('.btn.save-new');
+    me.$btnDelete = $('.caseDeleteDialog.btn');
+    me.deleteDlg = me.initDeleteConfirmationDlg();
     ///////////////////////     events binding      /////////////////////////////////
-    $('.btn.save').on('click', function () {
+    me.$btnDelete.on('click', callAsMe(me.showDeleteConfirmationDlg, me));
+    me.$btnSave.on('click', function () {
         return me.onSaveClick.call(me);
     });
-
-    $('.btn.save-close').on('click', function () {
+    me.$btnSaveClose.on('click', function () {
         return me.onSaveAndCloseClick.call(me);
     });
-
-    $('.btn.save-new').on('click', function () {
+    me.$btnSaveNew.on('click', function () {
         return me.onSaveAndNewClick.call(me);
     });
 
@@ -210,7 +300,22 @@ EditPage.prototype.init = function (p) {
         }
     });
     //////// init actions end ///////////
-    me.case = new Case({id: parseInt(p.currentCaseId, 10)});
+    /*
+        window.parameters.currentCaseId,
+        customerId: window.parameters.customerId,
+        parentCaseId: window.parameters.parentCaseId
+    */
+    me.case = new Case({
+        id: parseInt(p.currentCaseId, 10),
+        customerId: parseInt(p.customerId, 10),
+        parentCaseId: parseInt(p.parentCaseId, 10),
+        isAnyNotClosedChild: p.isAnyNotClosedChild === 'True'
+    });
+
+    if (me.case.isAnyNotClosedChild()) {
+        me.$btnDelete.addClass('disabled');
+    }
+
     if (p.currentCaseId > 0) {
         me.timerId = setInterval(callAsMe(me.ReExtendCaseLock, me), me.p.extendValue * 1000);
     }

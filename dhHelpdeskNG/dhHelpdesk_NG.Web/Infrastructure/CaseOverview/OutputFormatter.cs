@@ -9,7 +9,14 @@
 
     public class OutputFormatter
     {
-        public string FormatField(Field field, TimeZoneInfo userTimeZone)
+        public OutputFormatter(bool isLastFirstName)
+        {
+            this.IsLastFirstName = isLastFirstName;
+        }
+
+        public bool IsLastFirstName { get; set; }
+
+        public string FormatField(Field field)
         {
             switch (field.FieldType)
             {
@@ -20,11 +27,7 @@
                     }
                     break;
                 case FieldTypes.Time:
-                    if (field.DateTimeValue.HasValue)
-                    {
-                        return TimeZoneInfo.ConvertTimeFromUtc(field.DateTimeValue.Value, userTimeZone).ToString("g", Thread.CurrentThread.CurrentUICulture);
-                    }
-                    break;
+                    return this.FormatNullableDate(field.DateTimeValue);
                 case FieldTypes.NullableHours:
                     return string.IsNullOrEmpty(field.StringValue) ? " - " : string.Format("{0} h", field.StringValue);
                 default:
@@ -46,6 +49,38 @@
             }
 
             return string.Empty;
+        }
+
+        public string FormatDate(DateTime input)
+        {
+            return input.ToLocalTime().ToString("g", Thread.CurrentThread.CurrentUICulture);
+        }
+
+        public string FormatNullableDate(DateTime? input)
+        {
+            if (input.HasValue)
+            {
+                return this.FormatDate(input.Value);
+            }
+
+            return string.Empty;
+        }
+
+        public string FormatUserName(string firstName, string lastName)
+        {
+            if (this.IsLastFirstName)
+            {
+                return string.Format("{0} {1}", firstName, lastName);
+            }
+
+            return string.Format("{0} {1}", lastName, firstName);
+        }
+
+        internal string FormatUserName(BusinessData.Models.Case.UserNamesStruct userNamesStruct)
+        {
+            return userNamesStruct == null
+                       ? string.Empty
+                       : this.FormatUserName(userNamesStruct.FirstName, userNamesStruct.LastName);
         }
     }
 }

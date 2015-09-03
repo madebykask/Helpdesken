@@ -7,7 +7,7 @@
     /// <summary>
     /// Here we will store relations between field id and field name to know what settings is applied for what field case GridSettingsEntity.FieldId.
     /// I used this sql to fetch all availavble columns:
-    /// >> select distinct '{,"' + CaseField + '"},' from tblcasefieldsettingsorder by 1;
+    /// >> select distinct '{,"' + CaseField + '"},' from tblcasefieldsettingsorder order by 1;
     /// ACHTUNG!! if you delete something from this class then put checks to all plases where you use this maping. 
     /// Now this is at least CaseOverviewToGridColumnDefMapper and GridSettingsService classes. Otherwise you could get an "key not found" exception when will process data from DB
     /// </summary>

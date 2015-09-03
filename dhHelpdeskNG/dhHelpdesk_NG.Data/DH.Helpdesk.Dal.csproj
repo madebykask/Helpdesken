@@ -112,6 +112,7 @@
     <Compile Include="EntityConfigurations\Orders\OrderLogConfiguration.cs" />
     <Compile Include="EntityConfigurations\Orders\OrderPropertyConfiguration.cs" />
     <Compile Include="EntityConfigurations\ADFS\SSOLogConfiguration.cs" />
+    <Compile Include="EntityConfigurations\ParentChildCaseRelationConfiguration.cs" />
     <Compile Include="EntityConfigurations\RegistrationSourceCustomerConfiguration.cs" />
     <Compile Include="EntityConfigurations\SurveyConfiguration.cs" />
     <Compile Include="EntityConfigurations\Users\ModuleConfiguration.cs" />
@@ -184,6 +185,7 @@
     <Compile Include="Mappers\Cases\BusinessModelToEntity\CaseLockToEntityMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseLockToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseToBusinessModelMapper.cs" />
+    <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseToCaseOverviewMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CausingPartToOverviewMapper.cs" />
     <Compile Include="Mappers\Changes\BusinessModelToEntity\HistoryToChangeHistoryEntityMapper.cs" />
     <Compile Include="Mappers\Changes\BusinessModelToEntity\ChangeFieldSettingsToChangeFieldSettingsEntityMapper.cs" />
@@ -340,6 +342,12 @@
     <Compile Include="Repositories\ADFS\Concrete\ADFSRepository.cs" />
     <Compile Include="Repositories\ADFS\IADFSRepository.cs" />
     <Compile Include="Repositories\CaseHistoryRepository.cs" />
+    <Compile Include="Repositories\Cases\CaseFileRepository.cs" />
+    <Compile Include="Repositories\Cases\CaseInvoiceRowRepository.cs" />
+    <Compile Include="Repositories\Cases\CaseQuestionCategoryRepository.cs" />
+    <Compile Include="Repositories\Cases\CaseQuestionHeaderRepository.cs" />
+    <Compile Include="Repositories\Cases\CaseQuestionRepository.cs" />
+    <Compile Include="Repositories\Cases\CaseSettingsRepository.cs" />
     <Compile Include="Repositories\Cases\CaseSolutionSettingRepository.cs" />
     <Compile Include="Repositories\Cases\Concrete\CaseLockRepository.cs" />
     <Compile Include="Repositories\Cases\Concrete\CausingPartRepository.cs" />

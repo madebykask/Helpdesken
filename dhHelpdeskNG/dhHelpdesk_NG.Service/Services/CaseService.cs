@@ -2,21 +2,26 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+    using System.Reflection;
 
 namespace DH.Helpdesk.Services.Services
 {
 
     using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.Models.Case.ChidCase;
     using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.BusinessData.Models.Invoice;
+    using DH.Helpdesk.BusinessData.Models.User.Input;
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+    using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Common.Extensions.Boolean;
     using DH.Helpdesk.Dal.DbContext;
+    using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Dal.Repositories;
-    using DH.Helpdesk.Dal.Enums;
+    using DH.Helpdesk.Dal.Repositories.Cases;
     using DH.Helpdesk.Dal.Repositories.Cases.Concrete;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Cases;
@@ -32,10 +37,8 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.Services.Localization;
     using DH.Helpdesk.Services.Services.CaseStatistic;
     using DH.Helpdesk.Services.utils;
-    using DH.Helpdesk.BusinessData.Models.User.Input;
 
     using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
-    using DH.Helpdesk.Common.Enums;
 
     public interface ICaseService
     {
@@ -44,7 +47,17 @@ namespace DH.Helpdesk.Services.Services
         IList<Case> GetCasesByCustomers(IEnumerable<int> customerIds);
 
         Case InitCase(int customerId, int userId, int languageId, string ipAddress, CaseRegistrationSource source, Setting customerSetting, string adUser);
+
         Case Copy(int copyFromCaseid, int userId, int languageId, string ipAddress, CaseRegistrationSource source, string adUser);
+
+        Case InitChildCaseFromCase(
+            int copyFromCaseid,
+            int userId,
+            string ipAddress,
+            CaseRegistrationSource source,
+            string adUser,
+            out ParentCaseInfo parentCaseInfo);
+
         Case GetCaseById(int id, bool markCaseAsRead = false);
         Case GetDetachedCaseById(int id);
         Case GetCaseByGUID(Guid GUID);
@@ -61,10 +74,18 @@ namespace DH.Helpdesk.Services.Services
             int userId, 
             string adUser,           
             out IDictionary<string, string> errors,
-            CaseInvoice[] invoices = null);
+            CaseInvoice[] invoices = null,
+            Case parentCase = null);
 
-        int SaveCaseHistory(Case c, int userId, string adUser, out IDictionary<string, string> errors, 
-                            string defaultUser = "", ExtraFieldCaseHistory extraField = null);
+        int SaveCaseHistory(
+            Case c,
+            int userId,
+            string adUser,
+            out IDictionary<string, string> errors,
+            string defaultUser = "",
+            ExtraFieldCaseHistory extraField = null,
+            Case parentCase = null);
+
         void SendCaseEmail(int caseId, CaseMailSetting cms, int caseHistoryId, string basePath,
                            Case oldCase = null, CaseLog log = null, List<CaseFileDto> logFiles = null);
         void UpdateFollowUpDate(int caseId, DateTime? time);
@@ -74,7 +95,8 @@ namespace DH.Helpdesk.Services.Services
         void Activate(int caseId, int userId, string adUser, out IDictionary<string, string> errors);
         IList<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, UserOverview user);
         void Commit();
-        Guid Delete(int id, string basePath);
+
+        Guid Delete(int id, string basePath, int? parentCaseId);
 
         /// <summary>
         /// The get case overview.
@@ -94,6 +116,10 @@ namespace DH.Helpdesk.Services.Services
         List<RelatedCase> GetCaseRelatedCases(int caseId, int customerId, string userId, UserOverview currentUser);
 
         int GetCaseRelatedCasesCount(int caseId, int customerId, string userId, UserOverview currentUser);
+
+        ChildCaseOverview[] GetChildCasesFor(int caseId);
+
+        ParentCaseInfo GetParentInfo(int caseId);
     }
 
     public class CaseService : ICaseService
@@ -223,9 +249,28 @@ namespace DH.Helpdesk.Services.Services
             return _caseRepository.GetDynamicCase(id);
         }
 
-        public Guid Delete(int id, string basePath)
+        public Guid Delete(int id, string basePath, int? parentCaseId)
         {
             Guid ret = Guid.Empty; 
+
+            if (parentCaseId.HasValue)
+            {
+                using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
+                {
+                    var relationsRepo = uow.GetRepository<ParentChildRelation>();
+                    var relation = relationsRepo.GetAll().FirstOrDefault(it => it.DescendantId == id);
+                    if (relation == null || relation.AncestorId != parentCaseId.Value)
+                    {
+                        throw new ArgumentException(string.Format("bad parentCaseId \"{0}\" for case id \"{1}\"", parentCaseId.Value, id));
+                    }
+
+                    relationsRepo.Delete(relation);
+                    uow.Save();
+                    //@TODO: make a record in parent history
+                }
+            }
+
+            this.DeleteChildCasesFor(id);
 
             // delete form field values
             var ffv = this._formFieldValueRepository.GetFormFieldValuesByCaseId(id);
@@ -281,12 +326,12 @@ namespace DH.Helpdesk.Services.Services
                 {
                     this._caseHistoryRepository.Delete(h);  
                 }
-                this._caseHistoryRepository.Commit(); 
             }
+
+            this._caseHistoryRepository.Commit(); 
 
             //delete case lock
             this._caseLockService.UnlockCaseByCaseId(id);
-
 
             // delete case files
             var caseFiles = this._caseFileRepository.GetCaseFilesByCaseId(id);
@@ -304,16 +349,23 @@ namespace DH.Helpdesk.Services.Services
             this._caseFileRepository.DeleteFileViewLogs(id);
             this._caseFileRepository.Commit();
 
-
             // delete Invoice
             this.invoiceArticleService.DeleteCaseInvoices(id);
-
             var c = this._caseRepository.GetById(id);
             ret = c.CaseGUID; 
             this._caseRepository.Delete(c);
             this._caseRepository.Commit();
 
             return ret;
+        }
+
+        private void DeleteChildCasesFor(int caseId)
+        {
+            using (var uow = unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            {
+                uow.GetRepository<ParentChildRelation>().DeleteWhere(it => it.AncestorId == caseId);
+                uow.Save();
+            }
         }
 
         /// <summary>
@@ -376,9 +428,195 @@ namespace DH.Helpdesk.Services.Services
             }
         }
 
-        public Case Copy(int copyFromCaseid, int userId, int languageId, string ipAddress, CaseRegistrationSource source, string adUser)
+
+        public ChildCaseOverview[] GetChildCasesFor(int caseId)
         {
-            var c = this._caseRepository.GetDetachedCaseById(copyFromCaseid);
+            using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            {
+                var childCaseRelations = uow.GetRepository<ParentChildRelation>().GetAll();
+                var allCases = uow.GetRepository<Case>().GetAll();
+                var allSecStates = uow.GetRepository<StateSecondary>().GetAll();
+                var allPerformers = uow.GetRepository<User>().GetAll();
+                var caseTypes = uow.GetRepository<CaseType>().GetAll();
+                var res =
+                    childCaseRelations.Where(it => it.AncestorId == caseId)
+                        .Select(it => new { id = it.DescendantId, parentId = it.AncestorId })
+                        .GroupJoin(
+                            allCases,
+                            it => it.id,
+                            case_ => case_.Id,
+                            (parentChild, case_) => new { parentChild, case_ })
+                        .SelectMany(
+                            t => t.case_.DefaultIfEmpty(),
+                            (t, case_) =>
+                            new
+                                {
+                                    id = t.parentChild.id,
+                                    parentId = t.parentChild.parentId,
+                                    caseNumber = case_.CaseNumber,
+                                    subject = case_.Caption,
+                                    performerId = case_.Performer_User_Id,
+                                    substateId = case_.StateSecondary_Id,
+                                    caseTypeId = case_.CaseType_Id,
+                                    registrationDate = case_.RegTime,
+                                    closingDate = case_.FinishingDate
+                                })
+                        .GroupJoin(
+                            allPerformers,
+                            tempParentChildStruct => tempParentChildStruct.performerId,
+                            performer => performer.Id,
+                            (tmpParentChild, performer) => new { tmpParentChild, performer })
+                        .SelectMany(
+                            t => t.performer.DefaultIfEmpty(),
+                            (t, performer) =>
+                            new
+                                {
+                                    id = t.tmpParentChild.id,
+                                    parentId = t.tmpParentChild.parentId,
+                                    caseNumber = t.tmpParentChild.caseNumber,
+                                    subject = t.tmpParentChild.subject,
+                                    performerFirstName = performer == null ? string.Empty : performer.FirstName,
+                                    performerLastName = performer == null ? string.Empty : performer.SurName,
+                                    substateId = t.tmpParentChild.substateId,
+                                    caseTypeId = t.tmpParentChild.caseTypeId,
+                                    registrationDate = t.tmpParentChild.registrationDate,
+                                    closingDate = t.tmpParentChild.closingDate
+                                })
+                        .GroupJoin(
+                            allSecStates,
+                            tempParentCildStruct => tempParentCildStruct.substateId,
+                            subState => subState.Id,
+                            (tmpParentChild, subState) => new { tmpParentChild, subState })
+                        .SelectMany(
+                            t => t.subState.DefaultIfEmpty(),
+                            (t, subState) =>
+                            new
+                                {
+                                    id = t.tmpParentChild.id,
+                                    parentId = t.tmpParentChild.parentId,
+                                    subject = t.tmpParentChild.subject,
+                                    caseNumber = t.tmpParentChild.caseNumber,
+                                    performerFirstName = t.tmpParentChild.performerFirstName,
+                                    performerLastName = t.tmpParentChild.performerLastName,
+                                    subState = subState == null ? string.Empty : subState.Name,
+                                    caseTypeId = t.tmpParentChild.caseTypeId,
+                                    registrationDate = t.tmpParentChild.registrationDate,
+                                    closingDate = t.tmpParentChild.closingDate
+                                })
+                        .GroupJoin(
+                            caseTypes,
+                            tempParentCildStruct => tempParentCildStruct.caseTypeId,
+                            subState => subState.Id,
+                            (tmpParentChild, casetType) => new { tmpParentChild, casetType })
+                        .SelectMany(
+                            t => t.casetType.DefaultIfEmpty(),
+                            (t, casetType) =>
+                            new
+                                {
+                                    id = t.tmpParentChild.id,
+                                    parentId = t.tmpParentChild.parentId,
+                                    caseNumber = t.tmpParentChild.caseNumber,
+                                    subject = t.tmpParentChild.subject,
+                                    performerFirstName = t.tmpParentChild.performerFirstName,
+                                    performerLastName = t.tmpParentChild.performerLastName,
+                                    subState = t.tmpParentChild.subState,
+                                    caseType = casetType == null ? string.Empty : casetType.Name,
+                                    registrationDate = t.tmpParentChild.registrationDate,
+                                    closingDate = t.tmpParentChild.closingDate
+                                })
+                        .AsQueryable();
+                return res.Select(it => new ChildCaseOverview()
+                                     {
+                                         Id = it.id,
+                                         CaseNo = (int)it.caseNumber,
+                                         Subject = it.subject,
+                                         CasePerformer = new UserNamesStruct()
+                                                             {
+                                                                 FirstName = it.performerFirstName,
+                                                                 LastName = it.performerLastName
+                                                             },
+                                                             CaseType = it.caseType,
+                                                             SubStatus = it.subState,
+                                                             RegistrationDate = it.registrationDate,
+                                                             ClosingDate = it.closingDate
+                                     }).ToArray();
+            }
+        }
+
+        public ParentCaseInfo GetParentInfo(int caseId)
+        {
+            using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            {
+                var allCases = uow.GetRepository<Case>().GetAll();
+                var allRelations = uow.GetRepository<ParentChildRelation>().GetAll();
+                var allPerformers = uow.GetRepository<User>().GetAll();
+                var relationInfo = allRelations
+                    .Where(it => it.DescendantId == caseId)
+                    .Select(it => new { id = it.DescendantId, parentId = it.AncestorId })
+                    .GroupJoin(
+                            allCases,
+                            it => it.parentId,
+                            case_ => case_.Id,
+                            (parentChild, case_) => new { parentChild, case_ })
+                        .SelectMany(
+                            t => t.case_.DefaultIfEmpty(),
+                            (t, case_) =>
+                            new
+                            {
+                                id = t.parentChild.id,
+                                parentId = t.parentChild.parentId,
+                                caseNumber = case_.CaseNumber,
+                                subject = case_.Caption,
+                                performerId = case_.Performer_User_Id,
+                                substateId = case_.StateSecondary_Id,
+                                caseTypeId = case_.CaseType_Id,
+                                registrationDate = case_.RegTime,
+                                finishingDate = case_.FinishingDate
+                            })
+                        .GroupJoin(
+                            allPerformers,
+                            tempParentChildStruct => tempParentChildStruct.performerId,
+                            performer => performer.Id,
+                            (tmpParentChild, performer) => new { tmpParentChild, performer })
+                        .SelectMany(
+                            t => t.performer.DefaultIfEmpty(),
+                            (t, performer) =>
+                            new
+                            {
+                                parentId = t.tmpParentChild.parentId,
+                                caseNumber = t.tmpParentChild.caseNumber,
+                                finishingDate = t.tmpParentChild.finishingDate,
+                                performerFirstName = performer == null ? string.Empty : performer.FirstName,
+                                performerLastName = performer == null ? string.Empty : performer.SurName,
+                            })
+                        .FirstOrDefault();
+                if (relationInfo != null)
+                {
+                    return new ParentCaseInfo()
+                               {
+                                   ParentId = relationInfo.parentId,
+                                   CaseNumber = relationInfo.caseNumber,
+                                   CaseAdministrator =
+                                       new UserNamesStruct()
+                                           {
+                                               FirstName = relationInfo.performerFirstName,
+                                               LastName = relationInfo.performerLastName
+                                           },
+                                   FinishingDate = relationInfo.finishingDate
+                               };
+                }
+            }
+
+            return null;
+        }
+
+        private static Case InitNewCaseCopy(
+            Case c,
+            int userId,
+            string ipAddress,
+            CaseRegistrationSource source,
+            string adUser)
+        {
             c.IpAddress = ipAddress;
             c.CaseGUID = Guid.NewGuid();
             c.Id = 0;
@@ -390,6 +628,40 @@ namespace DH.Helpdesk.Services.Services
             c.RegUserDomain = adUser.GetDomainFromAdPath();
             c.CaseFiles = null;
             return c;
+        }
+
+        public Case InitChildCaseFromCase(
+            int copyFromCaseid, 
+            int userId, 
+            string ipAddress, 
+            CaseRegistrationSource source, 
+            string adUser, 
+            out ParentCaseInfo parentCaseInfo)
+        {
+            var c = this._caseRepository.GetDetachedCaseById(copyFromCaseid);
+            if (c == null)
+            {
+                throw new ArgumentException(string.Format("bad parent case id {0}", copyFromCaseid));
+            }
+
+            parentCaseInfo = new ParentCaseInfo
+                                     {
+                                         ParentId = copyFromCaseid,
+                                         CaseNumber = (int)c.CaseNumber,
+                                         CaseAdministrator = new UserNamesStruct()
+                                                                 {
+                                                                     FirstName = c.Administrator != null ? c.Administrator.FirstName : string.Empty,
+                                                                     LastName = c.Administrator != null ? c.Administrator.SurName : string.Empty
+                                                                 },
+                                                                 FinishingDate = c.FinishingDate
+                                     };
+            return InitNewCaseCopy(c, userId, ipAddress, source, adUser);
+        }
+
+        public Case Copy(int copyFromCaseid, int userId, int languageId, string ipAddress, CaseRegistrationSource source, string adUser)
+        {
+            var c = this._caseRepository.GetDetachedCaseById(copyFromCaseid);
+            return InitNewCaseCopy(c, userId, ipAddress, source, adUser);
         }
 
         public void MarkAsUnread(int caseId)
@@ -409,26 +681,28 @@ namespace DH.Helpdesk.Services.Services
 
         public Case InitCase(int customerId, int userId, int languageId, string ipAddress, CaseRegistrationSource source, Setting customerSetting, string adUser)
         {
-            var c = new Case();
+            var c = new Case
+                        {
+                            Customer_Id = customerId,
+                            User_Id = userId,
+                            CaseResponsibleUser_Id = userId,
+                            IpAddress = ipAddress,
+                            CaseGUID = Guid.NewGuid(),
+                            RegLanguage_Id = languageId,
+                            RegistrationSource = (int)source,
+                            Deleted = 0,
+                            Region_Id = this._regionService.GetDefaultId(customerId),
+                            CaseType_Id = this._caseTypeService.GetDefaultId(customerId),
+                            Supplier_Id = this._supplierServicee.GetDefaultId(customerId),
+                            Priority_Id = this._priorityService.GetDefaultId(customerId),
+                            Status_Id = this._statusService.GetDefaultId(customerId),
+                            WorkingGroup_Id = this.userRepository.GetUserDefaultWorkingGroupId(userId, customerId),
+                            RegUserId = adUser.GetUserFromAdPath(),
+                            RegUserDomain = adUser.GetDomainFromAdPath()
+                        };
 
-            c.Customer_Id = customerId;
-            c.User_Id = userId;
-            c.CaseResponsibleUser_Id = userId;
-            c.IpAddress = ipAddress; 
-            c.CaseGUID = Guid.NewGuid();
-            c.RegLanguage_Id = languageId;
-            c.RegistrationSource = (int)source;
-            c.Deleted = 0;
-            c.Region_Id = this._regionService.GetDefaultId(customerId);
-            c.CaseType_Id = this._caseTypeService.GetDefaultId(customerId);
-            c.Supplier_Id = this._supplierServicee.GetDefaultId(customerId);
-            c.Priority_Id = this._priorityService.GetDefaultId(customerId);
-            c.Status_Id = this._statusService.GetDefaultId(customerId);
             // http://redmine.fastdev.se/issues/10997
 //            c.WorkingGroup_Id = this._workingGroupService.GetDefaultId(customerId, userId);
-            c.WorkingGroup_Id = this.userRepository.GetUserDefaultWorkingGroupId(userId, customerId);
-            c.RegUserId =  adUser.GetUserFromAdPath();
-            c.RegUserDomain = adUser.GetDomainFromAdPath();
 
             if (customerSetting != null)
             {
@@ -554,7 +828,8 @@ namespace DH.Helpdesk.Services.Services
                 int userId, 
                 string adUser, 
                 out IDictionary<string, string> errors,
-                CaseInvoice[] invoices = null)
+                CaseInvoice[] invoices = null,
+                Case parentCase = null)
         {
             int ret = 0;
 
@@ -594,7 +869,6 @@ namespace DH.Helpdesk.Services.Services
             this._caseStatService.UpdateCaseStatistic(c);
             
             // save casehistory
-            // FinishingCause = FinishingType = ClosingReason 
             var extraFields = new ExtraFieldCaseHistory();
             if (caseLog != null && caseLog.FinishingType != null)
             {
@@ -602,10 +876,12 @@ namespace DH.Helpdesk.Services.Services
                 extraFields.ClosingReason = fc ;
             }
 
-            if (userId == 0)
-                ret = this.SaveCaseHistory(c, userId, adUser, out errors, adUser, extraFields);    
-            else            
-                ret = this.SaveCaseHistory(c, userId, adUser, out errors, "", extraFields);
+            if (parentCase != null)
+            {
+                this.AddChildCase(cases.Id, parentCase.Id, out errors);
+            }
+
+            ret = userId == 0 ? this.SaveCaseHistory(c, userId, adUser, out errors, adUser, extraFields, parentCase) : this.SaveCaseHistory(c, userId, adUser, out errors, string.Empty, extraFields, parentCase);
 
             if (invoices != null)
             {
@@ -615,17 +891,66 @@ namespace DH.Helpdesk.Services.Services
             return ret;
         }
 
-        public int SaveCaseHistory(Case c, int userId, string adUser, out IDictionary<string, string> errors,
+        private bool AddChildCase(int childCaseId, int parentCaseId, out IDictionary<string, string> errors)
+        {
+            errors = new Dictionary<string, string>();
+            using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            {
+                var parentChildRelationRepo = uow.GetRepository<ParentChildRelation>();
+                var allreadyExists = parentChildRelationRepo
+                        .GetAll()
+                        .Where(it => it.DescendantId == childCaseId // allready a child for [other|this] case
+                            || it.AncestorId == childCaseId // child case is a parent already
+                            || it.DescendantId == parentCaseId) // parent case is a child
+                        .FirstOrDefault();
+                if (allreadyExists != null)
+                {
+
+                    errors.Add(
+                        "childCaseId",
+                        "child case can not contain childs, parent child can not be a child case, child case already presented as child case");
+
+                    return false;
+                }
+                
+                parentChildRelationRepo.Add(new ParentChildRelation()
+                                                {
+                                                    AncestorId = parentCaseId,
+                                                    DescendantId = childCaseId
+                                                });
+                uow.Save();
+            }
+
+            return true;
+        }
+
+        public int SaveCaseHistory(
+            Case c,
+            int userId,
+            string adUser,
+            out IDictionary<string, string> errors,
                                    string defaultUser = "",
-                                   ExtraFieldCaseHistory extraField = null)
+            ExtraFieldCaseHistory extraField = null,
+            Case parentCase = null)
         {
             if (c == null)
                 throw new ArgumentNullException("caseHistory");
 
             errors = new Dictionary<string, string>();
+            decimal? parentCaseId = null;
+            if (parentCase != null)
+            {
+                parentCaseId = parentCase.CaseNumber;
+            }
 
-            CaseHistory h = this.GenerateHistoryFromCase(c, userId, adUser, defaultUser, extraField);
+            var h = this.GenerateHistoryFromCase(c, userId, adUser, defaultUser, extraField, parentCaseId);
             this._caseHistoryRepository.Add(h);
+            if (parentCase != null)
+            {
+                var parentHistory = this._caseHistoryRepository.GetCloneOfLatest(parentCase.Id);
+                parentHistory.ChildCaseNumber = c.CaseNumber;
+                this._caseHistoryRepository.Add(parentHistory);
+            }
 
             if (errors.Count == 0)
                 this._caseHistoryRepository.Commit();
@@ -1024,14 +1349,16 @@ namespace DH.Helpdesk.Services.Services
             return ret;
         }
 
-        private CaseHistory GenerateHistoryFromCase(Case c, int userId, string adUser, 
+        private CaseHistory GenerateHistoryFromCase(
+            Case c, 
+            int userId, 
+            string adUser, 
                                                     string defaultUser="", 
-                                                    ExtraFieldCaseHistory extraField = null)
+            ExtraFieldCaseHistory extraField = null,
+            decimal? parentCaseNumber = null)
         {
-            CaseHistory h = new CaseHistory();
-
+            var h = new CaseHistory();
             var user = this.userRepository.GetUser(userId);
-
             h.AgreedDate = c.AgreedDate;
             h.ApprovedDate = c.AgreedDate;
             h.ApprovedBy_User_Id = c.ApprovedBy_User_Id; 
@@ -1047,10 +1374,18 @@ namespace DH.Helpdesk.Services.Services
             h.ContactBeforeAction = c.ContactBeforeAction;
             h.Cost = c.Cost;
             h.CreatedDate = DateTime.UtcNow;
-            if (defaultUser != "") 
+            if (defaultUser != string.Empty)
+            {
                 h.CreatedByUser = defaultUser; // used for Self Service Project
+            }
             else
+            {
+                if (user != null)
+                {
                 h.CreatedByUser = user.FirstName + ' ' + user.SurName; 
+                }
+            }
+                
             h.Currency = c.Currency;
             h.Customer_Id = c.Customer_Id;
             h.Deleted = c.Deleted; 
@@ -1085,8 +1420,12 @@ namespace DH.Helpdesk.Services.Services
             h.ReferenceNumber = c.ReferenceNumber;
             h.RegistrationSource = c.RegistrationSource;
             h.RegLanguage_Id = c.RegLanguage_Id;
+            if (!string.IsNullOrEmpty(adUser))
+            {
             h.RegUserDomain = adUser.GetDomainFromAdPath();
             h.RegUserId = adUser.GetUserFromAdPath(); 
+            }
+            
             h.RelatedCaseNumber = c.RelatedCaseNumber;
             h.Region_Id = c.Region_Id; 
             h.ReportedBy = c.ReportedBy;
@@ -1115,6 +1454,8 @@ namespace DH.Helpdesk.Services.Services
                 h.CaseLog  = extraField.CaseLog;
                 h.ClosingReason = extraField.ClosingReason;
             }
+
+            h.ParentCaseNumber = parentCaseNumber;
 
             return h;
         }

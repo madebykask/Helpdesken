@@ -709,7 +709,6 @@
             modelBuilder.Configurations.Add(new WatchDateCalendarValueConfiguration());
             modelBuilder.Configurations.Add(new WorkingGroupConfiguration());
             modelBuilder.Configurations.Add(new FaqCategoryLanguageConfiguration());
-            //modelBuilder.Configurations.Add(new ComputerUserFieldSettingsLanguageConfiguration());
             modelBuilder.Configurations.Add(new ChangeFieldSettingsConfiguration());
             modelBuilder.Configurations.Add(new ChangeContactConfiguration());
             modelBuilder.Configurations.Add(new ChangeDepartmentConfiguration());
@@ -757,6 +756,8 @@
             modelBuilder.Configurations.Add(new DH.Helpdesk.Dal.EntityConfigurations.Licenses.ApplicationConfiguration());
             modelBuilder.Configurations.Add(new LicenseFileConfiguration());
             modelBuilder.Configurations.Add(new GridSettingsEntityConfiguration());
+
+            modelBuilder.Configurations.Add(new ParentChildRelationConfiguration());
 
             #endregion
 

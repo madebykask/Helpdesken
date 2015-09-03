@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models;
@@ -16,10 +17,13 @@
     using DH.Helpdesk.Domain.Changes;
     using DH.Helpdesk.Web.Infrastructure.Grid.Output;
     using DH.Helpdesk.Web.Models.Case.Output;
+    using DH.Helpdesk.Web.Models.CaseLock;
     using DH.Helpdesk.Web.Models.Invoice;
     using DH.Helpdesk.Web.Models.Shared;
-    using DH.Helpdesk.Web.Models.CaseLock;
     
+    using ChildCaseOverview = DH.Helpdesk.Web.Models.Case.ChildCase.ChildCaseOverview;
+    using ParentCaseInfo = DH.Helpdesk.Web.Models.Case.ChildCase.ParentCaseInfo;
+
     public class CaseInputViewModel
     {
         public CaseInputViewModel()
@@ -177,6 +181,30 @@
         public DateTime RegTime { get; set; }
 
         #endregion
+
+        public ChildCaseOverview[] ChildCaseList { get; set; }
+
+        public ParentCaseInfo ParentCaseInfo { get; set; }
+
+        public bool IsItChildCase()
+        {
+            return this.ParentCaseInfo != null && ParentCaseInfo.ParentId != 0;
+    }
+
+        public bool IsItParentCase()
+        {
+            return this.ChildCaseList != null && this.ChildCaseList.Length > 0;
+        }
+
+        public bool IsAnyNotClosedChild()
+        {
+            if (this.ChildCaseList == null || this.ChildCaseList.Length == 0)
+            {
+                return false;
+            }
+
+            return this.ChildCaseList.Any(it => string.IsNullOrEmpty(it.ClosingDate));
+        }
     }
 
     public class CaseIndexViewModel
@@ -235,6 +263,7 @@
     public class CaseSearchResultModel
     {
         public CaseColumnsSettingsModel GridSettings { get; set; }
+        
         public IList<CaseSettings> caseSettings { get; set; }
 
         public IList<CaseSearchResult> cases { get; set; }
