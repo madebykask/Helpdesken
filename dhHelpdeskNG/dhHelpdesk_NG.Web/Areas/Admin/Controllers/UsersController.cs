@@ -210,9 +210,15 @@
                         return users.OrderByDescending(u => u.Email).ToList();
                 case "UserGroup.Name":
                     if (isAsc)
-                        return users.OrderBy(u => u.UserGroup.Name).ToList();
+                    {
+                        var usersList = users.OrderBy(u => Translation.Get(u.UserGroup.Name, Enums.TranslationSource.TextTranslation)).ToList();
+                        return usersList;
+                    }
                     else
-                        return users.OrderByDescending(u => u.UserGroup.Name).ToList();
+                    {
+                        var usersList = users.OrderByDescending(u => Translation.Get(u.UserGroup.Name, Enums.TranslationSource.TextTranslation)).ToList();
+                        return usersList;
+                    }
                 case "ChangeTime":
                     if (isAsc)
                         return users.OrderBy(u => u.ChangeTime).ToList();
