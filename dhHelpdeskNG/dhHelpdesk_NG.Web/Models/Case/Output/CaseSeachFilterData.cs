@@ -126,5 +126,9 @@
         public string FilteredClosingReason { get; set; }
 
         public string FilteredClosingReasonText { get; set; }
+
+        public IList<WorkingGroupEntity> WorkingGroupList { get; set; }
+
+        public string FilteredWorkingGroup { get; set; }
     }
 }

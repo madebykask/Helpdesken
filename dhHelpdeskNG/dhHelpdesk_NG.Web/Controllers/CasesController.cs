@@ -375,6 +375,7 @@ namespace DH.Helpdesk.Web.Controllers
             else
             {
                 f.Department = string.Empty;
+                f.WorkingGroup = string.Empty;
                 f.Priority = string.Empty;
                 f.StateSecondary = string.Empty;
                 f.CaseType = 0;
@@ -1048,6 +1049,23 @@ namespace DH.Helpdesk.Web.Controllers
                     SessionFacade.CurrentUser,
                     isTakeOnlyActive);
             }
+
+            if (customerfieldSettings.Where(fs => fs.Name == GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString() &&
+                                                  fs.ShowOnStartPage != 0).Any())
+            {
+                var gs = _globalSettingService.GetGlobalSettings().FirstOrDefault();
+                const bool IsTakeOnlyActive = false;
+                if (gs.LockCaseToWorkingGroup == 0)
+                {
+                    specificFilter.WorkingGroupList = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId, IsTakeOnlyActive);
+                }
+                else
+                {
+                    specificFilter.WorkingGroupList = this._workingGroupService.GetWorkingGroups(customerId, IsTakeOnlyActive);
+                }
+
+                specificFilter.WorkingGroupList.Insert(0, ObjectExtensions.notAssignedWorkingGroup());
+            }
                         
             if (csm != null && csm.caseSearchFilter != null)
             {
@@ -1055,6 +1073,7 @@ namespace DH.Helpdesk.Web.Controllers
                 specificFilter.FilteredPriority = csm.caseSearchFilter.Priority;
                 specificFilter.FilteredStateSecondary = csm.caseSearchFilter.StateSecondary;
                 specificFilter.FilteredCaseType = csm.caseSearchFilter.CaseType;                
+                specificFilter.FilteredWorkingGroup = csm.caseSearchFilter.WorkingGroup;
                 if (specificFilter.FilteredCaseType > 0)
                 {
                     var c = this._caseTypeService.GetCaseType(specificFilter.FilteredCaseType);
