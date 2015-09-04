@@ -708,9 +708,6 @@
             var csSelected = user.Cs ?? new List<Customer>();
             var csAvailable = new List<Customer>();
 
-            // To add the empty choice for customer List 
-            var emptyChoice = new Customer();            
-            csSelected.Add(emptyChoice);
             foreach (var c in this._customerService.GetAllCustomers())
             {
                 if (!csSelected.Contains(c))
