@@ -427,6 +427,7 @@
     <Content Include="Content\js\bootstrap-tagsinput.min.js" />
     <Content Include="Content\js\Cases\case.templates.js" />
     <Content Include="Content\js\Cases\caseByIds.logic.js" />
+    <Content Include="Content\js\Cases\_caseLogInput.js" />
     <Content Include="Content\js\Cases\components\BaseField.js" />
     <Content Include="Content\js\Cases\components\DateField.js" />
     <Content Include="Content\js\Cases\components\EditPage.js" />
@@ -434,7 +435,7 @@
     <Content Include="Content\js\Cases\components\DropdownButtonField.js" />
     <Content Include="Content\js\Cases\components\FilterForm.js" />
     <Content Include="Content\js\Cases\components\Utils.js" />
-    <Content Include="Content\js\Cases\editLog.logic.js" />
+    <Content Include="Content\js\Cases\_caseLogFiles.js" />
     <Content Include="Content\js\Cases\index.settings.js" />
     <Content Include="Content\js\Cases\models\Case.js" />
     <Content Include="Content\js\Cases\_input.js" />

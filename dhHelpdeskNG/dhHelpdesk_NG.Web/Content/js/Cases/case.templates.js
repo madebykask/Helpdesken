@@ -13,10 +13,15 @@ function SetValueIfElVisible(el, val, opt) {
 }
 
 function SetValueToBtnGroup(domContainer, domText, domValue, value, doOverwrite) {
+    var $domValue = $(domValue);
+    var oldValue = $domValue.val();
     var el = $(domContainer).find('a[value="' + value + '"]');
-    if (el && (doOverwrite || $(domValue).val() == '')) {
+    if (el && (doOverwrite || oldValue == '')) {
         $(domText).text(getBreadcrumbs(el));
-        $(domValue).val(value).trigger('change');
+        $domValue.val(value);
+        if (oldValue !== value) {
+            $domValue.trigger('change');
+        }
     }
 }
 
@@ -191,7 +196,6 @@ function ApplyTemplate(data, doOverwrite) {
                 SetValueIfElVisible(el, val, cfg);
                 break;
             case 'FinishingCause_Id':
-                $('#divFinishingType ul.dropdown-menu li a').trigger('click');
                 SetValueToBtnGroup('#divFinishingType', "#divBreadcrumbs_FinishingType", "#CaseLog_FinishingType", val, doOverwrite);
                 break;
             case 'RegistrationSource':

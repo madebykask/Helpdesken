@@ -146,6 +146,9 @@
             bundles.Add(new ScriptBundle("~/bundles/cases/edit").Include(
                 "~/Content/js/Cases/caseInitForm.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/Cases/_CaseLogInput").Include(
+                "~/Content/js/Cases/_caseLogInput.js"));
+
             bundles.Add(
                 new ScriptBundle("~/bundles/cases/_input").Include(
                     "~/Content/js/Cases/models/Case.js",
@@ -155,7 +158,7 @@
                     "~/Content/js/dropdown_fix.js",
                     "~/Content/js/Cases/case.templates.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/cases/editLog").Include("~/Content/js/Cases/editLog.logic.js"));
+            bundles.Add(new ScriptBundle("~/bundles/cases/_caseLogFiles").Include("~/Content/js/Cases/_caseLogFiles.js"));
 
             #endregion
 
