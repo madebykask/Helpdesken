@@ -70,7 +70,7 @@
                                         @Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td class="span9">
-                                        @Html.DropDownListFor(model => model.ProductArea.MailID, Model.MailTemplates, "")
+                                        @Html.DropDownListFor(model => model.ProductArea.MailID, Model.MailTemplates, "") @Translation.Get("Sänds bara första gången produktområde väljs", Enums.TranslationSource.TextTranslation)
                                     </td>
                                 </tr>
                                 <tr>
