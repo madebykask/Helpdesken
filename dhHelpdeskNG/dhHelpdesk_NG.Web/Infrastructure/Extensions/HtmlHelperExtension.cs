@@ -837,13 +837,15 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                                     : item.SubCaseTypes.ToList();
                 }
 
+                var cls = item.IsActive == 1 ? string.Empty : "inactive";
+
                 if (childs.Count > 0)
                 {
-                    res.Append("<li class='dropdown-submenu'>");
+                    res.Append("<li class='dropdown-submenu " + cls + "'>");
                 }
                 else
                 {
-                    res.Append("<li>");
+                    res.Append("<li class='" + cls + "'>");
                 }
 
                 res.AppendFormat("<a href='#' value='{0}'>{1}</a>", item.Id.ToString(), Translation.Get(item.Name, SessionFacade.CurrentLanguageId));
@@ -873,10 +875,12 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                         if (f.SubFinishingCauses.Count > 0)
                             hasChild = true;
 
+                    var cls = f.IsActive == 1 ? string.Empty : "inactive";
+
                     if (hasChild)
-                        sb.Append("<li class='dropdown-submenu'>");
+                        sb.Append("<li class='dropdown-submenu " + cls + "'>");
                     else
-                        sb.Append("<li>");
+                        sb.Append("<li class='" + cls + "'>");
 
                     sb.Append("<a href='#' value=" + f.Id.ToString() + ">" + Translation.Get(f.Name, Enums.TranslationSource.TextTranslation) + "</a>");
                     if (hasChild)
