@@ -108,6 +108,12 @@ END
 CLOSE MY_CURSOR
 DEALLOCATE MY_CURSOR
 
+-- http://helpdesk5.dhsolutions.se/Cases/Edit/53386
+if COL_LENGTH('tblDepartment','SearchKey') != 400
+BEGIN	
+	alter table tblDepartment alter column SearchKey nvarchar(200);
+END
+
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.13'
