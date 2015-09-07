@@ -73,7 +73,7 @@ function IsWillBeOverwritten(fieldId, val) {
             return IsWillBeOverwrittenByValue('#case__WorkingGroup_Id', '#case__WorkingGroup_Id', val);
             break;
         case 'PerformerUser_Id':
-            return IsWillBeOverwrittenByValue('#Performer_Id', '#case__Performer_User_Id', val);
+            return IsWillBeOverwrittenByValue('#Performer_Id', '#Performer_Id', val);
             break;
         case 'Priority_Id':
             return IsWillBeOverwrittenByValue('#case__Priority_Id', '#case__Priority_Id', val);
