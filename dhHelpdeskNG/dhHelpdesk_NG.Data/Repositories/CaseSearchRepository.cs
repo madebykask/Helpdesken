@@ -782,16 +782,15 @@
             string sort = (s != null && !string.IsNullOrEmpty(s.SortBy)) ? s.SortBy.Replace("_temporary_.", string.Empty) : string.Empty;
             if (string.IsNullOrEmpty(sort))
             {
-                orderBy.Add(" CaseNumber ");
+                orderBy.Add(" CaseNumber desc");
             }
             else
             {
                 orderBy.Add(sort);
-            }
-            
-            if (s != null && !s.Ascending)
-            {
-                orderBy.Add("desc");
+                if (s != null && !s.Ascending)
+                {
+                    orderBy.Add("desc");
+                }
             }
 
             sql.Add(string.Join(" ", orderBy));

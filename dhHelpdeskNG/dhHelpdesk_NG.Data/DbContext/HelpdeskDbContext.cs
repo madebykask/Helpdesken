@@ -158,13 +158,13 @@
 
         public DbSet<ChangeEntity> Changes { get; set; }
 
-        public DbSet<ChecklistAction> ChecklistActions { get; set; }
+        public DbSet<ChecklistAction> CheckListActions { get; set; }
 
-        public DbSet<ChecklistRow> ChecklistRows { get; set; }
+        public DbSet<ChecklistRow> CheckListRows { get; set; }
 
-        public DbSet<ChecklistService> ChecklistServices { get; set; }
+        public DbSet<ChecklistService> CheckListServices { get; set; }
 
-        public DbSet<Checklist> Checklist { get; set; }
+        public DbSet<Checklist> CheckList { get; set; }
 
         public DbSet<CheckListsEntity> CheckLists { get; set; }
 

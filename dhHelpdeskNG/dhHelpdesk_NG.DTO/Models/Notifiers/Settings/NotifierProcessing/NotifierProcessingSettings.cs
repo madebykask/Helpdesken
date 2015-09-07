@@ -24,6 +24,7 @@
             FieldProcessingSetting department,
             FieldProcessingSetting unit,
             FieldProcessingSetting organizationUnit,
+            FieldProcessingSetting costCentre,
             FieldProcessingSetting division,
             FieldProcessingSetting manager,
             FieldProcessingSetting group,
@@ -50,6 +51,7 @@
             this.Department = department;
             this.Unit = unit;
             this.OrganizationUnit = organizationUnit;
+            this.CostCentre = costCentre;
             this.Division = division;
             this.Manager = manager;
             this.Group = group;
@@ -114,6 +116,8 @@
 
         [NotNull]
         public FieldProcessingSetting OrganizationUnit { get; private set; }
+
+        public FieldProcessingSetting CostCentre { get; private set; }
 
         [NotNull]
         public FieldProcessingSetting Division { get; private set; }

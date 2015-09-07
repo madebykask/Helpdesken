@@ -1,0 +1,31 @@
+﻿@model List<DH.Helpdesk.Web.Models.CheckLists.CheckListActionsInputModel>
+
+
+        <td>
+            @Translation.Get("Åtgärd", Enums.TranslationSource.TextTranslation)
+        </td>
+
+ @for (int i = 0; i < Model.Count(); i++ )
+{
+
+        <td>
+            @Translation.Get("Åtgärd", Enums.TranslationSource.TextTranslation)
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model[i].ActionName, new { maxlength = "500", style = "width: 200px;" })
+        </td>
+
+         
+
+        <td>
+            @Translation.Get("Aktivera", Enums.TranslationSource.TextTranslation)
+        </td>
+        <td class="field switch">
+            @Html.SpecialLabel("IsActive", Model[i].IsActive, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
+            @Html.SpecialLabelOff("IsActive", Model[i].IsActive, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
+            @Html.SpecialCheckBox("checklistaction.IsActive", Model[i].IsActive, 1, new { @class = "checkbox" })
+        </td>
+
+
+@Html.HiddenFor(model => model[i].Action_Id)
+ }

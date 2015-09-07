@@ -76,6 +76,8 @@
         [IsId]
         public int? OrganizationUnitId { get; internal set; }
 
+        public string CostCentre { get; set; }
+
         [MaxLength(NotifierConstraint.OtherMaxLength)]
         public string Other { get; internal set; }
 
@@ -126,6 +128,7 @@
             int? departmentId,
             string unit,
             int? organizationUnitId,
+            string costCentre,
             int? divisionId,
             int? managerId,
             int? groupId,
@@ -157,6 +160,7 @@
                                DepartmentId = departmentId,
                                Unit = unit,
                                OrganizationUnitId = organizationUnitId,
+                               CostCentre = costCentre,
                                DivisionId = divisionId,
                                ManagerId = managerId,
                                GroupId = groupId,
@@ -193,6 +197,7 @@
             int? departmentId,
             string unit,
             int? organizationUnitId,
+            string costCentre,
             int? divisionId,
             int? managerId,
             int? groupId,
@@ -223,6 +228,7 @@
                                DepartmentId = departmentId,
                                Unit = unit,
                                OrganizationUnitId = organizationUnitId,
+                               CostCentre = costCentre,
                                DivisionId = divisionId,
                                ManagerId = managerId,
                                GroupId = groupId,
@@ -257,6 +263,7 @@
             int? departmentId,
             string unit,
             int? organizationUnitId,
+            string costCentre,
             int? divisionId,
             int? managerId,
             int? groupId,
@@ -287,6 +294,7 @@
                                DepartmentId = departmentId,
                                Unit = unit,
                                OrganizationUnitId = organizationUnitId,
+                               CostCentre = costCentre,
                                DivisionId = divisionId,
                                ManagerId = managerId,
                                GroupId = groupId,

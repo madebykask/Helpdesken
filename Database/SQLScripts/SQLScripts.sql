@@ -1,62 +1,120 @@
--- update DB from 5.3.11 to 5.3.12 version
+-- update DB from 5.3.11 to 5.3.13 version
 
--- Nytt fält i tblCaseSolution
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'RegistrationSource' and sysobjects.name = N'tblCaseSolution')
-	ALTER TABLE tblCaseSolution ADD RegistrationSource int Default(0) NOT NULL
+
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Modal' and sysobjects.name = N'tblform')
+	begin
+		declare @default sysname, @sql nvarchar(max)  
+		select @default = name  from sys.default_constraints  
+		where parent_object_id = object_id('tblForm') 
+			AND type = 'D' 
+			AND parent_column_id = (select column_id from sys.columns where object_id = object_id('tblForm') and name = 'Modal')  
+
+		set @sql = N'alter table tblform drop constraint ' + @default 
+		exec sp_executesql @sql  
+	end
+go
+	ALTER TABLE [dbo].[tblCaseStatistics]  WITH CHECK ADD  CONSTRAINT [FK_tblCaseStatistics_tblCase] FOREIGN KEY([Case_Id])
+
+if COL_LENGTH('dbo.tblform', 'ViewMode') IS NULL
+begin
+	alter table tblform
+	alter column Modal int 
+
+	EXEC sp_rename '[tblForm].[Modal]', 'ViewMode', 'COLUMN';
+
+	ALTER TABLE tblForm ADD CONSTRAINT DF_tblForm_ViewMode DEFAULT 0 FOR ViewMode;
+end
+go
+
+
+
+IF COL_LENGTH('dbo.tblcase','CostCentre') IS NULL
+BEGIN	 
+	ALTER TABLE [dbo].[tblcase]
+	ADD CostCentre nvarchar(50) null
+END
+GO
+
+IF COL_LENGTH('dbo.tblcaseHistory','CostCentre') IS NULL
+BEGIN	 
+	ALTER TABLE [dbo].[tblcaseHistory]
+	ADD CostCentre nvarchar(50) null
+END
+GO
+
+IF COL_LENGTH('dbo.tblcomputerusers','CostCentre') IS NULL
+BEGIN	 
+	ALTER TABLE [dbo].[tblcomputerusers]
+	ADD CostCentre nvarchar(50) null
+END
 GO
 
 
-if not exists(select * from sysobjects WHERE Name = N'tblCaseStatistics') 
-BEGIN  
-	CREATE TABLE [dbo].[tblCaseStatistics](
-		[Id] [int] IDENTITY(1,1) NOT NULL,
-		[Case_Id] [int] NOT NULL,
-		[WasSolvedInTime] [int] NULL,     
-	 CONSTRAINT [PK_tblCaseStatistics] PRIMARY KEY CLUSTERED 
-	(
-		[Id] ASC
-	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-	) ON [PRIMARY];
-	ALTER TABLE [dbo].[tblCaseStatistics]  WITH CHECK ADD  CONSTRAINT [FK_tblCaseStatistics_tblCase] FOREIGN KEY([Case_Id])
-	REFERENCES [dbo].[tblCase] ([Id])
-	ON UPDATE CASCADE
-	ON DELETE CASCADE;
+DECLARE @CustomerId int
 
-	ALTER TABLE [dbo].[tblCaseStatistics] CHECK CONSTRAINT [FK_tblCaseStatistics_tblCase];
-END
+DECLARE MY_CURSOR CURSOR 
+  LOCAL STATIC READ_ONLY FORWARD_ONLY
+FOR 
+SELECT DISTINCT Id 
+FROM tblCustomer
 
--- http://helpdesk5.dhsolutions.se/Cases/Edit/53106
--- 200 bytes for 100 nvarchar (https://msdn.microsoft.com/en-us/library/ms188732.aspx)
-if COL_LENGTH('tblCase','Caption') != 200
-BEGIN	
-	alter table tblCase alter column Caption nvarchar(100);
-END
-if COL_LENGTH('tblCaseHistory','Caption') != 200
-BEGIN
-	alter table tblCase alter column Caption nvarchar(100);
-END
+OPEN MY_CURSOR
+FETCH NEXT FROM MY_CURSOR INTO @CustomerId
+WHILE @@FETCH_STATUS = 0
+BEGIN 
+    --Do something with Id here
 
+	if not exists (select * from tblCaseFieldSettings where CaseField = 'CostCentre' and Customer_Id = @CustomerId)
+	begin
+		insert into tblCaseFieldSettings (Customer_Id, CaseField, Show, [Required], ShowExternal, FieldSize, RelatedField, DefaultValue, ListEdit, Locked)
+		values (@CustomerId, 'CostCentre', 0, 0,0,0, '', null, 0, 0)
+	end
+    FETCH NEXT FROM MY_CURSOR INTO @CustomerId
+END
+CLOSE MY_CURSOR
+DEALLOCATE MY_CURSOR
 
 -- Script for update old templates with new fields at case
 insert into tblcasesolutionfieldsettings  
-select casesolution_id, 51, 1, getdate(), getdate() 
+select casesolution_id, 53, 1, getdate(), getdate() 
 from tblcasesolutionfieldsettings 
 where casesolution_id 
 	not in (select casesolution_id from tblcasesolutionfieldsettings
-			where fieldname_id = 51)
+			where fieldname_id = 53)
 group by casesolution_id
 Go
 
 
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'RegistrationSourceCustomer_Id' and sysobjects.name = N'tblCaseHistory')
-begin
-	ALTER TABLE tblCaseHistory ADD RegistrationSourceCustomer_Id int NULL
+DECLARE @CustomerId int
 
-	ALTER TABLE [dbo].[tblCaseHistory]  WITH CHECK ADD  
-			CONSTRAINT [FK_tblCaseHistory_tblRegistrationSourceCustomer] FOREIGN KEY([RegistrationSourceCustomer_Id])
-				REFERENCES [dbo].[tblRegistrationSourceCustomer] ([Id])
-end
-GO
+DECLARE MY_CURSOR CURSOR 
+  LOCAL STATIC READ_ONLY FORWARD_ONLY
+FOR 
+SELECT DISTINCT Id 
+FROM tblCustomer
+
+OPEN MY_CURSOR
+FETCH NEXT FROM MY_CURSOR INTO @CustomerId
+WHILE @@FETCH_STATUS = 0
+BEGIN 
+    --Do something with Id here
+
+	if not exists (select * from tblcomputeruserfieldsettings where ComputerUserField = 'CostCentre' and Customer_Id = @CustomerId)
+	begin
+		insert into tblcomputeruserfieldsettings (Customer_Id, ComputerUserField, Show, [Required], MinLength, ShowInList, LDAPAttribute)
+		values (@CustomerId, 'CostCentre', 0, 0, 0, 0, '')
+	end
+    FETCH NEXT FROM MY_CURSOR INTO @CustomerId
+END
+CLOSE MY_CURSOR
+DEALLOCATE MY_CURSOR
+
+-- http://helpdesk5.dhsolutions.se/Cases/Edit/53386
+if COL_LENGTH('tblDepartment','SearchKey') != 400
+BEGIN	
+	alter table tblDepartment alter column SearchKey nvarchar(200);
+END
+
 
 -- Last Line to update database version
-UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.12'
+UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.13'

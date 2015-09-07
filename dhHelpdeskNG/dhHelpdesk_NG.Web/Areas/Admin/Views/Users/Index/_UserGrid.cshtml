@@ -1,0 +1,106 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Admin.Models.UserList
+
+
+@Html.HiddenFor(m => m.Sorting.IsAsc, new { id = "sortFieldBy" })
+@{
+
+    var isAsc = Model.Sorting.IsAsc.ToString().ToLower();
+    
+ }   
+
+ 
+
+<table class="table table-striped table-bordered table-hover table-cases" id="tblUsers">
+    <thead>
+        <tr>
+            <th onclick="DoSort('UserId', @isAsc)" class="thpointer">
+                @Translation.Get("Användar ID", Enums.TranslationSource.TextTranslation)
+                 @if (Model.Sorting.FieldName != null && Model.Sorting.FieldName == "UserId")
+                    {
+                        @Html.GetSortIcon(Model.Sorting);
+                    }
+            </th>
+            <th  onclick="DoSort('FirstName', @isAsc)" class="thpointer">
+                @Translation.Get("Förnamn", Enums.TranslationSource.TextTranslation)
+                 @if (Model.Sorting.FieldName != null && Model.Sorting.FieldName == "FirstName")
+                    {
+                        @Html.GetSortIcon(Model.Sorting);
+                    }
+            </th>
+            <th onclick="DoSort('SurName', @isAsc)" class="thpointer">
+                @Translation.Get("Efternamn", Enums.TranslationSource.TextTranslation)
+                 @if (Model.Sorting.FieldName != null && Model.Sorting.FieldName == "SurName")
+                    {
+                        @Html.GetSortIcon(Model.Sorting);
+                    }
+            </th>
+            <th onclick="DoSort('Phone', @isAsc)" class="thpointer">
+                @Translation.Get("Telefon", Enums.TranslationSource.TextTranslation)
+                 @if (Model.Sorting.FieldName != null && Model.Sorting.FieldName == "Phone")
+                    {
+                        @Html.GetSortIcon(Model.Sorting);
+                    }
+            </th>
+            <th onclick="DoSort('CellPhone', @isAsc)" class="thpointer">
+                @Translation.Get("Mobil", Enums.TranslationSource.TextTranslation)
+                @if (Model.Sorting.FieldName != null && Model.Sorting.FieldName == "CellPhone")
+                  {
+                       @Html.GetSortIcon(Model.Sorting);
+                  }
+            </th>
+            <th onclick="DoSort('Email', @isAsc)" class="thpointer">
+                @Translation.Get("E-mail", Enums.TranslationSource.TextTranslation)
+                 @if (Model.Sorting.FieldName != null && Model.Sorting.FieldName == "Email")
+                    {
+                        @Html.GetSortIcon(Model.Sorting);
+                    }
+            </th>
+            <th onclick="DoSort('UserGroup.Name', @isAsc)" class="thpointer">
+                @Translation.Get("Användargrupp", Enums.TranslationSource.TextTranslation)
+                 @if (Model.Sorting.FieldName != null && Model.Sorting.FieldName == "UserGroup.Name")
+                    {
+                        @Html.GetSortIcon(Model.Sorting);
+                    }
+            </th>
+            <th onclick="DoSort('ChangeTime', @isAsc)" class="thpointer">
+                @Translation.Get("Senast ändrad datum", Enums.TranslationSource.TextTranslation)
+                 @if (Model.Sorting.FieldName != null && Model.Sorting.FieldName == "ChangeTime")
+                    {
+                        @Html.GetSortIcon(Model.Sorting);
+                    }
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Users)
+        {
+            <tr>
+                <td>
+                    <a href="@Url.Action("edit", "users", new { id = item.Id })">@Html.DisplayFor(modelItem => item.UserID)</a>
+                </td>
+                <td>
+                    <a href="@Url.Action("edit", "users", new { id = item.Id })">@Html.DisplayFor(modelItem => item.FirstName)</a>
+                </td>
+                <td>
+                    <a href="@Url.Action("edit", "users", new { id = item.Id })">@Html.DisplayFor(modelItem => item.SurName)</a>
+                </td>
+                <td>
+                    <a href="@Url.Action("edit", "users", new { id = item.Id })">@Html.DisplayFor(modelItem => item.Phone)</a>
+                </td>
+                <td>
+                    <a href="@Url.Action("edit", "users", new { id = item.Id })">@Html.DisplayFor(modelItem => item.CellPhone)</a>
+                </td>
+                <td>
+                    <a href="@Url.Action("edit", "users", new { id = item.Id })">@Html.DisplayFor(modelItem => item.Email)</a>
+                </td>
+                <td>
+                    <a href="@Url.Action("edit", "users", new { id = item.Id })">@Translation.Get(item.UserGroup.Name, Enums.TranslationSource.TextTranslation)</a>
+                </td>
+                <td>
+                    <a href="@Url.Action("edit", "users", new { id = item.Id })">@Html.DisplayFor(modelItem => item.ChangeTime)</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

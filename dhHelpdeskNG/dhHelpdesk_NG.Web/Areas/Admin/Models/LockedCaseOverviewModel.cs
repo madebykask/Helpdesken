@@ -19,7 +19,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models
             )
         {
             this.Customers = customers;
-            this.FilterCustomerId = filterCustomerId;
+            this.LockedCaseFilterCustomerId = filterCustomerId;
             this.FilterCaseNumber = (filterCaseNumber > 0 ? filterCaseNumber.ToString() : "");
             this.FilterText = filterText;            
             this.LockedCasesModels = lockedCasesModels;
@@ -27,7 +27,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models
 
         public IList<SelectListItem> Customers { get; private set; }
 
-        public int? FilterCustomerId { get; private set; }
+        public int? LockedCaseFilterCustomerId { get; private set; }
 
         public string FilterCaseNumber { get; private set; }
 

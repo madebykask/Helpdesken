@@ -11,7 +11,8 @@ $(function () {
     var unLockCaseUrl = window.partialparams.unLockCaseUrl;
     var releaseButtonsPrefixName = window.partialparams.releaseButtonsPrefixName;
     var lockTimeTextPrefixName = window.partialparams.lockTimeTextPrefixName;
-    var lockedCasePartialName = window.partialparams.lockedCasePartialName;       
+    var lockedCasePartialName = window.partialparams.lockedCasePartialName;
+    var $caselockContainer = $('.caselockinfo.container');
 
     $(".btn.releasecase").click(function () {
         var caseId = $(this).attr('selectedcaseid');
@@ -48,17 +49,17 @@ $(function () {
         var customerId = $(customerFilter).val();
         var caseNumber = $(caseNumberFilter).val();
         var searchText = $(textFilter).val();
-                
-        $.get(filterLockedCaseUrl,
-                {
-                    selectedCustomerId: customerId,
-                    caseNumber: caseNumber,
-                    searchText: searchText,
-                    curTime: new Date().getTime()
-                }, function (_LockedCases) {
-            $(lockedCasePartialName).html(_LockedCases);
-        });
 
+        $.get(filterLockedCaseUrl,
+            {
+                selectedCustomerId: customerId,
+                caseNumber: caseNumber,
+                searchText: searchText,
+                curTime: new Date().getTime()
+            })
+            .done(function(newContent) {
+                $caselockContainer.html(newContent);
+            });
     });
 
 });

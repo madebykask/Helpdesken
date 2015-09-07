@@ -1,6 +1,7 @@
 ﻿"use strsict";
 
 (function ($) {
+    window.Params = window.Params || {};
     var defaultFocusObj = window.Params.DefaultFocusObject;
     var caseTypeDropDown = window.Params.CaseTypeDropDown;
     var productAreaDropDown = window.Params.ProductAreaDropDown;

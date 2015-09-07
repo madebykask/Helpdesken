@@ -27,12 +27,18 @@
             this._customerService = customerService;
         }
 
+        public JsonResult SetShowOnlyActiveWorkingGroupsInAdmin(bool value)
+        {
+            SessionFacade.ShowOnlyActiveWorkingGroupsInAdmin = value;
+            return this.Json(new { result = "success" });
+        }
+
         public ActionResult Index(int customerId)
         {
             var customer = this._customerService.GetCustomer(customerId);
             var workingGroups = this._workingGroupService.GetWorkingGroupsForIndexPage(customer.Id);
 
-            var model = new WorkingGroupIndexViewModel { WorkingGroup = workingGroups, Customer = customer };
+            var model = new WorkingGroupIndexViewModel { WorkingGroup = workingGroups, Customer = customer, IsShowOnlyActive = SessionFacade.ShowOnlyActiveWorkingGroupsInAdmin };
 
             return this.View(model);
         }

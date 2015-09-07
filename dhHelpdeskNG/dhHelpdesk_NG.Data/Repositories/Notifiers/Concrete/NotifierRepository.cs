@@ -189,6 +189,7 @@
                 notifierEntity.Department_Id,
                 notifierEntity.SOU != string.Empty ? notifierEntity.SOU : null,
                 notifierEntity.OU_Id,
+                notifierEntity.CostCentre != string.Empty ? notifierEntity.CostCentre : null,
                 notifierEntity.Division_Id,
                 notifierEntity.ManagerComputerUser_Id,
                 notifierEntity.ComputerUserGroup_Id,
@@ -224,7 +225,8 @@
                 notifierEntity.Title != string.Empty ? notifierEntity.Title : null, 
                 notifierEntity.Department_Id, 
                 notifierEntity.SOU != string.Empty ? notifierEntity.SOU : null, 
-                notifierEntity.OU == null ? (int?)null : notifierEntity.OU.Id, 
+                notifierEntity.OU == null ? (int?)null : notifierEntity.OU.Id,
+                notifierEntity.CostCentre != string.Empty ? notifierEntity.CostCentre : null,
                 notifierEntity.Division_Id, 
                 notifierEntity.ManagerComputerUser_Id, 
                 notifierEntity.ComputerUserGroup_Id, 
@@ -290,7 +292,8 @@
                                     Phone = cu.Phone, 
                                     SurName = cu.SurName, 
                                     Department_Id = cu.Department_Id, 
-                                    OU_Id = cu.OU_Id, 
+                                    OU_Id = cu.OU_Id,
+                                    CostCentre = cu.CostCentre,
                                     Region_Id = k.Region_Id, 
                                     UserCode = cu.UserCode, 
                                     UserId = (cu.UserId != null ? cu.UserId : string.Empty),
@@ -455,6 +458,7 @@
             notifierEntity.ManagerComputerUser_Id = notifier.ManagerId;
             notifierEntity.OrderPermission = notifier.Ordered ? 1 : 0;
             notifierEntity.OU_Id = notifier.OrganizationUnitId;
+            notifierEntity.CostCentre = notifier.CostCentre ?? string.Empty;
             notifierEntity.Info = notifier.Other ?? string.Empty;
             notifierEntity.Phone = notifier.Phone ?? string.Empty;
             notifierEntity.Location = notifier.Place ?? string.Empty;

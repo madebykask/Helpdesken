@@ -53,6 +53,7 @@
         CausingPart = 49,
         FileName = 50,
         RegistrationSourceCustomer = 51,
-        AddUserBtn = 52
+        AddUserBtn = 52,
+        CostCentre = 53
     }
 }

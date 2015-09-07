@@ -33,6 +33,7 @@
             DropDownFieldModel region,
             DropDownFieldModel department,
             DropDownFieldModel organizationUnit,
+            StringFieldModel costCentre,
             StringFieldModel unit,
             DropDownFieldModel division,
             DropDownFieldModel managers,
@@ -63,6 +64,7 @@
                 region,
                 department,
                 organizationUnit,
+                costCentre,
                 unit,
                 division,
                 managers,
@@ -97,6 +99,7 @@
             DropDownFieldModel region,
             DropDownFieldModel department,
             DropDownFieldModel organizationUnit,
+            StringFieldModel costCentre,
             StringFieldModel unit,
             DropDownFieldModel division,
             DropDownFieldModel managers,
@@ -125,6 +128,7 @@
             this.Region = region;
             this.Department = department;
             this.OrganizationUnit = organizationUnit;
+            this.CostCentre = costCentre;
             this.Unit = unit;
             this.Division = division;
             this.Managers = managers;
@@ -173,6 +177,8 @@
         public StringFieldModel Email { get; set; }
 
         public StringFieldModel FirstName { get; set; }
+
+        public StringFieldModel CostCentre { get; set; }
 
         public DropDownFieldModel Group { get; set; }
 

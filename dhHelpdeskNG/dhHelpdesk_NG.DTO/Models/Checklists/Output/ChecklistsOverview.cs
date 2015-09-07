@@ -4,9 +4,9 @@
 
     using DH.Helpdesk.Domain;
 
-    public sealed class ChecklistsOverview
+    public sealed class CheckListsOverview
     {
-        public ChecklistsOverview(
+        public CheckListsOverview(
                 DateTime createdDate,
                 string checklistName)
         {

@@ -11,6 +11,6 @@
         public string FormPath { get; set; }
         public Guid FormGUID { get; set; }
         public int ExternalPage { get; set; }
-        public bool Modal { get; set; } 
+        public int ViewMode { get; set; } 
     }
 }

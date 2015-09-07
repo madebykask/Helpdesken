@@ -13,53 +13,6 @@ var publicReadOnlyOUName = '#OuName';
 var publicChangeRegion = '/Cases/ChangeRegion/';
 var publicChangeDepartment = '/Cases/ChangeDepartment/';
 
-/**
-* Initializator for Log form and case-log related controls
-*/
-function LogInitForm() {
-
-    $('#divFinishingType ul.dropdown-menu li a').click(function (e) {
-        e.preventDefault();
-        var value = $(this).attr('value');
-        $("#divBreadcrumbs_FinishingType").text(getBreadcrumbs(this));
-        $("#CaseLog_FinishingType").val(value);
-        if (value == '' || value === undefined) {
-            $("#CaseLog_FinishingDate").val('');
-        }
-        else {
-            if ($("#CaseLog_FinishingDate").val() == '') {
-                $("#CaseLog_FinishingDate").val(today());
-            }
-        }
-    });
-
-    $("#CaseLog_SendMailAboutLog").change(function () {
-        if ($(this).attr('readonly') != null) {
-            return false;
-        }
-        $('#divEmailRecepientsInternalLog').hide();
-        if (this.checked) {
-            $("#divSendToDialogCase").dialog("option", "width", 450);
-            $("#divSendToDialogCase").dialog("option", "height", 550);
-            $("#divSendToDialogCase").dialog("open");
-        }
-    });
-
-    $('#CaseLog_TextExternal').bind('input propertychange', function () {
-        var informNotifier = $('#CaseLog_SendMailAboutCaseToNotifier');
-        var isInformNotifierBehavior = informNotifier.attr("InformNotifierBehavior");
-        if (isInformNotifierBehavior == "false") {
-            return;
-        }
-
-        informNotifier.removeAttr('checked');
-        if (this.value.length) {
-            $('#CaseLog_SendMailAboutCaseToNotifier:not(:disabled)').attr('checked', 'checked');
-        }
-    });
-
-    bindDeleteLogFileBehaviorToDeleteButtons();
-}
 
 //tabbar
 $('.nav-tabs li:not(.disabled) a').click(function (e) {
@@ -184,26 +137,6 @@ function CaseCascadingSelectlistChange(id, customerId, postTo, ctl, departmentFi
 
 function CaseWriteTextToLogNote(value) {
     $('#WriteTextToExternalNote').val(value);
-}
-
-function EditCaseAndClose() {
-    $("#target").attr("action", '/Cases/EditAndClose');
-    $("#target").submit();
-}
-
-function EditCaseAndAddCase() {
-    $("#target").attr("action", '/Cases/EditAndAddCase');
-    $("#target").submit();
-}
-
-function NewCaseAndClose() {
-    $("#target").attr("action", '/Cases/NewAndClose');
-    $("#target").submit();
-}
-
-function NewCaseAndAddCase() {
-    $("#target").attr("action", '/Cases/NewAndAddCase');
-    $("#target").submit();
 }
 
 var allFileNames = [];
@@ -663,11 +596,7 @@ function DestroyDataTable(tableUniqId) {
 };
 
 function InitDataTable(tableUniqId, perText, showingText) {
-    //alert('init: ' + tableUniqId);
-
     $('#' + tableUniqId).dataTable({
-        stateSave: true,
-        //stateDuration: 10,
         "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
         "sPaginationType": "bootstrap",
         "oLanguage": {
@@ -678,8 +607,6 @@ function InitDataTable(tableUniqId, perText, showingText) {
                 "sLast": "Last",
                 "sNext": "",
                 "sPrevious":""
-                //"sNext": "@Translation.Get('Nästa', Enums.TranslationSource.TextTranslation)",
-                //"sPrevious": "@Translation.Get('Föregående', Enums.TranslationSource.TextTranslation)"
             }
         }
     });

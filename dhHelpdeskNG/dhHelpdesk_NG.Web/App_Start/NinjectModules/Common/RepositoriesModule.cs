@@ -122,7 +122,7 @@
             this.Bind<IChecklistActionRepository>().To<ChecklistActionRepository>();
             this.Bind<IChecklistRepository>().To<ChecklistRepository>();
             this.Bind<IChecklistRowRepository>().To<ChecklistRowRepository>();
-            this.Bind<IChecklistServiceRepository>().To<ChecklistServiceRepository>();
+            this.Bind<ICheckListServiceRepository>().To<CheckListServiceRepository>();
             this.Bind<IChecklistRepository>().To<ChecklistRepository>();
             this.Bind<IChecklistsRepository>().To<ChecklistsRepository>();            
             this.Bind<IContractCategoryRepository>().To<ContractCategoryRepository>();

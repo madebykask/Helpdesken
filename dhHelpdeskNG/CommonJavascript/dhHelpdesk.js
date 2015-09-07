@@ -493,6 +493,7 @@ function CaseInitForm() {
     });
 
     $('#AddNotifier').click(function (e) {
+
         e.preventDefault();
         if ($(this).hasClass('disabled')) {
             return false;
@@ -822,11 +823,11 @@ function GetComputerUserSearchOptions() {
                                     , departmentname: item.DepartmentName
                                     , ouid: item.OU_Id
                                     , ouname: item.OUName
+                                    , costcentre: item.CostCentre
                                     
                         };
                         return JSON.stringify(aItem);
                     });
-
                     return process(resultList);
                 }
             });
@@ -878,6 +879,7 @@ function GetComputerUserSearchOptions() {
             $('#case__PersonsCellphone').val(item.cellphone);
             $('#case__Place').val(item.place);
             $('#case__UserCode').val(item.usercode);
+            $('#case__CostCentre').val(item.costcentre);
 
             $('#case__Region_Id').val(item.regionid);
             $('#RegionName').val(item.regionname);
@@ -1136,7 +1138,7 @@ $(function(){
     $('[data-datetimeutc]', 'body').each(function () {
         // the date construct will automatically convert to local time
         var localDate = new Date(parseInt($(this).attr('data-datetimeutc')));
-        $(this).html(localDate.toLocaleDateString() + ' ' + localDate.toLocaleTimeString());
+        $(this).html(localDate.toLocaleDateString() + ' ' + localDate.toLocaleTimeSdetring());
     });
 });
 

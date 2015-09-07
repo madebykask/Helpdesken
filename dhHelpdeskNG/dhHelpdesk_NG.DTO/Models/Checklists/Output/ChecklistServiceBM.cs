@@ -1,17 +1,22 @@
-﻿using System;
+﻿using DH.Helpdesk.BusinessData.Models.Shared.Input;
+using DH.Helpdesk.Common.ValidationAttributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace DH.Helpdesk.BusinessData.Models.Checklists.Output
 {
-    public sealed class ChecklistServiceBM
+    public sealed class CheckListServiceBM : INewBusinessModel
     {
+       
+        public CheckListServiceBM()
+        {}
 
-        public ChecklistServiceBM(
+        public CheckListServiceBM(
                 int customerId,
-                int checkListId,
-                int id,
+                int checkListId,  
+                int id, 
                 int isActive,
                 string Name,
                 DateTime changedDate,
@@ -27,10 +32,11 @@ namespace DH.Helpdesk.BusinessData.Models.Checklists.Output
             this.CreatedDate = createdDate;
         }
 
-
         public int CustomerId { get; private set; }
         public int CheckListId { get; private set; }
-        public int Id { get; private set; }
+
+        [IsId]
+        public int Id { get; set; }
         public int IsActive { get; set; }
         public string Name { get; private set; }
         public DateTime ChangedDate { get; private set; }

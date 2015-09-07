@@ -43,12 +43,12 @@ var dhform = function (options) {
                              '</div>';
 
     (function () {
-        if (_this._options.modal == "false") {
+        if (_this._options.modal == 0) {
             $('#loadContainer').on('click', function (event) {
                 event.preventDefault();
                 _this.load({ url: _this._options.url });
             });
-        } else {
+        } else if (_this._options.modal == 1) {
             $('#openContainer').on('click', function (event) {
                 event.preventDefault();
                 _this.loadModal({ url: _this._options.url });
@@ -57,6 +57,12 @@ var dhform = function (options) {
             $(document).on('hidden', '#' + _this._modalId, function () {
                 _this.closeModal();
             })
+        }
+        else if (_this._options.modal == 2)
+        {
+            _this._formAreaId = 'dh-form-on-case-area';
+            _this._options.url = _this._options.url.substr(1);
+            _this.load({ url: _this._options.url });
         }
     })();
 };
@@ -74,7 +80,6 @@ dhform.prototype.progress = function () {
 dhform.prototype.load = function (options) {
     "use strict";
     var _this = this;
-
     _this._formArea = $('#' + _this._formAreaId);
 
     _this._formArea.html(_this._loadingTemplate);

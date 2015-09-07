@@ -62,7 +62,15 @@
                 item.Files);
         }
 
-        public void SendEmail(string from, string to, string subject, string body, List<DH.Helpdesk.Domain.Field> fields, string mailMessageId = "", bool highPriority = false, List<string> files = null)
+        public void SendEmail(
+            string from, 
+            string to, 
+            string subject, 
+            string body, 
+            List<DH.Helpdesk.Domain.Field> fields, 
+            string mailMessageId = "", 
+            bool highPriority = false, 
+            List<string> files = null)
         {
             SmtpClient _smtpClient;
 

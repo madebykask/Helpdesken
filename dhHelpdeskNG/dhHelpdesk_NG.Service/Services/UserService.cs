@@ -36,7 +36,7 @@
     {
         IEnumerable<CustomerUser> GetCustomerUserForUser(int userId);
 
-        IList<UserLists> GetUserOnCases(int customer);
+        IList<UserLists> GetUserOnCases(int customer, bool isTakeOnlyActive = false);
         IList<CustomerWorkingGroupForUser> GetListToUserWorkingGroup(int userId);
         List<CustomerWorkingGroupForUser> GetWorkinggroupsForUserAndCustomer(int userId, int customerId);
         IList<LoggedOnUsersOnIndexPage> GetListToUserLoggedOn();
@@ -298,9 +298,9 @@
             return this._userRepository.GetUsersForWorkingGroup(workingGroupId).OrderBy(x => x.SurName).ThenBy(x => x.FirstName).ToList();
         }
 
-        public IList<UserLists> GetUserOnCases(int customerId)
+        public IList<UserLists> GetUserOnCases(int customerId, bool isTakeOnlyActive = false)
         {
-            return this._userRepository.GetUserOnCases(customerId);
+            return this._userRepository.GetUserOnCases(customerId, isTakeOnlyActive);
         }
 
         public IList<User> GetUsers()

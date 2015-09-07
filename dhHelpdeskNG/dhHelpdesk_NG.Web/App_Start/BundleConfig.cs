@@ -70,13 +70,14 @@
                             "~/Content/js/bootstrap-switch.min.js",
                             "~/Content/js/dhHelpdesk-head.js",
                             "~/Content/js/ui/dh.ui.hierarchylist.js",
-                            "~/Content/js/jquery.dataTables.min.js"));
+                            "~/Content/js/jquery.dataTables.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery-typing").Include(
                             "~/Content/js/jquery.typing-0.2.0.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/dhhelpdesk").Include(
-                            "~/Content/js/dhHelpdesk.js"));
+                            "~/Content/js/dhHelpdesk.js",
+                            "~/Content/js/clickmultimenu_dropdown.js"));
             
             bundles.Add(new ScriptBundle("~/bundles/common/login").Include(
                             "~/Scripts/jquery-1.8.3.min.js",
@@ -145,13 +146,19 @@
             bundles.Add(new ScriptBundle("~/bundles/cases/edit").Include(
                 "~/Content/js/Cases/caseInitForm.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/Cases/_CaseLogInput").Include(
+                "~/Content/js/Cases/_caseLogInput.js"));
+
             bundles.Add(
                 new ScriptBundle("~/bundles/cases/_input").Include(
+                    "~/Content/js/Cases/models/Case.js",
+                    "~/Content/js/Cases/components/Utils.js",
+                    "~/Content/js/Cases/components/EditPage.js",
                     "~/Content/js/Cases/_input.js",
                     "~/Content/js/dropdown_fix.js",
                     "~/Content/js/Cases/case.templates.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/cases/editLog").Include("~/Content/js/Cases/editLog.logic.js"));
+            bundles.Add(new ScriptBundle("~/bundles/cases/_caseLogFiles").Include("~/Content/js/Cases/_caseLogFiles.js"));
 
             #endregion
 
@@ -246,6 +253,7 @@
                            "~/Areas/Admin/Content/js/Users/index.lockedcase.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/admin/users/index").Include(
+                           "~/Scripts/jquery.cookie.js",
                            "~/Areas/Admin/Content/js/Users/index.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/admin/customerOverview").Include(
@@ -257,7 +265,16 @@
                             "~/Areas/Admin/Content/js/Common/common.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/admin/ProductArea/index").Include(
-                            "~/Areas/Admin/Content/js/ProductArea/index.js"));
+                "~/Areas/Admin/Content/js/Common/ToggableInactiveList.js",
+                "~/Areas/Admin/Content/js/ProductArea/index.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/admin/CaseType/index").Include(
+                "~/Areas/Admin/Content/js/Common/ToggableInactiveList.js",
+                "~/Areas/Admin/Content/js/CaseType/index.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/admin/WorkingGroup/index").Include(
+              "~/Areas/Admin/Content/js/Common/ToggableInactiveList.js",
+              "~/Areas/Admin/Content/js/WorkingGroup/index.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/cases/relatedCases").Include(
                             "~/Content/js/Cases/relatedCases.logic.js"));

@@ -1,45 +1,41 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
-@model IList<LoggedInUsers>
-
-@using (Html.BeginForm("index", "users", FormMethod.Post, new { id = "searchOnlineUsers" }))
-{        
-    <div class="container">
-        <table class="table table-striped table-bordered table-hover table-cases" id="tblUsersLoggedIn">
-            <thead>
+﻿@model IList<LoggedInUsers>
+     
+<div class="onlineusers container">
+    <table class="table table-striped table-bordered table-hover table-cases" id="tblUsersLoggedIn">
+        <thead>
+            <tr>
+                <th>
+                    @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)
+                </th>
+                <th>
+                    @Translation.Get("Standardkund", Enums.TranslationSource.TextTranslation)
+                </th>
+                <th>
+                    @Translation.Get("Senast inloggad", Enums.TranslationSource.TextTranslation)
+                </th>                    
+                <th>
+                    @Translation.Get("Senaste aktivitet", Enums.TranslationSource.TextTranslation)
+                </th>                    
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
                 <tr>
-                    <th>
-                        @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)
-                    </th>
-                    <th>
-                        @Translation.Get("Kund", Enums.TranslationSource.TextTranslation)
-                    </th>
-                    <th>
-                        @Translation.Get("Senast inloggad", Enums.TranslationSource.TextTranslation)
-                    </th>                    
-                    <th>
-                        @Translation.Get("Senaste aktivitet", Enums.TranslationSource.TextTranslation)
-                    </th>                    
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserFirstName) @Html.DisplayFor(modelItem => item.UserLastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CustomerName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LoggedOnLastTime, "DateAndTime")
+                    </td>                       
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LatestActivity, "DateAndTime")
+                    </td>                        
                 </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.UserFirstName) @Html.DisplayFor(modelItem => item.UserLastName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.CustomerName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LoggedOnLastTime, "DateAndTime")
-                        </td>                       
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LatestActivity, "DateAndTime")
-                        </td>                        
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>       
-}
+            }
+        </tbody>
+    </table>
+</div>

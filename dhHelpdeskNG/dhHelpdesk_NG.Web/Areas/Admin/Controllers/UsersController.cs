@@ -10,7 +10,8 @@
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Accounts;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Users;
-    using DH.Helpdesk.Services.Services;    
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Services.utils;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Areas.Admin.Models;
     using DH.Helpdesk.Web.Areas.Admin.Infrastructure.Mappers;
@@ -80,16 +81,23 @@
         public ActionResult Index()
         {
             var model = this.IndexInputViewModel();
+            var userSearch = (UserSearch)this.Session["UserSearch"];
+
+           
+
             if (this.Session["UserSearch"] == null)
             {
-                model.Users = this._userService.GetUsers(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.UserID).ToList();
+                model.UserOverviewList.Users = this._userService.GetUsers().OrderBy(x => x.UserID).ToList();
+                model.UserOverviewList.Sorting = new UserSort { FieldName = "", IsAsc = true };
+                //model.Users = this._userService.GetUsers(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.UserID).ToList();
             }
             else
-            {
+            {                       
                 var filter = (UserSearch)this.Session["UserSearch"];
                 model.Filter = filter;
-                model.Users = this._userService.SearchSortAndGenerateUsers(filter);
-                model.StatusUsers.FirstOrDefault(x => x.Value == filter.StatusId.ToString()).Selected = true;
+                model.UserOverviewList.Users = this._userService.SearchSortAndGenerateUsers(filter);
+                model.UserOverviewList.Sorting = new UserSort { FieldName = "", IsAsc = true };
+                model.StatusUsers.FirstOrDefault(x => x.Value == filter.StatusId.ToString()).Selected = true;               
             }
             
             return this.View(model);
@@ -107,14 +115,119 @@
         [HttpPost]
         public ActionResult Index(UserSearch filter)
         {
-            var model = this.IndexInputViewModel();
-            model.Filter = filter;
-            this.Session["UserSearch"] = filter;
-            model.Users = this._userService.SearchSortAndGenerateUsers(filter);
-           
+            var model = this.IndexInputViewModel();  
+            var userSearch = (UserSearch) this.Session["UserSearch"]; 
+            
+            if (this.Session["UserSearch"] == null && filter.SearchUs == null)
+            {
+                model.UserOverviewList.Users = this._userService.GetUsers().OrderBy(x => x.UserID).ToList();
+                model.UserOverviewList.Sorting = new UserSort { FieldName = "", IsAsc = true };
+                //model.Users = this._userService.GetUsers(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.UserID).ToList();
+            }
+                if (this.Session["UserSearch"] == null && filter.SearchUs != null)
+            {
+                model.UserOverviewList.Users = this._userService.SearchSortAndGenerateUsers(filter);
+                model.UserOverviewList.Sorting = new UserSort { FieldName = "", IsAsc = true };
+            }
+            else
+            {
+
+                model.Filter = filter;
+                this.Session["UserSearch"] = filter;
+                model.UserOverviewList.Users = this._userService.SearchSortAndGenerateUsers(filter);
+            }
+
+           if (userSearch != null)
+           {
+              var fieldName = userSearch.SortBy;
+              var isAsc = userSearch.Ascending;
+              model.UserOverviewList.Users = this.SortUsers(model.UserOverviewList.Users, fieldName, isAsc);
+              model.UserOverviewList.Sorting = new UserSort { FieldName = fieldName, IsAsc = !isAsc };
+           }
             return this.View(model);
         }
 
+        [HttpGet]
+        public PartialViewResult DoSort(int customerId, string searchUs, int statusId, string fieldName, bool isAsc)
+        {
+            var model = new UserList();
+            var filter = new UserSearch { CustomerId = customerId, SearchUs = searchUs, StatusId = statusId };
+            if (this.Session["UserSearch"] == null && filter.SearchUs == null)
+            {
+                model.Users = this._userService.GetUsers().OrderBy(x => x.UserID).ToList();
+                model.Sorting = new UserSort { FieldName = fieldName, IsAsc = !isAsc };
+                //model.Users = this._userService.GetUsers(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.UserID).ToList();
+            }
+            if (this.Session["UserSearch"] == null && filter.SearchUs != null)
+            {
+                model.Users = this._userService.SearchSortAndGenerateUsers(filter);
+                model.Sorting = new UserSort { FieldName = fieldName, IsAsc = !isAsc };
+            }
+            else
+            {                
+                model.Users = this._userService.SearchSortAndGenerateUsers(filter);
+            }
+
+            model.Users = this.SortUsers(model.Users,fieldName,isAsc);
+            model.Sorting = new UserSort { FieldName = fieldName, IsAsc = !isAsc };
+
+            return PartialView("Index/_UserGrid", model);
+        }
+
+        private IEnumerable<User> SortUsers(IEnumerable<User> users, string fieldName, bool  isAsc)
+        {
+            switch (fieldName)
+            {
+                case "UserId":
+                    if (isAsc)
+                        return users.OrderBy(u => u.UserID).ToList();
+                    else
+                        return users.OrderByDescending(u => u.UserID).ToList();
+                case "FirstName":
+                    if (isAsc)
+                        return users.OrderBy(u => u.FirstName).ToList();
+                    else
+                        return users.OrderByDescending(u => u.FirstName).ToList();
+                case "SurName":
+                    if (isAsc)
+                        return users.OrderBy(u => u.SurName).ToList();
+                    else
+                        return users.OrderByDescending(u => u.SurName).ToList();
+                case "Phone":
+                    if (isAsc)
+                        return users.OrderBy(u => u.Phone).ToList();
+                    else
+                        return users.OrderByDescending(u => u.Phone).ToList();
+                case "CellPhone":
+                    if (isAsc)
+                        return users.OrderBy(u => u.CellPhone).ToList();
+                    else
+                        return users.OrderByDescending(u => u.CellPhone).ToList();
+                case "Email":
+                    if (isAsc)
+                        return users.OrderBy(u => u.Email).ToList();
+                    else
+                        return users.OrderByDescending(u => u.Email).ToList();
+                case "UserGroup.Name":
+                    if (isAsc)
+                    {
+                        var usersList = users.OrderBy(u => Translation.Get(u.UserGroup.Name, Enums.TranslationSource.TextTranslation)).ToList();
+                        return usersList;
+                    }
+                    else
+                    {
+                        var usersList = users.OrderByDescending(u => Translation.Get(u.UserGroup.Name, Enums.TranslationSource.TextTranslation)).ToList();
+                        return usersList;
+                    }
+                case "ChangeTime":
+                    if (isAsc)
+                        return users.OrderBy(u => u.ChangeTime).ToList();
+                    else
+                        return users.OrderByDescending(u => u.ChangeTime).ToList();
+
+                default: return users;
+            }
+        }
         /// <summary>
         /// The new.
         /// </summary>
@@ -278,14 +391,20 @@
             if (id != -1)
             {
                 userToSave = this._userService.GetUser(id);
+
+                var currentUserData = this._userService.GetUser(id);
+
                 if (SessionFacade.CurrentUser.UserGroupId != (int)UserGroup.SystemAdministrator
                     && (SessionFacade.CurrentUser.UserGroupId < userToSave.UserGroup_Id || userModel.User.UserGroup_Id > SessionFacade.CurrentUser.UserGroupId))
                 {
                     return this.RedirectToAction("Forbidden", "Error", new { area = string.Empty });
                 }
 
+                userModel.User.CustomerUsers = currentUserData.CustomerUsers;
+
                 userToSave.OrderPermission = this.returnOrderPermissionForSave(userModel);
                 userToSave.CaseInfoMail = this.returnCaseInfoMailForEditSave(userModel);
+
                 this.TryUpdateModel(userToSave, "user");
                 var allCustomers = _customerService.GetAllCustomers();
                 string err = "";
@@ -454,6 +573,11 @@
                     cu.CaseStateSecondaryFilter = "0";
                 }
 
+                if (ccu.CaseDepartmentFilter != null)
+                {
+                    cu.CaseDepartmentFilter = "0";
+                }
+
                 if (ccu.CaseStatusFilter != null)
                 {
                     cu.CaseStatusFilter = "0";
@@ -557,10 +681,15 @@
         public PartialViewResult GetLoggedInUsers(int? selectedCustomerId = null)
         {            
             var model = new List<LoggedInUsers>();
+            SessionFacade.AdminUsersPageLoggedInUsersTabSelectedCustomerId = selectedCustomerId;
             if (selectedCustomerId.HasValue)
-                model = ApplicationFacade.GetLoggedInUsers(selectedCustomerId.Value).ToList();                
+            {
+                model = ApplicationFacade.GetLoggedInUsers(selectedCustomerId.Value).ToList();
+            }
             else
-                model = ApplicationFacade.GetAllLoggedInUsers().ToList();                
+            {
+                model = ApplicationFacade.GetAllLoggedInUsers().ToList();
+            }
 
             return PartialView("Index/_OnlineUserList", model);
         }
@@ -569,16 +698,15 @@
         public PartialViewResult FilterLockedCases(int? selectedCustomerId = null, decimal caseNumber = 0, string searchText = "")
         {            
             var model = GetLockedCaseModel(selectedCustomerId, caseNumber, searchText);
-            return PartialView("Index/_LockedCaseOverview", model);
+            SessionFacade.AdminUsersPageLockedCasesTabSelectedCustomerId = selectedCustomerId;
+            return PartialView("Index/_LockedCaseTable", model.LockedCasesModels);
 
         }
         private UserIndexViewModel IndexInputViewModel()
         {
             var user = this._userService.GetUser(SessionFacade.CurrentUser.Id);
-
             var csSelected = user.Cs ?? new List<Customer>();
             var csAvailable = new List<Customer>();
-
 
             foreach (var c in this._customerService.GetAllCustomers())
             {
@@ -605,34 +733,42 @@
                 Value = "3",
                 Selected = false
             });
-
+            
             //Locked Cases                        
-            var lockedCasesModel = GetLockedCaseModel(SessionFacade.CurrentCustomer.Id);
-
-            var filter = (UserSearch)this.Session["UserSearch"];
-            if (filter == null)
+            int AdminUsersPageLockedCasesTabSelectedCustomerId = 0;
+            if (!SessionFacade.AdminUsersPageLockedCasesTabSelectedCustomerId.HasValue)
             {
-                filter = new UserSearch { CustomerId = SessionFacade.CurrentCustomer.Id };
+                SessionFacade.AdminUsersPageLockedCasesTabSelectedCustomerId = SessionFacade.CurrentUser.CustomerId;
             }
-            else
-                if (filter.CustomerId == 0)
-                    filter.CustomerId = SessionFacade.CurrentCustomer.Id;
 
+            AdminUsersPageLockedCasesTabSelectedCustomerId = SessionFacade.AdminUsersPageLockedCasesTabSelectedCustomerId.Value;
+            var lockedCasesModel = this.GetLockedCaseModel(AdminUsersPageLockedCasesTabSelectedCustomerId);
+
+            int AdminUsersPageLoggedInUsersTabSelectedCustomerId = 0;
+            if (!SessionFacade.AdminUsersPageLoggedInUsersTabSelectedCustomerId.HasValue)
+            {
+                SessionFacade.AdminUsersPageLoggedInUsersTabSelectedCustomerId = SessionFacade.CurrentUser.CustomerId;
+            }
+
+            AdminUsersPageLoggedInUsersTabSelectedCustomerId = SessionFacade.AdminUsersPageLoggedInUsersTabSelectedCustomerId.Value;
             var model = new UserIndexViewModel
             {
                 User = user,
                 StatusUsers = sli,
                 LockedCaseModel = lockedCasesModel,
-                ListLoggedInUsers = ApplicationFacade.GetLoggedInUsers(SessionFacade.CurrentCustomer.Id),
+                ListLoggedInUsers = AdminUsersPageLockedCasesTabSelectedCustomerId == 0 ? ApplicationFacade.GetAllLoggedInUsers() : ApplicationFacade.GetLoggedInUsers(AdminUsersPageLockedCasesTabSelectedCustomerId),
+                Filter = new UserSearch { CustomerId = AdminUsersPageLockedCasesTabSelectedCustomerId },
                 CsSelected = csSelected.Select(x => new SelectListItem
                 {
                     Text = x.Name,
-                    Value = x.Id.ToString()
+                    Value = x.Id.ToString(),                    
                 })
                 .OrderBy(c => c.Text)
-                .ToList()                
+                .ToList(),
+                OnlineUsersTabSelectedCustomerId = AdminUsersPageLoggedInUsersTabSelectedCustomerId,
+                UserOverviewList = new UserList()
             };
-
+            
             return model;
         }
 
@@ -643,13 +779,12 @@
             var csSelected = user.Cs ?? new List<Customer>();
             var csAvailable = new List<Customer>();
 
-
             foreach (var c in this._customerService.GetAllCustomers())
             {
                 if (!csSelected.Contains(c))
                     csAvailable.Add(c);
             }
-
+          
             var customerList = csSelected.Select(x => new SelectListItem
                 {
                     Text = x.Name,
@@ -657,7 +792,10 @@
                     Selected = (selectedCustomerId != null && x.Id == selectedCustomerId.Value)
                 })
                 .OrderBy(c=> c.Text)
-                .ToList();           
+                .ToList();
+
+            // Delete the empty choice added to the top of the customer List
+            customerList.RemoveAt(0);
 
             var lockedCases = new List<LockedCaseOverview>();
             if (caseNumber > 0)

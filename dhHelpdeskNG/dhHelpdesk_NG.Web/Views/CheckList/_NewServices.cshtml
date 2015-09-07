@@ -1,10 +1,8 @@
-﻿@model DH.Helpdesk.Web.Models.CheckLists.CheckListserviceModel
+﻿@model DH.Helpdesk.Web.Models.CheckLists.CheckListServiceModel
 
 
-@using (Html.BeginForm("AddSericesAndActions", "checklist", FormMethod.Post, new { id = "tblNewService" }))
-{
 <div class="span8">
-<table class="tableform">        
+<table class="tableform" id ="">        
     <tbody>                                         
             <tr>
                 <td>                  
@@ -17,38 +15,78 @@
                 </td>
              
                 <td>
-                  @* @Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation),
-                                     "AddSericesAndActions", null, new { onclick = "$('#tblNewService').submit();return false;", @class = "btn" }) *@
-                    <input type="submit"  value="@Translation.Get("Lägg till")" class="btn btn-default" />
+                   @Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation), "Edit", null, new { onclick = "$('#target').submit();return false;", @class = "btn" })             
                 </td>
             </tr>                                                                                        
             <tr> 
                 <td>                  
                    @Translation.Get("Ny åtgärd", Enums.TranslationSource.TextTranslation)
                 </td>
-             </tr>
+             </tr>       
              <tr>
                 <td> 
-                     @if (Model.ServiceName != null)
-                     {
-                        @Html.DropDownListFor(model => Model.Service_Id , Model.ServicesList)
-                      
-                     }
-                    else
-                    {
-                       <select id="services" name="Services">
-                         <option value="0">&nbsp;</option>                       
-                       </select>
-                     }
+                    @Html.DropDownListFor(t => Model.SId, Model.ServicesList)    
+                    @Html.HiddenFor( model => model.SId)    
+                    @Html.HiddenFor( model => model.Service_Id)                  
                 </td>                         
                 <td> 
+
+                    @Html.TextAreaFor(model => model.ActionInput)
+                   @* @Html.Partial("_Actions", Model.ActionsList)
+                     @Html.HiddenFor(model => model.ActionsList)*@
                     @*@Html.TextAreaFor(model => model.ListOfActions.ActionName)*@
                 </td>
                 <td>
-                    @Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation), "new", null, new { @class = "btn" })
+                    @Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation), "SaveAction", new { id = @Model.SId}, new { @class = "btn" })
                 </td>
             </tr>
-             @if (Model.ServiceName != null)
+        
+         
+         @foreach (var service in Model.ServicesList)
+         {
+             bool ServiceIsActive = Convert.ToBoolean(Model.IsActive);
+             <tr>
+
+                 <td>
+                     @Html.EditorFor(t => service.Text)
+                 </td>        
+                 <td>
+                     @Translation.Get("Aktivera Service", Enums.TranslationSource.TextTranslation)
+                 </td>
+                 <td class="field switch">
+                     @Html.CheckBoxFor(t => ServiceIsActive, new { @class = "switchcheckbox" })
+                 </td>
+                 <td>
+                     @*Html.CheckBoxFor(t=> service.)*@
+                 </td>
+             </tr>  
+             if ( Model.ActionsList != null)
+             {
+                 foreach (var action in Model.ActionsList)
+                 {
+                     bool ActionIsActive = Convert.ToBoolean(action.IsActive);
+                  
+                 <tr>
+                     <td>
+                         @Html.TextAreaFor(a => action.ActionName)
+                     </td>
+                     <td>
+                         @Translation.Get("Aktivera Action", Enums.TranslationSource.TextTranslation)
+                     </td>
+                     <td>
+                         @Html.CheckBoxFor(t => ServiceIsActive, new { @class = "switchcheckbox" })
+                     </td>
+                     <td>
+                         @Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "DeleteAction",
+                         new { id = action.Action_Id}, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post" , Enums.TranslationSource.TextTranslation) + "?"})
+                     </td>
+                 </tr>
+                  
+                   }
+               }
+          }
+             
+            @* @if (Model.ServiceName != null)
              {
                  <tr>
                     <td> 
@@ -63,12 +101,12 @@
                         @Html.SpecialCheckBox("IsActive", Model.IsActive, 1, new { @class = "checkbox" })
                     </td>
                  </tr>
-             }
+             }*@
 
     </tbody>                                             
 </table>
 </div>
-}
+
 
 <script type="text/javascript">
 
@@ -84,5 +122,16 @@
         });
 
     });
+
+
+
+    @*function addCheckListService() {
+        $.post('/checkList//' + '?checkListId=' + '@Model.CheckList_Id.ToString()' + '&serviceId=' + '@Model.Service_Id.ToString()' +
+             '&labellist=' + $("#labellist").val() + '&linelist=' + $("#linelist").val() +
+             '&minWidthValue=' + $("#minWidthValue").val() + '&colOrderValue=' + $("#colOrderValue").val() + '&userGroup= 4 ', function (result) {
+                 $("#colsetting_result").html(result);
+             });
+     }*@
+
 
 </script>

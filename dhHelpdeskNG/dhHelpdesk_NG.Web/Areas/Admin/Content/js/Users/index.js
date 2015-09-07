@@ -8,7 +8,26 @@ $(function () {
     var loggedInUser_Customers = window.parameters.loggedInUser_CustomerList;
     var loggedInUser_Partial = window.parameters.loggedInUser_Partial;
     var loggedInUser_Url = window.parameters.loggedInUser_Url;
+    var doSortUrl = window.parameters.doSort_Url;
     
+    window.DoSort = function DoSort(fieldName, isAsc) {
+        var pcustomerId = $('#customerDDL').val();
+        var pstatus = $('#statusDDL').val();
+        var psearchText = $('#Filter_SearchUs').val();
+        
+        $.get(doSortUrl, {
+            customerId : pcustomerId,
+            searchUs: psearchText,
+            statusId: pstatus,
+            fieldName: fieldName,
+            isAsc : isAsc,
+            curTime: new Date().getTime()
+        }, function (_UserIndexViewModel) {
+            $('#usergridarea').html(_UserIndexViewModel);
+        });    
+    };
+
+
     $(document).ready(function () {
         var newLine = "<br>";
         var e = alertMessage;
@@ -60,9 +79,13 @@ $(function () {
         });
         
     });
-    
-    $('#myTab a[href="' + $('#activeTab').val() + '"]').tab('show');
 
+    var   activeTab = $.cookie('admin.users.active_tab');
+    $('#myTab a[href="' + activeTab + '"]').tab('show');
+    $('#myTab a').on('click', function(ev) {
+        ev.preventDefault();
+        $.cookie('admin.users.active_tab', $(ev.target).attr('href'));
+    });
 });
 
 $(function () {
@@ -103,7 +126,4 @@ $(function () {
             return dhHelpdesk.admin.users.utils.replaceAll(prevstring, omit, place, string);
         }
     }
-
-
-
 });

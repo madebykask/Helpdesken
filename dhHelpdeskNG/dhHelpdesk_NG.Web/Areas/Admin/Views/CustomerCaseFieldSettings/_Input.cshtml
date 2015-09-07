@@ -404,6 +404,40 @@
                             <td><i class="dh-icon-textfield" rel="tooltip" title="@Translation.Get("Textfält", Enums.TranslationSource.TextTranslation)"></i>
                             </td>
                             <td>
+                                @Translation.Get("Kostnadsställe", Enums.TranslationSource.TextTranslation)
+                            </td>
+                            <td>
+                                <input type="checkbox" name="CaseFieldSettings[59].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.CostCentre.ToString()) == 1 ? "checked=checked" : "") value="1"/>
+                                <input type="hidden" name="CaseFieldSettings[59].ShowOnStartPage" value="0" />
+                                <input type="hidden" name="CaseFieldSettings[59].Customer_Id" value="@Model.Customer.Id" />
+                                <input type="hidden" name="CaseFieldSettings[59].Name" value="CostCentre" />
+                                <input type="hidden" name="CaseFieldSettings[59].Id" value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.CostCentre.ToString())" />
+                                <input type="hidden" name="CaseFieldSettings[59].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.CostCentre.ToString())" />
+                            </td>
+                            <td>
+                                <input type="checkbox" name="CaseFieldSettings[59].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.CostCentre.ToString()) == 1 ? "checked=checked" : "") value="1"/>
+                                <input type="hidden" name="CaseFieldSettings[59].ShowExternal" value="0" />
+                            </td>
+                            <td>@RenderLockedFieldOption("CaseFieldSettings[59].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.CostCentre.ToString()))</td>
+                            <td>
+                                <input type="text" name="CaseFieldSettingWithLangauges[59].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.CostCentre.ToString())"/>
+                                <input type="hidden" name="CaseFieldSettingWithLangauges[59].Name" value="CostCentre" />
+                            </td>
+                            <td>
+                                <input type="checkbox" name="CaseFieldSettings[59].Required" @(Model.CaseFieldSettings.getRequired(GlobalEnums.TranslationCaseFields.CostCentre.ToString()) == 1 ? "checked=checked" : "") value="1"/>
+                                <input type="hidden" name="CaseFieldSettings[59].Required" value="0" />
+                            </td>
+                            <td>&nbsp;
+                            </td>
+                            <td>
+                                <input type="text" name="CaseFieldSettingWithLangauges[59].FieldHelp" value="@Model.CaseFieldSettingWithLangauges.getFieldHelp(GlobalEnums.TranslationCaseFields.CostCentre.ToString())"/>
+                                <input type="hidden" name="CaseFieldSettingWithLangauges[59].FieldHelp" value="0" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><i class="dh-icon-textfield" rel="tooltip" title="@Translation.Get("Textfält", Enums.TranslationSource.TextTranslation)"></i>
+                            </td>
+                            <td>
                                 @Translation.Get("Placering", Enums.TranslationSource.TextTranslation)
                             </td>
                             <td>
@@ -468,6 +502,9 @@
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[10].FieldHelp" value="0" />
                             </td>
                         </tr>
+
+
+
                         @*                        "Add" (initiator) button *@
                         <tr>
                             <td><i class="dh-icon-textfield" rel="tooltip" title="@Translation.Get("Knappen")"></i>

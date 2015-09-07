@@ -27,6 +27,7 @@
             int? departmentId,
             string unit,
             int? organizationUnitId,
+            string costCentre,
             int? divisionId,
             int? managerId,
             int? groupId,
@@ -57,6 +58,7 @@
             this.DepartmentId = departmentId;
             this.Unit = unit;
             this.OrganizationUnitId = organizationUnitId;
+            this.CostCentre = costCentre;
             this.DivisionId = divisionId;
             this.ManagerId = managerId;
             this.GroupId = groupId;
@@ -111,6 +113,8 @@
 
         [IsId]
         public int? OrganizationUnitId { get; private set; }
+
+        public string CostCentre { get; private set; }
 
         [IsId]
         public int? DivisionId { get; private set; }

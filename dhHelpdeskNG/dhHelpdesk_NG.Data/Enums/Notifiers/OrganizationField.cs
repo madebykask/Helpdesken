@@ -12,6 +12,8 @@
 
         public static readonly string OrganizationUnit = "OU_Id";
 
+        public static readonly string CostCentre = "CostCentre";
+
         public static readonly string Division = "Division_Id";
 
         public static readonly string Manager = "ManagerComputerUser_Id";
@@ -32,6 +34,8 @@
         public static readonly string Unit = "Enhet";
 
         public static readonly string OrganizationUnit = "Organisationsenhet";
+
+        public static readonly string CostCentre = "Kostnadsställe";
 
         public static readonly string Division = "Division";
 

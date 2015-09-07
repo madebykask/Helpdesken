@@ -155,6 +155,8 @@
                 organizationUnit = new DropDownFieldModel(false);
             }
 
+            var costCentre = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.CostCentre, notifier.CostCentre);
+
             var unit = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Unit, notifier.Unit);
 
             DropDownFieldModel division;
@@ -264,6 +266,7 @@
                 region,
                 department,
                 organizationUnit,
+                costCentre,
                 unit,
                 division,
                 manager,

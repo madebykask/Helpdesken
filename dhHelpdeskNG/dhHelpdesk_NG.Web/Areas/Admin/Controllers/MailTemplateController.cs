@@ -67,7 +67,7 @@
 
             var existingmailId = this._mailTemplateService.GetNewMailTemplateMailId();
 
-            if (existingmailId > MailTemplate.UserTemplatesMinID)
+            if (existingmailId >= MailTemplate.UserTemplatesMinID)
             {
                 mailTemplate = new MailTemplateEntity { MailID = existingmailId + 1, Customer_Id = customer.Id, };
             }

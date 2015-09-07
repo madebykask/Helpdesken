@@ -5,11 +5,12 @@ using System.Web;
 
 namespace DH.Helpdesk.Web.Models.CheckLists
 {
-    public class ServicesActionsModel
+    public class CheckListActionsInputModel
     {
+        public CheckListActionsInputModel() { }
 
-        public ServicesActionsModel(
-                int checklistServiceId,   
+        public CheckListActionsInputModel(
+                int serviceId,   
                 int actionId,
                 int isActive,
                 string actionName,
@@ -17,7 +18,7 @@ namespace DH.Helpdesk.Web.Models.CheckLists
                 DateTime createdDate
                )
         {
-            this.ChecklistService_Id = checklistServiceId;
+            this.Service_Id = serviceId;
             this.Action_Id = actionId;
             this.IsActive = isActive;
             this.ActionName = actionName;
@@ -26,12 +27,17 @@ namespace DH.Helpdesk.Web.Models.CheckLists
         }
 
 
-        public int ChecklistService_Id { get; private set; }
-        public int Action_Id { get; private set; }
-        public int IsActive { get; private set; }
-        public string ActionName { get; private set; }
-        public DateTime ChangedDate { get; private set; }
-        public DateTime CreatedDate { get; private set; }
+        public int Service_Id { get; set; }
+
+        public int Action_Id { get; set; }
+
+        public int IsActive { get; set; }
+
+        public string ActionName { get; set; }
+
+        public DateTime ChangedDate { get; set; }
+
+        public DateTime CreatedDate { get; set; }
 
     }
 }

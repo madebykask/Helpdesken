@@ -1,7 +1,13 @@
+using System.Linq;
+using System.Collections.Generic;
+
 namespace DH.Helpdesk.Dal.Repositories
 {
+    using DH.Helpdesk.BusinessData.Models.Checklists.Output;
+    using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
+    
 
     #region CHECKLIST
 
@@ -21,15 +27,70 @@ namespace DH.Helpdesk.Dal.Repositories
 
     #region CHECKLISTACTION
 
-    public interface IChecklistActionRepository : IRepository<ChecklistAction>
+    public interface IChecklistActionRepository : INewRepository
     {
+        List<CheckListActionBM> GetCheckListActions(int serviceId);
+        void SaveCheckListAction(CheckListActionBM checklistAction);
+        void DeleteAction(int actionId);
+        void UpdateAction(CheckListActionBM checkListAction);
     }
 
-    public class ChecklistActionRepository : RepositoryBase<ChecklistAction>, IChecklistActionRepository
+    public class ChecklistActionRepository : Repository, IChecklistActionRepository
     {
         public ChecklistActionRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
+        }
+
+
+        public List<CheckListActionBM> GetCheckListActions(int serviceId)
+        {
+
+            var checkListActionsEntitys =
+                   this.DbContext.CheckListActions.Where(c => c.ChecklistService_Id == serviceId).ToList();
+
+            if (checkListActionsEntitys != null)
+            {
+
+                return checkListActionsEntitys.Select(c => new CheckListActionBM(c.ChecklistService_Id, c.IsActive, c.Name, c.ChangedDate, c.CreatedDate)).ToList();
+            }
+            else
+                return null;
+        }
+
+
+        public void SaveCheckListAction(CheckListActionBM checklistAction)
+        {
+            var New_CheckListAction = new ChecklistAction()
+            {
+                ChecklistService_Id = checklistAction.Service_Id,
+                IsActive = checklistAction.IsActive,
+                Name = checklistAction.ActionName,
+                CreatedDate = checklistAction.ChangedDate,
+                ChangedDate = checklistAction.ChangedDate
+            };
+
+
+            this.DbContext.CheckListActions.Add(New_CheckListAction);
+            this.InitializeAfterCommit(checklistAction, New_CheckListAction);
+        }
+
+        public void DeleteAction(int actionId)
+        {
+            var checkListActionEntity =
+                  this.DbContext.CheckListActions.Find(actionId);
+
+            this.DbContext.CheckListActions.Remove(checkListActionEntity);
+        }
+
+        public void UpdateAction(CheckListActionBM checkListAction)
+        {
+            var checkListActionEntity =
+                  this.DbContext.CheckListActions.Find(checkListAction.Id);
+
+            checkListActionEntity.Name = checkListAction.ActionName;
+            checkListActionEntity.ChangedDate = checkListAction.ChangedDate;
+            checkListActionEntity.IsActive = checkListAction.IsActive;
         }
     }
 
@@ -53,16 +114,53 @@ namespace DH.Helpdesk.Dal.Repositories
 
     #region CHECKLISTSERVICE
 
-    public interface IChecklistServiceRepository : IRepository<ChecklistService>
+    public interface ICheckListServiceRepository : INewRepository
     {
+        List<CheckListServiceBM> GetCheckListServices(int checkListId);
+        void SaveCheckListService(CheckListServiceBM checkListAService);
     }
 
-    public class ChecklistServiceRepository : RepositoryBase<ChecklistService>, IChecklistServiceRepository
+    public class CheckListServiceRepository : Repository, ICheckListServiceRepository
     {
-        public ChecklistServiceRepository(IDatabaseFactory databaseFactory)
+        public CheckListServiceRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
         }
+
+        public List<CheckListServiceBM> GetCheckListServices(int checkListId)
+        {
+            
+            var checkListServiceEntitys =
+                   this.DbContext.CheckListServices.Where(c => c.CheckList_Id == checkListId).ToList();
+
+            if (checkListServiceEntitys != null)
+            {
+               
+                return checkListServiceEntitys.Select(c => new CheckListServiceBM(c.Customer_Id, c.CheckList_Id, c.Id, c.IsActive, c.Name, c.ChangedDate, c.CreatedDate)).ToList();
+            }
+            else
+                return null;
+        }
+
+
+        public void SaveCheckListService(CheckListServiceBM checkListService)
+        {
+            var CheckListServiceEntity = new ChecklistService()
+            {
+                Customer_Id = checkListService.CustomerId,
+                CheckList_Id = checkListService.CheckListId,
+                IsActive = checkListService.IsActive,
+                Name = checkListService.Name,
+                CreatedDate = checkListService.ChangedDate,
+                ChangedDate = checkListService.ChangedDate
+            };
+
+
+            this.DbContext.CheckListServices.Add(CheckListServiceEntity);
+
+            this.InitializeAfterCommit(checkListService, CheckListServiceEntity);
+        }
+        
     }
 
     #endregion

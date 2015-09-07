@@ -99,6 +99,8 @@
 
         public string homeDrive { get; set; }
 
+        public string CostCentre { get; set; }
+
         #endregion
     }
 }

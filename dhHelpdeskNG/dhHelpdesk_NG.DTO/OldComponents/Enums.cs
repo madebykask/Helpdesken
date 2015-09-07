@@ -93,7 +93,8 @@
             Project = 58,
             Problem = 59,
             RegistrationSourceCustomer = 60,
-            AddUserBtn = 61
+            AddUserBtn = 61,
+            CostCentre = 62
         }
     }
 }

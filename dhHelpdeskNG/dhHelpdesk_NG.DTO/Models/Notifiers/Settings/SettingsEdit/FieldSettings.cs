@@ -77,6 +77,8 @@
         [NotNull]
         public FieldSetting OrganizationUnit { get; private set; }
 
+        public FieldSetting CostCentre { get; private set; }
+
         [NotNull]
         public FieldSetting Division { get; private set; }
 
@@ -127,6 +129,7 @@
             FieldSetting department,
             FieldSetting unit,
             FieldSetting organizationUnit,
+            FieldSetting costCentre,
             FieldSetting division,
             FieldSetting manager,
             FieldSetting group,
@@ -158,6 +161,7 @@
                                Department = department,
                                Unit = unit,
                                OrganizationUnit = organizationUnit,
+                               CostCentre = costCentre,
                                Division = division,
                                Manager = manager,
                                Group = group,

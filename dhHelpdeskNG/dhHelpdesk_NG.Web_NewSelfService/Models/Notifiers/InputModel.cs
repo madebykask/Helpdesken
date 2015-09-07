@@ -192,6 +192,8 @@
 
         public DropDownFieldModel OrganizationUnit { get; set; }
 
+        public StringFieldModel CostCentre { get; set; }
+
         [IsId]
         public int? OrganizationUnitId { get; set; }
 

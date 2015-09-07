@@ -74,6 +74,14 @@
 
         private const string _SHOW_ACTIVE_PRODUCT_AREAS_IN_ADMIN = "SHOW_ACTIVE_PRODUCT_AREAS_IN_ADMIN";
 
+        private const string _AdminUsersPageLoggedInUsersTabSelectedCustomerId = "AdminUsersPageLoggedInUsersTabSelectedCustomerId";
+
+        private const string _AdminUsersPageLockedCasesTabSelectedCustomerId = "AdminUsersPageLockedCasesTabSelectedCustomerId";
+
+        private const string _SHOW_ACTIVE_CASE_TYPES_IN_ADMIN = "SHOW_ACTIVE_CASE_TYPES_IN_ADMIN";
+
+        private const string _SHOW_ACTIVE_WORKING_GROUPS_IN_ADMIN = "SHOW_ACTIVE_WORKING_GROUPS_IN_ADMIN";
+
         #endregion
 
         #region Public Properties
@@ -564,6 +572,42 @@
             }
         }
 
+        public static bool ShowOnlyActiveCaseTypesInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_CASE_TYPES_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_CASE_TYPES_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_CASE_TYPES_IN_ADMIN, value);
+            }
+        }
+
+        public static bool ShowOnlyActiveWorkingGroupsInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_WORKING_GROUPS_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_WORKING_GROUPS_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_WORKING_GROUPS_IN_ADMIN, value);
+            }
+        }
+
         public static bool WasTimeZoneMessageDisplayed
         {
             get
@@ -576,6 +620,44 @@
                 SaveSetKeyValue(_TZ_MSG_KEY, value);
             }
         }
+
+        public static int? AdminUsersPageLoggedInUsersTabSelectedCustomerId
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_AdminUsersPageLoggedInUsersTabSelectedCustomerId] != null)
+                {
+                    return (int?)HttpContext.Current.Session[_AdminUsersPageLoggedInUsersTabSelectedCustomerId];
+                }
+
+                return null;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_AdminUsersPageLoggedInUsersTabSelectedCustomerId, value);
+            }
+        }
+
+        public static int? AdminUsersPageLockedCasesTabSelectedCustomerId
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_AdminUsersPageLockedCasesTabSelectedCustomerId] != null)
+                {
+                    return (int?)HttpContext.Current.Session[_AdminUsersPageLockedCasesTabSelectedCustomerId];
+                }
+
+                return null;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_AdminUsersPageLockedCasesTabSelectedCustomerId, value);
+            }
+        }
+
+
 
         private static void SaveSetKeyValue(string key, object value)
         {

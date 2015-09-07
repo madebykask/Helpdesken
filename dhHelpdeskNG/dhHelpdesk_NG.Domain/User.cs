@@ -10,8 +10,17 @@
     {
         public int AccountType { get; set; }
         public int ActivateCasePermission { get; set; }
+
+        /// <summary>
+        /// Send e-mail when the user is assigned a case
+        /// </summary>
         public int AllocateCaseMail { get; set; }
+
+        /// <summary>
+        /// Send SMS when the user is assigned a case
+        /// </summary>
         public int AllocateCaseSMS { get; set; }
+
         public int BulletinBoardPermission { get; set; }
 
         /// <summary>

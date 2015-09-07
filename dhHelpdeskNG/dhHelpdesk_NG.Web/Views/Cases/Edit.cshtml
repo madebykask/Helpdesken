@@ -80,23 +80,17 @@
                 dhHelpdesk.CaseArticles.OpenInvoiceWindow('@Translation.Get("Please send selected articles for invoicing or delete them in order to close the case.")');
             }
 
+            var emptyFn = function() {};
+
             $("#case-action-save-and-close").click(function (e) {
-                e.preventDefault();                
-                invoiceArticlesBeforeClose(EditCaseAndClose, openInvoiceWindow);
+                e.preventDefault();
+                invoiceArticlesBeforeClose(emptyFn, openInvoiceWindow);
             });
 
             $("#case-action-save-and-new").click(function (e) {
                 e.preventDefault();                
-                invoiceArticlesBeforeClose(EditCaseAndAddCase, openInvoiceWindow);
+                invoiceArticlesBeforeClose(emptyFn, openInvoiceWindow);
             });
-
-            @*$("#case-action-close").click(function (e) {
-                e.preventDefault();
-                var targetUrl = $(this).attr("href");
-                invoiceArticlesBeforeClose(function () { window.location.href = targetUrl; }, openInvoiceWindow);
-                if ('@Model.CaseLock.LockGUID' != '')
-                    UnLockCase('@Model.CaseLock.LockGUID');                
-            });*@
 
             $("#case-action-close").click(function (e) {
                 e.preventDefault();
@@ -192,7 +186,8 @@
 
     <script type="text/javascript">
         $(function () {
-            var currentpage = new dhform({ url: '@Model.DynamicCase.FormPath', modal: '@Model.DynamicCase.Modal.ToJavaScriptBool()' });
+            debugger;
+            var currentpage = new dhform({ url: '@Model.DynamicCase.FormPath', modal: '@Model.DynamicCase.ViewMode' });
         });
     </script>
 }
@@ -209,9 +204,9 @@
             <ul class="secnav">
                 @if (Model.EditMode == Enums.AccessMode.FullAccess)
                 {
-                    <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
-                    <li>@Html.ActionLink(Translation.Get("Spara och stäng", Enums.TranslationSource.TextTranslation), null, null, new { @class = "btn", id = "case-action-save-and-close" })</li>
-                    <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation), null, null, new { @class = "btn", id = "case-action-save-and-new" })</li>
+                    <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), null, null, null, new { @class = "btn save" })</li>
+                    <li>@Html.ActionLink(Translation.Get("Spara och stäng", Enums.TranslationSource.TextTranslation), null, null, new { @class = "btn save-close", id = "case-action-save-and-close" })</li>
+                    <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation), null, null, new { @class = "btn save-new", id = "case-action-save-and-new" })</li>
                     <li class="secspace"></li>                    
                     if (SessionFacade.CurrentUser.DeleteCasePermission == 1)
                     {                            
