@@ -115,10 +115,12 @@ BEGIN
 END
 
 -- http://helpdesk5.dhsolutions.se/Cases/Edit/53386
-if COL_LENGTH('tblDepartment','Department') != 200
+if COL_LENGTH('tblDepartment','Department') != 400
 BEGIN	
 	alter table tblDepartment alter column Department nvarchar(200) not null
 END
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.13'
+
+
