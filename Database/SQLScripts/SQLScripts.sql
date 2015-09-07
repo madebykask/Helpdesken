@@ -13,7 +13,6 @@ if exists (select * from syscolumns inner join sysobjects on sysobjects.id = sys
 		exec sp_executesql @sql  
 	end
 go
-	ALTER TABLE [dbo].[tblCaseStatistics]  WITH CHECK ADD  CONSTRAINT [FK_tblCaseStatistics_tblCase] FOREIGN KEY([Case_Id])
 
 if COL_LENGTH('dbo.tblform', 'ViewMode') IS NULL
 begin
