@@ -113,6 +113,12 @@ if COL_LENGTH('tblDepartment','SearchKey') != 400
 BEGIN	
 	alter table tblDepartment alter column SearchKey nvarchar(200);
 END
+-- http://helpdesk5.dhsolutions.se/Cases/Edit/53386
+if COL_LENGTH('tblDepartment','Department') != 400
+BEGIN	
+	alter table tblDepartment alter column Department nvarchar(200);
+END
+
 
 
 -- Last Line to update database version
