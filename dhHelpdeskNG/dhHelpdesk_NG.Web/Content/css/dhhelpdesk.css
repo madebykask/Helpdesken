@@ -3383,6 +3383,10 @@ td.disabled
     color: lightgray;
 }
 
+.DisabledChosen {
+    color: lightgray;
+}
+
 /********************    ADMIN PART   *********************/
 /********************************   Admin part -> product area    ******************************/
 .product-area.admin.content .inactive *,
