@@ -81,13 +81,8 @@ var GRID_STATE = {
         });
         
 
-        $('#btnNewCase a, #divCaseTemplate a').click(function() {
-            if (me._creatingCase || $(this).hasClass('disabled')) {
-                return false;
-            }
+        $('#btnNewCase a, #divCaseTemplate a:not(.category)').click(function() {
             me.abortAjaxReq();
-            me.$buttonsToDisableWhenGridLoads.addClass('disabled');
-            me._creatingCase = true;
             return true;
         });
         

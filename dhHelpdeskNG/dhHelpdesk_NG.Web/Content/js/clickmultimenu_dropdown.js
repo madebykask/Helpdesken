@@ -7,8 +7,12 @@ $('.clickmultimenu .dropdown-submenu').click(function (ev) {
     var $container = $(this).parents('.clickmultimenu:first');
     if (isChildSubMenuVisible) {
         if (!isHasSubMenu) {
-            $container.dropdown('toggle');
+            //***** click on a menu item (!submenu) ******
+            // do not perform any actions towards to menu, just return true
+            // and bootstrap code will do itself
+            return true;
         } else {
+            // click on another submenu
             $(this).find('.dropdown-menu').css('display', 'none');
         }
     } else {

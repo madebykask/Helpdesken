@@ -1179,7 +1179,7 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                     sb.Append("<a href='#' onclick = 'LoadTemplate(" + f.CategoryId.ToString()  + ")'" + customerId.ToString() + "&templateId=" + f.CategoryId.ToString() + "&templateistrue=1" + "' value=" + f.CategoryId.ToString() + ">" +
                            Translation.Get(f.CategoryName, Enums.TranslationSource.TextTranslation) + "</a>");
                 else
-                    sb.Append("<a href='#' value=" + f.CategoryId.ToString() + ">" +
+                    sb.Append("<a href='#' class='category' value=" + f.CategoryId.ToString() + ">" +
                             Translation.Get(f.CategoryName, Enums.TranslationSource.TextTranslation) + "</a>");
 
                 if (hasChild)
@@ -1228,11 +1228,9 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                     }
                     else
                     {
-                        sb.AppendFormat(
-                       "<a href='cases/new/?customerId={0}&templateId={1}&templateistrue=1' value={1}>{2}</a>",
-                       customerId,
-                       f.CategoryId,
-                       Translation.Get(f.CategoryName));
+                        sb.Append(
+                            "<a href='#' class='category' value=" + f.CategoryId.ToString() + ">"
+                            + Translation.Get(f.CategoryName, Enums.TranslationSource.TextTranslation) + "</a>");
                     }
                 }
 
