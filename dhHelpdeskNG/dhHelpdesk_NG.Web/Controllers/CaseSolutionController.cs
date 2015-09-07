@@ -333,7 +333,10 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(CaseSolutionInputViewModel caseSolutionInputViewModel, CaseSolutionSettingModel[] CaseSolutionSettingModels, int PageId)
+        public ActionResult Edit(
+            CaseSolutionInputViewModel caseSolutionInputViewModel, 
+            CaseSolutionSettingModel[] CaseSolutionSettingModels, 
+            int PageId)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
             IList<CaseFieldSetting> CheckMandatory = null; //_caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id); 

@@ -3045,11 +3045,10 @@ namespace DH.Helpdesk.Web.Controllers
                             m.case_.OtherCost = caseTemplate.OtherCost;
                             m.case_.Available = caseTemplate.Available;
                             m.case_.ContactBeforeAction = caseTemplate.ContactBeforeAction;
-                            //m.case_.RegistrationSourceCustomer_Id = caseTemplate.RegistrationSource;
-                            if (caseTemplate.RegistrationSource > 0)
+                            if (caseTemplate.RegistrationSource.HasValue)
                             {
-                                m.CustomerRegistrationSourceId = caseTemplate.RegistrationSource;
-                                var RegistrationSource = this._registrationSourceCustomerService.GetRegistrationSouceCustomer(caseTemplate.RegistrationSource);
+                                m.CustomerRegistrationSourceId = caseTemplate.RegistrationSource.Value;
+                                var RegistrationSource = this._registrationSourceCustomerService.GetRegistrationSouceCustomer(caseTemplate.RegistrationSource.Value);
                                 m.SelectedCustomerRegistrationSource = RegistrationSource.SourceName;
 
                             }
