@@ -926,6 +926,7 @@
     <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="Controllers\TestController.cs" />
+    <Compile Include="Controllers\TranslationController.cs" />
     <Compile Include="Controllers\UserInteractionController.cs" />
     <Compile Include="Areas\Inventory\Controllers\WorkstationController.cs" />
     <Compile Include="Enums\Case\OverviewType.cs" />

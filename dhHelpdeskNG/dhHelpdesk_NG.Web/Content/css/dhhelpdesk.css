@@ -3387,6 +3387,10 @@ td.disabled
     color: lightgray;
 }
 
+.ui-widget {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
 /********************    ADMIN PART   *********************/
 /********************************   Admin part -> product area    ******************************/
 .product-area.admin.content .inactive *,

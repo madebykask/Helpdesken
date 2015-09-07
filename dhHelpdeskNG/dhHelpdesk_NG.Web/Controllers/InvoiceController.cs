@@ -88,7 +88,12 @@
                 var data = this.invoiceHelper.ToCaseInvoices(invoices, caseOverview, articles);
                 foreach (var invoice in data)
                 {
-                    invoice.DoInvoice();
+                    var userId = 0;
+                    if (SessionFacade.CurrentUser.Id != null)
+                    {
+                        userId = SessionFacade.CurrentUser.Id;
+                    }
+                    invoice.DoInvoice(userId);
                 }
 
                 var output = this.invoiceHelper.ToOutputXml(data);

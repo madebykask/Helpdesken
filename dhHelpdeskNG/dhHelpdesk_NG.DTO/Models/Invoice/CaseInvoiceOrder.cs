@@ -16,8 +16,20 @@
                 CaseInvoice invoice, 
                 short number, 
                 string deliveryPeriod, 
+                DateTime? invoiceDate,
+                int? invoicedByUserId,
                 string reference,
                 DateTime date,
+                string reportedBy,
+                string persons_Name,
+                string persons_Phone,
+                string persons_Cellphone,
+                int? region_Id,
+                int? department_Id,
+                int? ou_Id,
+                string place,
+                string userCode,
+                string costCentre,
                 CaseInvoiceArticle[] articles,
                 CaseInvoiceOrderFile[] files)
         {
@@ -25,10 +37,22 @@
             this.Articles = articles;
             this.InvoiceId = invoiceId;
             this.DeliveryPeriod = deliveryPeriod;
+            this.InvoiceDate = invoiceDate ?? DateTime.UtcNow;
+            this.InvoicedByUserId = invoicedByUserId;
             this.Number = number;
             this.Invoice = invoice;
             this.Id = id;
             this.Date = date;
+            this.ReportedBy = reportedBy;
+            this.Persons_Name = persons_Name;
+            this.Persons_Phone = persons_Phone;
+            this.Persons_Cellphone = persons_Cellphone;
+            this.Region_Id = region_Id;
+            this.Department_Id = department_Id;
+            this.OU_Id = ou_Id;
+            this.Place = place;
+            this.UserCode = userCode;
+            this.CostCentre = costCentre;
             this.Files = files;
         }
 
@@ -36,12 +60,24 @@
                 int id, 
                 int invoiceId,
                 short number, 
-                string deliveryPeriod, 
+                string deliveryPeriod,
+                DateTime invoiceDate,
+                int? invoicedByUserId,
                 string reference,
                 DateTime date,
+                string reportedBy,
+                string persons_Name,
+                string persons_Phone,
+                string persons_Cellphone,
+                int? region_Id,
+                int? department_Id,
+                int? ou_Id,
+                string place,
+                string userCode,
+                string costCentre,
                 CaseInvoiceArticle[] articles,
                 CaseInvoiceOrderFile[] files) :
-                this(id, invoiceId, null, number, deliveryPeriod, reference, date, articles, files)
+                this(id, invoiceId, null, number, deliveryPeriod, invoiceDate, invoicedByUserId, reference, date, reportedBy, persons_Name, persons_Phone, persons_Cellphone, region_Id, department_Id, ou_Id, place, userCode, costCentre, articles, files)
         {
         }
 
@@ -59,9 +95,35 @@
 
         public string DeliveryPeriod { get; private set; }
 
+        public DateTime? InvoiceDate { get; private set; }
+
+        public int? InvoicedByUserId { get; private set; }
+
+        public string InvoicedByUser { get; set; }
+
         public string Reference { get; private set; }
 
         public DateTime Date { get; private set; }
+
+        public string ReportedBy { get; set; }
+
+        public string Persons_Name { get; set; }
+
+        public string Persons_Phone { get; set; }
+
+        public string Persons_Cellphone { get; set; }
+
+        public int? Region_Id { get; set; }
+
+        public int? Department_Id { get; set; }
+
+        public int? OU_Id { get; set; }
+
+        public string Place { get; set; }
+
+        public string UserCode { get; set; }
+
+        public string CostCentre { get; set; }
 
         public CaseInvoiceArticle[] Articles { get; private set; }
 
@@ -69,8 +131,9 @@
 
         public decimal? CaseNumber { get; set; }
 
-        public void DoInvoice()
+        public void DoInvoice(int userId)
         {
+            InvoicedByUserId = userId;
             foreach (var article in this.Articles)
             {
                 article.DoInvoice();

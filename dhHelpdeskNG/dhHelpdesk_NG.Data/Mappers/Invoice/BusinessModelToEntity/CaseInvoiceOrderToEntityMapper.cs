@@ -10,8 +10,44 @@
             entity.InvoiceId = businessModel.InvoiceId;
             entity.Number = businessModel.Number;
             entity.DeliveryPeriod = businessModel.DeliveryPeriod;
+            entity.InvoicedByUserId = businessModel.InvoicedByUserId;
+            entity.InvoiceDate = businessModel.InvoiceDate;
             entity.Reference = businessModel.Reference;
             entity.Date = businessModel.Date;
+
+            entity.ReportedBy = businessModel.ReportedBy;
+            entity.Persons_Name = businessModel.Persons_Name;
+            entity.Persons_Phone = businessModel.Persons_Phone;
+            entity.Persons_Cellphone = businessModel.Persons_Cellphone;
+
+            if (businessModel.Region_Id.HasValue)
+            {
+                entity.Region_Id = businessModel.Region_Id.Value;
+            }
+            else
+            {
+                entity.Region_Id = 0;
+            }
+            if (businessModel.Department_Id.HasValue)
+            {
+                entity.Department_Id = businessModel.Department_Id.Value;
+            }
+            else
+            {
+                entity.Department_Id = 0;
+            }
+
+            if (businessModel.OU_Id.HasValue)
+            {
+                entity.OU_Id = businessModel.OU_Id.Value;
+            }
+            else
+            {
+                entity.OU_Id = 0;
+            }
+            entity.Place = businessModel.Place;
+            entity.CostCentre = businessModel.CostCentre;
+            entity.UserCode = businessModel.UserCode;
         }
     }
 }

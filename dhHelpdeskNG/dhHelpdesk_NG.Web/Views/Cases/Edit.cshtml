@@ -64,7 +64,12 @@
             var hasNotInvoicedArticles = function () {
                 return typeof dhHelpdesk.CaseArticles !== "undefined" &&
                     dhHelpdesk.CaseArticles.HasNotInvoicedArticles();
-            }
+            };
+
+            var hasInvoicedArticles = function () {
+                return typeof dhHelpdesk.CaseArticles !== "undefined" &&
+                    dhHelpdesk.CaseArticles.HasInvoicedArticles();
+            };
 
             var invoiceArticlesBeforeClose = function (onOk, onCancel) {
                 if (!hasNotInvoicedArticles()) {
@@ -73,29 +78,95 @@
                 }
                 
                 confirmDialog(dc('@Translation.Get("Är du säker på att du vill stänga ärendet utan att fakturera artiklar?")'),
-                    onOk, onCancel);                
-            }
+                    onOk, onCancel);
+            };
 
             var openInvoiceWindow = function () {
                 dhHelpdesk.CaseArticles.OpenInvoiceWindow('@Translation.Get("Var god ta bort eller skicka valda men ofakturerade artiklar innan du avslutar ärendet.")');
-            }
+            };
+            var openInvoiceWindowWithMessage = function (message) {
+                dhHelpdesk.CaseArticles.OpenInvoiceWindow(message);
+            };
 
             var emptyFn = function() {};
 
             $("#case-action-save-and-close").click(function (e) {
+                //If case wants to be closed/finished it will first check if any orders exists with not invoiced articles
+                //if thats not the case, it will look for the invoice button and ask user for extra validation
+                //on closing/finishing the case if there are articles connected to the selected productarea
+
                 e.preventDefault();
-                invoiceArticlesBeforeClose(emptyFn, openInvoiceWindow);
+                //if there are articles selected but not invoiced and the case is finishing/closing
+                if ($('#CaseLog_FinishingDate').val() != '' || $('#CaseLog_FinishingType').val() != '') {
+                    if (hasNotInvoicedArticles()) {
+                        messageDialog(dc('@Translation.Get("You may not close a case with selected and not invoiced articles in the order section. Please review your orders.")'));
+                        return false;
+                    }
+                    else {
+                        debugger;
+                        if ($('#InvoiceModuleBtnOpen').is(':visible')) {
+                            if (!hasInvoicedArticles() && !hasNotInvoicedArticles()) {
+                                confirmDialog(dc('@Translation.Get("This product area has linked articles but no articles are selected. Are you sure you want to close the case?")'), EditCaseAndClose, InvoiceDialogOnNotFinishSaveCase);
+                            }
+                            else {
+                                EditCaseAndClose();
+                            }
+                        }
+                        else {
+                            EditCaseAndClose();
+                        }
+                    }
+                }
+                else {
+                    EditCaseAndClose();
+                }
             });
 
             $("#case-action-save-and-new").click(function (e) {
-                e.preventDefault();                
-                invoiceArticlesBeforeClose(emptyFn, openInvoiceWindow);
+                //If case wants to be closed/finished it will first check if any orders exists with not invoiced articles
+                //if thats not the case, it will look for the invoice button and ask user for extra validation
+                //on closing/finishing the case if there are articles connected to the selected productarea
+
+                e.preventDefault();
+                //if there are articles selected but not invoiced and the case is finishing/closing
+                if ($('#CaseLog_FinishingDate').val() != '' || $('#CaseLog_FinishingType').val() != '') {
+                    if (hasNotInvoicedArticles()) {
+                        messageDialog(dc('@Translation.Get("You may not close a case with selected and not invoiced articles in the order section. Please review your orders.")'));
+                        return false;
+                    }
+                    else {
+                        debugger;
+                        if ($('#InvoiceModuleBtnOpen').is(':visible')) {
+                            if (!hasInvoicedArticles() && !hasNotInvoicedArticles()) {
+                                confirmDialog(dc('@Translation.Get("This product area has linked articles but no articles are selected. Are you sure you want to close the case?")'), EditCaseAndAddCase, InvoiceDialogOnNotFinishSaveCase);
+                            }
+                            else {
+                                EditCaseAndAddCase();
+                            }
+                        }
+                        else {
+                            EditCaseAndAddCase();
+                        }
+                    }
+                }
+                else {
+                    EditCaseAndAddCase();
+                }
+
+
+                //old - remove this? not following requirement
+                //e.preventDefault();
+                //invoiceArticlesBeforeClose(EditCaseAndAddCase, openInvoiceWindow);
             });
 
             $("#case-action-close").click(function (e) {
                 e.preventDefault();
                 var targetUrl = $(this).attr("href");
-                invoiceArticlesBeforeClose(function ()
+
+
+@*               
+        NEW REQUIREMENTS, THIS IS NOT NEEDED -- REMOVE??
+         invoiceArticlesBeforeClose(function ()
                 {
                     if ('@Model.CaseLock.LockGUID' != '')
                         UnLockCase('@Model.CaseLock.LockGUID', targetUrl);
@@ -103,16 +174,57 @@
                     {
                         redirectToUrl(targetUrl);
                     }
-                }, openInvoiceWindow);
+                }, openInvoiceWindow);*@
             });
             
-            $("#case-action-delete").click(function (e) {                               
+            $("#case-action-delete").click(function (e) {
                 if (hasNotInvoicedArticles()) {
                     messageDialog(dc('@Translation.Get("Du får inte ta bort ett ärende som har invalda men ofakturerade artiklar.")'));
                     return false;
                 }
                 return true;                       
             })
+            var InvoiceDialogOnFinishSaveCase = function () {
+                $('#target').submit(); return false;
+            };
+
+            var InvoiceDialogOnNotFinishSaveCase = function ()
+            {
+                openInvoiceWindowWithMessage('@Translation.Get("Please review Orders and Articles")');
+            }
+
+            $("#case-action-save").click(function (e)
+            {
+                //If case wants to be closed/finished it will first check if any orders exists with not invoiced articles
+                //if thats not the case, it will look for the invoice button and ask user for extra validation
+                //on closing/finishing the case if there are articles connected to the selected productarea
+
+                e.preventDefault();
+                //if there are articles selected but not invoiced and the case is finishing/closing
+                if ($('#CaseLog_FinishingDate').val() != '' || $('#CaseLog_FinishingType').val() != '') {
+                    if (hasNotInvoicedArticles()) {
+                        messageDialog(dc('@Translation.Get("You may not close a case with selected and not invoiced articles in the order section. Please review your orders.")'));
+                        return false;
+                    }
+                    else {
+                        debugger;
+                        if ($('#InvoiceModuleBtnOpen').is(':visible')) {
+                            if (!hasInvoicedArticles() && !hasNotInvoicedArticles()) {
+                                confirmDialog(dc('@Translation.Get("This product area has linked articles but no articles are selected. Are you sure you want to close the case?")'), InvoiceDialogOnFinishSaveCase, InvoiceDialogOnNotFinishSaveCase);
+                            }
+                            else {
+                                $('#target').submit(); return false;
+                            }
+                        }
+                        else {
+                            $('#target').submit(); return false;
+                        }
+                    }
+                }
+                else {
+                    $('#target').submit(); return false;
+                }
+            });
         });
      
         function redirectToUrl(url) {            

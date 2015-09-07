@@ -25,7 +25,7 @@
 
             var serializer = new JavaScriptSerializer();
             var invoiceData = serializer.Deserialize<CaseInvoiceData>(invoices);
-
+            
             var now = DateTime.Now;
             var invoice = new CaseInvoice(
                         invoiceData.Id,
@@ -36,8 +36,20 @@
                                     o.InvoiceId,
                                     o.Number,
                                     o.DeliveryPeriod,
+                                    o.InvoicedDate = DateTime.UtcNow,
+                                    o.InvoicedByUserId,
                                     o.Reference,
                                     now,
+                                    o.ReportedBy,
+                                    o.Persons_Name,
+                                    o.Persons_Phone,
+                                    o.Persons_Cellphone,
+                                    o.Region_Id,
+                                    o.Department_Id,
+                                    o.OU_Id,
+                                    o.Place,
+                                    o.UserCode,
+                                    o.CostCentre,
                                     o.Articles
                                     .Select(a => new CaseInvoiceArticle(
                                             a.Id,
@@ -59,6 +71,19 @@
                 }                
             }
 
+            foreach (var order in invoice.Orders)
+            {
+                if (order.InvoicedByUserId != null)
+                {
+                    if (order.InvoicedByUserId != 0)
+                    {
+                        foreach (var article in order.Articles)
+                        {
+                            article.DoInvoice();
+                        }
+                    }
+                }
+            }
             return new[] { invoice };
         }
 
@@ -112,9 +137,33 @@
 
             public string DeliveryPeriod { get; set; }
 
+            public DateTime InvoicedDate { get; set; }
+
+            public int? InvoicedByUserId { get; set; }
+
             public string Reference { get; set; }
 
             public DateTime Date { get; set; }
+
+            public string ReportedBy { get; set; }
+
+            public string Persons_Name { get; set; }
+
+            public string Persons_Phone { get; set; }
+
+            public string Persons_Cellphone { get; set; }
+
+            public int? Region_Id { get; set; }
+
+            public int? Department_Id { get; set; }
+
+            public int? OU_Id { get; set; }
+
+            public string Place { get; set; }
+
+            public string UserCode { get; set; }
+
+            public string CostCentre { get; set; }
 
             public CaseInvoiceArticleData[] Articles { get; set; }
 

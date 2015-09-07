@@ -45,11 +45,11 @@
 
         public CaseInvoiceOrder[] Orders { get; private set; }
 
-        public void DoInvoice()
+        public void DoInvoice(int userId)
         {
             foreach (var order in this.Orders)
             {
-                order.DoInvoice();
+                order.DoInvoice(userId);
             }
         }
 
