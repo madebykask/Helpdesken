@@ -33,6 +33,7 @@
             SettingModel department,
             SettingModel unit,
             SettingModel organizationUnit,
+            SettingModel costCentre,
             SettingModel division,
             SettingModel manager,
             SettingModel group,
@@ -63,6 +64,7 @@
             this.Department = department;
             this.Unit = unit;
             this.OrganizationUnit = organizationUnit;
+            this.CostCentre = costCentre;
             this.Division = division;
             this.Manager = manager;
             this.Group = group;
@@ -158,6 +160,10 @@
         [Required]
         [NotNull]
         public SettingModel OrganizationUnit { get; set; }
+
+        [Required]
+        [NotNull]
+        public SettingModel CostCentre { get; set; }
 
         [Required]
         [NotNull]

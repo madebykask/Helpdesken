@@ -40,7 +40,7 @@
                     <tr>
                         <td></td>
                         <td>
-                            @Model.Users.Count()
+                            @Model.UserOverviewList.Users.Count()
                             @Translation.Get("poster i sökresultat", Enums.TranslationSource.TextTranslation)
                         </td>
                     </tr>
@@ -48,67 +48,7 @@
             </div>
         </div>
     </div>
-    <div class="container">
-        <table class="table table-striped table-bordered table-hover table-cases" id="tblUsers">
-            <thead>
-                <tr>
-                    <th>
-                        @Translation.Get("Användar ID", Enums.TranslationSource.TextTranslation)
-                    </th>
-                    <th>
-                        @Translation.Get("Förnamn", Enums.TranslationSource.TextTranslation)
-                    </th>
-                    <th>
-                        @Translation.Get("Efternamn", Enums.TranslationSource.TextTranslation)
-                    </th>
-                    <th>
-                        @Translation.Get("Telefon", Enums.TranslationSource.TextTranslation)
-                    </th>
-                    <th>
-                        @Translation.Get("Mobil", Enums.TranslationSource.TextTranslation)
-                    </th>
-                    <th>
-                        @Translation.Get("E-mail", Enums.TranslationSource.TextTranslation)
-                    </th>
-                    <th>
-                        @Translation.Get("Användargrupp", Enums.TranslationSource.TextTranslation)
-                    </th>
-                    <th>
-                        @Translation.Get("Senast ändrad datum", Enums.TranslationSource.TextTranslation)
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.Users)
-                {
-                    <tr>
-                        <td>
-                            <a href="@Url.Action("edit", "users", new { id = item.Id })">@Html.DisplayFor(modelItem => item.UserID)</a>
-                        </td>
-                        <td>
-                            <a href="@Url.Action("edit", "users", new { id = item.Id })">@Html.DisplayFor(modelItem => item.FirstName)</a>
-                        </td>
-                        <td>
-                            <a href="@Url.Action("edit", "users", new { id = item.Id })">@Html.DisplayFor(modelItem => item.SurName)</a>
-                        </td>
-                        <td>
-                            <a href="@Url.Action("edit", "users", new { id = item.Id })">@Html.DisplayFor(modelItem => item.Phone)</a>
-                        </td>
-                        <td>
-                            <a href="@Url.Action("edit", "users", new { id = item.Id })">@Html.DisplayFor(modelItem => item.CellPhone)</a>
-                        </td>
-                        <td>
-                            <a href="@Url.Action("edit", "users", new { id = item.Id })">@Html.DisplayFor(modelItem => item.Email)</a>
-                        </td>
-                        <td>
-                            <a href="@Url.Action("edit", "users", new { id = item.Id })">@Translation.Get(item.UserGroup.Name, Enums.TranslationSource.TextTranslation)</a>
-                        </td>
-                        <td>
-                            <a href="@Url.Action("edit", "users", new { id = item.Id })">@Html.DisplayFor(modelItem => item.ChangeTime)</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+    <div class="container" id="usergridarea">
+        @Html.Partial("Index/_UserGrid", Model.UserOverviewList)        
     </div>
 }

@@ -25,7 +25,7 @@ namespace DH.Helpdesk.Dal.Repositories
     public interface IUserRepository : IRepository<User>
     {
         List<ItemOverview> FindActiveUsersIncludeEmails(int customerId);
-        
+
         UserName GetUserNameById(int userId);
 
         List<ItemOverview> FindActiveOverviews(int customerId);
@@ -75,7 +75,7 @@ namespace DH.Helpdesk.Dal.Repositories
         }
 
         public bool UserHasCase(int customerId, int userId, List<int> workingGroupIds)
-        {            
+        {
             if (workingGroupIds.Any())
             {
                 var allUserCases =
@@ -84,7 +84,7 @@ namespace DH.Helpdesk.Dal.Repositories
                         .Select(c => new { c.WorkingGroup_Id })
                         .ToList();
 
-                var validCases =   allUserCases.Where(a => workingGroupIds.Contains(a.WorkingGroup_Id.Value)).ToList();
+                var validCases = allUserCases.Where(a => workingGroupIds.Contains(a.WorkingGroup_Id.Value)).ToList();
                 var invalidCases = allUserCases.Except(validCases).ToList();
 
                 if (invalidCases.Any())
@@ -105,18 +105,18 @@ namespace DH.Helpdesk.Dal.Repositories
                 else
                     return false;
             }
-                        
+
         }
 
         public int? GetUserDefaultWorkingGroupId(int userId, int customerId)
         {
             var entities = (from cu in this.DataContext.CustomerUsers.Where(x => x.User_Id == userId)
-                        join c in this.DataContext.Customers.Where(c => c.Id == customerId) on cu.Customer_Id equals c.Id
-                        join wg in this.DataContext.WorkingGroups on c.Id equals wg.Customer_Id
-                        join u in this.DataContext.Users on userId equals u.Id
-                        from uwg in this.DataContext.UserWorkingGroups.Where(x => x.WorkingGroup_Id == wg.Id && x.User_Id == userId).DefaultIfEmpty()
-                        where uwg.IsDefault == 1
-                        select wg.Id).ToList();
+                            join c in this.DataContext.Customers.Where(c => c.Id == customerId) on cu.Customer_Id equals c.Id
+                            join wg in this.DataContext.WorkingGroups on c.Id equals wg.Customer_Id
+                            join u in this.DataContext.Users on userId equals u.Id
+                            from uwg in this.DataContext.UserWorkingGroups.Where(x => x.WorkingGroup_Id == wg.Id && x.User_Id == userId).DefaultIfEmpty()
+                            where uwg.IsDefault == 1
+                            select wg.Id).ToList();
 
             if (entities.Any())
             {
@@ -241,13 +241,13 @@ namespace DH.Helpdesk.Dal.Repositories
         public IList<CustomerWorkingGroupForUser> GetWorkinggroupsForUserAndCustomer(int userId, int customerId)
         {
             var query = from uwg in this.DataContext.UserWorkingGroups.Where(uw => uw.User_Id == userId)
-                        join wg in this.DataContext.WorkingGroups.Where(w => w.Customer_Id == customerId) on uwg.WorkingGroup_Id equals wg.Id 
+                        join wg in this.DataContext.WorkingGroups.Where(w => w.Customer_Id == customerId) on uwg.WorkingGroup_Id equals wg.Id
                         select new CustomerWorkingGroupForUser
                         {
-                            WorkingGroupName = wg.WorkingGroupName, 
+                            WorkingGroupName = wg.WorkingGroupName,
                             User_Id = uwg.User_Id,
-                            WorkingGroup_Id = uwg.WorkingGroup_Id, 
-                            RoleToUWG = uwg.UserRole 
+                            WorkingGroup_Id = uwg.WorkingGroup_Id,
+                            RoleToUWG = uwg.UserRole
                         };
 
             var queryList = query.OrderBy(x => x.WorkingGroupName).ToList();
@@ -279,12 +279,12 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public IList<User> GetUsersForUserSettingList(UserSearch searchUser)
         {
+
             var query = from u in this.DataContext.Users
                         join cu in this.DataContext.CustomerUsers on u.Id equals cu.User_Id into cuGroup
                         from cuOJ in cuGroup.DefaultIfEmpty()
                         where ((cuOJ != null && cuOJ.Customer_Id == searchUser.CustomerId) || u.Customer_Id == searchUser.CustomerId)
                         select u;
-
 
 
             if (searchUser.StatusId == 2)
@@ -378,19 +378,19 @@ namespace DH.Helpdesk.Dal.Repositories
                         .ToList();
 
             return users.Select(o => new ItemOverview(o.Name, o.Value.ToString(CultureInfo.InvariantCulture)))
-                        .FirstOrDefault();            
+                        .FirstOrDefault();
         }
 
         private UserOverview GetUser(Expression<Func<User, bool>> expression)
         {
             var u = this.DataContext.Users
                     .Where(expression)
-                    .ToList() 
-                    .Select(x => new UserOverview( 
+                    .ToList()
+                    .Select(x => new UserOverview(
                         x.Id,
                         x.UserID,
                         x.Customer_Id,
-                        x.Language_Id, 
+                        x.Language_Id,
                         x.UserGroup_Id,
                         x.FollowUpPermission,
                         x.RestrictedCasePermission,
@@ -398,19 +398,19 @@ namespace DH.Helpdesk.Dal.Repositories
                         x.CreateCasePermission,
                         x.CopyCasePermission,
                         x.OrderPermission,
-                        x.CaseSolutionPermission, 
-                        x.DeleteCasePermission, 
-                        x.DeleteAttachedFilePermission, 
-                        x.MoveCasePermission ,
-                        x.ActivateCasePermission,  
-                        x.ReportPermission, 
+                        x.CaseSolutionPermission,
+                        x.DeleteCasePermission,
+                        x.DeleteAttachedFilePermission,
+                        x.MoveCasePermission,
+                        x.ActivateCasePermission,
+                        x.ReportPermission,
                         x.CloseCasePermission,
-                        x.CalendarPermission, 
-                        x.FAQPermission, 
+                        x.CalendarPermission,
+                        x.FAQPermission,
                         x.BulletinBoardPermission,
-                        x.SetPriorityPermission, 
-                        x.InvoicePermission, 
-                        x.DataSecurityPermission, 
+                        x.SetPriorityPermission,
+                        x.InvoicePermission,
+                        x.DataSecurityPermission,
                         x.RefreshContent,
                         x.FirstName,
                         x.SurName,

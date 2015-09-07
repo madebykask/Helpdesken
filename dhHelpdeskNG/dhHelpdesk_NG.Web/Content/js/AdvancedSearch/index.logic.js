@@ -524,16 +524,6 @@ var GRID_STATE = {
 })($);
 
 
-function getBreadcrumbs(a) {
-    var path = $(a).text(), $parent = $(a).parents("li").eq(1).find("a:first");
-
-    if ($parent.length == 1) {
-        path = getBreadcrumbs($parent) + " - " + path;
-    }
-    return path;
-}
-
-
 /**
 * @param { blockElementJqueryId } jquery-like element id of the bootstrap dropdown t.ex "#mainblock"
 */
@@ -605,21 +595,21 @@ $(function () {
     $('#' + caseTypeDropDown + ' ul.dropdown-menu li a').click(function (e) {
         e.preventDefault();
         var val = $(this).attr('value');
-        $(breadCrumbsPrefix + caseTypeDropDown).text(getBreadcrumbs(this));
+        $(breadCrumbsPrefix + caseTypeDropDown).text(window.getBreadcrumbs(this));
         $(hiddenPrefix + caseTypeDropDown).val(val);
     });
 
     $('#' + productAreaDropDown + ' ul.dropdown-menu li a').click(function (e) {
         e.preventDefault();
         var val = $(this).attr('value');
-        $(breadCrumbsPrefix + productAreaDropDown).text(getBreadcrumbs(this));
+        $(breadCrumbsPrefix + productAreaDropDown).text(window.getBreadcrumbs(this));
         $(hiddenPrefix + productAreaDropDown).val(val);
     });
 
     $('#' + closingReasonDropDown + ' ul.dropdown-menu li a').click(function (e) {
         e.preventDefault();
         var val = $(this).attr('value');
-        $(breadCrumbsPrefix + closingReasonDropDown).text(getBreadcrumbs(this));
+        $(breadCrumbsPrefix + closingReasonDropDown).text(window.getBreadcrumbs(this));
         $(hiddenPrefix + closingReasonDropDown).val(val);
     });
 

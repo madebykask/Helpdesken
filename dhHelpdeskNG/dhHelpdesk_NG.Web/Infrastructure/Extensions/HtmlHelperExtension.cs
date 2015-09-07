@@ -19,6 +19,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
     using DH.Helpdesk.Common.Enums;
 
     using UserGroup = DH.Helpdesk.BusinessData.Enums.Admin.Users.UserGroup;
+using DH.Helpdesk.Web.Areas.Admin.Models;
 
     public static class HtmlHelperExtension
     {
@@ -868,13 +869,15 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                                     : item.SubCaseTypes.ToList();
                 }
 
+                var cls = item.IsActive == 1 ? string.Empty : "inactive";
+
                 if (childs.Count > 0)
                 {
-                    res.Append("<li class='dropdown-submenu'>");
+                    res.Append("<li class='dropdown-submenu " + cls + "'>");
                 }
                 else
                 {
-                    res.Append("<li>");
+                    res.Append("<li class='" + cls + "'>");
                 }
 
                 res.AppendFormat("<a href='#' value='{0}'>{1}</a>", item.Id.ToString(), Translation.Get(item.Name, SessionFacade.CurrentLanguageId));
@@ -904,10 +907,12 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                         if (f.SubFinishingCauses.Count > 0)
                             hasChild = true;
 
+                    var cls = f.IsActive == 1 ? string.Empty : "inactive";
+
                     if (hasChild)
-                        sb.Append("<li class='dropdown-submenu'>");
+                        sb.Append("<li class='dropdown-submenu " + cls + "'>");
                     else
-                        sb.Append("<li>");
+                        sb.Append("<li class='" + cls + "'>");
 
                     sb.Append("<a href='#' value=" + f.Id.ToString() + ">" + Translation.Get(f.Name, Enums.TranslationSource.TextTranslation) + "</a>");
                     if (hasChild)
@@ -1307,5 +1312,14 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
         }
 
         #endregion
+
+        public static MvcHtmlString GetSortIcon(this HtmlHelper helper, UserSort sorting)
+        {
+            if (sorting.IsAsc)
+            {
+                return new MvcHtmlString("<i class=\"icon-chevron-up\"></i>");
+            }
+            return new MvcHtmlString("<i class=\"icon-chevron-down\"></i>");
+        }
     }
 }

@@ -46,6 +46,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Notifiers.Concrete
             var department = CreateSettingModel(settings.Department);
             var unit = CreateSettingModel(settings.Unit);
             var organizationUnit = CreateSettingModel(settings.OrganizationUnit);
+            var costCentre = CreateSettingModel(settings.CostCentre);
             var division = CreateSettingModel(settings.Division);
             var manager = CreateSettingModel(settings.Manager);
             var group = CreateSettingModel(settings.Group);
@@ -77,6 +78,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Notifiers.Concrete
                 department,
                 unit,
                 organizationUnit,
+                costCentre,
                 division,
                 manager,
                 group,

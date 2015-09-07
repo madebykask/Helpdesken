@@ -81,16 +81,23 @@
         public ActionResult Index()
         {
             var model = this.IndexInputViewModel();
+            var userSearch = (UserSearch)this.Session["UserSearch"];
+
+           
+
             if (this.Session["UserSearch"] == null)
             {
-                model.Users = this._userService.GetUsers(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.UserID).ToList();
+                model.UserOverviewList.Users = this._userService.GetUsers().OrderBy(x => x.UserID).ToList();
+                model.UserOverviewList.Sorting = new UserSort { FieldName = "", IsAsc = true };
+                //model.Users = this._userService.GetUsers(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.UserID).ToList();
             }
             else
-            {
+            {                       
                 var filter = (UserSearch)this.Session["UserSearch"];
                 model.Filter = filter;
-                model.Users = this._userService.SearchSortAndGenerateUsers(filter);
-                model.StatusUsers.FirstOrDefault(x => x.Value == filter.StatusId.ToString()).Selected = true;
+                model.UserOverviewList.Users = this._userService.SearchSortAndGenerateUsers(filter);
+                model.UserOverviewList.Sorting = new UserSort { FieldName = "", IsAsc = true };
+                model.StatusUsers.FirstOrDefault(x => x.Value == filter.StatusId.ToString()).Selected = true;               
             }
             
             return this.View(model);
@@ -108,14 +115,119 @@
         [HttpPost]
         public ActionResult Index(UserSearch filter)
         {
-            var model = this.IndexInputViewModel();
-            model.Filter = filter;
-            this.Session["UserSearch"] = filter;
-            model.Users = this._userService.SearchSortAndGenerateUsers(filter);
-           
+            var model = this.IndexInputViewModel();  
+            var userSearch = (UserSearch) this.Session["UserSearch"]; 
+            
+            if (this.Session["UserSearch"] == null && filter.SearchUs == null)
+            {
+                model.UserOverviewList.Users = this._userService.GetUsers().OrderBy(x => x.UserID).ToList();
+                model.UserOverviewList.Sorting = new UserSort { FieldName = "", IsAsc = true };
+                //model.Users = this._userService.GetUsers(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.UserID).ToList();
+            }
+                if (this.Session["UserSearch"] == null && filter.SearchUs != null)
+            {
+                model.UserOverviewList.Users = this._userService.SearchSortAndGenerateUsers(filter);
+                model.UserOverviewList.Sorting = new UserSort { FieldName = "", IsAsc = true };
+            }
+            else
+            {
+
+                model.Filter = filter;
+                this.Session["UserSearch"] = filter;
+                model.UserOverviewList.Users = this._userService.SearchSortAndGenerateUsers(filter);
+            }
+
+           if (userSearch != null)
+           {
+              var fieldName = userSearch.SortBy;
+              var isAsc = userSearch.Ascending;
+              model.UserOverviewList.Users = this.SortUsers(model.UserOverviewList.Users, fieldName, isAsc);
+              model.UserOverviewList.Sorting = new UserSort { FieldName = fieldName, IsAsc = !isAsc };
+           }
             return this.View(model);
         }
 
+        [HttpGet]
+        public PartialViewResult DoSort(int customerId, string searchUs, int statusId, string fieldName, bool isAsc)
+        {
+            var model = new UserList();
+            var filter = new UserSearch { CustomerId = customerId, SearchUs = searchUs, StatusId = statusId };
+            if (this.Session["UserSearch"] == null && filter.SearchUs == null)
+            {
+                model.Users = this._userService.GetUsers().OrderBy(x => x.UserID).ToList();
+                model.Sorting = new UserSort { FieldName = fieldName, IsAsc = !isAsc };
+                //model.Users = this._userService.GetUsers(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.UserID).ToList();
+            }
+            if (this.Session["UserSearch"] == null && filter.SearchUs != null)
+            {
+                model.Users = this._userService.SearchSortAndGenerateUsers(filter);
+                model.Sorting = new UserSort { FieldName = fieldName, IsAsc = !isAsc };
+            }
+            else
+            {                
+                model.Users = this._userService.SearchSortAndGenerateUsers(filter);
+            }
+
+            model.Users = this.SortUsers(model.Users,fieldName,isAsc);
+            model.Sorting = new UserSort { FieldName = fieldName, IsAsc = !isAsc };
+
+            return PartialView("Index/_UserGrid", model);
+        }
+
+        private IEnumerable<User> SortUsers(IEnumerable<User> users, string fieldName, bool  isAsc)
+        {
+            switch (fieldName)
+            {
+                case "UserId":
+                    if (isAsc)
+                        return users.OrderBy(u => u.UserID).ToList();
+                    else
+                        return users.OrderByDescending(u => u.UserID).ToList();
+                case "FirstName":
+                    if (isAsc)
+                        return users.OrderBy(u => u.FirstName).ToList();
+                    else
+                        return users.OrderByDescending(u => u.FirstName).ToList();
+                case "SurName":
+                    if (isAsc)
+                        return users.OrderBy(u => u.SurName).ToList();
+                    else
+                        return users.OrderByDescending(u => u.SurName).ToList();
+                case "Phone":
+                    if (isAsc)
+                        return users.OrderBy(u => u.Phone).ToList();
+                    else
+                        return users.OrderByDescending(u => u.Phone).ToList();
+                case "CellPhone":
+                    if (isAsc)
+                        return users.OrderBy(u => u.CellPhone).ToList();
+                    else
+                        return users.OrderByDescending(u => u.CellPhone).ToList();
+                case "Email":
+                    if (isAsc)
+                        return users.OrderBy(u => u.Email).ToList();
+                    else
+                        return users.OrderByDescending(u => u.Email).ToList();
+                case "UserGroup.Name":
+                    if (isAsc)
+                    {
+                        var usersList = users.OrderBy(u => Translation.Get(u.UserGroup.Name, Enums.TranslationSource.TextTranslation)).ToList();
+                        return usersList;
+                    }
+                    else
+                    {
+                        var usersList = users.OrderByDescending(u => Translation.Get(u.UserGroup.Name, Enums.TranslationSource.TextTranslation)).ToList();
+                        return usersList;
+                    }
+                case "ChangeTime":
+                    if (isAsc)
+                        return users.OrderBy(u => u.ChangeTime).ToList();
+                    else
+                        return users.OrderByDescending(u => u.ChangeTime).ToList();
+
+                default: return users;
+            }
+        }
         /// <summary>
         /// The new.
         /// </summary>
@@ -649,13 +761,14 @@
                 CsSelected = csSelected.Select(x => new SelectListItem
                 {
                     Text = x.Name,
-                    Value = x.Id.ToString()
+                    Value = x.Id.ToString(),                    
                 })
                 .OrderBy(c => c.Text)
                 .ToList(),
-                OnlineUsersTabSelectedCustomerId = AdminUsersPageLoggedInUsersTabSelectedCustomerId
+                OnlineUsersTabSelectedCustomerId = AdminUsersPageLoggedInUsersTabSelectedCustomerId,
+                UserOverviewList = new UserList()
             };
-
+            
             return model;
         }
 
@@ -666,13 +779,12 @@
             var csSelected = user.Cs ?? new List<Customer>();
             var csAvailable = new List<Customer>();
 
-
             foreach (var c in this._customerService.GetAllCustomers())
             {
                 if (!csSelected.Contains(c))
                     csAvailable.Add(c);
             }
-
+          
             var customerList = csSelected.Select(x => new SelectListItem
                 {
                     Text = x.Name,
@@ -680,7 +792,10 @@
                     Selected = (selectedCustomerId != null && x.Id == selectedCustomerId.Value)
                 })
                 .OrderBy(c=> c.Text)
-                .ToList();           
+                .ToList();
+
+            // Delete the empty choice added to the top of the customer List
+            customerList.RemoveAt(0);
 
             var lockedCases = new List<LockedCaseOverview>();
             if (caseNumber > 0)

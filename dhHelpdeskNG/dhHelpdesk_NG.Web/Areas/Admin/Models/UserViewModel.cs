@@ -7,6 +7,9 @@
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.BusinessData.Models.Case.CaseLock;
+    using DH.Helpdesk.Web.Models.Shared;
+    using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
 
     public class ChangeUserPasswordModel
     {
@@ -47,7 +50,7 @@
         
         public Customer Customer { get; set; }
 
-        public IEnumerable<User> Users { get; set; }
+        public UserList UserOverviewList { get; set; }
 
         public IList<LoggedInUsers> ListLoggedInUsers { get; set; }
 
@@ -57,10 +60,31 @@
 
         public IList<SelectListItem> StatusUsers { get; set; }
 
-        public IList<SelectListItem> Customers { get; set; }
+        public IList<SelectListItem> Customers { get; set; }        
 
 
         public int OnlineUsersTabSelectedCustomerId { get; set; }
+    }
+
+    public class UserList
+    {
+        public UserList()
+        {
+        }
+        public IEnumerable<User> Users { get; set; }
+
+        public UserSort Sorting { get; set; }
+    }
+
+    public class UserSort
+    {
+        public UserSort()
+        {
+        }
+
+        public string FieldName { get; set; }
+
+        public bool IsAsc { get; set; }
     }
 
     public class UserInputViewModel

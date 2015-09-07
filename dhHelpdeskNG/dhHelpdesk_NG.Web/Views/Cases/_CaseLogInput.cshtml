@@ -6,7 +6,7 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 
-
+@Scripts.Render("~/bundles/Cases/_CaseLogInput")
 @{ 
     var readonlyMode = false;
     if ((ViewData.Keys.Any() && ViewData.Keys.Contains("readonlyLog")) || Model.EditMode == Enums.AccessMode.ReadOnly)

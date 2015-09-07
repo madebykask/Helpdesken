@@ -29,6 +29,7 @@
             var department = CreateFieldSetting(model.Department);
             var unit = CreateFieldSetting(model.Unit);
             var organizationUnit = CreateFieldSetting(model.OrganizationUnit);
+            var costCentre = CreateFieldSetting(model.CostCentre);
             var division = CreateFieldSetting(model.Division);
             var manager = CreateFieldSetting(model.Manager);
             var group = CreateFieldSetting(model.Group);
@@ -61,6 +62,7 @@
                 department,
                 unit,
                 organizationUnit,
+                costCentre,
                 division,
                 manager,
                 group,

@@ -15,7 +15,7 @@
     <AssemblyName>DH.Helpdesk.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <SccProjectName>
     </SccProjectName>
     <SccLocalPath>
@@ -379,6 +379,7 @@
     <Content Include="Areas\Reports\Content\js\reports.js" />
     <Content Include="Content\bootstrap-tagsinput.css" />
     <Content Include="Content\css\bootstrap-tagsinput.css" />
+    <Content Include="Content\css\clickmultimenu_dropdown.css" />
     <Content Include="Content\css\custom\dynamic-cases.css" />
     <Content Include="Content\icons\advanced_search.png" />
     <Content Include="Content\icons\ajax-loader.gif" />
@@ -426,6 +427,7 @@
     <Content Include="Content\js\bootstrap-tagsinput.min.js" />
     <Content Include="Content\js\Cases\case.templates.js" />
     <Content Include="Content\js\Cases\caseByIds.logic.js" />
+    <Content Include="Content\js\Cases\_caseLogInput.js" />
     <Content Include="Content\js\Cases\components\BaseField.js" />
     <Content Include="Content\js\Cases\components\ConfirmationDialog.js" />
     <Content Include="Content\js\Cases\components\DateField.js" />
@@ -434,7 +436,7 @@
     <Content Include="Content\js\Cases\components\DropdownButtonField.js" />
     <Content Include="Content\js\Cases\components\FilterForm.js" />
     <Content Include="Content\js\Cases\components\Utils.js" />
-    <Content Include="Content\js\Cases\editLog.logic.js" />
+    <Content Include="Content\js\Cases\_caseLogFiles.js" />
     <Content Include="Content\js\Cases\index.settings.js" />
     <Content Include="Content\js\Cases\models\Case.js" />
     <Content Include="Content\js\Cases\_childCases.js" />
@@ -772,6 +774,7 @@
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\SupplierEditModel.cs" />
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\UserEditModel.cs" />
     <Compile Include="Areas\Orders\OrdersAreaRegistration.cs" />
+    <Content Include="Content\js\clickmultimenu_dropdown.js" />
     <Content Include="Content\js\dhHelpdesk.js" />
     <Content Include="Content\js\dropdown_fix.js" />
     <Content Include="Content\js\Licenses\license.editlogic.js" />
@@ -1689,6 +1692,7 @@
     <Content Include="Areas\Admin\Views\Users\Index\_LockedCaseOverview.cshtml" />
     <Content Include="Areas\Admin\Views\Users\Index\_OnlineUserOverview.cshtml" />
     <Content Include="Areas\Admin\Views\Users\Index\_OnlineUserList.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\Index\_UserGrid.cshtml" />
     <Content Include="Areas\Admin\Views\Users\Index\_LockedCaseTable.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="Scripts\jquery-1.8.3.js" />
