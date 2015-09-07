@@ -19,6 +19,7 @@
     using DH.Helpdesk.Web.Models.Invoice;
     using DH.Helpdesk.Web.Models.Shared;
     using DH.Helpdesk.Web.Models.CaseLock;
+    using DH.Helpdesk.BusinessData.Models.MailTemplates;
     
     public class CaseInputViewModel
     {
@@ -131,6 +132,8 @@
         public IEnumerable<LanguageOverview> Languages { get; set; }
   
         public CaseHistory EmptyCaseHistory { get; set; }
+
+        public List<CustomMailTemplate> MailTemplates { get; set; }
         
         public FilesModel LogFilesModel { get; set; }
 

@@ -7,6 +7,8 @@
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.utils;
+    using DH.Helpdesk.BusinessData.Models.MailTemplates;
+    using System.Collections.Generic;
 
     public static class StringExtensions
     {
@@ -272,7 +274,7 @@
 
         }
 
-        public static string GetMailTemplateName(this int value)
+        public static string GetMailTemplateName(this int value, List<CustomMailTemplate> customMailTemplates)
         {
             var ret = string.Empty; 
             switch (value)
@@ -314,7 +316,20 @@
                     ret = Translation.Get("Skicka mail när planerat åtgärdsdatum inträffar", Enums.TranslationSource.TextTranslation);
                     break;
                 default:
-                    ret = string.Empty; 
+                    if (value > 99 && customMailTemplates.Any())
+                    {
+                        var mailTemplate = customMailTemplates.Where(m=> m.MailId == value).FirstOrDefault();
+                        if (mailTemplate != null && mailTemplate.TemplateLanguages.Any())
+                            ret = mailTemplate.TemplateLanguages.FirstOrDefault().TemplateName;
+                        else
+                            ret = string.Empty;
+                        
+                    }
+                    else
+                    {
+                        ret = string.Empty; 
+                    }
+                    
                     break;
             }
 

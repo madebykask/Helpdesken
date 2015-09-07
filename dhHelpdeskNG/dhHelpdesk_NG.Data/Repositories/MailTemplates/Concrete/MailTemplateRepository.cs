@@ -64,6 +64,7 @@ namespace DH.Helpdesk.Dal.Repositories.MailTemplates.Concrete
                         Subject = templateLang.Subject,
                         Body = templateLang.Body,
                         LanguageId = templateLang.Language_Id,
+                        TemplateName = templateLang.MailTemplateName,
                         Language = new LanguageOverview
                               {
                                   Id = templateLang.Language.Id,
