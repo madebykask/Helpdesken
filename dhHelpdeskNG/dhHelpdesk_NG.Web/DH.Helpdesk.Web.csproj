@@ -384,6 +384,12 @@
     <Content Include="Content\icons\advanced_search.png" />
     <Content Include="Content\icons\ajax-loader.gif" />
     <Content Include="Content\img\ajax-loader.GIF" />
+    <Content Include="Content\img\clickmultimenu-1.png" />
+    <Content Include="Content\img\clickmultimenu-2.png" />
+    <Content Include="Content\img\clickmultimenu-3.png" />
+    <Content Include="Content\img\clickmultimenu-4.png" />
+    <Content Include="Content\img\clickmultimenu-5.png" />
+    <Content Include="Content\img\clickmultimenu-6.png" />
     <Content Include="Content\img\dh_solutions_version.png" />
     <Content Include="Content\img\glyphicons-dh.png" />
     <Content Include="Content\js\Account\order.js" />
