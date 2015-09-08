@@ -162,7 +162,7 @@
             bundles.Add(new ScriptBundle("~/bundles/cases/_caseLogFiles").Include("~/Content/js/Cases/_caseLogFiles.js"));
             bundles.Add(
                 new ScriptBundle("~/bundles/Cases/_ChildCases").Include(
-                    "~/Content/js/Cases/_childCases"));
+                    "~/Content/js/Cases/_childCases.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/cases/editLog").Include("~/Content/js/Cases/editLog.logic.js"));
 

@@ -35,8 +35,6 @@
 
         public int? ParentId { get; set; }
 
-        public bool? SendLogToParentChildLog { get; set; }
-
         public bool IsItChildCase()
         {
             return ParentId.HasValue && ParentId != 0;

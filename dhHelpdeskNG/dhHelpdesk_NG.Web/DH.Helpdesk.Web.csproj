@@ -381,6 +381,9 @@
     <Content Include="Content\css\bootstrap-tagsinput.css" />
     <Content Include="Content\css\clickmultimenu_dropdown.css" />
     <Content Include="Content\css\custom\dynamic-cases.css" />
+    <Content Include="Content\css\images\sort_asc.png" />
+    <Content Include="Content\css\images\sort_both.png" />
+    <Content Include="Content\css\images\sort_desc.png" />
     <Content Include="Content\icons\advanced_search.png" />
     <Content Include="Content\icons\ajax-loader.gif" />
     <Content Include="Content\img\ajax-loader.GIF" />

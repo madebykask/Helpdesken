@@ -34,6 +34,11 @@
         public int WorkingTimeHour { get; set; }
         public int WorkingTimeMinute { get; set; }
         public bool HighPriority { get; set; }
+
+        /// <summary>
+        /// checkbox value indicates send log to parent/child cases
+        /// </summary>
+        public bool? SendLogToParentChildLog { get; set; }
     }
 }
 

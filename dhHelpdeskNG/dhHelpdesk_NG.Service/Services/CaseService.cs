@@ -83,8 +83,7 @@ namespace DH.Helpdesk.Services.Services
             string adUser,
             out IDictionary<string, string> errors,
             string defaultUser = "",
-            ExtraFieldCaseHistory extraField = null,
-            Case parentCase = null);
+            ExtraFieldCaseHistory extraField = null);
 
         void SendCaseEmail(int caseId, CaseMailSetting cms, int caseHistoryId, string basePath,
                            Case oldCase = null, CaseLog log = null, List<CaseFileDto> logFiles = null);
@@ -120,6 +119,8 @@ namespace DH.Helpdesk.Services.Services
         ChildCaseOverview[] GetChildCasesFor(int caseId);
 
         ParentCaseInfo GetParentInfo(int caseId);
+
+        int? SaveInternalLogMessage(int id, string textInternal, out IDictionary<string, string> errors);
     }
 
     public class CaseService : ICaseService
@@ -610,6 +611,11 @@ namespace DH.Helpdesk.Services.Services
             return null;
         }
 
+        public int? SaveInternalLogMessage(int id, string textInternal, out IDictionary<string, string> errors)
+        {
+            throw new NotImplementedException();
+        }
+
         private static Case InitNewCaseCopy(
             Case c,
             int userId,
@@ -821,6 +827,21 @@ namespace DH.Helpdesk.Services.Services
             this._unitOfWork.Commit();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cases"></param>
+        /// <param name="caseLog"></param>
+        /// <param name="caseMailSetting"></param>
+        /// <param name="userId"></param>
+        /// <param name="adUser"></param>
+        /// <param name="errors"></param>
+        /// <param name="invoices"></param>
+        /// <param name="parentCase"></param>
+        /// <param name="sendLogToParentChild">
+        /// Flag to send log to parent/child case
+        /// </param>
+        /// <returns></returns>
         public int SaveCase(
                 Case cases, 
                 CaseLog caseLog, 
@@ -881,13 +902,15 @@ namespace DH.Helpdesk.Services.Services
                 this.AddChildCase(cases.Id, parentCase.Id, out errors);
             }
 
-            ret = userId == 0 ? this.SaveCaseHistory(c, userId, adUser, out errors, adUser, extraFields, parentCase) : this.SaveCaseHistory(c, userId, adUser, out errors, string.Empty, extraFields, parentCase);
+            ret = userId == 0 ? 
+                this.SaveCaseHistory(c, userId, adUser, out errors, adUser, extraFields) : 
+                this.SaveCaseHistory(c, userId, adUser, out errors, string.Empty, extraFields);
 
             if (invoices != null)
             {
                 this.invoiceArticleService.SaveCaseInvoices(invoices, cases.Id);                
             }
-            
+
             return ret;
         }
 
@@ -930,27 +953,14 @@ namespace DH.Helpdesk.Services.Services
             string adUser,
             out IDictionary<string, string> errors,
                                    string defaultUser = "",
-            ExtraFieldCaseHistory extraField = null,
-            Case parentCase = null)
+            ExtraFieldCaseHistory extraField = null)
         {
             if (c == null)
                 throw new ArgumentNullException("caseHistory");
 
             errors = new Dictionary<string, string>();
-            decimal? parentCaseId = null;
-            if (parentCase != null)
-            {
-                parentCaseId = parentCase.CaseNumber;
-            }
-
-            var h = this.GenerateHistoryFromCase(c, userId, adUser, defaultUser, extraField, parentCaseId);
+            var h = this.GenerateHistoryFromCase(c, userId, adUser, defaultUser, extraField);
             this._caseHistoryRepository.Add(h);
-            if (parentCase != null)
-            {
-                var parentHistory = this._caseHistoryRepository.GetCloneOfLatest(parentCase.Id);
-                parentHistory.ChildCaseNumber = c.CaseNumber;
-                this._caseHistoryRepository.Add(parentHistory);
-            }
 
             if (errors.Count == 0)
                 this._caseHistoryRepository.Commit();
@@ -1426,9 +1436,8 @@ namespace DH.Helpdesk.Services.Services
             Case c, 
             int userId, 
             string adUser, 
-                                                    string defaultUser="", 
-            ExtraFieldCaseHistory extraField = null,
-            decimal? parentCaseNumber = null)
+            string defaultUser="", 
+            ExtraFieldCaseHistory extraField = null)
         {
             var h = new CaseHistory();
             var user = this.userRepository.GetUser(userId);
@@ -1527,9 +1536,7 @@ namespace DH.Helpdesk.Services.Services
                 h.CaseLog  = extraField.CaseLog;
                 h.ClosingReason = extraField.ClosingReason;
             }
-
-            h.ParentCaseNumber = parentCaseNumber;
-
+            
             return h;
         }
 

@@ -159,7 +159,7 @@
                             {
                                 if (Model.IsItParentCase() || Model.IsItChildCase())
                                 {
-                                    <br/>@Html.CheckBox("SendLogToParentChildLog")
+                                    <br/>@Html.CheckBox("CaseLog.SendLogToParentChildLog")
                                     if (Model.IsItParentCase())
                                     {
                                         <span class="lbl">@Translation.Get("Send log to childs log(s)", SessionFacade.CurrentCaseLanguageId)</span>

@@ -11,6 +11,8 @@
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Domain;
 
+    using LinqLib.Operators;
+
     public interface ILogService
     {
         IDictionary<string, string> Validate(CaseLog logToValidate);
@@ -21,6 +23,8 @@
         Guid Delete(int id, string basePath);
 
         IEnumerable<LogOverview> GetCaseLogOverviews(int caseId);
+
+        void SaveChildsLogs(CaseLog baseCaseLog, int[] childCasesIds, out IDictionary<string, string> errors);
     }
 
     public class LogService : ILogService
@@ -161,6 +165,27 @@
             return result.OrderByDescending(l => l.LogDate);
         }
 
+        public void SaveChildsLogs(CaseLog baseCaseLog, int[] childCasesIds, out IDictionary<string, string> errors)
+        {
+            errors = this.Validate(baseCaseLog);
+            if (errors.Count != 0)
+            {
+                return;
+            }
+
+            var logs = childCasesIds.Select(
+                id =>
+                    {
+                        baseCaseLog.CaseId = id; 
+                        return this.GetLogFromCaseLog(baseCaseLog);
+                    });
+            logs.ForEach(it => this._logRepository.Add(it));
+            if (errors.Count == 0)
+            {
+                this.Commit();
+            }
+        }
+
         public IList<Log> GetLogsByCaseId(int caseId)
         {
             return this._logRepository.GetLogForCase(caseId).ToList();   
@@ -235,7 +260,6 @@
             {
                 log.RegTime = DateTime.UtcNow;
                 log.LogDate = DateTime.UtcNow;
-                log.RegUser = caseLog.RegUser;
                 log.RegUser = string.IsNullOrWhiteSpace(caseLog.RegUser) ? string.Empty : caseLog.RegUser;
                 log.Export = 0;
                 log.LogType = caseLog.LogType;

@@ -52,6 +52,8 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Web.Models.CaseLock;
     using DH.Helpdesk.Web.Models.Shared;
 
+    using Org.BouncyCastle.Bcpg;
+
     using DHDomain = DH.Helpdesk.Domain;
 
     public class CasesController : BaseController
@@ -1463,8 +1465,19 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
-        public RedirectToRouteResult EditLog(DHDomain.Case case_, CaseLog caseLog)
+        public RedirectToRouteResult EditLog(Case case_, CaseLog caseLog)
         {
+            this.UpdateCaseLogForCase(case_, caseLog);
+            return this.RedirectToAction("edit", "cases", new { id = caseLog.CaseId });
+        }
+
+        private void UpdateCaseLogForCase(Case @case, CaseLog caseLog)
+        {
+            if (@case == null || caseLog == null)
+            {
+                throw new ArgumentException("@case or/and caseLog is null");
+            }
+
             IDictionary<string, string> errors;
             int caseHistoryId;
 
@@ -1472,12 +1485,11 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 var c = this._caseService.GetCaseById(caseLog.CaseId);
                 // save case and case history
-                c.FinishingDescription = case_.FinishingDescription;
+                c.FinishingDescription = @case.FinishingDescription;
                 caseHistoryId = this._caseService.SaveCase(c, caseLog, null, SessionFacade.CurrentUser.Id, this.User.Identity.Name, out errors);
                 caseLog.CaseHistoryId = caseHistoryId;
             }
             this._logService.SaveLog(caseLog, 0, out errors);
-            return this.RedirectToAction("edit", "cases", new { id = caseLog.CaseId });
         }
 
         [HttpPost]
@@ -2599,6 +2611,29 @@ namespace DH.Helpdesk.Web.Controllers
             caseLog.CaseId = case_.Id;
             caseLog.CaseHistoryId = caseHistoryId;
             caseLog.Id = this._logService.SaveLog(caseLog, temporaryLogFiles.Count, out errors);
+
+            if (caseLog != null && caseLog.SendLogToParentChildLog.HasValue && caseLog.SendLogToParentChildLog.Value 
+                && !string.IsNullOrEmpty(caseLog.TextInternal))
+            {
+                if (parentCase != null)
+                {
+                    var parentCaseLog = new CaseLog
+                                            {
+                                                CaseId = parentCase.Id,
+                                                UserId = caseLog.UserId,
+                                                TextInternal = caseLog.TextInternal
+                                            };
+                    this.UpdateCaseLogForCase(parentCase, parentCaseLog);
+                    //                    var parentHistoryId = this._caseService.SaveInternalLogMessage(parentCase.Id, caseLog.TextInternal, out errors);
+                    //                    this._logService.SaveLog(parentCaseLog, 0, out errors);
+                }
+
+                var childCasesIds = this._caseService.GetChildCasesFor(case_.Id).Where(it => !it.ClosingDate.HasValue).Select(it => it.Id).ToArray();
+                if (childCasesIds != null && childCasesIds.Length > 0)
+                {
+//                    this._logService.SaveInternalLogMessage(childCasesIds, caseLog.TextInternal, out errors);
+                }
+            }
 
             var basePath = _masterDataService.GetFilePath(case_.Customer_Id);
             // save case files
