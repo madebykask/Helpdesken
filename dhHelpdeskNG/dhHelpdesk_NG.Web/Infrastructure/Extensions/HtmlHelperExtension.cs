@@ -845,11 +845,11 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                     res.Append("<li class='" + cls + "'>");
                 }
 
-                res.AppendFormat("<a href='#' value='{0}'>{1}</a>", item.Id.ToString(), Translation.Get(item.Name, SessionFacade.CurrentLanguageId));
+                res.AppendFormat("<a href='#' value='{0}'>{1}</a>", item.Id.ToString(), Translation.GetMasterDataTranslation(item.Name));
                 if (childs.Count > 0)
                 {
                     res.Append("<ul class='dropdown-menu'>");
-                    res.Append(BuildCaseTypeDropdownButton(childs.OrderBy(p => Translation.Get(p.Name)).ToList(), isTakeOnlyActive));
+                    res.Append(BuildCaseTypeDropdownButton(childs.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList(), isTakeOnlyActive));
                     res.Append("</ul>");
                 }
 
@@ -879,7 +879,7 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                     else
                         sb.Append("<li class='" + cls + "'>");
 
-                    sb.Append("<a href='#' value=" + f.Id.ToString() + ">" + Translation.Get(f.Name, Enums.TranslationSource.TextTranslation) + "</a>");
+                    sb.Append("<a href='#' value=" + f.Id.ToString() + ">" + Translation.GetMasterDataTranslation(f.Name) + "</a>");
                     if (hasChild)
                     {
                         sb.Append("<ul class='dropdown-menu'>");
@@ -902,11 +902,11 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                 var hasChild = productArea.Children != null && productArea.Children.Any();
 
                 result.Append(hasChild ? "<li class='dropdown-submenu'>" : "<li>");
-                result.AppendFormat("<a href='#' value='{0}'>{1}</a>", productArea.Id, Translation.Get(productArea.Name));
+                result.AppendFormat("<a href='#' value='{0}'>{1}</a>", productArea.Id, Translation.GetMasterDataTranslation(productArea.Name));
                 if (hasChild)
                 {
                     result.Append("<ul class='dropdown-menu'>");
-                    result.Append(BuildProductAreasList(productArea.Children.OrderBy(p => Translation.Get(p.Name, Enums.TranslationSource.TextTranslation)).ToList()));
+                    result.Append(BuildProductAreasList(productArea.Children.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList()));
                     result.Append("</ul>");
                 }
 
@@ -926,11 +926,11 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
 
                 result.Append(hasChild ? "<li class='dropdown-submenu'>" : "<li>");
 
-                result.Append("<a href='#' value=" + caseType.Id + ">" + Translation.Get(caseType.Name, Enums.TranslationSource.TextTranslation) + "</a>");
+                result.Append("<a href='#' value=" + caseType.Id + ">" + Translation.GetMasterDataTranslation(caseType.Name) + "</a>");
                 if (hasChild)
                 {
                     result.Append("<ul class='dropdown-menu'>");
-                    result.Append(BuildCaseTypesList(caseType.Children.OrderBy(p => Translation.Get(p.Name, Enums.TranslationSource.TextTranslation)).ToList()));
+                    result.Append(BuildCaseTypesList(caseType.Children.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList()));
                     result.Append("</ul>");
                 }
 
@@ -990,11 +990,11 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                     string.Format(
                         "<a href='#' value=\"{0}\">{1}</a>",
                         pa.Id,
-                        Translation.Get(pa.Name));
+                        Translation.GetMasterDataTranslation(pa.Name));
                 if (childList != null && childList.Count > 0)
                 {
                     htmlOutput += "<ul class='dropdown-menu'>";
-                    htmlOutput += BuildProcuctAreaDropdownButton(childList.OrderBy(p => Translation.Get(p.Name)).ToList(), isTakeOnlyActive, userGroupDictionary);
+                    htmlOutput += BuildProcuctAreaDropdownButton(childList.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList(), isTakeOnlyActive, userGroupDictionary);
                     htmlOutput += "</ul>";
                 }
 
