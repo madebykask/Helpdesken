@@ -605,7 +605,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                 RegistrationSources = this._registrationSourceCustomerService.GetCustomersActiveRegistrationSources(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
-                    Text = x.SourceName,
+                    Text = Translation.Get(x.SourceName),
                     Value = x.Id.ToString()
                 }).ToList(),
             };

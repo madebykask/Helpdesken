@@ -279,7 +279,7 @@
                 var caseRep = uow.GetRepository<Case>();
                 var fieldRep = uow.GetRepository<CaseFieldSetting>();
                 var caseStatisticEntity = uow.GetRepository<CaseStatistic>();
-                var hasLeadTime = fieldIds.Contains(Convert.ToInt32(CalculationFields.LeadTime));
+                var hasLeadTime = (fieldIds.Count == 0) || (fieldIds.Count != 0 && fieldIds.Contains(Convert.ToInt32(CalculationFields.LeadTime)));
                 var caseTypeQuery = uow.GetRepository<CaseType>().GetAll();
                 var productAreaQuery = uow.GetRepository<ProductArea>().GetAll();
                 var closingReasonQuery = uow.GetRepository<FinishingCause>().GetAll();

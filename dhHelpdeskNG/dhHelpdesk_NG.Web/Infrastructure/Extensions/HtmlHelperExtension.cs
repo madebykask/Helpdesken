@@ -567,17 +567,13 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
                     sb.Append(tdMarkup);
-                    if (o.RegistrationSourceCustomer != null)
-                        //should be active in v 5.3.13.xx
-                        //sb.Append(Translation.Get(o.RegistrationSourceCustomer.SourceName, Enums.TranslationSource.TextTranslation, customerId));
-                        sb.Append(o.RegistrationSourceCustomer.SourceName);
+                    if (o.RegistrationSourceCustomer != null)                        
+                        sb.Append(Translation.Get(o.RegistrationSourceCustomer.SourceName, Enums.TranslationSource.TextTranslation, customerId));                        
                     else
                         sb.Append(ey);
                     sb.Append(from);
-                    if (cur.RegistrationSourceCustomer != null)
-                        //should be active in v 5.3.13.xx
-                        //sb.Append(Translation.Get(cur.RegistrationSourceCustomer.SourceName, Enums.TranslationSource.TextTranslation, customerId));
-                        sb.Append(cur.RegistrationSourceCustomer.SourceName);
+                    if (cur.RegistrationSourceCustomer != null)                        
+                        sb.Append(Translation.Get(cur.RegistrationSourceCustomer.SourceName, Enums.TranslationSource.TextTranslation, customerId));                        
                     else
                         sb.Append(ey);
                     sb.Append("</td>");
