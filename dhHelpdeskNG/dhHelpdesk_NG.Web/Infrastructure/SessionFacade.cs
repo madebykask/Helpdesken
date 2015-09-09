@@ -86,6 +86,12 @@
 
         private const string _SHOW_ACTIVE_CATEGORIES_IN_ADMIN = "_SHOW_ACTIVE_CATEGORIES_IN_ADMIN";
 
+        private const string _SHOW_ACTIVE_SUPPLIERS_IN_ADMIN = "_SHOW_ACTIVE_SUPPLIERS_IN_ADMIN";
+
+        private const string _SHOW_ACTIVE_PRIORITIES_IN_ADMIN = "_SHOW_ACTIVE_PRIORITIES_IN_ADMIN";
+
+
+
         #endregion
 
         #region Public Properties
@@ -645,6 +651,43 @@
             set
             {
                 SaveSetKeyValue(_SHOW_ACTIVE_CATEGORIES_IN_ADMIN, value);
+            }
+        }
+
+        public static bool ShowOnlyActiveSuppliersInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_SUPPLIERS_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_SUPPLIERS_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_SUPPLIERS_IN_ADMIN, value);
+            }
+        }
+
+
+        public static bool ShowOnlyActivePrioritiesInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_PRIORITIES_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_PRIORITIES_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_PRIORITIES_IN_ADMIN, value);
             }
         }
 

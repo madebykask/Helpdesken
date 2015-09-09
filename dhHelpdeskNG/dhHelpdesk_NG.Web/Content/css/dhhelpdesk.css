@@ -3389,7 +3389,10 @@ td.disabled
 .case-type.admin.content .inactive *,
 .working-group.admin.content .inactive *,
 .causingpart.admin.content .inactive *,
-.category.admin.content .inactive *
+.category.admin.content .inactive *,
+.supplier.admin.content .inactive *,
+.priority.admin.content .inactive *
+
 {
     color: lightgray;
 }
