@@ -728,37 +728,44 @@ namespace DH.Helpdesk.Services.Services
                     // get mail template from productArea
                     if (newCase.ProductArea.MailID.HasValue)
                         mailTemplateId = newCase.ProductArea.MailTemplate.MailID;
-
-                    MailTemplateLanguageEntity mm = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
-                    if (mm != null)
+                    else
                     {
-                        if (!String.IsNullOrEmpty(mm.Body) && !String.IsNullOrEmpty(mm.Subject))
-                        {
-                            if (!cms.DontSendMailToNotifier && !dontSendMailToNotfier && !string.IsNullOrEmpty(newCase.PersonsEmail))
-                            {
-                                var to = newCase.PersonsEmail.Split(';', ',');
-                                foreach (var t in to)
-                                {
-                                    var curMail = t.Trim();
-                                    if (!string.IsNullOrWhiteSpace(curMail) && _emailService.IsValidEmail(curMail))
-                                    {
-                                        var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(customEmailSender1));
-                                        _emailLogRepository.Add(el);
-                                        _emailLogRepository.Commit();
-                                        fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 1);
+                        mailTemplateId = 0;
+                    }
 
-                                        _emailService.SendEmail(customEmailSender1, el.EmailAddress, mm.Subject, mm.Body, fields, el.MessageId);
+                    if (mailTemplateId > 0)
+                    {
+                        MailTemplateLanguageEntity mm = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
+                        if (mm != null)
+                        {
+                            if (!String.IsNullOrEmpty(mm.Body) && !String.IsNullOrEmpty(mm.Subject))
+                            {
+                                if (!cms.DontSendMailToNotifier && !dontSendMailToNotfier && !string.IsNullOrEmpty(newCase.PersonsEmail))
+                                {
+                                    var to = newCase.PersonsEmail.Split(';', ',');
+                                    foreach (var t in to)
+                                    {
+                                        var curMail = t.Trim();
+                                        if (!string.IsNullOrWhiteSpace(curMail) && _emailService.IsValidEmail(curMail))
+                                        {
+                                            var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(customEmailSender1));
+                                            _emailLogRepository.Add(el);
+                                            _emailLogRepository.Commit();
+                                            fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 1);
+
+                                            _emailService.SendEmail(customEmailSender1, el.EmailAddress, mm.Subject, mm.Body, fields, el.MessageId);
+                                        }
                                     }
                                 }
+
                             }
-                           
                         }
                     }
                 }
             }
 
             // send mail template from productArea if productarea has a mailtemplate
-            if (!isCreatingCase)
+            if (!isCreatingCase && !isClosingCase)
             {
                 if (newCase.ProductArea_Id.HasValue && newCase.ProductArea != null && oldCase.ProductAreaSetDate == null)
                 {
@@ -804,7 +811,7 @@ namespace DH.Helpdesk.Services.Services
             }
 
             // send email to tblCase.Performer_User_Id
-            if (((isCreatingCase && newCase.Performer_User_Id.HasValue) 
+            if (((!isClosingCase && isCreatingCase && newCase.Performer_User_Id.HasValue) 
                 || (!isCreatingCase && newCase.Performer_User_Id != oldCase.Performer_User_Id))
                 && newCase.Administrator != null)
             {
@@ -1040,7 +1047,7 @@ namespace DH.Helpdesk.Services.Services
                                         newCase,
                                         helpdeskMailFromAdress,
                                         files,
-                                        cms.CustomeMailFromAddress);
+                                        cms.CustomeMailFromAddress, isCreatingCase);
             
             this.caseMailer.InformAboutInternalLogIfNeeded(
                                         caseHistoryId,

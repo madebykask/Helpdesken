@@ -15,7 +15,8 @@
                 Case newCase,
                 string helpdeskMailFromAdress,
                 List<string> files,
-                MailSenders mailSenders);
+                MailSenders mailSenders,
+                bool isCreatingCase);
 
         void InformOwnerDefaultGroupIfNeeded(
                 int caseHistoryId,
