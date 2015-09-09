@@ -8,7 +8,7 @@ How to run:
 		<DevPath>\\dhutvas3\Websites\dhHelpdesk\</DevPath>
 		<AcctPath>\\dhutvas3\Websites\dhHelpdeskAcct\</AcctPath>
 		<TestPath>I:\tmp\_testdeploy\</TestPath>
-		<TargetPath>$(DevPath)</TargetPath>                               	
+		<TargetPath>$(AcctPath)</TargetPath>                               	
 		<AppOfflineDisabled>$(TargetPath)\_app_offline.htm</AppOfflineDisabled>
 		<AppOfflineEnabled>$(TargetPath)\app_offline.htm</AppOfflineEnabled>
 		<BackupFolder>$(TargetPath)\bak\</BackupFolder>
