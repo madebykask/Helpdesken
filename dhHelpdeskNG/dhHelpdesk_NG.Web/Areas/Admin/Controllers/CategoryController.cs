@@ -6,6 +6,7 @@
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Infrastructure;
 
     public class CategoryController : BaseAdminController
     {
@@ -22,12 +23,19 @@
             this._customerService = customerService;
         }
 
+        public JsonResult SetShowOnlyActiveCategoriesInAdmin(bool value)
+        {
+            SessionFacade.ShowOnlyActiveCategoriesInAdmin = value;
+            return this.Json(new { result = "success" });
+        }
+
+
         public ActionResult Index(int customerId)
         {
             var customer = this._customerService.GetCustomer(customerId);
             var categories = this._categoryService.GetCategories(customer.Id);
 
-            var model = new CategoryIndexViewModel { Categories = categories, Customer = customer };
+            var model = new CategoryIndexViewModel { Categories = categories, Customer = customer, IsShowOnlyActive = SessionFacade.ShowOnlyActiveCategoriesInAdmin };
 
             return this.View(model);
         }

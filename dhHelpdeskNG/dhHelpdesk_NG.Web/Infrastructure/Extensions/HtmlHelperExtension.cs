@@ -280,13 +280,14 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
         /// </returns>
         public static MvcHtmlString CausingPartsTree(
             this HtmlHelper html,
-            IEnumerable<CausingPartOverview> causingParts)
+            IEnumerable<CausingPartOverview> causingParts,
+            bool isShowOnlyActive = false)
         {
             if (causingParts == null)
             {
                 return MvcHtmlString.Empty;
             }
-            return CausingPartsTreeRow(causingParts, 0);
+            return CausingPartsTreeRow(causingParts, 0, isShowOnlyActive);
         }
 
         public static MvcHtmlString GetCaseHistoryInfo(this CaseHistory cur, CaseHistory old, int customerId, int departmentFilterFormat, IList<CaseFieldSetting> cfs)
@@ -1140,20 +1141,39 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
         /// <returns>
         /// The <see cref="MvcHtmlString"/>.
         /// </returns>
-        private static MvcHtmlString CausingPartsTreeRow(IEnumerable<CausingPartOverview> causingParts, int iteration)
+        private static MvcHtmlString CausingPartsTreeRow(IEnumerable<CausingPartOverview> causingParts, int iteration, bool isShowOnlyActive = true,
+            bool isParentInactive = false)
         {
             var result = new StringBuilder();
+
+            var causingPartToDisplay = isShowOnlyActive ? causingParts.Where(it => it.IsActive == true) : causingParts;
+
             foreach (var causingPart in causingParts)
             {
-                result.Append("<tr>");
+
+                var isInactive = causingPart.IsActive != true || isParentInactive;
+
+                result.AppendFormat("<tr class=\"{0}\">", isInactive ? "inactive" : string.Empty);
                 result.AppendFormat("<td><a href='/admin/causingpart/edit/{0}' style='padding-left: {1}px'><i class='icon-resize-full icon-dh'></i>{2}</a></td>", causingPart.Id, iteration, causingPart.Name);
                 result.AppendFormat("<td><a href='/admin/causingpart/edit/{0}'>{1}</a></td>", causingPart.Id, causingPart.IsActive.BoolToYesNo());
                 result.Append("</tr>");
 
+                //if (causingPart.Children != null)
+                //{
+                //    result.Append(CausingPartsTreeRow(causingPart.Children.ToList(), iteration + DefaultOffset));                    
+                //}
+
+
                 if (causingPart.Children != null)
                 {
-                    result.Append(CausingPartsTreeRow(causingPart.Children.ToList(), iteration + DefaultOffset));                    
+                    if (causingPart.Children.Count() > 0 && (
+                        (isShowOnlyActive && !isInactive)
+                        || !isShowOnlyActive))
+                    {
+                        result.Append(CausingPartsTreeRow(causingPart.Children.ToList(), iteration + DefaultOffset,isShowOnlyActive,isInactive)); 
+                    }
                 }
+
             }
             return new MvcHtmlString(result.ToString());
         }

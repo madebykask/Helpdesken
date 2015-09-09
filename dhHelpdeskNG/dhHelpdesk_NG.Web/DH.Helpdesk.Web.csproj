@@ -367,6 +367,8 @@
     <Compile Include="Areas\Admin\Models\UrgencyInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\WorkingGroupInputViewModel.cs" />
     <Content Include="Areas\Admin\Content\js\CaseOverview\customerOverview.js" />
+    <Content Include="Areas\Admin\Content\js\Category\index.js" />
+    <Content Include="Areas\Admin\Content\js\CausingPart\index.js" />
     <Content Include="Areas\Admin\Content\js\Common\common.js" />
     <Content Include="Areas\Admin\Content\js\Common\ToggableInactiveList.js" />
     <Content Include="Areas\Admin\Content\js\CaseType\index.js" />
