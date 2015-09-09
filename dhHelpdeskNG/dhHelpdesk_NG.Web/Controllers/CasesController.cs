@@ -2634,7 +2634,7 @@ namespace DH.Helpdesk.Web.Controllers
                 var childCasesIds = this._caseService.GetChildCasesFor(case_.Id).Where(it => !it.ClosingDate.HasValue).Select(it => it.Id).ToArray();
                 if (childCasesIds != null && childCasesIds.Length > 0)
                 {
-                    this._logService.UpdateCaseLogs(childCasesIds, caseLog.TextInternal);
+                    this._logService.AddParentCaseLogToChildCases(childCasesIds, caseLog);
                 }
             }
 

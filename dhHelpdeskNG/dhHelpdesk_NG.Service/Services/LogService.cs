@@ -26,7 +26,7 @@
         CaseLog GetLogById(int id);
         Guid Delete(int id, string basePath);
 
-        void UpdateCaseLogs(int[] caseIds, string internalLogMessage);
+        void AddParentCaseLogToChildCases(int[] caseIds, CaseLog parentCaseLog);
 
         IEnumerable<LogOverview> GetCaseLogOverviews(int caseId);
 
@@ -255,7 +255,7 @@
             this._unitOfWork.Commit();
         }
 
-        public void UpdateCaseLogs(int[] caseIds, string internalLogMessage)
+        public void AddParentCaseLogToChildCases(int[] caseIds, CaseLog parentCaseLog)
         {
             if (caseIds == null)
             {
@@ -356,22 +356,38 @@
                                 CaseLog = it.CaseLog,
                                 ClosingReason = it.ClosingReason,
                                 RegistrationSourceCustomer_Id = it.RegistrationSourceCustomer_Id
-                            })
-                        .ForEach(caseHistoryRepository.Add);
+                            }).ToArray();
+                newCaseHistories.ForEach(caseHistoryRepository.Add);
                 uow.Save();
             }
+
             /// check ids exists in newCaseHistories
-            var aasfd = new object();
-//            
-//                var c = this._caseService.GetCaseById(caseLog.CaseId);
-//                // save case and case history
-//                
-//                int caseHistoryId = this._caseService.SaveCase(c, caseLog, null, SessionFacade.CurrentUser.Id, this.User.Identity.Name, out errors);
-//                caseLog.CaseHistoryId = caseHistoryId;
-//            }
-//
-////            this._logService.SaveLog(caseLog, 0, out errors);
-//        }
+            newCaseHistories.Select(
+                it =>
+                    {
+                        var res = this.GetLogFromCaseLog(parentCaseLog);
+                        res.Id = 0;
+                        res.CaseHistory_Id = it.Id;
+                        res.Case_Id = it.Case_Id;
+
+                        return res;
+                    }).ForEach(this._logRepository.Add);
+            this._logRepository.Commit();
+            //                    res.CaseHistoryId = it.Id,
+            //                CaseId = it.Case_Id,
+            //                UserId = parentCaseLog.UserId,
+            //            }});
+            //            var aasfd = new object();
+            //
+            //                var c = this._caseService.GetCaseById(caseLog.CaseId);
+            //                // save case and case history
+            //                
+            //                int caseHistoryId = this._caseService.SaveCase(c, caseLog, null, SessionFacade.CurrentUser.Id, this.User.Identity.Name, out errors);
+            //                caseLog.CaseHistoryId = caseHistoryId;
+            //            }
+            //
+            ////            this._logService.SaveLog(caseLog, 0, out errors);
+            //        }
 
         }
 
