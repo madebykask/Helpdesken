@@ -913,7 +913,7 @@ namespace DH.Helpdesk.Services.Services
 
             return ret;
         }
-
+        
         private bool AddChildCase(int childCaseId, int parentCaseId, out IDictionary<string, string> errors)
         {
             errors = new Dictionary<string, string>();

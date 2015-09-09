@@ -86,15 +86,15 @@
         public string ClosingReason { get; set; }
         public int? RegistrationSourceCustomer_Id { get; set; }
 
-        /// <summary>
-        /// Number of parent case (if any)
-        /// </summary>
-        public decimal? ParentCaseNumber { get; set; }
-
-        /// <summary>
-        /// Number of child case (if any)
-        /// </summary>
-        public decimal? ChildCaseNumber { get; set; }
+//        /// <summary>
+//        /// Number of parent case (if any)
+//        /// </summary>
+//        public decimal? ParentCaseNumber { get; set; }
+//
+//        /// <summary>
+//        /// Number of child case (if any)
+//        /// </summary>
+//        public decimal? ChildCaseNumber { get; set; }
 
         public virtual Case Case { get; set; }
         public virtual Category Category { get; set; }

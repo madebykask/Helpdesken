@@ -1479,18 +1479,19 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             IDictionary<string, string> errors;
-            int caseHistoryId;
 
             if (caseLog.FinishingType != null && caseLog.FinishingType != 0)
             {
                 var c = this._caseService.GetCaseById(caseLog.CaseId);
                 // save case and case history
                 c.FinishingDescription = @case.FinishingDescription;
-                caseHistoryId = this._caseService.SaveCase(c, caseLog, null, SessionFacade.CurrentUser.Id, this.User.Identity.Name, out errors);
+                int caseHistoryId = this._caseService.SaveCase(c, caseLog, null, SessionFacade.CurrentUser.Id, this.User.Identity.Name, out errors);
                 caseLog.CaseHistoryId = caseHistoryId;
             }
+
             this._logService.SaveLog(caseLog, 0, out errors);
         }
+      
 
         [HttpPost]
         public ActionResult Search_User(string query, int customerId)
@@ -1994,9 +1995,13 @@ namespace DH.Helpdesk.Web.Controllers
             this.userTemporaryFilesStorage.ResetCacheForObject(caseGuid.ToString());
             if (parentCaseId.HasValue)
             {
-                var url = this.GetLinkWithHash(ChildCasesHashTab, new { id = parentCaseId.Value }, "Edit");
-                return this.Redirect(url);
-        }
+                var parentCase = this._caseService.GetCaseById(parentCaseId.Value);
+                if (parentCase.Performer_User_Id == SessionFacade.CurrentUser.Id)
+                {
+                    var url = this.GetLinkWithHash(ChildCasesHashTab, new { id = parentCaseId.Value }, "Edit");
+                    return this.Redirect(url);
+                }
+            }
 
             return this.Redirect("Index");
         }
@@ -2624,14 +2629,12 @@ namespace DH.Helpdesk.Web.Controllers
                                                 TextInternal = caseLog.TextInternal
                                             };
                     this.UpdateCaseLogForCase(parentCase, parentCaseLog);
-                    //                    var parentHistoryId = this._caseService.SaveInternalLogMessage(parentCase.Id, caseLog.TextInternal, out errors);
-                    //                    this._logService.SaveLog(parentCaseLog, 0, out errors);
                 }
 
                 var childCasesIds = this._caseService.GetChildCasesFor(case_.Id).Where(it => !it.ClosingDate.HasValue).Select(it => it.Id).ToArray();
                 if (childCasesIds != null && childCasesIds.Length > 0)
                 {
-//                    this._logService.SaveInternalLogMessage(childCasesIds, caseLog.TextInternal, out errors);
+                    this._logService.UpdateCaseLogs(childCasesIds, caseLog.TextInternal);
                 }
             }
 

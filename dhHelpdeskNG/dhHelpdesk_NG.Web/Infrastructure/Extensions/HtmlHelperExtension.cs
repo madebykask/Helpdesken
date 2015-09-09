@@ -766,36 +766,36 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
             }
 
             // Parent case number
-            if (cur.ParentCaseNumber != o.ParentCaseNumber)
-            {
-                sb.Append("<tr>");
-                sb.Append(bs + Translation.Get("Parent case number", customerId) + be);
-                sb.Append(tdMarkup);
-                if (o.ParentCaseNumber != null)
-                {
-                    sb.Append(o.ParentCaseNumber);
-                }
-                else
-                {
-                    sb.Append(ey);
-                }
-
-                sb.Append(from);
-                sb.Append(cur.ParentCaseNumber != null ? cur.ParentCaseNumber.ToString() : ey);
-                sb.Append("</td>");
-                sb.Append("</tr>");
-            }
-
-            // Child case number
-            if (cur.ChildCaseNumber != o.ChildCaseNumber)
-            {
-                sb.Append("<tr>");
-                sb.Append(bs + Translation.Get("New child case", customerId) + be);
-                sb.Append(tdMarkup);
-                sb.Append(cur.ChildCaseNumber != null ? cur.ChildCaseNumber.ToString(): ey);
-                sb.Append("</td>");
-                sb.Append("</tr>");
-            }
+//            if (cur.ParentCaseNumber != o.ParentCaseNumber)
+//            {
+//                sb.Append("<tr>");
+//                sb.Append(bs + Translation.Get("Parent case number", customerId) + be);
+//                sb.Append(tdMarkup);
+//                if (o.ParentCaseNumber != null)
+//                {
+//                    sb.Append(o.ParentCaseNumber);
+//                }
+//                else
+//                {
+//                    sb.Append(ey);
+//                }
+//
+//                sb.Append(from);
+//                sb.Append(cur.ParentCaseNumber != null ? cur.ParentCaseNumber.ToString() : ey);
+//                sb.Append("</td>");
+//                sb.Append("</tr>");
+//            }
+//
+//            // Child case number
+//            if (cur.ChildCaseNumber != o.ChildCaseNumber)
+//            {
+//                sb.Append("<tr>");
+//                sb.Append(bs + Translation.Get("New child case", customerId) + be);
+//                sb.Append(tdMarkup);
+//                sb.Append(cur.ChildCaseNumber != null ? cur.ChildCaseNumber.ToString(): ey);
+//                sb.Append("</td>");
+//                sb.Append("</tr>");
+//            }
 
             return new MvcHtmlString(sb.ToString());
         }
