@@ -86,7 +86,7 @@
             List<UserWorkingGroup> userWorkingGroups,
             out IDictionary<string, string> errors);
         
-        void SaveNewUser(User user, int[] aas, int[] cs, int[] ots, List<UserWorkingGroup> UserWorkingGroups, out IDictionary<string, string> errors);
+        void SaveNewUser(User user, int[] aas, int[] cs, int[] ots, List<UserWorkingGroup> UserWorkingGroups, int[] departments, out IDictionary<string, string> errors);
         void SaveProfileUser(User user, out IDictionary<string, string> errors);
         void Commit();
 
@@ -641,7 +641,7 @@
                 this.Commit();
         }
         
-        public void SaveNewUser(User user, int[] aas, int[] cs, int[] ots, List<UserWorkingGroup> UserWorkingGroups, out IDictionary<string, string> errors)
+        public void SaveNewUser(User user, int[] aas, int[] cs, int[] ots, List<UserWorkingGroup> UserWorkingGroups, int[] departments, out IDictionary<string, string> errors)
         {
             if (user == null)
             {
@@ -727,7 +727,7 @@
                 foreach (var delete in user.UserWorkingGroups.ToList())
                     user.UserWorkingGroups.Remove(delete);
             else
-                user.UserWorkingGroups = new List<UserWorkingGroup>();
+                user.UserWorkingGroups = UserWorkingGroups;
 
             if (user.OTs != null)
                 foreach (var delete in user.OTs.ToList())
@@ -743,6 +743,23 @@
 
                     if (ot != null)
                         user.OTs.Add(ot);
+                }
+            }
+
+            if (user.Departments != null)
+                foreach (var delete in user.Departments.ToList())
+                    user.Departments.Remove(delete);
+            else
+                user.Departments = new List<Department>();
+
+            if (departments != null)
+            {
+                foreach (int id in departments)
+                {
+                    var dep = this._departmentRepository.GetById(id);
+
+                    if (dep != null)
+                        user.Departments.Add(dep);
                 }
             }
 

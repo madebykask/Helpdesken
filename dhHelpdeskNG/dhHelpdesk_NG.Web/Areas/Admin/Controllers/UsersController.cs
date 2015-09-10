@@ -324,7 +324,7 @@
                 CsSelected = CsSelected.Where(availableCustomersHash.ContainsKey).ToArray();
             }
 
-            this._userService.SaveNewUser(user, AAsSelected, CsSelected, OTsSelected, null, out errors);
+            this._userService.SaveNewUser(user, AAsSelected, CsSelected, OTsSelected, null, null, out errors);
             if (errors.Count == 0)
             {
                 return this.RedirectToAction("edit", "users", new { id = user.Id });
@@ -525,7 +525,7 @@
                 copy.UserRoles.Add(userRight);
             }
 
-            this._userService.SaveNewUser(copy, AAsSelected, CsSelected, OTsSelected, UserWorkingGroups, out errors);
+            this._userService.SaveNewUser(copy, AAsSelected, CsSelected, OTsSelected, UserWorkingGroups, Departments, out errors);
 
             var customerUsers = this._userService.GetCustomerUserForUser(copy.Id).ToList();
 
