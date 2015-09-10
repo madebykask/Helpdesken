@@ -1,0 +1,83 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.IO;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Routing;
+
+using DH.Helpdesk.BusinessData.Enums.Case;
+using DH.Helpdesk.BusinessData.Models;
+using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.Models.FinishingCause;
+using DH.Helpdesk.BusinessData.Models.Grid;
+using DH.Helpdesk.BusinessData.Models.Shared;
+using DH.Helpdesk.BusinessData.OldComponents;
+using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Common.Extensions.Integer;
+using DH.Helpdesk.Common.Tools;
+using DH.Helpdesk.Dal.Enums;
+using DH.Helpdesk.Dal.Infrastructure.Context;
+using DH.Helpdesk.Services.Infrastructure;
+using DH.Helpdesk.Services.Services;
+using DH.Helpdesk.Services.Services.Concrete;
+using DH.Helpdesk.Services.Services.Grid;
+using DH.Helpdesk.Services.Utils;
+using DH.Helpdesk.Web.Infrastructure;
+using DH.Helpdesk.Web.Infrastructure.Attributes;
+using DH.Helpdesk.Web.Infrastructure.CaseOverview;
+using DH.Helpdesk.Web.Infrastructure.Configuration;
+using DH.Helpdesk.Web.Infrastructure.Extensions;
+using DH.Helpdesk.Web.Infrastructure.Grid;
+using DH.Helpdesk.Web.Infrastructure.ModelFactories.Case;
+using DH.Helpdesk.Web.Infrastructure.ModelFactories.Invoice;
+using DH.Helpdesk.Web.Infrastructure.Mvc;
+using DH.Helpdesk.Web.Infrastructure.Tools;
+using DH.Helpdesk.Web.Models;
+using DH.Helpdesk.Web.Models.Case;
+using DH.Helpdesk.Web.Models.Case.Input;
+using DH.Helpdesk.Web.Models.Case.Output;
+using DH.Helpdesk.Web.Models.Shared;
+using DHDomain = DH.Helpdesk.Domain;
+using DH.Helpdesk.Domain;
+
+namespace DH.Helpdesk.Web.Controllers
+{
+    public class TranslationController : BaseController
+    {
+        private readonly ITextTranslationService _textTranslationService;
+        private readonly ICaseFieldSettingService _caseFieldSettingService;
+        private readonly IMasterDataService _masterDataService;
+
+        public TranslationController(ITextTranslationService textTranslationService, ICaseFieldSettingService caseFieldSettingService, IMasterDataService masterDataService)
+            : base(masterDataService)
+        {
+            this._masterDataService = masterDataService;
+            this._textTranslationService = textTranslationService;
+            this._caseFieldSettingService = caseFieldSettingService;
+        }
+
+        public JsonResult TranslateText(string text)
+        {
+            var TranslatedString = Translation.Get(text).ToString();
+            return this.Json(TranslatedString, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetAllCoreTextTranslations()
+        {
+            var texts = _textTranslationService.GetAllTextsAndTranslations(0);
+            return this.Json(texts, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetCaseFieldsForTranslation()
+        {
+            var CustomerId = SessionFacade.CurrentCustomer.Id;
+            var CurrentLanguageId = SessionFacade.CurrentLanguageId;
+
+            var caseFields = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId);
+            return this.Json(caseFields, JsonRequestBehavior.AllowGet);
+        }
+    }
+}
