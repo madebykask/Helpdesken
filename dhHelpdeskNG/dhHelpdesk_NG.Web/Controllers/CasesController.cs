@@ -3144,6 +3144,9 @@ namespace DH.Helpdesk.Web.Controllers
                     {
                         c = TranslateCaseType(c);
                         m.ParantPath_CaseType = c.getCaseTypeParentPath();
+
+                        if (c.User_Id.HasValue)
+                            m.case_.Performer_User_Id = c.User_Id.Value;
                     }
                 }
 
