@@ -2006,6 +2006,10 @@ namespace DH.Helpdesk.Web.Controllers
                 ? ((frm.ReturnFormValue("ClosingReasonId") == string.Empty) ? "0" : frm.ReturnFormValue("ClosingReasonId"))
                 : string.Empty;
 
+            var caseRegistrationDateCheck = frm.IsFormValueTrue("CaseRegistrationDateFilterShow");
+            var caseClosingDateCheck = frm.IsFormValueTrue("CaseClosingDateFilterShow");
+            var caseWatchDateCheck = frm.IsFormValueTrue("CaseWatchDateFilterShow");
+
             var newCaseSetting = new UserCaseSetting(
                             customerId,
                             userId,
@@ -2020,12 +2024,12 @@ namespace DH.Helpdesk.Web.Controllers
                             priority,
                             stateCheck,
                             subState,
-                            frm.GetDate("CaseRegistrationDateStartFilter"),
-                            frm.GetDate("CaseRegistrationDateEndFilter"),
-                            frm.GetDate("CaseWatchDateStartFilter"),
-                            frm.GetDate("CaseWatchDateEndFilter"),
-                            frm.GetDate("CaseClosingDateStartFilter"),
-                            frm.GetDate("CaseClosingDateEndFilter"),
+                            (caseRegistrationDateCheck ? frm.GetDate("CaseRegistrationDateStartFilter") : null),
+                            (caseRegistrationDateCheck ? frm.GetDate("CaseRegistrationDateEndFilter") : null),
+                            (caseWatchDateCheck ? frm.GetDate("CaseWatchDateStartFilter") : null),
+                            (caseWatchDateCheck ? frm.GetDate("CaseWatchDateEndFilter") : null),
+                            (caseClosingDateCheck ? frm.GetDate("CaseClosingDateStartFilter") : null),
+                            (caseClosingDateCheck ? frm.GetDate("CaseClosingDateEndFilter") : null),
                             frm.IsFormValueTrue("CaseRegistrationDateFilterShow"),
                             frm.IsFormValueTrue("CaseWatchDateFilterShow"),
                             frm.IsFormValueTrue("CaseClosingDateFilterShow"),

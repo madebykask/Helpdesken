@@ -602,7 +602,7 @@
                 {
                     cu.CaseWorkingGroupFilter = "0";
                 }
-
+               
                 cu.CasePerformerFilter = "0";
 
                 this._customerUserService.SaveCustomerUser(cu, out errors);
