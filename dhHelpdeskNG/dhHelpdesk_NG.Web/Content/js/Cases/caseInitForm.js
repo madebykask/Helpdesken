@@ -163,7 +163,7 @@ function GetComputerUserSearchOptions() {
                                     , departmentname: item.DepartmentName
                                     , ouid: item.OU_Id
                                     , ouname: item.OUName
-
+                                    , name_family: item.FirstName + ' ' + item.SurName
                         };
                         return JSON.stringify(aItem);
                     });
@@ -177,6 +177,7 @@ function GetComputerUserSearchOptions() {
             var item = JSON.parse(obj);
             //console.log(JSON.stringify(item));
             return ~item.name.toLowerCase().indexOf(this.query.toLowerCase())
+                || ~item.name_family.toLowerCase().indexOf(this.query.toLowerCase())
                 || ~item.num.toLowerCase().indexOf(this.query.toLowerCase())
                 || ~item.phone.toLowerCase().indexOf(this.query.toLowerCase())
                 || ~item.email.toLowerCase().indexOf(this.query.toLowerCase());
@@ -196,12 +197,20 @@ function GetComputerUserSearchOptions() {
 
         highlighter: function (obj) {
             var item = JSON.parse(obj);
+            var orgQuery = this.query;
             var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
             var result = item.name + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email;
-
-            return result.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
-                return '<strong>' + match + '</strong>';
-            });
+            var resultBy_NameFamily = item.name_family + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email;
+                     
+            if (result.toLowerCase().indexOf(orgQuery.toLowerCase()) > -1)               
+                return result.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
+                    return '<strong>' + match + '</strong>';
+                });
+            else
+                return resultBy_NameFamily.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
+                    return '<strong>' + match + '</strong>';
+                });
+           
         },
 
         updater: function (obj) {
