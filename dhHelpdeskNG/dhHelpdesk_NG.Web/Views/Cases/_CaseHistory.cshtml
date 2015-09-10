@@ -46,7 +46,7 @@
                                         @foreach (var l in current.Emaillogs)
                                         {    
                                             <p>
-                                                @l.EmailAddress (@l.MailId.GetMailTemplateName()) 
+                                                @l.EmailAddress (@l.MailId.GetMailTemplateName(Model.MailTemplates))
                                             </p>
                                         }
                                     </div>

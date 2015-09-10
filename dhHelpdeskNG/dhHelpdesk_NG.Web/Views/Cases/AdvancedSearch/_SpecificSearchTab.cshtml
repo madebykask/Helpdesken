@@ -30,7 +30,15 @@
                             <select id="lstfilterDepartment" name="lstfilterDepartment" data-field="department" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                 @foreach (var e in Model.DepartmentList)
                                 {
-                                    <option value="@e.Id" @e.Id.IdIsSelected(Model.FilteredDepartment)>@e.DepartmentDescription(Model.CustomerSetting.DepartmentFilterFormat)</option>                                      
+                                    if (e.IsActive == 1)
+                                    {
+                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.FilteredDepartment)>@e.DepartmentDescription(Model.CustomerSetting.DepartmentFilterFormat)</option>
+                                    }
+                                    else
+                                    {
+                                        <option class="DisabledChosen" value="@e.Id" @e.Id.IdIsSelected(Model.FilteredDepartment)>@e.DepartmentDescription(Model.CustomerSetting.DepartmentFilterFormat)</option>
+                                    }
+                                    
                                 }
                             </select>
                         </td>
@@ -48,7 +56,14 @@
                             <select id="lstfilterWorkingGroup" name="@CaseSearchFilter.WorkingGroupNameAttribute" data-placeholder="@Translation.Get("Välj en eller flera")" multiple="multiple" class="chosen-select">
                                 @foreach (var e in Model.WorkingGroupList)
                                 {
-                                    <option value="@e.Id" @e.Id.IdIsSelected(Model.FilteredWorkingGroup)>@e.WorkingGroupName</option>
+                                    if (e.IsActive == 1)
+                                    {
+                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.FilteredWorkingGroup)>@e.WorkingGroupName</option>
+                                    }
+                                    else{
+                                        <option class="DisabledChosen" value="@e.Id" @e.Id.IdIsSelected(Model.FilteredWorkingGroup)>@e.WorkingGroupName</option>
+                                    }
+                                    
                                 }
                             </select>
                         </td>
@@ -66,7 +81,14 @@
                             <select id="lstfilterPriority" name="lstfilterPriority" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                 @foreach (var e in Model.PriorityList.OrderBy(p => p.Name))
                                 {
-                                    <option value="@e.Id" @e.Id.IdIsSelected(Model.FilteredPriority)>@Translation.Get(e.Name, Enums.TranslationSource.TextTranslation)</option>
+                                    if (e.IsActive == 1)
+                                    {
+                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.FilteredPriority)>@Translation.Get(e.Name, Enums.TranslationSource.TextTranslation)</option>
+                                    }
+                                    else
+                                    {
+                                        <option class="DisabledChosen" value="@e.Id" @e.Id.IdIsSelected(Model.FilteredPriority)>@Translation.Get(e.Name, Enums.TranslationSource.TextTranslation)</option>
+                                    }
                                 }
                             </select>
                         </td>
@@ -83,7 +105,15 @@
                             <select id="lstfilterStateSecondary" name="lstfilterStateSecondary" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                 @foreach (var e in Model.StateSecondaryList)
                                 {
-                                    <option value="@e.Id" @e.Id.IdIsSelected(Model.FilteredStateSecondary)>@Translation.Get(e.Name, Enums.TranslationSource.TextTranslation)</option>
+                                    if (e.IsActive == 1)
+                                    {
+                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.FilteredStateSecondary)>@Translation.Get(e.Name, Enums.TranslationSource.TextTranslation)</option>
+                                    }
+                                    else
+                                    {
+                                        <option class="DisabledChosen" value="@e.Id" @e.Id.IdIsSelected(Model.FilteredStateSecondary)>@Translation.Get(e.Name, Enums.TranslationSource.TextTranslation)</option>
+                                    }
+                                    
                                 }
                             </select>
                         </td>

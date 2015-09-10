@@ -26,6 +26,8 @@
 
         public string Body { get; set; }
 
+        public string TemplateName { get; set; }
+
         public LanguageOverview Language {get; set;}
 
     }

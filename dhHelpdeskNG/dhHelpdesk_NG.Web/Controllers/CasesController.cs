@@ -95,7 +95,8 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IEmailService _emailService;
         private readonly ILanguageService _languageService;
         private readonly IGlobalSettingService _globalSettingService;
-
+        private readonly IMailTemplateService _mailTemplateService;
+        
         private const string ParentPathDefaultValue = "--";
 
         private readonly ICaseNotifierModelFactory caseNotifierModelFactory;
@@ -200,7 +201,8 @@ namespace DH.Helpdesk.Web.Controllers
             IOrganizationService organizationService,
             OrganizationJsonService orgJsonService,
             IRegistrationSourceCustomerService registrationSourceCustomerService,
-            ICaseLockService caseLockService, 
+            ICaseLockService caseLockService,
+            IMailTemplateService mailTemplateService,
             IWatchDateCalendarService watchDateCalendarServcie)
             : base(masterDataService)
         {
@@ -261,6 +263,7 @@ namespace DH.Helpdesk.Web.Controllers
             this._registrationSourceCustomerService = registrationSourceCustomerService;
             this._caseLockService = caseLockService;
             this.watchDateCalendarServcie = watchDateCalendarServcie;
+            this._mailTemplateService = mailTemplateService;
             this._defaultMaxRows = 10;
             this._defaultCaseLockBufferTime = 30; // Second
             this._defaultExtendCaseLockTime = 60; // Second
@@ -2727,6 +2730,7 @@ namespace DH.Helpdesk.Web.Controllers
             var deps = this._departmentService.GetDepartmentsByUserPermissions(userId, customerId);
             var isCreateNewCase = caseId == 0;
             m.CaseLock = caseLocked;
+            m.MailTemplates = this._mailTemplateService.GetCustomMailTemplates(customerId).ToList();
             if (!isCreateNewCase)
             {
                 var markCaseAsRead = string.IsNullOrWhiteSpace(redirectFrom);

@@ -445,13 +445,20 @@
                 }
 
                 var customersAvailableHash = this.GetAvaliableCustomersFor(userToSave).ToDictionary(it => it.Id, it => true);
-                var customersSelected = CsSelected.Where(customersAvailableHash.ContainsKey).ToArray();
+                
+                int[] customersSelected = null;
+                if (CsSelected != null)
+                {
+                    customersSelected = CsSelected.Where(customersAvailableHash.ContainsKey).ToArray();
+                }
+                
+
                 if (SessionFacade.CurrentUser.Id == userToSave.Id)
                 {
                     this._userService.SaveEditUser(
                        userToSave,
                        AAsSelected,
-                       customersSelected.ToArray(),
+                       customersSelected,
                        customersAvailableHash.Keys.ToArray(),
                        OTsSelected,
                        Departments,
@@ -465,11 +472,14 @@
                         userToSave.CusomersAvailable.Where(it => !customersAvailableHash.ContainsKey(it.Id))
                             .Select(it => it.Id)
                             .ToList();
-                    usersOwnCustomer.AddRange(customersSelected);
+                    if (customersSelected != null)
+                    {
+                        usersOwnCustomer.AddRange(customersSelected);
+                    }
                     this._userService.SaveEditUser(
                         userToSave,
                         AAsSelected,
-                        customersSelected.ToArray(),
+                        customersSelected,
                         usersOwnCustomer.ToArray(),
                         OTsSelected,
                         Departments,
