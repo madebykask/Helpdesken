@@ -31,6 +31,10 @@
                         (int)CaseRegistrationSource.SelfService,
                         "Självservice"
                     },
+                    {
+                        (int)CaseRegistrationSource.Contract,
+                        "Avtal"
+                    },
                 };
 
         private readonly IRegistrationSourceCustomerService _registrationSourceCustomerService;
