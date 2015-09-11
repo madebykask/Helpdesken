@@ -1,611 +1,607 @@
 ﻿@using DH.Helpdesk.BusinessData.OldComponents
 @model DH.Helpdesk.Web.Models.Print.Case.CasePrintModel
-
 @{
     Layout = null;
 }
 
 <html>
-    <head></head>
-    <body face="Arial Unicode MS" encoding="Identity-H">
-        <img src="@Context.Server.MapPath("~/img-profile/print-logo.png")" />
-        <div>
-            <span style="font-weight:bold;">
-                @Translation.Get("Ärende")
-                @Model.Case.CaseNumber
-            </span>
-        </div>
-        <table border="1">
-            <tr>
-                <td colspan="2" bgcolor="silver" style="font-weight:bold;">
-                    @Translation.Get("Användarinformation")
-                </td>
-            </tr>                                
-            @if (Model.IsReportedByVisible)
-            {
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Model.CustomerId)
-                    </td>
-                    <td>
-                        @Model.Case.ReportedBy
-                    </td>
-                </tr>                        
-            }
-            @if (Model.IsPersonsNameVisible)
-            {
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Model.CustomerId)    
-                    </td>
-                    <td>
-                        @Model.Case.PersonsName                    
-                    </td>
-                </tr>                        
-            }
-            @if (Model.IsPersonsEmailVisible)
-            {
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString(), Model.CustomerId)
-                    </td>
-                    <td>
-                        @Model.Case.PersonsEmail
-                    </td>
-                </tr>                        
-            }
-            @if (Model.IsPersonsPhoneVisible)
-            {
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString(), Model.CustomerId)
-                    </td>
-                    <td>
-                        @Model.Case.PersonsPhone
-                    </td>
-                </tr>                        
-            }
-            @if (Model.IsPersonsCellPhoneVisible)
-            {
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString(), Model.CustomerId)
-                    </td>
-                    <td>
-                        @Model.Case.PersonsCellphone
-                    </td>
-                </tr>                        
-            }
-            @if (Model.IsRegionVisible)
-            {
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Region_Id.ToString(), Model.CustomerId)
-                    </td>
-                    <td>
-                        @(Model.Case.Region != null ? Model.Case.Region.Name : null)
-                    </td>
-                </tr>                        
-            }
-            @if (Model.IsDepartmentVisible)
-            {
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Model.CustomerId)
-                    </td>
-                    <td>
-                        @(Model.Case.Department != null ? Model.Case.Department.DepartmentName : null)
-                    </td>
-                </tr>                        
-            }
-            @if (Model.IsOuVisible)
-            {
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Model.CustomerId)
-                    </td>
-                    <td>
-                        @(Model.Case.Ou != null ? Model.Case.Ou.Name : null)
-                    </td>
-                </tr>                        
-            }
-            @if (Model.IsPlaceVisible)
-            {
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Place.ToString(), Model.CustomerId)
-                    </td>
-                    <td>
-                        @Model.Case.Place
-                    </td>
-                </tr>                        
-            }                
-            @if (Model.IsUserCodeVisible)
-            {
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.UserCode.ToString(), Model.CustomerId)
-                    </td>
-                    <td>
-                        @Model.Case.UserCode
-                    </td>
-                </tr>                        
-            }                
-        </table>
-    
-        @if (Model.GetIsComputerInformationVisible())
+<head></head>
+<body face="Arial Unicode MS" encoding="Identity-H">
+    <img src="@Context.Server.MapPath("~/img-profile/print-logo.png")" />
+    <div>
+        <span style="font-weight: bold;">
+            @Translation.Get("Ärende")
+            @Model.Case.CaseNumber
+        </span>
+    </div>
+    <table border="1">
+        <tr>
+            <td colspan="2" bgcolor="silver" style="font-weight: bold;">
+                @Translation.Get("Användarinformation")
+            </td>
+        </tr>
+        @if (Model.IsReportedByVisible)
         {
-            <table border="1">
-                <tr>
-                    <td colspan="2" bgcolor="silver" style="font-weight:bold;">
-                        @Translation.Get("Datorinformation")
-                    </td>
-                </tr>                                
-                @if (Model.IsInventoryNumberVisible)
-                {
-                    <tr>
-                        <td>
-                            @Translation.GetForCase(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(), Model.CustomerId)
-                        </td>
-                        <td>
-                            @Model.Case.InventoryNumber
-                        </td>
-                    </tr>                        
-                }                
-                @if (Model.IsInventoryTypeVisible)
-                {
-                    <tr>
-                        <td>
-                            @Translation.GetForCase(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString(), Model.CustomerId)
-                        </td>
-                        <td>
-                            @Model.Case.InventoryType
-                        </td>
-                    </tr>                        
-                }                
-                @if (Model.IsInventoryLocationVisible)
-                {
-                    <tr>
-                        <td>
-                            @Translation.GetForCase(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString(), Model.CustomerId)
-                        </td>
-                        <td>
-                            @Model.Case.InventoryLocation
-                        </td>
-                    </tr>                        
-                }                
-            </table>            
-        }
-    
-    
-        <table border="1">
-            <tr>
-                <td colspan="2" bgcolor="silver" style="font-weight:bold;">
-                    @Translation.Get("Ärendeinformation")
-                </td>
-            </tr>                                
-            @if (Model.IsCaseNumberVisible)
-            {
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.CaseNumber.ToString(), Model.CustomerId)
-                    </td>
-                    <td>
-                        @Model.Case.CaseNumber
-                    </td>
-                </tr>                        
-            }                
             <tr>
                 <td>
-                    @Translation.Get("Registreringsdatum")
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Model.CustomerId)
                 </td>
                 <td>
-                    @Html.DisplayFor(m => m.Case.RegistrationDate , "DateAndTime")
+                    @Model.Case.ReportedBy
                 </td>
             </tr>                        
-            @if (Model.IsUserVisible)
+        }
+        @if (Model.IsPersonsNameVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Model.CustomerId)
+                </td>
+                <td>
+                    @Model.Case.PersonsName
+                </td>
+            </tr>                        
+        }
+        @if (Model.IsPersonsEmailVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString(), Model.CustomerId)
+                </td>
+                <td>
+                    @Model.Case.PersonsEmail
+                </td>
+            </tr>                        
+        }
+        @if (Model.IsPersonsPhoneVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString(), Model.CustomerId)
+                </td>
+                <td>
+                    @Model.Case.PersonsPhone
+                </td>
+            </tr>                        
+        }
+        @if (Model.IsPersonsCellPhoneVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString(), Model.CustomerId)
+                </td>
+                <td>
+                    @Model.Case.PersonsCellphone
+                </td>
+            </tr>                        
+        }
+        @if (Model.IsRegionVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Region_Id.ToString(), Model.CustomerId)
+                </td>
+                <td>
+                    @(Model.Case.Region != null ? Model.Case.Region.Name : null)
+                </td>
+            </tr>                        
+        }
+        @if (Model.IsDepartmentVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Model.CustomerId)
+                </td>
+                <td>
+                    @(Model.Case.Department != null ? Model.Case.Department.DepartmentName : null)
+                </td>
+            </tr>                        
+        }
+        @if (Model.IsOuVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Model.CustomerId)
+                </td>
+                <td>
+                    @(Model.Case.Ou != null ? Model.Case.Ou.Name : null)
+                </td>
+            </tr>                        
+        }
+        @if (Model.IsPlaceVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Place.ToString(), Model.CustomerId)
+                </td>
+                <td>
+                    @Model.Case.Place
+                </td>
+            </tr>                        
+        }
+        @if (Model.IsUserCodeVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.UserCode.ToString(), Model.CustomerId)
+                </td>
+                <td>
+                    @Model.Case.UserCode
+                </td>
+            </tr>                        
+        }
+    </table>
+
+    @if (Model.GetIsComputerInformationVisible())
+    {
+        <table border="1">
+            <tr>
+                <td colspan="2" bgcolor="silver" style="font-weight: bold;">
+                    @Translation.Get("Datorinformation")
+                </td>
+            </tr>
+            @if (Model.IsInventoryNumberVisible)
             {
                 <tr>
                     <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.User_Id.ToString(), Model.CustomerId)
+                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(), Model.CustomerId)
                     </td>
                     <td>
-                        @if(Model.Case.User != null)
-                        {    
-                            @Model.Case.User.FirstName @Model.Case.User.SurName
-                        }
-                        @Model.Case.IpAddress                      
+                        @Model.Case.InventoryNumber
                     </td>
                 </tr>                        
-            }                
-            @if (Model.IsCaseTypeVisible)
+            }
+            @if (Model.IsInventoryTypeVisible)
             {
                 <tr>
                     <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Model.CustomerId)
+                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString(), Model.CustomerId)
                     </td>
                     <td>
-                        @Model.Case.ParentPathCaseType
+                        @Model.Case.InventoryType
                     </td>
                 </tr>                        
-            }                        
-            @if (Model.IsSystemVisible)
+            }
+            @if (Model.IsInventoryLocationVisible)
             {
                 <tr>
                     <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.System_Id.ToString(), Model.CustomerId)
+                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString(), Model.CustomerId)
                     </td>
                     <td>
-                        @(Model.Case.System != null ? Model.Case.System.Name : null)
+                        @Model.Case.InventoryLocation
                     </td>
                 </tr>                        
-            }                        
-            @if (Model.IsUrgencyVisible)
-            {
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString(), Model.CustomerId)
-                    </td>
-                    <td>
-                        @(Model.Case.Urgency != null ? Model.Case.Urgency.Name : null)
-                    </td>
-                </tr>                        
-            }                        
-            @if (Model.IsImpactVisible)
-            {
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Impact_Id.ToString(), Model.CustomerId)
-                    </td>
-                    <td>
-                        @(Model.Case.Impact != null ? Model.Case.Impact.Name : null)
-                    </td>
-                </tr>                        
-            }                        
-            @if (Model.IsCategoryVisible)
-            {
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Model.CustomerId)
-                    </td>
-                    <td>
-                        @(Model.Case.Category != null ? Model.Case.Category.Name : null)
-                    </td>
-                </tr>                        
-            }                        
-            @if (Model.IsSupplierVisible)
-            {
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString(), Model.CustomerId)
-                    </td>
-                    <td>
-                        @(Model.Case.Supplier != null ? Model.Case.Supplier.Name : null)
-                    </td>
-                </tr>                        
-            }          
-            @if (Model.IsInvoiceNumberVisible)
-            {
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString(), Model.CustomerId)
-                    </td>
-                    <td>
-                        @Model.Case.InvoiceNumber
-                    </td>
-                </tr>                        
-            }                        
-            @if (Model.IsReferenceNumberVisible)
-            {
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString(), Model.CustomerId)
-                    </td>
-                    <td>
-                        @Model.Case.ReferenceNumber
-                    </td>
-                </tr>                        
-            }                        
-            @if (Model.IsCaptionVisible)
-            {
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Caption.ToString(), Model.CustomerId)
-                    </td>
-                    <td>
-                        @Model.Case.Caption
-                    </td>
-                </tr>                        
-            }                        
-            @if (Model.IsDescriptionVisible)
-            {
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Description.ToString(), Model.CustomerId)
-                    </td>
-                    <td>
-                        @Model.Case.Description
-                    </td>
-                </tr>                        
-            }                        
-            @if (Model.IsMiscellaneousVisible)
-            {
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString(), Model.CustomerId)
-                    </td>
-                    <td>
-                        @Model.Case.Miscellaneous
-                    </td>
-                </tr>                        
-            }                        
-            @if (Model.IsProductAreaVisible)
-            {
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Model.CustomerId)
-                    </td>
-                    <td>
-                        @(Model.Case.ProductArea != null ? Model.Case.ProductArea.Name : null)
-                    </td>
-                </tr>                        
-            }          
-            @if (Model.IsContactBeforeActionVisible)
-            {
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString(), Model.CustomerId)
-                    </td>
-                    <td>
-                        @Model.Case.ContactBeforeAction.IntToYES_NO()
-                    </td>
-                </tr>                        
-            }                        
-            @if (Model.IsSmsVisible)
-            {
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.SMS.ToString(), Model.CustomerId)
-                    </td>
-                    <td>
-                    
-                        @Model.Case.Sms.IntToYES_NO()
-                    </td>
-                </tr>                        
-            }                        
-            @if (Model.IsAgreedDateVisible)
-            {
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.AgreedDate.ToString(), Model.CustomerId)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(m => m.Case.AgreedDate , "DateAndTime")
-                    </td>
-                </tr>                        
-            }                        
-            @if (Model.IsAvailableVisible)
-            {
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Available.ToString(), Model.CustomerId)
-                    </td>
-                    <td>
-                        @Model.Case.Available
-                    </td>
-                </tr>                        
-            }                        
-            @if (Model.IsCostVisible)
-            {
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Cost.ToString(), Model.CustomerId)
-                    </td>
-                    <td>
-                        <div>@Translation.Get("Artikelkostnad") @Model.Case.Cost</div>
-                        <div>@Translation.Get("Övrig kostnad") @Model.Case.OtherCost</div>
-                        <div>@Translation.Get("Valuta") @Model.Case.Currency</div>
-                    </td>
-                </tr>                        
-            }                        
-            @if (Model.IsFilesVisible)
-            {
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Filename.ToString(), Model.CustomerId)
-                    </td>
-                    <td>
-                        @if (Model.CaseFilesModel != null || Model.CaseFilesModel.Files != null)
+            }
+        </table>            
+    }
+
+
+    <table border="1">
+        <tr>
+            <td colspan="2" bgcolor="silver" style="font-weight: bold;">
+                @Translation.Get("Ärendeinformation")
+            </td>
+        </tr>
+        @if (Model.IsCaseNumberVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.CaseNumber.ToString(), Model.CustomerId)
+                </td>
+                <td>
+                    @Model.Case.CaseNumber
+                </td>
+            </tr>                        
+        }
+        <tr>
+            <td>
+                @Translation.Get("Registreringsdatum")
+            </td>
+            <td>
+                @Html.DisplayFor(m => m.Case.RegistrationDate, "DateAndTime")
+            </td>
+        </tr>
+        @if (Model.IsUserVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.User_Id.ToString(), Model.CustomerId)
+                </td>
+                <td>
+                    @if (Model.Case.User != null)
+                    {    
+                        @Model.Case.User.FirstName @Model.Case.User.SurName
+                    }
+                    @Model.Case.IpAddress
+                </td>
+            </tr>                        
+        }
+        @if (Model.IsCaseTypeVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Model.CustomerId)
+                </td>
+                <td>
+                    @Model.Case.ParentPathCaseType
+                </td>
+            </tr>                        
+        }
+        @if (Model.IsSystemVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.System_Id.ToString(), Model.CustomerId)
+                </td>
+                <td>
+                    @(Model.Case.System != null ? Model.Case.System.Name : null)
+                </td>
+            </tr>                        
+        }
+        @if (Model.IsUrgencyVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString(), Model.CustomerId)
+                </td>
+                <td>
+                    @(Model.Case.Urgency != null ? Model.Case.Urgency.Name : null)
+                </td>
+            </tr>                        
+        }
+        @if (Model.IsImpactVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Impact_Id.ToString(), Model.CustomerId)
+                </td>
+                <td>
+                    @(Model.Case.Impact != null ? Model.Case.Impact.Name : null)
+                </td>
+            </tr>                        
+        }
+        @if (Model.IsCategoryVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Model.CustomerId)
+                </td>
+                <td>
+                    @(Model.Case.Category != null ? Model.Case.Category.Name : null)
+                </td>
+            </tr>                        
+        }
+        @if (Model.IsSupplierVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString(), Model.CustomerId)
+                </td>
+                <td>
+                    @(Model.Case.Supplier != null ? Model.Case.Supplier.Name : null)
+                </td>
+            </tr>                        
+        }
+        @if (Model.IsInvoiceNumberVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString(), Model.CustomerId)
+                </td>
+                <td>
+                    @Model.Case.InvoiceNumber
+                </td>
+            </tr>                        
+        }
+        @if (Model.IsReferenceNumberVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString(), Model.CustomerId)
+                </td>
+                <td>
+                    @Model.Case.ReferenceNumber
+                </td>
+            </tr>                        
+        }
+        @if (Model.IsCaptionVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Caption.ToString(), Model.CustomerId)
+                </td>
+                <td>
+                    @Model.Case.Caption
+                </td>
+            </tr>                        
+        }
+        @if (Model.IsDescriptionVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Description.ToString(), Model.CustomerId)
+                </td>
+                <td>
+                    @Model.Case.Description
+                </td>
+            </tr>                        
+        }
+        @if (Model.IsMiscellaneousVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString(), Model.CustomerId)
+                </td>
+                <td>
+                    @Model.Case.Miscellaneous
+                </td>
+            </tr>                        
+        }
+        @if (Model.IsProductAreaVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Model.CustomerId)
+                </td>
+                <td>
+                    @(Model.Case.ProductArea != null ? Model.Case.ProductArea.Name : null)
+                </td>
+            </tr>                        
+        }
+        @if (Model.IsContactBeforeActionVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString(), Model.CustomerId)
+                </td>
+                <td>
+                    @Model.Case.ContactBeforeAction.IntToYES_NO()
+                </td>
+            </tr>                        
+        }
+        @if (Model.IsSmsVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.SMS.ToString(), Model.CustomerId)
+                </td>
+                <td>
+
+                    @Model.Case.Sms.IntToYES_NO()
+                </td>
+            </tr>                        
+        }
+        @if (Model.IsAgreedDateVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.AgreedDate.ToString(), Model.CustomerId)
+                </td>
+                <td>
+                    @Html.DisplayFor(m => m.Case.AgreedDate, "DateAndTime")
+                </td>
+            </tr>                        
+        }
+        @if (Model.IsAvailableVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Available.ToString(), Model.CustomerId)
+                </td>
+                <td>
+                    @Model.Case.Available
+                </td>
+            </tr>                        
+        }
+        @if (Model.IsCostVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Cost.ToString(), Model.CustomerId)
+                </td>
+                <td>
+                    <div>@Translation.Get("Artikelkostnad") @Model.Case.Cost</div>
+                    <div>@Translation.Get("Övrig kostnad") @Model.Case.OtherCost</div>
+                    <div>@Translation.Get("Valuta") @Model.Case.Currency</div>
+                </td>
+            </tr>                        
+        }
+        @if (Model.IsFilesVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Filename.ToString(), Model.CustomerId)
+                </td>
+                <td>
+                    @if (Model.CaseFilesModel != null || Model.CaseFilesModel.Files != null)
+                    {
+                        foreach (var file in Model.CaseFilesModel.Files)
                         {
-                            foreach (var file in Model.CaseFilesModel.Files)
-                            {
-                                <div>@file</div>                                                
-                            }
+                        <div>@file</div>                                                
                         }
-                    </td>
-                </tr>                        
-            }                                                              
-        </table>            
-    
-    
+                    }
+                </td>
+            </tr>                        
+        }
+    </table>
+
+
+    <table border="1">
+        <tr>
+            <td colspan="2" bgcolor="silver" style="font-weight: bold;">
+                @Translation.Get("Ärendehantering")
+            </td>
+        </tr>
+        @if (Model.IsWorkingGroupVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Model.CustomerId)
+                </td>
+                <td>
+                    @(Model.Case.WorkingGroup != null ? Model.Case.WorkingGroup.WorkingGroupName : null)
+                </td>
+            </tr>                        
+        }
+        @if (Model.IsCaseResponsibleUserVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Model.CustomerId)
+                </td>
+                <td>
+                    @(Model.Case.CaseResponsibleUser != null ?
+                              string.Format("{0} {1}", Model.Case.CaseResponsibleUser.SurName, Model.Case.CaseResponsibleUser.FirstName) : null)
+                </td>
+            </tr>                        
+        }
+        @if (Model.IsPerformerUserVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Model.CustomerId)
+                </td>
+                <td>
+                    @(Model.Case.PerformerUser != null ?
+                              string.Format("{0} {1}", Model.Case.PerformerUser.SurName, Model.Case.PerformerUser.FirstName) : null)
+                </td>
+            </tr>                        
+        }
+        @if (Model.IsPriorityVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Model.CustomerId)
+                </td>
+                <td>
+                    @(Model.Case.Priority != null ? Model.Case.Priority.Name : null)
+                </td>
+            </tr>                        
+        }
+        @if (Model.IsStatusVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Model.CustomerId)
+                </td>
+                <td>
+                    @(Model.Case.Status != null ? Model.Case.Status.Name : null)
+                </td>
+            </tr>                        
+        }
+        @if (Model.IsStateSecondaryVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Model.CustomerId)
+                </td>
+                <td>
+                    @(Model.Case.StateSecondary != null ? Model.Case.StateSecondary.Name : null)
+                </td>
+            </tr>                        
+        }
+        <tr>
+            <td>
+                @Translation.Get("Projekt")
+            </td>
+            <td>
+                @(Model.Case.Project != null ? Model.Case.Project.Name : null)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Translation.Get("ITIL Problem")
+            </td>
+            <td>
+                @(Model.Case.Problem != null ? Model.Case.Problem.Name : null)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Translation.Get("Ändring")
+            </td>
+            <td>
+                @(Model.Case.Change != null ? Model.Case.Change.ChangeTitle : null)
+            </td>
+        </tr>
+        @if (Model.IsWatchDateVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Model.CustomerId)
+                </td>
+                <td>
+                    @Html.EditorFor(m => m.Case.WatchDate, "DateReadOnly")
+                </td>
+            </tr>                        
+        }
+        @if (Model.IsVerifiedVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Verified.ToString(), Model.CustomerId)
+                </td>
+                <td>
+                    @Model.Case.Verified.IntToYES_NO()
+                </td>
+            </tr>                        
+        }
+        @if (Model.IsVerifiedDescriptionVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString(), Model.CustomerId)
+                </td>
+                <td>
+                    @Model.Case.VerifiedDescription
+                </td>
+            </tr>                        
+        }
+        @if (Model.IsSolutionRateVisible)
+        {
+            <tr>
+                <td>
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.SolutionRate.ToString(), Model.CustomerId)
+                </td>
+                <td>
+                    @Model.Case.SolutionRate
+                </td>
+            </tr>                        
+        }
+    </table>
+
+    @if (Model.Case.Logs != null && Model.Case.Logs.Any())
+    {
+        @Html.Partial("_CaseLogSection", Model)
+    }
+
+
+    @if (Model.Case.FinishingDate.HasValue)
+    {
         <table border="1">
             <tr>
-                <td colspan="2" bgcolor="silver" style="font-weight:bold;">
-                    @Translation.Get("Ärendehantering")
+                <td colspan="2" bgcolor="silver" style="font-weight: bold;">
+                    @Translation.Get("Status")
                 </td>
-            </tr>     
-            @if (Model.IsWorkingGroupVisible)
-            {
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Model.CustomerId)
-                    </td>
-                    <td>
-                        @(Model.Case.WorkingGroup != null ? Model.Case.WorkingGroup.WorkingGroupName : null)
-                    </td>
-                </tr>                        
-            }                                                           
-            @if (Model.IsCaseResponsibleUserVisible)
-            {
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Model.CustomerId)
-                    </td>
-                    <td>
-                        @(Model.Case.CaseResponsibleUser != null ? 
-                              string.Format("{0} {1}", Model.Case.CaseResponsibleUser.SurName, Model.Case.CaseResponsibleUser.FirstName) : null)
-                    </td>
-                </tr>                        
-            }                                                           
-            @if (Model.IsPerformerUserVisible)
-            {
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Model.CustomerId)
-                    </td>
-                    <td>
-                        @(Model.Case.PerformerUser != null ? 
-                              string.Format("{0} {1}", Model.Case.PerformerUser.SurName, Model.Case.PerformerUser.FirstName) : null)
-                    </td>
-                </tr>                        
-            }                                                           
-            @if (Model.IsPriorityVisible)
-            {
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Model.CustomerId)
-                    </td>
-                    <td>
-                        @(Model.Case.Priority != null ? Model.Case.Priority.Name : null)
-                    </td>
-                </tr>                        
-            }                                                           
-            @if (Model.IsStatusVisible)
-            {
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Model.CustomerId)
-                    </td>
-                    <td>
-                        @(Model.Case.Status != null ? Model.Case.Status.Name : null)
-                    </td>
-                </tr>                        
-            }                                                           
-            @if (Model.IsStateSecondaryVisible)
-            {
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Model.CustomerId)
-                    </td>
-                    <td>
-                        @(Model.Case.StateSecondary != null ? Model.Case.StateSecondary.Name : null)
-                    </td>
-                </tr>                        
-            }                                                           
+            </tr>
             <tr>
                 <td>
-                    @Translation.Get("Projekt")
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Model.CustomerId)
                 </td>
                 <td>
-                    @(Model.Case.Project != null ? Model.Case.Project.Name : null)
+                    @Html.DisplayFor(m => m.Case.FinishingDate, "DateAndTime")
                 </td>
-            </tr>                        
+            </tr>
             <tr>
                 <td>
-                    @Translation.Get("ITIL Problem")
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString(), Model.CustomerId)
                 </td>
                 <td>
-                    @(Model.Case.Problem != null ? Model.Case.Problem.Name : null)
+                    @Model.Case.FinishingDescription
                 </td>
-            </tr>                        
-            <tr>
-                <td>
-                    @Translation.Get("Ändring")
-                </td>
-                <td>
-                    @(Model.Case.Change != null ? Model.Case.Change.ChangeTitle : null)
-                </td>
-            </tr>         
-            @if (Model.IsWatchDateVisible)
-            {
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Model.CustomerId)
-                    </td>
-                    <td>
-                        @Html.EditorFor(m => m.Case.WatchDate, "DateReadOnly") 
-                    </td>
-                </tr>                        
-            }                                               
-            @if (Model.IsVerifiedVisible)
-            {
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Verified.ToString(), Model.CustomerId)
-                    </td>
-                    <td>
-                        @Model.Case.Verified.IntToYES_NO()
-                    </td>
-                </tr>                        
-            }                                               
-            @if (Model.IsVerifiedDescriptionVisible)
-            {
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString(), Model.CustomerId)
-                    </td>
-                    <td>
-                        @Model.Case.VerifiedDescription
-                    </td>
-                </tr>                        
-            }                                               
-            @if (Model.IsSolutionRateVisible)
-            {
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.SolutionRate.ToString(), Model.CustomerId)
-                    </td>
-                    <td>
-                        @Model.Case.SolutionRate
-                    </td>
-                </tr>                        
-            }                                               
-        </table>            
-       
-@if (Model.Case.Logs != null && Model.Case.Logs.Any())
-{
-    @Html.Partial("_CaseLogSection", Model)
-}
-@if (Model.Case.CaseHistories != null && Model.Case.CaseHistories.Any())
-{
-    @Html.Partial("_CaseHistorySection", Model)
-}
-    
-        @if (Model.Case.FinishingDate.HasValue)
-        {
-            <table border="1">
-                <tr>
-                    <td colspan="2" bgcolor="silver" style="font-weight:bold;">
-                        @Translation.Get("Status")
-                    </td>
-                </tr>  
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Model.CustomerId)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(m => m.Case.FinishingDate, "DateAndTime")
-                    </td>
-                </tr>                                       
-                <tr>
-                    <td>
-                        @Translation.GetForCase(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString(), Model.CustomerId)
-                    </td>
-                    <td>
-                        @Model.Case.FinishingDescription
-                    </td>
-                </tr>                                       
-            </table>
-        }
-    </body>
+            </tr>
+        </table>
+    }
+</body>
 </html>
