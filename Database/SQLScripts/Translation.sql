@@ -4413,5 +4413,12 @@ If not exists (select * from tblTextTranslation where text_id = 1535 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1535, 2, 'Only sent the first time product area is selected')
 GO
 
+
+-- New 20150911
+UPDATE tblText Set TextString = 'Använd # för att söka efter' WHERE Id = 1334;
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'Use # to search for' WHERE Text_Id=1334 AND Language_Id=2;
+GO
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
