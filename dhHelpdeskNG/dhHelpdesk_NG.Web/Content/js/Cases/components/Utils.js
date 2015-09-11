@@ -1,6 +1,33 @@
 ﻿'use strict';
 
-window.EMPTY_STR = '';
+var Utils = {
+    /**
+    * Builds object with fieldsToTake feilds
+    * from source object srcObject
+    * @param { Object } srcObject
+    * @param { String[] } fieldsToTake
+    * @return Object
+    */
+    buildParamObj: function(srcObject, fieldsToTake) {
+        var res = {};
+        var fieldsMap = {};
+        for (var el in fieldsToTake) {
+            fieldsMap[el] = true;
+        }
+        for (var field in srcObject) {
+            if (srcObject.hasOwnProperty(field) && fieldsMap[field]) {
+                res[field] = srcObject[field];
+            }
+        }
+        return res;
+    }
+};
+
+if (String.EMPTY === undefined) {
+    String.EMPTY = '';
+}
+
+window.EMPTY_STR = String.EMPTY;
 window.JOINER = EMPTY_STR;
 
 /**

@@ -19,6 +19,7 @@
     using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Dal.Repositories;
+    using DH.Helpdesk.Dal.Repositories.Cases;
     using DH.Helpdesk.Dal.Repositories.Users;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Accounts;

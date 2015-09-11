@@ -1,7 +1,6 @@
-﻿using DH.Helpdesk.BusinessData.Models.CaseSolution;
-
-namespace DH.Helpdesk.Web.Infrastructure.Extensions
+﻿namespace DH.Helpdesk.Web.Infrastructure.Extensions
 {
+    
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
@@ -9,14 +8,18 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
     using System.Web.Routing;
 
     using DH.Helpdesk.BusinessData.Enums.Users;
-    using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.Models.Case.ChidCase;
     using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.BusinessData.Models.CaseType;
     using DH.Helpdesk.BusinessData.Models.ProductArea;
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.BusinessData.Models.CaseSolution;
+    using DH.Helpdesk.Web.Infrastructure.CaseOverview;
     using DH.Helpdesk.Web.Models;
     using DH.Helpdesk.Common.Enums;
+    using DH.Helpdesk.Web.Models.Case.ChildCase;
 
     using UserGroup = DH.Helpdesk.BusinessData.Enums.Admin.Users.UserGroup;
 using DH.Helpdesk.Web.Areas.Admin.Models;
@@ -759,12 +762,44 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                         
                         sb.Append("</td>");
                         sb.Append("</tr>");
-                    
                 }
             }
 
+            // Parent case number
+//            if (cur.ParentCaseNumber != o.ParentCaseNumber)
+//            {
+//                sb.Append("<tr>");
+//                sb.Append(bs + Translation.Get("Parent case number", customerId) + be);
+//                sb.Append(tdMarkup);
+//                if (o.ParentCaseNumber != null)
+//                {
+//                    sb.Append(o.ParentCaseNumber);
+//                }
+//                else
+//                {
+//                    sb.Append(ey);
+//                }
+//
+//                sb.Append(from);
+//                sb.Append(cur.ParentCaseNumber != null ? cur.ParentCaseNumber.ToString() : ey);
+//                sb.Append("</td>");
+//                sb.Append("</tr>");
+//            }
+//
+//            // Child case number
+//            if (cur.ChildCaseNumber != o.ChildCaseNumber)
+//            {
+//                sb.Append("<tr>");
+//                sb.Append(bs + Translation.Get("New child case", customerId) + be);
+//                sb.Append(tdMarkup);
+//                sb.Append(cur.ChildCaseNumber != null ? cur.ChildCaseNumber.ToString(): ey);
+//                sb.Append("</td>");
+//                sb.Append("</tr>");
+//            }
+
             return new MvcHtmlString(sb.ToString());
         }
+
 
         public static MvcHtmlString CaseSolutionDropdownButtonString(this HtmlHelper helper, IList<CaseTemplateCategoryNode> categories, int customerId, string isJS = "")
         {
@@ -1302,6 +1337,58 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                 return new MvcHtmlString("<i class=\"icon-chevron-up\"></i>");
             }
             return new MvcHtmlString("<i class=\"icon-chevron-down\"></i>");
+        }
+
+        public static MvcHtmlString ImgForCase(this HtmlHelper helper, ChildCaseOverview ci)
+        {
+            var icoCode = GetCaseIcon(ci);
+            var icoTitle = GetCaseIconTitle(icoCode);
+            var content = string.Format("<img title='{0}' alt='{0}' src='/Content/icons/{1}' />", icoTitle, GetCaseIconSrc(icoCode));
+
+            return new MvcHtmlString(content);
+        }
+
+        private static GlobalEnums.CaseIcon GetCaseIcon(ChildCaseOverview ci)
+        {
+            var ret = GlobalEnums.CaseIcon.Normal;
+            // TODO Hantera icon för urgent
+            if (ci.ClosingDate != null)
+                if (ci.IsRequriedToApprive && ci.ApprovedDate == null)
+                    ret = GlobalEnums.CaseIcon.FinishedNotApproved;
+                else
+                    ret = GlobalEnums.CaseIcon.Finished;
+
+            return ret;
+        }
+
+        private static string GetCaseIconSrc(GlobalEnums.CaseIcon value)
+        {
+            var ret = "case.png";
+        
+            if (value == GlobalEnums.CaseIcon.Finished)
+                ret = "case_close.png";
+            else if (value == GlobalEnums.CaseIcon.FinishedNotApproved)
+                ret = "case_close_notapproved.png";
+            else if (value == GlobalEnums.CaseIcon.Urgent)
+                ret = "case_Log_urgent.png";
+        
+            return ret;
+        }
+
+        private static string GetCaseIconTitle(GlobalEnums.CaseIcon value)
+        {
+            string ret;
+
+            if (value == GlobalEnums.CaseIcon.Finished)
+                ret = Translation.Get("Avslutat ärende", Enums.TranslationSource.TextTranslation);
+            else if (value == GlobalEnums.CaseIcon.FinishedNotApproved)
+                ret = Translation.Get("Åtgärdat ärende, ej godkänt", Enums.TranslationSource.TextTranslation);
+            else if (value == GlobalEnums.CaseIcon.Urgent)
+                ret = Translation.Get("Ärende", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("akut", Enums.TranslationSource.TextTranslation) + ")";
+            else
+                ret = Translation.Get("Ärende", Enums.TranslationSource.TextTranslation);
+
+            return ret;
         }
     }
 }

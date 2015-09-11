@@ -151,6 +151,7 @@
 
             bundles.Add(
                 new ScriptBundle("~/bundles/cases/_input").Include(
+                    "~/Content/js/Cases/components/ConfirmationDialog.js",
                     "~/Content/js/Cases/models/Case.js",
                     "~/Content/js/Cases/components/Utils.js",
                     "~/Content/js/Cases/components/EditPage.js",
@@ -159,6 +160,11 @@
                     "~/Content/js/Cases/case.templates.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/cases/_caseLogFiles").Include("~/Content/js/Cases/_caseLogFiles.js"));
+            bundles.Add(
+                new ScriptBundle("~/bundles/Cases/_ChildCases").Include(
+                    "~/Content/js/Cases/_childCases.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/cases/editLog").Include("~/Content/js/Cases/editLog.logic.js"));
 
             #endregion
 

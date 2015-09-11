@@ -20,6 +20,7 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             int restrictedCasePermission,
             int showNotAssignedWorkingGroups,
             int createCasePermission,
+            int createSubCasePermission,
             int copyCasePermission,
             int orderPermission,
             int caseSolutionPermission,
@@ -55,6 +56,7 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             this.RestrictedCasePermission = restrictedCasePermission;
             this.ShowNotAssignedWorkingGroups = showNotAssignedWorkingGroups;
             this.CreateCasePermission = createCasePermission;
+            this.CreateSubCasePermission = createSubCasePermission;
             this.CopyCasePermission = copyCasePermission;
             this.OrderPermission = orderPermission;
             this.CaseSolutionPermission = caseSolutionPermission;
@@ -101,6 +103,11 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
         public int FollowUpPermission { get; set; }
 
         public int CreateCasePermission { get; set; }
+
+        /// <summary>
+        /// This permissions allows to user create sub cases for case
+        /// </summary>
+        public int CreateSubCasePermission { get; set; }
 
         public int CopyCasePermission { get; set; }
 

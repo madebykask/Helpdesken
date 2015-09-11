@@ -386,6 +386,9 @@
     <Content Include="Content\css\bootstrap-tagsinput.css" />
     <Content Include="Content\css\clickmultimenu_dropdown.css" />
     <Content Include="Content\css\custom\dynamic-cases.css" />
+    <Content Include="Content\css\images\sort_asc.png" />
+    <Content Include="Content\css\images\sort_both.png" />
+    <Content Include="Content\css\images\sort_desc.png" />
     <Content Include="Content\icons\advanced_search.png" />
     <Content Include="Content\icons\ajax-loader.gif" />
     <Content Include="Content\img\ajax-loader.GIF" />
@@ -440,6 +443,7 @@
     <Content Include="Content\js\Cases\caseByIds.logic.js" />
     <Content Include="Content\js\Cases\_caseLogInput.js" />
     <Content Include="Content\js\Cases\components\BaseField.js" />
+    <Content Include="Content\js\Cases\components\ConfirmationDialog.js" />
     <Content Include="Content\js\Cases\components\DateField.js" />
     <Content Include="Content\js\Cases\components\EditPage.js" />
     <Content Include="Content\js\Cases\components\JQueryChosenField.js" />
@@ -449,6 +453,7 @@
     <Content Include="Content\js\Cases\_caseLogFiles.js" />
     <Content Include="Content\js\Cases\index.settings.js" />
     <Content Include="Content\js\Cases\models\Case.js" />
+    <Content Include="Content\js\Cases\_childCases.js" />
     <Content Include="Content\js\Cases\_input.js" />
     <Content Include="Content\js\Cases\index.logic.js" />
     <Content Include="Content\js\Cases\relatedCases.logic.js" />
@@ -988,6 +993,7 @@
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\PrinterBuilder.cs" />
     <Compile Include="Infrastructure\CaseOverview\OutputFormatter.cs" />
     <Compile Include="Infrastructure\Case\CaseViewMapper.cs" />
+    <Compile Include="Infrastructure\Case\ChildCaseOverviewMapper.cs" />
     <Compile Include="Infrastructure\Configuration\Concrete\ApplicationConfiguration.cs" />
     <Compile Include="Infrastructure\ActionFilters\BadRequestOnNotValidAttribute.cs" />
     <Compile Include="Infrastructure\Configuration\Concrete\Configuration.cs" />
@@ -1216,6 +1222,8 @@
     <Compile Include="Models\Case\CaseByIdsViewModel.cs" />
     <Compile Include="Models\Case\CaseFilesModel.cs" />
     <Compile Include="Models\CaseLock\CaseLockModel.cs" />
+    <Compile Include="Models\Case\ChildCase\ChildCaseViewModel.cs" />
+    <Compile Include="Models\Case\ChildCase\ParentCaseInfo.cs" />
     <Compile Include="Models\Case\Input\CaseEditInput.cs" />
     <Compile Include="Models\Case\Output\CaseSeachFilterData.cs" />
     <Compile Include="Models\CaseSolution\CaseSolutionInputViewModel.cs" />
@@ -2274,6 +2282,7 @@
     <Content Include="Views\Print\_CaseHistorySection.cshtml" />
     <Content Include="Views\Cases\AdvancedSearch\_SpecificSearchTab.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\DateLocalTZ.cshtml" />
+    <Content Include="Views\Cases\_ChildCases.cshtml" />
     <Content Include="Views\CheckList\Edit.cshtml" />
     <Content Include="Views\CheckList\_Actions.cshtml" />
   </ItemGroup>

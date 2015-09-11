@@ -5,6 +5,10 @@
     
     public class CaseLog
     {
+        public const string ChildCaseMarker = "Underärende";
+
+        public const string ParentCaseMarker = "Upärende";
+
         public int? CaseHistoryId { get; set; }
         public int CaseId { get; set; }
         public Guid LogGuid { get; set; }
@@ -34,6 +38,11 @@
         public int WorkingTimeHour { get; set; }
         public int WorkingTimeMinute { get; set; }
         public bool HighPriority { get; set; }
+
+        /// <summary>
+        /// checkbox value indicates send log to parent/child cases
+        /// </summary>
+        public bool? SendLogToParentChildLog { get; set; }
     }
 }
 
