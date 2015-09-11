@@ -3395,7 +3395,8 @@ td.disabled
 .causingpart.admin.content .inactive *,
 .category.admin.content .inactive *,
 .supplier.admin.content .inactive *,
-.priority.admin.content .inactive *
+.priority.admin.content .inactive *,
+.status.admin.content .inactive *
 
 {
     color: lightgray;

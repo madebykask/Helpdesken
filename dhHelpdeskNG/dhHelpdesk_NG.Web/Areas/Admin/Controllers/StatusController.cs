@@ -7,6 +7,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Infrastructure;
 
     public class StatusController : BaseAdminController
     {
@@ -29,12 +30,19 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             this._stateSecondaryService = stateSecondaryService;
         }
 
+        public JsonResult SetShowOnlyActiveStatusesInAdmin(bool value)
+        {
+            SessionFacade.ShowOnlyActiveStatusesInAdmin = value;
+            return this.Json(new { result = "success" });
+        }
+
+
         public ActionResult Index(int customerId)
         {
             var customer = this._customerService.GetCustomer(customerId);
             var statuses = this._statusService.GetStatuses(customer.Id).ToList();
 
-            var model = new StatusIndexViewModel { Statuses = statuses, Customer = customer };
+            var model = new StatusIndexViewModel { Statuses = statuses, Customer = customer, IsShowOnlyActive = SessionFacade.ShowOnlyActiveStatusesInAdmin };
 
             return this.View(model);
         }

@@ -373,6 +373,7 @@
     <Content Include="Areas\Admin\Content\js\Common\ToggableInactiveList.js" />
     <Content Include="Areas\Admin\Content\js\CaseType\index.js" />
     <Content Include="Areas\Admin\Content\js\Priority\index.js" />
+    <Content Include="Areas\Admin\Content\js\Status\index.js" />
     <Content Include="Areas\Admin\Content\js\Supplier\index.js" />
     <Content Include="Areas\Admin\Content\js\WorkingGroup\index.js" />
     <Content Include="Areas\Admin\Content\js\Customer\customerCaseSettings.js" />
