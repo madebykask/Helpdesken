@@ -4,8 +4,9 @@
     using System.Threading;
     using System.Web.Mvc;
 
+    using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.Common.Enums.Cases;
-    using DH.Helpdesk.Domain;
+    using Field = DH.Helpdesk.Domain.Field;
 
     public class OutputFormatter
     {
@@ -75,7 +76,7 @@
 
             return string.Format("{0} {1}", lastName, firstName);
         }
-
+        
         internal string FormatUserName(BusinessData.Models.Case.UserNamesStruct userNamesStruct)
         {
             return userNamesStruct == null
@@ -83,4 +84,23 @@
                        : this.FormatUserName(userNamesStruct.FirstName, userNamesStruct.LastName);
         }
     }
+
+    public static class HtmlHelperExtension
+    {
+        public static MvcHtmlString FormaDate(this HtmlHelper h, DateTime? value, OutputFormatter formatter)
+        {
+            return new MvcHtmlString(formatter.FormatNullableDate(value));
+        }
+
+        public static MvcHtmlString FormaDate(this HtmlHelper h, DateTime value, OutputFormatter formatter)
+        {
+            return new MvcHtmlString(formatter.FormatDate(value));
+        }
+        
+        public static MvcHtmlString FormatUserName(this HtmlHelper h, UserNamesStruct value, OutputFormatter formatter)
+        {
+            return new MvcHtmlString(formatter.FormatUserName(value));
+        }
+    }
 }
+

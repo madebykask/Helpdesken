@@ -14,7 +14,6 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models.Case.CaseLock;
-    using DH.Helpdesk.BusinessData.Models.Case.ChidCase;
     using DH.Helpdesk.BusinessData.Models.FinishingCause;
     using DH.Helpdesk.BusinessData.Models.Grid;
     using DH.Helpdesk.BusinessData.Models.Shared;
@@ -47,6 +46,7 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Web.Infrastructure.Tools;
     using DH.Helpdesk.Web.Models;
     using DH.Helpdesk.Web.Models.Case;
+    using DH.Helpdesk.Web.Models.Case.ChildCase;
     using DH.Helpdesk.Web.Models.Case.Input;
     using DH.Helpdesk.Web.Models.Case.Output;
     using DH.Helpdesk.Web.Models.CaseLock;
@@ -55,6 +55,7 @@ namespace DH.Helpdesk.Web.Controllers
     using Org.BouncyCastle.Bcpg;
 
     using DHDomain = DH.Helpdesk.Domain;
+    using ParentCaseInfo = DH.Helpdesk.BusinessData.Models.Case.ChidCase.ParentCaseInfo;
 
     public class CasesController : BaseController
     {
@@ -1209,7 +1210,7 @@ namespace DH.Helpdesk.Web.Controllers
                 return new RedirectResult("~/Error/Unathorized");
             }
 
-            if (SessionFacade.CurrentUser.CreateCasePermission != 1)
+            if (SessionFacade.CurrentUser.CreateCasePermission != 1 || SessionFacade.CurrentUser.CreateSubCasePermission != 1)
             {
                 return new RedirectResult("~/Error/Forbidden");
             }
@@ -1829,25 +1830,6 @@ namespace DH.Helpdesk.Web.Controllers
 
             var model = new FilesModel(id, files);
             return this.PartialView("_CaseLogFiles", model);
-        }
-
-        [HttpGet]
-        public JsonResult ChildCases(int caseId)
-        {
-            if (SessionFacade.CurrentUser == null || SessionFacade.CurrentCustomer == null)
-            {
-                return this.Json(new { result = "failure", message = "Access denied" });
-            }
-            
-            var customerSetting = this._settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
-            var outputFormatter = new OutputFormatter(customerSetting.IsUserFirstLastNameRepresentation == 1);
-            return this.Json(
-                new
-                    {
-                        result = "success",
-                        data = this._caseService.GetChildCasesFor(caseId).MapBusinessToWebModel(outputFormatter)
-                    },
-                JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -2626,7 +2608,7 @@ namespace DH.Helpdesk.Web.Controllers
                                             {
                                                 CaseId = parentCase.Id,
                                                 UserId = caseLog.UserId,
-                                                TextInternal = caseLog.TextInternal
+                                                TextInternal = string.Format("[{0} #{1}]: {2}", Translation.Get(CaseLog.ChildCaseMarker), case_.CaseNumber, caseLog.TextInternal)
                                             };
                     this.UpdateCaseLogForCase(parentCase, parentCaseLog);
                 }
@@ -2634,6 +2616,7 @@ namespace DH.Helpdesk.Web.Controllers
                 var childCasesIds = this._caseService.GetChildCasesFor(case_.Id).Where(it => !it.ClosingDate.HasValue).Select(it => it.Id).ToArray();
                 if (childCasesIds != null && childCasesIds.Length > 0)
                 {
+                    caseLog.TextInternal = string.Format("[{0}]: {1}", Translation.Get(CaseLog.ParentCaseMarker), caseLog.TextInternal);
                     this._logService.AddParentCaseLogToChildCases(childCasesIds, caseLog);
                 }
             }
@@ -2937,7 +2920,13 @@ namespace DH.Helpdesk.Web.Controllers
                         }
                     }
 
-                    m.ChildCaseList = this._caseService.GetChildCasesFor(caseId).MapBusinessToWebModel(outputFormatter);
+                    var childCases = this._caseService.GetChildCasesFor(caseId);
+                    m.ChildCaseViewModel = new ChildCaseViewModel
+                                               {
+                                                   Formatter = outputFormatter,
+                                                   ChildCaseList = childCases
+                                               };
+                    m.ClosedChildCasesCount = childCases.Count(it => it.ClosingDate != null);
                     m.ParentCaseInfo = this._caseService.GetParentInfo(caseId).MapBusinessToWebModel(outputFormatter);
 
                 #endregion

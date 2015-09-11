@@ -28,20 +28,16 @@ BEGIN
 	ALTER TABLE [dbo].[tblParentChildCases]  WITH CHECK ADD  CONSTRAINT [FK_tblParentChildCases_tblCase1] FOREIGN KEY([Descendant_Id])
 	REFERENCES [dbo].[tblCase] ([Id]);
 
-	ALTER TABLE [dbo].[tblParentChildCases] CHECK CONSTRAINT [FK_tblParentChildCases_tblCase1];
-END
-
--- add parent case number into case history
-IF not exists (
-	select * from syscolumns 
-		inner join sysobjects on sysobjects.id = syscolumns.id 
-	where syscolumns.name = N'ParentCaseNumber' and sysobjects.name = N'tblCaseHistory')
-BEGIN
-	ALTER TABLE tblCaseHistory ADD ParentCaseNumber decimal(18,0) NULL
-	ALTER TABLE tblCaseHistory ADD ChildCaseNumber decimal(18,0) NULL
+	ALTER TABLE [dbo].[tblParentChildCases] CHECK CONSTRAINT [FK_tblParentChildCases_tblCase];
 END
 GO
 
+IF COL_LENGTH('dbo.tblUsers','CreateSubCasePermission') IS NULL
+BEGIN	 
+	ALTER TABLE [dbo].[tblUsers]
+	ADD [CreateSubCasePermission] INT NOT NULL DEFAULT(0)
+END
+GO 
 
 
 -- Last Line to update database version

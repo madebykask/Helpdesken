@@ -273,7 +273,8 @@
                         .GroupBy(it => it.Case_Id)
                         .ToDictionary(g => g.Key, g => g.Max(it => it.Id))
                         .Values.ToArray();
-                var caseHistories = caseHistoryRepository.GetAll().Where(it => maxCaseHistoryIds.Contains(it.Id)).ToArray();
+                var caseHistories =
+                    caseHistoryRepository.GetAll().Where(it => maxCaseHistoryIds.Contains(it.Id)).ToArray();
                 newCaseHistories =
                     caseHistories.Select(
                         it =>
@@ -356,39 +357,38 @@
                                 CaseLog = it.CaseLog,
                                 ClosingReason = it.ClosingReason,
                                 RegistrationSourceCustomer_Id = it.RegistrationSourceCustomer_Id
-                            }).ToArray();
+                            })
+                        .ToArray();
                 newCaseHistories.ForEach(caseHistoryRepository.Add);
                 uow.Save();
             }
 
-            /// check ids exists in newCaseHistories
-            newCaseHistories.Select(
-                it =>
-                    {
-                        var res = this.GetLogFromCaseLog(parentCaseLog);
-                        res.Id = 0;
-                        res.CaseHistory_Id = it.Id;
-                        res.Case_Id = it.Case_Id;
-
-                        return res;
-                    }).ForEach(this._logRepository.Add);
+            var caseLogs =
+                newCaseHistories.Select(
+                    it =>
+                    new Log
+                        {
+                            Id = it.Id,
+                            CaseHistory_Id = it.Id,
+                            Case_Id = it.Case_Id,
+                            User_Id = parentCaseLog.UserId,
+                            RegTime = DateTime.UtcNow,
+                            LogDate = DateTime.UtcNow,
+                            RegUser =
+                                string.IsNullOrWhiteSpace(parentCaseLog.RegUser)
+                                    ? string.Empty
+                                    : parentCaseLog.RegUser,
+                            LogType = parentCaseLog.LogType,
+                            LogGUID = parentCaseLog.LogGuid,
+                            Text_Internal =
+                                string.IsNullOrWhiteSpace(parentCaseLog.TextInternal)
+                                    ? string.Empty
+                                    : parentCaseLog.TextInternal,
+                            Text_External = string.Empty,
+                            ChangeTime = DateTime.UtcNow
+                        }).ToArray();
+            caseLogs.ForEach(this._logRepository.Add);
             this._logRepository.Commit();
-            //                    res.CaseHistoryId = it.Id,
-            //                CaseId = it.Case_Id,
-            //                UserId = parentCaseLog.UserId,
-            //            }});
-            //            var aasfd = new object();
-            //
-            //                var c = this._caseService.GetCaseById(caseLog.CaseId);
-            //                // save case and case history
-            //                
-            //                int caseHistoryId = this._caseService.SaveCase(c, caseLog, null, SessionFacade.CurrentUser.Id, this.User.Identity.Name, out errors);
-            //                caseLog.CaseHistoryId = caseHistoryId;
-            //            }
-            //
-            ////            this._logService.SaveLog(caseLog, 0, out errors);
-            //        }
-
         }
 
         #endregion

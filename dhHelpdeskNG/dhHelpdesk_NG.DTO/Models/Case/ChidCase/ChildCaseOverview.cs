@@ -19,5 +19,9 @@
         public DateTime RegistrationDate { get; set; }
 
         public DateTime? ClosingDate { get; set; }
+
+        public DateTime? ApprovedDate { get; set; }
+
+        public bool IsRequriedToApprive { get; set; }
     }
 }

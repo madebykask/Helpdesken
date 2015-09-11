@@ -1,11 +1,13 @@
 ﻿@using System.Web.Optimization
 @using DH.Helpdesk.BusinessData.Enums.Case.Fields
-@model DH.Helpdesk.Web.Models.Case.ChildCase.ChildCaseOverview[]
+@using DH.Helpdesk.Web.Infrastructure.CaseOverview
+@model DH.Helpdesk.Web.Models.Case.ChildCase.ChildCaseViewModel
 @Scripts.Render("~/bundles/Cases/_ChildCases")
 <div class="tab-pane tab-pane-border " id="childcases-tab">
     <table class="table table-striped table-bordered table-hover table-cases child-cases order-column">
         <thead>
             <tr>
+                <th style="width:18px;"></th>
                 <th>@Translation.CaseString(CaseInfoFields.Case)</th>
                 <th>@Translation.CaseString(CaseInfoFields.RegistrationDate)</th>
                 <th>@Translation.CaseString(CaseInfoFields.Caption)</th>
@@ -16,16 +18,17 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var childCase in Model)
+            @foreach (var childCase in Model.ChildCaseList)
             {
                 <tr>
+                    <td><a href="@Url.Action("Edit", new { childCase.Id })">@Html.ImgForCase(childCase)</a></td>
                     <td><a href="@Url.Action("Edit", new { childCase.Id })">@childCase.CaseNo.ToString()</a></td>
-                    <td><a href="@Url.Action("Edit", new { childCase.Id })">@childCase.RegistrationDate</a></td>
+                    <td><a href="@Url.Action("Edit", new { childCase.Id })">@Html.FormaDate(childCase.RegistrationDate, Model.Formatter)</a></td>
                     <td><a href="@Url.Action("Edit", new { childCase.Id })">@childCase.Subject</a></td>
                     <td><a href="@Url.Action("Edit", new { childCase.Id })">@childCase.CaseType</a></td>
-                    <td><a href="@Url.Action("Edit", new { childCase.Id })">@childCase.CasePerformer</a></td>
+                    <td><a href="@Url.Action("Edit", new { childCase.Id })">@Html.FormatUserName(childCase.CasePerformer , Model.Formatter)</a></td>
                     <td><a href="@Url.Action("Edit", new { childCase.Id })">@childCase.SubStatus</a></td>
-                    <td><a href="@Url.Action("Edit", new { childCase.Id })">@childCase.ClosingDate</a></td>
+                    <td><a href="@Url.Action("Edit", new { childCase.Id })">@Html.FormaDate(childCase.ClosingDate, Model.Formatter)</a></td>
                 </tr>
             }
         </tbody>

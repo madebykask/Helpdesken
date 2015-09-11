@@ -5,6 +5,10 @@
     
     public class CaseLog
     {
+        public const string ChildCaseMarker = "Underärende";
+
+        public const string ParentCaseMarker = "Upärende";
+
         public int? CaseHistoryId { get; set; }
         public int CaseId { get; set; }
         public Guid LogGuid { get; set; }

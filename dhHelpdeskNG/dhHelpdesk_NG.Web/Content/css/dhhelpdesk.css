@@ -1807,9 +1807,13 @@ table th.thpointer {
         min-height: 200px
     }
 
-
-.table-cases {
+.case-overview.page .table-cases 
+{
     table-layout:fixed !important;
+}
+
+.table-cases 
+{
     width:100%;
 }
 

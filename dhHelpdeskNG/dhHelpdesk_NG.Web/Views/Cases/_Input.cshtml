@@ -71,7 +71,7 @@
                 </li>
                 @if (Model.IsItParentCase())
                 {
-                    <li><a href="#childcases-tab">@string.Format("{0} ({1})", Translation.Get("Child cases"), Model.ChildCaseList.Length)</a></li>
+                    <li><a href="#childcases-tab" title="@string.Format("{0} av {1} är avslutat", Model.ClosedChildCasesCount, Model.ChildCaseViewModel.ChildCaseList.Length)">@string.Format("{0} ({1}/{2})", Translation.Get("Underärender"), Model.ClosedChildCasesCount, Model.ChildCaseViewModel.ChildCaseList.Length)</a></li>
                 }
 
                 @if (Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
@@ -153,7 +153,7 @@
                         {
                             <input type="hidden" name="ParentId" value="@Model.ParentCaseInfo.ParentId" />
                             <div class="alert alert-info">
-                                @Translation.Get("Dett är underärender till ärende")&nbsp;<a href="@Url.Action("Edit", new { id = Model.ParentCaseInfo.ParentId })"><strong>@Model.ParentCaseInfo.CaseNumber</strong></a>. 
+                                @Translation.Get("Dett en underärende till ärende")&nbsp;<a href="@Url.Action("Edit", new { id = Model.ParentCaseInfo.ParentId })"><strong>@Model.ParentCaseInfo.CaseNumber</strong></a>. 
                                 @if (!string.IsNullOrEmpty(Model.ParentCaseInfo.Administrator))
                                 {
                                     @Translation.Get("Händlagare")
@@ -1555,7 +1555,7 @@
                 }
                 @if (Model.IsItParentCase())
                 {
-                    @Html.Partial("_ChildCases", Model.ChildCaseList);
+                    @Html.Partial("_ChildCases", Model.ChildCaseViewModel);
                 }
             </div>
         </div>

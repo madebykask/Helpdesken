@@ -16,12 +16,12 @@
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Changes;
     using DH.Helpdesk.Web.Infrastructure.Grid.Output;
+    using DH.Helpdesk.Web.Models.Case.ChildCase;
     using DH.Helpdesk.Web.Models.Case.Output;
     using DH.Helpdesk.Web.Models.CaseLock;
     using DH.Helpdesk.Web.Models.Invoice;
     using DH.Helpdesk.Web.Models.Shared;
     
-    using ChildCaseOverview = DH.Helpdesk.Web.Models.Case.ChildCase.ChildCaseOverview;
     using ParentCaseInfo = DH.Helpdesk.Web.Models.Case.ChildCase.ParentCaseInfo;
 
     public class CaseInputViewModel
@@ -182,7 +182,9 @@
 
         #endregion
 
-        public ChildCaseOverview[] ChildCaseList { get; set; }
+        public ChildCaseViewModel ChildCaseViewModel { get; set; }
+        
+        public int ClosedChildCasesCount { get; set; }
 
         public ParentCaseInfo ParentCaseInfo { get; set; }
 
@@ -193,17 +195,23 @@
 
         public bool IsItParentCase()
         {
-            return this.ChildCaseList != null && this.ChildCaseList.Length > 0;
+            return this.ChildCaseViewModel != null && this.ChildCaseViewModel.ChildCaseList != null && this.ChildCaseViewModel.ChildCaseList.Length > 0;
         }
 
         public bool IsAnyNotClosedChild()
         {
-            if (this.ChildCaseList == null || this.ChildCaseList.Length == 0)
+            if (this.ChildCaseViewModel == null)
             {
                 return false;
             }
 
-            return this.ChildCaseList.Any(it => string.IsNullOrEmpty(it.ClosingDate));
+            var childList = this.ChildCaseViewModel.ChildCaseList;
+            if (childList == null || childList.Length == 0)
+            {
+                return false;
+            }
+
+            return childList.Any(it => it.ClosingDate == null);
         }
     }
 

@@ -460,7 +460,8 @@ namespace DH.Helpdesk.Services.Services
                                     substateId = case_.StateSecondary_Id,
                                     caseTypeId = case_.CaseType_Id,
                                     registrationDate = case_.RegTime,
-                                    closingDate = case_.FinishingDate
+                                    closingDate = case_.FinishingDate,
+                                    approvedDate = case_.ApprovedDate
                                 })
                         .GroupJoin(
                             allPerformers,
@@ -481,7 +482,8 @@ namespace DH.Helpdesk.Services.Services
                                     substateId = t.tmpParentChild.substateId,
                                     caseTypeId = t.tmpParentChild.caseTypeId,
                                     registrationDate = t.tmpParentChild.registrationDate,
-                                    closingDate = t.tmpParentChild.closingDate
+                                    closingDate = t.tmpParentChild.closingDate,
+                                    approvedDate = t.tmpParentChild.approvedDate
                                 })
                         .GroupJoin(
                             allSecStates,
@@ -502,7 +504,8 @@ namespace DH.Helpdesk.Services.Services
                                     subState = subState == null ? string.Empty : subState.Name,
                                     caseTypeId = t.tmpParentChild.caseTypeId,
                                     registrationDate = t.tmpParentChild.registrationDate,
-                                    closingDate = t.tmpParentChild.closingDate
+                                    closingDate = t.tmpParentChild.closingDate,
+                                    approvedDate = t.tmpParentChild.approvedDate
                                 })
                         .GroupJoin(
                             caseTypes,
@@ -511,7 +514,7 @@ namespace DH.Helpdesk.Services.Services
                             (tmpParentChild, casetType) => new { tmpParentChild, casetType })
                         .SelectMany(
                             t => t.casetType.DefaultIfEmpty(),
-                            (t, casetType) =>
+                            (t, caseType) =>
                             new
                                 {
                                     id = t.tmpParentChild.id,
@@ -521,9 +524,11 @@ namespace DH.Helpdesk.Services.Services
                                     performerFirstName = t.tmpParentChild.performerFirstName,
                                     performerLastName = t.tmpParentChild.performerLastName,
                                     subState = t.tmpParentChild.subState,
-                                    caseType = casetType == null ? string.Empty : casetType.Name,
+                                    caseType = caseType == null ? string.Empty : caseType.Name,
+                                    IsApprovingRequired = caseType != null && caseType.RequireApproving == 1,
                                     registrationDate = t.tmpParentChild.registrationDate,
-                                    closingDate = t.tmpParentChild.closingDate
+                                    closingDate = t.tmpParentChild.closingDate,
+                                    t.tmpParentChild.approvedDate
                                 })
                         .AsQueryable();
                 return res.Select(it => new ChildCaseOverview()
@@ -536,10 +541,12 @@ namespace DH.Helpdesk.Services.Services
                                                                  FirstName = it.performerFirstName,
                                                                  LastName = it.performerLastName
                                                              },
-                                                             CaseType = it.caseType,
-                                                             SubStatus = it.subState,
-                                                             RegistrationDate = it.registrationDate,
-                                                             ClosingDate = it.closingDate
+                                        CaseType = it.caseType,
+                                        SubStatus = it.subState,
+                                        RegistrationDate = it.registrationDate,
+                                        ClosingDate = it.closingDate,
+                                        ApprovedDate = it.approvedDate,
+                                        IsRequriedToApprive = it.IsApprovingRequired
                                      }).ToArray();
             }
         }

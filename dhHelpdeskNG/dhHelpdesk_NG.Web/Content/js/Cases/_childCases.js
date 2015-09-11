@@ -10,6 +10,16 @@ $(document).ready(function () {
         "paging":   false,
         "info": false,
         "ordering": true,
-        'order': [0, 'desc']
+        "columns": [
+            { 'orderable': false },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        'order': [1, 'desc']
     });
 });
