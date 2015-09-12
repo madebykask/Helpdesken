@@ -7,7 +7,7 @@
     {
         public const string ChildCaseMarker = "Underärende";
 
-        public const string ParentCaseMarker = "Upärende";
+        public const string ParentCaseMarker = "Huvudärende";
 
         public int? CaseHistoryId { get; set; }
         public int CaseId { get; set; }
