@@ -4420,5 +4420,33 @@ GO
 
 UPDATE tblTextTranslation Set TextTranslation = 'Use # to search for' WHERE Text_Id=1334 AND Language_Id=2;
 GO
+
+
+If not exists (select * from tbltext where id = 1536)
+	insert into tbltext (id, TextString) VALUES (1536, 'stängt')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1536 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1536, 2, 'closed')
+GO
+If not exists (select * from tbltext where id = 1537)
+	insert into tbltext (id, TextString) VALUES (1537, 'Underärenden')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1537 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1537, 2, 'Child cases')
+GO
+If not exists (select * from tbltext where id = 1538)
+	insert into tbltext (id, TextString) VALUES (1538, 'Detta är ett underärende till ärende')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1538 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1538, 2, 'This is a child case to')
+GO
+If not exists (select * from tbltext where id = 1539)
+	insert into tbltext (id, TextString) VALUES (1539, 'Huvudärende')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1539 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1539, 2, 'Parent case')
+GO
+
+                                                                    
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
