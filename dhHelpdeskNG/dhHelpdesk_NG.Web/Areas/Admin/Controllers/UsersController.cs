@@ -766,7 +766,7 @@
                 User = user,
                 StatusUsers = sli,
                 LockedCaseModel = lockedCasesModel,
-                ListLoggedInUsers = AdminUsersPageLockedCasesTabSelectedCustomerId == 0 ? ApplicationFacade.GetAllLoggedInUsers() : ApplicationFacade.GetLoggedInUsers(AdminUsersPageLockedCasesTabSelectedCustomerId),
+                ListLoggedInUsers = AdminUsersPageLoggedInUsersTabSelectedCustomerId == 0 ? ApplicationFacade.GetAllLoggedInUsers() : ApplicationFacade.GetLoggedInUsers(AdminUsersPageLoggedInUsersTabSelectedCustomerId),
                 Filter = new UserSearch { CustomerId = AdminUsersPageLockedCasesTabSelectedCustomerId },
                 CsSelected = csSelected.Select(x => new SelectListItem
                 {
