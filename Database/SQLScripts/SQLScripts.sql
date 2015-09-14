@@ -33,12 +33,12 @@ END
 GO
 
 IF COL_LENGTH('dbo.tblUsers','CreateSubCasePermission') IS NULL
-BEGIN	 
-	ALTER TABLE [dbo].[tblUsers]
-	ADD [CreateSubCasePermission] INT NOT NULL DEFAULT(0);
-	update tblUsers set  Createsubcasepermission = 1 where  CreateCasePermission = 1;
+BEGIN 	 
+	ALTER TABLE [dbo].[tblUsers] ADD [CreateSubCasePermission] INT NOT NULL DEFAULT(0);	
 END
-GO 
+GO
+
+update tblUsers set  CreateSubCasePermission = 1 where  CreateCasePermission = 1; 
 
 
 
