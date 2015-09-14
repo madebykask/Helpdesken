@@ -162,11 +162,11 @@
                                     <br/>@Html.CheckBox("CaseLog.SendLogToParentChildLog")
                                     if (Model.IsItParentCase())
                                     {
-                                        <span class="lbl">@Translation.Get("Send log to childs log(s)", SessionFacade.CurrentCaseLanguageId)</span>
+                                        <span class="lbl">@Translation.Get("Skicka intern loggpost till underärenden", SessionFacade.CurrentCaseLanguageId)</span>
                                     }
                                     else
                                     {
-                                        <span class="lbl">@Translation.Get("Send log to parent log", SessionFacade.CurrentCaseLanguageId)</span>
+                                        <span class="lbl">@Translation.Get("Skicka intern loggpost till huvudärende", SessionFacade.CurrentCaseLanguageId)</span>
                                     }
                                 }
                             }

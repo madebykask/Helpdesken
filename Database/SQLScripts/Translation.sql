@@ -4446,6 +4446,19 @@ GO
 If not exists (select * from tblTextTranslation where text_id = 1539 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1539, 2, 'Parent case')
 GO
+If not exists (select * from tbltext where id = 1540)
+	insert into tbltext (id, TextString) VALUES (1540, 'Skicka intern loggpost till huvudärende')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1540 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1540, 2, 'Send internal log note to parent')
+GO
+
+If not exists (select * from tbltext where id = 1541)
+	insert into tbltext (id, TextString) VALUES (1541, 'Skicka intern loggpost till underärenden')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1541 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1541, 2, 'Send internal log note to child cases')
+GO
 
                                                                     
 -- *** Run this last when put translation script above this line **--
