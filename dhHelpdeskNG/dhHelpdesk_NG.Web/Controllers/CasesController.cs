@@ -1266,7 +1266,7 @@ namespace DH.Helpdesk.Web.Controllers
             if (m.ParentId.HasValue)
             {
                 url = this.GetLinkWithHash(ChildCasesHashTab, new { id = m.ParentId }, "Edit");
-        }
+            }
             else
             {
                 url = this.GetLinkWithHash(string.Empty, new { customerId = m.case_.Customer_Id }, "Index");
@@ -2332,9 +2332,20 @@ namespace DH.Helpdesk.Web.Controllers
             }
         }
 
-        private RouteValueDictionary ExtractPreviousRouteInfo()
+        private RouteValueDictionary ExtractCurrentRouteInfo()
         {
             var fullUrl = Request.Url.AbsoluteUri;
+            return this.ExtractRouteInfo(fullUrl);
+        }
+
+        private RouteValueDictionary ExtractPreviousRouteInfo()
+        {
+            var fullUrl = Request.UrlReferrer.ToString();
+            return this.ExtractRouteInfo(fullUrl);
+        }
+
+        private RouteValueDictionary ExtractRouteInfo(string fullUrl)
+        {
             var questionMarkIndex = fullUrl.IndexOf('?');
             string queryString = null;
             string url = fullUrl;
@@ -3793,7 +3804,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         private string GetLinkWithHash(string hash, object routeObject, string action = null, string controller = null)
         {
-            var prevInfo = this.ExtractPreviousRouteInfo();
+            var prevInfo = this.ExtractCurrentRouteInfo();
             if (string.IsNullOrEmpty(action))
             {
                 action = prevInfo["action"].ToString();
