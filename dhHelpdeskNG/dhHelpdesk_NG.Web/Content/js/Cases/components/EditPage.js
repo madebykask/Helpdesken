@@ -152,14 +152,6 @@ EditPage.prototype.canDeleteCase = function () {
     return !(me.$btnDelete.hasClass('disabled') || me.case.isAnyNotClosedChild());
 };
 
-
-EditPage.prototype.closeDeleteConfirmationDlg = function () {
-    var me = this;
-    me.deleteDlg.hide();
-    return me.deleteDlg;
-};
-
-
 EditPage.prototype.showDeleteConfirmationDlg = function () {
     var me = this;
     if (!me.canDeleteCase()) {
@@ -192,11 +184,17 @@ EditPage.prototype.doDeleteCase = function(c) {
     $form.submit();
 };
 
-EditPage.prototype.onDeleteDlgClick = function () {
+EditPage.prototype.onDeleteDlgClick = function (res) {
     var me = this;
+    if (res === ConfirmationDialog.NO) {
+        me.deleteDlg.hide();
+        return false;
+    }
+
     if (!me.canDeleteCase()) {
         return false;
     }
+
     $.post(_parameters.caseLockChecker, { caseId: _parameters.currentCaseId, lockGuid: _parameters.caseLockGuid })
         .done(callAsMe(function(data) {
             me.showDeleteConfirmationDlg();
@@ -211,25 +209,53 @@ EditPage.prototype.onDeleteDlgClick = function () {
 
 /**
 * @private
-* @param { Case c }
 */
-EditPage.prototype.initDeleteConfirmationDlg = function (c) {
+EditPage.prototype.InitDeleteConfirmationDlg = function() {
     var me = this;
     // Delete case confirmation dialogue
-    var deleteDlgOptions = {
+    var dlgOptions = {
         btnYesText: $("#DeleteDialogDeleteButtonText").val(),
         btnNoText: $("#DeleteDialogCancelButtonText").val(),
-        onYesClick: callAsMe(me.onDeleteDlgClick, me),
-        onNoClick: callAsMe(me.closeDeleteConfirmationDlg, me),
+        onClick: Utils.callAsMe(me.onDeleteDlgClick, me),
         dlgText: me.$btnDelete.attr('deleteDialogText'),
-//        dlgAction: me.DELETE_CASE_URL + '?' + $.param(deleteActionData)
     };
     if (me.$btnDelete.attr("buttonTypes") === 'YesNo') {
-        deleteDlgOptions.btnYesText = $("#DeleteDialogYesButtonText").val();
-        deleteDlgOptions.btnNoText = $("#DeleteDialogNoButtonText").val();
+        dlgOptions.btnYesText = $("#DeleteDialogYesButtonText").val();
+        dlgOptions.btnNoText = $("#DeleteDialogNoButtonText").val();
     }
-    return CreateInstance(ConfirmationDialog, deleteDlgOptions);
-}
+    return CreateInstance(ConfirmationDialog, dlgOptions);
+};
+
+/**
+* @private
+*/
+EditPage.prototype.InitLeaveConfirmationDlg = function () {
+    var me = this;
+    // Delete case confirmation dialogue
+    var dlgOptions = {
+        btnYesText: $("#DeleteDialogYesButtonText").val(),
+        btnNoText: $("#DeleteDialogNoButtonText").val(),
+        dlgText: 'You have unsaved changes do you want to continue and lose it?'
+    };
+    
+    return CreateInstance(ConfirmationDialog, dlgOptions);
+};
+
+EditPage.prototype.onPageLeave = function(ev) {
+    var me = this;
+    var gotoUrl = ev.target;
+    if (me.formOnBootValues !== me.$form.serialize()) {
+        me.leaveDlg.show().done(function (result) {
+            me.leaveDlg.hide();
+            if (result === ConfirmationDialog.YES) {
+                //            window.location.href = gotoUrl;
+                console.log('gotoUrl: ' + gotoUrl);
+            }
+        });
+        ev.preventDefault();
+        return false;
+    }
+};
 
 /**
 * Page initialization 
@@ -255,7 +281,8 @@ EditPage.prototype.init = function (p) {
     me.$btnSaveClose = $('.btn.save-close');
     me.$btnSaveNew = $('.btn.save-new');
     me.$btnDelete = $('.caseDeleteDialog.btn');
-    me.deleteDlg = me.initDeleteConfirmationDlg();
+    me.deleteDlg = me.InitDeleteConfirmationDlg();
+    me.leaveDlg = me.InitLeaveConfirmationDlg();
     ///////////////////////     events binding      /////////////////////////////////
     me.$btnDelete.on('click', callAsMe(me.showDeleteConfirmationDlg, me));
     me.$btnSave.on('click', function () {
@@ -307,7 +334,11 @@ EditPage.prototype.init = function (p) {
             }
         }
     });
-    //////// init actions end ///////////
+
+    $('.lang.dropdown-submenu a').on('click', Utils.callAsMe(me.onPageLeave, me));
+    //////// event bind end ///////////
+
+
     /*
         window.parameters.currentCaseId,
         customerId: window.parameters.customerId,
@@ -327,4 +358,6 @@ EditPage.prototype.init = function (p) {
     if (p.currentCaseId > 0) {
         me.timerId = setInterval(callAsMe(me.ReExtendCaseLock, me), me.p.extendValue * 1000);
     }
+
+    me.formOnBootValues = me.$form.serialize();
 };

@@ -15,20 +15,23 @@ function ConfirmationDialog() {
                                     </div>';
 }
 
+ConfirmationDialog.YES = 0;
+
+ConfirmationDialog.NO = 1;
+
 /**
 * @public
 * @param { 
 *       btnYesText: string,  
 *       btnNoText: string,  
 *       dlgText: string
-*       onYesClick: fn,
-*       onNoClick: fn
+*       onClick: fn
 * } opt 
 * @returns ConfirmationDialog 
 */
 ConfirmationDialog.prototype.init = function (opt) {
     var me = this;
-    opt = opt || {};
+    me.opt = opt || {};
     me.$el = $(me.template).modal({
         "backdrop": "static",
         "keyboard": true,
@@ -36,27 +39,41 @@ ConfirmationDialog.prototype.init = function (opt) {
     });
     me.$btnYes = me.$el.find("button:eq(1)");
     me.$btnNo = me.$el.find("button:eq(2)");
-    me.$el.find("p:eq(0)").text(opt.dlgText);
-    me.$btnYes.text(opt.btnYesText).on('click', opt.onYesClick);
-    me.$btnNo.text(opt.btnNoText).on('click', opt.onNoClick);
+    me.$el.find("p:eq(0)").text(me.opt.dlgText);
+    me.$btnYes.text(me.opt.btnYesText).on('click', Utils.callAsMe(me.onClick, me));
+    me.$btnNo.text(me.opt.btnNoText).on('click', Utils.callAsMe(me.onClick, me));
     me.$form = me.$el.find('form');
-    me.$form.attr('action', opt.dlgAction);
+    me.$form.attr('action', me.opt.dlgAction);
     
     return me;
 };
 
+ConfirmationDialog.prototype.onClick = function(ev) {
+    var me = this;
+    var res = ConfirmationDialog.NO;
+    ev.preventDefault();
+    if (ev.target === me.$btnYes[0]) {
+        res = ConfirmationDialog.YES;
+    }
+
+    if (me.opt.onClick != null) {
+        me.opt.onClick(res);
+    }
+
+    me.$defferred.resolve(res);
+};
+
+/**
+* @returns { jQuery.Defferred }
+*/
 ConfirmationDialog.prototype.show = function () {
     var me = this;
+    me.$defferred = $.Deferred();
     me.$el.modal('show');
+    return me.$defferred;
 };
-//
-//ConfirmationDialog.prototype.runAction = function () {
-//    var me = this;
-//    me.$form.submit();
-//};
 
 ConfirmationDialog.prototype.hide = function () {
     var me = this;
     me.$el.modal('hide');
 };
-

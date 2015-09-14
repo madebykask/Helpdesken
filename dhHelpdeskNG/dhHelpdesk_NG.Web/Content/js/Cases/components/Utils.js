@@ -20,6 +20,18 @@ var Utils = {
             }
         }
         return res;
+    },
+
+    callAsMe: function(method, me) {
+        return function(arg) {
+            return method.call(me, arg);
+        };
+    },
+
+    applyAsMe: function(method, me, args) {
+        return function() {
+            return method.apply(me, args);
+        }
     }
 };
 
@@ -43,16 +55,18 @@ function strJoin() {
     return Array.prototype.join.call(arguments, JOINER);
 }
 
+/**
+* Deprecated. Use Utils.callAsMe() instead
+*/
 function callAsMe(method, me) {
-    return function(arg) {
-        return method.call(me, arg);
-    };
+    return Utils.callAsMe(method, me);
 }
 
+/**
+* Deprecated. Use Utils.applyAsMe() instead
+*/
 function applyAsMe(method, me, args) {
-    return function() {
-        return method.apply(me, args);
-    }
+    return Utils.applyAsMe(method, me, args);
 }
 
 /**
