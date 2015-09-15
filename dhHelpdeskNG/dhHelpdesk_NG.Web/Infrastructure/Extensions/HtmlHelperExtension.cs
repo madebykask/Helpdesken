@@ -293,7 +293,13 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
             return CausingPartsTreeRow(causingParts, 0, isShowOnlyActive);
         }
 
-        public static MvcHtmlString GetCaseHistoryInfo(this CaseHistory cur, CaseHistory old, int customerId, int departmentFilterFormat, IList<CaseFieldSetting> cfs)
+        public static MvcHtmlString GetCaseHistoryInfo(
+            this CaseHistory cur, 
+            CaseHistory old, 
+            int customerId, 
+            int departmentFilterFormat, 
+            IList<CaseFieldSetting> cfs,
+            OutputFormatter outFormatter)
         {
             StringBuilder sb = new StringBuilder();
             const string bs = "<th>";
@@ -733,14 +739,13 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
             {
                 if (cur.FinishingDate != o.FinishingDate)
                 {
-                    
                         sb.Append("<tr>");
                         if (o.FinishingDate == null)
                         {
                             sb.Append(bs + Translation.Get("Ärendet avslutat") + be);
                             sb.Append(tdMarkup);
                             sb.Append(from);
-                            sb.Append(cur.FinishingDate.Value.ToString("yyyy-MM-dd"));
+                            sb.Append(outFormatter.FormatDate(cur.FinishingDate.Value));
                         }
                         else
                         {
@@ -754,9 +759,9 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                             {
                                 sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
                                 sb.Append(tdMarkup);
-                                sb.Append(o.FinishingDate.Value.ToString("yyyy-MM-dd"));
+                                sb.Append(outFormatter.FormatDate(o.FinishingDate.Value));
                                 sb.Append(from);
-                                sb.Append(cur.FinishingDate.Value.ToString("yyyy-MM-dd"));
+                                sb.Append(outFormatter.FormatDate(cur.FinishingDate.Value));
                             }
                         }
                         
@@ -764,38 +769,6 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                         sb.Append("</tr>");
                 }
             }
-
-            // Parent case number
-//            if (cur.ParentCaseNumber != o.ParentCaseNumber)
-//            {
-//                sb.Append("<tr>");
-//                sb.Append(bs + Translation.Get("Parent case number", customerId) + be);
-//                sb.Append(tdMarkup);
-//                if (o.ParentCaseNumber != null)
-//                {
-//                    sb.Append(o.ParentCaseNumber);
-//                }
-//                else
-//                {
-//                    sb.Append(ey);
-//                }
-//
-//                sb.Append(from);
-//                sb.Append(cur.ParentCaseNumber != null ? cur.ParentCaseNumber.ToString() : ey);
-//                sb.Append("</td>");
-//                sb.Append("</tr>");
-//            }
-//
-//            // Child case number
-//            if (cur.ChildCaseNumber != o.ChildCaseNumber)
-//            {
-//                sb.Append("<tr>");
-//                sb.Append(bs + Translation.Get("New child case", customerId) + be);
-//                sb.Append(tdMarkup);
-//                sb.Append(cur.ChildCaseNumber != null ? cur.ChildCaseNumber.ToString(): ey);
-//                sb.Append("</td>");
-//                sb.Append("</tr>");
-//            }
 
             return new MvcHtmlString(sb.ToString());
         }

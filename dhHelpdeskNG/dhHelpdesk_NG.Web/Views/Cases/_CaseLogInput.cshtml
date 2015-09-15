@@ -266,16 +266,16 @@
                         {
                             if (Model.Setting.DisableCaseEndDate == 0)
                             {
-                                @Html.EditorFor(m => m.CaseLog.FinishingDate, "DatePicker", new { id = "divCaseLog_FinishingDate"})
+                                @Html.EditorFor(m => m.CaseLog.FinishingDate, "DatePickerLocalTZ", new { id = "divCaseLog_FinishingDate"})
                             }
                             else
                             {                            
-                                @Html.EditorFor(m => m.CaseLog.FinishingDate, "DateReadOnly", new { id = "divCaseLog_FinishingDate"})                             
+                                @Html.EditorFor(m => m.CaseLog.FinishingDate, "DateReadOnlyLocalTz", new { id = "divCaseLog_FinishingDate"})                             
                             }
                         }
                         else
                         {
-                            @Html.EditorFor(m => m.case_.FinishingDate, "DateReadOnly")                            
+                            @Html.EditorFor(m => m.case_.FinishingDate, "DateReadOnlyLocalTz")
                         }
                     </td>
                 </tr>

@@ -15,6 +15,7 @@
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Changes;
+    using DH.Helpdesk.Web.Infrastructure.CaseOverview;
     using DH.Helpdesk.Web.Infrastructure.Grid.Output;
     using DH.Helpdesk.Web.Models.Case.ChildCase;
     using DH.Helpdesk.Web.Models.Case.Output;
@@ -194,7 +195,7 @@
         public bool IsItChildCase()
         {
             return this.ParentCaseInfo != null && ParentCaseInfo.ParentId != 0;
-    }
+        }
 
         public bool IsItParentCase()
         {
@@ -216,6 +217,8 @@
 
             return childList.Any(it => it.ClosingDate == null);
         }
+
+        public OutputFormatter OutFormatter { get; set; }
     }
 
     public class CaseIndexViewModel

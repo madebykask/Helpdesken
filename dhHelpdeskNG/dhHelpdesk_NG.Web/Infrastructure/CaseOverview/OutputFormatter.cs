@@ -24,7 +24,7 @@
                 case FieldTypes.Date:
                     if (field.DateTimeValue.HasValue)
                     {
-                        return field.DateTimeValue.Value.ToShortDateString();
+                        return this.FormatDate(field.DateTimeValue.Value);
                     }
                     break;
                 case FieldTypes.Time:
@@ -54,7 +54,7 @@
 
         public string FormatDate(DateTime input)
         {
-            return input.ToLocalTime().ToString("g", Thread.CurrentThread.CurrentUICulture);
+            return input.ToLocalTime().ToString("yyyy-MM-dd", Thread.CurrentThread.CurrentUICulture);
         }
 
         public string FormatNullableDate(DateTime? input)

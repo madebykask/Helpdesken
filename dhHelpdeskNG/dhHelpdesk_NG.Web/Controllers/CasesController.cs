@@ -1428,6 +1428,7 @@ namespace DH.Helpdesk.Web.Controllers
                     const bool isAddEmpty = true;
                     var responsibleUsersAvailable = this._userService.GetAvailablePerformersOrUserId(customerId, m.case_.CaseResponsibleUser_Id);
                     var customerSettings = this._settingService.GetCustomerSetting(customerId);
+                    m.OutFormatter = new OutputFormatter(customerSettings.IsUserFirstLastNameRepresentation == 1);
                     m.ResponsibleUsersAvailable = responsibleUsersAvailable.MapToSelectList(customerSettings, isAddEmpty);
                     m.SendToDialogModel = this.CreateNewSendToDialogModel(customerId, responsibleUsersAvailable.ToList());
                     m.CaseLog.SendMailAboutCaseToNotifier = false;
@@ -2829,7 +2830,7 @@ namespace DH.Helpdesk.Web.Controllers
             int? templateistrue = 0,
             int? parentCaseId = null)
         {
-            var m = new CaseInputViewModel();
+            var m = new CaseInputViewModel ();
             m.BackUrl = backUrl;
             m.CanGetRelatedCases = SessionFacade.CurrentUser.IsAdministrator();
             SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
@@ -2857,10 +2858,11 @@ namespace DH.Helpdesk.Web.Controllers
                 throw new ArgumentException(string.Format("No customer settings for this customer '{0}' and user '{1}'", customerId, userId));
             }
 
-                var case_ = m.case_;
-                var customer = this._customerService.GetCustomer(customerId);
+            var case_ = m.case_;
+            var customer = this._customerService.GetCustomer(customerId);
             var customerSetting = this._settingService.GetCustomerSetting(customerId);
             var outputFormatter = new OutputFormatter(customerSetting.IsUserFirstLastNameRepresentation == 1);
+            m.OutFormatter = outputFormatter;
             m.customerUserSetting = customerUserSetting;
                 m.caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(customerId);
                 m.CaseFieldSettingWithLangauges = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customerId, SessionFacade.CurrentLanguageId);
