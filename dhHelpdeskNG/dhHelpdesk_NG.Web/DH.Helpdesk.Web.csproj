@@ -788,9 +788,10 @@
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\SupplierEditModel.cs" />
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\UserEditModel.cs" />
     <Compile Include="Areas\Orders\OrdersAreaRegistration.cs" />
-    <Content Include="Content\js\clickmultimenu_dropdown.js" />
+    <Content Include="Content\js\snippets\clickmultimenu_dropdown.js" />
+    <Content Include="Content\js\snippets\tabSwitchByHashTag.js" />
     <Content Include="Content\js\dhHelpdesk.js" />
-    <Content Include="Content\js\dropdown_fix.js" />
+    <Content Include="Content\js\snippets\dropdown_fix.js" />
     <Content Include="Content\js\Licenses\license.editlogic.js" />
     <Content Include="Content\js\Notifiers\edit.js" />
     <Content Include="Areas\Admin\Content\js\Common\tinymce.initiate.js" />

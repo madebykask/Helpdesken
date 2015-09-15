@@ -1,11 +1,17 @@
 ﻿"use strict";
 
-function EditPage() {
-    this.DELETE_CASE_URL = '/Cases/DeleteCase';
-    this.NEW_CLOSE_CASE_URL = '/Cases/NewAndClose';
-    this.EDIT_CASE_URL = '/Cases/Edit';
-    this.SAVE_ADD_CASE_URL = '/Cases/NewAndAddCase';
-};
+function EditPage() {};
+
+/*** CONST BEGIN ***/
+EditPage.prototype.DELETE_CASE_URL = '/Cases/DeleteCase';
+EditPage.prototype.NEW_CLOSE_CASE_URL = '/Cases/NewAndClose';
+EditPage.prototype.EDIT_CASE_URL = '/Cases/Edit';
+EditPage.prototype.SAVE_GOTO_PARENT_CASE_URL = '/Cases/NewAndGotoParentCase';
+EditPage.prototype.SAVE_ADD_CASE_URL = '/Cases/NewAndAddCase';
+EditPage.prototype.CASE_OVERVIEW_URL = '/Cases';
+
+EditPage.prototype.CHLID_CASES_TAB = 'childcases-tab';
+/*** CONST END ***/
 
 /**
 * @private
@@ -134,7 +140,13 @@ EditPage.prototype.doSave = function(submitUrl) {
 
 EditPage.prototype.onSaveClick = function () {
     var me = this;
-    return me.doSave();
+    var c = me.case;
+    var url = me.EDIT_CASE_URL;
+    if (c.isNew() && c.isChildCase()) {
+        url = me.SAVE_GOTO_PARENT_CASE_URL;
+    }
+
+    return me.doSave(url);
 };
 
 EditPage.prototype.onSaveAndCloseClick = function () {
@@ -257,6 +269,20 @@ EditPage.prototype.onPageLeave = function(ev) {
     }
 };
 
+EditPage.prototype.onCloseClick = function(ev) {
+    var me = this;
+    var c = me.case;
+    var url;
+    if (c.isChildCase() && c.isNew()) {
+        url = me.EDIT_CASE_URL + '/' + c.parentCaseId;
+    } else {
+        url = window.location.href;
+    }
+
+    window.location.href = url;
+    return false;
+};
+
 /**
 * Page initialization 
 */
@@ -281,19 +307,15 @@ EditPage.prototype.init = function (p) {
     me.$btnSaveClose = $('.btn.save-close');
     me.$btnSaveNew = $('.btn.save-new');
     me.$btnDelete = $('.caseDeleteDialog.btn');
+    me.$btnClose = $('.btn.close-page');
     me.deleteDlg = me.InitDeleteConfirmationDlg();
     me.leaveDlg = me.InitLeaveConfirmationDlg();
     ///////////////////////     events binding      /////////////////////////////////
     me.$btnDelete.on('click', callAsMe(me.showDeleteConfirmationDlg, me));
-    me.$btnSave.on('click', function () {
-        return me.onSaveClick.call(me);
-    });
-    me.$btnSaveClose.on('click', function () {
-        return me.onSaveAndCloseClick.call(me);
-    });
-    me.$btnSaveNew.on('click', function () {
-        return me.onSaveAndNewClick.call(me);
-    });
+    me.$btnClose.on('click', Utils.callAsMe(me.onCloseClick, me));
+    me.$btnSave.on('click', Utils.callAsMe(me.onSaveClick, me));
+    me.$btnSaveClose.on('click', Utils.callAsMe(me.onSaveAndCloseClick, me));
+    me.$btnSaveNew.on('click', Utils.callAsMe(me.onSaveAndNewClick, me));
 
     me.$watchDateChangers.on('change', function () {
         var deptId = parseInt(me.$department.val(), 10);

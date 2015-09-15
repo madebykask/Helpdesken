@@ -1309,6 +1309,20 @@ namespace DH.Helpdesk.Web.Controllers
         }
         #endregion
 
+        [HttpPost]
+        [ValidateInput(false)]
+        public RedirectResult NewAndGotoParentCase(CaseEditInput m)
+        {
+            if (m.ParentId == null)
+            {
+                throw new ArgumentException("bad input");
+            }
+
+            int id = this.Save(m);
+            var url = this.GetLinkWithHash(ChildCasesHashTab, new { id = m.ParentId }, "Edit");
+            return this.Redirect(url);
+        }
+
         [UserCasePermissions]
         public ActionResult Edit(int id, 
             string redirectFrom = "", 

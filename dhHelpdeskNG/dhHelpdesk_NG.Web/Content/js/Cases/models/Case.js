@@ -17,3 +17,7 @@ Case.prototype.isNew = function() {
 Case.prototype.isAnyNotClosedChild = function() {
     return this.hasAnyNotClosedChild;
 };
+
+Case.prototype.isChildCase = function() {
+    return this.parentCaseId !== 0;
+};

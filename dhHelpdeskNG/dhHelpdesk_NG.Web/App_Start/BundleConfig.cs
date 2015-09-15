@@ -77,7 +77,7 @@
 
             bundles.Add(new ScriptBundle("~/bundles/dhhelpdesk").Include(
                             "~/Content/js/dhHelpdesk.js",
-                            "~/Content/js/clickmultimenu_dropdown.js"));
+                            "~/Content/js/snippets/clickmultimenu_dropdown.js"));
             
             bundles.Add(new ScriptBundle("~/bundles/common/login").Include(
                             "~/Scripts/jquery-1.8.3.min.js",
@@ -144,7 +144,8 @@
                 "~/Content/js/Cases/caseInitForm.js"));
             
             bundles.Add(new ScriptBundle("~/bundles/cases/edit").Include(
-                "~/Content/js/Cases/caseInitForm.js"));
+                "~/Content/js/Cases/caseInitForm.js",
+                "~/Content/js/snippets/tabSwitchByHashTag.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/Cases/_CaseLogInput").Include(
                 "~/Content/js/Cases/_caseLogInput.js"));
@@ -156,7 +157,7 @@
                     "~/Content/js/Cases/components/Utils.js",
                     "~/Content/js/Cases/components/EditPage.js",
                     "~/Content/js/Cases/_input.js",
-                    "~/Content/js/dropdown_fix.js",
+                    "~/Content/js/snippets/dropdown_fix.js",
                     "~/Content/js/Cases/case.templates.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/cases/_caseLogFiles").Include("~/Content/js/Cases/_caseLogFiles.js"));
