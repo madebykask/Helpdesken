@@ -980,9 +980,23 @@ namespace DH.Helpdesk.Services.Services
             return this._caseHistoryRepository.GetCaseHistoryByCaseId(caseId).ToList(); 
         }
 
-        public void SendCaseEmail(int caseId, CaseMailSetting cms, int caseHistoryId, string basePath, Case oldCase = null, CaseLog log = null, List<CaseFileDto> logFiles = null)        
+        public void SendCaseEmail(
+            int caseId, 
+            CaseMailSetting cms, 
+            int caseHistoryId, 
+            string basePath, 
+            Case oldCase = null, 
+            CaseLog log = null, 
+            List<CaseFileDto> logFiles = null)
         {
-            if (!this._emailService.IsValidEmail(cms.HelpdeskMailFromAdress))
+            //get sender email adress
+            var helpdeskMailFromAdress = string.Empty;
+            if (!string.IsNullOrEmpty((cms.HelpdeskMailFromAdress)))
+            {
+                helpdeskMailFromAdress = cms.HelpdeskMailFromAdress.Trim();                
+            }
+
+            if (!this._emailService.IsValidEmail(helpdeskMailFromAdress))
             {
                 return;
             }
@@ -996,9 +1010,7 @@ namespace DH.Helpdesk.Services.Services
 
             // get list of fields to replace [#1] tags in the subjcet and body texts
             List<Field> fields = GetCaseFieldsForEmail(newCase, log, cms, string.Empty , 0);
-
-            //get sender email adress
-            string helpdeskMailFromAdress = cms.HelpdeskMailFromAdress;
+            
             if (newCase.Workinggroup != null)
                 if (!string.IsNullOrWhiteSpace(newCase.Workinggroup.EMail) && _emailService.IsValidEmail(newCase.Workinggroup.EMail))  
                     helpdeskMailFromAdress = newCase.Workinggroup.EMail;
@@ -1026,6 +1038,10 @@ namespace DH.Helpdesk.Services.Services
 
                 if (string.IsNullOrWhiteSpace(customEmailSender1))
                     customEmailSender1 = cms.CustomeMailFromAddress.SystemEmail;
+                if (!string.IsNullOrEmpty(customEmailSender1))
+                {
+                    customEmailSender1 = customEmailSender1.Trim();
+                }
 
                 MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                 if (m != null)
@@ -1119,6 +1135,11 @@ namespace DH.Helpdesk.Services.Services
 
                     if (string.IsNullOrWhiteSpace(customEmailSender1))
                         customEmailSender1 = cms.CustomeMailFromAddress.SystemEmail;
+
+                    if (!string.IsNullOrEmpty(customEmailSender1))
+                    {
+                        customEmailSender1 = customEmailSender1.Trim();
+                    }
 
                     // get mail template from productArea
                     if (newCase.ProductArea.MailID.HasValue)
@@ -1290,6 +1311,11 @@ namespace DH.Helpdesk.Services.Services
                     customEmailSender2 = cms.CustomeMailFromAddress.WGEmail;
                 if (string.IsNullOrWhiteSpace(customEmailSender2))
                     customEmailSender2 = cms.CustomeMailFromAddress.SystemEmail;
+
+                if (!string.IsNullOrEmpty(customEmailSender2))
+                {
+                    customEmailSender2 = customEmailSender2.Trim();
+                }
 
                 MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                 if (m != null)
