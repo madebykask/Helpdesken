@@ -1,7 +1,11 @@
 <!-- 
 How to run: 
-	%WINDIR%\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe /toolsversion:4.0 deploy.xml
-	/t:Stackoverflow /p:BuildCmd=Clean
+	%WINDIR%\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe /toolsversion:4.0 deploy.xml /t:Dev
+to deploy on DEV Environment
+all options listed below
+	  - /t:Debug debugging mode in $(TestPath) folder;
+	  - /t:Dev deploy on DEV environment;
+	  - /t:Acct deploy on ACCT environment;
 -->
 <Project DefaultTargets="Help" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" Tools="2.0">
 	<PropertyGroup>		
