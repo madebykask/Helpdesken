@@ -260,8 +260,7 @@ EditPage.prototype.onPageLeave = function(ev) {
         me.leaveDlg.show().done(function (result) {
             me.leaveDlg.hide();
             if (result === ConfirmationDialog.YES) {
-                //            window.location.href = gotoUrl;
-                console.log('gotoUrl: ' + gotoUrl);
+                window.location.href = gotoUrl;
             }
         });
         ev.preventDefault();
