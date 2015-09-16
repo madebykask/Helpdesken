@@ -2594,6 +2594,9 @@ namespace DH.Helpdesk.Web.Controllers
                     case_.Department_Id) - case_.ExternalTime;
             }
 
+            var childCasesIds = this._caseService.GetChildCasesFor(case_.Id).Where(it => !it.ClosingDate.HasValue).Select(it => it.Id).ToArray();
+
+
             // save case and case history
             int caseHistoryId = this._caseService.SaveCase(
                         case_,
@@ -2604,7 +2607,7 @@ namespace DH.Helpdesk.Web.Controllers
                         out errors,
                         this.invoiceHelper.ToCaseInvoices(caseInvoiceArticles, null, null),
                         parentCase);
-
+            
             if (updateNotifierInformation.HasValue && updateNotifierInformation.Value)
             {
                 var names = case_.PersonsName.Split(' ');
@@ -2644,7 +2647,20 @@ namespace DH.Helpdesk.Web.Controllers
             var temporaryLogFiles = this.userTemporaryFilesStorage.FindFiles(caseLog.LogGuid.ToString(), ModuleName.Log);
             caseLog.CaseId = case_.Id;
             caseLog.CaseHistoryId = caseHistoryId;
+
+            var orginalInternalLog = caseLog.TextInternal;
+            
+            if (caseLog.SendLogToParentChildLog.HasValue && caseLog.SendLogToParentChildLog.Value
+                && !string.IsNullOrEmpty(caseLog.TextInternal) && childCasesIds.Length > 0)
+            {
+                caseLog.TextInternal = string.Format(
+                    "[{0}]: {1}",
+                    Translation.Get(CaseLog.ParentChildCasesMarker),
+                    caseLog.TextInternal);
+            }
+
             caseLog.Id = this._logService.SaveLog(caseLog, temporaryLogFiles.Count, out errors);
+            caseLog.TextInternal = orginalInternalLog;
 
             if (caseLog != null && caseLog.SendLogToParentChildLog.HasValue && caseLog.SendLogToParentChildLog.Value 
                 && !string.IsNullOrEmpty(caseLog.TextInternal))
@@ -2659,8 +2675,7 @@ namespace DH.Helpdesk.Web.Controllers
                                             };
                     this.UpdateCaseLogForCase(parentCase, parentCaseLog);
                 }
-
-                var childCasesIds = this._caseService.GetChildCasesFor(case_.Id).Where(it => !it.ClosingDate.HasValue).Select(it => it.Id).ToArray();
+                
                 if (childCasesIds != null && childCasesIds.Length > 0)
                 {
                     caseLog.TextInternal = string.Format("[{0}]: {1}", Translation.Get(CaseLog.ParentCaseMarker), caseLog.TextInternal);
