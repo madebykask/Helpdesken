@@ -56,7 +56,6 @@ EditPage.prototype.resetSaving = function () {
     me.$buttonsToDisable.removeClass('disabled');
 };
 
-
 EditPage.prototype.isProductAreaValid = function () {
     var me = this;
     var res = me.$productAreaChildObj.val();
@@ -65,6 +64,7 @@ EditPage.prototype.isProductAreaValid = function () {
     else
         return true;
 };
+
 
 EditPage.prototype.getValidationErrorMessage = function () {
     var me = this;
@@ -88,11 +88,12 @@ EditPage.prototype.getValidationErrorMessage = function () {
 
 EditPage.prototype.isFormValid = function() {
     var me = this;
+
     if (!me.isProductAreaValid()) {
         me.$productAreaObj.addClass("error");
         dhHelpdesk.cases.utils.showError(me.productAreaErrorMessage);
         return false;
-    }
+    }    
 
     if (!me.$form.valid()) {
         dhHelpdesk.cases.utils.showError(me.getValidationErrorMessage());
@@ -102,14 +103,75 @@ EditPage.prototype.isFormValid = function() {
     return true;
 };
 
-EditPage.prototype.doSave = function(submitUrl) {
+EditPage.prototype.checkAndSave = function (submitUrl) {
     var me = this;
     var action = submitUrl || me.EDIT_CASE_URL;
     if (me._inSaving) {
         return false;
     }
-    me._inSaving = true;
+
+    me._inSaving = true;        
     me.$buttonsToDisable.addClass('disabled');
+    
+    var params = me.p;
+
+    if (params.preventToSaveCaseWithInactiveValue != null && params.preventToSaveCaseWithInactiveValue == 1) {
+        if (me.$form == undefined || me.$form.index(0) == -1) {
+            ShowToastMessage("Case form is not valid!", "error", true);
+            return;
+        }
+        var form = me.$form[0];
+        var fieldsToCheck = {
+            CustomerId: form.elements[params.caseFieldNames.CustomerId].value,
+            RegionId: form.elements[params.caseFieldNames.RegionId].value,
+            DepartmentId: form.elements[params.caseFieldNames.DepartmentId].value,
+            OUId: form.elements[params.caseFieldNames.OUId].value,
+            SourceId: form.elements[params.caseFieldNames.SourceId].value,
+            CaseTypeId: form.elements[params.caseFieldNames.CaseTypeId].value,
+            ProductAreaId: form.elements[params.caseFieldNames.ProductAreaId].value,
+            CategoryId: form.elements[params.caseFieldNames.CategoryId].value,
+            SupplierId: form.elements[params.caseFieldNames.SupplierId].value,
+            WorkingGroupId: form.elements[params.caseFieldNames.WorkingGroupId].value,
+            ResponsibleId: form.elements[params.caseFieldNames.ResponsibleId].value,
+            AdministratorId: form.elements[params.caseFieldNames.AdministratorId].value,
+            PriorityId: form.elements[params.caseFieldNames.PriorityId].value,
+            StatusId: form.elements[params.caseFieldNames.StatusId].value,
+            SubStatusId: form.elements[params.caseFieldNames.SubStatusId].value,
+            CausingPartId: form.elements[params.caseFieldNames.CausingPartId].value,
+            ClosingReasonId: form.elements[params.caseFieldNames.ClosingReasonId].value
+        }
+
+        $.ajax({
+            type: "POST",
+            data: JSON.stringify(fieldsToCheck),
+            url: params.caseActiveDataChecker,
+            contentType: "application/json",
+            success: function (data) {
+                if (data == 'valid') {
+                    return me.doSave(submitUrl);
+                } else {
+                    //Case has inactive value(s)                    
+                    ShowToastMessage(data, "error", true);
+                    me.$buttonsToDisable.removeClass('disabled');
+                    me._inSaving = false;
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                ShowToastMessage("Error in check inactive items! <br/> \"" + thrownError + "\"", "error", true);
+                me.$buttonsToDisable.removeClass('disabled');
+                me._inSaving = false;
+                return;
+            }
+        });        
+    }
+    else
+        return me.doSave(submitUrl);
+    
+}
+
+EditPage.prototype.doSave = function(submitUrl) {
+    var me = this;
+    var action = submitUrl || '/Cases/Edit';
     me.$form.attr("action", action);
     if (me.isFormValid()) {
         if (me.case.isNew()) {
@@ -151,12 +213,12 @@ EditPage.prototype.onSaveClick = function () {
 
 EditPage.prototype.onSaveAndCloseClick = function () {
     var me = this;
-    return me.doSave(me.NEW_CLOSE_CASE_URL);
+    return me.checkAndSave(me.NEW_CLOSE_CASE_URL);    
 };
 
 EditPage.prototype.onSaveAndNewClick = function () {
     var me = this;
-    return me.doSave(me.SAVE_ADD_CASE_URL);
+    return me.checkAndSave(me.SAVE_ADD_CASE_URL);    
 };
 
 EditPage.prototype.canDeleteCase = function () {

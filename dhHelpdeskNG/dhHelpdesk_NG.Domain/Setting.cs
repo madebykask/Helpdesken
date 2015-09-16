@@ -120,6 +120,7 @@ namespace DH.Helpdesk.Domain
         public virtual OrderState CloseOrderState { get; set; }
 
         public int ModuleCaseInvoice { get; set; }
+        public int PreventToSaveCaseWithInactiveValue { get; set; }
 
         /// <summary>
         /// If 1 - indicates that users should be presented(and sorted by) as "FirstName LastName", and vice versa

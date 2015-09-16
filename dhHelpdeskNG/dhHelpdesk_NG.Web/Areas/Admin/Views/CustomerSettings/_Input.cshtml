@@ -424,6 +424,18 @@
                                         </span>                                            
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td>
+                                       <label> @Translation.Get("Ärende", Enums.TranslationSource.TextTranslation) </label>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="setting.PreventToSaveCaseWithInactiveValue" @(Model.Setting.PreventToSaveCaseWithInactiveValue == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="setting.PreventToSaveCaseWithInactiveValue" value="0" />
+                                        <span>
+                                            @Translation.Get("Tillåt inte att spara ärenden med inaktiva värden.", Enums.TranslationSource.TextTranslation) 
+                                        </span>                                            
+                                    </td>
+                                </tr>
                             </table>
                         </div>
                     </div>

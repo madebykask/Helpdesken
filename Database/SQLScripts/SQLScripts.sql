@@ -39,8 +39,14 @@ END
 GO
 
 update tblUsers set  CreateSubCasePermission = 1 where  CreateCasePermission = 1; 
+Go
 
-
+IF COL_LENGTH('dbo.tblsettings','PreventToSaveCaseWithInactiveValue') IS NULL
+BEGIN	 
+	ALTER TABLE [dbo].[tblsettings]
+	ADD [PreventToSaveCaseWithInactiveValue] int Not Null default(0)
+END
+GO 
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.14'
