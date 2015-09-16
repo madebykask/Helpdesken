@@ -1782,8 +1782,8 @@ namespace DH.Helpdesk.Web.Controllers
             if (inactiveFields.Any())
             {
                 var publicMessage = Translation.Get("Ärendet kunde inte sparas pga inaktiva värden(n). Var vänlig kontrollera ärendet.");
-                var fieldNames = String.Join("<br/> * ", inactiveFields.ToArray());
-                return Json(string.Format("{0}<br/><br/> * {1}", publicMessage, fieldNames));
+                var fieldNames = String.Join("<br/> ", inactiveFields.ToArray());
+                return Json(string.Format("{0}<br/> {1}", publicMessage, fieldNames));
             }
             else
                 return Json("valid");
@@ -3895,65 +3895,65 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 var region = this._regionService.GetRegion(fields.RegionId.Value);
                 if (region != null && region.IsActive == 0)
-                    ret.Add(Translation.Get(GlobalEnums.TranslationCaseFields.Region_Id.ToString(), 
+                    ret.Add(string.Format("[{0}]",Translation.Get(GlobalEnums.TranslationCaseFields.Region_Id.ToString(), 
                                             Enums.TranslationSource.CaseTranslation, 
-                                            fields.CustomerId));
+                                            fields.CustomerId)));
             }
             if (fields.CaseTypeId.HasValue)
             {
                 var caseType = this._caseTypeService.GetCaseType(fields.CaseTypeId.Value);
                 if (caseType != null && caseType.IsActive == 0)
-                    ret.Add(Translation.Get(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(),
+                    ret.Add(string.Format("[{0}]",Translation.Get(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(),
                                             Enums.TranslationSource.CaseTranslation,
-                                            fields.CustomerId));
+                                            fields.CustomerId)));
             }
             if (fields.ProductAreaId.HasValue)
             {
                 var productArea = this._productAreaService.GetProductArea(fields.ProductAreaId.Value);
                 if (productArea != null && productArea.IsActive == 0)
-                    ret.Add(Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(),
+                    ret.Add(string.Format("[{0}]",Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(),
                                             Enums.TranslationSource.CaseTranslation,
-                                            fields.CustomerId));
+                                            fields.CustomerId)));
             }
             if (fields.CategoryId.HasValue)
             {
                 var category = this._categoryService.GetCategory(fields.CategoryId.Value, fields.CustomerId);
                 if (category != null && category.IsActive == 0)
-                    ret.Add(Translation.Get(GlobalEnums.TranslationCaseFields.Category_Id.ToString(),
+                    ret.Add(string.Format("[{0}]",Translation.Get(GlobalEnums.TranslationCaseFields.Category_Id.ToString(),
                                             Enums.TranslationSource.CaseTranslation,
-                                            fields.CustomerId));
+                                            fields.CustomerId)));
             }
             if (fields.SupplierId.HasValue)
             {
                 var supplier = this._supplierService.GetSupplier(fields.SupplierId.Value);
                 if (supplier != null && supplier.IsActive == 0)
-                    ret.Add(Translation.Get(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString(),
+                    ret.Add(string.Format("[{0}]",Translation.Get(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString(),
                                             Enums.TranslationSource.CaseTranslation,
-                                            fields.CustomerId));
+                                            fields.CustomerId)));
             }
             if (fields.PriorityId.HasValue)
             {
                 var priority = this._priorityService.GetPriority(fields.PriorityId.Value);
                 if (priority != null && priority.IsActive == 0)
-                    ret.Add(Translation.Get(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(),
+                    ret.Add(string.Format("[{0}]",Translation.Get(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(),
                                             Enums.TranslationSource.CaseTranslation,
-                                            fields.CustomerId));
+                                            fields.CustomerId)));
             }
             if (fields.StatusId.HasValue)
             {
                 var status = this._statusService.GetStatus(fields.StatusId.Value);
                 if (status != null && status.IsActive == 0)
-                    ret.Add(Translation.Get(GlobalEnums.TranslationCaseFields.Status_Id.ToString(),
+                    ret.Add(string.Format("[{0}]",Translation.Get(GlobalEnums.TranslationCaseFields.Status_Id.ToString(),
                                             Enums.TranslationSource.CaseTranslation,
-                                            fields.CustomerId));
+                                            fields.CustomerId)));
             }
             if (fields.SubStatusId.HasValue)
             {
                 var subStatus = this._stateSecondaryService.GetStateSecondary(fields.SubStatusId.Value);
                 if (subStatus != null && subStatus.IsActive == 0)
-                    ret.Add(Translation.Get(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(),
+                    ret.Add(string.Format("[{0}]",Translation.Get(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(),
                                             Enums.TranslationSource.CaseTranslation,
-                                            fields.CustomerId));
+                                            fields.CustomerId)));
             }
             return ret;
         }
