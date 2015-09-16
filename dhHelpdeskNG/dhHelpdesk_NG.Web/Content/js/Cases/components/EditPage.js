@@ -327,7 +327,7 @@ EditPage.prototype.InitLeaveConfirmationDlg = function () {
     var dlgOptions = {
         btnYesText: $("#DeleteDialogYesButtonText").val(),
         btnNoText: $("#DeleteDialogNoButtonText").val(),
-        dlgText: 'You have unsaved changes do you want to continue and lose it?'
+        dlgText: me.p.lostChangesConfirmation
     };
     
     return CreateInstance(ConfirmationDialog, dlgOptions);
