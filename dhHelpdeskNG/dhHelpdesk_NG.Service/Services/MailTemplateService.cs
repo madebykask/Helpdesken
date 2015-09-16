@@ -17,6 +17,7 @@
         IDictionary<string, string> Validate(MailTemplateEntity mailTemplateToValidate);
 
         IList<MailTemplateList> GetMailTemplates(int customerId, int langaugeId);
+        CustomMailTemplate GetCustomMailTemplate(int mailTemplateId);
         IList<CustomMailTemplate> GetCustomMailTemplates(int customerId);
         MailTemplateEntity GetMailTemplate(int id, int customerId);
         MailTemplateEntity GetMailTemplate(int id, int customerId, int orderTypeId);
@@ -72,6 +73,11 @@
         public IList<MailTemplateList> GetMailTemplates(int customerId, int langaugeId)
         {
             return this._mailTemplateRepository.GetMailTemplates(customerId, langaugeId).ToList();
+        }
+
+        public CustomMailTemplate GetCustomMailTemplate(int mailTemplateId)
+        {
+            return this._mailTemplateRepository.GetCustomMailTemplate(mailTemplateId);
         }
 
         public IList<CustomMailTemplate> GetCustomMailTemplates(int customerId)

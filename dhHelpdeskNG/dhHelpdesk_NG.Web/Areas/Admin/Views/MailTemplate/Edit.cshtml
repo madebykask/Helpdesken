@@ -59,9 +59,7 @@
     </div>
 }
 @section Scripts {
-    <script type="text/javascript">
-        changeLanguageList('@SessionFacade.CurrentLanguageId');
-
+    <script type="text/javascript">        
         function changeLanguageList(id) {
             var actionLink = '/admin/mailtemplate/delete/' + '@Model.MailTemplateLanguage.MailTemplate.Id.ToString()' +
                                                         '?customerId=' + '@Model.Customer.Id.ToString()' +

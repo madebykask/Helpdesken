@@ -75,8 +75,8 @@
             {
                 mailTemplate = new MailTemplateEntity { MailID = MailTemplate.UserTemplatesMinID, Customer_Id = customer.Id, };
             }
-
-            var mailTemplateLanguage = new MailTemplateLanguageEntity() { Language_Id = customer.Language_Id, MailTemplate = mailTemplate };
+            
+            var mailTemplateLanguage = new MailTemplateLanguageEntity() { Language_Id = SessionFacade.CurrentLanguageId, MailTemplate = mailTemplate };
 
             var model = this.CreateInputViewModel(mailTemplateLanguage, customer, customer.Language_Id, null, null);
 
@@ -134,8 +134,7 @@
         }
 
         public ActionResult Edit(int id, int customerId, int languageId, int? ordertypeId, int? accountactivityId)
-        {
-
+        {            
             var customer = this._customerService.GetCustomer(customerId);
 
             var mailTemplate = new MailTemplateEntity();
@@ -153,8 +152,23 @@
                 {                    
                     MailID = id,
                 };
-            }            
-            
+            }
+
+            // Get first active language for Template
+            var customMailTemplate = this._mailTemplateService.GetCustomMailTemplate(mailTemplate.Id);
+            if (customMailTemplate != null)
+            {
+                var activeLanguages = customMailTemplate.TemplateLanguages
+                                                        .Where(l=> !string.IsNullOrEmpty(l.Subject) && !string.IsNullOrEmpty(l.Body))
+                                                        .Select(l => l.LanguageId)
+                                                        .ToList();
+                if (activeLanguages.Any())
+                {
+                    if (!activeLanguages.Contains(languageId))
+                        languageId = activeLanguages.First();
+                }
+            }
+
             var mailTemplateLanguage = new MailTemplateLanguageEntity();
             if (ordertypeId != null)
                 // Search by OrderTypeId
@@ -162,7 +176,7 @@
             else
                 // Search by MailID                
                 mailTemplateLanguage = this._mailTemplateService.GetMailTemplateLanguageForCustomer(id, customer.Id, languageId);
-
+            
 
             if (mailTemplateLanguage == null)
             {
@@ -585,7 +599,8 @@
                 Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
                 {
                     Text = Translation.Get(x.Name, Enums.TranslationSource.TextTranslation),
-                    Value = x.Id.ToString()
+                    Value = x.Id.ToString(),
+                    Selected = (x.Id == languageId)
                 }).ToList()
 
             };
