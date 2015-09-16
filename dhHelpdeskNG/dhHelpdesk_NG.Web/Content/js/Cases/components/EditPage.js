@@ -11,6 +11,10 @@ EditPage.prototype.SAVE_ADD_CASE_URL = '/Cases/NewAndAddCase';
 EditPage.prototype.CASE_OVERVIEW_URL = '/Cases';
 
 EditPage.prototype.CHLID_CASES_TAB = 'childcases-tab';
+
+EditPage.prototype.CASE_IN_IDLE = 'case_in_idle';
+EditPage.prototype.CASE_IN_SAVING = 'case_in_saving';
+
 /*** CONST END ***/
 
 /**
@@ -52,8 +56,7 @@ EditPage.prototype.ReExtendCaseLock = function () {
 
 EditPage.prototype.resetSaving = function () {
     var me = this;
-    me._inSaving = false;
-    me.$buttonsToDisable.removeClass('disabled');
+    me.setCaseStatus(me.CASE_IN_IDLE);
 };
 
 EditPage.prototype.isProductAreaValid = function () {
@@ -110,11 +113,9 @@ EditPage.prototype.checkAndSave = function (submitUrl) {
         return false;
     }
 
-    me._inSaving = true;        
-    me.$buttonsToDisable.addClass('disabled');
+    me.setCaseStatus(me.CASE_IN_SAVING);
     
     var params = me.p;
-
     if (params.preventToSaveCaseWithInactiveValue != null && params.preventToSaveCaseWithInactiveValue == 1) {
         if (me.$form == undefined || me.$form.index(0) == -1) {
             ShowToastMessage("Case form is not valid!", "error", true);
@@ -152,14 +153,12 @@ EditPage.prototype.checkAndSave = function (submitUrl) {
                 } else {
                     //Case has inactive value(s)                    
                     ShowToastMessage(data, "error", true);
-                    me.$buttonsToDisable.removeClass('disabled');
-                    me._inSaving = false;
+                    me.setCaseStatus(me.CASE_IN_IDLE);
                 }
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 ShowToastMessage("Error in check inactive items! <br/> \"" + thrownError + "\"", "error", true);
-                me.$buttonsToDisable.removeClass('disabled');
-                me._inSaving = false;
+                me.setCaseStatus(me.CASE_IN_IDLE);
                 return;
             }
         });        
@@ -189,16 +188,35 @@ EditPage.prototype.doSave = function(submitUrl) {
                 } else {
                     //Case is Locked
                     ShowToastMessage(me.p.saveLockedCaseMessage, "error", true);
-                    me.$buttonsToDisable.removeClass('disabled');
-                    me._inSaving = false;
+                    me.setCaseStatus(me.CASE_IN_IDLE);
                 }
             });
     } else {
-        me._inSaving = false;
-        me.$buttonsToDisable.removeClass('disabled');
+        me.setCaseStatus(me.CASE_IN_IDLE);
     }
     return false;
 };
+
+EditPage.prototype.setCaseStatus = function (status) {
+    var me = this;
+    switch (status)
+    {
+        case me.CASE_IN_IDLE:
+            me._inSaving = false;
+            me.$buttonsToDisable.removeClass('disabled');
+            return true;
+    
+        case me.CASE_IN_SAVING:
+            me._inSaving = true;        
+            me.$buttonsToDisable.addClass('disabled');
+            return true;
+
+        default:
+            ShowToastMessage("Case status is not defined!", "error", true);
+            return false;
+    }    
+};
+
 
 EditPage.prototype.onSaveClick = function () {
     var me = this;
@@ -207,8 +225,8 @@ EditPage.prototype.onSaveClick = function () {
     if (c.isNew() && c.isChildCase()) {
         url = me.SAVE_GOTO_PARENT_CASE_URL;
     }
-
-    return me.doSave(url);
+    
+    return me.checkAndSave(url);
 };
 
 EditPage.prototype.onSaveAndCloseClick = function () {
@@ -362,8 +380,7 @@ EditPage.prototype.init = function (p) {
     me.$productAreaObj = $('#divProductArea');
     me.$productAreaChildObj = $('#ProductAreaHasChild');
     me.productAreaErrorMessage = me.p.productAreaErrorMessage;
-    me.$moveCaseButton = $("#btnMoveCase");
-    me.$buttonsToDisable = $('.btn.save, .btn.save-close, .btn.save-new');
+    me.$moveCaseButton = $("#btnMoveCase");    
     me.$btnSave = $('.btn.save');
     me.$btnSaveClose = $('.btn.save-close');
     me.$btnSaveNew = $('.btn.save-new');
