@@ -10,6 +10,9 @@
         public const string ParentCaseMarker = "Huvudärende";
 
         public const string ParentChildCasesMarker = "Skickat till underrärenden";
+
+        public const string ChildParentCasesMarker = "Skickat till huvudärende";
+
         public int? CaseHistoryId { get; set; }
         public int CaseId { get; set; }
         public Guid LogGuid { get; set; }

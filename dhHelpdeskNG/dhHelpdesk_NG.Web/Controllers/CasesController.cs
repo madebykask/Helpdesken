@@ -2659,6 +2659,14 @@ namespace DH.Helpdesk.Web.Controllers
                     caseLog.TextInternal);
             }
 
+            if (caseLog.SendLogToParentChildLog.HasValue && caseLog.SendLogToParentChildLog.Value && parentCase != null)
+            {
+                caseLog.TextInternal = string.Format(
+                   "[{0}]: {1}",
+                   Translation.Get(CaseLog.ChildParentCasesMarker),
+                   caseLog.TextInternal);
+            }
+
             caseLog.Id = this._logService.SaveLog(caseLog, temporaryLogFiles.Count, out errors);
             caseLog.TextInternal = orginalInternalLog;
 
