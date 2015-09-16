@@ -355,7 +355,7 @@ EditPage.prototype.onCloseClick = function(ev) {
     if (c.isChildCase() && c.isNew()) {
         url = me.EDIT_CASE_URL + '/' + c.parentCaseId;
     } else {
-        url = window.location.href;
+        url = me.CASE_OVERVIEW_URL;
     }
 
     window.location.href = url;
