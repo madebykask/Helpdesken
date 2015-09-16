@@ -4459,13 +4459,6 @@ GO
 If not exists (select * from tblTextTranslation where text_id = 1541 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1541, 2, 'Send internal log note to child cases')
 GO
-
-If not exists (select * from tbltext where id = 1542)
-	insert into tbltext (id, TextString) VALUES (1542, 'Skickat till underrärenden')
-GO
-If not exists (select * from tblTextTranslation where text_id = 1542 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1542, 2, 'Sent to child cases')
-GO
             
 If not exists (select * from tbltext where id = 1542)
 	insert into tbltext (id, TextString) VALUES (1542, 'Ärendet kunde inte sparas pga inaktiva värden(n). Var vänlig kontrollera ärendet.')
@@ -4480,12 +4473,20 @@ GO
 If not exists (select * from tblTextTranslation where text_id = 1543 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1543, 2, 'Prevent to save cases with inactive values.')
 GO      
-   	    
-If not exists (select * from tbltext where id = 1543)
-	insert into tbltext (id, TextString) VALUES (1543, 'Dina ändringar har inte sparats. Fortsätt?')
+
+If not exists (select * from tbltext where id = 1544)
+	insert into tbltext (id, TextString) VALUES (1544, 'Skickat till underrärenden')
 GO
-If not exists (select * from tblTextTranslation where text_id = 1543 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1543, 2, 'Your changes have not been saved. Continue?')
+If not exists (select * from tblTextTranslation where text_id = 1544 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1544, 2, 'Sent to child cases')
+GO
+   	    
+If not exists (select * from tbltext where id = 1545)
+	insert into tbltext (id, TextString) VALUES (1545, 'Dina ändringar har inte sparats. Fortsätt?')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1545 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1545, 2, 'Your changes have not been saved. Continue?')
+GO
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
