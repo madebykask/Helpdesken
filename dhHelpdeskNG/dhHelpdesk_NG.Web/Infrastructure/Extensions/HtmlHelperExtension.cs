@@ -390,6 +390,29 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                     sb.Append("</tr>");
                 }
             }
+
+            // Registration Source
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.RegistrationSourceCustomer_Id != o.RegistrationSourceCustomer_Id)
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    sb.Append(tdMarkup);
+                    if (o.RegistrationSourceCustomer != null)
+                        sb.Append(Translation.Get(o.RegistrationSourceCustomer.SourceName, Enums.TranslationSource.TextTranslation, customerId));
+                    else
+                        sb.Append(ey);
+                    sb.Append(from);
+                    if (cur.RegistrationSourceCustomer != null)
+                        sb.Append(Translation.Get(cur.RegistrationSourceCustomer.SourceName, Enums.TranslationSource.TextTranslation, customerId));
+                    else
+                        sb.Append(ey);
+                    sb.Append("</td>");
+                    sb.Append("</tr>");
+                }
+            }
+
             // CaseType
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()).ShowOnStartPage == 1)
             {
@@ -561,28 +584,6 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                     sb.Append(from);
                     if (cur.Status != null)
                         sb.Append(Translation.Get(cur.Status.Name, Enums.TranslationSource.TextTranslation, customerId));
-                    else
-                        sb.Append(ey);
-                    sb.Append("</td>");
-                    sb.Append("</tr>");
-                }
-            }
-
-            // Registration Source
-            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString()).ShowOnStartPage == 1)
-            {
-                if (cur.RegistrationSourceCustomer_Id != o.RegistrationSourceCustomer_Id)
-                {
-                    sb.Append("<tr>");
-                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
-                    sb.Append(tdMarkup);
-                    if (o.RegistrationSourceCustomer != null)                        
-                        sb.Append(Translation.Get(o.RegistrationSourceCustomer.SourceName, Enums.TranslationSource.TextTranslation, customerId));                        
-                    else
-                        sb.Append(ey);
-                    sb.Append(from);
-                    if (cur.RegistrationSourceCustomer != null)                        
-                        sb.Append(Translation.Get(cur.RegistrationSourceCustomer.SourceName, Enums.TranslationSource.TextTranslation, customerId));                        
                     else
                         sb.Append(ey);
                     sb.Append("</td>");
