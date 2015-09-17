@@ -1851,8 +1851,21 @@ table th.thpointer {
 {
     cursor:move;
 }
-
 /*********************** CASE OVERVIEW PAGE END  ***********/
+
+
+/***********************  CASE EDIT PAGE BEGIN ************************************/
+
+/*** editcase.caselog begin ***/
+.table.caselog .case-icon.solved 
+{
+    padding: 0px 14px;
+    background: url('/Content/icons/case_close.png') no-repeat;    
+}
+/*** editcase.caselog end ***/
+
+/***********************  CASE EDIT PAGE END ************************************/
+
 
 
 /****************VARIOUS SELECT, INPUT, ETC*******************************/
