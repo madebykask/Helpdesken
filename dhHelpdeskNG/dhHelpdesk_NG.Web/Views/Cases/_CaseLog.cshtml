@@ -24,7 +24,14 @@
                 {
                     <tr>
                         <td>
-                            <span class="case-icon solved"></span>
+                            @if (r.FinishingDate.HasValue)
+                            {
+                                <span class="case-icon solved" title="@Translation.GetCoreTextTranslation("Stängt")"></span>
+                            }
+                            else
+                            {
+                                <span class="case-icon"></span>
+                            }
                             @{
                                 r.LogDate = TimeZoneInfo.ConvertTimeFromUtc(r.LogDate.ToUniversalTime(), userTimeZone);
                             }

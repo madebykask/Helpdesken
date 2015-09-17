@@ -1857,9 +1857,12 @@ table th.thpointer {
 /***********************  CASE EDIT PAGE BEGIN ************************************/
 
 /*** editcase.caselog begin ***/
+.table.caselog .case-icon 
+{
+    padding: 0 14px;
+}
 .table.caselog .case-icon.solved 
 {
-    padding: 0px 14px;
     background: url('/Content/icons/case_close.png') no-repeat;    
 }
 /*** editcase.caselog end ***/
