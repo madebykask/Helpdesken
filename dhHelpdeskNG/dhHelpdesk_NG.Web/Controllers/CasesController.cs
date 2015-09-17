@@ -3147,173 +3147,187 @@ namespace DH.Helpdesk.Web.Controllers
             m.CaseKey = m.case_.Id == 0 ? m.case_.CaseGUID.ToString() : m.case_.Id.ToString(global::System.Globalization.CultureInfo.InvariantCulture);
             m.LogKey = m.CaseLog.LogGuid.ToString();
 
-                if (m.case_.Supplier_Id > 0 && m.suppliers != null)
+            if (m.case_.Supplier_Id > 0 && m.suppliers != null)
+            {
+                var sup = m.suppliers.FirstOrDefault(x => x.Id == m.case_.Supplier_Id.GetValueOrDefault());
+                m.CountryId = sup.Country_Id.GetValueOrDefault();
+            }
+
+            if (isCreateNewCase)
+            {
+                #region New case initialize
+
+                // Load template info
+                if (templateId != null)
                 {
-                    var sup = m.suppliers.FirstOrDefault(x => x.Id == m.case_.Supplier_Id.GetValueOrDefault());
-                    m.CountryId = sup.Country_Id.GetValueOrDefault();
-                }
+                    var caseTemplate = this._caseSolutionService.GetCaseSolution(templateId.Value);
+                    var caseTemplateSettings =
+                        this.caseSolutionSettingService.GetCaseSolutionSettingOverviews(templateId.Value);
 
-                if (isCreateNewCase)
-                {
-                    #region New case initialize
-
-                    // Load template info
-                    if (templateId != null)
+                    if (caseTemplateSettings.Any())
                     {
-                        var caseTemplate = this._caseSolutionService.GetCaseSolution(templateId.Value);
-                        var caseTemplateSettings =
-                            this.caseSolutionSettingService.GetCaseSolutionSettingOverviews(templateId.Value);
-
-                        if (caseTemplateSettings.Any())
-                        {
-                            m.CaseSolutionSettingModels = CaseSolutionSettingModel.CreateModel(caseTemplateSettings);
-                        }
-
-                        if (caseTemplate != null)
-                        {
-                            if (caseTemplate.CaseType_Id != null)
-                            {
-                                m.case_.CaseType_Id = caseTemplate.CaseType_Id.Value;
-                            }
-
-                            if (caseTemplate.PerformerUser_Id != null)
-                            {
-                                m.case_.Performer_User_Id = caseTemplate.PerformerUser_Id.Value;
-                            }
-                            else
-                            {
-                                m.case_.Performer_User_Id = 0;
-                            }
-
-                            if (caseTemplate.Category_Id != null)
-                            {
-                                m.case_.Category_Id = caseTemplate.Category_Id.Value;
-                            }
-
-                            if (caseTemplate.UpdateNotifierInformation.HasValue)
-                            {
-                                m.UpdateNotifierInformation = caseTemplate.UpdateNotifierInformation.Value.ToBool();
-                            }
-
-                            m.case_.ReportedBy = caseTemplate.ReportedBy;
-                            m.case_.Department_Id = caseTemplate.Department_Id;
-                            //m.CaseMailSetting.DontSendMailToNotifier = caseTemplate.NoMailToNotifier.ToBool();
-                            m.case_.ProductArea_Id = caseTemplate.ProductArea_Id;
-                            m.case_.Caption = caseTemplate.Caption;
-                            m.case_.Description = caseTemplate.Description;
-                            m.case_.Miscellaneous = caseTemplate.Miscellaneous;
-
-                    if (caseTemplate.CaseWorkingGroup_Id != null)
-                    {
-                        m.case_.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id;
+                        m.CaseSolutionSettingModels = CaseSolutionSettingModel.CreateModel(caseTemplateSettings);
                     }
 
-                            m.case_.Priority_Id = caseTemplate.Priority_Id;
-                            m.case_.Project_Id = caseTemplate.Project_Id;
-                            m.CaseLog.TextExternal = caseTemplate.Text_External;
-                            m.CaseLog.TextInternal = caseTemplate.Text_Internal;
-                            m.CaseLog.FinishingType = caseTemplate.FinishingCause_Id;
-                            if (m.CaseLog.FinishingType.HasValue)
-                                m.CaseLog.FinishingDate = DateTime.UtcNow;
-                            m.case_.PersonsName = caseTemplate.PersonsName;
-                            m.case_.PersonsPhone = caseTemplate.PersonsPhone;
-                            m.case_.Region_Id = caseTemplate.Region_Id;
-                            m.case_.OU_Id = caseTemplate.OU_Id;
-                            m.case_.Place = caseTemplate.Place;
-                            m.case_.UserCode = caseTemplate.UserCode;
-                            m.case_.Urgency_Id = caseTemplate.Urgency_Id;
-                            m.case_.Impact_Id = caseTemplate.Impact_Id;
-                            m.case_.InvoiceNumber = caseTemplate.InvoiceNumber;
-                            m.case_.ReferenceNumber = caseTemplate.ReferenceNumber;
-                            m.case_.Status_Id = caseTemplate.Status_Id;
-                            m.case_.StateSecondary_Id = caseTemplate.StateSecondary_Id;
-                            m.case_.Verified = caseTemplate.Verified;
-                            m.case_.VerifiedDescription = caseTemplate.VerifiedDescription;
-                            m.case_.SolutionRate = caseTemplate.SolutionRate;
-                            m.case_.InventoryNumber = caseTemplate.InventoryNumber;
-                            m.case_.InventoryType = caseTemplate.InventoryType;
-                            m.case_.InventoryLocation = caseTemplate.InventoryLocation;
-                            m.case_.System_Id = caseTemplate.System_Id;
-                            m.case_.Currency = caseTemplate.Currency;
-                            m.case_.Cost = caseTemplate.Cost;
-                            m.case_.OtherCost = caseTemplate.OtherCost;
-                            m.case_.Available = caseTemplate.Available;
-                            m.case_.ContactBeforeAction = caseTemplate.ContactBeforeAction;
-                            if (caseTemplate.RegistrationSource.HasValue)
-                            {
-                                m.CustomerRegistrationSourceId = caseTemplate.RegistrationSource.Value;
-                                var RegistrationSource = this._registrationSourceCustomerService.GetRegistrationSouceCustomer(caseTemplate.RegistrationSource.Value);
-                                m.SelectedCustomerRegistrationSource = RegistrationSource.SourceName;
+                    if (caseTemplate != null)
+                    {
+                        #region new case from template
+                        if (caseTemplate.CaseType_Id != null)
+                        {
+                            m.case_.CaseType_Id = caseTemplate.CaseType_Id.Value;
+                        }
 
-                            }
+                        if (caseTemplate.PerformerUser_Id != null)
+                        {
+                            m.case_.Performer_User_Id = caseTemplate.PerformerUser_Id.Value;
+                        }
+                        else
+                        {
+                            m.case_.Performer_User_Id = 0;
+                        }
 
-                            // "watch date" 
-                            if (caseTemplate.WatchDate.HasValue)
+                        if (caseTemplate.Category_Id != null)
+                        {
+                            m.case_.Category_Id = caseTemplate.Category_Id.Value;
+                        }
+
+                        if (caseTemplate.UpdateNotifierInformation.HasValue)
+                        {
+                            m.UpdateNotifierInformation = caseTemplate.UpdateNotifierInformation.Value.ToBool();
+                        }
+
+                        m.case_.ReportedBy = caseTemplate.ReportedBy;
+                        m.case_.Department_Id = caseTemplate.Department_Id;
+                        //m.CaseMailSetting.DontSendMailToNotifier = caseTemplate.NoMailToNotifier.ToBool();
+                        m.case_.ProductArea_Id = caseTemplate.ProductArea_Id;
+                        m.case_.Caption = caseTemplate.Caption;
+                        m.case_.Description = caseTemplate.Description;
+                        m.case_.Miscellaneous = caseTemplate.Miscellaneous;
+
+                        if (caseTemplate.CaseWorkingGroup_Id != null)
+                        {
+                            m.case_.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id;
+                        }
+
+                        m.case_.Priority_Id = caseTemplate.Priority_Id;
+                        m.case_.Project_Id = caseTemplate.Project_Id;
+                        m.CaseLog.TextExternal = caseTemplate.Text_External;
+                        m.CaseLog.TextInternal = caseTemplate.Text_Internal;
+                        m.CaseLog.FinishingType = caseTemplate.FinishingCause_Id;
+                        if (m.CaseLog.FinishingType.HasValue)
+                            m.CaseLog.FinishingDate = DateTime.UtcNow;
+                        m.case_.PersonsName = caseTemplate.PersonsName;
+                        m.case_.PersonsPhone = caseTemplate.PersonsPhone;
+                        m.case_.Region_Id = caseTemplate.Region_Id;
+                        m.case_.OU_Id = caseTemplate.OU_Id;
+                        m.case_.Place = caseTemplate.Place;
+                        m.case_.UserCode = caseTemplate.UserCode;
+                        m.case_.Urgency_Id = caseTemplate.Urgency_Id;
+                        m.case_.Impact_Id = caseTemplate.Impact_Id;
+                        m.case_.InvoiceNumber = caseTemplate.InvoiceNumber;
+                        m.case_.ReferenceNumber = caseTemplate.ReferenceNumber;
+                        m.case_.Status_Id = caseTemplate.Status_Id;
+                        m.case_.StateSecondary_Id = caseTemplate.StateSecondary_Id;
+                        m.case_.Verified = caseTemplate.Verified;
+                        m.case_.VerifiedDescription = caseTemplate.VerifiedDescription;
+                        m.case_.SolutionRate = caseTemplate.SolutionRate;
+                        m.case_.InventoryNumber = caseTemplate.InventoryNumber;
+                        m.case_.InventoryType = caseTemplate.InventoryType;
+                        m.case_.InventoryLocation = caseTemplate.InventoryLocation;
+                        m.case_.System_Id = caseTemplate.System_Id;
+                        m.case_.Currency = caseTemplate.Currency;
+                        m.case_.Cost = caseTemplate.Cost;
+                        m.case_.OtherCost = caseTemplate.OtherCost;
+                        m.case_.Available = caseTemplate.Available;
+                        m.case_.ContactBeforeAction = caseTemplate.ContactBeforeAction;
+                        if (caseTemplate.RegistrationSource.HasValue)
+                        {
+                            m.CustomerRegistrationSourceId = caseTemplate.RegistrationSource.Value;
+                            var RegistrationSource = this._registrationSourceCustomerService.GetRegistrationSouceCustomer(caseTemplate.RegistrationSource.Value);
+                            m.SelectedCustomerRegistrationSource = RegistrationSource.SourceName;
+                        }
+
+                        // "watch date" 
+                        if (caseTemplate.WatchDate.HasValue)
+                        {
+                            m.case_.WatchDate = caseTemplate.WatchDate;
+                        }
+                        else
+                        {
+                            if (m.case_.Department_Id.HasValue && m.case_.Priority_Id.HasValue)
                             {
-                                m.case_.WatchDate = caseTemplate.WatchDate;
-                            }
-                            else
-                            {
-                                if (m.case_.Department_Id.HasValue && m.case_.Priority_Id.HasValue)
+                                var dept = this._departmentService.GetDepartment(m.case_.Department_Id.Value);
+                                var priority =
+                                    m.priorities.Where(it => it.Id == m.case_.Priority_Id && it.IsActive == 1).FirstOrDefault();
+                                if (dept != null && priority != null && priority.SolutionTime == 0)
                                 {
-                                    var dept = this._departmentService.GetDepartment(m.case_.Department_Id.Value);
-                                    var priority =
-                                        m.priorities.Where(it => it.Id == m.case_.Priority_Id && it.IsActive == 1).FirstOrDefault();
-                                    if (dept != null && priority != null && priority.SolutionTime == 0)
-                                    {
-                                        m.case_.WatchDate =
-                                        this.watchDateCalendarServcie.GetClosestDateTo(
-                                                dept.WatchDateCalendar_Id.Value,
-                                                DateTime.UtcNow);
-                                    }
+                                    m.case_.WatchDate =
+                                    this.watchDateCalendarServcie.GetClosestDateTo(
+                                            dept.WatchDateCalendar_Id.Value,
+                                            DateTime.UtcNow);
                                 }
                             }
-
-                            m.case_.Project_Id = caseTemplate.Project_Id;
-                            m.case_.Problem_Id = caseTemplate.Problem_Id;
-                            m.case_.Change_Id = caseTemplate.Change_Id;
-                            m.case_.FinishingDate = caseTemplate.FinishingDate;
-                            m.case_.FinishingDescription = caseTemplate.FinishingDescription;
-                            m.case_.PlanDate = caseTemplate.PlanDate;
-                            m.CaseTemplateName = caseTemplate.Name;
-                            // This is used for hide fields(which are not in casetemplate) in new case input
-                            m.templateistrue = templateistrue;
-                            var finishingCauses = this._finishingCauseService.GetFinishingCauseInfos(customerId);
-                            m.FinishingCause = this.GetFinishingCauseFullPath(
-                                finishingCauses.ToArray(),
-                                caseTemplate.FinishingCause_Id);
-
-                            
                         }
+
+                        m.case_.Project_Id = caseTemplate.Project_Id;
+                        m.case_.Problem_Id = caseTemplate.Problem_Id;
+                        m.case_.Change_Id = caseTemplate.Change_Id;
+                        m.case_.FinishingDate = caseTemplate.FinishingDate;
+                        m.case_.FinishingDescription = caseTemplate.FinishingDescription;
+                        m.case_.PlanDate = caseTemplate.PlanDate;
+                        m.CaseTemplateName = caseTemplate.Name;
+                        // This is used for hide fields(which are not in casetemplate) in new case input
+                        m.templateistrue = templateistrue;
+                        var finishingCauses = this._finishingCauseService.GetFinishingCauseInfos(customerId);
+                        m.FinishingCause = this.GetFinishingCauseFullPath(
+                            finishingCauses.ToArray(),
+                            caseTemplate.FinishingCause_Id);
+                        #endregion
                     }
-                    #endregion
                 }
+                #endregion
+            }
 
-                DHDomain.User admUser = null;
-                if (m.case_.Performer_User_Id.HasValue)
-                {
-                    admUser = this._userService.GetUser(m.case_.Performer_User_Id.Value);
-                }
+            DHDomain.User admUser = null;
+            if (m.case_.Performer_User_Id.HasValue)
+            {
+                admUser = this._userService.GetUser(m.case_.Performer_User_Id.Value);
+            }
 
-                var performersList = responsibleUsersList;
+            var performersList = responsibleUsersList;
             if (customerSetting.DontConnectUserToWorkingGroup == 0 && m.case_.WorkingGroup_Id > 0)
-                {
-                    performersList = this._userService.GetAvailablePerformersForWorkingGroup(customerId, m.case_.WorkingGroup_Id);
-                }
+            {
+                performersList = this._userService.GetAvailablePerformersForWorkingGroup(customerId, m.case_.WorkingGroup_Id);
+            }
 
-                if (!performersList.Contains(admUser) && admUser != null)
-                {
-                    performersList.Insert(0, admUser);
-                }
+            if (!performersList.Contains(admUser) && admUser != null)
+            {
+                performersList.Insert(0, admUser);
+            }
 
-                if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.OU_Id.ToString()).ShowOnStartPage == 1)
+            if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.OU_Id.ToString()).ShowOnStartPage == 1)
+            {
+                //m.ous = this._ouService.GetOUs(customerId);
+                m.ous = this._organizationService.GetOUs(m.case_.Department_Id).ToList();
+            }
+           
+            // hämta parent path för casetype
+            if (m.case_.CaseType_Id > 0)
+            {
+                var c = this._caseTypeService.GetCaseType(m.case_.CaseType_Id);
+                if (c != null)
                 {
-                    //m.ous = this._ouService.GetOUs(customerId);
-                    m.ous = this._organizationService.GetOUs(m.case_.Department_Id).ToList();
+                    c = TranslateCaseType(c);
+                    m.ParantPath_CaseType = c.getCaseTypeParentPath();
+                    if (isCreateNewCase && c.User_Id.HasValue)
+                    {
+                        m.case_.Performer_User_Id = c.User_Id.Value;
+                    }
                 }
+            }
 
-                // hämta parent path för productArea 
-                m.ProductAreaHasChild = 0;
+            // hämta parent path för productArea 
+            m.ProductAreaHasChild = 0;
             if (m.case_.ProductArea_Id.HasValue)
             {
                 var p = this._productAreaService.GetProductArea(m.case_.ProductArea_Id.GetValueOrDefault());
@@ -3328,100 +3342,87 @@ namespace DH.Helpdesk.Web.Controllers
                     }
                 }
             }
+            
 
-            // hämta parent path för casetype
-                if (m.case_.CaseType_Id > 0)
+            // check department info
+            m.ShowInvoiceFields = 0;
+            if (m.case_.Department_Id > 0 && m.case_.Department_Id.HasValue)
+            {
+                var d = this._departmentService.GetDepartment(m.case_.Department_Id.Value);
+                if (d != null)
                 {
-                    var c = this._caseTypeService.GetCaseType(m.case_.CaseType_Id);                    
-                    if (c != null)
-                    {
-                        c = TranslateCaseType(c);
-                        m.ParantPath_CaseType = c.getCaseTypeParentPath();
-
-                        if (c.User_Id.HasValue)
-                            m.case_.Performer_User_Id = c.User_Id.Value;
-                    }
+                    m.ShowInvoiceFields = d.Charge;
                 }
+            }
 
-                // check department info
-                m.ShowInvoiceFields = 0;
-                if (m.case_.Department_Id > 0 && m.case_.Department_Id.HasValue)
+            // check state secondary info
+            m.CaseLog.SendMailAboutCaseToNotifier = customer.CommunicateWithNotifier.ToBool();
+
+            m.Disable_SendMailAboutCaseToNotifier = false;
+            if (m.case_.StateSecondary_Id > 0)
+            {
+                if (m.case_.StateSecondary != null)
                 {
-                    var d = this._departmentService.GetDepartment(m.case_.Department_Id.Value);
-                    if (d != null)
-                    {
-                        m.ShowInvoiceFields = d.Charge;
-                    }
+                    m.Disable_SendMailAboutCaseToNotifier = m.case_.StateSecondary.NoMailToNotifier == 1;
                 }
+            }
 
-                // check state secondary info
-                m.CaseLog.SendMailAboutCaseToNotifier = customer.CommunicateWithNotifier.ToBool();
-
-                m.Disable_SendMailAboutCaseToNotifier = false;
-                if (m.case_.StateSecondary_Id > 0)
-                {
-                    if (m.case_.StateSecondary != null)
-                    {
-                        m.Disable_SendMailAboutCaseToNotifier = m.case_.StateSecondary.NoMailToNotifier == 1;
-                    }
-                }
-
-                m.EditMode = this.EditMode(m, ModuleName.Cases, deps, acccessToGroups);
+            m.EditMode = this.EditMode(m, ModuleName.Cases, deps, acccessToGroups);
             if (isCreateNewCase) 
             {
                 m.case_.DefaultOwnerWG_Id = null;
-                    if (m.case_.User_Id.HasValue && m.case_.User_Id != 0)
-                    {
-                        // http://redmine.fastdev.se/issues/10997
-                        /*var curUser = _userService.GetUser(m.case_.User_Id);                        
-
-                        if (curUser.Default_WorkingGroup_Id != null)
-                           m.case_.DefaultOwnerWG_Id = curUser.Default_WorkingGroup_Id;*/
-
-                        var userDefaultWorkingGroupId = this._userService.GetUserDefaultWorkingGroupId(m.case_.User_Id.Value, m.case_.Customer_Id);
-                        if (userDefaultWorkingGroupId.HasValue)
-                        {
-                            m.case_.DefaultOwnerWG_Id = userDefaultWorkingGroupId;
-                        }
-                    }
-                }
-                else
+                if (m.case_.User_Id.HasValue && m.case_.User_Id != 0)
                 {
-                    if (m.case_.DefaultOwnerWG_Id.HasValue && m.case_.DefaultOwnerWG_Id.Value > 0)
+                    // http://redmine.fastdev.se/issues/10997
+                    /*var curUser = _userService.GetUser(m.case_.User_Id);                        
+
+                    if (curUser.Default_WorkingGroup_Id != null)
+                        m.case_.DefaultOwnerWG_Id = curUser.Default_WorkingGroup_Id;*/
+
+                    var userDefaultWorkingGroupId = this._userService.GetUserDefaultWorkingGroupId(m.case_.User_Id.Value, m.case_.Customer_Id);
+                    if (userDefaultWorkingGroupId.HasValue)
                     {
-                        m.CaseOwnerDefaultWorkingGroup = this._workingGroupService.GetWorkingGroup(m.case_.DefaultOwnerWG_Id.Value);                
+                        m.case_.DefaultOwnerWG_Id = userDefaultWorkingGroupId;
                     }
                 }
+            }
+            else
+            {
+                if (m.case_.DefaultOwnerWG_Id.HasValue && m.case_.DefaultOwnerWG_Id.Value > 0)
+                {
+                    m.CaseOwnerDefaultWorkingGroup = this._workingGroupService.GetWorkingGroup(m.case_.DefaultOwnerWG_Id.Value);                
+                }
+            }
 
-                // TODO: Should mix CustomerSettings & Setting                 
-                m.CustomerSettings = this.workContext.Customer.Settings;
+            // TODO: Should mix CustomerSettings & Setting                 
+            m.CustomerSettings = this.workContext.Customer.Settings;
             m.Setting = customerSetting;
 
-                // "Responsible"
-                m.ResponsibleUser_Id = m.case_.CaseResponsibleUser_Id ?? 0;
-                const bool isAddEmpty = true;
-                m.ResponsibleUsersAvailable = responsibleUsersList.MapToSelectList(m.Setting, isAddEmpty);
+            // "Responsible"
+            m.ResponsibleUser_Id = m.case_.CaseResponsibleUser_Id ?? 0;
+            const bool isAddEmpty = true;
+            m.ResponsibleUsersAvailable = responsibleUsersList.MapToSelectList(m.Setting, isAddEmpty);
 
-                // "Administrator" (Performer)
-                m.Performer_Id = m.case_.Performer_User_Id ?? 0;
-                m.Performers = performersList.Where(it => it.IsActive == 1 && (it.Performer == 1 || it.Id == m.Performer_Id))
-                    .MapToSelectList(m.Setting, isAddEmpty);
+            // "Administrator" (Performer)
+            m.Performer_Id = m.case_.Performer_User_Id ?? 0;
+            m.Performers = performersList.Where(it => it.IsActive == 1 && (it.Performer == 1 || it.Id == m.Performer_Id))
+                .MapToSelectList(m.Setting, isAddEmpty);
 
-                m.DynamicCase = this._caseService.GetDynamicCase(m.case_.Id);
-                if (m.DynamicCase != null)
-                {
-                    var l = m.Languages.Where(x => x.Id == SessionFacade.CurrentLanguageId).FirstOrDefault();
-                    m.DynamicCase.FormPath = m.DynamicCase.FormPath
-                        .Replace("[CaseId]", m.case_.Id.ToString())
-                        .Replace("[UserId]", SessionFacade.CurrentUser.UserId.ToString())
-                        .Replace("[Language]", l.LanguageId);
-                }
+            m.DynamicCase = this._caseService.GetDynamicCase(m.case_.Id);
+            if (m.DynamicCase != null)
+            {
+                var l = m.Languages.Where(x => x.Id == SessionFacade.CurrentLanguageId).FirstOrDefault();
+                m.DynamicCase.FormPath = m.DynamicCase.FormPath
+                    .Replace("[CaseId]", m.case_.Id.ToString())
+                    .Replace("[UserId]", SessionFacade.CurrentUser.UserId.ToString())
+                    .Replace("[Language]", l.LanguageId);
+            }
 
-                var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
-                if (case_ != null)
-                {
-                    m.MapCaseToCaseInputViewModel(case_, userTimeZone);
-                }
+            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
+            if (case_ != null)
+            {
+                m.MapCaseToCaseInputViewModel(case_, userTimeZone);
+            }
 
             m.CaseTemplateTreeButton = this.GetCaseTemplateTreeModel(customerId, userId);
             return m;
