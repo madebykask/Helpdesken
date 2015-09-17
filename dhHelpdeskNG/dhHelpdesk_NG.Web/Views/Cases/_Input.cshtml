@@ -180,7 +180,7 @@
                                 @Translation.Get("Detta är ett underärende till ärende")&nbsp;<a href="@Url.Action("Edit", new { id = Model.ParentCaseInfo.ParentId })"><strong>@Model.ParentCaseInfo.CaseNumber</strong></a>. 
                                 @if (!string.IsNullOrEmpty(Model.ParentCaseInfo.Administrator))
                                 {
-                                    @Translation.Get("Händlagare")
+                                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Model.case_.Customer_Id)
                                     <strong>@Model.ParentCaseInfo.Administrator</strong>
                                 }
                             </div>
