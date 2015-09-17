@@ -12,7 +12,9 @@
 
         public string SystemCodeName { get; set; }
 
-        public string IsActive { get; set; }
+        public string IsActiveStr { get; set; }
+
+        public int IsActive { get; set; }
     }
 
     public class RegistrationSourceIndexViewModel
@@ -20,5 +22,7 @@
         public Customer Customer { get; set; }
 
         public IList<RegistrationSourceCustomerIndex> RegistrationSources { get; set; }
+
+        public bool IsShowOnlyActive { get; set; }
     }
 }

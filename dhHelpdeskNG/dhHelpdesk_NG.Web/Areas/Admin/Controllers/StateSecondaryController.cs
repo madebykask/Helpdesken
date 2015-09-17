@@ -30,12 +30,19 @@
             this._mailTemplateService = mailTemplateService;
         }
 
+        public JsonResult SetShowOnlyActiveStateSecondariesInAdmin(bool value)
+        {
+            SessionFacade.ShowOnlyActiveStateSecondariesInAdmin = value;
+            return this.Json(new { result = "success" });
+        }
+
+
         public ActionResult Index(int customerId)
         {
             var customer = this._customerService.GetCustomer(customerId);
             var statesecondaries = this._stateSecondaryService.GetStateSecondaries(customer.Id).ToList();
 
-            var model = new StateSecondaryIndexViewModel { StateSecondaries = statesecondaries, Customer = customer };
+            var model = new StateSecondaryIndexViewModel { StateSecondaries = statesecondaries, Customer = customer, IsShowOnlyActive = SessionFacade.ShowOnlyActiveStateSecondariesInAdmin };
 
             return this.View(model);
         }

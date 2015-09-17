@@ -92,8 +92,10 @@
 
         private const string _SHOW_ACTIVE_STATUSES_IN_ADMIN = "_SHOW_ACTIVE_STATUSES_IN_ADMIN";
 
+        private const string _SHOW_ACTIVE_STATE_SECONDARIES_IN_ADMIN = "_SHOW_ACTIVE_STATE_SECONDARIES_IN_ADMIN";
 
-
+        private const string _SHOW_ACTIVE_REGISTRATION_SOURCE_CUSTOMER_IN_ADMIN = "_SHOW_ACTIVE_REGISTRATION_SOURCE_CUSTOMER_IN_ADMIN";
+        
 
         #endregion
 
@@ -711,7 +713,43 @@
                 SaveSetKeyValue(_SHOW_ACTIVE_STATUSES_IN_ADMIN, value);
             }
         }
-        
+
+        public static bool ShowOnlyActiveStateSecondariesInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_STATE_SECONDARIES_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_STATE_SECONDARIES_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_STATE_SECONDARIES_IN_ADMIN, value);
+            }
+        }
+
+
+        public static bool ShowOnlyActiveRegistrationSourceCustomerInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_REGISTRATION_SOURCE_CUSTOMER_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_REGISTRATION_SOURCE_CUSTOMER_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_REGISTRATION_SOURCE_CUSTOMER_IN_ADMIN, value);
+            }
+        } 
 
         public static bool WasTimeZoneMessageDisplayed
         {

@@ -4,7 +4,7 @@
 $(document).ready(function () {
     var statusList = new ToggableInactiveList();
     statusList.init({
-        saveStateUrl: 'Priority/SetShowOnlyActiveStatusesInAdmin',
+        saveStateUrl: 'Status/SetShowOnlyActiveStatusesInAdmin',
         $baseContainer: $('.tab-pane').first()
     });
 });
