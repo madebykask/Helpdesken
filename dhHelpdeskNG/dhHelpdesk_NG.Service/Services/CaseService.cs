@@ -991,6 +991,8 @@ namespace DH.Helpdesk.Services.Services
         {
             //get sender email adress
             var helpdeskMailFromAdress = string.Empty;
+            var containsProductAreaMail = false;
+
             if (!string.IsNullOrEmpty((cms.HelpdeskMailFromAdress)))
             {
                 helpdeskMailFromAdress = cms.HelpdeskMailFromAdress.Trim();                
@@ -1164,12 +1166,14 @@ namespace DH.Helpdesk.Services.Services
                                         fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 1);
 
                                         _emailService.SendEmail(customEmailSender1, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                        containsProductAreaMail = true;
                                     }
                                 }
                             }
                            
                         }
                     }
+                    
                 }
             }
 
@@ -1406,17 +1410,19 @@ namespace DH.Helpdesk.Services.Services
             //                }
             //            }
             //        }
+            if (!containsProductAreaMail)
+            {
+                this.caseMailer.InformNotifierIfNeeded(
+                                            caseHistoryId,
+                                            fields,
+                                            log,
+                                            dontSendMailToNotfier,
+                                            newCase,
+                                            helpdeskMailFromAdress,
+                                            files,
+                                            cms.CustomeMailFromAddress, isCreatingCase);
+            }
 
-            this.caseMailer.InformNotifierIfNeeded(
-                                        caseHistoryId,
-                                        fields,
-                                        log,
-                                        dontSendMailToNotfier,
-                                        newCase,
-                                        helpdeskMailFromAdress,
-                                        files,
-                                        cms.CustomeMailFromAddress, isCreatingCase);
-            
             this.caseMailer.InformAboutInternalLogIfNeeded(
                                         caseHistoryId,
                                         fields,
