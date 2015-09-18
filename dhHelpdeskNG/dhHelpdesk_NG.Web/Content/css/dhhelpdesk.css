@@ -3426,7 +3426,11 @@ td.disabled
 .priority.admin.content .inactive *,
 .status.admin.content .inactive *,
 .stateSecondary.admin.content .inactive *,
-.registrationSourceCustomer.admin.content .inactive *
+.registrationSourceCustomer.admin.content .inactive *,
+.region.admin.content .inactive *,
+.department.admin.content .inactive *,
+.oU.admin.content .inactive *
+
 
 {
     color: lightgray;

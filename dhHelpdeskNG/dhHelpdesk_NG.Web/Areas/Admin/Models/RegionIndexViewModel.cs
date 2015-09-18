@@ -8,5 +8,6 @@
     {
         public Customer Customer { get; set; }
         public IList<Region> Regions { get; set; }
+        public bool IsShowOnlyActive { get; set; }
     }
 }

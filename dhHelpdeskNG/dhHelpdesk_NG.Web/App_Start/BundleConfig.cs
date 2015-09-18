@@ -311,6 +311,18 @@
             "~/Areas/Admin/Content/js/Common/ToggableInactiveList.js",
             "~/Areas/Admin/Content/js/RegistrationSourceCustomer/index.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/admin/Region/index").Include(
+            "~/Areas/Admin/Content/js/Common/ToggableInactiveList.js",
+            "~/Areas/Admin/Content/js/Region/index.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/admin/Department/index").Include(
+            "~/Areas/Admin/Content/js/Common/ToggableInactiveList.js",
+            "~/Areas/Admin/Content/js/Department/index.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/admin/OU/index").Include(
+            "~/Areas/Admin/Content/js/Common/ToggableInactiveList.js",
+            "~/Areas/Admin/Content/js/OU/index.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/cases/relatedCases").Include(
                             "~/Content/js/Cases/relatedCases.logic.js"));
 

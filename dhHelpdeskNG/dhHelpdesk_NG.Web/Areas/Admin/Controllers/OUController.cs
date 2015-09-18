@@ -31,12 +31,18 @@
             this._customerService = customerService;
         }
 
+        public JsonResult SetShowOnlyActiveOUInAdmin(bool value)
+        {
+            SessionFacade.ShowOnlyActiveOUInAdmin = value;
+            return this.Json(new { result = "success" });
+        }
+
         public ActionResult Index(int customerId)
         {
             var customer = this._customerService.GetCustomer(customerId);
             var ous = this._ouService.GetOUs(customer.Id);
 
-            var model = new OUIndexViewModel { OUs = ous, Customer = customer };
+            var model = new OUIndexViewModel { OUs = ous, Customer = customer, IsShowOnlyActive = SessionFacade.ShowOnlyActiveOUInAdmin };
             return this.View(model);
         }
 

@@ -247,13 +247,15 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                 return new MvcHtmlString(string.Empty);
         }
 
-        public static MvcHtmlString OUTreeString(this HtmlHelper helper, IList<OU> ous)
+        public static MvcHtmlString OUTreeString(this HtmlHelper helper, IList<OU> ous, 
+                                                 bool isShowOnlyActive = true,
+                                                 bool isParentInactive = false)
         {
             ous = ous.OrderBy(x => x.Department.DepartmentName).ToList();
 
             if (ous != null)
             {
-                return BuildOUTreeRow(ous, 0);
+                return BuildOUTreeRow(ous, 0, isShowOnlyActive, isParentInactive);
             }
             else
                 return new MvcHtmlString(string.Empty);
@@ -1079,21 +1081,33 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
             return new MvcHtmlString(htmlOutput);
         }
 
-        private static MvcHtmlString BuildOUTreeRow(IList<OU> ous, int iteration)
+        private static MvcHtmlString BuildOUTreeRow(IList<OU> ous, int iteration, bool isShowOnlyActive = true,
+            bool isParentInactive = false)
         {
             string htmlOutput = string.Empty;
+            var oUToDisplay = isShowOnlyActive ? ous.Where(it => it.IsActive == 1) : ous;
+
 
             foreach (OU ou in ous)
             {
-                htmlOutput += "<tr>";
+                var isInactive = ou.IsActive != 1 || isParentInactive;
+
+                htmlOutput += string.Format("<tr class=\"{0}\">", isInactive ? "inactive" : string.Empty);
                 htmlOutput += "<td><a href='/admin/ou/edit/" + ou.Id + "?customerId=" + ou.Department.Customer_Id + "'>" + ou.Department.DepartmentName + "</a></td>";
                 htmlOutput += "<td><a href='/admin/ou/edit/" + ou.Id + "?customerId=" + ou.Department.Customer_Id + "' style='padding-left: " + iteration + "px'><i class='icon-resize-full icon-dh'></i>" + ou.OUId + " (" + ou.Name + ")</a></td>";
                 htmlOutput += "<td><a href='/admin/ou/edit/" + ou.Id + "?customerId=" + ou.Department.Customer_Id + "'>" + ou.IsActive.TranslateBit() + "</a></td>";
-                htmlOutput += "</tr>";
+                htmlOutput += "</tr>";              
 
                 if (ou.SubOUs != null)
-                    if (ou.SubOUs.Count > 0)
-                        htmlOutput += BuildOUTreeRow(ou.SubOUs.ToList(), iteration + 20);
+                {
+                    if (ou.SubOUs.Count() > 0 && (
+                        (isShowOnlyActive && !isInactive)
+                        || !isShowOnlyActive))
+                    {
+                        htmlOutput += (BuildOUTreeRow(ou.SubOUs.ToList(), iteration + DefaultOffset, isShowOnlyActive, isInactive));
+                    }
+                }
+
             }
 
             return new MvcHtmlString(htmlOutput);
