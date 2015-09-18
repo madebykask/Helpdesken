@@ -839,7 +839,7 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                 if (item.SubCaseTypes != null)
                 {
                     childs = isTakeOnlyActive
-                                    ? item.SubCaseTypes.Where(p => p.IsActive != 0).ToList()
+                                    ? item.SubCaseTypes.Where(p => p.IsActive != 0 && p.Selectable != 0).ToList()
                                     : item.SubCaseTypes.ToList();
                 }
 

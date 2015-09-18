@@ -53,7 +53,7 @@
                 x => x.Customer_Id == customerId && x.Parent_CaseType_Id == null);
             if (isTakeOnlyActive)
             {
-                query = query.Where(it => it.IsActive == 1);
+                query = query.Where(it => it.IsActive == 1 && it.Selectable == 1);
             }
 
             return query.OrderBy(x => x.Name).ToList();
