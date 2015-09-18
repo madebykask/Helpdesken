@@ -511,7 +511,7 @@ namespace DH.Helpdesk.Web.Controllers
                                      : this._userService.GetAvailablePerformersForWorkingGroup(
                                          SessionFacade.CurrentCustomer.Id,
                                          caseSolution.CaseWorkingGroup_Id).MapToSelectList(cs, true);
-
+            const bool TakeOnlyActive = true;
             var model = new CaseSolutionInputViewModel
             {
                 CaseSolution = caseSolution,
@@ -523,8 +523,8 @@ namespace DH.Helpdesk.Web.Controllers
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-
-                CaseTypes = this._caseTypeService.GetCaseTypes(SessionFacade.CurrentCustomer.Id),
+                
+                CaseTypes = this._caseTypeService.GetCaseTypes(SessionFacade.CurrentCustomer.Id, TakeOnlyActive),
 
                 CaseWorkingGroups = this._workingGroupService.GetAllWorkingGroupsForCustomer(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
