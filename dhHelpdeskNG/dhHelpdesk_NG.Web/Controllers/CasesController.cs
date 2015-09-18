@@ -2727,7 +2727,7 @@ namespace DH.Helpdesk.Web.Controllers
             var cu = this._customerUserService.GetCustomerSettings(customerId, userId);
             if (cu == null)
             {
-                throw new Exception("An error occurred, please refresh your page. Please, logout and login again.");
+                throw new Exception(string.Format("Customers settings is empty or not valid for customer id {0}", customerId));
             }
 
             f.CustomerId = customerId;
