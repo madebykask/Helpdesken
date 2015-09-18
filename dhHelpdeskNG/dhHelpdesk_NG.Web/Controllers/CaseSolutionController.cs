@@ -295,8 +295,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             return this.View(model);
         }
-
-        [HttpPost]
+        
         public ActionResult GetTemplate(int id)
         {
             var caseSolution = this._caseSolutionService.GetCaseSolution(id);
@@ -309,9 +308,10 @@ namespace DH.Helpdesk.Web.Controllers
             /// This strange logic I took from Edit() action
             caseSolution.NoMailToNotifier = caseSolution.NoMailToNotifier == 0 ? 1 : 0;
 
-            return this.Json(new
-                                 {
-                                     caseSolution.CaseType_Id,
+            return this.Json(
+                new
+                    {
+                        caseSolution.CaseType_Id,
                                      caseSolution.PerformerUser_Id,
                                      caseSolution.Category_Id,
                                      caseSolution.ReportedBy,
@@ -329,7 +329,8 @@ namespace DH.Helpdesk.Web.Controllers
                                      caseSolution.Text_Internal,
                                      caseSolution.FinishingCause_Id,
                                      caseSolution.RegistrationSource
-                                 });
+                                 },
+                JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -510,7 +511,7 @@ namespace DH.Helpdesk.Web.Controllers
                                      : this._userService.GetAvailablePerformersForWorkingGroup(
                                          SessionFacade.CurrentCustomer.Id,
                                          caseSolution.CaseWorkingGroup_Id).MapToSelectList(cs, true);
-
+            const bool TakeOnlyActive = true;
             var model = new CaseSolutionInputViewModel
             {
                 CaseSolution = caseSolution,
@@ -522,8 +523,8 @@ namespace DH.Helpdesk.Web.Controllers
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-
-                CaseTypes = this._caseTypeService.GetCaseTypes(SessionFacade.CurrentCustomer.Id),
+                
+                CaseTypes = this._caseTypeService.GetCaseTypes(SessionFacade.CurrentCustomer.Id, TakeOnlyActive),
 
                 CaseWorkingGroups = this._workingGroupService.GetAllWorkingGroupsForCustomer(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {

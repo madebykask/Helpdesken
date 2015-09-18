@@ -270,7 +270,7 @@ function IsValueApplicableFor(templateFieldId, val) {
 
 
 function LoadTemplate(id) {
-    $.post('/CaseSolution/GetTemplate?id=',
+    $.get('/CaseSolution/GetTemplate',
         { 'id': id },
         function (caseTemplate) {
             var showOverwriteWarning = false;
