@@ -3416,6 +3416,7 @@ namespace DH.Helpdesk.Web.Controllers
                     .Replace("[CaseId]", m.case_.Id.ToString())
                     .Replace("[UserId]", SessionFacade.CurrentUser.UserId.ToString())
                     .Replace("[Language]", l.LanguageId);
+                m.DynamicCase.FormPath = m.DynamicCase.FormPath.Replace(@"\", @"\\"); //this is because users with backslash in name will have issues with container.js
             }
 
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);

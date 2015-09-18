@@ -191,8 +191,8 @@
 
     <script type="text/javascript">
         $(function () {
-            debugger;
-            var currentpage = new dhform({ url: '@Model.DynamicCase.FormPath', modal: '@Model.DynamicCase.ViewMode' });
+            var urlToSend = "@Model.DynamicCase.FormPath".replace(/\\/g, '&#92;');
+            var currentpage = new dhform({ url: urlToSend, modal: '@Model.DynamicCase.ViewMode' });
         });
     </script>
 }
