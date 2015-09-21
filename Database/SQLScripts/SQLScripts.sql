@@ -49,6 +49,11 @@ BEGIN
 End
 Go
 
+if COL_LENGTH('tblsettings','EMailSubjectPattern') != 200
+BEGIN	
+	alter table tblsettings alter column EMailSubjectPattern nvarchar(100) not null 
+END
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.14'
 

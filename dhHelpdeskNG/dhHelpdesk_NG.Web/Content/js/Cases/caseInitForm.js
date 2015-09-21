@@ -150,8 +150,10 @@ function GetComputerUserSearchOptions() {
                     var resultList = jQuery.map(result, function (item) {
                         var aItem = {
                             id: item.Id
-                                    , num: item.UserId                                    
-                                    , name: item.SurName + ' ' + item.FirstName                                    
+                                    , num: item.UserId
+                                    //Changed in HotFix 5.3.13
+                                    //, name: item.SurName + ' ' + item.FirstName
+                                    , name: item.FirstName + ' ' + item.SurName
                                     , email: item.Email
                                     , place: item.Location
                                     , phone: item.Phone
@@ -163,7 +165,7 @@ function GetComputerUserSearchOptions() {
                                     , departmentname: item.DepartmentName
                                     , ouid: item.OU_Id
                                     , ouname: item.OUName
-                                    , name_family: item.FirstName + ' ' + item.SurName
+                                    , name_family: item.SurName + ' ' + item.SurName
                         };
                         return JSON.stringify(aItem);
                         
