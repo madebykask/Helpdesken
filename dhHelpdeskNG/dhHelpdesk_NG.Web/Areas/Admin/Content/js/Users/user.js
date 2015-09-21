@@ -48,6 +48,7 @@ $(function () {
     dhHelpdesk.admin.users.permissionType = {
         performerPermission : 'performerPermission',
         createCasePermission: 'createCasePermission',
+        createSubCasePermission: 'createSubCasePermission',
         copyCasePermission: 'copyCasePermission',
         deleteCasePermission: 'deleteCasePermission',
         deleteAttachedFilePermission: 'deleteAttachedFilePermission',
@@ -196,12 +197,14 @@ $(function () {
                     walkPermissions(function (permission) {
                         var type = permission.getType();
                         var hasAccess = type == dhHelpdesk.admin.users.permissionType.createCasePermission ||
+                                        type == dhHelpdesk.admin.users.permissionType.createSubCasePermission ||
                                         type == dhHelpdesk.admin.users.permissionType.closeCasePermission ||
                                         type == dhHelpdesk.admin.users.permissionType.restrictedCasePermission;
                         permission.setAccess(hasAccess);
 
                         if (setPermissions || !permission.getIsHasAccess()) {
                             var hasPermission = type == dhHelpdesk.admin.users.permissionType.createCasePermission ||
+                                        type == dhHelpdesk.admin.users.permissionType.createSubCasePermission ||
                                         type == dhHelpdesk.admin.users.permissionType.closeCasePermission ||
                                         type == dhHelpdesk.admin.users.permissionType.restrictedCasePermission;
                             permission.setHasPermission(hasPermission);
@@ -218,6 +221,7 @@ $(function () {
                         if (setPermissions || !permission.getIsHasAccess()) {
                             var isChecked = type == permissions.performerPermission
                            || type == permissions.createCasePermission
+                           || type == permissions.createSubCasePermission
                            || type == permissions.copyCasePermission
                            || type == permissions.activateCasePermission
                            || type == permissions.closeCasePermission
@@ -469,6 +473,7 @@ $(function () {
         var casePermissions = [];
         casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="performerPermission"]'), type: dhHelpdesk.admin.users.permissionType.performerPermission }));
         casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="createCasePermission"]'), type: dhHelpdesk.admin.users.permissionType.createCasePermission }));
+        casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="createSubCasePermission"]'), type: dhHelpdesk.admin.users.permissionType.createSubCasePermission }));
         casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="copyCasePermission"]'), type: dhHelpdesk.admin.users.permissionType.copyCasePermission }));
         casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="deleteCasePermission"]'), type: dhHelpdesk.admin.users.permissionType.deleteCasePermission }));
         casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="deleteAttachedFilePermission"]'), type: dhHelpdesk.admin.users.permissionType.deleteAttachedFilePermission }));

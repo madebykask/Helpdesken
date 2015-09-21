@@ -28,5 +28,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.CausingPart
         /// Gets or sets the causing parts.
         /// </summary>
         public IEnumerable<CausingPartOverview> CausingParts { get; set; }
+
+        public bool IsShowOnlyActive { get; set; }
     }
 }

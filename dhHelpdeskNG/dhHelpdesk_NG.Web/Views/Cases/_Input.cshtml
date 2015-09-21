@@ -9,6 +9,9 @@
 <script type="text/javascript">
     window.parameters = {
         currentCaseId: '@Model.case_.Id',        
+        customerId: '@Model.case_.Customer_Id',
+        parentCaseId: '@(Model.ParentCaseInfo != null? Model.ParentCaseInfo.ParentId.ToString() : "null")',
+        isAnyNotClosedChild: '@Model.IsAnyNotClosedChild().ToString()',
         productAreaErrorMessage:'@Html.Raw(Translation.Get("Ärendet kunde inte sparas då den lägsta möjliga nivån på fält") + " [" +
                                            Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) + "] " +
                                            Translation.Get("inte har valts. Vänligen kontrollera ärendet."))',
@@ -17,9 +20,31 @@
         extendValue: '@Model.CaseLock.ExtendValue',
         caseLockChecker: '@Url.Content("~/Cases/IsCaseAvailable/")',
         caseLockExtender: '@Url.Content("~/Cases/ReExtendCaseLock/")',
+        caseActiveDataChecker: '@Url.Content("~/Cases/CheckCaseForActiveData/")',
+        preventToSaveCaseWithInactiveValue: '@Model.Setting.PreventToSaveCaseWithInactiveValue',
         saveLockedCaseMessage: '@Translation.Get("Ärendet kan inte uppdateras då det är upplåst. Stäng ärendet och försök igen.")',
         deleteLockedCaseMessage: '@Translation.Get("Ärendet kan inte uppdateras då det är upplåst. Stäng ärendet och försök igen.")',
-        moveLockedCaseMessage: '@Translation.Get("Ärendet kan inte uppdateras då det är upplåst. Stäng ärendet och försök igen.")',
+        moveLockedCaseMessage: '@Translation.Get("Ärendet kan inte uppdateras då det är upplåst. Stäng ärendet och försök igen.")',        
+        lostChangesConfirmation: '@Html.Raw(Translation.Get("Dina ändringar har inte sparats. Fortsätt?"))',
+        caseFieldNames:{
+            CustomerId: "case__Customer_Id",
+            RegionId: "case__Region_Id",
+            DepartmentId: "case__Department_Id",
+            OUId: "case__Ou_Id",
+            SourceId: "CustomerRegistrationSourceId",
+            CaseTypeId: "case__CaseType_Id",
+            ProductAreaId: "case__ProductArea_Id",
+            CategoryId: "case__Category_Id",
+            SupplierId: "case__Supplier_Id",
+            WorkingGroupId: "case__WorkingGroup_Id",
+            ResponsibleId: "ResponsibleUser_Id",
+            AdministratorId: "Performer_Id",
+            PriorityId: "case__Priority_Id",
+            StatusId: "case__Status_Id",
+            SubStatusId: "case__StateSecondary_Id",
+            CausingPartId: "case__CausingPartId",
+            ClosingReasonId: "CaseLog_FinishingType"
+        },
         casesScopeInitParameters: {
             requiredFieldsMessage: '@Translation.Get("Ärendet kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ärendet.")',
             getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax")',
@@ -63,10 +88,6 @@
         <div class="container">
             <ul class="nav nav-tabs" id="myTab">
                 <li class="active">
-                    @*<a id="case-tab" href="#case" class="case">@Translation.Get("Ärende")
-                        @if (Model.case_.Id != 0)
-                        {@Model.case_.CaseNumber }
-                    </a>*@
                     @if (Model.CaseTemplateName != null)
                     {
                         <a id="case-tab" href="#case" class="case">@Model.CaseTemplateName</a>
@@ -80,8 +101,13 @@
                             }                            
                         </a>
                     }
-
                 </li>
+                @if (Model.IsItParentCase())
+                {
+                    <li><a href="#childcases-tab" title="@string.Format("{0}/{1} {2}", Model.ClosedChildCasesCount, Model.ChildCaseViewModel.ChildCaseList.Length, Translation.GetCoreTextTranslation("avslutade").ToLower())">
+                            @string.Format("{0} ({1}/{2} {3})", Translation.GetCoreTextTranslation("Underärenden"), Model.ClosedChildCasesCount, Model.ChildCaseViewModel.ChildCaseList.Length, Translation.GetCoreTextTranslation("avslutade").ToLower())
+                        </a></li>
+                }
 
                 @if (Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
                 {
@@ -118,7 +144,7 @@
             </ul>
             <div class="tab-content">
                 <div class="tab-pane tab-pane-border active" id="case">
-                    <div class="container">
+                    <div class="container"> 
                         @Html.HiddenFor(model => model.case_.Id, new { data_field = "caseId" })
                         @Html.HiddenFor(model => model.case_.CaseGUID)
                         @Html.HiddenFor(model => model.case_.Customer_Id, new { data_field = "customerId" })
@@ -156,8 +182,20 @@
                         @Html.Hidden("Today", DateTime.Now.ToShortDateString())
                         @Html.Hidden("CurLanguageId", SessionFacade.CurrentLanguageId)
                         @Html.Hidden("SelectedValueCarrier", "")
-                        @Html.HiddenFor(model => Model.CaseLock.LockGUID)                        
+                        @Html.HiddenFor(model => Model.CaseLock.LockGUID)
                         @*<input type="button" id="sla_test" value="SLA Test" onclick="CalcSLA();" />*@
+                        @if (Model.IsItChildCase())
+                        {
+                            <input type="hidden" name="ParentId" value="@Model.ParentCaseInfo.ParentId" />
+                            <div class="alert alert-info">
+                                @Translation.Get("Detta är ett underärende till ärende")&nbsp;<a href="@Url.Action("Edit", new { id = Model.ParentCaseInfo.ParentId })"><strong>@Model.ParentCaseInfo.CaseNumber</strong></a>. 
+                                @if (!string.IsNullOrEmpty(Model.ParentCaseInfo.Administrator))
+                                {
+                                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Model.case_.Customer_Id)
+                                    <strong>@Model.ParentCaseInfo.Administrator</strong>
+                                }
+                            </div>
+                        }
                         @if (Model.customerUserSetting.UserInfoPermission == 1)
                         {                                                        
                             <div style="@Model.caseFieldSettings.displayUserInfoHtml()"  class="notifier-block hideshow">
@@ -1549,6 +1587,10 @@
                 {
                     <div id="dh-form-area" class="tab-pane tab-pane-border">
                     </div>
+                }
+                @if (Model.IsItParentCase())
+                {
+                    @Html.Partial("_ChildCases", Model.ChildCaseViewModel);
                 }
             </div>
         </div>

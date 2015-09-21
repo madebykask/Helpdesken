@@ -12,6 +12,8 @@ namespace DH.Helpdesk.Dal.Repositories.MailTemplates
     {
         IEnumerable<MailTemplateList> GetMailTemplates(int customerId, int languageId);
 
+        CustomMailTemplate GetCustomMailTemplate(int mailTemplateId);
+
         List<CustomMailTemplate> GetCustomMailTemplates(int customerId);
 
         int? GetTemplateId(ChangeTemplate template, int customerId);

@@ -178,9 +178,16 @@
             IQueryable<UnionItemOverview> query = null;
             var separator = Guid.NewGuid().ToString();
 
+            var departmentsResult = new List<ItemOverview>();
+            var caseTypesOverviewsResult = new List<ItemOverview>();
+            var workingGroupsResult = new List<ItemOverview>();
+            var administratorsResult = new List<ItemOverview>();
+
             if (departments != null)
             {
-                query = departments.Select(d => new UnionItemOverview { Id = d.Id, Name = d.DepartmentName, Type = "Departments" });
+                departmentsResult = departments.OrderBy(d=> d.DepartmentName).ToList()
+                                               .Select(d => new ItemOverview(d.DepartmentName, d.Id.ToString(CultureInfo.InvariantCulture)))
+                                               .ToList();
             }
 
             if (caseTypes != null)
@@ -201,18 +208,26 @@
                 }
 
                 query = query == null ? union : query.Union(union);
+                caseTypesOverviewsResult = query.OrderBy(c => c.Name).ToList()
+                                                .Select(c => new ItemOverview(c.Name, c.Id.ToString(CultureInfo.InvariantCulture)))
+                                                .ToList();
             }
 
             if (workingGroups != null)
             {
-                var union = workingGroups.Select(g => new UnionItemOverview { Id = g.Id, Name = g.WorkingGroupName, Type = "WorkingGroups" });
-                query = query == null ? union : query.Union(union);
+                var wgs = workingGroups.Select(g => new UnionItemOverview { Id = g.Id, Name = g.WorkingGroupName, Type = "WorkingGroups" });                
+                workingGroupsResult = wgs.OrderBy(c => c.Name).ToList()
+                                         .Select(w => new ItemOverview(w.Name, w.Id.ToString(CultureInfo.InvariantCulture)))
+                                         .ToList();
             }
 
             if (administrators != null)
             {
                 var union = administrators.Select(a => new UnionItemOverview { Id = a.Id, Name = a.FirstName + " " + a.SurName, Type = "Administrators" });
                 query = query == null ? union : query.Union(union);
+                administratorsResult = query.OrderBy(c => c.Name).ToList()
+                                            .Select(a => new ItemOverview(a.Name, a.Id.ToString(CultureInfo.InvariantCulture)))
+                                            .ToList();
             }
 
             if (productAreas != null)
@@ -226,7 +241,7 @@
                                                     .OrderBy(a => a.Name)
                                                     .ToList();
 
-                productAreasResult = productAreaLineRelations ? productAreaEntities.BuildLineRelations() : productAreaEntities.BuildRelations();
+                productAreasResult = productAreaLineRelations ? productAreaEntities.BuildLineRelations() : productAreaEntities.BuildRelations();                
             }
 
             if (fields != null)
@@ -244,20 +259,10 @@
                 var leadTimeId = Convert.ToInt32(CalculationFields.LeadTime).ToString();
                 fieldsResult.Add(new ItemOverview(CaseInfoFields.LeadTime, leadTimeId));
             }
-
-            var overviews = query != null ? query
-                            .OrderBy(o => o.Type)
-                            .ThenBy(o => o.Name)
-                            .ToList() : new List<UnionItemOverview>();
-
-            var departmentsResult = overviews.Where(o => o.Type == "Departments").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToList();
-            var caseTypesOverviewsResult = overviews.Where(o => o.Type == "CaseTypes").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToList();
-            var workingGroupsResult = overviews.Where(o => o.Type == "WorkingGroups").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToList();
-            var administratorsResult = overviews.Where(o => o.Type == "Administrators").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToList();
-            
+  
             if (caseTypeRootsOnly)
             {
-                caseTypesResult = overviews.Where(o => o.Type == "CaseTypes").Select(
+                caseTypesResult = caseTypesOverviewsResult.Select(
                 o =>
                     {
                         var values = o.Name.Split(new[] { separator }, StringSplitOptions.RemoveEmptyEntries);
@@ -269,12 +274,12 @@
                             parentId = parentIdVal;
                         }
 
-                        return new CaseTypeItem(o.Id, parentId, name);
+                        return new CaseTypeItem(int.Parse(o.Value), parentId, name);
                     }).ToList().BuildRelations();     
             }
             else
             {
-                caseTypesOverviewsResult = overviews.Where(o => o.Type == "CaseTypes").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToList();
+                caseTypesOverviewsResult = caseTypesOverviewsResult.Select(o => new ItemOverview(o.Name, o.Value)).ToList();
             }                  
 
             return new ReportOptions(

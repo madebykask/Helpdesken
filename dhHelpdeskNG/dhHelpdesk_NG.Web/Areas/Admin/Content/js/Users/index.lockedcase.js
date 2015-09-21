@@ -14,12 +14,11 @@ $(function () {
     var lockedCasePartialName = window.partialparams.lockedCasePartialName;
     var $caselockContainer = $('.caselockinfo.container');
 
-    $(".btn.releasecase").click(function () {
+    function unlockHandler() {
         var caseId = $(this).attr('selectedcaseid');
         var customerId = $(customerFilter).val();
         var caseNumber = $(caseNumberFilter).val();
         var searchText = $(textFilter).val();
-
         if (caseId != '') {            
             $.get(unLockCaseUrl, {
                 caseId: caseId,
@@ -31,7 +30,9 @@ $(function () {
                 $(lockedCasePartialName).html(_LockedCases);
             });
         }
-    });
+    }
+
+    $caselockContainer.on('click', '.btn.releasecase', unlockHandler);
 
     $(caseNumberFilter).keydown(function (e) {
         if (e.keyCode == 13) {

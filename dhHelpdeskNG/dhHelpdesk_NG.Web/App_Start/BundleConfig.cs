@@ -77,7 +77,7 @@
 
             bundles.Add(new ScriptBundle("~/bundles/dhhelpdesk").Include(
                             "~/Content/js/dhHelpdesk.js",
-                            "~/Content/js/clickmultimenu_dropdown.js"));
+                            "~/Content/js/snippets/clickmultimenu_dropdown.js"));
             
             bundles.Add(new ScriptBundle("~/bundles/common/login").Include(
                             "~/Scripts/jquery-1.8.3.min.js",
@@ -144,21 +144,28 @@
                 "~/Content/js/Cases/caseInitForm.js"));
             
             bundles.Add(new ScriptBundle("~/bundles/cases/edit").Include(
-                "~/Content/js/Cases/caseInitForm.js"));
+                "~/Content/js/Cases/caseInitForm.js",
+                "~/Content/js/snippets/tabSwitchByHashTag.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/Cases/_CaseLogInput").Include(
                 "~/Content/js/Cases/_caseLogInput.js"));
 
             bundles.Add(
                 new ScriptBundle("~/bundles/cases/_input").Include(
+                    "~/Content/js/Cases/components/ConfirmationDialog.js",
                     "~/Content/js/Cases/models/Case.js",
                     "~/Content/js/Cases/components/Utils.js",
                     "~/Content/js/Cases/components/EditPage.js",
                     "~/Content/js/Cases/_input.js",
-                    "~/Content/js/dropdown_fix.js",
+                    "~/Content/js/snippets/dropdown_fix.js",
                     "~/Content/js/Cases/case.templates.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/cases/_caseLogFiles").Include("~/Content/js/Cases/_caseLogFiles.js"));
+            bundles.Add(
+                new ScriptBundle("~/bundles/Cases/_ChildCases").Include(
+                    "~/Content/js/Cases/_childCases.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/cases/editLog").Include("~/Content/js/Cases/editLog.logic.js"));
 
             #endregion
 
@@ -275,6 +282,46 @@
             bundles.Add(new ScriptBundle("~/bundles/admin/WorkingGroup/index").Include(
               "~/Areas/Admin/Content/js/Common/ToggableInactiveList.js",
               "~/Areas/Admin/Content/js/WorkingGroup/index.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/admin/CausingPart/index").Include(
+             "~/Areas/Admin/Content/js/Common/ToggableInactiveList.js",
+             "~/Areas/Admin/Content/js/CausingPart/index.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/admin/Category/index").Include(
+            "~/Areas/Admin/Content/js/Common/ToggableInactiveList.js",
+            "~/Areas/Admin/Content/js/Category/index.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/admin/Supplier/index").Include(
+            "~/Areas/Admin/Content/js/Common/ToggableInactiveList.js",
+            "~/Areas/Admin/Content/js/Supplier/index.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/admin/Priority/index").Include(
+            "~/Areas/Admin/Content/js/Common/ToggableInactiveList.js",
+            "~/Areas/Admin/Content/js/Priority/index.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/admin/Status/index").Include(
+            "~/Areas/Admin/Content/js/Common/ToggableInactiveList.js",
+            "~/Areas/Admin/Content/js/Status/index.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/admin/StateSecondary/index").Include(
+            "~/Areas/Admin/Content/js/Common/ToggableInactiveList.js",
+            "~/Areas/Admin/Content/js/StateSecondary/index.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/admin/RegistrationSourceCustomer/index").Include(
+            "~/Areas/Admin/Content/js/Common/ToggableInactiveList.js",
+            "~/Areas/Admin/Content/js/RegistrationSourceCustomer/index.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/admin/Region/index").Include(
+            "~/Areas/Admin/Content/js/Common/ToggableInactiveList.js",
+            "~/Areas/Admin/Content/js/Region/index.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/admin/Department/index").Include(
+            "~/Areas/Admin/Content/js/Common/ToggableInactiveList.js",
+            "~/Areas/Admin/Content/js/Department/index.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/admin/OU/index").Include(
+            "~/Areas/Admin/Content/js/Common/ToggableInactiveList.js",
+            "~/Areas/Admin/Content/js/OU/index.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/cases/relatedCases").Include(
                             "~/Content/js/Cases/relatedCases.logic.js"));

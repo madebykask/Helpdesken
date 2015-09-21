@@ -183,7 +183,7 @@
                                         </td>
                                     </tr>
                                  }
-                               @* @if (Model.CaseFieldSettings.Count() != 0)
+                               @if (Model.CaseFieldSettings.Count() != 0)
                                 {
                                     <tr>
                                         <td>
@@ -193,15 +193,13 @@
                                             <input type="checkbox" name="Casesolution.NoMailToNotifier" @(Model.CaseSolution.NoMailToNotifier == 1 ? "checked=checked" : "") value ="1" />
                                             <input type="hidden" name="Casesolution.NoMailToNotifier" value="0" />
                                             &nbsp;@Translation.Get("Skicka mail till anmälaren", Enums.TranslationSource.TextTranslation)
-
-
                                         </td>
                                         <td class="span9">
                                             @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.Email, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.Persons_EMail)
                                         </td>
 
                                     </tr>
-                                }     *@
+                                }
                               
                                  @if (Model.CaseFieldSettings.Count() != 0)
                                  {

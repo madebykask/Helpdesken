@@ -82,6 +82,26 @@
 
         private const string _SHOW_ACTIVE_WORKING_GROUPS_IN_ADMIN = "SHOW_ACTIVE_WORKING_GROUPS_IN_ADMIN";
 
+        private const string _SHOW_ACTIVE_CAUSING_PARTS_IN_ADMIN = "_SHOW_ACTIVE_CAUSING_PARTS_IN_ADMIN";
+
+        private const string _SHOW_ACTIVE_CATEGORIES_IN_ADMIN = "_SHOW_ACTIVE_CATEGORIES_IN_ADMIN";
+
+        private const string _SHOW_ACTIVE_SUPPLIERS_IN_ADMIN = "_SHOW_ACTIVE_SUPPLIERS_IN_ADMIN";
+
+        private const string _SHOW_ACTIVE_PRIORITIES_IN_ADMIN = "_SHOW_ACTIVE_PRIORITIES_IN_ADMIN";
+
+        private const string _SHOW_ACTIVE_STATUSES_IN_ADMIN = "_SHOW_ACTIVE_STATUSES_IN_ADMIN";
+
+        private const string _SHOW_ACTIVE_STATE_SECONDARIES_IN_ADMIN = "_SHOW_ACTIVE_STATE_SECONDARIES_IN_ADMIN";
+
+        private const string _SHOW_ACTIVE_REGISTRATION_SOURCE_CUSTOMER_IN_ADMIN = "_SHOW_ACTIVE_REGISTRATION_SOURCE_CUSTOMER_IN_ADMIN";
+
+        private const string _SHOW_ACTIVE_REGION_IN_ADMIN = "_SHOW_ACTIVE_REGION_IN_ADMIN";
+
+        private const string _SHOW_ACTIVE_DEPARTMENT_IN_ADMIN = "_SHOW_ACTIVE_DEPARTMENT_IN_ADMIN";
+
+        private const string _SHOW_ACTIVE_OU_IN_ADMIN = "_SHOW_ACTIVE_OU_IN_ADMIN";
+
         #endregion
 
         #region Public Properties
@@ -607,6 +627,190 @@
                 SaveSetKeyValue(_SHOW_ACTIVE_WORKING_GROUPS_IN_ADMIN, value);
             }
         }
+
+        public static bool ShowOnlyActiveCausingPartsInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_CAUSING_PARTS_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_CAUSING_PARTS_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_CAUSING_PARTS_IN_ADMIN, value);
+            }
+        }
+
+        public static bool ShowOnlyActiveCategoriesInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_CATEGORIES_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_CATEGORIES_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_CATEGORIES_IN_ADMIN, value);
+            }
+        }
+
+        public static bool ShowOnlyActiveSuppliersInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_SUPPLIERS_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_SUPPLIERS_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_SUPPLIERS_IN_ADMIN, value);
+            }
+        }
+
+
+        public static bool ShowOnlyActivePrioritiesInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_PRIORITIES_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_PRIORITIES_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_PRIORITIES_IN_ADMIN, value);
+            }
+        }
+
+        public static bool ShowOnlyActiveStatusesInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_STATUSES_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_STATUSES_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_STATUSES_IN_ADMIN, value);
+            }
+        }
+
+        public static bool ShowOnlyActiveStateSecondariesInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_STATE_SECONDARIES_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_STATE_SECONDARIES_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_STATE_SECONDARIES_IN_ADMIN, value);
+            }
+        }
+
+
+        public static bool ShowOnlyActiveRegistrationSourceCustomerInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_REGISTRATION_SOURCE_CUSTOMER_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_REGISTRATION_SOURCE_CUSTOMER_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_REGISTRATION_SOURCE_CUSTOMER_IN_ADMIN, value);
+            }
+        }
+
+
+        public static bool ShowOnlyActiveRegionInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_REGION_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_REGION_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_REGION_IN_ADMIN, value);
+            }
+        }
+
+        public static bool ShowOnlyActiveDepartmentInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_DEPARTMENT_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_DEPARTMENT_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_DEPARTMENT_IN_ADMIN, value);
+            }
+        }
+
+        public static bool ShowOnlyActiveOUInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_OU_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_OU_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_OU_IN_ADMIN, value);
+            }
+        } 
+
 
         public static bool WasTimeZoneMessageDisplayed
         {

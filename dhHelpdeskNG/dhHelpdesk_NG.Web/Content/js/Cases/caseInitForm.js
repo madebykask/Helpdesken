@@ -653,7 +653,10 @@ function CaseInitForm() {
         });
     });
 
-    LogInitForm();
+    if (window.LogInitForm != null) {
+        LogInitForm();
+    }
+
     bindDeleteCaseFileBehaviorToDeleteButtons();
     SetFocusToReportedByOnCase();
 }

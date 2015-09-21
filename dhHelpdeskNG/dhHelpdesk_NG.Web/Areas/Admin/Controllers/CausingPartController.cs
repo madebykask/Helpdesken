@@ -14,6 +14,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
     using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models.CausingPart;
+    using DH.Helpdesk.Web.Infrastructure;
 
     /// <summary>
     /// The causing part controller.
@@ -48,6 +49,13 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             this.causingPartService = causingPartService;
         }
 
+
+        public JsonResult SetShowOnlyActiveCausingPartsInAdmin(bool value)
+        {
+            SessionFacade.ShowOnlyActiveCausingPartsInAdmin = value;
+            return this.Json(new { result = "success" });
+        }
+
         /// <summary>
         /// The index.
         /// </summary>
@@ -57,12 +65,14 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         /// <returns>
         /// The <see cref="ViewResult"/>.
         /// </returns>
-        [HttpGet]
+        //[HttpGet]
         public ViewResult Index(int customerId)
         {
             var model = new CausingPartsViewModel();
             model.Customer = this.customerService.GetCustomer(customerId);
             model.CausingParts = this.causingPartService.GetCausingParts(customerId);
+            model.IsShowOnlyActive = SessionFacade.ShowOnlyActiveCausingPartsInAdmin;
+
 
             return this.View(model);
         }

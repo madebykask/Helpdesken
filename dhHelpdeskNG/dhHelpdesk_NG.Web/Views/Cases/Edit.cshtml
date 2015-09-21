@@ -1,5 +1,6 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel
 @using System.Web.Optimization
+@using DH.Helpdesk.Web
 
 @{ var t = new ViewDataDictionary();
    t.Add("isJS", "true");
@@ -81,6 +82,10 @@
             }
 
             var emptyFn = function() {};
+
+            $("#case-action-save").click(function (e) {
+                e.preventDefault();                
+            });
 
             $("#case-action-save-and-close").click(function (e) {
                 e.preventDefault();
@@ -182,12 +187,12 @@
 
 @if (Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
 {
-    @System.Web.Optimization.Scripts.Render(DH.Helpdesk.Web.BundleConfig.ScriptNames.DynamicCase)
+    @System.Web.Optimization.Scripts.Render(BundleConfig.ScriptNames.DynamicCase)
 
     <script type="text/javascript">
         $(function () {
-            debugger;
-            var currentpage = new dhform({ url: '@Model.DynamicCase.FormPath', modal: '@Model.DynamicCase.ViewMode' });
+            var urlToSend = "@Model.DynamicCase.FormPath".replace(/\\/g, '&#92;');
+            var currentpage = new dhform({ url: urlToSend, modal: '@Model.DynamicCase.ViewMode' });
         });
     </script>
 }
@@ -204,8 +209,8 @@
             <ul class="secnav">
                 @if (Model.EditMode == Enums.AccessMode.FullAccess)
                 {
-                    <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), null, null, null, new { @class = "btn save" })</li>
-                    <li>@Html.ActionLink(Translation.Get("Spara och stäng", Enums.TranslationSource.TextTranslation), null, null, new { @class = "btn save-close", id = "case-action-save-and-close" })</li>
+                    <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), null, null, null, new { @class = "btn save", id = "case-action-save" })</li>
+                    <li>@Html.ActionLink(Translation.Get("Spara och stäng", Enums.TranslationSource.TextTranslation), null, null, new { @class = "btn save-close", id = "case-action-save-and-close" })</li>                    
                     <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation), null, null, new { @class = "btn save-new", id = "case-action-save-and-new" })</li>
                     <li class="secspace"></li>                    
                     if (SessionFacade.CurrentUser.DeleteCasePermission == 1)
@@ -242,7 +247,12 @@
                                         @Translation.Get("Markera ärendet som oläst", Enums.TranslationSource.TextTranslation)
                                     </a>
                                 </li>
-                                @if (SessionFacade.CurrentUser.ActivateCasePermission == 1 && Model.case_.FinishingDate.HasValue)
+                                @if (!Model.IsItChildCase() && SessionFacade.CurrentUser.CreateSubCasePermission == 1)
+                                {
+                                    <li>@Html.ActionLink(Translation.Get("Skapa underärende"), "NewChildCase", new { parentCaseId = Model.case_.Id})</li>
+                                }
+                                @if (SessionFacade.CurrentUser.ActivateCasePermission == 1 && Model.case_.FinishingDate.HasValue
+                                    && (!Model.IsItChildCase() || (Model.IsItChildCase() && !Model.ParentCaseInfo.IsCaseClosed)))
                                 {   
                                     <li>@Html.ActionLink(Translation.Get("Aktivera"), "Activate", "Cases", new { id = Model.case_.Id, backUrl = Model.BackUrl }, new { @class="btn" })</li>                             
                                 }
@@ -323,7 +333,8 @@
                 else
                 {
 
-                    if (SessionFacade.CurrentUser.ActivateCasePermission == 1 && Model.case_.FinishingDate.HasValue)
+                    if (SessionFacade.CurrentUser.ActivateCasePermission == 1 && Model.case_.FinishingDate.HasValue
+                        && (!Model.IsItChildCase() || (Model.IsItChildCase() && !Model.ParentCaseInfo.IsCaseClosed)))
                     {                                
                         <li>@Html.ActionLink(Translation.Get("Aktivera"), "Activate", "Cases", new { id = Model.case_.Id, backUrl = Model.BackUrl }, new { @class="btn" })</li>                             
                     }

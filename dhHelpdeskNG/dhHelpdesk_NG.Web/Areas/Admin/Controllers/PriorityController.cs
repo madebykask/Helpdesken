@@ -41,12 +41,19 @@
             this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Cases);
         }
 
+        public JsonResult SetShowOnlyActivePrioritiesInAdmin(bool value)
+        {
+            SessionFacade.ShowOnlyActivePrioritiesInAdmin = value;
+            return this.Json(new { result = "success" });
+        }
+
+
         public ActionResult Index(int customerId)
         {
             var customer = this._customerService.GetCustomer(customerId);
             var priorities = this._priorityService.GetPriorities(customer.Id).ToList();
 
-            var model = new PriorityIndexViewModel { Priorities = priorities, Customer = customer };
+            var model = new PriorityIndexViewModel { Priorities = priorities, Customer = customer, IsShowOnlyActive = SessionFacade.ShowOnlyActivePrioritiesInAdmin };
 
             return this.View(model);
         }

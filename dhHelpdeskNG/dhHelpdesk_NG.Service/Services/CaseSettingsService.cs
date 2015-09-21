@@ -8,6 +8,7 @@
     using DH.Helpdesk.BusinessData.Models.Grid;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
+    using DH.Helpdesk.Dal.Repositories.Cases;
     using DH.Helpdesk.Domain;
 
     using LinqLib.Operators;

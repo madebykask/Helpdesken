@@ -1,22 +1,17 @@
-﻿using DH.Helpdesk.BusinessData.Models.Case.Output;
-
-namespace DH.Helpdesk.Dal.Repositories
+﻿namespace DH.Helpdesk.Dal.Repositories
 {
+    using System;
     using System.Collections.Generic;
+    using System.Configuration;
     using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Case;
-    using DH.Helpdesk.Common.Tools;
-    using DH.Helpdesk.Dal.Enums;
+    using DH.Helpdesk.BusinessData.Models.Case.Output;
+    using DH.Helpdesk.BusinessData.Models.User.Input;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Infrastructure.Context;
+    using DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel;
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.BusinessData.Models.User.Input;
-    using System;
-    using System.Configuration;
-
-    #region CASE
 
     public interface ICaseRepository : IRepository<Case>
     {
@@ -46,7 +41,7 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </returns>
         CaseOverview GetCaseOverview(int caseId);
 
-        MyCase[] GetMyCases(int userId, int? count = null);                
+        MyCase[] GetMyCases(int userId, int? count = null);
     }
 
     public class CaseRepository : RepositoryBase<Case>, ICaseRepository
@@ -272,68 +267,7 @@ namespace DH.Helpdesk.Dal.Repositories
                 .Where(c => c.Id == caseId)
                 .ToList();
 
-            return entities.Select(c => new CaseOverview
-            {
-                CustomerId = c.Customer_Id,
-                Deleted = c.Deleted,
-                FinishingDate = c.FinishingDate,
-                StatusId = c.Status_Id,
-                UserId = c.User_Id,
-                CaseNumber = c.CaseNumber,
-                Department = c.Department,
-                PersonsCellphone = c.PersonsCellphone,
-                PersonsName = c.PersonsName,
-                PersonsPhone = c.PersonsPhone,
-                Region = c.Region,
-                RegionId = c.Region_Id,
-                RegistrationDate = c.RegTime,
-                ReportedBy = c.ReportedBy,
-                OuId = c.OU_Id,
-                Place = c.Place,
-                UserCode = c.UserCode,
-                PersonsEmail = c.PersonsEmail,
-                InventoryNumber = c.InventoryNumber,
-                InventoryLocation = c.InventoryLocation,
-                InventoryType = c.InventoryType,
-                IpAddress = c.IpAddress,
-                CaseTypeId = c.CaseType_Id,
-                SystemId = c.System_Id,
-                Urgency = c.Urgency,
-                ImpactId = c.Impact_Id,
-                SupplierId = c.Supplier_Id,
-                InvoiceNumber = c.InvoiceNumber,
-                ReferenceNumber = c.ReferenceNumber,
-                Caption = c.Caption,
-                Description = c.Description,
-                CategoryId = c.Category_Id,
-                Miscellaneous = c.Miscellaneous,
-                ProductAreaId = c.ProductArea_Id,
-                ContactBeforeAction = c.ContactBeforeAction,
-                Sms = c.SMS,
-                AgreedDate = c.AgreedDate,
-                Available = c.Available,
-                Cost = c.Cost,
-                OtherCost = c.OtherCost,
-                Currency = c.Currency,
-                WorkingGroupId = c.WorkingGroup_Id,
-                WorkingGroup = c.Workinggroup,
-                CaseResponsibleUserId = c.CaseResponsibleUser_Id,
-                PerformerUserId = c.Performer_User_Id,
-                Priority = c.Priority,
-                StateSecondaryId = c.StateSecondary_Id,
-                StateSecondary = c.StateSecondary,
-                ProjectId = c.Project_Id,
-                ProblemId = c.Problem_Id,
-                ChangeId = c.Change_Id,
-                WatchDate = c.WatchDate,
-                Verified = c.Verified,
-                VerifiedDescription = c.VerifiedDescription,
-                SolutionRate = c.SolutionRate,
-                CaseHistories = c.CaseHistories,
-                FinishingDescription = c.FinishingDescription,
-                CausingTypeId = c.CausingPartId
-            })
-            .FirstOrDefault();
+            return entities.Select(CaseToCaseOverviewMapper.Map).FirstOrDefault();
         }
 
         public MyCase[] GetMyCases(int userId, int? count = null)
@@ -353,22 +287,7 @@ namespace DH.Helpdesk.Dal.Repositories
                                Description = cs.Description,
                                CustomerName = cus.Name
                             };
-
-            //var entities = this.DataContext.Cases
-            //               .Where(c => c.Performer_User_Id == userId && c.FinishingDate == null)
-            //               .OrderByDescending(c => c.ChangeTime)
-            //               .Select(c => new
-            //                {
-            //                   Id = c.Id,
-            //                   CaseNumber = c.CaseNumber, 
-            //                   RegistrationDate = c.RegTime,
-            //                   ChangedDate = c.ChangeTime, 
-            //                   Subject = c.Caption,
-            //                   InitiatorName = c.PersonsName,
-            //                   Description = c.Description,
-            //                   CustomerName = "CustomerName" 
-            //                });
-
+        
             if (count.HasValue)
             {
                 entities = entities.Take(count.Value);
@@ -387,7 +306,7 @@ namespace DH.Helpdesk.Dal.Repositories
                                 c.CustomerName))
                                 .ToArray();
         }
-        
+
         public void MarkCaseAsRead(int id)
         {
             SetCaseUnreadFlag(id);
@@ -401,238 +320,4 @@ namespace DH.Helpdesk.Dal.Repositories
             this.Commit();
         }
     }
-
-    #endregion
-
-    #region CASEFILE
-
-    public interface ICaseFileRepository : IRepository<CaseFile>
-    {
-        List<string> FindFileNamesByCaseId(int caseid);
-        List<CaseFile> GetCaseFilesByCaseId(int caseid);
-        byte[] GetFileContentByIdAndFileName(int caseId, string basePath, string fileName);
-        bool FileExists(int caseId, string fileName);
-        void DeleteByCaseIdAndFileName(int caseId, string basePath, string fileName);
-        int GetCaseNumberForUploadedFile(int caseId);        
-        CaseFileModel[] GetCaseFiles(int caseId);
-        void DeleteFileViewLogs(int caseId);
-    }
-
-    public class CaseFileRepository : RepositoryBase<CaseFile>, ICaseFileRepository
-    {
-        private readonly IFilesStorage _filesStorage;
-
-        public CaseFileRepository(IDatabaseFactory databaseFactory, IFilesStorage fileStorage)
-            : base(databaseFactory)
-        {
-            this._filesStorage = fileStorage;
-        }
-
-        public byte[] GetFileContentByIdAndFileName(int caseId, string basePath, string fileName)
-        {
-            int id = GetCaseNumberForUploadedFile(caseId); 
-            return this._filesStorage.GetFileContent(ModuleName.Cases, id, basePath, fileName);
-        }
-
-        public bool FileExists(int caseId, string fileName)
-        {
-            return this.DataContext.CaseFiles.Any(f => f.Case_Id == caseId && f.FileName == fileName.Trim());
-        }
-
-        public void DeleteByCaseIdAndFileName(int caseId,string basePath, string fileName)
-        {
-            if (FileExists(caseId, fileName))
-            {
-                var cf = this.DataContext.CaseFiles.Single(f => f.Case_Id == caseId && f.FileName == fileName.Trim());
-                this.DataContext.CaseFiles.Remove(cf);
-                this.Commit();
-            }
-            int id = GetCaseNumberForUploadedFile(caseId); 
-            this._filesStorage.DeleteFile(ModuleName.Cases, id, basePath, fileName);
-        }
-
-        public List<string> FindFileNamesByCaseId(int caseId)
-        {
-            return this.DataContext.CaseFiles.Where(f => f.Case_Id == caseId).Select(f => f.FileName).ToList();
-        }
-
-        public List<CaseFile> GetCaseFilesByCaseId(int caseId)
-        {
-            return (from f in this.DataContext.CaseFiles
-                    where f.Case_Id == caseId
-                    select f).ToList();
-        }
-
-        public int GetCaseNumberForUploadedFile(int caseId)
-        {
-            int ret;
-            var caseNo = (from c in this.DataContext.Cases
-                            where c.Id == caseId
-                            select c.CaseNumber
-                        ).FirstOrDefault(); 
-
-            if (int.TryParse(caseNo.ToString(), out ret))   
-                return ret;
-            else
-                return caseId;
-
-        }
-
-        public CaseFileModel[] GetCaseFiles(int caseId)
-        {
-            var entities = (from f in this.DataContext.CaseFiles
-                            join u in this.DataContext.Users on f.UserId equals u.Id into uj
-                            from user in uj.DefaultIfEmpty()
-                            where f.Case_Id == caseId
-                            select new
-                                       {
-                                           f.Id,
-                                           CaseId = f.Case_Id,
-                                           f.FileName,
-                                           f.CreatedDate,
-                                           UserName = user != null ? (user.FirstName + " " + user.SurName) : null
-                                       })
-                            .ToList();
-
-            return entities.Select(f => new CaseFileModel(
-                                        f.Id,
-                                        f.CaseId,
-                                        f.FileName,
-                                        f.CreatedDate,
-                                        f.UserName))
-                                        .ToArray();
-        }
-
-        public void DeleteFileViewLogs(int caseId)
-        {
-            var fileViewLogEntities = this.DataContext.FileViewLogs.Where(f => f.Case_Id == caseId).ToList();
-            foreach (var fileViewLogEntity in fileViewLogEntities)
-                this.DataContext.FileViewLogs.Remove(fileViewLogEntity);
-        }
-    }
-
-    #endregion
-
-    #region CASEINVOICEROW
-
-    public interface ICaseInvoiceRowRepository : IRepository<CaseInvoiceRow>
-    {
-    }
-
-    public class CaseInvoiceRowRepository : RepositoryBase<CaseInvoiceRow>, ICaseInvoiceRowRepository
-    {
-        public CaseInvoiceRowRepository(IDatabaseFactory databaseFactory)
-            : base(databaseFactory)
-        {
-        }
-    }
-
-    #endregion
-
-    #region CASEQUESTIONCATEGORY
-
-    public interface ICaseQuestionCategoryRepository : IRepository<CaseQuestionCategory>
-    {
-    }
-
-    public class CaseQuestionCategoryRepository : RepositoryBase<CaseQuestionCategory>, ICaseQuestionCategoryRepository
-    {
-        public CaseQuestionCategoryRepository(IDatabaseFactory databaseFactory)
-            : base(databaseFactory)
-        {
-        }
-    }
-
-    #endregion
-
-    #region CASEQUESTIONHEADER
-
-    public interface ICaseQuestionHeaderRepository : IRepository<CaseQuestionHeader>
-    {
-    }
-
-    public class CaseQuestionHeaderRepository : RepositoryBase<CaseQuestionHeader>, ICaseQuestionHeaderRepository
-    {
-        public CaseQuestionHeaderRepository(IDatabaseFactory databaseFactory)
-            : base(databaseFactory)
-        {
-        }
-    }
-
-    #endregion
-
-    #region CASEQUESTION
-
-    public interface ICaseQuestionRepository : IRepository<CaseQuestion>
-    {
-    }
-
-    public class CaseQuestionRepository : RepositoryBase<CaseQuestion>, ICaseQuestionRepository
-    {
-        public CaseQuestionRepository(IDatabaseFactory databaseFactory)
-            : base(databaseFactory)
-        {
-        }
-    }
-
-    #endregion
-
-    #region CASESETTING
-
-    public interface ICaseSettingRepository : IRepository<CaseSettings>
-    {
-        string SetListCaseName(int labelId);
-        void UpdateCaseSetting(CaseSettings updatedCaseSetting);
-        void ReOrderCaseSetting(List<string> caseSettingIds);
-    }
-
-    public class CaseSettingRepository : RepositoryBase<CaseSettings>, ICaseSettingRepository
-    {
-        public CaseSettingRepository(IDatabaseFactory databaseFactory)
-            : base(databaseFactory)
-        {
-        }
-
-        public string SetListCaseName(int labelId)
-        {
-            var query = from cfs in this.DataContext.CaseFieldSettings
-                        join cs in this.DataContext.CaseSettings on cfs.Name equals cs.Name
-                        where cfs.Id == labelId
-                        group cfs by new { cfs.Name } into g
-                        select new CaseSettingList
-                        {
-                            Name = g.Key.Name
-                        };
-
-            return query.First().Name;
-        }
-
-        public void ReOrderCaseSetting(List<string> caseSettingIds)
-        {
-            int orderNum = 0; 
-            foreach (var strId in caseSettingIds)
-            {
-                if (!string.IsNullOrEmpty(strId))
-                {
-                    orderNum++;
-                    var id = int.Parse(strId);
-                    var caseSettingEntity = this.DataContext.CaseSettings.Find(id);
-                    caseSettingEntity.ColOrder = orderNum;
-                }
-            }                                    
-        }
-
-        public void UpdateCaseSetting(CaseSettings updatedCaseSetting)
-        {
-            var caseSettingEntity = this.DataContext.CaseSettings.Find(updatedCaseSetting.Id);
-
-            caseSettingEntity.Name = updatedCaseSetting.Name;
-            caseSettingEntity.Line = updatedCaseSetting.Line;
-            caseSettingEntity.MinWidth = updatedCaseSetting.MinWidth;
-            caseSettingEntity.UserGroup = updatedCaseSetting.UserGroup;
-            caseSettingEntity.ColOrder = updatedCaseSetting.ColOrder;
-        }
-    }
-
-    #endregion
 }

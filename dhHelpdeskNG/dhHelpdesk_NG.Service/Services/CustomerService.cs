@@ -9,6 +9,7 @@
     using DH.Helpdesk.Common.Extensions.String;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
+    using DH.Helpdesk.Dal.Repositories.Cases;
     using DH.Helpdesk.Domain;
 
     public interface ICustomerService

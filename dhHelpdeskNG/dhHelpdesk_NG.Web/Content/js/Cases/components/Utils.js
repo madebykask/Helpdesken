@@ -1,6 +1,45 @@
 ﻿'use strict';
 
-window.EMPTY_STR = '';
+var Utils = {
+    /**
+    * Builds object with fieldsToTake feilds
+    * from source object srcObject
+    * @param { Object } srcObject
+    * @param { String[] } fieldsToTake
+    * @return Object
+    */
+    buildParamObj: function(srcObject, fieldsToTake) {
+        var res = {};
+        var fieldsMap = {};
+        for (var el in fieldsToTake) {
+            fieldsMap[el] = true;
+        }
+        for (var field in srcObject) {
+            if (srcObject.hasOwnProperty(field) && fieldsMap[field]) {
+                res[field] = srcObject[field];
+            }
+        }
+        return res;
+    },
+
+    callAsMe: function(method, me) {
+        return function(arg) {
+            return method.call(me, arg);
+        };
+    },
+
+    applyAsMe: function(method, me, args) {
+        return function() {
+            return method.apply(me, args);
+        }
+    }
+};
+
+if (String.EMPTY === undefined) {
+    String.EMPTY = '';
+}
+
+window.EMPTY_STR = String.EMPTY;
 window.JOINER = EMPTY_STR;
 
 /**
@@ -16,16 +55,18 @@ function strJoin() {
     return Array.prototype.join.call(arguments, JOINER);
 }
 
+/**
+* Deprecated. Use Utils.callAsMe() instead
+*/
 function callAsMe(method, me) {
-    return function(arg) {
-        return method.call(me, arg);
-    };
+    return Utils.callAsMe(method, me);
 }
 
+/**
+* Deprecated. Use Utils.applyAsMe() instead
+*/
 function applyAsMe(method, me, args) {
-    return function() {
-        return method.apply(me, args);
-    }
+    return Utils.applyAsMe(method, me, args);
 }
 
 /**

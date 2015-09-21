@@ -8,5 +8,6 @@
     {
         public Customer Customer { get; set; }
         public IList<Department> Departments { get; set; }
+        public bool IsShowOnlyActive { get; set; }
     }
 }

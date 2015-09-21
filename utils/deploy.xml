@@ -1,14 +1,16 @@
 <!-- 
 How to run: 
-	%WINDIR%\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe /toolsversion:4.0 deploy.xml
+	%WINDIR%\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe /toolsversion:4.0 deploy.xml /t:Dev
+to deploy on DEV Environment
+all options listed below
+	  - /t:Debug debugging mode in $(TestPath) folder;
+	  - /t:Dev deploy on DEV environment;
+	  - /t:Acct deploy on ACCT environment;
 -->
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" Tools="2.0">
+<Project DefaultTargets="Help" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" Tools="2.0">
 	<PropertyGroup>		
 		<PublishedFolder>C:\Download\published\</PublishedFolder>
-		<DevPath>\\dhutvas3\Websites\dhHelpdesk\</DevPath>
-		<AcctPath>\\dhutvas3\Websites\dhHelpdeskAcct\</AcctPath>
-		<TestPath>I:\tmp\_testdeploy\</TestPath>
-		<TargetPath>$(AcctPath)</TargetPath>                               	
+		<TargetPath>\\dhutvas3\Websites\dhHelpdesk\</TargetPath>                               	
 		<AppOfflineDisabled>$(TargetPath)\_app_offline.htm</AppOfflineDisabled>
 		<AppOfflineEnabled>$(TargetPath)\app_offline.htm</AppOfflineEnabled>
 		<BackupFolder>$(TargetPath)\bak\</BackupFolder>
@@ -41,17 +43,31 @@ How to run:
 				$(PublishedFolder)\app_offline.htm;
 				$(PublishedFolder)\log4net.config;
 				$(PublishedFolder)\Web.config" />
-
-		<FilesToZip Include="\\servername\f$\web\example.com\wwwroot\**\*.*" />	
 	</ItemGroup>
+	<!-- Environments definitions BEGIN -->
+	<Target Name="Debug">
+		<CreateProperty Value="I:\tmp\_testdeploy\">
+			<Output TaskParameter="Value" PropertyName="TargetPath" />
+        	</CreateProperty>
+	</Target>
+	<Target Name="Acct">
+		<CreateProperty Value="\\dhutvas3\Websites\dhHelpdeskAcct\">
+			<Output TaskParameter="Value" PropertyName="TargetPath" />
+        	</CreateProperty>
+	</Target>
+	<Target Name="Dev">
+		<CreateProperty Value="\\dhutvas3\Websites\dhHelpdesk\">
+			<Output TaskParameter="Value" PropertyName="TargetPath" />
+        	</CreateProperty>
+	</Target>
+	<!-- Environments definitions END -->
 
-	<Target Name="Deploy">
+	<Target Name="Deploy" AfterTargets="Debug;Dev;Acct">		
 		<Message Text="==========  Starting copying content to target  ============" />
 		<Move SourceFiles="@(FilesToDeploy)" DestinationFolder="$(TargetPath)\%(RecursiveDir)" /> 
 	</Target>
 
 	<Target Name="Backup" BeforeTargets="Deploy">
-		<!--Message Text="Backing up old content $(BackupFolder)\%(Backup.RecursiveDir)"/ -->
 		<RemoveDir Directories="$(BackupFolder)" />
 		<MakeDir Directories="$(BackupFolder)" />
 		<Move SourceFiles="@(Backup)" DestinationFolder="$(BackupFolder)\%(RecursiveDir)" /> 
@@ -74,7 +90,13 @@ How to run:
 			WorkingDirectory="\\servername\f$\web\example.com\wwwroot" />
 	</Target>
  
-     <Target Name="Build" DependsOnTargets="Clean">
-	<Message Text="Clean"/>
+     <Target Name="Help">
+	<Message Text="Copies project from $(PublishedFolder) to target site. 
+	Specify target you want by using parameter:
+	  - /t:Debug debugging mode in $(TestPath) folder;
+	  - /t:Dev deploy on DEV environment;
+	  - /t:Acct deploy on ACCT environment;
+	
+	P.S.: does not increases version and does not perform SQL queries"/>
      </Target>
 </Project>

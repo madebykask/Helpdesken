@@ -18,6 +18,7 @@
         FaqPermission,
         CalendarPermission,
         CreateOrderPermission,
-        AdministerOrderPermission
+        AdministerOrderPermission,
+        CreateSubCasePermission
     }
 }

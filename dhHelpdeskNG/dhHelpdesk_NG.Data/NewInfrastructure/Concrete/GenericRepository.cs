@@ -54,6 +54,11 @@
             this.dbset.Remove(entity);
         }
 
+        public void Delete(TEntity entity)
+        {
+            this.dbset.Remove(entity);
+        }
+
         public void DeleteWhere(Expression<Func<TEntity, bool>> predicate)
         {
             IQueryable<TEntity> delList = this.dbset.Where(predicate);

@@ -6,7 +6,7 @@
 {
     var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
     <div class="tab-pane tab-pane-border active" id="logtab">
-        <table class="table table-striped table-bordered table-hover">
+        <table class="table table-striped table-bordered table-hover caselog">
             @if (Model.Logs.Any())
             {            
                 <thead>
@@ -24,6 +24,14 @@
                 {
                     <tr>
                         <td>
+                            @if (r.FinishingDate.HasValue)
+                            {
+                                <span class="case-icon solved" title="@Translation.GetCoreTextTranslation("Stängt")"></span>
+                            }
+                            else
+                            {
+                                <span class="case-icon"></span>
+                            }
                             @{
                                 r.LogDate = TimeZoneInfo.ConvertTimeFromUtc(r.LogDate.ToUniversalTime(), userTimeZone);
                             }

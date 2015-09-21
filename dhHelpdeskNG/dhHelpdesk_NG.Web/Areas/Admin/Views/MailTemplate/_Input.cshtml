@@ -26,8 +26,8 @@
                                         @Translation.Get("Språk", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @Html.DropDownListFor(model => model.MailTemplateLanguage.Language_Id, Model.Languages,
-                                                              new { id = "LanguageId", onchange = "changeLanguageList(this.options[this.selectedIndex].value);" })
+                                        @Html.DropDownListFor(model => Model.MailTemplateLanguage.Language_Id, Model.Languages,
+                                                              new { id = "LanguageId"})                                        
                                     </td>
                                 </tr>
                                 @if (Model.MailTemplateLanguage.MailTemplate_Id != 0)
@@ -173,12 +173,7 @@
                                     </tr>
                                 }
                                 else
-                                {
-                                    <tr>
-                                        <td>
-                                            @Translation.Get("Ny E-post mall", Enums.TranslationSource.TextTranslation)
-                                        </td>
-                                    </tr>
+                                {                                 
                                     <tr>
                                         <td>
                                             @Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation)
@@ -1097,3 +1092,9 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    $("#LanguageId").change(function () {        
+        changeLanguageList(this.options[this.selectedIndex].value);
+    });
+</script>

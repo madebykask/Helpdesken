@@ -687,12 +687,16 @@
                     }
 
                     // Log
+                    if (sort.Name == LogFields.FinishingDate)
+                    {
+                        query = query.OrderBy(c => c.FinishingDate);
+                    }
+
                     if (sort.Name == LogFields.InternalLogNote ||
                         sort.Name == LogFields.ExternalLogNote ||
                         sort.Name == LogFields.Debiting ||
                         sort.Name == LogFields.AttachedFile ||
                         sort.Name == LogFields.FinishingDescription ||
-                        sort.Name == LogFields.FinishingDate ||
                         sort.Name == LogFields.FinishingCause)
                     {
                         query = query.OrderBy(c => c.Logs.Count);
@@ -901,12 +905,16 @@
                     }
 
                     // Log
+                    if (sort.Name == LogFields.FinishingDate)
+                    {
+                        query = query.OrderByDescending(c => c.FinishingDate);
+                    }
+
                     if (sort.Name == LogFields.InternalLogNote ||
                         sort.Name == LogFields.ExternalLogNote ||
                         sort.Name == LogFields.Debiting ||
                         sort.Name == LogFields.AttachedFile ||
                         sort.Name == LogFields.FinishingDescription ||
-                        sort.Name == LogFields.FinishingDate ||
                         sort.Name == LogFields.FinishingCause)
                     {
                         query = query.OrderByDescending(c => c.Logs.Count);

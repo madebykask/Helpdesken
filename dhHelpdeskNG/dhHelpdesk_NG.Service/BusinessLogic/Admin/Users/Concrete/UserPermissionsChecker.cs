@@ -42,6 +42,11 @@
                 permissions.Add(UserPermission.CreateCasePermission);
             }
 
+            if (user.CreateSubCasePermission.ToBool())
+            {
+                permissions.Add(UserPermission.CreateSubCasePermission);
+            }
+
             if (user.CopyCasePermission.ToBool())
             {
                 permissions.Add(UserPermission.CopyCasePermission);

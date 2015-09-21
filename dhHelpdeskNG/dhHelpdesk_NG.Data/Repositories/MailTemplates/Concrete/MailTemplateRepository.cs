@@ -45,6 +45,56 @@ namespace DH.Helpdesk.Dal.Repositories.MailTemplates.Concrete
             return q;
         }
 
+        public CustomMailTemplate GetCustomMailTemplate(int mailTemplateId)
+        {
+            var res = new CustomMailTemplate();
+
+            var mailTemplateEntities = this.DataContext.MailTemplates.Where(t => t.Id == mailTemplateId).FirstOrDefault();
+
+            if (mailTemplateEntities == null)
+                return null;
+
+            var mailTemplateLanguageEntities = this.DataContext.MailTemplateLanguages
+                                                               .Where(tl => tl.Language.IsActive != 0).ToList();
+
+            
+            var templateLanguages = new List<CustomMailTemplateLanguage>();
+            foreach (var templateLang in mailTemplateLanguageEntities.Where(ml => ml.MailTemplate_Id == mailTemplateEntities.Id))
+            {
+                var templateLanguage = new CustomMailTemplateLanguage
+                {
+                    Subject = templateLang.Subject,
+                    Body = templateLang.Body,
+                    LanguageId = templateLang.Language_Id,
+                    TemplateName = templateLang.MailTemplateName,
+                    Language = new LanguageOverview
+                    {
+                        Id = templateLang.Language.Id,
+                        LanguageId = templateLang.Language.LanguageID,
+                        Name = templateLang.Language.Name,
+                        IsActive = Convert.ToBoolean(templateLang.Language.IsActive)
+                    }
+                };
+
+                templateLanguages.Add(templateLanguage);
+            }
+
+            var mailTemplate = new CustomMailTemplate
+            {
+                MailTemplateId = mailTemplateEntities.Id,
+                CustomerId = mailTemplateEntities.Customer_Id.Value,
+                IsStandard = mailTemplateEntities.IsStandard,
+                MailId = mailTemplateEntities.MailID,
+                OrderTypeId = mailTemplateEntities.OrderType_Id,
+                TemplateLanguages = templateLanguages
+            };
+
+            res = mailTemplate;
+            
+
+            return res;
+        }
+
         public List<CustomMailTemplate> GetCustomMailTemplates(int customerId)
         {
             var res = new List<CustomMailTemplate>();

@@ -6,6 +6,7 @@
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
+    using DH.Helpdesk.Dal.Repositories.Cases;
     using DH.Helpdesk.Domain;
 
     public interface ICaseFileService

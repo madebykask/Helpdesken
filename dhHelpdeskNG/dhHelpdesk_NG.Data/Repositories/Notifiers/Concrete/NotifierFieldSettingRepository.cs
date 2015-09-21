@@ -107,6 +107,7 @@
             this.UpdateFieldSetting(settings, OrganizationField.Manager, fieldSettings.Manager, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
             this.UpdateFieldSetting(settings, OrdererField.Ordered, fieldSettings.Ordered, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
             this.UpdateFieldSetting(settings, OrganizationField.OrganizationUnit, fieldSettings.OrganizationUnit, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
+            this.UpdateFieldSetting(settings, OrganizationField.CostCentre, fieldSettings.CostCentre, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
             this.UpdateFieldSetting(settings, OrganizationField.Other, fieldSettings.Other, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
             this.UpdateFieldSetting(settings, GeneralField.Phone, fieldSettings.Phone, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
             this.UpdateFieldSetting(settings, GeneralField.Place, fieldSettings.Place, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
@@ -278,11 +279,19 @@
             }
 
             var translation = this.GetTranslationBySettingIdAndLanguageId(setting.Id, languageId);
+            
             if (translation == null)
             {
-                return this.notifierFieldSettingsFactory.CreateEmpty();
+                var emptyNotifierFieldSettings =  this.notifierFieldSettingsFactory.CreateEmpty();
+                //return this.notifierFieldSettingsFactory.Create(setting.Show != 0,
+                //                                        setting.ShowInList != 0,
+                //                                        emptyNotifierFieldSettings.LableText,
+                //                                        lableText,
+                //                                        setting.Required != 0,
+                //                                        setting.LDAPAttribute);
+                return emptyNotifierFieldSettings;
             }
-
+            
             return this.notifierFieldSettingsFactory.Create(
                                                     setting.Show != 0,
                                                     setting.ShowInList != 0,
@@ -347,7 +356,15 @@
                     t => t.ComputerUserFieldSettings_Id == setting.Id && t.Language_Id == languageId);
             if (translation != null)
             {
-                translation.Label = updatedSetting.Caption;                
+                translation.Label = updatedSetting.Caption;
+                
+            }
+            else {
+                ComputerUserFieldSettingsLanguage NewComputerUserFieldSettingLanguage = new ComputerUserFieldSettingsLanguage();
+                NewComputerUserFieldSettingLanguage.ComputerUserFieldSettings_Id = setting.Id;
+                NewComputerUserFieldSettingLanguage.Language_Id = languageId;
+                NewComputerUserFieldSettingLanguage.Label = updatedSetting.Caption;
+                this.DataContext.ComputerUserFieldSettingsLanguages.Add(NewComputerUserFieldSettingLanguage);
             }
 
             setting.Required = updatedSetting.Required ? 1 : 0;

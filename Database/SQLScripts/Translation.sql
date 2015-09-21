@@ -4413,5 +4413,103 @@ If not exists (select * from tblTextTranslation where text_id = 1535 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1535, 2, 'Only sent the first time product area is selected')
 GO
 
+
+-- New 20150911
+UPDATE tblText Set TextString = 'Använd # för att söka efter' WHERE Id = 1334;
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'Use # to search for' WHERE Text_Id=1334 AND Language_Id=2;
+GO
+
+
+If not exists (select * from tbltext where id = 1536)
+	insert into tbltext (id, TextString) VALUES (1536, 'stängt')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1536 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1536, 2, 'closed')
+GO
+If not exists (select * from tbltext where id = 1537)
+	insert into tbltext (id, TextString) VALUES (1537, 'Underärenden')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1537 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1537, 2, 'Child cases')
+GO
+If not exists (select * from tbltext where id = 1538)
+	insert into tbltext (id, TextString) VALUES (1538, 'Detta är ett underärende till ärende')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1538 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1538, 2, 'This is a child case to')
+GO
+If not exists (select * from tbltext where id = 1539)
+	insert into tbltext (id, TextString) VALUES (1539, 'Huvudärende')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1539 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1539, 2, 'Parent case')
+GO
+If not exists (select * from tbltext where id = 1540)
+	insert into tbltext (id, TextString) VALUES (1540, 'Skicka intern loggpost till huvudärende')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1540 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1540, 2, 'Send internal log note to parent')
+GO
+
+If not exists (select * from tbltext where id = 1541)
+	insert into tbltext (id, TextString) VALUES (1541, 'Skicka intern loggpost till underärenden')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1541 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1541, 2, 'Send internal log note to child cases')
+GO
+            
+If not exists (select * from tbltext where id = 1542)
+	insert into tbltext (id, TextString) VALUES (1542, 'Ärendet kunde inte sparas pga inaktiva värden(n). Var vänlig kontrollera ärendet.')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1542 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1542, 2, 'The case could not be saved because of inactive value(s). Please check the case.')
+GO      
+       
+If not exists (select * from tbltext where id = 1543)
+	insert into tbltext (id, TextString) VALUES (1543, 'Tillåt inte att spara ärenden med inaktiva värden.')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1543 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1543, 2, 'Prevent to save cases with inactive values.')
+GO      
+
+If not exists (select * from tbltext where id = 1544)
+	insert into tbltext (id, TextString) VALUES (1544, 'Skickat till underrärenden')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1544 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1544, 2, 'Sent to child cases')
+GO
+   	    
+If not exists (select * from tbltext where id = 1545)
+	insert into tbltext (id, TextString) VALUES (1545, 'Dina ändringar har inte sparats. Fortsätt?')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1545 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1545, 2, 'Your changes have not been saved. Continue?')
+GO
+
+If not exists (select * from tbltext where id = 1546)
+	insert into tbltext (id, TextString) VALUES (1546, 'Skickat till huvudärende')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1546 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1546, 2, 'Sent to parent case')
+GO
+
+If not exists (select * from tbltext where id = 1547)
+	insert into tbltext (id, TextString) VALUES (1547, 'Underärende')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1547 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1547, 2, 'Child case')
+GO
+
+If not exists (select * from tbltext where id = 1548)
+	insert into tbltext (id, TextString) VALUES (1548, 'Skapa underärende')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1548 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1548, 2, 'Create child case')
+GO
+
+
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

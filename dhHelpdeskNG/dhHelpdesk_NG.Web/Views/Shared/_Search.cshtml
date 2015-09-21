@@ -331,7 +331,7 @@
                          <td>
                              <input type="text" id="txtFreeTextSearch" value="@Model.caseSearchFilter.FreeTextSearch" name="@CaseSearchFilter.FreeTextSearchNameAttribute" 
                                     rel="tooltip" 
-                                    title="@Translation.Get("Använd # för att söka efter ärendenummer")" />
+                                    title="@Translation.Get("Använd # för att söka efter") @Translation.GetForCase(GlobalEnums.TranslationCaseFields.CaseNumber.ToString(), SessionFacade.CurrentCustomer.Id)" />
                          </td>
                          <td>
                              <select id="lstfilterCaseProgress" name="@CaseSearchFilter.FilterCaseProgressNameAttribute">
