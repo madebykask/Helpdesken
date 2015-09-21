@@ -46,9 +46,8 @@
             this.Property(x => x.EMailAnswerDestination).IsRequired();
             this.Property(x => x.EMailAnswerSeparator).IsRequired().HasMaxLength(20);
             this.Property(x => x.EMailImportType).IsRequired();
-            this.Property(x => x.EMailRegistrationMailID).IsRequired();
-            // Quick temporary fix change langth from 20 >> 60 for hotfix 5.3.13.xx (HotFix)
-            this.Property(x => x.EMailSubjectPattern).IsRequired().HasMaxLength(60);
+            this.Property(x => x.EMailRegistrationMailID).IsRequired();            
+            this.Property(x => x.EMailSubjectPattern).IsRequired().HasMaxLength(20);
             //this.Property(x => x.InventoryDays2WaitBeforeDelete).IsOptional();
             this.Property(x => x.InvoiceType).IsRequired();
             this.Property(x => x.LDAPAllUsers).IsRequired();

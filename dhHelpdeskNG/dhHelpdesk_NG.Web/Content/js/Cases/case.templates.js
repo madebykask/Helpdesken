@@ -273,11 +273,7 @@ function LoadTemplate(id) {
     $.get('/CaseSolution/GetTemplate',
         { 'id': id },
         function (caseTemplate) {
-
-            // Quick temporary fix for hotfix 5.3.13.xx (HotFix)
-            if (caseTemplate.RegistrationSource == 0)
-                caseTemplate.RegistrationSource = null;
-
+            
             var showOverwriteWarning = false;
             if (!caseTemplate) {
                 return;

@@ -45,13 +45,8 @@ IF COL_LENGTH('dbo.tblsettings','PreventToSaveCaseWithInactiveValue') IS NULL
 BEGIN	 
 	ALTER TABLE [dbo].[tblsettings]
 	ADD [PreventToSaveCaseWithInactiveValue] int Not Null default(0)
-
--- Hot Fix(5.3.13.70) 
-if COL_LENGTH('tblSettings','EMailSubjectPattern') != 120
-BEGIN	
-	alter table tblSettings alter column EMailSubjectPattern nvarchar(60);
-END
-GO 
+End
+Go
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.14'

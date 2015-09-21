@@ -2541,9 +2541,8 @@ namespace DH.Helpdesk.Web.Controllers
             var updateNotifierInformation = m.updateNotifierInformation;
             var caseInvoiceArticles = m.caseInvoiceArticles;
             case_.Performer_User_Id = m.Performer_Id;
-            case_.CaseResponsibleUser_Id = m.ResponsibleUser_Id;
-            // Quick temporary fix for hotfix 5.3.13.xx (HotFix)
-            case_.RegistrationSourceCustomer_Id = (m.customerRegistrationSourceId == 0 ? null : m.customerRegistrationSourceId);
+            case_.CaseResponsibleUser_Id = m.ResponsibleUser_Id;            
+            case_.RegistrationSourceCustomer_Id = m.customerRegistrationSourceId;
             case_.Ou = null;
             case_.Department = null;
             case_.Region = null;
