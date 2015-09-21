@@ -5,6 +5,7 @@ BEGIN
 	ALTER TABLE tblCaseSolution ALTER COLUMN RegistrationSource int NULL
 END
 
+update tblCaseSolution set RegistrationSource = null where RegistrationSource = 0
 -- Parent-child cases
 if not exists(select * from sysobjects WHERE Name = N'tblParentChildCaseRelations')
 BEGIN
