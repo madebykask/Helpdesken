@@ -8,8 +8,7 @@
 
 <script type="text/javascript">
     window.parameters = {
-        currentCaseId: '@Model.case_.Id',
-        @*parentCaseId: '@(Model.ParentCaseInfo != null ? Model.ParentCaseInfo.ParentId.ToString() : "null")',*@
+        currentCaseId: '@Model.case_.Id',        
         productAreaErrorMessage:'@Html.Raw(Translation.Get("Ärendet kunde inte sparas då den lägsta möjliga nivån på fält") + " [" +
                                            Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) + "] " +
                                            Translation.Get("inte har valts. Vänligen kontrollera ärendet."))',
@@ -48,7 +47,7 @@
     }
  }
 
-<script type="text/javascript">
+@*<script type="text/javascript">
     function CalcSLA()
     {        
         $.post('@Url.Content("~/Cases/CalulateSLA/")', {caseId:'@Model.case_.Id', userId:'@SessionFacade.CurrentUser.Id', simulateTime:'@Model.case_.ChangeTime.AddSeconds(5)'},
@@ -56,7 +55,7 @@
                 alert(data);
             });
     }
-</script>
+</script>*@
 
 @if (Model.case_ != null)
 {

@@ -136,7 +136,7 @@
             /////////////////////
             /// holidays
             var departmentsHolidays = this.holidayService.GetHolidayBetweenDatesForDepartments(
-                rangeBegin.RoundToDay(),
+                rangeBegin,
                 rangeEnd,
                 departmentsIds);
 

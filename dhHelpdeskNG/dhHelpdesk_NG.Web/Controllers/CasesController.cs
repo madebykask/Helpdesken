@@ -1142,7 +1142,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         /****  Case SLA Calculation simulator ***/
         // ** This function is using for developing test **//
-        public JsonResult CalulateSLA(int caseId, int userId, DateTime simulateTime)
+        /*public JsonResult CalulateSLA(int caseId, int userId, DateTime simulateTime)
         {
             
             var utcNow = simulateTime;
@@ -1242,7 +1242,7 @@ namespace DH.Helpdesk.Web.Controllers
                                     case_.LeadTime, case_.ExternalTime, leadTime, externalTime);
                                     
             return Json(msg);
-        }
+        }*/
 
 
         public ActionResult New(
