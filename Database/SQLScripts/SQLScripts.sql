@@ -19,17 +19,17 @@ BEGIN
 		)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY];
 
-	ALTER TABLE [dbo].[tblParentChildCases]  WITH CHECK ADD  CONSTRAINT [FK_tblParentChildCases_tblCase] FOREIGN KEY([Ancestor_Id])
+	ALTER TABLE [dbo].[tblParentChildCaseRelations]  WITH CHECK ADD  CONSTRAINT [FK_tblParentChildCaseRelations_tblCase] FOREIGN KEY([Ancestor_Id])
 	REFERENCES [dbo].[tblCase] ([Id])
 		ON UPDATE CASCADE
 		ON DELETE CASCADE;
 
-	ALTER TABLE [dbo].[tblParentChildCases] CHECK CONSTRAINT [FK_tblParentChildCases_tblCase];	
+	ALTER TABLE [dbo].[tblParentChildCaseRelations] CHECK CONSTRAINT [FK_tblParentChildCaseRelations_tblCase];	
 
-	ALTER TABLE [dbo].[tblParentChildCases]  WITH CHECK ADD  CONSTRAINT [FK_tblParentChildCases_tblCase1] FOREIGN KEY([Descendant_Id])
+	ALTER TABLE [dbo].[tblParentChildCaseRelations]  WITH CHECK ADD  CONSTRAINT [FK_tblParentChildCaseRelations_tblCase1] FOREIGN KEY([Descendant_Id])
 	REFERENCES [dbo].[tblCase] ([Id]);
 
-	ALTER TABLE [dbo].[tblParentChildCases] CHECK CONSTRAINT [FK_tblParentChildCases_tblCase];
+	ALTER TABLE [dbo].[tblParentChildCaseRelations] CHECK CONSTRAINT [FK_tblParentChildCaseRelations_tblCase];
 END
 GO
 
