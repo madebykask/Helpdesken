@@ -157,7 +157,7 @@
                         @Html.Hidden("CurLanguageId", SessionFacade.CurrentLanguageId)
                         @Html.Hidden("SelectedValueCarrier", "")
                         @Html.HiddenFor(model => Model.CaseLock.LockGUID)                        
-                        <input type="button" id="sla_test" value="SLA Test" onclick="CalcSLA();" />
+                        @*<input type="button" id="sla_test" value="SLA Test" onclick="CalcSLA();" />*@
                         @if (Model.customerUserSetting.UserInfoPermission == 1)
                         {                                                        
                             <div style="@Model.caseFieldSettings.displayUserInfoHtml()"  class="notifier-block hideshow">
