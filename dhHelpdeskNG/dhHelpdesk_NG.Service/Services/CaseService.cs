@@ -1086,12 +1086,11 @@ namespace DH.Helpdesk.Services.Services
                 if (newCase.ProductArea_Id.HasValue && newCase.ProductArea != null)
                 {
                     // get mail template from productArea
+                    mailTemplateId = 0;
+
                     if (newCase.ProductArea.MailID.HasValue)
                         mailTemplateId = newCase.ProductArea.MailTemplate.MailID;
-                    else
-                    {
-                        mailTemplateId = 0;
-                    }
+                    
 
                     if (mailTemplateId > 0)
                     {
@@ -1129,7 +1128,8 @@ namespace DH.Helpdesk.Services.Services
             {
                 if (newCase.ProductArea_Id.HasValue && newCase.ProductArea != null && oldCase.ProductAreaSetDate == null)
                 {
-                    int mailTemplateId = (int)GlobalEnums.MailTemplates.NewCase;
+                    
+                    int mailTemplateId = 0;
                     string customEmailSender1 = cms.CustomeMailFromAddress.DefaultOwnerWGEMail;
 
                     if (string.IsNullOrWhiteSpace(customEmailSender1))
@@ -1146,34 +1146,36 @@ namespace DH.Helpdesk.Services.Services
                     // get mail template from productArea
                     if (newCase.ProductArea.MailID.HasValue)
                         mailTemplateId = newCase.ProductArea.MailTemplate.MailID;
-
-                    MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
-                    if (m != null)
+                    
+                    if (mailTemplateId > 0)
                     {
-                        if (!String.IsNullOrEmpty(m.Body) && !String.IsNullOrEmpty(m.Subject))
+                        MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
+                        if (m != null)
                         {
-                            if (!cms.DontSendMailToNotifier && !dontSendMailToNotfier && !string.IsNullOrEmpty(newCase.PersonsEmail))
+                            if (!String.IsNullOrEmpty(m.Body) && !String.IsNullOrEmpty(m.Subject))
                             {
-                                var to = newCase.PersonsEmail.Split(';', ',');
-                                foreach (var t in to)
+                                if (!cms.DontSendMailToNotifier && !dontSendMailToNotfier && !string.IsNullOrEmpty(newCase.PersonsEmail))
                                 {
-                                    var curMail = t.Trim();
-                                    if (!string.IsNullOrWhiteSpace(curMail) && _emailService.IsValidEmail(curMail))
+                                    var to = newCase.PersonsEmail.Split(';', ',');
+                                    foreach (var t in to)
                                     {
-                                        var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(customEmailSender1));
-                                        _emailLogRepository.Add(el);
-                                        _emailLogRepository.Commit();
-                                        fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 1);
+                                        var curMail = t.Trim();
+                                        if (!string.IsNullOrWhiteSpace(curMail) && _emailService.IsValidEmail(curMail))
+                                        {
+                                            var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(customEmailSender1));
+                                            _emailLogRepository.Add(el);
+                                            _emailLogRepository.Commit();
+                                            fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 1);
 
-                                        _emailService.SendEmail(customEmailSender1, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
-                                        containsProductAreaMail = true;
+                                            _emailService.SendEmail(customEmailSender1, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                            containsProductAreaMail = true;
+                                        }
                                     }
                                 }
+
                             }
-                           
                         }
                     }
-                    
                 }
             }
 
