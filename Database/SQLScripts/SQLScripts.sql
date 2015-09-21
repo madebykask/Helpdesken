@@ -1,4 +1,4 @@
--- update DB from 5.3.11 to 5.3.13 version
+-- update DB from 5.3.11 to 5.3.13 (HotFix 70) version
 
 
 if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Modal' and sysobjects.name = N'tblform')
@@ -118,6 +118,12 @@ END
 if COL_LENGTH('tblDepartment','Department') != 400
 BEGIN	
 	alter table tblDepartment alter column Department nvarchar(200) not null
+END
+
+-- Hot Fix(5.3.13.70) 
+if COL_LENGTH('tblSettings','EMailSubjectPattern') != 120
+BEGIN	
+	alter table tblSettings alter column EMailSubjectPattern nvarchar(60);
 END
 
 -- Last Line to update database version

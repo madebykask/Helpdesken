@@ -308,7 +308,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             /// This strange logic I took from Edit() action
             caseSolution.NoMailToNotifier = caseSolution.NoMailToNotifier == 0 ? 1 : 0;
-
+            
             return this.Json(new
                                  {
                                      caseSolution.CaseType_Id,
