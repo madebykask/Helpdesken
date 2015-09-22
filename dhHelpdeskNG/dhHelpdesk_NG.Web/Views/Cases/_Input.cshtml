@@ -16,6 +16,7 @@
                                            Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) + "] " +
                                            Translation.Get("inte har valts. Vänligen kontrollera ärendet."))',
         caseLockGuid: '@Model.CaseLock.LockGUID',
+        caseChangedTime: '@Model.case_.ChangeTime',
         userCaseLocker: '@Model.CaseLock.UserId',
         extendValue: '@Model.CaseLock.ExtendValue',
         caseLockChecker: '@Url.Content("~/Cases/IsCaseAvailable/")',

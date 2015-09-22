@@ -180,6 +180,7 @@ EditPage.prototype.doSave = function(submitUrl) {
 
         $.post(window.parameters.caseLockChecker, {
                 caseId: me.p.currentCaseId,
+                caseChangedTime: me.p.caseChangedTime,
                 lockGuid: me.p.caseLockGuid
             },
             function (data) {
@@ -287,7 +288,12 @@ EditPage.prototype.onDeleteDlgClick = function (res) {
         return false;
     }
 
-    $.post(_parameters.caseLockChecker, { caseId: _parameters.currentCaseId, lockGuid: _parameters.caseLockGuid })
+    $.post(_parameters.caseLockChecker,
+        {
+            caseId: _parameters.currentCaseId,
+            caseChangedTime: _parameters.caseChangedTime,
+            lockGuid: _parameters.caseLockGuid
+        })
         .done(callAsMe(function(data) {
             me.showDeleteConfirmationDlg();
             if (data == true) {
@@ -414,7 +420,11 @@ EditPage.prototype.init = function (p) {
     me.$moveCaseButton.click(function (e) {
         e.preventDefault();
         $.post(p.caseLockChecker,
-            { caseId: p.currentCaseId, lockGuid: p.caseLockGuid },
+            {
+                caseId: p.currentCaseId,
+                caseChangedTime: p.caseChangedTime,
+                lockGuid: p.caseLockGuid
+            },
             function (data) {
                 if (data == true) {
                     window.moveCase(p.currentCaseId);

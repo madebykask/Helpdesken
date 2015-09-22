@@ -51,6 +51,7 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Web.Models.Case.Output;
     using DH.Helpdesk.Web.Models.CaseLock;
     using DH.Helpdesk.Web.Models.Shared;
+    using DH.Helpdesk.Common.Extensions.DateTime;
 
     using Org.BouncyCastle.Bcpg;
 
@@ -1132,13 +1133,27 @@ namespace DH.Helpdesk.Web.Controllers
             return Json("Success");
         }
 
-        public JsonResult IsCaseAvailable(int caseId, string lockGuid)
+        public JsonResult IsCaseAvailable(int caseId, DateTime caseChangedTime, string lockGuid)
         {
             var caseLock = this._caseLockService.GetCaseLockByCaseId(caseId);
+
+            
             if (caseLock != null && caseLock.LockGUID == new Guid(lockGuid) && caseLock.ExtendedTime >= DateTime.Now)
+                // Case still is locked by me
                 return Json(true);
+            else                            
+                if (caseLock == null || (caseLock != null && !(caseLock.ExtendedTime >= DateTime.Now)))
+                {
+                    //case is not locked by me or is not locked at all 
+                    var curCase = this._caseService.GetCaseById(caseId);
+                    if (curCase != null && curCase.ChangeTime.RoundTick() == caseChangedTime.RoundTick())
+                        //case is not updated yet by any other
+                        return Json(true);
+                    else
+                        return Json(false);
+                }
             else
-                return Json(false);
+                return Json(false);            
         }
 
         public JsonResult ReExtendCaseLock(string lockGuid, int extendValue)

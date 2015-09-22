@@ -57,5 +57,10 @@ namespace DH.Helpdesk.Common.Extensions.DateTime
         {
             return (long)((dt.ToUniversalTime().Ticks - DatetimeMinTimeTicks) / 10000);
         }
+
+        public static DateTime RoundTick(this DateTime dt)
+        {
+            return new DateTime(dt.Year, dt.Month, dt.Day, dt.Hour, dt.Minute, dt.Second, dt.Kind);
+        }
     }
 }
