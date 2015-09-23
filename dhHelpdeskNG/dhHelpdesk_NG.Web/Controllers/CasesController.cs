@@ -1375,7 +1375,7 @@ namespace DH.Helpdesk.Web.Controllers
             CheckTemplateParameters(templateId, caseId);
             return this.RedirectToAction("edit", "cases", new { id = caseId, redirectFrom = "save", uni = m.updateNotifierInformation });
         }
-
+         
         [HttpPost]
         [ValidateInput(false)]
         public RedirectResult NewAndClose(CaseEditInput m, int? templateId)
