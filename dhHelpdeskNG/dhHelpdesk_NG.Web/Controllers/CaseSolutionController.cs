@@ -308,29 +308,52 @@ namespace DH.Helpdesk.Web.Controllers
             /// This strange logic I took from Edit() action
             caseSolution.NoMailToNotifier = caseSolution.NoMailToNotifier == 0 ? 1 : 0;
 
+            // Check CaseType is Active
+            if (caseSolution.CaseType_Id.HasValue)
+            {
+                var caseType = _caseTypeService.GetCaseType(caseSolution.CaseType_Id.Value);
+                if (!(caseType != null && caseType.IsActive != 0))
+                    caseSolution.CaseType_Id = null;
+            }
+
+            // Check ProductArea is Active
+            if (caseSolution.ProductArea_Id.HasValue)
+            {
+                var productArea = _productAreaService.GetProductArea(caseSolution.ProductArea_Id.Value);
+                if (!(productArea != null && productArea.IsActive != 0))
+                    caseSolution.ProductArea_Id = null;
+            }
+
+            // Check Finishing Cause is Active
+            if (caseSolution.FinishingCause_Id.HasValue)
+            {
+                var finishingCause = _finishingCauseService.GetFinishingCause(caseSolution.FinishingCause_Id.Value);
+                if (!(finishingCause != null && finishingCause.IsActive != 0))
+                    caseSolution.FinishingCause_Id = null;
+            }
+
             return this.Json(
                 new
                     {
                         caseSolution.CaseType_Id,
-                                     caseSolution.PerformerUser_Id,
-                                     caseSolution.Category_Id,
-                                     caseSolution.ReportedBy,
-                                     caseSolution.Department_Id,
-                                     NoMailToNotifier = caseSolution.NoMailToNotifier.ToBool(),
-                                     caseSolution.ProductArea_Id,
-                                     caseSolution.Caption,
-                                     caseSolution.Description,
-                                     caseSolution.Miscellaneous,
-                                     caseSolution.CaseWorkingGroup_Id,
-
-                                     caseSolution.Priority_Id,
-                                     caseSolution.Project_Id,
-                                     caseSolution.Text_External,
-                                     caseSolution.Text_Internal,
-                                     caseSolution.FinishingCause_Id,
-                                     caseSolution.RegistrationSource
-                                 },
-                JsonRequestBehavior.AllowGet);
+                        caseSolution.PerformerUser_Id,
+                        caseSolution.Category_Id,
+                        caseSolution.ReportedBy,
+                        caseSolution.Department_Id,
+                        NoMailToNotifier = caseSolution.NoMailToNotifier.ToBool(),
+                        caseSolution.ProductArea_Id,
+                        caseSolution.Caption,
+                        caseSolution.Description,
+                        caseSolution.Miscellaneous,
+                        caseSolution.CaseWorkingGroup_Id,
+                        caseSolution.Priority_Id,
+                        caseSolution.Project_Id,
+                        caseSolution.Text_External,
+                        caseSolution.Text_Internal,
+                        caseSolution.FinishingCause_Id,
+                        caseSolution.RegistrationSource
+                    },
+                    JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

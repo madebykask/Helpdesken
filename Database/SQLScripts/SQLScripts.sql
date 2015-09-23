@@ -5,6 +5,7 @@ BEGIN
 	ALTER TABLE tblCaseSolution ALTER COLUMN RegistrationSource int NULL
 END
 
+update tblCaseSolution set RegistrationSource = null where RegistrationSource = 0
 -- Parent-child cases
 if not exists(select * from sysobjects WHERE Name = N'tblParentChildCaseRelations')
 BEGIN
@@ -18,17 +19,17 @@ BEGIN
 		)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY];
 
-	ALTER TABLE [dbo].[tblParentChildCases]  WITH CHECK ADD  CONSTRAINT [FK_tblParentChildCases_tblCase] FOREIGN KEY([Ancestor_Id])
+	ALTER TABLE [dbo].[tblParentChildCaseRelations]  WITH CHECK ADD  CONSTRAINT [FK_tblParentChildCaseRelations_tblCase] FOREIGN KEY([Ancestor_Id])
 	REFERENCES [dbo].[tblCase] ([Id])
 		ON UPDATE CASCADE
 		ON DELETE CASCADE;
 
-	ALTER TABLE [dbo].[tblParentChildCases] CHECK CONSTRAINT [FK_tblParentChildCases_tblCase];	
+	ALTER TABLE [dbo].[tblParentChildCaseRelations] CHECK CONSTRAINT [FK_tblParentChildCaseRelations_tblCase];	
 
-	ALTER TABLE [dbo].[tblParentChildCases]  WITH CHECK ADD  CONSTRAINT [FK_tblParentChildCases_tblCase1] FOREIGN KEY([Descendant_Id])
+	ALTER TABLE [dbo].[tblParentChildCaseRelations]  WITH CHECK ADD  CONSTRAINT [FK_tblParentChildCaseRelations_tblCase1] FOREIGN KEY([Descendant_Id])
 	REFERENCES [dbo].[tblCase] ([Id]);
 
-	ALTER TABLE [dbo].[tblParentChildCases] CHECK CONSTRAINT [FK_tblParentChildCases_tblCase];
+	ALTER TABLE [dbo].[tblParentChildCaseRelations] CHECK CONSTRAINT [FK_tblParentChildCaseRelations_tblCase];
 END
 GO
 
@@ -45,8 +46,13 @@ IF COL_LENGTH('dbo.tblsettings','PreventToSaveCaseWithInactiveValue') IS NULL
 BEGIN	 
 	ALTER TABLE [dbo].[tblsettings]
 	ADD [PreventToSaveCaseWithInactiveValue] int Not Null default(0)
+End
+Go
+
+if COL_LENGTH('tblsettings','EMailSubjectPattern') != 200
+BEGIN	
+	alter table tblsettings alter column EMailSubjectPattern nvarchar(100) not null 
 END
-GO 
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.14'

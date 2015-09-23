@@ -51,6 +51,7 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Web.Models.Case.Output;
     using DH.Helpdesk.Web.Models.CaseLock;
     using DH.Helpdesk.Web.Models.Shared;
+    using DH.Helpdesk.Common.Extensions.DateTime;
 
     using Org.BouncyCastle.Bcpg;
 
@@ -1132,19 +1133,138 @@ namespace DH.Helpdesk.Web.Controllers
             return Json("Success");
         }
 
-        public JsonResult IsCaseAvailable(int caseId, string lockGuid)
+        public JsonResult IsCaseAvailable(int caseId, DateTime caseChangedTime, string lockGuid)
         {
             var caseLock = this._caseLockService.GetCaseLockByCaseId(caseId);
+
+            
             if (caseLock != null && caseLock.LockGUID == new Guid(lockGuid) && caseLock.ExtendedTime >= DateTime.Now)
+                // Case still is locked by me
                 return Json(true);
+            else                            
+                if (caseLock == null || (caseLock != null && !(caseLock.ExtendedTime >= DateTime.Now)))
+                {
+                    //case is not locked by me or is not locked at all 
+                    var curCase = this._caseService.GetCaseById(caseId);
+                    if (curCase != null && curCase.ChangeTime.RoundTick() == caseChangedTime.RoundTick())
+                        //case is not updated yet by any other
+                        return Json(true);
+                    else
+                        return Json(false);
+                }
             else
-                return Json(false);
+                return Json(false);            
         }
 
         public JsonResult ReExtendCaseLock(string lockGuid, int extendValue)
         {
             return Json(this._caseLockService.ReExtendLockCase(new Guid(lockGuid), extendValue));
         }
+
+        /****  Case SLA Calculation simulator ***/
+        // ** This function is using for developing test **//
+        /*public JsonResult CalulateSLA(int caseId, int userId, DateTime simulateTime)
+        {
+            
+            var utcNow = simulateTime;
+
+            var case_ = this._caseService.GetCaseById(caseId);
+            if (case_ == null || case_.Id < 1)
+                return Json("There is no case info for case id:" + caseId.ToString());
+
+            var user = this._userService.GetUser(userId);
+            if (user == null || user.Id < 1)
+                return Json("User number is not exist:" + userId.ToString());
+
+            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(user.TimeZoneId);
+
+            var curCustomer = _customerService.GetCustomer(case_.Customer_Id);
+            var caseRegTime = DateTime.SpecifyKind(case_.RegTime, DateTimeKind.Utc);
+
+            bool edit = true;
+            // get case as it was before edit
+            //DHDomain.Case oldCase = new DHDomain.Case();
+
+            var curCase = this._caseService.GetCaseHistoryByCaseId(caseId).Where(ch => ch.CreatedDate < simulateTime)
+                                                                              .OrderByDescending(x => x.CreatedDate)
+                                                                              .FirstOrDefault();
+            var oldCase = this._caseService.GetCaseHistoryByCaseId(caseId).Where(ch => ch.CreatedDate < curCase.CreatedDate)
+                                                                            .OrderByDescending(x => x.CreatedDate)
+                                                                            .FirstOrDefault();
+            var externalTime = 0;
+            if (edit)
+            {
+                #region Editing existing case
+                //oldCase = this._caseService.GetDetachedCaseById(case_.Id);
+
+
+                if (curCase == null)
+                    return Json("There is no history about case");
+
+                var oldCase_StateSecondary_Id = oldCase.StateSecondary_Id;
+                if (oldCase_StateSecondary_Id.HasValue)
+                {
+                    var caseSubState = this._stateSecondaryService.GetStateSecondary(oldCase_StateSecondary_Id.Value);
+
+                    // calculating time spent in "inactive" state since last changing every save
+                    if (caseSubState.IncludeInCaseStatistics == 0)
+                    {
+                        var workTimeCalcFactory =
+                            new WorkTimeCalculatorFactory(
+                                ManualDependencyResolver.Get<IHolidayService>(),
+                                curCustomer.WorkingDayStart,
+                                curCustomer.WorkingDayEnd,
+                                TimeZoneInfo.FindSystemTimeZoneById(user.TimeZoneId));
+                        int[] deptIds = null;
+
+                        var caseDepartmentId = curCase.Department_Id;
+                        if (caseDepartmentId.HasValue)
+                        {
+                            deptIds = new int[] { caseDepartmentId.Value };
+                        }
+
+                        var oldCase_ChangeTime = oldCase.CreatedDate;
+                        var oldCase_DepartmentId = oldCase.Department_Id;
+                        var workTimeCalc = workTimeCalcFactory.Build(oldCase_ChangeTime, utcNow, deptIds);
+                        externalTime = workTimeCalc.CalculateWorkTime(
+                            oldCase_ChangeTime,
+                            utcNow,
+                            oldCase_DepartmentId) + oldCase.ExternalTime;
+                    }
+                }
+
+
+                #endregion
+            }
+
+
+
+            var case_FinishingDate = simulateTime;
+
+            var workTimeCalcFactory2 = new WorkTimeCalculatorFactory(
+                ManualDependencyResolver.Get<IHolidayService>(),
+                curCustomer.WorkingDayStart,
+                curCustomer.WorkingDayEnd,
+                TimeZoneInfo.FindSystemTimeZoneById(user.TimeZoneId));
+            int[] deptIds2 = null;
+
+            if (curCase.Department_Id.HasValue)
+            {
+                deptIds2 = new int[] { curCase.Department_Id.Value };
+            }
+
+            var workTimeCalc2 = workTimeCalcFactory2.Build(caseRegTime, case_FinishingDate, deptIds2);
+            var leadTime = workTimeCalc2.CalculateWorkTime(
+                caseRegTime,
+                case_FinishingDate,
+                curCase.Department_Id) - externalTime;
+
+            var msg = string.Format("System >> LeadTime:{0} ExternalTime:{1} <br/> Simulator >> LeadTime:{2} ExternalTime:{3}",
+                                    case_.LeadTime, case_.ExternalTime, leadTime, externalTime);
+                                    
+            return Json(msg);
+        }*/
+
 
         public ActionResult New(
             int? customerId, 
@@ -2436,7 +2556,7 @@ namespace DH.Helpdesk.Web.Controllers
             var updateNotifierInformation = m.updateNotifierInformation;
             var caseInvoiceArticles = m.caseInvoiceArticles;
             case_.Performer_User_Id = m.Performer_Id;
-            case_.CaseResponsibleUser_Id = m.ResponsibleUser_Id;
+            case_.CaseResponsibleUser_Id = m.ResponsibleUser_Id;            
             case_.RegistrationSourceCustomer_Id = m.customerRegistrationSourceId;
             case_.Ou = null;
             case_.Department = null;

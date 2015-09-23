@@ -125,7 +125,12 @@
         }
 
         function MakeAsUnread() {             
-            $.post('@Url.Content("~/Cases/IsCaseAvailable/")', { caseId: '@Model.CaseLock.CaseId', lockGuid: '@Model.CaseLock.LockGUID' },
+            $.post('@Url.Content("~/Cases/IsCaseAvailable/")',
+                {
+                    caseId: '@Model.CaseLock.CaseId',
+                    caseChangedTime: '@Model.case_.ChangeTime',
+                    lockGuid: '@Model.CaseLock.LockGUID'
+                },
                 function (data) {
                     if (data == true) {
                         $.post('/cases/markasunread/', { id: '@Model.case_.Id', customerId: '@Model.case_.Customer_Id' }, function (data) {

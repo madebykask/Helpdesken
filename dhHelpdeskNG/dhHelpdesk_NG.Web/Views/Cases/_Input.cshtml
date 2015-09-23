@@ -8,7 +8,7 @@
 
 <script type="text/javascript">
     window.parameters = {
-        currentCaseId: '@Model.case_.Id',
+        currentCaseId: '@Model.case_.Id',        
         customerId: '@Model.case_.Customer_Id',
         parentCaseId: '@(Model.ParentCaseInfo != null? Model.ParentCaseInfo.ParentId.ToString() : "null")',
         isAnyNotClosedChild: '@Model.IsAnyNotClosedChild().ToString()',
@@ -16,6 +16,7 @@
                                            Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) + "] " +
                                            Translation.Get("inte har valts. Vänligen kontrollera ärendet."))',
         caseLockGuid: '@Model.CaseLock.LockGUID',
+        caseChangedTime: '@Model.case_.ChangeTime',
         userCaseLocker: '@Model.CaseLock.UserId',
         extendValue: '@Model.CaseLock.ExtendValue',
         caseLockChecker: '@Url.Content("~/Cases/IsCaseAvailable/")',
@@ -71,6 +72,17 @@
         pDepartmentVisible = true;
     }
  }
+
+@*<script type="text/javascript">
+    function CalcSLA()
+    {        
+        $.post('@Url.Content("~/Cases/CalulateSLA/")', {caseId:'@Model.case_.Id', userId:'@SessionFacade.CurrentUser.Id', simulateTime:'@Model.case_.ChangeTime.AddSeconds(5)'},
+            function(data) {
+                alert(data);
+            });
+    }
+</script>*@
+
 @if (Model.case_ != null)
 {
     <div class="content onemenu editcase" id="mm1">
@@ -172,7 +184,7 @@
                         @Html.Hidden("CurLanguageId", SessionFacade.CurrentLanguageId)
                         @Html.Hidden("SelectedValueCarrier", "")
                         @Html.HiddenFor(model => Model.CaseLock.LockGUID)
-                        
+                        @*<input type="button" id="sla_test" value="SLA Test" onclick="CalcSLA();" />*@
                         @if (Model.IsItChildCase())
                         {
                             <input type="hidden" name="ParentId" value="@Model.ParentCaseInfo.ParentId" />

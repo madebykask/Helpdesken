@@ -273,6 +273,7 @@ function LoadTemplate(id) {
     $.get('/CaseSolution/GetTemplate',
         { 'id': id },
         function (caseTemplate) {
+            
             var showOverwriteWarning = false;
             if (!caseTemplate) {
                 return;

@@ -575,7 +575,10 @@
     {
         @Html.Partial("_CaseLogSection", Model)
     }
-
+@*@if (Model.Case.CaseHistories != null && Model.Case.CaseHistories.Any())
+{
+    @Html.Partial("_CaseHistorySection", Model)
+}*@
 
     @if (Model.Case.FinishingDate.HasValue)
     {

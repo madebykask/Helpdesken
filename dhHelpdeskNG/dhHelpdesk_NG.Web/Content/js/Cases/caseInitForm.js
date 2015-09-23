@@ -140,7 +140,7 @@ function GetComputerUserSearchOptions() {
     var options = {
         items: 20,
         minLength: 2,
-        source: function (query, process) {
+        source: function (query, process) {                        
             return $.ajax({
                 url: '/cases/search_user',
                 type: 'post',
@@ -151,7 +151,9 @@ function GetComputerUserSearchOptions() {
                         var aItem = {
                             id: item.Id
                                     , num: item.UserId
-                                    , name: item.SurName + ' ' + item.FirstName
+                                    //Changed in HotFix 5.3.13
+                                    //, name: item.SurName + ' ' + item.FirstName
+                                    , name: item.FirstName + ' ' + item.SurName
                                     , email: item.Email
                                     , place: item.Location
                                     , phone: item.Phone
@@ -163,11 +165,12 @@ function GetComputerUserSearchOptions() {
                                     , departmentname: item.DepartmentName
                                     , ouid: item.OU_Id
                                     , ouname: item.OUName
-                                    , name_family: item.FirstName + ' ' + item.SurName
+                                    , name_family: item.SurName + ' ' + item.SurName
                         };
                         return JSON.stringify(aItem);
+                        
                     });
-
+                    
                     return process(resultList);
                 }
             });
@@ -216,12 +219,12 @@ function GetComputerUserSearchOptions() {
         updater: function (obj) {
             var item = JSON.parse(obj);
             var departmentFilterFormat = $('#DepartmentFilterFormat').val();
-            //console.log(JSON.stringify(item));
+            
             $('#case__ReportedBy').val(item.num);
-
+            
             // Raise event about UserId changed.
             $(document).trigger("OnUserIdChanged", [item.num]);
-
+            
             $('#case__PersonsName').val(item.name);
             $('#case__PersonsEmail').val(item.email);
             $('#case__PersonsPhone').val(item.phone);
@@ -234,7 +237,7 @@ function GetComputerUserSearchOptions() {
             $(publicDepartmentControlName).val(item.departmentid).trigger('change');
 
             refreshDepartment(item.regionid, departmentFilterFormat, item.departmentid, item.ouid);
-
+            
             return item.num;
         }
     };
