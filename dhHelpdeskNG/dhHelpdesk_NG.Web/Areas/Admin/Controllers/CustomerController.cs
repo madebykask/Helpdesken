@@ -997,6 +997,7 @@
                 newCustomerCustomerUser.User_Id = cu.User_Id;
                 newCustomerCustomerUser.CasePerformerFilter = string.Empty;
                 newCustomerCustomerUser.ShowOnStartPage = cu.ShowOnStartPage;
+                newCustomerCustomerUser.UserInfoPermission = cu.UserInfoPermission;
 
                 this._customerUserService.SaveCustomerUserForCopy(newCustomerCustomerUser, out errors);
             }

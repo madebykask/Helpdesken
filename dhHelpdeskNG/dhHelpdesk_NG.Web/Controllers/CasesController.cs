@@ -1378,7 +1378,7 @@ namespace DH.Helpdesk.Web.Controllers
          
         [HttpPost]
         [ValidateInput(false)]
-        public RedirectResult NewAndClose(CaseEditInput m, int? templateId)
+        public RedirectResult NewAndClose(CaseEditInput m, int? templateId, string BackUrl)
         {
             int caseId = this.Save(m);
             this.CheckTemplateParameters(templateId, caseId);
@@ -1389,7 +1389,14 @@ namespace DH.Helpdesk.Web.Controllers
             }
             else
             {
-                url = this.GetLinkWithHash(string.Empty, new { customerId = m.case_.Customer_Id }, "Index");
+                if (BackUrl != "")
+                {
+                    url = BackUrl;
+                }
+                else
+                {
+                    url = this.GetLinkWithHash(string.Empty, new { customerId = m.case_.Customer_Id }, "Index");
+                }
             }
 
             return this.Redirect(url);
