@@ -1383,6 +1383,10 @@ namespace DH.Helpdesk.Web.Controllers
             int caseId = this.Save(m);
             this.CheckTemplateParameters(templateId, caseId);
             string url;
+
+            if (BackUrl == null)
+                BackUrl = "";
+
             if (m.ParentId.HasValue)
             {
                 url = this.GetLinkWithHash(ChildCasesHashTab, new { id = m.ParentId }, "Edit");
