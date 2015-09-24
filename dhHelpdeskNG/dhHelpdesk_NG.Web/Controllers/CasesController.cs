@@ -1163,11 +1163,9 @@ namespace DH.Helpdesk.Web.Controllers
 
         /****  Case SLA Calculation simulator ***/
         // ** This function is using for developing test **//
-        /*public JsonResult CalulateSLA(int caseId, int userId, DateTime simulateTime)
-        {
-            
+        public JsonResult CalculateSLA(int caseId, int userId, DateTime simulateTime)
+        {            
             var utcNow = simulateTime;
-
             var case_ = this._caseService.GetCaseById(caseId);
             if (case_ == null || case_.Id < 1)
                 return Json("There is no case info for case id:" + caseId.ToString());
@@ -1182,9 +1180,7 @@ namespace DH.Helpdesk.Web.Controllers
             var caseRegTime = DateTime.SpecifyKind(case_.RegTime, DateTimeKind.Utc);
 
             bool edit = true;
-            // get case as it was before edit
-            //DHDomain.Case oldCase = new DHDomain.Case();
-
+            // get case as it was before edit           
             var curCase = this._caseService.GetCaseHistoryByCaseId(caseId).Where(ch => ch.CreatedDate < simulateTime)
                                                                               .OrderByDescending(x => x.CreatedDate)
                                                                               .FirstOrDefault();
@@ -1237,8 +1233,6 @@ namespace DH.Helpdesk.Web.Controllers
                 #endregion
             }
 
-
-
             var case_FinishingDate = simulateTime;
 
             var workTimeCalcFactory2 = new WorkTimeCalculatorFactory(
@@ -1263,7 +1257,7 @@ namespace DH.Helpdesk.Web.Controllers
                                     case_.LeadTime, case_.ExternalTime, leadTime, externalTime);
                                     
             return Json(msg);
-        }*/
+        }
 
 
         public ActionResult New(
@@ -2614,9 +2608,16 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             // get case as it was before edit
+            var curCustomer = _customerService.GetCustomer(case_.Customer_Id);
+            if (curCustomer == null)
+            {
+                throw new ArgumentException("Case customer has an invalid value");
+            }
+
             DHDomain.Case oldCase = new DHDomain.Case();
             if (edit)
             {
+                
                 #region Editing existing case
                 oldCase = this._caseService.GetDetachedCaseById(case_.Id);
                 var cu = this._customerUserService.GetCustomerSettings(case_.Customer_Id, SessionFacade.CurrentUser.Id);
@@ -2657,8 +2658,8 @@ namespace DH.Helpdesk.Web.Controllers
                         var workTimeCalcFactory =
                             new WorkTimeCalculatorFactory(
                                 ManualDependencyResolver.Get<IHolidayService>(),
-                                SessionFacade.CurrentCustomer.WorkingDayStart,
-                                SessionFacade.CurrentCustomer.WorkingDayEnd,
+                                curCustomer.WorkingDayStart,
+                                curCustomer.WorkingDayEnd,
                                 TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
                         int[] deptIds = null;
                         if (case_.Department_Id.HasValue)
@@ -2709,8 +2710,8 @@ namespace DH.Helpdesk.Web.Controllers
 
                 var workTimeCalcFactory = new WorkTimeCalculatorFactory(
                     ManualDependencyResolver.Get<IHolidayService>(),
-                    SessionFacade.CurrentCustomer.WorkingDayStart,
-                    SessionFacade.CurrentCustomer.WorkingDayEnd,
+                    curCustomer.WorkingDayStart,
+                    curCustomer.WorkingDayEnd,
                     TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
                 int[] deptIds = null;
                 if (case_.Department_Id.HasValue)

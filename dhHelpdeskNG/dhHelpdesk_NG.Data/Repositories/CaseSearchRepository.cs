@@ -172,18 +172,20 @@
                                         //// calc time by watching date
                                         if (watchDateDue > now)
                                         {
+                                            // #52951 timeOnPause shouldn't calculate when watchdate has value
                                             timeLeft = (workTimeCalculator.CalculateWorkTime(
                                                 now,
                                                 watchDateDue,
-                                                departmentId) + timeOnPause) / 60;
+                                                departmentId) ) / 60;                                            
                                         }
                                         else
                                         {
                                             //// for cases that should be closed in the past
+                                            // #52951 timeOnPause shouldn't calculate when watchdate has value
                                             timeLeft = (-workTimeCalculator.CalculateWorkTime(
                                             watchDateDue,
                                             now,
-                                            departmentId) + timeOnPause) / 60;
+                                            departmentId)) / 60;
                                         }                                        
                                     }
                                     else if (SLAtime > 0)
