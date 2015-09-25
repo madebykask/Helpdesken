@@ -1339,7 +1339,7 @@ namespace DH.Helpdesk.Services.Services
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
                                     fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 8);
-                                    _emailService.SendEmail(customEmailSender2, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                    _emailService.SendEmail(customEmailSender2, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, false, files);
                                 }
                             }
                         }
@@ -1357,7 +1357,7 @@ namespace DH.Helpdesk.Services.Services
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
                                     fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 9);
-                                    _emailService.SendEmail(customEmailSender2, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                    _emailService.SendEmail(customEmailSender2, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, false, files);
                                 }
                             }
                                 
