@@ -598,7 +598,7 @@
             sql.Add("select distinct");
 
             // vid avslutade ärenden visas bara första 500
-            if (f != null && (f.CaseProgress == "1" || f.CaseProgress =="-1"))
+            if (f != null && (f.CaseProgress == CaseProgressFilter.ClosedCases || f.CaseProgress == CaseProgressFilter.None))
             {
                 sql.Add("top 500");
             }
@@ -793,6 +793,9 @@
                 {
                     orderBy.Add("desc");
                 }
+
+                if (sort.ToLower() != "casenumber")
+                orderBy.Add(", CaseNumber desc");
             }
 
             sql.Add(string.Join(" ", orderBy));
