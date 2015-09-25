@@ -1374,6 +1374,11 @@ namespace DH.Helpdesk.Web.Controllers
         [ValidateInput(false)]
         public RedirectResult NewAndClose(CaseEditInput m, int? templateId, string BackUrl)
         {
+            var newChild = false;
+
+            if (m.case_.Id == 0 && m.ParentId != null)
+                newChild = true;
+
             int caseId = this.Save(m);
             this.CheckTemplateParameters(templateId, caseId);
             string url;
@@ -1381,20 +1386,18 @@ namespace DH.Helpdesk.Web.Controllers
             if (BackUrl == null)
                 BackUrl = "";
 
-            if (m.ParentId.HasValue)
+
+            if (BackUrl != "")
+            {
+                url = BackUrl;
+            }
+            else if (m.ParentId.HasValue && newChild)
             {
                 url = this.GetLinkWithHash(ChildCasesHashTab, new { id = m.ParentId }, "Edit");
             }
             else
             {
-                if (BackUrl != "")
-                {
-                    url = BackUrl;
-                }
-                else
-                {
-                    url = this.GetLinkWithHash(string.Empty, new { customerId = m.case_.Customer_Id }, "Index");
-                }
+                url = this.GetLinkWithHash(string.Empty, new { customerId = m.case_.Customer_Id }, "Index");
             }
 
             return this.Redirect(url);
