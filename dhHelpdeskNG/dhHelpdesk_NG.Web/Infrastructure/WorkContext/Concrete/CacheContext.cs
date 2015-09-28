@@ -35,11 +35,6 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
         /// The holiday service.
         /// </summary>
         private readonly IHolidayService holidayService;
-
-        /// <summary>
-        /// The holidays.
-        /// </summary>
-        private IEnumerable<HolidayOverview> holidays;  
         
         /// <summary>
         /// The default calendar holidays.
@@ -55,27 +50,6 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
         public CacheContext(IHolidayService holidayService)
         {
             this.holidayService = holidayService;
-        }
-
-        /// <summary>
-        /// Gets the holidays.
-        /// </summary>
-        public IEnumerable<HolidayOverview> Holidays
-        {
-            get
-            {
-                return null;
-                //                if (this.holidays == null)
-                //                {
-                //                    this.holidays = (IEnumerable<HolidayOverview>)HttpContext.Current.Cache[CacheHolidays];
-                //                    if (this.holidays == null)
-                //                    {
-                //                        HttpContext.Current.Cache[CacheHolidays] = this.holidays = this.holidayService.GetHolidayOverviews();
-                //                    }
-                //                }
-                //
-                //                return this.holidays;
-            }
         }
 
         public IEnumerable<HolidayOverview> DefaultCalendarHolidays
@@ -101,7 +75,6 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
         /// </summary>
         public void Refresh()
         {
-            this.holidays = null;
             HttpContext.Current.Cache.Remove(CacheDefaultCalendar);
             HttpContext.Current.Cache.Remove(CacheHolidays);
         }

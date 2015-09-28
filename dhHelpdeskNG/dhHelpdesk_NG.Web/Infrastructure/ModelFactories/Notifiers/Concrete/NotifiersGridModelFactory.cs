@@ -93,7 +93,7 @@
                 CreateValueIfNeeded(
                     settings.CreatedDate,
                     StateField.CreatedDate,
-                    notifier.CreatedDate.ToString(CultureInfo.InvariantCulture),
+                    notifier.CreatedDate.ToFormattedDateTime(),
                     cellValues);
 
                 CreateValueIfNeeded(

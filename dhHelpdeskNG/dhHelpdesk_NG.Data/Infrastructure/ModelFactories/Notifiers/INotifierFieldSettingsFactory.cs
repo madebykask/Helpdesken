@@ -10,8 +10,8 @@
                     string caption,
                     string lableText,
                     bool required,
-                    string ldapAttribute);        
-        
-        FieldSetting CreateEmpty();
+                    string ldapAttribute);
+
+        FieldSetting CreateEmpty(string label);
     }
 }

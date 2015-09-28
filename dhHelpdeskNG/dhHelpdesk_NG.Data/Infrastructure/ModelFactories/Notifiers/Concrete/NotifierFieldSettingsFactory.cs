@@ -22,13 +22,13 @@
             return instance;
         }
 
-        public FieldSetting CreateEmpty()
+        public FieldSetting CreateEmpty(string label)
         {
             var empty = new FieldSetting(
                             false,
                             false,
                             "Empty",
-                            "Empty",
+                            string.IsNullOrEmpty(label) ? "Empty" : label,
                             false,
                             string.Empty);
             empty.MarkAsEmpty();

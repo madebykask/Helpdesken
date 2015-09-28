@@ -1,8 +1,6 @@
 ﻿using System;
-using System;
 using System.Collections.Generic;
 
-using DH.Helpdesk.BusinessData.Models.SelfService.Case;
 using DH.Helpdesk.Common.ValidationAttributes;
 
 namespace DH.Helpdesk.BusinessData.Models.SelfService.Case
@@ -35,7 +33,7 @@ namespace DH.Helpdesk.BusinessData.Models.SelfService.Case
                                        DateTime registrationDate, string productArea, string watchDate, List<SelfServiceCaseLog>  caseLogs)
         {
              
-            caseId = caseId;
+            this.caseId = caseId;
             PersonName = personName;
             PersonPhone = personPhone;
             Department = department;
