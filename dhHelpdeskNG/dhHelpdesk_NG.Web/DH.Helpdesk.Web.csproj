@@ -29,10 +29,14 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
-    <IISExpressSSLPort>44302</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
-    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
+    <IISExpressSSLPort>
+    </IISExpressSSLPort>
+    <IISExpressAnonymousAuthentication>
+    </IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>
+    </IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode>
+    </IISExpressUseClassicPipelineMode>
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
     <DontImportPostSharp>True</DontImportPostSharp>
     <TargetFrameworkProfile />
@@ -924,6 +928,7 @@
     <Compile Include="Controllers\DailyReportController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FaqController.cs" />
+    <Compile Include="Controllers\FilesController.cs" />
     <Compile Include="Controllers\InvoiceController.cs" />
     <Compile Include="Areas\Licenses\Controllers\ProductsController.cs" />
     <Compile Include="Controllers\NotifiersController.cs" />

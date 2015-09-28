@@ -1566,7 +1566,12 @@ namespace DH.Helpdesk.Web.Controllers
                     m.CaseFieldSettingWithLangauges = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customerId, SessionFacade.CurrentLanguageId);
                     m.finishingCauses = this._finishingCauseService.GetFinishingCauses(customerId);
                     m.case_ = this._caseService.GetCaseById(m.CaseLog.CaseId);
-                    m.LogFilesModel = new FilesModel(id.ToString(), this._logFileService.FindFileNamesByLogId(id));
+                    bool UseVD = false;
+                    if (!string.IsNullOrEmpty(this._masterDataService.GetVirtualDirectoryPath(customerId)))
+                    {
+                        UseVD = true;
+                    }
+                    m.LogFilesModel = new FilesModel(id.ToString(), this._logFileService.FindFileNamesByLogId(id), UseVD);
                     const bool isAddEmpty = true;
                     var responsibleUsersAvailable = this._userService.GetAvailablePerformersOrUserId(customerId, m.case_.CaseResponsibleUser_Id);
                     var customerSettings = this._settingService.GetCustomerSetting(customerId);
@@ -1934,6 +1939,26 @@ namespace DH.Helpdesk.Web.Controllers
                 fileContent = this._caseFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
             }
             return new UnicodeFileContentResult(fileContent, fileName);
+        }        
+
+        [HttpGet]
+        public FileResult FileLink(string id, string fileName)
+        {
+            var link = "";
+
+            var absolute = RequestExtension.GetAbsoluteUrl();
+
+            var c = this._caseService.GetCaseById(int.Parse(id));
+            var basePath = string.Empty;
+            if (c != null)
+                basePath = _masterDataService.GetFilePath(c.Customer_Id);
+
+            basePath = "documents";
+            absolute = "http://dhhelpdesk-dh-dev/";
+            var mimetype = "application/octet-stream";
+            link = absolute + basePath + "/" + c.CaseNumber + "/" + fileName;
+
+            return File(link,mimetype);
         }
 
         [HttpGet]
@@ -1969,8 +1994,18 @@ namespace DH.Helpdesk.Web.Controllers
                                 : this._caseFileService.FindFileNamesByCaseId(int.Parse(id));
 
             var cfs = MakeCaseFileModel(files);
-
-            var model = new CaseFilesModel(id, cfs.ToArray());
+            var customerId = 0;
+            if (!GuidHelper.IsGuid(id)) {
+                customerId = this._caseService.GetCaseById(int.Parse(id)).Customer_Id;
+            }
+            
+            //
+            bool UseVD = false;
+            if (customerId != 0 && !string.IsNullOrEmpty(this._masterDataService.GetVirtualDirectoryPath(customerId)))
+            {
+                UseVD = true;
+            }
+            var model = new CaseFilesModel(id, cfs.ToArray(), UseVD);
             return this.PartialView("_CaseFiles", model);
         }
 
@@ -1987,8 +2022,19 @@ namespace DH.Helpdesk.Web.Controllers
             var files = GuidHelper.IsGuid(id)
                                 ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Log)
                                 : this._logFileService.FindFileNamesByLogId(int.Parse(id));
+            var caseId = this._logService.GetLogById(int.Parse(id)).CaseId;
+            var customerId = 0;
+            if (!GuidHelper.IsGuid(id))
+            {
+                customerId = this._caseService.GetCaseById(caseId).Customer_Id;
+            }
+            bool UseVD = false;
+            if (customerId != 0 &&!string.IsNullOrEmpty(this._masterDataService.GetVirtualDirectoryPath(customerId)))
+            {
+                UseVD = true;
+            }
 
-            var model = new FilesModel(id, files);
+            var model = new FilesModel(id, files,UseVD);
             return this.PartialView("_CaseLogFiles", model);
         }
 
@@ -3112,7 +3158,14 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                 #region Existing case model initialization actions
                     m.Logs = this._logService.GetCaseLogOverviews(caseId);
-                    m.CaseFilesModel = new CaseFilesModel(caseId.ToString(global::System.Globalization.CultureInfo.InvariantCulture), this._caseFileService.GetCaseFiles(caseId).OrderBy(x => x.CreatedDate).ToArray());
+                    
+                    bool UseVD = false;
+                    if (!string.IsNullOrEmpty(this._masterDataService.GetVirtualDirectoryPath(customerId)))
+                    {
+                        UseVD = true;
+                    }
+
+                    m.CaseFilesModel = new CaseFilesModel(caseId.ToString(global::System.Globalization.CultureInfo.InvariantCulture), this._caseFileService.GetCaseFiles(caseId).OrderBy(x => x.CreatedDate).ToArray(), UseVD);
                     if (m.case_.User_Id.HasValue)
                     {
                         m.RegByUser = this._userService.GetUser(m.case_.User_Id.Value);

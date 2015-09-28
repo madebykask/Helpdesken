@@ -31,7 +31,14 @@
         var date = TimeZoneInfo.ConvertTimeFromUtc(file.CreatedDate.ToUniversalTime(), userTimezone);
                 <tr data-field="caseFile" data-field-id="@Model.ObjectId" data-field-name="@file.FileName">
                     <td>
-                        <a href="@Url.Action("DownloadFile", new RouteValueDictionary { { "id", Model.ObjectId }, { "fileName", file.FileName } })"><i class="icon-file"></i>@file.FileName</a>
+                        @if (Model.VirtualDirectory)
+                        {
+                            <a target="_blank" href="@Html.Action("CaseFileLinkVD","Files", new RouteValueDictionary { { "id", Model.ObjectId }, { "fileName", file.FileName } })"><i class="icon-file"></i>@file.FileName</a>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("DownloadFile", new RouteValueDictionary { { "id", Model.ObjectId }, { "fileName", file.FileName } })"><i class="icon-file"></i>@file.FileName</a>
+                        }
                     </td>
                     <td>
                         @date.ToFormattedDateTime()

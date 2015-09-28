@@ -303,7 +303,7 @@ namespace DH.Helpdesk.Web.Controllers
                         {
                             CustomerId = customerId,
                             Case = caseModel,
-                            CaseFilesModel = new FilesModel(caseId.ToString(CultureInfo.InvariantCulture), this.caseFileService.FindFileNamesByCaseId(caseId)),
+                            CaseFilesModel = new FilesModel(caseId.ToString(CultureInfo.InvariantCulture), this.caseFileService.FindFileNamesByCaseId(caseId), false),
                             CaseFieldSettings = fields,
                             CaseLog = this.logService.InitCaseLog(SessionFacade.CurrentUser.Id, string.Empty),
                             FinishingCauses = this.finishingCauseService.GetFinishingCauses(customerId),

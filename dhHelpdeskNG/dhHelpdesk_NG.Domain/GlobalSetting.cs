@@ -15,6 +15,7 @@ namespace DH.Helpdesk.Domain
         public int ServerPort { get; set; }
         public string ApplicationName { get; set; }
         public string AttachedFileFolder { get; set; }
+        public string VirtualFileFolder { get; set; }
         public string DBVersion { get; set; }
         public string HelpdeskDBVersion { get; set; }
         public string EMailBodyEncoding { get; set; }
