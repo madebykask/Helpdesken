@@ -1942,26 +1942,6 @@ namespace DH.Helpdesk.Web.Controllers
         }        
 
         [HttpGet]
-        public FileResult FileLink(string id, string fileName)
-        {
-            var link = "";
-
-            var absolute = RequestExtension.GetAbsoluteUrl();
-
-            var c = this._caseService.GetCaseById(int.Parse(id));
-            var basePath = string.Empty;
-            if (c != null)
-                basePath = _masterDataService.GetFilePath(c.Customer_Id);
-
-            basePath = "documents";
-            absolute = "http://dhhelpdesk-dh-dev/";
-            var mimetype = "application/octet-stream";
-            link = absolute + basePath + "/" + c.CaseNumber + "/" + fileName;
-
-            return File(link,mimetype);
-        }
-
-        [HttpGet]
         public UnicodeFileContentResult DownloadLogFile(string id, string fileName)
         {
             byte[] fileContent;
