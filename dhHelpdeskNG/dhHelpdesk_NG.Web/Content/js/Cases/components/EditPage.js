@@ -35,9 +35,10 @@ EditPage.prototype.fetchWatchDateByDept = function (deptId) {
                 if (response.data != null) {
                     var dt = new Date(parseInt(response.data.replace("/Date(", "").replace(")/", ""), 10));
                     me.$watchDate.datepicker('update', dt);
-                } else {
-                    me.$watchDate.datepicker('update', '');
                 }
+                //else {
+                //    me.$watchDate.datepicker('update', '');
+                //}
 
             }
         });
@@ -381,6 +382,7 @@ EditPage.prototype.init = function (p) {
     me.$department = $('.departments-list');
     me.$SLASelect = $('#case__Priority_Id');
     me.$SLAInput = $('input.sla-value');
+    me.$watchDateEdit = $('#case__WatchDate');
     me.$watchDate = $('#divCase__WatchDate');
     me.$buttonsToDisable = $('.btn.save, .btn.save-close, .btn.save-new');
     me.$productAreaObj = $('#divProductArea');
@@ -410,9 +412,11 @@ EditPage.prototype.init = function (p) {
 
         if (!isNaN(deptId) && (!isNaN(SLA) && SLA === 0)) {
             return me.fetchWatchDateByDept.call(me, deptId);
-        } else {
-            me.$watchDate.datepicker('update', '');
         }
+        //else {
+        //    if (me.$watchDateEdit.val() == '')
+        //        me.$watchDate.datepicker('update', '');
+        //}
 
         return false;
     });
