@@ -597,6 +597,7 @@ function DestroyDataTable(tableUniqId) {
 
 function InitDataTable(tableUniqId, perText, showingText) {
     $('#' + tableUniqId).dataTable({
+        'sError': 'throw',
         "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
         "sPaginationType": "bootstrap",
         "oLanguage": {
