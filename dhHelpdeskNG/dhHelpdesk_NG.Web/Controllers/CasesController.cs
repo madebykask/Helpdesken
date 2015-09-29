@@ -623,7 +623,12 @@ namespace DH.Helpdesk.Web.Controllers
                                              SessionFacade.CaseOverviewGridSettings,
                                              SessionFacade.CurrentCustomer.Id,
                                              m.CaseSetting.ColumnSettingModel.AvailableColumns.Count()),
-                                     refreshContent = user.RefreshContent
+                                     refreshContent = user.RefreshContent,
+                                     messages = new Dictionary<string, string>()
+                                                    {
+                                                        { "information", Translation.GetCoreTextTranslation("Information") },
+                                                        { "records_limited_msg", Translation.GetCoreTextTranslation("Antal ärende som visas är begränsade till 500.") },
+                                                    }
                                  };
 
             return this.View("Index", m);
