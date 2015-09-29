@@ -129,7 +129,8 @@
                                                          c => c.Logs.Select(l => l.LogFiles.FirstOrDefault().FileName),
                                                          c => c.Logs.Select(l => l.FinishingDate),
                                                          c => c.Logs.Select(l => l.FinishingTypeEntity != null? l.FinishingTypeEntity.Id : 0),
-                                                         c => c.Logs.Select(l => l.LogDate)
+                                                         c => c.Logs.Select(l => l.LogDate),
+                                                         c => c.RegistrationSourceCustomer.SourceName
                                                      })
                                                      .ToList();
 
@@ -235,7 +236,8 @@
                         caseEntity.ProductArea.Name = caseEntity.ProductArea_Id.GetProductAreaFullName(productAreaQuery);
                         caseEntity.Ou.Name = caseEntity.OU_Id.GetOUFullName(organizationUnitQuery);
 
-                        var caseStatistic = caseStatisticsQuery.Where(cs => cs.CaseId == caseEntity.Id).FirstOrDefault();                        
+                        var caseStatistic = caseStatisticsQuery.Where(cs => cs.CaseId == caseEntity.Id).FirstOrDefault();
+                        caseEntity.RegistrationSourceCustomer = new RegistrationSourceCustomer { SourceName = e.f34 };
                         return CreateFullOverview(caseEntity, caseStatistic);
                     }).ToList();
         }
@@ -287,6 +289,9 @@
             var registratedBy = new UserName(entity.User.FirstName, entity.User.SurName);
             var attachedFile = entity.CaseFiles.Any() ? entity.CaseFiles.First().FileName : string.Empty;
             var solvedInTime = (caseStatistics != null ? caseStatistics.WasSolvedInTime : null);
+            var sourceName = entity.RegistrationSourceCustomer == null
+                                 ? string.Empty
+                                 : entity.RegistrationSourceCustomer.SourceName; 
 
             return new CaseInfoOverview(
                         entity.CaseNumber,
@@ -311,6 +316,7 @@
                         entity.Available,
                         entity.Cost,
                         attachedFile,
+                        sourceName,
                         solvedInTime);
         }
 

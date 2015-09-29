@@ -27,6 +27,7 @@
                 string available, 
                 int cost, 
                 string attachedFile,
+                string registrationSource,
                 int? solvedInTime)
         {
             this.AttachedFile = attachedFile;
@@ -51,6 +52,7 @@
             this.ChangeDate = changeDate;
             this.RegistrationDate = registrationDate;
             this.Case = caseNumber;
+            this.RegistrationSource = registrationSource;
             this.SolvedInTime = solvedInTime;
         }
 
@@ -97,6 +99,8 @@
         public int Cost { get; private set; }
 
         public string AttachedFile { get; private set; }
+
+        public string RegistrationSource { get; private set; }
 
         public int? SolvedInTime { get; private set; }
     }
