@@ -1,11 +1,13 @@
-﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
+namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
-    using System.Collections.Generic;
-    using System.Web.Mvc;
-
+   
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Infrastructure;
 
     public class StandardTextController : BaseAdminController
     {
@@ -22,12 +24,18 @@
             this._customerService = customerService;
         }
 
+        public JsonResult SetShowOnlyActiveStandardTextsInAdmin(bool value)
+        {
+            SessionFacade.ShowOnlyActiveStandardTextsInAdmin = value;
+            return this.Json(new { result = "success" });
+        }
+
         public ActionResult Index(int customerId)
         {
             var customer = this._customerService.GetCustomer(customerId);
             var standardTexts = this._textService.GetStandardTexts(customer.Id);
 
-            var model = new StandardTextIndexViewModel { StandardTexts = standardTexts, Customer = customer };
+            var model = new StandardTextIndexViewModel { StandardTexts = standardTexts, Customer = customer, IsShowOnlyActive = SessionFacade.ShowOnlyActiveStandardTextsInAdmin };
             return this.View(model);
         }
 

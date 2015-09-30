@@ -324,6 +324,10 @@
             "~/Areas/Admin/Content/js/Common/ToggableInactiveList.js",
             "~/Areas/Admin/Content/js/OU/index.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/admin/StandardText/index").Include(
+            "~/Areas/Admin/Content/js/Common/ToggableInactiveList.js",
+            "~/Areas/Admin/Content/js/StandardText/index.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/cases/relatedCases").Include(
                             "~/Content/js/Cases/relatedCases.logic.js"));
 

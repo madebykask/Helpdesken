@@ -102,6 +102,8 @@
 
         private const string _SHOW_ACTIVE_OU_IN_ADMIN = "_SHOW_ACTIVE_OU_IN_ADMIN";
 
+        private const string _SHOW_ACTIVE_STANDARDTEXTS_IN_ADMIN = "_SHOW_ACTIVE_STANDARDTEXTS_IN_ADMIN";
+
         #endregion
 
         #region Public Properties
@@ -809,8 +811,25 @@
             {
                 SaveSetKeyValue(_SHOW_ACTIVE_OU_IN_ADMIN, value);
             }
-        } 
+        }
 
+        public static bool ShowOnlyActiveStandardTextsInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_STANDARDTEXTS_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_STANDARDTEXTS_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_STANDARDTEXTS_IN_ADMIN, value);
+            }
+        }
 
         public static bool WasTimeZoneMessageDisplayed
         {

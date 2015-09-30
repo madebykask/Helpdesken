@@ -3434,7 +3434,8 @@ td.disabled
 .registrationSourceCustomer.admin.content .inactive *,
 .region.admin.content .inactive *,
 .department.admin.content .inactive *,
-.oU.admin.content .inactive *
+.oU.admin.content .inactive *,
+.standardtext.admin.content .inactive *
 
 
 {
