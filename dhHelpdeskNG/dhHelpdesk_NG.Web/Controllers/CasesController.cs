@@ -2008,10 +2008,11 @@ namespace DH.Helpdesk.Web.Controllers
             var files = GuidHelper.IsGuid(id)
                                 ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Log)
                                 : this._logFileService.FindFileNamesByLogId(int.Parse(id));
-            var caseId = this._logService.GetLogById(int.Parse(id)).CaseId;
+            
             var customerId = 0;
             if (!GuidHelper.IsGuid(id))
             {
+                var caseId = this._logService.GetLogById(int.Parse(id)).CaseId;
                 customerId = this._caseService.GetCaseById(caseId).Customer_Id;
             }
             bool UseVD = false;
