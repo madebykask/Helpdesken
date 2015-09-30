@@ -48,7 +48,7 @@
 
         public IList<Supplier> GetSuppliers(int customerId)
         {
-            return this._supplierRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
+            return this._supplierRepository.GetMany(x => x.Customer_Id == customerId && x.IsActive == 1).OrderBy(x => x.Name).ToList();
         }
 
         public IList<Supplier> GetActiveSuppliers(int customerId)
@@ -58,7 +58,7 @@
 
         public IList<Supplier> GetSuppliersByCountry(int customerId, int countryId)
         {
-            return this._supplierRepository.GetMany(x => x.Customer_Id == customerId && x.Country_Id == countryId).OrderBy(x => x.Name).ToList();
+            return this._supplierRepository.GetMany(x => x.Customer_Id == customerId && x.Country_Id == countryId && x.IsActive == 1).OrderBy(x => x.Name).ToList();
         }
 
         public int? GetDefaultId(int customerId)

@@ -3372,6 +3372,9 @@ namespace DH.Helpdesk.Web.Controllers
                             m.UpdateNotifierInformation = caseTemplate.UpdateNotifierInformation.Value.ToBool();
                         }
 
+                        if (caseTemplate.Supplier_Id != null)
+                            m.case_.Supplier_Id = caseTemplate.Supplier_Id.Value;
+
                         m.case_.ReportedBy = caseTemplate.ReportedBy;
                         m.case_.Department_Id = caseTemplate.Department_Id;
                         m.CaseMailSetting.DontSendMailToNotifier = caseTemplate.NoMailToNotifier.ToBool();
