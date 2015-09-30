@@ -1126,13 +1126,13 @@
                                         <td>
                                             @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.WorkingGroup_Id, CaseSolutionFields.WorkingGroup))
                                             {
-                                                <select id="case__WorkingGroup_Id" name="case_.WorkingGroup_Id" data-field="workingGroup">
+                                                <select id="case__WorkingGroup_Id" name="case_.WorkingGroup_Id" data-field="workingGroup" class="working-group">
                                                     <option value="">&nbsp;</option>
                                                     @if (Model.workingGroups != null)
                                                     {
-                                                        foreach (var e in Model.workingGroups.Where(e => e.IsActive == 1 || Model.case_.WorkingGroup_Id == e.Id))
+                                                        foreach (var e in Model.workingGroups)
                                                         {
-                                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.WorkingGroup_Id.ToString()) >@e.WorkingGroupName</option>
+                                                        <option value="@e.Id" class="@(e.IsActive != 1?"inactive":string.Empty)" @e.Id.IdIsSelected(Model.case_.WorkingGroup_Id.ToString()) >@e.WorkingGroupName</option>
                                                         }
                                                     }
                                                 </select>
@@ -1719,8 +1719,8 @@
                 required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Available.ToString())")
             },
             "case_.WorkingGroup_Id": {
-                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.WorkingGroup_Id, CaseSolutionFields.WorkingGroup))  
-                },
+                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.WorkingGroup_Id, CaseSolutionFields.WorkingGroup))
+            },
             "ResponsibleUser_Id": {
                 required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString())")
             },

@@ -1856,6 +1856,11 @@ table th.thpointer {
 
 /***********************  CASE EDIT PAGE BEGIN ************************************/
 
+select.working-group option.inactive
+{
+    color: lightgray;
+}
+
 /*** editcase.caselog begin ***/
 .table.caselog .case-icon 
 {

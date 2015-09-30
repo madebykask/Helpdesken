@@ -3249,7 +3249,8 @@ namespace DH.Helpdesk.Web.Controllers
                 // "Workging group" field
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString()).ShowOnStartPage == 1)
                 {
-                    m.workingGroups = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId);
+                    var IsTakeOnlyActive = !case_.IsClosed();
+                    m.workingGroups = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId, IsTakeOnlyActive);
                 }
 
                 if (isCreateNewCase && m.workingGroups != null && m.workingGroups.Count > 0)

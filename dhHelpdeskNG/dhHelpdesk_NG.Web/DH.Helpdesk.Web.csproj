@@ -794,6 +794,7 @@
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\UserEditModel.cs" />
     <Compile Include="Areas\Orders\OrdersAreaRegistration.cs" />
     <Content Include="Content\js\snippets\clickmultimenu_dropdown.js" />
+    <Content Include="Content\js\snippets\jQuery.inactiveValue.validator.js" />
     <Content Include="Content\js\snippets\tabSwitchByHashTag.js" />
     <Content Include="Content\js\dhHelpdesk.js" />
     <Content Include="Content\js\snippets\dropdown_fix.js" />
