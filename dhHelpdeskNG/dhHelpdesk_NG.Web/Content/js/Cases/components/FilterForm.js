@@ -32,6 +32,14 @@ FilterForm.prototype.init = function (opt) {
         }
     });
 
+    me.controlsMap['CaseInitiatorFilter'].on('keydown', function(ev) {
+        if (ev.keyCode == 13) {
+            ev.preventDefault();
+            me.onSearchClick.call(me);
+            return false;
+        }
+    });
+
     me.$btnResetFilter.click(function(ev) {
         ev.preventDefault();
         me.reset();
