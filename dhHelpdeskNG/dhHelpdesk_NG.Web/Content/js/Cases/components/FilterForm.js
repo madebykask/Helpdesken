@@ -3,7 +3,6 @@
 function FilterForm() {
 };
 
-
 /// initial state of search form
 FilterForm.prototype.init = function (opt) {
     var me = this;
@@ -81,6 +80,35 @@ FilterForm.prototype.init = function (opt) {
         me.$filteredMarker.show();
         me.toggleFilter(true);
     }
+};
+
+/**
+* @public
+*/
+FilterForm.prototype.getSavedSeacrhCaseTypeValue = function() {
+    return parseInt($.cookie('caseoverveiew.filter.searchCaseType'), 10);
+};
+
+/**
+* @public
+*/
+FilterForm.prototype.saveSeacrhCaseTypeValue = function() {
+    var me = this;
+    $.cookie('caseoverveiew.filter.searchCaseType', me.getSearchCaseType());
+};
+
+/**
+* @public
+* @returns int
+*/
+FilterForm.prototype.getSearchCaseType = function() {
+    var me = this;
+    var res = parseInt(me.$caseFilterType.val(), 10);
+    if (!isNaN(res)) {
+        return res;
+    }
+
+    throw new Error('unknow value in caseFilterType control');
 };
 
 /**

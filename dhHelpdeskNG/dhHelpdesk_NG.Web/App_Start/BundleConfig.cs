@@ -121,6 +121,7 @@
                             "~/Content/js/Invoice/invoice.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/cases/index").Include(
+                "~/Scripts/jquery.cookie.js",
                 "~/Content/js/Cases/components/Utils.js",
                 "~/Content/js/Cases/components/BaseField.js",
                 "~/Content/js/Cases/components/DropdownButtonField.js",

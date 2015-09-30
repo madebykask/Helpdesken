@@ -269,8 +269,10 @@ var GRID_STATE = {
     Page.prototype.loadData = function(data, opt) {
         var me = this;
         var out = [];
-        var RECORDS_TRUNCATED = 500;
-        var isShowMessage = false;
+        var RECORDS_TRUNCATED_IDX = 499;
+        var CASE_TYPE_ALL = -1;
+        var CASE_TYPE_CLOSED = 1;
+        var isRecordsLimitReached = false;
         opt = opt || {};
         
         if (data && data.length > 0) {
@@ -291,12 +293,16 @@ var GRID_STATE = {
                 });
                 rowOut.push('</tr>');
                 out.push(rowOut.join(JOINER));
-                if (opt.isSearchInitByUser && idx === RECORDS_TRUNCATED) {
-                    isShowMessage = true;
+                if (idx === RECORDS_TRUNCATED_IDX) {
+                    isRecordsLimitReached = true;
                 }
             });
             me.$tableBody.html(out.join(JOINER));
-            if (isShowMessage) {
+            var oldCaseType = me.filterForm.getSavedSeacrhCaseTypeValue();
+            var newCaseType = me.filterForm.getSearchCaseType();
+
+            if (isRecordsLimitReached && opt.isSearchInitByUser
+                && newCaseType !== oldCaseType &&  (newCaseType === CASE_TYPE_ALL || newCaseType === CASE_TYPE_CLOSED)) {
                 ShowToastMessage(me.msgs.information + '<br/>' + me.msgs.records_limited_msg, 'notice');
             }
         } else {
@@ -384,6 +390,9 @@ var GRID_STATE = {
             })
             .done(function() {
                 me.onGetData.call(me, arguments[0], { isSearchInitByUser: p.isSearchInitByUser });
+            })
+            .always(function() {
+                me.filterForm.saveSeacrhCaseTypeValue.call(me.filterForm);
             });
     };
    
