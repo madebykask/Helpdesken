@@ -3435,7 +3435,8 @@ td.disabled
 .region.admin.content .inactive *,
 .department.admin.content .inactive *,
 .oU.admin.content .inactive *,
-.standardtext.admin.content .inactive *
+.standardtext.admin.content .inactive *,
+.finishingcause.admin.content .inactive *
 
 
 {

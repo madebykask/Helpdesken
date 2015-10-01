@@ -1015,20 +1015,40 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
             return new MvcHtmlString(htmlOutput);
         }
 
-        private static MvcHtmlString BuildFinishingCauseTreeRow(IList<FinishingCause> finishingCauses, int iteration)
+        private static MvcHtmlString BuildFinishingCauseTreeRow(IList<FinishingCause> finishingCauses, int iteration, 
+                bool isShowOnlyActive = true,
+                bool isParentInactive = false)
         {
             string htmlOutput = string.Empty;
+            var finishingCauseToDisplay = isShowOnlyActive ? finishingCauses.Where(it => it.IsActive == 1) : finishingCauses;
 
             foreach (FinishingCause finishingCause in finishingCauses)
             {
-                htmlOutput += "<tr>";
+                var isInactive = finishingCause.IsActive != 1 || isParentInactive;
+                //htmlOutput += "<tr>";
+                htmlOutput += string.Format("<tr class=\"{0}\">", isInactive ? "inactive" : string.Empty);
                 htmlOutput += "<td><a href='/admin/finishingcause/edit/" + finishingCause.Id + "' style='padding-left: " + iteration + "px'><i class='icon-resize-full icon-dh'></i>" + finishingCause.Name + "</a></td>";
                 htmlOutput += "<td><a href='/admin/finishingcause/edit/" + finishingCause.Id + "'>" + finishingCause.IsActive.TranslateBit() + "</a></td>";
                 htmlOutput += "</tr>";
 
+
                 if (finishingCause.SubFinishingCauses != null)
-                    if (finishingCause.SubFinishingCauses.Count > 0)
-                        htmlOutput += BuildFinishingCauseTreeRow(finishingCause.SubFinishingCauses.ToList(), iteration + 20);
+                {
+                    if (finishingCause.SubFinishingCauses.Count > 0 && (
+                        (isShowOnlyActive && !isInactive)
+                        || !isShowOnlyActive))
+                    {
+                        htmlOutput += BuildFinishingCauseTreeRow(
+                            finishingCause.SubFinishingCauses.OrderBy(x => x.Name).ToList(),
+                            iteration + 20,
+                            isShowOnlyActive,
+                            isInactive);
+                    }
+                }
+
+                //if (finishingCause.SubFinishingCauses != null)
+                //    if (finishingCause.SubFinishingCauses.Count > 0)
+                //        htmlOutput += BuildFinishingCauseTreeRow(finishingCause.SubFinishingCauses.ToList(), iteration + 20);
             }
 
             return new MvcHtmlString(htmlOutput);

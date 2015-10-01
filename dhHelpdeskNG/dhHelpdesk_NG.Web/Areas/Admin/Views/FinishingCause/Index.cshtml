@@ -1,5 +1,6 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Web.Infrastructure.Extensions
+@using System.Web.Optimization
 @model DH.Helpdesk.Web.Areas.Admin.Models.FinishingCauseIndexViewModel
 @{
     ViewBag.Title = "Index";
@@ -12,13 +13,16 @@
     </div>
     @Html.Partial("_MasterDataPanel", Model.Customer)
 </div>
-<div class="content">
+@Scripts.Render("~/bundles/admin/FinishingCause/index")
+<div class="content finishingcause admin">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
             <li class="active"><a href="#fragment-1">@Translation.Get("Avslutsorsak", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment-1">
+                <span>@Translation.Get("Visa endast aktiva")</span>
+                <input type="checkbox" class="switchcheckbox showonly-active" @(Model.IsShowOnlyActive ? "checked" : string.Empty)>
                 <table class="table table-striped table-bordered table-hover" id="tblfinishingcause">
                     <thead>
                         <tr>
