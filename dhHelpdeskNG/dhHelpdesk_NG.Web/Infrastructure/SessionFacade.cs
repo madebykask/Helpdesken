@@ -108,6 +108,8 @@
 
         private const string _SHOW_ACTIVE_DAILYREPORTSUBJECTS_IN_ADMIN = "_SHOW_ACTIVE_DAILYREPORTSUBJECTS_IN_ADMIN";
 
+        private const string _SHOW_ACTIVE_OPERATIONOBJECTS_IN_ADMIN = "_SHOW_ACTIVE_OPERATIONOBJECTS_IN_ADMIN";
+
         #endregion
 
         #region Public Properties
@@ -868,6 +870,24 @@
             set
             {
                 SaveSetKeyValue(_SHOW_ACTIVE_DAILYREPORTSUBJECTS_IN_ADMIN, value);
+            }
+        }
+
+        public static bool ShowOnlyActiveOperationObjectsInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_OPERATIONOBJECTS_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_OPERATIONOBJECTS_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_OPERATIONOBJECTS_IN_ADMIN, value);
             }
         }
 

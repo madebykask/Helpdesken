@@ -8,5 +8,7 @@
     {
         public Customer Customer { get; set; }
         public IList<OperationObject> OperationObjects { get; set; }
+
+        public bool IsShowOnlyActive { get; set; }
     }
 }
