@@ -3250,7 +3250,7 @@ namespace DH.Helpdesk.Web.Controllers
                 // "Workging group" field
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString()).ShowOnStartPage == 1)
                 {
-                    var IsTakeOnlyActive = !case_.IsClosed();
+                    var IsTakeOnlyActive = isCreateNewCase;
                     m.workingGroups = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId, IsTakeOnlyActive);
                 }
 
@@ -4133,6 +4133,14 @@ namespace DH.Helpdesk.Web.Controllers
                 var subStatus = this._stateSecondaryService.GetStateSecondary(fields.SubStatusId.Value);
                 if (subStatus != null && subStatus.IsActive == 0)
                     ret.Add(string.Format("[{0}]",Translation.Get(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(),
+                                            Enums.TranslationSource.CaseTranslation,
+                                            fields.CustomerId)));
+            }
+            if (fields.WorkingGroupId.HasValue)
+            {
+                var workingGroup = this._workingGroupService.GetWorkingGroup(fields.WorkingGroupId.Value);
+                if (workingGroup != null && workingGroup.IsActive == 0)
+                    ret.Add(string.Format("[{0}]", Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(),
                                             Enums.TranslationSource.CaseTranslation,
                                             fields.CustomerId)));
             }
