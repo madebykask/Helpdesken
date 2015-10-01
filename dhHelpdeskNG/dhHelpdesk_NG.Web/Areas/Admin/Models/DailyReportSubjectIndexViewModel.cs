@@ -8,5 +8,7 @@
     {
         public Customer Customer { get; set; }
         public IList<DailyReportSubject> DailyReportSubjects { get; set; }
+
+        public bool IsShowOnlyActive { get; set; }
     }
 }
