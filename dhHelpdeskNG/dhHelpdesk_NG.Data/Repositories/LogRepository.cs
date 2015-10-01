@@ -1,8 +1,8 @@
+using System.Collections.Generic;
+using System.Linq;
+
 namespace DH.Helpdesk.Dal.Repositories
 {
-    using System.Collections.Generic;
-    using System.Linq;
-
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;

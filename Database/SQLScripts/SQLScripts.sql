@@ -1,4 +1,9 @@
 -- update DB from 5.3.13 to 5.3.14 version
+IF COL_LENGTH('dbo.tblglobalsettings','VirtualFileFolder') IS NULL
+BEGIN 	 
+	ALTER TABLE [dbo].[tblglobalsettings] ADD [VirtualFileFolder] nvarchar(50) NULL;	
+END
+GO
 
 if (SELECT COLUMNPROPERTY(OBJECT_ID('tblCaseSolution', 'U'), 'RegistrationSource', 'AllowsNull')) = 0
 BEGIN
@@ -25,7 +30,6 @@ BEGIN
 		ON DELETE CASCADE;
 
 	ALTER TABLE [dbo].[tblParentChildCaseRelations] CHECK CONSTRAINT [FK_tblParentChildCaseRelations_tblCase];	
-
 	ALTER TABLE [dbo].[tblParentChildCaseRelations]  WITH CHECK ADD  CONSTRAINT [FK_tblParentChildCaseRelations_tblCase1] FOREIGN KEY([Descendant_Id])
 	REFERENCES [dbo].[tblCase] ([Id]);
 

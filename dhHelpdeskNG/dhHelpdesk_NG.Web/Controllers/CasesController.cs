@@ -1163,11 +1163,9 @@ namespace DH.Helpdesk.Web.Controllers
 
         /****  Case SLA Calculation simulator ***/
         // ** This function is using for developing test **//
-        /*public JsonResult CalulateSLA(int caseId, int userId, DateTime simulateTime)
-        {
-            
+        public JsonResult CalculateSLA(int caseId, int userId, DateTime simulateTime)
+        {            
             var utcNow = simulateTime;
-
             var case_ = this._caseService.GetCaseById(caseId);
             if (case_ == null || case_.Id < 1)
                 return Json("There is no case info for case id:" + caseId.ToString());
@@ -1182,9 +1180,7 @@ namespace DH.Helpdesk.Web.Controllers
             var caseRegTime = DateTime.SpecifyKind(case_.RegTime, DateTimeKind.Utc);
 
             bool edit = true;
-            // get case as it was before edit
-            //DHDomain.Case oldCase = new DHDomain.Case();
-
+            // get case as it was before edit           
             var curCase = this._caseService.GetCaseHistoryByCaseId(caseId).Where(ch => ch.CreatedDate < simulateTime)
                                                                               .OrderByDescending(x => x.CreatedDate)
                                                                               .FirstOrDefault();
@@ -1237,8 +1233,6 @@ namespace DH.Helpdesk.Web.Controllers
                 #endregion
             }
 
-
-
             var case_FinishingDate = simulateTime;
 
             var workTimeCalcFactory2 = new WorkTimeCalculatorFactory(
@@ -1263,7 +1257,7 @@ namespace DH.Helpdesk.Web.Controllers
                                     case_.LeadTime, case_.ExternalTime, leadTime, externalTime);
                                     
             return Json(msg);
-        }*/
+        }
 
 
         public ActionResult New(
@@ -1558,7 +1552,12 @@ namespace DH.Helpdesk.Web.Controllers
                     m.CaseFieldSettingWithLangauges = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customerId, SessionFacade.CurrentLanguageId);
                     m.finishingCauses = this._finishingCauseService.GetFinishingCauses(customerId);
                     m.case_ = this._caseService.GetCaseById(m.CaseLog.CaseId);
-                    m.LogFilesModel = new FilesModel(id.ToString(), this._logFileService.FindFileNamesByLogId(id));
+                    bool UseVD = false;
+                    if (!string.IsNullOrEmpty(this._masterDataService.GetVirtualDirectoryPath(customerId)))
+                    {
+                        UseVD = true;
+                    }
+                    m.LogFilesModel = new FilesModel(id.ToString(), this._logFileService.FindFileNamesByLogId(id), UseVD);
                     const bool isAddEmpty = true;
                     var responsibleUsersAvailable = this._userService.GetAvailablePerformersOrUserId(customerId, m.case_.CaseResponsibleUser_Id);
                     var customerSettings = this._settingService.GetCustomerSetting(customerId);
@@ -1926,7 +1925,7 @@ namespace DH.Helpdesk.Web.Controllers
                 fileContent = this._caseFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
             }
             return new UnicodeFileContentResult(fileContent, fileName);
-        }
+        }        
 
         [HttpGet]
         public UnicodeFileContentResult DownloadLogFile(string id, string fileName)
@@ -1961,8 +1960,18 @@ namespace DH.Helpdesk.Web.Controllers
                                 : this._caseFileService.FindFileNamesByCaseId(int.Parse(id));
 
             var cfs = MakeCaseFileModel(files);
-
-            var model = new CaseFilesModel(id, cfs.ToArray());
+            var customerId = 0;
+            if (!GuidHelper.IsGuid(id)) {
+                customerId = this._caseService.GetCaseById(int.Parse(id)).Customer_Id;
+            }
+            
+            //
+            bool UseVD = false;
+            if (customerId != 0 && !string.IsNullOrEmpty(this._masterDataService.GetVirtualDirectoryPath(customerId)))
+            {
+                UseVD = true;
+            }
+            var model = new CaseFilesModel(id, cfs.ToArray(), UseVD);
             return this.PartialView("_CaseFiles", model);
         }
 
@@ -1979,8 +1988,20 @@ namespace DH.Helpdesk.Web.Controllers
             var files = GuidHelper.IsGuid(id)
                                 ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Log)
                                 : this._logFileService.FindFileNamesByLogId(int.Parse(id));
+            
+            var customerId = 0;
+            if (!GuidHelper.IsGuid(id))
+            {
+                var caseId = this._logService.GetLogById(int.Parse(id)).CaseId;
+                customerId = this._caseService.GetCaseById(caseId).Customer_Id;
+            }
+            bool UseVD = false;
+            if (customerId != 0 &&!string.IsNullOrEmpty(this._masterDataService.GetVirtualDirectoryPath(customerId)))
+            {
+                UseVD = true;
+            }
 
-            var model = new FilesModel(id, files);
+            var model = new FilesModel(id, files,UseVD);
             return this.PartialView("_CaseLogFiles", model);
         }
 
@@ -2603,9 +2624,16 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             // get case as it was before edit
+            var curCustomer = _customerService.GetCustomer(case_.Customer_Id);
+            if (curCustomer == null)
+            {
+                throw new ArgumentException("Case customer has an invalid value");
+            }
+
             DHDomain.Case oldCase = new DHDomain.Case();
             if (edit)
             {
+                
                 #region Editing existing case
                 oldCase = this._caseService.GetDetachedCaseById(case_.Id);
                 var cu = this._customerUserService.GetCustomerSettings(case_.Customer_Id, SessionFacade.CurrentUser.Id);
@@ -2646,8 +2674,8 @@ namespace DH.Helpdesk.Web.Controllers
                         var workTimeCalcFactory =
                             new WorkTimeCalculatorFactory(
                                 ManualDependencyResolver.Get<IHolidayService>(),
-                                SessionFacade.CurrentCustomer.WorkingDayStart,
-                                SessionFacade.CurrentCustomer.WorkingDayEnd,
+                                curCustomer.WorkingDayStart,
+                                curCustomer.WorkingDayEnd,
                                 TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
                         int[] deptIds = null;
                         if (case_.Department_Id.HasValue)
@@ -2698,8 +2726,8 @@ namespace DH.Helpdesk.Web.Controllers
 
                 var workTimeCalcFactory = new WorkTimeCalculatorFactory(
                     ManualDependencyResolver.Get<IHolidayService>(),
-                    SessionFacade.CurrentCustomer.WorkingDayStart,
-                    SessionFacade.CurrentCustomer.WorkingDayEnd,
+                    curCustomer.WorkingDayStart,
+                    curCustomer.WorkingDayEnd,
                     TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
                 int[] deptIds = null;
                 if (case_.Department_Id.HasValue)
@@ -3097,7 +3125,14 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                 #region Existing case model initialization actions
                     m.Logs = this._logService.GetCaseLogOverviews(caseId);
-                    m.CaseFilesModel = new CaseFilesModel(caseId.ToString(global::System.Globalization.CultureInfo.InvariantCulture), this._caseFileService.GetCaseFiles(caseId).OrderBy(x => x.CreatedDate).ToArray());
+                    
+                    bool UseVD = false;
+                    if (!string.IsNullOrEmpty(this._masterDataService.GetVirtualDirectoryPath(customerId)))
+                    {
+                        UseVD = true;
+                    }
+
+                    m.CaseFilesModel = new CaseFilesModel(caseId.ToString(global::System.Globalization.CultureInfo.InvariantCulture), this._caseFileService.GetCaseFiles(caseId).OrderBy(x => x.CreatedDate).ToArray(), UseVD);
                     if (m.case_.User_Id.HasValue)
                     {
                         m.RegByUser = this._userService.GetUser(m.case_.User_Id.Value);

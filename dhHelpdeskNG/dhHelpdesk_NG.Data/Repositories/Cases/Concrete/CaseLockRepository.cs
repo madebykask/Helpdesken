@@ -1,9 +1,10 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
 namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
+    
 
     using DH.Helpdesk.BusinessData.Models.Case.CaseLock;
     using DH.Helpdesk.Dal.Infrastructure;
