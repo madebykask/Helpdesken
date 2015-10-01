@@ -21,6 +21,7 @@ FilterForm.prototype.init = function (opt) {
     me.$btnResetFilter = me.$el.find('.btn-reset');
     me.$btnClearFilter = me.$el.find('.btn-clear');
     me.$searchField = me.$el.find('#txtFreeTextSearch');
+    me.initiatorField = me.$el.find('#CaseInitiatorFilter');
     me.$searchOnlyInMyCases = $('#SearchInMyCasesOnly');
 
     /************** EVENTS BINDING ************************/
@@ -31,8 +32,8 @@ FilterForm.prototype.init = function (opt) {
             return false;
         }
     });
-
-    me.controlsMap['CaseInitiatorFilter'].on('keydown', function(ev) {
+    
+    me.initiatorField.keydown(function (ev) {
         if (ev.keyCode == 13) {
             ev.preventDefault();
             me.onSearchClick.call(me);
@@ -282,7 +283,7 @@ FilterForm.prototype.initControlsMap = function() {
                 }
                 break;
             default:
-                throw Error('Create UI is not registerd for control "' + controlName + '" in initControlsMap()');
+                throw Error('Create UI is not registered for control "' + controlName + '" in initControlsMap()');
         }
         
         if (control != null) {
