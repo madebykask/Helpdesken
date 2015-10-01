@@ -69,7 +69,13 @@
                                 {                                            
                                 <div>
                                     <p>
-                                        <a href="@Url.Action("DownloadLogFile", new { id = r.Id, fileName = l.FileName })">@l.FileName</a>
+                                        @if(Model.CaseFilesModel.VirtualDirectory)
+                                        {
+                                            <a target="_blank" href="@Html.Action("LogFileLinkVD","Files", new { id = r.Id, fileName = l.FileName })">@l.FileName</a>    
+                                        }
+                                        else{
+                                            <a href="@Url.Action("DownloadLogFile", new { id = r.Id, fileName = l.FileName })">@l.FileName</a>    
+                                        }
                                     </p>
                                 </div>
                                 }                                    
