@@ -4509,7 +4509,18 @@ If not exists (select * from tblTextTranslation where text_id = 1548 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1548, 2, 'Create child case')
 GO
 
+If not exists (select * from tbltext where id = 1549)
+	insert into tbltext (id, TextString) VALUES (1549, 'Välj')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1549 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1549, 2, 'Select')
+GO
 
-
+If not exists (select * from tbltext where id = 1550)
+	insert into tbltext (id, TextString) VALUES (1550, 'Ingen mottagare är angiven.')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1550 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1550, 2, 'No recipient is selected.')
+GO
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

@@ -65,10 +65,18 @@
                 buttons: [
                     {
                         text: '@Translation.Get("OK", Enums.TranslationSource.TextTranslation)',
-                        click: function() {
-                            saveRecipientEmails();
-                            $(this).dialog("close");
-                            window['@callback'](recipientEmails);
+                        click: function () {
+                            var items = $("#divSendToDialogCase_recipient_emails_listbox option");
+                            if (items == undefined || items.index(0) == -1) {                                
+                                ShowToastMessage('@Translation.Get("Ingen mottagare är angiven.", Enums.TranslationSource.TextTranslation)', "warning", false);
+                                $("#divSendToDialogCase_add_emails_button").focus();
+                                return;
+                            }
+                            else {
+                                saveRecipientEmails();
+                                $(this).dialog("close");
+                                window['@callback'](recipientEmails);
+                            }
                         },
                         'class': 'btn'
                     },
@@ -198,7 +206,7 @@
     <input type="text" id="@customEmailTextboxId" />
     
     <br />
-    <input type="button" id="@addEmailsButtonId" class="btn" value="-->" />
+    <input type="button" id="@addEmailsButtonId" class="btn" value="@Translation.Get("Välj", Enums.TranslationSource.TextTranslation)" />
 
     <br />
     @Translation.Get("Mottagare", Enums.TranslationSource.TextTranslation)<br />
