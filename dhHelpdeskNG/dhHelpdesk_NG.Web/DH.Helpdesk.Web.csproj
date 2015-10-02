@@ -368,6 +368,7 @@
     <Content Include="Areas\Admin\Content\js\Common\common.js" />
     <Content Include="Areas\Admin\Content\js\Common\ToggableInactiveList.js" />
     <Content Include="Areas\Admin\Content\js\CaseType\index.js" />
+    <Content Include="Areas\Admin\Content\js\OperationLogCategory\index.js" />
     <Content Include="Areas\Admin\Content\js\OperationObject\index.js" />
     <Content Include="Areas\Admin\Content\js\DailyReportSubject\index.js" />
     <Content Include="Areas\Admin\Content\js\FinishingCause\index.js" />

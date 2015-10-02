@@ -3438,7 +3438,8 @@ td.disabled
 .standardtext.admin.content .inactive *,
 .finishingcause.admin.content .inactive *,
 .dailyreportsubject.admin.content .inactive *,
-.operationobject.admin.content .inactive *
+.operationobject.admin.content .inactive *,
+.operationlogcategory.admin.content .inactive *
 
 
 {

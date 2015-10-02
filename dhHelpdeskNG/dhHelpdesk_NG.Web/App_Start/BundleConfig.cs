@@ -340,6 +340,10 @@
             "~/Areas/Admin/Content/js/Common/ToggableInactiveList.js",
             "~/Areas/Admin/Content/js/OperationObject/index.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/admin/OperationLogCategory/index").Include(
+            "~/Areas/Admin/Content/js/Common/ToggableInactiveList.js",
+            "~/Areas/Admin/Content/js/OperationLogCategory/index.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/cases/relatedCases").Include(
                             "~/Content/js/Cases/relatedCases.logic.js"));
 
