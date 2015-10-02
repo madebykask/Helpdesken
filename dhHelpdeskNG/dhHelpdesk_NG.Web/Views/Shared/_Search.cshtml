@@ -73,7 +73,10 @@
                                      @foreach (var e in Model.filterDepartment)
                                      {
                                          if (e.IsActive == 1)
-                                         { 
+                                         {
+                                             /*Attention: As we have combination of Department and OU in a one filter, 
+                                               we use -OU.id (Id with minus sign) to detect it is OU.Id (Not Department.Id) and 
+                                               then for fetching data we convert Negative to positive, Also they are storing Negative in the Session*/                                              
                                              <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.Department)>@e.DepartmentDescription(Model.customerSetting.DepartmentFilterFormat)</option>                                      
                                          }
                                      }

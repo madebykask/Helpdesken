@@ -651,8 +651,7 @@ namespace DH.Helpdesk.Web.Controllers
             f.Initiator = frm.ReturnFormValue(CaseSearchFilter.InitiatorNameAttribute);
             f.CaseType = frm.ReturnFormValue(CaseSearchFilter.CaseTypeIdNameAttribute).convertStringToInt();
             f.ProductArea = frm.ReturnFormValue(CaseSearchFilter.ProductAreaIdNameAttribute).ReturnCustomerUserValue();
-            f.Region = frm.ReturnFormValue(CaseSearchFilter.RegionNameAttribute);
-            f.Department = frm.ReturnFormValue(CaseSearchFilter.DepartmentNameAttribute);
+            f.Region = frm.ReturnFormValue(CaseSearchFilter.RegionNameAttribute);            
             f.User = frm.ReturnFormValue(CaseSearchFilter.RegisteredByNameAttribute);
             f.Category = frm.ReturnFormValue(CaseSearchFilter.CategoryNameAttribute);
             f.WorkingGroup = frm.ReturnFormValue(CaseSearchFilter.WorkingGroupNameAttribute);
@@ -675,6 +674,10 @@ namespace DH.Helpdesk.Web.Controllers
 
             f.CaseProgress = frm.ReturnFormValue(CaseSearchFilter.FilterCaseProgressNameAttribute);
             f.FreeTextSearch = frm.ReturnFormValue(CaseSearchFilter.FreeTextSearchNameAttribute);
+            var departments_OrganizationUnits = frm.ReturnFormValue(CaseSearchFilter.DepartmentNameAttribute);
+
+            f.Department = GetDepartmentsFrom(departments_OrganizationUnits);
+            f.OrganizationUnit = GetOrganizationUnitsFrom(departments_OrganizationUnits);
 
             int caseRemainingTimeFilter;
             if (int.TryParse(frm.ReturnFormValue("CaseRemainingTime"), out caseRemainingTimeFilter))
@@ -770,7 +773,21 @@ namespace DH.Helpdesk.Web.Controllers
                 showRemainingTime,
                 out remainingTimeData);
             m.cases = this.TreeTranslate(m.cases, f.CustomerId);
-            sm.Search.IdsForLastSearch = this.GetIdsFromSearchResult(m.cases);
+            sm.Search.IdsForLastSearch = this.GetIdsFromSearchResult(m.cases);                            
+            
+            var ouIds = f.OrganizationUnit.Split(',');
+            if (ouIds.Any())
+            {
+                foreach (var id in ouIds)
+                    if (!string.IsNullOrEmpty(id))
+                    {
+                        if (string.IsNullOrEmpty(sm.caseSearchFilter.Department))
+                            sm.caseSearchFilter.Department += string.Format("-{0}", id);
+                        else
+                            sm.caseSearchFilter.Department += string.Format(",-{0}", id);
+                    }
+            }
+
             SessionFacade.CurrentCaseSearch = sm;
             #endregion
 
@@ -819,6 +836,38 @@ namespace DH.Helpdesk.Web.Controllers
             return this.Json(new { result = "success", data = data, remainingView = remainingView });
         }
 
+        private string GetDepartmentsFrom(string departments_OrganizationUnits)
+        {
+            string ret = string.Empty;
+            var ids = departments_OrganizationUnits.Split(',');
+            var depIds = new List<int>();
+            if (ids.Length > 0)
+            {
+                for (int i = 0; i < ids.Length; i++)
+                    if (!string.IsNullOrEmpty(ids[i].Trim()) && int.Parse(ids[i].Trim()) > 0)
+                        depIds.Add(int.Parse(ids[i]));
+            }
+            if (depIds.Any())
+                ret = string.Join(",", depIds);
+            return ret;
+        }
+
+        private string GetOrganizationUnitsFrom(string departments_OrganizationUnits)
+        {
+            string ret = string.Empty;
+            var ids = departments_OrganizationUnits.Split(',');
+            var ouIds = new List<int>();
+            if (ids.Length > 0)
+            {
+                for (int i = 0; i < ids.Length; i++)
+                    if (!string.IsNullOrEmpty(ids[i].Trim()) && int.Parse(ids[i].Trim()) < 0)
+                        ouIds.Add(-int.Parse(ids[i]));
+            }
+            if (ouIds.Any())
+                ret = string.Join(",", ouIds);
+            return ret;
+        }
+
         private CaseSearchFilterData CreateCaseSearchFilterData(int cusId, UserOverview userOverview, DHDomain.CustomerUser cu, CaseSearchModel sm)
         {
             var userId = userOverview.Id;
@@ -841,7 +890,7 @@ namespace DH.Helpdesk.Web.Controllers
                     cusId,
                     IsTakeOnlyActive);
                 if (!fd.filterDepartment.Any())
-                {
+                {                    
                     fd.filterDepartment =
                         this._departmentService.GetDepartments(cusId)
                             .Where(
@@ -851,6 +900,37 @@ namespace DH.Helpdesk.Web.Controllers
                                 || (IsTakeOnlyActive && d.Region != null && d.Region.IsActive != 0))
                             .ToList();
                 }
+
+                if (fd.filterDepartment.Any())
+                {
+                    var allOUsNeeded = this._ouService.GetAllOUs()
+                                                      .Where(o=> o.Department_Id.HasValue)
+                                                      .Where(o=> fd.filterDepartment.Select(d=> d.Id).ToList().Contains(o.Department_Id.Value))
+                                                      .ToList();
+                    var dep_Ou = new List<Department>();
+                    foreach (var dep in fd.filterDepartment)
+                    {
+                        var currentOUsForDep = allOUsNeeded.Where(o => o.Department_Id == dep.Id).ToList();
+                        var depName = dep.DepartmentName;
+                        foreach (var o in currentOUsForDep)
+                        {
+                            /*Attention: As we have combination of Department and OU in a one filter in case overview, 
+                            we use -OU.id (Id with minus sign) to detect it is OU.Id (Not Department.Id) and 
+                            then for fetching data we convert Negative to positive, Also they are storing Negative in the Session*/
+                            var newDep = new Department()
+                            {
+                                Id = -o.Id,
+                                DepartmentName =  depName + " - " + o.Name,
+                                IsActive = 1                                
+                            };                           
+                            dep_Ou.Add(newDep);
+                        }
+                    }
+                    foreach (var nDep in dep_Ou.ToList())
+                        fd.filterDepartment.Add(nDep);
+                    fd.filterDepartment = fd.filterDepartment.OrderBy(d => d.DepartmentName).ToList();
+                }
+                
             }
 
             //ärendetyp
