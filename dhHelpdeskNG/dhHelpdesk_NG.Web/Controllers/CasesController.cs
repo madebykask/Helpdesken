@@ -1297,8 +1297,8 @@ namespace DH.Helpdesk.Web.Controllers
 
                     // TODO: Should mix CustomerSettings & Setting 
                     m.CustomerSettings = this.workContext.Customer.Settings;
-                    m.Setting = cs;
-                    m.EditMode = EditMode(m, ModuleName.Log, deps, acccessToGroups);
+                    m.Setting = cs;                    
+                    m.EditMode = EditMode(m, ModuleName.Log, deps, acccessToGroups, true);
                     m.LogFileNames = string.Join("|", m.LogFilesModel.Files.ToArray());
                     AddViewDataValues();
                     SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
