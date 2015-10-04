@@ -3232,7 +3232,8 @@ namespace DH.Helpdesk.Web.Controllers
                 }
             }
 
-            m.EditMode = this.EditMode(m, ModuleName.Cases, deps, acccessToGroups);
+            var temporaryUserHasAccessToWG = redirectFrom.ToLower() == "save" ? true : false;
+            m.EditMode = this.EditMode(m, ModuleName.Cases, deps, acccessToGroups, temporaryUserHasAccessToWG);
             if (isCreateNewCase) 
             {
                 m.case_.DefaultOwnerWG_Id = null;
@@ -3380,7 +3381,8 @@ namespace DH.Helpdesk.Web.Controllers
         /// <returns>
         /// The result.
         /// </returns>
-        private Enums.AccessMode EditMode(CaseInputViewModel m, string topic, IList<DHDomain.Department> departmensForUser, List<CustomerWorkingGroupForUser> accessToWorkinggroups)
+        private Enums.AccessMode EditMode(CaseInputViewModel m, string topic, IList<DHDomain.Department> departmensForUser, 
+                                          List<CustomerWorkingGroupForUser> accessToWorkinggroups, bool temporaryHasAccessToWG = false)
         {
             var gs = this._globalSettingService.GetGlobalSettings().FirstOrDefault();
 
@@ -3424,12 +3426,14 @@ namespace DH.Helpdesk.Web.Controllers
                         var wg = accessToWorkinggroups.FirstOrDefault(w => w.WorkingGroup_Id == m.case_.WorkingGroup_Id.Value);
                         if (wg == null && (gs != null && gs.LockCaseToWorkingGroup == 1))
                         {
-                            return Enums.AccessMode.NoAccess;
+                            if (!temporaryHasAccessToWG)
+                              return Enums.AccessMode.NoAccess;
                         }
 
                         if (wg != null && wg.RoleToUWG == 1)
                         {
-                            return Enums.AccessMode.ReadOnly;
+                            if (!temporaryHasAccessToWG)
+                                return Enums.AccessMode.ReadOnly;
                         }
                     }
                 }
