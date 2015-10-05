@@ -8,6 +8,7 @@
     {
         public Customer Customer { get; set; }
         public IList<EmailGroupEntity> EmailGroups { get; set; }
+        public bool IsShowOnlyActive { get; set; }
     }
 
     public class EmailGroupInputViewModel

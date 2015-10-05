@@ -3439,7 +3439,9 @@ td.disabled
 .finishingcause.admin.content .inactive *,
 .dailyreportsubject.admin.content .inactive *,
 .operationobject.admin.content .inactive *,
-.operationlogcategory.admin.content .inactive *
+.operationlogcategory.admin.content .inactive *,
+.emailgroup.admin.content .inactive *,
+.program.admin.content .inactive *
 
 
 {

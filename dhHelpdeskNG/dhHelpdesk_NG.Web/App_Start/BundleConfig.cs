@@ -344,6 +344,14 @@
             "~/Areas/Admin/Content/js/Common/ToggableInactiveList.js",
             "~/Areas/Admin/Content/js/OperationLogCategory/index.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/admin/EMailGroup/index").Include(
+            "~/Areas/Admin/Content/js/Common/ToggableInactiveList.js",
+            "~/Areas/Admin/Content/js/EMailGroup/index.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/admin/Program/index").Include(
+            "~/Areas/Admin/Content/js/Common/ToggableInactiveList.js",
+            "~/Areas/Admin/Content/js/Program/index.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/cases/relatedCases").Include(
                             "~/Content/js/Cases/relatedCases.logic.js"));
 
