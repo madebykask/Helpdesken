@@ -1804,7 +1804,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         public JsonResult ChangeCountry(int? id, int customerId, int departmentFilterFormat)
         {
-            var list = id.HasValue ? this._supplierService.GetSuppliersByCountry(customerId, id.GetValueOrDefault()).Select(x => new { id = x.Id, name = x.Name }) : this._supplierService.GetSuppliers(customerId).Select(x => new { id = x.Id, name = x.Name });
+            var list = id.HasValue ? this._supplierService.GetSuppliersByCountry(customerId, id.GetValueOrDefault()).Select(x => new { id = x.Id, name = x.Name }) : this._supplierService.GetSuppliers(customerId).Where(x => x.IsActive == 1).Select(x => new { id = x.Id, name = x.Name });
             return this.Json(new { list });
         }
 
