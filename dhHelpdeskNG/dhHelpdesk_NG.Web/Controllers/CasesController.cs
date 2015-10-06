@@ -2497,13 +2497,13 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     for (int i = 0; i < names.Length - 1; i++)
                         if (i == 0)
-                            lName = names[i];
+                            fName = names[i];
                         else
-                            lName += " " + names[i];
+                            fName += " " + names[i];
                 }
 
                 if (names.Length > 1)
-                    fName = names[names.Length - 1];
+                    lName = names[names.Length - 1];
 
                 var caseNotifier = this.caseNotifierModelFactory.Create(
                                                             case_.ReportedBy,
