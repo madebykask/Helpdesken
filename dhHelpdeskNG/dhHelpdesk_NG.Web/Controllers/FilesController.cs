@@ -50,8 +50,9 @@ namespace DH.Helpdesk.Web.Controllers
 
             link = absolute + basePath + c.CaseNumber + "/" + fileName;
 
-            var UriLink = new Uri(link);
-            return UriLink.ToString();
+            var UriLink = new Uri(link).ToString();
+            UriLink = UriLink.Replace("#", "%23");
+            return UriLink;
         }
 
         [HttpGet]
@@ -76,8 +77,9 @@ namespace DH.Helpdesk.Web.Controllers
                 }
                 link = absolute + basePath + "L" + id + "/" + fileName;
             }
-            var UriLink = new Uri(link);
-            return UriLink.ToString();
+            var UriLink = new Uri(link).ToString();
+            UriLink = UriLink.Replace("#", "%23");
+            return UriLink;
         }
     }
 }
