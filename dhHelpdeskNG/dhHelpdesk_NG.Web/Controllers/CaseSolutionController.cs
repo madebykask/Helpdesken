@@ -565,7 +565,7 @@ namespace DH.Helpdesk.Web.Controllers
                 
                 PerformerUsers = performersList,
 
-                Priorities = this._priorityService.GetPriorities(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                Priorities = this._priorityService.GetPriorities(SessionFacade.CurrentCustomer.Id).Where(x => x.IsActive == 1).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()

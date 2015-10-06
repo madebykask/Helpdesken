@@ -185,7 +185,7 @@
                     Text = x.WorkingGroupName,
                     Value = x.Id.ToString()
                 }).ToList(),
-                Priorities = this._priorityService.GetPriorities(customer.Id).Select(x => new SelectListItem
+                Priorities = this._priorityService.GetPriorities(customer.Id).Where(x => x.IsActive == 1).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
