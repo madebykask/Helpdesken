@@ -17,7 +17,8 @@ namespace DH.Helpdesk.Web.Controllers
 
         public FilesController(ICaseService caseService,
             IMasterDataService masterDataService,
-            ILogService logService) : base(masterDataService)
+            ILogService logService)
+            : base(masterDataService)
         {
             this._masterDataService = masterDataService;
             this._caseService = caseService;
@@ -48,7 +49,9 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             link = absolute + basePath + c.CaseNumber + "/" + fileName;
-            return link;
+
+            var UriLink = new Uri(link);
+            return UriLink.ToString();
         }
 
         [HttpGet]
@@ -73,7 +76,8 @@ namespace DH.Helpdesk.Web.Controllers
                 }
                 link = absolute + basePath + "L" + id + "/" + fileName;
             }
-            return link;
+            var UriLink = new Uri(link);
+            return UriLink.ToString();
         }
     }
 }
