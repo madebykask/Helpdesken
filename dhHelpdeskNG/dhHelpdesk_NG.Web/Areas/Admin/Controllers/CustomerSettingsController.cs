@@ -106,6 +106,7 @@
             vmodel.Setting.LDAPLogLevel = setting.LDAPLogLevel;
             vmodel.Setting.PhysicalFilePath = setting.PhysicalFilePath;
             vmodel.Setting.VirtualFilePath = setting.VirtualFilePath;
+            vmodel.Setting.CaseComplaintDays = setting.CaseComplaintDays;
 
             //vmodel.Setting.PasswordHistory = returnPasswordHistoryForSave(vmodel);
           

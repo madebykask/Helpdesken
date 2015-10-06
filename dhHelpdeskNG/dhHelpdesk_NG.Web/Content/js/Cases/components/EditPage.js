@@ -114,34 +114,42 @@ EditPage.prototype.checkAndSave = function (submitUrl) {
         return false;
     }
 
-    me.setCaseStatus(me.CASE_IN_SAVING);
-    
+    me.setCaseStatus(me.CASE_IN_SAVING);    
     var params = me.p;
     if (params.preventToSaveCaseWithInactiveValue != null && params.preventToSaveCaseWithInactiveValue == 1) {
         if (me.$form == undefined || me.$form.index(0) == -1) {
             ShowToastMessage("Case form is not valid!", "error", true);
             return;
         }
-        var form = me.$form[0];
-        var fieldsToCheck = {
-            CustomerId: form.elements[params.caseFieldNames.CustomerId].value,
-            RegionId: form.elements[params.caseFieldNames.RegionId].value,
-            DepartmentId: form.elements[params.caseFieldNames.DepartmentId].value,
-            OUId: form.elements[params.caseFieldNames.OUId].value,
-            SourceId: form.elements[params.caseFieldNames.SourceId].value,
-            CaseTypeId: form.elements[params.caseFieldNames.CaseTypeId].value,
-            ProductAreaId: form.elements[params.caseFieldNames.ProductAreaId].value,
-            CategoryId: form.elements[params.caseFieldNames.CategoryId].value,
-            SupplierId: form.elements[params.caseFieldNames.SupplierId].value,
-            WorkingGroupId: form.elements[params.caseFieldNames.WorkingGroupId].value,
-            ResponsibleId: form.elements[params.caseFieldNames.ResponsibleId].value,
-            AdministratorId: form.elements[params.caseFieldNames.AdministratorId].value,
-            PriorityId: form.elements[params.caseFieldNames.PriorityId].value,
-            StatusId: form.elements[params.caseFieldNames.StatusId].value,
-            SubStatusId: form.elements[params.caseFieldNames.SubStatusId].value,
-            CausingPartId: form.elements[params.caseFieldNames.CausingPartId].value,
-            ClosingReasonId: form.elements[params.caseFieldNames.ClosingReasonId].value
-        }
+
+        try 
+        {
+            var form = me.$form[0];        
+            var fieldsToCheck = {
+                CustomerId: (form.elements[params.caseFieldNames.CustomerId] == undefined) ? null : form.elements[params.caseFieldNames.CustomerId].value,
+                RegionId: (form.elements[params.caseFieldNames.RegionId] == undefined) ? null : form.elements[params.caseFieldNames.RegionId].value,
+                DepartmentId: (form.elements[params.caseFieldNames.DepartmentId] == undefined) ? null : form.elements[params.caseFieldNames.DepartmentId].value,
+                OUId: (form.elements[params.caseFieldNames.OUId] == undefined) ? null : form.elements[params.caseFieldNames.OUId].value,
+                SourceId: (form.elements[params.caseFieldNames.SourceId] == undefined) ? null : form.elements[params.caseFieldNames.SourceId].value,
+                CaseTypeId: (form.elements[params.caseFieldNames.CaseTypeId] == undefined) ? null : form.elements[params.caseFieldNames.CaseTypeId].value,
+                ProductAreaId: (form.elements[params.caseFieldNames.ProductAreaId] == undefined) ? null : form.elements[params.caseFieldNames.ProductAreaId].value,
+                CategoryId: (form.elements[params.caseFieldNames.CategoryId] == undefined) ? null : form.elements[params.caseFieldNames.CategoryId].value,
+                SupplierId: (form.elements[params.caseFieldNames.SupplierId] == undefined) ? null : form.elements[params.caseFieldNames.SupplierId].value,
+                WorkingGroupId: (form.elements[params.caseFieldNames.WorkingGroupId] == undefined) ? null : form.elements[params.caseFieldNames.WorkingGroupId].value,
+                ResponsibleId: (form.elements[params.caseFieldNames.ResponsibleId] == undefined) ? null : form.elements[params.caseFieldNames.ResponsibleId].value,
+                AdministratorId: (form.elements[params.caseFieldNames.AdministratorId] == undefined) ? null : form.elements[params.caseFieldNames.AdministratorId].value,
+                PriorityId: (form.elements[params.caseFieldNames.PriorityId] == undefined) ? null : form.elements[params.caseFieldNames.PriorityId].value,
+                StatusId: (form.elements[params.caseFieldNames.StatusId] == undefined) ? null : form.elements[params.caseFieldNames.StatusId].value,
+                SubStatusId: (form.elements[params.caseFieldNames.SubStatusId] == undefined) ? null : form.elements[params.caseFieldNames.SubStatusId].value,
+                CausingPartId: (form.elements[params.caseFieldNames.CausingPartId] == undefined) ? null : form.elements[params.caseFieldNames.CausingPartId].value,
+                ClosingReasonId: (form.elements[params.caseFieldNames.ClosingReasonId] == undefined) ? null : form.elements[params.caseFieldNames.ClosingReasonId].value
+            }
+        }        
+        catch (exception) {
+            ShowToastMessage("An error has occurred in field validation: " + exception.message, "error", true);
+            me.setCaseStatus(me.CASE_IN_IDLE);
+            return;
+        }        
 
         $.ajax({
             type: "POST",

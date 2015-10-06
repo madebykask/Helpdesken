@@ -1112,7 +1112,7 @@ namespace DH.Helpdesk.Services.Services
                                             _emailLogRepository.Commit();
                                             fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 1);
 
-                                            _emailService.SendEmail(customEmailSender1, el.EmailAddress, mm.Subject, mm.Body, fields, el.MessageId);
+                                            _emailService.SendEmail(customEmailSender1, el.EmailAddress, mm.Subject, mm.Body, fields, el.MessageId, false, files);
                                         }
                                     }
                                 }

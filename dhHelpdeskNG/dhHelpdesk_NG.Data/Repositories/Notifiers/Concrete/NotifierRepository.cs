@@ -305,7 +305,7 @@
                                     OUName = (cu.OU.Parent != null ? cu.OU.Parent.Name + " - " : "") + cu.OU.Name
                                 };
 
-            return query.OrderBy(x => x.FirstName).ThenBy(x => x.SurName).ThenBy(x=> x.Id).ToList();
+            return query.OrderBy(x => x.FirstName).ThenBy(x => x.SurName).ThenBy(x=> x.Id).Take(25).ToList();
         }
 
         public SearchResult Search(SearchParameters parameters)

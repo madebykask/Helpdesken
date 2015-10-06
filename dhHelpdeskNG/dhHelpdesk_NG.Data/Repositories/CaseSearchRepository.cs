@@ -719,7 +719,7 @@
             tables.Add("inner join tblCustomerUser on tblCase.Customer_Id = tblCustomerUser.Customer_Id ");  
             tables.Add("left outer join tblDepartment on tblDepartment.Id = tblCase.Department_Id ");  
             tables.Add("left outer join tblRegion on tblCase.Region_Id = tblRegion.Id ");  
-            tables.Add("left outer join tblOU on tblCase.OU_Id=tblOU.Id ");  
+            tables.Add("left outer join tblOU on tblCase.OU_Id=tblOU.Id ");            
             tables.Add("left outer join tblSupplier on tblCase.Supplier_Id=tblSupplier.Id "); 
             tables.Add("left outer join tblSystem on tblCase.System_Id = tblSystem.Id ");  
             tables.Add("left outer join tblUrgency on tblCase.Urgency_Id = tblUrgency.Id ");  
@@ -1087,9 +1087,23 @@
             if (!string.IsNullOrWhiteSpace(f.ProductArea))
                 if (string.Compare(f.ProductArea, "0", true, CultureInfo.InvariantCulture) != 0)  
                     sb.Append(" and (tblcase.ProductArea_Id in (" + f.ProductArea.SafeForSqlInject() + "))");
+
             // department / avdelning
             if (!string.IsNullOrWhiteSpace(f.Department))
-                sb.Append(" and (tblCase.Department_Id in (" + f.Department.SafeForSqlInject() + "))");
+            {
+                // organizationUnit
+                if (!string.IsNullOrWhiteSpace(f.OrganizationUnit))
+                    sb.Append(" and (tblCase.Department_Id in (" + f.Department.SafeForSqlInject() + ") or " +
+                                    "tblCase.OU_Id in (" + f.OrganizationUnit.SafeForSqlInject() + "))");
+                else
+                    sb.Append(" and (tblCase.Department_Id in (" + f.Department.SafeForSqlInject() + "))");
+            }
+            else
+            {
+                // organizationUnit
+                if (!string.IsNullOrWhiteSpace(f.OrganizationUnit))
+                    sb.Append(" and (tblCase.OU_Id in (" + f.OrganizationUnit.SafeForSqlInject() + "))");                                    
+            }
             
             // användare / user            
             if (!string.IsNullOrWhiteSpace(f.User))
