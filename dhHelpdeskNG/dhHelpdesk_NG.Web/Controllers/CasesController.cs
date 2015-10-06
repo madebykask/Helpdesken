@@ -841,8 +841,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             return this.Json(new { result = "success", data = data, remainingView = remainingView });
         }
-
-            fd.filterCaseProgress = ObjectExtensions.GetFilterForCases(SessionFacade.CurrentUser.FollowUpPermission, cusId);
+            
         public JsonResult UnLockCase(string lockGUID)
         {
             if (!string.IsNullOrEmpty(lockGUID))
@@ -3971,8 +3970,8 @@ namespace DH.Helpdesk.Web.Controllers
             //understatus
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseStateSecondaryFilter))
                 fd.filterStateSecondary = this._stateSecondaryService.GetStateSecondaries(cusId);
-            fd.filterCaseProgress = ObjectExtensions.GetFilterForCases(SessionFacade.CurrentUser.FollowUpPermission, fd.filterPriority, cusId);
 
+            fd.filterCaseProgress = ObjectExtensions.GetFilterForCases(SessionFacade.CurrentUser.FollowUpPermission, cusId);            
             fd.CaseRegistrationDateStartFilter = fd.customerUserSetting.CaseRegistrationDateStartFilter;
             fd.CaseRegistrationDateEndFilter = fd.customerUserSetting.CaseRegistrationDateEndFilter;
             fd.CaseWatchDateStartFilter = fd.customerUserSetting.CaseWatchDateStartFilter;
