@@ -677,6 +677,18 @@ input[type="text"] {
 
 .dropup { bottom:100% !important; top:auto !important; }
 
+
+.dropup .dropdown-submenu {
+  top:auto;
+  margin-bottom:-4px;  
+}
+
+.dropup .dropdown-submenu a {
+  padding-bottom:6px;
+}
+
+
+
 .dropdown-menu > li > a:hover,
 .dropdown-menu > li > a:focus,
 .dropdown-submenu:hover > a,

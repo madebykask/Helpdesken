@@ -5,6 +5,11 @@ BEGIN
 END
 GO
 
+IF COL_LENGTH('dbo.tblSettings','ShowOUsOnDepartmentFilter') IS NULL
+BEGIN 	 
+	ALTER TABLE [dbo].[tblSettings] ADD [ShowOUsOnDepartmentFilter] int	Not null default(0)
+END
+GO
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.15'

@@ -3497,13 +3497,19 @@ namespace DH.Helpdesk.Web.Controllers
             ret.Regions = regions;
             ret.SelectedRegion = userCaseSettings.Region;
 
+            var customerSettings = this._settingService.GetCustomerSetting(customerId);
+
             var departments = this._departmentService.GetDepartments(customerId, ActivationStatus.All);
             ret.IsDepartmentChecked = userCaseSettings.Departments != string.Empty;
-            ret.Departments = AddOrganizationUnitsToDepartments(departments);
+
+            if (customerSettings != null && customerSettings.ShowOUsOnDepartmentFilter != 0)
+                ret.Departments = AddOrganizationUnitsToDepartments(departments);
+            else
+                ret.Departments = departments;
             
             ret.SelectedDepartments = userCaseSettings.Departments;
 
-            var customerSettings = this._settingService.GetCustomerSetting(customerId);
+            
             const bool IsTakeOnlyActive = true;
             ret.RegisteredByCheck = userCaseSettings.RegisteredBy != string.Empty;
             ret.RegisteredByUserList = this._userService.GetUserOnCases(customerId, IsTakeOnlyActive).MapToSelectList(customerSettings);
@@ -3927,7 +3933,8 @@ namespace DH.Helpdesk.Web.Controllers
                             .ToList();
                 }
 
-                fd.filterDepartment = AddOrganizationUnitsToDepartments(fd.filterDepartment);                
+                if(fd.customerSetting != null && fd.customerSetting.ShowOUsOnDepartmentFilter != 0)
+                    fd.filterDepartment = AddOrganizationUnitsToDepartments(fd.filterDepartment);                
             }
 
             //ärendetyp
@@ -4204,7 +4211,7 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         private IList<Department> AddOrganizationUnitsToDepartments(IList<Department> departments)
-        {
+        {            
             if (departments.Any())
             {
                 var allOUsNeeded = this._ouService.GetAllOUs()

@@ -2,6 +2,7 @@
 @using System.Web.Optimization
 @using System.Linq;
 @using DH.Helpdesk.BusinessData.OldComponents
+@using DH.Helpdesk.Common.Enums
 @using DH.Helpdesk.Common.Enums.Settings
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
@@ -383,8 +384,8 @@
                                                                 @if (Model.departments != null)
                                                                 {
                                                                     foreach (var e in Model.departments.Where(e => e.IsActive == 1 || Model.case_.Department_Id == e.Id).Where(e => Model.case_.Region_Id == e.Region_Id || !Model.case_.Region_Id.IntHasValue()))
-                                                                    {
-                                                                    <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Department_Id.ToString())>@e.DepartmentDescription(Model.DepartmentFilterFormat)</option>
+                                                                    {                                                                        
+                                                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Department_Id.ToString())>@e.DepartmentDescription(Model.DepartmentFilterFormat)</option>
                                                                     }
                                                                 }
                                                             </select>
@@ -655,15 +656,15 @@
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ProductArea_Id, "Produktområde")
                                         </td>
                                         <td colspan="2">
-                                            <div id="divProductArea" class="btn-group">
+                                            <div id="divProductArea" class="btn-group DynamicDropDown">
                                                 @{
                                             string disabledProductArea = Model.GetDisabledString(GlobalEnums.TranslationCaseFields.ProductArea_Id, CaseSolutionFields.ProductArea);
                                                 }
                                                 <div class="btn @disabledProductArea" id="divBreadcrumbs_ProductArea">@Model.ParantPath_ProductArea</div>
-                                                <button class="btn dropdown-toggle" data-toggle="dropdown" @disabledProductArea>
+                                                <button class="btn dropdown-toggle" data-toggle="dropdown" @disabledProductArea id="dropDownBtn">
                                                     <span class="caret"></span>
                                                 </button>
-                                                <ul class="dropdown-menu">
+                                                <ul class="dropdown-menu" style="z-index:99999999999;">
                                                     <li><a href="#">@Translation.Get("--")</a></li>
                                                     @Html.ProductAreaDropdownButtonString(Model.productAreas)
                                                 </ul>
@@ -1948,6 +1949,71 @@
 
 
     $(function() {        
+        
+        SetDynamicDropDowns();
+
+        $( ".dropdown-submenu.DynamicDropDown_Up" ).mousemove(function( event ) {            
+            var target = $(event.target.parentElement);
+            if (target != undefined && target.hasClass('DynamicDropDown_Up') && target.index(0) != -1) {
+                var objPos = GetObjectPosInView(target[0].id);                
+                var subMenu = "#subDropDownMenu_" + target[0].id;                                               
+                $(subMenu).css("bottom", "auto");
+                $(subMenu).css("top", "auto");
+                if ($(".DynamicDropDown").hasClass('dropup'))
+                {
+                    if (objPos.ToTop < objPos.ToDown )          
+                    {
+                        var h = -$(subMenu).height() + 25;                        
+                        var hstr = h+"px";                    
+                        $(subMenu).css("bottom",hstr);                        
+                    }                    
+                    else
+                        $(subMenu).css("bottom","0");  
+                }
+                else
+                {                    
+                    if (objPos.ToTop < objPos.ToDown || $(subMenu).height() < objPos.ToDown)                                                      
+                        $(subMenu).css("top","0");                                        
+                    else
+                    {
+                        var h = -$(subMenu).height() + 25;                        
+                        var hstr = h+"px";                    
+                        $(subMenu).css("top",hstr);                        
+                    }                        
+                }
+            }            
+        });
+
+        function GetObjectPosInView(objectId)
+        {
+            var fixedArea = 90;
+            var pageSize = $(window).height() - fixedArea;
+            var scrollPos = $(window).scrollTop();            
+            var elementToTop = $("#" + objectId).offset().top  - scrollPos - fixedArea;
+            var elementToDown = pageSize - elementToTop;
+            return {ToTop: elementToTop, ToDown: elementToDown};
+        }
+
+        $(window).scroll(function() {            
+            SetDynamicDropDowns()
+        });      
+
+        function SetDynamicDropDowns()
+        {
+            var fixedArea = 90;
+            var pageSize = $(window).height() - fixedArea;
+            var scrollPos = $(window).scrollTop();            
+            var elementToTop = $(".DynamicDropDown").offset().top  - scrollPos - fixedArea
+            var elementToDown = pageSize - elementToTop;            
+            if (elementToTop < -$(".DynamicDropDown").height())
+                $(".DynamicDropDown").removeClass('open');
+
+            if (elementToTop <= elementToDown) {
+                $(".DynamicDropDown").removeClass('dropup').addClass('dropdown');        
+            } else {    
+                $(".DynamicDropDown").removeClass('dropdown').addClass('dropup');                
+            } 
+        }
 
         $("#caseDescriptionPreview").click(function() {
             var description = $(".case-description")

@@ -4522,5 +4522,14 @@ GO
 If not exists (select * from tblTextTranslation where text_id = 1550 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1550, 2, 'No recipient is selected.')
 GO
+
+If not exists (select * from tbltext where id = 1551)
+	insert into tbltext (id, TextString) VALUES (1551, 'Visa Organisationsenhet i Avdelning filter')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1551 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1551, 2, 'Show Organizational Unit in Department filter')
+GO
+
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

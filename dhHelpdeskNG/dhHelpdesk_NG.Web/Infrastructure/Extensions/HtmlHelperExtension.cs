@@ -952,7 +952,7 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
         }
         
         private static MvcHtmlString BuildProcuctAreaDropdownButton(
-            IList<ProductArea> pal,
+            IList<ProductArea> pal,            
             bool isTakeOnlyActive = true,
             Dictionary<int, bool> userGroupDictionary = null)
         {
@@ -985,16 +985,16 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                     }
 
                     childList = childs.ToList();
-                }
+                }                
 
                 var cls = pa.IsActive == 1 ? string.Empty : "inactive";
                 if (childList != null && childList.Count > 0)
                 {
-                    htmlOutput += string.Format("<li class=\"dropdown-submenu {0}\">", cls);
+                    htmlOutput += string.Format("<li class=\"dropdown-submenu {0} {1}\" id=\"{2}\">", cls, "DynamicDropDown_Up", pa.Id);
                 }
                 else
                 {
-                    htmlOutput += string.Format("<li class=\"{0}\">", cls);
+                    htmlOutput += string.Format("<li class=\"{0} \" >", cls);
                 }
 
                 htmlOutput +=
@@ -1002,9 +1002,10 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                         "<a href='#' value=\"{0}\">{1}</a>",
                         pa.Id,
                         Translation.GetMasterDataTranslation(pa.Name));
+                
                 if (childList != null && childList.Count > 0)
                 {
-                    htmlOutput += "<ul class='dropdown-menu'>";
+                    htmlOutput += string.Format("<ul class='dropdown-menu' id=\"subDropDownMenu_{0}\" >", pa.Id);                    
                     htmlOutput += BuildProcuctAreaDropdownButton(childList.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList(), isTakeOnlyActive, userGroupDictionary);
                     htmlOutput += "</ul>";
                 }

@@ -115,13 +115,12 @@ namespace DH.Helpdesk.Domain
         public string SMSEMailDomainUserName { get; set; }
         public string XMLFileFolder { get; set; }
         public string PhysicalFilePath { get; set; }
-        public string VirtualFilePath { get; set; }
-        
-        public virtual OrderState CloseOrderState { get; set; }
-
+        public string VirtualFilePath { get; set; }               
         public int ModuleCaseInvoice { get; set; }
         public int PreventToSaveCaseWithInactiveValue { get; set; }
+        public int ShowOUsOnDepartmentFilter { get; set; }
 
+        public virtual OrderState CloseOrderState { get; set; }
         /// <summary>
         /// If 1 - indicates that users should be presented(and sorted by) as "FirstName LastName", and vice versa
         /// </summary>

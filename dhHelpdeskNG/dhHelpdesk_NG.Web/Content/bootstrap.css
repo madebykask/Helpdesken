@@ -3038,7 +3038,7 @@ table th[class*="span"],
 }
 
 .dropdown-submenu {
-  position: relative;
+  position: fixed;
 }
 
 .dropdown-submenu > .dropdown-menu {

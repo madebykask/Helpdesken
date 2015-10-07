@@ -364,7 +364,7 @@
                         <div class="span15">
                             <table >
                                 <tr>
-                                    <td style="width:100px">
+                                    <td style="width:150px">
                                         @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td >
@@ -373,6 +373,17 @@
                                         <br />
                                         <input type="radio" name="Setting.CaseWorkingGroupSource" @(Model.Setting.CaseWorkingGroupSource == 1 ? "checked='checked'" : "") id="Customer_Setting_CaseWorkingGroupSource2" value="1" />
                                         @Translation.Get("visa alltid värde", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:150px">
+                                         @Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation) -<br />
+                                         @Translation.Get("Organisationsenhet", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td >
+                                        <input type="checkbox" name="setting.ShowOUsOnDepartmentFilter" @(Model.Setting.ShowOUsOnDepartmentFilter == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="setting.ShowOUsOnDepartmentFilter" value="0" />
+                                        @Translation.Get("Visa Organisationsenhet i Avdelning filter", Enums.TranslationSource.TextTranslation)
                                     </td>
                                 </tr>
                             </table>
