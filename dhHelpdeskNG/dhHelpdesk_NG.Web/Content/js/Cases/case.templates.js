@@ -93,6 +93,9 @@ function IsWillBeOverwritten(fieldId, val) {
         case 'RegistrationSource':
             return IsWillBeOverwrittenByValue('#CustomerRegistrationSourceId', "#CustomerRegistrationSourceId", val);
             break;
+        case 'Status_Id':
+            return IsWillBeOverwrittenByValue('#case__Status_Id', '#case__Status_Id', val);
+            break;
         case 'StateSecondary_Id':
             return IsWillBeOverwrittenByValue('#case__StateSecondary_Id', '#case__StateSecondary_Id', val);
             break;
@@ -209,6 +212,10 @@ function ApplyTemplate(data, doOverwrite) {
                     el = $("#case__StateSecondary_Id");
                     SetValueIfElVisible(el, val, cfg);
                     break;
+                case 'Status_Id':
+                    el = $("#case__Status_Id");
+                    SetValueIfElVisible(el, val, cfg);
+                    break;
             }
         }
     }
@@ -273,6 +280,9 @@ function IsValueApplicableFor(templateFieldId, val) {
             break;
         case 'StateSecondary_Id':
             return $("#case__StateSecondary_Id").is(':visible');
+            break;
+        case 'Status_Id':
+            return $("#case__Status_Id").is(':visible');
             break;
     }
     return false;

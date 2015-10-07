@@ -351,7 +351,9 @@ namespace DH.Helpdesk.Web.Controllers
                         caseSolution.Text_External,
                         caseSolution.Text_Internal,
                         caseSolution.FinishingCause_Id,
-                        caseSolution.RegistrationSource
+                        caseSolution.RegistrationSource,
+                        caseSolution.Status_Id,
+                        caseSolution.StateSecondary_Id
                     },
                     JsonRequestBehavior.AllowGet);
         }
