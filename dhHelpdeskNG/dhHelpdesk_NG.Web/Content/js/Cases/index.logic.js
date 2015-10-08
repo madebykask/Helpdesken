@@ -269,6 +269,11 @@ var GRID_STATE = {
     Page.prototype.loadData = function(data, opt) {
         var me = this;
         var out = [];
+        if (data)
+        {
+            var totalCaseAmount = data.length;
+            $('[data-field="TotalAmountCases"]').text(totalCaseAmount);
+        }        
         var RECORDS_TRUNCATED_IDX = 499;
         var CASE_TYPE_ALL = -1;
         var CASE_TYPE_CLOSED = 1;
