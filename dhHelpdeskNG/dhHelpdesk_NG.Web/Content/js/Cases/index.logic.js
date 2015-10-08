@@ -60,6 +60,7 @@ var GRID_STATE = {
         me.$noAvailableFieldsMsg = $('#search_result div.noavailablefields-msg');
         me.$buttonsToDisableWhenGridLoads = $('ul.secnav a.btn, ul.secnav div.btn-group button, ul.secnav input[type=button], .submit, #btnClearFilter');
         me.$buttonsToDisableWhenNoColumns = $('#btnNewCase a.btn, #btnCaseTemplate a.btn, .submit, #btnClearFilter');
+        me.$caseRecordCount = $('[data-field="TotalAmountCases"]');
         
         me.filterForm = new FilterForm();
         me.filterForm.init({
@@ -272,8 +273,9 @@ var GRID_STATE = {
         if (data)
         {
             var totalCaseAmount = data.length;
-            $('[data-field="TotalAmountCases"]').text(totalCaseAmount);
-        }        
+            me.$caseRecordCount.text(totalCaseAmount);
+        }
+
         var RECORDS_TRUNCATED_IDX = 499;
         var CASE_TYPE_ALL = -1;
         var CASE_TYPE_CLOSED = 1;
