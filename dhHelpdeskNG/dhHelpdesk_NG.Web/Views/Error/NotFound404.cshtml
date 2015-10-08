@@ -1,0 +1,28 @@
+﻿@using System.Web.Optimization
+@{
+    ViewBag.Title = "Error";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta content="html/text; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    @Styles.Render("~/Content/css/login")
+    @Styles.Render("~/img-profile/css")
+    @Scripts.Render("~/bundles/common/login")
+    <title>@ViewBag.Title</title>
+</head>
+<body class="login" onload="catchTime()">
+    <div class="form-signin">
+        <div class="form-signin-heading">&nbsp;</div>
+        <p>@ViewBag.ErrorMessage</p>       
+    </div>
+    <div class="signin-bottom">
+        <p><img src="@Url.Content("~/Content/img/dhhelpdesk.png")" /></p>
+        <p>DH Helpdesk is a case handling system from DH Solutions</p>
+        <p>@Translation.Get("version")&nbsp;@ApplicationFacade.Version</p>
+        <a href="http://www.dhsolutions.se" target="_blank">www.dhsolutions.se</a>
+    </div>
+</body>
+</html>
