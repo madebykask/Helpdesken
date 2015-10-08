@@ -121,6 +121,8 @@ namespace DH.Helpdesk.Services.Services
         ParentCaseInfo GetParentInfo(int caseId);
 
         int? SaveInternalLogMessage(int id, string textInternal, out IDictionary<string, string> errors);
+
+        CaseDataSet GetCaseDataSet();
     }
 
     public class CaseService : ICaseService
@@ -978,6 +980,40 @@ namespace DH.Helpdesk.Services.Services
         public IList<CaseHistory> GetCaseHistoryByCaseId(int caseId)
         {
             return this._caseHistoryRepository.GetCaseHistoryByCaseId(caseId).ToList(); 
+        }
+
+        public CaseDataSet GetCaseDataSet()
+        {
+            var ret = new CaseDataSet();
+            using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            {
+                ret.CaseFileQuery = uow.GetRepository<CaseFile>().GetAll().ToList();
+                ret.CaseStatisticsQuery = uow.GetRepository<DH.Helpdesk.Domain.Cases.CaseStatistic>().GetAll().ToList();
+                ret.CaseTypeQuery = uow.GetRepository<CaseType>().GetAll().ToList();
+                ret.CategoryQuery = uow.GetRepository<Category>().GetAll().ToList();
+                ret.CausingPartQuery = uow.GetRepository<CausingPart>().GetAll().ToList();
+                ret.ClosingReasonQuery = uow.GetRepository<FinishingCause>().GetAll().ToList();
+                ret.CustomerQuery = uow.GetRepository<Customer>().GetAll().ToList();
+                ret.DepartmentQuery = uow.GetRepository<Department>().GetAll().ToList();
+                ret.ImpactQuery = uow.GetRepository<Impact>().GetAll().ToList();
+                ret.LogQuery = uow.GetRepository<Log>().GetAll().ToList();
+                ret.OrganizationUnitQuery = uow.GetRepository<OU>().GetAll().ToList();
+                ret.PriorityQuery = uow.GetRepository<Priority>().GetAll().ToList();
+                ret.ProductAreaQuery = uow.GetRepository<ProductArea>().GetAll().ToList();
+                ret.RegionQuery = uow.GetRepository<Region>().GetAll().ToList();
+                ret.StateSecondaryQuery = uow.GetRepository<StateSecondary>().GetAll().ToList();
+                ret.StatusQuery = uow.GetRepository<Status>().GetAll().ToList();
+                ret.SupplierQuery = uow.GetRepository<Supplier>().GetAll().ToList();
+                ret.SystemQuery = uow.GetRepository<System>().GetAll().ToList();
+                ret.UrgencyQuery = uow.GetRepository<Urgency>().GetAll().ToList();
+                ret.UserQuery = uow.GetRepository<User>().GetAll().ToList();
+                ret.WorkingGroupQuery = uow.GetRepository<WorkingGroupEntity>().GetAll().ToList();
+                ret.RegistrationSourceCustomerQuery = uow.GetRepository<RegistrationSourceCustomer>().GetAll().ToList();
+                ret.LanguageQuery = uow.GetRepository<Language>().GetAll().ToList();
+                ret.LogFileQuery = uow.GetRepository<LogFile>().GetAll().ToList(); 
+             }
+
+            return ret;
         }
 
         public void SendCaseEmail(

@@ -36,16 +36,18 @@
 
     public sealed class ReportService : IReportService
     {
-        private readonly IUnitOfWorkFactory unitOfWorkFactory;
-
+        private readonly IUnitOfWorkFactory unitOfWorkFactory;        
         private readonly ISurveyService sureyService;
+        private readonly ICaseService _caseService;
 
         public ReportService(
-                IUnitOfWorkFactory unitOfWorkFactory, 
-                ISurveyService sureyService)
+                IUnitOfWorkFactory unitOfWorkFactory,                 
+                ISurveyService sureyService,
+                ICaseService caseService)
         {
             this.unitOfWorkFactory = unitOfWorkFactory;
             this.sureyService = sureyService;
+            this._caseService = caseService;
         }
 
         #region Reports
@@ -280,9 +282,14 @@
                 var fieldRep = uow.GetRepository<CaseFieldSetting>();
                 var caseStatisticEntity = uow.GetRepository<CaseStatistic>();
                 var hasLeadTime = (fieldIds.Count == 0) || (fieldIds.Count != 0 && fieldIds.Contains(Convert.ToInt32(CalculationFields.LeadTime)));
+
                 var caseTypeQuery = uow.GetRepository<CaseType>().GetAll();
                 var productAreaQuery = uow.GetRepository<ProductArea>().GetAll();
                 var closingReasonQuery = uow.GetRepository<FinishingCause>().GetAll();
+
+                var customerQuery = uow.GetRepository<Customer>().GetAll();
+                var regionQuery = uow.GetRepository<Region>().GetAll();
+                var departmentQuery = uow.GetRepository<Department>().GetAll();
                 var organizationUnitQuery = uow.GetRepository<OU>().GetAll();
 
                 var settings = fieldRep.GetAll()
@@ -298,6 +305,8 @@
                 }
                 
                 var caseStatistics = caseStatisticEntity.GetAll();
+
+                var caseDataSet = _caseService.GetCaseDataSet();
                 
                 var overviews = caseRep.GetAll()
                                        .Search(customerId,
@@ -309,18 +318,14 @@
                                                text,
                                                sort,
                                                selectCount)
-                                       .MapToCaseOverviews(caseTypeQuery, 
-                                                           productAreaQuery, 
-                                                           closingReasonQuery,
-                                                           organizationUnitQuery,
-                                                           caseStatistics);
+                                       .MapToCaseOverviews(caseDataSet);
 
                 return new ReportGeneratorData(settings, overviews);
             }
         }
 
         #endregion
-
+          
         #region CaseSatisfaction
 
         public CaseSatisfactionOptionsResponse GetCaseSatisfactionOptionsResponse(OperationContext context)
