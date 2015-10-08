@@ -250,8 +250,8 @@
                     .ToList()
                     .Where(it => GridColumnsDefinition.IsAvailavbleToViewInCaseoverview(it.Name))
                     .AsQueryable();
-                var departments = departmentRep.GetAll().GetActiveByCustomer(customerId);
-                var workingGroups = workingGroupRep.GetAll().GetActiveByCustomer(customerId);
+                var departments = departmentRep.GetAll().GetByCustomer(customerId);
+                var workingGroups = workingGroupRep.GetAll().GetByCustomer(customerId);
                 var caseTypes = caseTypeRep.GetAll().GetByCustomer(customerId);
 
                 return ReportsOptionsMapper.MapToReportGeneratorOptions(
@@ -280,17 +280,7 @@
             {
                 var caseRep = uow.GetRepository<Case>();
                 var fieldRep = uow.GetRepository<CaseFieldSetting>();
-                var caseStatisticEntity = uow.GetRepository<CaseStatistic>();
                 var hasLeadTime = (fieldIds.Count == 0) || (fieldIds.Count != 0 && fieldIds.Contains(Convert.ToInt32(CalculationFields.LeadTime)));
-
-                var caseTypeQuery = uow.GetRepository<CaseType>().GetAll();
-                var productAreaQuery = uow.GetRepository<ProductArea>().GetAll();
-                var closingReasonQuery = uow.GetRepository<FinishingCause>().GetAll();
-
-                var customerQuery = uow.GetRepository<Customer>().GetAll();
-                var regionQuery = uow.GetRepository<Region>().GetAll();
-                var departmentQuery = uow.GetRepository<Department>().GetAll();
-                var organizationUnitQuery = uow.GetRepository<OU>().GetAll();
 
                 var settings = fieldRep.GetAll()
                             .GetByNullableCustomer(customerId)
@@ -302,9 +292,7 @@
                 if (caseTypeId.HasValue)
                 {
                     LoadCaseTypeChildrenIds(caseTypeId.Value, caseTypeIds, uow);
-                }
-                
-                var caseStatistics = caseStatisticEntity.GetAll();
+                }                                
 
                 var caseDataSet = _caseService.GetCaseDataSet();
                 
