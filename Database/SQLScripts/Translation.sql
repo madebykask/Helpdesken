@@ -4530,6 +4530,16 @@ If not exists (select * from tblTextTranslation where text_id = 1551 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1551, 2, 'Show Organizational Unit in Department filter')
 GO
 
+If not exists (select * from tbltext where id = 1552)
+	insert into tbltext (id, TextString, TextType) VALUES (1552, '404 Error', 999)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1552 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1552, 1, '404 Error - Filen gick inte att hitta')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1552 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1552, 2, '404 Error - File was not found')
+GO
+
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
