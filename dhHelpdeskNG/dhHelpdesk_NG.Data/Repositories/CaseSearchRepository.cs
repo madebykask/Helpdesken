@@ -1197,6 +1197,7 @@
                     sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblFormFieldValue] WHERE {0}))", this.GetSqlLike("FormFieldValue", text));
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[ReferenceNumber]", text));
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[InvoiceNumber]", text));
+                    sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[InventoryNumber]", text));
             
                     sb.Append(") ");
                 }
