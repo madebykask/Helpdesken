@@ -114,6 +114,7 @@
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.Available, CaseInfoFields.Available, headers);
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.Cost, CaseInfoFields.Cost, headers);
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.AttachedFile, CaseInfoFields.AttachedFile, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.RegistrationSource, CaseInfoFields.RegistrationSourceCustomer, headers);
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.LeadTime, CaseInfoFields.LeadTime, headers);
         }
 
@@ -206,6 +207,7 @@
             FieldSettingsHelper.CreateValueIfNeeded(settings.Available, CaseInfoFields.Available, fields.Available, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.Cost, CaseInfoFields.Cost, fields.Cost, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.AttachedFile, CaseInfoFields.AttachedFile, fields.AttachedFile, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.RegistrationSource, CaseInfoFields.RegistrationSourceCustomer, fields.RegistrationSource, values);
             FieldSettingsHelper.CreateSolvedTimeValueIfNeeded(settings.LeadTime, CaseInfoFields.LeadTime, fields.SolvedInTime, values);
 
         }

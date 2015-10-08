@@ -6,6 +6,7 @@
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Infrastructure;
 
     public class OperationLogCategoryController : BaseAdminController
     {
@@ -22,12 +23,18 @@
             this._customerService = customerService;
         }
 
+        public JsonResult SetShowOnlyActiveOperationLogCategoriesInAdmin(bool value)
+        {
+            SessionFacade.ShowOnlyActiveOperationLogCategoriesInAdmin = value;
+            return this.Json(new { result = "success" });
+        }
+
         public ActionResult Index(int customerId)
         {
             var customer = this._customerService.GetCustomer(customerId);
             var operationlogcategories = this._operationLogCategoryService.GetOperationLogCategories(customer.Id).ToList();
 
-            var model = new OperationLogCategoryIndexViewModel { OperationLogCategories = operationlogcategories, Customer = customer };
+            var model = new OperationLogCategoryIndexViewModel { OperationLogCategories = operationlogcategories, Customer = customer, IsShowOnlyActive = SessionFacade.ShowOnlyActiveOperationLogCategoriesInAdmin };
             return this.View(model);
         }    
 

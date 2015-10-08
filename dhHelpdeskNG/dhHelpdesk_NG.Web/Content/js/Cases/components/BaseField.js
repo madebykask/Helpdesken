@@ -50,3 +50,8 @@ BaseField.prototype.clear = function () {
     var me = this;
     me.setValue(window.EMTPY_STR);
 };
+
+BaseField.prototype.on = function() {
+    var me = this;
+    me.$el.on.apply(me.$el, arguments);
+};

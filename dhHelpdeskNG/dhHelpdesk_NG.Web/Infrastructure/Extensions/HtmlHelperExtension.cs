@@ -952,7 +952,7 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
         }
         
         private static MvcHtmlString BuildProcuctAreaDropdownButton(
-            IList<ProductArea> pal,
+            IList<ProductArea> pal,            
             bool isTakeOnlyActive = true,
             Dictionary<int, bool> userGroupDictionary = null)
         {
@@ -985,16 +985,16 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                     }
 
                     childList = childs.ToList();
-                }
+                }                
 
                 var cls = pa.IsActive == 1 ? string.Empty : "inactive";
                 if (childList != null && childList.Count > 0)
                 {
-                    htmlOutput += string.Format("<li class=\"dropdown-submenu {0}\">", cls);
+                    htmlOutput += string.Format("<li class=\"dropdown-submenu {0} {1}\" id=\"{2}\">", cls, "DynamicDropDown_Up", pa.Id);
                 }
                 else
                 {
-                    htmlOutput += string.Format("<li class=\"{0}\">", cls);
+                    htmlOutput += string.Format("<li class=\"{0} \" >", cls);
                 }
 
                 htmlOutput +=
@@ -1002,9 +1002,10 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                         "<a href='#' value=\"{0}\">{1}</a>",
                         pa.Id,
                         Translation.GetMasterDataTranslation(pa.Name));
+                
                 if (childList != null && childList.Count > 0)
                 {
-                    htmlOutput += "<ul class='dropdown-menu'>";
+                    htmlOutput += string.Format("<ul class='dropdown-menu' id=\"subDropDownMenu_{0}\" >", pa.Id);                    
                     htmlOutput += BuildProcuctAreaDropdownButton(childList.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList(), isTakeOnlyActive, userGroupDictionary);
                     htmlOutput += "</ul>";
                 }
@@ -1015,20 +1016,40 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
             return new MvcHtmlString(htmlOutput);
         }
 
-        private static MvcHtmlString BuildFinishingCauseTreeRow(IList<FinishingCause> finishingCauses, int iteration)
+        private static MvcHtmlString BuildFinishingCauseTreeRow(IList<FinishingCause> finishingCauses, int iteration, 
+                bool isShowOnlyActive = true,
+                bool isParentInactive = false)
         {
             string htmlOutput = string.Empty;
+            var finishingCauseToDisplay = isShowOnlyActive ? finishingCauses.Where(it => it.IsActive == 1) : finishingCauses;
 
             foreach (FinishingCause finishingCause in finishingCauses)
             {
-                htmlOutput += "<tr>";
+                var isInactive = finishingCause.IsActive != 1 || isParentInactive;
+                //htmlOutput += "<tr>";
+                htmlOutput += string.Format("<tr class=\"{0}\">", isInactive ? "inactive" : string.Empty);
                 htmlOutput += "<td><a href='/admin/finishingcause/edit/" + finishingCause.Id + "' style='padding-left: " + iteration + "px'><i class='icon-resize-full icon-dh'></i>" + finishingCause.Name + "</a></td>";
                 htmlOutput += "<td><a href='/admin/finishingcause/edit/" + finishingCause.Id + "'>" + finishingCause.IsActive.TranslateBit() + "</a></td>";
                 htmlOutput += "</tr>";
 
+
                 if (finishingCause.SubFinishingCauses != null)
-                    if (finishingCause.SubFinishingCauses.Count > 0)
-                        htmlOutput += BuildFinishingCauseTreeRow(finishingCause.SubFinishingCauses.ToList(), iteration + 20);
+                {
+                    if (finishingCause.SubFinishingCauses.Count > 0 && (
+                        (isShowOnlyActive && !isInactive)
+                        || !isShowOnlyActive))
+                    {
+                        htmlOutput += BuildFinishingCauseTreeRow(
+                            finishingCause.SubFinishingCauses.OrderBy(x => x.Name).ToList(),
+                            iteration + 20,
+                            isShowOnlyActive,
+                            isInactive);
+                    }
+                }
+
+                //if (finishingCause.SubFinishingCauses != null)
+                //    if (finishingCause.SubFinishingCauses.Count > 0)
+                //        htmlOutput += BuildFinishingCauseTreeRow(finishingCause.SubFinishingCauses.ToList(), iteration + 20);
             }
 
             return new MvcHtmlString(htmlOutput);

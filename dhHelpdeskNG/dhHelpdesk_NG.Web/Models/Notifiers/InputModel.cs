@@ -74,6 +74,7 @@
                 isActive)
         {
             this.Id = id;
+            this.IsNew = false;
             this.CreatedDate = createdDate;
             this.ChangedDate = changedDate;
             this.SynchronizationDate = synchronizationDate;

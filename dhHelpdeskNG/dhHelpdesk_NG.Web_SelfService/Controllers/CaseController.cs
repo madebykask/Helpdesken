@@ -581,10 +581,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             catch (Exception e)
             {
                 throw new HttpException((int)HttpStatusCode.PartialContent, e.Message);                
-                return View("Error");
             }
-
-            
         }
 
         private int Save(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey)

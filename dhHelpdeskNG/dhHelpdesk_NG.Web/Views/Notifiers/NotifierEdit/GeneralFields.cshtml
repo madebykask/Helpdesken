@@ -7,15 +7,17 @@
     <div class="row">
         <div class="span12">
             <table class="tableform">
-                @if (Model.IsNew)
+                @*@if (Model.IsNew)
                 {
                     @Html.EditorFor(m => m.UserId, "TextBox")
                 }
                 else
                 {
                     @Html.DisplayFor(m => m.UserId, "Label")
-                }
-                                    
+                }*@
+                        
+                @Html.EditorFor(m => m.UserId, "TextBox") 
+                           
                 @if (Model.Domain.Show)
                 {
                     <tr>
@@ -38,6 +40,7 @@
                 @Html.EditorFor(m => m.CellPhone, "TextBox")
                 @Html.EditorFor(m => m.Email, "TextBox")
                 @Html.EditorFor(m => m.Code, "TextBox")
+               
             </table>
         </div>
     </div>

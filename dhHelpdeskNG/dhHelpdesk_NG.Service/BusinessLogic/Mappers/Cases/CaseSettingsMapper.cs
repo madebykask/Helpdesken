@@ -118,6 +118,7 @@
             var available = CreateFieldSetting(fieldSettings.FindByName(CaseInfoFields.Available));
             var cost = CreateFieldSetting(fieldSettings.FindByName(CaseInfoFields.Cost));
             var attachedFile = CreateFieldSetting(fieldSettings.FindByName(CaseInfoFields.AttachedFile));
+            var registrationSource = CreateFieldSetting(fieldSettings.FindByName(CaseInfoFields.RegistrationSourceCustomer));
             var leadTime = CreateFieldSetting(fieldSettings.FindByName(CaseInfoFields.LeadTime));
 
             return new CaseInfoSettings(
@@ -143,6 +144,7 @@
                         available,
                         cost,
                         attachedFile,
+                        registrationSource,
                         leadTime);
         }
 

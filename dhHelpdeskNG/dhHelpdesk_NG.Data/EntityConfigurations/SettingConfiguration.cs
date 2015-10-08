@@ -125,6 +125,7 @@
             this.Property(x => x.VirtualFilePath).IsOptional();
             this.Property(x => x.IsUserFirstLastNameRepresentation).IsRequired();
             this.Property(x => x.PreventToSaveCaseWithInactiveValue).IsRequired();
+            this.Property(x => x.ShowOUsOnDepartmentFilter).IsRequired();
 
             this.ToTable("tblsettings");
         }

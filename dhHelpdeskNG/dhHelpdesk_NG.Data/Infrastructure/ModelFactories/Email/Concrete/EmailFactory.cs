@@ -5,7 +5,7 @@
     using DH.Helpdesk.BusinessData.Models.Email;
     using DH.Helpdesk.Domain;
 
-    public sealed class EmailFactory : IEmailFactory
+    public sealed class EmailFactory : DH.Helpdesk.Dal.Infrastructure.ModelFactories.Email.IEmailFactory
     {
         public EmailItem CreateEmailItem(
             string fromAddress,

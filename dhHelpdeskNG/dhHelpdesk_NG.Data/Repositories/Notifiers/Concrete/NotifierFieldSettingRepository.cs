@@ -88,35 +88,81 @@
         {
             var settings = this.FindByCustomerId(fieldSettings.CustomerId);
 
-            this.UpdateFieldSetting(settings, GeneralField.CellPhone, fieldSettings.CellPhone, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
-            this.UpdateFieldSetting(settings, StateField.ChangedDate, fieldSettings.ChangedDate, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
-            this.UpdateFieldSetting(settings, AddressField.City, fieldSettings.City, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
-            this.UpdateFieldSetting(settings, GeneralField.Code, fieldSettings.Code, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
-            this.UpdateFieldSetting(settings, StateField.CreatedDate, fieldSettings.CreatedDate, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
-            this.UpdateFieldSetting(settings, OrganizationField.Region, fieldSettings.Region, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
-            this.UpdateFieldSetting(settings, OrganizationField.Department, fieldSettings.Department, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
-            this.UpdateFieldSetting(settings, GeneralField.DisplayName, fieldSettings.DisplayName, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
-            this.UpdateFieldSetting(settings, OrganizationField.Division, fieldSettings.Division, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
-            this.UpdateFieldSetting(settings, GeneralField.Domain, fieldSettings.Domain, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
-            this.UpdateFieldSetting(settings, GeneralField.Email, fieldSettings.Email, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
-            this.UpdateFieldSetting(settings, GeneralField.FirstName, fieldSettings.FirstName, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
-            this.UpdateFieldSetting(settings, OrganizationField.Group, fieldSettings.Group, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
-            this.UpdateFieldSetting(settings, GeneralField.Initials, fieldSettings.Initials, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
-            this.UpdateFieldSetting(settings, GeneralField.LastName, fieldSettings.LastName, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
-            this.UpdateFieldSetting(settings, GeneralField.LoginName, fieldSettings.LoginName, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
-            this.UpdateFieldSetting(settings, OrganizationField.Manager, fieldSettings.Manager, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
-            this.UpdateFieldSetting(settings, OrdererField.Ordered, fieldSettings.Ordered, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
-            this.UpdateFieldSetting(settings, OrganizationField.OrganizationUnit, fieldSettings.OrganizationUnit, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
-            this.UpdateFieldSetting(settings, OrganizationField.CostCentre, fieldSettings.CostCentre, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
-            this.UpdateFieldSetting(settings, OrganizationField.Other, fieldSettings.Other, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
-            this.UpdateFieldSetting(settings, GeneralField.Phone, fieldSettings.Phone, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
-            this.UpdateFieldSetting(settings, GeneralField.Place, fieldSettings.Place, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
-            this.UpdateFieldSetting(settings, AddressField.PostalAddress, fieldSettings.PostalAddress, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
-            this.UpdateFieldSetting(settings, AddressField.PostalCode, fieldSettings.PostalCode, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
-            this.UpdateFieldSetting(settings, StateField.SynchronizationDate, fieldSettings.SynchronizationDate, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
-            this.UpdateFieldSetting(settings, OrganizationField.Title, fieldSettings.Title, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
-            this.UpdateFieldSetting(settings, OrganizationField.Unit, fieldSettings.Unit, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
-            this.UpdateFieldSetting(settings, GeneralField.UserId, fieldSettings.UserId, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
+            var supportedSettings = new Dictionary<string, FieldSetting>()
+                                        {
+                                            { GeneralField.CellPhone, fieldSettings.CellPhone },
+                                            { StateField.ChangedDate, fieldSettings.ChangedDate },
+                                            { AddressField.City, fieldSettings.City },
+                                            { GeneralField.Code, fieldSettings.Code },
+                                            { StateField.CreatedDate, fieldSettings.CreatedDate },
+                                            { OrganizationField.Region, fieldSettings.Region },
+                                            { OrganizationField.Department, fieldSettings.Department },
+                                            { GeneralField.DisplayName, fieldSettings.DisplayName },
+                                            { OrganizationField.Division, fieldSettings.Division },
+                                            { GeneralField.Domain, fieldSettings.Domain },
+                                            { GeneralField.Email, fieldSettings.Email },
+                                            { GeneralField.FirstName, fieldSettings.FirstName },
+                                            { OrganizationField.Group, fieldSettings.Group },
+                                            { GeneralField.Initials, fieldSettings.Initials },
+                                            { GeneralField.LastName, fieldSettings.LastName },
+                                            { GeneralField.LoginName, fieldSettings.LoginName },
+                                            { OrganizationField.Manager, fieldSettings.Manager },
+                                            { OrdererField.Ordered, fieldSettings.Ordered },
+                                            { OrganizationField.OrganizationUnit, fieldSettings.OrganizationUnit },
+                                            { OrganizationField.CostCentre, fieldSettings.CostCentre },
+                                            { OrganizationField.Other, fieldSettings.Other },
+                                            { GeneralField.Phone, fieldSettings.Phone },
+                                            { GeneralField.Place, fieldSettings.Place },
+                                            { AddressField.PostalAddress, fieldSettings.PostalAddress },
+                                            { AddressField.PostalCode, fieldSettings.PostalCode },
+                                            { StateField.SynchronizationDate, fieldSettings.SynchronizationDate },
+                                            { OrganizationField.Title, fieldSettings.Title },
+                                            { OrganizationField.Unit, fieldSettings.Unit },
+                                            { GeneralField.UserId, fieldSettings.UserId }
+                                        };
+            var settingsToAdd = new Dictionary<ComputerUserFieldSettings, ComputerUserFieldSettingsLanguage>();
+            foreach (var supportedSetting in supportedSettings)
+            {
+                var settingName = supportedSetting.Key;
+                var settingData = supportedSetting.Value;
+                var setting = FilterSettingByFieldName(settings, settingName);
+                if (setting == null)
+                {
+                    var newCustomerComputerUserFS = new ComputerUserFieldSettings() { };
+                    newCustomerComputerUserFS.Customer_Id = fieldSettings.CustomerId;
+                    newCustomerComputerUserFS.ComputerUserField = settingName;
+                    newCustomerComputerUserFS.Show = settingData.ShowInDetails ? 1 : 0;
+                    newCustomerComputerUserFS.Required = settingData.Required ? 1 : 0;
+                    newCustomerComputerUserFS.MinLength = 0;
+                    newCustomerComputerUserFS.ShowInList = settingData.ShowInNotifiers ? 1 : 0;
+                    newCustomerComputerUserFS.LDAPAttribute = settingData.LdapAttribute ?? string.Empty;
+                    this.DataContext.ComputerUserFieldSettings.Add(newCustomerComputerUserFS);
+                    settingsToAdd.Add(newCustomerComputerUserFS, new ComputerUserFieldSettingsLanguage
+                                                                  {
+                                                                      Language_Id =
+                                                                          fieldSettings
+                                                                          .LanguageId,
+                                                                      Label =
+                                                                          settingData
+                                                                          .Caption
+                                                                  });
+                }
+                else
+                {
+                    this.UpdateFieldSetting(settings, supportedSetting.Key, supportedSetting.Value, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
+                }
+            }
+
+            if (settingsToAdd.Count > 0)
+            {
+                this.DataContext.SaveChanges();
+                foreach (var settingKV in settingsToAdd)
+                {
+                    settingKV.Value.ComputerUserFieldSettings_Id = settingKV.Key.Id;
+                    this.DataContext.ComputerUserFieldSettingsLanguages.Add(settingKV.Value);
+                }
+                this.DataContext.SaveChanges();
+            }
         }
 
         public NotifierOverviewSettings FindDisplayFieldSettingsByCustomerIdAndLanguageId(int customerId, int languageId)
@@ -188,11 +234,6 @@
         public FieldSettings FindByCustomerIdAndLanguageId(int customerId, int languageId)
         {
             var settings = this.FindByCustomerId(customerId);
-            if (!settings.Any())
-            {
-                return FieldSettings.CreateEmpty();
-            }
-
             var userId = this.CreateFieldSetting(settings, GeneralField.UserId, languageId, GeneralFieldLable.UserId );
             var domain = this.CreateFieldSetting(settings, GeneralField.Domain, languageId, GeneralFieldLable.Domain);
             var loginName = this.CreateFieldSetting(settings, GeneralField.LoginName, languageId, GeneralFieldLable.LoginName);
@@ -275,21 +316,14 @@
             var setting = FilterSettingByFieldName(settings, createSettingName);
             if (setting == null)
             {
-                return this.notifierFieldSettingsFactory.CreateEmpty();
+                return this.notifierFieldSettingsFactory.CreateEmpty(lableText);
             }
 
             var translation = this.GetTranslationBySettingIdAndLanguageId(setting.Id, languageId);
             
             if (translation == null)
             {
-                var emptyNotifierFieldSettings =  this.notifierFieldSettingsFactory.CreateEmpty();
-                //return this.notifierFieldSettingsFactory.Create(setting.Show != 0,
-                //                                        setting.ShowInList != 0,
-                //                                        emptyNotifierFieldSettings.LableText,
-                //                                        lableText,
-                //                                        setting.Required != 0,
-                //                                        setting.LDAPAttribute);
-                return emptyNotifierFieldSettings;
+                return this.notifierFieldSettingsFactory.CreateEmpty(lableText);
             }
             
             return this.notifierFieldSettingsFactory.Create(

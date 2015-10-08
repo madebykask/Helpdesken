@@ -351,7 +351,9 @@ namespace DH.Helpdesk.Web.Controllers
                         caseSolution.Text_External,
                         caseSolution.Text_Internal,
                         caseSolution.FinishingCause_Id,
-                        caseSolution.RegistrationSource
+                        caseSolution.RegistrationSource,
+                        caseSolution.Status_Id,
+                        caseSolution.StateSecondary_Id
                     },
                     JsonRequestBehavior.AllowGet);
         }
@@ -565,7 +567,7 @@ namespace DH.Helpdesk.Web.Controllers
                 
                 PerformerUsers = performersList,
 
-                Priorities = this._priorityService.GetPriorities(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                Priorities = this._priorityService.GetPriorities(SessionFacade.CurrentCustomer.Id).Where(x => x.IsActive == 1).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()

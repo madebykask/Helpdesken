@@ -30,12 +30,18 @@
             this._customerService = customerService;
         }
 
+        public JsonResult SetShowOnlyActiveOperationObjectsInAdmin(bool value)
+        {
+            SessionFacade.ShowOnlyActiveOperationObjectsInAdmin = value;
+            return this.Json(new { result = "success" });
+        }
+
         public ActionResult Index(int customerId)
         {
             var customer = this._customerService.GetCustomer(customerId);
             var operationObjects = this._operationObjectService.GetOperationObjects(customer.Id);
 
-            var model = new OperationObjectIndexViewModel { OperationObjects = operationObjects, Customer = customer };
+            var model = new OperationObjectIndexViewModel { OperationObjects = operationObjects, Customer = customer, IsShowOnlyActive = SessionFacade.ShowOnlyActiveOperationObjectsInAdmin };
             return this.View(model);
         }
 

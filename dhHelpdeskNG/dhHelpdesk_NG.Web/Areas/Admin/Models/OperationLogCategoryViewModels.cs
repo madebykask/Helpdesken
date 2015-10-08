@@ -8,6 +8,8 @@
     {
         public Customer Customer { get; set; }
         public IList<OperationLogCategory> OperationLogCategories { get; set; }
+
+        public bool IsShowOnlyActive { get; set; }
     }
 
     public class OperationLogCategoryInputViewModel

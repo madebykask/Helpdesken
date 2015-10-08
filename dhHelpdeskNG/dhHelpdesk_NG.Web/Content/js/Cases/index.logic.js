@@ -39,6 +39,7 @@ var GRID_STATE = {
     Page.prototype.init = function(appSettings) {
         var me = this;
         me.hXHR = null;
+        me.msgs = appSettings.messages || {};
         me.settings = {
             filterSettings: appSettings.searchFilter.data,
             refreshContent: appSettings.refreshContent
@@ -65,7 +66,7 @@ var GRID_STATE = {
             $el: $('#frmCaseSearch'),
             filter: appSettings.searchFilter.data,
             onBeforeSearch: callAsMe(me.canMakeSearch, me),
-            onSearch: callAsMe(me.fetchData, me)
+            onSearch: Utils.applyAsMe(me.fetchData, me, [{ isSearchInitByUser: true }])
         });
         
         me.$remainingView = $('[data-field="caseRemainingTimeHidePlace"]');
@@ -76,7 +77,7 @@ var GRID_STATE = {
             if (me._gridState !== window.GRID_STATE.IDLE) {
                 return false;
             }
-            me.fetchData.call(me);
+            me.fetchData.call(me, { isSearchInitByUser: true });
             return false;
         });
         
@@ -183,7 +184,7 @@ var GRID_STATE = {
         me.$tableHeader.html(out.join(JOINER));
         me.$tableHeader.find('th.thpointer').on('click', sortCallback);
 
-        me.fetchData();        
+        me.fetchData({ isSearchInitByUser: true });
     };
 
     Page.prototype.setSortField = function(fieldName, $el) {
@@ -207,6 +208,8 @@ var GRID_STATE = {
         }
         $($el).find('i').addClass(getClsForSortDir(sortOpt.sortDir));
 
+        // I did not put isSearchInitByUser: true due to it shows irritating message 
+        //  when more than 500 rows fetchied
         me.fetchData();        
     };
 
@@ -263,9 +266,14 @@ var GRID_STATE = {
         return out.join(JOINER);
     };
 
-    Page.prototype.loadData = function(data) {
+    Page.prototype.loadData = function(data, opt) {
         var me = this;
         var out = [];
+        var RECORDS_TRUNCATED_IDX = 499;
+        var CASE_TYPE_ALL = -1;
+        var CASE_TYPE_CLOSED = 1;
+        var isRecordsLimitReached = false;
+        opt = opt || {};
         
         if (data && data.length > 0) {
             me.hideMessage();
@@ -285,8 +293,18 @@ var GRID_STATE = {
                 });
                 rowOut.push('</tr>');
                 out.push(rowOut.join(JOINER));
+                if (idx === RECORDS_TRUNCATED_IDX) {
+                    isRecordsLimitReached = true;
+                }
             });
             me.$tableBody.html(out.join(JOINER));
+            var oldCaseType = me.filterForm.getSavedSeacrhCaseTypeValue();
+            var newCaseType = me.filterForm.getSearchCaseType();
+
+            if (isRecordsLimitReached && opt.isSearchInitByUser
+                && newCaseType !== oldCaseType &&  (newCaseType === CASE_TYPE_ALL || newCaseType === CASE_TYPE_CLOSED)) {
+                ShowToastMessage(me.msgs.information + '<br/>' + me.msgs.records_limited_msg, 'notice');
+            }
         } else {
             me.showMsg(NODATA_MSG_TYPE);
         }
@@ -296,10 +314,14 @@ var GRID_STATE = {
 
     Page.prototype.onRemainingViewClick = function(aElement) {
         var me = this;
-        me.fetchData([{ 'name': 'CaseRemainingTime', 'value': $(aElement).attr('data-remaining-time') },
-        { 'name': 'CaseRemainingTimeUntil', 'value': $(aElement).attr('data-remaining-time-until') },
-        { 'name': 'CaseRemainingTimeMax', 'value': $(aElement).attr('data-remaining-time-max') },
-        { 'name': 'CaseRemainingTimeHours', 'value': $(aElement).attr('data-remaining-time-hours') }]);
+        me.fetchData( {
+            isSearchInitByUser: true, 
+            appendFetch: [
+                { 'name': 'CaseRemainingTime', 'value': $(aElement).attr('data-remaining-time') },
+                { 'name': 'CaseRemainingTimeUntil', 'value': $(aElement).attr('data-remaining-time-until') },
+                { 'name': 'CaseRemainingTimeMax', 'value': $(aElement).attr('data-remaining-time-max') },
+                { 'name': 'CaseRemainingTimeHours', 'value': $(aElement).attr('data-remaining-time-hours') }]
+        });
     };
 
     Page.prototype.loadRemainingView = function(htmlContent) {
@@ -312,18 +334,11 @@ var GRID_STATE = {
         });
     };
 
-    /**
-    * @private
-    */
-    Page.prototype.onSearchClick = function () {
-        var me = this;
-        me.fetchData();
-    };
 
-    Page.prototype.onGetData = function (response) {
+    Page.prototype.onGetData = function (response, opt) {
         var me = this;
         if (response && response.result === 'success' && response.data) {
-            me.loadData(response.data);
+            me.loadData(response.data, opt);
             if (response.remainingView) {
                 me.loadRemainingView(response.remainingView);
             }
@@ -340,40 +355,45 @@ var GRID_STATE = {
         }
     };
 
-    Page.prototype.fetchData = function(addFetchParam) {
+    Page.prototype.fetchData = function(params) {
         var me = this;
         var fetchParams;
         var baseParams = me.filterForm.getFilterToSend();
+        var p = params || {};
         baseParams.push(
             { name: 'sortBy', value: me.gridSettings.sortOptions.sortBy },
             { name: 'sortDir', value: me.gridSettings.sortOptions.sortDir },
             { name: 'pageIndex', value: me.gridSettings.pageOptions.pageIndex },
             { name: 'recPerPage', value: me.gridSettings.pageOptions.recPerPage });
 
-        if (addFetchParam != null && addFetchParam.length > 0) {
-            fetchParams = baseParams.concat(addFetchParam);
+        if (p.appendFetch != null && p.appendFetch.length > 0) {
+            fetchParams = baseParams.concat(p.appendFetch);
         } else {
             fetchParams = baseParams;
         }
         me.setGridState(window.GRID_STATE.LOADING);
         me.showMsg(LOADING_MSG_TYPE);
         me.hXHR = $.ajax('/Cases/SearchAjax', {
-            type: 'POST',
-            dataType: 'json',
-            data: fetchParams,
-            success: function () {
+                type: 'POST',
+                dataType: 'json',
+                data: fetchParams
+            })
+            .always(function() {
                 me._gridUpdated = (new Date()).getTime();
-                me.onGetData.apply(me, arguments);
-            },
-            error: function () {
+            })
+            .fail(function() {
                 var textStatus = arguments[1];
-                me._gridUpdated = (new Date()).getTime();
                 if (textStatus !== 'abort') {
                     me.showMsg(ERROR_MSG_TYPE);
                     me.setGridState(window.GRID_STATE.IDLE);
                 }
-            }
-        });
+            })
+            .done(function() {
+                me.onGetData.call(me, arguments[0], { isSearchInitByUser: p.isSearchInitByUser });
+            })
+            .always(function() {
+                me.filterForm.saveSeacrhCaseTypeValue.call(me.filterForm);
+            });
     };
    
     window.app = new Page();

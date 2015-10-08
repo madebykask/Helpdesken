@@ -9,7 +9,6 @@ namespace DH.Helpdesk.SelfService
     using System.Web;
 
     using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Cases;
     using DH.Helpdesk.Dal.Repositories.Computers;
@@ -25,11 +24,7 @@ namespace DH.Helpdesk.SelfService
     using DH.Helpdesk.Dal.Repositories.Users.Concrete;
     using DH.Helpdesk.Dal.Repositories.WorkstationModules;
     using DH.Helpdesk.Dal.Repositories.WorkstationModules.Concrete;
-    using DH.Helpdesk.SelfService.Infrastructure.WorkContext;
-    using DH.Helpdesk.SelfService.Infrastructure.WorkContext.Concrete;
     using DH.Helpdesk.SelfService.NinjectModules.Modules;
-    using DH.Helpdesk.SelfService.NinjectModules.Modules;
-    using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Infrastructure;
     using DH.Helpdesk.Services.Infrastructure.Concrete;
     using DH.Helpdesk.Services.Services;

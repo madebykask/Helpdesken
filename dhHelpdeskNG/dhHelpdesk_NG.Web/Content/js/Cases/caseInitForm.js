@@ -165,7 +165,7 @@ function GetComputerUserSearchOptions() {
                                     , departmentname: item.DepartmentName
                                     , ouid: item.OU_Id
                                     , ouname: item.OUName
-                                    , name_family: item.SurName + ' ' + item.SurName
+                                    , name_family: item.SurName + ' ' + item.FirstName
                         };
                         return JSON.stringify(aItem);
                         

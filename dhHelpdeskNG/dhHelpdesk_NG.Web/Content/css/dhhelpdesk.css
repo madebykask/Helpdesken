@@ -677,6 +677,18 @@ input[type="text"] {
 
 .dropup { bottom:100% !important; top:auto !important; }
 
+
+.dropup .dropdown-submenu {
+  top:auto;
+  margin-bottom:-4px;  
+}
+
+.dropup .dropdown-submenu a {
+  padding-bottom:6px;
+}
+
+
+
 .dropdown-menu > li > a:hover,
 .dropdown-menu > li > a:focus,
 .dropdown-submenu:hover > a,
@@ -1855,6 +1867,11 @@ table th.thpointer {
 
 
 /***********************  CASE EDIT PAGE BEGIN ************************************/
+
+select.working-group option.inactive
+{
+    color: lightgray;
+}
 
 /*** editcase.caselog begin ***/
 .table.caselog .case-icon 
@@ -3429,7 +3446,14 @@ td.disabled
 .registrationSourceCustomer.admin.content .inactive *,
 .region.admin.content .inactive *,
 .department.admin.content .inactive *,
-.oU.admin.content .inactive *
+.oU.admin.content .inactive *,
+.standardtext.admin.content .inactive *,
+.finishingcause.admin.content .inactive *,
+.dailyreportsubject.admin.content .inactive *,
+.operationobject.admin.content .inactive *,
+.operationlogcategory.admin.content .inactive *,
+.emailgroup.admin.content .inactive *,
+.program.admin.content .inactive *
 
 
 {

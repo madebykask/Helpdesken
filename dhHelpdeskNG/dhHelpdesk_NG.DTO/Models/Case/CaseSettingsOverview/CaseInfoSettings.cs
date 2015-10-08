@@ -28,6 +28,7 @@
             FieldOverviewSetting available, 
             FieldOverviewSetting cost, 
             FieldOverviewSetting attachedFile,
+            FieldOverviewSetting registrationSource,
             FieldOverviewSetting leadTime)
         {
             this.AttachedFile = attachedFile;
@@ -52,6 +53,7 @@
             this.ChangeDate = changeDate;
             this.RegistrationDate = registrationDate;
             this.Case = caseNumber;
+            this.RegistrationSource = registrationSource;
             this.LeadTime = leadTime;
         }
 
@@ -120,6 +122,9 @@
 
         [NotNull]
         public FieldOverviewSetting AttachedFile { get; private set; }
+
+        [NotNull]
+        public FieldOverviewSetting RegistrationSource { get; private set; }
 
         [NotNull]
         public FieldOverviewSetting LeadTime { get; private set; }

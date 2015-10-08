@@ -6,12 +6,6 @@
     ViewBag.Title = Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation);
 }
 
-@if (Model.IsEmpty)
-{
-    @Html.Partial("Empty")
-}
-else
-{
     @Scripts.Render("~/bundles/notifiers/index")
 
     <script type="text/javascript">
@@ -53,4 +47,3 @@ else
             </div>
         </div>
     </div>        
-}

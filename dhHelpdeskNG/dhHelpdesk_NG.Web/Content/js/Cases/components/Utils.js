@@ -22,12 +22,23 @@ var Utils = {
         return res;
     },
 
+    /**
+     * Shortcut for Object.prototype.call()
+     * @param { fn } method is function to call
+     * @param { Object } me is object that will act as this 
+     */
     callAsMe: function(method, me) {
         return function(arg) {
             return method.call(me, arg);
         };
     },
 
+    /**
+     * Shortcut for Object.prototype.call()
+     * @param { fn } method is function to call
+     * @param { Object } me is object that will act as this 
+     * @param { Array } args is array that will supplied to callback
+     */
     applyAsMe: function(method, me, args) {
         return function() {
             return method.apply(me, args);

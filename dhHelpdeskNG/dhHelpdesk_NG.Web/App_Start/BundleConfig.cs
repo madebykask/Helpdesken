@@ -121,6 +121,7 @@
                             "~/Content/js/Invoice/invoice.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/cases/index").Include(
+                "~/Scripts/jquery.cookie.js",
                 "~/Content/js/Cases/components/Utils.js",
                 "~/Content/js/Cases/components/BaseField.js",
                 "~/Content/js/Cases/components/DropdownButtonField.js",
@@ -322,6 +323,34 @@
             bundles.Add(new ScriptBundle("~/bundles/admin/OU/index").Include(
             "~/Areas/Admin/Content/js/Common/ToggableInactiveList.js",
             "~/Areas/Admin/Content/js/OU/index.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/admin/StandardText/index").Include(
+            "~/Areas/Admin/Content/js/Common/ToggableInactiveList.js",
+            "~/Areas/Admin/Content/js/StandardText/index.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/admin/FinishingCause/index").Include(
+            "~/Areas/Admin/Content/js/Common/ToggableInactiveList.js",
+            "~/Areas/Admin/Content/js/FinishingCause/index.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/admin/DailyReportSubject/index").Include(
+            "~/Areas/Admin/Content/js/Common/ToggableInactiveList.js",
+            "~/Areas/Admin/Content/js/DailyReportSubject/index.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/admin/OperationObject/index").Include(
+            "~/Areas/Admin/Content/js/Common/ToggableInactiveList.js",
+            "~/Areas/Admin/Content/js/OperationObject/index.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/admin/OperationLogCategory/index").Include(
+            "~/Areas/Admin/Content/js/Common/ToggableInactiveList.js",
+            "~/Areas/Admin/Content/js/OperationLogCategory/index.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/admin/EMailGroup/index").Include(
+            "~/Areas/Admin/Content/js/Common/ToggableInactiveList.js",
+            "~/Areas/Admin/Content/js/EMailGroup/index.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/admin/Program/index").Include(
+            "~/Areas/Admin/Content/js/Common/ToggableInactiveList.js",
+            "~/Areas/Admin/Content/js/Program/index.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/cases/relatedCases").Include(
                             "~/Content/js/Cases/relatedCases.logic.js"));

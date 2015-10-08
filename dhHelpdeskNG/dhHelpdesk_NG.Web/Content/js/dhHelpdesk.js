@@ -120,17 +120,15 @@ function SelectValueInOtherDropdownOnChange(id, postTo, ctl) {
 function CaseCascadingSelectlistChange(id, customerId, postTo, ctl, departmentFilterFormat) {
     var ctlOption = ctl + ' option';
     $.post(postTo, { 'id': id, 'customerId': customerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {
+        var $ctl = $(ctl);
+        var selected = $ctl.val();
         $(ctlOption).remove();
-        $(ctl).append('<option value="">&nbsp;</option>');
-        var selected = $('#SelectedValueCarrier').val();
-
+        $ctl.append('<option value="">&nbsp;</option>');
         if (data != undefined) {
             for (var i = 0; i < data.list.length; i++) {
-                if (data.list[i].id == selected)
-                    $(ctl).append('<option value="' + data.list[i].id + '" selected>' + data.list[i].name + '</option>');
-                else
-                    $(ctl).append('<option value="' + data.list[i].id + '">' + data.list[i].name + '</option>');
+                $ctl.append('<option value="' + data.list[i].id + '">' + data.list[i].name + '</option>');
             }
+            $ctl.val(selected);
         }
     });
 }
@@ -597,6 +595,7 @@ function DestroyDataTable(tableUniqId) {
 
 function InitDataTable(tableUniqId, perText, showingText) {
     $('#' + tableUniqId).dataTable({
+        'sError': 'throw',
         "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
         "sPaginationType": "bootstrap",
         "oLanguage": {

@@ -368,6 +368,13 @@
     <Content Include="Areas\Admin\Content\js\Common\common.js" />
     <Content Include="Areas\Admin\Content\js\Common\ToggableInactiveList.js" />
     <Content Include="Areas\Admin\Content\js\CaseType\index.js" />
+    <Content Include="Areas\Admin\Content\js\Program\index.js" />
+    <Content Include="Areas\Admin\Content\js\EMailGroup\index.js" />
+    <Content Include="Areas\Admin\Content\js\OperationLogCategory\index.js" />
+    <Content Include="Areas\Admin\Content\js\OperationObject\index.js" />
+    <Content Include="Areas\Admin\Content\js\DailyReportSubject\index.js" />
+    <Content Include="Areas\Admin\Content\js\FinishingCause\index.js" />
+    <Content Include="Areas\Admin\Content\js\StandardText\index.js" />
     <Content Include="Areas\Admin\Content\js\Department\index.js" />
     <Content Include="Areas\Admin\Content\js\OU\index.js" />
     <Content Include="Areas\Admin\Content\js\Priority\index.js" />
@@ -790,6 +797,7 @@
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\UserEditModel.cs" />
     <Compile Include="Areas\Orders\OrdersAreaRegistration.cs" />
     <Content Include="Content\js\snippets\clickmultimenu_dropdown.js" />
+    <Content Include="Content\js\snippets\jQuery.inactiveValue.validator.js" />
     <Content Include="Content\js\snippets\tabSwitchByHashTag.js" />
     <Content Include="Content\js\dhHelpdesk.js" />
     <Content Include="Content\js\snippets\dropdown_fix.js" />
@@ -3097,7 +3105,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>62796</DevelopmentServerPort>
+          <DevelopmentServerPort>64738</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:57747/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

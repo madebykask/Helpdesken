@@ -148,7 +148,7 @@
                         new List<GridColumnHeaderModel>(),
                         new List<NotifierDetailedOverviewModel>(),
                         new SortFieldModel()));
-            empty.MarkAsEmpty();
+            
             return empty;
         }
     }
