@@ -1952,7 +1952,7 @@
         
         SetDynamicDropDowns();
 
-        $( ".dropdown-submenu.DynamicDropDown_Up" ).mousemove(function( event ) {            
+        $( ".dropdown-submenu.DynamicDropDown_Up" ).mousemove(function( event ) {                                
             var target = $(event.target.parentElement);
             if (target != undefined && target.hasClass('DynamicDropDown_Up') && target.index(0) != -1) {
                 var objPos = GetObjectPosInView(target[0].id);                
@@ -2003,15 +2003,15 @@
             var fixedArea = 90;
             var pageSize = $(window).height() - fixedArea;
             var scrollPos = $(window).scrollTop();            
-            var elementToTop = $(".DynamicDropDown").offset().top  - scrollPos - fixedArea
+            var elementToTop = $(".DynamicDropDown").offset().top  - scrollPos - fixedArea;
             var elementToDown = pageSize - elementToTop;            
             if (elementToTop < -$(".DynamicDropDown").height())
                 $(".DynamicDropDown").removeClass('open');
 
             if (elementToTop <= elementToDown) {
-                $(".DynamicDropDown").removeClass('dropup').addClass('dropdown');        
+                $(".DynamicDropDown").removeClass('dropup');        
             } else {    
-                $(".DynamicDropDown").removeClass('dropdown').addClass('dropup');                
+                $(".DynamicDropDown").addClass('dropup');                
             } 
         }
 
