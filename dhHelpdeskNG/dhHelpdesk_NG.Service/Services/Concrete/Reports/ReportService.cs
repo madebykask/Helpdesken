@@ -293,8 +293,8 @@
                 {
                     LoadCaseTypeChildrenIds(caseTypeId.Value, caseTypeIds, uow);
                 }                                
-
-                var caseDataSet = _caseService.GetCaseDataSet();
+                
+                var caseDataSet = _caseService.GetCaseDataSet(periodFrom.Value, periodUntil.Value);
                 
                 var overviews = caseRep.GetAll()
                                        .Search(customerId,

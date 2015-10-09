@@ -122,7 +122,7 @@ namespace DH.Helpdesk.Services.Services
 
         int? SaveInternalLogMessage(int id, string textInternal, out IDictionary<string, string> errors);
 
-        CaseDataSet GetCaseDataSet();
+        CaseDataSet GetCaseDataSet(DateTime? fromDate, DateTime? toDate);
     }
 
     public class CaseService : ICaseService
@@ -982,21 +982,18 @@ namespace DH.Helpdesk.Services.Services
             return this._caseHistoryRepository.GetCaseHistoryByCaseId(caseId).ToList(); 
         }
 
-        public CaseDataSet GetCaseDataSet()
+        public CaseDataSet GetCaseDataSet(DateTime? fromDate, DateTime? toDate)
         {
             var ret = new CaseDataSet();
             using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
-            {
-                ret.CaseFileQuery = uow.GetRepository<CaseFile>().GetAll().ToList();
-                ret.CaseStatisticsQuery = uow.GetRepository<DH.Helpdesk.Domain.Cases.CaseStatistic>().GetAll().ToList();
+            {                                
                 ret.CaseTypeQuery = uow.GetRepository<CaseType>().GetAll().ToList();
                 ret.CategoryQuery = uow.GetRepository<Category>().GetAll().ToList();
                 ret.CausingPartQuery = uow.GetRepository<CausingPart>().GetAll().ToList();
                 ret.ClosingReasonQuery = uow.GetRepository<FinishingCause>().GetAll().ToList();
                 ret.CustomerQuery = uow.GetRepository<Customer>().GetAll().ToList();
                 ret.DepartmentQuery = uow.GetRepository<Department>().GetAll().ToList();
-                ret.ImpactQuery = uow.GetRepository<Impact>().GetAll().ToList();
-                ret.LogQuery = uow.GetRepository<Log>().GetAll().ToList();
+                ret.ImpactQuery = uow.GetRepository<Impact>().GetAll().ToList();                
                 ret.OrganizationUnitQuery = uow.GetRepository<OU>().GetAll().ToList();
                 ret.PriorityQuery = uow.GetRepository<Priority>().GetAll().ToList();
                 ret.ProductAreaQuery = uow.GetRepository<ProductArea>().GetAll().ToList();
@@ -1008,9 +1005,12 @@ namespace DH.Helpdesk.Services.Services
                 ret.UrgencyQuery = uow.GetRepository<Urgency>().GetAll().ToList();
                 ret.UserQuery = uow.GetRepository<User>().GetAll().ToList();
                 ret.WorkingGroupQuery = uow.GetRepository<WorkingGroupEntity>().GetAll().ToList();
-                ret.RegistrationSourceCustomerQuery = uow.GetRepository<RegistrationSourceCustomer>().GetAll().ToList();
+                ret.RegistrationSourceCustomerQuery = uow.GetRepository<RegistrationSourceCustomer>().GetAll().ToList();                
                 ret.LanguageQuery = uow.GetRepository<Language>().GetAll().ToList();
-                ret.LogFileQuery = uow.GetRepository<LogFile>().GetAll().ToList(); 
+                ret.CaseStatisticsQuery = uow.GetRepository<DH.Helpdesk.Domain.Cases.CaseStatistic>().GetAll().ToList();
+                ret.CaseFileQuery = _caseFileRepository.GetCaseFilesByDate(fromDate, toDate);
+                ret.LogQuery = _logService.GetCaseLogs(fromDate, toDate).ToList();
+                //ret.LogFileQuery = uow.GetRepository<LogFile>().GetAll().ToList(); 
              }
 
             return ret;

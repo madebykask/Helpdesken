@@ -30,6 +30,8 @@
 
         IEnumerable<LogOverview> GetCaseLogOverviews(int caseId);
 
+        IEnumerable<Log> GetCaseLogs(DateTime? fromDate, DateTime? toDate);
+
         void SaveChildsLogs(CaseLog baseCaseLog, int[] childCasesIds, out IDictionary<string, string> errors);
     }
 
@@ -143,6 +145,13 @@
         /// <returns>
         /// The result.
         /// </returns>
+
+        public IEnumerable<Log> GetCaseLogs(DateTime? fromDate, DateTime? toDate)
+        {
+            var ret = this._logRepository.GetCaseLogs(fromDate, toDate);
+            return ret; 
+        }
+
         public IEnumerable<LogOverview> GetCaseLogOverviews(int caseId)
         {
             var result = new List<LogOverview>();

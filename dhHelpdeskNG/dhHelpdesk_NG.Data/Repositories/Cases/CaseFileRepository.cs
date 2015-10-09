@@ -7,6 +7,7 @@
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
+using System;
 
     public interface ICaseFileRepository : IRepository<CaseFile>
     {
@@ -17,6 +18,7 @@
         void DeleteByCaseIdAndFileName(int caseId, string basePath, string fileName);
         int GetCaseNumberForUploadedFile(int caseId);
         CaseFileModel[] GetCaseFiles(int caseId);
+        List<CaseFile> GetCaseFilesByDate(DateTime? fromDate, DateTime? toDate);
         void DeleteFileViewLogs(int caseId);
     }
 
@@ -63,6 +65,24 @@
             return (from f in this.DataContext.CaseFiles
                     where f.Case_Id == caseId
                     select f).ToList();
+        }
+
+        public List<CaseFile> GetCaseFilesByDate(DateTime? fromDate, DateTime? toDate)
+        {
+            var ret = new List<CaseFile>();
+            if (fromDate.HasValue && toDate.HasValue)
+            {
+                var fdate = fromDate.Value.AddDays(-1);
+                var tdate = toDate.Value.AddDays(1);
+                return (from f in this.DataContext.CaseFiles
+                        where f.CreatedDate >= fdate && f.CreatedDate <= tdate
+                        select f).ToList();
+            }
+            else
+            {
+                return (from f in this.DataContext.CaseFiles                        
+                        select f).ToList();
+            }           
         }
 
         public int GetCaseNumberForUploadedFile(int caseId)
