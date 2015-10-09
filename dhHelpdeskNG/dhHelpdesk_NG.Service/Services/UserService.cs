@@ -318,7 +318,7 @@
         {
             return
                 this._userRepository.GetUsers(customerId)
-                    .Where(e => e.IsActive == 1 && (e.Performer == 1 || (userId.HasValue && e.Id == userId)))
+                    .Where(e => e.IsActive == 1 && (e.Performer == 1 || (userId.HasValue && e.Id == userId))).OrderBy(e => e.SurName)
                     .ToList();
         }
 

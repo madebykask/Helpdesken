@@ -63,7 +63,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public List<IdAndNameOverview> FindActiveIdAndNameOverviews(int customerId)
         {
-            var workingGroups = this.FindByCustomerIdCore(customerId).Where(g => g.IsActive != 0);
+            var workingGroups = this.FindByCustomerIdCore(customerId).Where(g => g.IsActive != 0).OrderBy(g => g.WorkingGroupName);
             var overviews = workingGroups.Select(g => new { g.WorkingGroupName, g.Id }).ToList();
 
             return
