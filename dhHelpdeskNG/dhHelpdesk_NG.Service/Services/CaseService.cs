@@ -1251,6 +1251,8 @@ namespace DH.Helpdesk.Services.Services
                     if (!String.IsNullOrEmpty(m.Body) && !String.IsNullOrEmpty(m.Subject))
                     {
                         string wgEmails = string.Empty;
+                        if (!string.IsNullOrWhiteSpace(newCase.Workinggroup.EMail))
+                            wgEmails = newCase.Workinggroup.EMail;
 
                         if (newCase.Workinggroup.AllocateCaseMail == 1 && !string.IsNullOrWhiteSpace(newCase.Workinggroup.EMail))
                         {
