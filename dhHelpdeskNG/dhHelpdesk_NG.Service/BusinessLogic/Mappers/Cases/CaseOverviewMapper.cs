@@ -164,19 +164,48 @@
                 if (caseEntity.RegistrationSourceCustomer_Id.HasValue)
                     caseEntity.RegistrationSourceCustomer = caseDataSet.RegistrationSourceCustomerQuery.Where(s => s.Id == caseEntity.RegistrationSourceCustomer_Id.Value).FirstOrDefault() ?? caseEntity.RegistrationSourceCustomer;                
 
-                caseEntity.Logs = new List<Log>();
-                var allLogs = caseDataSet.LogQuery.Where(l => l.Case_Id == caseEntity.Id).ToList();
+                caseEntity.Logs = new List<Log>();                
+                var lastLog = caseDataSet.LogQuery.Where(l => l.Case_Id == caseEntity.Id).OrderByDescending(l=> l.LogDate).FirstOrDefault();
                 var logFiles = new List<LogFile>();
-                
-                foreach (var log in allLogs)
+                var finishingType = new FinishingCause { Name = string.Empty };
+
+                if (lastLog == null)
+                {                    
+                    caseEntity.Logs.Add(new Log
+                    {                    
+                        Text_External = string.Empty,
+                        Text_Internal = string.Empty,
+                        FinishingDate = caseEntity.FinishingDate,
+                        LogFiles = logFiles,
+                        FinishingTypeEntity = finishingType                        
+                    });
+                }
+                else
                 {
-                    var finishingType = new FinishingCause { Name = string.Empty };
+                    if (lastLog.FinishingType.HasValue)                    
+                        finishingType = new FinishingCause { Name = lastLog.FinishingType.Value.GetClosingReasonFullName(caseDataSet.ClosingReasonQuery.AsQueryable()) };
+                    
+                    caseEntity.Logs.Add(new Log
+                    {
+                        Text_Internal = lastLog.Text_Internal,
+                        Text_External = lastLog.Text_External,
+                        Charge = lastLog.Charge,
+                        LogFiles = logFiles,
+                        FinishingDate = caseEntity.FinishingDate,
+                        FinishingTypeEntity = finishingType,
+                        LogDate = lastLog.LogDate
+                    });
+                }
+
+                /*foreach (var log in allLogs)
+                {
+                    
                     if (log.FinishingType.HasValue)
                     {
                         finishingType = new FinishingCause { Name = log.FinishingType.Value.GetClosingReasonFullName(caseDataSet.ClosingReasonQuery.AsQueryable()) };
                     }
                     
-                    logFiles = caseDataSet.LogFileQuery.Where(lf => lf.Log_Id == log.Id).ToList();                    
+                    //logFiles = caseDataSet.LogFileQuery.Where(lf => lf.Log_Id == log.Id).ToList();                    
 
                     caseEntity.Logs.Add(new Log
                                             {
@@ -188,7 +217,7 @@
                                                 FinishingTypeEntity = finishingType,
                                                 LogDate = log.LogDate
                                             });                                                                                
-                }                                                
+                }*/                                                
                 
                 caseEntity.CaseFiles = new List<CaseFile>();
                 caseEntity.CaseFiles = caseDataSet.CaseFileQuery.Where(cf => cf.Case_Id == caseEntity.Id).ToList();

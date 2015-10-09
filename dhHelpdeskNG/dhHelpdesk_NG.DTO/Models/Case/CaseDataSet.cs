@@ -29,12 +29,11 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         public IList<Priority> PriorityQuery { get; set; }
         public IList<Status> StatusQuery { get; set; }
         public IList<StateSecondary> StateSecondaryQuery { get; set; }
-        public IList<CausingPart> CausingPartQuery { get; set; }
-        public IList<Log> LogQuery { get; set; }
+        public IList<CausingPart> CausingPartQuery { get; set; }        
         public IList<CaseStatistic> CaseStatisticsQuery { get; set; }
         public IList<RegistrationSourceCustomer> RegistrationSourceCustomerQuery { get; set; }
         public IList<Language> LanguageQuery { get; set; }
-        public IList<LogFile> LogFileQuery { get; set; }
-
+        public IList<Log> LogQuery { get; set; }
+        //public IList<LogFile> LogFileQuery { get; set; }
     }
 }

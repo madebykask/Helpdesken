@@ -6,7 +6,7 @@ namespace DH.Helpdesk.Dal.Repositories
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
-
+    using System;
     using Log = DH.Helpdesk.Domain.Log;
 
     #region LOG
@@ -26,6 +26,7 @@ namespace DH.Helpdesk.Dal.Repositories
         /// The result />.
         /// </returns>
         IEnumerable<BusinessData.Models.Logs.Output.LogOverview> GetCaseLogOverviews(int caseId);
+        IEnumerable<Log> GetCaseLogs(DateTime? fromDate, DateTime? toDate);
 
         Log GetLastLog(int caseId);
     }
@@ -111,6 +112,23 @@ namespace DH.Helpdesk.Dal.Repositories
                             LogFiles = l.LogFiles,
                             User = l.User
                         });
+        }
+
+        public IEnumerable<Log> GetCaseLogs(DateTime? fromDate, DateTime? toDate)
+        {
+            var ret = new List<Log>();
+            if (fromDate.HasValue && toDate.HasValue)
+            {
+                var fDate = fromDate.Value.AddDays(-1);
+                var tDate = toDate.Value.AddDays(1);                
+                ret =  this.Table.Where(l => l.LogDate >= fDate && l.LogDate <= tDate).ToList();
+            }
+            else
+            {
+                ret =  this.Table.ToList();
+            }            
+
+            return ret;
         }
 
         public Log GetLastLog(int caseId)
