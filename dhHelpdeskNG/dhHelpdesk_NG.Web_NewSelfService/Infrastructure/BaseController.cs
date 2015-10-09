@@ -377,7 +377,7 @@
                 {
                     if(ConfigurationManager.AppSettings[AppSettingsKey.CurrentApplicationType].ToString().ToLower() == ApplicationTypes.LineManager)
                         SessionFacade.TextTranslation = this._masterDataService.GetTranslationTexts()
-                                                                               .Where(x => x.Type == 300)
+                                                                               .Where(x => x.Type == TranslationType.SelfService)
                                                                                .ToList();
                     else
                         SessionFacade.TextTranslation = this._masterDataService.GetTranslationTexts().ToList();
