@@ -11,9 +11,11 @@
     {        
         private readonly IMasterDataService _masterDataService;
 
+        
+
         public ErrorController(IMasterDataService masterDataService)
         {
-            this._masterDataService = masterDataService; 
+            this._masterDataService = masterDataService;
         }
 
         public ActionResult Index()
@@ -29,7 +31,7 @@
         public ActionResult NotFound404()
         {
             var errorMessage = "Error 404: Page was not found!";
-            var curLanguageId = GetMessageLanguageId();
+            /*var curLanguageId = GetMessageLanguageId();
 
             if (curLanguageId > 0)
             {                
@@ -49,27 +51,27 @@
                     }
                 }
             }
-
+            */
             ViewBag.ErrorMessage = errorMessage;
             Response.StatusCode = 404;
             return this.View();
         }
 
-        private int GetMessageLanguageId()
-        {
-            var ret = 0;
-            var globalSetting = this._masterDataService.GetGlobalSettings().FirstOrDefault();
+        //private int GetMessageLanguageId()
+        //{
+        //    var ret = 0;
+        //    var globalSetting = this._masterDataService.GetGlobalSettings().FirstOrDefault();
 
-            if (globalSetting != null)
-            {                
-                if (SessionFacade.CurrentLanguageId > 0)
-                    ret = SessionFacade.CurrentLanguageId;
-                else
-                    ret = globalSetting.DefaultLanguage_Id;
-            }
+        //    if (globalSetting != null)
+        //    {                
+        //        if (SessionFacade.CurrentLanguageId > 0)
+        //            ret = SessionFacade.CurrentLanguageId;
+        //        else
+        //            ret = globalSetting.DefaultLanguage_Id;
+        //    }
 
-            return ret;
-        }
+        //    return ret;
+        //}
 
         public ViewResult BusinessLogicError()
         {
