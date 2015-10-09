@@ -69,7 +69,9 @@
     <authentication mode="Forms">
       <forms loginUrl="~/Login/Login" timeout="2880" defaultUrl="~/" />
     </authentication>
-    <customErrors mode="Off" />
+     <customErrors mode="On">
+      <error statusCode="404" redirect="~/Error/NotFound404"/>
+    </customErrors>
     <pages>
       <namespaces>
         <add namespace="System.Web.Helpers" />
