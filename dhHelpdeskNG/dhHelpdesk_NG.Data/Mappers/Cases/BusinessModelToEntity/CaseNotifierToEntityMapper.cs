@@ -12,8 +12,10 @@
                 return;
             }
 
-            entity.UserId = businessModel.UserId;
-            entity.FirstName = businessModel.FirstName ?? string.Empty;
+            // We will not update userid, firstname and surname to the initiator
+            //entity.UserId = businessModel.UserId;
+            //entity.FirstName = businessModel.FirstName ?? string.Empty;
+            //entity.SurName = businessModel.LastName ?? string.Empty;
             entity.Email = businessModel.Email ?? string.Empty;
             entity.Phone = businessModel.Phone ?? string.Empty;
             entity.Cellphone = businessModel.Cellphone ?? string.Empty;
