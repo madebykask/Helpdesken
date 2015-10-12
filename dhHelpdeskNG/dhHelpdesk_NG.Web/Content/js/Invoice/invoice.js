@@ -331,7 +331,7 @@ $(function () {
                     th._invoicesBackup.push(invoice.Clone());
                 }
                 th.SaveInvoices();
-                th.ShowMessage(dhHelpdesk.CaseArticles.translate('Articles invoiced.'));
+                th.ShowMessage(dhHelpdesk.CaseArticles.translate('Order fakturerad.'));
             })
             .fail(function(result) {
                 th.ShowErrorMessage(result.statusText);
@@ -1567,11 +1567,6 @@ $(function () {
                     }
                 });
 
-                //var deliveryPeriod = this.Container.find(".delivery-period");
-                //deliveryPeriod.blur(function () {
-                //    th.DeliveryPeriod = $(this).val();
-                //});
-
                 var ReportedBy = this.Container.find(".reportedby");
                 ReportedBy.typeahead(dhHelpdesk.CaseArticles.GetUserSearchOptions());
                 
@@ -1697,7 +1692,7 @@ $(function () {
                     d.dialog({
                         buttons: [
                             {
-                                text: dhHelpdesk.CaseArticles.translate("Attach"),
+                                text: dhHelpdesk.CaseArticles.translate("Bifoga"),
                                 click: function() {
                                     d.find("input:checked").each(function() {
                                         that.AddFileByName($(this).val());
@@ -1707,7 +1702,7 @@ $(function () {
                                 }
                             },
                             {
-                                text: dhHelpdesk.CaseArticles.translate("Close"),
+                                text: dhHelpdesk.CaseArticles.translate("Stäng"),
                                 click: function() {
                                     d.dialog("close");
                                 }
@@ -1717,7 +1712,7 @@ $(function () {
                 } else {
                     d.dialog({
                         buttons: [{
-                                text: dhHelpdesk.CaseArticles.translate("Close"),
+                                text: dhHelpdesk.CaseArticles.translate("Stäng"),
                                 click: function () {
                                     d.dialog("close");
                                 }
@@ -1995,7 +1990,7 @@ $(function () {
             this.TotalHeader = dhHelpdesk.CaseArticles.translate("Total");
             this.TotalLabel = dhHelpdesk.CaseArticles.translate("Total");
             //this.DeliveryPeriodTitle = dhHelpdesk.CaseArticles.translate("Leveransperiod");
-            this.ReferenceTitle = dhHelpdesk.CaseArticles.translate("Order referens");
+            this.ReferenceTitle = dhHelpdesk.CaseArticles.translate("Orderreferens");
             this.InvoicedByTitle = dhHelpdesk.CaseArticles.translate("Fakturerad av");
 
             //LABELS FOR initiator data

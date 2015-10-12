@@ -98,15 +98,15 @@
                 e.preventDefault();
                 //if there are articles selected but not invoiced and the case is finishing/closing
                 if ($('#CaseLog_FinishingDate').val() != '' || $('#CaseLog_FinishingType').val() != '') {
-                    if (hasNotInvoicedArticles()) {
-                        messageDialog(dc('@Translation.Get("You may not close a case with selected and not invoiced articles in the order section. Please review your orders.")'));
+                    if (hasNotInvoicedArticles()) { 
+                        messageDialog(dc('@Translation.Get("Du får inte avsluta ett ärende med invalda fast ofakturerade artiklar. Var god granska dina ordrar.")'));
                         return false;
                     }
                     else {
                         debugger;
                         if ($('#InvoiceModuleBtnOpen').is(':visible')) {
-                            if (!hasInvoicedArticles() && !hasNotInvoicedArticles()) {
-                                confirmDialog(dc('@Translation.Get("This product area has linked articles but no articles are selected. Are you sure you want to close the case?")'), EditCaseAndClose, InvoiceDialogOnNotFinishSaveCase);
+                            if (!hasInvoicedArticles() && !hasNotInvoicedArticles()) { 
+                                confirmDialog(dc('@Translation.Get("Produktområdet har länkade artiklar men inga artiklar är invalda. Vill du verkligen avsluta ärendet?")'), EditCaseAndClose, InvoiceDialogOnNotFinishSaveCase);
                             }
                             else {
                                 EditCaseAndClose();
@@ -130,15 +130,15 @@
                 e.preventDefault();
                 //if there are articles selected but not invoiced and the case is finishing/closing
                 if ($('#CaseLog_FinishingDate').val() != '' || $('#CaseLog_FinishingType').val() != '') {
-                    if (hasNotInvoicedArticles()) {
-                        messageDialog(dc('@Translation.Get("You may not close a case with selected and not invoiced articles in the order section. Please review your orders.")'));
+                    if (hasNotInvoicedArticles()) { 
+                        messageDialog(dc('@Translation.Get("Du får inte avsluta ett ärende med invalda fast ofakturerade artiklar. Var god granska dina ordrar.")'));
                         return false;
                     }
                     else {
                         debugger;
                         if ($('#InvoiceModuleBtnOpen').is(':visible')) {
                             if (!hasInvoicedArticles() && !hasNotInvoicedArticles()) {
-                                confirmDialog(dc('@Translation.Get("This product area has linked articles but no articles are selected. Are you sure you want to close the case?")'), EditCaseAndAddCase, InvoiceDialogOnNotFinishSaveCase);
+                                confirmDialog(dc('@Translation.Get("Produktområdet har länkade artiklar men inga artiklar är invalda. Vill du verkligen avsluta ärendet?")'), EditCaseAndAddCase, InvoiceDialogOnNotFinishSaveCase);
                             }
                             else {
                                 EditCaseAndAddCase();
@@ -163,18 +163,12 @@
                 e.preventDefault();
                 var targetUrl = $(this).attr("href");
 
-
-@*               
-        NEW REQUIREMENTS, THIS IS NOT NEEDED -- REMOVE??
-         invoiceArticlesBeforeClose(function ()
-                {
                     if ('@Model.CaseLock.LockGUID' != '')
                         UnLockCase('@Model.CaseLock.LockGUID', targetUrl);
                     else
                     {
                         redirectToUrl(targetUrl);
                     }
-                }, openInvoiceWindow);*@
             });
             
             $("#case-action-delete").click(function (e) {
@@ -190,7 +184,7 @@
 
             var InvoiceDialogOnNotFinishSaveCase = function ()
             {
-                openInvoiceWindowWithMessage('@Translation.Get("Please review Orders and Articles")');
+                openInvoiceWindowWithMessage('@Translation.Get("Var god granska dina ordrar och artiklar.")');
             }
 
             $("#case-action-save").click(function (e)
@@ -203,14 +197,14 @@
                 //if there are articles selected but not invoiced and the case is finishing/closing
                 if ($('#CaseLog_FinishingDate').val() != '' || $('#CaseLog_FinishingType').val() != '') {
                     if (hasNotInvoicedArticles()) {
-                        messageDialog(dc('@Translation.Get("You may not close a case with selected and not invoiced articles in the order section. Please review your orders.")'));
+                        messageDialog(dc('@Translation.Get("Du får inte avsluta ett ärende med invalda fast ofakturerade artiklar. Var god granska dina ordrar.")'));
                         return false;
                     }
                     else {
                         debugger;
                         if ($('#InvoiceModuleBtnOpen').is(':visible')) {
                             if (!hasInvoicedArticles() && !hasNotInvoicedArticles()) {
-                                confirmDialog(dc('@Translation.Get("This product area has linked articles but no articles are selected. Are you sure you want to close the case?")'), InvoiceDialogOnFinishSaveCase, InvoiceDialogOnNotFinishSaveCase);
+                                confirmDialog(dc('@Translation.Get("Produktområdet har länkade artiklar men inga artiklar är invalda. Vill du verkligen avsluta ärendet?")'), InvoiceDialogOnFinishSaveCase, InvoiceDialogOnNotFinishSaveCase);
                             }
                             else {
                                 $('#target').submit(); return false;
