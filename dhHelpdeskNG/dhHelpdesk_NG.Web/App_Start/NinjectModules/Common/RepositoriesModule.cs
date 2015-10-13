@@ -30,6 +30,8 @@
     using DH.Helpdesk.Dal.Repositories.Projects.Concrete;
     using DH.Helpdesk.Dal.Repositories.Questionnaire;
     using DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete;
+    using DH.Helpdesk.Dal.Repositories.ReportService;
+    using DH.Helpdesk.Dal.Repositories.ReportService.Concrete;
     using DH.Helpdesk.Dal.Repositories.Servers;
     using DH.Helpdesk.Dal.Repositories.Servers.Concrete;
     using DH.Helpdesk.Dal.Repositories.Users;
@@ -264,6 +266,7 @@
             this.Bind<IADFSRepository>().To<ADFSRepository>();
             this.Bind<IRegistrationSourceCustomerRepository>().To<RegistrationSourceCustomerRepository>();
             this.Bind<ICaseLockRepository>().To<CaseLockRepository>();
+            this.Bind<IReportServiceRepository>().To<ReportServiceRepository>();
         }
 
         #endregion

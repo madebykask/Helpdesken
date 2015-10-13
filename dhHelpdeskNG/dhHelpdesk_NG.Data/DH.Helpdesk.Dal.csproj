@@ -621,6 +621,8 @@
     <Compile Include="Repositories\Questionnaire\IQuestionnaireQuestionOptionRepository.cs" />
     <Compile Include="Repositories\Questionnaire\IQuestionnaireQuestionRepository.cs" />
     <Compile Include="Repositories\RegistrationSourceCustomerRepository.cs" />
+    <Compile Include="Repositories\ReportService\Concrete\ReportServiceRepository.cs" />
+    <Compile Include="Repositories\ReportService\IReportServiceRepository.cs" />
     <Compile Include="Repositories\Servers\IServerFieldSettingsRepository.cs" />
     <Compile Include="Repositories\Servers\IServerLogicalDriveRepository.cs" />
     <Compile Include="Repositories\Servers\IServerRepository.cs" />

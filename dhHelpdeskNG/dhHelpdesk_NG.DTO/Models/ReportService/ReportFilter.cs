@@ -1,0 +1,27 @@
+﻿
+namespace DH.Helpdesk.BusinessData.Models.ReportService
+{
+    using System.Collections.Generic;
+    using DH.Helpdesk.Domain;    
+    using DH.Helpdesk.BusinessData.Models.Shared;
+
+    public class ReportFilter
+    {
+        public ReportFilter()
+        {
+        }
+
+        public DateToDate CaseCreationDate { get; set; }
+
+        public List<Customer> Customers { get; set; }
+
+        public List<User> Administrators { get; set; }
+
+        public List<Department> Departments { get; set; }
+
+        public List<WorkingGroupEntity> WorkingGroups { get; set; }
+
+        public List<CaseType> CaseTypes { get; set; }              
+    }
+       
+}

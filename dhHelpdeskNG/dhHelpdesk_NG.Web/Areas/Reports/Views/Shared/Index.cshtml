@@ -24,12 +24,15 @@
 <div class="content report-page">
     <div class="container">
         <ul class="nav nav-tabs">
-            <li class="active">
+            <li class="">
                 <a href="#fragment-1">@Translation.Get("Rapporter")</a>
+            </li>
+            <li class="active">
+                <a href="#fragment-2">@Translation.Get("Report Viewer")</a>
             </li>
         </ul>        
         <div class="tab-content overflow-visible">
-            <div id="fragment-1" class="tab-pane tab-pane-border active">
+            <div id="fragment-1" class="tab-pane tab-pane-border">
                 @using (Ajax.BeginForm("GetReportOptions", "Report", null,
                     new AjaxOptions { UpdateTargetId = "reportContent", OnComplete = "onLoadOptions" }, new { id = "getReportOptionsForm" }))
                 {
@@ -42,6 +45,10 @@
                 }                
                 <div id="reportContent">
                 </div>
+            </div>
+
+            <div id="fragment-2" class="tab-pane tab-pane-border active">
+                @Html.Partial("ReportViewer/_Overview", Model.ReportServiceOverview)                  
             </div>
         </div>
     </div>

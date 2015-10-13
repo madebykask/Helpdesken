@@ -1,0 +1,110 @@
+﻿@using System.Web.Optimization
+@using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Infrastructure.Extensions
+@using DH.Helpdesk.BusinessData.OldComponents
+@model DH.Helpdesk.Web.Areas.Reports.Models.ReportService.ReportServiceOverviewModel
+
+
+<script type="text/javascript">
+    window.getSpecificFilterDataUrl = '@Url.Content("~/Reports/Report/GetCustomerSpecificFilter")';    
+    window.Params = {
+        DefaultFocusObject: "#btnSearch",
+        CaseTypeDropDown: "CaseTypeDropDown",
+        ProductAreaDropDown: "ProductAreaDropDown",
+        ClosingReasonDropDown: "ClosingReasonDropDown"
+    };
+</script>
+
+@*@Scripts.Render("~/bundles/report/reportViewer")*@
+
+@if (Model != null)
+{        
+     <div class="container">         
+         <div class="row">                                      
+             <div class="span6">
+                 <table class="tableform"> 
+                     @if (Model.ReportList != null)
+                     {
+                         var selectedItems = Model.ReportList.SelectedItems.GetSelectedStr();
+                         <tr>
+                             <td>                                
+                                 @Translation.Get("Report Name")
+                             </td>
+                             <td>
+                                 <select id="lstReports" name="lstReports" data-field="reports" style="width: 300px;">
+                                     @foreach (var r in Model.ReportList.Items)
+                                     {                                            
+                                         int reportId = int.Parse(r.Id);                
+                                         <option value="@r.Id" @reportId.IdIsSelected(selectedItems)> 
+                                             @r.Value 
+                                         </option>
+                                     }
+                                 </select>
+                             </td>
+                         </tr>                
+                     }         
+                                          
+                     @if (Model.ReportFilter.Customers != null)
+                     {
+                         var selectedItems = Model.ReportFilter.Selected.SelectedCustomers.GetSelectedStr();
+                         <tr>
+                             <td>                                
+                                 @Translation.Get("Kund")
+                             </td>
+                             <td>
+                                 <select id="lstfilterCustomers" name="lstfilterCustomers" data-field="customers" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                     @foreach (var c in Model.ReportFilter.Customers)
+                                     {                                                                                     
+                                         <option value="@c.Id" @c.Id.IdIsSelected(selectedItems)> 
+                                             @c.Name 
+                                         </option>
+                                     }
+                                 </select>
+                             </td>
+                         </tr>
+                     }
+
+                     @if (Model.ReportFilter.Administrators != null)
+                     {
+                         var selectedItems = Model.ReportFilter.Selected.SelectedAdministrator.GetSelectedStr();
+                         <tr>
+                             <td>                               
+                                 @Translation.Get(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id)                                  
+                             </td>
+                             <td>
+                                 <select id="lstfilterAdministrator" name="lstfilterAdministrator" data-field="administrator" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                     @foreach (var a in Model.ReportFilter.Administrators)
+                                     {
+                                         var userName = "";     
+                                         if(Model.ReportFilter.UserOrientationName == 1) 
+                                         {
+                                           userName = a.FirstName + " " + a.SurName;
+                                         }  
+                                         else
+                                         {
+                                            userName = a.SurName + " " + a.FirstName;
+                                         }  
+                                                                                                                    
+                                         <option value="@a.Id" @a.Id.IdIsSelected(selectedItems)>
+                                            @userName 
+                                         </option>
+                                     }
+                                 </select>
+                             </td>
+                         </tr>                 
+                     }                                                                                   
+                 </table>
+             </div>
+
+            @* @if (Model.ReportFilter.Selected.SelectedCustomers.Count == 1)
+             {
+                 *@
+                <div class="span6">
+                      @Html.Partial("ReportViewer/_CustomerSpecificFilter", Model.ReportFilter)
+                 </div>     
+             @*}*@
+         </div>         
+     </div>
+}
+
+
