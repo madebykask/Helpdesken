@@ -9,7 +9,7 @@
                         <th>{{:NameEngHeader}}</th>
                         <th>{{:UnitsHeader}}</th>
                         <th>{{:TypeHeader}}</th>
-                        <th>{{:PpuHeader}}</th>
+                        <th>{{:PpuHeader}} SEK</th>
                         <th>{{:TotalHeader}}</th>
                         <th></th>
                     </tr>
@@ -35,7 +35,7 @@
         <tbody>
             <tr>
                 <td>
-                    <button onclick="dhHelpdesk.CaseArticles.OtherReference('{{:Id}}')">{{:ReferenceTitle}}</button>
+                    <button class="btn OtherReferenceBtn" onclick="dhHelpdesk.CaseArticles.OtherReference('{{:Id}}')">{{:ReferenceTitle}}</button>
                 </td>
             </tr>
             {{if ShowReportedBy}}
@@ -205,7 +205,7 @@
                 <td>{{:attachedFilesTitle}}
                 </td>
                 <td>
-                    <button onclick="dhHelpdesk.CaseArticles.SelectCaseFiles('{{:Id}}'); return false;">{{:attachFilesTitle}}</button>
+                    <button class="btn" onclick="dhHelpdesk.CaseArticles.SelectCaseFiles('{{:Id}}'); return false;">{{:attachFilesTitle}}</button>
                 </td>
             </tr>
             <tr>
@@ -220,4 +220,7 @@
             </tr>
         </tbody>
     </table>
+    <div>
+        <button class="btn doInvoice" onclick="dhHelpdesk.CaseArticles.DoOrderInvoice('{{:Id}}'); return false;" data-orderid="{{:Id}}">{{:doInvoiceTitle}}</button>
+    </div>
 </div>

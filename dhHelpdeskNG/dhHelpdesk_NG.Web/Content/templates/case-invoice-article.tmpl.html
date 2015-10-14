@@ -22,7 +22,7 @@
             <td>{{:NameEng}}</td>
             <td>{{:Amount}}</td>
             <td>{{:UnitName}}</td>
-            <td>{{:Ppu}} SEK</td>
+            <td>{{:Ppu}}</td>
             <td>{{:Total}}</td>
             <td><i class='icon-flag icon-green'></i></td>
         </tr>
@@ -40,7 +40,7 @@
             <td>{{:UnitName}}</td>
             <td>
                 {{if IsArticlePpuExists}}
-                    {{:Ppu}} SEK
+                    {{:Ppu}}
                 {{else}}
                     <input onchange='dhHelpdesk.CaseArticles.UpdateArticle($(this).parent().parent())' type='text' maxlength='5' class='article-ppu input-small-important' value='{{:Ppu}}' />                    
                 {{/if}}
