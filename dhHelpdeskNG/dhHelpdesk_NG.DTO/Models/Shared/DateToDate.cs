@@ -16,7 +16,7 @@ namespace DH.Helpdesk.BusinessData.Models.Shared
         public DateToDate(DateTime? fromDate, DateTime? toDate)
         {
             this.FromDate = fromDate;
-            this.ToDate = ToDate;
+            this.ToDate = toDate;
         }     
     }
 }

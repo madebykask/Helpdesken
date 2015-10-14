@@ -3,37 +3,37 @@
     using System;
     using System.Linq;
     using System.Web.Mvc;
+    using System.Collections.Generic;
+    using System.IO;
 
+    using DH.Helpdesk.Common.Tools;
+    using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.BusinessData.Models.Reports.Enums;
     using DH.Helpdesk.BusinessData.OldComponents;
-    using DH.Helpdesk.Common.Tools;
+    using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.BusinessData.Models.Reports.Options;
+    using DH.Helpdesk.BusinessData.Models.Reports.Data.ReportGenerator;
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
+    using DH.Helpdesk.BusinessData.Models.ReportService;    
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Reports;
     using DH.Helpdesk.Web.Areas.Reports.Infrastructure;
     using DH.Helpdesk.Web.Areas.Reports.Infrastructure.ModelFactories;
     using DH.Helpdesk.Web.Areas.Reports.Models.Options;
     using DH.Helpdesk.Web.Areas.Reports.Models.Options.ReportGenerator;
+    using DH.Helpdesk.Web.Areas.Reports.Models.Reports.ReportGenerator;
+    using DH.Helpdesk.Web.Areas.Reports.Models.ReportService;
     using DH.Helpdesk.Web.Controllers;
     using DH.Helpdesk.Web.Enums;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.ActionFilters;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
     using DH.Helpdesk.Web.Infrastructure.Mvc;
-    using DH.Helpdesk.Web.Infrastructure.Tools;
-    using DH.Helpdesk.BusinessData.Models.Shared;
-    using System.Collections.Generic;
-    using DH.Helpdesk.BusinessData.Models.Reports.Options;
-    using DH.Helpdesk.Web.Models.Shared;
-    using DH.Helpdesk.Web.Areas.Reports.Models.Reports.ReportGenerator;
-    using DH.Helpdesk.BusinessData.Models.Reports.Data.ReportGenerator;
-    using DH.Helpdesk.BusinessData.Models.Shared.Input;
-    using DH.Helpdesk.Common.Enums;
+    using DH.Helpdesk.Web.Infrastructure.Tools;    
+    using DH.Helpdesk.Web.Models.Shared;    
+    
     using Microsoft.Reporting.WebForms;
-    using System.Data;
-    using System.Data.SqlClient;
-    using DH.Helpdesk.BusinessData.Models.ReportService;    
-    using DH.Helpdesk.Web.Areas.Reports.Models.ReportService;
-    using System.IO;
+    using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;            
 
     public sealed class ReportController : UserInteractionController
     {
@@ -86,107 +86,35 @@
 
             var reports = this.reportService.GetAvailableCustomerReports(customerId);
             var model = this.reportModelFactory.GetReportsOptions(reports);
-            model.ReportServiceOverview = GetNewReportServiceModel();
+            var lastState = SessionFacade.ReportService ?? SessionFacade.ReportService;
+            model.ReportServiceOverview = GetReportServiceModel(lastState);
 
             return this.View(model);
         }
 
-        public ActionResult ShowReport(string reportName)
+        [HttpGet]
+        public PartialViewResult ShowReport(string reportName, ReportFilterJSModel filter)
         {
-            var model = GetNewReportServiceModel();
-
-            var reportFilter = _ReportServiceService.GetReportFilter(SessionFacade.CurrentCustomer.Id);            
+            var selectedReport = filter.MapToSelectedFilter();
+            var model = GetReportViewerData(reportName, selectedReport);
             
-            //if (reportData != null)
-            //{
-            //    var basePath = Request.MapPath(Request.ApplicationPath);
-                
-            //    ViewBag.ReportViewer = model.ReportViewerData;
-            //    return this.View("Reports/ShowReport", model);
-            //}
-            //var reportData = this._ReportServiceService.GetReportData(reportName, selectedFilter);
-            return this.View("Reports/ShowReport");
+            // Save state in session
+            if (model != null)
+                SessionFacade.ReportService = new ReportServiceSessionModel()
+                                                {
+                                                    ReportName = reportName,
+                                                    SelectedFilter = selectedReport
+                                                };
+
+            return PartialView("ReportViewer/_PresentReport", model);
         }
 
         [HttpGet]
-        public PartialViewResult GetCustomerSpecificFilter(int selectedCustomerId, bool resetFilter = false)
-        {            
-            if (!resetFilter)
-                selectedCustomerId = 0;
-
-            var model = GetReportFilterModel(selectedCustomerId);
+        public PartialViewResult GetCustomerSpecificFilter(int selectedCustomerId)
+        {
+            var lastState = SessionFacade.ReportService ?? SessionFacade.ReportService;
+            var model = GetReportFilterModel(selectedCustomerId, lastState);
             return PartialView("ReportViewer/_CustomerSpecificFilter", model);
-        }
-
-
-        private ReportServiceOverviewModel GetNewReportServiceModel()
-        {
-            var model = new ReportServiceOverviewModel();            
-            model.ReportFilter = GetReportFilterModel(SessionFacade.CurrentCustomer.Id);
-            model.ReportList = GetReportList();
-            model.ReportViewerData = GetReportViewerData();
-            return model;
-        }
-
-        private ReportFilterModel GetReportFilterModel(int? selectedCustomerId = null)
-        {
-            int curCustomerId = SessionFacade.CurrentCustomer.Id;
-            var reportFilter = _ReportServiceService.GetReportFilter(curCustomerId, selectedCustomerId);
-            var customerSetting = this._customerSettingService.GetCustomerSetting(curCustomerId);
-            
-            var model = new ReportFilterModel()
-            {
-                CaseCreationDate = reportFilter.CaseCreationDate,
-                Customers = reportFilter.Customers,
-                Administrators = reportFilter.Administrators,
-                Departments = reportFilter.Departments,
-                WorkingGroups = reportFilter.WorkingGroups,
-                Selected = GetNewFilterSelections(),
-                CaseTypes = reportFilter.CaseTypes,
-                UserOrientationName = customerSetting.IsUserFirstLastNameRepresentation
-            };            
-
-            return model;
-        }
-
-        private ReportSelectedFilter GetNewFilterSelections()
-        {
-            var selections = new ReportSelectedFilter();            
-            selections.CaseCreationDate = new DateToDate();
-            return selections;
-        }
-
-        private CustomSelectList GetReportList()
-        {
-            var ret = new CustomSelectList();
-            ret.Items.AddItem("0", "CasesPerSource");
-            ret.Items.AddItem("1", "Test");
-
-            return ret;
-        }
-
-        private ReportViewer GetReportViewerData(ReportData reportData = null)
-        {
-            ReportViewer reportViewer = new ReportViewer();
-            
-            if (reportData == null)
-            {
-                reportViewer = null;
-            }
-            else
-            {
-                var basePath = Request.MapPath(Request.ApplicationPath);
-                var fileLocation = Path.Combine(_reportFolderName, string.Format("{0}.rdl", reportData.ReportName));
-                var reportFile = Path.Combine(basePath, fileLocation);
-                
-                reportViewer.ProcessingMode = ProcessingMode.Local;
-                reportViewer.SizeToReportContent = true;
-                reportViewer.LocalReport.ReportPath = reportFile;
-                foreach (var dataSet in reportData.DataSets)
-                    reportViewer.LocalReport.DataSources.Add(new ReportDataSource(dataSet.DataSetName, dataSet.DataSet));
-            }
-
-            return reportViewer;
         }
 
         [HttpPost]
@@ -570,6 +498,107 @@
                             );            
             return ret;
         }
+
+        private ReportServiceOverviewModel GetReportServiceModel(ReportServiceSessionModel lastState = null)
+        {
+            var model = new ReportServiceOverviewModel();
+            int? customerId = SessionFacade.CurrentCustomer.Id;
+            if (lastState != null && lastState.SelectedFilter != null)
+                if (lastState.SelectedFilter.SelectedCustomers.Count == 1)
+                    customerId = lastState.SelectedFilter.SelectedCustomers.FirstOrDefault();
+                else
+                    customerId = null;
+            else
+                customerId = null;
+
+            model.ReportFilter = GetReportFilterModel(customerId, lastState);
+            model.ReportList = GetReportList(lastState != null ? lastState.ReportName : string.Empty);
+            model.ReportViewerData = new ReportPresentationModel();
+            return model;
+        }
+
+        private ReportFilterModel GetReportFilterModel(int? selectedCustomerId = null, ReportServiceSessionModel lastState = null)
+        {
+            int curCustomerId = SessionFacade.CurrentCustomer.Id;
+            var reportFilter = _ReportServiceService.GetReportFilter(curCustomerId, selectedCustomerId);
+            var customerSetting = this._customerSettingService.GetCustomerSetting(curCustomerId);
+
+            var model = new ReportFilterModel()
+            {
+                CaseCreationDate = reportFilter.CaseCreationDate,
+                Customers = reportFilter.Customers,
+                Administrators = reportFilter.Administrators,
+                Departments = reportFilter.Departments,
+                WorkingGroups = reportFilter.WorkingGroups,
+                Selected = GetNewFilterSelections(),
+                CaseTypes = reportFilter.CaseTypes,
+                UserOrientationName = customerSetting.IsUserFirstLastNameRepresentation,
+                CaseTypeSelectedText = Translation.Get("--", Enums.TranslationSource.TextTranslation)
+            };
+
+            if (lastState != null)
+            {
+                model.CaseCreationDate = lastState.SelectedFilter.CaseCreationDate;
+                model.Selected = lastState.SelectedFilter;
+                if (model.CaseTypes != null && lastState.SelectedFilter.SelectedCaseTypes.Any())
+                {
+                    var caseType = model.CaseTypes.Where(ct => ct.Id == lastState.SelectedFilter.SelectedCaseTypes.First()).FirstOrDefault();
+                    if (caseType != null)
+                        model.CaseTypeSelectedText = caseType.getCaseTypeParentPath();
+                }                
+            }
+
+            return model;
+        }
+
+        private ReportSelectedFilter GetNewFilterSelections()
+        {
+            var selections = new ReportSelectedFilter();
+            selections.CaseCreationDate = new DateToDate();
+            return selections;
+        }
+
+        private CustomSelectList GetReportList(string defaultReportName)
+        {
+            var ret = new CustomSelectList();
+            ret.Items.AddItem("0", "CasesPerSource");
+            ret.Items.AddItem("1", "CasesPerDate");
+
+            var defaultSelected = ret.Items.Where(i => i.Value.ToLower() == defaultReportName.ToLower()).FirstOrDefault();
+            if (defaultSelected != null)
+                ret.SelectedItems.AddItem(int.Parse(defaultSelected.Id));
+
+            return ret;
+        }
+
+        private ReportPresentationModel GetReportViewerData(string reportName, ReportSelectedFilter reportSelectedFilter)
+        {
+            var reportData = _ReportServiceService.GetReportData(reportName, reportSelectedFilter);
+
+            ReportPresentationModel model = new ReportPresentationModel();
+
+            if (reportData == null || (reportData != null && !reportData.DataSets.Any()))
+            {
+                model.ReportPage = null;
+            }
+            else
+            {
+                ReportViewer reportViewer = new ReportViewer();
+                var basePath = Request.MapPath(Request.ApplicationPath);
+                var fileLocation = Path.Combine(_reportFolderName, string.Format("{0}.rdl", reportData.ReportName));
+                var reportFile = Path.Combine(basePath, fileLocation);
+                reportViewer.ProcessingMode = ProcessingMode.Local;
+                reportViewer.SizeToReportContent = true;
+                reportViewer.LocalReport.ReportPath = reportFile;
+                foreach (var dataSet in reportData.DataSets)
+                    reportViewer.LocalReport.DataSources.Add(new ReportDataSource(dataSet.DataSetName, dataSet.DataSet));
+
+                model.ReportPage = reportViewer;
+            }
+
+            return model;
+        }
+
 
     }
 }

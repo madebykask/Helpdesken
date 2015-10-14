@@ -922,6 +922,8 @@
     <Compile Include="Areas\Reports\Models\Options\ReportGenerator\ReportGeneratorOptionsModel.cs" />
     <Compile Include="Areas\Reports\Models\Options\ReportsFilterModel.cs" />
     <Compile Include="Areas\Reports\Models\Options\ReportsOptions.cs" />
+    <Compile Include="Areas\Reports\Models\ReportService\ReportServiceSessionModel.cs" />
+    <Compile Include="Areas\Reports\Models\ReportService\ReportFilterModel.cs" />
     <Compile Include="Areas\Reports\Models\ReportService\ReportServiceOverviewModel.cs" />
     <Compile Include="Areas\Reports\Models\Reports\CaseSatisfactionReport.cs" />
     <Compile Include="Areas\Reports\Models\Reports\CaseTypeArticleNoModel.cs" />
@@ -1732,7 +1734,7 @@
     <Content Include="Areas\Admin\Views\Users\Index\_OnlineUserList.cshtml" />
     <Content Include="Areas\Admin\Views\Users\Index\_UserGrid.cshtml" />
     <Content Include="Areas\Admin\Views\Users\Index\_LockedCaseTable.cshtml" />
-    <Content Include="Areas\Reports\Views\Report\ReportViewer\ShowReport.cshtml" />
+    <Content Include="Areas\Reports\Views\Report\ReportViewer\_PresentReport.cshtml" />
     <Content Include="Areas\Reports\Views\Report\ReportViewer\_Overview.cshtml" />
     <Content Include="Areas\Reports\Views\Report\ReportViewer\_CustomerSpecificFilter.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />

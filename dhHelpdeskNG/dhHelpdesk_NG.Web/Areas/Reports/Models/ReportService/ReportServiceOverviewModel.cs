@@ -17,8 +17,8 @@
         public CustomSelectList ReportList { get; set; }
 
         public ReportFilterModel ReportFilter { get; set; }
-        
-        public ReportViewer ReportViewerData { get; set; }
+
+        public ReportPresentationModel ReportViewerData { get; set; }
         
     }
 
@@ -29,6 +29,15 @@
         public string CaseTypeSelectedText { get; set; }
 
         public int UserOrientationName { get; set; }
+    }
+
+    public sealed class ReportPresentationModel
+    {
+        public ReportPresentationModel()
+        {
+
+        }
+        public ReportViewer ReportPage { get; set; }
     }
        
 }

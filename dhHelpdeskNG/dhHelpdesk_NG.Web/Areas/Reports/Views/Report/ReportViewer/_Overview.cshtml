@@ -6,16 +6,21 @@
 
 
 <script type="text/javascript">
-    window.getSpecificFilterDataUrl = '@Url.Content("~/Reports/Report/GetCustomerSpecificFilter")';    
+    window.
     window.Params = {
-        DefaultFocusObject: "#btnSearch",
-        CaseTypeDropDown: "CaseTypeDropDown",
-        ProductAreaDropDown: "ProductAreaDropDown",
-        ClosingReasonDropDown: "ClosingReasonDropDown"
+        SpecificFilterDataUrl: '@Url.Content("~/Reports/Report/GetCustomerSpecificFilter")',
+        ShowReportUrl: '@Url.Content("~/Reports/Report/ShowReport")',
+        ShowReportButton: "#btnShowReport",
+        ReportList: "#lstReports",
+        CustomerDropDown: "#lstfilterCustomers",
+        AdministratorDropDown: "#lstfilterAdministrator",
+        CaseCreateFrom: "#ReportFilter_CaseCreationDate_FromDate",
+        CaseCreateTo: "#ReportFilter_CaseCreationDate_ToDate",
+        DepartmentDropDown: "#lstfilterDepartment",
+        WorkingGroupDropDown: "#lstfilterWorkingGroup",
+        CaseTypeDropDown: "CaseTypeDropDown"     
     };
 </script>
-
-@*@Scripts.Render("~/bundles/report/reportViewer")*@
 
 @if (Model != null)
 {        
@@ -35,7 +40,7 @@
                                      @foreach (var r in Model.ReportList.Items)
                                      {                                            
                                          int reportId = int.Parse(r.Id);                
-                                         <option value="@r.Id" @reportId.IdIsSelected(selectedItems)> 
+                                         <option value="@r.Value" @reportId.IdIsSelected(selectedItems)> 
                                              @r.Value 
                                          </option>
                                      }
@@ -92,18 +97,34 @@
                                  </select>
                              </td>
                          </tr>                 
-                     }                                                                                   
+                     }       
+                     
+                     @if (Model.ReportFilter.CaseCreationDate != null)
+                     {                        
+                         <tr class="date-block">
+                             <td>                                
+                                 @Translation.Get(GlobalEnums.TranslationCaseFields.RegTime.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id)                                   
+                             </td>
+                             <td>                                 
+                                 @Html.EditorFor(m => Model.ReportFilter.CaseCreationDate.FromDate, "DatePicker", new { id = "CaseRegistrationFromDate" }) 
+                                 &nbsp;
+                                 @Html.EditorFor(m => Model.ReportFilter.CaseCreationDate.ToDate, "DatePicker", new { id = "CaseRegistrationToDate" })                                 
+                             </td>
+                         </tr>   
+                     }                                                                                                           
                  </table>
-             </div>
-
-            @* @if (Model.ReportFilter.Selected.SelectedCustomers.Count == 1)
-             {
-                 *@
-                <div class="span6">
-                      @Html.Partial("ReportViewer/_CustomerSpecificFilter", Model.ReportFilter)
-                 </div>     
-             @*}*@
-         </div>         
+             </div>            
+             <div class="span6">
+                 @Html.Partial("ReportViewer/_CustomerSpecificFilter", Model.ReportFilter)
+             </div>     
+         </div>                          
+     </div>
+     <div class="container">         
+        <div class="row">                                      
+            <div class="span6">         
+                @Html.Partial("ReportViewer/_PresentReport", Model.ReportViewerData)             
+            </div>
+        </div>
      </div>
 }
 
