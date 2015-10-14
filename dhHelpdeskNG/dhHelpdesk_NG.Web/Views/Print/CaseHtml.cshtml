@@ -5,7 +5,8 @@
 }
 
 <html>
-<head></head>
+<head>
+</head>
 <body face="Arial Unicode MS" encoding="Identity-H">
     <img src="@Context.Server.MapPath("~/img-profile/print-logo.png")" />
     <div>
@@ -24,7 +25,7 @@
         {
             <tr>
                 <td>
-                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Model.CustomerId)
+                   @Translation.GetForCase(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Model.CustomerId)
                 </td>
                 <td>
                     @Model.Case.ReportedBy
@@ -101,7 +102,7 @@
         {
             <tr>
                 <td>
-                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Model.CustomerId)
+                   @Translation.GetForCase(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Model.CustomerId)
                 </td>
                 <td>
                     @(Model.Case.Ou != null ? Model.Case.Ou.Name : null)
@@ -319,22 +320,22 @@
         @if (Model.IsDescriptionVisible)
         {
             <tr>
-                <td>
-                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Description.ToString(), Model.CustomerId)
+                <td colspan="2">
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Description.ToString(), Model.CustomerId)<br />
+                    <div>
+                        @Model.Case.Description
+                    </div>
                 </td>
-                <td>
-                    @Model.Case.Description
-                </td>
-            </tr>                        
+            </tr>                 
         }
         @if (Model.IsMiscellaneousVisible)
         {
             <tr>
-                <td>
-                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString(), Model.CustomerId)
-                </td>
-                <td>
-                    @Model.Case.Miscellaneous
+                <td colspan="2">
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString(), Model.CustomerId)<br />
+                    <div>
+                        @Model.Case.Miscellaneous
+                    </div>
                 </td>
             </tr>                        
         }
@@ -503,7 +504,7 @@
         }
         <tr>
             <td>
-                @Translation.Get("Projekt")
+                @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Project.ToString(), Model.CustomerId)
             </td>
             <td>
                 @(Model.Case.Project != null ? Model.Case.Project.Name : null)
@@ -532,7 +533,7 @@
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Model.CustomerId)
                 </td>
                 <td>
-                    @Html.EditorFor(m => m.Case.WatchDate, "DateReadOnly")
+                    @Html.DisplayFor(m => Model.Case.WatchDate, "Date")                    
                 </td>
             </tr>                        
         }

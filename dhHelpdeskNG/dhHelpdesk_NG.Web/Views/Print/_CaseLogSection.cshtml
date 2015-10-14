@@ -2,25 +2,35 @@
 @model DH.Helpdesk.Web.Models.Print.Case.CasePrintModel
 <table style="border-collapse: collapse">
     <tr><td><span style="font-size: 14px; font-weight: bold;">@Translation.Get("Ärendelogg")</span></td></tr>
-    @foreach (var log in Model.Case.Logs) {<tr border="1" frame="above"><td><table style="table-layout: fixed; width: 100%;" border="0"><tr><td style="width: 200px;">@Html.DisplayFor(m => log.LogDate, "DateAndTime"), <br/>@(log.User == null ? log.RegUser : log.User.FirstName + " " + log.User.SurName)</td>
-            <td>@if (log.CaseHistory != null && log.CaseHistory.Emaillogs != null)
-                {
-                    foreach (var l in log.CaseHistory.Emaillogs)
-                    {
-                        <div>@l.EmailAddress</div>
-                    }
-                }
+    @foreach (var log in Model.Case.Logs) {
+        <tr border="1" frame="above">
+            <td>
+                <table style="table-layout: fixed; width: 100%;" border="0">
+                    <tr>
+                        <td style="width: 200px;">@Html.DisplayFor(m => log.LogDate, "DateAndTime"), <br/>@(log.User == null ? log.RegUser : log.User.FirstName + " " + log.User.SurName)</td>
+                        <td>@if (log.CaseHistory != null && log.CaseHistory.Emaillogs != null)
+                            {
+                                foreach (var l in log.CaseHistory.Emaillogs)
+                                {
+                                    <div>@l.EmailAddress</div>
+                                }
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold;" colspan="2">@Translation.GetForCase(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(), Model.CustomerId)</td>
+                    </tr>
+                    <tr class="log-message">
+                        <td class="external" colspan="2">@log.TextExternal</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold;" colspan="2">@Translation.GetForCase(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(), Model.CustomerId)</td>
+                    </tr>
+                    <tr class="log-message">
+                        <td class="internal" colspan="2">@log.TextInternal</td>
+                    </tr>
+                </table>
             </td>
-            </tr>
-            <tr>
-                <td style="font-weight: bold;">@Translation.GetForCase(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(), Model.CustomerId)</td>
-                <td style="font-weight: bold;">@Translation.GetForCase(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(), Model.CustomerId)</td>
-            </tr>
-            <tr class="log-message">
-                <td class="external">@log.TextExternal</td>
-                <td class="internal">@log.TextInternal</td>
-            </tr>
-        </table>
-        </td></tr>
-}   
+        </tr>
+    }   
 </table>             
