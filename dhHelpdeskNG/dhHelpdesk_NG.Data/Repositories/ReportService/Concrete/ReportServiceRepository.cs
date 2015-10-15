@@ -68,7 +68,7 @@
                     ret.Add(                               
                           new KeyValuePair<string, string>(
                             "CasesPerDate",
-                            "SELECT COUNT(tblCase.Casenumber) AS Volume, tblCustomer.Name,format(tblDate.DateKey,'####-##-##') as DateKey, tblCustomer.Id " + 
+                            "SELECT COUNT(tblCase.Casenumber) AS Volume, cast(convert(date, cast(tblDate.DateKey as nvarchar),11) as nvarchar) as DateKey, tblCustomer.Id " + 
                             "FROM  tblCustomer INNER JOIN " + 
                                 "tblCase ON tblCustomer.Id = tblCase.Customer_Id RIGHT OUTER JOIN " +
                                 "tblDate ON CAST(tblCase.RegTime AS Date) = tblDate.FullDate "  +
