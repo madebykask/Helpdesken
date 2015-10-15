@@ -1049,9 +1049,6 @@ namespace DH.Helpdesk.Services.Services
             // get list of fields to replace [#1] tags in the subjcet and body texts
             List<Field> fields = GetCaseFieldsForEmail(newCase, log, cms, string.Empty , 0);
             
-            if (newCase.Workinggroup != null)
-                if (!string.IsNullOrWhiteSpace(newCase.Workinggroup.EMail) && _emailService.IsValidEmail(newCase.Workinggroup.EMail))  
-                    helpdeskMailFromAdress = newCase.Workinggroup.EMail;
 
             // if logfiles should be attached to the mail 
             List<string> files = null;
