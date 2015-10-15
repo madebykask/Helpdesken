@@ -331,24 +331,7 @@ ORDER BY tblDate.DateKey</CommandText>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
       </Fields>
-    </DataSet>
-    <DataSet Name="CustomerName">
-      <Query>
-        <DataSourceName>Helpdesk_local</DataSourceName>
-        <CommandText>SELECT        Name, Id
-FROM            tblCustomer</CommandText>
-      </Query>
-      <Fields>
-        <Field Name="Name">
-          <DataField>Name</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Id">
-          <DataField>Id</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-      </Fields>
-    </DataSet>
+    </DataSet>   
   </DataSets>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>
   <rd:ReportID>2a653c68-33b1-4f86-9f48-c79d6a0195fa</rd:ReportID>

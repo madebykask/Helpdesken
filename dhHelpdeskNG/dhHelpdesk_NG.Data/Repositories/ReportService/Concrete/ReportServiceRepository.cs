@@ -44,14 +44,14 @@
 
         private List<KeyValuePair<string, string>> GetQueriesFor(string reportIdentity, ReportSelectedFilter filters)
         {
+            var ret = new List<KeyValuePair<string, string>>();
             var _whereClause = GetWhereClauseBy(filters);
             switch (reportIdentity)
             {
                 case "CasesPerSource":                    
-                    var ret = new List<KeyValuePair<string, string>>()
-                        {
+                    ret.Add(                               
                           new KeyValuePair<string, string>(
-                            "CasesPerSource",
+                            "CasesPerDate",
                             "SELECT COUNT(tblCase.Casenumber) AS Volume, tblCustomer.Name, " +
                                    "tblDate.CalendarYearMonth, tblCustomer.Id, tblRegistrationSourceCustomer.SourceName " +
                             "FROM tblCustomer INNER JOIN " +
@@ -61,26 +61,28 @@
                             _whereClause +  
                             "GROUP BY tblCustomer.Name, tblDate.CalendarYearMonth, tblCustomer.Id, tblRegistrationSourceCustomer.SourceName " +
                             "ORDER BY tblDate.CalendarYearMonth")
-                        };
-                    return ret;
+                            );
+                    break;
 
-                //case "CasesPerDate":                    
-                //    var ret = new List<KeyValuePair<string, string>>()
-                //        {
-                //          new KeyValuePair<string, string>(
-                //            "CasesPerDate",
-                //            "SELECT COUNT(tblCase.Casenumber) AS Volume, tblCustomer.Name, tblDate.DateKey, tblCustomer.Id " + 
-                //            "FROM  tblCustomer INNER JOIN " + 
-                //                "tblCase ON tblCustomer.Id = tblCase.Customer_Id RIGHT OUTER JOIN " +
-                //                "tblDate ON CAST(tblCase.RegTime AS Date) = tblDate.FullDate "  +
-                //            _whereClause +  
-                //            "GROUP BY tblDate.DateKey, tblCustomer.Name, tblCustomer.Id " +
-                //            "ORDER BY tblDate.DateKey")
-                //        };
-                //    return ret;
+                case "CasesPerDate":
+                    ret.Add(                               
+                          new KeyValuePair<string, string>(
+                            "CasesPerDate",
+                            "SELECT COUNT(tblCase.Casenumber) AS Volume, tblCustomer.Name,format(tblDate.DateKey,'####-##-##') as DateKey, tblCustomer.Id " + 
+                            "FROM  tblCustomer INNER JOIN " + 
+                                "tblCase ON tblCustomer.Id = tblCase.Customer_Id RIGHT OUTER JOIN " +
+                                "tblDate ON CAST(tblCase.RegTime AS Date) = tblDate.FullDate "  +
+                            _whereClause +  
+                            "GROUP BY tblDate.DateKey, tblCustomer.Name, tblCustomer.Id " +
+                            "ORDER BY tblDate.DateKey")
+                            );
+                    break; 
+
                 default:
-                    return new List<KeyValuePair<string, string>>();
+                    return ret;
             }
+
+            return ret;
         }
 
         private DataTable GetDataTable(string sqlQuery)
@@ -104,7 +106,7 @@
 
         private string GetWhereClauseBy(ReportSelectedFilter filters)
         {
-            var _whereStr = "Where 1=1 ";
+            var _whereStr = " Where 1=1 ";
 
             if (filters.SelectedCustomers.Any())
                 _whereStr += string.Format("AND tblCase.Customer_Id in ({0}) ", filters.SelectedCustomers.GetSelectedStr().SafeForSqlInject());
