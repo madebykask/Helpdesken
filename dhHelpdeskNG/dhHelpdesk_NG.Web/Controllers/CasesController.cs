@@ -3553,11 +3553,24 @@ namespace DH.Helpdesk.Web.Controllers
 
             var userWorkingGroup =
                 _userService.GetUserWorkingGroups().Where(u => u.User_Id == userId).Select(x => x.WorkingGroup_Id);
-            var workingGroups =
-                _workingGroupService.GetWorkingGroups(customerId, true).ToList();
+
+            //var isAdmin = SessionFacade.CurrentUser.IsAdministrator();
+            //if (isAdmin)
+            if (SessionFacade.CurrentUser.UserGroupId == 1 || SessionFacade.CurrentUser.UserGroupId == 2)
+            {
+                var workingGroups = _workingGroupService.GetWorkingGroups(customerId, userId, true).ToList();
+                ret.WorkingGroups = workingGroups;
+            }
+            else
+            {
+                var workingGroups = _workingGroupService.GetWorkingGroups(customerId, true).ToList();
+                ret.WorkingGroups = workingGroups;
+            }
+
+            
             //.Where(w => userWorkingGroup.Contains(w.Id))
             ret.WorkingGroupCheck = (userCaseSettings.WorkingGroup != string.Empty);
-            ret.WorkingGroups = workingGroups;
+            //ret.WorkingGroups = workingGroups;
             ret.SelectedWorkingGroup = userCaseSettings.WorkingGroup;
 
             ret.ResponsibleCheck = userCaseSettings.Responsible;
@@ -3952,7 +3965,18 @@ namespace DH.Helpdesk.Web.Controllers
                 if (gs.LockCaseToWorkingGroup == 0)
                     fd.filterWorkingGroup = this._workingGroupService.GetAllWorkingGroupsForCustomer(cusId);
                 else
-                    fd.filterWorkingGroup = this._workingGroupService.GetWorkingGroups(cusId, isTakeOnlyActive);
+                {
+                    if (SessionFacade.CurrentUser.UserGroupId == 1 || SessionFacade.CurrentUser.UserGroupId == 2)
+                        fd.filterWorkingGroup = this._workingGroupService.GetWorkingGroups(cusId, userId, isTakeOnlyActive);
+                    else
+                        fd.filterWorkingGroup = this._workingGroupService.GetWorkingGroups(cusId, isTakeOnlyActive);
+
+                    //var isAdmin = SessionFacade.CurrentUser.IsAdministrator();
+                    //if (isAdmin)                    
+                    //    fd.filterWorkingGroup = this._workingGroupService.GetWorkingGroups(cusId, isTakeOnlyActive);                           
+                    //else
+                    //    fd.filterWorkingGroup = this._workingGroupService.GetWorkingGroups(cusId, userId, isTakeOnlyActive);                                     
+                }
             }
 
             //produktonmråde
