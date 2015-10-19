@@ -105,84 +105,10 @@
             }
         }
 
-        
-
-        public XmlDocument OrderToOutputXML(CaseInvoiceOrder order)
-        {
-            if (order == null)
-            {
-                return null;
-            }
-            var xml = "";
-
-            xml += OrderXMLHeader();
-            xml += "<SalesDoc>";
-            xml += "<SalesHeader>";
-            xml += XMLRow("DocType", "valueplaceholder");
-            xml += XMLRow("SellToCustomerNo", "valueplaceholder");
-            xml += XMLRow("OrderDate", order.InvoiceDate.Value.ToShortDateString());
-            xml += XMLRow("OurReferenceName", "PLACEHOLDERVALUE");
-            xml += XMLRow("YourReferenceName", order.CostCentre + "/" + order.Persons_Name);
-            xml += XMLRow("OrderNo", "FA" + order.CaseNumber + "-" + order.Number);
-            xml += XMLRow("CurrencyCode", "SEK");
-            //JOBNO <JobNo />??
-
-            foreach (var article in order.Articles)
-            {
-                xml += "<SalesLine>";
-                xml += XMLRow("ItemNo", article.Article.Number);
-                xml += XMLRow("Description", article.Article.Description);
-                xml += XMLRow("Quantity", article.Amount.ToString());
-                xml += XMLRow("UnitOfMeasureCode", article.Article.Unit.Name);
-                var articlePrice = article.Ppu;
-                if (articlePrice == null)
-	            {
-		             articlePrice = article.Article.Ppu;
-	            }
-                xml += XMLRow("UnitPrice", articlePrice.ToString());
-                xml += "</SalesLine>";
-            }
-
-            xml += "</SalesHeader>";
-            xml += "</SalesDoc>";
-
-
-
-
-            using (var ms = new MemoryStream())
-            {
-                //var serializer = new XmlSerializer(typeof(CaseInvoiceOrder));
-                //serializer.Serialize(ms, order);
-                //ms.Seek(0, SeekOrigin.Begin);
-                //var document = new XmlDocument();
-                //document.Load(ms);
-                //return document;
-
-
-                XmlDocument xmlDoc = new XmlDocument();
-                xmlDoc.LoadXml(xml);
-                return xmlDoc;
-            }
-        }
-
         public string GetExportFileName()
         {
             return string.Format("{0}_{1}.xml", DateTime.Now.ToShortDateString(), Guid.NewGuid());
         }
-
-        private string XMLRow(string tag, string value)
-        {
-            var NewXMLRow = "";
-            NewXMLRow = "<" + tag + ">" + value + "</" + tag + ">";
-
-            return NewXMLRow;
-        }
-
-        public string OrderXMLHeader()
-        {
-            return "<?xml version=\"1.0\" encoding=\"UTF-16\" standalone=\"no\"?>";
-        }
-
 
         private class CaseInvoiceData
         {

@@ -18,6 +18,8 @@
 
         void DeleteCaseInvoices(int caseId);
 
+        void DoInvoiceWork(CaseInvoice[] caseInvoiceData, int caseId, int customerId, int CurrentUserId);
+
         int SaveArticle(InvoiceArticle article);
 
         int SaveUnit(InvoiceArticleUnit unit);
