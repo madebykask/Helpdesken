@@ -82,7 +82,7 @@
             };
 
             var openInvoiceWindow = function () {
-                dhHelpdesk.CaseArticles.OpenInvoiceWindow('@Translation.Get("Var god ta bort eller skicka valda men ofakturerade artiklar innan du avslutar ärendet.")');
+                dhHelpdesk.CaseArticles.OpenInvoiceWindow('@Translation.Get("Var god ta bort eller skicka valda men ofakturerade artiklar innan du stänger ärendet.")');
             };
             var openInvoiceWindowWithMessage = function (message) {
                 dhHelpdesk.CaseArticles.OpenInvoiceWindow(message);
@@ -130,13 +130,13 @@
                 //if there are articles selected but not invoiced and the case is finishing/closing
                 if ($('#CaseLog_FinishingDate').val() != '' || $('#CaseLog_FinishingType').val() != '') {
                     if (hasNotInvoicedArticles()) {
-                        messageDialog(dc('@Translation.Get("You may not close a case with selected and not invoiced articles in the order section. Please review your orders.")'));
+                        messageDialog(dc('@Translation.Get("Du får inte avsluta ett ärende med invalda fast ofakturerade artiklar. Var god granska dina ordrar.")'));
                         return false;
                     }
                     else {
                         if ($('#InvoiceModuleBtnOpen').is(':visible')) {
                             if (!hasInvoicedArticles() && !hasNotInvoicedArticles()) {
-                                confirmDialog(dc('@Translation.Get("This product area has linked articles but no articles are selected. Are you sure you want to close the case?")'), EditCaseAndAddCase, InvoiceDialogOnNotFinishSaveCase);
+                                confirmDialog(dc('@Translation.Get("Produktområdet har länkade artiklar men inga artiklar är invalda. Vill du verkligen avsluta ärendet?")'), EditCaseAndAddCase, InvoiceDialogOnNotFinishSaveCase);
                             }
                             else {
                                 EditCaseAndAddCase();
@@ -443,7 +443,7 @@
             </ul>
         </div>
     </div>
-    
+    <input type="hidden" value="@Model.CustomerSettings.ModuleCaseInvoice" id="ModuleCaseInvoice" />
     <div class="editmode">
         @Html.Partial("_Input", Model)
     </div>
