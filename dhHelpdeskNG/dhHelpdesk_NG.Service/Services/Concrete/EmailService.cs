@@ -10,72 +10,114 @@
     using DH.Helpdesk.BusinessData.Models.MailTemplates;
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Services.Infrastructure;
+    using System.Threading;
+    using System.Globalization;
 
     public sealed class EmailService : IEmailService
     {
         private readonly IEmailSendingSettingsProvider emailSendingSettingsProvider;
+        private readonly string _EMAIL_SEND_MESSAGE = "Email has been sent!";
 
         public EmailService(IEmailSendingSettingsProvider emailSendingSettingsProvider)
         {
             this.emailSendingSettingsProvider = emailSendingSettingsProvider;
         }
 
-        public void SendEmail(MailAddress from, List<MailAddress> recipients, Mail mail)
+        public EmailResponse SendEmail(MailAddress from, List<MailAddress> recipients, Mail mail)
         {
+            EmailResponse res = new EmailResponse();
+            var sendTime = DateTime.Now;
+
             foreach (var recipient in recipients)
             {
-                this.SendEmail(from, recipient, mail);
+                res = this.SendEmail(from, recipient, mail);
             }
+
+            res.SendTime = sendTime;
+            return res;
         }
 
-        public void SendEmail(MailItem mailItem)
+        public EmailResponse SendEmail(MailItem mailItem)
         {
-            this.SendEmail(new MailAddress(mailItem.From), new MailAddress(mailItem.To), mailItem.Mail);
+            return this.SendEmail(new MailAddress(mailItem.From), new MailAddress(mailItem.To), mailItem.Mail);
         }
 
-        public void SendEmail(MailAddress from, MailAddress recipient, Mail mail)
+        public EmailResponse SendEmail(MailAddress from, MailAddress recipient, Mail mail)
         {
+            EmailResponse res = new EmailResponse(null, string.Empty);
+            var sendTime = DateTime.Now;
+
             var mailSendingSettings = this.emailSendingSettingsProvider.GetSettings();
-
+           
             using (var smtpClient = new SmtpClient(mailSendingSettings.SmtpServer, mailSendingSettings.SmtpPort))
             {
-                var mailMessage = new MailMessage(@from, recipient)
-                                      {
-                                          Subject = mail.Subject,
-                                          Body = mail.Body,
-                                          IsBodyHtml = true
-                                      };
-                smtpClient.Send(mailMessage);
+                CultureInfo oldCI = Thread.CurrentThread.CurrentCulture;  
+                Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
+                Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+                try
+                {
+                    var mailMessage = new MailMessage(@from, recipient)
+                                          {
+                                              Subject = mail.Subject,
+                                              Body = mail.Body,
+                                              IsBodyHtml = true
+                                          };
+                    smtpClient.Send(mailMessage);
+                    res = new EmailResponse(sendTime, _EMAIL_SEND_MESSAGE);
+                }
+                catch (Exception ex)
+                {
+                    var msg = string.Empty;
+                    if (ex.InnerException != null)
+                        msg = string.Format("{0} - InnerMessage: {1}", ex.Message, ex.InnerException.Message);
+                    else
+                        msg = string.Format("{0}", ex.Message);
+
+                    res = new EmailResponse(sendTime, msg);
+                }
+                finally
+                {
+                    Thread.CurrentThread.CurrentCulture = oldCI;
+                    Thread.CurrentThread.CurrentUICulture = oldCI;
+                }
             }
+            return res;
         }
 
-        public void SendEmail(EmailItem item)
+        public EmailResponse SendEmail(EmailItem item)
         {
-            this.SendEmail(
-                item.From,
-                item.To,
-                item.Subject,
-                item.Body,
-                item.Fields,
-                item.MailMessageId,
-                item.IsHighPriority,
-                item.Files);
+            return this.SendEmail(
+                                item.From,
+                                item.To,
+                                item.Subject,
+                                item.Body,
+                                item.Fields,
+                                item.MailMessageId,
+                                item.IsHighPriority,
+                                item.Files);
         }
 
-        public void SendEmail(
+        public EmailResponse SendEmail(
             string from, 
             string to, 
             string subject, 
             string body, 
-            List<DH.Helpdesk.Domain.Field> fields, 
+            List<DH.Helpdesk.Domain.Field> fields,            
             string mailMessageId = "", 
             bool highPriority = false, 
             List<string> files = null)
         {
+            EmailResponse res = new EmailResponse(null, string.Empty);
+            var sendTime = DateTime.Now;
+
             SmtpClient _smtpClient;
+            CultureInfo oldCI = Thread.CurrentThread.CurrentCulture;            
+
+            Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
 
             try
-            {
+            {                
                 string smtpServer = ConfigurationManager.AppSettings["SmtpServer"].ToString();
                 string smtpPort = ConfigurationManager.AppSettings["SmtpPort"].ToString();
 
@@ -148,20 +190,33 @@
                                     msg.Attachments.Add(new Attachment(f));  
                             }
                         }
-                        if (msg.To.Count > 0 || msg.Bcc.Count > 0 || msg.CC.Count > 0)  
+
+                        if (msg.To.Count > 0 || msg.Bcc.Count > 0 || msg.CC.Count > 0)
+                        {
                             _smtpClient.Send(msg);
+                            res = new EmailResponse(sendTime, _EMAIL_SEND_MESSAGE);                            
+                        }
                     }
-                }
-            }
+                }                
+            }            
             catch (Exception ex)
             {
-                //TODO
-                //throw (ex);
+                var msg = string.Empty;
+                if (ex.InnerException != null)
+                    msg = string.Format("{0} - InnerMessage: {1}", ex.Message, ex.InnerException.Message);
+                else
+                    msg = string.Format("{0}", ex.Message);
+
+                res = new EmailResponse(sendTime, msg);
             }
             finally
             {
                 _smtpClient = null;
+                Thread.CurrentThread.CurrentCulture = oldCI;
+                Thread.CurrentThread.CurrentUICulture = oldCI;
             }
+
+            return res;
         }
 
         public string GetMailMessageId(string helpdeskFromAddress)

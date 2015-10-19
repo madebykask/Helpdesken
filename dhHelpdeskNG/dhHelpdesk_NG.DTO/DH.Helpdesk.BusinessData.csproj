@@ -224,6 +224,7 @@
     <Compile Include="Models\Accounts\AccountSettings\Read\Processing\ProgramFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Processing\UserFieldSettings.cs" />
     <Compile Include="Models\Department\DepartmentOverview.cs" />
+    <Compile Include="Models\Email\EmailResponse.cs" />
     <Compile Include="Models\Error\ErrorModel.cs" />
     <Compile Include="Models\FinishingCause\FinishingCauseItem.cs" />
     <Compile Include="Models\Grid\CaseOverviewColumnDefinition.cs" />

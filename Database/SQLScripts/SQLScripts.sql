@@ -43,6 +43,18 @@ ALTER TABLE tblCaseSolution ADD CONSTRAINT DF_Text_Internal DEFAULT '' FOR Text_
 ALTER TABLE tblCaseSolution ALTER COLUMN Text_Internal  nvarchar(max) not null
 
 
+IF COL_LENGTH('dbo.tblEMailLog','SendTime') IS NULL
+BEGIN 	 
+	ALTER TABLE [dbo].[tblEMailLog] ADD [SendTime] DateTime	null
+END
+GO
+
+IF COL_LENGTH('dbo.tblEMailLog','ResponseMessage') IS NULL
+BEGIN 	 
+	ALTER TABLE [dbo].[tblEMailLog] ADD [ResponseMessage] Nvarchar(400) null 
+END
+GO
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.16'
 

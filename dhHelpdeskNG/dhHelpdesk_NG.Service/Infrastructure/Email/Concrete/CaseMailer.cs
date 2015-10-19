@@ -108,7 +108,11 @@
                                                             notifierEmailLog.MessageId,
                                                             log.HighPriority,
                                                             files);
-                            this.emailService.SendEmail(notifierEmailItem);
+                            var e_res = this.emailService.SendEmail(notifierEmailItem);
+                            notifierEmailLog.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                            var now = DateTime.Now;
+                            notifierEmailLog.CreatedDate = now;
+                            notifierEmailLog.ChangedDate = now;
                             this.emailLogRepository.Add(notifierEmailLog);
                             this.emailLogRepository.Commit();
                         }
@@ -190,7 +194,11 @@
                                                 defaultWorkingGroupEmailLog.MessageId,
                                                 log.HighPriority,
                                                 files);
-                this.emailService.SendEmail(defaultWorkingGroupEmailItem);
+                var e_res = this.emailService.SendEmail(defaultWorkingGroupEmailItem);
+                defaultWorkingGroupEmailLog.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                var now = DateTime.Now;
+                defaultWorkingGroupEmailLog.CreatedDate = now;
+                defaultWorkingGroupEmailLog.ChangedDate = now;
                 this.emailLogRepository.Add(defaultWorkingGroupEmailLog);
                 this.emailLogRepository.Commit();
             }
@@ -249,7 +257,11 @@
                                                         internalEmailLog.MessageId,
                                                         log.HighPriority,
                                                         files);
-                        this.emailService.SendEmail(internalEmail);
+                        var e_res = this.emailService.SendEmail(internalEmail);
+                        internalEmailLog.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                        var now = DateTime.Now;
+                        internalEmailLog.CreatedDate = now;
+                        internalEmailLog.ChangedDate = now;
                         this.emailLogRepository.Add(internalEmailLog);
                         this.emailLogRepository.Commit();
                     }
