@@ -15,10 +15,8 @@
                 int invoiceId,
                 CaseInvoice invoice, 
                 short number, 
-                string deliveryPeriod, 
                 DateTime? invoiceDate,
                 int? invoicedByUserId,
-                string reference,
                 DateTime date,
                 string reportedBy,
                 string persons_Name,
@@ -33,11 +31,9 @@
                 CaseInvoiceArticle[] articles,
                 CaseInvoiceOrderFile[] files)
         {
-            this.Reference = reference;
             this.Articles = articles;
             this.InvoiceId = invoiceId;
-            this.DeliveryPeriod = deliveryPeriod;
-            this.InvoiceDate = invoiceDate ?? DateTime.UtcNow;
+            this.InvoiceDate = invoiceDate;
             this.InvoicedByUserId = invoicedByUserId;
             this.Number = number;
             this.Invoice = invoice;
@@ -61,7 +57,7 @@
                 int invoiceId,
                 short number, 
                 string deliveryPeriod,
-                DateTime invoiceDate,
+                DateTime? invoiceDate,
                 int? invoicedByUserId,
                 string reference,
                 DateTime date,
@@ -77,7 +73,7 @@
                 string costCentre,
                 CaseInvoiceArticle[] articles,
                 CaseInvoiceOrderFile[] files) :
-                this(id, invoiceId, null, number, deliveryPeriod, invoiceDate, invoicedByUserId, reference, date, reportedBy, persons_Name, persons_Phone, persons_Cellphone, region_Id, department_Id, ou_Id, place, userCode, costCentre, articles, files)
+                this(id, invoiceId, null, number, invoiceDate, invoicedByUserId, date, reportedBy, persons_Name, persons_Phone, persons_Cellphone, region_Id, department_Id, ou_Id, place, userCode, costCentre, articles, files)
         {
         }
 
@@ -136,6 +132,7 @@
             InvoicedByUserId = userId;
             foreach (var article in this.Articles)
             {
+                this.InvoiceDate = DateTime.UtcNow;
                 article.DoInvoice();
             }
         }
