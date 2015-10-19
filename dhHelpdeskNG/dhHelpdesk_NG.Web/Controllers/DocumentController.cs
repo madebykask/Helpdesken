@@ -232,13 +232,15 @@ namespace DH.Helpdesk.Web.Controllers
             DocumentSearch ds = new DocumentSearch();
             if (SessionFacade.CurrentDocumentSearch == null)
             {
-                ds.Ascending = true;
+                ds.Ascending = false;
                 ds.SortBy = "Name";
-                SessionFacade.CurrentDocumentSearch = ds;
+                
             }
             else
-                ds = SessionFacade.CurrentDocumentSearch;  
+                ds = SessionFacade.CurrentDocumentSearch;
 
+            ds.Ascending = !ds.Ascending;
+            SessionFacade.CurrentDocumentSearch = ds;
             var customerId = SessionFacade.CurrentCustomer.Id;
             var documents = new List<DocumentOverview>();
 
@@ -306,7 +308,7 @@ namespace DH.Helpdesk.Web.Controllers
             else
                 ds = SessionFacade.CurrentDocumentSearch;  
             
-            ds.Ascending = !ds.Ascending;
+            //ds.Ascending = !ds.Ascending;
             ds.SortBy = sortedColumn;
             SessionFacade.CurrentDocumentSearch = ds;
 
@@ -363,13 +365,14 @@ namespace DH.Helpdesk.Web.Controllers
             DocumentSearch ds = new DocumentSearch();
             if (SessionFacade.CurrentDocumentSearch == null)
             {
-                ds.Ascending = true;
-                ds.SortBy = "Name";
-                SessionFacade.CurrentDocumentSearch = ds;  
+                ds.Ascending = false;
+                ds.SortBy = "Name";                
             }
             else
-                ds = SessionFacade.CurrentDocumentSearch;            
-                        
+                ds = SessionFacade.CurrentDocumentSearch;
+
+            ds.Ascending = !ds.Ascending;
+            SessionFacade.CurrentDocumentSearch = ds;  
 
             var customerId = SessionFacade.CurrentCustomer.Id;
             var documents = new List<DocumentOverview>();

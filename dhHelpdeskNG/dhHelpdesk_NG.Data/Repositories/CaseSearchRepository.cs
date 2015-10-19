@@ -1021,7 +1021,7 @@
             {
                 var preparedUserIds = userId.ToString(CultureInfo.InvariantCulture).SafeForSqlInject();
                 sb.AppendFormat(
-                    " AND ([tblCase].[Performer_User_Id] IN ({0}) OR [tblProblem].[ResponsibleUser_Id] IN ({0}) ", preparedUserIds);
+                    " AND ([tblCase].[Performer_User_Id] IN ({0}) ", preparedUserIds);
                 if (isFieldResponsibleVisible)
                 {
                     sb.AppendFormat("OR [tblCase].[CaseResponsibleUser_Id] IN ({0})", preparedUserIds);

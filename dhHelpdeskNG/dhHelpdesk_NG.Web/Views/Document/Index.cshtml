@@ -127,7 +127,8 @@
                {
                    docType: $('#SelectedListType').val(),
                    Id: $('#SelectedCategory').val(),
-                   sortedColumn: colName
+                   sortedColumn: colName,
+                   curTime: new Date().getTime()
                }, function (docs) {
                    $("#docOverview").submit();
                    //refreshDocsTable(docs, $('#SelectedListType').val(), $('#SelectedCategory').val(), colName);
