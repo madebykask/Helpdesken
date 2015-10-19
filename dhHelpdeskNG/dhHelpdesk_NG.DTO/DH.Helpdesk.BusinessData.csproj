@@ -224,6 +224,7 @@
     <Compile Include="Models\Accounts\AccountSettings\Read\Processing\ProgramFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Processing\UserFieldSettings.cs" />
     <Compile Include="Models\Department\DepartmentOverview.cs" />
+    <Compile Include="Models\Email\EmailResponse.cs" />
     <Compile Include="Models\Error\ErrorModel.cs" />
     <Compile Include="Models\FinishingCause\FinishingCauseItem.cs" />
     <Compile Include="Models\Grid\CaseOverviewColumnDefinition.cs" />
@@ -385,6 +386,8 @@
     <Compile Include="Models\Questionnaire\Read\QuestionnaireQuestionOverview.cs" />
     <Compile Include="Models\Questionnaire\Write\Answer.cs" />
     <Compile Include="Models\Questionnaire\Write\ParticipantForInsert.cs" />
+    <Compile Include="Models\ReportService\ReportData.cs" />
+    <Compile Include="Models\ReportService\ReportFilter.cs" />
     <Compile Include="Models\Reports\Data\CaseSatisfaction\CaseSatisfactionReportResponse.cs" />
     <Compile Include="Models\Reports\Data\CasesInProgressDay\CasesInProgressDayCase.cs" />
     <Compile Include="Models\Reports\Data\CasesInProgressDay\CasesInProgressDayData.cs" />
@@ -423,6 +426,9 @@
     <Compile Include="Models\Reports\Options\RegistratedCasesDayOptions.cs" />
     <Compile Include="Models\Reports\Options\ReportGeneratorOptions.cs" />
     <Compile Include="Models\Reports\Print\CaseTypeArticleNoPrintData.cs" />
+    <Compile Include="Models\Shared\CustomSelectList.cs" />
+    <Compile Include="Models\Shared\DateToDate.cs" />
+    <Compile Include="Models\ReportService\ReportSelectedFilter.cs" />
     <Compile Include="Models\TextList.cs" />
     <Compile Include="Models\Interfaces\IHierarchyItem.cs" />
     <Compile Include="Models\ActionSetting\ActionSetting.cs" />

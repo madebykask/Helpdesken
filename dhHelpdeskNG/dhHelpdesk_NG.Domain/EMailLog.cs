@@ -23,7 +23,15 @@
         public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }
         public Guid EmailLogGUID { get; set; }
+        public DateTime? SendTime { get; set; }
+        public string ResponseMessage { get; set; }
 
         public virtual CaseHistory CaseHistory { get; set; }
+
+        public void SetResponse(DateTime? sendTime, string resopnseMessage)
+        {
+            this.SendTime = sendTime;
+            this.ResponseMessage = resopnseMessage;
+        }
     }
 }

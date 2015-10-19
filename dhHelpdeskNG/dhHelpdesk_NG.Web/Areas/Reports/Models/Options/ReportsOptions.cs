@@ -5,6 +5,7 @@
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
     using DH.Helpdesk.Web.Models;
+using DH.Helpdesk.Web.Areas.Reports.Models.ReportService;
 
     public sealed class ReportsOptions : ISearchModel<ReportsFilterModel>
     {
@@ -24,6 +25,8 @@
         [MinValue(0)]
         [LocalizedDisplay("Rapport")]
         public int ReportId { get; set; }
+
+        public ReportServiceOverviewModel ReportServiceOverview { get; set; }
 
         public ReportsFilterModel ExtractFilters()
         {

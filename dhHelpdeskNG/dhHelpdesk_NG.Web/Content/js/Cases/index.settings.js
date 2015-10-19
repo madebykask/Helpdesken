@@ -36,7 +36,8 @@ $(document).ready(function () {
            }
        });
 
-    $("#customerCaseSum tbody").disableSelection();
+    //Has problem in FireFox
+    //$("#customerCaseSum tbody").disableSelection();
 
     //// bind event handlers 
     $saveBtn.click(function (e) {

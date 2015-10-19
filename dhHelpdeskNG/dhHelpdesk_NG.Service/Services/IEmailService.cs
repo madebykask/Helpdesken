@@ -15,23 +15,23 @@
 
         bool IsValidEmail(string inputEmail);
 
-        void SendEmail(MailAddress from, List<MailAddress> recipients, Mail mail);
+        EmailResponse SendEmail(MailAddress from, List<MailAddress> recipients, Mail mail);
 
-        void SendEmail(MailAddress from, MailAddress recipient, Mail mail);
+        EmailResponse SendEmail(MailAddress from, MailAddress recipient, Mail mail);
 
-        void SendEmail(MailItem mailItem);
+        EmailResponse SendEmail(MailItem mailItem);
 
-        void SendEmail(
+        EmailResponse SendEmail(
             string from,
             string to,
             string subject,
             string body,
-            List<Field> fields,
+            List<Field> fields,            
             string mailMessageId = "",
             bool highPriority = false,
             List<string> files = null);
 
-        void SendEmail(EmailItem item);
+        EmailResponse SendEmail(EmailItem item);
 
         #endregion
     }

@@ -5,28 +5,29 @@
 }
 
 <html>
-<head></head>
+<head>
+</head>
 <body face="Arial Unicode MS" encoding="Identity-H">
     <img src="@Context.Server.MapPath("~/img-profile/print-logo.png")" />
     <div>
-        <span style="font-weight: bold;">
+        <span style="font-weight: bold;font-size: 10px;">
             @Translation.Get("Ärende")
             @Model.Case.CaseNumber
         </span>
     </div>
     <table border="1">
         <tr>
-            <td colspan="2" bgcolor="silver" style="font-weight: bold;">
+            <td colspan="2" bgcolor="silver" style="font-weight: bold;font-size: 10px;">
                 @Translation.Get("Användarinformation")
             </td>
         </tr>
         @if (Model.IsReportedByVisible)
         {
             <tr>
-                <td>
-                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Model.CustomerId)
+                <td style="font-size: 9px;">
+                   @Translation.GetForCase(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
                     @Model.Case.ReportedBy
                 </td>
             </tr>                        
@@ -34,10 +35,10 @@
         @if (Model.IsPersonsNameVisible)
         {
             <tr>
-                <td>
+                <td style="font-size: 9px;">
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
                     @Model.Case.PersonsName
                 </td>
             </tr>                        
@@ -45,10 +46,10 @@
         @if (Model.IsPersonsEmailVisible)
         {
             <tr>
-                <td>
+                <td style="font-size: 9px;">
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
                     @Model.Case.PersonsEmail
                 </td>
             </tr>                        
@@ -56,10 +57,10 @@
         @if (Model.IsPersonsPhoneVisible)
         {
             <tr>
-                <td>
+                <td style="font-size: 9px;">
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
                     @Model.Case.PersonsPhone
                 </td>
             </tr>                        
@@ -67,10 +68,10 @@
         @if (Model.IsPersonsCellPhoneVisible)
         {
             <tr>
-                <td>
+                <td style="font-size: 9px;">
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
                     @Model.Case.PersonsCellphone
                 </td>
             </tr>                        
@@ -78,10 +79,10 @@
         @if (Model.IsRegionVisible)
         {
             <tr>
-                <td>
+                <td style="font-size: 9px;">
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Region_Id.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
                     @(Model.Case.Region != null ? Model.Case.Region.Name : null)
                 </td>
             </tr>                        
@@ -89,10 +90,10 @@
         @if (Model.IsDepartmentVisible)
         {
             <tr>
-                <td>
+                <td style="font-size: 9px;">
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
                     @(Model.Case.Department != null ? Model.Case.Department.DepartmentName : null)
                 </td>
             </tr>                        
@@ -100,10 +101,10 @@
         @if (Model.IsOuVisible)
         {
             <tr>
-                <td>
-                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Model.CustomerId)
+                <td style="font-size: 9px;">
+                   @Translation.GetForCase(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
                     @(Model.Case.Ou != null ? Model.Case.Ou.Name : null)
                 </td>
             </tr>                        
@@ -111,10 +112,10 @@
         @if (Model.IsPlaceVisible)
         {
             <tr>
-                <td>
+                <td style="font-size: 9px;">
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Place.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
                     @Model.Case.Place
                 </td>
             </tr>                        
@@ -122,10 +123,10 @@
         @if (Model.IsUserCodeVisible)
         {
             <tr>
-                <td>
+                <td style="font-size: 9px;">
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.UserCode.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
                     @Model.Case.UserCode
                 </td>
             </tr>                        
@@ -136,17 +137,17 @@
     {
         <table border="1">
             <tr>
-                <td colspan="2" bgcolor="silver" style="font-weight: bold;">
+                <td colspan="2" bgcolor="silver" style="font-weight: bold;font-size: 9px;">
                     @Translation.Get("Datorinformation")
                 </td>
             </tr>
             @if (Model.IsInventoryNumberVisible)
             {
                 <tr>
-                    <td>
+                    <td style="font-size: 9px;">
                         @Translation.GetForCase(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(), Model.CustomerId)
                     </td>
-                    <td>
+                    <td style="font-size: 9px;">
                         @Model.Case.InventoryNumber
                     </td>
                 </tr>                        
@@ -154,10 +155,10 @@
             @if (Model.IsInventoryTypeVisible)
             {
                 <tr>
-                    <td>
+                    <td style="font-size: 9px;">
                         @Translation.GetForCase(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString(), Model.CustomerId)
                     </td>
-                    <td>
+                    <td style="font-size: 9px;">
                         @Model.Case.InventoryType
                     </td>
                 </tr>                        
@@ -165,10 +166,10 @@
             @if (Model.IsInventoryLocationVisible)
             {
                 <tr>
-                    <td>
+                    <td style="font-size: 9px;">
                         @Translation.GetForCase(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString(), Model.CustomerId)
                     </td>
-                    <td>
+                    <td style="font-size: 9px;">
                         @Model.Case.InventoryLocation
                     </td>
                 </tr>                        
@@ -179,36 +180,36 @@
 
     <table border="1">
         <tr>
-            <td colspan="2" bgcolor="silver" style="font-weight: bold;">
+            <td colspan="2" bgcolor="silver" style="font-weight: bold;font-size: 9px;">
                 @Translation.Get("Ärendeinformation")
             </td>
         </tr>
         @if (Model.IsCaseNumberVisible)
         {
             <tr>
-                <td>
+                <td style="font-size: 9px;">
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.CaseNumber.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
                     @Model.Case.CaseNumber
                 </td>
             </tr>                        
         }
         <tr>
-            <td>
+            <td style="font-size: 9px;">
                 @Translation.Get("Registreringsdatum")
             </td>
-            <td>
+            <td style="font-size: 9px;">
                 @Html.DisplayFor(m => m.Case.RegistrationDate, "DateAndTime")
             </td>
         </tr>
         @if (Model.IsUserVisible)
         {
             <tr>
-                <td>
+                <td style="font-size: 9px;">
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.User_Id.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
                     @if (Model.Case.User != null)
                     {    
                         @Model.Case.User.FirstName @Model.Case.User.SurName
@@ -220,10 +221,10 @@
         @if (Model.IsCaseTypeVisible)
         {
             <tr>
-                <td>
+                <td style="font-size: 9px;">
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
                     @Model.Case.ParentPathCaseType
                 </td>
             </tr>                        
@@ -231,10 +232,10 @@
         @if (Model.IsSystemVisible)
         {
             <tr>
-                <td>
+                <td style="font-size: 9px;">
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.System_Id.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
                     @(Model.Case.System != null ? Model.Case.System.Name : null)
                 </td>
             </tr>                        
@@ -242,10 +243,10 @@
         @if (Model.IsUrgencyVisible)
         {
             <tr>
-                <td>
+                <td style="font-size: 9px;">
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
                     @(Model.Case.Urgency != null ? Model.Case.Urgency.Name : null)
                 </td>
             </tr>                        
@@ -253,10 +254,10 @@
         @if (Model.IsImpactVisible)
         {
             <tr>
-                <td>
+                <td style="font-size: 9px;">
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Impact_Id.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
                     @(Model.Case.Impact != null ? Model.Case.Impact.Name : null)
                 </td>
             </tr>                        
@@ -264,10 +265,10 @@
         @if (Model.IsCategoryVisible)
         {
             <tr>
-                <td>
+                <td style="font-size: 9px;">
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
                     @(Model.Case.Category != null ? Model.Case.Category.Name : null)
                 </td>
             </tr>                        
@@ -275,10 +276,10 @@
         @if (Model.IsSupplierVisible)
         {
             <tr>
-                <td>
+                <td style="font-size: 9px;">
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
                     @(Model.Case.Supplier != null ? Model.Case.Supplier.Name : null)
                 </td>
             </tr>                        
@@ -286,10 +287,10 @@
         @if (Model.IsInvoiceNumberVisible)
         {
             <tr>
-                <td>
+                <td style="font-size: 9px;">
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
                     @Model.Case.InvoiceNumber
                 </td>
             </tr>                        
@@ -297,10 +298,10 @@
         @if (Model.IsReferenceNumberVisible)
         {
             <tr>
-                <td>
+                <td style="font-size: 9px;">
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
                     @Model.Case.ReferenceNumber
                 </td>
             </tr>                        
@@ -308,10 +309,10 @@
         @if (Model.IsCaptionVisible)
         {
             <tr>
-                <td>
+                <td style="font-size: 9px;">
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Caption.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
                     @Model.Case.Caption
                 </td>
             </tr>                        
@@ -319,32 +320,32 @@
         @if (Model.IsDescriptionVisible)
         {
             <tr>
-                <td>
-                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Description.ToString(), Model.CustomerId)
+                <td colspan="2" style="font-size: 9px;">
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Description.ToString(), Model.CustomerId)<br />
+                    <div>
+                        @Model.Case.Description
+                    </div>
                 </td>
-                <td>
-                    @Model.Case.Description
-                </td>
-            </tr>                        
+            </tr>                 
         }
         @if (Model.IsMiscellaneousVisible)
         {
             <tr>
-                <td>
-                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString(), Model.CustomerId)
-                </td>
-                <td>
-                    @Model.Case.Miscellaneous
+                <td colspan="2" style="font-size: 9px;">
+                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString(), Model.CustomerId)<br />
+                    <div>
+                        @Model.Case.Miscellaneous
+                    </div>
                 </td>
             </tr>                        
         }
         @if (Model.IsProductAreaVisible)
         {
             <tr>
-                <td>
+                <td style="font-size: 9px;">
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
                     @(Model.Case.ProductArea != null ? Model.Case.ProductArea.Name : null)
                 </td>
             </tr>                        
@@ -352,10 +353,10 @@
         @if (Model.IsContactBeforeActionVisible)
         {
             <tr>
-                <td>
+                <td style="font-size: 9px;">
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
                     @Model.Case.ContactBeforeAction.IntToYES_NO()
                 </td>
             </tr>                        
@@ -363,10 +364,10 @@
         @if (Model.IsSmsVisible)
         {
             <tr>
-                <td>
+                <td style="font-size: 9px;">
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.SMS.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
 
                     @Model.Case.Sms.IntToYES_NO()
                 </td>
@@ -375,10 +376,10 @@
         @if (Model.IsAgreedDateVisible)
         {
             <tr>
-                <td>
+                <td style="font-size: 9px;">
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.AgreedDate.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
                     @Html.DisplayFor(m => m.Case.AgreedDate, "DateAndTime")
                 </td>
             </tr>                        
@@ -386,10 +387,10 @@
         @if (Model.IsAvailableVisible)
         {
             <tr>
-                <td>
+                <td style="font-size: 9px;">
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Available.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
                     @Model.Case.Available
                 </td>
             </tr>                        
@@ -397,10 +398,10 @@
         @if (Model.IsCostVisible)
         {
             <tr>
-                <td>
+                <td style="font-size: 9px;">
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Cost.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
                     <div>@Translation.Get("Artikelkostnad") @Model.Case.Cost</div>
                     <div>@Translation.Get("Övrig kostnad") @Model.Case.OtherCost</div>
                     <div>@Translation.Get("Valuta") @Model.Case.Currency</div>
@@ -410,10 +411,10 @@
         @if (Model.IsFilesVisible)
         {
             <tr>
-                <td>
+                <td style="font-size: 9px;">
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Filename.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
                     @if (Model.CaseFilesModel != null || Model.CaseFilesModel.Files != null)
                     {
                         foreach (var file in Model.CaseFilesModel.Files)
@@ -429,17 +430,17 @@
 
     <table border="1">
         <tr>
-            <td colspan="2" bgcolor="silver" style="font-weight: bold;">
+            <td colspan="2" bgcolor="silver" style="font-weight: bold;font-size: 9px;">
                 @Translation.Get("Ärendehantering")
             </td>
         </tr>
         @if (Model.IsWorkingGroupVisible)
         {
             <tr>
-                <td>
+                <td style="font-size: 9px;">
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
                     @(Model.Case.WorkingGroup != null ? Model.Case.WorkingGroup.WorkingGroupName : null)
                 </td>
             </tr>                        
@@ -447,10 +448,10 @@
         @if (Model.IsCaseResponsibleUserVisible)
         {
             <tr>
-                <td>
+                <td style="font-size: 9px;">
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
                     @(Model.Case.CaseResponsibleUser != null ?
                               string.Format("{0} {1}", Model.Case.CaseResponsibleUser.SurName, Model.Case.CaseResponsibleUser.FirstName) : null)
                 </td>
@@ -459,10 +460,10 @@
         @if (Model.IsPerformerUserVisible)
         {
             <tr>
-                <td>
+                <td style="font-size: 9px;">
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
                     @(Model.Case.PerformerUser != null ?
                               string.Format("{0} {1}", Model.Case.PerformerUser.SurName, Model.Case.PerformerUser.FirstName) : null)
                 </td>
@@ -471,10 +472,10 @@
         @if (Model.IsPriorityVisible)
         {
             <tr>
-                <td>
+                <td style="font-size: 9px;">
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
                     @(Model.Case.Priority != null ? Model.Case.Priority.Name : null)
                 </td>
             </tr>                        
@@ -482,10 +483,10 @@
         @if (Model.IsStatusVisible)
         {
             <tr>
-                <td>
+                <td style="font-size: 9px;">
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
                     @(Model.Case.Status != null ? Model.Case.Status.Name : null)
                 </td>
             </tr>                        
@@ -493,56 +494,56 @@
         @if (Model.IsStateSecondaryVisible)
         {
             <tr>
-                <td>
+                <td style="font-size: 9px;">
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
                     @(Model.Case.StateSecondary != null ? Model.Case.StateSecondary.Name : null)
                 </td>
             </tr>                        
         }
         <tr>
-            <td>
-                @Translation.Get("Projekt")
+            <td style="font-size: 9px;">
+                @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Project.ToString(), Model.CustomerId)
             </td>
-            <td>
+            <td style="font-size: 9px;">
                 @(Model.Case.Project != null ? Model.Case.Project.Name : null)
             </td>
         </tr>
         <tr>
-            <td>
+            <td style="font-size: 9px;">
                 @Translation.Get("ITIL Problem")
             </td>
-            <td>
+            <td style="font-size: 9px;">
                 @(Model.Case.Problem != null ? Model.Case.Problem.Name : null)
             </td>
         </tr>
         <tr>
-            <td>
+            <td style="font-size: 9px;">
                 @Translation.Get("Ändring")
             </td>
-            <td>
+            <td style="font-size: 9px;">
                 @(Model.Case.Change != null ? Model.Case.Change.ChangeTitle : null)
             </td>
         </tr>
         @if (Model.IsWatchDateVisible)
         {
             <tr>
-                <td>
+                <td style="font-size: 9px;">
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Model.CustomerId)
                 </td>
-                <td>
-                    @Html.EditorFor(m => m.Case.WatchDate, "DateReadOnly")
+                <td style="font-size: 9px;">
+                    @Html.DisplayFor(m => Model.Case.WatchDate, "Date")                    
                 </td>
             </tr>                        
         }
         @if (Model.IsVerifiedVisible)
         {
             <tr>
-                <td>
+                <td style="font-size: 9px;">
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Verified.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
                     @Model.Case.Verified.IntToYES_NO()
                 </td>
             </tr>                        
@@ -550,10 +551,10 @@
         @if (Model.IsVerifiedDescriptionVisible)
         {
             <tr>
-                <td>
+                <td style="font-size: 9px;">
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
                     @Model.Case.VerifiedDescription
                 </td>
             </tr>                        
@@ -561,10 +562,10 @@
         @if (Model.IsSolutionRateVisible)
         {
             <tr>
-                <td>
+                <td style="font-size: 9px;">
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.SolutionRate.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
                     @Model.Case.SolutionRate
                 </td>
             </tr>                        
@@ -584,23 +585,23 @@
     {
         <table border="1">
             <tr>
-                <td colspan="2" bgcolor="silver" style="font-weight: bold;">
+                <td colspan="2" bgcolor="silver" style="font-weight: bold;font-size: 9px;">
                     @Translation.Get("Status")
                 </td>
             </tr>
             <tr>
-                <td>
+                <td style="font-size: 9px;">
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
                     @Html.DisplayFor(m => m.Case.FinishingDate, "DateAndTime")
                 </td>
             </tr>
             <tr>
-                <td>
+                <td style="font-size: 9px;">
                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString(), Model.CustomerId)
                 </td>
-                <td>
+                <td style="font-size: 9px;">
                     @Model.Case.FinishingDescription
                 </td>
             </tr>

@@ -26,6 +26,8 @@
             this.Property(l => l.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(l => l.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(l => l.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            this.Property(l => l.SendTime).IsOptional();
+            this.Property(l => l.ResponseMessage).IsOptional();
 
             this.ToTable("tblEmaillog");
         }

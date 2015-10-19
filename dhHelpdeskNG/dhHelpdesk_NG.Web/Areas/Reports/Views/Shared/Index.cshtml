@@ -18,6 +18,9 @@
             <li>
                 <a id="excelReport" class="btn">@Translation.Get("Export to Excel")</a>                
             </li>
+            @*<li>
+                <a id="btnShowReport" class="btn" style="display:none">@Translation.Get("Visa")</a>                             
+            </li>*@
         </ul>
     </div>
 </div>
@@ -25,8 +28,11 @@
     <div class="container">
         <ul class="nav nav-tabs">
             <li class="active">
-                <a href="#fragment-1">@Translation.Get("Rapporter")</a>
+                <a id="tab_report" href="#fragment-1">@Translation.Get("Rapporter")</a>
             </li>
+            @*<li class="">
+                <a id="tab_reportViewer" href="#fragment-2">@Translation.Get("Report Viewer")</a>
+            </li>*@
         </ul>        
         <div class="tab-content overflow-visible">
             <div id="fragment-1" class="tab-pane tab-pane-border active">
@@ -43,6 +49,10 @@
                 <div id="reportContent">
                 </div>
             </div>
+
+            <div id="fragment-2" class="tab-pane tab-pane-border">
+                @Html.Partial("ReportViewer/_Overview", Model.ReportServiceOverview)                  
+            </div>
         </div>
     </div>
 </div>
@@ -54,7 +64,8 @@
 
     $(function() {
         scope = dhHelpdesk.reports.scope({
-            workingGroupUsersRoute: '@Url.Action("GetWorkingGroupUsers", "Services", new { area = "reports" })'
+            workingGroupUsersRoute: '@Url.Action("GetWorkingGroupUsers", "Services", new { area = "reports" })',
+            
         });
     });
 

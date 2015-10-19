@@ -9,6 +9,7 @@
 
 namespace DH.Helpdesk.NewSelfService.NinjectModules.Modules
 {
+    using DH.Helpdesk.BusinessData.Models.Case.CaseLock;
     using DH.Helpdesk.BusinessData.Models.Case.Input;
     using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.BusinessData.Models.Customer;
@@ -25,6 +26,7 @@ namespace DH.Helpdesk.NewSelfService.NinjectModules.Modules
     using DH.Helpdesk.Dal.Mappers.ProductArea.BusinessModelToEntity;
     using DH.Helpdesk.Dal.Mappers.ProductArea.EntityToBusinessModel;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Cases;
     using DH.Helpdesk.Domain.Computers;
     using DH.Helpdesk.Domain.Invoice;
     using DH.Helpdesk.NewSelfService.Infrastructure.Translate;
@@ -116,6 +118,13 @@ namespace DH.Helpdesk.NewSelfService.NinjectModules.Modules
                 .To<CaseInvoiceOrderFileToEntityMapper>()
                 .InSingletonScope();
 
+            this.Bind<IBusinessModelToEntityMapper<CaseLock, CaseLockEntity>>()
+             .To<CaseLockToEntityMapper>()
+             .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<CaseLockEntity, CaseLock>>()
+                .To<CaseLockToBusinessModelMapper>()
+                .InSingletonScope();
         }
     }
 }

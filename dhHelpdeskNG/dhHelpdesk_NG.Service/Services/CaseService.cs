@@ -797,10 +797,14 @@ namespace DH.Helpdesk.Services.Services
                                 {
                                     if (!String.IsNullOrEmpty(m.Body) && !String.IsNullOrEmpty(m.Subject))
                                     {
-                                        var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(helpdeskMailFromAdress));
+                                        var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(helpdeskMailFromAdress));                                        
+                                        var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, log.HighPriority, files);
+                                        el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                                        var now = DateTime.Now;
+                                        el.CreatedDate = now;
+                                        el.ChangedDate = now;
                                         _emailLogRepository.Add(el);
                                         _emailLogRepository.Commit();
-                                        _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, log.HighPriority, files);
                                     }
                                 }
                             }
@@ -821,9 +825,13 @@ namespace DH.Helpdesk.Services.Services
                             for (int i = 0; i < to.Length; i++)
                             {
                                 var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(helpdeskMailFromAdress));
+                                var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, log.HighPriority, files);
+                                el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                                var now = DateTime.Now;
+                                el.CreatedDate = now;
+                                el.ChangedDate = now;
                                 _emailLogRepository.Add(el);
                                 _emailLogRepository.Commit();
-                                _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, log.HighPriority, files);
                             }
                         }
                     }
@@ -1049,9 +1057,6 @@ namespace DH.Helpdesk.Services.Services
             // get list of fields to replace [#1] tags in the subjcet and body texts
             List<Field> fields = GetCaseFieldsForEmail(newCase, log, cms, string.Empty , 0);
             
-            if (newCase.Workinggroup != null)
-                if (!string.IsNullOrWhiteSpace(newCase.Workinggroup.EMail) && _emailService.IsValidEmail(newCase.Workinggroup.EMail))  
-                    helpdeskMailFromAdress = newCase.Workinggroup.EMail;
 
             // if logfiles should be attached to the mail 
             List<string> files = null;
@@ -1094,12 +1099,15 @@ namespace DH.Helpdesk.Services.Services
                                 var curMail = t.Trim();
                                 if (!string.IsNullOrWhiteSpace(curMail) && _emailService.IsValidEmail(curMail))
                                 {
-                                    var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(customEmailSender1));
+                                    var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(customEmailSender1));                                    
+                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 1);
+                                    var e_res = _emailService.SendEmail(customEmailSender1, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, false, files);
+                                    el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                                    var now = DateTime.Now;
+                                    el.CreatedDate = now;
+                                    el.ChangedDate = now;
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
-                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 1);
-
-                                    _emailService.SendEmail(customEmailSender1, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, false, files);
                                 }
                             }
                         }
@@ -1108,11 +1116,15 @@ namespace DH.Helpdesk.Services.Services
                             string[] to = cms.SendMailAboutNewCaseTo.Split(';');
                             for (int i = 0; i < to.Length; i++)
                             {
-                                var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(customEmailSender1));
+                                var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(customEmailSender1));                                
+                                fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 2);
+                                var e_res = _emailService.SendEmail(customEmailSender1, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, false, files);
+                                el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                                var now = DateTime.Now;
+                                el.CreatedDate = now;
+                                el.ChangedDate = now;
                                 _emailLogRepository.Add(el);
                                 _emailLogRepository.Commit();
-                                fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 2);
-                                _emailService.SendEmail(customEmailSender1, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, false, files);
                             }
                         }
                     }
@@ -1143,12 +1155,15 @@ namespace DH.Helpdesk.Services.Services
                                         var curMail = t.Trim();
                                         if (!string.IsNullOrWhiteSpace(curMail) && _emailService.IsValidEmail(curMail))
                                         {
-                                            var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(customEmailSender1));
+                                            var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(customEmailSender1));                                            
+                                            fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 1);
+                                            var e_res = _emailService.SendEmail(customEmailSender1, el.EmailAddress, mm.Subject, mm.Body, fields, el.MessageId, false, files);
+                                            el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                                            var now = DateTime.Now;
+                                            el.CreatedDate = now;
+                                            el.ChangedDate = now;
                                             _emailLogRepository.Add(el);
                                             _emailLogRepository.Commit();
-                                            fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 1);
-
-                                            _emailService.SendEmail(customEmailSender1, el.EmailAddress, mm.Subject, mm.Body, fields, el.MessageId, false, files);
                                         }
                                     }
                                 }
@@ -1198,12 +1213,15 @@ namespace DH.Helpdesk.Services.Services
                                         var curMail = t.Trim();
                                         if (!string.IsNullOrWhiteSpace(curMail) && _emailService.IsValidEmail(curMail))
                                         {
-                                            var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(customEmailSender1));
+                                            var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(customEmailSender1));                                            
+                                            fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 1);
+                                            var e_res = _emailService.SendEmail(customEmailSender1, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, false, files);
+                                            el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                                            var now = DateTime.Now;
+                                            el.CreatedDate = now;
+                                            el.ChangedDate = now;
                                             _emailLogRepository.Add(el);
                                             _emailLogRepository.Commit();
-                                            fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 1);
-
-                                            _emailService.SendEmail(customEmailSender1, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, false, files);
                                             containsProductAreaMail = true;
                                         }
                                     }
@@ -1235,11 +1253,15 @@ namespace DH.Helpdesk.Services.Services
                         if (!String.IsNullOrEmpty(m.Body) && !String.IsNullOrEmpty(m.Subject))
                         {
                             var smsTo = GetSmsRecipient(customerSetting, newCase.Administrator.CellPhone);
-                            var el = new EmailLog(caseHistoryId, mailTemplateId, smsTo, _emailService.GetMailMessageId(helpdeskMailFromAdress));
+                            var el = new EmailLog(caseHistoryId, mailTemplateId, smsTo, _emailService.GetMailMessageId(helpdeskMailFromAdress));                            
+                            fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 4);
+                            var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, GetSmsSubject(customerSetting), m.Body, fields, el.MessageId);
+                            el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                            var now = DateTime.Now;
+                            el.CreatedDate = now;
+                            el.ChangedDate = now;
                             _emailLogRepository.Add(el);
                             _emailLogRepository.Commit();
-                            fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 4);
-                            _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, GetSmsSubject(customerSetting), m.Body, fields, el.MessageId);
                         }
                     }
                 }
@@ -1260,11 +1282,15 @@ namespace DH.Helpdesk.Services.Services
                             {
                                 if (!String.IsNullOrEmpty(m.Body) && !String.IsNullOrEmpty(m.Subject))
                                 {
-                                    var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.Priority.EMailList, _emailService.GetMailMessageId(helpdeskMailFromAdress));
+                                    var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.Priority.EMailList, _emailService.GetMailMessageId(helpdeskMailFromAdress));                                    
+                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 5);
+                                    var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                    el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                                    var now = DateTime.Now;
+                                    el.CreatedDate = now;
+                                    el.ChangedDate = now;
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
-                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 5);
-                                    _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                                 }
                             }
                         }
@@ -1287,6 +1313,8 @@ namespace DH.Helpdesk.Services.Services
                     if (!String.IsNullOrEmpty(m.Body) && !String.IsNullOrEmpty(m.Subject))
                     {
                         string wgEmails = string.Empty;
+                        if (!string.IsNullOrWhiteSpace(newCase.Workinggroup.EMail))
+                            wgEmails = newCase.Workinggroup.EMail;
 
                         if (newCase.Workinggroup.AllocateCaseMail == 1 && !string.IsNullOrWhiteSpace(newCase.Workinggroup.EMail))
                         {
@@ -1295,16 +1323,23 @@ namespace DH.Helpdesk.Services.Services
                                 mailTemplateId,
                                 wgEmails,
                                 _emailService.GetMailMessageId(helpdeskMailFromAdress));
+                            
+                            fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 6);
+
+                            var e_res = _emailService.SendEmail(
+                                                                helpdeskMailFromAdress,
+                                                                el.EmailAddress,
+                                                                m.Subject,
+                                                                m.Body,
+                                                                fields,
+                                                                el.MessageId);
+
+                            el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                            var now = DateTime.Now;
+                            el.CreatedDate = now;
+                            el.ChangedDate = now;
                             _emailLogRepository.Add(el);
                             _emailLogRepository.Commit();
-                            fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 6);
-                            _emailService.SendEmail(
-                                helpdeskMailFromAdress,
-                                el.EmailAddress,
-                                m.Subject,
-                                m.Body,
-                                fields,
-                                el.MessageId);
                         }
                     }
                 }
@@ -1332,11 +1367,15 @@ namespace DH.Helpdesk.Services.Services
                             {
                                 if (!String.IsNullOrEmpty(m.Body) && !String.IsNullOrEmpty(m.Subject))
                                 {
-                                    var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(helpdeskMailFromAdress));
+                                    var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(helpdeskMailFromAdress));                                    
+                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 7);
+                                    var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, false, files);
+                                    el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                                    var now = DateTime.Now;
+                                    el.CreatedDate = now;
+                                    el.ChangedDate = now;
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
-                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 7);
-                                    _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, false, files);
                                 }
                             }
                         }
@@ -1371,11 +1410,15 @@ namespace DH.Helpdesk.Services.Services
                             {
                                 if (_emailService.IsValidEmail(to[i]))
                                 {
-                                    var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(customEmailSender2));
+                                    var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(customEmailSender2));                                    
+                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 8);
+                                    var e_res = _emailService.SendEmail(customEmailSender2, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, false, files);
+                                    el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                                    var now = DateTime.Now;
+                                    el.CreatedDate = now;
+                                    el.ChangedDate = now;
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
-                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 8);
-                                    _emailService.SendEmail(customEmailSender2, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, false, files);
                                 }
                             }
                         }
@@ -1389,11 +1432,15 @@ namespace DH.Helpdesk.Services.Services
                                 if (!string.IsNullOrWhiteSpace(curMail) && _emailService.IsValidEmail(curMail))
                                 {
 
-                                    var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(customEmailSender2));
+                                    var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(customEmailSender2));                                    
+                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 9);
+                                    var e_res = _emailService.SendEmail(customEmailSender2, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, false, files);
+                                    el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                                    var now = DateTime.Now;
+                                    el.CreatedDate = now;
+                                    el.ChangedDate = now;
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
-                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 9);
-                                    _emailService.SendEmail(customEmailSender2, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, false, files);
                                 }
                             }
                                 
@@ -1409,11 +1456,15 @@ namespace DH.Helpdesk.Services.Services
                                 if (!String.IsNullOrEmpty(mt.Body) && !String.IsNullOrEmpty(mt.Subject))
                                 {
                                     var smsTo = GetSmsRecipient(customerSetting, newCase.PersonsCellphone);
-                                    var el = new EmailLog(caseHistoryId, mailTemplateId, smsTo, _emailService.GetMailMessageId(helpdeskMailFromAdress));
+                                    var el = new EmailLog(caseHistoryId, mailTemplateId, smsTo, _emailService.GetMailMessageId(helpdeskMailFromAdress));                                    
+                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 10);
+                                    var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, GetSmsSubject(customerSetting), mt.Body, fields, el.MessageId);
+                                    el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                                    var now = DateTime.Now;
+                                    el.CreatedDate = now;
+                                    el.ChangedDate = now;
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
-                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 10);
-                                    _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, GetSmsSubject(customerSetting), mt.Body, fields, el.MessageId);
                                 }
                             }
                         }
@@ -1487,10 +1538,15 @@ namespace DH.Helpdesk.Services.Services
                     mailTemplateId, 
                     recipient, 
                     this._emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
-                this._emailLogRepository.Add(el);
-                this._emailLogRepository.Commit();
+                
                 var fields = this.GetCaseFieldsForEmail(case_, log, cms, el.EmailLogGUID.ToString(), 3);
-                this._emailService.SendEmail(cms.HelpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                var e_res = this._emailService.SendEmail(cms.HelpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                var now = DateTime.Now;
+                el.CreatedDate = now;
+                el.ChangedDate = now;
+                _emailLogRepository.Add(el);
+                _emailLogRepository.Commit();
             }
         }
 

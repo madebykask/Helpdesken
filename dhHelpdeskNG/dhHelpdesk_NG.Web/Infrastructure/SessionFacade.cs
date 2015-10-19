@@ -15,6 +15,7 @@
     using DH.Helpdesk.Web.Infrastructure.Session;
     using DH.Helpdesk.Web.Models;
     using DH.Helpdesk.Common.Types;
+    using DH.Helpdesk.Web.Areas.Reports.Models.ReportService;
 
     public static class SessionFacade
     {
@@ -115,6 +116,8 @@
         private const string _SHOW_ACTIVE_EMAILGROUPS_IN_ADMIN = "_SHOW_ACTIVE_EMAILGROUPS_IN_ADMIN";
 
         private const string _SHOW_ACTIVE_PROGRAMS_IN_ADMIN = "_SHOW_ACTIVE_PROGRAMS_IN_ADMIN";
+
+        private const string _REPORT_SERVICE_SESSION_MODEL = "REPORT_SERVICE_SESSION_MODEL";
 
         #endregion
 
@@ -997,6 +1000,29 @@
             set
             {
                 SaveSetKeyValue(_AdminUsersPageLockedCasesTabSelectedCustomerId, value);
+            }
+        }
+
+        public static ReportServiceSessionModel ReportService
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_REPORT_SERVICE_SESSION_MODEL] == null)
+                {
+                    return null;
+                }
+                return (ReportServiceSessionModel)HttpContext.Current.Session[_REPORT_SERVICE_SESSION_MODEL];
+            }
+            set
+            {
+                if (HttpContext.Current.Session[_REPORT_SERVICE_SESSION_MODEL] == null)
+                {
+                    HttpContext.Current.Session.Add(_REPORT_SERVICE_SESSION_MODEL, value);
+                }
+                else
+                {
+                    HttpContext.Current.Session[_REPORT_SERVICE_SESSION_MODEL] = value;
+                }
             }
         }
 

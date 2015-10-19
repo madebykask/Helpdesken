@@ -1,0 +1,21 @@
+﻿@using ReportViewerForMvc
+@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Reports.Models.ReportService.ReportPresentationModel
+
+<div id="reportPresentationArea" >    
+    @if (Model.ReportPage != null)
+    {             
+        <div class="span100" >            
+            @Html.ReportViewer(Model.ReportPage)
+            @*<table>
+                <tr>
+                    <td style="width:10%"></td>
+                    <td style="width:80%">
+                        
+                    </td>
+                    <td style="width:10%"></td>
+                </tr>
+            </table>*@
+        </div>
+    }
+</div>

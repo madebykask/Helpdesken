@@ -19,14 +19,9 @@
                                                 CustomerId = cus.Id,
                                                 CustomerName = cus.Name,
                                                 CasesInProgress = cus.Cases.Where(c => c.FinishingDate == null && c.Deleted == 0).Count(),
-                                                CasesUnreaded = cus.Cases.Where(c => c.Unread == 1 && c.Deleted == 0).Count(),
+                                                CasesUnreaded = cus.Cases.Where(c => c.Unread == 1 && c.Deleted == 0 && c.FinishingDate == null).Count(),
                                                 CasesInRest = cus.Cases.Where(c => c.FinishingDate == null && c.StateSecondary_Id != null && c.StateSecondary.IncludeInCaseStatistics == 0 && c.Deleted == 0).Count(),
-                                                CasesMy = (from c in cus.Cases
-                                                           join p in problems on c.Problem equals p into gj
-                                                           from cp in gj.DefaultIfEmpty()
-                                                           where (c.FinishingDate == null && c.Deleted == 0 &&
-                                                                  (c.CaseResponsibleUser_Id == userId || c.Problem.ResponsibleUser_Id == userId || c.Performer_User_Id == userId))
-                                                           select c).Count()
+                                                CasesMy = cus.Cases.Where(c => c.FinishingDate == null && c.Deleted == 0 && c.Performer_User_Id == userId).Count()
                                                 }).ToArray();
 
             var overviews = entities.Select(c => new CustomerCases(

@@ -17,8 +17,8 @@
         public List<IdAndNameOverview> FindActiveIdAndNameOverviews(int customerId)
         {
             var emailGroups =
-                this.DataContext.EMailGroups.Where(g => g.Customer_Id == customerId)
-                    .Select(g => new { g.Id, g.Name })
+                this.DataContext.EMailGroups.Where(g => g.Customer_Id == customerId && g.IsActive == 1)
+                    .Select(g => new { g.Id, g.Name }).OrderBy(g => g.Name)
                     .ToList();
 
             return emailGroups.Select(g => new IdAndNameOverview(g.Id, g.Name)).ToList();
