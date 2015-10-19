@@ -23,7 +23,8 @@ $(function () {
             }
         });
 
-    $(tableBody).disableSelection();
+    //Has problem in FireFox
+    //$(tableBody).disableSelection();
 });
 
 function addCaseSettingRow() {    
