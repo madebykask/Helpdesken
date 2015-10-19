@@ -230,8 +230,14 @@ namespace DH.Helpdesk.Web.Controllers
         public JsonResult GetDocList(int docType, int Id)
         {
             DocumentSearch ds = new DocumentSearch();
-            if (SessionFacade.CurrentDocumentSearch != null)
-                ds = SessionFacade.CurrentDocumentSearch;
+            if (SessionFacade.CurrentDocumentSearch == null)
+            {
+                ds.Ascending = true;
+                ds.SortBy = "Name";
+                SessionFacade.CurrentDocumentSearch = ds;
+            }
+            else
+                ds = SessionFacade.CurrentDocumentSearch;  
 
             var customerId = SessionFacade.CurrentCustomer.Id;
             var documents = new List<DocumentOverview>();
@@ -267,10 +273,7 @@ namespace DH.Helpdesk.Web.Controllers
                     break;
 
                 default:
-                    docs = (ds.Ascending) ? docs.OrderBy(d => d.DocName).ToList() : docs.OrderByDescending(d => d.DocName).ToList();
-                    ds.Ascending = true;
-                    ds.SortBy = "Name";
-                    SessionFacade.CurrentDocumentSearch = ds;
+                    docs = (ds.Ascending) ? docs.OrderBy(d => d.DocName).ToList() : docs.OrderByDescending(d => d.DocName).ToList();                                        
                     break;
             }
 
@@ -280,8 +283,7 @@ namespace DH.Helpdesk.Web.Controllers
             HttpContext.Application["TreeView"] = treeView;
 
             ViewBag.SelectedCategory = Id;
-            ViewBag.SelectedListType = docType;
-           // ViewBag.SortColName = "Name";
+            ViewBag.SelectedListType = docType;           
 
             
             ds.Page = docType;
@@ -295,8 +297,15 @@ namespace DH.Helpdesk.Web.Controllers
         public JsonResult SortDocList(int docType, int Id, string sortedColumn)        
         {            
             DocumentSearch ds = new DocumentSearch();
-            if (SessionFacade.CurrentDocumentSearch != null)
-                ds = SessionFacade.CurrentDocumentSearch;
+            if (SessionFacade.CurrentDocumentSearch == null)
+            {
+                ds.Ascending = true;
+                ds.SortBy = "Name";
+                SessionFacade.CurrentDocumentSearch = ds;
+            }
+            else
+                ds = SessionFacade.CurrentDocumentSearch;  
+            
             ds.Ascending = !ds.Ascending;
             ds.SortBy = sortedColumn;
             SessionFacade.CurrentDocumentSearch = ds;
@@ -352,7 +361,13 @@ namespace DH.Helpdesk.Web.Controllers
         private DocumentInputViewModel IndexInputViewModel(int docType, int Id)
         {
             DocumentSearch ds = new DocumentSearch();
-            if (SessionFacade.CurrentDocumentSearch != null)
+            if (SessionFacade.CurrentDocumentSearch == null)
+            {
+                ds.Ascending = true;
+                ds.SortBy = "Name";
+                SessionFacade.CurrentDocumentSearch = ds;  
+            }
+            else
                 ds = SessionFacade.CurrentDocumentSearch;            
                         
 
@@ -392,9 +407,6 @@ namespace DH.Helpdesk.Web.Controllers
 
                     default:
                         docs = (ds.Ascending) ? docs.OrderBy(d => d.DocName).ToList() : docs.OrderByDescending(d => d.DocName).ToList();
-                        ds.Ascending = true;
-                        ds.SortBy = "Name";
-                        SessionFacade.CurrentDocumentSearch = ds;                
                         break;
                 }
             }           

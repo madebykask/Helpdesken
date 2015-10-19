@@ -410,6 +410,8 @@
     <Content Include="Content\css\images\sort_desc.png" />
     <Content Include="Content\icons\advanced_search.png" />
     <Content Include="Content\icons\ajax-loader.gif" />
+    <Content Include="Content\icons\doc-download.png" />
+    <Content Include="Content\icons\doc-edit.png" />
     <Content Include="Content\img\ajax-loader.GIF" />
     <Content Include="Content\img\clickmultimenu-1.png" />
     <Content Include="Content\img\clickmultimenu-2.png" />
