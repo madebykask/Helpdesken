@@ -49,7 +49,7 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             link = absolute + basePath + c.CaseNumber + "/" + fileName;
-
+            link = link.Replace("%", "%25");
             var UriLink = new Uri(link).ToString();
             UriLink = UriLink.Replace("#", "%23");
             return UriLink;
@@ -77,6 +77,7 @@ namespace DH.Helpdesk.Web.Controllers
                 }
                 link = absolute + basePath + "L" + id + "/" + fileName;
             }
+            link = link.Replace("%", "%25");
             var UriLink = new Uri(link).ToString();
             UriLink = UriLink.Replace("#", "%23");
             return UriLink;
