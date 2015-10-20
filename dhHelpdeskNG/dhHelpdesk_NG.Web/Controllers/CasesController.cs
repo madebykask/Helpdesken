@@ -1654,6 +1654,11 @@ namespace DH.Helpdesk.Web.Controllers
 
                 fileContent = this._caseFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
             }
+
+            var defaultFileName = fileName.Replace("%", "");
+            defaultFileName = defaultFileName.Replace("?", "");
+            Response.AddHeader("Content-Disposition", string.Format("attachment; filename={0}", defaultFileName));
+
             return new UnicodeFileContentResult(fileContent, fileName);
         }        
 
@@ -1677,6 +1682,10 @@ namespace DH.Helpdesk.Web.Controllers
 
                 fileContent = this._logFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
             }
+
+            var defaultFileName = fileName.Replace("%", "");
+            defaultFileName = defaultFileName.Replace("?", "");
+            Response.AddHeader("Content-Disposition", string.Format("attachment; filename={0}", defaultFileName));
 
             return new UnicodeFileContentResult(fileContent, fileName);
         }
