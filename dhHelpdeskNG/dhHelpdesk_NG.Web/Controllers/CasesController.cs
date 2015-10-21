@@ -397,7 +397,12 @@ namespace DH.Helpdesk.Web.Controllers
                 f.CaseNumber = frm.ReturnFormValue("txtCaseNumberSearch");
             }
             else
-                f.FreeTextSearch = frm.ReturnFormValue("txtFreeTextSearch");
+            {
+                if (!string.IsNullOrEmpty(frm.ReturnFormValue("txtCaptionSearch")))
+                    f.CaptionSearch = frm.ReturnFormValue("txtCaptionSearch");
+                else
+                    f.FreeTextSearch = frm.ReturnFormValue("txtFreeTextSearch");
+            }
 
             var maxRecords = this._defaultMaxRows;
             int.TryParse(frm.ReturnFormValue("lstfilterMaxRows"), out maxRecords);

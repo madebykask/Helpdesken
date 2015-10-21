@@ -69,6 +69,7 @@
         public string StateSecondary { get; set; }
         public string CaseProgress { get; set; }
         public string FreeTextSearch { get; set; }
+        public string CaptionSearch { get; set; }
 
         public string ParantPath_ProductArea = DropDownButtonDefaultValue;
 
@@ -153,6 +154,7 @@
             r.Customer = o.Customer;
             r.CaseNumber = o.CaseNumber;
             r.MaxRows = o.MaxRows;
+            r.CaptionSearch = o.CaptionSearch;
 
             return r;
         }

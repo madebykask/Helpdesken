@@ -1202,7 +1202,16 @@
                     sb.Append(") ");
                 }
             }
-            
+
+            // "Caption" Search
+            if (!string.IsNullOrEmpty(f.CaptionSearch))
+            {
+                var text = f.CaptionSearch;
+                sb.Append(" AND (");
+                sb.Append(this.GetSqlLike("[tblCase].[Caption]", text));
+                sb.Append(") ");
+            }
+
             // "Initiator" search field
             if (!string.IsNullOrEmpty(f.Initiator))
             {

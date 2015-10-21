@@ -62,10 +62,12 @@ var GRID_STATE = {
         me.$tableErrorMsg = ' div.error-msg';
         me.$noFieldsMsg = $('#search_result div.nofields-msg');
         me.$noAvailableFieldsMsg = $('#search_result div.noavailablefields-msg');
-        me.$buttonsToDisableWhenGridLoads = $('ul.secnav a.btn, ul.secnav div.btn-group button, ul.secnav input[type=button], .submit, #btnClearFilter');        
+        me.$buttonsToDisableWhenGridLoads = $('ul.secnav a.btn, ul.secnav div.btn-group button, ul.secnav input[type=button], .submit, #btnClearFilter');
+        me.$txtsToSearchByEnterKey = '#CaseInitiatorFilter, #txtFreeTextSearch, #txtCaseNumberSearch, #txtCaptionSearch';
         me.$searchField = '#txtFreeTextSearch';
         me.$filterForm = $('#frmAdvanceSearch');        
         me.$availableCustomer = [];
+
         $('#lstfilterCustomers option').each(function () {
             me.$availableCustomer.push({
                 customerId: $(this).val(),
@@ -90,7 +92,7 @@ var GRID_STATE = {
             return false;
         });                
 
-        $('#CaseInitiatorFilter, #txtFreeTextSearch, #txtCaseNumberSearch').keydown(function (e) {
+        $(me.$txtsToSearchByEnterKey).keydown(function (e) {
             if (e.keyCode == 13) {
                 e.preventDefault();
                 $("#btnSearch").click();
