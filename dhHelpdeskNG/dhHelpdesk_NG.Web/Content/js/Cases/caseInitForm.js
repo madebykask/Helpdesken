@@ -219,25 +219,42 @@ function GetComputerUserSearchOptions() {
         updater: function (obj) {
             var item = JSON.parse(obj);
             var departmentFilterFormat = $('#DepartmentFilterFormat').val();
-            
+                        
             $('#case__ReportedBy').val(item.num);
             
             // Raise event about UserId changed.
             $(document).trigger("OnUserIdChanged", [item.num]);
             
-            $('#case__PersonsName').val(item.name);
-            $('#case__PersonsEmail').val(item.email);
-            $('#case__PersonsPhone').val(item.phone);
-            $('#case__PersonsCellphone').val(item.cellphone);
-            $('#case__Place').val(item.place);
-            $('#case__UserCode').val(item.usercode);
+            if (item.name != "" && item.name != null)
+                $('#case__PersonsName').val(item.name);
 
-            $('#case__Region_Id').val(item.regionid);
-            $('#RegionName').val(item.regionname);
-            $(publicDepartmentControlName).val(item.departmentid).trigger('change');
-
-            refreshDepartment(item.regionid, departmentFilterFormat, item.departmentid, item.ouid);
+            if (item.email != "" && item.email != null)
+                $('#case__PersonsEmail').val(item.email);
             
+            if (item.phone != "" && item.phone != null)
+                $('#case__PersonsPhone').val(item.phone);
+
+            if (item.cellphone != "" && item.cellphone != null)
+                $('#case__PersonsCellphone').val(item.cellphone);
+
+            if (item.place != "" && item.place != null)
+                $('#case__Place').val(item.place);
+
+            if (item.usercode != "" && item.usercode != null)
+                $('#case__UserCode').val(item.usercode);
+
+
+            if (item.regionid != "" && item.regionid != null) {
+                $('#case__Region_Id').val(item.regionid);
+                $('#RegionName').val(item.regionname);
+            }
+
+            if (item.regionid != "" && item.regionid != null && 
+                item.departmentid != "" && item.departmentid != null) {
+                $(publicDepartmentControlName).val(item.departmentid).trigger('change');
+                refreshDepartment(item.regionid, departmentFilterFormat, item.departmentid, item.ouid);
+            }
+
             return item.num;
         }
     };

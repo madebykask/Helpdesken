@@ -96,6 +96,16 @@
                              <input type="text" id="txtCaseNumberSearch" value="@Model.CaseSearchFilterData.caseSearchFilter.CaseNumber" name="txtCaseNumberSearch" />
                          </td>                         
                      </tr>
+
+                     <tr>
+                         <td class="span3">
+                             @Translation.Get("Rubrik")
+                         </td>
+                         <td class="span4">
+                             <input type="text" id="txtCaptionSearch" value="@Model.CaseSearchFilterData.caseSearchFilter.CaptionSearch" name="txtCaptionSearch" />
+                         </td>                         
+                     </tr>
+
                      <tr>
                          <td class="span3">
                              @Translation.Get("Fritextfält")

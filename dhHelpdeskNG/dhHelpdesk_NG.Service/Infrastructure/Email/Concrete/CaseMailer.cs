@@ -231,6 +231,7 @@
             if (!String.IsNullOrEmpty(template.Body) && !String.IsNullOrEmpty(template.Subject))
             {
                 var to = log.EmailRecepientsInternalLog
+                                    .Replace(" ", "")
                                     .Replace(Environment.NewLine, "|")
                                     .Split('|');
                 foreach (var t in to)

@@ -397,7 +397,12 @@ namespace DH.Helpdesk.Web.Controllers
                 f.CaseNumber = frm.ReturnFormValue("txtCaseNumberSearch");
             }
             else
-                f.FreeTextSearch = frm.ReturnFormValue("txtFreeTextSearch");
+            {
+                if (!string.IsNullOrEmpty(frm.ReturnFormValue("txtCaptionSearch")))
+                    f.CaptionSearch = frm.ReturnFormValue("txtCaptionSearch");
+                else
+                    f.FreeTextSearch = frm.ReturnFormValue("txtFreeTextSearch");
+            }
 
             var maxRecords = this._defaultMaxRows;
             int.TryParse(frm.ReturnFormValue("lstfilterMaxRows"), out maxRecords);
@@ -1654,6 +1659,10 @@ namespace DH.Helpdesk.Web.Controllers
 
                 fileContent = this._caseFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
             }
+
+            var defaultFileName = GetDefaultFileName(fileName);
+            Response.AddHeader("Content-Disposition", string.Format("attachment; filename={0}", defaultFileName));
+            
             return new UnicodeFileContentResult(fileContent, fileName);
         }        
 
@@ -1677,6 +1686,9 @@ namespace DH.Helpdesk.Web.Controllers
 
                 fileContent = this._logFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
             }
+
+            var defaultFileName = GetDefaultFileName(fileName);
+            Response.AddHeader("Content-Disposition", string.Format("attachment; filename={0}", defaultFileName));
 
             return new UnicodeFileContentResult(fileContent, fileName);
         }
@@ -4268,6 +4280,17 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             return departments;
+        }
+
+        private string GetDefaultFileName(string fileName)
+        {
+            var defaultFileName = fileName;
+            if (Request.Browser.Browser.ToLower() == "ie" || Request.Browser.Browser.ToLower() == "internetexplorer")
+            {
+                defaultFileName = fileName.Replace("%", "");
+                defaultFileName = defaultFileName.Replace("?", "");                                
+            }
+            return defaultFileName;
         }
         #endregion
     }

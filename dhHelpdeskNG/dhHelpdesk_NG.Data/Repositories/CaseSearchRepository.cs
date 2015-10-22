@@ -1021,7 +1021,7 @@
             {
                 var preparedUserIds = userId.ToString(CultureInfo.InvariantCulture).SafeForSqlInject();
                 sb.AppendFormat(
-                    " AND ([tblCase].[Performer_User_Id] IN ({0}) OR [tblProblem].[ResponsibleUser_Id] IN ({0}) ", preparedUserIds);
+                    " AND ([tblCase].[Performer_User_Id] IN ({0}) ", preparedUserIds);
                 if (isFieldResponsibleVisible)
                 {
                     sb.AppendFormat("OR [tblCase].[CaseResponsibleUser_Id] IN ({0})", preparedUserIds);
@@ -1202,7 +1202,16 @@
                     sb.Append(") ");
                 }
             }
-            
+
+            // "Caption" Search
+            if (!string.IsNullOrEmpty(f.CaptionSearch))
+            {
+                var text = f.CaptionSearch;
+                sb.Append(" AND (");
+                sb.Append(this.GetSqlLike("[tblCase].[Caption]", text));
+                sb.Append(") ");
+            }
+
             // "Initiator" search field
             if (!string.IsNullOrEmpty(f.Initiator))
             {
