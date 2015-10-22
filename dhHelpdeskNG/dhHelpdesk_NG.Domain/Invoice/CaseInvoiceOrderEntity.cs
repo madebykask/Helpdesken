@@ -25,6 +25,8 @@
 
         public string Persons_Name { get; set; }
 
+        public string Persons_Email { get; set; }
+
         public string Persons_Phone { get; set; }
 
         public string Persons_Cellphone { get; set; }

@@ -47,6 +47,7 @@
                                 o.Date,
                                 o.ReportedBy,
                                 o.Persons_Name,
+                                o.Persons_Email,
                                 o.Persons_Phone,
                                 o.Persons_Cellphone,
                                 o.Region_Id,

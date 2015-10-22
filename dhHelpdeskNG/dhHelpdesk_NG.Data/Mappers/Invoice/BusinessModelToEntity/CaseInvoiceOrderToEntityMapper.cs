@@ -9,10 +9,8 @@
         {
             entity.InvoiceId = businessModel.InvoiceId;
             entity.Number = businessModel.Number;
-            entity.DeliveryPeriod = businessModel.DeliveryPeriod;
             entity.InvoicedByUserId = businessModel.InvoicedByUserId;
             entity.InvoiceDate = businessModel.InvoiceDate;
-            entity.Reference = businessModel.Reference;
             entity.Date = businessModel.Date;
 
             entity.ReportedBy = businessModel.ReportedBy;

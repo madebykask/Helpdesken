@@ -35,13 +35,12 @@
                                     o.Id,
                                     o.InvoiceId,
                                     o.Number,
-                                    o.DeliveryPeriod,
-                                    o.InvoicedDate,
+                                    o.InvoiceDate,
                                     o.InvoicedByUserId,
-                                    o.Reference,
                                     now,
                                     o.ReportedBy,
                                     o.Persons_Name,
+                                    o.Persons_Email,
                                     o.Persons_Phone,
                                     o.Persons_Cellphone,
                                     o.Region_Id,
@@ -135,13 +134,9 @@
 
             public short Number { get; set; }
 
-            public string DeliveryPeriod { get; set; }
-
-            public DateTime? InvoicedDate { get; set; }
+            public DateTime? InvoiceDate { get; set; }
 
             public int? InvoicedByUserId { get; set; }
-
-            public string Reference { get; set; }
 
             public DateTime Date { get; set; }
 
@@ -168,6 +163,8 @@
             public CaseInvoiceArticleData[] Articles { get; set; }
 
             public CaseInvoiceOrderFileData[] Files { get; set; }
+
+            public string Persons_Email { get; set; }
         }
 
         private class CaseInvoiceOrderFileData

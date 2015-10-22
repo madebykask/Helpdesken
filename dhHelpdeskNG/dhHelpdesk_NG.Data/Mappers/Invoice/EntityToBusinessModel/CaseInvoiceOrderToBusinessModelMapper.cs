@@ -40,6 +40,7 @@
                         entity.Date,
                         entity.ReportedBy,
                         entity.Persons_Name,
+                        entity.Persons_Email,
                         entity.Persons_Phone,
                         entity.Persons_Cellphone,
                         entity.Region_Id,

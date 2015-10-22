@@ -23,11 +23,6 @@
             </td>
         </tr>
     </table>
-    {{if IsInvoiced}}
-    <div class='width100 textbold' style='text-align: left;'>
-        {{:InvoicedByTitle}}: {{:InvoicedByUser}} {{:InvoiceDate}}
-    </div>
-    {{/if}}
     <div class='width100 textbold' style='text-align: right;'>
         {{:TotalLabel}}: <span class='articles-total'>{{:Total}}</span> SEK
     </div>
@@ -65,6 +60,21 @@
             <tr style="display: none;">
                 <td>
                     <input type="hidden" id="Persons_Name_{{:Id}}" value="{{:Persons_Name}}" class="name" />
+                </td>
+            </tr>
+            {{/if}}
+            {{if ShowPersons_Email}}
+            <tr class="InitiatorFieldsOrder{{:Id}} InitiatorField">
+                <td>{{:Persons_EmailTitle}}
+                </td>
+                <td>
+                    <input type="text" id="Persons_Email_{{:Id}}" class="email" maxlength="40" autocomplete="Off" style="margin-bottom: -2px;" value="{{:Persons_Email}}" data-orderid="{{:Id}}"/>
+                </td>
+            </tr>
+            {{else}}
+            <tr style="display: none;">
+                <td>
+                    <input type="hidden" id="Persons_Email_{{:Id}}" class="phone" value="{{:Persons_Email}}" />
                 </td>
             </tr>
             {{/if}}
