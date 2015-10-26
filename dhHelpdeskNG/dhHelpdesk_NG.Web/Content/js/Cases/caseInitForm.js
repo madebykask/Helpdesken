@@ -368,6 +368,7 @@ function CaseInitForm() {
                     exists = $('#case__Priority_Id option[value=' + data.Priority_Id + ']').length;
                     if (exists > 0 && data.Priority_Id > 0) {
                         $("#case__Priority_Id").val(data.Priority_Id);
+                        $("#case__Priority_Id").change();
                     }
 
                     $("#ProductAreaHasChild").val(data.HasChild);
