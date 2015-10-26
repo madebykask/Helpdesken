@@ -9,6 +9,7 @@
         public DateTime CreatedDate { get; set; }
         public DateTime WatchDate { get; set; }
         public string WatchDateValueName { get; set; }
+        public DateTime? ValidUntilDate { get; set; }
 
         public virtual WatchDateCalendar WatchDateCalendar { get; set; }
     }

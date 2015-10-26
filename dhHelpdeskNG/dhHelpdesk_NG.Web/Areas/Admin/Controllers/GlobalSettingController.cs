@@ -1263,7 +1263,7 @@
             //return this.View(model);
         }
 
-        public string AddRowToWatchDateCalendarValue(int watchdatecalendarid, DateTime watchdate, string watchdatevaluenname)
+        public string AddRowToWatchDateCalendarValue(int watchdatecalendarid, DateTime watchdate, string watchdatevaluenname, DateTime? validuntil)
         {
             var wdcv = new WatchDateCalendarValue();
             var year = DateTime.Today.Year;
@@ -1275,6 +1275,7 @@
 
             if (this.ModelState.IsValid)
             {
+                wdcv.ValidUntilDate = validuntil;
                 wdcv.WatchDate = watchdate;
                 wdcv.WatchDateCalendar_Id = watchdatecalendarid;
                 wdcv.CreatedDate = DateTime.UtcNow;
@@ -1288,7 +1289,7 @@
             return this.UpdateWatchDateList(wdc);
         }
 
-        public string SaveRowToWatchDateCalendarValue(int id, int watchdatecalendarId, DateTime watchdate, string watchdatevaluenname)
+        public string SaveRowToWatchDateCalendarValue(int id, int watchdatecalendarId, DateTime watchdate, string watchdatevaluenname, DateTime? validuntil)
         {
             var wdcv = this._watchDateCalendarService.GetWatchDateCalendarValue(id);
             var year = DateTime.Today.Year;
@@ -1304,6 +1305,7 @@
                 wdcv.WatchDateCalendar_Id = watchdatecalendarId;
                 wdcv.CreatedDate = DateTime.UtcNow;
                 wdcv.WatchDateValueName = watchdatevaluenname;
+                wdcv.ValidUntilDate = validuntil;
             }
 
             model.WatchDateCalendarValue = wdcv;
