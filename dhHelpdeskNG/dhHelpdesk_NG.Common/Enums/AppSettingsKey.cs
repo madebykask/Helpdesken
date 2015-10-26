@@ -16,6 +16,8 @@
 
         public static readonly string CaseList = "CaseList";
 
+        public static readonly string DefaultUserId = "DefaultUserId";
+
         public static readonly string DefaultEmployeeNumber = "DefaultEmployeeNumber";
 
         public static readonly string SSOLog = "SSOLog";
