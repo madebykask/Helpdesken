@@ -49,64 +49,73 @@
             Case newCase, 
             string helpdeskMailFromAdress, 
             List<string> files,
-            MailSenders mailSenders)
-        {            
-            if (log == null || log.Id <= 0 || string.IsNullOrWhiteSpace(log.TextExternal) ||
-                !log.SendMailAboutCaseToNotifier ||
-                dontSendMailToNotfier ||                
-                newCase.FinishingDate != null)
-            {
-                return;
-            }
+            MailSenders mailSenders,
+            bool isCreatingCase)
+        {
 
-            var template = this.mailTemplateService.GetMailTemplateForCustomerAndLanguage(
-                                                newCase.Customer_Id,
-                                                newCase.RegLanguage_Id,
-                                                (int)GlobalEnums.MailTemplates.InformNotifier);
-            if (template == null)
+            if (!isCreatingCase)
             {
-                return;
-            }
-
-            if (!String.IsNullOrEmpty(template.Body) && !String.IsNullOrEmpty(template.Subject))
-            {                
-                var to = newCase.PersonsEmail.Split(';', ',');
-                foreach (var t in to)
+                if (log == null || log.Id <= 0 || string.IsNullOrWhiteSpace(log.TextExternal) ||
+                    !log.SendMailAboutCaseToNotifier ||
+                    dontSendMailToNotfier ||
+                    newCase.FinishingDate != null)
                 {
-                    var curMail = t.Trim();
-                    if (!string.IsNullOrWhiteSpace(curMail) && this.emailService.IsValidEmail(curMail))
+                    return;
+                }
+
+                var template = this.mailTemplateService.GetMailTemplateForCustomerAndLanguage(
+                                                    newCase.Customer_Id,
+                                                    newCase.RegLanguage_Id,
+                                                    (int)GlobalEnums.MailTemplates.InformNotifier);
+                if (template == null)
+                {
+                    return;
+                }
+
+                if (!String.IsNullOrEmpty(template.Body) && !String.IsNullOrEmpty(template.Subject))
+                {
+                    var to = newCase.PersonsEmail.Split(';', ',');
+                    foreach (var t in to)
                     {
-                        string customEmailSender4 = mailSenders.DefaultOwnerWGEMail;
-                        if (string.IsNullOrWhiteSpace(customEmailSender4))
-                            customEmailSender4 = mailSenders.WGEmail;
-                        if (string.IsNullOrWhiteSpace(customEmailSender4))
-                            customEmailSender4 = mailSenders.SystemEmail;
+                        var curMail = t.Trim();
+                        if (!string.IsNullOrWhiteSpace(curMail) && this.emailService.IsValidEmail(curMail))
+                        {
+                            string customEmailSender4 = mailSenders.DefaultOwnerWGEMail;
+                            if (string.IsNullOrWhiteSpace(customEmailSender4))
+                                customEmailSender4 = mailSenders.WGEmail;
+                            if (string.IsNullOrWhiteSpace(customEmailSender4))
+                                customEmailSender4 = mailSenders.SystemEmail;
 
-                        var mailMessageId = this.emailService.GetMailMessageId(customEmailSender4);
-                        var notifierEmailLog = this.emailFactory.CreatEmailLog(
-                                                        caseHistoryId,
-                                                        (int)GlobalEnums.MailTemplates.InformNotifier,
-                                                        curMail,
-                                                        mailMessageId);
+                            var mailMessageId = this.emailService.GetMailMessageId(customEmailSender4);
+                            var notifierEmailLog = this.emailFactory.CreatEmailLog(
+                                                            caseHistoryId,
+                                                            (int)GlobalEnums.MailTemplates.InformNotifier,
+                                                            curMail,
+                                                            mailMessageId);
 
-                        string site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + notifierEmailLog.EmailLogGUID.ToString();
-                        string url = "<br><a href='" + site + "'>" + site + "</a>";
-                        foreach (var field in fields)
-                            if (field.Key == "[#98]")
-                                field.StringValue = url;
+                            string site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + notifierEmailLog.EmailLogGUID.ToString();
+                            string url = "<br><a href='" + site + "'>" + site + "</a>";
+                            foreach (var field in fields)
+                                if (field.Key == "[#98]")
+                                    field.StringValue = url;
 
-                        var notifierEmailItem = this.emailFactory.CreateEmailItem(
-                                                        customEmailSender4,
-                                                        notifierEmailLog.EmailAddress,
-                                                        template.Subject,
-                                                        template.Body,
-                                                        fields,
-                                                        notifierEmailLog.MessageId,
-                                                        log.HighPriority,
-                                                        files);
-                        this.emailService.SendEmail(notifierEmailItem);
-                        this.emailLogRepository.Add(notifierEmailLog);
-                        this.emailLogRepository.Commit();
+                            var notifierEmailItem = this.emailFactory.CreateEmailItem(
+                                                            customEmailSender4,
+                                                            notifierEmailLog.EmailAddress,
+                                                            template.Subject,
+                                                            template.Body,
+                                                            fields,
+                                                            notifierEmailLog.MessageId,
+                                                            log.HighPriority,
+                                                            files);
+                            var e_res = this.emailService.SendEmail(notifierEmailItem);
+                            notifierEmailLog.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                            var now = DateTime.Now;
+                            notifierEmailLog.CreatedDate = now;
+                            notifierEmailLog.ChangedDate = now;
+                            this.emailLogRepository.Add(notifierEmailLog);
+                            this.emailLogRepository.Commit();
+                        }
                     }
                 }
             }
@@ -185,7 +194,11 @@
                                                 defaultWorkingGroupEmailLog.MessageId,
                                                 log.HighPriority,
                                                 files);
-                this.emailService.SendEmail(defaultWorkingGroupEmailItem);
+                var e_res = this.emailService.SendEmail(defaultWorkingGroupEmailItem);
+                defaultWorkingGroupEmailLog.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                var now = DateTime.Now;
+                defaultWorkingGroupEmailLog.CreatedDate = now;
+                defaultWorkingGroupEmailLog.ChangedDate = now;
                 this.emailLogRepository.Add(defaultWorkingGroupEmailLog);
                 this.emailLogRepository.Commit();
             }
@@ -218,6 +231,7 @@
             if (!String.IsNullOrEmpty(template.Body) && !String.IsNullOrEmpty(template.Subject))
             {
                 var to = log.EmailRecepientsInternalLog
+                                    .Replace(" ", "")
                                     .Replace(Environment.NewLine, "|")
                                     .Split('|');
                 foreach (var t in to)
@@ -244,7 +258,11 @@
                                                         internalEmailLog.MessageId,
                                                         log.HighPriority,
                                                         files);
-                        this.emailService.SendEmail(internalEmail);
+                        var e_res = this.emailService.SendEmail(internalEmail);
+                        internalEmailLog.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                        var now = DateTime.Now;
+                        internalEmailLog.CreatedDate = now;
+                        internalEmailLog.ChangedDate = now;
                         this.emailLogRepository.Add(internalEmailLog);
                         this.emailLogRepository.Commit();
                     }

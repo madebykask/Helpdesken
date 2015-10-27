@@ -1,8 +1,7 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using System.Collections.Generic;
+using System.Linq;
+namespace DH.Helpdesk.Services.Services
 {
-    using System.Collections.Generic;
-    using System.Linq;
-
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.User.Input;
     using DH.Helpdesk.Dal.Repositories;
@@ -30,6 +29,7 @@
         IList<GlobalSetting> GetGlobalSettings();
         int? GetCustomerIdByEMailGUID(Guid GUID);
         string GetFilePath(int customerId);
+        string GetVirtualDirectoryPath(int customerId);
         
     }
 
@@ -196,6 +196,20 @@
             }
 
             return (string.IsNullOrEmpty(customerFilePath)? string.Empty: customerFilePath);
+        }
+
+        public string GetVirtualDirectoryPath(int customerId)
+        {
+            var customerFilePath = this._settingRepository.GetAll()
+                                                          .Where(s => s.Customer_Id == customerId)
+                                                          .Select(s => s.VirtualFilePath)
+                                                          .FirstOrDefault();
+            if (string.IsNullOrEmpty(customerFilePath)) {
+                var globalSetting = this._globalSettingRepository.GetAll().FirstOrDefault();
+                if (globalSetting != null)
+                    customerFilePath = globalSetting.VirtualFileFolder;
+            }
+            return (string.IsNullOrEmpty(customerFilePath) ? string.Empty : customerFilePath);
         }
 
     }

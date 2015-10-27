@@ -8,6 +8,7 @@
     {
         public Customer Customer { get; set; }
         public IList<StandardText> StandardTexts { get; set; }
+        public bool IsShowOnlyActive { get; set; }
     }
 
     public class StandardTextInputViewModel

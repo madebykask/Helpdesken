@@ -26,8 +26,8 @@
                                         @Translation.Get("Språk", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @Html.DropDownListFor(model => model.MailTemplateLanguage.Language_Id, Model.Languages,
-                                                              new { id = "LanguageId", onchange = "changeLanguageList(this.options[this.selectedIndex].value);" })
+                                        @Html.DropDownListFor(model => Model.MailTemplateLanguage.Language_Id, Model.Languages,
+                                                              new { id = "LanguageId" })
                                     </td>
                                 </tr>
                                 @if (Model.MailTemplateLanguage.MailTemplate_Id != 0)
@@ -173,12 +173,7 @@
                                     </tr>
                                 }
                                 else
-                                {
-                                    <tr>
-                                        <td>
-                                            @Translation.Get("Ny E-post mall", Enums.TranslationSource.TextTranslation)
-                                        </td>
-                                    </tr>
+                                {                                 
                                     <tr>
                                         <td>
                                             @Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation)
@@ -429,10 +424,10 @@
                                     </th>
                                 </tr>
                                 @Html.Action("MailTemplateFieldIdentifierRow", new { customerId = Model.Customer.Id, mailTemplateRowName = GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString() });   
-                                @Html.Action("MailTemplateFieldIdentifierRow", new { customerId = Model.Customer.Id, mailTemplateRowName = GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Extralabel = "E-post", EMailIdentifier="[#13]" });
+                                @Html.Action("MailTemplateFieldIdentifierRow", new { customerId = Model.Customer.Id, mailTemplateRowName = GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Extralabel = "E-post", EMailIdentifier = "[#13]" });
 
-                                @Html.Action("MailTemplateFieldIdentifierRow", new { customerId = Model.Customer.Id, mailTemplateRowName = GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Extralabel = "Förnamn", EMailIdentifier ="[#6]" });   
-                                @Html.Action("MailTemplateFieldIdentifierRow", new { customerId = Model.Customer.Id, mailTemplateRowName = GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Extralabel = "Efternamn", EMailIdentifier ="[#7]" });   
+                                @Html.Action("MailTemplateFieldIdentifierRow", new { customerId = Model.Customer.Id, mailTemplateRowName = GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Extralabel = "Förnamn", EMailIdentifier = "[#6]" });   
+                                @Html.Action("MailTemplateFieldIdentifierRow", new { customerId = Model.Customer.Id, mailTemplateRowName = GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Extralabel = "Efternamn", EMailIdentifier = "[#7]" });   
                                 @Html.Action("MailTemplateFieldIdentifierRow", new { customerId = Model.Customer.Id, mailTemplateRowName = GlobalEnums.TranslationCaseFields.Priority_Id.ToString() });
                                 <tr>
                                     <td>
@@ -449,18 +444,22 @@
                                 </tr>
                                 @Html.Action("MailTemplateFieldIdentifierRow", new { customerId = Model.Customer.Id, mailTemplateRowName = GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString() });
                                 @Html.Action("MailTemplateFieldIdentifierRow", new { customerId = Model.Customer.Id, mailTemplateRowName = GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString() });
-                                                                                                                                                                                                               if (Model.MailTemplateLanguage.MailTemplate.MailID == 4 || Model.MailTemplateLanguage.MailTemplate.MailID == 5)
-                                                                                                                                                                                                               {
-                                <tr>
-                                    <td>
-                                        @Translation.Get("Bifogad fil", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                    <td>[#14]
-                                    </td>
-                                </tr>
-                                                                                                                                                                                                               }
-                                                                                                                                                                                                               if (Model.MailTemplateLanguage.MailTemplate.MailID == 11)
-                                                                                                                                                                                                               {
+                                if (Model.MailTemplateLanguage.MailTemplate.MailID == 4 || 
+                                    Model.MailTemplateLanguage.MailTemplate.MailID == 5 || 
+                                    Model.MailTemplateLanguage.MailTemplate.MailID == 1 ||
+                                    Model.MailTemplateLanguage.MailTemplate.MailID == 3 ||
+                                    Model.MailTemplateLanguage.MailTemplate.MailID > 99)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Translation.Get("Bifogad fil", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td>[#14]
+                                        </td>
+                                    </tr>
+                                }
+                                if (Model.MailTemplateLanguage.MailTemplate.MailID == 11)
+                                {
                                 <tr>
                                     <td>
                                         @Translation.Get("Hyperlänk", Enums.TranslationSource.TextTranslation) @Translation.Get("Enkät", Enums.TranslationSource.TextTranslation)
@@ -1097,3 +1096,9 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    $("#LanguageId").change(function () {
+        changeLanguageList(this.options[this.selectedIndex].value);
+    });
+</script>

@@ -88,8 +88,8 @@
             this.Property(x => x.ProductArea_Id).IsOptional();
             this.Property(x => x.Project_Id).IsOptional();
             this.Property(x => x.ReportedBy).IsOptional().HasMaxLength(40);
-            this.Property(x => x.Text_External).IsRequired().HasMaxLength(1500);
-            this.Property(x => x.Text_Internal).IsRequired().HasMaxLength(1000);
+            this.Property(x => x.Text_External).IsRequired().HasMaxLength(3000);
+            this.Property(x => x.Text_Internal).IsRequired().HasMaxLength(3000);
             this.Property(x => x.WorkingGroup_Id).IsOptional();
             this.Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);

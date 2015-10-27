@@ -51,6 +51,7 @@ namespace DH.Helpdesk.NewSelfService
     using DH.Helpdesk.Dal.Repositories.Invoice.Concrete;
     using DH.Helpdesk.NewSelfService.WebServices;
     using DH.Helpdesk.Dal.Repositories.Cases;
+    using DH.Helpdesk.Dal.Repositories.Cases.Concrete;
     
     public static class NinjectWebCommon 
     {
@@ -183,7 +184,10 @@ namespace DH.Helpdesk.NewSelfService
             kernel.Bind<IHolidayRepository>().To<HolidayRepository>();
             kernel.Bind<IHolidayHeaderRepository>().To<HolidayHeaderRepository>();
             kernel.Bind<IDomainRepository>().To<DomainRepository>();
-                                       
+            kernel.Bind<ILinkRepository>().To<LinkRepository>();
+            kernel.Bind<ICaseLockRepository>().To<CaseLockRepository>();
+            kernel.Bind<ILinkGroupRepository>().To<LinkGroupRepository>();
+            
             // Service             
             kernel.Bind<IMasterDataService>().To<MasterDataService>();            
             kernel.Bind<ISettingService>().To<SettingService>();
@@ -230,6 +234,8 @@ namespace DH.Helpdesk.NewSelfService
             kernel.Bind<ISurveyService>().To<SurveyService>();
             kernel.Bind<IHolidayService>().To<HolidayService>();
             kernel.Bind<IOrganizationService>().To<OrganizationService>();
+            kernel.Bind<ILinkService>().To<LinkService>();
+            kernel.Bind<ICaseLockService>().To<CaseLockService>();
 
             // Cache
             kernel.Bind<ICacheProvider>().To<CacheProvider>();

@@ -93,6 +93,12 @@ function IsWillBeOverwritten(fieldId, val) {
         case 'RegistrationSource':
             return IsWillBeOverwrittenByValue('#CustomerRegistrationSourceId', "#CustomerRegistrationSourceId", val);
             break;
+        case 'Status_Id':
+            return IsWillBeOverwrittenByValue('#case__Status_Id', '#case__Status_Id', val);
+            break;
+        case 'StateSecondary_Id':
+            return IsWillBeOverwrittenByValue('#case__StateSecondary_Id', '#case__StateSecondary_Id', val);
+            break;
     }
     return false;
 }
@@ -107,7 +113,7 @@ var overwriteWarning = {
         me.caseTemplateData = data;
         if (me.dlg == null) {
             me.dlg = $('#overwriteDlg')
-            $(me.dlg).find('button.btn-ok').on('click', function() {
+            $(me.dlg).find('button.btn-ok').on('click', function () {
                 me.dlg.modal('hide');
                 window.ApplyTemplate(me.caseTemplateData, true);
             });
@@ -134,74 +140,82 @@ function ApplyTemplate(data, doOverwrite) {
         var el;
         if (val != null && val !== '') {
             switch (fieldId) {
-            case 'CaseType_Id':
-                SetValueToBtnGroup('#divCaseType', "#divBreadcrumbs_CaseType", "#case__CaseType_Id", val, doOverwrite);
-                break;
-            case 'Category_Id':
-                el = $('#case__Category_Id');
-                SetValueIfElVisible(el, val, cfg);
-                break;
-            case 'ReportedBy':
-                el = $('#case__ReportedBy');
-                SetValueIfElVisible(el, val, cfg);
-                break;
-            case 'Department_Id':
-                el = $('#case__Department_Id');
-                SetValueIfElVisible(el, val, cfg);
-                break;
-            case 'NoMailToNotifier':
-                el = $("#CaseMailSetting_DontSendMailToNotifier");
-                SetCheckboxValueIfElVisible(el, val);
-                break;
-            case 'ProductArea_Id':
-                SetValueToBtnGroup('#divProductArea', "#divBreadcrumbs_ProductArea", "#case__ProductArea_Id", val, doOverwrite);
-                break;
-            case 'Caption':
-                el = $("#case__Caption");
-                SetValueIfElVisible(el, val, cfg);
-                break;
-            case 'Description':
-                el = $("#case__Description");
-                SetValueIfElVisible(el, val, cfg);
-                break;
-            case 'Miscellaneous':
-                el = $("#case__Miscellaneous");
-                SetValueIfElVisible(el, val, cfg);
-                break;
-            case 'CaseWorkingGroup_Id':
-                el = $("#case__WorkingGroup_Id");
-                //#13311(redmine) Case template_list of administrators doesn´t narrows depending on the choice of working group
-                //cfg['doNotTriggerEvent'] = true;
-                SetValueIfElVisible(el, val, cfg);                
-                break;
-            case 'PerformerUser_Id':
-                el = $('#Performer_Id');
-                SetValueIfElVisible(el, val, cfg);
-                break;
-            case 'Priority_Id':
-                el = $("#case__Priority_Id");
-                cfg['doNotTriggerEvent'] = true;
-                SetValueIfElVisible(el, val, cfg);
-                break;
-            case 'Project_Id':
-                el = $("#case__Project_Id");
-                SetValueIfElVisible(el, val, cfg);
-                break;
-            case 'Text_External':
-                el = $("#CaseLog_TextExternal");
-                SetValueIfElVisible(el, val, cfg);
-                break;
-            case 'Text_Internal':
-                el = $("#CaseLog_TextInternal");
-                SetValueIfElVisible(el, val, cfg);
-                break;
-            case 'FinishingCause_Id':
-                SetValueToBtnGroup('#divFinishingType', "#divBreadcrumbs_FinishingType", "#CaseLog_FinishingType", val, doOverwrite);
-                break;
-            case 'RegistrationSource':
-                el = $("#CustomerRegistrationSourceId");
-                SetValueIfElVisible(el, val, cfg);
-                break;
+                case 'CaseType_Id':
+                    SetValueToBtnGroup('#divCaseType', "#divBreadcrumbs_CaseType", "#case__CaseType_Id", val, doOverwrite);
+                    break;
+                case 'Category_Id':
+                    el = $('#case__Category_Id');
+                    SetValueIfElVisible(el, val, cfg);
+                    break;
+                case 'ReportedBy':
+                    el = $('#case__ReportedBy');
+                    SetValueIfElVisible(el, val, cfg);
+                    break;
+                case 'Department_Id':
+                    el = $('#case__Department_Id');
+                    SetValueIfElVisible(el, val, cfg);
+                    break;
+                case 'NoMailToNotifier':
+                    el = $("#CaseMailSetting_DontSendMailToNotifier");
+                    SetCheckboxValueIfElVisible(el, val);
+                    break;
+                case 'ProductArea_Id':
+                    SetValueToBtnGroup('#divProductArea', "#divBreadcrumbs_ProductArea", "#case__ProductArea_Id", val, doOverwrite);
+                    break;
+                case 'Caption':
+                    el = $("#case__Caption");
+                    SetValueIfElVisible(el, val, cfg);
+                    break;
+                case 'Description':
+                    el = $("#case__Description");
+                    SetValueIfElVisible(el, val, cfg);
+                    break;
+                case 'Miscellaneous':
+                    el = $("#case__Miscellaneous");
+                    SetValueIfElVisible(el, val, cfg);
+                    break;
+                case 'CaseWorkingGroup_Id':
+                    el = $("#case__WorkingGroup_Id");
+                    //#13311(redmine) Case template_list of administrators doesn´t narrows depending on the choice of working group
+                    //cfg['doNotTriggerEvent'] = true;
+                    SetValueIfElVisible(el, val, cfg);
+                    break;
+                case 'PerformerUser_Id':
+                    el = $('#Performer_Id');
+                    SetValueIfElVisible(el, val, cfg);
+                    break;
+                case 'Priority_Id':
+                    el = $("#case__Priority_Id");
+                    cfg['doNotTriggerEvent'] = true;
+                    SetValueIfElVisible(el, val, cfg);
+                    break;
+                case 'Project_Id':
+                    el = $("#case__Project_Id");
+                    SetValueIfElVisible(el, val, cfg);
+                    break;
+                case 'Text_External':
+                    el = $("#CaseLog_TextExternal");
+                    SetValueIfElVisible(el, val, cfg);
+                    break;
+                case 'Text_Internal':
+                    el = $("#CaseLog_TextInternal");
+                    SetValueIfElVisible(el, val, cfg);
+                    break;
+                case 'FinishingCause_Id':
+                    SetValueToBtnGroup('#divFinishingType', "#divBreadcrumbs_FinishingType", "#CaseLog_FinishingType", val, doOverwrite);
+                    break;
+                case 'RegistrationSource':
+                    el = $("#CustomerRegistrationSourceId");
+                    SetValueIfElVisible(el, val, cfg);
+                    break;
+                case 'StateSecondary_Id':
+                    el = $("#case__StateSecondary_Id");
+                    SetValueIfElVisible(el, val, cfg);
+                    break;
+                case 'Status_Id':
+                    el = $("#case__Status_Id");
+                    SetValueIfElVisible(el, val, cfg);
+                    break;
             }
         }
     }
@@ -264,21 +278,29 @@ function IsValueApplicableFor(templateFieldId, val) {
         case 'RegistrationSource':
             return $("#CustomerRegistrationSourceId").is(':visible') && $("#CustomerRegistrationSourceId").find('a[value="' + val + '"]');
             break;
-        }
+        case 'StateSecondary_Id':
+            return $("#case__StateSecondary_Id").is(':visible');
+            break;
+        case 'Status_Id':
+            return $("#case__Status_Id").is(':visible');
+            break;
+    }
     return false;
 }
 
 
 function LoadTemplate(id) {
-    $.post('/CaseSolution/GetTemplate?id=',
+    $.get('/CaseSolution/GetTemplate',
         { 'id': id },
         function (caseTemplate) {
+
             var showOverwriteWarning = false;
             if (!caseTemplate) {
                 return;
             }
 
             for (var field in caseTemplate) {
+                debugger
                 if (window.IsValueApplicableFor(field, caseTemplate[field]) && window.IsWillBeOverwritten(field, caseTemplate[field])) {
                     showOverwriteWarning = true;
                     break;

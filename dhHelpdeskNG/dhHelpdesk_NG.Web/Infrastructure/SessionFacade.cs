@@ -15,6 +15,7 @@
     using DH.Helpdesk.Web.Infrastructure.Session;
     using DH.Helpdesk.Web.Models;
     using DH.Helpdesk.Common.Types;
+    using DH.Helpdesk.Web.Areas.Reports.Models.ReportService;
 
     public static class SessionFacade
     {
@@ -81,6 +82,42 @@
         private const string _SHOW_ACTIVE_CASE_TYPES_IN_ADMIN = "SHOW_ACTIVE_CASE_TYPES_IN_ADMIN";
 
         private const string _SHOW_ACTIVE_WORKING_GROUPS_IN_ADMIN = "SHOW_ACTIVE_WORKING_GROUPS_IN_ADMIN";
+
+        private const string _SHOW_ACTIVE_CAUSING_PARTS_IN_ADMIN = "_SHOW_ACTIVE_CAUSING_PARTS_IN_ADMIN";
+
+        private const string _SHOW_ACTIVE_CATEGORIES_IN_ADMIN = "_SHOW_ACTIVE_CATEGORIES_IN_ADMIN";
+
+        private const string _SHOW_ACTIVE_SUPPLIERS_IN_ADMIN = "_SHOW_ACTIVE_SUPPLIERS_IN_ADMIN";
+
+        private const string _SHOW_ACTIVE_PRIORITIES_IN_ADMIN = "_SHOW_ACTIVE_PRIORITIES_IN_ADMIN";
+
+        private const string _SHOW_ACTIVE_STATUSES_IN_ADMIN = "_SHOW_ACTIVE_STATUSES_IN_ADMIN";
+
+        private const string _SHOW_ACTIVE_STATE_SECONDARIES_IN_ADMIN = "_SHOW_ACTIVE_STATE_SECONDARIES_IN_ADMIN";
+
+        private const string _SHOW_ACTIVE_REGISTRATION_SOURCE_CUSTOMER_IN_ADMIN = "_SHOW_ACTIVE_REGISTRATION_SOURCE_CUSTOMER_IN_ADMIN";
+
+        private const string _SHOW_ACTIVE_REGION_IN_ADMIN = "_SHOW_ACTIVE_REGION_IN_ADMIN";
+
+        private const string _SHOW_ACTIVE_DEPARTMENT_IN_ADMIN = "_SHOW_ACTIVE_DEPARTMENT_IN_ADMIN";
+
+        private const string _SHOW_ACTIVE_OU_IN_ADMIN = "_SHOW_ACTIVE_OU_IN_ADMIN";
+
+        private const string _SHOW_ACTIVE_STANDARDTEXTS_IN_ADMIN = "_SHOW_ACTIVE_STANDARDTEXTS_IN_ADMIN";
+
+        private const string _SHOW_ACTIVE_FINISHINGCAUSES_IN_ADMIN = "_SHOW_ACTIVE_FINISHINGCAUSES_IN_ADMIN";
+
+        private const string _SHOW_ACTIVE_DAILYREPORTSUBJECTS_IN_ADMIN = "_SHOW_ACTIVE_DAILYREPORTSUBJECTS_IN_ADMIN";
+
+        private const string _SHOW_ACTIVE_OPERATIONOBJECTS_IN_ADMIN = "_SHOW_ACTIVE_OPERATIONOBJECTS_IN_ADMIN";
+
+        private const string _SHOW_ACTIVE_OPERATIONLOGCATEGORIES_IN_ADMIN = "_SHOW_ACTIVE_OPERATIONLOGCATEGORIES_IN_ADMIN";
+
+        private const string _SHOW_ACTIVE_EMAILGROUPS_IN_ADMIN = "_SHOW_ACTIVE_EMAILGROUPS_IN_ADMIN";
+
+        private const string _SHOW_ACTIVE_PROGRAMS_IN_ADMIN = "_SHOW_ACTIVE_PROGRAMS_IN_ADMIN";
+
+        private const string _REPORT_SERVICE_SESSION_MODEL = "REPORT_SERVICE_SESSION_MODEL";
 
         #endregion
 
@@ -608,6 +645,315 @@
             }
         }
 
+        public static bool ShowOnlyActiveCausingPartsInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_CAUSING_PARTS_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_CAUSING_PARTS_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_CAUSING_PARTS_IN_ADMIN, value);
+            }
+        }
+
+        public static bool ShowOnlyActiveCategoriesInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_CATEGORIES_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_CATEGORIES_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_CATEGORIES_IN_ADMIN, value);
+            }
+        }
+
+        public static bool ShowOnlyActiveSuppliersInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_SUPPLIERS_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_SUPPLIERS_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_SUPPLIERS_IN_ADMIN, value);
+            }
+        }
+
+
+        public static bool ShowOnlyActivePrioritiesInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_PRIORITIES_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_PRIORITIES_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_PRIORITIES_IN_ADMIN, value);
+            }
+        }
+
+        public static bool ShowOnlyActiveStatusesInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_STATUSES_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_STATUSES_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_STATUSES_IN_ADMIN, value);
+            }
+        }
+
+        public static bool ShowOnlyActiveStateSecondariesInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_STATE_SECONDARIES_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_STATE_SECONDARIES_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_STATE_SECONDARIES_IN_ADMIN, value);
+            }
+        }
+
+
+        public static bool ShowOnlyActiveRegistrationSourceCustomerInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_REGISTRATION_SOURCE_CUSTOMER_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_REGISTRATION_SOURCE_CUSTOMER_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_REGISTRATION_SOURCE_CUSTOMER_IN_ADMIN, value);
+            }
+        }
+
+
+        public static bool ShowOnlyActiveRegionInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_REGION_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_REGION_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_REGION_IN_ADMIN, value);
+            }
+        }
+
+        public static bool ShowOnlyActiveDepartmentInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_DEPARTMENT_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_DEPARTMENT_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_DEPARTMENT_IN_ADMIN, value);
+            }
+        }
+
+        public static bool ShowOnlyActiveOUInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_OU_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_OU_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_OU_IN_ADMIN, value);
+            }
+        }
+
+        public static bool ShowOnlyActiveStandardTextsInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_STANDARDTEXTS_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_STANDARDTEXTS_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_STANDARDTEXTS_IN_ADMIN, value);
+            }
+        }
+
+        public static bool ShowOnlyActiveFinishingCausesInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_FINISHINGCAUSES_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_FINISHINGCAUSES_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_FINISHINGCAUSES_IN_ADMIN, value);
+            }
+        }
+
+        public static bool ShowOnlyActiveDailyReportSubjectsInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_DAILYREPORTSUBJECTS_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_DAILYREPORTSUBJECTS_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_DAILYREPORTSUBJECTS_IN_ADMIN, value);
+            }
+        }
+
+        public static bool ShowOnlyActiveOperationObjectsInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_OPERATIONOBJECTS_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_OPERATIONOBJECTS_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_OPERATIONOBJECTS_IN_ADMIN, value);
+            }
+        }
+
+        public static bool ShowOnlyActiveOperationLogCategoriesInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_OPERATIONLOGCATEGORIES_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_OPERATIONLOGCATEGORIES_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_OPERATIONLOGCATEGORIES_IN_ADMIN, value);
+            }
+        }
+
+        public static bool ShowOnlyActiveEMailGroupsInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_EMAILGROUPS_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_EMAILGROUPS_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_EMAILGROUPS_IN_ADMIN, value);
+            }
+        }
+
+        public static bool ShowOnlyActiveProgramsInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_PROGRAMS_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_PROGRAMS_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_PROGRAMS_IN_ADMIN, value);
+            }
+        }
+
         public static bool WasTimeZoneMessageDisplayed
         {
             get
@@ -654,6 +1000,29 @@
             set
             {
                 SaveSetKeyValue(_AdminUsersPageLockedCasesTabSelectedCustomerId, value);
+            }
+        }
+
+        public static ReportServiceSessionModel ReportService
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_REPORT_SERVICE_SESSION_MODEL] == null)
+                {
+                    return null;
+                }
+                return (ReportServiceSessionModel)HttpContext.Current.Session[_REPORT_SERVICE_SESSION_MODEL];
+            }
+            set
+            {
+                if (HttpContext.Current.Session[_REPORT_SERVICE_SESSION_MODEL] == null)
+                {
+                    HttpContext.Current.Session.Add(_REPORT_SERVICE_SESSION_MODEL, value);
+                }
+                else
+                {
+                    HttpContext.Current.Session[_REPORT_SERVICE_SESSION_MODEL] = value;
+                }
             }
         }
 

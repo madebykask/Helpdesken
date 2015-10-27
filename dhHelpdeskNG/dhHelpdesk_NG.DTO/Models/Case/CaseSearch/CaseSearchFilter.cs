@@ -10,7 +10,7 @@
         public const string InitiatorNameAttribute = "CaseInitiatorFilter";
         public const string RegionNameAttribute = "lstFilterRegion";
         
-        public const string DepartmentNameAttribute = "lstfilterDepartment";
+        public const string DepartmentNameAttribute = "lstfilterDepartment";        
         public const string RegisteredByNameAttribute = "lstfilterUser";
         public const string CaseTypeIdNameAttribute = "hidFilterCaseTypeId";
         public const string ProductAreaIdNameAttribute = "hidFilterProductAreaId";
@@ -48,6 +48,7 @@
         public int CaseType { get; set; }
         public string Region { get; set; }
         public string Department { get; set; }
+        public string OrganizationUnit { get; set; }
         public string User { get; set; }
 
         /// <summary>
@@ -68,6 +69,7 @@
         public string StateSecondary { get; set; }
         public string CaseProgress { get; set; }
         public string FreeTextSearch { get; set; }
+        public string CaptionSearch { get; set; }
 
         public string ParantPath_ProductArea = DropDownButtonDefaultValue;
 
@@ -118,6 +120,7 @@
             r.Category = o.Category;
             r.CustomerId = o.CustomerId;
             r.Department = o.Department;
+            r.OrganizationUnit = o.OrganizationUnit;
             r.FreeTextSearch = o.FreeTextSearch;
             r.ParantPath_CaseType = o.ParantPath_CaseType;
             r.ParantPath_ProductArea = o.ParantPath_ProductArea; 
@@ -151,6 +154,7 @@
             r.Customer = o.Customer;
             r.CaseNumber = o.CaseNumber;
             r.MaxRows = o.MaxRows;
+            r.CaptionSearch = o.CaptionSearch;
 
             return r;
         }

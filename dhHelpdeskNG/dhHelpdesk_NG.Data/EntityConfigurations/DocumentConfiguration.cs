@@ -76,7 +76,7 @@
             this.Property(x => x.Name).IsRequired().HasMaxLength(100).HasColumnName("DocumentName");
             this.Property(x => x.Size).IsRequired().HasColumnName("DocumentSize");
             this.Property(x => x.ShowOnStartPage).IsRequired();
-            this.Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+            this.Property(x => x.ChangedDate).IsRequired();
             this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 

@@ -9,14 +9,17 @@ a, a:hover, a:focus {
   color: #333333;
   text-decoration: none;
 }
-/** return bootstrap style for links inside toastmessage dialgue */
-.toast-container a
+/** recover bootstrap styles for links inside toastmessage dialgue */
+.toast-container a,
+.alert a
 {
   color: #0088cc;
   text-decoration: none;
 }
 .toast-container a:hover,
-.toast-container a:focus
+.toast-container a:focus,
+.alert a:hover,
+.alert a:focus
 {
   color: #005580;
   text-decoration: underline;
@@ -673,6 +676,18 @@ input[type="text"] {
 }
 
 .dropup { bottom:100% !important; top:auto !important; }
+
+
+.dropup .dropdown-submenu {
+  top:auto;
+  margin-bottom:-4px;  
+}
+
+.dropup .dropdown-submenu a {
+  padding-bottom:6px;
+}
+
+
 
 .dropdown-menu > li > a:hover,
 .dropdown-menu > li > a:focus,
@@ -1804,9 +1819,13 @@ table th.thpointer {
         min-height: 200px
     }
 
-
-.table-cases {
+.case-overview.page .table-cases 
+{
     table-layout:fixed !important;
+}
+
+.table-cases 
+{
     width:100%;
 }
 
@@ -1844,8 +1863,29 @@ table th.thpointer {
 {
     cursor:move;
 }
-
 /*********************** CASE OVERVIEW PAGE END  ***********/
+
+
+/***********************  CASE EDIT PAGE BEGIN ************************************/
+
+select.working-group option.inactive
+{
+    color: lightgray;
+}
+
+/*** editcase.caselog begin ***/
+.table.caselog .case-icon 
+{
+    padding: 0 14px;
+}
+.table.caselog .case-icon.solved 
+{
+    background: url('/Content/icons/case_close.png') no-repeat;    
+}
+/*** editcase.caselog end ***/
+
+/***********************  CASE EDIT PAGE END ************************************/
+
 
 
 /****************VARIOUS SELECT, INPUT, ETC*******************************/
@@ -2322,6 +2362,11 @@ h4
   -webkit-border-radius: 0;
      -moz-border-radius: 0;
           border-radius: 0;
+}
+
+.editcase.content  .alert a strong 
+{
+    text-decoration: underline;
 }
 
 
@@ -3395,7 +3440,26 @@ td.disabled
 /********************************   Admin part -> product area    ******************************/
 .product-area.admin.content .inactive *,
 .case-type.admin.content .inactive *,
-.working-group.admin.content .inactive *
+.working-group.admin.content .inactive *,
+.causingpart.admin.content .inactive *,
+.category.admin.content .inactive *,
+.supplier.admin.content .inactive *,
+.priority.admin.content .inactive *,
+.status.admin.content .inactive *,
+.stateSecondary.admin.content .inactive *,
+.registrationSourceCustomer.admin.content .inactive *,
+.region.admin.content .inactive *,
+.department.admin.content .inactive *,
+.oU.admin.content .inactive *,
+.standardtext.admin.content .inactive *,
+.finishingcause.admin.content .inactive *,
+.dailyreportsubject.admin.content .inactive *,
+.operationobject.admin.content .inactive *,
+.operationlogcategory.admin.content .inactive *,
+.emailgroup.admin.content .inactive *,
+.program.admin.content .inactive *
+
+
 {
     color: lightgray;
 }

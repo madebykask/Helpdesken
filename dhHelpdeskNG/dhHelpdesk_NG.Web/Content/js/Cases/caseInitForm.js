@@ -140,7 +140,7 @@ function GetComputerUserSearchOptions() {
     var options = {
         items: 20,
         minLength: 2,
-        source: function (query, process) {
+        source: function (query, process) {                        
             return $.ajax({
                 url: '/cases/search_user',
                 type: 'post',
@@ -151,7 +151,9 @@ function GetComputerUserSearchOptions() {
                         var aItem = {
                             id: item.Id
                                     , num: item.UserId
-                                    , name: item.SurName + ' ' + item.FirstName
+                                    //Changed in HotFix 5.3.13
+                                    //, name: item.SurName + ' ' + item.FirstName
+                                    , name: item.FirstName + ' ' + item.SurName
                                     , email: item.Email
                                     , place: item.Location
                                     , phone: item.Phone
@@ -163,11 +165,12 @@ function GetComputerUserSearchOptions() {
                                     , departmentname: item.DepartmentName
                                     , ouid: item.OU_Id
                                     , ouname: item.OUName
-
+                                    , name_family: item.SurName + ' ' + item.FirstName
                         };
                         return JSON.stringify(aItem);
+                        
                     });
-
+                    
                     return process(resultList);
                 }
             });
@@ -177,6 +180,7 @@ function GetComputerUserSearchOptions() {
             var item = JSON.parse(obj);
             //console.log(JSON.stringify(item));
             return ~item.name.toLowerCase().indexOf(this.query.toLowerCase())
+                || ~item.name_family.toLowerCase().indexOf(this.query.toLowerCase())
                 || ~item.num.toLowerCase().indexOf(this.query.toLowerCase())
                 || ~item.phone.toLowerCase().indexOf(this.query.toLowerCase())
                 || ~item.email.toLowerCase().indexOf(this.query.toLowerCase());
@@ -196,35 +200,60 @@ function GetComputerUserSearchOptions() {
 
         highlighter: function (obj) {
             var item = JSON.parse(obj);
+            var orgQuery = this.query;
             var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
             var result = item.name + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email;
-
-            return result.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
-                return '<strong>' + match + '</strong>';
-            });
+            var resultBy_NameFamily = item.name_family + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email;
+                     
+            if (result.toLowerCase().indexOf(orgQuery.toLowerCase()) > -1)               
+                return result.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
+                    return '<strong>' + match + '</strong>';
+                });
+            else
+                return resultBy_NameFamily.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
+                    return '<strong>' + match + '</strong>';
+                });
+           
         },
 
         updater: function (obj) {
             var item = JSON.parse(obj);
             var departmentFilterFormat = $('#DepartmentFilterFormat').val();
-            //console.log(JSON.stringify(item));
+                        
             $('#case__ReportedBy').val(item.num);
-
+            
             // Raise event about UserId changed.
             $(document).trigger("OnUserIdChanged", [item.num]);
+            
+            if (item.name != "" && item.name != null)
+                $('#case__PersonsName').val(item.name);
 
-            $('#case__PersonsName').val(item.name);
-            $('#case__PersonsEmail').val(item.email);
-            $('#case__PersonsPhone').val(item.phone);
-            $('#case__PersonsCellphone').val(item.cellphone);
-            $('#case__Place').val(item.place);
-            $('#case__UserCode').val(item.usercode);
+            if (item.email != "" && item.email != null)
+                $('#case__PersonsEmail').val(item.email);
+            
+            if (item.phone != "" && item.phone != null)
+                $('#case__PersonsPhone').val(item.phone);
 
-            $('#case__Region_Id').val(item.regionid);
-            $('#RegionName').val(item.regionname);
-            $(publicDepartmentControlName).val(item.departmentid).trigger('change');
+            if (item.cellphone != "" && item.cellphone != null)
+                $('#case__PersonsCellphone').val(item.cellphone);
 
-            refreshDepartment(item.regionid, departmentFilterFormat, item.departmentid, item.ouid);
+            if (item.place != "" && item.place != null)
+                $('#case__Place').val(item.place);
+
+            if (item.usercode != "" && item.usercode != null)
+                $('#case__UserCode').val(item.usercode);
+
+
+            if (item.regionid != "" && item.regionid != null) {
+                $('#case__Region_Id').val(item.regionid);
+                $('#RegionName').val(item.regionname);
+            }
+
+            if (item.regionid != "" && item.regionid != null && 
+                item.departmentid != "" && item.departmentid != null) {
+                $(publicDepartmentControlName).val(item.departmentid).trigger('change');
+                refreshDepartment(item.regionid, departmentFilterFormat, item.departmentid, item.ouid);
+            }
 
             return item.num;
         }
@@ -339,6 +368,7 @@ function CaseInitForm() {
                     exists = $('#case__Priority_Id option[value=' + data.Priority_Id + ']').length;
                     if (exists > 0 && data.Priority_Id > 0) {
                         $("#case__Priority_Id").val(data.Priority_Id);
+                        $("#case__Priority_Id").change();
                     }
 
                     $("#ProductAreaHasChild").val(data.HasChild);
@@ -641,7 +671,10 @@ function CaseInitForm() {
         });
     });
 
-    LogInitForm();
+    if (window.LogInitForm != null) {
+        LogInitForm();
+    }
+
     bindDeleteCaseFileBehaviorToDeleteButtons();
     SetFocusToReportedByOnCase();
 }

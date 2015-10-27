@@ -280,7 +280,10 @@
                             && (cu.UserId.ToLower().Contains(s) || cu.FirstName.ToLower().Contains(s)
                                 || cu.SurName.ToLower().Contains(s) || cu.Phone.ToLower().Contains(s)
                                 || cu.Location.ToLower().Contains(s) || cu.Cellphone.ToLower().Contains(s)
-                                || cu.Email.ToLower().Contains(s) || cu.UserCode.ToLower().Contains(s))
+                                || cu.Email.ToLower().Contains(s) || cu.UserCode.ToLower().Contains(s)
+                                || (cu.SurName.ToLower() + " " + cu.FirstName.ToLower()).Contains(s)
+                                || (cu.FirstName.ToLower() + " " + cu.SurName.ToLower()).Contains(s))
+                                
                         select
                             new UserSearchResults
                                 {
@@ -302,7 +305,7 @@
                                     OUName = (cu.OU.Parent != null ? cu.OU.Parent.Name + " - " : "") + cu.OU.Name
                                 };
 
-            return query.OrderBy(x => x.FirstName).ThenBy(x => x.SurName).ThenBy(x=> x.Id).ToList();
+            return query.OrderBy(x => x.FirstName).ThenBy(x => x.SurName).ThenBy(x=> x.Id).Take(25).ToList();
         }
 
         public SearchResult Search(SearchParameters parameters)

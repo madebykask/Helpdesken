@@ -161,6 +161,10 @@
 
         [Required]
         [NotNull]
+        public SettingModel CostCentre { get; set; }
+
+        [Required]
+        [NotNull]
         public SettingModel Division { get; set; }
 
         [Required]

@@ -18,11 +18,6 @@ namespace DH.Helpdesk.Dal.Infrastructure.Context
     /// </summary>
     public interface ICacheContext
     {
-        /// <summary>
-        /// Gets the holidays.
-        /// </summary>
-        IEnumerable<HolidayOverview> Holidays { get; }
-
         IEnumerable<HolidayOverview> DefaultCalendarHolidays { get; }
 
         /// <summary>

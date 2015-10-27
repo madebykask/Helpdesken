@@ -172,18 +172,20 @@
                                         //// calc time by watching date
                                         if (watchDateDue > now)
                                         {
+                                            // #52951 timeOnPause shouldn't calculate when watchdate has value
                                             timeLeft = (workTimeCalculator.CalculateWorkTime(
                                                 now,
                                                 watchDateDue,
-                                                departmentId) + timeOnPause) / 60;
+                                                departmentId) ) / 60;                                            
                                         }
                                         else
                                         {
                                             //// for cases that should be closed in the past
+                                            // #52951 timeOnPause shouldn't calculate when watchdate has value
                                             timeLeft = (-workTimeCalculator.CalculateWorkTime(
                                             watchDateDue,
                                             now,
-                                            departmentId) + timeOnPause) / 60;
+                                            departmentId)) / 60;
                                         }                                        
                                     }
                                     else if (SLAtime > 0)
@@ -596,7 +598,7 @@
             sql.Add("select distinct");
 
             // vid avslutade ärenden visas bara första 500
-            if (f != null && (f.CaseProgress == "1" || f.CaseProgress =="-1"))
+            if (f != null && (f.CaseProgress == CaseProgressFilter.ClosedCases || f.CaseProgress == CaseProgressFilter.None))
             {
                 sql.Add("top 500");
             }
@@ -637,13 +639,13 @@
                 if (customerSetting.IsUserFirstLastNameRepresentation == 1)
                 {
                     columns.Add("coalesce(tblUsers.FirstName, '') + ' ' + coalesce(tblUsers.SurName, '') as Performer_User_Id");
-                    columns.Add("coalesce(tblUsers2.FirstName, '') + ' ' + coalesce(tblUsers2.SurName, '') as User_Id");
+                    columns.Add("IsNull(tblCase.RegUserName, coalesce(tblUsers2.FirstName, '') + ' ' + coalesce(tblUsers2.SurName, '')) as User_Id");
                     columns.Add("coalesce(tblUsers3.FirstName, '') + ' ' + coalesce(tblUsers3.SurName, '') as CaseResponsibleUser_Id");
                 }
                 else
                 {
                     columns.Add("coalesce(tblUsers.SurName, '') + ' ' + coalesce(tblUsers.FirstName, '') as Performer_User_Id");
-                    columns.Add("coalesce(tblUsers2.Surname, '') + ' ' + coalesce(tblUsers2.Firstname, '') as User_Id");
+                    columns.Add("IsNull(tblCase.RegUserName, coalesce(tblUsers2.Surname, '') + ' ' + coalesce(tblUsers2.Firstname, '')) as User_Id");
                     columns.Add("coalesce(tblUsers3.Surname, '') + ' ' + coalesce(tblUsers3.Firstname, '') as CaseResponsibleUser_Id");
                 }
 
@@ -717,7 +719,7 @@
             tables.Add("inner join tblCustomerUser on tblCase.Customer_Id = tblCustomerUser.Customer_Id ");  
             tables.Add("left outer join tblDepartment on tblDepartment.Id = tblCase.Department_Id ");  
             tables.Add("left outer join tblRegion on tblCase.Region_Id = tblRegion.Id ");  
-            tables.Add("left outer join tblOU on tblCase.OU_Id=tblOU.Id ");  
+            tables.Add("left outer join tblOU on tblCase.OU_Id=tblOU.Id ");            
             tables.Add("left outer join tblSupplier on tblCase.Supplier_Id=tblSupplier.Id "); 
             tables.Add("left outer join tblSystem on tblCase.System_Id = tblSystem.Id ");  
             tables.Add("left outer join tblUrgency on tblCase.Urgency_Id = tblUrgency.Id ");  
@@ -791,6 +793,9 @@
                 {
                     orderBy.Add("desc");
                 }
+
+                if (sort.ToLower() != "casenumber")
+                orderBy.Add(", CaseNumber desc");
             }
 
             sql.Add(string.Join(" ", orderBy));
@@ -1016,7 +1021,7 @@
             {
                 var preparedUserIds = userId.ToString(CultureInfo.InvariantCulture).SafeForSqlInject();
                 sb.AppendFormat(
-                    " AND ([tblCase].[Performer_User_Id] IN ({0}) OR [tblProblem].[ResponsibleUser_Id] IN ({0}) ", preparedUserIds);
+                    " AND ([tblCase].[Performer_User_Id] IN ({0}) ", preparedUserIds);
                 if (isFieldResponsibleVisible)
                 {
                     sb.AppendFormat("OR [tblCase].[CaseResponsibleUser_Id] IN ({0})", preparedUserIds);
@@ -1082,9 +1087,23 @@
             if (!string.IsNullOrWhiteSpace(f.ProductArea))
                 if (string.Compare(f.ProductArea, "0", true, CultureInfo.InvariantCulture) != 0)  
                     sb.Append(" and (tblcase.ProductArea_Id in (" + f.ProductArea.SafeForSqlInject() + "))");
+
             // department / avdelning
             if (!string.IsNullOrWhiteSpace(f.Department))
-                sb.Append(" and (tblCase.Department_Id in (" + f.Department.SafeForSqlInject() + "))");
+            {
+                // organizationUnit
+                if (!string.IsNullOrWhiteSpace(f.OrganizationUnit))
+                    sb.Append(" and (tblCase.Department_Id in (" + f.Department.SafeForSqlInject() + ") or " +
+                                    "tblCase.OU_Id in (" + f.OrganizationUnit.SafeForSqlInject() + "))");
+                else
+                    sb.Append(" and (tblCase.Department_Id in (" + f.Department.SafeForSqlInject() + "))");
+            }
+            else
+            {
+                // organizationUnit
+                if (!string.IsNullOrWhiteSpace(f.OrganizationUnit))
+                    sb.Append(" and (tblCase.OU_Id in (" + f.OrganizationUnit.SafeForSqlInject() + "))");                                    
+            }
             
             // användare / user            
             if (!string.IsNullOrWhiteSpace(f.User))
@@ -1164,6 +1183,7 @@
                     sb.Append(this.GetSqlLike("[tblCase].[CaseNumber]", text));
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[ReportedBy]", text));
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Name]", text));
+                    sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[RegUserName]", text));
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_EMail]", text));
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Phone]", text));
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_CellPhone]", text));
@@ -1177,17 +1197,27 @@
                     sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblFormFieldValue] WHERE {0}))", this.GetSqlLike("FormFieldValue", text));
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[ReferenceNumber]", text));
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[InvoiceNumber]", text));
+                    sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[InventoryNumber]", text));
             
                     sb.Append(") ");
                 }
             }
-            
+
+            // "Caption" Search
+            if (!string.IsNullOrEmpty(f.CaptionSearch))
+            {
+                var text = f.CaptionSearch;
+                sb.Append(" AND (");
+                sb.Append(this.GetSqlLike("[tblCase].[Caption]", text));
+                sb.Append(") ");
+            }
+
             // "Initiator" search field
             if (!string.IsNullOrEmpty(f.Initiator))
             {
                 sb.Append(" AND (");
-                sb.AppendFormat("{0}", this.GetSqlLike("[tblCase].[Persons_Name]", f.Initiator, Combinator_AND));
-                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[ReportedBy]", f.Initiator, Combinator_AND));
+                sb.AppendFormat("{0}", this.GetSqlLike("[tblCase].[ReportedBy]", f.Initiator, Combinator_AND));
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Name]", f.Initiator, Combinator_AND));                
                 sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[UserCode]", f.Initiator, Combinator_AND));
                 sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Email]", f.Initiator, Combinator_AND));
                 sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Place]", f.Initiator, Combinator_AND));

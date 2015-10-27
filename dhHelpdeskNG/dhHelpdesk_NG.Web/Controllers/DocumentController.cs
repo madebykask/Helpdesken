@@ -228,25 +228,147 @@ namespace DH.Helpdesk.Web.Controllers
 
         [HttpGet]
         public JsonResult GetDocList(int docType, int Id)
+        {                        
+            var documents = GetDocumentOverview(docType, Id);
+
+            TreeContent treeView = (TreeContent) HttpContext.Application["TreeView"];                     
+            HttpContext.Application["TreeView"] = treeView;
+
+            ViewBag.SelectedCategory = Id;
+            ViewBag.SelectedListType = docType;
+
+            var ds = SessionFacade.CurrentDocumentSearch;
+            ds.Page = docType;
+            ds.SearchDs = Id.ToString();            
+
+            return this.Json(documents, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult SortDocList(int docType, int Id, string sortedColumn)
+        {            
+            DocumentSearch ds = new DocumentSearch();
+            if (SessionFacade.CurrentDocumentSearch == null)
+            {
+                ds.Ascending = true;
+                ds.SortBy = "Name";                
+            }
+            else
+            {
+                ds = SessionFacade.CurrentDocumentSearch;
+                if (ds.SortBy == sortedColumn)
+                    ds.Ascending = !ds.Ascending;
+                else
+                    ds.SortBy = sortedColumn;
+            }
+
+            SessionFacade.CurrentDocumentSearch = ds;
+            var documents = GetDocumentOverview(docType, Id);            
+            TreeContent treeView = (TreeContent)HttpContext.Application["TreeView"];
+            HttpContext.Application["TreeView"] = treeView;
+
+            ViewBag.SelectedCategory = Id;
+            ViewBag.SelectedListType = docType;
+                       
+            return this.Json(documents, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public string DeleteUploadedFile(int id)
+        {
+            var fileToDelete = this._documentService.GetDocument(id);
+
+            if (fileToDelete != null)
+            {
+                try
+                {
+                    fileToDelete.ContentType = "";
+                    fileToDelete.File = null;
+                    fileToDelete.FileName = "";
+                    fileToDelete.Size = 0;
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+
+            this._documentService.UpdateSavedFile(fileToDelete);
+
+            return string.Empty;
+        }
+
+        [HttpGet]
+        public ActionResult DocumentFile(int document)
+        {
+            var file = _documentService.GetDocumentFile(document);
+            if (file == null)
+                return new HttpNotFoundResult();
+
+            var contentType = file.ContentType;
+            if (string.IsNullOrEmpty(contentType))
+                contentType = "application/octet-stream";
+
+            if (file.File == null || file.File.Length == 0)
+                return new HttpNotFoundResult();
+
+            return File(file.File, contentType, file.FileName);
+        }
+
+        private DocumentInputViewModel IndexInputViewModel(int docType, int Id)
+        {
+            var customerId = SessionFacade.CurrentCustomer.Id;
+
+            var documents = GetDocumentOverview(docType, Id);
+            var docTree = _documentService.FindCategoriesWithSubcategoriesByCustomerId(customerId);            
+            var categoryTreeItems = docTree.Select(this.CategoryToTreeItem).ToList();
+            var categoriesTreeContent = new TreeContent(categoryTreeItems, "0");
+                        
+            var activeTab = SessionFacade.FindActiveTab("Document");
+            activeTab = (activeTab == null) ? "DocumentTab" : activeTab;
+
+            var model = new DocumentInputViewModel(activeTab)
+            {
+                CurrentDocType = docType,
+                CurrentItemName = Id.ToString(),
+                Documents = documents,
+                DocumentCategories = this._documentService.GetDocumentCategories(SessionFacade.CurrentCustomer.Id),
+                DocumentTree = categoriesTreeContent,                
+            };
+
+            var ds = SessionFacade.CurrentDocumentSearch;
+            HttpContext.Application["TreeView"] = categoriesTreeContent;
+            ViewBag.SelectedCategory = Id;
+            ViewBag.SelectedListType = docType;
+            model.DocSearch = ds;
+            
+            return model;
+        }
+
+        private List<DocumentOverview> GetDocumentOverview(int docType, int Id)
         {
             DocumentSearch ds = new DocumentSearch();
-            if (SessionFacade.CurrentDocumentSearch != null)
+            if (SessionFacade.CurrentDocumentSearch == null)
+            {
+                ds.Ascending = true;
+                ds.SortBy = "Name";
+                SessionFacade.CurrentDocumentSearch = ds;
+            }
+            else
                 ds = SessionFacade.CurrentDocumentSearch;
 
             var customerId = SessionFacade.CurrentCustomer.Id;
             var documents = new List<DocumentOverview>();
-
             var docs = _documentService.GetDocuments(customerId)
                                        .Select(c => new
-                                          {
-                                              Id = c.Id,
-                                              DocName = c.Name,
-                                              Size = c.Size,
-                                              ChangeDate = c.ChangedDate,
-                                              UserName = (c.ChangedByUser == null) ? " " : c.ChangedByUser.SurName + " " + c.ChangedByUser.FirstName,
-                                              CategoryId = c.DocumentCategory_Id
-                                          })
-                                       .OrderBy(c=> c.DocName)
+                                       {
+                                           Id = c.Id,
+                                           DocName = c.Name,
+                                           Size = c.Size,
+                                           ChangeDate = c.ChangedDate,
+                                           UserName = (c.ChangedByUser == null) ? " " : c.ChangedByUser.SurName + " " + c.ChangedByUser.FirstName,
+                                           CategoryId = c.DocumentCategory_Id
+                                       })
                                        .ToList();
 
             if (docType == TreeNodeType.tnCategory)
@@ -268,168 +390,11 @@ namespace DH.Helpdesk.Web.Controllers
 
                 default:
                     docs = (ds.Ascending) ? docs.OrderBy(d => d.DocName).ToList() : docs.OrderByDescending(d => d.DocName).ToList();
-                    ds.Ascending = true;
-                    ds.SortBy = "Name";
-                    SessionFacade.CurrentDocumentSearch = ds;
                     break;
             }
 
             documents = docs.Select(c => new DocumentOverview(c.Id, c.DocName, c.Size.RoundQty(), c.ChangeDate, c.UserName)).ToList();
-
-            TreeContent treeView = (TreeContent) HttpContext.Application["TreeView"];                     
-            HttpContext.Application["TreeView"] = treeView;
-
-            ViewBag.SelectedCategory = Id;
-            ViewBag.SelectedListType = docType;
-           // ViewBag.SortColName = "Name";
-
-            
-            ds.Page = docType;
-            ds.SearchDs = Id.ToString();
-            SessionFacade.CurrentDocumentSearch = ds;
-
-            return this.Json(documents, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpGet]
-        public JsonResult SortDocList(int docType, int Id, string sortedColumn)        
-        {            
-            DocumentSearch ds = new DocumentSearch();
-            if (SessionFacade.CurrentDocumentSearch != null)
-                ds = SessionFacade.CurrentDocumentSearch;
-            ds.Ascending = !ds.Ascending;
-            ds.SortBy = sortedColumn;
-            SessionFacade.CurrentDocumentSearch = ds;
-
-            var customerId = SessionFacade.CurrentCustomer.Id;
-            var documents = new List<DocumentOverview>();
-
-            var docs = _documentService.GetDocuments(customerId)
-                                       .Select(c => new
-                                            {
-                                                Id = c.Id,
-                                                DocName = c.Name,
-                                                Size = c.Size,
-                                                ChangeDate = c.ChangedDate,
-                                                UserName = (c.ChangedByUser == null) ? " " : c.ChangedByUser.SurName + " " + c.ChangedByUser.FirstName,
-                                                CategoryId  = c.DocumentCategory_Id
-                                            })
-                                       .ToList();
-            
-            if (docType == TreeNodeType.tnCategory)                                         
-                docs = docs.Where(d=> d.CategoryId == Id).ToList();                                                          
-            
-            switch (sortedColumn)
-            {                
-                case "Size":
-                    docs = (ds.Ascending) ? docs.OrderBy(d => d.Size).ToList() : docs.OrderByDescending(d => d.Size).ToList();
-                    break;
-
-                case "ChangedDate":
-                    docs = (ds.Ascending) ? docs.OrderBy(d => d.ChangeDate).ToList() : docs.OrderByDescending(d => d.ChangeDate).ToList();
-                    break;
-
-                case "UserName":
-                    docs = (ds.Ascending) ? docs.OrderBy(d => d.UserName).ToList() : docs.OrderByDescending(d => d.UserName).ToList();
-                    break;
-
-                default:
-                    docs = (ds.Ascending) ? docs.OrderBy(d => d.DocName).ToList() : docs.OrderByDescending(d => d.DocName).ToList();
-                    break;
-            }
-
-            documents = docs.Select(c => new DocumentOverview(c.Id, c.DocName, c.Size.RoundQty(), c.ChangeDate, c.UserName)).ToList();
-            
-            TreeContent treeView = (TreeContent)HttpContext.Application["TreeView"];
-            HttpContext.Application["TreeView"] = treeView;
-
-            ViewBag.SelectedCategory = Id;
-            ViewBag.SelectedListType = docType;
-                       
-            return this.Json(documents, JsonRequestBehavior.AllowGet);
-        }
-
-        private DocumentInputViewModel IndexInputViewModel(int docType, int Id)
-        {
-            DocumentSearch ds = new DocumentSearch();
-            if (SessionFacade.CurrentDocumentSearch != null)
-                ds = SessionFacade.CurrentDocumentSearch;            
-                        
-
-            var customerId = SessionFacade.CurrentCustomer.Id;
-            var documents = new List<DocumentOverview>();
-
-            var docs = _documentService.GetDocuments(customerId)
-                                       .Select(c => new
-                                           {
-                                               Id = c.Id,
-                                               DocName = c.Name,
-                                               Size = c.Size,
-                                               ChangeDate = c.ChangedDate,
-                                               UserName = (c.ChangedByUser == null) ? " " : c.ChangedByUser.SurName + " " + c.ChangedByUser.FirstName,
-                                               CategoryId = c.DocumentCategory_Id
-                                           })                                       
-                                       .ToList();
-
-            if (docType == TreeNodeType.tnCategory)
-                docs = docs.Where(d => d.CategoryId == Id).ToList();
-
-            if (ds != null)
-            {
-                switch (ds.SortBy)
-                {
-                    case "Size":
-                        docs = (ds.Ascending) ? docs.OrderBy(d => d.Size).ToList() : docs.OrderByDescending(d => d.Size).ToList();
-                        break;
-
-                    case "ChangedDate":
-                        docs = (ds.Ascending) ? docs.OrderBy(d => d.ChangeDate).ToList() : docs.OrderByDescending(d => d.ChangeDate).ToList();
-                        break;
-
-                    case "UserName":
-                        docs = (ds.Ascending) ? docs.OrderBy(d => d.UserName).ToList() : docs.OrderByDescending(d => d.UserName).ToList();
-                        break;
-
-                    default:
-                        docs = (ds.Ascending) ? docs.OrderBy(d => d.DocName).ToList() : docs.OrderByDescending(d => d.DocName).ToList();
-                        ds.Ascending = true;
-                        ds.SortBy = "Name";
-                        SessionFacade.CurrentDocumentSearch = ds;                
-                        break;
-                }
-            }           
-           
-
-            documents = docs.Select(c => new DocumentOverview(c.Id, c.DocName, c.Size.RoundQty(), c.ChangeDate, c.UserName)).ToList();
-
-            var docTree = _documentService.FindCategoriesWithSubcategoriesByCustomerId(customerId);            
-            var categoryTreeItems = docTree.Select(this.CategoryToTreeItem).ToList();
-            var categoriesTreeContent = new TreeContent(
-                categoryTreeItems, "0");
-
-            
-            
-            var activeTab = SessionFacade.FindActiveTab("Document");
-            activeTab = (activeTab == null) ? "DocumentTab" : activeTab;
-
-            var model = new DocumentInputViewModel(activeTab)
-            {
-                CurrentDocType = docType,
-                CurrentItemName = Id.ToString(),
-                Documents = documents, //this._documentService.GetDocuments(SessionFacade.CurrentCustomer.Id),
-                DocumentCategories = this._documentService.GetDocumentCategories(SessionFacade.CurrentCustomer.Id),
-                DocumentTree = categoriesTreeContent,
-                
-            };
-
-            HttpContext.Application["TreeView"] = categoriesTreeContent;
-
-            ViewBag.SelectedCategory = Id;
-            ViewBag.SelectedListType = docType;
-            model.DocSearch = ds;
-            
-
-            return model;
+            return documents;
         }
 
         private TreeItem CategoryToTreeItem(CategoryWithSubCategory categoryWithSubcategories)
@@ -505,47 +470,6 @@ namespace DH.Helpdesk.Web.Controllers
 
             return model;
         }
-
-        [HttpPost]
-        public string DeleteUploadedFile(int id)
-        {
-            var fileToDelete = this._documentService.GetDocument(id);
-
-            if (fileToDelete != null)
-            {
-                try
-                {
-                    fileToDelete.ContentType = "";
-                    fileToDelete.File = null;
-                    fileToDelete.FileName = "";
-                    fileToDelete.Size = 0;
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-            }
-
-            this._documentService.UpdateSavedFile(fileToDelete);
-
-            return string.Empty;
-        }
-
-        [HttpGet]
-        public ActionResult DocumentFile(int document)
-        {
-            var file = _documentService.GetDocumentFile(document);
-            if(file == null)
-                return new HttpNotFoundResult();
-
-            var contentType = file.ContentType;
-            if (string.IsNullOrEmpty(contentType))
-                contentType = "application/octet-stream";
-
-            if (file.File == null || file.File.Length == 0)
-                return new HttpNotFoundResult();
-
-            return File(file.File, contentType, file.FileName);
-        }
+        
     }
 }

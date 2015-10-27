@@ -24,13 +24,19 @@
             this._customerService = customerService;
         }
 
+        public JsonResult SetShowOnlyActiveFinishingCausesInAdmin(bool value)
+        {
+            SessionFacade.ShowOnlyActiveFinishingCausesInAdmin = value;
+            return this.Json(new { result = "success" });
+        }
+
         public ActionResult Index(int customerId)
         {
             var customer = this._customerService.GetCustomer(customerId);
 
             var finishingCauses = this._finishingCauseService.GetFinishingCauses(customer.Id);
 
-            var model = new FinishingCauseIndexViewModel { FinishingCauses = finishingCauses, Customer = customer };
+            var model = new FinishingCauseIndexViewModel { FinishingCauses = finishingCauses, Customer = customer, IsShowOnlyActive = SessionFacade.ShowOnlyActiveFinishingCausesInAdmin };
             return this.View(model);
         }
 

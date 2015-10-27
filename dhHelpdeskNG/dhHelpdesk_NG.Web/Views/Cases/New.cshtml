@@ -47,12 +47,13 @@
 
                     <li><a class="btn save-close" href="#">@Translation.Get("Spara och stäng")</a></li>
 
-                    @if (Model.templateistrue != 1)
+                    @if (Model.templateistrue != 1 && !Model.IsItChildCase())
                     {
                         <li><a class="btn save-new">@string.Format("{0} / {1}", Translation.Get("Spara"), Translation.Get("Nytt ärende"))</a></li>
                     }
-                        <li class="secspace"></li>
-                    <li>@Html.ActionLink(Translation.Get("Stäng", Enums.TranslationSource.TextTranslation), "index", new { customerId = @Model.case_.Customer_Id }, new { @class = "btn" })</li>
+                    <li class="secspace"></li>
+                    
+                    <li><a class="btn close-page">@Translation.GetCoreTextTranslation("Stäng")</a></li>
 
                     <li>
                         <div id="divActionMenu" class="btn-group">

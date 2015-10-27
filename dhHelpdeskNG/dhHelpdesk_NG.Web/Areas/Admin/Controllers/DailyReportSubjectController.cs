@@ -6,6 +6,7 @@
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Infrastructure;
 
     public class DailyReportSubjectController : BaseAdminController
     {
@@ -22,13 +23,19 @@
             this._customerService = customerService;
         }
 
+        public JsonResult SetShowOnlyActiveDailyReportSubjectsInAdmin(bool value)
+        {
+            SessionFacade.ShowOnlyActiveDailyReportSubjectsInAdmin = value;
+            return this.Json(new { result = "success" });
+        }
+
         public ActionResult Index(int customerId)
         {
             var customer = this._customerService.GetCustomer(customerId);
             var dailyReportSubjects = this._dailyReportService.GetDailyReportSubjects(customer.Id);
 
 
-            var model = new DailyReportSubjectIndexViewModel { DailyReportSubjects = dailyReportSubjects, Customer = customer };
+            var model = new DailyReportSubjectIndexViewModel { DailyReportSubjects = dailyReportSubjects, Customer = customer, IsShowOnlyActive = SessionFacade.ShowOnlyActiveDailyReportSubjectsInAdmin };
             return this.View(model);
         }
 

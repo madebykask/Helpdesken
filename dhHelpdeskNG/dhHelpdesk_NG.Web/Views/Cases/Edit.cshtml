@@ -1,5 +1,6 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel
 @using System.Web.Optimization
+@using DH.Helpdesk.Web
 
 @{ var t = new ViewDataDictionary();
    t.Add("isJS", "true");
@@ -14,29 +15,29 @@
 
 @section Scripts {
     <script type="text/javascript">
-
+        
         $(document).ready(function () {
 
             CaseInitForm();
 
-            var dc = function (text) {
+            var dc = function(text) {
                 return $("<div>" + text + "<div>");
             };
 
-            var confirmDialog = function (d, onOk, onCancel) {
+            var confirmDialog = function(d, onOk, onCancel) {
                 return d.dialog({
                     title: '@Translation.Get("Meddelande")',
                     buttons: [
                         {
                             text: '@Translation.Get("OK")',
-                            click: function () {
+                            click: function() {
                                 onOk();
                                 d.dialog("close");
                             }
                         },
                         {
                             text: '@Translation.Get("Avbryt")',
-                            click: function () {
+                            click: function() {
                                 onCancel();
                                 d.dialog("close");
                             }
@@ -46,13 +47,13 @@
                 });
             };
 
-            var messageDialog = function (d) {
+            var messageDialog= function(d) {
                 return d.dialog({
                     title: '@Translation.Get("Meddelande")',
                     buttons: [
                         {
                             text: '@Translation.Get("Stäng")',
-                            click: function () {
+                            click: function() {
                                 d.dialog("close");
                             }
                         }
@@ -64,12 +65,7 @@
             var hasNotInvoicedArticles = function () {
                 return typeof dhHelpdesk.CaseArticles !== "undefined" &&
                     dhHelpdesk.CaseArticles.HasNotInvoicedArticles();
-            };
-
-            var hasInvoicedArticles = function () {
-                return typeof dhHelpdesk.CaseArticles !== "undefined" &&
-                    dhHelpdesk.CaseArticles.HasInvoicedArticles();
-            };
+            }
 
             var invoiceArticlesBeforeClose = function (onOk, onCancel) {
                 if (!hasNotInvoicedArticles()) {
@@ -77,152 +73,64 @@
                     return;
                 }
 
-                confirmDialog(dc('@Translation.Get("Är du säker på att du vill stänga ärendet utan att fakturera artiklar?")'),
-                    onOk, onCancel);
-            };
+                confirmDialog(dc('@Translation.Get("Are you sure you want to close the case without sending your selected articles to invoicing?")'),
+                    onOk, onCancel);                
+            }
 
             var openInvoiceWindow = function () {
-                dhHelpdesk.CaseArticles.OpenInvoiceWindow('@Translation.Get("Var god ta bort eller skicka valda men ofakturerade artiklar innan du stänger ärendet.")');
-            };
-            var openInvoiceWindowWithMessage = function (message) {
-                dhHelpdesk.CaseArticles.OpenInvoiceWindow(message);
-            };
+                dhHelpdesk.CaseArticles.OpenInvoiceWindow('@Translation.Get("Please send selected articles for invoicing or delete them in order to close the case.")');
+            }
 
-            var emptyFn = function () { };
+            var emptyFn = function() {};
+
+            $("#case-action-save").click(function (e) {
+                e.preventDefault();                
+            });
 
             $("#case-action-save-and-close").click(function (e) {
-                //If case wants to be closed/finished it will first check if any orders exists with not invoiced articles
-                //if thats not the case, it will look for the invoice button and ask user for extra validation
-                //on closing/finishing the case if there are articles connected to the selected productarea
-                
                 e.preventDefault();
-                //if there are articles selected but not invoiced and the case is finishing/closing
-                if ($('#CaseLog_FinishingDate').val() != '' || $('#CaseLog_FinishingType').val() != '') {
-                    if (hasNotInvoicedArticles()) {
-                        messageDialog(dc('@Translation.Get("Du får inte avsluta ett ärende med invalda fast ofakturerade artiklar. Var god granska dina ordrar.")'));
-                        return false;
-                    }
-                    else {
-                        if ($('#InvoiceModuleBtnOpen').is(':visible')) {
-                            if (!hasInvoicedArticles() && !hasNotInvoicedArticles()) {
-                                confirmDialog(dc('@Translation.Get("Produktområdet har länkade artiklar men inga artiklar är invalda. Vill du verkligen avsluta ärendet?")'), EditCaseAndClose, InvoiceDialogOnNotFinishSaveCase);
-                            }
-                            else {
-                                EditCaseAndClose();
-                            }
-                        }
-                        else {
-                            EditCaseAndClose();
-                        }
-                    }
-                }
-                else {
-                    EditCaseAndClose();
-                }
+                invoiceArticlesBeforeClose(emptyFn, openInvoiceWindow);
             });
 
             $("#case-action-save-and-new").click(function (e) {
-                //If case wants to be closed/finished it will first check if any orders exists with not invoiced articles
-                //if thats not the case, it will look for the invoice button and ask user for extra validation
-                //on closing/finishing the case if there are articles connected to the selected productarea
-
-                e.preventDefault();
-                //if there are articles selected but not invoiced and the case is finishing/closing
-                if ($('#CaseLog_FinishingDate').val() != '' || $('#CaseLog_FinishingType').val() != '') {
-                    if (hasNotInvoicedArticles()) {
-                        messageDialog(dc('@Translation.Get("Du får inte avsluta ett ärende med invalda fast ofakturerade artiklar. Var god granska dina ordrar.")'));
-                        return false;
-                    }
-                    else {
-                        if ($('#InvoiceModuleBtnOpen').is(':visible')) {
-                            if (!hasInvoicedArticles() && !hasNotInvoicedArticles()) {
-                                confirmDialog(dc('@Translation.Get("Produktområdet har länkade artiklar men inga artiklar är invalda. Vill du verkligen avsluta ärendet?")'), EditCaseAndAddCase, InvoiceDialogOnNotFinishSaveCase);
-                            }
-                            else {
-                                EditCaseAndAddCase();
-                            }
-                        }
-                        else {
-                            EditCaseAndAddCase();
-                        }
-                    }
-                }
-                else {
-                    EditCaseAndAddCase();
-                }
-
-
-                //old - remove this? not following requirement
-                //e.preventDefault();
-                //invoiceArticlesBeforeClose(EditCaseAndAddCase, openInvoiceWindow);
+                e.preventDefault();                
+                invoiceArticlesBeforeClose(emptyFn, openInvoiceWindow);
             });
-
 
             $("#case-action-close").click(function (e) {
                 e.preventDefault();
                 var targetUrl = $(this).attr("href");
-                invoiceArticlesBeforeClose(function () {
-                    if ('@Model.CaseLock.LockGUID' != '') {
+                invoiceArticlesBeforeClose(function ()
+                {
+                    if ('@Model.CaseLock.LockGUID' != '')
                         UnLockCase('@Model.CaseLock.LockGUID', targetUrl);
-                    }
-                    else {
+                    else
+                    {
                         redirectToUrl(targetUrl);
                     }
                 }, openInvoiceWindow);
             });
-
-            $("#case-action-delete").click(function (e) {
+            
+            $("#case-action-delete").click(function (e) {                               
                 if (hasNotInvoicedArticles()) {
-                    messageDialog(dc('@Translation.Get("Du får inte ta bort ett ärende som har invalda men ofakturerade artiklar.")'));
+                    messageDialog(dc('@Translation.Get("You may not delete a case with selected articles in the order section. Please review your orders.")'));
                     return false;
                 }
-                return true;
-            });
-            var InvoiceDialogOnFinishSaveCase = function () {
-                $('#target').submit(); return false;
-            };
+                return true;                       
+            })
+        });
+     
+        function redirectToUrl(url) {            
+            window.location.href = url;
+        }
 
-            var InvoiceDialogOnNotFinishSaveCase = function () {
-                openInvoiceWindowWithMessage('@Translation.Get("Var god granska dina ordrar och artiklar.")');
-            }
-
-            $("#case-action-save").click(function (e) {
-                //If case wants to be closed/finished it will first check if any orders exists with not invoiced articles
-                //if thats not the case, it will look for the invoice button and ask user for extra validation
-                //on closing/finishing the case if there are articles connected to the selected productarea
-
-                e.preventDefault();
-                //if there are articles selected but not invoiced and the case is finishing/closing
-                if ($('#CaseLog_FinishingDate').val() != '' || $('#CaseLog_FinishingType').val() != '') {
-                    if (hasNotInvoicedArticles()) {
-                        messageDialog(dc('@Translation.Get("Du får inte avsluta ett ärende med invalda fast ofakturerade artiklar. Var god granska dina ordrar.")'));
-                        return false;
-                    }
-                    else {
-                        if ($('#InvoiceModuleBtnOpen').is(':visible')) {
-                            if (!hasInvoicedArticles() && !hasNotInvoicedArticles()) {
-                                confirmDialog(dc('@Translation.Get("Produktområdet har länkade artiklar men inga artiklar är invalda. Vill du verkligen avsluta ärendet?")'), InvoiceDialogOnFinishSaveCase, InvoiceDialogOnNotFinishSaveCase);
-                            }
-                            else {
-                                $('#target').submit(); return false;
-                            }
-                        }
-                        else {
-                            $('#target').submit(); return false;
-                        }
-                    }
-                }
-                else {
-                    $('#target').submit(); return false;
-                }
-            });
-
-            function redirectToUrl(url) {
-                window.location.href = url;
-            }
-
-            function MakeAsUnread() {
-                $.post('@Url.Content("~/Cases/IsCaseAvailable/")', { caseId: '@Model.CaseLock.CaseId', lockGuid: '@Model.CaseLock.LockGUID' },
+        function MakeAsUnread() {             
+            $.post('@Url.Content("~/Cases/IsCaseAvailable/")',
+                {
+                    caseId: '@Model.CaseLock.CaseId',
+                    caseChangedTime: '@Model.case_.ChangeTime',
+                    lockGuid: '@Model.CaseLock.LockGUID'
+                },
                 function (data) {
                     if (data == true) {
                         $.post('/cases/markasunread/', { id: '@Model.case_.Id', customerId: '@Model.case_.Customer_Id' }, function (data) {
@@ -233,62 +141,64 @@
                         });
                     }
                     else {
-                        ShowToastMessage('@Translation.Get("Ärendet kan inte ändras då det är öppet hos en annan användare.")', "error", false);
+                        ShowToastMessage('@Translation.Get("Ärendet kan inte ändras då det är öppet hos en annan användare.")', "error", false);                        
                     }
-                });
-            };
+                });            
+        };
 
+        
+        function UnLockCase(lockGuid, url) {
+            $.post('@Url.Content("~/Cases/UnLockCase/")', { lockGUID: lockGuid }, function (data) {                
+                if (data != "Success")
+                {                    
+                    ShowToastMessage('@Translation.Get("Ett fel inträffade när ärendet skulle låsas upp automatiskt. Var vänlig kontakta systemadministratören.")', "Error");
+                }
+                if (url) {                    
+                    redirectToUrl(url);
+                }
+            });
+        };
+                
+        //HIDE SHOW
+        $( ".hidebtn" ).on( "click", function() {
+            $( this ).parents( ".notifier-block" ).addClass( "hideshow" );
+        });
+        $( ".showbtn" ).on( "click", function() {
+            $( this ).parents( ".notifier-block" ).removeClass( "hideshow" );
+        });
 
-            function UnLockCase(lockGuid, url) {
-                $.post('@Url.Content("~/Cases/UnLockCase/")', { lockGUID: lockGuid }, function (data) {
-                    if (data != "Success") {
-                        ShowToastMessage('@Translation.Get("Ett fel inträffade när ärendet skulle låsas upp automatiskt. Var vänlig kontakta systemadministratören.")', "Error");
-                    }
-                    if (url) {
-                        redirectToUrl(url);
-                    }
-                });
-            };
+        $( ".hidebtn" ).on( "click", function() {
+            $( this ).parents( ".computer-block" ).addClass( "hideshow" );
+        });
+        $( ".showbtn" ).on( "click", function() {
+            $( this ).parents( ".computer-block" ).removeClass( "hideshow" );
+        });
 
-            //HIDE SHOW
-            $(".hidebtn").on("click", function () {
-                $(this).parents(".notifier-block").addClass("hideshow");
-            });
-            $(".showbtn").on("click", function () {
-                $(this).parents(".notifier-block").removeClass("hideshow");
-            });
+        $( ".hidebtn" ).on( "click", function() {
+            $( this ).parents( ".caseinfo-block" ).addClass( "hideshow" );
+        });
+        $( ".showbtn" ).on( "click", function() {
+            $( this ).parents( ".caseinfo-block" ).removeClass( "hideshow" );
+        });
 
-            $(".hidebtn").on("click", function () {
-                $(this).parents(".computer-block").addClass("hideshow");
-            });
-            $(".showbtn").on("click", function () {
-                $(this).parents(".computer-block").removeClass("hideshow");
-            });
-
-            $(".hidebtn").on("click", function () {
-                $(this).parents(".caseinfo-block").addClass("hideshow");
-            });
-            $(".showbtn").on("click", function () {
-                $(this).parents(".caseinfo-block").removeClass("hideshow");
-            });
-
-            $(".hidebtn").on("click", function () {
-                $(this).parents(".casehandling-block").addClass("hideshow");
-            });
-            $(".showbtn").on("click", function () {
-                $(this).parents(".casehandling-block").removeClass("hideshow");
-            });
-        })</script>
+        $( ".hidebtn" ).on( "click", function() {
+            $( this ).parents( ".casehandling-block" ).addClass( "hideshow" );
+        });
+        $( ".showbtn" ).on( "click", function() {
+            $( this ).parents( ".casehandling-block" ).removeClass( "hideshow" );
+        });
+    </script>
 }
 
 @if (Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
 {
-    @System.Web.Optimization.Scripts.Render(DH.Helpdesk.Web.BundleConfig.ScriptNames.DynamicCase)
+    @System.Web.Optimization.Scripts.Render(BundleConfig.ScriptNames.DynamicCase)
 
     <script type="text/javascript">
         $(function () {
-            var currentpage = new dhform({ url: '@Model.DynamicCase.FormPath', modal: '@Model.DynamicCase.ViewMode' });
-            });
+            var urlToSend = "@Model.DynamicCase.FormPath".replace(/\\/g, '&#92;');
+            var currentpage = new dhform({ url: urlToSend, modal: '@Model.DynamicCase.ViewMode' });
+        });
     </script>
 }
 
@@ -298,14 +208,14 @@
 {
     using (Html.BeginForm("edit", "cases", null, FormMethod.Post, new { id = "target" }))
     {    
-    @Html.HiddenFor(m => m.BackUrl) 
+        @Html.HiddenFor(m => m.BackUrl) 
     <div class="secnavs fixed">
         <div class="pull-left">
             <ul class="secnav">
                 @if (Model.EditMode == Enums.AccessMode.FullAccess)
                 {
-                    <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), null, null, null, new { @class = "btn", id = "case-action-save" })</li>
-                    <li>@Html.ActionLink(Translation.Get("Spara och stäng", Enums.TranslationSource.TextTranslation), null, null, new { @class = "btn save-close", id = "case-action-save-and-close" })</li>
+                    <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), null, null, null, new { @class = "btn save", id = "case-action-save" })</li>
+                    <li>@Html.ActionLink(Translation.Get("Spara och stäng", Enums.TranslationSource.TextTranslation), null, null, new { @class = "btn save-close", id = "case-action-save-and-close" })</li>                    
                     <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation), null, null, new { @class = "btn save-new", id = "case-action-save-and-new" })</li>
                     <li class="secspace"></li>                    
                     if (SessionFacade.CurrentUser.DeleteCasePermission == 1)
@@ -342,9 +252,14 @@
                                         @Translation.Get("Markera ärendet som oläst", Enums.TranslationSource.TextTranslation)
                                     </a>
                                 </li>
-                                @if (SessionFacade.CurrentUser.ActivateCasePermission == 1 && Model.case_.FinishingDate.HasValue)
+                                @if (!Model.IsItChildCase() && SessionFacade.CurrentUser.CreateSubCasePermission == 1)
+                                {
+                                    <li>@Html.ActionLink(Translation.Get("Skapa underärende"), "NewChildCase", new { parentCaseId = Model.case_.Id})</li>
+                                }
+                                @if (SessionFacade.CurrentUser.ActivateCasePermission == 1 && Model.case_.FinishingDate.HasValue
+                                    && (!Model.IsItChildCase() || (Model.IsItChildCase() && !Model.ParentCaseInfo.IsCaseClosed)))
                                 {   
-                                    <li>@Html.ActionLink(Translation.Get("Aktivera"), "Activate", "Cases", new { id = Model.case_.Id, backUrl = Model.BackUrl }, new { @class = "btn" })</li>                             
+                                    <li>@Html.ActionLink(Translation.Get("Aktivera"), "Activate", "Cases", new { id = Model.case_.Id, backUrl = Model.BackUrl }, new { @class="btn" })</li>                             
                                 }
 
                                 @if (SessionFacade.CurrentUser.MoveCasePermission == 1)
@@ -390,7 +305,7 @@
                                                         {
                                                             <i class='icon-ok'></i>
                                                         }
-                                                    </a>
+                                                    </a>                                                  
                                                 </li>
                                             }
                                         </ul>
@@ -423,9 +338,10 @@
                 else
                 {
 
-                    if (SessionFacade.CurrentUser.ActivateCasePermission == 1 && Model.case_.FinishingDate.HasValue)
+                    if (SessionFacade.CurrentUser.ActivateCasePermission == 1 && Model.case_.FinishingDate.HasValue
+                        && (!Model.IsItChildCase() || (Model.IsItChildCase() && !Model.ParentCaseInfo.IsCaseClosed)))
                     {                                
-                    <li>@Html.ActionLink(Translation.Get("Aktivera"), "Activate", "Cases", new { id = Model.case_.Id, backUrl = Model.BackUrl }, new { @class = "btn" })</li>                             
+                        <li>@Html.ActionLink(Translation.Get("Aktivera"), "Activate", "Cases", new { id = Model.case_.Id, backUrl = Model.BackUrl }, new { @class="btn" })</li>                             
                     }
 
                 }
@@ -443,7 +359,7 @@
             </ul>
         </div>
     </div>
-    <input type="hidden" value="@Model.CustomerSettings.ModuleCaseInvoice" id="ModuleCaseInvoice" />
+    
     <div class="editmode">
         @Html.Partial("_Input", Model)
     </div>

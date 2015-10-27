@@ -57,7 +57,7 @@
                 res.data.Add(new JsonCaseSearchFilterItem()
                 {
                     attrName = CaseSearchFilter.DepartmentNameAttribute,
-                    value = string.Empty
+                    value = SaveExtractArray(defaultSearchFilter.SelectedDepartments)
                 });
             }
 

@@ -2,21 +2,26 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+    using System.Reflection;
 
 namespace DH.Helpdesk.Services.Services
 {
 
     using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.Models.Case.ChidCase;
     using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.BusinessData.Models.Invoice;
+    using DH.Helpdesk.BusinessData.Models.User.Input;
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+    using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Common.Extensions.Boolean;
     using DH.Helpdesk.Dal.DbContext;
+    using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Dal.Repositories;
-    using DH.Helpdesk.Dal.Enums;
+    using DH.Helpdesk.Dal.Repositories.Cases;
     using DH.Helpdesk.Dal.Repositories.Cases.Concrete;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Cases;
@@ -32,10 +37,8 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.Services.Localization;
     using DH.Helpdesk.Services.Services.CaseStatistic;
     using DH.Helpdesk.Services.utils;
-    using DH.Helpdesk.BusinessData.Models.User.Input;
 
     using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
-    using DH.Helpdesk.Common.Enums;
 
     public interface ICaseService
     {
@@ -44,7 +47,17 @@ namespace DH.Helpdesk.Services.Services
         IList<Case> GetCasesByCustomers(IEnumerable<int> customerIds);
 
         Case InitCase(int customerId, int userId, int languageId, string ipAddress, CaseRegistrationSource source, Setting customerSetting, string adUser);
+
         Case Copy(int copyFromCaseid, int userId, int languageId, string ipAddress, CaseRegistrationSource source, string adUser);
+
+        Case InitChildCaseFromCase(
+            int copyFromCaseid,
+            int userId,
+            string ipAddress,
+            CaseRegistrationSource source,
+            string adUser,
+            out ParentCaseInfo parentCaseInfo);
+
         Case GetCaseById(int id, bool markCaseAsRead = false);
         Case GetDetachedCaseById(int id);
         Case GetCaseByGUID(Guid GUID);
@@ -55,15 +68,22 @@ namespace DH.Helpdesk.Services.Services
         DynamicCase GetDynamicCase(int id);
 
         int SaveCase(
-            Case cases,
-            CaseLog caseLog,
-            CaseMailSetting caseMailSetting,
+            Case cases, 
+            CaseLog caseLog, 
+            CaseMailSetting caseMailSetting, 
+            int userId, 
+            string adUser,           
+            out IDictionary<string, string> errors,
+            Case parentCase = null);
+
+        int SaveCaseHistory(
+            Case c,
             int userId,
             string adUser,
-            out IDictionary<string, string> errors);
+            out IDictionary<string, string> errors,
+            string defaultUser = "",
+            ExtraFieldCaseHistory extraField = null);
 
-        int SaveCaseHistory(Case c, int userId, string adUser, out IDictionary<string, string> errors, 
-                            string defaultUser = "", ExtraFieldCaseHistory extraField = null);
         void SendCaseEmail(int caseId, CaseMailSetting cms, int caseHistoryId, string basePath,
                            Case oldCase = null, CaseLog log = null, List<CaseFileDto> logFiles = null);
         void UpdateFollowUpDate(int caseId, DateTime? time);
@@ -73,7 +93,8 @@ namespace DH.Helpdesk.Services.Services
         void Activate(int caseId, int userId, string adUser, out IDictionary<string, string> errors);
         IList<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, UserOverview user);
         void Commit();
-        Guid Delete(int id, string basePath);
+
+        Guid Delete(int id, string basePath, int? parentCaseId);
 
         /// <summary>
         /// The get case overview.
@@ -93,6 +114,14 @@ namespace DH.Helpdesk.Services.Services
         List<RelatedCase> GetCaseRelatedCases(int caseId, int customerId, string userId, UserOverview currentUser);
 
         int GetCaseRelatedCasesCount(int caseId, int customerId, string userId, UserOverview currentUser);
+
+        ChildCaseOverview[] GetChildCasesFor(int caseId);
+
+        ParentCaseInfo GetParentInfo(int caseId);
+
+        int? SaveInternalLogMessage(int id, string textInternal, out IDictionary<string, string> errors);
+
+        CaseDataSet GetCaseDataSet(DateTime? fromDate, DateTime? toDate);
     }
 
     public class CaseService : ICaseService
@@ -222,9 +251,28 @@ namespace DH.Helpdesk.Services.Services
             return _caseRepository.GetDynamicCase(id);
         }
 
-        public Guid Delete(int id, string basePath)
+        public Guid Delete(int id, string basePath, int? parentCaseId)
         {
             Guid ret = Guid.Empty; 
+
+            if (parentCaseId.HasValue)
+            {
+                using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
+                {
+                    var relationsRepo = uow.GetRepository<ParentChildRelation>();
+                    var relation = relationsRepo.GetAll().FirstOrDefault(it => it.DescendantId == id);
+                    if (relation == null || relation.AncestorId != parentCaseId.Value)
+                    {
+                        throw new ArgumentException(string.Format("bad parentCaseId \"{0}\" for case id \"{1}\"", parentCaseId.Value, id));
+                    }
+
+                    relationsRepo.Delete(relation);
+                    uow.Save();
+                    //@TODO: make a record in parent history
+                }
+            }
+
+            this.DeleteChildCasesFor(id);
 
             // delete form field values
             var ffv = this._formFieldValueRepository.GetFormFieldValuesByCaseId(id);
@@ -280,12 +328,12 @@ namespace DH.Helpdesk.Services.Services
                 {
                     this._caseHistoryRepository.Delete(h);  
                 }
-                this._caseHistoryRepository.Commit(); 
             }
+
+            this._caseHistoryRepository.Commit(); 
 
             //delete case lock
             this._caseLockService.UnlockCaseByCaseId(id);
-
 
             // delete case files
             var caseFiles = this._caseFileRepository.GetCaseFilesByCaseId(id);
@@ -303,16 +351,23 @@ namespace DH.Helpdesk.Services.Services
             this._caseFileRepository.DeleteFileViewLogs(id);
             this._caseFileRepository.Commit();
 
-
             // delete Invoice
             this.invoiceArticleService.DeleteCaseInvoices(id);
-
             var c = this._caseRepository.GetById(id);
             ret = c.CaseGUID; 
             this._caseRepository.Delete(c);
             this._caseRepository.Commit();
 
             return ret;
+        }
+
+        private void DeleteChildCasesFor(int caseId)
+        {
+            using (var uow = unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            {
+                uow.GetRepository<ParentChildRelation>().DeleteWhere(it => it.AncestorId == caseId);
+                uow.Save();
+            }
         }
 
         /// <summary>
@@ -375,9 +430,207 @@ namespace DH.Helpdesk.Services.Services
             }
         }
 
-        public Case Copy(int copyFromCaseid, int userId, int languageId, string ipAddress, CaseRegistrationSource source, string adUser)
+
+        public ChildCaseOverview[] GetChildCasesFor(int caseId)
         {
-            var c = this._caseRepository.GetDetachedCaseById(copyFromCaseid);
+            using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            {
+                var childCaseRelations = uow.GetRepository<ParentChildRelation>().GetAll();
+                var allCases = uow.GetRepository<Case>().GetAll();
+                var allSecStates = uow.GetRepository<StateSecondary>().GetAll();
+                var allPerformers = uow.GetRepository<User>().GetAll();
+                var caseTypes = uow.GetRepository<CaseType>().GetAll();
+                var res =
+                    childCaseRelations.Where(it => it.AncestorId == caseId)
+                        .Select(it => new { id = it.DescendantId, parentId = it.AncestorId })
+                        .GroupJoin(
+                            allCases,
+                            it => it.id,
+                            case_ => case_.Id,
+                            (parentChild, case_) => new { parentChild, case_ })
+                        .SelectMany(
+                            t => t.case_.DefaultIfEmpty(),
+                            (t, case_) =>
+                            new
+                                {
+                                    id = t.parentChild.id,
+                                    parentId = t.parentChild.parentId,
+                                    caseNumber = case_.CaseNumber,
+                                    subject = case_.Caption,
+                                    performerId = case_.Performer_User_Id,
+                                    substateId = case_.StateSecondary_Id,
+                                    caseTypeId = case_.CaseType_Id,
+                                    registrationDate = case_.RegTime,
+                                    closingDate = case_.FinishingDate,
+                                    approvedDate = case_.ApprovedDate
+                                })
+                        .GroupJoin(
+                            allPerformers,
+                            tempParentChildStruct => tempParentChildStruct.performerId,
+                            performer => performer.Id,
+                            (tmpParentChild, performer) => new { tmpParentChild, performer })
+                        .SelectMany(
+                            t => t.performer.DefaultIfEmpty(),
+                            (t, performer) =>
+                            new
+                                {
+                                    id = t.tmpParentChild.id,
+                                    parentId = t.tmpParentChild.parentId,
+                                    caseNumber = t.tmpParentChild.caseNumber,
+                                    subject = t.tmpParentChild.subject,
+                                    performerFirstName = performer == null ? string.Empty : performer.FirstName,
+                                    performerLastName = performer == null ? string.Empty : performer.SurName,
+                                    substateId = t.tmpParentChild.substateId,
+                                    caseTypeId = t.tmpParentChild.caseTypeId,
+                                    registrationDate = t.tmpParentChild.registrationDate,
+                                    closingDate = t.tmpParentChild.closingDate,
+                                    approvedDate = t.tmpParentChild.approvedDate
+                                })
+                        .GroupJoin(
+                            allSecStates,
+                            tempParentCildStruct => tempParentCildStruct.substateId,
+                            subState => subState.Id,
+                            (tmpParentChild, subState) => new { tmpParentChild, subState })
+                        .SelectMany(
+                            t => t.subState.DefaultIfEmpty(),
+                            (t, subState) =>
+                            new
+                                {
+                                    id = t.tmpParentChild.id,
+                                    parentId = t.tmpParentChild.parentId,
+                                    subject = t.tmpParentChild.subject,
+                                    caseNumber = t.tmpParentChild.caseNumber,
+                                    performerFirstName = t.tmpParentChild.performerFirstName,
+                                    performerLastName = t.tmpParentChild.performerLastName,
+                                    subState = subState == null ? string.Empty : subState.Name,
+                                    caseTypeId = t.tmpParentChild.caseTypeId,
+                                    registrationDate = t.tmpParentChild.registrationDate,
+                                    closingDate = t.tmpParentChild.closingDate,
+                                    approvedDate = t.tmpParentChild.approvedDate
+                                })
+                        .GroupJoin(
+                            caseTypes,
+                            tempParentCildStruct => tempParentCildStruct.caseTypeId,
+                            subState => subState.Id,
+                            (tmpParentChild, casetType) => new { tmpParentChild, casetType })
+                        .SelectMany(
+                            t => t.casetType.DefaultIfEmpty(),
+                            (t, caseType) =>
+                            new
+                                {
+                                    id = t.tmpParentChild.id,
+                                    parentId = t.tmpParentChild.parentId,
+                                    caseNumber = t.tmpParentChild.caseNumber,
+                                    subject = t.tmpParentChild.subject,
+                                    performerFirstName = t.tmpParentChild.performerFirstName,
+                                    performerLastName = t.tmpParentChild.performerLastName,
+                                    subState = t.tmpParentChild.subState,
+                                    caseType = caseType == null ? string.Empty : caseType.Name,
+                                    IsApprovingRequired = caseType != null && caseType.RequireApproving == 1,
+                                    registrationDate = t.tmpParentChild.registrationDate,
+                                    closingDate = t.tmpParentChild.closingDate,
+                                    t.tmpParentChild.approvedDate
+                                })
+                        .AsQueryable();
+                return res.Select(it => new ChildCaseOverview()
+                                     {
+                                         Id = it.id,
+                                         CaseNo = (int)it.caseNumber,
+                                         Subject = it.subject,
+                                         CasePerformer = new UserNamesStruct()
+                                                             {
+                                                                 FirstName = it.performerFirstName,
+                                                                 LastName = it.performerLastName
+                                                             },
+                                        CaseType = it.caseType,
+                                        SubStatus = it.subState,
+                                        RegistrationDate = it.registrationDate,
+                                        ClosingDate = it.closingDate,
+                                        ApprovedDate = it.approvedDate,
+                                        IsRequriedToApprive = it.IsApprovingRequired
+                                     }).ToArray();
+            }
+        }
+
+        public ParentCaseInfo GetParentInfo(int caseId)
+        {
+            using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            {
+                var allCases = uow.GetRepository<Case>().GetAll();
+                var allRelations = uow.GetRepository<ParentChildRelation>().GetAll();
+                var allPerformers = uow.GetRepository<User>().GetAll();
+                var relationInfo = allRelations
+                    .Where(it => it.DescendantId == caseId)
+                    .Select(it => new { id = it.DescendantId, parentId = it.AncestorId })
+                    .GroupJoin(
+                            allCases,
+                            it => it.parentId,
+                            case_ => case_.Id,
+                            (parentChild, case_) => new { parentChild, case_ })
+                        .SelectMany(
+                            t => t.case_.DefaultIfEmpty(),
+                            (t, case_) =>
+                            new
+                            {
+                                id = t.parentChild.id,
+                                parentId = t.parentChild.parentId,
+                                caseNumber = case_.CaseNumber,
+                                subject = case_.Caption,
+                                performerId = case_.Performer_User_Id,
+                                substateId = case_.StateSecondary_Id,
+                                caseTypeId = case_.CaseType_Id,
+                                registrationDate = case_.RegTime,
+                                finishingDate = case_.FinishingDate
+                            })
+                        .GroupJoin(
+                            allPerformers,
+                            tempParentChildStruct => tempParentChildStruct.performerId,
+                            performer => performer.Id,
+                            (tmpParentChild, performer) => new { tmpParentChild, performer })
+                        .SelectMany(
+                            t => t.performer.DefaultIfEmpty(),
+                            (t, performer) =>
+                            new
+                            {
+                                parentId = t.tmpParentChild.parentId,
+                                caseNumber = t.tmpParentChild.caseNumber,
+                                finishingDate = t.tmpParentChild.finishingDate,
+                                performerFirstName = performer == null ? string.Empty : performer.FirstName,
+                                performerLastName = performer == null ? string.Empty : performer.SurName,
+                            })
+                        .FirstOrDefault();
+                if (relationInfo != null)
+                {
+                    return new ParentCaseInfo()
+                               {
+                                   ParentId = relationInfo.parentId,
+                                   CaseNumber = relationInfo.caseNumber,
+                                   CaseAdministrator =
+                                       new UserNamesStruct()
+                                           {
+                                               FirstName = relationInfo.performerFirstName,
+                                               LastName = relationInfo.performerLastName
+                                           },
+                                   FinishingDate = relationInfo.finishingDate
+                               };
+                }
+            }
+
+            return null;
+        }
+
+        public int? SaveInternalLogMessage(int id, string textInternal, out IDictionary<string, string> errors)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static Case InitNewCaseCopy(
+            Case c,
+            int userId,
+            string ipAddress,
+            CaseRegistrationSource source,
+            string adUser)
+        {
             c.IpAddress = ipAddress;
             c.CaseGUID = Guid.NewGuid();
             c.Id = 0;
@@ -389,6 +642,40 @@ namespace DH.Helpdesk.Services.Services
             c.RegUserDomain = adUser.GetDomainFromAdPath();
             c.CaseFiles = null;
             return c;
+        }
+
+        public Case InitChildCaseFromCase(
+            int copyFromCaseid, 
+            int userId, 
+            string ipAddress, 
+            CaseRegistrationSource source, 
+            string adUser, 
+            out ParentCaseInfo parentCaseInfo)
+        {
+            var c = this._caseRepository.GetDetachedCaseById(copyFromCaseid);
+            if (c == null)
+            {
+                throw new ArgumentException(string.Format("bad parent case id {0}", copyFromCaseid));
+            }
+
+            parentCaseInfo = new ParentCaseInfo
+                                     {
+                                         ParentId = copyFromCaseid,
+                                         CaseNumber = (int)c.CaseNumber,
+                                         CaseAdministrator = new UserNamesStruct()
+                                                                 {
+                                                                     FirstName = c.Administrator != null ? c.Administrator.FirstName : string.Empty,
+                                                                     LastName = c.Administrator != null ? c.Administrator.SurName : string.Empty
+                                                                 },
+                                                                 FinishingDate = c.FinishingDate
+                                     };
+            return InitNewCaseCopy(c, userId, ipAddress, source, adUser);
+        }
+
+        public Case Copy(int copyFromCaseid, int userId, int languageId, string ipAddress, CaseRegistrationSource source, string adUser)
+        {
+            var c = this._caseRepository.GetDetachedCaseById(copyFromCaseid);
+            return InitNewCaseCopy(c, userId, ipAddress, source, adUser);
         }
 
         public void MarkAsUnread(int caseId)
@@ -408,26 +695,28 @@ namespace DH.Helpdesk.Services.Services
 
         public Case InitCase(int customerId, int userId, int languageId, string ipAddress, CaseRegistrationSource source, Setting customerSetting, string adUser)
         {
-            var c = new Case();
+            var c = new Case
+                        {
+                            Customer_Id = customerId,
+                            User_Id = userId,
+                            CaseResponsibleUser_Id = userId,
+                            IpAddress = ipAddress,
+                            CaseGUID = Guid.NewGuid(),
+                            RegLanguage_Id = languageId,
+                            RegistrationSource = (int)source,
+                            Deleted = 0,
+                            Region_Id = this._regionService.GetDefaultId(customerId),
+                            CaseType_Id = this._caseTypeService.GetDefaultId(customerId),
+                            Supplier_Id = this._supplierServicee.GetDefaultId(customerId),
+                            Priority_Id = this._priorityService.GetDefaultId(customerId),
+                            Status_Id = this._statusService.GetDefaultId(customerId),
+                            WorkingGroup_Id = this.userRepository.GetUserDefaultWorkingGroupId(userId, customerId),
+                            RegUserId = adUser.GetUserFromAdPath(),
+                            RegUserDomain = adUser.GetDomainFromAdPath()
+                        };
 
-            c.Customer_Id = customerId;
-            c.User_Id = userId;
-            c.CaseResponsibleUser_Id = userId;
-            c.IpAddress = ipAddress; 
-            c.CaseGUID = Guid.NewGuid();
-            c.RegLanguage_Id = languageId;
-            c.RegistrationSource = (int)source;
-            c.Deleted = 0;
-            c.Region_Id = this._regionService.GetDefaultId(customerId);
-            c.CaseType_Id = this._caseTypeService.GetDefaultId(customerId);
-            c.Supplier_Id = this._supplierServicee.GetDefaultId(customerId);
-            c.Priority_Id = this._priorityService.GetDefaultId(customerId);
-            c.Status_Id = this._statusService.GetDefaultId(customerId);
             // http://redmine.fastdev.se/issues/10997
 //            c.WorkingGroup_Id = this._workingGroupService.GetDefaultId(customerId, userId);
-            c.WorkingGroup_Id = this.userRepository.GetUserDefaultWorkingGroupId(userId, customerId);
-            c.RegUserId =  adUser.GetUserFromAdPath();
-            c.RegUserDomain = adUser.GetDomainFromAdPath();
 
             if (customerSetting != null)
             {
@@ -507,10 +796,14 @@ namespace DH.Helpdesk.Services.Services
                                 {
                                     if (!String.IsNullOrEmpty(m.Body) && !String.IsNullOrEmpty(m.Subject))
                                     {
-                                        var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(helpdeskMailFromAdress));
+                                        var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(helpdeskMailFromAdress));                                        
+                                        var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, log.HighPriority, files);
+                                        el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                                        var now = DateTime.Now;
+                                        el.CreatedDate = now;
+                                        el.ChangedDate = now;
                                         _emailLogRepository.Add(el);
                                         _emailLogRepository.Commit();
-                                        _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, log.HighPriority, files);
                                     }
                                 }
                             }
@@ -531,9 +824,13 @@ namespace DH.Helpdesk.Services.Services
                             for (int i = 0; i < to.Length; i++)
                             {
                                 var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(helpdeskMailFromAdress));
+                                var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, log.HighPriority, files);
+                                el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                                var now = DateTime.Now;
+                                el.CreatedDate = now;
+                                el.ChangedDate = now;
                                 _emailLogRepository.Add(el);
                                 _emailLogRepository.Commit();
-                                _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, log.HighPriority, files);
                             }
                         }
                     }
@@ -546,13 +843,30 @@ namespace DH.Helpdesk.Services.Services
             this._unitOfWork.Commit();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cases"></param>
+        /// <param name="caseLog"></param>
+        /// <param name="caseMailSetting"></param>
+        /// <param name="userId"></param>
+        /// <param name="adUser"></param>
+        /// <param name="errors"></param>
+        /// <param name="invoices"></param>
+        /// <param name="parentCase"></param>
+        /// <param name="sendLogToParentChild">
+        /// Flag to send log to parent/child case
+        /// </param>
+        /// <returns></returns>
         public int SaveCase(
                 Case cases, 
                 CaseLog caseLog, 
                 CaseMailSetting caseMailSetting, 
                 int userId, 
                 string adUser, 
-                out IDictionary<string, string> errors)
+                out IDictionary<string, string> errors,
+                CaseInvoice[] invoices = null,
+                Case parentCase = null)
         {
             int ret = 0;
 
@@ -592,7 +906,6 @@ namespace DH.Helpdesk.Services.Services
             this._caseStatService.UpdateCaseStatistic(c);
             
             // save casehistory
-            // FinishingCause = FinishingType = ClosingReason 
             var extraFields = new ExtraFieldCaseHistory();
             if (caseLog != null && caseLog.FinishingType != null)
             {
@@ -600,24 +913,69 @@ namespace DH.Helpdesk.Services.Services
                 extraFields.ClosingReason = fc ;
             }
 
-            if (userId == 0)
-                ret = this.SaveCaseHistory(c, userId, adUser, out errors, adUser, extraFields);    
-            else            
-                ret = this.SaveCaseHistory(c, userId, adUser, out errors, "", extraFields);
-            
+            if (parentCase != null)
+            {
+                this.AddChildCase(cases.Id, parentCase.Id, out errors);
+            }
+
+            ret = userId == 0 ? 
+                this.SaveCaseHistory(c, userId, adUser, out errors, adUser, extraFields) : 
+                this.SaveCaseHistory(c, userId, adUser, out errors, string.Empty, extraFields);
+
+            if (invoices != null)
+            {
+                this.invoiceArticleService.SaveCaseInvoices(invoices, cases.Id);                
+            }
+
             return ret;
         }
+        
+        private bool AddChildCase(int childCaseId, int parentCaseId, out IDictionary<string, string> errors)
+        {
+            errors = new Dictionary<string, string>();
+            using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            {
+                var parentChildRelationRepo = uow.GetRepository<ParentChildRelation>();
+                var allreadyExists = parentChildRelationRepo
+                        .GetAll()
+                        .Where(it => it.DescendantId == childCaseId // allready a child for [other|this] case
+                            || it.AncestorId == childCaseId // child case is a parent already
+                            || it.DescendantId == parentCaseId) // parent case is a child
+                        .FirstOrDefault();
+                if (allreadyExists != null)
+                {
 
-        public int SaveCaseHistory(Case c, int userId, string adUser, out IDictionary<string, string> errors,
+                    errors.Add(
+                        "childCaseId",
+                        "child case can not contain childs, parent child can not be a child case, child case already presented as child case");
+
+                    return false;
+                }
+                
+                parentChildRelationRepo.Add(new ParentChildRelation()
+                                                {
+                                                    AncestorId = parentCaseId,
+                                                    DescendantId = childCaseId
+                                                });
+                uow.Save();
+            }
+
+            return true;
+        }
+
+        public int SaveCaseHistory(
+            Case c,
+            int userId,
+            string adUser,
+            out IDictionary<string, string> errors,
                                    string defaultUser = "",
-                                   ExtraFieldCaseHistory extraField = null)
+            ExtraFieldCaseHistory extraField = null)
         {
             if (c == null)
                 throw new ArgumentNullException("caseHistory");
 
             errors = new Dictionary<string, string>();
-
-            CaseHistory h = this.GenerateHistoryFromCase(c, userId, adUser, defaultUser, extraField);
+            var h = this.GenerateHistoryFromCase(c, userId, adUser, defaultUser, extraField);
             this._caseHistoryRepository.Add(h);
 
             if (errors.Count == 0)
@@ -631,9 +989,59 @@ namespace DH.Helpdesk.Services.Services
             return this._caseHistoryRepository.GetCaseHistoryByCaseId(caseId).ToList(); 
         }
 
-        public void SendCaseEmail(int caseId, CaseMailSetting cms, int caseHistoryId, string basePath, Case oldCase = null, CaseLog log = null, List<CaseFileDto> logFiles = null)        
+        public CaseDataSet GetCaseDataSet(DateTime? fromDate, DateTime? toDate)
         {
-            if (!this._emailService.IsValidEmail(cms.HelpdeskMailFromAdress))
+            var ret = new CaseDataSet();
+            using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            {                                
+                ret.CaseTypeQuery = uow.GetRepository<CaseType>().GetAll().ToList();
+                ret.CategoryQuery = uow.GetRepository<Category>().GetAll().ToList();
+                ret.CausingPartQuery = uow.GetRepository<CausingPart>().GetAll().ToList();
+                ret.ClosingReasonQuery = uow.GetRepository<FinishingCause>().GetAll().ToList();
+                ret.CustomerQuery = uow.GetRepository<Customer>().GetAll().ToList();
+                ret.DepartmentQuery = uow.GetRepository<Department>().GetAll().ToList();
+                ret.ImpactQuery = uow.GetRepository<Impact>().GetAll().ToList();                
+                ret.OrganizationUnitQuery = uow.GetRepository<OU>().GetAll().ToList();
+                ret.PriorityQuery = uow.GetRepository<Priority>().GetAll().ToList();
+                ret.ProductAreaQuery = uow.GetRepository<ProductArea>().GetAll().ToList();
+                ret.RegionQuery = uow.GetRepository<Region>().GetAll().ToList();
+                ret.StateSecondaryQuery = uow.GetRepository<StateSecondary>().GetAll().ToList();
+                ret.StatusQuery = uow.GetRepository<Status>().GetAll().ToList();
+                ret.SupplierQuery = uow.GetRepository<Supplier>().GetAll().ToList();
+                ret.SystemQuery = uow.GetRepository<System>().GetAll().ToList();
+                ret.UrgencyQuery = uow.GetRepository<Urgency>().GetAll().ToList();
+                ret.UserQuery = uow.GetRepository<User>().GetAll().ToList();
+                ret.WorkingGroupQuery = uow.GetRepository<WorkingGroupEntity>().GetAll().ToList();
+                ret.RegistrationSourceCustomerQuery = uow.GetRepository<RegistrationSourceCustomer>().GetAll().ToList();                
+                ret.LanguageQuery = uow.GetRepository<Language>().GetAll().ToList();
+                ret.CaseStatisticsQuery = uow.GetRepository<DH.Helpdesk.Domain.Cases.CaseStatistic>().GetAll().ToList();
+                ret.CaseFileQuery = _caseFileRepository.GetCaseFilesByDate(fromDate, toDate);
+                ret.LogQuery = _logService.GetCaseLogs(fromDate, toDate).ToList();
+                //ret.LogFileQuery = uow.GetRepository<LogFile>().GetAll().ToList(); 
+             }
+
+            return ret;
+        }
+
+        public void SendCaseEmail(
+            int caseId, 
+            CaseMailSetting cms, 
+            int caseHistoryId, 
+            string basePath, 
+            Case oldCase = null, 
+            CaseLog log = null, 
+            List<CaseFileDto> logFiles = null)
+        {
+            //get sender email adress
+            var helpdeskMailFromAdress = string.Empty;
+            var containsProductAreaMail = false;
+
+            if (!string.IsNullOrEmpty((cms.HelpdeskMailFromAdress)))
+            {
+                helpdeskMailFromAdress = cms.HelpdeskMailFromAdress.Trim();                
+            }
+
+            if (!this._emailService.IsValidEmail(helpdeskMailFromAdress))
             {
                 return;
             }
@@ -647,12 +1055,7 @@ namespace DH.Helpdesk.Services.Services
 
             // get list of fields to replace [#1] tags in the subjcet and body texts
             List<Field> fields = GetCaseFieldsForEmail(newCase, log, cms, string.Empty , 0);
-
-            //get sender email adress
-            string helpdeskMailFromAdress = cms.HelpdeskMailFromAdress;
-            if (newCase.Workinggroup != null)
-                if (!string.IsNullOrWhiteSpace(newCase.Workinggroup.EMail) && _emailService.IsValidEmail(newCase.Workinggroup.EMail))  
-                    helpdeskMailFromAdress = newCase.Workinggroup.EMail;
+            
 
             // if logfiles should be attached to the mail 
             List<string> files = null;
@@ -677,6 +1080,10 @@ namespace DH.Helpdesk.Services.Services
 
                 if (string.IsNullOrWhiteSpace(customEmailSender1))
                     customEmailSender1 = cms.CustomeMailFromAddress.SystemEmail;
+                if (!string.IsNullOrEmpty(customEmailSender1))
+                {
+                    customEmailSender1 = customEmailSender1.Trim();
+                }
 
                 MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                 if (m != null)
@@ -691,12 +1098,15 @@ namespace DH.Helpdesk.Services.Services
                                 var curMail = t.Trim();
                                 if (!string.IsNullOrWhiteSpace(curMail) && _emailService.IsValidEmail(curMail))
                                 {
-                                    var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(customEmailSender1));
+                                    var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(customEmailSender1));                                    
+                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 1);
+                                    var e_res = _emailService.SendEmail(customEmailSender1, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, false, files);
+                                    el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                                    var now = DateTime.Now;
+                                    el.CreatedDate = now;
+                                    el.ChangedDate = now;
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
-                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 1);
-
-                                    _emailService.SendEmail(customEmailSender1, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                                 }
                             }
                         }
@@ -705,11 +1115,15 @@ namespace DH.Helpdesk.Services.Services
                             string[] to = cms.SendMailAboutNewCaseTo.Split(';');
                             for (int i = 0; i < to.Length; i++)
                             {
-                                var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(customEmailSender1));
+                                var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(customEmailSender1));                                
+                                fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 2);
+                                var e_res = _emailService.SendEmail(customEmailSender1, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, false, files);
+                                el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                                var now = DateTime.Now;
+                                el.CreatedDate = now;
+                                el.ChangedDate = now;
                                 _emailLogRepository.Add(el);
                                 _emailLogRepository.Commit();
-                                fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 2);
-                                _emailService.SendEmail(customEmailSender1, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                             }
                         }
                     }
@@ -719,43 +1133,53 @@ namespace DH.Helpdesk.Services.Services
                 if (newCase.ProductArea_Id.HasValue && newCase.ProductArea != null)
                 {
                     // get mail template from productArea
+                    mailTemplateId = 0;
+
                     if (newCase.ProductArea.MailID.HasValue)
                         mailTemplateId = newCase.ProductArea.MailTemplate.MailID;
+                    
 
-                    MailTemplateLanguageEntity mm = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
-                    if (mm != null)
+                    if (mailTemplateId > 0)
                     {
-                        if (!String.IsNullOrEmpty(mm.Body) && !String.IsNullOrEmpty(mm.Subject))
+                        MailTemplateLanguageEntity mm = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
+                        if (mm != null)
                         {
-                            if (!cms.DontSendMailToNotifier && !dontSendMailToNotfier && !string.IsNullOrEmpty(newCase.PersonsEmail))
+                            if (!String.IsNullOrEmpty(mm.Body) && !String.IsNullOrEmpty(mm.Subject))
                             {
-                                var to = newCase.PersonsEmail.Split(';', ',');
-                                foreach (var t in to)
+                                if (!cms.DontSendMailToNotifier && !dontSendMailToNotfier && !string.IsNullOrEmpty(newCase.PersonsEmail))
                                 {
-                                    var curMail = t.Trim();
-                                    if (!string.IsNullOrWhiteSpace(curMail) && _emailService.IsValidEmail(curMail))
+                                    var to = newCase.PersonsEmail.Split(';', ',');
+                                    foreach (var t in to)
                                     {
-                                        var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(customEmailSender1));
-                                        _emailLogRepository.Add(el);
-                                        _emailLogRepository.Commit();
-                                        fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 1);
-
-                                        _emailService.SendEmail(customEmailSender1, el.EmailAddress, mm.Subject, mm.Body, fields, el.MessageId);
+                                        var curMail = t.Trim();
+                                        if (!string.IsNullOrWhiteSpace(curMail) && _emailService.IsValidEmail(curMail))
+                                        {
+                                            var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(customEmailSender1));                                            
+                                            fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 1);
+                                            var e_res = _emailService.SendEmail(customEmailSender1, el.EmailAddress, mm.Subject, mm.Body, fields, el.MessageId, false, files);
+                                            el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                                            var now = DateTime.Now;
+                                            el.CreatedDate = now;
+                                            el.ChangedDate = now;
+                                            _emailLogRepository.Add(el);
+                                            _emailLogRepository.Commit();
+                                        }
                                     }
                                 }
+
                             }
-                           
                         }
                     }
                 }
             }
 
             // send mail template from productArea if productarea has a mailtemplate
-            if (!isCreatingCase)
+            if (!isCreatingCase && !isClosingCase)
             {
                 if (newCase.ProductArea_Id.HasValue && newCase.ProductArea != null && oldCase.ProductAreaSetDate == null)
                 {
-                    int mailTemplateId = (int)GlobalEnums.MailTemplates.NewCase;
+                    
+                    int mailTemplateId = 0;
                     string customEmailSender1 = cms.CustomeMailFromAddress.DefaultOwnerWGEMail;
 
                     if (string.IsNullOrWhiteSpace(customEmailSender1))
@@ -764,40 +1188,52 @@ namespace DH.Helpdesk.Services.Services
                     if (string.IsNullOrWhiteSpace(customEmailSender1))
                         customEmailSender1 = cms.CustomeMailFromAddress.SystemEmail;
 
+                    if (!string.IsNullOrEmpty(customEmailSender1))
+                    {
+                        customEmailSender1 = customEmailSender1.Trim();
+                    }
+
                     // get mail template from productArea
                     if (newCase.ProductArea.MailID.HasValue)
                         mailTemplateId = newCase.ProductArea.MailTemplate.MailID;
-
-                    MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
-                    if (m != null)
+                    
+                    if (mailTemplateId > 0)
                     {
-                        if (!String.IsNullOrEmpty(m.Body) && !String.IsNullOrEmpty(m.Subject))
+                        MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
+                        if (m != null)
                         {
-                            if (!cms.DontSendMailToNotifier && !dontSendMailToNotfier && !string.IsNullOrEmpty(newCase.PersonsEmail))
+                            if (!String.IsNullOrEmpty(m.Body) && !String.IsNullOrEmpty(m.Subject))
                             {
-                                var to = newCase.PersonsEmail.Split(';', ',');
-                                foreach (var t in to)
+                                if (!cms.DontSendMailToNotifier && !dontSendMailToNotfier && !string.IsNullOrEmpty(newCase.PersonsEmail))
                                 {
-                                    var curMail = t.Trim();
-                                    if (!string.IsNullOrWhiteSpace(curMail) && _emailService.IsValidEmail(curMail))
+                                    var to = newCase.PersonsEmail.Split(';', ',');
+                                    foreach (var t in to)
                                     {
-                                        var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(customEmailSender1));
-                                        _emailLogRepository.Add(el);
-                                        _emailLogRepository.Commit();
-                                        fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 1);
-
-                                        _emailService.SendEmail(customEmailSender1, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                        var curMail = t.Trim();
+                                        if (!string.IsNullOrWhiteSpace(curMail) && _emailService.IsValidEmail(curMail))
+                                        {
+                                            var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(customEmailSender1));                                            
+                                            fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 1);
+                                            var e_res = _emailService.SendEmail(customEmailSender1, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, false, files);
+                                            el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                                            var now = DateTime.Now;
+                                            el.CreatedDate = now;
+                                            el.ChangedDate = now;
+                                            _emailLogRepository.Add(el);
+                                            _emailLogRepository.Commit();
+                                            containsProductAreaMail = true;
+                                        }
                                     }
                                 }
+
                             }
-                           
                         }
                     }
                 }
             }
 
             // send email to tblCase.Performer_User_Id
-            if (((isCreatingCase && newCase.Performer_User_Id.HasValue) 
+            if (((!isClosingCase && isCreatingCase && newCase.Performer_User_Id.HasValue) 
                 || (!isCreatingCase && newCase.Performer_User_Id != oldCase.Performer_User_Id))
                 && newCase.Administrator != null)
             {
@@ -816,11 +1252,15 @@ namespace DH.Helpdesk.Services.Services
                         if (!String.IsNullOrEmpty(m.Body) && !String.IsNullOrEmpty(m.Subject))
                         {
                             var smsTo = GetSmsRecipient(customerSetting, newCase.Administrator.CellPhone);
-                            var el = new EmailLog(caseHistoryId, mailTemplateId, smsTo, _emailService.GetMailMessageId(helpdeskMailFromAdress));
+                            var el = new EmailLog(caseHistoryId, mailTemplateId, smsTo, _emailService.GetMailMessageId(helpdeskMailFromAdress));                            
+                            fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 4);
+                            var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, GetSmsSubject(customerSetting), m.Body, fields, el.MessageId);
+                            el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                            var now = DateTime.Now;
+                            el.CreatedDate = now;
+                            el.ChangedDate = now;
                             _emailLogRepository.Add(el);
                             _emailLogRepository.Commit();
-                            fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 4);
-                            _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, GetSmsSubject(customerSetting), m.Body, fields, el.MessageId);
                         }
                     }
                 }
@@ -841,11 +1281,15 @@ namespace DH.Helpdesk.Services.Services
                             {
                                 if (!String.IsNullOrEmpty(m.Body) && !String.IsNullOrEmpty(m.Subject))
                                 {
-                                    var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.Priority.EMailList, _emailService.GetMailMessageId(helpdeskMailFromAdress));
+                                    var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.Priority.EMailList, _emailService.GetMailMessageId(helpdeskMailFromAdress));                                    
+                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 5);
+                                    var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                    el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                                    var now = DateTime.Now;
+                                    el.CreatedDate = now;
+                                    el.ChangedDate = now;
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
-                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 5);
-                                    _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                                 }
                             }
                         }
@@ -868,6 +1312,8 @@ namespace DH.Helpdesk.Services.Services
                     if (!String.IsNullOrEmpty(m.Body) && !String.IsNullOrEmpty(m.Subject))
                     {
                         string wgEmails = string.Empty;
+                        if (!string.IsNullOrWhiteSpace(newCase.Workinggroup.EMail))
+                            wgEmails = newCase.Workinggroup.EMail;
 
                         if (newCase.Workinggroup.AllocateCaseMail == 1 && !string.IsNullOrWhiteSpace(newCase.Workinggroup.EMail))
                         {
@@ -876,16 +1322,23 @@ namespace DH.Helpdesk.Services.Services
                                 mailTemplateId,
                                 wgEmails,
                                 _emailService.GetMailMessageId(helpdeskMailFromAdress));
+                            
+                            fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 6);
+
+                            var e_res = _emailService.SendEmail(
+                                                                helpdeskMailFromAdress,
+                                                                el.EmailAddress,
+                                                                m.Subject,
+                                                                m.Body,
+                                                                fields,
+                                                                el.MessageId);
+
+                            el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                            var now = DateTime.Now;
+                            el.CreatedDate = now;
+                            el.ChangedDate = now;
                             _emailLogRepository.Add(el);
                             _emailLogRepository.Commit();
-                            fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 6);
-                            _emailService.SendEmail(
-                                helpdeskMailFromAdress,
-                                el.EmailAddress,
-                                m.Subject,
-                                m.Body,
-                                fields,
-                                el.MessageId);
                         }
                     }
                 }
@@ -913,11 +1366,15 @@ namespace DH.Helpdesk.Services.Services
                             {
                                 if (!String.IsNullOrEmpty(m.Body) && !String.IsNullOrEmpty(m.Subject))
                                 {
-                                    var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(helpdeskMailFromAdress));
+                                    var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(helpdeskMailFromAdress));                                    
+                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 7);
+                                    var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, false, files);
+                                    el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                                    var now = DateTime.Now;
+                                    el.CreatedDate = now;
+                                    el.ChangedDate = now;
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
-                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 7);
-                                    _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                                 }
                             }
                         }
@@ -935,6 +1392,11 @@ namespace DH.Helpdesk.Services.Services
                 if (string.IsNullOrWhiteSpace(customEmailSender2))
                     customEmailSender2 = cms.CustomeMailFromAddress.SystemEmail;
 
+                if (!string.IsNullOrEmpty(customEmailSender2))
+                {
+                    customEmailSender2 = customEmailSender2.Trim();
+                }
+
                 MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                 if (m != null)
                 {
@@ -947,11 +1409,15 @@ namespace DH.Helpdesk.Services.Services
                             {
                                 if (_emailService.IsValidEmail(to[i]))
                                 {
-                                    var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(customEmailSender2));
+                                    var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(customEmailSender2));                                    
+                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 8);
+                                    var e_res = _emailService.SendEmail(customEmailSender2, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, false, files);
+                                    el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                                    var now = DateTime.Now;
+                                    el.CreatedDate = now;
+                                    el.ChangedDate = now;
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
-                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 8);
-                                    _emailService.SendEmail(customEmailSender2, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                                 }
                             }
                         }
@@ -965,11 +1431,15 @@ namespace DH.Helpdesk.Services.Services
                                 if (!string.IsNullOrWhiteSpace(curMail) && _emailService.IsValidEmail(curMail))
                                 {
 
-                                    var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(customEmailSender2));
+                                    var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(customEmailSender2));                                    
+                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 9);
+                                    var e_res = _emailService.SendEmail(customEmailSender2, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, false, files);
+                                    el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                                    var now = DateTime.Now;
+                                    el.CreatedDate = now;
+                                    el.ChangedDate = now;
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
-                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 9);
-                                    _emailService.SendEmail(customEmailSender2, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                                 }
                             }
                                 
@@ -985,11 +1455,15 @@ namespace DH.Helpdesk.Services.Services
                                 if (!String.IsNullOrEmpty(mt.Body) && !String.IsNullOrEmpty(mt.Subject))
                                 {
                                     var smsTo = GetSmsRecipient(customerSetting, newCase.PersonsCellphone);
-                                    var el = new EmailLog(caseHistoryId, mailTemplateId, smsTo, _emailService.GetMailMessageId(helpdeskMailFromAdress));
+                                    var el = new EmailLog(caseHistoryId, mailTemplateId, smsTo, _emailService.GetMailMessageId(helpdeskMailFromAdress));                                    
+                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 10);
+                                    var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, GetSmsSubject(customerSetting), mt.Body, fields, el.MessageId);
+                                    el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                                    var now = DateTime.Now;
+                                    el.CreatedDate = now;
+                                    el.ChangedDate = now;
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
-                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 10);
-                                    _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, GetSmsSubject(customerSetting), mt.Body, fields, el.MessageId);
                                 }
                             }
                         }
@@ -1024,17 +1498,19 @@ namespace DH.Helpdesk.Services.Services
             //                }
             //            }
             //        }
+            if (!containsProductAreaMail)
+            {
+                this.caseMailer.InformNotifierIfNeeded(
+                                            caseHistoryId,
+                                            fields,
+                                            log,
+                                            dontSendMailToNotfier,
+                                            newCase,
+                                            helpdeskMailFromAdress,
+                                            files,
+                                            cms.CustomeMailFromAddress, isCreatingCase);
+            }
 
-            this.caseMailer.InformNotifierIfNeeded(
-                                        caseHistoryId,
-                                        fields,
-                                        log,
-                                        dontSendMailToNotfier,
-                                        newCase,
-                                        helpdeskMailFromAdress,
-                                        files,
-                                        cms.CustomeMailFromAddress);
-            
             this.caseMailer.InformAboutInternalLogIfNeeded(
                                         caseHistoryId,
                                         fields,
@@ -1061,10 +1537,15 @@ namespace DH.Helpdesk.Services.Services
                     mailTemplateId, 
                     recipient, 
                     this._emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
-                this._emailLogRepository.Add(el);
-                this._emailLogRepository.Commit();
+                
                 var fields = this.GetCaseFieldsForEmail(case_, log, cms, el.EmailLogGUID.ToString(), 3);
-                this._emailService.SendEmail(cms.HelpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                var e_res = this._emailService.SendEmail(cms.HelpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                var now = DateTime.Now;
+                el.CreatedDate = now;
+                el.ChangedDate = now;
+                _emailLogRepository.Add(el);
+                _emailLogRepository.Commit();
             }
         }
 
@@ -1090,14 +1571,15 @@ namespace DH.Helpdesk.Services.Services
             return ret;
         }
 
-        private CaseHistory GenerateHistoryFromCase(Case c, int userId, string adUser, 
-                                                    string defaultUser="", 
-                                                    ExtraFieldCaseHistory extraField = null)
+        private CaseHistory GenerateHistoryFromCase(
+            Case c, 
+            int userId, 
+            string adUser, 
+            string defaultUser="", 
+            ExtraFieldCaseHistory extraField = null)
         {
-            CaseHistory h = new CaseHistory();
-
+            var h = new CaseHistory();
             var user = this.userRepository.GetUser(userId);
-
             h.AgreedDate = c.AgreedDate;
             h.ApprovedDate = c.AgreedDate;
             h.ApprovedBy_User_Id = c.ApprovedBy_User_Id; 
@@ -1113,10 +1595,18 @@ namespace DH.Helpdesk.Services.Services
             h.ContactBeforeAction = c.ContactBeforeAction;
             h.Cost = c.Cost;
             h.CreatedDate = DateTime.UtcNow;
-            if (defaultUser != "") 
+            if (defaultUser != string.Empty)
+            {
                 h.CreatedByUser = defaultUser; // used for Self Service Project
+            }
             else
+            {
+                if (user != null)
+                {
                 h.CreatedByUser = user.FirstName + ' ' + user.SurName; 
+                }
+            }
+                
             h.Currency = c.Currency;
             h.Customer_Id = c.Customer_Id;
             h.Deleted = c.Deleted; 
@@ -1151,8 +1641,12 @@ namespace DH.Helpdesk.Services.Services
             h.ReferenceNumber = c.ReferenceNumber;
             h.RegistrationSource = c.RegistrationSource;
             h.RegLanguage_Id = c.RegLanguage_Id;
+            if (!string.IsNullOrEmpty(adUser))
+            {
             h.RegUserDomain = adUser.GetDomainFromAdPath();
             h.RegUserId = adUser.GetUserFromAdPath(); 
+            }
+            
             h.RelatedCaseNumber = c.RelatedCaseNumber;
             h.Region_Id = c.Region_Id; 
             h.ReportedBy = c.ReportedBy;
@@ -1181,7 +1675,7 @@ namespace DH.Helpdesk.Services.Services
                 h.CaseLog  = extraField.CaseLog;
                 h.ClosingReason = extraField.ClosingReason;
             }
-
+            
             return h;
         }
 

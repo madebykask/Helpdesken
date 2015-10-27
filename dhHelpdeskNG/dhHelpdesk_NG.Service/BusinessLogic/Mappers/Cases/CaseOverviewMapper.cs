@@ -12,6 +12,7 @@
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Cases;
     using DH.Helpdesk.Domain.Problems;
+    using DH.Helpdesk.BusinessData.Models.Case;
 
     public static class CaseOverviewMapper
     {
@@ -29,17 +30,14 @@
             return res;
         }
 
-        public static string GetProductAreaFullName(this int? productId, IQueryable<ProductArea> productAreaQuery)
-        {
-            if (productId == null)
-                return string.Empty;
-
+        public static string GetProductAreaFullName(int productId, List<ProductArea> productAreaQuery)
+        {            
             var res = string.Empty;            
             var pa = productAreaQuery.Where(p => p.Id == productId).FirstOrDefault();
             if (pa != null)
             {
                 if (pa.Parent_ProductArea_Id.HasValue)
-                    res = pa.Parent_ProductArea_Id.GetProductAreaFullName(productAreaQuery) + " - " + pa.Name;
+                    res = GetProductAreaFullName(pa.Parent_ProductArea_Id.Value, productAreaQuery) + " - " + pa.Name;
                 else
                     res = pa.Name;
             }
@@ -77,167 +75,158 @@
             }
             return res;
         }
+       
+        public static List<FullCaseOverview> MapToCaseOverviews(this IQueryable<Case> query, CaseDataSet caseDataSet)
+        {            
+            var ret = new List<FullCaseOverview>();
+            foreach (var caseEntity in query.ToList())
+            {
+                caseEntity.Customer = caseDataSet.CustomerQuery.Where(c => c.Id == caseEntity.Customer_Id).FirstOrDefault() ?? new Customer() { Name = string.Empty};
 
-        public static List<FullCaseOverview> MapToCaseOverviews(this IQueryable<Case> query, 
-                                                                IQueryable<CaseType> caseTypeQuery,
-                                                                IQueryable<ProductArea> productAreaQuery,
-                                                                IQueryable<FinishingCause> closingReasonQuery,
-                                                                IQueryable<OU> organizationUnitQuery,
-                                                                IQueryable<CaseStatistic> caseStatisticsQuery)
-        {
-            var separator = Guid.NewGuid().ToString();            
-            var entities = query.SelectIncluding(new List<Expression<Func<Case, object>>>
-                                                     {
-                                                         c => c.ProductArea.Name,
-                                                         c => c.LastChangedByUser.FirstName,
-                                                         c => c.LastChangedByUser.SurName,
-                                                         c => c.Administrator.FirstName,
-                                                         c => c.Administrator.SurName,
-                                                         c => c.CaseType.Name,
-                                                         c => c.Workinggroup.WorkingGroupName,
-                                                         c => c.Category.Name,
-                                                         c => c.Customer.Name,
-                                                         c => c.Department.DepartmentName,
-                                                         c => c.RegLanguage.Name,
-                                                         c => c.Urgency.Name,
-                                                         c => c.Problem.Name,
-                                                         c => c.Priority.Name,
-                                                         c => c.StateSecondary.Name,
-                                                         c => c.CaseFiles.Select(f => f.FileName),
-                                                         c => c.Region.Name,
-                                                         c => c.CausingPart.Name,
-                                                         c => c.Ou.Name,
-                                                         c => c.System.SystemName,
-                                                         c => c.Impact.Name,
-                                                         c => c.Supplier.Name,
-                                                         c => c.CaseResponsibleUser.FirstName,
-                                                         c => c.CaseResponsibleUser.SurName,
-                                                         c => c.Status.Name,
-                                                         c => c.User.FirstName,
-                                                         c => c.User.SurName,
-                                                         // http://redmine.fastdev.se/issues/10639
-                                                         /*c => c.Logs.Select(
-                                                             l => l.Text_Internal + separator +
-                                                                    l.Text_External + separator +                                                                     
-                                                                    l.Charge + separator +
-                                                                    l.LogFiles.FirstOrDefault().FileName + separator +
-                                                                    l.FinishingDate + separator +
-                                                                    l.FinishingTypeEntity.Name)*/
-                                                         c => c.Logs.Select(l => l.Text_Internal),
-                                                         c => c.Logs.Select(l => l.Text_External),
-                                                         c => c.Logs.Select(l => l.Charge),
-                                                         c => c.Logs.Select(l => l.LogFiles.FirstOrDefault().FileName),
-                                                         c => c.Logs.Select(l => l.FinishingDate),
-                                                         c => c.Logs.Select(l => l.FinishingTypeEntity != null? l.FinishingTypeEntity.Id : 0),
-                                                         c => c.Logs.Select(l => l.LogDate)
-                                                     })
-                                                     .ToList();
+                caseEntity.CaseType = new CaseType { Name = string.Empty };
+                caseEntity.CaseType.Name = caseEntity.CaseType_Id.GetCaseTypeFullName(caseDataSet.CaseTypeQuery.AsQueryable());
+                
+                caseEntity.RegLanguage = caseDataSet.LanguageQuery.Where(l => l.Id == caseEntity.RegLanguage_Id).FirstOrDefault() ?? new Language() { Name = string.Empty };                
 
-            return entities.Select(
-                e =>
+                caseEntity.Region = new Region { Name = string.Empty };
+                if (caseEntity.Region_Id.HasValue)
+                    caseEntity.Region = caseDataSet.RegionQuery.Where(r => r.Id == caseEntity.Region_Id.Value).FirstOrDefault() ?? caseEntity.Region;
+
+                caseEntity.Department = new Department { DepartmentName = string.Empty };
+                if (caseEntity.Department_Id.HasValue)
+                    caseEntity.Department = caseDataSet.DepartmentQuery.Where(r => r.Id == caseEntity.Department_Id.Value).FirstOrDefault() ?? caseEntity.Department;
+
+                caseEntity.Ou = new OU { Name = string.Empty };
+                if (caseEntity.OU_Id.HasValue)                                 
+                    caseEntity.Ou.Name = caseEntity.OU_Id.GetOUFullName(caseDataSet.OrganizationUnitQuery.AsQueryable());                
+
+                caseEntity.User = new User { FirstName = string.Empty, SurName = string.Empty };
+                if (caseEntity.User_Id.HasValue)
+                    caseEntity.User = caseDataSet.UserQuery.Where(u => u.Id == caseEntity.User_Id.Value).FirstOrDefault() ?? caseEntity.User;
+
+                caseEntity.CaseResponsibleUser = new User { FirstName = string.Empty, SurName = string.Empty };
+                if (caseEntity.CaseResponsibleUser_Id.HasValue)
+                    caseEntity.CaseResponsibleUser = caseDataSet.UserQuery.Where(u => u.Id == caseEntity.CaseResponsibleUser_Id.Value).FirstOrDefault() ?? caseEntity.CaseResponsibleUser;
+
+                caseEntity.Administrator = new User { FirstName = string.Empty, SurName = string.Empty };
+                if (caseEntity.Performer_User_Id.HasValue)
+                    caseEntity.Administrator = caseDataSet.UserQuery.Where(u => u.Id == caseEntity.Performer_User_Id.Value).FirstOrDefault() ?? caseEntity.Administrator;
+
+                caseEntity.LastChangedByUser= new User { FirstName = string.Empty, SurName = string.Empty };
+                if (caseEntity.ChangeByUser_Id.HasValue)
+                    caseEntity.LastChangedByUser = caseDataSet.UserQuery.Where(u => u.Id == caseEntity.ChangeByUser_Id.Value).FirstOrDefault() ?? caseEntity.LastChangedByUser;
+
+                caseEntity.Category = new Category { Name = string.Empty };
+                if (caseEntity.Category_Id.HasValue)
+                    caseEntity.Category = caseDataSet.CategoryQuery.Where(c => c.Id == caseEntity.Category_Id.Value).FirstOrDefault() ?? caseEntity.Category;
+
+                caseEntity.ProductArea = new ProductArea { Name = string.Empty };
+                if (caseEntity.ProductArea_Id.HasValue)                
+                    caseEntity.ProductArea.Name = GetProductAreaFullName(caseEntity.ProductArea_Id.Value, caseDataSet.ProductAreaQuery.ToList());                                    
+
+                caseEntity.System = new System { SystemName = string.Empty };
+                if (caseEntity.System_Id.HasValue)
+                    caseEntity.System = caseDataSet.SystemQuery.Where(s => s.Id == caseEntity.System_Id.Value).FirstOrDefault() ?? caseEntity.System;
+
+                caseEntity.Urgency = new Urgency { Name = string.Empty };
+                if (caseEntity.Urgency_Id.HasValue)
+                    caseEntity.Urgency = caseDataSet.UrgencyQuery.Where(u => u.Id == caseEntity.Urgency_Id.Value).FirstOrDefault() ?? caseEntity.Urgency;
+
+                caseEntity.Impact = new Impact { Name = string.Empty };
+                if (caseEntity.Impact_Id.HasValue)
+                    caseEntity.Impact = caseDataSet.ImpactQuery.Where(i => i.Id == caseEntity.Impact_Id.Value).FirstOrDefault() ?? caseEntity.Impact;
+
+                caseEntity.Supplier = new Supplier { Name = string.Empty };
+                if (caseEntity.Supplier_Id.HasValue)
+                    caseEntity.Supplier = caseDataSet.SupplierQuery.Where(s => s.Id == caseEntity.Supplier_Id.Value).FirstOrDefault() ?? caseEntity.Supplier;
+
+                caseEntity.Workinggroup = new WorkingGroupEntity { WorkingGroupName = string.Empty };
+                if (caseEntity.WorkingGroup_Id.HasValue)
+                    caseEntity.Workinggroup = caseDataSet.WorkingGroupQuery.Where(w => w.Id == caseEntity.WorkingGroup_Id.Value).FirstOrDefault() ?? caseEntity.Workinggroup;
+
+                caseEntity.Priority = new Priority { Name = string.Empty };
+                if (caseEntity.Priority_Id.HasValue)
+                    caseEntity.Priority = caseDataSet.PriorityQuery.Where(p => p.Id == caseEntity.Priority_Id.Value).FirstOrDefault() ?? caseEntity.Priority;
+
+                caseEntity.Status = new Status { Name = string.Empty };
+                if (caseEntity.Status_Id.HasValue)
+                    caseEntity.Status = caseDataSet.StatusQuery.Where(s => s.Id == caseEntity.Status_Id.Value).FirstOrDefault() ?? caseEntity.Status;
+
+                caseEntity.StateSecondary = new StateSecondary { Name = string.Empty };
+                if (caseEntity.StateSecondary_Id.HasValue)
+                    caseEntity.StateSecondary = caseDataSet.StateSecondaryQuery.Where(s => s.Id == caseEntity.StateSecondary_Id.Value).FirstOrDefault() ?? caseEntity.StateSecondary;
+
+                caseEntity.CausingPart = new CausingPart { Name = string.Empty };
+                if (caseEntity.CausingPartId.HasValue)
+                    caseEntity.CausingPart = caseDataSet.CausingPartQuery.Where(s => s.Id == caseEntity.CausingPartId.Value).FirstOrDefault() ?? caseEntity.CausingPart;
+
+                caseEntity.RegistrationSourceCustomer = new RegistrationSourceCustomer { SourceName = string.Empty };
+                if (caseEntity.RegistrationSourceCustomer_Id.HasValue)
+                    caseEntity.RegistrationSourceCustomer = caseDataSet.RegistrationSourceCustomerQuery.Where(s => s.Id == caseEntity.RegistrationSourceCustomer_Id.Value).FirstOrDefault() ?? caseEntity.RegistrationSourceCustomer;                
+
+                caseEntity.Logs = new List<Log>();                
+                var lastLog = caseDataSet.LogQuery.Where(l => l.Case_Id == caseEntity.Id).OrderByDescending(l=> l.LogDate).FirstOrDefault();
+                var logFiles = new List<LogFile>();
+                var finishingType = new FinishingCause { Name = string.Empty };
+
+                if (lastLog == null)
+                {                    
+                    caseEntity.Logs.Add(new Log
+                    {                    
+                        Text_External = string.Empty,
+                        Text_Internal = string.Empty,
+                        FinishingDate = caseEntity.FinishingDate,
+                        LogFiles = logFiles,
+                        FinishingTypeEntity = finishingType                        
+                    });
+                }
+                else
+                {
+                    if (lastLog.FinishingType.HasValue)                    
+                        finishingType = new FinishingCause { Name = lastLog.FinishingType.Value.GetClosingReasonFullName(caseDataSet.ClosingReasonQuery.AsQueryable()) };
+                    
+                    caseEntity.Logs.Add(new Log
                     {
-                        var caseEntity = (Case)e.sourceObject;
+                        Text_Internal = lastLog.Text_Internal,
+                        Text_External = lastLog.Text_External,
+                        Charge = lastLog.Charge,
+                        LogFiles = logFiles,
+                        FinishingDate = caseEntity.FinishingDate,
+                        FinishingTypeEntity = finishingType,
+                        LogDate = lastLog.LogDate
+                    });
+                }
 
-                        caseEntity.ProductArea = new ProductArea { Name = e.f0 };
-                        caseEntity.LastChangedByUser = new User { FirstName = e.f1, SurName = e.f2 };
-                        caseEntity.Administrator = new User { FirstName = e.f3, SurName = e.f4 };
-                        caseEntity.CaseType = new CaseType { Name = e.f5 };
-                        caseEntity.Workinggroup = new WorkingGroupEntity { WorkingGroupName = e.f6 };
-                        caseEntity.Category = new Category { Name = e.f7 };
-                        caseEntity.Customer = new Customer { Name = e.f8 };
-                        caseEntity.Department = new Department { DepartmentName = e.f9 };
-                        caseEntity.RegLanguage = new Language { Name = e.f10 };
-                        caseEntity.Urgency = new Urgency { Name = e.f11 };
-                        caseEntity.Problem = new Problem { Name = e.f12 };
-                        caseEntity.Priority = new Priority { Name = e.f13 };
-                        caseEntity.StateSecondary = new StateSecondary { Name = e.f14 };
-                        caseEntity.CaseFiles = ((List<string>)e.f15).Select(f => new CaseFile { FileName = f }).ToList();
-                        caseEntity.Region = new Region { Name = e.f16 };
-                        caseEntity.CausingPart = new CausingPart { Name = e.f17 };
-                        caseEntity.Ou = new OU { Name =  e.f18 };
-                        caseEntity.System = new System { SystemName = e.f19 };
-                        caseEntity.Impact = new Impact { Name = e.f20 };
-                        caseEntity.Supplier = new Supplier { Name = e.f21 };
-                        caseEntity.CaseResponsibleUser = new User { FirstName = e.f22, SurName = e.f23 };
-                        caseEntity.Status = new Status { Name = e.f24 };
-                        caseEntity.User = new User { FirstName = e.f25, SurName = e.f26 };
-                        
-                        // http://redmine.fastdev.se/issues/10639
-                        /*caseEntity.Logs = ((List<string>)e.f27).Select(
-                            l =>
-                            {
-                                var values = l.Split(new[] { separator }, StringSplitOptions.None);
-                                var internalLogNote = values[0];
-                                var externalLogNote = values[1];
-                                var charge = int.Parse(values[2]);
-                                var files = new List<LogFile>();
-                                if (!string.IsNullOrEmpty(values[3]))
-                                {
-                                    files.Add(new LogFile { FileName = values[3] });
-                                }
+                /*foreach (var log in allLogs)
+                {
+                    
+                    if (log.FinishingType.HasValue)
+                    {
+                        finishingType = new FinishingCause { Name = log.FinishingType.Value.GetClosingReasonFullName(caseDataSet.ClosingReasonQuery.AsQueryable()) };
+                    }
+                    
+                    //logFiles = caseDataSet.LogFileQuery.Where(lf => lf.Log_Id == log.Id).ToList();                    
 
-                                DateTime? finishingDate = null;
-                                DateTime finishingDateVal;
-                                if (DateTime.TryParse(values[4], out finishingDateVal))
-                                {
-                                    finishingDate = finishingDateVal;
-                                }
+                    caseEntity.Logs.Add(new Log
+                                            {
+                                                Text_Internal = log.Text_Internal,
+                                                Text_External = log.Text_External,
+                                                Charge = log.Charge,
+                                                LogFiles = logFiles,
+                                                FinishingDate = caseEntity.FinishingDate,
+                                                FinishingTypeEntity = finishingType,
+                                                LogDate = log.LogDate
+                                            });                                                                                
+                }*/                                                
+                
+                caseEntity.CaseFiles = new List<CaseFile>();
+                caseEntity.CaseFiles = caseDataSet.CaseFileQuery.Where(cf => cf.Case_Id == caseEntity.Id).ToList();
 
-                                var finishingType = new FinishingCause { Name = values[5] };
+                var caseStatistic = caseDataSet.CaseStatisticsQuery.Where(cs => cs.CaseId == caseEntity.Id).FirstOrDefault();
+                ret.Add(CreateFullOverview(caseEntity, caseStatistic));                
+            }
 
-                                return new Log
-                                {
-                                    Text_Internal = internalLogNote,
-                                    Text_External = externalLogNote,
-                                    Charge = charge,
-                                    LogFiles = files,
-                                    FinishingDate = finishingDate,
-                                    FinishingTypeEntity = finishingType
-                                };
-                            }).ToList();*/
-
-                        caseEntity.Logs = new List<Log>();
-                        var internalLogNotes = (List<string>)e.f27;
-                        var externalLogNotes = (List<string>)e.f28;
-                        var charges = (List<int>)e.f29;
-                        var files = (List<string>)e.f30;
-                        //var finishingDates = (List<DateTime?>)e.f31;
-                        //Show current closing date Case #52681
-                        var curFinishingDate = caseEntity.FinishingDate;
-                        var finishingTypes = (List<int>)e.f32;
-                        var logDates = (List<DateTime>)e.f33;
-                        
-
-                        for (var i = 0; i < internalLogNotes.Count; i++)
-                        {
-                            var logFiles = new List<LogFile>();
-                            if (!string.IsNullOrEmpty(files[i]))
-                            {
-                                logFiles.Add(new LogFile { FileName = files[i] });
-                            }
-
-                            var finishingType = new FinishingCause { Name = finishingTypes[i].GetClosingReasonFullName(closingReasonQuery) };
-
-                            caseEntity.Logs.Add(new Log
-                                                    {
-                                                        Text_Internal = internalLogNotes[i],
-                                                        Text_External = externalLogNotes[i],
-                                                        Charge = charges[i],
-                                                        LogFiles = logFiles,
-                                                        FinishingDate = curFinishingDate,
-                                                        FinishingTypeEntity = finishingType,
-                                                        LogDate = logDates[i]
-                                                    });
-                        }
-
-                        
-                        caseEntity.CaseType.Name = caseEntity.CaseType_Id.GetCaseTypeFullName(caseTypeQuery);
-                        caseEntity.ProductArea.Name = caseEntity.ProductArea_Id.GetProductAreaFullName(productAreaQuery);
-                        caseEntity.Ou.Name = caseEntity.OU_Id.GetOUFullName(organizationUnitQuery);
-
-                        var caseStatistic = caseStatisticsQuery.Where(cs => cs.CaseId == caseEntity.Id).FirstOrDefault();                        
-                        return CreateFullOverview(caseEntity, caseStatistic);
-                    }).ToList();
+            return ret;
         }
 
         private static FullCaseOverview CreateFullOverview(Case entity, CaseStatistic caseStatistic)
@@ -287,6 +276,9 @@
             var registratedBy = new UserName(entity.User.FirstName, entity.User.SurName);
             var attachedFile = entity.CaseFiles.Any() ? entity.CaseFiles.First().FileName : string.Empty;
             var solvedInTime = (caseStatistics != null ? caseStatistics.WasSolvedInTime : null);
+            var sourceName = entity.RegistrationSourceCustomer == null
+                                 ? string.Empty
+                                 : entity.RegistrationSourceCustomer.SourceName; 
 
             return new CaseInfoOverview(
                         entity.CaseNumber,
@@ -311,6 +303,7 @@
                         entity.Available,
                         entity.Cost,
                         attachedFile,
+                        sourceName,
                         solvedInTime);
         }
 
@@ -344,10 +337,10 @@
                                                 lastLog.Text_Internal,
                                                 lastLog.Text_External,
                                                 lastLog.Charge.ToBool(),
-                                                lastLog.LogFiles.Any() ? lastLog.LogFiles.First().FileName : string.Empty,
+                                                lastLog.LogFiles != null && lastLog.LogFiles.Any() ? lastLog.LogFiles.First().FileName : string.Empty,
                                                 entity.FinishingDescription,
                                                 lastLog.FinishingDate,
-                                                lastLog.FinishingTypeEntity.Name);
+                                                lastLog.FinishingTypeEntity != null? lastLog.FinishingTypeEntity.Name : string.Empty);
                 logs.Add(lastLogOverview);
             }
                                 

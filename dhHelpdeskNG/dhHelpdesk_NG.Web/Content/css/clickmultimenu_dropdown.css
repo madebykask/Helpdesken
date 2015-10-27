@@ -18,35 +18,67 @@
     }
 
     .btn-group > .clickmultimenu.dropdown-menu > .dropdown-submenu > .dropdown-menu > li.dropdown-header, .btn-group > .clickmultimenu.dropdown-menu > .dropdown-submenu > .dropdown-menu > li > a, .dropdown > .clickmultimenu.dropdown-menu > .dropdown-submenu > .dropdown-menu > li.dropdown-header, .dropdown > .dropdown-menu > .dropdown-submenu > .dropdown-menu > li > a, .dropup > .clickmultimenu.dropdown-menu > .dropdown-submenu > .dropdown-menu > li.dropdown-header, .dropup > .clickmultimenu.dropdown-menu > .dropdown-submenu > .dropdown-menu > li > a {
-        padding-left: 30px;
+        padding-left: 40px;
+        vertical-align: text-top;
+        background-image: url("../img/clickmultimenu-1.png");
+        background-position: 1px 7px;
+        background-repeat: no-repeat;
     }
 
     .btn-group > .clickmultimenu.dropdown-menu > .dropdown-submenu > .dropdown-menu > li > .dropdown-menu > li.dropdown-header, .btn-group > .clickmultimenu.dropdown-menu > .dropdown-submenu > .dropdown-menu > li > .dropdown-menu > li > a, .dropdown > .clickmultimenu.dropdown-menu > .dropdown-submenu > .dropdown-menu > li > .dropdown-menu > li.dropdown-header, .dropdown > .clickmultimenu.dropdown-menu > .dropdown-submenu > .dropdown-menu > li > .dropdown-menu > li > a, .dropup > .clickmultimenu.dropdown-menu > .dropdown-submenu > .dropdown-menu > li > .dropdown-menu > li.dropdown-header, .dropup > .clickmultimenu.dropdown-menu > .dropdown-submenu > .dropdown-menu > li > .dropdown-menu > li > a {
-        padding-left: 40px;
+        padding-left: 50px;
+        vertical-align: text-top;
+        background-image: url("../img/clickmultimenu-2.png");
+        background-position: 1px 7px;
+        background-repeat: no-repeat;
     }
 
     .btn-group > .clickmultimenu.dropdown-menu > .dropdown-submenu > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li.dropdown-header, .btn-group > .clickmultimenu.dropdown-menu > .dropdown-submenu > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > a, .dropdown > .clickmultimenu.dropdown-menu > .dropdown-submenu > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li.dropdown-header, .dropdown > .clickmultimenu.dropdown-menu > .dropdown-submenu > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > a, .dropup > .clickmultimenu.dropdown-menu > .dropdown-submenu > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li.dropdown-header, .dropup > .clickmultimenu.dropdown-menu > .dropdown-submenu > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > a {
-        padding-left: 50px;
+        padding-left: 60px;
+        vertical-align: text-top;
+        background-image: url("../img/clickmultimenu-3.png");
+        background-position: 1px 7px;
+        background-repeat: no-repeat;
     }
 
     .btn-group > .clickmultimenu.dropdown-menu > .dropdown-submenu > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li.dropdown-header, .btn-group > .clickmultimenu.dropdown-menu > .dropdown-submenu > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > a, .dropdown > .clickmultimenu.dropdown-menu > .dropdown-submenu > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li.dropdown-header, .dropdown > .clickmultimenu.dropdown-menu > .dropdown-submenu > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > a, .dropup > .clickmultimenu.dropdown-menu > .dropdown-submenu > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li.dropdown-header, .dropup > .clickmultimenu.dropdown-menu > .dropdown-submenu > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > a {
-        padding-left: 60px;
+        padding-left: 70px;
+        vertical-align: text-top;
+        background-image: url("../img/clickmultimenu-4.png");
+        background-position: 1px 7px;
+        background-repeat: no-repeat;
+    }
+
+    .btn-group > .clickmultimenu.dropdown-menu > .dropdown-submenu > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li.dropdown-header, .btn-group > .clickmultimenu.dropdown-menu > .dropdown-submenu > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > a, .dropdown > .clickmultimenu.dropdown-menu > .dropdown-submenu > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li.dropdown-header, .dropdown > .clickmultimenu.dropdown-menu > .dropdown-submenu > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > a, .dropup > .clickmultimenu.dropdown-menu > .dropdown-submenu > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li.dropdown-header, .dropup > .clickmultimenu.dropdown-menu > .dropdown-submenu > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > a {
+        padding-left: 80px;
+        vertical-align: text-top;
+        background-image: url("../img/clickmultimenu-5.png");
+        background-position: 1px 7px;
+        background-repeat: no-repeat;
+    }
+
+    .btn-group > .clickmultimenu.dropdown-menu > .dropdown-submenu > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu >  li > .dropdown-menu > li.dropdown-header, .btn-group > .clickmultimenu.dropdown-menu > .dropdown-submenu > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > a, .dropdown > .clickmultimenu.dropdown-menu > .dropdown-submenu > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li.dropdown-header, .dropdown > .clickmultimenu.dropdown-menu > .dropdown-submenu > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > a, .dropup > .clickmultimenu.dropdown-menu > .dropdown-submenu > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li.dropdown-header, .dropup > .clickmultimenu.dropdown-menu > .dropdown-submenu > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > .dropdown-menu > li > a {
+        padding-left: 90px;
+        vertical-align: text-top;
+        background-image: url("../img/clickmultimenu-6.png");
+        background-position: 1px 7px;
+        background-repeat: no-repeat;
     }
 
 
 .clickmultimenu.dropdown-menu {
-    max-height: 300px;
+    max-height: 320px;
     overflow-y: auto;
     overflow-x: hidden;
-    min-width: 350px;
+    min-width: 400px;
 }
 
 .clickmultimenu.dropdown-menu > .dropdown-submenu {
-    max-width: 335px;
+    max-width: 385px;
 }
 
 .clickmultimenu.dropdown-menu > .dropdown-submenu .dropdown-menu {
-    min-width: 335px;
+    min-width: 385px;
 }
 
 .clickmultimenu.dropdown-menu > .dropdown-submenu:hover > .dropdown-menu {

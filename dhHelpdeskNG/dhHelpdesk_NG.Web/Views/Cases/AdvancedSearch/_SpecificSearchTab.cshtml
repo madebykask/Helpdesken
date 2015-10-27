@@ -45,7 +45,7 @@
                     </tr>                
                 }
                 
-                @*                     Working group control*@
+                @*Working group control*@
                 @if (Model.WorkingGroupList != null)
                 {
                     <tr>
@@ -60,7 +60,8 @@
                                     {
                                         <option value="@e.Id" @e.Id.IdIsSelected(Model.FilteredWorkingGroup)>@e.WorkingGroupName</option>
                                     }
-                                    else{
+                                    else
+                                    {
                                         <option class="DisabledChosen" value="@e.Id" @e.Id.IdIsSelected(Model.FilteredWorkingGroup)>@e.WorkingGroupName</option>
                                     }
                                     

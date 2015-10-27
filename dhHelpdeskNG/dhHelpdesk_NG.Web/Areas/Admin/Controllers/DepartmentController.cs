@@ -8,6 +8,7 @@
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
     using DH.Helpdesk.Common.Enums;
+    using DH.Helpdesk.Web.Infrastructure;
 
     public class DepartmentController : BaseAdminController
     {
@@ -36,12 +37,21 @@
             this._customerService = customerService;
         }
 
+        public JsonResult SetShowOnlyActiveDepartmentInAdmin(bool value)
+        {
+            SessionFacade.ShowOnlyActiveDepartmentInAdmin = value;
+            return this.Json(new { result = "success" });
+        }
+
         public ActionResult Index(int customerId)
         {
             var customer = this._customerService.GetCustomer(customerId);
             var departments = this._departmentService.GetDepartments(customer.Id, ActivationStatus.All).ToList();
 
-            var model = new DepartmentIndexViewModel { Departments = departments, Customer = customer};
+            var model = new DepartmentIndexViewModel { Departments = departments,
+                                                       Customer = customer,
+                                                       IsShowOnlyActive = SessionFacade.ShowOnlyActiveDepartmentInAdmin
+                                                     };
             return this.View(model);
         }
 

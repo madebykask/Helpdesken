@@ -197,8 +197,6 @@
         [IsId]
         public int? OrganizationUnitId { get; set; }
 
-        public StringFieldModel CostCentre { get; set; }
-
         public StringFieldModel Other { get; set; }
 
         public StringFieldModel Phone { get; set; }

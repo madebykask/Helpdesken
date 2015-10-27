@@ -31,6 +31,11 @@
         public int CaseSolutionPermission { get; set; }
         public int CloseCasePermission { get; set; }
         public int CreateCasePermission { get; set; }
+
+        /// <summary>
+        /// Allows user to create subcases
+        /// </summary>
+        public int CreateSubCasePermission { get; set; }
         public int CopyCasePermission { get; set; }
         public int Customer_Id { get; set; }
         public int DailyReportReminder { get; set; }

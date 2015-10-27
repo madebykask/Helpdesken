@@ -29,14 +29,10 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
-    <IISExpressSSLPort>
-    </IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>
-    </IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>
-    </IISExpressWindowsAuthentication>
-    <IISExpressUseClassicPipelineMode>
-    </IISExpressUseClassicPipelineMode>
+    <IISExpressSSLPort>44302</IISExpressSSLPort>
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
     <DontImportPostSharp>True</DontImportPostSharp>
     <TargetFrameworkProfile />
@@ -92,6 +88,10 @@
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\MicosoftReportViewerWebForms_v11.1.0.1\lib\Microsoft.ReportViewer.WebForms.DLL</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
@@ -117,6 +117,11 @@
     <Reference Include="RazorPDF">
       <HintPath>..\packages\RazorPDF.1.0.0\lib\net40\RazorPDF.dll</HintPath>
     </Reference>
+    <Reference Include="ReportViewerForMvc, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\ReportViewerForMvc.1.0.1\lib\net45\ReportViewerForMvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.IdentityModel.Tokens.ValidatingIssuerNameRegistry">
@@ -367,23 +372,53 @@
     <Compile Include="Areas\Admin\Models\UrgencyInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\WorkingGroupInputViewModel.cs" />
     <Content Include="Areas\Admin\Content\js\CaseOverview\customerOverview.js" />
+    <Content Include="Areas\Admin\Content\js\Category\index.js" />
+    <Content Include="Areas\Admin\Content\js\CausingPart\index.js" />
     <Content Include="Areas\Admin\Content\js\Common\common.js" />
     <Content Include="Areas\Admin\Content\js\Common\ToggableInactiveList.js" />
     <Content Include="Areas\Admin\Content\js\CaseType\index.js" />
+    <Content Include="Areas\Admin\Content\js\Program\index.js" />
+    <Content Include="Areas\Admin\Content\js\EMailGroup\index.js" />
+    <Content Include="Areas\Admin\Content\js\OperationLogCategory\index.js" />
+    <Content Include="Areas\Admin\Content\js\OperationObject\index.js" />
+    <Content Include="Areas\Admin\Content\js\DailyReportSubject\index.js" />
+    <Content Include="Areas\Admin\Content\js\FinishingCause\index.js" />
+    <Content Include="Areas\Admin\Content\js\StandardText\index.js" />
+    <Content Include="Areas\Admin\Content\js\Department\index.js" />
+    <Content Include="Areas\Admin\Content\js\OU\index.js" />
+    <Content Include="Areas\Admin\Content\js\Priority\index.js" />
+    <Content Include="Areas\Admin\Content\js\Region\index.js" />
+    <Content Include="Areas\Admin\Content\js\RegistrationSourceCustomer\index.js" />
+    <Content Include="Areas\Admin\Content\js\StateSecondary\index.js" />
+    <Content Include="Areas\Admin\Content\js\Status\index.js" />
+    <Content Include="Areas\Admin\Content\js\Supplier\index.js" />
     <Content Include="Areas\Admin\Content\js\WorkingGroup\index.js" />
     <Content Include="Areas\Admin\Content\js\Customer\customerCaseSettings.js" />
     <Content Include="Areas\Admin\Content\js\ProductArea\index.js" />
     <Content Include="Areas\Admin\Content\js\Users\index.lockedcase.js" />
     <Content Include="Areas\Admin\Content\js\Users\index.js" />
     <Content Include="Areas\Admin\Content\js\Users\user.js" />
+    <Content Include="Areas\Reports\Content\js\reportViewer.logic.js" />
+    <Content Include="Areas\Reports\Content\js\reportViewer.specialfilter.js" />
     <Content Include="Areas\Reports\Content\js\reports.js" />
     <Content Include="Content\bootstrap-tagsinput.css" />
     <Content Include="Content\css\bootstrap-tagsinput.css" />
     <Content Include="Content\css\clickmultimenu_dropdown.css" />
     <Content Include="Content\css\custom\dynamic-cases.css" />
+    <Content Include="Content\css\images\sort_asc.png" />
+    <Content Include="Content\css\images\sort_both.png" />
+    <Content Include="Content\css\images\sort_desc.png" />
     <Content Include="Content\icons\advanced_search.png" />
     <Content Include="Content\icons\ajax-loader.gif" />
+    <Content Include="Content\icons\doc-download.png" />
+    <Content Include="Content\icons\doc-edit.png" />
     <Content Include="Content\img\ajax-loader.GIF" />
+    <Content Include="Content\img\clickmultimenu-1.png" />
+    <Content Include="Content\img\clickmultimenu-2.png" />
+    <Content Include="Content\img\clickmultimenu-3.png" />
+    <Content Include="Content\img\clickmultimenu-4.png" />
+    <Content Include="Content\img\clickmultimenu-5.png" />
+    <Content Include="Content\img\clickmultimenu-6.png" />
     <Content Include="Content\img\dh_solutions_version.png" />
     <Content Include="Content\img\glyphicons-dh.png" />
     <Content Include="Content\js\Account\order.js" />
@@ -429,6 +464,7 @@
     <Content Include="Content\js\Cases\caseByIds.logic.js" />
     <Content Include="Content\js\Cases\_caseLogInput.js" />
     <Content Include="Content\js\Cases\components\BaseField.js" />
+    <Content Include="Content\js\Cases\components\ConfirmationDialog.js" />
     <Content Include="Content\js\Cases\components\DateField.js" />
     <Content Include="Content\js\Cases\components\EditPage.js" />
     <Content Include="Content\js\Cases\components\JQueryChosenField.js" />
@@ -438,6 +474,7 @@
     <Content Include="Content\js\Cases\_caseLogFiles.js" />
     <Content Include="Content\js\Cases\index.settings.js" />
     <Content Include="Content\js\Cases\models\Case.js" />
+    <Content Include="Content\js\Cases\_childCases.js" />
     <Content Include="Content\js\Cases\_input.js" />
     <Content Include="Content\js\Cases\index.logic.js" />
     <Content Include="Content\js\Cases\relatedCases.logic.js" />
@@ -772,9 +809,11 @@
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\SupplierEditModel.cs" />
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\UserEditModel.cs" />
     <Compile Include="Areas\Orders\OrdersAreaRegistration.cs" />
-    <Content Include="Content\js\clickmultimenu_dropdown.js" />
+    <Content Include="Content\js\snippets\clickmultimenu_dropdown.js" />
+    <Content Include="Content\js\snippets\jQuery.inactiveValue.validator.js" />
+    <Content Include="Content\js\snippets\tabSwitchByHashTag.js" />
     <Content Include="Content\js\dhHelpdesk.js" />
-    <Content Include="Content\js\dropdown_fix.js" />
+    <Content Include="Content\js\snippets\dropdown_fix.js" />
     <Content Include="Content\js\Licenses\license.editlogic.js" />
     <Content Include="Content\js\Notifiers\edit.js" />
     <Content Include="Areas\Admin\Content\js\Common\tinymce.initiate.js" />
@@ -885,6 +924,9 @@
     <Compile Include="Areas\Reports\Models\Options\ReportGenerator\ReportGeneratorOptionsModel.cs" />
     <Compile Include="Areas\Reports\Models\Options\ReportsFilterModel.cs" />
     <Compile Include="Areas\Reports\Models\Options\ReportsOptions.cs" />
+    <Compile Include="Areas\Reports\Models\ReportService\ReportServiceSessionModel.cs" />
+    <Compile Include="Areas\Reports\Models\ReportService\ReportFilterModel.cs" />
+    <Compile Include="Areas\Reports\Models\ReportService\ReportServiceOverviewModel.cs" />
     <Compile Include="Areas\Reports\Models\Reports\CaseSatisfactionReport.cs" />
     <Compile Include="Areas\Reports\Models\Reports\CaseTypeArticleNoModel.cs" />
     <Compile Include="Areas\Reports\Models\Reports\FinishingCauseCategoryCustomerModel.cs" />
@@ -906,6 +948,7 @@
     <Compile Include="Controllers\DailyReportController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FaqController.cs" />
+    <Compile Include="Controllers\FilesController.cs" />
     <Compile Include="Controllers\InvoiceController.cs" />
     <Compile Include="Areas\Licenses\Controllers\ProductsController.cs" />
     <Compile Include="Controllers\NotifiersController.cs" />
@@ -978,6 +1021,7 @@
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\PrinterBuilder.cs" />
     <Compile Include="Infrastructure\CaseOverview\OutputFormatter.cs" />
     <Compile Include="Infrastructure\Case\CaseViewMapper.cs" />
+    <Compile Include="Infrastructure\Case\ChildCaseOverviewMapper.cs" />
     <Compile Include="Infrastructure\Configuration\Concrete\ApplicationConfiguration.cs" />
     <Compile Include="Infrastructure\ActionFilters\BadRequestOnNotValidAttribute.cs" />
     <Compile Include="Infrastructure\Configuration\Concrete\Configuration.cs" />
@@ -1206,6 +1250,9 @@
     <Compile Include="Models\Case\CaseByIdsViewModel.cs" />
     <Compile Include="Models\Case\CaseFilesModel.cs" />
     <Compile Include="Models\CaseLock\CaseLockModel.cs" />
+    <Compile Include="Models\Case\ChildCase\ChildCaseViewModel.cs" />
+    <Compile Include="Models\Case\CaseMasterDataFieldsModel.cs" />
+    <Compile Include="Models\Case\ChildCase\ParentCaseInfo.cs" />
     <Compile Include="Models\Case\Input\CaseEditInput.cs" />
     <Compile Include="Models\Case\Output\CaseSeachFilterData.cs" />
     <Compile Include="Models\CaseSolution\CaseSolutionInputViewModel.cs" />
@@ -1690,7 +1737,11 @@
     <Content Include="Areas\Admin\Views\Users\Index\_OnlineUserList.cshtml" />
     <Content Include="Areas\Admin\Views\Users\Index\_UserGrid.cshtml" />
     <Content Include="Areas\Admin\Views\Users\Index\_LockedCaseTable.cshtml" />
+    <Content Include="Areas\Reports\Views\Report\ReportViewer\_PresentReport.cshtml" />
+    <Content Include="Areas\Reports\Views\Report\ReportViewer\_Overview.cshtml" />
+    <Content Include="Areas\Reports\Views\Report\ReportViewer\_CustomerSpecificFilter.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
+    <Content Include="ReportViewerWebForm.aspx" />
     <Content Include="Scripts\jquery-1.8.3.js" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />
     <Content Include="Scripts\jquery-ui-1.9.2.js" />
@@ -2264,8 +2315,11 @@
     <Content Include="Views\Print\_CaseHistorySection.cshtml" />
     <Content Include="Views\Cases\AdvancedSearch\_SpecificSearchTab.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\DateLocalTZ.cshtml" />
+    <Content Include="Views\Cases\_ChildCases.cshtml" />
     <Content Include="Views\CheckList\Edit.cshtml" />
     <Content Include="Views\CheckList\_Actions.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\DatePickerLocalTZ.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\DateReadOnlyLocalTZ.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
@@ -3072,7 +3126,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>63788</DevelopmentServerPort>
+          <DevelopmentServerPort>64738</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:57747/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

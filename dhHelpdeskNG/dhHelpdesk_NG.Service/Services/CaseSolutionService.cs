@@ -1,10 +1,10 @@
 ﻿using DH.Helpdesk.BusinessData.Models.CaseSolution;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DH.Helpdesk.Services.Services
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
+{   
 
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;

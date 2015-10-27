@@ -20,10 +20,8 @@
             {
                 case "good":
                     return new Survey() { CaseId = caseId, VoteResult = SurveyVoteResult.GOOD };
-                    break;
                 case "bad":
                     return new Survey() { CaseId = caseId, VoteResult = SurveyVoteResult.BAD };
-                    break;
             }
 
             return new Survey() { CaseId = caseId, VoteResult = SurveyVoteResult.NORMAL };

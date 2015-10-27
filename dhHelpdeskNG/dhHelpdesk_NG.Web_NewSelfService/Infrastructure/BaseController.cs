@@ -161,6 +161,9 @@
                         }
                     }
 
+                    if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings[AppSettingsKey.DefaultUserId]))
+                        userIdentity.UserId = ConfigurationManager.AppSettings[AppSettingsKey.DefaultUserId].ToString();
+
                     var netId = principal.Identity.Name;
                     var ssoLog = new NewSSOLog()
                     {
@@ -183,13 +186,13 @@
                     }
                     else
                     {
-                        SessionFacade.CurrentSystemUser = userIdentity.UserId;
-                        SessionFacade.CurrentUserIdentity = userIdentity;
+                        SessionFacade.CurrentSystemUser = userIdentity.UserId;                        
 
                         var defaultEmployeeNumber = ConfigurationManager.AppSettings[AppSettingsKey.DefaultEmployeeNumber].ToString();
                         if(!string.IsNullOrEmpty(defaultEmployeeNumber))
                             userIdentity.EmployeeNumber = defaultEmployeeNumber;
 
+                        SessionFacade.CurrentUserIdentity = userIdentity;
                         SessionFacade.UserHasAccess = true;
 
                         if(SessionFacade.CurrentCustomer != null && !string.IsNullOrEmpty(userIdentity.EmployeeNumber))
@@ -377,7 +380,7 @@
                 {
                     if(ConfigurationManager.AppSettings[AppSettingsKey.CurrentApplicationType].ToString().ToLower() == ApplicationTypes.LineManager)
                         SessionFacade.TextTranslation = this._masterDataService.GetTranslationTexts()
-                                                                               .Where(x => x.Type == 300)
+                                                                               .Where(x => x.Type == TranslationType.SelfService)
                                                                                .ToList();
                     else
                         SessionFacade.TextTranslation = this._masterDataService.GetTranslationTexts().ToList();

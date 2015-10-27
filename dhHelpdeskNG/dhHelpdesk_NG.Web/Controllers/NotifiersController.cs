@@ -1,10 +1,10 @@
-﻿namespace DH.Helpdesk.Web.Controllers
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 
+namespace DH.Helpdesk.Web.Controllers
+{
     using DH.Helpdesk.BusinessData.Models.Notifiers;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.BusinessData.Models.Shared.Input;
@@ -195,78 +195,82 @@
             var settings = this.notifierFieldSettingRepository.FindByCustomerIdAndLanguageId(
                 currentCustomerId,
                 currentLanguageId);
+            IndexModel model = null;
             if (settings.IsEmpty)
             {
-                var empty = this.indexModelFactory.CreateEmpty();
-                return this.View(empty);
+                model = this.indexModelFactory.CreateEmpty();
             }
-
-            List<ItemOverview> searchDomains = null;
-            List<ItemOverview> searchRegions = null;
-            List<ItemOverview> searchDepartments = null;
-            List<ItemOverview> searchOrganizationUnit = null;
-            List<ItemOverview> searchDivisions = null;
-
-            if (settings.Domain.ShowInNotifiers)
+            else
             {
-                searchDomains = this.domainRepository.FindByCustomerId(currentCustomerId);
-            }
+                List<ItemOverview> searchDomains = null;
+                List<ItemOverview> searchRegions = null;
+                List<ItemOverview> searchDepartments = null;
+                List<ItemOverview> searchOrganizationUnit = null;
+                List<ItemOverview> searchDivisions = null;
 
-            if (settings.Region.ShowInNotifiers)
-            {
-                searchRegions = this.regionRepository.FindByCustomerId(currentCustomerId);
-            }
-
-            if (settings.Department.ShowInNotifiers)
-            {
-                searchRegions = this.regionRepository.FindByCustomerId(currentCustomerId);
-
-                if (filters.RegionId.HasValue)
+                if (settings.Domain.ShowInNotifiers)
                 {
-                    searchDepartments = this.departmentRepository.FindActiveByCustomerIdAndRegionId(
-                        currentCustomerId,
-                        filters.RegionId.Value);
-                }
-                else
-                {
-                    searchDepartments = this.departmentRepository.FindActiveOverviews(currentCustomerId);
+                    searchDomains = this.domainRepository.FindByCustomerId(currentCustomerId);
                 }
 
-                searchOrganizationUnit = this.organizationService.GetOrganizationUnits(filters.DepartmentId);
+                if (settings.Region.ShowInNotifiers)
+                {
+                    searchRegions = this.regionRepository.FindByCustomerId(currentCustomerId);
+                }
+
+                if (settings.Department.ShowInNotifiers)
+                {
+                    searchRegions = this.regionRepository.FindByCustomerId(currentCustomerId);
+
+                    if (filters.RegionId.HasValue)
+                    {
+                        searchDepartments = this.departmentRepository.FindActiveByCustomerIdAndRegionId(
+                            currentCustomerId,
+                            filters.RegionId.Value);
+                    }
+                    else
+                    {
+                        searchDepartments = this.departmentRepository.FindActiveOverviews(currentCustomerId);
+                    }
+
+                    searchOrganizationUnit = this.organizationService.GetOrganizationUnits(filters.DepartmentId);
+                }
+
+                if (settings.Division.ShowInNotifiers)
+                {
+                    searchDivisions = this.divisionRepository.FindByCustomerId(currentCustomerId);
+                }
+
+                var sortField = !string.IsNullOrEmpty(filters.SortByField)
+                    ? new SortField(filters.SortByField, filters.SortBy)
+                    : null;
+
+                var parameters = new SearchParameters(
+                    currentCustomerId,
+                    filters.DomainId,
+                    filters.RegionId,
+                    filters.DepartmentId,
+                    filters.OrganizationUnitId,
+                    filters.DivisionId,
+                    filters.Pharse,
+                    filters.Status,
+                    filters.RecordsOnPage,
+                    sortField);
+
+                var searchResult = this.notifierRepository.Search(parameters);
+
+               model = this.indexModelFactory.Create(
+                    settings,
+                    searchDomains,
+                    searchRegions,
+                    searchDepartments,
+                    searchOrganizationUnit,
+                    searchDivisions,
+                    filters,
+                    searchResult);
             }
 
-            if (settings.Division.ShowInNotifiers)
-            {
-                searchDivisions = this.divisionRepository.FindByCustomerId(currentCustomerId);
-            }
 
-            var sortField = !string.IsNullOrEmpty(filters.SortByField)
-                ? new SortField(filters.SortByField, filters.SortBy)
-                : null;
-
-            var parameters = new SearchParameters(
-                currentCustomerId,
-                filters.DomainId,
-                filters.RegionId,
-                filters.DepartmentId,
-                filters.OrganizationUnitId,
-                filters.DivisionId,
-                filters.Pharse,
-                filters.Status,
-                filters.RecordsOnPage,
-                sortField);
-
-            var searchResult = this.notifierRepository.Search(parameters);
-
-            var model = this.indexModelFactory.Create(
-                settings,
-                searchDomains,
-                searchRegions,
-                searchDepartments,
-                searchOrganizationUnit,
-                searchDivisions,
-                filters,
-                searchResult);
 
             return this.View(model);
         }

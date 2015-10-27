@@ -63,6 +63,9 @@ namespace DH.Helpdesk.NewSelfService.WebServices
         [AllowAnonymous]
         private async Task<bool> WS_IsEmployeeManager(string employeeNumber)        
         {
+            /* IMPORTANT: Active this line only on debug mode */
+            //ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+
             var apiInfo = GetApiInfo();
             var handler = new HttpClientHandler { Credentials = new NetworkCredential(apiInfo.UserName, apiInfo.Password) };
             using (var client = new HttpClient(handler))
@@ -86,6 +89,9 @@ namespace DH.Helpdesk.NewSelfService.WebServices
         [AllowAnonymous]
         private async Task<APIEmployee> WS_GetEmployeesFor(string employeeNum)
         {
+            /* IMPORTANT: Active this line only on debug mode */
+            //ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+
             var res = new APIEmployee() { IsManager = false, Subordinates = null };         
             var apiInfo = GetApiInfo();
             var handler = new HttpClientHandler { Credentials = new NetworkCredential(apiInfo.UserName, apiInfo.Password) };

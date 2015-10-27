@@ -71,6 +71,14 @@
         <tr>
             <td></td>
             <td>
+                <input data-field="createSubCasePermission" type="checkbox" name="User.CreateSubCasePermission" @(Model.User.CreateSubCasePermission == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="User.CreateSubCasePermission" value="0" />
+                &nbsp; &nbsp;@Translation.Get("Användaren får skapa underärenden", Enums.TranslationSource.TextTranslation)
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
                 <input data-field="copyCasePermission" type="checkbox" name="User.CopyCasePermission" @(Model.User.CopyCasePermission == 1 ? "checked=checked" : "") value="1"/>
                 <input type="hidden" name="User.CopyCasePermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren får kopiera ärenden", Enums.TranslationSource.TextTranslation)

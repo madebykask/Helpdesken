@@ -81,7 +81,9 @@
         var that = {};
 
         var workingGroupUsersRoute = spec.workingGroupUsersRoute || '';
-
+        var tabReport = spec.tabReport || '';
+        var tabReportViewer = spec.tabReportViewer || '';
+        
         var getCurrentReport = function (type) {
             switch (type) {
                 case dhHelpdesk.reports.reportType.RegistratedCasesDay:
@@ -378,6 +380,10 @@
         var btnShow = $("#showReport");
         var btnPrint = $('#printReport');
         var btnExcel = $('#excelReport');
+        var tabReport = $('#tab_report');
+        var btnShowReport = $('#btnShowReport');
+        var tabReportViewer = $('#tab_reportViewer');
+
         var manager = dhHelpdesk.reports.reportsManager({
             workingGroupUsersRoute: workingGroupUsersRoute
         });
@@ -424,6 +430,18 @@
             if (report.getCanExcel()) {
                 report.excelReport();
             }
+        });
+
+        tabReport.click(function () {            
+            btnShow.attr('style', '');            
+            btnExcel.attr('style', '');
+            btnShowReport.attr('style', 'display:none');
+        });
+
+        tabReportViewer.click(function () {            
+            btnShow.attr('style', 'display:none');            
+            btnExcel.attr('style', 'display:none');
+            btnShowReport.attr('style', '');
         });
 
         return that;

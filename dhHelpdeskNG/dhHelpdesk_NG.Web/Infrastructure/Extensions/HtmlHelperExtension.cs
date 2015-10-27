@@ -1,7 +1,6 @@
-﻿using DH.Helpdesk.BusinessData.Models.CaseSolution;
-
-namespace DH.Helpdesk.Web.Infrastructure.Extensions
+﻿namespace DH.Helpdesk.Web.Infrastructure.Extensions
 {
+    
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
@@ -9,14 +8,18 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
     using System.Web.Routing;
 
     using DH.Helpdesk.BusinessData.Enums.Users;
-    using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.Models.Case.ChidCase;
     using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.BusinessData.Models.CaseType;
     using DH.Helpdesk.BusinessData.Models.ProductArea;
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.BusinessData.Models.CaseSolution;
+    using DH.Helpdesk.Web.Infrastructure.CaseOverview;
     using DH.Helpdesk.Web.Models;
     using DH.Helpdesk.Common.Enums;
+    using DH.Helpdesk.Web.Models.Case.ChildCase;
 
     using UserGroup = DH.Helpdesk.BusinessData.Enums.Admin.Users.UserGroup;
 using DH.Helpdesk.Web.Areas.Admin.Models;
@@ -244,13 +247,15 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                 return new MvcHtmlString(string.Empty);
         }
 
-        public static MvcHtmlString OUTreeString(this HtmlHelper helper, IList<OU> ous)
+        public static MvcHtmlString OUTreeString(this HtmlHelper helper, IList<OU> ous, 
+                                                 bool isShowOnlyActive = true,
+                                                 bool isParentInactive = false)
         {
             ous = ous.OrderBy(x => x.Department.DepartmentName).ToList();
 
             if (ous != null)
             {
-                return BuildOUTreeRow(ous, 0);
+                return BuildOUTreeRow(ous, 0, isShowOnlyActive, isParentInactive);
             }
             else
                 return new MvcHtmlString(string.Empty);
@@ -280,16 +285,23 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
         /// </returns>
         public static MvcHtmlString CausingPartsTree(
             this HtmlHelper html,
-            IEnumerable<CausingPartOverview> causingParts)
+            IEnumerable<CausingPartOverview> causingParts,
+            bool isShowOnlyActive = false)
         {
             if (causingParts == null)
             {
                 return MvcHtmlString.Empty;
             }
-            return CausingPartsTreeRow(causingParts, 0);
+            return CausingPartsTreeRow(causingParts, 0, isShowOnlyActive);
         }
 
-        public static MvcHtmlString GetCaseHistoryInfo(this CaseHistory cur, CaseHistory old, int customerId, int departmentFilterFormat, IList<CaseFieldSetting> cfs)
+        public static MvcHtmlString GetCaseHistoryInfo(
+            this CaseHistory cur, 
+            CaseHistory old, 
+            int customerId, 
+            int departmentFilterFormat, 
+            IList<CaseFieldSetting> cfs,
+            OutputFormatter outFormatter)
         {
             StringBuilder sb = new StringBuilder();
             const string bs = "<th>";
@@ -380,6 +392,29 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                     sb.Append("</tr>");
                 }
             }
+
+            // Registration Source
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.RegistrationSourceCustomer_Id != o.RegistrationSourceCustomer_Id)
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    sb.Append(tdMarkup);
+                    if (o.RegistrationSourceCustomer != null)
+                        sb.Append(Translation.Get(o.RegistrationSourceCustomer.SourceName, Enums.TranslationSource.TextTranslation, customerId));
+                    else
+                        sb.Append(ey);
+                    sb.Append(from);
+                    if (cur.RegistrationSourceCustomer != null)
+                        sb.Append(Translation.Get(cur.RegistrationSourceCustomer.SourceName, Enums.TranslationSource.TextTranslation, customerId));
+                    else
+                        sb.Append(ey);
+                    sb.Append("</td>");
+                    sb.Append("</tr>");
+                }
+            }
+
             // CaseType
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()).ShowOnStartPage == 1)
             {
@@ -558,32 +593,6 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                 }
             }
 
-            // Registration Source
-            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString()).ShowOnStartPage == 1)
-            {
-                if (cur.RegistrationSourceCustomer_Id != o.RegistrationSourceCustomer_Id)
-                {
-                    sb.Append("<tr>");
-                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
-                    sb.Append(tdMarkup);
-                    if (o.RegistrationSourceCustomer != null)
-                        //should be active in v 5.3.13.xx
-                        //sb.Append(Translation.Get(o.RegistrationSourceCustomer.SourceName, Enums.TranslationSource.TextTranslation, customerId));
-                        sb.Append(o.RegistrationSourceCustomer.SourceName);
-                    else
-                        sb.Append(ey);
-                    sb.Append(from);
-                    if (cur.RegistrationSourceCustomer != null)
-                        //should be active in v 5.3.13.xx
-                        //sb.Append(Translation.Get(cur.RegistrationSourceCustomer.SourceName, Enums.TranslationSource.TextTranslation, customerId));
-                        sb.Append(cur.RegistrationSourceCustomer.SourceName);
-                    else
-                        sb.Append(ey);
-                    sb.Append("</td>");
-                    sb.Append("</tr>");
-                }
-            }
-
             // CaseFile
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Filename.ToString()).ShowOnStartPage == 1)
             {                 
@@ -733,14 +742,13 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
             {
                 if (cur.FinishingDate != o.FinishingDate)
                 {
-                    
                         sb.Append("<tr>");
                         if (o.FinishingDate == null)
                         {
                             sb.Append(bs + Translation.Get("Ärendet avslutat") + be);
                             sb.Append(tdMarkup);
                             sb.Append(from);
-                            sb.Append(cur.FinishingDate.Value.ToString("yyyy-MM-dd"));
+                            sb.Append(outFormatter.FormatDate(cur.FinishingDate.Value));
                         }
                         else
                         {
@@ -754,20 +762,20 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                             {
                                 sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
                                 sb.Append(tdMarkup);
-                                sb.Append(o.FinishingDate.Value.ToString("yyyy-MM-dd"));
+                                sb.Append(outFormatter.FormatDate(o.FinishingDate.Value));
                                 sb.Append(from);
-                                sb.Append(cur.FinishingDate.Value.ToString("yyyy-MM-dd"));
+                                sb.Append(outFormatter.FormatDate(cur.FinishingDate.Value));
                             }
                         }
                         
                         sb.Append("</td>");
                         sb.Append("</tr>");
-                    
                 }
             }
 
             return new MvcHtmlString(sb.ToString());
         }
+
 
         public static MvcHtmlString CaseSolutionDropdownButtonString(this HtmlHelper helper, IList<CaseTemplateCategoryNode> categories, int customerId, string isJS = "")
         {
@@ -833,7 +841,7 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                 if (item.SubCaseTypes != null)
                 {
                     childs = isTakeOnlyActive
-                                    ? item.SubCaseTypes.Where(p => p.IsActive != 0).ToList()
+                                    ? item.SubCaseTypes.Where(p => p.IsActive != 0 && p.Selectable != 0).ToList()
                                     : item.SubCaseTypes.ToList();
                 }
 
@@ -848,11 +856,11 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                     res.Append("<li class='" + cls + "'>");
                 }
 
-                res.AppendFormat("<a href='#' value='{0}'>{1}</a>", item.Id.ToString(), Translation.Get(item.Name, SessionFacade.CurrentLanguageId));
+                res.AppendFormat("<a href='#' value='{0}'>{1}</a>", item.Id.ToString(), Translation.GetMasterDataTranslation(item.Name));
                 if (childs.Count > 0)
                 {
                     res.Append("<ul class='dropdown-menu'>");
-                    res.Append(BuildCaseTypeDropdownButton(childs.OrderBy(p => Translation.Get(p.Name)).ToList(), isTakeOnlyActive));
+                    res.Append(BuildCaseTypeDropdownButton(childs.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList(), isTakeOnlyActive));
                     res.Append("</ul>");
                 }
 
@@ -882,7 +890,7 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                     else
                         sb.Append("<li class='" + cls + "'>");
 
-                    sb.Append("<a href='#' value=" + f.Id.ToString() + ">" + Translation.Get(f.Name, Enums.TranslationSource.TextTranslation) + "</a>");
+                    sb.Append("<a href='#' value=" + f.Id.ToString() + ">" + Translation.GetMasterDataTranslation(f.Name) + "</a>");
                     if (hasChild)
                     {
                         sb.Append("<ul class='dropdown-menu'>");
@@ -905,11 +913,11 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                 var hasChild = productArea.Children != null && productArea.Children.Any();
 
                 result.Append(hasChild ? "<li class='dropdown-submenu'>" : "<li>");
-                result.AppendFormat("<a href='#' value='{0}'>{1}</a>", productArea.Id, Translation.Get(productArea.Name));
+                result.AppendFormat("<a href='#' value='{0}'>{1}</a>", productArea.Id, Translation.GetMasterDataTranslation(productArea.Name));
                 if (hasChild)
                 {
                     result.Append("<ul class='dropdown-menu'>");
-                    result.Append(BuildProductAreasList(productArea.Children.OrderBy(p => Translation.Get(p.Name, Enums.TranslationSource.TextTranslation)).ToList()));
+                    result.Append(BuildProductAreasList(productArea.Children.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList()));
                     result.Append("</ul>");
                 }
 
@@ -929,11 +937,11 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
 
                 result.Append(hasChild ? "<li class='dropdown-submenu'>" : "<li>");
 
-                result.Append("<a href='#' value=" + caseType.Id + ">" + Translation.Get(caseType.Name, Enums.TranslationSource.TextTranslation) + "</a>");
+                result.Append("<a href='#' value=" + caseType.Id + ">" + Translation.GetMasterDataTranslation(caseType.Name) + "</a>");
                 if (hasChild)
                 {
                     result.Append("<ul class='dropdown-menu'>");
-                    result.Append(BuildCaseTypesList(caseType.Children.OrderBy(p => Translation.Get(p.Name, Enums.TranslationSource.TextTranslation)).ToList()));
+                    result.Append(BuildCaseTypesList(caseType.Children.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList()));
                     result.Append("</ul>");
                 }
 
@@ -944,7 +952,7 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
         }
         
         private static MvcHtmlString BuildProcuctAreaDropdownButton(
-            IList<ProductArea> pal,
+            IList<ProductArea> pal,            
             bool isTakeOnlyActive = true,
             Dictionary<int, bool> userGroupDictionary = null)
         {
@@ -977,27 +985,28 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                     }
 
                     childList = childs.ToList();
-                }
+                }                
 
                 var cls = pa.IsActive == 1 ? string.Empty : "inactive";
                 if (childList != null && childList.Count > 0)
                 {
-                    htmlOutput += string.Format("<li class=\"dropdown-submenu {0}\">", cls);
+                    htmlOutput += string.Format("<li class=\"dropdown-submenu {0} {1}\" id=\"{2}\">", cls, "DynamicDropDown_Up", pa.Id);
                 }
                 else
                 {
-                    htmlOutput += string.Format("<li class=\"{0}\">", cls);
+                    htmlOutput += string.Format("<li class=\"{0} \" >", cls);
                 }
 
                 htmlOutput +=
                     string.Format(
                         "<a href='#' value=\"{0}\">{1}</a>",
                         pa.Id,
-                        Translation.Get(pa.Name));
+                        Translation.GetMasterDataTranslation(pa.Name));
+                
                 if (childList != null && childList.Count > 0)
                 {
-                    htmlOutput += "<ul class='dropdown-menu'>";
-                    htmlOutput += BuildProcuctAreaDropdownButton(childList.OrderBy(p => Translation.Get(p.Name)).ToList(), isTakeOnlyActive, userGroupDictionary);
+                    htmlOutput += string.Format("<ul class='dropdown-menu' id=\"subDropDownMenu_{0}\" >", pa.Id);                    
+                    htmlOutput += BuildProcuctAreaDropdownButton(childList.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList(), isTakeOnlyActive, userGroupDictionary);
                     htmlOutput += "</ul>";
                 }
 
@@ -1007,20 +1016,40 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
             return new MvcHtmlString(htmlOutput);
         }
 
-        private static MvcHtmlString BuildFinishingCauseTreeRow(IList<FinishingCause> finishingCauses, int iteration)
+        private static MvcHtmlString BuildFinishingCauseTreeRow(IList<FinishingCause> finishingCauses, int iteration, 
+                bool isShowOnlyActive = true,
+                bool isParentInactive = false)
         {
             string htmlOutput = string.Empty;
+            var finishingCauseToDisplay = isShowOnlyActive ? finishingCauses.Where(it => it.IsActive == 1) : finishingCauses;
 
             foreach (FinishingCause finishingCause in finishingCauses)
             {
-                htmlOutput += "<tr>";
+                var isInactive = finishingCause.IsActive != 1 || isParentInactive;
+                //htmlOutput += "<tr>";
+                htmlOutput += string.Format("<tr class=\"{0}\">", isInactive ? "inactive" : string.Empty);
                 htmlOutput += "<td><a href='/admin/finishingcause/edit/" + finishingCause.Id + "' style='padding-left: " + iteration + "px'><i class='icon-resize-full icon-dh'></i>" + finishingCause.Name + "</a></td>";
                 htmlOutput += "<td><a href='/admin/finishingcause/edit/" + finishingCause.Id + "'>" + finishingCause.IsActive.TranslateBit() + "</a></td>";
                 htmlOutput += "</tr>";
 
+
                 if (finishingCause.SubFinishingCauses != null)
-                    if (finishingCause.SubFinishingCauses.Count > 0)
-                        htmlOutput += BuildFinishingCauseTreeRow(finishingCause.SubFinishingCauses.ToList(), iteration + 20);
+                {
+                    if (finishingCause.SubFinishingCauses.Count > 0 && (
+                        (isShowOnlyActive && !isInactive)
+                        || !isShowOnlyActive))
+                    {
+                        htmlOutput += BuildFinishingCauseTreeRow(
+                            finishingCause.SubFinishingCauses.OrderBy(x => x.Name).ToList(),
+                            iteration + 20,
+                            isShowOnlyActive,
+                            isInactive);
+                    }
+                }
+
+                //if (finishingCause.SubFinishingCauses != null)
+                //    if (finishingCause.SubFinishingCauses.Count > 0)
+                //        htmlOutput += BuildFinishingCauseTreeRow(finishingCause.SubFinishingCauses.ToList(), iteration + 20);
             }
 
             return new MvcHtmlString(htmlOutput);
@@ -1073,21 +1102,33 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
             return new MvcHtmlString(htmlOutput);
         }
 
-        private static MvcHtmlString BuildOUTreeRow(IList<OU> ous, int iteration)
+        private static MvcHtmlString BuildOUTreeRow(IList<OU> ous, int iteration, bool isShowOnlyActive = true,
+            bool isParentInactive = false)
         {
             string htmlOutput = string.Empty;
+            var oUToDisplay = isShowOnlyActive ? ous.Where(it => it.IsActive == 1) : ous;
+
 
             foreach (OU ou in ous)
             {
-                htmlOutput += "<tr>";
+                var isInactive = ou.IsActive != 1 || isParentInactive;
+
+                htmlOutput += string.Format("<tr class=\"{0}\">", isInactive ? "inactive" : string.Empty);
                 htmlOutput += "<td><a href='/admin/ou/edit/" + ou.Id + "?customerId=" + ou.Department.Customer_Id + "'>" + ou.Department.DepartmentName + "</a></td>";
                 htmlOutput += "<td><a href='/admin/ou/edit/" + ou.Id + "?customerId=" + ou.Department.Customer_Id + "' style='padding-left: " + iteration + "px'><i class='icon-resize-full icon-dh'></i>" + ou.OUId + " (" + ou.Name + ")</a></td>";
                 htmlOutput += "<td><a href='/admin/ou/edit/" + ou.Id + "?customerId=" + ou.Department.Customer_Id + "'>" + ou.IsActive.TranslateBit() + "</a></td>";
-                htmlOutput += "</tr>";
+                htmlOutput += "</tr>";              
 
                 if (ou.SubOUs != null)
-                    if (ou.SubOUs.Count > 0)
-                        htmlOutput += BuildOUTreeRow(ou.SubOUs.ToList(), iteration + 20);
+                {
+                    if (ou.SubOUs.Count() > 0 && (
+                        (isShowOnlyActive && !isInactive)
+                        || !isShowOnlyActive))
+                    {
+                        htmlOutput += (BuildOUTreeRow(ou.SubOUs.ToList(), iteration + DefaultOffset, isShowOnlyActive, isInactive));
+                    }
+                }
+
             }
 
             return new MvcHtmlString(htmlOutput);
@@ -1140,20 +1181,39 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
         /// <returns>
         /// The <see cref="MvcHtmlString"/>.
         /// </returns>
-        private static MvcHtmlString CausingPartsTreeRow(IEnumerable<CausingPartOverview> causingParts, int iteration)
+        private static MvcHtmlString CausingPartsTreeRow(IEnumerable<CausingPartOverview> causingParts, int iteration, bool isShowOnlyActive = true,
+            bool isParentInactive = false)
         {
             var result = new StringBuilder();
+
+            var causingPartToDisplay = isShowOnlyActive ? causingParts.Where(it => it.IsActive == true) : causingParts;
+
             foreach (var causingPart in causingParts)
             {
-                result.Append("<tr>");
+
+                var isInactive = causingPart.IsActive != true || isParentInactive;
+
+                result.AppendFormat("<tr class=\"{0}\">", isInactive ? "inactive" : string.Empty);
                 result.AppendFormat("<td><a href='/admin/causingpart/edit/{0}' style='padding-left: {1}px'><i class='icon-resize-full icon-dh'></i>{2}</a></td>", causingPart.Id, iteration, causingPart.Name);
                 result.AppendFormat("<td><a href='/admin/causingpart/edit/{0}'>{1}</a></td>", causingPart.Id, causingPart.IsActive.BoolToYesNo());
                 result.Append("</tr>");
 
+                //if (causingPart.Children != null)
+                //{
+                //    result.Append(CausingPartsTreeRow(causingPart.Children.ToList(), iteration + DefaultOffset));                    
+                //}
+
+
                 if (causingPart.Children != null)
                 {
-                    result.Append(CausingPartsTreeRow(causingPart.Children.ToList(), iteration + DefaultOffset));                    
+                    if (causingPart.Children.Count() > 0 && (
+                        (isShowOnlyActive && !isInactive)
+                        || !isShowOnlyActive))
+                    {
+                        result.Append(CausingPartsTreeRow(causingPart.Children.ToList(), iteration + DefaultOffset,isShowOnlyActive,isInactive)); 
+                    }
                 }
+
             }
             return new MvcHtmlString(result.ToString());
         }
@@ -1286,6 +1346,58 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                 return new MvcHtmlString("<i class=\"icon-chevron-up\"></i>");
             }
             return new MvcHtmlString("<i class=\"icon-chevron-down\"></i>");
+        }
+
+        public static MvcHtmlString ImgForCase(this HtmlHelper helper, ChildCaseOverview ci)
+        {
+            var icoCode = GetCaseIcon(ci);
+            var icoTitle = GetCaseIconTitle(icoCode);
+            var content = string.Format("<img title='{0}' alt='{0}' src='/Content/icons/{1}' />", icoTitle, GetCaseIconSrc(icoCode));
+
+            return new MvcHtmlString(content);
+        }
+
+        private static GlobalEnums.CaseIcon GetCaseIcon(ChildCaseOverview ci)
+        {
+            var ret = GlobalEnums.CaseIcon.Normal;
+            // TODO Hantera icon för urgent
+            if (ci.ClosingDate != null)
+                if (ci.IsRequriedToApprive && ci.ApprovedDate == null)
+                    ret = GlobalEnums.CaseIcon.FinishedNotApproved;
+                else
+                    ret = GlobalEnums.CaseIcon.Finished;
+
+            return ret;
+        }
+
+        private static string GetCaseIconSrc(GlobalEnums.CaseIcon value)
+        {
+            var ret = "case.png";
+        
+            if (value == GlobalEnums.CaseIcon.Finished)
+                ret = "case_close.png";
+            else if (value == GlobalEnums.CaseIcon.FinishedNotApproved)
+                ret = "case_close_notapproved.png";
+            else if (value == GlobalEnums.CaseIcon.Urgent)
+                ret = "case_Log_urgent.png";
+        
+            return ret;
+        }
+
+        private static string GetCaseIconTitle(GlobalEnums.CaseIcon value)
+        {
+            string ret;
+
+            if (value == GlobalEnums.CaseIcon.Finished)
+                ret = Translation.Get("Avslutat ärende", Enums.TranslationSource.TextTranslation);
+            else if (value == GlobalEnums.CaseIcon.FinishedNotApproved)
+                ret = Translation.Get("Åtgärdat ärende, ej godkänt", Enums.TranslationSource.TextTranslation);
+            else if (value == GlobalEnums.CaseIcon.Urgent)
+                ret = Translation.Get("Ärende", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("akut", Enums.TranslationSource.TextTranslation) + ")";
+            else
+                ret = Translation.Get("Ärende", Enums.TranslationSource.TextTranslation);
+
+            return ret;
         }
     }
 }

@@ -39,9 +39,7 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
         /// The user id.
         /// </summary>
         private int? userId;
-
-        private string userName;
-
+        
         /// <summary>
         /// The user working groups.
         /// </summary>
@@ -173,7 +171,6 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
         public void Refresh()
         {
             this.userId = null;
-            this.userName = null;
             this.userWorkingGroups = null;
             HttpContext.Current.Session[UserModules] = this.modules = null;
             this.user = null;

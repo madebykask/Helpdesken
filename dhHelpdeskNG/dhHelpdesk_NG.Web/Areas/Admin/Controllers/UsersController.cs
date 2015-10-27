@@ -324,7 +324,7 @@
                 CsSelected = CsSelected.Where(availableCustomersHash.ContainsKey).ToArray();
             }
 
-            this._userService.SaveNewUser(user, AAsSelected, CsSelected, OTsSelected, null, out errors);
+            this._userService.SaveNewUser(user, AAsSelected, CsSelected, OTsSelected, null, null, out errors);
             if (errors.Count == 0)
             {
                 return this.RedirectToAction("edit", "users", new { id = user.Id });
@@ -535,7 +535,7 @@
                 copy.UserRoles.Add(userRight);
             }
 
-            this._userService.SaveNewUser(copy, AAsSelected, CsSelected, OTsSelected, UserWorkingGroups, out errors);
+            this._userService.SaveNewUser(copy, AAsSelected, CsSelected, OTsSelected, UserWorkingGroups, Departments, out errors);
 
             var customerUsers = this._userService.GetCustomerUserForUser(copy.Id).ToList();
 
@@ -602,7 +602,7 @@
                 {
                     cu.CaseWorkingGroupFilter = "0";
                 }
-
+               
                 cu.CasePerformerFilter = "0";
 
                 this._customerUserService.SaveCustomerUser(cu, out errors);
@@ -766,7 +766,7 @@
                 User = user,
                 StatusUsers = sli,
                 LockedCaseModel = lockedCasesModel,
-                ListLoggedInUsers = AdminUsersPageLockedCasesTabSelectedCustomerId == 0 ? ApplicationFacade.GetAllLoggedInUsers() : ApplicationFacade.GetLoggedInUsers(AdminUsersPageLockedCasesTabSelectedCustomerId),
+                ListLoggedInUsers = AdminUsersPageLoggedInUsersTabSelectedCustomerId == 0 ? ApplicationFacade.GetAllLoggedInUsers() : ApplicationFacade.GetLoggedInUsers(AdminUsersPageLoggedInUsersTabSelectedCustomerId),
                 Filter = new UserSearch { CustomerId = AdminUsersPageLockedCasesTabSelectedCustomerId },
                 CsSelected = csSelected.Select(x => new SelectListItem
                 {

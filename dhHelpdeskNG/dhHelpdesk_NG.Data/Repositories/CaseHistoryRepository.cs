@@ -11,6 +11,8 @@
         IEnumerable<CaseHistory> GetCaseHistoryByCaseId(int caseId);
 
         void SetNullProblemByProblemId(int problemId);
+
+        CaseHistory GetCloneOfLatest(int caseId);
     }
 
     public class CaseHistoryRepository : RepositoryBase<CaseHistory>, ICaseHistoryRepository
@@ -38,14 +40,13 @@
             }
         }
 
-        public void SetNullProjectByProjectId(int projectId)
+        public CaseHistory GetCloneOfLatest(int caseId)
         {
-            var cases = this.DataContext.CaseHistories.Where(x => x.Project_Id == projectId).ToList();
-
-            foreach (var item in cases)
-            {
-                item.Project_Id = null;
-            }
+            return this.DataContext.Set<CaseHistory>()
+                .AsNoTracking()
+                .Where(it => it.Case_Id == caseId)
+                .OrderByDescending(it => it.Id)
+                .FirstOrDefault();
         }
     }
 }

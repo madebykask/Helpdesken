@@ -31,6 +31,10 @@
                         (int)CaseRegistrationSource.SelfService,
                         "Självservice"
                     },
+                    {
+                        (int)CaseRegistrationSource.Contract,
+                        "Avtal"
+                    },
                 };
 
         private readonly IRegistrationSourceCustomerService _registrationSourceCustomerService;
@@ -47,6 +51,12 @@
             this._customerService = customerService;
         }
 
+        public JsonResult SetShowOnlyActiveRegistrationSourceCustomerInAdmin(bool value)
+        {
+            SessionFacade.ShowOnlyActiveRegistrationSourceCustomerInAdmin = value;
+            return this.Json(new { result = "success" });
+        }
+
         public ActionResult Index(int customerId)
         {
             var customer = this._customerService.GetCustomer(customerId);
@@ -56,11 +66,15 @@
                     Id = it.Id,
                     SourceName = it.SourceName,
                     SystemCodeName = this.ResolveSystemCodeName(it.SystemCode),
-                    IsActive = (it.IsActive == 1) ? Translation.Get("Ja") : Translation.Get("Nej")
+                    IsActiveStr = (it.IsActive == 1) ? Translation.Get("Ja") : Translation.Get("Nej"),
+                    IsActive = it.IsActive
                 })
                 .ToList();
 
-            var model = new RegistrationSourceIndexViewModel { RegistrationSources = registrationsources, Customer = customer };
+            var model = new RegistrationSourceIndexViewModel { RegistrationSources = registrationsources, 
+                                                               Customer = customer,
+                                                               IsShowOnlyActive = SessionFacade.ShowOnlyActiveRegistrationSourceCustomerInAdmin
+                                                             };
 
             return this.View(model);
         }

@@ -39,7 +39,7 @@
             return new User { Id = 0, FirstName = "-- " + Translation.Get("Ej Tilldelade", Enums.TranslationSource.TextTranslation) + " --", SurName="", IsActive = 1 , Performer = 1};
         }
 
-        public static IList<Field> GetFilterForCases(int followUpPermission, IList<Priority> pl, int customerId)
+        public static IList<Field> GetFilterForCases(int followUpPermission, int customerId)
         {
             var ret = new List<Field>();
             ret.Add(new Field { Id = 2, StringValue = Translation.Get("Pågående ärenden", Enums.TranslationSource.TextTranslation) });
@@ -47,25 +47,16 @@
             ret.Add(new Field { Id = 4, StringValue = Translation.Get("Olästa ärenden", Enums.TranslationSource.TextTranslation) });
             ret.Add(new Field { Id = 3, StringValue = Translation.Get("Vilande ärenden", Enums.TranslationSource.TextTranslation) });
             ret.Add(new Field { Id = 7, StringValue = Translation.Get("Ärenden med", Enums.TranslationSource.TextTranslation) + " " + Translation.Get(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Enums.TranslationSource.CaseTranslation, customerId) });
-
             if (followUpPermission == 1)
-                ret.Add(new Field { Id = 8, StringValue = Translation.Get("För uppföljning", Enums.TranslationSource.TextTranslation) });
-
-            if (pl.getPriorityMaxtime() > 0)
-                ret.Add(new Field { Id = 10, StringValue = Translation.Get("Akuta ärenden", Enums.TranslationSource.TextTranslation) });
-
-            int start = 10;
-            int i = 1;
-
-            if (pl != null)
-                foreach (Priority p in pl.OrderBy(x => x.SolutionTime))
-                {
-                    if (p.SolutionTime > 0 && p.IsActive == 1)
-                    {
-                        ret.Add(new Field { Id = (start + i), StringValue = Translation.Get("Återstående åtgärdstid", Enums.TranslationSource.TextTranslation) + " " + p.SolutionTime.ToString() + " " + Translation.Get("timmar", Enums.TranslationSource.TextTranslation) });
-                        i++;
-                    }
-                }
+            {
+                ret.Add(
+                    new Field
+                        {
+                            Id = 8,
+                            StringValue =
+                                Translation.Get("För uppföljning", Enums.TranslationSource.TextTranslation)
+                        });
+            }
 
             ret.Add(new Field { Id = -1, StringValue = Translation.Get("Alla") });
             return ret;

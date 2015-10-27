@@ -130,14 +130,13 @@
         {
             var watchDateCalendarValue =
                 this._watchDateCalendarValueRepository.GetAll()
-                    .Where(it => it.WatchDateCalendar_Id == calendarId && it.WatchDate > now)
+                    .Where(it => it.WatchDateCalendar_Id == calendarId && it.WatchDate > now && (it.ValidUntilDate == null || it.ValidUntilDate > now))
                     .OrderBy(it => it.WatchDate)
                     .FirstOrDefault();
             if (watchDateCalendarValue != null)
             {
                 return watchDateCalendarValue.WatchDate;
             }
-
             return null;
         }
 

@@ -15,12 +15,14 @@
                             this IQueryable<CaseFieldSetting> query,
                             int languageId, bool hasLeadTime = false)
         {
+            var exceptFields = new string[] { LogFields.AttachedFile, LogFields.ExternalLogNote, LogFields.InternalLogNote };
             var entities = query.Select(f => new CaseSettingsMapData
                                                  {
                                                     FieldName = f.Name,                                                    
                                                     Show = f.ShowOnStartPage,
                                                     ShowInList = f.ShowExternal
-                                                 })                                                 
+                                                 })
+                                                 .Where(f=> !exceptFields.ToList().Contains(f.FieldName))
                                                  .ToList();
 
             // Add LeadTime calculation field manually 
@@ -118,6 +120,7 @@
             var available = CreateFieldSetting(fieldSettings.FindByName(CaseInfoFields.Available));
             var cost = CreateFieldSetting(fieldSettings.FindByName(CaseInfoFields.Cost));
             var attachedFile = CreateFieldSetting(fieldSettings.FindByName(CaseInfoFields.AttachedFile));
+            var registrationSource = CreateFieldSetting(fieldSettings.FindByName(CaseInfoFields.RegistrationSourceCustomer));
             var leadTime = CreateFieldSetting(fieldSettings.FindByName(CaseInfoFields.LeadTime));
 
             return new CaseInfoSettings(
@@ -143,6 +146,7 @@
                         available,
                         cost,
                         attachedFile,
+                        registrationSource,
                         leadTime);
         }
 
@@ -178,10 +182,10 @@
 
         private static LogSettings CreateLogSettings(NamedObjectCollection<CaseSettingsMapData> fieldSettings)
         {
-            var internalLogNote = CreateFieldSetting(fieldSettings.FindByName(LogFields.InternalLogNote));
-            var externalLogNote = CreateFieldSetting(fieldSettings.FindByName(LogFields.ExternalLogNote));
+            var internalLogNote = CreateFieldSetting(fieldSettings.FindByName(LogFields.InternalLogNote));            
+            var externalLogNote = CreateFieldSetting(fieldSettings.FindByName(LogFields.ExternalLogNote));            
             var debiting = CreateFieldSetting(fieldSettings.FindByName(LogFields.Debiting));
-            var attachedFile = CreateFieldSetting(fieldSettings.FindByName(LogFields.AttachedFile));
+            var attachedFile = CreateFieldSetting(fieldSettings.FindByName(LogFields.AttachedFile));            
             var finishingDescription = CreateFieldSetting(fieldSettings.FindByName(LogFields.FinishingDescription));
             var finishingDate = CreateFieldSetting(fieldSettings.FindByName(LogFields.FinishingDate));
             var finishingCause = CreateFieldSetting(fieldSettings.FindByName(LogFields.FinishingCause));

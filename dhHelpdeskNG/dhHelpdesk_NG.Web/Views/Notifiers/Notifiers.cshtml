@@ -14,12 +14,19 @@
     });
 </script>
 
-<div class="row">
-    @Html.Partial("Search", Model.SearchModel)
-</div>
-<div id="notifiers_grid">
-    @Html.Partial("NotifiersGrid", Model.GridModel)
-</div>
+@if (Model.GridModel.Headers.Count == 0)
+{
+    <div class="alert alert-warning">No default columns have been selected for your user in this customer. To display case overview filters, go to the Settings tab.</div>
+}
+else
+{
+    <div class="row">
+        @Html.Partial("Search", Model.SearchModel)
+    </div>
+    <div id="notifiers_grid">
+        @Html.Partial("NotifiersGrid", Model.GridModel)
+    </div>
+}
 
 <script type="text/javascript">
     $("#DepartmentErrorMessage").hide();

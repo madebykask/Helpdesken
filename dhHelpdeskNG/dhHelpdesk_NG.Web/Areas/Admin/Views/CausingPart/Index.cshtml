@@ -1,4 +1,5 @@
-﻿@model DH.Helpdesk.Web.Areas.Admin.Models.CausingPart.CausingPartsViewModel
+﻿@using System.Web.Optimization
+@model DH.Helpdesk.Web.Areas.Admin.Models.CausingPart.CausingPartsViewModel
 <div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
@@ -7,13 +8,16 @@
     </div>
     @Html.Partial("_MasterDataPanel", Model.Customer)
 </div>
-<div class="content">
+@Scripts.Render("~/bundles/admin/CausingPart/index")
+<div class="content causingpart admin">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
             <li class="active"><a href="#fragment-1">@Translation.Get("Rotorsak") - @Model.Customer.Name</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment-1">
+                 <span>@Translation.Get("Visa endast aktiva")</span>
+                <input type="checkbox" class="switchcheckbox showonly-active" @(Model.IsShowOnlyActive ? "checked" : string.Empty)>
                 <table class="table table-striped table-bordered table-hover" id="tblproductarea">
                     <thead>
                         <tr>

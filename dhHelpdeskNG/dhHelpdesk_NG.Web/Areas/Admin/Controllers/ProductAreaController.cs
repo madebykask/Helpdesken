@@ -153,21 +153,39 @@
                 pa = pa.ParentProductArea;
             }
 
+            // Get active mail templates 
+            var customMailTemplates = _mailTemplateService.GetCustomMailTemplates(customer.Id).ToList();
+            var activeMailTemplates = customMailTemplates.Where(m => m.TemplateLanguages
+                                                                    .Where(tl => !string.IsNullOrEmpty(tl.Subject) && !string.IsNullOrEmpty(tl.Body)).Any() &&
+                                                                    m.MailId >= 100
+                                                               )
+                                                         .ToList();
+                                                      
+            var mailTemplateView = new List<SelectListItem>();
+            foreach (var mailtemplate in activeMailTemplates)
+            {
+                var templateId = mailtemplate.MailTemplateId;
+                var templateName = string.Empty;
+                var activeLanguages = mailtemplate.TemplateLanguages.Where(l=> !string.IsNullOrEmpty(l.Subject) && !string.IsNullOrEmpty(l.Body)).ToList();
+                if (activeLanguages.Select(l => l.LanguageId).Contains(SessionFacade.CurrentLanguageId))
+                    templateName = activeLanguages.Where(l => l.LanguageId == SessionFacade.CurrentLanguageId).First().TemplateName;
+                else
+                    templateName = activeLanguages.First().TemplateName;
+
+                mailTemplateView.Add(new SelectListItem { Value = templateId.ToString(), Text = templateName });
+            }
+
             var model = new ProductAreaInputViewModel
             {
                 ProductArea = productArea,
                 Customer = customer,
-                MailTemplates = this._mailTemplateService.GetMailTemplates(customer.Id, customer.Language_Id).Select(x => new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString()
-                }).ToList(),
+                MailTemplates = mailTemplateView,                
                 WorkingGroups = this._workingGroupService.GetWorkingGroups(customer.Id).Select(x => new SelectListItem
                 {
                     Text = x.WorkingGroupName,
                     Value = x.Id.ToString()
                 }).ToList(),
-                Priorities = this._priorityService.GetPriorities(customer.Id).Select(x => new SelectListItem
+                Priorities = this._priorityService.GetPriorities(customer.Id).Where(x => x.IsActive == 1).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()

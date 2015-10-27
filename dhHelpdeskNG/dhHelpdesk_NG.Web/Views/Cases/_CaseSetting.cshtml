@@ -6,9 +6,9 @@
     <div class="tab-content overflow-visible">
         <div class="tab-pane tab-pane-border active" id="fragment-1">
             <div class="container">
-                <h4>@Translation.Get("Filter") @Translation.Get("Ärendesök")</h4>    
+                <h4>@Translation.Get("Filter") @Translation.Get("Ärendesök")</h4>
 
-                @Html.HiddenFor(m => Model.CustomerId)                
+                @Html.HiddenFor(m => Model.CustomerId)
                 @Html.HiddenFor(m => Model.UserId)
 
                 <div class="row">
@@ -19,108 +19,108 @@
                                     <th>
                                         @Translation.Get("Fält", Enums.TranslationSource.TextTranslation)
                                     </th>
-                                    <th >
+                                    <th>
                                         @Translation.Get("Visa", Enums.TranslationSource.TextTranslation)
-                                    </th>                                                        
-                                    <th >
+                                    </th>
+                                    <th>
                                         @Translation.Get("Filter", Enums.TranslationSource.TextTranslation)
-                                    </th>                                     
+                                    </th>
                                 </tr>
                             </thead>
-                            @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Persons_Name.ToString()) == 1) 
+                            @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Persons_Name.ToString()) == 1)
                             { 
                                 <tr>
-                                    <td class="span3">                                        
+                                    <td class="span3">
                                         @{
-                                            var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
-                                         }
+                                var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
+                                        }
                                         @lbl:
                                     </td>
-                                    <td colspan="3"> 
-                                        @Html.CheckBoxFor(m => Model.CaseInitiatorFilterShow, new { @class = "switchcheckbox" })                                   
+                                    <td colspan="3">
+                                        @Html.CheckBoxFor(m => Model.CaseInitiatorFilterShow, new { @class = "switchcheckbox" })
                                     </td>
                                 </tr>
                             }
 
-                            @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Region_Id.ToString()) == 1) 
+                            @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Region_Id.ToString()) == 1)
                             { 
                                 <tr>
-                                    <td class="span3">                                        
+                                    <td class="span3">
                                         @{
                                 var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.Region_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
-                                         }
+                                        }
                                         @lbl:     
-                                    </td>                            
+                                    </td>
                                     <td>
-                                        @Html.CheckBoxFor(m => Model.RegionCheck, new { @class = "switchcheckbox" })                                   
-                                    </td>                            
+                                        @Html.CheckBoxFor(m => Model.RegionCheck, new { @class = "switchcheckbox" })
+                                    </td>
                                     <td colspan="2">
                                         <select id="lstRegions" name="lstRegions" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                             @foreach (var e in Model.Regions)
-                                            {   
+                                            {
                                                 if (e.IsActive != 0)
                                                 {                                                                                                                        
-                                                  <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedRegion)>@e.Name</option>                                       
+                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedRegion)>@e.Name</option>                                       
                                                 }
                                             }
                                         </select>
-                                    </td>                                                        
+                                    </td>
                                 </tr>
                             }
 @*                            "Department" field *@
-                            @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Department_Id.ToString()) == 1) 
+                            @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Department_Id.ToString()) == 1)
                             { 
                                 <tr>
-                                    <td class="span3">                                        
+                                    <td class="span3">
                                         @Translation.Get(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id):
-                                    </td>                            
+                                    </td>
                                     <td>
-                                        @Html.CheckBoxFor(m => Model.IsDepartmentChecked, new { @class = "switchcheckbox" })                                   
-                                    </td>                            
+                                        @Html.CheckBoxFor(m => Model.IsDepartmentChecked, new { @class = "switchcheckbox" })
+                                    </td>
                                     <td colspan="2">
                                         <select name="@CaseSettingModel.DepartmentsControlName" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                             @foreach (var e in Model.Departments)
-                                            {             
+                                            {
                                                 if (e.IsActive != 0)
                                                 {                                                                                         
                                                 <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedDepartments)>@e.DepartmentName</option>                                       
                                                 }
                                             }
                                         </select>
-                                    </td>                                                        
+                                    </td>
                                 </tr>
                             }
 
-                            @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.User_Id.ToString()) == 1) 
+                            @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.User_Id.ToString()) == 1)
                             {                                    
                                 <tr>
                                     <td class="span3">
                                         @{
                                 var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.User_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
-                                         }
-                                         @lbl:                                         
-                                    </td>                            
+                                        }
+                                        @lbl:                                         
+                                    </td>
                                     <td>
                                         @Html.CheckBoxFor(m => Model.RegisteredByCheck, new { @class = "switchcheckbox" })
-                                    </td>                            
+                                    </td>
                                     <td colspan="2">
-                                          @Html.ListBoxFor(m => m.lstRegisterBy, Model.RegisteredByUserList, new { id = "lstRegisterBys", @class = "chosen-select", multiple = "multiple" })
-                                    </td>                                                        
+                                        @Html.ListBoxFor(m => m.lstRegisterBy, Model.RegisteredByUserList, new { id = "lstRegisterBys", @class = "chosen-select", multiple = "multiple" })
+                                    </td>
                                 </tr>
                             }
 
-                            @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()) == 1) 
+                            @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()) == 1)
                             {                                 
                                 <tr>
                                     <td class="span3">
                                         @{
                                 var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
-                                         }
+                                        }
                                         @lbl:                                             
-                                    </td>                            
+                                    </td>
                                     <td>
                                         @Html.CheckBoxFor(m => Model.CaseTypeCheck, new { @class = "switchcheckbox" })
-                                    </td>                        
+                                    </td>
                                     <td colspan="2">
                                         <div id="divCaseTypeSetting" class="btn-group">
                                             <div class="btn" id="divBreadcrumbs_CaseTypeSetting">@Model.CaseTypePath</div>
@@ -133,22 +133,22 @@
                                             </ul>
                                             @Html.HiddenFor(model => model.CaseTypeId)
                                         </div>
-                                    </td>                            
+                                    </td>
                                 </tr>
-                            } 
-                            
+                            }
+
                             @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()) == 1)
-                           {
+                            {
                                 <tr>
-                                    <td class="span3">                                        
+                                    <td class="span3">
                                         @{
-                               var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);                                                                                          
-                                         }
+                                var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);                                                                                          
+                                        }
                                         @lbl:                                             
                                     </td>
                                     <td>
                                         @Html.CheckBoxFor(m => Model.ProductAreaCheck, new { @class = "switchcheckbox" })
-                                    </td>                                                        
+                                    </td>
                                     <td colspan="2">
                                         <div id="divProductAreaSetting" class="btn-group">
                                             <div class="btn" id="divBreadcrumbs_ProductAreaSetting">@Model.ProductAreaPath</div>
@@ -161,211 +161,207 @@
                                             </ul>
                                             @Html.HiddenFor(model => model.ProductAreaId)
                                         </div>
-                                    </td>                            
+                                    </td>
                                 </tr>             
-                           } 
+                            }
 
-                           @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString()) == 1)
-                           {                                         
+                            @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString()) == 1)
+                            {                                         
                                 <tr>
-                                    <td class="span3">                                        
+                                    <td class="span3">
                                         @{
-                               var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
-                                         }
-                                         @lbl:   
-                                    </td>                            
+                                var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
+                                        }
+                                        @lbl:   
+                                    </td>
                                     <td>
                                         @Html.CheckBoxFor(m => Model.WorkingGroupCheck, new { @class = "switchcheckbox" })
-                                    </td>                        
+                                    </td>
                                     <td colspan="2">
                                         <select id="lstWorkingGroups" name="lstWorkingGroup" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                             @foreach (var e in Model.WorkingGroups)
-                                            {   
+                                            {
                                                 if (e.IsActive != 0)
                                                 {                                                                                                   
                                                 <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedWorkingGroup)>@e.WorkingGroupName</option>                                       
                                                 }
                                             }
                                         </select>
-                                    </td>                                                        
+                                    </td>
                                 </tr>
-                           } 
+                            }
 
-                           @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString()) == 1)
-                           {         
+                            @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString()) == 1)
+                            {         
                                 <tr>
-                                    <td class="span3">                                        
+                                    <td class="span3">
                                         @{
-                               var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
-                                         }
-                                         @lbl: 
+                                var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
+                                        }
+                                        @lbl: 
                                     </td>
                                     <td>
                                         @Html.CheckBoxFor(m => Model.ResponsibleCheck, new { @class = "switchcheckbox" })
-                                    </td>                            
-                                    <td>
-                                
-                                    </td>                            
+                                    </td>
+                                    <td></td>
                                 </tr>
-                           }
-                           
-                           @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString()) == 1)
-                           {             
+                            }
+
+                            @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString()) == 1)
+                            {             
                                 <tr>
-                                    <td class="span3">                                        
+                                    <td class="span3">
                                         @{
-                               var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
-                                         }
-                                         @lbl:
-                                    </td>                            
+                                var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
+                                        }
+                                        @lbl:
+                                    </td>
                                     <td>
                                         @Html.CheckBoxFor(m => Model.AdministratorCheck, new { disabled = "1", @class = "switchcheckbox" })
                                     </td>
                                     <td colspan="2">
                                         @Html.ListBoxFor(m => m.lstAdministrator, Model.AvailablePerformersList, new { id = "lstAdministrators", @class = "chosen-select", multiple = "multiple" })
-                                    </td>                                                        
+                                    </td>
                                 </tr> 
-                           }
-                            
-                           @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()) == 1)
-                           {                                                         
+                            }
+
+                            @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()) == 1)
+                            {                                                         
                                 <tr>
-                                    <td class="span3">                                        
+                                    <td class="span3">
                                         @{
-                               var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
-                                         }
-                                         @lbl:
-                                    </td>                            
+                                var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
+                                        }
+                                        @lbl:
+                                    </td>
                                     <td>
                                         @Html.CheckBoxFor(m => Model.PriorityCheck, new { @class = "switchcheckbox" })
-                                    </td>                            
+                                    </td>
                                     <td colspan="2">
                                         <select id="lstPriorities" name="lstPriority" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                             @foreach (var e in Model.Priorities)
-                                            {          
+                                            {
                                                 if (e.IsActive != 0)
                                                 {                                                                                            
                                                 <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedPriority)>@e.Code. @e.Name </option>                                       
                                                 }
                                             }
                                         </select>
-                                    </td>                                                                                                                
+                                    </td>
                                 </tr>
-                           }
-                            
+                            }
+
                             @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Status_Id.ToString()) == 1)
                             { 
                                 <tr>
-                                    <td class="span3">                                        
+                                    <td class="span3">
                                         @{
-                                            var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
+                                var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
                                         }
                                         @lbl:
-                                    </td>                            
+                                    </td>
                                     <td>
                                         @Html.CheckBoxFor(m => Model.StateCheck, new { @class = "switchcheckbox" })
-                                    </td>                        
-                                    <td>
-                                
                                     </td>
+                                    <td></td>
                                 </tr>
                             }
 
                             @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()) == 1)
                             { 
                                 <tr>
-                                <td class="span3">                                    
-                                    @{
+                                    <td class="span3">
+                                        @{
                                 var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
-                                      }
-                                      @lbl:
-                                </td>                            
-                                <td>
-                                    @Html.CheckBoxFor(m => Model.SubStateCheck, new { @class = "switchcheckbox" })
-                                </td>                            
-                                <td colspan="2">
-                                    <select id="lstSubStates" name="lstSubState" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
-                                        @foreach (var e in Model.SubStates)
-                                        {     
-                                            if (e.IsActive != 0)                                                                                                 
-                                            {
-                                              <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedSubState)>@e.Name </option>                                       
-                                            }
                                         }
-                                    </select>
-                                </td>                                                                                                                
-                            </tr>  
+                                        @lbl:
+                                    </td>
+                                    <td>
+                                        @Html.CheckBoxFor(m => Model.SubStateCheck, new { @class = "switchcheckbox" })
+                                    </td>
+                                    <td colspan="2">
+                                        <select id="lstSubStates" name="lstSubState" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                            @foreach (var e in Model.SubStates)
+                                            {
+                                                if (e.IsActive != 0)
+                                                {
+                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedSubState)>@e.Name </option>                                       
+                                                }
+                                            }
+                                        </select>
+                                    </td>
+                                </tr>  
                             }
-                            
+
                             @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.RegTime.ToString()) == 1)
                             { 
                                 <tr>
-                                    <td class="span3">                                      
+                                    <td class="span3">
                                         @{
                                 var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.RegTime.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
-                                      }
-                                      @lbl:
-                                    </td>                            
+                                        }
+                                        @lbl:
+                                    </td>
                                     <td>
                                         @Html.CheckBoxFor(m => m.CaseRegistrationDateFilterShow, new { @class = "switchcheckbox" })
-                                    </td>                            
+                                    </td>
                                     <td>
                                         @Html.EditorFor(m => m.CaseRegistrationDateStartFilter, "DatePickerNoJs")
                                         @Html.EditorFor(m => m.CaseRegistrationDateEndFilter, "DatePickerNoJs")
-                                    </td>                                                                                                                
+                                    </td>
                                 </tr>  
                             }
 
                             @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.WatchDate.ToString()) == 1)
                             { 
                                 <tr>
-                                    <td class="span3">                                       
+                                    <td class="span3">
                                         @{
                                 var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
-                                      }
-                                      @lbl:
-                                    </td>                            
+                                        }
+                                        @lbl:
+                                    </td>
                                     <td>
                                         @Html.CheckBoxFor(m => m.CaseWatchDateFilterShow, new { @class = "switchcheckbox" })
-                                    </td>                            
+                                    </td>
                                     <td>
                                         @Html.EditorFor(m => m.CaseWatchDateStartFilter, "DatePickerNoJS")
                                         @Html.EditorFor(m => m.CaseWatchDateEndFilter, "DatePickerNoJS")
-                                    </td>                                                                                                                
+                                    </td>
                                 </tr>  
                             }
 
                             @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.FinishingDate.ToString()) == 1)
                             { 
                                 <tr>
-                                    <td class="span3">                                        
+                                    <td class="span3">
                                         @{
                                 var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
-                                      }
-                                      @lbl:
-                                    </td>                            
+                                        }
+                                        @lbl:
+                                    </td>
                                     <td>
                                         @Html.CheckBoxFor(m => m.CaseClosingDateFilterShow, new { @class = "switchcheckbox" })
-                                    </td>                            
+                                    </td>
                                     <td>
                                         @Html.EditorFor(m => m.CaseClosingDateStartFilter, "DatePickerNoJS")
                                         @Html.EditorFor(m => m.CaseClosingDateEndFilter, "DatePickerNoJS")
-                                    </td>                                                                                                                
+                                    </td>
                                 </tr>  
                             }
 
                             @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.ClosingReason.ToString()) == 1)
                             {
                                 <tr>
-                                    <td class="span3">                                        
+                                    <td class="span3">
                                         @{
                                 var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.ClosingReason.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
-                                      }
-                                      @lbl:
+                                        }
+                                        @lbl:
                                     </td>
                                     <td>
                                         @Html.CheckBoxFor(m => Model.ClosingReasonCheck, new { @class = "switchcheckbox" })
-                                    </td>                                                        
+                                    </td>
                                     <td colspan="2">
                                         <div id="divClosingReasonSetting" class="btn-group">
                                             <div class="btn" id="divBreadcrumbs_ClosingReasonSetting">@Model.ClosingReasonPath</div>
@@ -378,18 +374,18 @@
                                             </ul>
                                             @Html.HiddenFor(model => model.ClosingReasonId)
                                         </div>
-                                    </td>                            
+                                    </td>
                                 </tr>             
-                            }                         
+                            }
                         </table>
                     </div>
                 </div>
             </div>
 
-             </div>                
+        </div>
     </div>
 </form>
-<!-- ************************* Columns ********************************* -->      
+<!-- ************************* Columns ********************************* -->
 <div id="colsetting_result" class="container">
-    @Html.Partial("_ColumnCaseSetting", Model.ColumnSettingModel) 
+    @Html.Partial("_ColumnCaseSetting", Model.ColumnSettingModel)
 </div>

@@ -396,6 +396,7 @@ namespace DH.Helpdesk.Dal.Repositories
                         x.RestrictedCasePermission,
                         x.ShowNotAssignedWorkingGroups,
                         x.CreateCasePermission,
+                        x.CreateSubCasePermission,
                         x.CopyCasePermission,
                         x.OrderPermission,
                         x.CaseSolutionPermission,

@@ -5,48 +5,53 @@
 @Translation.Get("poster i sökresultat", Enums.TranslationSource.TextTranslation):
 @Model.NotifiersFound
 
-    
-<table id="Notifire_Table" class="table table-striped table-bordered table-hover table-cases">
-    <thead>
-        <tr>
-            @foreach (var header in Model.Headers)
-            {
-                <th onclick=" sortGrid('@header.FieldName') " class="thpointer">
-                    @Translation.Get(header.Caption, Enums.TranslationSource.TextTranslation)
-                    @if (Model.SortField != null && header.FieldName == Model.SortField.Name)
-                    {
-                        switch (Model.SortField.SortBy)
-                        {
-                            case SortBy.Ascending:
-                                <i class="icon-chevron-up"></i>
-                                break;
-                            case SortBy.Descending:
-                                <i class="icon-chevron-down"></i>
-                                break;
-                            default:
-                                throw new ArgumentOutOfRangeException();
-                        }
-                    }
-                </th>
-            }
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var notifier in Model.Notifiers)
-        {
-            <tr onclick=" window.location.href = '@Url.Action("Notifier", new RouteValueDictionary { { "id", notifier.Id } })' ">
-                @for (var i = 0; i < notifier.FieldValues.Count; i++)
+@if (Model.Headers.Count == 0)
+{
+    <div class="alert alert-warning">No default columns have been selected for your user in this customer. To display case overview filters, go to the Settings tab.</div>
+}
+else
+{
+    <table id="Notifire_Table" class="table table-striped table-bordered table-hover table-cases">
+        <thead>
+            <tr>
+                @foreach (var header in Model.Headers)
                 {
-                    var field = Model.Headers[i];
-                    var value = notifier.FieldValues.Single(v => v.FieldName == field.FieldName);
-
-                    <td class="tdpointer">@value.Value.ForHtmlView()</td>
+                    <th onclick=" sortGrid('@header.FieldName') " class="thpointer">
+                        @Translation.Get(header.Caption, Enums.TranslationSource.TextTranslation)
+                        @if (Model.SortField != null && header.FieldName == Model.SortField.Name)
+                        {
+                            switch (Model.SortField.SortBy)
+                            {
+                                case SortBy.Ascending:
+                                    <i class="icon-chevron-up"></i>
+                                    break;
+                                case SortBy.Descending:
+                                    <i class="icon-chevron-down"></i>
+                                    break;
+                                default:
+                                    throw new ArgumentOutOfRangeException();
+                            }
+                        }
+                    </th>
                 }
             </tr>
-        }
-    </tbody>
-</table>
-        
+        </thead>
+        <tbody>
+            @foreach (var notifier in Model.Notifiers)
+            {
+                <tr onclick=" window.location.href = '@Url.Action("Notifier", new RouteValueDictionary { { "id", notifier.Id } })' ">
+                    @for (var i = 0; i < notifier.FieldValues.Count; i++)
+                    {
+                        var field = Model.Headers[i];
+                        var value = notifier.FieldValues.Single(v => v.FieldName == field.FieldName);
+
+                        <td class="tdpointer">@value.Value.ForHtmlView()</td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
   
 <script>
 

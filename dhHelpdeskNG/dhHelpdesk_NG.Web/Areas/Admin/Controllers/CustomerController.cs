@@ -184,6 +184,7 @@
                 newCustomerCaseFieldSettings.ShowOnStartPage = cfs.ShowOnStartPage;
                 newCustomerCaseFieldSettings.Required = cfs.Required;
                 newCustomerCaseFieldSettings.ShowExternal = cfs.ShowExternal;
+                newCustomerCaseFieldSettings.EMailIdentifier = cfs.EMailIdentifier;
               
 
                 this._customerService.SaveCaseFieldSettingsForCustomerCopy(customer.Id, customer.Language_Id, newCustomerCaseFieldSettings, out errors);
@@ -850,7 +851,9 @@
                 LogNoteFormat = customerToCopySettings.LogNoteFormat,
                 CaseArchiveDays = customerToCopySettings.CaseArchiveDays,
                 CaseComplaintDays = customerToCopySettings.CaseComplaintDays,
-                ModuleCaseInvoice = customerToCopySettings.ModuleCaseInvoice
+                ModuleCaseInvoice = customerToCopySettings.ModuleCaseInvoice,
+                PreventToSaveCaseWithInactiveValue = customerToCopySettings.PreventToSaveCaseWithInactiveValue,
+                ShowOUsOnDepartmentFilter = customerToCopySettings.ShowOUsOnDepartmentFilter
             };
 
             //Get CaseSettings to copy
@@ -885,6 +888,7 @@
                 newCustomerCaseFieldSettings.ShowExternal = cfs.ShowExternal;
                 newCustomerCaseFieldSettings.FieldSize = cfs.FieldSize;
                 newCustomerCaseFieldSettings.ListEdit = cfs.ListEdit;
+                newCustomerCaseFieldSettings.EMailIdentifier = cfs.EMailIdentifier;
 
                 
                 this._customerService.SaveCaseFieldSettingsForCustomerCopy(newCustomerToSave.Id, newCustomerToSave.Language_Id, newCustomerCaseFieldSettings, out errors);
@@ -996,6 +1000,7 @@
                 newCustomerCustomerUser.User_Id = cu.User_Id;
                 newCustomerCustomerUser.CasePerformerFilter = string.Empty;
                 newCustomerCustomerUser.ShowOnStartPage = cu.ShowOnStartPage;
+                newCustomerCustomerUser.UserInfoPermission = cu.UserInfoPermission;
 
                 this._customerUserService.SaveCustomerUserForCopy(newCustomerCustomerUser, out errors);
             }

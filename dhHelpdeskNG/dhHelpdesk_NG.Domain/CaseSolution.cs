@@ -70,7 +70,7 @@ namespace DH.Helpdesk.Domain
         public int? UpdateNotifierInformation { get; set; }
         public DateTime? PlanDate { get; set; }
         public int? CausingPartId { get; set; }
-        public int RegistrationSource { get; set; }
+        public int? RegistrationSource { get; set; }
 
         public virtual CaseSolutionCategory CaseSolutionCategory { get; set; }
         public virtual CaseSolutionSchedule CaseSolutionSchedule { get; set; }

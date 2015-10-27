@@ -7,9 +7,15 @@
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models.Logs.Output;
     using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Dal.NewInfrastructure;
+    using DH.Helpdesk.Dal.NewInfrastructure.Concrete;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Domain;
+
+    using LinqLib.Operators;
+
+    using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
 
     public interface ILogService
     {
@@ -20,7 +26,13 @@
         CaseLog GetLogById(int id);
         Guid Delete(int id, string basePath);
 
+        void AddParentCaseLogToChildCases(int[] caseIds, CaseLog parentCaseLog);
+
         IEnumerable<LogOverview> GetCaseLogOverviews(int caseId);
+
+        IEnumerable<Log> GetCaseLogs(DateTime? fromDate, DateTime? toDate);
+
+        void SaveChildsLogs(CaseLog baseCaseLog, int[] childCasesIds, out IDictionary<string, string> errors);
     }
 
     public class LogService : ILogService
@@ -33,6 +45,8 @@
         private readonly IFilesStorage _filesStorage;
         private readonly IFinishingCauseRepository _finishingCauseRepository;
         private readonly IFinishingCauseService _finishingCauseService;
+
+        private readonly IUnitOfWorkFactory unitOfWorkFactory;
 
         /// <summary>
         /// The case repository.
@@ -72,7 +86,7 @@
             ICaseRepository caseRepository, 
             IProblemLogService problemLogService,
             IFinishingCauseRepository finishingCauseRepository,
-            IFinishingCauseService finishingCauseService)
+            IFinishingCauseService finishingCauseService, IUnitOfWorkFactory unitOfWorkFactory)
         {
             this._logRepository = logRepository;
             this._unitOfWork = unitOfWork;
@@ -81,7 +95,8 @@
             this._filesStorage = filesStorage;
             this._logFileRepository = logFileRepository;
             this._finishingCauseRepository = finishingCauseRepository;
-            this._finishingCauseService = finishingCauseService; 
+            this._finishingCauseService = finishingCauseService;
+            this.unitOfWorkFactory = unitOfWorkFactory;
         }
 
         #endregion
@@ -130,6 +145,13 @@
         /// <returns>
         /// The result.
         /// </returns>
+
+        public IEnumerable<Log> GetCaseLogs(DateTime? fromDate, DateTime? toDate)
+        {
+            var ret = this._logRepository.GetCaseLogs(fromDate, toDate);
+            return ret; 
+        }
+
         public IEnumerable<LogOverview> GetCaseLogOverviews(int caseId)
         {
             var result = new List<LogOverview>();
@@ -159,6 +181,27 @@
             }
 
             return result.OrderByDescending(l => l.LogDate);
+        }
+
+        public void SaveChildsLogs(CaseLog baseCaseLog, int[] childCasesIds, out IDictionary<string, string> errors)
+        {
+            errors = this.Validate(baseCaseLog);
+            if (errors.Count != 0)
+            {
+                return;
+            }
+
+            var logs = childCasesIds.Select(
+                id =>
+                    {
+                        baseCaseLog.CaseId = id; 
+                        return this.GetLogFromCaseLog(baseCaseLog);
+                    });
+            logs.ForEach(it => this._logRepository.Add(it));
+            if (errors.Count == 0)
+            {
+                this.Commit();
+            }
         }
 
         public IList<Log> GetLogsByCaseId(int caseId)
@@ -221,6 +264,142 @@
             this._unitOfWork.Commit();
         }
 
+        public void AddParentCaseLogToChildCases(int[] caseIds, CaseLog parentCaseLog)
+        {
+            if (caseIds == null)
+            {
+                throw new ArgumentException("caseLog is null");
+            }
+
+            IDictionary<string, string> errors;
+            IEnumerable<CaseHistory> newCaseHistories;
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var caseHistoryRepository = uow.GetRepository<CaseHistory>();
+                var maxCaseHistoryIds =
+                    caseHistoryRepository.GetAll()
+                        .Where(it => caseIds.Contains(it.Case_Id))
+                        .GroupBy(it => it.Case_Id)
+                        .ToDictionary(g => g.Key, g => g.Max(it => it.Id))
+                        .Values.ToArray();
+                var caseHistories =
+                    caseHistoryRepository.GetAll().Where(it => maxCaseHistoryIds.Contains(it.Id)).ToArray();
+                newCaseHistories =
+                    caseHistories.Select(
+                        it =>
+                        new CaseHistory()
+                            {
+                                CaseHistoryGUID = Guid.NewGuid(),
+                                Case_Id = it.Case_Id,
+                                ReportedBy = it.ReportedBy,
+                                PersonsName = it.PersonsName,
+                                PersonsEmail = it.PersonsEmail,
+                                PersonsPhone = it.PersonsPhone,
+                                PersonsCellphone = it.PersonsCellphone,
+                                Customer_Id = it.Customer_Id,
+                                Region_Id = it.Region_Id,
+                                Department_Id = it.Department_Id,
+                                OU_Id = it.OU_Id,
+                                Place = it.Place,
+                                UserCode = it.UserCode,
+                                InventoryNumber = it.InventoryNumber,
+                                InventoryType = it.InventoryType,
+                                InventoryLocation = it.InventoryLocation,
+                                CaseNumber = it.CaseNumber,
+                                User_Id = it.User_Id,
+                                IpAddress = it.IpAddress,
+                                CaseType_Id = it.CaseType_Id,
+                                ProductArea_Id = it.ProductArea_Id,
+                                System_Id = it.System_Id,
+                                Urgency_Id = it.Urgency_Id,
+                                Impact_Id = it.Impact_Id,
+                                Category_Id = it.Category_Id,
+                                Supplier_Id = it.Supplier_Id,
+                                InvoiceNumber = it.InvoiceNumber,
+                                ReferenceNumber = it.ReferenceNumber,
+                                Caption = it.Caption,
+                                Description = it.Description,
+                                Miscellaneous = it.Miscellaneous,
+                                ContactBeforeAction = it.ContactBeforeAction,
+                                SMS = it.SMS,
+                                AgreedDate = it.AgreedDate,
+                                Available = it.Available,
+                                Cost = it.Cost,
+                                OtherCost = it.OtherCost,
+                                Currency = it.Currency,
+                                Performer_User_Id = it.Performer_User_Id,
+                                CaseResponsibleUser_Id = it.CaseResponsibleUser_Id,
+                                Priority_Id = it.Priority_Id,
+                                Status_Id = it.Status_Id,
+                                StateSecondary_Id = it.StateSecondary_Id,
+                                ExternalTime = it.ExternalTime,
+                                Project_Id = it.Project_Id,
+                                Verified = it.Verified,
+                                VerifiedDescription = it.VerifiedDescription,
+                                SolutionRate = it.SolutionRate,
+                                PlanDate = it.PlanDate,
+                                ApprovedDate = it.ApprovedDate,
+                                ApprovedBy_User_Id = it.ApprovedBy_User_Id,
+                                WatchDate = it.WatchDate,
+                                LockCaseToWorkingGroup_Id = it.LockCaseToWorkingGroup_Id,
+                                WorkingGroup_Id = it.WorkingGroup_Id,
+                                FinishingDate = it.FinishingDate,
+                                FinishingDescription = it.FinishingDescription,
+                                FollowUpDate = it.FollowUpDate,
+                                RegistrationSource = it.RegistrationSource,
+                                RelatedCaseNumber = it.RelatedCaseNumber,
+                                Problem_Id = it.Problem_Id,
+                                Change_Id = it.Change_Id,
+                                Unread = it.Unread,
+                                RegLanguage_Id = it.RegLanguage_Id,
+                                RegUserId = it.RegUserId,
+                                RegUserDomain = it.RegUserDomain,
+                                ProductAreaQuestionVersion_Id = it.ProductAreaQuestionVersion_Id,
+                                LeadTime = it.LeadTime,
+                                CreatedDate = DateTime.UtcNow,
+                                CreatedByUser = it.CreatedByUser,
+                                Deleted = it.Deleted,
+                                CausingPartId = it.CausingPartId,
+                                DefaultOwnerWG_Id = it.DefaultOwnerWG_Id,
+                                CaseFile = it.CaseFile,
+                                LogFile = it.LogFile,
+                                CaseLog = it.CaseLog,
+                                ClosingReason = it.ClosingReason,
+                                RegistrationSourceCustomer_Id = it.RegistrationSourceCustomer_Id
+                            })
+                        .ToArray();
+                newCaseHistories.ForEach(caseHistoryRepository.Add);
+                uow.Save();
+            }
+
+            var caseLogs =
+                newCaseHistories.Select(
+                    it =>
+                    new Log
+                        {
+                            Id = it.Id,
+                            CaseHistory_Id = it.Id,
+                            Case_Id = it.Case_Id,
+                            User_Id = parentCaseLog.UserId,
+                            RegTime = DateTime.UtcNow,
+                            LogDate = DateTime.UtcNow,
+                            RegUser =
+                                string.IsNullOrWhiteSpace(parentCaseLog.RegUser)
+                                    ? string.Empty
+                                    : parentCaseLog.RegUser,
+                            LogType = parentCaseLog.LogType,
+                            LogGUID = parentCaseLog.LogGuid,
+                            Text_Internal =
+                                string.IsNullOrWhiteSpace(parentCaseLog.TextInternal)
+                                    ? string.Empty
+                                    : parentCaseLog.TextInternal,
+                            Text_External = string.Empty,
+                            ChangeTime = DateTime.UtcNow
+                        }).ToArray();
+            caseLogs.ForEach(this._logRepository.Add);
+            this._logRepository.Commit();
+        }
+
         #endregion
 
         #region Private Methods and Operators
@@ -235,7 +414,6 @@
             {
                 log.RegTime = DateTime.UtcNow;
                 log.LogDate = DateTime.UtcNow;
-                log.RegUser = caseLog.RegUser;
                 log.RegUser = string.IsNullOrWhiteSpace(caseLog.RegUser) ? string.Empty : caseLog.RegUser;
                 log.Export = 0;
                 log.LogType = caseLog.LogType;

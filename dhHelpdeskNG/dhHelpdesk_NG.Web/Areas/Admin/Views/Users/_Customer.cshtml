@@ -46,6 +46,16 @@
                     @Html.Hidden(string.Format("User.CustomerUsers[{0}].CasePerformerFilter", counter), cu.CasePerformerFilter)
                     @Html.Hidden(string.Format("User.CustomerUsers[{0}].CaseCategoryFilter", counter), cu.CaseCategoryFilter)
 
+
+                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].CaseRegistrationDateStartFilter", counter), cu.CaseRegistrationDateStartFilter)                
+                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].CaseRegistrationDateEndFilter", counter), cu.CaseRegistrationDateEndFilter)
+
+                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].CaseClosingDateStartFilter", counter), cu.CaseClosingDateStartFilter)                
+                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].CaseClosingDateEndFilter", counter), cu.CaseClosingDateEndFilter)
+
+                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].CaseWatchDateStartFilter", counter), cu.CaseWatchDateStartFilter)                
+                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].CaseWatchDateEndFilter", counter), cu.CaseWatchDateEndFilter)
+
                     @Html.Hidden(string.Format("User.CustomerUsers[{0}].CaseCaseTypeFilter", counter), cu.CaseCaseTypeFilter)
                     @Html.Hidden(string.Format("User.CustomerUsers[{0}].CaseStatusFilter", counter), cu.CaseStatusFilter)
                     @Html.Hidden(string.Format("User.CustomerUsers[{0}].CaseResponsibleFilter", counter), cu.CaseResponsibleFilter)

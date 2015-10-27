@@ -183,7 +183,7 @@
                                         </td>
                                     </tr>
                                  }
-                               @* @if (Model.CaseFieldSettings.Count() != 0)
+                               @if (Model.CaseFieldSettings.Count() != 0)
                                 {
                                     <tr>
                                         <td>
@@ -193,15 +193,13 @@
                                             <input type="checkbox" name="Casesolution.NoMailToNotifier" @(Model.CaseSolution.NoMailToNotifier == 1 ? "checked=checked" : "") value ="1" />
                                             <input type="hidden" name="Casesolution.NoMailToNotifier" value="0" />
                                             &nbsp;@Translation.Get("Skicka mail till anmälaren", Enums.TranslationSource.TextTranslation)
-
-
                                         </td>
                                         <td class="span9">
                                             @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.Email, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.Persons_EMail)
                                         </td>
 
                                     </tr>
-                                }     *@
+                                }
                               
                                  @if (Model.CaseFieldSettings.Count() != 0)
                                  {
@@ -802,7 +800,7 @@
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                         </td>
                                         <td class="span9">
-                                            @Html.TextAreaFor(model => model.CaseSolution.Text_External, new { style = "height:100px;", maxlength = "1500" })
+                                            @Html.TextAreaFor(model => model.CaseSolution.Text_External, new { style = "height:100px;", maxlength = "3000" })
                                         </td>
                                         <td class="span9">
                                             @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.ExternalLogNote, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.tblLog_Text_External)
@@ -816,7 +814,7 @@
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                         </td>
                                         <td>
-                                            @Html.TextAreaFor(model => model.CaseSolution.Text_Internal, new { style = "height:100px;", maxlength = "1000" })
+                                            @Html.TextAreaFor(model => model.CaseSolution.Text_Internal, new { style = "height:100px;", maxlength = "3000" })
                                         </td>
                                         <td class="span9">
                                             @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.InternalLogNote, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.tblLog_Text_Internal)
@@ -1144,4 +1142,11 @@
            form.submit();
        }
    });
+</script>
+<script>
+    $(function () {
+        $('#CaseLog_TextExternal').resizable();
+        $('#CaseLog_TextInternal').resizable();
+    });
+
 </script>

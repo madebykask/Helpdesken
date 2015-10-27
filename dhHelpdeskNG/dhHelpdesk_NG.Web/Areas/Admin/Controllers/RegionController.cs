@@ -7,6 +7,7 @@
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Infrastructure;
 
     public class RegionController : BaseAdminController
     {
@@ -23,12 +24,21 @@
             this._customerService = customerService;
         }
 
+        public JsonResult SetShowOnlyActiveRegionInAdmin(bool value)
+        {
+            SessionFacade.ShowOnlyActiveRegionInAdmin = value;
+            return this.Json(new { result = "success" });
+        }
+
         public ActionResult Index(int customerId)
         {
             var customer = this._customerService.GetCustomer(customerId);
             var regions = this._regionService.GetRegions(customer.Id).ToList();
 
-            var model = new RegionIndexViewModel { Regions = regions, Customer = customer};
+            var model = new RegionIndexViewModel { Regions = regions, 
+                                                   Customer = customer,
+                                                   IsShowOnlyActive = SessionFacade.ShowOnlyActiveRegionInAdmin
+                                                 };
             return this.View(model);
         }
 

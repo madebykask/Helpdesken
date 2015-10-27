@@ -3,7 +3,6 @@
 function FilterForm() {
 };
 
-
 /// initial state of search form
 FilterForm.prototype.init = function (opt) {
     var me = this;
@@ -22,10 +21,19 @@ FilterForm.prototype.init = function (opt) {
     me.$btnResetFilter = me.$el.find('.btn-reset');
     me.$btnClearFilter = me.$el.find('.btn-clear');
     me.$searchField = me.$el.find('#txtFreeTextSearch');
+    me.initiatorField = me.$el.find('#CaseInitiatorFilter');
     me.$searchOnlyInMyCases = $('#SearchInMyCasesOnly');
 
     /************** EVENTS BINDING ************************/
     me.$searchField.keydown(function (ev) {
+        if (ev.keyCode == 13) {
+            ev.preventDefault();
+            me.onSearchClick.call(me);
+            return false;
+        }
+    });
+    
+    me.initiatorField.keydown(function (ev) {
         if (ev.keyCode == 13) {
             ev.preventDefault();
             me.onSearchClick.call(me);
@@ -81,6 +89,35 @@ FilterForm.prototype.init = function (opt) {
         me.$filteredMarker.show();
         me.toggleFilter(true);
     }
+};
+
+/**
+* @public
+*/
+FilterForm.prototype.getSavedSeacrhCaseTypeValue = function() {
+    return parseInt($.cookie('caseoverveiew.filter.searchCaseType'), 10);
+};
+
+/**
+* @public
+*/
+FilterForm.prototype.saveSeacrhCaseTypeValue = function() {
+    var me = this;
+    $.cookie('caseoverveiew.filter.searchCaseType', me.getSearchCaseType());
+};
+
+/**
+* @public
+* @returns int
+*/
+FilterForm.prototype.getSearchCaseType = function() {
+    var me = this;
+    var res = parseInt(me.$caseFilterType.val(), 10);
+    if (!isNaN(res)) {
+        return res;
+    }
+
+    throw new Error('unknow value in caseFilterType control');
 };
 
 /**
@@ -246,7 +283,7 @@ FilterForm.prototype.initControlsMap = function() {
                 }
                 break;
             default:
-                throw Error('Create UI is not registerd for control "' + controlName + '" in initControlsMap()');
+                throw Error('Create UI is not registered for control "' + controlName + '" in initControlsMap()');
         }
         
         if (control != null) {

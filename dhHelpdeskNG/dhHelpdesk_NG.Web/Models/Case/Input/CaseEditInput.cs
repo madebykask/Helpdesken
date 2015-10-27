@@ -33,11 +33,11 @@
 
         public CaseLockModel caseLock { get; set; }
 
+        public int? ParentId { get; set; }
 
-        #region Date field from case_. Converted to user time zone
-
-        public DateTime? RegTime { get; set; }
-
-        #endregion
+        public bool IsItChildCase()
+        {
+            return ParentId.HasValue && ParentId != 0;
+        }
     }
 }
