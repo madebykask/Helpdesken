@@ -24,34 +24,20 @@
             </td>
         </tr>
     </table>
-<!--    <div class='width100 textbold' style='text-align: left;'>
-        {{:InvoicedByTitle}}: {{:InvoicedByUser}} at {{:InvoiceDate}}
-    </div>-->  
+    {{if IsInvoiced}}
+    <div class='width100 textbold' style='text-align: left;'>
+        {{:InvoicedByTitle}}: {{:InvoicedByUser}} - {{:InvoiceDate}}
+    </div>
+    {{/if}}
     <div class='width100 textbold' style='text-align: right;'>
         {{:TotalLabel}}: {{:Total}}
     </div>  
     <table>
         <tbody>
-<!--            <tr>
-                <td>
-                    {{:DeliveryPeriodTitle}}:
-                </td>
-                <td>
-                    {{:DeliveryPeriod}}                             
-                </td>
-            </tr>-->
-<!--            <tr>
-                <td>
-                    {{:ReferenceTitle}}:
-                </td>
-                <td>
-                    {{:Reference}}
-                </td>
-            </tr>-->
         </tbody>
-    </table>        
+    </table>
 </div>    
 {{/for}} 
-<div  class='textbold' style='text-align: right;'>
+<div class='textbold' style='text-align: right;'>
     {{:TotalLabel}}: {{:Total}}
 </div>    

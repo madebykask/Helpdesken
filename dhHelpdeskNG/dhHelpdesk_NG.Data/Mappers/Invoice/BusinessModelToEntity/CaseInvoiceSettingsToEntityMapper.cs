@@ -9,6 +9,10 @@
         {
             entity.CustomerId = businessModel.CustomerId;
             entity.ExportPath = businessModel.ExportPath;
+            entity.Currency = businessModel.Currency;
+            entity.OrderNoPrefix = businessModel.OrderNoPrefix;
+            entity.Issuer = businessModel.Issuer;
+            entity.OurReference = businessModel.OurReference;
         }
     }
 }

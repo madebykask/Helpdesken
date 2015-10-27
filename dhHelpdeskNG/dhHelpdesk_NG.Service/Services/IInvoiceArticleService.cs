@@ -3,6 +3,7 @@
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models.Invoice;
+    using System;
 
     public interface IInvoiceArticleService
     {
@@ -13,6 +14,10 @@
         InvoiceArticle[] GetArticles(int customerId);
 
         CaseInvoice[] GetCaseInvoices(int caseId);
+
+        CaseInvoice[] GetCaseInvoicesWithTimeZone(int caseId, TimeZoneInfo userTimeZone);
+
+        bool ValidateInvoiceSettings(int customerId);
 
         void SaveCaseInvoices(IEnumerable<CaseInvoice> invoices, int caseId);
 

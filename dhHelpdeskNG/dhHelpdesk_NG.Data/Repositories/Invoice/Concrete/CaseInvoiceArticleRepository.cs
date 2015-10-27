@@ -71,15 +71,18 @@
                     if (order.Id > 0)
                     {
                         orderEntity = this.DbContext.CaseInvoiceOrders.Find(order.Id);
-                        var articlesForDelete = new List<int>();
-                        articlesForDelete.AddRange(orderEntity.Articles.Where(a => order.Articles.All(ar => ar.Id != a.Id)).Select(a => a.Id));
-                        foreach (var articleForDelete in articlesForDelete)
+                        if (orderEntity.InvoiceDate == null)
                         {
-                            var a = this.DbContext.CaseInvoiceArticles.Find(articleForDelete);
-                            this.DbContext.CaseInvoiceArticles.Remove(a);
-                        }
+                            var articlesForDelete = new List<int>();
+                            articlesForDelete.AddRange(orderEntity.Articles.Where(a => order.Articles.All(ar => ar.Id != a.Id)).Select(a => a.Id));
+                            foreach (var articleForDelete in articlesForDelete)
+                            {
+                                var a = this.DbContext.CaseInvoiceArticles.Find(articleForDelete);
+                                this.DbContext.CaseInvoiceArticles.Remove(a);
+                            }
 
-                        this.orderMapper.Map(order, orderEntity);
+                            this.orderMapper.Map(order, orderEntity);
+                        }
                     }
                     else
                     {

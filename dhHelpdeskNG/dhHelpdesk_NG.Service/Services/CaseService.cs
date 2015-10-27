@@ -55,13 +55,12 @@ namespace DH.Helpdesk.Services.Services
         DynamicCase GetDynamicCase(int id);
 
         int SaveCase(
-            Case cases, 
-            CaseLog caseLog, 
-            CaseMailSetting caseMailSetting, 
-            int userId, 
-            string adUser,           
-            out IDictionary<string, string> errors,
-            CaseInvoice[] invoices = null);
+            Case cases,
+            CaseLog caseLog,
+            CaseMailSetting caseMailSetting,
+            int userId,
+            string adUser,
+            out IDictionary<string, string> errors);
 
         int SaveCaseHistory(Case c, int userId, string adUser, out IDictionary<string, string> errors, 
                             string defaultUser = "", ExtraFieldCaseHistory extraField = null);
@@ -553,8 +552,7 @@ namespace DH.Helpdesk.Services.Services
                 CaseMailSetting caseMailSetting, 
                 int userId, 
                 string adUser, 
-                out IDictionary<string, string> errors,
-                CaseInvoice[] invoices = null)
+                out IDictionary<string, string> errors)
         {
             int ret = 0;
 
@@ -606,11 +604,6 @@ namespace DH.Helpdesk.Services.Services
                 ret = this.SaveCaseHistory(c, userId, adUser, out errors, adUser, extraFields);    
             else            
                 ret = this.SaveCaseHistory(c, userId, adUser, out errors, "", extraFields);
-
-            if (invoices != null)
-            {
-                this.invoiceArticleService.SaveCaseInvoices(invoices, cases.Id);                
-            }
             
             return ret;
         }

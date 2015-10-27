@@ -66,6 +66,13 @@
             return this.Json(articles, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
+        public JsonResult InvoiceSettingsValid(int customerId)
+        {
+            bool SettingsValid = this.invoiceArticleService.ValidateInvoiceSettings(customerId);
+            return this.Json(SettingsValid, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpPost]
         public void SaveArticles(int caseId, string invoices)
         {

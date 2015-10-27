@@ -96,6 +96,8 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ILanguageService _languageService;
         private readonly IGlobalSettingService _globalSettingService;
         private readonly IMailTemplateService _mailTemplateService;
+
+        private readonly ICaseInvoiceSettingsService caseInvoiceSettingsService;
         
         private const string ParentPathDefaultValue = "--";
 
@@ -203,7 +205,8 @@ namespace DH.Helpdesk.Web.Controllers
             IRegistrationSourceCustomerService registrationSourceCustomerService,
             ICaseLockService caseLockService,
             IMailTemplateService mailTemplateService,
-            IWatchDateCalendarService watchDateCalendarServcie)
+            IWatchDateCalendarService watchDateCalendarServcie,
+            ICaseInvoiceSettingsService caseInvoiceSettingsService)
             : base(masterDataService)
         {
             this._masterDataService = masterDataService;
@@ -255,6 +258,7 @@ namespace DH.Helpdesk.Web.Controllers
             this.caseSolutionSettingService = caseSolutionSettingService;
             this.invoiceHelper = invoiceHelper;
             this.caseModelFactory = caseModelFactory;
+            this.caseInvoiceSettingsService = caseInvoiceSettingsService;
             this.caseOverviewSettingsService = caseOverviewSettingsService;
             this.gridSettingsService = gridSettingsService;
             this.outputFormatter = outputFormatter;
@@ -1313,28 +1317,14 @@ namespace DH.Helpdesk.Web.Controllers
                     m.ParantPath_OU = ParentPathDefaultValue;
                 }
 
-                var caseInvoices = this.invoiceArticleService.GetCaseInvoices(id);
-                m.InvoiceArticles = this.invoiceArticlesModelFactory.CreateCaseInvoiceArticlesModel(caseInvoices);
-                //foreach (var invoice in m.InvoiceArticles.Invoices)
-                //{
-                //    foreach (var order in invoice.Orders)
-                //    {
-                //        var UserId = 0;
-                //        if (order.InvoicedByUserId.HasValue && order.InvoicedByUserId != 0)
-                //        {
-                //            UserId = order.InvoicedByUserId.Value;
-                //            var user = _userService.GetUser(UserId);
-                //            order.InvoicedByUser = user.FirstName + " " + user.SurName;
-                //        }
-                //        else
-                //        {
-                //            order.InvoicedByUser = "";
-                //        }
-                        
-                //    }
-                //}
+                var moduleCaseInvoice = this._settingService.GetCustomerSetting(m.case_.Customer_Id).ModuleCaseInvoice;
+                if (moduleCaseInvoice == 1)
+                {
+                    var caseInvoices = this.invoiceArticleService.GetCaseInvoicesWithTimeZone(id, TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
+                    m.InvoiceArticles = this.invoiceArticlesModelFactory.CreateCaseInvoiceArticlesModel(caseInvoices);
+                }  
                 m.CustomerSettings = this.workContext.Customer.Settings;
-            }            
+            }        
 
             AddViewDataValues();
 
@@ -2465,8 +2455,14 @@ namespace DH.Helpdesk.Web.Controllers
                         caseMailSetting,
                         SessionFacade.CurrentUser.Id,
                         this.User.Identity.Name,
-                        out errors,
-                        this.invoiceHelper.ToCaseInvoices(caseInvoiceArticles, null, null));
+                        out errors);
+
+            var moduleCaseInvoice = this._settingService.GetCustomerSetting(case_.Customer_Id).ModuleCaseInvoice;
+            if (moduleCaseInvoice == 1)
+            {
+                DoInvoiceWork(caseInvoiceArticles, case_.Id, case_.Customer_Id);
+            }
+
 
             if (updateNotifierInformation.HasValue && updateNotifierInformation.Value)
             {
@@ -2535,6 +2531,14 @@ namespace DH.Helpdesk.Web.Controllers
             this.userTemporaryFilesStorage.ResetCacheForObject(caseLog.LogGuid.ToString());
 
             return case_.Id;
+        }
+
+        private void DoInvoiceWork(string caseInvoiceData, int caseId, int customerId)
+        {
+            var caseOverview = this._caseService.GetCaseOverview(caseId);
+            var articles = this.invoiceArticleService.GetArticles(customerId);
+            var Invoices = this.invoiceHelper.ToCaseInvoices(caseInvoiceData, caseOverview, articles); //there will only be one?
+            this.invoiceArticleService.DoInvoiceWork(Invoices, caseId, customerId, SessionFacade.CurrentUser.Id);
         }
 
         private CaseSearchModel InitCaseSearchModel(int customerId, int userId)
