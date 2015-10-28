@@ -57,6 +57,7 @@ namespace DH.Helpdesk.Web.Controllers
 
     using DHDomain = DH.Helpdesk.Domain;
     using ParentCaseInfo = DH.Helpdesk.BusinessData.Models.Case.ChidCase.ParentCaseInfo;
+    using DH.Helpdesk.Web.Enums;
 
     public class CasesController : BaseController
     {
@@ -694,6 +695,24 @@ namespace DH.Helpdesk.Web.Controllers
             f.Department = GetDepartmentsFrom(departments_OrganizationUnits);
             f.OrganizationUnit = GetOrganizationUnitsFrom(departments_OrganizationUnits);
 
+            f.CaseRemainingTime = frm.ReturnFormValue(CaseSearchFilter.CaseRemainingTimeAttribute);
+            
+            if (!string.IsNullOrEmpty(f.CaseRemainingTime))
+            {
+                int remainingTimeId;
+                if (int.TryParse(f.CaseRemainingTime, out remainingTimeId))
+                {
+                    var timeTable = GetRemainigTimeById((RemainingTimes) remainingTimeId);
+                    if (timeTable != null)
+                    {
+                        f.CaseRemainingTimeFilter = timeTable.RemaningTime;
+                        f.CaseRemainingTimeUntilFilter = timeTable.RemaningTimeUntil;
+                        f.CaseRemainingTimeMaxFilter = timeTable.MaxRemaningTime;
+                        f.CaseRemainingTimeHoursFilter = timeTable.IsHour;
+                    }
+                }
+            }
+
             int caseRemainingTimeFilter;
             if (int.TryParse(frm.ReturnFormValue("CaseRemainingTime"), out caseRemainingTimeFilter))
             {
@@ -846,7 +865,11 @@ namespace DH.Helpdesk.Web.Controllers
                 remainingView = this.RenderPartialViewToString(
                     "CaseRemainingTime",
                     this.caseModelFactory.GetCaseRemainingTimeModel(remainingTimeData, this.workContext));
+
+
             }
+
+            
 
             return this.Json(new { result = "success", data = data, remainingView = remainingView });
         }
@@ -1304,7 +1327,7 @@ namespace DH.Helpdesk.Web.Controllers
                     m.ResponsibleUsersAvailable = responsibleUsersAvailable.MapToSelectList(customerSettings, isAddEmpty);
                     m.SendToDialogModel = this.CreateNewSendToDialogModel(customerId, responsibleUsersAvailable.ToList());
                     m.CaseLog.SendMailAboutCaseToNotifier = false;
-                    m.MinWorkingTime = cs.MinRegWorkingTime != 0 ? cs.MinRegWorkingTime : 30;
+                    m.MinWorkingTime = cs.MinRegWorkingTime != 0 ? cs.MinRegWorkingTime : 30;                    
                     // check department info
                     m.ShowInvoiceFields = 0;
                     if (m.case_.Department_Id > 0 && m.case_.Department_Id.HasValue)
@@ -4070,6 +4093,10 @@ namespace DH.Helpdesk.Web.Controllers
                 fd.lstfilterPerformer = fd.caseSearchFilter.UserPerformer.Split(',').Select(int.Parse).ToArray();
             }
 
+            //Tid kvar 
+            if (SessionFacade.CurrentUser.ShowSolutionTime)      
+                fd.filterCaseRemainingTime = GetRemainigTimeList(cusId);           
+
             return fd;
         }
 
@@ -4296,6 +4323,145 @@ namespace DH.Helpdesk.Web.Controllers
             }
             return defaultFileName;
         }
+
+        private List<SelectListItem> GetRemainigTimeList(int customerId)
+        {
+            var curCustomer = this._customerService.GetCustomer(customerId);
+            var dayWorkingTime = curCustomer.WorkingDayEnd - curCustomer.WorkingDayStart;
+            List<SelectListItem> li = new List<SelectListItem>();
+            li.Add(new SelectListItem()
+            {
+                Text = Translation.Get("Akuta ärenden", Enums.TranslationSource.TextTranslation),
+                Value = RemainingTimes.Delayed.ToStr(),
+                Selected = false
+            });
+            li.Add(new SelectListItem()
+            {
+                Text = Translation.Get("Återstående åtgärdstid") + ", " + "<1 h",
+                Value = RemainingTimes.OneHour.ToStr(),
+                Selected = false
+            });
+            li.Add(new SelectListItem()
+            {
+                Text = Translation.Get("Återstående åtgärdstid") + ", " + "<2 h",
+                Value = RemainingTimes.TwoHours.ToStr(),
+                Selected = false
+            });
+            li.Add(new SelectListItem()
+            {
+                Text = Translation.Get("Återstående åtgärdstid") + ", " + "<4 h",
+                Value = RemainingTimes.FourHours.ToStr(),
+                Selected = false
+            });
+
+            if (dayWorkingTime > 8)
+            {
+                li.Add(new SelectListItem()
+                {
+                    Text = Translation.Get("Återstående åtgärdstid") + ", " + "<8 h",
+                    Value = RemainingTimes.EightHours.ToStr(),
+                    Selected = false
+                });
+            }
+
+            li.Add(new SelectListItem()
+            {
+                Text = Translation.Get("Återstående åtgärdstid") + ", " + "<1 d",
+                Value = RemainingTimes.OneDay.ToStr(),
+                Selected = false
+            });
+            li.Add(new SelectListItem()
+            {
+                Text = Translation.Get("Återstående åtgärdstid") + ", " + "<2 d",
+                Value = RemainingTimes.TwoDays.ToStr(),
+                Selected = false
+            });
+            li.Add(new SelectListItem()
+            {
+                Text = Translation.Get("Återstående åtgärdstid") + ", " + "<3 d",
+                Value = RemainingTimes.ThreeDays.ToStr(),
+                Selected = false
+            });
+            li.Add(new SelectListItem()
+            {
+                Text = Translation.Get("Återstående åtgärdstid") + ", " + "<4 d",
+                Value = RemainingTimes.FourDays.ToStr(),
+                Selected = false
+            });
+            li.Add(new SelectListItem()
+            {
+                Text = Translation.Get("Återstående åtgärdstid") + ", " + "<5 d",
+                Value = RemainingTimes.FiveDays.ToStr(),
+                Selected = false
+            });
+            li.Add(new SelectListItem()
+            {
+                Text = Translation.Get("Återstående åtgärdstid") + ", " + ">=5 d",
+                Value = RemainingTimes.MaxDays.ToStr(),
+                Selected = false
+            });
+
+            return li;
+        }
+
+        private CaseRemainingTimeTable GetRemainigTimeById(RemainingTimes remainigTimeId)
+        {
+            var ret = new CaseRemainingTimeTable();
+
+            switch (remainigTimeId)
+            {
+                case RemainingTimes.Delayed:
+                    ret = new CaseRemainingTimeTable((int) remainigTimeId, null, 5, true);
+                    break;
+
+                case RemainingTimes.OneHour:
+                    ret = new CaseRemainingTimeTable(1, null, 5, true);
+                    break;
+
+                case RemainingTimes.TwoHours:
+                    ret = new CaseRemainingTimeTable(2, null, 5, true);
+                    break;
+
+                case RemainingTimes.FourHours:
+                    ret = new CaseRemainingTimeTable(2, 4, 5, true);
+                    break;
+
+                case RemainingTimes.EightHours:
+                    ret = new CaseRemainingTimeTable(4, 8, 5, true);
+                    break;
+
+                case RemainingTimes.OneDay:
+                    ret = new CaseRemainingTimeTable(1, null, 5, false);
+                    break;
+
+                case RemainingTimes.TwoDays:
+                    ret = new CaseRemainingTimeTable(2, null, 5, false);
+                    break;
+
+                case RemainingTimes.ThreeDays:
+                    ret = new CaseRemainingTimeTable(3, null, 5, false);
+                    break;
+
+                case RemainingTimes.FourDays:
+                    ret = new CaseRemainingTimeTable(4, null, 5, false);
+                    break;
+
+                case RemainingTimes.FiveDays:
+                    ret = new CaseRemainingTimeTable(5, null, 5, false);
+                    break;
+
+                case RemainingTimes.MaxDays:
+                    ret = new CaseRemainingTimeTable((int)remainigTimeId, null, 5, false);
+                    break;
+                default:
+                    ret = null;
+                    break;
+            }
+
+            return ret;
+
+        }
+        
         #endregion
     }
 }

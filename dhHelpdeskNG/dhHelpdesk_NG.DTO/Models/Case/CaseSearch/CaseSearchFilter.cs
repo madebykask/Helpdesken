@@ -21,6 +21,7 @@
         public const string PriorityNameAttribute = "lstfilterPriority";
         public const string StatusNameAttribute = "lstfilterStatus";
         public const string StateSecondaryNameAttribute = "lstfilterStateSecondary";
+        public const string CaseRemainingTimeAttribute = "lstfilterCaseRemainingTime";
 
         public const string CaseRegistrationDateStartFilterNameAttribute = "CaseRegistrationDateStartFilter";
         public const string CaseRegistrationDateEndFilterFilterNameAttribute = "CaseRegistrationDateEndFilter";
@@ -70,6 +71,7 @@
         public string CaseProgress { get; set; }
         public string FreeTextSearch { get; set; }
         public string CaptionSearch { get; set; }
+        public string CaseRemainingTime { get; set; }
         public bool SearchThruFiles  { get; set; }
 
         public string ParantPath_ProductArea = DropDownButtonDefaultValue;
@@ -156,6 +158,7 @@
             r.CaseNumber = o.CaseNumber;
             r.MaxRows = o.MaxRows;
             r.CaptionSearch = o.CaptionSearch;
+            r.CaseRemainingTime = o.CaseRemainingTime;
             r.SearchThruFiles = o.SearchThruFiles;
 
             return r;

@@ -65,7 +65,7 @@
     {
         if (model.NumberOfCases > 0)
         {
-            return MvcHtmlString.Create(string.Format("<a href=\"#\" data-remaining-time=\"{0}\" data-remaining-time-until=\"{4}\" data-remaining-time-max=\"{1}\" data-remaining-time-hours=\"{2}\">{3}</a>", 
+            return MvcHtmlString.Create(string.Format("<p data-remaining-time=\"{0}\" data-remaining-time-until=\"{4}\" data-remaining-time-max=\"{1}\" data-remaining-time-hours=\"{2}\">{3}</p>", 
                         model.Time, 
                         Model.MaxDays,
                         hours,

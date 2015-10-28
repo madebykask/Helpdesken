@@ -163,8 +163,8 @@
                              <td>
                                  <select id="lstfilterWorkingGroup" name="@CaseSearchFilter.WorkingGroupNameAttribute" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                      @foreach (var e in Model.filterWorkingGroup)
-                                     {    
-                                         if (e.IsActive != 0)                                     
+                                     {
+                                         if (e.IsActive != 0)
                                          {
                                             <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.WorkingGroup)>@e.WorkingGroupName</option>
                                          }
@@ -228,12 +228,32 @@
                                          if (e.IsActive != 0)
                                          {
                                          <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.Status)>@Translation.Get(e.Name, Enums.TranslationSource.TextTranslation)</option>                                            
-                                        }
+                                         }
                                      }
                                  </select>
                              </td>
                          </tr>                
                      }
+                     @if (Model.filterCaseRemainingTime != null)
+                     {
+                         <tr>
+                             <td>                                                                
+                                 @Translation.Get("Återstående åtgärdstid")                                   
+                             </td>
+                             <td>
+                                
+                                <select id="lstfilterCaseRemainingTime" name="@CaseSearchFilter.CaseRemainingTimeAttribute" style="width:300px">
+                                    <option></option>
+                                        @foreach (var time in Model.filterCaseRemainingTime)
+                                        {
+                                            var curId = int.Parse(time.Value);
+                                            <option id="time" value="@time.Value" @curId.IdIsSelected(Model.caseSearchFilter.CaseRemainingTime)>@time.Text</option>
+                                        }
+                                </select>
+                            </td>
+                         </tr>                
+                     }
+
                      @if (Model.filterStateSecondary != null)
                      {
                          <tr>
@@ -243,7 +263,7 @@
                              <td>
                                  <select id="lstfilterStateSecondary" name="@CaseSearchFilter.StateSecondaryNameAttribute" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                      @foreach (var e in Model.filterStateSecondary)
-                                     {  
+                                     {
                                          if (e.IsActive != 0)
                                          {
                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.StateSecondary)>@Translation.Get(e.Name, Enums.TranslationSource.TextTranslation)</option>

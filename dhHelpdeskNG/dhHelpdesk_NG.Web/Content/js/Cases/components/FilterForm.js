@@ -234,7 +234,7 @@ FilterForm.prototype.initControlsMap = function() {
         'hidFilterClosingReasonId',
         'CaseRegistrationDateStartFilter', 'CaseRegistrationDateEndFilter',
         'CaseWatchDateStartFilter', 'CaseWatchDateEndFilter',
-        'CaseClosingDateStartFilter', 'CaseClosingDateEndFilter'
+        'CaseClosingDateStartFilter', 'CaseClosingDateEndFilter', 'lstfilterCaseRemainingTime'
     ];
     $.each(controlsId, function(id, controlName) {
         var control;
@@ -280,6 +280,12 @@ FilterForm.prototype.initControlsMap = function() {
                 $el = me.$el.find(searchEl).parent('.input-append.date.dateie');
                 if (!window.is$ElEmpty($el)) {
                     control = CreateInstance(DateField, { $el: $el });
+                }
+                break;
+            case 'lstfilterCaseRemainingTime':
+                $el = me.$el.find(searchEl);
+                if (!window.is$ElEmpty($el)) {
+                    control = CreateInstance(JQueryChosenField, { $el: $el });
                 }
                 break;
             default:
