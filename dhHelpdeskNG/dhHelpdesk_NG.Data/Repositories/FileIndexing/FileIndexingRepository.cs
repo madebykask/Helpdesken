@@ -27,7 +27,7 @@
         {
             var ret = new List<int>();
             var query = string.Format("SELECT path, filename{0}scope() " +
-                                      "WHERE contains(Contents, '{1}')",
+                                      "WHERE FREETEXT(Contents,'%{1}%')",
                                        _FROM_CLAUSE, searchText);
 
             var indexQuery = GetIndexQueryText(serverName, catalogName, query);
