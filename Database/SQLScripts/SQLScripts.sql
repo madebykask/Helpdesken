@@ -6,6 +6,12 @@ BEGIN
 END
 GO
 
+IF COL_LENGTH('dbo.tblSettings','FileIndexingServerName') IS NULL
+BEGIN 	 
+	ALTER TABLE [dbo].[tblSettings] ADD [FileIndexingServerName] nvarchar(50) null 
+END
+Go
+
 IF COL_LENGTH('dbo.tblSettings','FileIndexingCatalogName') IS NULL
 BEGIN 	 
 	ALTER TABLE [dbo].[tblSettings] ADD [FileIndexingCatalogName] nvarchar(50) null 
