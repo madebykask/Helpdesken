@@ -22,8 +22,10 @@
     using DH.Helpdesk.Common.Enums.Cases;
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Dal.Repositories;
 
     using ProductAreaEntity = DH.Helpdesk.Domain.ProductArea;
+    using DH.Helpdesk.Dal.Enums;
 
     /// <summary>
     /// The CaseSearchRepository interface.
@@ -48,7 +50,6 @@
 
         private readonly ICaseTypeRepository caseTypeRepository;
         
-
         private readonly ILogRepository logRepository;
 
         public CaseSearchRepository(
@@ -60,8 +61,8 @@
             this._customerUserRepository = customerUserRepository;
             this._productAreaRepository = productAreaRepository;
             this.caseTypeRepository = caseTypeRepository;
-            this.logRepository = logRepository;
-        }
+            this.logRepository = logRepository;            
+        }    
 
         public IList<CaseSearchResult> Search(CaseSearchContext context, out CaseRemainingTimeData remainingTime)
         {
@@ -118,7 +119,7 @@
                         cmd.Connection = con;
                         cmd.CommandType = CommandType.Text;
                         cmd.CommandText = sql;
-                        cmd.CommandTimeout = 300;
+                        cmd.CommandTimeout = 300;                        
                         var dr = cmd.ExecuteReader();
                         if (dr != null && dr.HasRows)
                         {
@@ -1197,8 +1198,19 @@
                     sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblFormFieldValue] WHERE {0}))", this.GetSqlLike("FormFieldValue", text));
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[ReferenceNumber]", text));
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[InvoiceNumber]", text));
-                    sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[InventoryNumber]", text));
-            
+                    sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[InventoryNumber]", text));                                            
+                    
+                    // Get CaseNumbers from Indexing Service
+                    if (f.SearchThruFiles)
+                    {
+                        if (!string.IsNullOrEmpty(customerSetting.FileIndexingServerName) && !string.IsNullOrEmpty(customerSetting.FileIndexingCatalogName))
+                        {
+                            var caseNumbers = GetCasesContainsText(customerSetting.FileIndexingServerName, customerSetting.FileIndexingCatalogName, text);
+                            if (!string.IsNullOrEmpty(caseNumbers))
+                                sb.AppendFormat(" OR [tblCase].[CaseNumber] In ({0}) ", caseNumbers);
+                        }
+                    }
+
                     sb.Append(") ");
                 }
             }
@@ -1245,6 +1257,22 @@
             return sb.ToString();
         }
 
+        private string GetCasesContainsText(string indexingServerName, string catalogName, string searchText)
+        {
+            var res = string.Empty;
+            if (string.IsNullOrEmpty(indexingServerName) ||
+                string.IsNullOrEmpty(catalogName) || string.IsNullOrEmpty(searchText))
+                return string.Empty;
+            else
+            {
+                
+                var caseNumbers = FileIndexingRepository.GetCaseNumbersBy(indexingServerName, catalogName, searchText);
+                if (caseNumbers.Any())
+                    res = string.Join(",", caseNumbers.ToArray());
+            }                        
+            return res;
+        }
+
         private string GetSqlLike(string field, string text, string combinator = Combinator_OR)
         {
             var sb = new StringBuilder();
@@ -1271,7 +1299,7 @@
 
             return sb.ToString();
         }
-
+        
         private string InsensitiveSearch(string fieldName)
         {
             var ret = fieldName;

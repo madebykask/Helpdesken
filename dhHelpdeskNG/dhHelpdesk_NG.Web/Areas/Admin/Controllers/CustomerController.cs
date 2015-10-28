@@ -853,7 +853,9 @@
                 CaseComplaintDays = customerToCopySettings.CaseComplaintDays,
                 ModuleCaseInvoice = customerToCopySettings.ModuleCaseInvoice,
                 PreventToSaveCaseWithInactiveValue = customerToCopySettings.PreventToSaveCaseWithInactiveValue,
-                ShowOUsOnDepartmentFilter = customerToCopySettings.ShowOUsOnDepartmentFilter
+                ShowOUsOnDepartmentFilter = customerToCopySettings.ShowOUsOnDepartmentFilter,
+                FileIndexingServerName = customerToCopySettings.FileIndexingServerName,
+                FileIndexingCatalogName = customerToCopySettings.FileIndexingCatalogName
             };
 
             //Get CaseSettings to copy

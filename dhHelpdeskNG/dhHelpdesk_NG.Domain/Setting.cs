@@ -119,6 +119,9 @@ namespace DH.Helpdesk.Domain
         public int ModuleCaseInvoice { get; set; }
         public int PreventToSaveCaseWithInactiveValue { get; set; }
         public int ShowOUsOnDepartmentFilter { get; set; }
+        public string FileIndexingServerName { get; set; }
+        public string FileIndexingCatalogName { get; set; }
+
 
         public virtual OrderState CloseOrderState { get; set; }
         /// <summary>

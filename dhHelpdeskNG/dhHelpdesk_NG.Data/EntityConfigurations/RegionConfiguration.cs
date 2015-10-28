@@ -20,6 +20,7 @@
             this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             this.Property(x => x.SearchKey).IsOptional();
+            this.Property(x => x.Code).IsOptional().HasMaxLength(20);
 
             this.ToTable("tblregion");
         }

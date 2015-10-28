@@ -401,12 +401,16 @@ namespace DH.Helpdesk.Web.Controllers
                 if (!string.IsNullOrEmpty(frm.ReturnFormValue("txtCaptionSearch")))
                     f.CaptionSearch = frm.ReturnFormValue("txtCaptionSearch");
                 else
+                {
                     f.FreeTextSearch = frm.ReturnFormValue("txtFreeTextSearch");
+                    f.SearchThruFiles = frm.IsFormValueTrue("searchThruFiles");
+                }
             }
 
             var maxRecords = this._defaultMaxRows;
             int.TryParse(frm.ReturnFormValue("lstfilterMaxRows"), out maxRecords);
             f.MaxRows = maxRecords.ToString();
+            
 
             if (string.IsNullOrEmpty(f.CaseProgress))
                 f.CaseProgress = CaseProgressFilter.None;

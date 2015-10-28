@@ -70,6 +70,7 @@
         public string CaseProgress { get; set; }
         public string FreeTextSearch { get; set; }
         public string CaptionSearch { get; set; }
+        public bool SearchThruFiles  { get; set; }
 
         public string ParantPath_ProductArea = DropDownButtonDefaultValue;
 
@@ -155,6 +156,7 @@
             r.CaseNumber = o.CaseNumber;
             r.MaxRows = o.MaxRows;
             r.CaptionSearch = o.CaptionSearch;
+            r.SearchThruFiles = o.SearchThruFiles;
 
             return r;
         }
