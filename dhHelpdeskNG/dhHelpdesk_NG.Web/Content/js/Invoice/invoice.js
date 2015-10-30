@@ -11,6 +11,8 @@ $(function () {
 
     var CaseFieldSettings = [];
 
+    var CurrentLanguageId;
+
     dhHelpdesk.CaseArticles = {
         DefaultAmount: 1,
 
@@ -61,7 +63,7 @@ $(function () {
                 {
                     var AllTranslationsTranslationsLength = AllTranslations[i].Translations.length;
                     for (var j = 0; j < AllTranslationsTranslationsLength; j++) {
-                        if (AllTranslations[i].Translations[j].Language_Id == 1)
+                        if (AllTranslations[i].Translations[j].Language_Id == CurrentLanguageId) // NOT WORKÌNG?
                         {
                             return AllTranslations[i].Translations[j].TranslationName;
                         }
@@ -804,7 +806,6 @@ $(function () {
                     if (data == null || data.length == 0) {
                         return;
                     }
-                    debugger
                     //if (th.ModuleCaseInvoiceElement.val() == "True") { //todo fix this. No need to do alot of stuff when module is not active. Maybe put it before json request
                         button.show();
                             
@@ -1025,7 +1026,6 @@ $(function () {
             },
 
             this.AddOrder = function (order) {
-                debugger
                 this._orders.push(order);
                 order.Invoice = this;
                 order.Number = this._orders.length - 1;
@@ -1773,7 +1773,6 @@ $(function () {
 
                 var that = this;
                 var d = $(dhHelpdesk.CaseArticles.CaseInvoiceCaseFilesTemplate.render(model));
-
                 if (model.getFiles().length > 0) {
                     d.dialog({
                         buttons: [
@@ -1785,21 +1784,22 @@ $(function () {
                                     });
                                     that.UpdateFiles();
                                     d.dialog("close");
-                                }
+                                },
+                                class: "btn"
                             },
                             {
                                 text: dhHelpdesk.CaseArticles.translate("Stäng"),
                                 click: function() {
                                     d.dialog("close");
-                                }
+                                },
+                                class: "btn"
                             }
                         ]
                     });
+                    d.dialog("open");
                 } else {
                     dhHelpdesk.CaseArticles.ShowErrorMessage(dhHelpdesk.CaseArticles.translate("Det finns inga filer att lägga till") + ". " + dhHelpdesk.CaseArticles.translate("Endast PDF-filer som är bifogade på ärendet går att bifoga."));
                 }
-
-                d.dialog("open");
             }
         },
 
@@ -2049,6 +2049,7 @@ $(function () {
             this.OrderTitle = dhHelpdesk.CaseArticles.translate("Order");
             this.SummaryTitle = dhHelpdesk.CaseArticles.translate("Översikt");
             this.TotalLabel = dhHelpdesk.CaseArticles.translate("Total");
+            this.TotalAllLabel = dhHelpdesk.CaseArticles.translate("Totalt alla ordrar");
             this.Total = null;
             this.Orders = [];
 
@@ -2067,6 +2068,7 @@ $(function () {
             this.PpuHeader = dhHelpdesk.CaseArticles.translate("PPE");
             this.TotalHeader = dhHelpdesk.CaseArticles.translate("Total");
             this.TotalLabel = dhHelpdesk.CaseArticles.translate("Total");
+            this.TotalAllLabel = dhHelpdesk.CaseArticles.translate("Totalt alla ordrar");
             this.ReferenceTitle = dhHelpdesk.CaseArticles.translate("Orderreferens");
             this.InvoicedByTitle = dhHelpdesk.CaseArticles.translate("Fakturerad av");
 
@@ -2458,6 +2460,11 @@ $(function () {
     };
 
     var loadTranslationList = function () {
+        $.getJSON("/Translation/CurrentLanguageId", function (data) {
+            debugger
+            CurrentLanguageId = data;
+        });
+
         return $.getJSON("/Translation/GetAllCoreTextTranslations", function (data) {
             AllTranslations = data;
         });

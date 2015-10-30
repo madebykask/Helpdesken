@@ -79,5 +79,11 @@ namespace DH.Helpdesk.Web.Controllers
             var caseFields = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId);
             return this.Json(caseFields, JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult CurrentLanguageId()
+        {
+            var currentLanguageId = SessionFacade.CurrentLanguageId;
+            return Json(currentLanguageId, JsonRequestBehavior.AllowGet);
+        }
     }
 }
