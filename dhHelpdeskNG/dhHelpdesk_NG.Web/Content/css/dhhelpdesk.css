@@ -3436,6 +3436,10 @@ td.disabled
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
 /********************    ADMIN PART   *********************/
 /********************************   Admin part -> product area    ******************************/
 .product-area.admin.content .inactive *,
