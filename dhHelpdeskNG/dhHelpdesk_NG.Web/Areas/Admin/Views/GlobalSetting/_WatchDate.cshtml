@@ -179,7 +179,7 @@
 
     function addWDCVRow() {
         var list = $("#watchdate");
-        $.post('/globalsetting/AddRowToWatchDateCalendarValue/' + '?watchdatecalendarId=' + $("#watchdatecalendarId").val() + '&watchdate=' + $("#WatchDateCalendarValue_WatchDate").val() + '&watchdatevaluenname=' + $("#WatchDateValueName").val() + '&validuntil=' + $('#validuntildate').val(), function (result) {
+        $.post('/globalsetting/AddRowToWatchDateCalendarValue/' + '?watchdatecalendarId=' + $("#watchdatecalendarId").val() + '&watchdate=' + $("#WatchDateCalendarValue_WatchDate").val() + '&watchdatevaluenname=' + $("#WatchDateValueName").val() + '&validuntil=' + $('#WatchDateCalendarValue_ValidUntilDate').val(), function (result) {
             
             location.reload();
         });
