@@ -203,6 +203,15 @@
                 });
             }
 
+            // "CaseRemainingTime"
+            //if (caseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Department_Id.ToString()) == 1)
+            //{
+                res.data.Add(new JsonCaseSearchFilterItem()
+                {
+                    attrName = CaseSearchFilter.CaseRemainingTimeAttribute,
+                    value = SaveExtractArray(defaultSearchFilter.SelectedCaseRemainingTime)
+                });
+            //}
             return res;
         }
         

@@ -36,6 +36,12 @@ BEGIN
 END
 GO
 
+IF COL_LENGTH('tblCustomerUser','CaseRemainingTimeFilter') IS NULL
+BEGIN
+       ALTER TABLE tblCustomerUser ADD CaseRemainingTimeFilter NVARCHAR(50) NULL
+END
+GO
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.17'
 

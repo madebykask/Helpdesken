@@ -30,7 +30,8 @@
                     bool caseWatchDateFilterShow, 
                     bool caseClosingDateFilterShow, 
                     string caseClosingReasonFilter,
-                    bool caseInitiatorFilterShow)
+                    bool caseInitiatorFilterShow,
+                    string caseRemainingTime)
         {
             this.CaseClosingReasonFilter = caseClosingReasonFilter;
             this.CaseClosingDateFilterShow = caseClosingDateFilterShow;
@@ -56,6 +57,8 @@
             this.State = state;
             this.SubState = subState;
             this.CaseInitiatorFilterShow = caseInitiatorFilterShow;
+            this.CaseRemainingTime = caseRemainingTime;
+
         }
 
         public int CustomerId { get; private set; }
@@ -108,5 +111,7 @@
         /// Flag to display "filter by intitator" field on case overview page
         /// </summary>
         public bool CaseInitiatorFilterShow { get; private set; }
+
+        public string CaseRemainingTime { get; private set; }
     }
 }

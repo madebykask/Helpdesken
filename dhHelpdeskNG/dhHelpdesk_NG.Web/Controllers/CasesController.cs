@@ -2028,6 +2028,11 @@ namespace DH.Helpdesk.Web.Controllers
             var caseClosingDateCheck = frm.IsFormValueTrue("CaseClosingDateFilterShow");
             var caseWatchDateCheck = frm.IsFormValueTrue("CaseWatchDateFilterShow");
 
+            bool caseRemainingTimeCheck = frm.IsFormValueTrue("CaseRemainingTimeChecked");
+            var caseRemainingTime = caseRemainingTimeCheck
+                 ? ((frm.ReturnFormValue("lstfilterCaseRemainingTime") == string.Empty) ? "0" : frm.ReturnFormValue("lstfilterCaseRemainingTime"))
+                : string.Empty;
+
             var newCaseSetting = new UserCaseSetting(
                             customerId,
                             userId,
@@ -2052,7 +2057,8 @@ namespace DH.Helpdesk.Web.Controllers
                             frm.IsFormValueTrue("CaseWatchDateFilterShow"),
                             frm.IsFormValueTrue("CaseClosingDateFilterShow"),
                             closingReason,
-                            frm.IsFormValueTrue("CaseInitiatorFilterShow"));
+                            frm.IsFormValueTrue("CaseInitiatorFilterShow"),
+                            caseRemainingTime);
 
             this._customerUserService.UpdateUserCaseSetting(newCaseSetting);
             SessionFacade.CurrentCaseSearch = null;
@@ -2669,6 +2675,7 @@ namespace DH.Helpdesk.Web.Controllers
             f.CaseClosingDateStartFilter = cu.CaseClosingDateStartFilter;
             f.CaseClosingDateEndFilter = cu.CaseClosingDateEndFilter;
             f.CaseClosingReasonFilter = cu.CaseClosingReasonFilter.ReturnCustomerUserValue();
+            f.CaseRemainingTime = cu.CaseRemainingTimeFilter.ReturnCustomerUserValue();
             this.ResolveParentPathesForFilter(f);
 
             s.SortBy = "CaseNumber";
@@ -3633,6 +3640,11 @@ namespace DH.Helpdesk.Web.Controllers
             ret.SubStates = subStates;
             ret.SelectedSubState = userCaseSettings.SubState;
 
+            var caseRemainingTime = this.GetRemainigTimeList(customerId);
+            ret.CaseRemainingTimeChecked = userCaseSettings.CaseRemainingTime != string.Empty;
+            ret.filterCaseRemainingTime = caseRemainingTime;
+            ret.SelectedCaseRemainingTime = userCaseSettings.CaseRemainingTime;
+           
             ret.CaseRegistrationDateStartFilter = userCaseSettings.CaseRegistrationDateStartFilter;
             ret.CaseRegistrationDateEndFilter = userCaseSettings.CaseRegistrationDateEndFilter;
             ret.CaseWatchDateStartFilter = userCaseSettings.CaseWatchDateStartFilter;
@@ -4094,9 +4106,10 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             //Tid kvar 
-            if (SessionFacade.CurrentUser.ShowSolutionTime)      
+            if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseRemainingTimeFilter))
                 fd.filterCaseRemainingTime = GetRemainigTimeList(cusId);           
 
+            
             return fd;
         }
 
