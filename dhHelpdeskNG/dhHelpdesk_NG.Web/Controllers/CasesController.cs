@@ -2177,8 +2177,7 @@ namespace DH.Helpdesk.Web.Controllers
                                                 this.workContext.Customer.CustomerId,
                                                 userId,
                                                 SessionFacade.CurrentUser);
-
-            return this.Json(count, JsonRequestBehavior.AllowGet);
+return this.Json(count, JsonRequestBehavior.AllowGet);
         }
 
         #region Private Methods and Operators

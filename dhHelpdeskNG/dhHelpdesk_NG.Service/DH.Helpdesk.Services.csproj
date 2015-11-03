@@ -415,6 +415,7 @@
     <Compile Include="Services\Licenses\IManufacturersService.cs" />
     <Compile Include="Services\Licenses\IProductsService.cs" />
     <Compile Include="Services\Licenses\IVendorsService.cs" />
+    <Compile Include="Services\DataLog\DataLogService.cs" />
     <Compile Include="Services\LogFileService.cs" />
     <Compile Include="Services\OperationLogService.cs" />
     <Compile Include="Services\CountryService.cs" />

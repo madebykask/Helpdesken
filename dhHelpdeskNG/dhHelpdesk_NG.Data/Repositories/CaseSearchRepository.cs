@@ -1264,9 +1264,8 @@
                 string.IsNullOrEmpty(catalogName) || string.IsNullOrEmpty(searchText))
                 return string.Empty;
             else
-            {
-                
-                var caseNumbers = FileIndexingRepository.GetCaseNumbersBy(indexingServerName, catalogName, searchText);
+            {                
+                var caseNumbers = FileIndexingRepository.GetCaseNumbersBy(indexingServerName, catalogName, searchText);                
                 if (caseNumbers.Any())
                     res = string.Join(",", caseNumbers.ToArray());
             }                        

@@ -12,9 +12,9 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
     using DH.Helpdesk.Domain.Cases;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Domain;
-       
-    
-    public sealed class CaseLockRepository : Repository, ICaseLockRepository
+
+
+    public sealed class CaseLockRepository : RepositoryBase<CaseLockEntity>, ICaseLockRepository
     {
         public class TempLockInfo
         {
@@ -44,8 +44,8 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
     
         public CaseLock GetCaseLockByGUID(Guid lockGUID)
         {
-            var entity = this.DbContext.CaseLock.Where(l => l.LockGUID == lockGUID)
-                                                .FirstOrDefault();
+            var entity = this.GetAll().Where(l => l.LockGUID == lockGUID)
+                                      .FirstOrDefault();
 
             if (entity == null)
                 return null;
@@ -55,7 +55,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 
         public CaseLock GetCaseLockByCaseId(int caseId)
         {
-            var entity = this.DbContext.CaseLock.Where(l => l.Case_Id == caseId)
+            var entity = this.GetAll().Where(l => l.Case_Id == caseId)
                                                 .FirstOrDefault();
 
             if (entity == null)
@@ -69,30 +69,22 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             var entity = new CaseLockEntity();
             this._caseLockToEntityMapper.Map(caseLock, entity);
 
-            this.DbContext.CaseLock.Add(entity);
-            this.DbContext.Commit();            
+            this.Add(entity);
+            this.Commit();            
         }
 
         public bool ReExtendLockCase(Guid lockGUID, int extendedTimeInSecond)
         {
             var ret = false;
-            var existingLock = this.DbContext.CaseLock.Where(cl => cl.LockGUID == lockGUID)
-                                                      .FirstOrDefault();
+            var existingLock = this.GetAll().Where(cl => cl.LockGUID == lockGUID)
+                                            .FirstOrDefault();
 
             if (existingLock != null)
-            {
-                this.DbContext.CaseLock.Remove(existingLock);
-                var entity = new CaseLockEntity { 
-                                                    Case_Id = existingLock.Case_Id,
-                                                    User_Id = existingLock.User_Id,
-                                                    LockGUID = existingLock.LockGUID,
-                                                    BrowserSession = existingLock.BrowserSession,
-                                                    CreatedTime = existingLock.CreatedTime,
-                                                    ExtendedTime = DateTime.Now.AddSeconds(extendedTimeInSecond)
-                                                };
+            {                
+                existingLock.ExtendedTime = DateTime.Now.AddSeconds(extendedTimeInSecond);                
 
-                this.DbContext.CaseLock.Add(entity);
-                this.DbContext.Commit();
+                this.Update(existingLock);                
+                this.Commit();
                 ret = true;
             }
 
@@ -101,34 +93,34 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
  
         public void UnlockCaseByCaseId(int caseId)
         {
-            var entity = this.DbContext.CaseLock.Where(l => l.Case_Id == caseId)
-                                                .FirstOrDefault();
+            var entity = this.GetAll().Where(l => l.Case_Id == caseId)
+                                      .FirstOrDefault();
             if (entity != null)
             {
-                this.DbContext.CaseLock.Remove(entity);
-                this.DbContext.Commit();
+                this.Delete(entity);
+                this.Commit();
             }
         }
 
         public void UnlockCaseByGUID(Guid lockGUID)
         {
-            var entity = this.DbContext.CaseLock.Where(l => l.LockGUID == lockGUID)
-                                                .FirstOrDefault();
+            var entity = this.GetAll().Where(l => l.LockGUID == lockGUID)
+                                      .FirstOrDefault();
             if (entity != null)
             {
-                this.DbContext.CaseLock.Remove(entity);
-                this.DbContext.Commit();
+                this.Delete(entity);
+                this.Commit();
             }
         }
 
         public void DeleteCaseLockByCaseId(int caseId)
         {
-            var entity = this.DbContext.CaseLock.Where(l => l.Case_Id == caseId)
-                                                .FirstOrDefault();
+            var entity = this.GetAll().Where(l => l.Case_Id == caseId)
+                                      .FirstOrDefault();
             if (entity != null)
             {
-                this.DbContext.CaseLock.Remove(entity);
-                this.DbContext.Commit();
+                this.Delete(entity);
+                this.Commit();
             }
         }
 
@@ -171,10 +163,10 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 
         private List<TempLockInfo> GetAlllockedCaseEntities()
         {
-           // Get cases which were locked atleast at 3 seconds ago
+           // Get cases which were locked at least at 3 seconds ago
            var curTime = DateTime.Now.AddSeconds(-3);
-           return (from cl in this.DbContext.CaseLock
-                   join c in this.DbContext.Cases on cl.Case_Id equals c.Id
+           return (from cl in this.DataContext.CaseLock
+                   join c in this.DataContext.Cases on cl.Case_Id equals c.Id
                    where (cl.ExtendedTime > curTime)
                    select new TempLockInfo
                     {

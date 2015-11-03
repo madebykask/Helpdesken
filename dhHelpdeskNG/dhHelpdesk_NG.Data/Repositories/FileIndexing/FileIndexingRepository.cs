@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Dal.Repositories
 {
+    using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Dal.Enums;
     using System;
     using System.Collections.Generic;
@@ -14,24 +15,29 @@
     
     public class FileIndexingRepository
     {
-        const string _FROM_CLAUSE = "@FROM";
-        const string _INDEXING_SERVICE_PROVIDER_CONNECTION_STRING = "Provider=MSIDXS;";
+        const string _FROM_CLAUSE = "@FROM";        
 		const string _DATA_SOURCE_CONNECTION_STRING = " Data Source=\"{0}\";";        
 
         public FileIndexingRepository()
         {
-            
+
         }
 
         public static List<int> GetCaseNumbersBy(string serverName, string catalogName, string searchText)
         {
+            var _INDEXING_SERVICE_PROVIDER_CONNECTION_STRING = string.Empty;
+
+            if (ConfigurationManager.ConnectionStrings["HelpdeskIndexingService"] != null)
+                if (!string.IsNullOrEmpty(ConfigurationManager.ConnectionStrings["HelpdeskIndexingService"].ConnectionString))
+                    _INDEXING_SERVICE_PROVIDER_CONNECTION_STRING = ConfigurationManager.ConnectionStrings["HelpdeskIndexingService"].ConnectionString;
+
             var ret = new List<int>();
+            
             var query = string.Format("SELECT path, filename{0}scope() " +
                                       "WHERE FREETEXT(Contents,'%{1}%')",
                                        _FROM_CLAUSE, searchText);
 
-            var indexQuery = GetIndexQueryText(serverName, catalogName, query);
-
+            var indexQuery = GetIndexQueryText(serverName, catalogName, query);            
             using (var con = new OleDbConnection(_INDEXING_SERVICE_PROVIDER_CONNECTION_STRING))
             {
                 using (IDbCommand cmd = con.CreateCommand())
@@ -44,7 +50,7 @@
                         cmd.CommandText = indexQuery;                        
                         var dr = cmd.ExecuteReader();
                         if (dr != null)
-                        {                                                            
+                        {                            
                             while (dr.Read())
                             {                                    
                                 int caseNumber = -1;
@@ -66,7 +72,7 @@
                     }
                     catch (Exception ex)
                     {
-
+                        DataLogRepository.SaveLog("Error: " + ex.Message, DataLogTypes.GENERAL);
                     }            
                     finally
                     {
