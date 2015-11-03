@@ -399,6 +399,14 @@
                     user.OLs.Clear();                    
                     user.OTs.Clear();
 
+                    //Remove Case Settings
+                    var userCaseSettings = this._casesettingRepository.GetAll().Where(cs => cs.User_Id == id).ToList();
+                    if (userCaseSettings.Any())
+                    {
+                        foreach (var caseSetting in userCaseSettings)
+                            this._casesettingRepository.Delete(caseSetting);
+                    }
+
                     // Remove User Modules 
                     var userModules = this._userModuleRepository.GetAll().Where(um => um.User_Id == id).ToList();
                     if (userModules.Any())
@@ -412,9 +420,12 @@
                     if (passwordHistories.Any())
                     {
                         foreach (var passHistory in passwordHistories)
+                        {
                             this._userPasswordHistoryRepository.Delete(passHistory);
+                            this.Commit();
+                        }
                     }
-
+                    
                     this._userRepository.Delete(user);
                     this.Commit();
 
