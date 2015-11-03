@@ -160,7 +160,7 @@
             var result = this.caseSearchRepository.Search(context, out remainingTime);
 
             var workingHours = workingDayEnd - workingDayStart;
-            if (f.CaseRemainingTimeFilter.HasValue && calculateRemainingTime)
+            if (f.CaseRemainingTimeFilter.HasValue)
             {
                 IEnumerable<CaseRemainingTime> filteredCaseRemainigTimes;
                 if (f.CaseRemainingTimeFilter < 0)
