@@ -3743,7 +3743,8 @@ namespace DH.Helpdesk.Web.Controllers
             var caseLock = this._caseLockService.GetCaseLockByCaseId(caseId);
             var caseIsLocked = true;
             var gs = this._globalSettingService.GetGlobalSettings().FirstOrDefault();
-            var extendedSec = (gs != null && gs.CaseLockTimer > 0 ? gs.CaseLockTimer : this._defaultExtendCaseLockTime);
+            var extendedSec = (gs != null && gs.CaseLockExtendTime > 0 ? gs.CaseLockExtendTime : this._defaultExtendCaseLockTime);
+            var timerInterval = (gs != null? gs.CaseLockTimer : 0);
             var bufferTime = (gs != null && gs.CaseLockBufferTime > 0 ? gs.CaseLockBufferTime : this._defaultCaseLockBufferTime);
             var caseLockGUID = string.Empty;
             var nowTime = DateTime.Now;
@@ -3779,7 +3780,7 @@ namespace DH.Helpdesk.Web.Controllers
                 caseLock = newCaseLock;
             }
 
-            return caseLock.MapToViewModel(caseIsLocked, extendedSec);
+            return caseLock.MapToViewModel(caseIsLocked, extendedSec, timerInterval);
         }
 
         private string GetLinkWithHash(string hash, object routeObject, string action = null, string controller = null)

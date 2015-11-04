@@ -38,6 +38,7 @@
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             this.Property(x => x.CaseLockTimer).IsRequired();
             this.Property(x => x.CaseLockBufferTime).IsRequired();
+            this.Property(x => x.CaseLockExtendTime).IsRequired();
 
             this.ToTable("tblglobalsettings");
         }

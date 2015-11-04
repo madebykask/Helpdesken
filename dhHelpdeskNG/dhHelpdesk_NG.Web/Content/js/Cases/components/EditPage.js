@@ -477,8 +477,8 @@ EditPage.prototype.init = function (p) {
         me.$btnDelete.addClass('disabled');
     }
 
-    if (p.currentCaseId > 0) {
-        me.timerId = setInterval(callAsMe(me.ReExtendCaseLock, me), me.p.extendValue * 1000);
+    if (p.currentCaseId > 0 && me.p.timerInterval > 0) {
+        me.timerId = setInterval(callAsMe(me.ReExtendCaseLock, me), me.p.timerInterval * 1000);
     }
 
     me.formOnBootValues = me.$form.serialize();

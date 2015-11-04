@@ -55,6 +55,12 @@ BEGIN
 END
 GO
 
+IF COL_LENGTH('tblGlobalSettings','CaseLockExtendTime') IS NULL
+BEGIN 	 
+	ALTER TABLE [dbo].tblGlobalSettings ADD [CaseLockExtendTime] int not null default(60)
+END
+GO
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.16'
 
