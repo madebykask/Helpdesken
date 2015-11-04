@@ -14,6 +14,7 @@
     var DepartmentDropDown = window.Params.DepartmentDropDown;
     var WorkingGroupDropDown = window.Params.WorkingGroupDropDown;
     var caseTypeDropDown = window.Params.CaseTypeDropDown;
+    var currentCustomerId = window.Params.CurrentCustomerId;
 
     var breadCrumbsPrefix = "#divBreadcrumbs_";
     var hiddenPrefix = "#hid_";
@@ -27,10 +28,8 @@
         var _workingGroup = "";
         var _administrator = "";
         var _caseType = "";
-
-        $(customerDropDown + ' option:selected').each(function () {            
-            _customers += $(this).val() + ",";
-        });   
+        
+        _customers = currentCustomerId;        
 
         $(DepartmentDropDown + ' option:selected').each(function () {            
             _departments += $(this).val() + ",";
@@ -69,6 +68,8 @@
              );
     });
 
+    /* always it must be show because we use current customer only
+    /*
     SetSpecificConditions();
 
     $('#lstfilterCustomers.chosen-select').on('change', function (evt, params) {
@@ -86,6 +87,7 @@
                 selectedCount++;
             }
         });
+        
 
         if (selectedCount == 1) {
             $.get(specificFilterDataUrl,
@@ -104,6 +106,7 @@
             $('#CustomerSpecificFilterPartial').attr('style', 'display:none');
             $('#CustomerSpecificFilterPartial').attr('data-field', '');
         }
-    }
+        
+    }*/
       
 })($);

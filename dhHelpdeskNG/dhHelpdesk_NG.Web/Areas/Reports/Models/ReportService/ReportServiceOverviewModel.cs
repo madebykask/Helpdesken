@@ -14,6 +14,8 @@
             
         }
 
+        public int CustomerId { get; set; }
+
         public CustomSelectList ReportList { get; set; }
 
         public ReportFilterModel ReportFilter { get; set; }

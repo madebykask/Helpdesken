@@ -5,8 +5,7 @@
 @model DH.Helpdesk.Web.Areas.Reports.Models.ReportService.ReportServiceOverviewModel
 
 
-<script type="text/javascript">
-    window.
+<script type="text/javascript">    
     window.Params = {
         SpecificFilterDataUrl: '@Url.Content("~/Reports/Report/GetCustomerSpecificFilter")',
         ShowReportUrl: '@Url.Content("~/Reports/Report/ShowReport")',
@@ -18,7 +17,8 @@
         CaseCreateTo: "#ReportFilter_CaseCreationDate_ToDate",
         DepartmentDropDown: "#lstfilterDepartment",
         WorkingGroupDropDown: "#lstfilterWorkingGroup",
-        CaseTypeDropDown: "CaseTypeDropDown"     
+        CaseTypeDropDown: "CaseTypeDropDown",
+        CurrentCustomerId: '@Model.CustomerId'
     };
 </script>
 
@@ -49,7 +49,7 @@
                          </tr>                
                      }         
                                           
-                     @if (Model.ReportFilter.Customers != null)
+                     @*@if (Model.ReportFilter.Customers != null)
                      {
                          var selectedItems = Model.ReportFilter.Selected.SelectedCustomers.GetSelectedStr();
                          <tr>
@@ -67,7 +67,7 @@
                                  </select>
                              </td>
                          </tr>
-                     }
+                     }*@
 
                      @if (Model.ReportFilter.Administrators != null)
                      {

@@ -502,7 +502,8 @@
         private ReportServiceOverviewModel GetReportServiceModel(ReportServiceSessionModel lastState = null)
         {
             var model = new ReportServiceOverviewModel();
-            int? customerId = SessionFacade.CurrentCustomer.Id;
+            model.CustomerId = SessionFacade.CurrentCustomer.Id;
+            int? customerId = model.CustomerId;
             if (lastState != null && lastState.SelectedFilter != null)
                 if (lastState.SelectedFilter.SelectedCustomers.Count == 1)
                     customerId = lastState.SelectedFilter.SelectedCustomers.FirstOrDefault();

@@ -1280,6 +1280,7 @@ namespace DH.Helpdesk.Web.Controllers
                 //    }
                 //}
                 m.CustomerSettings = this.workContext.Customer.Settings;
+                
             }            
 
             AddViewDataValues();
