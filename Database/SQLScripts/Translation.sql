@@ -4053,5 +4053,20 @@ If not exists (select * from tblTextTranslation where text_id = 1553 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1553, 2, 'User has premission to create child cases')
 GO
 
+-- New translation 20151104
+If not exists (select * from tbltext where id = 1554)
+	insert into tbltext (id, TextString) VALUES (1554, 'Du har inga rättigheter att ta bort bifogade filer')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1554 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1554, 2, 'You have no premission to delete attached files')
+GO
+
+If not exists (select * from tbltext where id = 1555)
+	insert into tbltext (id, TextString) VALUES (1555, 'Antal ärende som visas är begränsade till 500.')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1555 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1555, 2, 'Number of cases displayed is limited to 500.')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

@@ -1933,8 +1933,27 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpPost]
         public RedirectToRouteResult DeleteLog(int id, int caseId)
         {
+            var currentuser = this._userService.GetUser(SessionFacade.CurrentUser.Id);
+            string err = "";
+
             var tmpLog = this._logService.GetLogById(id);
             var logFiles = this._logFileService.FindFileNamesByLogId(id);
+
+            var logFileStr = string.Empty;
+            if (logFiles.Any())
+            {
+                if (currentuser.DeleteAttachedFilePermission != 0)
+                {
+                    logFileStr = string.Format("{0}{1}", StringTags.LogFile, string.Join(StringTags.Seperator, logFiles.ToArray()));
+                }
+                else
+                {
+                    err = Translation.Get("Du har inga rättigheter att ta bort bifogade filer") + ".";
+                    TempData["PreventError"] = err;
+                    return this.RedirectToAction("editlog", "cases", new { id = id, customerId = SessionFacade.CurrentCustomer.Id });
+                }
+            }
+
             var c = this._caseService.GetCaseById(caseId);
             var basePath = _masterDataService.GetFilePath(c.Customer_Id);
             var logGuid = this._logService.Delete(id, basePath);
@@ -1943,24 +1962,19 @@ namespace DH.Helpdesk.Web.Controllers
             IDictionary<string, string> errors;
             string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
 
-            var logFileStr = string.Empty;
-            if (logFiles.Any())
-            {
-                logFileStr = string.Format("{0}{1}", StringTags.LogFile, string.Join(StringTags.Seperator, logFiles.ToArray()));
-            }
-
             var logStr = string.Format("{0}{1}{2}{3}{4}{5}",
-                                       StringTags.Delete,
-                                       StringTags.ExternalLog,
-                                       tmpLog.TextExternal,
-                                       StringTags.InternalLog,
-                                       tmpLog.TextInternal,
-                                       logFileStr);
+                                        StringTags.Delete,
+                                        StringTags.ExternalLog,
+                                        tmpLog.TextExternal,
+                                        StringTags.InternalLog,
+                                        tmpLog.TextInternal,
+                                        logFileStr);
 
             var extraField = new ExtraFieldCaseHistory { CaseLog = logStr };
             this._caseService.SaveCaseHistory(c, SessionFacade.CurrentUser.Id, adUser, out errors, string.Empty, extraField);
 
             return this.RedirectToAction("edit", "cases", new { id = caseId });
+          
         }
 
         public void SaveSetting(FormCollection frm)
