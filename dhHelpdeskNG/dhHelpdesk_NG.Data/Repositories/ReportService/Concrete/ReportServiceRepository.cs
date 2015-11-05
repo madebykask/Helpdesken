@@ -13,6 +13,7 @@
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
     using System.Data.SqlClient;
+    using DH.Helpdesk.BusinessData.Enums.Case;
     
     public class ReportServiceRepository : IReportServiceRepository
     {
@@ -117,6 +118,23 @@
             if (filters.SelectedCustomers.Count == 1)
             {
                 if (filters.SeletcedDepartments.Any())
+                {
+                    // Dep + OU
+                    if (filters.SeletcedOUs.Any()) 
+                        _whereStr += string.Format("AND tblCase.Department_Id in ({0}) or tblCase.OU_Id in ({1}) ", 
+                                                   filters.SeletcedDepartments.GetSelectedStr().SafeForSqlInject(),
+                                                   filters.SeletcedOUs.GetSelectedStr().SafeForSqlInject());                        
+                    else
+                        _whereStr += string.Format("AND tblCase.Department_Id in ({0}) ", filters.SeletcedDepartments.GetSelectedStr().SafeForSqlInject());
+                }
+                else
+                {
+                    // OU only
+                    if (filters.SeletcedOUs.Any())
+                        _whereStr += string.Format("AND tblCase.OU_Id in ({0}) ", filters.SeletcedOUs.GetSelectedStr().SafeForSqlInject());                        
+                }
+
+                if (filters.SeletcedDepartments.Any())
                     _whereStr += string.Format("AND tblCase.Department_Id in ({0}) ", filters.SeletcedDepartments.GetSelectedStr().SafeForSqlInject());
 
                 if (filters.SelectedWorkingGroups.Any())                
@@ -124,6 +142,24 @@
 
                 if (filters.SelectedCaseTypes.Any())                
                     _whereStr += string.Format("AND tblCase.CaseType_Id in ({0}) ", filters.SelectedCaseTypes.GetSelectedStr().SafeForSqlInject());
+
+                if (filters.SelectedCaseStatus.Any())
+                {
+                    var progress = filters.SelectedCaseStatus.GetSelectedStr().SafeForSqlInject();
+                    switch (progress)
+                    {
+                        case CaseProgressFilter.None:
+                            break;
+                        case CaseProgressFilter.ClosedCases:                            
+                            _whereStr += "AND tblCase.FinishingDate is not null ";
+                            break;
+                        case CaseProgressFilter.CasesInProgress:
+                            _whereStr += "AND tblCase.FinishingDate is null ";                            
+                            break;                        
+                        default:                            
+                            break;
+                    }                    
+                }
             }
 
             if (filters.CaseCreationDate.FromDate.HasValue) 

@@ -15,24 +15,24 @@
     var WorkingGroupDropDown = window.Params.WorkingGroupDropDown;
     var caseTypeDropDown = window.Params.CaseTypeDropDown;
     var currentCustomerId = window.Params.CurrentCustomerId;
+    var statusList = window.Params.StatusList;
 
     var breadCrumbsPrefix = "#divBreadcrumbs_";
-    var hiddenPrefix = "#hid_";
-
-    setTimeout(function () { $(reportList).focus(); }, 200);
+    var hiddenPrefix = "#hid_";       
 
     $(showReportButton).click(function (e) {
         var _reportName = $(reportList + " option:selected").val();
         var _customers = "";
-        var _departments = "";
+        var _deps_OUs = "";
         var _workingGroup = "";
         var _administrator = "";
         var _caseType = "";
+        var _status = "";
         
         _customers = currentCustomerId;        
 
         $(DepartmentDropDown + ' option:selected').each(function () {            
-            _departments += $(this).val() + ",";
+            _deps_OUs += $(this).val() + ",";
         });
 
         $(WorkingGroupDropDown + ' option:selected').each(function () {            
@@ -47,6 +47,8 @@
         if (_caseType == "0")
             _caseType = "";
 
+        _status = $(statusList + " option:selected").val();
+
         var _regDateFrom = $(CaseCreateFrom).val();
         var _regDateTo = $(CaseCreateTo).val();       
 
@@ -54,10 +56,11 @@
                 {
                     reportName: _reportName,
                     'filter.Customers': _customers, 
-                    'filter.Departments': _departments,                    
+                    'filter.Deps_OUs': _deps_OUs,
                     'filter.WorkingGroups': _workingGroup,
                     'filter.Administrators': _administrator,
                     'filter.CaseTypes': _caseType,
+                    'filter.CaseStatus': _status,
                     'filter.RegisterFrom': _regDateFrom,
                     'filter.RegisterTo': _regDateTo,        
                     curTime: new Date().getTime()
@@ -68,45 +71,18 @@
              );
     });
 
-    /* always it must be show because we use current customer only
-    /*
-    SetSpecificConditions();
-
-    $('#lstfilterCustomers.chosen-select').on('change', function (evt, params) {
-        SetSpecificConditions();
+    $(".chosen-select").chosen({
+        width: "300px",
+        'placeholder_text_multiple': placeholder_text_multiple,
+        'no_results_text': no_results_text
     });
 
-    function SetSpecificConditions() {
-        var selectedCustomers = $('#lstfilterCustomers.chosen-select option');
-        var selectedCount = 0;
-        var customerId = 0;
+    $('#' + caseTypeDropDown + ' ul.dropdown-menu li a').click(function (e) {
+        e.preventDefault();
+        var val = $(this).attr('value');
+        $(breadCrumbsPrefix + caseTypeDropDown).text(getBreadcrumbs(this));
+        $(hiddenPrefix + caseTypeDropDown).val(val);
+    });
 
-        $.each(selectedCustomers, function (idx, value) {
-            if (value.selected) {
-                customerId = value.value;
-                selectedCount++;
-            }
-        });
-        
-
-        if (selectedCount == 1) {
-            $.get(specificFilterDataUrl,
-                    {
-                        selectedCustomerId: customerId,                        
-                        curTime: new Date().getTime()
-                    }, function (_SpecificFilterData) {
-                        $("#CustomerSpecificFilterPartial").html(_SpecificFilterData);
-
-                    });
-
-            $('#CustomerSpecificFilterPartial').attr('style', '');
-            $('#CustomerSpecificFilterPartial').attr('data-field', customerId);
-        }
-        else {
-            $('#CustomerSpecificFilterPartial').attr('style', 'display:none');
-            $('#CustomerSpecificFilterPartial').attr('data-field', '');
-        }
-        
-    }*/
       
 })($);

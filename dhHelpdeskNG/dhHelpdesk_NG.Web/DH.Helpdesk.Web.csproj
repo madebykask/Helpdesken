@@ -399,7 +399,6 @@
     <Content Include="Areas\Admin\Content\js\Users\index.js" />
     <Content Include="Areas\Admin\Content\js\Users\user.js" />
     <Content Include="Areas\Reports\Content\js\reportViewer.logic.js" />
-    <Content Include="Areas\Reports\Content\js\reportViewer.specialfilter.js" />
     <Content Include="Areas\Reports\Content\js\reports.js" />
     <Content Include="Content\bootstrap-tagsinput.css" />
     <Content Include="Content\css\bootstrap-tagsinput.css" />
@@ -1740,7 +1739,6 @@
     <Content Include="Areas\Admin\Views\Users\Index\_LockedCaseTable.cshtml" />
     <Content Include="Areas\Reports\Views\Report\ReportViewer\_PresentReport.cshtml" />
     <Content Include="Areas\Reports\Views\Report\ReportViewer\_Overview.cshtml" />
-    <Content Include="Areas\Reports\Views\Report\ReportViewer\_CustomerSpecificFilter.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="ReportViewerWebForm.aspx" />
     <Content Include="Scripts\jquery-1.8.3.js" />

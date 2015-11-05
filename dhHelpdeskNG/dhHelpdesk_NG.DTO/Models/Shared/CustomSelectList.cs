@@ -93,7 +93,7 @@
             this.AddRange(items);
         }
 
-        public void AddItems(string strItems, string separator = ",")
+        public void AddItems(string strItems, bool ignoreNegativeItems = true, string separator = ",")
         {
             if (!string.IsNullOrEmpty(strItems))
             {
@@ -101,7 +101,15 @@
                 int o = 0;
                 foreach (var item in items)
                     if (int.TryParse(item, out o))
-                        this.Add(o);                
+                    {
+                        if (ignoreNegativeItems)
+                        {
+                            if (o > 0)
+                                this.Add(o);
+                        }
+                        else
+                            this.Add(o);
+                    }
             }
         }
 
