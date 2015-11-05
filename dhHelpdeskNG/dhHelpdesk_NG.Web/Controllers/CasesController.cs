@@ -1212,7 +1212,7 @@ namespace DH.Helpdesk.Web.Controllers
             if (SessionFacade.CurrentUser != null)
             {
                 var userId = SessionFacade.CurrentUser.Id;
-                                              
+
                 var caseLockViewModel = GetCaseLockModel(id, userId);
                 int customerId = moveToCustomerId.HasValue ? moveToCustomerId.Value : _caseService.GetCaseById(id).Customer_Id;
                 m = this.GetCaseInputViewModel(userId, customerId, id, caseLockViewModel, redirectFrom, backUrl, null, null, updateState);
@@ -1223,6 +1223,12 @@ namespace DH.Helpdesk.Web.Controllers
                 
                 ApplicationFacade.UpdateLoggedInUser(Session.SessionID, string.Empty);
 
+                // If user logged in from link in email
+                var currentCustomerId = SessionFacade.CurrentCustomer.Id;
+                var currentCase = this._caseService.GetCaseById(id);
+                if (currentCustomerId != currentCase.Customer_Id)
+                    this.InitFilter(currentCase.Customer_Id, false, CasesCustomFilter.None, false);
+                    
                 // User has not access to case
                 if (m.EditMode == Enums.AccessMode.NoAccess)
                     return this.RedirectToAction("index", "home");
