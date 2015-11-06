@@ -23,8 +23,8 @@
             this.Property(l => l.MailId).IsRequired();
             this.Property(l => l.MessageId).IsOptional();
             this.Property(l => l.CaseHistory_Id).IsOptional();
-            this.Property(l => l.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
-            this.Property(l => l.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+            this.Property(l => l.ChangedDate).IsRequired();
+            this.Property(l => l.CreatedDate).IsRequired();
             this.Property(l => l.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             this.Property(l => l.SendTime).IsOptional();
             this.Property(l => l.ResponseMessage).IsOptional();
