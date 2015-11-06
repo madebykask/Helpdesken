@@ -22,6 +22,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
         private readonly IWorkingGroupService _workingGroupService;
         private readonly IUserService _userService;
         private readonly ICaseTypeService _caseTypeService;
+        private readonly IProductAreaService _productAreaService;
         private readonly IReportServiceRepository _reportServiceRepository;
 
         #endregion
@@ -35,6 +36,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
             IWorkingGroupService workingGroupService,
             IUserService userService,
             ICaseTypeService caseTypeService,
+            IProductAreaService productAreaService,
             IReportServiceRepository reportServiceRepository)
         {
             this._customerService = customerService;            
@@ -43,6 +45,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
             this._workingGroupService = workingGroupService;
             this._userService = userService;
             this._caseTypeService = caseTypeService;
+            this._productAreaService = productAreaService;
             this._reportServiceRepository = reportServiceRepository;            
         }
 
@@ -63,11 +66,17 @@ namespace DH.Helpdesk.Services.Services.Concrete
                 departments = AddOrganizationUnitsToDepartments(departments);
 
             var workingGroups = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId).ToList();                
+
             var caseTypes = this._caseTypeService.GetCaseTypes(customerId).ToList();
-                
+            var caseTypesInRow = this._caseTypeService.GetChildsInRow(caseTypes).ToList();
+
+            var productAreas = this._productAreaService.GetAllProductAreas(customerId);
+            var productAreasInRow = this._productAreaService.GetChildsInRow(productAreas).ToList();
+    
             reportFilter.Departments = departments.ToList();
             reportFilter.WorkingGroups = workingGroups;
-            reportFilter.CaseTypes = caseTypes;
+            reportFilter.CaseTypes = caseTypesInRow;
+            reportFilter.ProductAreas = productAreasInRow;
             
             return reportFilter;
         }

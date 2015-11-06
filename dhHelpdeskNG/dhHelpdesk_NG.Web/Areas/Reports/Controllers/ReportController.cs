@@ -518,21 +518,15 @@ using DH.Helpdesk.BusinessData.Enums.Case;
                 WorkingGroups = reportFilter.WorkingGroups,
                 Selected = GetNewFilterSelections(),
                 CaseTypes = reportFilter.CaseTypes,
-                UserOrientationName = customerSettings.IsUserFirstLastNameRepresentation,
-                CaseTypeSelectedText = Translation.Get("--", Enums.TranslationSource.TextTranslation),
-                Status = GetCaseStateFilter()
+                ProductAreas = reportFilter.ProductAreas,
+                Status = GetCaseStateFilter(),
+                UserNameOrientation = customerSettings.IsUserFirstLastNameRepresentation
             };
         
             if (lastState != null)
             {
                 model.CaseCreationDate = lastState.SelectedFilter.CaseCreationDate;
-                model.Selected = lastState.SelectedFilter;
-                if (model.CaseTypes != null && lastState.SelectedFilter.SelectedCaseTypes.Any())
-                {
-                    var caseType = model.CaseTypes.Where(ct => ct.Id == lastState.SelectedFilter.SelectedCaseTypes.First()).FirstOrDefault();
-                    if (caseType != null)
-                        model.CaseTypeSelectedText = caseType.getCaseTypeParentPath();
-                }                
+                model.Selected = lastState.SelectedFilter;                                
             }
 
             return model;

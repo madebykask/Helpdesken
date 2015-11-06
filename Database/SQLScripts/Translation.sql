@@ -4068,5 +4068,12 @@ If not exists (select * from tblTextTranslation where text_id = 1555 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1555, 2, 'Number of cases displayed is limited to 500.')
 GO
 
+If not exists (select * from tbltext where id = 1556)
+	insert into tbltext (id, TextString) VALUES (1556, 'Rapportergenerator')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1556 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1556, 2, 'Report Generator')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

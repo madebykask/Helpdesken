@@ -21,6 +21,8 @@ namespace DH.Helpdesk.BusinessData.Models.ReportService
 
         public List<CaseType> CaseTypes { get; set; }
 
+        public List<ProductArea> ProductAreas { get; set; }
+
         public CustomSelectList Status { get; set; }
     }
        

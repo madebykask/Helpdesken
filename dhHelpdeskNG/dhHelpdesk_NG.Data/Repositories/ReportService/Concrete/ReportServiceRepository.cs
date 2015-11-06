@@ -143,6 +143,9 @@
                 if (filters.SelectedCaseTypes.Any())                
                     _whereStr += string.Format("AND tblCase.CaseType_Id in ({0}) ", filters.SelectedCaseTypes.GetSelectedStr().SafeForSqlInject());
 
+                if (filters.SelectedProductAreas.Any())
+                    _whereStr += string.Format("AND tblCase.ProductArea_Id in ({0}) ", filters.SelectedProductAreas.GetSelectedStr().SafeForSqlInject());
+
                 if (filters.SelectedCaseStatus.Any())
                 {
                     var progress = filters.SelectedCaseStatus.GetSelectedStr().SafeForSqlInject();

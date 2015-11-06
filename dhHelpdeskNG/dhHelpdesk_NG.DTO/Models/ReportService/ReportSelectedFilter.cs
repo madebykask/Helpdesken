@@ -13,6 +13,7 @@
             this.SelectedWorkingGroups = new SelectedItems();
             this.SelectedAdministrator = new SelectedItems();
             this.SelectedCaseTypes = new SelectedItems();
+            this.SelectedProductAreas = new SelectedItems();
             this.SelectedCaseStatus = new SelectedItems();
         }
 
@@ -29,6 +30,8 @@
         public SelectedItems SelectedAdministrator { get; set; }
 
         public SelectedItems SelectedCaseTypes { get; set; }
+
+        public SelectedItems SelectedProductAreas { get; set; }
 
         public SelectedItems SelectedCaseStatus { get; set; }
                 

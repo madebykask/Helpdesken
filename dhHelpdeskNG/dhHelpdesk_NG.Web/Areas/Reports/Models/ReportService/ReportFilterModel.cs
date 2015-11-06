@@ -21,6 +21,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Models.ReportService
 
         public string CaseTypes { get; set; }
 
+        public string ProductAreas { get; set; }
+
         public string CaseStatus { get; set; }
 
         public DateTime? RegisterFrom { get; set; }
@@ -40,6 +42,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Models.ReportService
             ret.SelectedWorkingGroups.AddItems(reportFilter.WorkingGroups);
             ret.SelectedAdministrator.AddItems(reportFilter.Administrators);
             ret.SelectedCaseTypes.AddItems(reportFilter.CaseTypes);
+            ret.SelectedProductAreas.AddItems(reportFilter.ProductAreas);
             ret.SelectedCaseStatus.AddItems(reportFilter.CaseStatus);
             ret.CaseCreationDate = new DateToDate(reportFilter.RegisterFrom, reportFilter.RegisterTo);
             return ret;
