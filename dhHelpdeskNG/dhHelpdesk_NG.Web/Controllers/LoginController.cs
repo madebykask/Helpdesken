@@ -21,6 +21,7 @@
         private readonly ICustomerService customerService;
         private readonly ILanguageService languageService;
         private readonly IUsersPasswordHistoryService usersPasswordHistoryService;
+        private readonly ICaseLockService _caseLockService;
 
         private readonly IRouteResolver routeResolver;
 
@@ -28,12 +29,14 @@
                 IUserService userService, 
                 ICustomerService customerService, 
                 IUsersPasswordHistoryService usersPasswordHistoryService,
+                ICaseLockService caseLockService,
                 ILanguageService languageService, 
                 IRouteResolver routeResolver)
         {
             this.userService = userService;
             this.customerService = customerService;
             this.usersPasswordHistoryService = usersPasswordHistoryService;
+            this._caseLockService = caseLockService;
             this.languageService = languageService;
             this.routeResolver = routeResolver;
         }
@@ -157,6 +160,8 @@
                             });
 
                     this.usersPasswordHistoryService.SaveHistory(user.Id, EncryptionHelper.GetMd5Hash(password));
+                    this._caseLockService.CaseLockCleanUp();
+
                     if (SessionFacade.TimeZoneDetectionResult == TimeZoneAutodetectResult.Failure)
                     {
                         this.RedirectFromLoginPage(userName, "~/Profile/Edit/", user.StartPage);

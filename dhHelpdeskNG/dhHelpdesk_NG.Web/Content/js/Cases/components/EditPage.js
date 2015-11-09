@@ -183,17 +183,19 @@ EditPage.prototype.doSave = function(submitUrl) {
     me.$form.attr("action", action);
     if (me.isFormValid()) {
         if (me.case.isNew()) {
+            me.stopCaseLockTimer();
             me.$form.submit();
             return false;
         } 
 
+        me.stopCaseLockTimer();
         $.post(window.parameters.caseLockChecker, {
                 caseId: me.p.currentCaseId,
                 caseChangedTime: me.p.caseChangedTime,
                 lockGuid: me.p.caseLockGuid
             },
             function (data) {
-                if (data == true) {
+                if (data == true) {                    
                     me.$form.submit();
                 } else {
                     //Case is Locked
@@ -205,6 +207,12 @@ EditPage.prototype.doSave = function(submitUrl) {
         me.setCaseStatus(me.CASE_IN_IDLE);
     }
     return false;
+};
+
+EditPage.prototype.stopCaseLockTimer = function () {
+    var me = this;
+    if (me.timerId != undefined)
+        clearInterval(me.timerId);    
 };
 
 EditPage.prototype.setCaseStatus = function (status) {
@@ -283,6 +291,7 @@ EditPage.prototype.doDeleteCase = function(c) {
     var me = this;
     var $form = $(['<form action="', me.DELETE_CASE_URL, '?', $.param(me.MakeDeleteParams(c)), '" method="post"></form>'].join(String.EMPTY));
     $('body').append($form);
+    me.stopCaseLockTimer();
     $form.submit();
 };
 
@@ -355,6 +364,7 @@ EditPage.prototype.onPageLeave = function(ev) {
         me.leaveDlg.show().done(function (result) {
             me.leaveDlg.hide();
             if (result === ConfirmationDialog.YES) {
+                me.stopCaseLockTimer();
                 window.location.href = gotoUrl;
             }
         });
@@ -373,6 +383,7 @@ EditPage.prototype.onCloseClick = function(ev) {
         url = me.CASE_OVERVIEW_URL;
     }
 
+    me.stopCaseLockTimer();
     window.location.href = url;
     return false;
 };
@@ -477,8 +488,8 @@ EditPage.prototype.init = function (p) {
         me.$btnDelete.addClass('disabled');
     }
 
-    if (p.currentCaseId > 0) {
-        me.timerId = setInterval(callAsMe(me.ReExtendCaseLock, me), me.p.extendValue * 1000);
+    if (p.currentCaseId > 0 && me.p.timerInterval > 0) {
+        me.timerId = setInterval(callAsMe(me.ReExtendCaseLock, me), me.p.timerInterval * 1000);
     }
 
     me.formOnBootValues = me.$form.serialize();

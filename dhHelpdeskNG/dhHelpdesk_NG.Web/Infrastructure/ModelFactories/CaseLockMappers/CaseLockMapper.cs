@@ -9,7 +9,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.CaseLockMappers
 {  
     public static class CaseLockMapper
     {
-        public static CaseLockModel MapToViewModel(this CaseLock businessModel, bool isLocked, int extendValue)
+        public static CaseLockModel MapToViewModel(this CaseLock businessModel, bool isLocked, 
+                                                   int extendValue, int timerInterval)
         {   
             return new CaseLockModel(
                                       isLocked, 
@@ -20,6 +21,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.CaseLockMappers
                                       businessModel.CreatedTime,
                                       businessModel.ExtendedTime,
                                       extendValue,
+                                      timerInterval,
                                       businessModel.User
                                     );
         }

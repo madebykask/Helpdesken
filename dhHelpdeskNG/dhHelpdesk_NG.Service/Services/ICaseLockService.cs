@@ -20,6 +20,8 @@
 
         CaseLock GetCaseLockByCaseId(int caseId);
 
+        void CaseLockCleanUp();
+
         void LockCase(CaseLock caseLock);
 
         bool ReExtendLockCase(Guid lockGUID, int extendedTimeInSecond);

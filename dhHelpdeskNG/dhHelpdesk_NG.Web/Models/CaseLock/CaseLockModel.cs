@@ -20,6 +20,7 @@ namespace DH.Helpdesk.Web.Models.CaseLock
             DateTime createTime,
             DateTime extendedTime,            
             int extendValue,
+            int timerInterval,
             User user)
         {
             this.IsLocked = isLocked;
@@ -30,6 +31,7 @@ namespace DH.Helpdesk.Web.Models.CaseLock
             this.CreatedTime = createTime;
             this.ExtendedTime = extendedTime;
             this.ExtendValue = extendValue;
+            this.TimerInterval = timerInterval;
             this.User = user;                            
         }
 
@@ -48,6 +50,8 @@ namespace DH.Helpdesk.Web.Models.CaseLock
         public DateTime ExtendedTime { get; private set; }
 
         public int ExtendValue { get; private set; }
+
+        public int TimerInterval { get; private set; }
 
         public User User { get; private set; }
     }
