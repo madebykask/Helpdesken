@@ -8,15 +8,15 @@
             <ChartMember>
               <Group Name="ChartCasesPerDate_CategoryGroup">
                 <GroupExpressions>
-                  <GroupExpression>=Fields!DateKey.Value</GroupExpression>
+                  <GroupExpression>=Fields!WorkingGroup.Value</GroupExpression>
                 </GroupExpressions>
               </Group>
               <SortExpressions>
                 <SortExpression>
-                  <Value>=Fields!DateKey.Value</Value>
+                  <Value>=Fields!WorkingGroup.Value</Value>
                 </SortExpression>
               </SortExpressions>
-              <Label>=Fields!DateKey.Value</Label>
+              <Label>=Fields!WorkingGroup.Value</Label>
             </ChartMember>
           </ChartMembers>
         </ChartCategoryHierarchy>
@@ -40,6 +40,20 @@
                     <UseValueAsLabel>true</UseValueAsLabel>
                     <Visible>true</Visible>
                   </ChartDataLabel>
+                  <ActionInfo>
+                    <Actions>
+                      <Action>
+                        <Drillthrough>
+                          <ReportName>Details</ReportName>
+                          <Parameters>
+                            <Parameter Name="WorkingGroup">
+                              <Value>=Fields!WorkingGroup_Id.Value</Value>
+                            </Parameter>
+                          </Parameters>
+                        </Drillthrough>
+                      </Action>
+                    </Actions>
+                  </ActionInfo>
                   <Style />
                   <ChartMarker>
                     <Style />
@@ -100,6 +114,7 @@
                   <Length>0.5</Length>
                 </ChartMinorTickMarks>
                 <CrossAt>NaN</CrossAt>
+                <Scalar>true</Scalar>
                 <Minimum>NaN</Minimum>
                 <Maximum>NaN</Maximum>
                 <Angle>-45</Angle>
@@ -252,7 +267,7 @@
             <VerticalAlign>Top</VerticalAlign>
           </Style>
         </ChartNoDataMessage>
-        <DataSetName>CasesPerDate</DataSetName>
+        <DataSetName>CasesPerWorkGroup</DataSetName>
         <Height>16.9cm</Height>
         <Width>25.6cm</Width>
         <Style>
@@ -290,14 +305,16 @@
     </DataSource>
   </DataSources>
   <DataSets>
-    <DataSet Name="CasesPerDate">
+    <DataSet Name="CasesPerWorkGroup">
       <Query>
         <DataSourceName>Helpdesk_local</DataSourceName>
-        <CommandText>SELECT        COUNT(tblCase.Casenumber) AS Volume, tblCustomer.Name, tblDate.DateKey, tblCustomer.Id
+        <CommandText>SELECT        COUNT(tblCase.Casenumber) AS Volume, tblCustomer.Name, tblDate.DateKey, tblCustomer.Id, tblCase.WorkingGroup_Id, tblWorkingGroup.WorkingGroup, 
+                         tblDate.CalendarYearMonth
 FROM            tblCustomer INNER JOIN
-                         tblCase ON tblCustomer.Id = tblCase.Customer_Id RIGHT OUTER JOIN
+                         tblCase ON tblCustomer.Id = tblCase.Customer_Id INNER JOIN
+                         tblWorkingGroup ON tblCustomer.Id = tblWorkingGroup.Customer_Id AND tblCase.WorkingGroup_Id = tblWorkingGroup.Id RIGHT OUTER JOIN
                          tblDate ON CAST(tblCase.RegTime AS Date) = tblDate.FullDate
-GROUP BY tblDate.DateKey, tblCustomer.Name, tblCustomer.Id
+GROUP BY tblDate.DateKey, tblCustomer.Name, tblCustomer.Id, tblCase.WorkingGroup_Id, tblWorkingGroup.WorkingGroup, tblDate.CalendarYearMonth
 ORDER BY tblDate.DateKey</CommandText>
       </Query>
       <Fields>
@@ -315,6 +332,56 @@ ORDER BY tblDate.DateKey</CommandText>
         </Field>
         <Field Name="Id">
           <DataField>Id</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="WorkingGroup_Id">
+          <DataField>WorkingGroup_Id</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="WorkingGroup">
+          <DataField>WorkingGroup</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CalendarYearMonth">
+          <DataField>CalendarYearMonth</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="CustomerName">
+      <Query>
+        <DataSourceName>Helpdesk_local</DataSourceName>
+        <CommandText>SELECT        Name, Id
+FROM            tblCustomer</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="Name">
+          <DataField>Name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Id">
+          <DataField>Id</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="WorkingGroupName">
+      <Query>
+        <DataSourceName>Helpdesk_local</DataSourceName>
+        <CommandText>SELECT        WorkingGroup, Id, Customer_Id
+FROM            tblWorkingGroup</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="WorkingGroup">
+          <DataField>WorkingGroup</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Id">
+          <DataField>Id</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Customer_Id">
+          <DataField>Customer_Id</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
       </Fields>
