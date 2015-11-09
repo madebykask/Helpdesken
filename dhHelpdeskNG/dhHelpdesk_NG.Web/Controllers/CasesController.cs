@@ -3642,7 +3642,10 @@ return this.Json(count, JsonRequestBehavior.AllowGet);
             ret.ResponsibleCheck = userCaseSettings.Responsible;
 
             ret.AdministratorCheck = true;
-            ret.AvailablePerformersList = this._userService.GetAvailablePerformersOrUserId(customerId).MapToSelectList(customerSettings);
+
+            var performers = this._userService.GetAvailablePerformersOrUserId(customerId);
+            performers.Insert(0, ObjectExtensions.notAssignedPerformer());
+            ret.AvailablePerformersList = performers.MapToSelectList(customerSettings);            
             if (!string.IsNullOrEmpty(userCaseSettings.Administrators))
             {
                 ret.lstAdministrator = userCaseSettings.Administrators.Split(',').Select(int.Parse).ToArray();

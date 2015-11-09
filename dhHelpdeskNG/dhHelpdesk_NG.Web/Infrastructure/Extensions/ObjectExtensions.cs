@@ -36,7 +36,7 @@
 
         public static User notAssignedPerformer()
         {
-            return new User { Id = 0, FirstName = "-- " + Translation.Get("Ej Tilldelade", Enums.TranslationSource.TextTranslation) + " --", SurName="", IsActive = 1 , Performer = 1};
+            return new User { Id = int.MinValue, FirstName = "-- " + Translation.Get("Ej Tilldelade", Enums.TranslationSource.TextTranslation) + " --", SurName="", IsActive = 1 , Performer = 1};
         }
 
         public static IList<Field> GetFilterForCases(int followUpPermission, int customerId)

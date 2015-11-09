@@ -1035,10 +1035,10 @@
             if (!string.IsNullOrWhiteSpace(f.UserPerformer))
             {
                 var performersDict = f.UserPerformer.Split(',').ToDictionary(it => it, it => true);
-                var searchingUnassigned = restrictedCasePermission != 1 && customerUserSetting.User.ShowNotAssignedCases == 1 && performersDict.ContainsKey("0");
+                var searchingUnassigned = restrictedCasePermission != 1 && customerUserSetting.User.ShowNotAssignedCases == 1 && performersDict.ContainsKey(int.MinValue.ToString());
                 if (searchingUnassigned)
                 {
-                    performersDict.Remove("0");
+                    performersDict.Remove(int.MinValue.ToString());
                 }
 
                 if (performersDict.Count > 0 || searchingUnassigned)
