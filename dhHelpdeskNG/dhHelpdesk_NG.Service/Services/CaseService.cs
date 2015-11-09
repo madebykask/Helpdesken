@@ -396,10 +396,13 @@ namespace DH.Helpdesk.Services.Services
             {
                 var customerRepository = uow.GetRepository<Customer>();
                 var problemsRep = uow.GetRepository<Problem>();
+                var caseFieldSettingsRep = uow.GetRepository<CaseFieldSetting>();
 
                 var customerCases = customerRepository.GetAll()
                                     .GetByIds(customerIds)
-                                    .MapToCustomerCases(problemsRep.GetAll(), userId);
+                                    .MapToCustomerCases(caseFieldSettingsRep.GetAll(), problemsRep.GetAll(), userId);
+
+               
 
                 return customerCases;
             }
