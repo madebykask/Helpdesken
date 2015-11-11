@@ -165,6 +165,7 @@
     <Compile Include="Models\Case\CaseOverview\OtherOverview.cs" />
     <Compile Include="Models\Case\CaseOverview\UserOverview.cs" />
     <Compile Include="Models\Case\CaseDataSet.cs" />
+    <Compile Include="Models\Case\MyFavoriteFilterModel.cs" />
     <Compile Include="Models\Case\UserNamesStruct.cs" />
     <Compile Include="Models\Case\CaseRemainingTime.cs" />
     <Compile Include="Models\Case\CaseRemainingTimeData.cs" />

@@ -9,6 +9,8 @@ FilterForm.prototype.init = function (opt) {
     me.opt = opt || {};
     me.$el = opt.$el;
     me.$filterFormContent = me.$el.find('.hideable');
+    me.$favorites = opt.favorites;
+
     if (me.$el == null) {
         throw Error('me.$el should be JQuery-like DOM element');
     }
@@ -18,6 +20,9 @@ FilterForm.prototype.init = function (opt) {
     me.$btnExpandFilter = $("#btnMore");
     me.$expandIcon = $('#icoPlus');
     me.$caseFilterType = $('#lstfilterCaseProgress');
+    me.$filteredMarker = $('#icoFilter');
+    me.$myFavoritesElementName = '#lstMyFavorites';
+    me.$myFavorites = $(me.$myFavoritesElementName);
     me.$btnResetFilter = me.$el.find('.btn-reset');
     me.$btnClearFilter = me.$el.find('.btn-clear');
     me.$searchField = me.$el.find('#txtFreeTextSearch');
@@ -68,6 +73,11 @@ FilterForm.prototype.init = function (opt) {
             me.reset();
         }
     });
+    
+    me.$myFavorites.change(function () {
+        var selectedFavoriteId = $(me.$myFavoritesElementName + " option:selected").val();
+        me.applyFavoriteFilter(selectedFavoriteId);
+    });
 
     $('.submit').on('click', function (ev) {
         ev.preventDefault();
@@ -89,12 +99,69 @@ FilterForm.prototype.init = function (opt) {
         me.$filteredMarker.show();
         me.toggleFilter(true);
     }
+    
+    me.setMyFavorites();
 };
 
 /**
-* @public
+* @private
 */
-FilterForm.prototype.getSavedSeacrhCaseTypeValue = function() {
+FilterForm.prototype.setMyFavorites = function(selectedId) {
+    var me = this;    
+
+    if (me.$favorites != undefined && me.$favorites.length > 0) {
+        var defaultSeleted = (selectedId? selectedId: 0); 
+        var defaultText = "";
+        if (me.$myFavorites.attr("data-placeholder")) {
+            defaultText = "-- " + me.$myFavorites.attr("data-placeholder") + " --";
+        }
+
+        me.$myFavorites.empty();
+        me.$myFavorites.append($("<option></option>").attr("value", 0).text(defaultText));
+        me.$myFavorites.val(0);
+
+        $.each(me.$favorites, function (key, value) {            
+            me.$myFavorites.append($("<option></option>").attr("value", value.Id).text(value.Name));
+
+            if (value.id == selectedId)
+                me.$myFavorites.val(selectedId);
+
+            me.$myFavorites.show();
+        });        
+    }
+    else {
+        me.$myFavorites.hide();
+    }
+};
+
+FilterForm.prototype.applyFavoriteFilter = function (favoriteId) {
+    var me = this;    
+
+    if (favoriteId > 0) {
+        $.each(me.$favorites, function (idx, value) {
+            if (value.Id == favoriteId) {
+                // favorite found
+                if (value.Fields != undefined && value.Fields != null) {
+                    $.each(value.Fields, function (idx2, field) {
+                        var control = me.getControlByFieldName(field.AttributeName);
+                        if (control != null) {
+                            var data = field.AttributeValue.split(",");
+                            control.setValue(data);
+                        }
+                    });
+                    return true;
+                }
+            }
+        });
+    }
+    else {
+        return false;
+    }
+
+    
+};
+
+FilterForm.prototype.getSavedSeacrhCaseTypeValue = function () {
     return parseInt($.cookie('caseoverveiew.filter.searchCaseType'), 10);
 };
 

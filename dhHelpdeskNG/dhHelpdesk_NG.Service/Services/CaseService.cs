@@ -123,6 +123,8 @@ namespace DH.Helpdesk.Services.Services
         int? SaveInternalLogMessage(int id, string textInternal, out IDictionary<string, string> errors);
 
         CaseDataSet GetCaseDataSet(DateTime? fromDate, DateTime? toDate);
+
+        List<MyFavoriteFilter> GetMyFavorites(int customerId, int userId);
     }
 
     public class CaseService : ICaseService
@@ -358,6 +360,26 @@ namespace DH.Helpdesk.Services.Services
             ret = c.CaseGUID; 
             this._caseRepository.Delete(c);
             this._caseRepository.Commit();
+
+            return ret;
+        }
+
+        public List<MyFavoriteFilter> GetMyFavorites(int customerId, int userId)
+        {
+            var ret = new List<MyFavoriteFilter>();
+            
+            var newFavorite = new MyFavoriteFilter();
+            newFavorite.Id = 1;
+            newFavorite.Name = "My Favorit 1";
+            newFavorite.Fields.AdministratorIds.AddItems("210, 233,234");
+            newFavorite.Fields.WorkingGroupIds.AddItems("31,32");
+            ret.Add(newFavorite);
+
+            newFavorite = new MyFavoriteFilter();
+            newFavorite.Id = 2;
+            newFavorite.Name = "My Favorit 2";
+            newFavorite.Fields.AdministratorIds.AddItems("1,234");
+            ret.Add(newFavorite);
 
             return ret;
         }

@@ -239,6 +239,8 @@
 
         public JsonGridSettingsModel gridSettings { get; set; }
 
+        public List<MyFavoriteFilterJSModel> userFilterFavorites { get; set; }
+
         public Dictionary<string, string> messages { get; set; }
 
         public int refreshContent { get; set; }

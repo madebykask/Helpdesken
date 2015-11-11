@@ -7,6 +7,7 @@
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
+    using DH.Helpdesk.Web.Enums;
 
     public class JsonCaseSearchFilterItem
     {
@@ -37,7 +38,7 @@
             {
                 res.data.Add(new JsonCaseSearchFilterItem()
                                  {
-                                     attrName = CaseSearchFilter.InitiatorNameAttribute,
+                                     attrName = CaseFilterFields.InitiatorNameAttribute,
                                      value = string.Empty
                                  });
             }
@@ -46,7 +47,7 @@
             {
                 res.data.Add(new JsonCaseSearchFilterItem()
                 {
-                    attrName = CaseSearchFilter.RegionNameAttribute,
+                    attrName = CaseFilterFields.RegionNameAttribute,
                     value = SaveExtractArray(defaultSearchFilter.SelectedRegion)
                 });
             }
@@ -56,7 +57,7 @@
             {
                 res.data.Add(new JsonCaseSearchFilterItem()
                 {
-                    attrName = CaseSearchFilter.DepartmentNameAttribute,
+                    attrName = CaseFilterFields.DepartmentNameAttribute,
                     value = SaveExtractArray(defaultSearchFilter.SelectedDepartments)
                 });
             }
@@ -65,7 +66,7 @@
             {
                 res.data.Add(new JsonCaseSearchFilterItem()
                 {
-                    attrName = CaseSearchFilter.RegisteredByNameAttribute,
+                    attrName = CaseFilterFields.RegisteredByNameAttribute,
                     value = defaultSearchFilter.lstRegisterBy
                 });
             }
@@ -74,7 +75,7 @@
             {
                 res.data.Add(new JsonCaseSearchFilterItem()
                 {
-                    attrName = CaseSearchFilter.CaseTypeIdNameAttribute,
+                    attrName = CaseFilterFields.CaseTypeIdNameAttribute,
                     value = defaultSearchFilter.CaseTypeId
                 });
             }
@@ -83,7 +84,7 @@
             {
                 res.data.Add(new JsonCaseSearchFilterItem()
                 {
-                    attrName = CaseSearchFilter.ProductAreaIdNameAttribute,
+                    attrName = CaseFilterFields.ProductAreaIdNameAttribute,
                     value = defaultSearchFilter.ProductAreaId
                 });
             }
@@ -93,7 +94,7 @@
             {
                 res.data.Add(new JsonCaseSearchFilterItem()
                 {
-                    attrName = CaseSearchFilter.WorkingGroupNameAttribute,
+                    attrName = CaseFilterFields.WorkingGroupNameAttribute,
                     value = SaveExtractArray(defaultSearchFilter.SelectedWorkingGroup)
                 });
             }
@@ -103,7 +104,7 @@
             {
                  res.data.Add(new JsonCaseSearchFilterItem()
                                  {
-                                     attrName = CaseSearchFilter.ResponsibleNameAttribute,
+                                     attrName = CaseFilterFields.ResponsibleNameAttribute,
                                      value = string.Empty
                                  });
             }
@@ -113,7 +114,7 @@
             {
                 res.data.Add(new JsonCaseSearchFilterItem()
                 {
-                    attrName = CaseSearchFilter.PerformerNameAttribute,
+                    attrName = CaseFilterFields.PerformerNameAttribute,
                     value = defaultSearchFilter.lstAdministrator
                 });
             }
@@ -123,7 +124,7 @@
             {
                 res.data.Add(new JsonCaseSearchFilterItem()
                 {
-                    attrName = CaseSearchFilter.PriorityNameAttribute,
+                    attrName = CaseFilterFields.PriorityNameAttribute,
                     value = SaveExtractArray(defaultSearchFilter.SelectedPriority)
                 });
             }
@@ -133,7 +134,7 @@
             {
                 res.data.Add(new JsonCaseSearchFilterItem()
                 {
-                    attrName = CaseSearchFilter.StatusNameAttribute,
+                    attrName = CaseFilterFields.StatusNameAttribute,
                     value = string.Empty
                 });
             }
@@ -143,7 +144,7 @@
             {
                 res.data.Add(new JsonCaseSearchFilterItem()
                 {
-                    attrName = CaseSearchFilter.StateSecondaryNameAttribute,
+                    attrName = CaseFilterFields.StateSecondaryNameAttribute,
                     value = SaveExtractArray(defaultSearchFilter.SelectedSubState)
                 });
             }
@@ -153,12 +154,12 @@
             {
                 res.data.Add(new JsonCaseSearchFilterItem()
                 {
-                    attrName = CaseSearchFilter.CaseRegistrationDateStartFilterNameAttribute,
+                    attrName = CaseFilterFields.CaseRegistrationDateStartFilterNameAttribute,
                     value = FmtDate(defaultSearchFilter.CaseRegistrationDateStartFilter)
                 });
                 res.data.Add(new JsonCaseSearchFilterItem()
                 {
-                    attrName = CaseSearchFilter.CaseRegistrationDateEndFilterFilterNameAttribute,
+                    attrName = CaseFilterFields.CaseRegistrationDateEndFilterFilterNameAttribute,
                     value = FmtDate(defaultSearchFilter.CaseRegistrationDateEndFilter)
                 });
             }
@@ -168,12 +169,12 @@
             {
                 res.data.Add(new JsonCaseSearchFilterItem()
                 {
-                    attrName = CaseSearchFilter.CaseWatchDateStartFilterNameAttribute,
+                    attrName = CaseFilterFields.CaseWatchDateStartFilterNameAttribute,
                     value = FmtDate(defaultSearchFilter.CaseWatchDateStartFilter)
                 });
                 res.data.Add(new JsonCaseSearchFilterItem()
                 {
-                    attrName = CaseSearchFilter.CaseWatchDateEndFilterNameAttribute,
+                    attrName = CaseFilterFields.CaseWatchDateEndFilterNameAttribute,
                     value = FmtDate(defaultSearchFilter.CaseWatchDateEndFilter)
                 });
             }
@@ -183,12 +184,12 @@
             {
                 res.data.Add(new JsonCaseSearchFilterItem()
                 {
-                    attrName = CaseSearchFilter.CaseClosingDateStartFilterNameAttribute,
+                    attrName = CaseFilterFields.CaseClosingDateStartFilterNameAttribute,
                     value = FmtDate(defaultSearchFilter.CaseClosingDateStartFilter)
                 });
                 res.data.Add(new JsonCaseSearchFilterItem()
                 {
-                    attrName = CaseSearchFilter.CaseClosingDateEndFilterNameAttribute,
+                    attrName = CaseFilterFields.CaseClosingDateEndFilterNameAttribute,
                     value = FmtDate(defaultSearchFilter.CaseClosingDateEndFilter)
                 });
             }
@@ -198,7 +199,7 @@
             {
                 res.data.Add(new JsonCaseSearchFilterItem()
                 {
-                    attrName = CaseSearchFilter.ClosingReasonNameAttribute,
+                    attrName = CaseFilterFields.ClosingReasonNameAttribute,
                     value = defaultSearchFilter.ClosingReasonId
                 });
             }
@@ -208,7 +209,7 @@
             //{
                 res.data.Add(new JsonCaseSearchFilterItem()
                 {
-                    attrName = CaseSearchFilter.CaseRemainingTimeAttribute,
+                    attrName = CaseFilterFields.CaseRemainingTimeAttribute,
                     value = SaveExtractArray(defaultSearchFilter.SelectedCaseRemainingTime)
                 });
             //}
