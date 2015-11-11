@@ -48,6 +48,10 @@ BEGIN
 END
 GO
 
+
+ALTER TABLE tblUsers ALTER COLUMN UserId nvarchar(40) not null
+GO
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.17'
 
