@@ -188,12 +188,22 @@
                      }  
                     @if (Model.AvailablePerformersList != null)
                     {
+                        var selectedPerformers = (Model.lstfilterPerformer == null)? string.Empty : string.Join(",", Model.lstfilterPerformer);
                     <tr>
                         <td>                               
                             @Translation.Get(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId)                                   
                         </td>
-                        <td>
-                            @Html.ListBoxFor(m => m.lstfilterPerformer, Model.AvailablePerformersList, new { id = "lstfilterPerformer", @class = "chosen-select", multiple = "multiple" })
+                        <td>         
+                            <select id="lstfilterPerformer" name="@CaseFilterFields.PerformerNameAttribute" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                @foreach (var p in Model.AvailablePerformersList)
+                                {             
+                                    int curId;                                    
+                                    if (int.TryParse(p.Value, out curId))
+                                    {
+                                       <option value="@p.Value" @curId.IdIsSelected(selectedPerformers)>@p.Text</option>                                 
+                                    }
+                                }
+                            </select>                                       
                         </td>
                     </tr>                 
                     }
@@ -236,7 +246,6 @@
                          </tr>                
                      }
                     
-
                      @if (Model.filterStateSecondary != null)
                      {
                          <tr>
@@ -256,7 +265,8 @@
                              </td>
                          </tr>                
                      }
-                      @if (Model.filterCaseRemainingTime != null)
+
+                     @if (Model.filterCaseRemainingTime != null)
                      {
                          <tr>
                              <td>                                                                
@@ -344,14 +354,16 @@
          </div>
          <div class="row">
              <div class="span12">
-                 <table class="tableform">
+                 <table class="tableform" >
                      <tr>
                          <td class="span3">@Translation.Get("Mina ärenden")</td>
-                         <td colspan="4">
-                             @Html.CheckBoxFor(m => m.SearchInMyCasesOnly, new { @class = "switchcheckbox" })
-                             <select id="lstMyFavorites" name="lstMyFavorites" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)">
-                             </select>
+                         <td >
+                             @Html.CheckBoxFor(m => m.SearchInMyCasesOnly, new { @class = "switchcheckbox" })                             
                          </td>                         
+                         <td colspan="3">
+                             <select id="lstMyFavorites" name="@CaseFilterFields.CaseFilterFavoriteNameAttribute" selectedItem="@Model.caseSearchFilter.CaseFilterFavorite" data-placeholder="@Translation.Get("Select favorite filter", Enums.TranslationSource.TextTranslation)">
+                             </select>
+                         </td>
                      </tr>
                      <tr>
                          <td class="span3">

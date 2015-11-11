@@ -40,6 +40,7 @@
         public string Status { get; set; }
         public string StateSecondary { get; set; }
         public string CaseProgress { get; set; }
+        public string CaseFilterFavorite { get; set; }
         public string FreeTextSearch { get; set; }
         public string CaptionSearch { get; set; }
         public string CaseRemainingTime { get; set; }
@@ -131,6 +132,7 @@
             r.CaptionSearch = o.CaptionSearch;
             r.CaseRemainingTime = o.CaseRemainingTime;
             r.SearchThruFiles = o.SearchThruFiles;
+            r.CaseFilterFavorite = o.CaseFilterFavorite;
 
             return r;
         }

@@ -21,7 +21,7 @@
             this.Fields = fields;
         }
 
-        public MyFavoriteFilterJSModel(int id, string name, MyFavoriteFilterFields fields)
+        public MyFavoriteFilterJSModel(int id, string name, CaseFilterFavoriteFields fields)
         {
             this.Id = id;
             this.Name = name;
@@ -61,39 +61,39 @@
                 this.AddField(field.AttributeName, field.AttributeValue);
         }
 
-        public void AddFields(MyFavoriteFilterFields filterFields)
+        public void AddFields(CaseFilterFavoriteFields filterFields)
         {
-            this.AddField(CaseFilterFields.PerformerNameAttribute, filterFields.AdministratorIds.GetSelectedStr());
-            this.AddField(CaseFilterFields.CaseTypeIdNameAttribute, filterFields.CaseTypeIds.GetSelectedStr());
-            this.AddField(CaseFilterFields.ClosingReasonNameAttribute, filterFields.ClosingReason.GetSelectedStr());
-            this.AddField(CaseFilterFields.DepartmentNameAttribute, filterFields.DepartmentIds.GetSelectedStr());
-            this.AddField(CaseFilterFields.PriorityNameAttribute, filterFields.PriorityIds.GetSelectedStr());
-            this.AddField(CaseFilterFields.ProductAreaIdNameAttribute, filterFields.ProductAreaIds.GetSelectedStr());
-            this.AddField(CaseFilterFields.RegionNameAttribute, filterFields.RegionIds.GetSelectedStr());
-            this.AddField(CaseFilterFields.RegisteredByNameAttribute, filterFields.RegisteredByIds.GetSelectedStr());            
-            this.AddField(CaseFilterFields.CaseRemainingTimeAttribute, filterFields.RemainingTimeId.GetSelectedStr());
-            this.AddField(CaseFilterFields.ResponsibleNameAttribute, filterFields.ResponsibleIds.GetSelectedStr());
-            this.AddField(CaseFilterFields.StatusNameAttribute, filterFields.StatusIds.GetSelectedStr());
-            this.AddField(CaseFilterFields.StateSecondaryNameAttribute, filterFields.SubStatusIds.GetSelectedStr());            
-            this.AddField(CaseFilterFields.WorkingGroupNameAttribute, filterFields.WorkingGroupIds.GetSelectedStr());
+            this.AddField(CaseFilterFields.PerformerNameAttribute, filterFields.AdministratorFilter.GetSelectedStr());
+            this.AddField(CaseFilterFields.CaseTypeIdNameAttribute, filterFields.CaseTypeFilter.GetSelectedStr());
+            this.AddField(CaseFilterFields.ClosingReasonNameAttribute, filterFields.ClosingReasonFilter.GetSelectedStr());
+            this.AddField(CaseFilterFields.DepartmentNameAttribute, filterFields.DepartmentFilter.GetSelectedStr());
+            this.AddField(CaseFilterFields.PriorityNameAttribute, filterFields.PriorityFilter.GetSelectedStr());
+            this.AddField(CaseFilterFields.ProductAreaIdNameAttribute, filterFields.ProductAreaFilter.GetSelectedStr());
+            this.AddField(CaseFilterFields.RegionNameAttribute, filterFields.RegionFilter.GetSelectedStr());
+            this.AddField(CaseFilterFields.RegisteredByNameAttribute, filterFields.RegisteredByFilter.GetSelectedStr());            
+            this.AddField(CaseFilterFields.CaseRemainingTimeAttribute, filterFields.RemainingTimeFilter.GetSelectedStr());
+            this.AddField(CaseFilterFields.ResponsibleNameAttribute, filterFields.ResponsibleFilter.GetSelectedStr());
+            this.AddField(CaseFilterFields.StatusNameAttribute, filterFields.StatusFilter.GetSelectedStr());
+            this.AddField(CaseFilterFields.StateSecondaryNameAttribute, filterFields.SubStatusFilter.GetSelectedStr());            
+            this.AddField(CaseFilterFields.WorkingGroupNameAttribute, filterFields.WorkingGroupFilter.GetSelectedStr());
 
-            if (filterFields.ClosingDate.FromDate != null)
-                this.AddField(CaseFilterFields.CaseClosingDateStartFilterNameAttribute, filterFields.ClosingDate.FromDate.ToString());
+            if (filterFields.ClosingDateFilter.FromDate != null)
+                this.AddField(CaseFilterFields.CaseClosingDateStartFilterNameAttribute, filterFields.ClosingDateFilter.FromDate.ToString());
 
-            if (filterFields.ClosingDate.FromDate != null)
-                this.AddField(CaseFilterFields.CaseClosingDateEndFilterNameAttribute, filterFields.ClosingDate.ToDate.ToString());
+            if (filterFields.ClosingDateFilter.FromDate != null)
+                this.AddField(CaseFilterFields.CaseClosingDateEndFilterNameAttribute, filterFields.ClosingDateFilter.ToDate.ToString());
 
-            if (filterFields.RegistrationDate.FromDate != null)
-                this.AddField(CaseFilterFields.CaseRegistrationDateStartFilterNameAttribute, filterFields.RegistrationDate.FromDate.ToString());
+            if (filterFields.RegistrationDateFilter.FromDate != null)
+                this.AddField(CaseFilterFields.CaseRegistrationDateStartFilterNameAttribute, filterFields.RegistrationDateFilter.FromDate.ToString());
 
-            if (filterFields.RegistrationDate.ToDate != null)
-                this.AddField(CaseFilterFields.CaseRegistrationDateEndFilterFilterNameAttribute, filterFields.RegistrationDate.ToDate.ToString());
+            if (filterFields.RegistrationDateFilter.ToDate != null)
+                this.AddField(CaseFilterFields.CaseRegistrationDateEndFilterFilterNameAttribute, filterFields.RegistrationDateFilter.ToDate.ToString());
 
-            if (filterFields.WatchDate.FromDate != null)
-                this.AddField(CaseFilterFields.CaseWatchDateStartFilterNameAttribute, filterFields.WatchDate.FromDate.ToString());
+            if (filterFields.WatchDateFilter.FromDate != null)
+                this.AddField(CaseFilterFields.CaseWatchDateStartFilterNameAttribute, filterFields.WatchDateFilter.FromDate.ToString());
 
-            if (filterFields.WatchDate.ToDate != null)            
-                this.AddField(CaseFilterFields.CaseWatchDateEndFilterNameAttribute, filterFields.WatchDate.ToDate.ToString());
+            if (filterFields.WatchDateFilter.ToDate != null)            
+                this.AddField(CaseFilterFields.CaseWatchDateEndFilterNameAttribute, filterFields.WatchDateFilter.ToDate.ToString());
         }
     }
 

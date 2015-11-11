@@ -124,7 +124,7 @@ namespace DH.Helpdesk.Services.Services
 
         CaseDataSet GetCaseDataSet(DateTime? fromDate, DateTime? toDate);
 
-        List<MyFavoriteFilter> GetMyFavorites(int customerId, int userId);
+        List<CaseFilterFavorite> GetMyFavorites(int customerId, int userId);
     }
 
     public class CaseService : ICaseService
@@ -364,21 +364,21 @@ namespace DH.Helpdesk.Services.Services
             return ret;
         }
 
-        public List<MyFavoriteFilter> GetMyFavorites(int customerId, int userId)
+        public List<CaseFilterFavorite> GetMyFavorites(int customerId, int userId)
         {
-            var ret = new List<MyFavoriteFilter>();
+            var ret = new List<CaseFilterFavorite>();
             
-            var newFavorite = new MyFavoriteFilter();
+            var newFavorite = new CaseFilterFavorite();
             newFavorite.Id = 1;
-            newFavorite.Name = "My Favorit 1";
-            newFavorite.Fields.AdministratorIds.AddItems("210, 233,234");
-            newFavorite.Fields.WorkingGroupIds.AddItems("31,32");
+            newFavorite.Name = "My Favorite 1";
+            newFavorite.Fields.AdministratorFilter.AddItems("168, 233,234");
+            newFavorite.Fields.WorkingGroupFilter.AddItems("31,32");
             ret.Add(newFavorite);
 
-            newFavorite = new MyFavoriteFilter();
+            newFavorite = new CaseFilterFavorite();
             newFavorite.Id = 2;
-            newFavorite.Name = "My Favorit 2";
-            newFavorite.Fields.AdministratorIds.AddItems("1,234");
+            newFavorite.Name = "My Favorite 2";
+            newFavorite.Fields.AdministratorFilter.AddItems("1,234");
             ret.Add(newFavorite);
 
             return ret;

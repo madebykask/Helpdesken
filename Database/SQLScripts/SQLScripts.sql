@@ -48,9 +48,43 @@ BEGIN
 END
 GO
 
+if not exists(select * from sysobjects WHERE Name = N'tblCaseFilterFavorite')
+BEGIN
+	CREATE TABLE [dbo].[tblCaseFilterFavorite](
+		[Id] [int] IDENTITY(1,1) NOT NULL,
+		[Customer_Id] [int] NOT NULL,
+		[User_Id] [int] NOT NULL,
+		[Name] [nvarchar](80) NOT NULL,
+		[RegionFilter] [nvarchar](80) NULL,
+		[DepartmentFilter] [nvarchar](80) NULL,
+		[RegisteredByFilter] [nvarchar](80) NULL,
+		[CaseTypeFilter] [nvarchar](80) NULL,
+		[ProductAreaFilter] [nvarchar](80) NULL,
+		[WorkingGroupFilter] [nvarchar](80) NULL,
+		[ResponsibleFilter] [nvarchar](80) NULL,
+		[AdministratorFilter] [nvarchar](80) NULL,
+		[PriorityFilter] [nvarchar](80) NULL,
+		[StatusFilter] [nvarchar](80) NULL,
+		[SubStatusFilter] [nvarchar](80) NULL,
+		[RemainingTimeFilter] [nvarchar](80) NULL,
+		[ClosingReasonFilter] [nvarchar](80) NULL,
+		[RegistrationDateStartFilter] [datetime] NULL,
+		[RegistrationDateEndFilter] [datetime] NULL,
+		[WatchDateStartFilter] [datetime] NULL,
+		[WatchDateEndFilter] [datetime] NULL,
+		[ClosingDateStartFilter] [datetime] NULL,
+		[ClosingDateEndFilter] [datetime] NULL,
+	 CONSTRAINT [PK_tblCaseFilterFavorite] PRIMARY KEY CLUSTERED 
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
+END
+GO
 
 ALTER TABLE tblUsers ALTER COLUMN UserId nvarchar(40) not null
 GO
+
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.17'

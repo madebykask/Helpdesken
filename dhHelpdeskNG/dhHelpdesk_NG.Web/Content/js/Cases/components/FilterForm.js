@@ -100,7 +100,11 @@ FilterForm.prototype.init = function (opt) {
         me.toggleFilter(true);
     }
     
-    me.setMyFavorites();
+    var curId = "0";
+    if (me.$myFavorites.attr("selectedItem")) {
+        curId = me.$myFavorites.attr("selectedItem");
+    }
+    me.setMyFavorites(curId);
 };
 
 /**
@@ -123,7 +127,7 @@ FilterForm.prototype.setMyFavorites = function(selectedId) {
         $.each(me.$favorites, function (key, value) {            
             me.$myFavorites.append($("<option></option>").attr("value", value.Id).text(value.Name));
 
-            if (value.id == selectedId)
+            if (value.Id == selectedId)
                 me.$myFavorites.val(selectedId);
 
             me.$myFavorites.show();
@@ -155,6 +159,7 @@ FilterForm.prototype.applyFavoriteFilter = function (favoriteId) {
         });
     }
     else {
+        me.clear();
         return false;
     }
 
@@ -202,6 +207,7 @@ FilterForm.prototype.getFilterToSend = function () {
 */
 FilterForm.prototype.clear = function () {
     var me = this;
+    me.$myFavorites.val(0);
     $.each(me.controlsMap, function(fieldId, control) {
         control.clear();
     });
@@ -233,10 +239,14 @@ FilterForm.prototype.reset = function() {
     if (fSettings == null || fSettings.length == 0) {
         me.clear();
     } else {
+        me.$myFavorites.val(0);
         $.each(fSettings, function (idx, field) {
             var control = me.getControlByFieldName(field.attrName);
             if (control != null) {
-                control.setValue(field.value);
+                if (field.value == null)
+                    control.clear();
+                else
+                    control.setValue(field.value);
             }
         });
     }

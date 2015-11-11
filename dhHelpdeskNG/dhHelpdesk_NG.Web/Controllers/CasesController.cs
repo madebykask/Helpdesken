@@ -690,6 +690,7 @@ namespace DH.Helpdesk.Web.Controllers
             f.SearchInMyCasesOnly = frm.IsFormValueTrue("SearchInMyCasesOnly");
 
             f.CaseProgress = frm.ReturnFormValue(CaseFilterFields.FilterCaseProgressNameAttribute);
+            f.CaseFilterFavorite = frm.ReturnFormValue(CaseFilterFields.CaseFilterFavoriteNameAttribute);
             f.FreeTextSearch = frm.ReturnFormValue(CaseFilterFields.FreeTextSearchNameAttribute);
             var departments_OrganizationUnits = frm.ReturnFormValue(CaseFilterFields.DepartmentNameAttribute);
 
@@ -2199,7 +2200,7 @@ namespace DH.Helpdesk.Web.Controllers
                                                 this.workContext.Customer.CustomerId,
                                                 userId,
                                                 SessionFacade.CurrentUser);
-return this.Json(count, JsonRequestBehavior.AllowGet);
+            return this.Json(count, JsonRequestBehavior.AllowGet);
         }
 
         #region Private Methods and Operators
@@ -4503,7 +4504,7 @@ return this.Json(count, JsonRequestBehavior.AllowGet);
         private List<MyFavoriteFilterJSModel> GetMyFavorites(int customerId, int userId)
         {
             var ret = new List<MyFavoriteFilterJSModel>();
-            //var favorites = this._caseService.GetMyFavorites(customerId, userId);
+            var favorites = this._caseService.GetMyFavorites(customerId, userId);
             //if (favorites.Any())
             //{
             //    foreach (var favorite in favorites)
