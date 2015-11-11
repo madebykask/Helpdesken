@@ -4503,12 +4503,12 @@ return this.Json(count, JsonRequestBehavior.AllowGet);
         private List<MyFavoriteFilterJSModel> GetMyFavorites(int customerId, int userId)
         {
             var ret = new List<MyFavoriteFilterJSModel>();
-            var favorites = this._caseService.GetMyFavorites(customerId, userId);
-            if (favorites.Any())
-            {
-                foreach (var favorite in favorites)
-                    ret.Add(new MyFavoriteFilterJSModel(favorite.Id, favorite.Name, favorite.Fields));
-            }
+            //var favorites = this._caseService.GetMyFavorites(customerId, userId);
+            //if (favorites.Any())
+            //{
+            //    foreach (var favorite in favorites)
+            //        ret.Add(new MyFavoriteFilterJSModel(favorite.Id, favorite.Name, favorite.Fields));
+            //}
             return ret;
         }
 
