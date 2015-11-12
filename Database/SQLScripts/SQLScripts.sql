@@ -55,9 +55,9 @@ BEGIN
 		[Customer_Id] [int] NOT NULL,
 		[User_Id] [int] NOT NULL,
 		[Name] [nvarchar](80) NOT NULL,
-		[RegionFilter] [nvarchar](80) NULL,
-		[DepartmentFilter] [nvarchar](80) NULL,
 		[RegisteredByFilter] [nvarchar](80) NULL,
+		[RegionFilter] [nvarchar](80) NULL,
+		[DepartmentFilter] [nvarchar](80) NULL,		
 		[CaseTypeFilter] [nvarchar](80) NULL,
 		[ProductAreaFilter] [nvarchar](80) NULL,
 		[WorkingGroupFilter] [nvarchar](80) NULL,
@@ -74,6 +74,7 @@ BEGIN
 		[WatchDateEndFilter] [datetime] NULL,
 		[ClosingDateStartFilter] [datetime] NULL,
 		[ClosingDateEndFilter] [datetime] NULL,
+		[CreatedDate] [datetime] Not NULL,
 	 CONSTRAINT [PK_tblCaseFilterFavorite] PRIMARY KEY CLUSTERED 
 	(
 		[Id] ASC

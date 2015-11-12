@@ -84,7 +84,7 @@
         }
 
         public SelectedItems(string strItems, bool ignoreNegativeItems = true, string separator = ",")
-        {            
+        {                       
             this.AddItems(strItems, ignoreNegativeItems, separator);
         }
 

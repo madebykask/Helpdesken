@@ -1,21 +1,28 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Case
 {
     using DH.Helpdesk.BusinessData.Models.Shared;
+    using System;
 
     public sealed class CaseFilterFavorite
     {
         public CaseFilterFavorite()
         {
             this.Fields = new CaseFilterFavoriteFields();
+            this.CreatedDate = DateTime.Now;
         }
 
-        public CaseFilterFavorite(int id, int customerId, int userId, string name, CaseFilterFavoriteFields fields)
+        public CaseFilterFavorite(int id, int customerId, int userId, string name, CaseFilterFavoriteFields fields, DateTime? createdDate = null)
         {
             this.Id = id;
             this.CustomerId = customerId;
             this.UserId = userId;
             this.Name = name;
             this.Fields = fields;
+
+            if (createdDate.HasValue)
+                this.CreatedDate = createdDate.Value;
+            else
+                this.CreatedDate = DateTime.Now;
         }
 
         public int Id { get; set; }
@@ -27,6 +34,8 @@
         public string Name { get; set; }       
 
         public CaseFilterFavoriteFields Fields { get; set; }
+
+        public DateTime CreatedDate { get; set; }                
     }
 
     public class CaseFilterFavoriteFields
@@ -36,8 +45,7 @@
         public CaseFilterFavoriteFields()
         {
             this.RegionFilter = new SelectedItems();
-            this.DepartmentFilter = new SelectedItems();
-            this.RegisteredByFilter = new SelectedItems();
+            this.DepartmentFilter = new SelectedItems();            
             this.CaseTypeFilter = new SelectedItems();
             this.ProductAreaFilter = new SelectedItems();
             this.WorkingGroupFilter = new SelectedItems();
@@ -48,6 +56,7 @@
             this.SubStatusFilter = new SelectedItems();
             this.RemainingTimeFilter = new SelectedItems();
             this.ClosingReasonFilter = new SelectedItems();
+            this.RegisteredByFilter = new SelectedItems();
             this.RegistrationDateFilter = new DateToDate();
             this.WatchDateFilter = new DateToDate();
             this.ClosingDateFilter = new DateToDate();            
@@ -55,8 +64,7 @@
 
         public CaseFilterFavoriteFields(
                     SelectedItems regionFilter,
-                    SelectedItems departmentFilter,
-                    SelectedItems registeredByFilter,
+                    SelectedItems departmentFilter,                    
                     SelectedItems caseTypeFilter,
                     SelectedItems productAreaFilter,
                     SelectedItems workingGroupFilter,
@@ -67,26 +75,27 @@
                     SelectedItems subStatusFilter,
                     SelectedItems remainingTimeFilter,
                     SelectedItems closingReasonFilter,
+                    SelectedItems registeredByFilter,
                     DateToDate registrationDateFilter,
                     DateToDate watchDateFilter,
                     DateToDate closingDateFilter)
         {
             this.RegionFilter = regionFilter;
-            this.DepartmentFilter = new SelectedItems();
-            this.RegisteredByFilter = new SelectedItems();
-            this.CaseTypeFilter = new SelectedItems();
-            this.ProductAreaFilter = new SelectedItems();
-            this.WorkingGroupFilter = new SelectedItems();
-            this.ResponsibleFilter = new SelectedItems();
-            this.AdministratorFilter = new SelectedItems();
-            this.PriorityFilter = new SelectedItems();
-            this.StatusFilter = new SelectedItems();
-            this.SubStatusFilter = new SelectedItems();
-            this.RemainingTimeFilter = new SelectedItems();
-            this.ClosingReasonFilter = new SelectedItems();
-            this.RegistrationDateFilter = new DateToDate();
-            this.WatchDateFilter = new DateToDate();
-            this.ClosingDateFilter = new DateToDate();
+            this.DepartmentFilter = departmentFilter;            
+            this.CaseTypeFilter = caseTypeFilter;
+            this.ProductAreaFilter = productAreaFilter;
+            this.WorkingGroupFilter = workingGroupFilter;
+            this.ResponsibleFilter = responsibleFilter;
+            this.AdministratorFilter = administratorFilter;
+            this.PriorityFilter = priorityFilter;
+            this.StatusFilter = statusFilter;
+            this.SubStatusFilter = subStatusFilter;
+            this.RemainingTimeFilter = remainingTimeFilter;
+            this.RegisteredByFilter = registeredByFilter;
+            this.ClosingReasonFilter = closingReasonFilter;
+            this.RegistrationDateFilter = registrationDateFilter;
+            this.WatchDateFilter = watchDateFilter;
+            this.ClosingDateFilter = closingDateFilter;            
         }
 
         #endregion
@@ -95,9 +104,7 @@
 
         public SelectedItems RegionFilter { get; set; }
 
-        public SelectedItems DepartmentFilter { get; set; }
-
-        public SelectedItems RegisteredByFilter { get; set; }
+        public SelectedItems DepartmentFilter { get; set; }        
 
         public SelectedItems CaseTypeFilter { get; set; }
 
@@ -119,13 +126,14 @@
 
         public SelectedItems ClosingReasonFilter { get; set; }
 
+        public SelectedItems RegisteredByFilter { get; set; }
+
         public DateToDate RegistrationDateFilter { get; set; }
 
         public DateToDate WatchDateFilter { get; set; }
 
         public DateToDate ClosingDateFilter { get; set; }
-                
-
+        
         #endregion
     }
 

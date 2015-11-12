@@ -61,12 +61,15 @@ var GRID_STATE = {
         me.$buttonsToDisableWhenGridLoads = $('ul.secnav a.btn, ul.secnav div.btn-group button, ul.secnav input[type=button], .submit, #btnClearFilter');
         me.$buttonsToDisableWhenNoColumns = $('#btnNewCase a.btn, #btnCaseTemplate a.btn, .submit, #btnClearFilter');
         me.$caseRecordCount = $('[data-field="TotalAmountCases"]');
-        
+       
+
         me.filterForm = new FilterForm();
         me.filterForm.init({
             $el: $('#frmCaseSearch'),
             filter: appSettings.searchFilter.data,
-            favorites: appSettings.userFilterFavorites,            
+            favorites: appSettings.userFilterFavorites,
+            saveFavoriteUrl: window.params.saveFavoriteUrl,
+            loadFavoritesUrl: window.params.loadFavoritesUrl,
             onBeforeSearch: callAsMe(me.canMakeSearch, me),
             onSearch: Utils.applyAsMe(me.fetchData, me, [{ isSearchInitByUser: true }])
         });
@@ -82,8 +85,7 @@ var GRID_STATE = {
             me.fetchData.call(me, { isSearchInitByUser: true });
             return false;
         });
-        
-
+                       
         $('#btnNewCase a, #divCaseTemplate a:not(.category)').click(function() {
             me.abortAjaxReq();
             return true;

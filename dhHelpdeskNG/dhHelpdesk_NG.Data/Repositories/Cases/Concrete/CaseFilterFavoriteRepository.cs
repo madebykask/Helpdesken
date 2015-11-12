@@ -40,7 +40,53 @@
              }
 
              return ret;
-         }       
+         }
+
+         public string SaveFavorite(CaseFilterFavorite favorite)
+         {             
+             var entities = this.GetAll().Where(f => f.Customer_Id == favorite.CustomerId && f.User_Id == favorite.UserId).ToList();
+
+             //new mode
+             if (favorite.Id == 0)
+             {
+                 if (!entities.Any() || !entities.Where(f => f.Name.ToLower() == favorite.Name.ToLower()).ToList().Any())
+                 {
+                     var entity = new CaseFilterFavoriteEntity();
+                     this._caseFilterFavoriteToEntityMapper.Map(favorite, entity);
+                     this.Add(entity);
+                     return string.Empty;
+                 }
+                 else
+                     return "Repeated";
+             }
+             else
+             {
+                 if (!entities.Any())
+                     return "User favorites is empty!";
+
+                 var existingFavorite = entities.Where(f => f.Id == favorite.Id && f.Name.ToLower() == favorite.Name.ToLower()).FirstOrDefault();
+                 if(existingFavorite != null)
+                 {                     
+                     this._caseFilterFavoriteToEntityMapper.Map(favorite, existingFavorite);
+                     this.Update(existingFavorite);
+                     return string.Empty;
+                 }
+                 else
+                 {
+                     if (!entities.Where(f => f.Name.ToLower() == favorite.Name.ToLower()).ToList().Any())
+                     {
+                         var entity = new CaseFilterFavoriteEntity();
+                         this._caseFilterFavoriteToEntityMapper.Map(favorite, entity);
+                         this.Add(entity);
+                         return string.Empty;
+                     }
+                     else
+                        return "Repeated";
+                 }
+             }
+
+             return "Unexpected error!";
+         }
                    
      }
  }

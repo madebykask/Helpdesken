@@ -9,30 +9,30 @@
         public CaseFilterFavorite Map(CaseFilterFavoriteEntity entity)
         {           
             var fields = new CaseFilterFavoriteFields(
-                    new SelectedItems(entity.RegionFilter),
-                    new SelectedItems(entity.DepartmentFilter),
-                    new SelectedItems(entity.RegisteredByFilter),
-                    new SelectedItems(entity.CaseTypeFilter),
-                    new SelectedItems(entity.ProductAreaFilter),
-                    new SelectedItems(entity.WorkingGroupFilter),
-                    new SelectedItems(entity.ResponsibleFilter),
-                    new SelectedItems(entity.AdministratorFilter),
-                    new SelectedItems(entity.PriorityFilter),
-                    new SelectedItems(entity.StatusFilter),
-                    new SelectedItems(entity.SubStatusFilter),
-                    new SelectedItems(entity.RemainingTimeFilter),
-                    new SelectedItems(entity.ClosingReasonFilter),
+                    new SelectedItems(entity.RegionFilter, false),
+                    new SelectedItems(entity.DepartmentFilter, false),
+                    new SelectedItems(entity.CaseTypeFilter, false),
+                    new SelectedItems(entity.ProductAreaFilter, false),
+                    new SelectedItems(entity.WorkingGroupFilter, false),
+                    new SelectedItems(entity.ResponsibleFilter, false),
+                    new SelectedItems(entity.AdministratorFilter, false),
+                    new SelectedItems(entity.PriorityFilter, false),
+                    new SelectedItems(entity.StatusFilter, false),
+                    new SelectedItems(entity.SubStatusFilter, false),
+                    new SelectedItems(entity.RemainingTimeFilter, false),
+                    new SelectedItems(entity.ClosingReasonFilter, false),
+                    new SelectedItems(entity.RegisteredByFilter, false),
                     new DateToDate(entity.RegistrationDateStartFilter, entity.RegistrationDateEndFilter),
                     new DateToDate(entity.WatchDateStartFilter, entity.WatchDateEndFilter),
-                    new DateToDate(entity.ClosingDateStartFilter, entity.ClosingDateEndFilter) 
-                );
+                    new DateToDate(entity.ClosingDateStartFilter, entity.ClosingDateEndFilter));
 
             var caseFilterFavorite = new CaseFilterFavorite(            
                                                         entity.Id, 
                                                         entity.Customer_Id,
                                                         entity.User_Id,
                                                         entity.Name,
-                                                        fields);
+                                                        fields,
+                                                        entity.CreatedDate);
             return caseFilterFavorite;
         }
     }

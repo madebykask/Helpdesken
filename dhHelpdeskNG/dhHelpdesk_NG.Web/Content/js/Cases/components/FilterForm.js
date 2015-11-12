@@ -3,6 +3,17 @@
 function FilterForm() {
 };
 
+
+var controlsId = ['CaseInitiatorFilter', 'lstFilterRegion', 'lstfilterDepartment', 'lstfilterUser',
+        'hidFilterCaseTypeId', 'hidFilterProductAreaId', 'lstfilterCategory',
+        'lstfilterWorkingGroup', 'lstfilterResponsible', 'lstfilterPerformer',
+        'lstfilterPriority', 'lstfilterStatus', 'lstfilterStateSecondary',
+        'hidFilterClosingReasonId',
+        'CaseRegistrationDateStartFilter', 'CaseRegistrationDateEndFilter',
+        'CaseWatchDateStartFilter', 'CaseWatchDateEndFilter',
+        'CaseClosingDateStartFilter', 'CaseClosingDateEndFilter', 'lstfilterCaseRemainingTime'
+];
+
 /// initial state of search form
 FilterForm.prototype.init = function (opt) {
     var me = this;
@@ -20,15 +31,26 @@ FilterForm.prototype.init = function (opt) {
     me.$btnExpandFilter = $("#btnMore");
     me.$expandIcon = $('#icoPlus');
     me.$caseFilterType = $('#lstfilterCaseProgress');
-    me.$filteredMarker = $('#icoFilter');
-    me.$myFavoritesElementName = '#lstMyFavorites';
-    me.$myFavorites = $(me.$myFavoritesElementName);
+    me.$filteredMarker = $('#icoFilter');    
     me.$btnResetFilter = me.$el.find('.btn-reset');
     me.$btnClearFilter = me.$el.find('.btn-clear');
     me.$searchField = me.$el.find('#txtFreeTextSearch');
     me.initiatorField = me.$el.find('#CaseInitiatorFilter');
     me.$searchOnlyInMyCases = $('#SearchInMyCasesOnly');
-
+    me.$dateFields = ['CaseRegistrationDateStartFilter', 'CaseRegistrationDateEndFilter',
+                      'CaseWatchDateStartFilter', 'CaseWatchDateEndFilter',
+                      'CaseClosingDateStartFilter', 'CaseClosingDateEndFilter'];    
+  
+    me.$myFavoritesElementName = '#lstMyFavorites';
+    me.$myFavorites = $(me.$myFavoritesElementName);
+    me.$favoriteDialog = $('#saveFavoriteDialog');
+    me.$favoriteName = $('#txtFavoriteName');
+    me.$btnSaveFavorite = $('#btnSaveFavorite');
+    me.$repeatedFavoriteMessage = $('#favoriteDialogError');
+    me.$saveFavoriteUrl = opt.saveFavoriteUrl;
+    me.$loadFavoritesUrl = opt.loadFavoritesUrl;
+    
+    
     /************** EVENTS BINDING ************************/
     me.$searchField.keydown(function (ev) {
         if (ev.keyCode == 13) {
@@ -79,6 +101,39 @@ FilterForm.prototype.init = function (opt) {
         me.applyFavoriteFilter(selectedFavoriteId);
     });
 
+    $('#btnFavorite').on('click', function (ev) {
+        ev.preventDefault();
+        me.$repeatedFavoriteMessage.hide();
+        var selectedFavoriteId = $(me.$myFavoritesElementName + ' option:selected').val();
+        if (selectedFavoriteId == undefined)
+            selectedFavoriteId = 0;
+
+        if (selectedFavoriteId > 0)
+            me.$favoriteName.val($(me.$myFavoritesElementName + ' option:selected').text());
+        else
+            me.$favoriteName.val("");
+
+        me.$btnSaveFavorite.attr("selectedFavorite", selectedFavoriteId);
+        me.$favoriteDialog.modal('show');
+        me.$favoriteName.focus();
+        return false;
+    });
+
+    me.$btnSaveFavorite.on('click', function (ev) {
+        if (me.$favoriteName.val().replace(" ", "") == "") {
+            me.$favoriteName.focus();
+            return;
+        }
+
+        var curFavoriteId = me.$btnSaveFavorite.attr("selectedFavorite");
+        me.saveFavorite(curFavoriteId, me.$favoriteName.val());
+        
+    });
+
+    $('#btnCancelFavorite').on('click', function (ev) {
+        me.$favoriteDialog.modal('hide');
+    });
+
     $('.submit').on('click', function (ev) {
         ev.preventDefault();
         me.onSearchClick.call(me);
@@ -110,6 +165,46 @@ FilterForm.prototype.init = function (opt) {
 /**
 * @private
 */
+
+FilterForm.prototype.saveFavorite = function (favId, favName) {
+    var me = this;    
+    var curFilter = me.getCurrentFilters();
+    me.$repeatedFavoriteMessage.hide();
+
+    $.ajax({
+        type: 'post',
+        url: me.$saveFavoriteUrl,
+        traditional: true,
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify({
+            favoritId: favId,
+            favoriteName: favName,
+            favoritFilter: curFilter
+        }),
+        success: function (data) {
+            if (data == "") {
+                $.ajax({
+                    type: 'post',
+                    url: me.$loadFavoritesUrl,
+                    traditional: true,
+                    contentType: "application/json; charset=utf-8",                    
+                    success: function (newFavorites) {
+                        if (newFavorites) {
+                            me.$favorites = newFavorites;
+                            me.setMyFavorites(favId);
+                            me.$favoriteDialog.modal('hide');
+                        }                        
+                    }
+                });
+            }
+            else
+                me.$repeatedFavoriteMessage.show();
+        }
+    });
+   
+    //me.$favoriteDialog.modal('hide');
+};
+
 FilterForm.prototype.setMyFavorites = function(selectedId) {
     var me = this;    
 
@@ -149,7 +244,11 @@ FilterForm.prototype.applyFavoriteFilter = function (favoriteId) {
                     $.each(value.Fields, function (idx2, field) {
                         var control = me.getControlByFieldName(field.AttributeName);
                         if (control != null) {
-                            var data = field.AttributeValue.split(",");
+                            
+                            var isDateField = ($.inArray(field.AttributeName, me.$dateFields) != -1) ? true : false;
+                            
+                            var data = (isDateField)? field.AttributeValue : field.AttributeValue.split(",");
+                            
                             control.setValue(data);
                         }
                     });
@@ -304,15 +403,7 @@ FilterForm.prototype.onSearchClick = function () {
 FilterForm.prototype.initControlsMap = function() {
     var me = this;
     var res = {};
-    var controlsId = ['CaseInitiatorFilter', 'lstFilterRegion', 'lstfilterDepartment', 'lstfilterUser',
-        'hidFilterCaseTypeId', 'hidFilterProductAreaId', 'lstfilterCategory',
-        'lstfilterWorkingGroup', 'lstfilterResponsible', 'lstfilterPerformer',
-        'lstfilterPriority', 'lstfilterStatus', 'lstfilterStateSecondary',
-        'hidFilterClosingReasonId',
-        'CaseRegistrationDateStartFilter', 'CaseRegistrationDateEndFilter',
-        'CaseWatchDateStartFilter', 'CaseWatchDateEndFilter',
-        'CaseClosingDateStartFilter', 'CaseClosingDateEndFilter', 'lstfilterCaseRemainingTime'
-    ];
+    
     $.each(controlsId, function(id, controlName) {
         var control;
         var $el;
@@ -348,6 +439,7 @@ FilterForm.prototype.initControlsMap = function() {
                     control =  CreateInstance(DropdownButtonField, { $el: $el });
                 }
                 break;
+            
             case 'CaseRegistrationDateStartFilter':
             case 'CaseRegistrationDateEndFilter':
             case 'CaseWatchDateStartFilter':
@@ -371,6 +463,61 @@ FilterForm.prototype.initControlsMap = function() {
         
         if (control != null) {
             res[controlName] = control;
+        }
+    });
+    return res;
+};
+
+FilterForm.prototype.getCurrentFilters = function () {
+    var me = this;
+    var res = [];
+
+    $.each(controlsId, function (id, controlName) {
+        var control;
+        var $el;
+        var searchEl = '[name=' + controlName + ']';
+        switch (controlName) {
+            case 'lstFilterRegion':
+            case 'lstfilterDepartment':
+            case 'lstfilterUser':
+            case 'lstfilterCategory':
+            case 'lstfilterWorkingGroup':
+            case 'lstfilterResponsible':
+            case 'lstfilterPerformer':
+            case 'lstfilterPriority':
+            case 'lstfilterStatus':
+            case 'lstfilterStateSecondary':
+                $el = me.$el.find(searchEl);
+                if (!window.is$ElEmpty($el)) {
+                    res.push({ AttributeName: controlName, AttributeValue: ($el.val() == null) ? "" : $el.val().join(",") });
+                }
+                break;
+            case 'hidFilterCaseTypeId':
+            case 'hidFilterProductAreaId':
+            case 'hidFilterClosingReasonId':
+                $el = me.$el.find(searchEl);
+                if (!window.is$ElEmpty($el)) {
+                    res.push({ AttributeName: controlName, AttributeValue: ($el.val() == null) ? "" : $el.val() });
+                }
+                break;
+
+            case 'CaseRegistrationDateStartFilter':
+            case 'CaseRegistrationDateEndFilter':
+            case 'CaseWatchDateStartFilter':
+            case 'CaseWatchDateEndFilter':
+            case 'CaseClosingDateStartFilter':
+            case 'CaseClosingDateEndFilter':
+                $el = me.$el.find(searchEl);
+                if (!window.is$ElEmpty($el)) {
+                    res.push({ AttributeName: controlName, AttributeValue: ($el.val() == null) ? "" : $el.val() });
+                }
+                break;
+            case 'lstfilterCaseRemainingTime':
+                $el = me.$el.find(searchEl);
+                if (!window.is$ElEmpty($el)) {
+                    res.push({ AttributeName: controlName, AttributeValue: ($el.val() == null) ? "" : $el.val() });
+                }
+                break;
         }
     });
     return res;

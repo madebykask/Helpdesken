@@ -1679,6 +1679,33 @@ namespace DH.Helpdesk.Web.Controllers
                 return Json("valid");
         }
 
+        [HttpPost]
+        public JsonResult SaveFavorite(int favoritId, string favoriteName, MyFavoriteFilterJSFields favoritFilter)
+        {
+            if (SessionFacade.CurrentCustomer == null || SessionFacade.CurrentUser == null )
+                return Json("Please logout and login again!");
+
+            var jsFilter = new MyFavoriteFilterJSModel(favoritId, favoriteName, favoritFilter);
+
+            var favoriteBM = new CaseFilterFavorite(jsFilter.Id,
+                                                       SessionFacade.CurrentCustomer.Id,
+                                                       SessionFacade.CurrentUser.Id,
+                                                       jsFilter.Name,
+                                                       jsFilter.GetFavoriteFields());
+            
+            return Json(this._caseService.SaveFavorite(favoriteBM));
+        }
+
+        [HttpPost]
+        public JsonResult LoadFavorites()
+        {
+            var favorites = new List<MyFavoriteFilterJSModel>();
+            if (SessionFacade.CurrentCustomer == null || SessionFacade.CurrentUser == null)
+                return Json(new List<MyFavoriteFilterJSModel>()); 
+            else
+                return Json(GetMyFavorites(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser.Id));
+        }
+
         [HttpGet]
         public UnicodeFileContentResult DownloadFile(string id, string fileName)
         {
@@ -4505,12 +4532,12 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var ret = new List<MyFavoriteFilterJSModel>();
             var favorites = this._caseService.GetMyFavorites(customerId, userId);
-            //if (favorites.Any())
-            //{
-            //    foreach (var favorite in favorites)
-            //        ret.Add(new MyFavoriteFilterJSModel(favorite.Id, favorite.Name, favorite.Fields));
-            //}
-            return ret;
+            if (favorites.Any())
+            {
+                foreach (var favorite in favorites)
+                    ret.Add(new MyFavoriteFilterJSModel(favorite.Id, favorite.Name, favorite.Fields));
+            }
+            return ret.OrderBy(f=> f.Name).ToList();
         }
 
         #endregion

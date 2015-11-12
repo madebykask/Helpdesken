@@ -125,6 +125,8 @@ namespace DH.Helpdesk.Services.Services
         CaseDataSet GetCaseDataSet(DateTime? fromDate, DateTime? toDate);
 
         List<CaseFilterFavorite> GetMyFavorites(int customerId, int userId);
+
+        string SaveFavorite(CaseFilterFavorite favorite);
     }
 
     public class CaseService : ICaseService
@@ -160,6 +162,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly ICaseLockService _caseLockService;
 
         private readonly CaseStatisticService _caseStatService;
+        private readonly ICaseFilterFavoriteRepository _caseFilterFavoriteRepository;
 
         public CaseService(
             ICaseRepository caseRepository,
@@ -187,7 +190,9 @@ namespace DH.Helpdesk.Services.Services
             ISurveyService surveyService,
             ILogService logService,
             IFinishingCauseService finishingCauseService,
-            ICaseLockService caseLockService, CaseStatisticService caseStatService)
+            ICaseLockService caseLockService, 
+            CaseStatisticService caseStatService,
+            ICaseFilterFavoriteRepository caseFilterFavoriteRepository)
         {
             this._unitOfWork = unitOfWork;
             this._caseRepository = caseRepository;
@@ -217,6 +222,7 @@ namespace DH.Helpdesk.Services.Services
             this._finishingCauseService = finishingCauseService;
             this._caseLockService = caseLockService;
             this._caseStatService = caseStatService;
+            this._caseFilterFavoriteRepository = caseFilterFavoriteRepository;
         }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
@@ -366,22 +372,25 @@ namespace DH.Helpdesk.Services.Services
 
         public List<CaseFilterFavorite> GetMyFavorites(int customerId, int userId)
         {
-            var ret = new List<CaseFilterFavorite>();
-            
-            var newFavorite = new CaseFilterFavorite();
-            newFavorite.Id = 1;
-            newFavorite.Name = "My Favorite 1";
-            newFavorite.Fields.AdministratorFilter.AddItems("168, 233,234");
-            newFavorite.Fields.WorkingGroupFilter.AddItems("31,32");
-            ret.Add(newFavorite);
-
-            newFavorite = new CaseFilterFavorite();
-            newFavorite.Id = 2;
-            newFavorite.Name = "My Favorite 2";
-            newFavorite.Fields.AdministratorFilter.AddItems("1,234");
-            ret.Add(newFavorite);
-
+            var ret = this._caseFilterFavoriteRepository.GetUserFavoriteFilters(customerId, userId);            
             return ret;
+        }
+
+        public string SaveFavorite(CaseFilterFavorite favorite)
+        {
+            var res = this._caseFilterFavoriteRepository.SaveFavorite(favorite);
+            if (res == string.Empty)
+            {
+                try
+                {
+                    this._caseFilterFavoriteRepository.Commit();
+                }
+                catch (Exception ex)
+                {
+                    return ex.Message;
+                }
+            }
+            return res;
         }
 
         private void DeleteChildCasesFor(int caseId)
