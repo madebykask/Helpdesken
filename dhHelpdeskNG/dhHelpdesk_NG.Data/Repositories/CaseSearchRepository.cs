@@ -962,7 +962,9 @@
 
             // användaren får bara se avdelningar som den har behörighet till
             sb.Append(" and (tblCase.Department_Id In (select Department_Id from tblDepartmentUser where [User_Id] = " + userId + ")");
-            sb.Append(" or not exists (select Department_Id from tblDepartmentUser where ([User_Id] = " + userId + "))");
+            sb.Append(" or not exists (select du.Department_Id from tblDepartmentUser du " +
+                                                "Inner join tblDepartment d on (d.Id = du.Department_Id) " +
+                                      "where (du.[User_Id] = " + userId + ") and d.customer_id = " + f.CustomerId + ")");
             sb.Append(") ");
 
             // finns kryssruta på användaren att den bara får se sina egna ärenden
