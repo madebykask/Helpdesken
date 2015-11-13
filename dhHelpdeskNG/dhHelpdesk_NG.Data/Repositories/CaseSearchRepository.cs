@@ -108,7 +108,10 @@
             }
 
             var workTimeCalculator = this.InitCalcFromSQL(dsn, sql, workTimeCalcFactory, now);
-            
+
+            IDictionary<int,int> aggregateStatus = new Dictionary<int,int>();
+            IDictionary<int,int> aggregateSubStatus = new Dictionary<int,int>();
+
             using (var con = new OleDbConnection(dsn)) 
             {
                 using (var cmd = new OleDbCommand())
@@ -133,6 +136,24 @@
                                 var sortOrder = string.Empty;
                                 DateTime caseRegistrationDate;
 
+                                int? curStatus = dr.SafeGetNullableInteger("aggregate_Status");
+                                if (curStatus.HasValue)
+                                {                                
+                                    if (aggregateStatus.Keys.Contains(curStatus.Value))
+                                        aggregateStatus[curStatus.Value] += 1;
+                                    else
+                                        aggregateStatus.Add(curStatus.Value, 1);
+                                }
+
+                                int? curSubStatus = dr.SafeGetNullableInteger("aggregate_SubStatus");
+                                if (curSubStatus.HasValue)
+                                {
+                                    if (aggregateSubStatus.Keys.Contains(curSubStatus.Value))
+                                        aggregateSubStatus[curSubStatus.Value] += 1;
+                                    else
+                                        aggregateSubStatus.Add(curSubStatus.Value, 1);
+                                }
+ 
                                 DateTime.TryParse(dr["RegTime"].ToString(), out caseRegistrationDate);
                                 DateTime dtTmp;
                                 DateTime? caseFinishingDate = null;
@@ -703,6 +724,9 @@
             columns.Add("tblCase.Verified");
             columns.Add("tblCase.VerifiedDescription");
             columns.Add("tblCase.LeadTime");
+            columns.Add("tblCase.Status_Id as aggregate_Status");
+            columns.Add("tblCase.StateSecondary_Id as aggregate_SubStatus");
+             
             columns.Add(string.Format("'0' as [{0}]", TimeLeftColumn));
             columns.Add("tblStateSecondary.IncludeInCaseStatistics");
             if (caseSettings.ContainsKey(GlobalEnums.TranslationCaseFields.CausingPart.ToString()))

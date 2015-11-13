@@ -30,5 +30,7 @@
                                     int caseId,
                                     string sortBy,
                                     bool sortByAsc);
+
+        //CaseStatusViewModel GetCaseStatisticsTreeView();
     }
 }

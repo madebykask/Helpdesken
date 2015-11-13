@@ -318,6 +318,7 @@ var GRID_STATE = {
         }
         me.setGridState(window.GRID_STATE.IDLE);
         $(document).trigger("OnCasesLoaded");
+        
     };
 
     Page.prototype.onRemainingViewClick = function(aElement) {
@@ -540,7 +541,7 @@ $(function () {
                 moveCaseRemainingTimeIntoHidePlace();
             }
 
-            bindCaseRemainingTime();
+            bindCaseRemainingTime();            
         });
 
         return that;

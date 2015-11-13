@@ -830,7 +830,7 @@ namespace DH.Helpdesk.Web.Controllers
             var outputFormatter = new OutputFormatter(customerSettings.IsUserFirstLastNameRepresentation == 1);
             var data = new List<Dictionary<string, object>>();
             foreach (var searchRow in m.cases)
-            {
+            {                
                 var jsRow = new Dictionary<string, object>
                                 {
                                     { "case_id", searchRow.Id },
@@ -866,15 +866,18 @@ namespace DH.Helpdesk.Web.Controllers
                 remainingView = this.RenderPartialViewToString(
                     "CaseRemainingTime",
                     this.caseModelFactory.GetCaseRemainingTimeModel(remainingTimeData, this.workContext));
-
-
             }
 
+            CaseStatusViewModel statusView = null;
+            //SessionFacade.CurrentUser.ShowCaseStatisticsTree = true;
+            //if (SessionFacade.CurrentUser.ShowCaseStatisticsTree)
+            //{
+            //    statusView = this.caseModelFactory.GetCaseStatisticsTreeView(m.cases.Select(c=> c.Columns.).GroupBy);    
+            //}
             
+            return this.Json(new { result = "success", data = data, remainingView = remainingView, statusView = statusView });
+        }        
 
-            return this.Json(new { result = "success", data = data, remainingView = remainingView });
-        }
-            
         public JsonResult UnLockCase(string lockGUID)
         {
             if (!string.IsNullOrEmpty(lockGUID))

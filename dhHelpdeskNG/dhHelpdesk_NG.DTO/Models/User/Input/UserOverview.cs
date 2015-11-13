@@ -159,6 +159,8 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
 
         public bool ShowSolutionTime { get; set; }
 
+        public bool ShowCaseStatisticsTree { get; set; }
+
         public string TimeZoneId { get; set; }
 
         public bool IsAdministrator()
