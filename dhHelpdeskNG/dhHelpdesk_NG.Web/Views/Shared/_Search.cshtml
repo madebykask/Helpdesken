@@ -14,7 +14,9 @@
     window.i18n = @Html.Raw(jsSerializer.Serialize(i18n))
     window.params = {
         saveFavoriteUrl: '@Url.Content("~/Cases/SaveFavorite/")',
-        loadFavoritesUrl: '@Url.Content("~/Cases/LoadFavorites/")'
+        loadFavoritesUrl: '@Url.Content("~/Cases/LoadFavorites/")',
+        addingDialogHeader: '@Translation.Get("New favorite")',
+        updatingDialogHeader: '@Translation.Get("Update favorite")'
     };
 </script>
 
@@ -406,14 +408,19 @@
     
     <div id="saveFavoriteDialog" class="modal fade">
         <div class="modal-dialog">
-            <form method="post" id="saveFavoriteDialogForm" class="">
+            <form method="post" id="saveFavoriteDialogForm" autocomplete="off" class="">
                 <div class="modal-header">                    
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h5 > test header</h5>
+                    <h5> 
+                        <span id="headerCaption"> </span> 
+                    </h5>
                 </div>
                 <div class="modal-body">                    
-                    <p class="">@Translation.Get("Namn") <input type="text" id="txtFavoriteName" value="" required/></p>
-                    <span id="favoriteDialogError" class="err" > @Translation.Get("The name already exist in your favorite(s)") </span>
+                    <p class=""> 
+                        @Translation.Get("Namn") <input type="text" id="txtFavoriteName" value="" required /> 
+                        <span id="requiredFavoriteText" hidden> @Translation.Get("required")</span>
+                    </p>
+                    <span id="favoriteDialogError" class="err" > @Translation.Get("The name already exist in your favorites") </span>
                     <p class=""> explain text</p>
                 </div>
                 <div class="modal-footer">

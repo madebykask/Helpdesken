@@ -67,9 +67,7 @@ var GRID_STATE = {
         me.filterForm.init({
             $el: $('#frmCaseSearch'),
             filter: appSettings.searchFilter.data,
-            favorites: appSettings.userFilterFavorites,
-            saveFavoriteUrl: window.params.saveFavoriteUrl,
-            loadFavoritesUrl: window.params.loadFavoritesUrl,
+            favorites: appSettings.userFilterFavorites,            
             onBeforeSearch: callAsMe(me.canMakeSearch, me),
             onSearch: Utils.applyAsMe(me.fetchData, me, [{ isSearchInitByUser: true }])
         });

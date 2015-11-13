@@ -47,8 +47,15 @@ FilterForm.prototype.init = function (opt) {
     me.$favoriteName = $('#txtFavoriteName');
     me.$btnSaveFavorite = $('#btnSaveFavorite');
     me.$repeatedFavoriteMessage = $('#favoriteDialogError');
-    me.$saveFavoriteUrl = opt.saveFavoriteUrl;
-    me.$loadFavoritesUrl = opt.loadFavoritesUrl;
+    me.$header = $("#headerCaption");
+    me.$requireText = $("#requiredFavoriteText");
+
+    me.$addingDialogHeader = window.params.addingDialogHeader;
+    me.$updatingDialogHeader = window.params.updatingDialogHeader;    
+    
+    me.$saveFavoriteUrl = window.params.saveFavoriteUrl;
+    me.$loadFavoritesUrl = window.params.loadFavoritesUrl;
+    
     
     
     /************** EVENTS BINDING ************************/
@@ -103,31 +110,41 @@ FilterForm.prototype.init = function (opt) {
 
     $('#btnFavorite').on('click', function (ev) {
         ev.preventDefault();
+
+        me.$requireText.hide();
         me.$repeatedFavoriteMessage.hide();
         var selectedFavoriteId = $(me.$myFavoritesElementName + ' option:selected').val();
         if (selectedFavoriteId == undefined)
             selectedFavoriteId = 0;
 
         if (selectedFavoriteId > 0)
+        {            
+            me.$header.text(me.$updatingDialogHeader);
             me.$favoriteName.val($(me.$myFavoritesElementName + ' option:selected').text());
+        }
         else
+        {
+            me.$header.text(me.$addingDialogHeader);
             me.$favoriteName.val("");
-
+        }
+                
         me.$btnSaveFavorite.attr("selectedFavorite", selectedFavoriteId);
-        me.$favoriteDialog.modal('show');
         me.$favoriteName.focus();
+        me.$favoriteDialog.modal('show');
+        
         return false;
     });
 
     me.$btnSaveFavorite.on('click', function (ev) {
-        if (me.$favoriteName.val().replace(" ", "") == "") {
-            me.$favoriteName.focus();
-            return;
-        }
+        me.saveFavorite();
+    });
 
-        var curFavoriteId = me.$btnSaveFavorite.attr("selectedFavorite");
-        me.saveFavorite(curFavoriteId, me.$favoriteName.val());
-        
+    me.$favoriteName.keydown(function (ev) {
+        if (ev.keyCode == 13) {
+            ev.preventDefault();
+            me.saveFavorite();
+            return false;
+        }
     });
 
     $('#btnCancelFavorite').on('click', function (ev) {
@@ -155,18 +172,30 @@ FilterForm.prototype.init = function (opt) {
         me.toggleFilter(true);
     }
     
-    var curId = "0";
+    var favoriteId = "0";
     if (me.$myFavorites.attr("selectedItem")) {
-        curId = me.$myFavorites.attr("selectedItem");
+        favoriteId = me.$myFavorites.attr("selectedItem");
     }
-    me.setMyFavorites(curId);
+    me.setMyFavorites(favoriteId);
 };
 
 /**
 * @private
 */
+FilterForm.prototype.saveFavorite = function () {
+    var me = this;
+    if (me.$favoriteName.val().replace(" ", "") == "") {
+        me.$requireText.show();
+        me.$favoriteName.focus();
+        return;
+    }
 
-FilterForm.prototype.saveFavorite = function (favId, favName) {
+    me.$requireText.hide();
+    var curFavoriteId = me.$btnSaveFavorite.attr("selectedFavorite");
+    me.doSaveFavorite(curFavoriteId, me.$favoriteName.val());
+};
+
+FilterForm.prototype.doSaveFavorite = function (favId, favName) {
     var me = this;    
     var curFilter = me.getCurrentFilters();
     me.$repeatedFavoriteMessage.hide();
@@ -187,25 +216,34 @@ FilterForm.prototype.saveFavorite = function (favId, favName) {
                     type: 'post',
                     url: me.$loadFavoritesUrl,
                     traditional: true,
-                    contentType: "application/json; charset=utf-8",                    
+                    contentType: "application/json; charset=utf-8",
                     success: function (newFavorites) {
                         if (newFavorites) {
                             me.$favorites = newFavorites;
-                            me.setMyFavorites(favId);
+                            if (favId > 0)
+                                me.setMyFavorites(favId);
+                            else
+                                me.setMyFavorites(favId, favName);
+
                             me.$favoriteDialog.modal('hide');
-                        }                        
+                        }
                     }
                 });
             }
-            else
-                me.$repeatedFavoriteMessage.show();
+            else {
+                if (data.toLowerCase() == "repeated")
+                    me.$repeatedFavoriteMessage.show();
+                else {
+                    me.$favoriteDialog.modal('hide');
+                    ShowToastMessage(data, "error", true);
+                }
+            }
         }
     });
-   
-    //me.$favoriteDialog.modal('hide');
+       
 };
 
-FilterForm.prototype.setMyFavorites = function(selectedId) {
+FilterForm.prototype.setMyFavorites = function(selectedId, favName) {
     var me = this;    
 
     if (me.$favorites != undefined && me.$favorites.length > 0) {
@@ -224,6 +262,9 @@ FilterForm.prototype.setMyFavorites = function(selectedId) {
 
             if (value.Id == selectedId)
                 me.$myFavorites.val(selectedId);
+
+            if(favName != undefined && selectedId == 0 && value.Name == favName)
+                me.$myFavorites.val(value.Id);
 
             me.$myFavorites.show();
         });        
