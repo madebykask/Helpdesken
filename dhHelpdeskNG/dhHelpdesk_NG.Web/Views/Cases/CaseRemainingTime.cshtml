@@ -9,7 +9,7 @@
 <table class="table table-striped table-bordered table-hover case-remaining-time" data-field="caseRemainingTime">
     <thead>
         <tr>
-            <th colspan="@columns">@Translation.Get("Antal ärenden med återstående åtgärdstid")</th>
+            <td colspan="@columns">@Translation.Get("Antal ärenden med återstående åtgärdstid")</td>
         </tr>
         <tr>
             <th>@Translation.Get("Akut")</th>
@@ -65,7 +65,7 @@
     {
         if (model.NumberOfCases > 0)
         {
-            return MvcHtmlString.Create(string.Format("<p data-remaining-time=\"{0}\" data-remaining-time-until=\"{4}\" data-remaining-time-max=\"{1}\" data-remaining-time-hours=\"{2}\">{3}</p>", 
+            return MvcHtmlString.Create(string.Format("<span data-remaining-time=\"{0}\" data-remaining-time-until=\"{4}\" data-remaining-time-max=\"{1}\" data-remaining-time-hours=\"{2}\">{3}</span>", 
                         model.Time, 
                         Model.MaxDays,
                         hours,
