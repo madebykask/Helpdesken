@@ -359,10 +359,8 @@ namespace DH.Helpdesk.Web.Controllers
 
             f.CustomerId = int.Parse(frm.ReturnFormValue("currentCustomerId"));
             f.Customer = frm.ReturnFormValue("lstfilterCustomers");
-            f.CaseProgress = frm.ReturnFormValue("lstFilterCaseProgress");
-            f.WorkingGroup = frm.ReturnFormValue("lstFilterWorkingGroup");
-            f.UserPerformer = frm.ReturnFormValue("CaseSearchFilterData.lstFilterPerformer");
-            f.StateSecondary = frm.ReturnFormValue("lstFilterStateSecondary");
+            f.CaseProgress = frm.ReturnFormValue("lstFilterCaseProgress");            
+            f.UserPerformer = frm.ReturnFormValue("CaseSearchFilterData.lstFilterPerformer");            
             f.Initiator = frm.ReturnFormValue("CaseInitiatorFilter");
             f.CaseRegistrationDateStartFilter = frm.GetDate("CaseRegistrationDateStartFilter");
             f.CaseRegistrationDateEndFilter = frm.GetDate("CaseRegistrationDateEndFilter");
@@ -372,9 +370,10 @@ namespace DH.Helpdesk.Web.Controllers
             //Apply & save specific filters only when user has selected one customer 
             if (!string.IsNullOrEmpty(f.Customer) && !f.Customer.Contains(","))
             {
+                f.WorkingGroup = frm.ReturnFormValue("lstFilterWorkingGroup");
                 f.Department = frm.ReturnFormValue("lstfilterDepartment");
                 f.Priority = frm.ReturnFormValue("lstfilterPriority");
-                f.StateSecondary = frm.ReturnFormValue("lstfilterStateSecondary");
+                f.StateSecondary = frm.ReturnFormValue("lstfilterStateSecondary");                
                 f.CaseType = frm.ReturnFormValue("hid_CaseTypeDropDown").convertStringToInt();
                 f.ProductArea = f.ProductArea = frm.ReturnFormValue("hid_ProductAreaDropDown").ReturnCustomerUserValue();
                 f.CaseClosingReasonFilter = frm.ReturnFormValue("hid_ClosingReasonDropDown").ReturnCustomerUserValue();

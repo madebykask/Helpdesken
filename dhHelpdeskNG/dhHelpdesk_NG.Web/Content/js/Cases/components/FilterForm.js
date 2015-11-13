@@ -119,8 +119,9 @@ FilterForm.prototype.init = function (opt) {
 
         if (selectedFavoriteId > 0)
         {            
-            me.$header.text(me.$updatingDialogHeader);
-            me.$favoriteName.val($(me.$myFavoritesElementName + ' option:selected').text());
+            var _favoriteName = $(me.$myFavoritesElementName + ' option:selected').text();
+            me.$header.text(me.$updatingDialogHeader + " (" + _favoriteName + ")");
+            me.$favoriteName.val(_favoriteName);
         }
         else
         {
