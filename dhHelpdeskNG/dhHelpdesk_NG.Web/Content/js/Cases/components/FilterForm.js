@@ -258,7 +258,7 @@ FilterForm.prototype.setMyFavorites = function(selectedId, favName) {
         var defaultSeleted = (selectedId? selectedId: 0); 
         var defaultText = "";
         if (me.$myFavorites.attr("data-placeholder")) {
-            defaultText = "-- " + me.$myFavorites.attr("data-placeholder") + " --";
+            defaultText = me.$myFavorites.attr("data-placeholder");
         }
 
         me.$myFavorites.empty();
