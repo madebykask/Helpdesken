@@ -1070,7 +1070,10 @@ input[type=text].error, select.error, textarea.error,  .btn-group.error .btn
     display: inline;
     line-height: 30px;
 }
-
+.error
+{
+    color: #ff0000;
+}
 /*******************************************************************************************/
 .navbar-inner
 {
