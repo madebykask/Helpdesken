@@ -4075,5 +4075,62 @@ If not exists (select * from tblTextTranslation where text_id = 1556 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1556, 2, 'Report Generator')
 GO
 
+-- 2015-11-13
+If not exists (select * from tbltext where id = 1557)
+	insert into tbltext (id, TextString) VALUES (1557, 'Japanska')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1557 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1557, 2, 'Japanese')
+GO
+
+If not exists (select * from tbltext where id = 1558)
+	insert into tbltext (id, TextString) VALUES (1558, 'Favorit')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1558 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1558, 2, 'Favorite')
+GO
+
+If not exists (select * from tbltext where id = 1559)
+	insert into tbltext (id, TextString) VALUES (1559, 'Namnet finns redan i dina favoriter. Välj ett annat namn eller uppdatera den befintliga favoriten med samma namn.')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1559 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1559, 2, 'The name already exists in your favorites. Choose a different name or update the existing favorite with the same name.')
+GO
+
+If not exists (select * from tbltext where id = 1560)
+	insert into tbltext (id, TextString) VALUES (1560, 'Ny favorit')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1560 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1560, 2, 'New Favorite')
+GO
+
+If not exists (select * from tbltext where id = 1561)
+	insert into tbltext (id, TextString) VALUES (1561, 'Uppdatera favorit')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1561 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1561, 2, 'Update Favorite')
+GO
+
+If not exists (select * from tbltext where id = 1562)
+	insert into tbltext (id, TextString) VALUES (1562, 'Fyll i ett namn på din nya favorit.')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1562 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1562, 2, 'Enter a name for your new favorite.')
+GO
+
+If not exists (select * from tbltext where id = 1563)
+	insert into tbltext (id, TextString) VALUES (1563, 'Uppatera din favorit eller ändra namnet för att spara den som en ny favorit.')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1563 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1563, 2, 'Update your favorite or change the name to save it as a new favorite.')
+GO
+
+If not exists (select * from tbltext where id = 1564)
+	insert into tbltext (id, TextString) VALUES (1564, 'Välj favoritfilter')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1564 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1564, 2, 'Select Favorite Filter')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

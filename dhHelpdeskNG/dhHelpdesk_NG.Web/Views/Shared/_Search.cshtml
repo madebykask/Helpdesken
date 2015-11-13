@@ -15,10 +15,10 @@
     window.params = {
         saveFavoriteUrl: '@Url.Content("~/Cases/SaveFavorite/")',
         loadFavoritesUrl: '@Url.Content("~/Cases/LoadFavorites/")',
-        addingDialogHeader: '@Translation.Get("Ny favorit")',
-        updatingDialogHeader: '@Translation.Get("Uppdatera favorit")',
-        addingDialogDescription: '@Translation.Get("Fyll i ett namn på din nya favorit.")',
-        updatingDialogDescription: '@Translation.Get("Uppatera din favorit eller ändra namnet för att spara den som en ny favorit.")'
+        addingDialogHeader: '@Html.Raw(Translation.Get("Ny favorit"))',
+        updatingDialogHeader: '@Html.Raw(Translation.Get("Uppdatera favorit"))',
+        addingDialogDescription: '@Html.Raw(Translation.Get("Fyll i ett namn på din nya favorit."))',
+        updatingDialogDescription: '@Html.Raw(Translation.Get("Uppatera din favorit eller ändra namnet för att spara den som en ny favorit."))'
     };
 </script>
 
@@ -370,7 +370,8 @@
                              @Html.CheckBoxFor(m => m.SearchInMyCasesOnly, new { @class = "switchcheckbox" })                             
                          </td>                         
                          <td colspan="3">
-                             <select id="lstMyFavorites" name="@CaseFilterFields.CaseFilterFavoriteNameAttribute" selectedItem="@Model.caseSearchFilter.CaseFilterFavorite" data-placeholder="@Translation.Get("Välj favoritfilter", Enums.TranslationSource.TextTranslation)">
+                             <select id="lstMyFavorites" name="@CaseFilterFields.CaseFilterFavoriteNameAttribute" selectedItem="@Model.caseSearchFilter.CaseFilterFavorite" data-placeholder="@Translation.Get("Välj favoritfilter")">
+                                 
                              </select>
                          </td>
                      </tr>
@@ -407,6 +408,7 @@
          </div>
      </div>
     </form>
+    
     //Modal
     <div id="saveFavoriteDialog" class="modal fade">
         <div class="modal-dialog">
@@ -418,13 +420,13 @@
                     </h5>
                 </div>
                 <div class="modal-body">
-                    <p id="explainText" style="margin-top:20px;"> </p>                  
+                    <p id="explainText" style="margin-top:20px;">  </p>                  
                     <p class="input-prepend" style="margin-top:20px;"> 
                         <span class="add-on">@Translation.Get("Namn")</span> <input type="text" id="txtFavoriteName" value="" required />                         
                     </p>
                     <p>
-                    <span id="requiredFavoriteText" hidden class="error">* @Translation.Get("måste anges")</span>
-                    <span id="favoriteDialogError" class="error"> @Translation.Get("Namnet finns redan i dina favoriter. Välj ett annat namn eller uppdatera den befintliga favoriten med samma namn.") </span>
+                        <span id="requiredFavoriteText" hidden class="error">* @Translation.Get("måste anges")</span>
+                        <span id="favoriteDialogError" class="error"> @Translation.Get("Namnet finns redan i dina favoriter. Välj ett annat namn eller uppdatera den befintliga favoriten med samma namn.") </span>
                     </p>
                     
                 </div>

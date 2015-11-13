@@ -48,16 +48,19 @@ FilterForm.prototype.init = function (opt) {
     me.$btnSaveFavorite = $('#btnSaveFavorite');
     me.$repeatedFavoriteMessage = $('#favoriteDialogError');
     me.$header = $("#headerCaption");
+    me.$explainText = $("#explainText");
     me.$requireText = $("#requiredFavoriteText");
 
     me.$addingDialogHeader = window.params.addingDialogHeader;
-    me.$updatingDialogHeader = window.params.updatingDialogHeader;    
+    me.$updatingDialogHeader = window.params.updatingDialogHeader;
+
+    me.$addingDialogDescription = window.params.addingDialogDescription;
+    me.$updatingDialogDescription = window.params.updatingDialogDescription;
     
     me.$saveFavoriteUrl = window.params.saveFavoriteUrl;
     me.$loadFavoritesUrl = window.params.loadFavoritesUrl;
     
-    
-    
+        
     /************** EVENTS BINDING ************************/
     me.$searchField.keydown(function (ev) {
         if (ev.keyCode == 13) {
@@ -120,12 +123,14 @@ FilterForm.prototype.init = function (opt) {
         if (selectedFavoriteId > 0)
         {            
             var _favoriteName = $(me.$myFavoritesElementName + ' option:selected').text();
-            me.$header.text(me.$updatingDialogHeader + " (" + _favoriteName + ")");
+            me.$header.text(me.$updatingDialogHeader + " - " + _favoriteName);
+            me.$explainText.text(me.$updatingDialogDescription);
             me.$favoriteName.val(_favoriteName);
         }
         else
         {
             me.$header.text(me.$addingDialogHeader);
+            me.$explainText.text(me.$addingDialogDescription);
             me.$favoriteName.val("");
         }
                 
@@ -185,13 +190,15 @@ FilterForm.prototype.init = function (opt) {
 */
 FilterForm.prototype.saveFavorite = function () {
     var me = this;
+    me.$requireText.hide();
+    me.$repeatedFavoriteMessage.hide();
+
     if (me.$favoriteName.val().replace(" ", "") == "") {
         me.$requireText.show();
         me.$favoriteName.focus();
         return;
     }
-
-    me.$requireText.hide();
+    
     var curFavoriteId = me.$btnSaveFavorite.attr("selectedFavorite");
     me.doSaveFavorite(curFavoriteId, me.$favoriteName.val());
 };
