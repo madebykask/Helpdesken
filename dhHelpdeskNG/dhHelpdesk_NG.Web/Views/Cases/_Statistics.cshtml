@@ -1,0 +1,107 @@
+﻿@model DH.Helpdesk.Web.Models.Case.CaseStatisticsViewModel
+@using System.Web.Script.Serialization
+@using DH.Helpdesk.BusinessData.Models.Case
+@using DH.Helpdesk.Web.Enums
+@using DH.Helpdesk.BusinessData.OldComponents
+@using DH.Helpdesk.Web.Infrastructure.Extensions
+
+
+@if (Model != null)
+{                  
+    <div class="caseoverviewaccordion accordion" id="Caseaccordion">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#Caseaccordion" href="#">
+                    <div class="row-fluid">
+                        <div class="span9">
+                            @Model.CaseData.AttributeName
+                        </div>
+                        <div class="span3 text-right">
+                            @Model.CaseData.AttributeValue
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div id="collapseOne" class="accordion-body collapse in">
+                <div class="accordion-inner">
+                    <div class="accordion" id="CaseaccordionLevel1">                        
+                        @foreach (var group in Model.CaseData.Children)
+                        {                            
+                            var uniqueId = "Group_" + group.AttributeId;
+                            var isExpanded = (uniqueId == Model.ExpandedGroup && group.Children.Any());
+                            var captionId = "Caption_" + uniqueId;
+                            <div class="accordion-group">
+                                <div class="accordion-heading">
+                                    <a class="accordion-toggle" data-unique="@uniqueId" onclick="saveExpanded('@uniqueId')" 
+                                        data-toggle="collapse" data-parent="#CaseaccordionLevel1" href="#@uniqueId">
+                                        <div class="row-fluid">
+                                            <div class="span9" >
+                                                <span id="@captionId"> @(isExpanded?"- ":"+ ") @group.AttributeName  </span>
+                                            </div>
+                                            <div class="span3 text-right">
+                                                @group.AttributeValue
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                @if (group.Children.Any())
+                                {
+                                    var groupHeight = (isExpanded? "auto;":"0px;");
+                                    var groupClass = (isExpanded ? "accordion-body in collapse" : "accordion-body collapse");
+                                    <div id="@uniqueId" class="@groupClass" style="height:@groupHeight">
+                                        <div class="accordion-inner">
+                                            @foreach (var child in group.Children)
+                                            {             
+                                                <div class="row-fluid">
+                                                    <div class="span9">
+                                                        @child.AttributeName
+                                                    </div>
+                                                    <div class="span3 text-right">
+                                                        @child.AttributeValue
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>                                        
+}
+<script type="text/javascript">
+    function saveExpanded(id) {
+        var curExpanded = $('#hidExpandedGroup').val();
+        
+        switch (curExpanded) {
+            case "":
+                $('#hidExpandedGroup').val(id);                
+                $('#Caption_' + id).text(getExpandCaption($('#Caption_' + id).text()));
+                break;
+
+            case id:
+                $('#hidExpandedGroup').val('');
+                $('#Caption_' + id).text(getCollapseCaption($('#Caption_' + id).text()));
+                break;
+
+            default:
+                $('#Caption_' + id).text(getExpandCaption($('#Caption_' + id).text()));
+                $('#Caption_' + curExpanded).text(getCollapseCaption($('#Caption_' + curExpanded).text()));
+                $('#hidExpandedGroup').val(id);
+                break;
+        }        
+    }
+
+    function getExpandCaption(cap) {
+        return cap.replace("+ ", "- ");
+    }
+
+    function getCollapseCaption(cap) {
+        return cap.replace("- ", "+ ");
+    }
+  
+</script>

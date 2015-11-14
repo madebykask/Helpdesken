@@ -45,7 +45,8 @@
             TimeZoneInfo userTimeZone,
             string applicationType,
             bool calculateRemainingTime,
-            out CaseRemainingTimeData remainingTime,
+            out CaseRemainingTimeData remainingTime,            
+            out CaseAggregateData aggregateData,
             int? relatedCasesCaseId = null,
             string relatedCasesUserId = null,
             int[] caseIds = null);
@@ -90,6 +91,8 @@
             string applicationType)
         {
             CaseRemainingTimeData remainingTime;
+            CaseAggregateData aggregateData;
+
             return this.Search(
                         f,
                         csl,
@@ -105,7 +108,8 @@
                         userTimeZone,
                         applicationType,
                         false,
-                        out remainingTime);
+                        out remainingTime,
+                        out aggregateData);
         }
 
         public IList<CaseSearchResult> Search(
@@ -124,6 +128,7 @@
                                 string applicationType,
                                 bool calculateRemainingTime,
                                 out CaseRemainingTimeData remainingTime,
+                                out CaseAggregateData aggregateData,
                                 int? relatedCasesCaseId = null,
                                 string relatedCasesUserId = null,
                                 int[] caseIds = null)
@@ -157,7 +162,7 @@
                                     relatedCasesUserId = relatedCasesUserId,
                                     caseIds = caseIds
                               };
-            var result = this.caseSearchRepository.Search(context, out remainingTime);
+            var result = this.caseSearchRepository.Search(context, out remainingTime, out aggregateData);
 
             var workingHours = workingDayEnd - workingDayStart;
             if (f.CaseRemainingTimeFilter.HasValue)

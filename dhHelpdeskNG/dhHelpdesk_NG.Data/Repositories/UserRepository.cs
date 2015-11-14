@@ -420,6 +420,7 @@ namespace DH.Helpdesk.Dal.Repositories
                         x.UserWorkingGroups,
                         x.StartPage,
                         x.ShowSolutionTime.ToBool(),
+                        x.ShowCaseStatistics.ToBool(),
                         x.TimeZoneId)).SingleOrDefault();
             return u;
         }

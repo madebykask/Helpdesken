@@ -124,6 +124,7 @@
                 user.UserWorkingGroups,
                 user.StartPage,
                 user.ShowSolutionTime.ToBool(),
+                user.ShowCaseStatistics.ToBool(),
                 user.TimeZoneId);
         }
 

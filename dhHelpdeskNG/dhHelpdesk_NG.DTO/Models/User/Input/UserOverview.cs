@@ -44,6 +44,7 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             ICollection<UserWorkingGroup> wgs,
             int startPage,
             bool showSolutionTime,
+            bool showCaseStatistics,
             string timeZoneId)
         {
             this.StartPage = startPage;
@@ -80,6 +81,7 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             this.Email = email;
             this.UserWorkingGroups = wgs;
             this.ShowSolutionTime = showSolutionTime;
+            this.ShowCaseStatistics = showCaseStatistics;
             this.TimeZoneId = timeZoneId;
         }
 
@@ -159,7 +161,7 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
 
         public bool ShowSolutionTime { get; set; }
 
-        public bool ShowCaseStatisticsTree { get; set; }
+        public bool ShowCaseStatistics { get; set; }
 
         public string TimeZoneId { get; set; }
 

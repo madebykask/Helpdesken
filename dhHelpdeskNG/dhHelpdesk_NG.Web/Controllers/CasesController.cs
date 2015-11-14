@@ -790,6 +790,7 @@ namespace DH.Helpdesk.Web.Controllers
             var caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(f.CustomerId).ToArray();
             var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
             CaseRemainingTimeData remainingTimeData;
+            CaseAggregateData aggregateData;
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
             m.cases = this._caseSearchService.Search(
                 f,
@@ -806,7 +807,9 @@ namespace DH.Helpdesk.Web.Controllers
                 userTimeZone,
                 ApplicationTypes.Helpdesk,
                 showRemainingTime,
-                out remainingTimeData);
+                out remainingTimeData,
+                out aggregateData);
+
             m.cases = this.TreeTranslate(m.cases, f.CustomerId);
             sm.Search.IdsForLastSearch = this.GetIdsFromSearchResult(m.cases);                            
             
@@ -827,6 +830,7 @@ namespace DH.Helpdesk.Web.Controllers
             #endregion
 
             var customerSettings = this._settingService.GetCustomerSetting(f.CustomerId);
+            
             var outputFormatter = new OutputFormatter(customerSettings.IsUserFirstLastNameRepresentation == 1);
             var data = new List<Dictionary<string, object>>();
             foreach (var searchRow in m.cases)
@@ -868,15 +872,91 @@ namespace DH.Helpdesk.Web.Controllers
                     this.caseModelFactory.GetCaseRemainingTimeModel(remainingTimeData, this.workContext));
             }
 
-            CaseStatusViewModel statusView = null;
-            //SessionFacade.CurrentUser.ShowCaseStatisticsTree = true;
-            //if (SessionFacade.CurrentUser.ShowCaseStatisticsTree)
-            //{
-            //    statusView = this.caseModelFactory.GetCaseStatisticsTreeView(m.cases.Select(c=> c.Columns.).GroupBy);    
-            //}
+            string statisticsView = null;
             
-            return this.Json(new { result = "success", data = data, remainingView = remainingView, statusView = statusView });
-        }        
+            var statisticsFields = m.GridSettings.CaseFieldSettings.Where(cf=>  cf.ShowOnStartPage != 0 &&
+                                                                               (cf.Name == GlobalEnums.TranslationCaseFields.Status_Id.ToString() ||
+                                                                                cf.Name == GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()))
+                                                                   .Select(cf => cf.Name)
+                                                                   .ToList();            
+            var showCaseStatistics = SessionFacade.CurrentUser.ShowCaseStatistics && statisticsFields.Any();            
+            if (showCaseStatistics)
+            {                
+                var expandedGroup = frm.ReturnFormValue("expandedGroup");
+                statisticsView = this.RenderPartialViewToString(
+                    "_Statistics",
+                    GetCaseStatisticsModel(aggregateData, m.cases.Count(), expandedGroup, statisticsFields));    
+            }
+
+            return this.Json(new { result = "success", data = data, remainingView = remainingView, statisticsView = statisticsView });
+        }
+
+        public CaseStatisticsViewModel GetCaseStatisticsModel(CaseAggregateData aggregateData, int caseCount, 
+                                                              string expandedGroup, List<string> fields)
+        {
+            if (aggregateData == null)
+                return null;
+
+            var customerId = SessionFacade.CurrentCustomer.Id;
+            var ret = new CaseStatisticsViewModel();
+            ret.ExpandedGroup = expandedGroup; 
+            ret.CaseData.AttributeId = "Case";
+            ret.CaseData.AttributeName = Translation.Get("Ärenden");
+            ret.CaseData.AttributeValue = caseCount.ToString();
+            int sumValues;
+
+            #region Status
+
+            if (fields.Contains(GlobalEnums.TranslationCaseFields.Status_Id.ToString()))
+            {
+                sumValues = 0;
+                var statusChildren = new List<DataAttributeGroup>();
+                var allStatus = this._statusService.GetStatuses(customerId);
+                foreach (var status in aggregateData.Status)
+                {
+                    var name = allStatus.Where(s => s.Id == status.Key).Select(s => s.Name).FirstOrDefault() ?? string.Empty;
+                    statusChildren.Add(new DataAttributeGroup(status.Key.ToString(), name, status.Value.ToString()));
+                    sumValues += status.Value;
+                }
+
+                var statusGroup = new DataAttributeGroup(
+                                                    "Status",
+                                                    Translation.Get(GlobalEnums.TranslationCaseFields.Status_Id.ToString(),
+                                                                    Enums.TranslationSource.CaseTranslation, customerId),
+                                                    sumValues.ToString(),
+                                                    statusChildren.OrderBy(s => s.AttributeName).ToList());
+
+                ret.CaseData.AddChild(statusGroup);
+                
+            }
+            #endregion
+
+            #region SubStatus
+            if (fields.Contains(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()))
+            {
+                sumValues = 0;
+                var subStatusChildren = new List<DataAttributeGroup>();
+                var allSubStatus = this._stateSecondaryService.GetStateSecondaries(customerId);
+                foreach (var subStatus in aggregateData.SubStatus)
+                {
+                    var name = allSubStatus.Where(s => s.Id == subStatus.Key).Select(s => s.Name).FirstOrDefault() ?? string.Empty;
+                    subStatusChildren.Add(new DataAttributeGroup(subStatus.Key.ToString(), Translation.Get(name), subStatus.Value.ToString()));
+                    sumValues += subStatus.Value;
+                }
+
+                var subStatusGroup = new DataAttributeGroup(
+                                                    "SubStatus",
+                                                    Translation.Get(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(),
+                                                                    Enums.TranslationSource.CaseTranslation, customerId),
+                                                    sumValues.ToString(),
+                                                    subStatusChildren.OrderBy(ss => ss.AttributeName).ToList());
+
+                ret.CaseData.AddChild(subStatusGroup);
+            }
+            #endregion                        
+            
+            return ret;
+        }
 
         public JsonResult UnLockCase(string lockGUID)
         {
@@ -2273,6 +2353,7 @@ namespace DH.Helpdesk.Web.Controllers
             search.caseSearchFilter.CaseProgress = CaseProgressFilter.None;
             var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
             CaseRemainingTimeData remainingTime;
+            CaseAggregateData aggregateData;
             var caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id).ToArray();
             searchResult.cases = this._caseSearchService.Search(
                 search.caseSearchFilter,
@@ -2290,6 +2371,7 @@ namespace DH.Helpdesk.Web.Controllers
                 ApplicationTypes.Helpdesk,
                 showRemainingTime,
                 out remainingTime,
+                out aggregateData,
                 relatedCasesCaseId,
                 relatedCasesUserId,
                 caseIds);

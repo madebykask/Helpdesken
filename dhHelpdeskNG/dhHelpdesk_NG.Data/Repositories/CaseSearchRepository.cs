@@ -32,7 +32,7 @@
     /// </summary>
     public interface ICaseSearchRepository
     {
-        IList<CaseSearchResult> Search(CaseSearchContext context, out CaseRemainingTimeData remainingTime);
+        IList<CaseSearchResult> Search(CaseSearchContext context, out CaseRemainingTimeData remainingTime, out CaseAggregateData aggregateData);
     }
 
     public class CaseSearchRepository : ICaseSearchRepository
@@ -64,7 +64,7 @@
             this.logRepository = logRepository;            
         }    
 
-        public IList<CaseSearchResult> Search(CaseSearchContext context, out CaseRemainingTimeData remainingTime)
+        public IList<CaseSearchResult> Search(CaseSearchContext context, out CaseRemainingTimeData remainingTime, out CaseAggregateData aggregateData)
         {
             var now = DateTime.UtcNow;
             var dsn = ConfigurationManager.ConnectionStrings["HelpdeskOleDbContext"].ConnectionString;
@@ -85,6 +85,8 @@
             var caseTypes = this.caseTypeRepository.GetCaseTypeOverviews(f.CustomerId).ToArray();
             var displayLeftTime = userCaseSettings.Any(it => it.Name == TimeLeftColumn);
             remainingTime = new CaseRemainingTimeData();
+            aggregateData = new CaseAggregateData();
+
             var sql = this.ReturnCaseSearchSql(
                                         context.f,
                                         context.customerSetting,
@@ -139,19 +141,19 @@
                                 int? curStatus = dr.SafeGetNullableInteger("aggregate_Status");
                                 if (curStatus.HasValue)
                                 {                                
-                                    if (aggregateStatus.Keys.Contains(curStatus.Value))
-                                        aggregateStatus[curStatus.Value] += 1;
+                                    if (aggregateData.Status.Keys.Contains(curStatus.Value))
+                                        aggregateData.Status[curStatus.Value] += 1;
                                     else
-                                        aggregateStatus.Add(curStatus.Value, 1);
+                                        aggregateData.Status.Add(curStatus.Value, 1);
                                 }
 
                                 int? curSubStatus = dr.SafeGetNullableInteger("aggregate_SubStatus");
                                 if (curSubStatus.HasValue)
                                 {
-                                    if (aggregateSubStatus.Keys.Contains(curSubStatus.Value))
-                                        aggregateSubStatus[curSubStatus.Value] += 1;
+                                    if (aggregateData.SubStatus.Keys.Contains(curSubStatus.Value))
+                                        aggregateData.SubStatus[curSubStatus.Value] += 1;
                                     else
-                                        aggregateSubStatus.Add(curSubStatus.Value, 1);
+                                        aggregateData.SubStatus.Add(curSubStatus.Value, 1);
                                 }
  
                                 DateTime.TryParse(dr["RegTime"].ToString(), out caseRegistrationDate);
@@ -296,7 +298,7 @@
                                 row.Id = dr.SafeGetInteger("Id"); 
                                 row.Columns = cols;
                                 row.IsUnread = dr.SafeGetInteger("Status") == 1;
-                                row.IsUrgent = timeLeft.HasValue && timeLeft <= 0;
+                                row.IsUrgent = timeLeft.HasValue && timeLeft <= 0;                                
                                 ret.Add(row); 
                             }
                         }
@@ -330,7 +332,7 @@
                     return this.SortSearchResult(filtered, s);
                 }
             }
-
+            
             return this.SortSearchResult(ret, s);
         }
 

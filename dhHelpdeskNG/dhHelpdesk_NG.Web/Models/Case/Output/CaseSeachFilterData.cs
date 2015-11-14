@@ -91,6 +91,7 @@
 
         public SelectList CaseRemainingTimeList { get; set; }
         public int[] lstfilterCaseRemainingTime { get; set; }
+        public CaseStatisticsViewModel CaseStatisticsModel { get; set; }
     }
 
     public class AdvancedSearchSpecificFilterData

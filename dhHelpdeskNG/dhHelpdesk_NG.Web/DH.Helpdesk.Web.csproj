@@ -1254,7 +1254,7 @@
     <Compile Include="Models\Case\CaseMasterDataFieldsModel.cs" />
     <Compile Include="Models\Case\ChildCase\ParentCaseInfo.cs" />
     <Compile Include="Models\Case\CaseRemainingTimeTable.cs" />
-    <Compile Include="Models\Case\CaseStatusViewModel.cs" />
+    <Compile Include="Models\Case\CaseStatisticsViewModel.cs" />
     <Compile Include="Models\Case\Input\CaseEditInput.cs" />
     <Compile Include="Models\Case\MyFavoriteFilterModel.cs" />
     <Compile Include="Models\Case\Output\CaseSeachFilterData.cs" />
@@ -2322,6 +2322,7 @@
     <Content Include="Views\CheckList\_Actions.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DatePickerLocalTZ.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DateReadOnlyLocalTZ.cshtml" />
+    <Content Include="Views\Cases\_Statistics.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
@@ -3003,7 +3004,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Shared\_Search.cshtml" />
+    <Content Include="Views\Cases\_Search.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\_NoHits.cshtml" />
