@@ -5,9 +5,12 @@
 @using DH.Helpdesk.BusinessData.OldComponents
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 
-
 @if (Model != null)
-{                  
+{
+    <script type="text/javascript">        
+        $('#hidExpandedGroup').val('@Model.ExpandedGroup');    
+    </script>
+    
     <div class="caseoverviewaccordion accordion" id="Caseaccordion">
         <div class="accordion-group">
             <div class="accordion-heading">
@@ -33,11 +36,14 @@
                             var captionId = "Caption_" + uniqueId;
                             <div class="accordion-group">
                                 <div class="accordion-heading">
-                                    <a class="accordion-toggle" data-unique="@uniqueId" onclick="saveExpanded('@uniqueId')" 
+                                    <a class="accordion-toggle" data-unique="@uniqueId"  
                                         data-toggle="collapse" data-parent="#CaseaccordionLevel1" href="#@uniqueId">
                                         <div class="row-fluid">
                                             <div class="span9" >
-                                                <span id="@captionId"> @(isExpanded?"- ":"+ ") @group.AttributeName  </span>
+                                                <span id="@captionId" 
+                                                    ondblclick="saveExpanded('@uniqueId')"
+                                                    onclick="saveExpanded('@uniqueId')"> 
+                                                    @(isExpanded?"- ":"+ ") @group.AttributeName  </span>
                                             </div>
                                             <div class="span3 text-right">
                                                 @group.AttributeValue
@@ -72,11 +78,11 @@
             </div>
         </div>
     </div>                                        
-}
-<script type="text/javascript">
+
+    <script type="text/javascript">
     function saveExpanded(id) {
         var curExpanded = $('#hidExpandedGroup').val();
-        
+        //$('#Caption_' + id).text().con
         switch (curExpanded) {
             case "":
                 $('#hidExpandedGroup').val(id);                
@@ -102,6 +108,7 @@
 
     function getCollapseCaption(cap) {
         return cap.replace("- ", "+ ");
-    }
+    }    
   
 </script>
+}
