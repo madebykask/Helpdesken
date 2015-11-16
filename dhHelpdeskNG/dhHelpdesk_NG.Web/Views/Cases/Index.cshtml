@@ -7,9 +7,11 @@
 <script type="text/javascript">
     window.pageSettings = @Html.Raw(jsSerializer.Serialize(Model.PageSettings))
 </script>
+
 <div class="case-overview page">
     <div class="secnavs fixed">
         <div class="pull-left">
+            <input type="hidden" id="hidExpandedGroup" value=""/>
             <ul class="secnav">
                 @if (SessionFacade.CurrentUser.CreateCasePermission == 1)
                 {                                        

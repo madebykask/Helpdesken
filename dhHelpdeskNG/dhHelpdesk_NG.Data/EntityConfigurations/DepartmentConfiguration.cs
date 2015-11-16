@@ -55,6 +55,7 @@
             this.Property(x => x.HolidayHeader_Id).IsOptional();
             this.Property(x => x.WatchDateCalendar_Id).IsOptional();
             this.Property(x => x.OverTimeAmount).IsRequired();
+            this.Property(x => x.Code).IsOptional().HasMaxLength(20);
 
             this.ToTable("tbldepartment");
         }

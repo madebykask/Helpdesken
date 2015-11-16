@@ -22,7 +22,8 @@ DateField.prototype.init = function (opt) {
 * @public
 */
 DateField.prototype.setValue = function (value) {
-    var me = this;
+    var me = this;    
+
     value = value || window.EMPTY_STR;
     me.$el.datepicker('update', value);
 };

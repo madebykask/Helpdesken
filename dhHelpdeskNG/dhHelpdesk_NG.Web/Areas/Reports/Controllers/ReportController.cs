@@ -33,7 +33,8 @@
     using DH.Helpdesk.Web.Models.Shared;    
     
     using Microsoft.Reporting.WebForms;
-    using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;            
+    using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+using DH.Helpdesk.BusinessData.Enums.Case;    
 
     public sealed class ReportController : UserInteractionController
     {
@@ -107,15 +108,7 @@
                                                 };
 
             return PartialView("ReportViewer/_PresentReport", model);
-        }
-
-        [HttpGet]
-        public PartialViewResult GetCustomerSpecificFilter(int selectedCustomerId)
-        {
-            var lastState = SessionFacade.ReportService ?? SessionFacade.ReportService;
-            var model = GetReportFilterModel(selectedCustomerId, lastState);
-            return PartialView("ReportViewer/_CustomerSpecificFilter", model);
-        }
+        }        
 
         [HttpPost]
         [BadRequestOnNotValid]
@@ -502,50 +495,38 @@
         private ReportServiceOverviewModel GetReportServiceModel(ReportServiceSessionModel lastState = null)
         {
             var model = new ReportServiceOverviewModel();
-            int? customerId = SessionFacade.CurrentCustomer.Id;
-            if (lastState != null && lastState.SelectedFilter != null)
-                if (lastState.SelectedFilter.SelectedCustomers.Count == 1)
-                    customerId = lastState.SelectedFilter.SelectedCustomers.FirstOrDefault();
-                else
-                    customerId = null;
-            else
-                customerId = null;
-
-            model.ReportFilter = GetReportFilterModel(customerId, lastState);
+            model.CustomerId = SessionFacade.CurrentCustomer.Id;
+            model.ReportFilter = GetReportFilterModel(model.CustomerId, lastState);
             model.ReportList = GetReportList(lastState != null ? lastState.ReportName : string.Empty);
             model.ReportViewerData = new ReportPresentationModel();
             return model;
         }
 
-        private ReportFilterModel GetReportFilterModel(int? selectedCustomerId = null, ReportServiceSessionModel lastState = null)
-        {
-            int curCustomerId = SessionFacade.CurrentCustomer.Id;
-            var reportFilter = _ReportServiceService.GetReportFilter(curCustomerId, selectedCustomerId);
-            var customerSetting = this._customerSettingService.GetCustomerSetting(curCustomerId);
+        private ReportFilterModel GetReportFilterModel(int customerId, ReportServiceSessionModel lastState = null)
+        {            
+            int curUserId = SessionFacade.CurrentUser.Id;
+            var customerSettings = this._customerSettingService.GetCustomerSetting(customerId);
+
+            var addOUToDep = (customerSettings != null && customerSettings.ShowOUsOnDepartmentFilter != 0)? true : false;
+            var reportFilter = _ReportServiceService.GetReportFilter(customerId, curUserId, addOUToDep);            
 
             var model = new ReportFilterModel()
             {
-                CaseCreationDate = reportFilter.CaseCreationDate,
-                Customers = reportFilter.Customers,
+                CaseCreationDate = reportFilter.CaseCreationDate,                
                 Administrators = reportFilter.Administrators,
                 Departments = reportFilter.Departments,
                 WorkingGroups = reportFilter.WorkingGroups,
                 Selected = GetNewFilterSelections(),
                 CaseTypes = reportFilter.CaseTypes,
-                UserOrientationName = customerSetting.IsUserFirstLastNameRepresentation,
-                CaseTypeSelectedText = Translation.Get("--", Enums.TranslationSource.TextTranslation)
+                ProductAreas = reportFilter.ProductAreas,
+                Status = GetCaseStateFilter(),
+                UserNameOrientation = customerSettings.IsUserFirstLastNameRepresentation
             };
-
+        
             if (lastState != null)
             {
                 model.CaseCreationDate = lastState.SelectedFilter.CaseCreationDate;
-                model.Selected = lastState.SelectedFilter;
-                if (model.CaseTypes != null && lastState.SelectedFilter.SelectedCaseTypes.Any())
-                {
-                    var caseType = model.CaseTypes.Where(ct => ct.Id == lastState.SelectedFilter.SelectedCaseTypes.First()).FirstOrDefault();
-                    if (caseType != null)
-                        model.CaseTypeSelectedText = caseType.getCaseTypeParentPath();
-                }                
+                model.Selected = lastState.SelectedFilter;                                
             }
 
             return model;
@@ -568,6 +549,15 @@
             if (defaultSelected != null)
                 ret.SelectedItems.AddItem(int.Parse(defaultSelected.Id));
 
+            return ret;
+        }
+
+        public CustomSelectList GetCaseStateFilter()
+        {
+            var ret = new CustomSelectList();
+            ret.Items.AddItem(CaseProgressFilter.None, string.Empty);
+            ret.Items.AddItem(CaseProgressFilter.CasesInProgress, Translation.Get("Pågående ärenden", Enums.TranslationSource.TextTranslation));
+            ret.Items.AddItem(CaseProgressFilter.ClosedCases, Translation.Get("Avslutade ärenden", Enums.TranslationSource.TextTranslation));
             return ret;
         }
 

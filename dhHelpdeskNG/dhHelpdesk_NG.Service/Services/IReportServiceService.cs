@@ -3,7 +3,7 @@ namespace DH.Helpdesk.Services.Services
 {
     public interface IReportServiceService
     {
-        ReportFilter GetReportFilter(int defaultCustomerId, int? selectedCustomerId = null);
+        ReportFilter GetReportFilter(int customerId, int userId, bool addOUsToDepartments = true);
 
         ReportData GetReportData(string reportIdentity, ReportSelectedFilter filters);        
     }

@@ -33,6 +33,16 @@ namespace DH.Helpdesk.Common.Extensions.DateTime
             return date.ToString("d", Thread.CurrentThread.CurrentUICulture);
         }
 
+        public static string ToFormattedDate(this DateTime? date)
+        {
+            if (date.HasValue)
+            {
+                var d = date.Value;
+                return d.ToString("d", Thread.CurrentThread.CurrentUICulture);
+            }
+            else
+                return string.Empty;
+        }
 
         /// <summary>
         /// The to formatted date time.

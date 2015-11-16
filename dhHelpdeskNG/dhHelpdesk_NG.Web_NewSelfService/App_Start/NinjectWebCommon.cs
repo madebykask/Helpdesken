@@ -187,6 +187,9 @@ namespace DH.Helpdesk.NewSelfService
             kernel.Bind<ILinkRepository>().To<LinkRepository>();
             kernel.Bind<ICaseLockRepository>().To<CaseLockRepository>();
             kernel.Bind<ILinkGroupRepository>().To<LinkGroupRepository>();
+            kernel.Bind<IUsersPasswordHistoryRepository>().To<UsersPasswordHistoryRepository>();
+            kernel.Bind<ICaseFilterFavoriteRepository>().To<CaseFilterFavoriteRepository>();
+            
             
             // Service             
             kernel.Bind<IMasterDataService>().To<MasterDataService>();            

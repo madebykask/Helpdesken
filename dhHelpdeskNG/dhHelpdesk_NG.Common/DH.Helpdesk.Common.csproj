@@ -68,6 +68,7 @@
     <Compile Include="Enums\ApplicationTypes.cs" />
     <Compile Include="Enums\CaseRegistrationSource.cs" />
     <Compile Include="Enums\CalculationFields.cs" />
+    <Compile Include="Enums\DataLogTypes.cs" />
     <Compile Include="Enums\InfoTextType.cs" />
     <Compile Include="Enums\StringTags.cs" />
     <Compile Include="Enums\LoginMode.cs" />

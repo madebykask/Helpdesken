@@ -38,6 +38,8 @@
 
         DeleteMessage DeleteProductArea(int id);
 
+        IList<ProductArea> GetChildsInRow(IList<ProductArea> productAreas, bool isTakeOnlyActive = false);
+
         void SaveProductArea(ProductAreaEntity productArea, int[] wg, out IDictionary<string, string> errors);
 
         void Commit();
@@ -256,6 +258,42 @@
 
             return DeleteMessage.Error;
         }
+
+        public IList<ProductArea> GetChildsInRow(IList<ProductArea> productAreas, bool isTakeOnlyActive = false)
+        {
+            var childProductAreas = new List<ProductArea>();
+            var parentProductAreas = productAreas.Where(pa => !pa.Parent_ProductArea_Id.HasValue && (isTakeOnlyActive ? pa.IsActive == 1 : true)).ToList();
+            foreach (var p in parentProductAreas)
+            {
+                childProductAreas.AddRange(GetChilds(p.Name, p.IsActive, p.SubProductAreas.ToList(), isTakeOnlyActive));
+            }
+
+            return parentProductAreas.Union(childProductAreas).OrderBy(p => p.Name).ToList();
+        }
+
+        private IList<ProductArea> GetChilds(string parentName, int parentState, IList<ProductArea> subProductAreas, bool isTakeOnlyActive = false)
+        {
+            var ret = new List<ProductArea>();
+            var newSubProductAreas = subProductAreas.Where(pa => (isTakeOnlyActive ? pa.IsActive == 1 : true)).ToList();
+            foreach (var s in newSubProductAreas)
+            {
+                var newParentName = string.Format("{0} - {1}", parentName, s.Name);
+                var newPA = new ProductArea()
+                {
+                    Id = s.Id,
+                    Name = newParentName,
+                    IsActive = parentState,
+                    Parent_ProductArea_Id = s.Parent_ProductArea_Id
+                };
+                ret.Add(newPA);
+
+                if (s.SubProductAreas.Any())
+                    ret.AddRange(GetChilds(newParentName, parentState, s.SubProductAreas.ToList(), isTakeOnlyActive));
+            }
+
+            return ret;
+        }
+
 
         public void SaveProductArea(ProductAreaEntity productArea, int[] wg, out IDictionary<string, string> errors)
         {

@@ -123,6 +123,12 @@ namespace DH.Helpdesk.Services.Services
         int? SaveInternalLogMessage(int id, string textInternal, out IDictionary<string, string> errors);
 
         CaseDataSet GetCaseDataSet(DateTime? fromDate, DateTime? toDate);
+
+        List<CaseFilterFavorite> GetMyFavorites(int customerId, int userId);
+
+        string SaveFavorite(CaseFilterFavorite favorite);
+
+        string DeleteFavorite(int favoriteId);
     }
 
     public class CaseService : ICaseService
@@ -158,6 +164,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly ICaseLockService _caseLockService;
 
         private readonly CaseStatisticService _caseStatService;
+        private readonly ICaseFilterFavoriteRepository _caseFilterFavoriteRepository;
 
         public CaseService(
             ICaseRepository caseRepository,
@@ -185,7 +192,9 @@ namespace DH.Helpdesk.Services.Services
             ISurveyService surveyService,
             ILogService logService,
             IFinishingCauseService finishingCauseService,
-            ICaseLockService caseLockService, CaseStatisticService caseStatService)
+            ICaseLockService caseLockService, 
+            CaseStatisticService caseStatService,
+            ICaseFilterFavoriteRepository caseFilterFavoriteRepository)
         {
             this._unitOfWork = unitOfWork;
             this._caseRepository = caseRepository;
@@ -215,6 +224,7 @@ namespace DH.Helpdesk.Services.Services
             this._finishingCauseService = finishingCauseService;
             this._caseLockService = caseLockService;
             this._caseStatService = caseStatService;
+            this._caseFilterFavoriteRepository = caseFilterFavoriteRepository;
         }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
@@ -362,6 +372,46 @@ namespace DH.Helpdesk.Services.Services
             return ret;
         }
 
+        public List<CaseFilterFavorite> GetMyFavorites(int customerId, int userId)
+        {
+            var ret = this._caseFilterFavoriteRepository.GetUserFavoriteFilters(customerId, userId);            
+            return ret;
+        }
+
+        public string SaveFavorite(CaseFilterFavorite favorite)
+        {
+            var res = this._caseFilterFavoriteRepository.SaveFavorite(favorite);
+            if (res == string.Empty)
+            {
+                try
+                {
+                    this._caseFilterFavoriteRepository.Commit();
+                }
+                catch (Exception ex)
+                {
+                    return ex.Message;
+                }
+            }
+            return res;
+        }
+
+        public string DeleteFavorite(int favoriteId)
+        {
+            var res = this._caseFilterFavoriteRepository.DeleteFavorite(favoriteId);
+            if (res == string.Empty)
+            {
+                try
+                {
+                    this._caseFilterFavoriteRepository.Commit();
+                }
+                catch (Exception ex)
+                {
+                    return ex.Message;
+                }
+            }
+            return res;
+        }
+
         private void DeleteChildCasesFor(int caseId)
         {
             using (var uow = unitOfWorkFactory.CreateWithDisabledLazyLoading())
@@ -396,10 +446,13 @@ namespace DH.Helpdesk.Services.Services
             {
                 var customerRepository = uow.GetRepository<Customer>();
                 var problemsRep = uow.GetRepository<Problem>();
+                var caseFieldSettingsRep = uow.GetRepository<CaseFieldSetting>();
 
                 var customerCases = customerRepository.GetAll()
                                     .GetByIds(customerIds)
-                                    .MapToCustomerCases(problemsRep.GetAll(), userId);
+                                    .MapToCustomerCases(caseFieldSettingsRep.GetAll(), problemsRep.GetAll(), userId);
+
+               
 
                 return customerCases;
             }

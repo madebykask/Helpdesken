@@ -80,6 +80,7 @@
     <Compile Include="Cases\CaseSolutionSetting.cs" />
     <Compile Include="Cases\CaseLockEntity.cs" />
     <Compile Include="Cases\CaseStatistic.cs" />
+    <Compile Include="Cases\CaseFilterFavoriteEntity.cs" />
     <Compile Include="CaseType.cs" />
     <Compile Include="Cases\CausingPart.cs" />
     <Compile Include="Changes\ChangeChangeEntity.cs" />

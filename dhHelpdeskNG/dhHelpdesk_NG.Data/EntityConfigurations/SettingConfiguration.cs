@@ -126,6 +126,8 @@
             this.Property(x => x.IsUserFirstLastNameRepresentation).IsRequired();
             this.Property(x => x.PreventToSaveCaseWithInactiveValue).IsRequired();
             this.Property(x => x.ShowOUsOnDepartmentFilter).IsRequired();
+            this.Property(x => x.FileIndexingServerName).IsOptional().HasMaxLength(50);
+            this.Property(x => x.FileIndexingCatalogName).IsOptional().HasMaxLength(50);
 
             this.ToTable("tblsettings");
         }

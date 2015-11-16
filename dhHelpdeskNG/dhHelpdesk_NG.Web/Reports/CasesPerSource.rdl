@@ -252,7 +252,7 @@
             <DockOutsideChartArea>true</DockOutsideChartArea>
           </ChartTitle>
         </ChartTitles>
-        <Palette>BrightPastel</Palette>
+        <Palette>SeaGreen</Palette>
         <ChartBorderSkin>
           <Style>
             <BackgroundColor>Gray</BackgroundColor>
@@ -269,9 +269,8 @@
           </Style>
         </ChartNoDataMessage>
         <DataSetName>CasesPerDate</DataSetName>
-        <Left>0.28222cm</Left>
-        <Height>13.65188cm</Height>
-        <Width>19.88814cm</Width>
+        <Height>16.9cm</Height>
+        <Width>25.6cm</Width>
         <Style>
           <Border>
             <Color>LightGrey</Color>
@@ -282,13 +281,15 @@
         </Style>
       </Chart>
     </ReportItems>
-    <Height>5.50395in</Height>
+    <Height>16.9cm</Height>
     <Style />
   </Body>
-  <Width>13.00359in</Width>
+  <Width>25.6cm</Width>
   <Page>
-    <PageHeight>29.7cm</PageHeight>
-    <PageWidth>21cm</PageWidth>
+    <PageHeight>21cm</PageHeight>
+    <PageWidth>29.7cm</PageWidth>
+    <InteractiveHeight>16.9cm</InteractiveHeight>
+    <InteractiveWidth>25.6cm</InteractiveWidth>
     <LeftMargin>2cm</LeftMargin>
     <RightMargin>2cm</RightMargin>
     <TopMargin>2cm</TopMargin>
@@ -312,7 +313,7 @@
 FROM            tblCustomer INNER JOIN
                          tblCase ON tblCustomer.Id = tblCase.Customer_Id LEFT OUTER JOIN
                          tblRegistrationSourceCustomer ON tblCase.RegistrationSourceCustomer_Id = tblRegistrationSourceCustomer.Id RIGHT OUTER JOIN
-                         tblDate ON CAST(tblCase.RegTime AS Date) = tblDate.FullDate						 
+                         tblDate ON CAST(tblCase.RegTime AS Date) = tblDate.FullDate
 GROUP BY tblCustomer.Name, tblDate.CalendarYearMonth, tblCustomer.Id, tblRegistrationSourceCustomer.SourceName
 ORDER BY tblDate.CalendarYearMonth</CommandText>
       </Query>
@@ -338,7 +339,7 @@ ORDER BY tblDate.CalendarYearMonth</CommandText>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
-    </DataSet>    
+    </DataSet>
   </DataSets>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>
   <rd:ReportID>2a653c68-33b1-4f86-9f48-c79d6a0195fa</rd:ReportID>

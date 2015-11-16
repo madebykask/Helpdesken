@@ -230,11 +230,7 @@
             bundles.Add(new ScriptBundle("~/bundles/report").Include(
                             "~/Areas/Reports/Content/js/reportViewer.logic.js",
                             "~/Areas/Reports/Content/js/reports.js"));
-
-            bundles.Add(new ScriptBundle("~/bundles/report/reportViewer").Include(                                                    
-                          "~/Areas/Reports/Content/js/reportViewer.specialfilter.js"
-                          ));
-
+            
             bundles.Add(new ScriptBundle("~/bundles/common/admin").Include(
                            "~/Scripts/jquery-1.8.3.min.js",
                            "~/Scripts/jquery-ui-1.9.2.min.js",
