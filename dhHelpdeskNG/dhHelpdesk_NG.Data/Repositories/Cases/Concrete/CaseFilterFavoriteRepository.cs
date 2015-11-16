@@ -87,6 +87,21 @@
 
              return "Unexpected error!";
          }
+
+         public string DeleteFavorite(int favoriteId)
+         {
+             var entitiy = this.GetAll().Where(f => f.Id == favoriteId).FirstOrDefault();
+
+             if (entitiy != null)
+             {
+                 this.Delete(entitiy);
+                 return string.Empty;
+             }
+             else
+             {
+                 return "Favorite not found!";
+             }             
+         }
                    
      }
  }

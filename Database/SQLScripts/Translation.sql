@@ -4140,6 +4140,13 @@ If not exists (select * from tblTextTranslation where text_id = 1565 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1565, 2, 'Number of cases with status')
 GO
 
+If not exists (select * from tbltext where id = 1566)
+	insert into tbltext (id, TextString) VALUES (1566, 'Klicka här för att ta bort favoriten från din favoritlista.')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1566 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1566, 2, 'Click here to remove the favorite from your favorite list.')
+GO
+
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

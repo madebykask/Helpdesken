@@ -14,9 +14,12 @@
     window.i18n = @Html.Raw(jsSerializer.Serialize(i18n))
     window.params = {
         saveFavoriteUrl: '@Url.Content("~/Cases/SaveFavorite/")',
+        deleteFavoriteUrl: '@Url.Content("~/Cases/DeleteFavorite/")',
         loadFavoritesUrl: '@Url.Content("~/Cases/LoadFavorites/")',
         addingDialogHeader: '@Html.Raw(Translation.Get("Ny favorit"))',
         updatingDialogHeader: '@Html.Raw(Translation.Get("Uppdatera favorit"))',
+        saveButtonCaption: '@Html.Raw(Translation.Get("Spara"))',
+        deleteButtonCaption: '@Html.Raw(Translation.Get("Ta bort"))',
         addingDialogDescription: '@Html.Raw(Translation.Get("Fyll i ett namn på din nya favorit."))',
         updatingDialogDescription: '@Html.Raw(Translation.Get("Uppatera din favorit eller ändra namnet för att spara den som en ny favorit."))'
     };
@@ -414,14 +417,14 @@
              </div>
          </div>
 
-             <div class="span5" style="float:right;">                 
+             <div class="span6" style="float:right;">                 
                  <div data-field="caseStatisticsPlace">
                      @if (Model.CaseStatisticsModel != null)
                      {                
                         @Html.Partial("_Statistics", Model.CaseStatisticsModel)
                      }
                  </div>
-                 <div data-field="caseRemainingTimeHidePlace" class="span5" style="float: right;"></div>  
+                 <div data-field="caseRemainingTimeHidePlace" class="span6" style="float: right;"></div>  
              </div>
                                      
          </div>
@@ -441,7 +444,10 @@
                 <div class="modal-body">
                     <p id="explainText" style="margin-top:20px;">  </p>                  
                     <p class="input-prepend" style="margin-top:20px;"> 
-                        <span class="add-on">@Translation.Get("Namn")</span> <input type="text" id="txtFavoriteName" value="" required />                         
+                        <span class="add-on">@Translation.Get("Namn")</span> <input type="text" id="txtFavoriteName" value="" required />  
+                        <button type="button" id="btnDeleteFavorite" data-selectedFavorite="" title="@Translation.Get("Klicka här för att ta bort favoriten från din favoritlista.")" class="btn btn-small" style="margin-left:20px;">
+                            <i class="icon-remove"></i>
+                        </button>                       
                     </p>
                     <p>
                         <span id="requiredFavoriteText" hidden class="error">* @Translation.Get("måste anges")</span>
@@ -450,8 +456,8 @@
                     
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="btnSaveFavorite" selectedFavorite="" class="btn btn-ok">@Translation.Get("Spara")</button>
-                    <button type="button" id="btnCancelFavorite" class="btn btn-cancel">@Translation.Get("Avbryt")</button>
+                    <button type="button" id="btnSaveFavorite" data-btnMode="save" data-selectedFavorite="" class="btn btn-ok">@Translation.Get("Spara")</button>
+                    <button type="button" id="btnCancelFavorite" class="btn btn-cancel">@Translation.Get("Avbryt")</button>                    
                 </div>
             </form>
         </div>

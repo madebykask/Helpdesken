@@ -14,6 +14,9 @@ var controlsId = ['CaseInitiatorFilter', 'lstFilterRegion', 'lstfilterDepartment
         'CaseClosingDateStartFilter', 'CaseClosingDateEndFilter', 'lstfilterCaseRemainingTime'
 ];
 
+var _DELETE_MODE = "delete";
+var _SAVE_MODE = "save";
+
 /// initial state of search form
 FilterForm.prototype.init = function (opt) {
     var me = this;
@@ -46,6 +49,7 @@ FilterForm.prototype.init = function (opt) {
     me.$favoriteDialog = $('#saveFavoriteDialog');
     me.$favoriteName = $('#txtFavoriteName');
     me.$btnSaveFavorite = $('#btnSaveFavorite');
+    me.$btnDeleteFavorite = $('#btnDeleteFavorite');
     me.$repeatedFavoriteMessage = $('#favoriteDialogError');
     me.$header = $("#headerCaption");
     me.$explainText = $("#explainText");
@@ -53,11 +57,14 @@ FilterForm.prototype.init = function (opt) {
 
     me.$addingDialogHeader = window.params.addingDialogHeader;
     me.$updatingDialogHeader = window.params.updatingDialogHeader;
+    me.$saveButtonCaption = window.params.saveButtonCaption;
+    me.$deleteButtonCaption = window.params.deleteButtonCaption;
 
     me.$addingDialogDescription = window.params.addingDialogDescription;
     me.$updatingDialogDescription = window.params.updatingDialogDescription;
     
     me.$saveFavoriteUrl = window.params.saveFavoriteUrl;
+    me.$deleteFavoriteUrl = window.params.deleteFavoriteUrl;
     me.$loadFavoritesUrl = window.params.loadFavoritesUrl;
     
         
@@ -116,6 +123,11 @@ FilterForm.prototype.init = function (opt) {
 
         me.$requireText.hide();
         me.$repeatedFavoriteMessage.hide();
+        me.$btnSaveFavorite.attr("data-btnMode", _SAVE_MODE);
+        me.$btnSaveFavorite.removeClass("btn-danger");
+        me.$btnSaveFavorite.text(me.$saveButtonCaption);
+        me.$explainText.show();
+
         var selectedFavoriteId = $(me.$myFavoritesElementName + ' option:selected').val();
         if (selectedFavoriteId == undefined)
             selectedFavoriteId = 0;
@@ -126,15 +138,20 @@ FilterForm.prototype.init = function (opt) {
             me.$header.text(me.$updatingDialogHeader + " - " + _favoriteName);
             me.$explainText.text(me.$updatingDialogDescription);
             me.$favoriteName.val(_favoriteName);
+            me.$btnDeleteFavorite.attr("data-selectedFavorite", selectedFavoriteId);
+            me.$btnDeleteFavorite.show();
         }
         else
         {
             me.$header.text(me.$addingDialogHeader);
             me.$explainText.text(me.$addingDialogDescription);
             me.$favoriteName.val("");
+            me.$btnDeleteFavorite.attr("data-selectedFavorite", 0);
+            me.$btnDeleteFavorite.hide();
         }
                 
-        me.$btnSaveFavorite.attr("selectedFavorite", selectedFavoriteId);
+        me.$btnSaveFavorite.attr("data-selectedFavorite", selectedFavoriteId);
+        
         me.$favoriteName.focus();
         me.$favoriteDialog.modal('show');
         
@@ -142,7 +159,23 @@ FilterForm.prototype.init = function (opt) {
     });
 
     me.$btnSaveFavorite.on('click', function (ev) {
-        me.saveFavorite();
+        var mode = me.$btnSaveFavorite.attr("data-btnMode");
+        switch (mode) {
+            case _SAVE_MODE:
+                me.saveFavorite();
+                break;
+
+            case _DELETE_MODE:
+                me.deleteFavorite();
+                break;
+
+            default:
+                return;
+        }
+    });
+
+    me.$btnDeleteFavorite.on('click', function (ev) {
+        me.showDeleteButton();
     });
 
     me.$favoriteName.keydown(function (ev) {
@@ -188,6 +221,17 @@ FilterForm.prototype.init = function (opt) {
 /**
 * @private
 */
+FilterForm.prototype.showDeleteButton = function () {
+    var me = this;
+    me.$requireText.hide();
+    me.$repeatedFavoriteMessage.hide();
+    me.$btnSaveFavorite.attr("data-btnMode", _DELETE_MODE);
+    me.$btnSaveFavorite.addClass("btn-danger");
+    me.$btnSaveFavorite.text(me.$deleteButtonCaption);
+    me.$explainText.hide();
+    return;
+};
+
 FilterForm.prototype.saveFavorite = function () {
     var me = this;
     me.$requireText.hide();
@@ -199,8 +243,52 @@ FilterForm.prototype.saveFavorite = function () {
         return;
     }
     
-    var curFavoriteId = me.$btnSaveFavorite.attr("selectedFavorite");
+    var curFavoriteId = me.$btnSaveFavorite.attr("data-selectedFavorite");
     me.doSaveFavorite(curFavoriteId, me.$favoriteName.val());
+};
+
+FilterForm.prototype.deleteFavorite = function () {
+    var me = this;
+    me.$requireText.hide();
+    me.$repeatedFavoriteMessage.hide();
+    var curFavoriteId = me.$btnDeleteFavorite.attr("data-selectedFavorite");
+
+    if (curFavoriteId == 0) 
+        return;
+    else
+    {        
+        $.ajax({
+            type: 'post',
+            url: me.$deleteFavoriteUrl,
+            traditional: true,
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({
+                favoriteId: curFavoriteId
+            }),
+            success: function (data) {
+                if (data == "") {
+                    $.ajax({
+                            type: 'post',
+                            url: me.$loadFavoritesUrl,
+                            traditional: true,
+                            contentType: "application/json; charset=utf-8",
+                            success: function (newFavorites) {
+                                me.$favorites = newFavorites;
+                                me.setMyFavorites(0);
+                                me.clear();
+                                me.$favoriteDialog.modal('hide');
+                            }
+                    });
+                }
+                else {                    
+                    me.$favoriteDialog.modal('hide');
+                    ShowToastMessage(data, "error", true);                    
+                }
+            }
+        });
+    }
+
+    return;
 };
 
 FilterForm.prototype.doSaveFavorite = function (favId, favName) {
@@ -214,9 +302,9 @@ FilterForm.prototype.doSaveFavorite = function (favId, favName) {
         traditional: true,
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify({
-            favoritId: favId,
+            favoriteId: favId,
             favoriteName: favName,
-            favoritFilter: curFilter
+            favoriteFilter: curFilter
         }),
         success: function (data) {
             if (data == "") {

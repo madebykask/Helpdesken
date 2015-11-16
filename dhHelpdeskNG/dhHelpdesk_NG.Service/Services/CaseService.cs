@@ -127,6 +127,8 @@ namespace DH.Helpdesk.Services.Services
         List<CaseFilterFavorite> GetMyFavorites(int customerId, int userId);
 
         string SaveFavorite(CaseFilterFavorite favorite);
+
+        string DeleteFavorite(int favoriteId);
     }
 
     public class CaseService : ICaseService
@@ -379,6 +381,23 @@ namespace DH.Helpdesk.Services.Services
         public string SaveFavorite(CaseFilterFavorite favorite)
         {
             var res = this._caseFilterFavoriteRepository.SaveFavorite(favorite);
+            if (res == string.Empty)
+            {
+                try
+                {
+                    this._caseFilterFavoriteRepository.Commit();
+                }
+                catch (Exception ex)
+                {
+                    return ex.Message;
+                }
+            }
+            return res;
+        }
+
+        public string DeleteFavorite(int favoriteId)
+        {
+            var res = this._caseFilterFavoriteRepository.DeleteFavorite(favoriteId);
             if (res == string.Empty)
             {
                 try

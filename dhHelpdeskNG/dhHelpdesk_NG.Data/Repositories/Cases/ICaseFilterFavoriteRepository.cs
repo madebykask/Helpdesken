@@ -11,6 +11,8 @@
     {
         List<CaseFilterFavorite> GetUserFavoriteFilters(int customerId, int userId);
 
-        string SaveFavorite(CaseFilterFavorite favorite);        
+        string SaveFavorite(CaseFilterFavorite favorite);
+
+        string DeleteFavorite(int favoriteId);        
     }
 }
