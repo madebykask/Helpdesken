@@ -14,9 +14,6 @@ var controlsId = ['CaseInitiatorFilter', 'lstFilterRegion', 'lstfilterDepartment
         'CaseClosingDateStartFilter', 'CaseClosingDateEndFilter', 'lstfilterCaseRemainingTime'
 ];
 
-var _DELETE_MODE = "delete";
-var _SAVE_MODE = "save";
-
 /// initial state of search form
 FilterForm.prototype.init = function (opt) {
     var me = this;
@@ -57,9 +54,7 @@ FilterForm.prototype.init = function (opt) {
 
     me.$addingDialogHeader = window.params.addingDialogHeader;
     me.$updatingDialogHeader = window.params.updatingDialogHeader;
-    me.$saveButtonCaption = window.params.saveButtonCaption;
-    me.$deleteButtonCaption = window.params.deleteButtonCaption;
-
+    
     me.$addingDialogDescription = window.params.addingDialogDescription;
     me.$updatingDialogDescription = window.params.updatingDialogDescription;
     
@@ -122,11 +117,7 @@ FilterForm.prototype.init = function (opt) {
         ev.preventDefault();
 
         me.$requireText.hide();
-        me.$repeatedFavoriteMessage.hide();
-        me.$btnSaveFavorite.attr("data-btnMode", _SAVE_MODE);
-        me.$btnSaveFavorite.removeClass("btn-danger");
-        me.$btnSaveFavorite.text(me.$saveButtonCaption);
-        me.$explainText.show();
+        me.$repeatedFavoriteMessage.hide();        
 
         var selectedFavoriteId = $(me.$myFavoritesElementName + ' option:selected').val();
         if (selectedFavoriteId == undefined)
@@ -159,23 +150,11 @@ FilterForm.prototype.init = function (opt) {
     });
 
     me.$btnSaveFavorite.on('click', function (ev) {
-        var mode = me.$btnSaveFavorite.attr("data-btnMode");
-        switch (mode) {
-            case _SAVE_MODE:
-                me.saveFavorite();
-                break;
-
-            case _DELETE_MODE:
-                me.deleteFavorite();
-                break;
-
-            default:
-                return;
-        }
+        me.saveFavorite();        
     });
 
     me.$btnDeleteFavorite.on('click', function (ev) {
-        me.showDeleteButton();
+        me.deleteFavorite();
     });
 
     me.$favoriteName.keydown(function (ev) {
@@ -221,16 +200,6 @@ FilterForm.prototype.init = function (opt) {
 /**
 * @private
 */
-FilterForm.prototype.showDeleteButton = function () {
-    var me = this;
-    me.$requireText.hide();
-    me.$repeatedFavoriteMessage.hide();
-    me.$btnSaveFavorite.attr("data-btnMode", _DELETE_MODE);
-    me.$btnSaveFavorite.addClass("btn-danger");
-    me.$btnSaveFavorite.text(me.$deleteButtonCaption);
-    me.$explainText.hide();
-    return;
-};
 
 FilterForm.prototype.saveFavorite = function () {
     var me = this;

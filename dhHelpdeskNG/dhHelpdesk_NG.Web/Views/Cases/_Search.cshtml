@@ -18,8 +18,6 @@
         loadFavoritesUrl: '@Url.Content("~/Cases/LoadFavorites/")',
         addingDialogHeader: '@Html.Raw(Translation.Get("Ny favorit"))',
         updatingDialogHeader: '@Html.Raw(Translation.Get("Uppdatera favorit"))',
-        saveButtonCaption: '@Html.Raw(Translation.Get("Spara"))',
-        deleteButtonCaption: '@Html.Raw(Translation.Get("Ta bort"))',
         addingDialogDescription: '@Html.Raw(Translation.Get("Fyll i ett namn på din nya favorit."))',
         updatingDialogDescription: '@Html.Raw(Translation.Get("Uppatera din favorit eller ändra namnet för att spara den som en ny favorit."))'
     };
@@ -444,20 +442,17 @@
                 <div class="modal-body">
                     <p id="explainText" style="margin-top:20px;">  </p>                  
                     <p class="input-prepend" style="margin-top:20px;"> 
-                        <span class="add-on">@Translation.Get("Namn")</span> <input type="text" id="txtFavoriteName" value="" required />  
-                        <button type="button" id="btnDeleteFavorite" data-selectedFavorite="" title="@Translation.Get("Klicka här för att ta bort favoriten från din favoritlista.")" class="btn btn-small" style="margin-left:20px;">
-                            <i class="icon-remove"></i>
-                        </button>                       
+                        <span class="add-on">@Translation.Get("Namn")</span> <input type="text" id="txtFavoriteName" value="" required />                          
                     </p>
                     <p>
                         <span id="requiredFavoriteText" hidden class="error">* @Translation.Get("måste anges")</span>
                         <span id="favoriteDialogError" class="error"> @Translation.Get("Namnet finns redan i dina favoriter. Välj ett annat namn eller uppdatera den befintliga favoriten med samma namn.") </span>
-                    </p>
-                    
+                    </p>                    
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="btnSaveFavorite" data-btnMode="save" data-selectedFavorite="" class="btn btn-ok">@Translation.Get("Spara")</button>
-                    <button type="button" id="btnCancelFavorite" class="btn btn-cancel">@Translation.Get("Avbryt")</button>                    
+                    <button type="button" id="btnSaveFavorite" data-selectedFavorite="" class="btn btn-ok">@Translation.Get("Spara")</button>
+                    <button type="button" id="btnDeleteFavorite" data-selectedFavorite="" title="@Translation.Get("Klicka här för att ta bort favoriten från din favoritlista.")" class="btn btn-ok" > @Translation.Get("Ta bort") </button>                       
+                    <button type="button" id="btnCancelFavorite" class="btn btn-cancel">@Translation.Get("Avbryt")</button>                                                                                            
                 </div>
             </form>
         </div>
