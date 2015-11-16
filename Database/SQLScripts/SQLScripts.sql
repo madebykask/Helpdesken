@@ -87,7 +87,14 @@ ALTER TABLE tblUsers ALTER COLUMN UserId nvarchar(40) not null
 GO
 
 
+IF COL_LENGTH('dbo.tblUsers','ShowCaseStatistics') IS NULL
+BEGIN 	 
+	ALTER TABLE [dbo].[tblUsers] ADD [ShowCaseStatistics] int not null default(1)
+END
+Go
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.17'
 
 
+Antal ärenden med status
+Number of cases with status
