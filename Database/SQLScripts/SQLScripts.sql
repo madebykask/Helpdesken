@@ -95,6 +95,3 @@ Go
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.17'
 
-
-Antal ärenden med status
-Number of cases with status
