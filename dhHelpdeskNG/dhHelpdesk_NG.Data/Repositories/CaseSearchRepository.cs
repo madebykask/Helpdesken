@@ -1208,6 +1208,7 @@
                 else
                 {
                     var text = f.FreeTextSearch;
+                    var safeText = f.FreeTextSearch.Replace("'","''");
                     sb.Append(" AND (");
                     sb.Append(this.GetSqlLike("[tblCase].[CaseNumber]", text));
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[ReportedBy]", text));
@@ -1217,12 +1218,12 @@
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Phone]", text));
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_CellPhone]", text));
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Place]", text));
-                    sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Caption]", text));
-                    sb.AppendFormat(" OR [tblCase].[Description] LIKE '%{0}%'", text);
+                    sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Caption]", text));                    
+                    sb.AppendFormat(" OR [tblCase].[Description] LIKE '%{0}%'", safeText);
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Miscellaneous]", text));
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblDepartment].[Department]", text));
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblDepartment].[DepartmentId]", text));
-                    sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblLog] WHERE [tblLog].[Text_Internal] LIKE '%{0}%' OR [tblLog].[Text_External] LIKE '%{0}%'))", text);
+                    sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblLog] WHERE [tblLog].[Text_Internal] LIKE '%{0}%' OR [tblLog].[Text_External] LIKE '%{0}%'))", safeText);
                     sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblFormFieldValue] WHERE {0}))", this.GetSqlLike("FormFieldValue", text));
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[ReferenceNumber]", text));
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[InvoiceNumber]", text));
@@ -1233,7 +1234,7 @@
                     {
                         if (!string.IsNullOrEmpty(customerSetting.FileIndexingServerName) && !string.IsNullOrEmpty(customerSetting.FileIndexingCatalogName))
                         {
-                            var caseNumbers = GetCasesContainsText(customerSetting.FileIndexingServerName, customerSetting.FileIndexingCatalogName, text);
+                            var caseNumbers = GetCasesContainsText(customerSetting.FileIndexingServerName, customerSetting.FileIndexingCatalogName, safeText);
                             if (!string.IsNullOrEmpty(caseNumbers))
                                 sb.AppendFormat(" OR [tblCase].[CaseNumber] In ({0}) ", caseNumbers);
                         }
@@ -1308,7 +1309,7 @@
             {
                 sb.Append(" (");
                 var words = text
-                        .SafeForSqlInject()
+                        .FreeTextSafeForSqlInject()
                         .ToLower()
                         .Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 

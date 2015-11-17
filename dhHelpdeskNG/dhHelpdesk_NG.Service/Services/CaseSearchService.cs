@@ -201,11 +201,13 @@
         private CaseSearchFilter DoFilterValidation(CaseSearchFilter filter)
         {
             var filterValidate = filter.Copy(filter);
-            if (!string.IsNullOrEmpty(filterValidate.FreeTextSearch))
-                filterValidate.FreeTextSearch = filterValidate.FreeTextSearch.Replace("'", "''");
 
-            if (!string.IsNullOrEmpty(filterValidate.CaptionSearch))
-                filterValidate.CaptionSearch = filterValidate.CaptionSearch.Replace("'", "''");
+            //Applied in FreeTextSearchSafeForSQLInject
+            //if (!string.IsNullOrEmpty(filterValidate.FreeTextSearch))
+            //    filterValidate.FreeTextSearch = filterValidate.FreeTextSearch.Replace("'", "''");
+
+            //if (!string.IsNullOrEmpty(filterValidate.CaptionSearch))
+            //    filterValidate.CaptionSearch = filterValidate.CaptionSearch.Replace("'", "''");
 
             // ärenden som tillhör barn till föräldrer ska visas om vi filtrerar på föräldern
             int productAreaId;
