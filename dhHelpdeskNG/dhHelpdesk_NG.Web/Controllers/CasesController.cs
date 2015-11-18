@@ -1243,6 +1243,8 @@ namespace DH.Helpdesk.Web.Controllers
                     m.InvoiceArticles = this.invoiceArticlesModelFactory.CreateCaseInvoiceArticlesModel(caseInvoices);
                 }  
                 m.CustomerSettings = this.workContext.Customer.Settings;
+
+                m.CustomerSettings.ModuleCaseInvoice = this._settingService.GetCustomerSetting(m.case_.Customer_Id).ModuleCaseInvoice.ToBool(); // TODO FIX
             }        
 
             AddViewDataValues();
@@ -2484,7 +2486,7 @@ namespace DH.Helpdesk.Web.Controllers
                         caseMailSetting,
                         SessionFacade.CurrentUser.Id,
                         this.User.Identity.Name,
-                        out errors),
+                        out errors,
                         parentCase);
             
             var moduleCaseInvoice = this._settingService.GetCustomerSetting(case_.Customer_Id).ModuleCaseInvoice;

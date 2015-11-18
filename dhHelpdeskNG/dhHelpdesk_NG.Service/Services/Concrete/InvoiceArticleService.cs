@@ -25,12 +25,12 @@
         private readonly ICaseFileService caseFileService;
 
         private readonly IMasterDataService masterDataService;
-               
+
         private readonly IUnitOfWorkFactory unitOfWorkFactory;
 
         public InvoiceArticleService(
-                IInvoiceArticleUnitRepository invoiceArticleUnitRepository, 
-                IInvoiceArticleRepository invoiceArticleRepository, 
+                IInvoiceArticleUnitRepository invoiceArticleUnitRepository,
+                IInvoiceArticleRepository invoiceArticleRepository,
                 ICaseInvoiceArticleRepository caseInvoiceArticleRepository,
                 ICaseInvoiceSettingsService caseInvoiceSettingsService,
                 IUserService userService,
@@ -94,11 +94,14 @@
         {
             if (CaseInvoices != null)
             {
-                foreach (var Order in CaseInvoices.FirstOrDefault().Orders)
+                if (CaseInvoices.FirstOrDefault() != null)
                 {
-                    if (Order.InvoiceDate != null)
+                    foreach (var Order in CaseInvoices.FirstOrDefault().Orders)
                     {
-                        Order.InvoiceDate = TimeZoneInfo.ConvertTimeFromUtc(Order.InvoiceDate ?? new DateTime(1970,1,1), TimeZone);    
+                        if (Order.InvoiceDate != null)
+                        {
+                            Order.InvoiceDate = TimeZoneInfo.ConvertTimeFromUtc(Order.InvoiceDate ?? new DateTime(1970, 1, 1), TimeZone);
+                        }
                     }
                 }
             }
@@ -109,14 +112,17 @@
         {
             if (CaseInvoices != null)
             {
-                foreach (var Order in CaseInvoices.FirstOrDefault().Orders)
+                if (CaseInvoices.FirstOrDefault() != null)
                 {
-                    if (Order.InvoicedByUserId != null)
+                    foreach (var Order in CaseInvoices.FirstOrDefault().Orders)
                     {
-                        Order.InvoicedByUser = this.userService.GetUser(Order.InvoicedByUserId ?? 0).UserID;
+                        if (Order.InvoicedByUserId != null)
+                        {
+                            Order.InvoicedByUser = this.userService.GetUser(Order.InvoicedByUserId ?? 0).UserID;
+                        }
                     }
                 }
-            }            
+            }
             return CaseInvoices;
         }
 
@@ -340,10 +346,11 @@
         /// <param name="CostCentre"></param>
         /// <param name="ReferenceName"></param>
         /// <returns></returns>
-        private string YourReferenceRow(string CostCentre, string ReferenceName) {
+        private string YourReferenceRow(string CostCentre, string ReferenceName)
+        {
             var reference = CostCentre;
             reference += "/";
-            var truncatedToNLength = new string(ReferenceName.Take((41-reference.Length)).ToArray());
+            var truncatedToNLength = new string(ReferenceName.Take((41 - reference.Length)).ToArray());
             reference += truncatedToNLength;
             return reference;
         }

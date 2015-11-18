@@ -75,9 +75,26 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var CustomerId = SessionFacade.CurrentCustomer.Id;
             var CurrentLanguageId = SessionFacade.CurrentLanguageId;
-
             var caseFields = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId);
-            return this.Json(caseFields, JsonRequestBehavior.AllowGet);
+            var allCaseFields = this._caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id);
+            List<CaseFieldSettingsWithLanguage> newListOfCaseFieldSettingsWithLanguage = new List<CaseFieldSettingsWithLanguage>();
+            var allCaseFieldsMissingLabels = allCaseFields.Where(x=> !caseFields.Any(y=>y.Name == x.Name));
+            foreach (var caseField in allCaseFieldsMissingLabels)
+            {
+                var translatedCaseField = new CaseFieldSettingsWithLanguage();
+                var coreLabel = caseField.CaseFieldSettingLanguages.Where(x => x.Language_Id == 1).Select(y => y.Label);
+                var translatedLabel = Translation.GetCoreTextTranslation(coreLabel.FirstOrDefault());
+                translatedCaseField.Name = caseField.Name;
+                translatedCaseField.Language_Id = SessionFacade.CurrentLanguageId;
+                translatedCaseField.Label = translatedLabel;
+                newListOfCaseFieldSettingsWithLanguage.Add(translatedCaseField);
+            }
+            foreach (var item in caseFields)
+            {
+                newListOfCaseFieldSettingsWithLanguage.Add(item);
+            }
+
+            return this.Json(newListOfCaseFieldSettingsWithLanguage, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult CurrentLanguageId()

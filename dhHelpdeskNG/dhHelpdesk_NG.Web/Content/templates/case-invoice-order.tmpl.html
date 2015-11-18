@@ -4,14 +4,14 @@
             <td class='width100'>
                 <table class='width100 table table-striped table-bordered table-hover'>
                     <tr>
-                        <th>{{:ArtNoHeader}}</th>
+                        <th class="case-invoice-colnarrow">{{:ArtNoHeader}}</th>
                         <th>{{:NameHeader}}</th>
                         <th>{{:NameEngHeader}}</th>
-                        <th>{{:UnitsHeader}}</th>
+                        <th class="case-invoice-colnarrow">{{:UnitsHeader}}</th>
                         <th>{{:TypeHeader}}</th>
                         <th>{{:PpuHeader}} SEK</th>
-                        <th>{{:TotalHeader}}</th>
-                        <th></th>
+                        <th style="text-align: right;">{{:TotalHeader}}</th>
+                        <th class="case-invoice-colextranarrow"></th>
                     </tr>
                     <tbody class='articles-rows'>
                         {{for Articles tmpl="caseInvoiceArticle" /}}                        
@@ -28,6 +28,23 @@
     </div>
     <table>
         <tbody>
+            <tr>
+                <td>{{:attachedFilesTitle}}
+                </td>
+                <td>
+                    <button class="btn" onclick="dhHelpdesk.CaseArticles.SelectCaseFiles('{{:Id}}'); return false;">{{:attachFilesTitle}}</button>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div style="margin-bottom: 1em;"></div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div id="files-container"></div>
+                </td>
+            </tr>
             <tr>
                 <td>
                     <button class="btn OtherReferenceBtn" onclick="dhHelpdesk.CaseArticles.OtherReference('{{:Id}}')">{{:ReferenceTitle}}</button>
@@ -211,23 +228,7 @@
                     <div style="margin-bottom: 1em;"></div>
                 </td>
             </tr>
-            <tr>
-                <td>{{:attachedFilesTitle}}
-                </td>
-                <td>
-                    <button class="btn" onclick="dhHelpdesk.CaseArticles.SelectCaseFiles('{{:Id}}'); return false;">{{:attachFilesTitle}}</button>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div style="margin-bottom: 1em;"></div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div id="files-container"></div>
-                </td>
-            </tr>
+            
         </tbody>
     </table>
     <div>

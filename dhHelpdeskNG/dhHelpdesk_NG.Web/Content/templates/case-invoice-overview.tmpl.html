@@ -1,43 +1,37 @@
-﻿{{for Orders}}
-<div class="mb20">
-    Order {{:Number}}
-    <table class='width100'>
-        <tr>
-            <td>
-                <table class='width100 table table-striped table-bordered table-hover'>
-                    <thead>
-                        <tr>
-                            <th>{{:ArtNoHeader}}</th>
-                            <th>{{:NameHeader}}</th>
-                            <th>{{:NameEngHeader}}</th>
-                            <th>{{:UnitsHeader}}</th>
-                            <th>{{:TypeHeader}}</th>
-                            <th>{{:PpuHeader}} SEK</th>
-                            <th>{{:TotalHeader}}</th>
-                            <th></th>
-                        </tr>                        
-                    </thead>
-                    <tbody>
-                        {{for Articles tmpl="caseInvoiceArticleOverview" /}}                        
-                    </tbody>
-                </table>
-            </td>
-        </tr>
-    </table>
+﻿<table class="table table-bordered">
+    {{for Orders}}
+    <tr class="case-invoice-orderrow">
+        <th colspan="8">Order {{:Number}}</th>
+    </tr>
+    <tr>
+        <th class="case-invoice-colnarrow">{{:ArtNoHeader}}</th>
+        <th class="case-invoice-colwide">{{:NameHeader}}</th>
+        <th class="case-invoice-colwide">{{:NameEngHeader}}</th>
+        <th class="case-invoice-colnarrow">{{:UnitsHeader}}</th>
+        <th class="case-invoice-colnarrow">{{:TypeHeader}}</th>
+        <th class="case-invoice-colnarrow">{{:PpuHeader}} SEK</th>
+        <th style="text-align: right;" class="case-invoice-colnarrow">{{:TotalHeader}}</th>
+        <th class="case-invoice-colextranarrow"></th>
+    </tr>
+    {{for Articles tmpl="caseInvoiceArticleOverview" /}}
     {{if IsInvoiced}}
-    <div class='width100 textbold' style='text-align: left;'>
-        {{:InvoicedByTitle}}: {{:InvoicedByUser}} - {{:InvoiceDate}}
-    </div>
+    <tr>
+        <td colspan="8">{{:Persons_Name}} - {{:CostCentre}}</td>
+    </tr>
     {{/if}}
-    <div class='width100 textbold' style='text-align: right;'>
-        {{:TotalLabel}}: {{:Total}}
-    </div>  
-    <table>
-        <tbody>
-        </tbody>
-    </table>
-</div>    
-{{/for}} 
+    <tr>
+        {{if IsInvoiced}}
+        <td colspan="5" class='textbold' style='text-align: left;'>{{:InvoicedByTitle}}: {{:InvoicedByUser}} - {{:InvoiceDate}}</td>
+        <td colspan="2" class='textbold' style='text-align: right;'>{{:TotalLabel}}: {{:Total}}</td>
+        <td colspan="1"></td>
+        {{else}}
+        <td colspan="7" class='textbold' style='text-align: right;'>{{:TotalLabel}}: {{:Total}}
+        </td>
+        <td colspan="1"></td>
+        {{/if}}
+    </tr>
+    {{/for}}
+</table>
 <div class='textbold' style='text-align: right;'>
-    {{:TotalLabel}}: {{:Total}}
-</div>    
+    {{:TotalAllLabel}}: {{:Total}}
+</div>

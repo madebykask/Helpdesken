@@ -62,7 +62,7 @@
                 return this.Json(null, JsonRequestBehavior.AllowGet);
             }
 
-            var articles = this.invoiceArticleService.GetArticles(this.workContext.Customer.CustomerId, productAreaId.Value);
+            var articles = this.invoiceArticleService.GetArticles(SessionFacade.CurrentCustomer.Id, productAreaId.Value);
             return this.Json(articles, JsonRequestBehavior.AllowGet);
         }
 
@@ -166,7 +166,7 @@
                     }
 
                     file.Size = fileContent.Length;
-                    file.Type = MimeHelper.GetMimeType(fileName);
+                    file.Type = MimeHelper.GetMimeTypeExtended(fileName);
 
                     files.Add(file);
                 }
