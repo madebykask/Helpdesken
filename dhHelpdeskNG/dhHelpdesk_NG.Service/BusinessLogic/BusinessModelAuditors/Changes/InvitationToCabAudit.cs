@@ -13,6 +13,7 @@
     using DH.Helpdesk.Services.BusinessLogic.MailTools.TemplateFormatters;
     using DH.Helpdesk.Services.Requests.Changes;
     using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.BusinessData.Models.Email;
 
     public sealed class InvitationToCabAudit : IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditData>
     {
@@ -102,7 +103,7 @@
                 businessModel.Context.DateAndTime,
                 from);
 
-            this.emailService.SendEmail(from, log.Emails, mail);
+            this.emailService.SendEmail(from, log.Emails, mail, EmailResponse.GetEmptyEmailResponse());
 
             var emailLog = EmailLog.CreateNew(
                 optionalData.HistoryId,

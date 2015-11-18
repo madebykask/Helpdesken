@@ -15,11 +15,11 @@
 
         bool IsValidEmail(string inputEmail);
 
-        EmailResponse SendEmail(MailAddress from, List<MailAddress> recipients, Mail mail);
+        EmailResponse SendEmail(MailAddress from, List<MailAddress> recipients, Mail mail, EmailResponse emailResponse);
 
-        EmailResponse SendEmail(MailAddress from, MailAddress recipient, Mail mail);
+        EmailResponse SendEmail(MailAddress from, MailAddress recipient, Mail mailint, EmailResponse emailResponse);
 
-        EmailResponse SendEmail(MailItem mailItem);
+        EmailResponse SendEmail(MailItem mailItem, EmailResponse emailResponse);
 
         EmailResponse SendEmail(
             string from,
@@ -27,11 +27,12 @@
             string subject,
             string body,
             List<Field> fields,            
+            EmailResponse emailResponse,
             string mailMessageId = "",
             bool highPriority = false,
             List<string> files = null);
 
-        EmailResponse SendEmail(EmailItem item);
+        EmailResponse SendEmail(EmailItem item, EmailResponse emailResponse);
 
         #endregion
     }

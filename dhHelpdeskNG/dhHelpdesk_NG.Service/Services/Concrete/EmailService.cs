@@ -17,34 +17,35 @@
     {
         private readonly IEmailSendingSettingsProvider emailSendingSettingsProvider;
         private readonly string _EMAIL_SEND_MESSAGE = "Email has been sent!";
+        private readonly int _MAX_NUMBER_SENDING_EMAIL = 3;
 
         public EmailService(IEmailSendingSettingsProvider emailSendingSettingsProvider)
         {
             this.emailSendingSettingsProvider = emailSendingSettingsProvider;
         }
 
-        public EmailResponse SendEmail(MailAddress from, List<MailAddress> recipients, Mail mail)
+        public EmailResponse SendEmail(MailAddress from, List<MailAddress> recipients, Mail mail, EmailResponse emailResponse)
         {
-            EmailResponse res = new EmailResponse();
+            EmailResponse res = emailResponse;
             var sendTime = DateTime.Now;
 
             foreach (var recipient in recipients)
             {
-                res = this.SendEmail(from, recipient, mail);
+                res = this.SendEmail(from, recipient, mail, emailResponse);
             }
 
             res.SendTime = sendTime;
             return res;
         }
 
-        public EmailResponse SendEmail(MailItem mailItem)
+        public EmailResponse SendEmail(MailItem mailItem, EmailResponse emailResponse)
         {
-            return this.SendEmail(new MailAddress(mailItem.From), new MailAddress(mailItem.To), mailItem.Mail);
+            return this.SendEmail(new MailAddress(mailItem.From), new MailAddress(mailItem.To), mailItem.Mail, emailResponse);
         }
 
-        public EmailResponse SendEmail(MailAddress from, MailAddress recipient, Mail mail)
+        public EmailResponse SendEmail(MailAddress from, MailAddress recipient, Mail mail, EmailResponse emailResponse)
         {
-            EmailResponse res = new EmailResponse(null, string.Empty);
+            EmailResponse res = emailResponse;
             var sendTime = DateTime.Now;
 
             var mailSendingSettings = this.emailSendingSettingsProvider.GetSettings();
@@ -63,7 +64,7 @@
                                               IsBodyHtml = true
                                           };
                     smtpClient.Send(mailMessage);
-                    res = new EmailResponse(sendTime, _EMAIL_SEND_MESSAGE);
+                    res = new EmailResponse(sendTime, emailResponse.ResponseMessage + " | " + _EMAIL_SEND_MESSAGE, emailResponse.NumberOfTry);
                 }
                 catch (Exception ex)
                 {
@@ -73,18 +74,26 @@
                     else
                         msg = string.Format("{0}", ex.Message);
 
-                    res = new EmailResponse(sendTime, msg);
+                    res = new EmailResponse(sendTime, emailResponse.ResponseMessage + " | " + msg, emailResponse.NumberOfTry++);
                 }
                 finally
                 {
                     Thread.CurrentThread.CurrentCulture = oldCI;
                     Thread.CurrentThread.CurrentUICulture = oldCI;
                 }
+
             }
+
+            if (res.NumberOfTry != emailResponse.NumberOfTry && res.NumberOfTry <= _MAX_NUMBER_SENDING_EMAIL)
+            {
+                res.NumberOfTry++;
+                res = this.SendEmail(from, recipient, mail, emailResponse);
+            }
+
             return res;
         }
 
-        public EmailResponse SendEmail(EmailItem item)
+        public EmailResponse SendEmail(EmailItem item, EmailResponse emailResponse)
         {
             return this.SendEmail(
                                 item.From,
@@ -92,6 +101,7 @@
                                 item.Subject,
                                 item.Body,
                                 item.Fields,
+                                emailResponse,
                                 item.MailMessageId,
                                 item.IsHighPriority,
                                 item.Files);
@@ -103,11 +113,12 @@
             string subject, 
             string body, 
             List<DH.Helpdesk.Domain.Field> fields,            
+            EmailResponse emailResponse,
             string mailMessageId = "", 
-            bool highPriority = false, 
+            bool highPriority = false,
             List<string> files = null)
         {
-            EmailResponse res = new EmailResponse(null, string.Empty);
+            EmailResponse res = emailResponse;
             var sendTime = DateTime.Now;
 
             SmtpClient _smtpClient;
@@ -194,7 +205,7 @@
                         if (msg.To.Count > 0 || msg.Bcc.Count > 0 || msg.CC.Count > 0)
                         {
                             _smtpClient.Send(msg);
-                            res = new EmailResponse(sendTime, _EMAIL_SEND_MESSAGE);                            
+                            res = new EmailResponse(sendTime, emailResponse.ResponseMessage + " | " + _EMAIL_SEND_MESSAGE, emailResponse.NumberOfTry);                            
                         }
                     }
                 }                
@@ -207,7 +218,7 @@
                 else
                     msg = string.Format("{0}", ex.Message);
 
-                res = new EmailResponse(sendTime, msg);
+                res = new EmailResponse(sendTime, emailResponse.ResponseMessage + " | " + msg, emailResponse.NumberOfTry++);
             }
             finally
             {
@@ -216,7 +227,14 @@
                 Thread.CurrentThread.CurrentUICulture = oldCI;
             }
 
+            if (res.NumberOfTry != emailResponse.NumberOfTry && res.NumberOfTry <= _MAX_NUMBER_SENDING_EMAIL)
+            {
+                res.NumberOfTry++;
+                res = this.SendEmail(from, to, subject, body, fields, res, mailMessageId, highPriority, files);                
+            }
+            
             return res;
+           
         }
 
         public string GetMailMessageId(string helpdeskFromAddress)

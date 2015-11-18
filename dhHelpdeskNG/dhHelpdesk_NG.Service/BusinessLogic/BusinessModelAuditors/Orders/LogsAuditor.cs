@@ -15,6 +15,7 @@
     using DH.Helpdesk.Services.Services;
 
     using EmailLog = DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditFields.EmailLog;
+    using DH.Helpdesk.BusinessData.Models.Email;
 
     public sealed class LogsAuditor : IBusinessModelAuditor<UpdateOrderRequest, OrderAuditData>
     {
@@ -92,7 +93,7 @@
 
                     var from = new MailAddress(customerEmail);
 
-                    this.emailService.SendEmail(from, log.Emails, mail);
+                    this.emailService.SendEmail(from, log.Emails, mail, EmailResponse.GetEmptyEmailResponse());
 
                     var mailUniqueIdentifier = this.mailUniqueIdentifierProvider.Provide(
                                                                 businessModel.DateAndTime,

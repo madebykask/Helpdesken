@@ -13,6 +13,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
     using DH.Helpdesk.Services.BusinessLogic.MailTools.TemplateFormatters;
     using DH.Helpdesk.Services.Requests.Changes;
     using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.BusinessData.Models.Email;
 
     public sealed class ManualLogsAudit : IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditData>
     {
@@ -109,7 +110,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
                     businessModel.Context.DateAndTime,
                     from);
 
-                this.emailService.SendEmail(from, log.Emails, mail);
+                this.emailService.SendEmail(from, log.Emails, mail, EmailResponse.GetEmptyEmailResponse());
 
                 var emailLog = EmailLog.CreateNew(
                     optionalData.HistoryId,
