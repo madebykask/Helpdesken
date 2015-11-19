@@ -120,7 +120,7 @@ namespace DH.Helpdesk.Dal.Repositories
             if (fromDate.HasValue && toDate.HasValue)
             {
                 var fDate = fromDate.Value.AddDays(-1);
-                var tDate = toDate.Value.AddDays(1);                
+                var tDate = toDate.Value.AddMonths(1);                
                 ret =  this.Table.Where(l => l.LogDate >= fDate && l.LogDate <= tDate).ToList();
             }
             else
