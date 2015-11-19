@@ -339,6 +339,10 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpGet]
         public PartialViewResult GetCustomerSpecificFilter(int selectedCustomerId, bool resetFilter = false)
         {
+            if (SessionFacade.CurrentUser == null || SessionFacade.CurrentCustomer == null)
+            {
+                return PartialView("AdvancedSearch/_SpecificSearchTab", null);
+            }            
             CaseSearchModel csm = null;
 
             if (!resetFilter)
@@ -1876,6 +1880,26 @@ namespace DH.Helpdesk.Web.Controllers
             return new UnicodeFileContentResult(fileContent, fileName);
         }
 
+        private string GetCaseFileNames(string id)
+        {
+            var files = GuidHelper.IsGuid(id)
+                                ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Cases)
+                                : this._caseFileService.FindFileNamesByCaseId(int.Parse(id));
+
+            return String.Join("|", files);
+
+        }
+
+        private string GetLogFileNames(string id)
+        {
+            var files = GuidHelper.IsGuid(id)
+                                ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Log)
+                                : this._caseFileService.FindFileNamesByCaseId(int.Parse(id));
+
+            return String.Join("|", files);
+
+        }                                
+
         #endregion
 
         #region --Case Actions--
@@ -2763,25 +2787,7 @@ namespace DH.Helpdesk.Web.Controllers
             return string.Join(",", cases.Select(c => c.Id));
         }        
 
-        private string GetCaseFileNames(string id)
-        {
-            var files = GuidHelper.IsGuid(id)
-                                ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Cases)
-                                : this._caseFileService.FindFileNamesByCaseId(int.Parse(id));
-
-            return String.Join("|", files);
-
-        }
-
-        private string GetLogFileNames(string id)
-        {
-            var files = GuidHelper.IsGuid(id)
-                                ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Log)
-                                : this._caseFileService.FindFileNamesByCaseId(int.Parse(id));
-
-            return String.Join("|", files);
-
-        }                                
+      
         
         private List<string> GetInactiveFieldsValue(CaseMasterDataFieldsModel fields)
         {
@@ -3156,7 +3162,8 @@ namespace DH.Helpdesk.Web.Controllers
             if (customerId == 0)
             {
                 csm = SessionFacade.CurrentAdvancedSearch;
-                customerId = csm.caseSearchFilter.CustomerId;
+                if (csm != null && csm.caseSearchFilter != null)
+                    customerId = csm.caseSearchFilter.CustomerId;
             }
 
             var specificFilter = new AdvancedSearchSpecificFilterData();
