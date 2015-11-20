@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Controllers
 {
     using System;
+    using System.Linq;
     using System.Collections.Generic;
     using System.IO;
     using System.Net;
@@ -79,6 +80,7 @@
             this.invoiceArticleService.SaveCaseInvoices(this.invoiceHelper.ToCaseInvoices(invoices, null, null), caseId);
         }
 
+        [Obsolete]
         [HttpPost]
         public ActionResult DoInvoice(int customerId, int caseId, string invoices)
         {

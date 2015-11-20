@@ -13,7 +13,7 @@
             entity.Number = businessModel.Number;
             entity.ParentId = businessModel.ParentId;
             entity.Ppu = businessModel.Ppu;
-            entity.ProductAreaId = businessModel.ProductAreaId;
+            //entity.ProductAreaId = businessModel.ProductAreaId;
             entity.UnitId = businessModel.UnitId;
             entity.CustomerId = businessModel.CustomerId;
         }

@@ -111,6 +111,13 @@ $(function () {
             e.css("border-color", "");
         },
 
+        MarkTextInvalid: function (e) {
+            e.css("color", "red");
+        },
+        MarkTextValid: function (e) {
+            e.css("color", "");
+        },
+
         IsNullOrEmpty: function (value) {
             return !(typeof value === "string" && value.length > 0);
         },
@@ -831,40 +838,43 @@ $(function () {
                 $.getJSON("/invoice/articles?productAreaId=" + th.ProductAreaElement.val(), function (data) {
                     th.ClearInvoiceArticles();
                     if (data == null || data.length == 0) {
-
+                        
                     }
-                    //if (th.ModuleCaseInvoiceElement.val() == "True") { //todo fix this. No need to do alot of stuff when module is not active. Maybe put it before json request
-                    button.show();
+                    else {
+                        //if (th.ModuleCaseInvoiceElement.val() == "True") { //todo fix this. No need to do alot of stuff when module is not active. Maybe put it before json request
+                        button.show();
 
-                    for (var i = 0; i < data.length; i++) {
-                        var a = data[i];
-                        var article = new dhHelpdesk.CaseArticles.InvoiceArticle();
-                        article.Id = a.Id;
-                        article.ParentId = a.ParentId;
-                        article.Number = a.Number;
-                        article.Name = a.Name;
-                        article.NameEng = a.NameEng;
-                        article.Description = a.Description;
-                        article.UnitId = a.UnitId;
-                        if (a.Unit != null) {
-                            article.Unit = new dhHelpdesk.CaseArticles.InvoiceArticleUnit();
-                            article.Unit.Id = a.Unit.Id;
-                            article.Unit.Name = a.Unit.Name;
-                            article.Unit.CustomerId = a.Unit.CustomerId;
+                        for (var i = 0; i < data.length; i++) {
+                            var a = data[i];
+                            var article = new dhHelpdesk.CaseArticles.InvoiceArticle();
+                            article.Id = a.Id;
+                            article.ParentId = a.ParentId;
+                            article.Number = a.Number;
+                            article.Name = a.Name;
+                            article.NameEng = a.NameEng;
+                            article.Description = a.Description;
+                            article.TextDemand = a.TextDemand;
+                            article.UnitId = a.UnitId;
+                            if (a.Unit != null) {
+                                article.Unit = new dhHelpdesk.CaseArticles.InvoiceArticleUnit();
+                                article.Unit.Id = a.Unit.Id;
+                                article.Unit.Name = a.Unit.Name;
+                                article.Unit.CustomerId = a.Unit.CustomerId;
+                            }
+                            article.Ppu = a.Ppu;
+                            article.ProductAreaId = a.ProductAreaId;
+                            article.CustomerId = a.CustomerId;
+                            th.AddInvoiceArticle(article);
                         }
-                        article.Ppu = a.Ppu;
-                        article.ProductAreaId = a.ProductAreaId;
-                        article.CustomerId = a.CustomerId;
-                        th.AddInvoiceArticle(article);
-                    }
 
-                    var articles = th.GetInvoiceArticles();
-                    for (var j = 0; j < articles.length; j++) {
-                        var parent = articles[j];
-                        for (var k = 0; k < articles.length; k++) {
-                            var child = articles[k];
-                            if (child.ParentId == parent.Id) {
-                                parent.AddChild(child);
+                        var articles = th.GetInvoiceArticles();
+                        for (var j = 0; j < articles.length; j++) {
+                            var parent = articles[j];
+                            for (var k = 0; k < articles.length; k++) {
+                                var child = articles[k];
+                                if (child.ParentId == parent.Id) {
+                                    parent.AddChild(child);
+                                }
                             }
                         }
                     }
@@ -919,6 +929,7 @@ $(function () {
             this.Ppu = null;
             this.ProductAreaId = null;
             this.CustomerId = null;
+            this.TextDemand = null;
 
             this.Parent = null;
             this.Children = [];
@@ -1785,10 +1796,7 @@ $(function () {
             },
 
             this.InvoiceValidate = function () {
-                var a = this;
                 var isValid = true;
-                debugger
-                var a = this.CostCentre;
                 if (dhHelpdesk.CaseArticles.IsNullOrEmpty(this.CostCentre)) {
                     dhHelpdesk.CaseArticles.ShowErrorMessage(dhHelpdesk.CaseArticles.translate("Kostnadställe saknas."));
                     isValid = false;
@@ -1878,6 +1886,7 @@ $(function () {
             this.Position = null;
             this.IsInvoiced = null;
             this.Ppu = null;
+            
             this.Container = null;
             this.CreditedFrom = null;
 
@@ -2080,7 +2089,30 @@ $(function () {
                         dhHelpdesk.CaseArticles.MakeValid(eAmount);
                     }
                 }
-
+                
+                //Textdemand has blank article?
+                if (!(this.IsBlank()) && this.Article.TextDemand) {
+                    var TextIsValid = false;
+                    var thisArticle = this;
+                    var thisPosition = thisArticle.Position + 1;
+                    var allArticles = thisArticle.Order._articles;
+                    $.each(allArticles, function () {
+                        if (this.Position == thisPosition && this.IsBlank())
+                        {
+                            TextIsValid = true;
+                            return false;
+                        }
+                    });
+                    var eArticleRow = this.Container.find(".article-amount").parent().parent();
+                    if (!TextIsValid) {
+                        isValid = false;
+                        dhHelpdesk.CaseArticles.MarkTextInvalid(eArticleRow);
+                        dhHelpdesk.CaseArticles.ShowErrorMessage(dhHelpdesk.CaseArticles.translate('En artikel saknar textrad.'));
+                    }
+                    else {
+                        dhHelpdesk.CaseArticles.MarkTextValid(eArticleRow);
+                    }
+                }
                 return isValid;
             }
         },
@@ -2091,10 +2123,8 @@ $(function () {
             $.each(allArticlePrices, function (index, value) {
                 $(value).val(dhHelpdesk.CaseArticles.delimitInput($(value).val()));
             });
-            debugger
             var allTotalPrices = $('.article-total, .articles-total, .article-ppu-fixed');
             $.each(allTotalPrices, function (index, value) {
-                debugger
                 $(value).text(dhHelpdesk.CaseArticles.delimitInput($(value).text()));
             });
         },
@@ -2700,6 +2730,7 @@ $(function () {
                                     caseArticle.Article.Name = article.Article.Name;
                                     caseArticle.Article.NameEng = article.Article.NameEng;
                                     caseArticle.Article.Description = article.Article.Description;
+                                    caseArticle.Article.TextDemand = article.Article.TextDemand;
                                     caseArticle.Article.UnitId = article.Article.UnitId;
                                     if (article.Article.Unit != null) {
                                         var unit = new dhHelpdesk.CaseArticles.InvoiceArticleUnit();

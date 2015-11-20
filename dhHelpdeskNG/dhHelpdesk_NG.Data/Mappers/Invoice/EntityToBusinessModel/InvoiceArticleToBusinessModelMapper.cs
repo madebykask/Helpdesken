@@ -1,5 +1,6 @@
-﻿namespace DH.Helpdesk.Dal.Mappers.Invoice.EntityToBusinessModel
-{
+﻿using System.Linq;
+namespace DH.Helpdesk.Dal.Mappers.Invoice.EntityToBusinessModel
+{   
     using DH.Helpdesk.BusinessData.Models.Customer.Input;
     using DH.Helpdesk.BusinessData.Models.Invoice;
     using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
@@ -42,9 +43,10 @@
                         entity.UnitId,
                         this.unitMapper.Map(entity.Unit),
                         entity.Ppu,
-                        entity.ProductAreaId,
-                        this.productAreaMapper.Map(entity.ProductArea),
+                        entity.ProductAreas.ToList(),
                         entity.CustomerId,
+                        entity.TextDemand,
+                        entity.Blocked,
                         this.customerMapper.Map(entity.Customer));
         }
     }

@@ -32,7 +32,7 @@
 
             var entities = this.DbContext.InvoiceArticles
                         .Where(a => a.CustomerId == customerId &&
-                                productAreas.Contains(a.ProductAreaId))
+                            a.ProductAreas.Where(p=>productAreas.Contains(p.Id)).Any()) //does this work?
                         .OrderBy(a => a.Number)
                         .ToList();
 
