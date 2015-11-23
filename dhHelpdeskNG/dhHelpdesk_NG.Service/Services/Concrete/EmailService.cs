@@ -74,7 +74,8 @@
                     else
                         msg = string.Format("{0}", ex.Message);
 
-                    res = new EmailResponse(sendTime, emailResponse.ResponseMessage + " | " + msg, emailResponse.NumberOfTry++);
+                    var tryCount = emailResponse.NumberOfTry + 1;
+                    res = new EmailResponse(sendTime, emailResponse.ResponseMessage + " | " + msg, tryCount);
                 }
                 finally
                 {
@@ -84,11 +85,8 @@
 
             }
 
-            if (res.NumberOfTry != emailResponse.NumberOfTry && res.NumberOfTry <= _MAX_NUMBER_SENDING_EMAIL)
-            {
-                res.NumberOfTry++;
-                res = this.SendEmail(from, recipient, mail, emailResponse);
-            }
+            if (res.NumberOfTry != emailResponse.NumberOfTry && res.NumberOfTry <= _MAX_NUMBER_SENDING_EMAIL)                            
+                res = this.SendEmail(from, recipient, mail, res);            
 
             return res;
         }
@@ -218,7 +216,8 @@
                 else
                     msg = string.Format("{0}", ex.Message);
 
-                res = new EmailResponse(sendTime, emailResponse.ResponseMessage + " | " + msg, emailResponse.NumberOfTry++);
+                var tryCount = emailResponse.NumberOfTry + 1;
+                res = new EmailResponse(sendTime, emailResponse.ResponseMessage + " | " + msg, tryCount);
             }
             finally
             {
@@ -227,11 +226,8 @@
                 Thread.CurrentThread.CurrentUICulture = oldCI;
             }
 
-            if (res.NumberOfTry != emailResponse.NumberOfTry && res.NumberOfTry <= _MAX_NUMBER_SENDING_EMAIL)
-            {
-                res.NumberOfTry++;
-                res = this.SendEmail(from, to, subject, body, fields, res, mailMessageId, highPriority, files);                
-            }
+            if (res.NumberOfTry != emailResponse.NumberOfTry && res.NumberOfTry <= _MAX_NUMBER_SENDING_EMAIL)                            
+                res = this.SendEmail(from, to, subject, body, fields, res, mailMessageId, highPriority, files);                            
             
             return res;
            
