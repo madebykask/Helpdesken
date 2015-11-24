@@ -386,6 +386,12 @@ namespace DH.Helpdesk.Web.Controllers
                 f.CaseType = frm.ReturnFormValue("hid_CaseTypeDropDown").convertStringToInt();
                 f.ProductArea = f.ProductArea = frm.ReturnFormValue("hid_ProductAreaDropDown").ReturnCustomerUserValue();
                 f.CaseClosingReasonFilter = frm.ReturnFormValue("hid_ClosingReasonDropDown").ReturnCustomerUserValue();
+
+
+                var departments_OrganizationUnits = frm.ReturnFormValue(CaseFilterFields.DepartmentNameAttribute);
+
+                f.Department = GetDepartmentsFrom(departments_OrganizationUnits);
+                f.OrganizationUnit = GetOrganizationUnitsFrom(departments_OrganizationUnits);
             }
             else
             {
@@ -495,6 +501,20 @@ namespace DH.Helpdesk.Web.Controllers
                 if (sm.caseSearchFilter.FreeTextSearch[0] == '#')
                     sm.caseSearchFilter.FreeTextSearch = string.Empty;
             }
+
+            var ouIds = f.OrganizationUnit.Split(',');
+            if (ouIds.Any())
+            {
+                foreach (var id in ouIds)
+                    if (!string.IsNullOrEmpty(id))
+                    {
+                        if (string.IsNullOrEmpty(sm.caseSearchFilter.Department))
+                            sm.caseSearchFilter.Department += string.Format("-{0}", id);
+                        else
+                            sm.caseSearchFilter.Department += string.Format(",-{0}", id);
+                    }
+            }
+
 
             SessionFacade.CurrentAdvancedSearch = sm;
             #endregion
@@ -3166,6 +3186,8 @@ namespace DH.Helpdesk.Web.Controllers
                     customerId = csm.caseSearchFilter.CustomerId;
             }
 
+            var customerSetting = this._settingService.GetCustomerSetting(customerId);
+
             var specificFilter = new AdvancedSearchSpecificFilterData();
 
             specificFilter.CustomerId = customerId;
@@ -3191,6 +3213,9 @@ namespace DH.Helpdesk.Web.Controllers
                         this._departmentService.GetDepartments(customerId, ActivationStatus.All)
                         .ToList();
                 }
+
+                if (customerSetting != null && customerSetting.ShowOUsOnDepartmentFilter != 0)
+                    specificFilter.DepartmentList = AddOrganizationUnitsToDepartments(specificFilter.DepartmentList);
             }
 
             if (customerfieldSettings.Where(fs => fs.Name == GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString() &&
