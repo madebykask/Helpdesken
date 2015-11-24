@@ -117,6 +117,7 @@ EditPage.prototype.isFormValid = function() {
         var finishDate = me.getDate(curFinishDate);
         if (regDate > finishDate) {
             dhHelpdesk.cases.utils.showError(me.p.finishingDateMessage);
+            $('#' + me.p.caseFieldNames.FinishingDate).addClass("error");
             return false;
         };        
     }

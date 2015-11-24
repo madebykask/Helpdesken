@@ -4147,6 +4147,12 @@ If not exists (select * from tblTextTranslation where text_id = 1566 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1566, 2, 'Click here to remove the favorite from your favorite list.')
 GO
 
+If not exists (select * from tbltext where id = 1567)
+	insert into tbltext (id, TextString) VALUES (1567, 'kan inte vara tidigare än registreringsdatum.')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1567 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1567, 2, 'can not be earlier than registration date.')
+GO
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
