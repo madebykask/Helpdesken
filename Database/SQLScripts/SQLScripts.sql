@@ -195,6 +195,11 @@ begin
  exec [dbo].[sp_PopulateTblDate] '2016-01-01', '2016-12-31'
 end
 GO	
+
+
+ALTER TABLE tblEMailLog ALTER COLUMN ResponseMessage nvarchar(1000)
+GO
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.17'
 
