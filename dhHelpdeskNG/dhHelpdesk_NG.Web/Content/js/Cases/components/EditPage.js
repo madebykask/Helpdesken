@@ -90,6 +90,18 @@ EditPage.prototype.getValidationErrorMessage = function () {
     return messages.join('');
 };
 
+EditPage.prototype.getDate = function (val) {
+    if (val == undefined || val == null || val == "")
+        return null;
+    else {
+        var dateStr = val.split(' ');
+        if (dateStr.length > 0)
+            return new Date(dateStr[0]);
+        else
+            return null;
+    }
+};
+
 EditPage.prototype.isFormValid = function() {
     var me = this;
 
@@ -97,7 +109,18 @@ EditPage.prototype.isFormValid = function() {
         me.$productAreaObj.addClass("error");
         dhHelpdesk.cases.utils.showError(me.productAreaErrorMessage);
         return false;
-    }    
+    }            
+            
+    var curFinishDate = $('#' + me.p.caseFieldNames.FinishingDate).val();
+    if (curFinishDate != undefined && curFinishDate != '') {
+        var regDate = me.getDate(me.p.caseRegDate);            
+        var finishDate = me.getDate(curFinishDate);
+        if (regDate > finishDate) {
+            dhHelpdesk.cases.utils.showError(me.p.finishingDateMessage);
+            return false;
+        };        
+    }
+    
 
     if (!me.$form.valid()) {
         dhHelpdesk.cases.utils.showError(me.getValidationErrorMessage());

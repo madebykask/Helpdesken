@@ -2482,7 +2482,7 @@ namespace DH.Helpdesk.Web.Controllers
                 }
 
                 case_.RegTime = DateTime.SpecifyKind(oldCase.RegTime, DateTimeKind.Utc);
-#endregion
+                #endregion
             }
             else
             {

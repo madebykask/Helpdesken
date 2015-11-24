@@ -29,6 +29,8 @@
         deleteLockedCaseMessage: '@Translation.Get("Ärendet kan inte uppdateras då det är upplåst. Stäng ärendet och försök igen.")',
         moveLockedCaseMessage: '@Translation.Get("Ärendet kan inte uppdateras då det är upplåst. Stäng ärendet och försök igen.")',        
         lostChangesConfirmation: '@Html.Raw(Translation.Get("Dina ändringar har inte sparats. Fortsätt?"))',
+        finishingDateMessage: '@Html.Raw(Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) + " " + Translation.Get("kan inte vara tidigare än registreringsdatum."))',
+        caseRegDate: '@Model.case_.RegTime',      
         caseFieldNames:{
             CustomerId: "case__Customer_Id",
             RegionId: "case__Region_Id",
@@ -46,7 +48,8 @@
             StatusId: "case__Status_Id",
             SubStatusId: "case__StateSecondary_Id",
             CausingPartId: "case__CausingPartId",
-            ClosingReasonId: "CaseLog_FinishingType"
+            ClosingReasonId: "CaseLog_FinishingType",
+            FinishingDate: "CaseLog_FinishingDate"
         },
         casesScopeInitParameters: {
             requiredFieldsMessage: '@Translation.Get("Ärendet kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ärendet.")',
