@@ -166,6 +166,7 @@ function GetComputerUserSearchOptions() {
                                     , ouid: item.OU_Id
                                     , ouname: item.OUName
                                     , name_family: item.SurName + ' ' + item.FirstName
+                                    , customername : item.CustomerName
                         };
                         return JSON.stringify(aItem);
                         
@@ -201,9 +202,11 @@ function GetComputerUserSearchOptions() {
         highlighter: function (obj) {
             var item = JSON.parse(obj);
             var orgQuery = this.query;
+            if (item.regionname == null)
+                item.regionname = ""
             var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
-            var result = item.name + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email;
-            var resultBy_NameFamily = item.name_family + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email;
+            var result = item.name + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email + ' - ' + item.regionname;
+            var resultBy_NameFamily = item.name_family + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email + ' - ' + item.regionname;
                      
             if (result.toLowerCase().indexOf(orgQuery.toLowerCase()) > -1)               
                 return result.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
