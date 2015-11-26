@@ -8,8 +8,9 @@ using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Domain;
 using System.Collections.Generic;
 using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Services.Services.Reports;
 
-namespace DH.Helpdesk.Services.Services.Concrete
+namespace DH.Helpdesk.Services.Services.Concrete.Reports
 {   
 
     public sealed class ReportServiceService : IReportServiceService

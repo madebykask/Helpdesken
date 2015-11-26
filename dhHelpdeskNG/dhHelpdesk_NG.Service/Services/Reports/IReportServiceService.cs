@@ -1,5 +1,5 @@
 ﻿using DH.Helpdesk.BusinessData.Models.ReportService;
-namespace DH.Helpdesk.Services.Services
+namespace DH.Helpdesk.Services.Services.Reports
 {
     public interface IReportServiceService
     {
