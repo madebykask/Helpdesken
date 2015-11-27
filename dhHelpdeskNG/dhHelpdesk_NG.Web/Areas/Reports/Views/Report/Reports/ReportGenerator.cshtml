@@ -5,7 +5,6 @@
 
 @Translation.Get("Poster i sökresultat"):
 @Model.CasesFound
-
 <table id="casesTable" class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
@@ -33,7 +32,7 @@
     <tbody>
         @foreach (var c in Model.Cases)
         {
-            <tr onclick=" window.location.href = '@Url.Action("Edit", "Cases", new RouteValueDictionary { { "id", c.Id }, { "area", String.Empty } })' ">
+            <tr onclick=" window.location.href = '@Url.Action("Edit", "Cases", new RouteValueDictionary { { "id", c.Id }, { "backURL" , "/Reports/Report"}, { "area", String.Empty } })' ">
                 @foreach(var value in c.FieldValues)
                 {
                     <td class="tdpointer">@value.Value.GetDisplayValue().ForHtmlView()</td>

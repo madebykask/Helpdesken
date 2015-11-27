@@ -502,19 +502,21 @@ namespace DH.Helpdesk.Web.Controllers
                     sm.caseSearchFilter.FreeTextSearch = string.Empty;
             }
 
-            var ouIds = f.OrganizationUnit.Split(',');
-            if (ouIds.Any())
+            if (!string.IsNullOrEmpty(f.OrganizationUnit))
             {
-                foreach (var id in ouIds)
-                    if (!string.IsNullOrEmpty(id))
-                    {
-                        if (string.IsNullOrEmpty(sm.caseSearchFilter.Department))
-                            sm.caseSearchFilter.Department += string.Format("-{0}", id);
-                        else
-                            sm.caseSearchFilter.Department += string.Format(",-{0}", id);
-                    }
+                var ouIds = f.OrganizationUnit.Split(',');
+                if (ouIds.Any())
+                {
+                    foreach (var id in ouIds)
+                        if (!string.IsNullOrEmpty(id))
+                        {
+                            if (string.IsNullOrEmpty(sm.caseSearchFilter.Department))
+                                sm.caseSearchFilter.Department += string.Format("-{0}", id);
+                            else
+                                sm.caseSearchFilter.Department += string.Format(",-{0}", id);
+                        }
+                }
             }
-
 
             SessionFacade.CurrentAdvancedSearch = sm;
             #endregion
@@ -1222,7 +1224,7 @@ namespace DH.Helpdesk.Web.Controllers
             string backUrl = null)
         {
             CaseInputViewModel m = null;
-
+            
             if (SessionFacade.CurrentUser != null)
             {
                 var userId = SessionFacade.CurrentUser.Id;
