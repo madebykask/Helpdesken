@@ -376,6 +376,12 @@ namespace DH.Helpdesk.Web.Controllers
             f.CaseClosingDateStartFilter = frm.GetDate("CaseClosingDateStartFilter");
             f.CaseClosingDateEndFilter = frm.GetDate("CaseClosingDateEndFilter");
 
+            if (f.CaseRegistrationDateEndFilter != null)
+                f.CaseRegistrationDateEndFilter = f.CaseRegistrationDateEndFilter.Value.AddDays(1);
+
+            if (f.CaseClosingDateEndFilter != null)
+                f.CaseClosingDateEndFilter = f.CaseClosingDateEndFilter.Value.AddDays(1);
+
             //Apply & save specific filters only when user has selected one customer 
             if (!string.IsNullOrEmpty(f.Customer) && !f.Customer.Contains(","))
             {
