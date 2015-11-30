@@ -70,6 +70,7 @@
     <Compile Include="Enums\Admin\Users\UserGroup.cs" />
     <Compile Include="Enums\Admin\Users\UserOrderPermission.cs" />
     <Compile Include="Enums\Admin\Users\UserPermission.cs" />
+    <Compile Include="Enums\BusinessRules\BusinessRuleEnums.cs" />
     <Compile Include="Enums\Case\CaseProgressFilter.cs" />
     <Compile Include="Enums\Case\CasesCustomFilter.cs" />
     <Compile Include="Enums\Case\Fields\CaseInfoFields.cs" />
@@ -155,6 +156,10 @@
     <Compile Include="Models\Accounts\Read\Edit\UserForEdit.cs" />
     <Compile Include="Models\Accounts\Write\AccountForWrite.cs" />
     <Compile Include="Models\ADFS\Input\ADFSSetting.cs" />
+    <Compile Include="Models\BusinessRules\RuleAction.cs" />
+    <Compile Include="Models\BusinessRules\RuleActionParam.cs" />
+    <Compile Include="Models\BusinessRules\RuleCondition.cs" />
+    <Compile Include="Models\BusinessRules\Rule.cs" />
     <Compile Include="Models\CaseType\CaseTypeItem.cs" />
     <Compile Include="Models\Case\CaseLock\LockedCaseOverview.cs" />
     <Compile Include="Models\Case\CaseOverview\CaseInfoOverview.cs" />
