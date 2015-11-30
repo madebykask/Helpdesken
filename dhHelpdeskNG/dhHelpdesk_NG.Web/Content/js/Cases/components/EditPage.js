@@ -421,7 +421,7 @@ EditPage.prototype.init = function (p) {
     me.p = p;
     /// controls binding
     me.$form = $('#target');
-    me.$watchDateChangers = $('.departments-list, #case__Priority_Id');
+    me.$watchDateChangers = $('.departments-list, #case__Priority_Id, #case__StateSecondary_Id');
     me.$department = $('.departments-list');
     me.$SLASelect = $('#case__Priority_Id');
     me.$SLAInput = $('input.sla-value');
@@ -451,6 +451,16 @@ EditPage.prototype.init = function (p) {
         var SLA = parseInt(me.$SLASelect.find('option:selected').attr('data-sla'), 10);
         if (isNaN(SLA)) {
             SLA = parseInt(me.$SLAInput.attr('data-sla'), 10);
+        }
+        if (this.id == "case__StateSecondary_Id") {
+            $.post('/Cases/ChangeStateSecondary', { 'id': $(this).val() }, function (data) {
+                if (data.ReCalculateWatchDate == 1) {
+                    if (!isNaN(deptId) && (!isNaN(SLA) && SLA === 0)) {
+                        return me.fetchWatchDateByDept.call(me, deptId);
+                    }
+                }
+            }, 'json');
+            return;
         }
 
         if (!isNaN(deptId) && (!isNaN(SLA) && SLA === 0)) {

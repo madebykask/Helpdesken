@@ -1655,14 +1655,20 @@ namespace DH.Helpdesk.Web.Controllers
         {
             int workinggroupId = 0;
             int noMailToNotifier = 0;
+            int reCalculateWatchDate = 0;
 
             if (id.HasValue)
             {
                 var s = _stateSecondaryService.GetStateSecondary(id.Value);
+                reCalculateWatchDate = s != null ? s.RecalculateWatchDate : 0;
                 noMailToNotifier = s != null ? s.NoMailToNotifier : 0;
                 workinggroupId = s != null ? s.WorkingGroup_Id.HasValue ? s.WorkingGroup_Id.Value : 0 : 0;
             }
-            return Json(new { NoMailToNotifier = noMailToNotifier, WorkingGroup_Id = workinggroupId });
+            return Json(new {
+                NoMailToNotifier = noMailToNotifier,
+                WorkingGroup_Id = workinggroupId,
+                ReCalculateWatchDate = reCalculateWatchDate
+            });
         }
 
         #endregion

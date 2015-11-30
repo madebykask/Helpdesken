@@ -72,6 +72,12 @@ Select Id, 'IsAbout_UserCode', 0, 0,0,0, '',NULL, 0, NULL, Getdate(), GetDate(),
 where not exists (select * from tblCasefieldsettings where  Customer_Id = c.Id and CaseField = 'IsAbout_UserCode')
 
 
+IF COL_LENGTH('dbo.tblstatesecondary','RecalculateWatchDate') IS NULL
+BEGIN 	 
+	ALTER TABLE [dbo].tblstatesecondary ADD [RecalculateWatchDate] int not null 
+END
+Go
+
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.18'
