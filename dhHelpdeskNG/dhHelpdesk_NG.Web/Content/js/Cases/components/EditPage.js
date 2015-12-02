@@ -295,16 +295,24 @@ EditPage.prototype.showDeleteConfirmationDlg = function () {
     return false;
 };
 
-EditPage.prototype.MakeDeleteParams = function(c) {
+EditPage.prototype.MakeDeleteParams = function (c) {
+    var me = this;
     var res = {
         caseId: c.id
     };
+
     if (c.customerId != 0) {
         res.customerId = c.customerId;
     }
+
     if (c.parentCaseId != 0) {
         res.parentCaseId = c.parentCaseId;
     }
+
+    if (me.p.backUrl != null) {
+        res.backUrl = me.p.backUrl;
+    }
+
     return res;
 };
 

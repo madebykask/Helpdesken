@@ -1092,8 +1092,10 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpPost]
         public RedirectResult DeleteCase(
             int caseId,
-            int customerId,
-            int? parentCaseId)
+            int customerId,            
+            int? parentCaseId,
+            string backUrl
+            )
         {
             var basePath = this._masterDataService.GetFilePath(customerId);
             var caseGuid = this._caseService.Delete(caseId, basePath, parentCaseId);
@@ -1107,8 +1109,7 @@ namespace DH.Helpdesk.Web.Controllers
                     return this.Redirect(url);
                 }
             }
-
-            return this.Redirect("Index");
+            return string.IsNullOrEmpty(backUrl) ? this.Redirect(Url.Action("index", "cases", new { customerId = customerId })) : this.Redirect(backUrl);
         }
 
         [HttpPost]

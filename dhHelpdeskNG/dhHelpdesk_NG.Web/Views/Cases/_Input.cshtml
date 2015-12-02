@@ -13,6 +13,7 @@
         customerId: '@Model.case_.Customer_Id',
         parentCaseId: '@(Model.ParentCaseInfo != null ? Model.ParentCaseInfo.ParentId.ToString() : "null")',
         isAnyNotClosedChild: '@Model.IsAnyNotClosedChild().ToString()',
+        backUrl: '@Model.BackUrl',
         productAreaErrorMessage:'@Html.Raw(Translation.Get("Ärendet kunde inte sparas då den lägsta möjliga nivån på fält") + " [" +
                                            Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) + "] " +
                                            Translation.Get("inte har valts. Vänligen kontrollera ärendet."))',
