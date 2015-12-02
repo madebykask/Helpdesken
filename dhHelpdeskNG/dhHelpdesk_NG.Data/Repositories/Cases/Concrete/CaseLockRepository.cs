@@ -57,10 +57,8 @@
              var affectDate = DateTime.Now.AddDays(-1);
              var recordsForCleaning = this.GetAll().Where(l => l.ExtendedTime < affectDate).ToList();
              if (recordsForCleaning.Any())
-             {
-                 foreach (var record in recordsForCleaning)
-                     this.Delete(record);
-
+             {                 
+                 this.DataContext.CaseLock.RemoveRange(recordsForCleaning);
                  this.Commit();
              }
          }
