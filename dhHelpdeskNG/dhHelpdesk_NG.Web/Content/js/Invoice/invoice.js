@@ -665,6 +665,40 @@ $(function () {
             return that;
         },
 
+        CloseContainerDialog: function () {
+            var th = this;
+            var d = $('<div id="adialog">' + 'testmessage' + '<div>');
+            return d.dialog({
+                title: dhHelpdesk.CaseArticles.translate('Meddelande'),
+                buttons: [
+                    {
+                        text: 'Ok',
+                        click: function () {
+                            th.CloseContainer();
+                            d.dialog("close");
+                        }
+                    },
+                    {
+                        text: 'Avbryt',
+                        click: function () {
+                            d.dialog("close");
+                        }
+                    }
+                ],
+                modal: true
+            });
+        },
+
+        CloseContainer: function () {
+            var th = this;
+            var invoice = th.GetInvoice();
+            th._container = invoice.Container;
+
+            th.CancelChanges();
+            th._container.dialog("close"); //why this line? todo investigate
+            $('.case-invoice-container').remove();
+        },
+
         CreateContainer: function (message) {
             var th = this;
             var invoice = th.GetInvoice();
@@ -687,7 +721,8 @@ $(function () {
                     event.preventDefault();
                 },
                 close: function () {
-                    th._container.dialog("destroy");
+                    //th.CloseContainer();
+                    return th.CloseContainerDialog();
                 },
                 buttons: [
                     {
@@ -704,9 +739,8 @@ $(function () {
                         text: dhHelpdesk.CaseArticles.translate("Stäng"),
                         'class': 'btn',
                         click: function () {
-                            th.CancelChanges();
-                            th._container.dialog("close");
-                            $('.case-invoice-container').remove();
+                            //th.CloseContainer();
+                            th.CloseContainerDialog();
                         }
                     }
                 ],
