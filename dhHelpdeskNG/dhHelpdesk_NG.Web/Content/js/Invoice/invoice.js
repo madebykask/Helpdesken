@@ -4,8 +4,6 @@ if (window.dhHelpdesk == null)
 
 $(function () {
 
-
-
     //used for translating casefields
     var AllCaseFields = [];
 
@@ -66,7 +64,7 @@ $(function () {
                     //for (var j = 0; j <= AllTranslationsTranslationsLength; j++) {
                     //    if (AllTranslations[i].Translations[j].Language_Id)
                     //    {
-                    //        if (AllTranslations[i].Translations[j].Language_Id == CurrentLanguageId) { //language_id is sometimes undefined... bug. todo fix
+                    //        if (AllTranslations[i].Translations[j].Language_Id == CurrentLanguageId) { //language_id is sometimes undefined...?? bug. todo fix
                     //            return AllTranslations[i].Translations[j].TranslationName;
                     //        }
                     //    }
@@ -338,7 +336,7 @@ $(function () {
         },
 
         InvoiceArticles: function () {
-            alert("THIS IS NOT USED. CONTACT ADMINISTRATOR IF YOU SEE THIS");
+            alert("THIS IS NOT USED. CONTACT ADMINISTRATOR IF YOU SEE THIS"); //old way of doing invoicing - invoiced whole order and could give issues if important data was missing on case (since only invoice was posted)
             //var th = this;
             //$.post("/Invoice/DoInvoice", {
             //    customerId: this.CustomerId,
@@ -632,8 +630,6 @@ $(function () {
                     $('#Place_' + OrderId).val(item.place);
                     $('#UserCode_' + OrderId).val(item.usercode);
 
-                    //email
-
                     return item.num;
                 }
             };
@@ -716,7 +712,7 @@ $(function () {
                 //height: 800,
                 autoResize: true,
                 resize: function (event, ui) {
-                    var thisHeight = $(event.target).height(); //todo fix this
+                    var thisHeight = $(event.target).height(); //todo fix this - if you resize manually, the window wont automatically resize later on
                     var tabsheight = $('#case-invoice-orders-tabs').height();
                     event.preventDefault();
                 },
@@ -1129,7 +1125,7 @@ $(function () {
 
                 $('.articles-params-units').focus();
                 $('.articles-params-units').click();
-                //hide orderreference fields
+                //hide orderreference fields -- todo: fix this
                 //$('.InitiatorFieldsOrder' + order.Id).toggle(); -- shows and hides when clicking save
             },
 
@@ -2087,7 +2083,7 @@ $(function () {
                             dhHelpdesk.CaseArticles.MakeValid(ePpu);
                         }
 
-                        //old validation before delimit
+                        //old validation before delimit -- remove this
                         //if (!dhHelpdesk.CaseArticles.IsInteger(ppu) || ppu <= 0) {
                         //    dhHelpdesk.CaseArticles.MakeInvalid(ePpu);
                         //    isValid = false;
@@ -2124,7 +2120,7 @@ $(function () {
                     }
                 }
                 
-                //Textdemand has blank article?
+                //check if Textdemand has blank article?
                 if (!(this.IsBlank()) && this.Article.TextDemand) {
                     var TextIsValid = false;
                     var thisArticle = this;
