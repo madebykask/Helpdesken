@@ -126,6 +126,8 @@
 
         public DbSet<Category> Categories { get; set; }
 
+        public DbSet<CausingPart> CausingParts { get; set; }
+
         public DbSet<ChangeCategoryEntity> ChangeCategories { get; set; }
 
         public DbSet<ChangeChangeGroupEntity> ChangeChangeGroups { get; set; }

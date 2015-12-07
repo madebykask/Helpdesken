@@ -122,7 +122,7 @@ namespace DH.Helpdesk.Services.Services
 
         int? SaveInternalLogMessage(int id, string textInternal, out IDictionary<string, string> errors);
 
-        CaseDataSet GetCaseDataSet(DateTime? fromDate, DateTime? toDate);
+        Dictionary<int, string> GetCaseFiles(List<int> caseIds);
 
         List<CaseFilterFavorite> GetMyFavorites(int customerId, int userId);
 
@@ -1043,37 +1043,19 @@ namespace DH.Helpdesk.Services.Services
             return this._caseHistoryRepository.GetCaseHistoryByCaseId(caseId).ToList(); 
         }
 
-        public CaseDataSet GetCaseDataSet(DateTime? fromDate, DateTime? toDate)
+        public Dictionary<int, string> GetCaseFiles(List<int> caseIds)
         {
-            var ret = new CaseDataSet();
-            using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
-            {                                
-                ret.CaseTypeQuery = uow.GetRepository<CaseType>().GetAll().ToList();
-                ret.CategoryQuery = uow.GetRepository<Category>().GetAll().ToList();
-                ret.CausingPartQuery = uow.GetRepository<CausingPart>().GetAll().ToList();
-                ret.ClosingReasonQuery = uow.GetRepository<FinishingCause>().GetAll().ToList();
-                ret.CustomerQuery = uow.GetRepository<Customer>().GetAll().ToList();
-                ret.DepartmentQuery = uow.GetRepository<Department>().GetAll().ToList();
-                ret.ImpactQuery = uow.GetRepository<Impact>().GetAll().ToList();                
-                ret.OrganizationUnitQuery = uow.GetRepository<OU>().GetAll().ToList();
-                ret.PriorityQuery = uow.GetRepository<Priority>().GetAll().ToList();
-                ret.ProductAreaQuery = uow.GetRepository<ProductArea>().GetAll().ToList();
-                ret.RegionQuery = uow.GetRepository<Region>().GetAll().ToList();
-                ret.StateSecondaryQuery = uow.GetRepository<StateSecondary>().GetAll().ToList();
-                ret.StatusQuery = uow.GetRepository<Status>().GetAll().ToList();
-                ret.SupplierQuery = uow.GetRepository<Supplier>().GetAll().ToList();
-                ret.SystemQuery = uow.GetRepository<System>().GetAll().ToList();
-                ret.UrgencyQuery = uow.GetRepository<Urgency>().GetAll().ToList();
-                ret.UserQuery = uow.GetRepository<User>().GetAll().ToList();
-                ret.WorkingGroupQuery = uow.GetRepository<WorkingGroupEntity>().GetAll().ToList();
-                ret.RegistrationSourceCustomerQuery = uow.GetRepository<RegistrationSourceCustomer>().GetAll().ToList();                
-                ret.LanguageQuery = uow.GetRepository<Language>().GetAll().ToList();
-                ret.CaseStatisticsQuery = uow.GetRepository<DH.Helpdesk.Domain.Cases.CaseStatistic>().GetAll().ToList();
-                ret.CaseFileQuery = _caseFileRepository.GetCaseFilesByDate(fromDate, toDate);
-                ret.LogQuery = _logService.GetCaseLogs(fromDate, toDate).ToList();
-                //ret.LogFileQuery = uow.GetRepository<LogFile>().GetAll().ToList(); 
-             }
+            var preCaseFiles = this._caseFileRepository.GetAll().Where(f => caseIds.Contains(f.Case_Id)).ToList();
 
+            var groupedCaseFiles = preCaseFiles.GroupBy(f => f.Case_Id)
+                                               .Select(g => new
+                                                            {
+                                                                caseId = g.Key,
+                                                                fileNames = g.Aggregate(string.Empty, (x, i) => x + Environment.NewLine + i.FileName)
+                                                            }).ToDictionary(d=> d.caseId, d=> d.fileNames);
+
+            var casesWithoutFile = caseIds.Where(c => !groupedCaseFiles.ContainsKey(c)).ToDictionary(d => d, d => string.Empty);
+            var ret = groupedCaseFiles.Union(casesWithoutFile).ToDictionary(d=> d.Key, d=> d.Value);
             return ret;
         }
 

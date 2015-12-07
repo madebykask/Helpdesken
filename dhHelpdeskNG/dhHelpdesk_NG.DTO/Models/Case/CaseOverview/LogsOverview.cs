@@ -3,15 +3,29 @@
     using System.Collections.Generic;
 
     using DH.Helpdesk.Common.ValidationAttributes;
+    using System;
+
+    //public sealed class LogsOverview
+    //{
+    //    public LogsOverview(List<LogOverview> logs)
+    //    {
+    //        this.Logs = logs;
+    //    }
+
+    //    [NotNull]
+    //    public List<LogOverview> Logs { get; private set; }
+    //}
 
     public sealed class LogsOverview
     {
-        public LogsOverview(List<LogOverview> logs)
+        public LogsOverview(string finishingCause, DateTime? closingDate)
         {
-            this.Logs = logs;
+            this.FinishingCause = finishingCause;
+            this.ClosingDate = closingDate;
         }
 
-        [NotNull]
-        public List<LogOverview> Logs { get; private set; }
+        public string FinishingCause { get; private set; }
+
+        public DateTime? ClosingDate { get; private set; }       
     }
 }

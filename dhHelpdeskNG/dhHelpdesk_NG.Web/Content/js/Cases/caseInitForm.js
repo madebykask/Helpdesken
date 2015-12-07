@@ -86,11 +86,11 @@ function GetComputerSearchOptions() {
 function refreshOrganizationUnit(departmentId, departmentFilterFormat, selectedOrganizationUnitId) {
     $(publicOUControlName).val('');
     $(publicReadOnlyOUName).val('');
-    var ctlOption = publicOUControlName + ' option';
-    $(ctlOption).remove();
-    $(publicOUControlName).prop('disabled', true);
-    $(publicOUControlName).append('<option value="">&nbsp;</option>');
-    $.post(publicChangeDepartment, { 'id': departmentId, 'customerId': publicCustomerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {
+    var ctlOption = publicOUControlName + ' option';    
+    $(publicOUControlName).prop('disabled', true);    
+    $.post(publicChangeDepartment, { 'id': departmentId, 'customerId': publicCustomerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {                
+        $(ctlOption).remove();
+        $(publicOUControlName).append('<option value="">&nbsp;</option>');
         if (data != undefined) {
             for (var i = 0; i < data.list.length; i++) {
                 var item = data.list[i];
@@ -112,12 +112,11 @@ function refreshOrganizationUnit(departmentId, departmentFilterFormat, selectedO
 function refreshDepartment(regionId, departmentFilterFormat, selectedDepartmentId, selectedOU) {
     $(publicDepartmentControlName).val('');
     $(publicReadOnlyDepartmentName).val('');
-    var ctlOption = publicDepartmentControlName + ' option';
-    $(ctlOption).remove();
-    $(publicDepartmentControlName).append('<option value="">&nbsp;</option>');
+    var ctlOption = publicDepartmentControlName + ' option';    
     $(publicDepartmentControlName).prop('disabled', true);
     $.post(publicChangeRegion, { 'id': regionId, 'customerId': publicCustomerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {
-
+        $(ctlOption).remove();
+        $(publicDepartmentControlName).append('<option value="">&nbsp;</option>');
         if (data != undefined) {
             for (var i = 0; i < data.list.length; i++) {
                 var item = data.list[i];
