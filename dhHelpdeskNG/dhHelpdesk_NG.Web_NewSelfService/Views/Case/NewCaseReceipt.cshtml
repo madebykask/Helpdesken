@@ -1,9 +1,21 @@
 ﻿@using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils
 @using DH.Helpdesk.NewSelfService.Infrastructure
 @using DH.Helpdesk.BusinessData.OldComponents
+@using DH.Helpdesk.NewSelfService.Models.Case
+@using DH.Helpdesk.Services.Infrastructure
+@using DH.Helpdesk.NewSelfService.Infrastructure.Common
 @model DH.Helpdesk.NewSelfService.Models.Case.CaseOverviewModel
 
+@{
+    CaseLogModel pCaseLogs = null;
+    var currentCaseId = Model.CasePreview.Id;
+    var helper = ManualDependencyResolver.Get<ICommonFunctions>();
+    if (currentCaseId != null)
+    {
+        pCaseLogs = helper.GetCaseLogs(currentCaseId);
+    }
 
+}
 @if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.UserInformation))
 {
     <input id="CaseId" type="hidden" value="@Model.CasePreview.Id"/>    
@@ -209,8 +221,9 @@
                         <label class="col-md-3">                            
                             @Translation.Get(GlobalEnums.TranslationCaseFields.RegTime.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID):
                         </label>
-                        <div class="col-md-9">
-                            @Html.DisplayFor(r => Model.CasePreview.RegTime, "DateAndTime")
+                        <div class="col-md-9">                            
+                            @{var _regDate = Model.CasePreview.RegTime.ToLocalTime();}
+                            @Html.DisplayFor(r => _regDate)
                         </div>
                     </div>
                 }
@@ -221,7 +234,8 @@
                             @Translation.Get(GlobalEnums.TranslationCaseFields.ChangeTime.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID):
                         </label>
                         <div class="col-md-9">
-                            @Html.DisplayFor(c => Model.CasePreview.ChangeTime, "DateAndTime")
+                            @{var _changeDate = Model.CasePreview.ChangeTime.ToLocalTime();}                            
+                            @Html.DisplayFor(c => _changeDate)
                         </div>
                     </div>
                 }
@@ -395,7 +409,8 @@
                             @Translation.Get(GlobalEnums.TranslationCaseFields.AgreedDate.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID):
                         </label>
                         <div class="col-md-9">
-                            @Html.DisplayFor(a => Model.CasePreview.AgreedDate, "DateAndTime")
+                            @{var _agreeDate = Model.CasePreview.AgreedDate.HasValue? Model.CasePreview.AgreedDate.Value.ToLocalTime().ToString() : string.Empty;}
+                            @Html.DisplayFor(a => _agreeDate )
                         </div>
                     </div>
                 }
@@ -462,8 +477,52 @@
 }
 <!-- Case Info Fields -->
 
+<h4>@Translation.Get("Comments", Enums.TranslationSource.TextTranslation) </h4>
 
+<div class="row">
+    <div class="col-md-3 dh-col">
+        <div class="container form-horizontal">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-8">
+                        <label>
+                            @Translation.Get("Add comment", Enums.TranslationSource.TextTranslation):
+                        </label>
+                        <div>
+                            <textarea id="logNote" class="col-md-12" style="height: 100px;margin-bottom:10px;"></textarea>
+                        </div>
+                        <button class="btn btn-success" onclick=" SaveLogMessage() ">@Translation.Get("Send", Enums.TranslationSource.TextTranslation)</button>
+                        <hr />
+                    </div>
+                </div>
+            </div>
+            <div id="Receipt_CaseLogPartial" class="onpage com-list">
+                <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-8">
+                @Html.Partial("_CaseLogNote", pCaseLogs)
+                        </div>
+                    </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+ 
 
+<script>
+    function SaveLogMessage() {        
+        var note = $('#logNote').val();
+        if (note == "") {
+            alert('Note text is empty!');
+        } else {
+            $.get(SaveMessageUrl, { caseId: '@Model.CasePreview.Id', note: note }, function (_CaseLogNoteMarkup) {
+                $('#Receipt_CaseLogPartial').html(_CaseLogNoteMarkup);
+                $('#logNote').val('');
+            });
+        }
+    }
+</script>
     
  
     
