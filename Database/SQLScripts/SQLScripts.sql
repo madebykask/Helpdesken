@@ -5,7 +5,7 @@ GO
 
 IF COL_LENGTH('dbo.tblstatesecondary','RecalculateWatchDate') IS NULL
 BEGIN 	 
-	ALTER TABLE [dbo].tblstatesecondary ADD [RecalculateWatchDate] int not null 
+	ALTER TABLE [dbo].tblstatesecondary ADD [RecalculateWatchDate] int not null default(0)
 END
 Go
 
