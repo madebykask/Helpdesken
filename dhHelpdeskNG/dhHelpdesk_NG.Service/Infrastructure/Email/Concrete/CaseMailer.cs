@@ -10,6 +10,7 @@
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.Services;
     using System.Configuration;
+    using DH.Helpdesk.BusinessData.Models.Email;
 
     public sealed class CaseMailer : ICaseMailer
     {
@@ -108,7 +109,7 @@
                                                             notifierEmailLog.MessageId,
                                                             log.HighPriority,
                                                             files);
-                            var e_res = this.emailService.SendEmail(notifierEmailItem);
+                            var e_res = this.emailService.SendEmail(notifierEmailItem, EmailResponse.GetEmptyEmailResponse());
                             notifierEmailLog.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                             var now = DateTime.Now;
                             notifierEmailLog.CreatedDate = now;
@@ -194,7 +195,7 @@
                                                 defaultWorkingGroupEmailLog.MessageId,
                                                 log.HighPriority,
                                                 files);
-                var e_res = this.emailService.SendEmail(defaultWorkingGroupEmailItem);
+                var e_res = this.emailService.SendEmail(defaultWorkingGroupEmailItem, EmailResponse.GetEmptyEmailResponse());
                 defaultWorkingGroupEmailLog.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                 var now = DateTime.Now;
                 defaultWorkingGroupEmailLog.CreatedDate = now;
@@ -233,7 +234,8 @@
                 var to = log.EmailRecepientsInternalLog
                                     .Replace(" ", "")
                                     .Replace(Environment.NewLine, "|")
-                                    .Split('|');
+                                    .Split('|', ';', ',');
+               
                 foreach (var t in to)
                 {
                     if (!string.IsNullOrWhiteSpace(t) && this.emailService.IsValidEmail(t))
@@ -258,7 +260,7 @@
                                                         internalEmailLog.MessageId,
                                                         log.HighPriority,
                                                         files);
-                        var e_res = this.emailService.SendEmail(internalEmail);
+                        var e_res = this.emailService.SendEmail(internalEmail, EmailResponse.GetEmptyEmailResponse());
                         internalEmailLog.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                         var now = DateTime.Now;
                         internalEmailLog.CreatedDate = now;

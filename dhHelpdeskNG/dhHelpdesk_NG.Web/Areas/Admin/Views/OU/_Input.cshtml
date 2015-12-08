@@ -96,6 +96,14 @@
                                 </tr>
                                 <tr>
                                     <td>
+                                        @Translation.Get("Kod", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => Model.OU.Code, new { maxlength = "20" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
                                         @Translation.Get("Synkronisering", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td><label class="checkbox">
@@ -126,9 +134,9 @@
                                     </td>
                                 </tr>
                             </table>
-                            @Html.HiddenFor(model => model.OU.Id)
-                            @Html.HiddenFor(model => model.OU.Parent_OU_Id)
-                            @Html.HiddenFor(model => model.OU.Code)
+                            @Html.HiddenFor(model => Model.OU.Id)
+                            @Html.HiddenFor(model => Model.OU.Parent_OU_Id)
+                            @Html.HiddenFor(model => Model.OU.Code)
                             <input type="hidden" id="sdepartments" value="@Model.SDepartments.ToJavaScriptObject()" />
                             <input type="hidden" id="allAvailableOrganizationUnits" value="@Model.AllAvailableOrganizationUnits.ToJavaScriptObject()" />
                             <input type="hidden" id="parentId" value="@Model.OU.Parent_OU_Id" />

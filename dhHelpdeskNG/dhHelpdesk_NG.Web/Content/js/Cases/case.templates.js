@@ -291,7 +291,7 @@ function IsValueApplicableFor(templateFieldId, val) {
 
 function LoadTemplate(id) {
     $.get('/CaseSolution/GetTemplate',
-        { 'id': id },
+        { 'id': id, myTime: Date.now },
         function (caseTemplate) {
 
             var showOverwriteWarning = false;
@@ -299,8 +299,7 @@ function LoadTemplate(id) {
                 return;
             }
 
-            for (var field in caseTemplate) {
-                debugger
+            for (var field in caseTemplate) {                
                 if (window.IsValueApplicableFor(field, caseTemplate[field]) && window.IsWillBeOverwritten(field, caseTemplate[field])) {
                     showOverwriteWarning = true;
                     break;

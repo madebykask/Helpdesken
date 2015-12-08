@@ -3474,7 +3474,8 @@ td.disabled
     margin-bottom:0;
 }
 .caseoverviewaccordion .row-fluid [class*="span"] {
-    min-height:5px !important;
+    min-height:4px !important;
+    line-height:15px !important;
 }
 .caseoverviewaccordion .accordion-group {
   margin-bottom: 0;
@@ -3494,19 +3495,19 @@ td.disabled
   padding: 1px 5px 0 18px;
   border-top: none;
   color:#707070;
-  font-size: small;
+  font-size: 11px;
 }
 
 .caseoverviewaccordion .accordion-heading .accordion-toggle {
   display: block;
-  padding: 3px 5px 0 5px;
+  padding: 1px 5px 0 5px;
   font-weight:bold;
   color:#707070;
-  font-size: small;
+  font-size: 11px;
 }
 
 .case-remaining-time {
-    font-size: small;
+    font-size: 11px;
     margin-top:-1px;
 }
 
@@ -3527,5 +3528,5 @@ td.disabled
 
 .case-remaining-time.table thead th, .case-remaining-time.table thead td, .case-remaining-time.table tbody td
 {
-    padding:2px 5px;
+    padding:1px 2px;
 }

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0"?>
 <!--
   For more information on how to configure your ASP.NET application, please visit
   http://go.microsoft.com/fwlink/?LinkId=152368
@@ -6,179 +6,131 @@
 <configuration>
   <configSections>
     <!-- For more information on Entity Framework configuration, visit http://go.microsoft.com/fwlink/?LinkID=237468 -->
-    <section name="entityFramework" type="System.Data.Entity.Internal.ConfigFile.EntityFrameworkSection, EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" requirePermission="false" />
-    
-    <!--Active for SSO-->
-    <!--<section name="system.identityModel" type="System.IdentityModel.Configuration.SystemIdentityModelSection, System.IdentityModel, Version=4.0.0.0, Culture=neutral, PublicKeyToken=B77A5C561934E089" />
-    <section name="system.identityModel.services" type="System.IdentityModel.Services.Configuration.SystemIdentityModelServicesSection, System.IdentityModel.Services, Version=4.0.0.0, Culture=neutral, PublicKeyToken=B77A5C561934E089" />-->
-
+    <section name="entityFramework" type="System.Data.Entity.Internal.ConfigFile.EntityFrameworkSection, EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" requirePermission="false"/>
   </configSections>
   <connectionStrings>
-<!--    <add name="HelpdeskSqlServerDbContext" connectionString="Data Source=dhutvsql3;Initial Catalog=dhHelpdeskNG_SysTest;User Id=dhHelpdeskNG_SysTest_WebUser;Password=kgk270Q2;MultipleActiveResultSets=True" providerName="System.Data.SqlClient" />-->
-<!--    <add name="HelpdeskOleDbContext" connectionString="Provider=SQLOLEDB;Data Source=dhutvsql3;Initial Catalog=dhHelpdeskNG_SysTest;User Id=dhHelpdeskNG_SysTest_WebUser;Password=kgk270Q2;" providerName="System.Data.OleDb" />-->
-
-    <!--<add name="HelpdeskOracleDbContext" connectionString="User Id=DH;Password=hdikeaus;Direct=true;Data Source=dhsql2;Port=1521;SID=hdikeaus" providerName="Devart.Data.Oracle" />
-    <add name="HelpdeskSqlServerDbContext" connectionString="Data Source=dhutvsql1;Initial Catalog=DH_Support;User Id=SA;Password=;MultipleActiveResultSets=True" providerName="System.Data.SqlClient" />-->
-
-    <!--<add name="HelpdeskSqlServerDbContext" connectionString="Data Source=dhutvsql3;Initial Catalog=dhHelpdeskNG_Test_DH;User Id=dhHelpdeskNG_Test_DH;Password=kgk277;MultipleActiveResultSets=True" providerName="System.Data.SqlClient" />
-    <add name="HelpdeskOleDbContext" connectionString="Provider=SQLOLEDB;Data Source=dhutvsql3;Initial Catalog=dhHelpdeskNG_Test_DH;User Id=dhHelpdeskNG_Test_DH;Password=kgk277;" providerName="System.Data.OleDb" />-->
-
-    <add name="HelpdeskOleDbContext" connectionString="Provider=SQLOLEDB;Data Source=dhutvsql1;Initial Catalog=DH_Support;User Id=SA;Password=;" providerName="System.Data.OleDb" />
-       <add name="HelpdeskSqlServerDbContext" connectionString="Data Source=dhutvsql1;Initial Catalog=DH_Support;User Id=SA;Password=;MultipleActiveResultSets=True" providerName="System.Data.SqlClient" />
-    
-<!--        <add name="HelpdeskOleDbContext" connectionString="Provider=SQLOLEDB;Data Source=dhutvsql1;Initial Catalog=DH_Support;User Id=SA;Password=;" providerName="System.Data.OleDb" />-->
-<!--        <add name="HelpdeskSqlServerDbContext" connectionString="Data Source=localhost\SQLEXPRESS;Initial Catalog=DH_Support;User Id=rte;Password=rte;MultipleActiveResultSets=True" providerName="System.Data.SqlClient" />-->
-<!--        <add name="HelpdeskOleDbContext" connectionString="Provider=SQLOLEDB;Data Source=localhost\SQLEXPRESS;Initial Catalog=DH_Support;User Id=rte;Password=rte;" providerName="System.Data.OleDb" />-->
-
-
-    <!--<add name="HelpdeskSqlServerDbContext" connectionString="Data Source=(local);Initial Catalog=DH_Support;User Id=dhuser;Password=dhpass;MultipleActiveResultSets=True" providerName="System.Data.SqlClient" />
-    <add name="HelpdeskOleDbContext" connectionString="Provider=SQLOLEDB;Data Source=(local);Initial Catalog=DH_Support;User Id=dhuser;Password=dhpass;" providerName="System.Data.OleDb" />-->
-  </connectionStrings> 
+    <!-- Dev -->
+    <add name="HelpdeskOleDbContext" connectionString="Provider=SQLOLEDB;Data Source=dhutvsql2;Initial Catalog=DH_Support;User Id=sa;Password=;" providerName="System.Data.OleDb"/>
+    <add name="HelpdeskSqlServerDbContext" connectionString="Data Source=dhutvsql2;Initial Catalog=DH_Support;User Id=sa;Password=;MultipleActiveResultSets=True;Connection Lifetime=3;Max Pool Size=3;" providerName="System.Data.SqlClient"/>    
+    <add name="HelpdeskIndexingService" connectionString="Provider=MSIDXS;"/>
+  </connectionStrings>
   <appSettings>
-    <add key="dh_maskedpassword" value="||||||||" />  
-    <add key="dh_filesDirectory" value="\\dhutvas3\Websites\dhHelpdesk\uploaded_file" />
-    <add key="dh_selfserviceaddress" value="http://www.dhsolutions.se" />
-    <add key="dh_selfserviceaddress" value="dhHelpdeskUTV/Selfservice/case/Index/" />   
-    <add key="Application.DefaultCulture" value="sv" />
-    <add key="ClientValidationEnabled" value="true" />
-    <add key="UnobtrusiveJavaScriptEnabled" value="true" />
-    <add key="InitFromSelfService" value="false" />
-    <add key="InitFromSelfServiceWorkflowInitValue" value="10" />
-    <add key="log4net.Internal.Debug" value="true" />
-    <add key="SmtpServer" value="localhost" />
-    <add key="SmtpPort" value="25" />
-    <add key="LoginMode" value="Application" /> <!-- Can be ("Application" or "SSO") -->
-
-    <!--Active for SSO--> 
-    <!--<add key="ida:FederationMetadataLocation" value="https://fs.dhsolutions.se/federationmetadata/2007-06/federationmetadata.xml" />
-    <add key="ida:Issuer" value="https://fs.dhsolutions.se/adfs/ls/" />
-    <add key="ida:ProviderSelection" value="productionSTS" />-->
-    
+    <add key="dh_maskedpassword" value="||||||||"/>
+    <add key="dh_filesDirectory" value="C:\DHHelpdeskUTV_Documents"/>    
+    <add key="dh_selfserviceaddress" value="dhHelpdeskUTV/Selfservice/case/Index/"/>
+    <add key="Application.DefaultCulture" value="sv"/>
+    <add key="ClientValidationEnabled" value="true"/>
+    <add key="UnobtrusiveJavaScriptEnabled" value="true"/>
+    <add key="InitFromSelfService" value="false"/>
+    <add key="InitFromSelfServiceWorkflowInitValue" value="10"/>
+    <add key="log4net.Internal.Debug" value="true"/>
+    <add key="SmtpServer" value="smtp.datahalland.se"/>
+    <add key="SmtpPort" value="25"/>
+    <add key="LoginMode" value="Application"/> 
   </appSettings>
-
+  <system.web.extensions>
+    <scripting>
+      <webServices>
+        <jsonSerialization maxJsonLength="36000000"/>
+      </webServices>
+    </scripting>
+  </system.web.extensions>
   <system.web>
     <compilation debug="true" targetFramework="4.0">
       <assemblies>
-        <add assembly="System.Web.Abstractions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35" />
-        <add assembly="System.Web.Helpers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35" />
-        <add assembly="System.Web.Routing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35" />
-        <add assembly="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35" />
-        <add assembly="System.Web.WebPages, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35" />
+        <add assembly="System.Web.Abstractions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35"/>
+        <add assembly="System.Web.Helpers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35"/>
+        <add assembly="System.Web.Routing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35"/>
+        <add assembly="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35"/>
+        <add assembly="System.Web.WebPages, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35"/>
       </assemblies>
-    </compilation>
-    <authentication mode="Forms">
-      <forms loginUrl="~/Login/Login" timeout="2880" defaultUrl="~/" />
-    </authentication>
-     <customErrors mode="On">
-      <error statusCode="404" redirect="~/Error/NotFound404"/>
-    </customErrors>
+    </compilation>       
     <pages>
       <namespaces>
-        <add namespace="System.Web.Helpers" />
-        <add namespace="System.Web.Mvc" />
-        <add namespace="System.Web.Mvc.Ajax" />
-        <add namespace="System.Web.Mvc.Html" />
-        <add namespace="System.Web.Routing" />
-        <add namespace="System.Web.WebPages" />
+        <add namespace="System.Web.Helpers"/>
+        <add namespace="System.Web.Mvc"/>
+        <add namespace="System.Web.Mvc.Ajax"/>
+        <add namespace="System.Web.Mvc.Html"/>
+        <add namespace="System.Web.Routing"/>
+        <add namespace="System.Web.WebPages"/>
       </namespaces>
     </pages>
     <!-- 50 mb in kilobytes -->
-    <httpRuntime maxRequestLength="51200" />
-    
-    <!--Active for SSO-->
-    <!--<identity impersonate="true" />--> 
-    
+    <httpRuntime maxRequestLength="5242880"/>    
+    <authentication mode="Forms">
+      <forms loginUrl="~/Login/Login" timeout="2880" defaultUrl="~/"/>
+    </authentication>
+       
+    <identity impersonate="true"/>
+    <httpHandlers>
+      <add path="Reserved.ReportViewerWebControl.axd" verb="*" type="Microsoft.Reporting.WebForms.HttpHandler, Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" validate="false"/>
+    </httpHandlers>
   </system.web>
-  <system.webServer>
-    <validation validateIntegratedModeConfiguration="false" />
-    
-    <!--InActive for SSO-->
-    <modules runAllManagedModulesForAllRequests="false" />
-    
-    <!--Active for SSO-->
-    <!--<modules runAllManagedModulesForAllRequests="true">
-      <remove name="FormsAuthentication" />      
-      <add name="WSFederationAuthenticationModule" type="System.IdentityModel.Services.WSFederationAuthenticationModule, System.IdentityModel.Services, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" preCondition="managedHandler" />
-      <add name="SessionAuthenticationModule" type="System.IdentityModel.Services.SessionAuthenticationModule, System.IdentityModel.Services, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" preCondition="managedHandler" />
-    </modules>-->
-    
+  <system.webServer>    
+    <modules runAllManagedModulesForAllRequests="false"/>    
     <security>
       <requestFiltering>
         <!-- for iis 7 >. 50 mb in bytes -->
-        <requestLimits maxAllowedContentLength="38000000" />
-      </requestFiltering>   
-    </security> 
-    <staticContent>
-	<mimeMap fileExtension=".woff" mimeType="application/x-woff" />
-    </staticContent>
+        <requestLimits maxAllowedContentLength="5242880"/>
+      </requestFiltering>
+    </security>
+    <validation validateIntegratedModeConfiguration="false"/>
+    <handlers>
+      <add name="ReportViewerWebControlHandler" preCondition="integratedMode" verb="*" path="Reserved.ReportViewerWebControl.axd" type="Microsoft.Reporting.WebForms.HttpHandler, Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"/>
+    </handlers>
   </system.webServer>
   <runtime>
     <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
       <dependentAssembly>
-        <assemblyIdentity name="System.Web.Mvc" publicKeyToken="31bf3856ad364e35" />
-        <bindingRedirect oldVersion="0.0.0.0-3.0.0.0" newVersion="3.0.0.1" />
+        <assemblyIdentity name="System.Web.Mvc" publicKeyToken="31bf3856ad364e35"/>
+        <bindingRedirect oldVersion="0.0.0.0-3.0.0.1" newVersion="3.0.0.1"/>
       </dependentAssembly>
       <dependentAssembly>
-        <assemblyIdentity name="WebGrease" publicKeyToken="31bf3856ad364e35" culture="neutral" />
-        <bindingRedirect oldVersion="0.0.0.0-1.5.2.14234" newVersion="1.5.2.14234" />
+        <assemblyIdentity name="WebGrease" publicKeyToken="31bf3856ad364e35" culture="neutral"/>
+        <bindingRedirect oldVersion="0.0.0.0-1.5.2.14234" newVersion="1.5.2.14234"/>
       </dependentAssembly>
       <dependentAssembly>
-        <assemblyIdentity name="System.Web.Optimization" publicKeyToken="31bf3856ad364e35" culture="neutral" />
-        <bindingRedirect oldVersion="0.0.0.0-1.1.0.0" newVersion="1.1.0.0" />
+        <assemblyIdentity name="System.Web.Optimization" publicKeyToken="31bf3856ad364e35" culture="neutral"/>
+        <bindingRedirect oldVersion="0.0.0.0-1.1.0.0" newVersion="1.1.0.0"/>
       </dependentAssembly>
       <dependentAssembly>
-        <assemblyIdentity name="System.Xml" publicKeyToken="b77a5c561934e089" culture="neutral" />
-        <bindingRedirect oldVersion="0.0.0.0-4.0.0.0" newVersion="4.0.0.0" />
+        <assemblyIdentity name="System.Xml" publicKeyToken="b77a5c561934e089" culture="neutral"/>
+        <bindingRedirect oldVersion="0.0.0.0-4.0.0.0" newVersion="4.0.0.0"/>
       </dependentAssembly>
       <dependentAssembly>
-        <assemblyIdentity name="System" publicKeyToken="b77a5c561934e089" culture="neutral" />
-        <bindingRedirect oldVersion="0.0.0.0-4.0.0.0" newVersion="4.0.0.0" />
+        <assemblyIdentity name="System" publicKeyToken="b77a5c561934e089" culture="neutral"/>
+        <bindingRedirect oldVersion="0.0.0.0-4.0.0.0" newVersion="4.0.0.0"/>
       </dependentAssembly>
       <dependentAssembly>
-        <assemblyIdentity name="System.Core" publicKeyToken="b77a5c561934e089" culture="neutral" />
-        <bindingRedirect oldVersion="0.0.0.0-4.0.0.0" newVersion="4.0.0.0" />
+        <assemblyIdentity name="System.Core" publicKeyToken="b77a5c561934e089" culture="neutral"/>
+        <bindingRedirect oldVersion="0.0.0.0-4.0.0.0" newVersion="4.0.0.0"/>
       </dependentAssembly>
       <dependentAssembly>
-        <assemblyIdentity name="System.Web" publicKeyToken="b03f5f7f11d50a3a" culture="neutral" />
-        <bindingRedirect oldVersion="0.0.0.0-4.0.0.0" newVersion="4.0.0.0" />
+        <assemblyIdentity name="System.Web" publicKeyToken="b03f5f7f11d50a3a" culture="neutral"/>
+        <bindingRedirect oldVersion="0.0.0.0-4.0.0.0" newVersion="4.0.0.0"/>
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="EPPlus" publicKeyToken="ea159fdaa78159a1" culture="neutral"/>
+        <bindingRedirect oldVersion="0.0.0.0-4.0.2.0" newVersion="4.0.2.0"/>
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Configuration" publicKeyToken="b03f5f7f11d50a3a" culture="neutral"/>
+        <bindingRedirect oldVersion="0.0.0.0-4.0.0.0" newVersion="4.0.0.0"/>
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.WebPages" publicKeyToken="31bf3856ad364e35" culture="neutral"/>
+        <bindingRedirect oldVersion="0.0.0.0-1.0.0.0" newVersion="1.0.0.0"/>
       </dependentAssembly>
     </assemblyBinding>
   </runtime>
   <entityFramework>
     <defaultConnectionFactory type="System.Data.Entity.Infrastructure.LocalDbConnectionFactory, EntityFramework">
       <parameters>
-        <parameter value="v11.0" />
+        <parameter value="v11.0"/>
       </parameters>
     </defaultConnectionFactory>
     <providers>
-      <provider invariantName="System.Data.SqlClient" type="System.Data.Entity.SqlServer.SqlProviderServices, EntityFramework.SqlServer" />
+      <provider invariantName="System.Data.SqlClient" type="System.Data.Entity.SqlServer.SqlProviderServices, EntityFramework.SqlServer"/>
     </providers>
-  </entityFramework>
-
-  <!--Active for SSO-->  
-  <!--<system.identityModel>
-    <identityConfiguration>
-      <audienceUris>
-        <add value="https://localhost:44302/" />
-      </audienceUris>
-      <issuerNameRegistry type="System.IdentityModel.Tokens.ValidatingIssuerNameRegistry, System.IdentityModel.Tokens.ValidatingIssuerNameRegistry">
-        <authority name="http://fs.dhsolutions.se/adfs/services/trust">
-          <keys>
-            <add thumbprint="2118731BB6FFE60C3B814EA2ED31F006B3A64CCA" />
-          </keys>
-          <validIssuers>
-            <add name="http://fs.dhsolutions.se/adfs/services/trust" />
-          </validIssuers>
-        </authority>
-      </issuerNameRegistry>      
-      <certificateValidation certificateValidationMode="None" />
-    </identityConfiguration>
-  </system.identityModel>
-  <system.identityModel.services>
-    <federationConfiguration>
-      <cookieHandler requireSsl="false" />
-      <wsFederation passiveRedirectEnabled="true" issuer="https://fs.dhsolutions.se/adfs/ls/" realm="https://localhost:44302/" requireHttps="false" />
-    </federationConfiguration>
-  </system.identityModel.services>-->
-  
+  </entityFramework>  
 </configuration>

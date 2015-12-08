@@ -339,6 +339,10 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpGet]
         public PartialViewResult GetCustomerSpecificFilter(int selectedCustomerId, bool resetFilter = false)
         {
+            if (SessionFacade.CurrentUser == null || SessionFacade.CurrentCustomer == null)
+            {
+                return PartialView("AdvancedSearch/_SpecificSearchTab", null);
+            }            
             CaseSearchModel csm = null;
 
             if (!resetFilter)
@@ -372,6 +376,12 @@ namespace DH.Helpdesk.Web.Controllers
             f.CaseClosingDateStartFilter = frm.GetDate("CaseClosingDateStartFilter");
             f.CaseClosingDateEndFilter = frm.GetDate("CaseClosingDateEndFilter");
 
+            if (f.CaseRegistrationDateEndFilter != null)
+                f.CaseRegistrationDateEndFilter = f.CaseRegistrationDateEndFilter.Value.AddDays(1);
+
+            if (f.CaseClosingDateEndFilter != null)
+                f.CaseClosingDateEndFilter = f.CaseClosingDateEndFilter.Value.AddDays(1);
+
             //Apply & save specific filters only when user has selected one customer 
             if (!string.IsNullOrEmpty(f.Customer) && !f.Customer.Contains(","))
             {
@@ -382,6 +392,12 @@ namespace DH.Helpdesk.Web.Controllers
                 f.CaseType = frm.ReturnFormValue("hid_CaseTypeDropDown").convertStringToInt();
                 f.ProductArea = f.ProductArea = frm.ReturnFormValue("hid_ProductAreaDropDown").ReturnCustomerUserValue();
                 f.CaseClosingReasonFilter = frm.ReturnFormValue("hid_ClosingReasonDropDown").ReturnCustomerUserValue();
+
+
+                var departments_OrganizationUnits = frm.ReturnFormValue(CaseFilterFields.DepartmentNameAttribute);
+
+                f.Department = GetDepartmentsFrom(departments_OrganizationUnits);
+                f.OrganizationUnit = GetOrganizationUnitsFrom(departments_OrganizationUnits);
             }
             else
             {
@@ -490,6 +506,22 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 if (sm.caseSearchFilter.FreeTextSearch[0] == '#')
                     sm.caseSearchFilter.FreeTextSearch = string.Empty;
+            }
+
+            if (!string.IsNullOrEmpty(f.OrganizationUnit))
+            {
+                var ouIds = f.OrganizationUnit.Split(',');
+                if (ouIds.Any())
+                {
+                    foreach (var id in ouIds)
+                        if (!string.IsNullOrEmpty(id))
+                        {
+                            if (string.IsNullOrEmpty(sm.caseSearchFilter.Department))
+                                sm.caseSearchFilter.Department += string.Format("-{0}", id);
+                            else
+                                sm.caseSearchFilter.Department += string.Format(",-{0}", id);
+                        }
+                }
             }
 
             SessionFacade.CurrentAdvancedSearch = sm;
@@ -1060,8 +1092,10 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpPost]
         public RedirectResult DeleteCase(
             int caseId,
-            int customerId,
-            int? parentCaseId)
+            int customerId,            
+            int? parentCaseId,
+            string backUrl
+            )
         {
             var basePath = this._masterDataService.GetFilePath(customerId);
             var caseGuid = this._caseService.Delete(caseId, basePath, parentCaseId);
@@ -1075,8 +1109,7 @@ namespace DH.Helpdesk.Web.Controllers
                     return this.Redirect(url);
                 }
             }
-
-            return this.Redirect("Index");
+            return string.IsNullOrEmpty(backUrl) ? this.Redirect(Url.Action("index", "cases", new { customerId = customerId })) : this.Redirect(backUrl);
         }
 
         [HttpPost]
@@ -1198,7 +1231,7 @@ namespace DH.Helpdesk.Web.Controllers
             string backUrl = null)
         {
             CaseInputViewModel m = null;
-
+            
             if (SessionFacade.CurrentUser != null)
             {
                 var userId = SessionFacade.CurrentUser.Id;
@@ -1629,14 +1662,20 @@ namespace DH.Helpdesk.Web.Controllers
         {
             int workinggroupId = 0;
             int noMailToNotifier = 0;
+            int reCalculateWatchDate = 0;
 
             if (id.HasValue)
             {
                 var s = _stateSecondaryService.GetStateSecondary(id.Value);
+                reCalculateWatchDate = s != null ? s.RecalculateWatchDate : 0;
                 noMailToNotifier = s != null ? s.NoMailToNotifier : 0;
                 workinggroupId = s != null ? s.WorkingGroup_Id.HasValue ? s.WorkingGroup_Id.Value : 0 : 0;
             }
-            return Json(new { NoMailToNotifier = noMailToNotifier, WorkingGroup_Id = workinggroupId });
+            return Json(new {
+                NoMailToNotifier = noMailToNotifier,
+                WorkingGroup_Id = workinggroupId,
+                ReCalculateWatchDate = reCalculateWatchDate
+            });
         }
 
         #endregion
@@ -1875,6 +1914,26 @@ namespace DH.Helpdesk.Web.Controllers
 
             return new UnicodeFileContentResult(fileContent, fileName);
         }
+
+        private string GetCaseFileNames(string id)
+        {
+            var files = GuidHelper.IsGuid(id)
+                                ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Cases)
+                                : this._caseFileService.FindFileNamesByCaseId(int.Parse(id));
+
+            return String.Join("|", files);
+
+        }
+
+        private string GetLogFileNames(string id)
+        {
+            var files = GuidHelper.IsGuid(id)
+                                ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Log)
+                                : this._caseFileService.FindFileNamesByCaseId(int.Parse(id));
+
+            return String.Join("|", files);
+
+        }                                
 
         #endregion
 
@@ -2458,7 +2517,7 @@ namespace DH.Helpdesk.Web.Controllers
                 }
 
                 case_.RegTime = DateTime.SpecifyKind(oldCase.RegTime, DateTimeKind.Utc);
-#endregion
+                #endregion
             }
             else
             {
@@ -2763,25 +2822,7 @@ namespace DH.Helpdesk.Web.Controllers
             return string.Join(",", cases.Select(c => c.Id));
         }        
 
-        private string GetCaseFileNames(string id)
-        {
-            var files = GuidHelper.IsGuid(id)
-                                ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Cases)
-                                : this._caseFileService.FindFileNamesByCaseId(int.Parse(id));
-
-            return String.Join("|", files);
-
-        }
-
-        private string GetLogFileNames(string id)
-        {
-            var files = GuidHelper.IsGuid(id)
-                                ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Log)
-                                : this._caseFileService.FindFileNamesByCaseId(int.Parse(id));
-
-            return String.Join("|", files);
-
-        }                                
+      
         
         private List<string> GetInactiveFieldsValue(CaseMasterDataFieldsModel fields)
         {
@@ -3156,8 +3197,11 @@ namespace DH.Helpdesk.Web.Controllers
             if (customerId == 0)
             {
                 csm = SessionFacade.CurrentAdvancedSearch;
-                customerId = csm.caseSearchFilter.CustomerId;
+                if (csm != null && csm.caseSearchFilter != null)
+                    customerId = csm.caseSearchFilter.CustomerId;
             }
+
+            var customerSetting = this._settingService.GetCustomerSetting(customerId);
 
             var specificFilter = new AdvancedSearchSpecificFilterData();
 
@@ -3184,6 +3228,9 @@ namespace DH.Helpdesk.Web.Controllers
                         this._departmentService.GetDepartments(customerId, ActivationStatus.All)
                         .ToList();
                 }
+
+                if (customerSetting != null && customerSetting.ShowOUsOnDepartmentFilter != 0)
+                    specificFilter.DepartmentList = AddOrganizationUnitsToDepartments(specificFilter.DepartmentList);
             }
 
             if (customerfieldSettings.Where(fs => fs.Name == GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString() &&

@@ -128,9 +128,10 @@
 
         public DateTime? GetClosestDateTo(int calendarId, DateTime now)
         {
+            
             var watchDateCalendarValue =
                 this._watchDateCalendarValueRepository.GetAll()
-                    .Where(it => it.WatchDateCalendar_Id == calendarId && it.WatchDate > now && (it.ValidUntilDate == null || it.ValidUntilDate > now))
+                    .Where(it => it.WatchDateCalendar_Id == calendarId && it.WatchDate > now && (it.ValidUntilDate == null || it.ValidUntilDate.Value.Date >= now.Date))
                     .OrderBy(it => it.WatchDate)
                     .FirstOrDefault();
             if (watchDateCalendarValue != null)

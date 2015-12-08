@@ -86,11 +86,11 @@ function GetComputerSearchOptions() {
 function refreshOrganizationUnit(departmentId, departmentFilterFormat, selectedOrganizationUnitId) {
     $(publicOUControlName).val('');
     $(publicReadOnlyOUName).val('');
-    var ctlOption = publicOUControlName + ' option';
-    $(ctlOption).remove();
-    $(publicOUControlName).prop('disabled', true);
-    $(publicOUControlName).append('<option value="">&nbsp;</option>');
-    $.post(publicChangeDepartment, { 'id': departmentId, 'customerId': publicCustomerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {
+    var ctlOption = publicOUControlName + ' option';    
+    $(publicOUControlName).prop('disabled', true);    
+    $.post(publicChangeDepartment, { 'id': departmentId, 'customerId': publicCustomerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {                
+        $(ctlOption).remove();
+        $(publicOUControlName).append('<option value="">&nbsp;</option>');
         if (data != undefined) {
             for (var i = 0; i < data.list.length; i++) {
                 var item = data.list[i];
@@ -112,12 +112,11 @@ function refreshOrganizationUnit(departmentId, departmentFilterFormat, selectedO
 function refreshDepartment(regionId, departmentFilterFormat, selectedDepartmentId, selectedOU) {
     $(publicDepartmentControlName).val('');
     $(publicReadOnlyDepartmentName).val('');
-    var ctlOption = publicDepartmentControlName + ' option';
-    $(ctlOption).remove();
-    $(publicDepartmentControlName).append('<option value="">&nbsp;</option>');
+    var ctlOption = publicDepartmentControlName + ' option';    
     $(publicDepartmentControlName).prop('disabled', true);
     $.post(publicChangeRegion, { 'id': regionId, 'customerId': publicCustomerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {
-
+        $(ctlOption).remove();
+        $(publicDepartmentControlName).append('<option value="">&nbsp;</option>');
         if (data != undefined) {
             for (var i = 0; i < data.list.length; i++) {
                 var item = data.list[i];
@@ -166,6 +165,7 @@ function GetComputerUserSearchOptions() {
                                     , ouid: item.OU_Id
                                     , ouname: item.OUName
                                     , name_family: item.SurName + ' ' + item.FirstName
+                                    , customername : item.CustomerName
                         };
                         return JSON.stringify(aItem);
                         
@@ -201,9 +201,11 @@ function GetComputerUserSearchOptions() {
         highlighter: function (obj) {
             var item = JSON.parse(obj);
             var orgQuery = this.query;
+            if (item.regionname == null)
+                item.regionname = ""
             var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
-            var result = item.name + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email;
-            var resultBy_NameFamily = item.name_family + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email;
+            var result = item.name + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email + ' - ' + item.regionname;
+            var resultBy_NameFamily = item.name_family + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email + ' - ' + item.regionname;
                      
             if (result.toLowerCase().indexOf(orgQuery.toLowerCase()) > -1)               
                 return result.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {

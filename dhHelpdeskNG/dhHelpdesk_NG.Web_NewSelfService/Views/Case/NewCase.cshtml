@@ -176,10 +176,10 @@
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Customer_Id.ToString()))
                                     {
                                         <div class="form-group row">
-                                            <label class="col-md-2">
+                                            <label class="col-md-3">
                                                  @Translation.Get(GlobalEnums.TranslationCaseFields.Customer_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                                                
                                             </label>
-                                            <div class="col-md-10">
+                                            <div class="col-md-9">
                                                 @Model.NewCase.Customer.Name
                                             </div>
                                         </div>
@@ -187,14 +187,14 @@
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.ReportedBy.ToString()))
                                     {
                                         <div class="form-group row">
-                                            <label class="col-md-2">                                                                                                   
+                                            <label class="col-md-3">                                                                                                   
                                                   @Translation.Get(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                                                                                                  
                                                   @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.ReportedBy.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
                                                   {
                                                       <span class="mandatorystar">*</span>
                                                   }
                                             </label>
-                                            <div class="col-md-10">                                                
+                                            <div class="col-md-9">                                                
                                                 @Html.TextBoxFor(model => model.NewCase.ReportedBy, new { maxlength = "40", autocomplete = "Off" })
                                             </div>
                                         </div>
@@ -202,14 +202,14 @@
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Persons_Name.ToString()))
                                     {
                                         <div class="form-group row">
-                                            <label class="col-md-2">
+                                            <label class="col-md-3">
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):
                                                 @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Persons_Name.ToString()).Select(f => f.Required).FirstOrDefault() == 1)
                                                 {
                                                     <span class="mandatorystar">*</span>
                                                 }
                                             </label>
-                                            <div class="col-md-10">                                                                                                
+                                            <div class="col-md-9">                                                                                                
                                                 @Html.TextBoxFor(p => Model.NewCase.PersonsName)
                                             </div>
                                         </div>
@@ -217,14 +217,14 @@
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString()))
                                     {
                                         <div class="form-group row">
-                                            <label class="col-md-2">                                                
+                                            <label class="col-md-3">                                                
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):
                                                 @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Persons_EMail.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
                                                 {
                                                     <span class="mandatorystar">*</span>
                                                 }
                                             </label>
-                                            <div class="col-md-10">
+                                            <div class="col-md-9">
                                                 @Html.TextBoxFor(p => Model.NewCase.PersonsEmail)
                                             </div>
                                         </div>
@@ -232,14 +232,14 @@
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString()))
                                     {
                                         <div class="form-group row">
-                                            <label class="col-md-2">                                                
+                                            <label class="col-md-3">                                                
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):
                                                 @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Persons_Phone.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
                                                 {
                                                     <span class="mandatorystar">*</span>
                                                 }
                                             </label>
-                                            <div class="col-md-10">                                      
+                                            <div class="col-md-9">                                      
                                                 @Html.TextBoxFor(p => Model.NewCase.PersonsPhone)
                                             </div>
                                         </div>
@@ -247,14 +247,14 @@
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString()))
                                     {
                                         <div class="form-group row">
-                                            <label class="col-md-2">
+                                            <label class="col-md-3">
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                                                
                                                 @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
                                                 {
                                                     <span class="mandatorystar">*</span>
                                                 }
                                             </label>
-                                            <div class="col-md-10">
+                                            <div class="col-md-9">
                                                 @Html.TextBoxFor(c => Model.NewCase.PersonsCellphone)
                                             </div>
                                         </div>
@@ -262,14 +262,14 @@
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Region_Id.ToString()))
                                     {
                                         <div class="form-group row">
-                                            <label class="col-md-2">                                               
+                                            <label class="col-md-3">                                               
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.Region_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):
                                                 @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Region_Id.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
                                                 {
                                                     <span class="mandatorystar">*</span>
                                                 }
                                             </label>
-                                            <div class="col-md-10">
+                                            <div class="col-md-9">
                                                 <select id="NewCase_Region_Id" name="NewCase.Region_Id">
                                                     <option value="">&nbsp;</option>
                                                     @if (Model.Regions != null)
@@ -286,14 +286,14 @@
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Department_Id.ToString()))
                                     {
                                         <div class="form-group row">
-                                            <label class="col-md-2">                                                
+                                            <label class="col-md-3">                                                
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                                                
                                                 @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Department_Id.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
                                                 {
                                                     <span class="mandatorystar">*</span>
                                                 }
                                             </label>
-                                            <div class="col-md-10">                                                                                                
+                                            <div class="col-md-9">                                                                                                
                                                 <select id="NewCase_Department_Id" name="NewCase.Department_Id">
                                                     <option value="">&nbsp;</option>
                                                     @if (Model.Departments != null)
@@ -311,14 +311,14 @@
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.OU_Id.ToString()))
                                     {
                                         <div class="form-group row">
-                                            <label class="col-md-2">                                                
+                                            <label class="col-md-3">                                                
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                                                
                                                 @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.OU_Id.ToString()).Select(f => f.Required).FirstOrDefault() == 1)
                                                 {
                                                     <span class="mandatorystar">*</span>
                                                 }
                                             </label>
-                                            <div class="col-md-10">                                                                                                
+                                            <div class="col-md-9">                                                                                                
                                                 <select id="NewCase_Ou_Id" name="NewCase.OU_Id">
                                                     <option value="">&nbsp;</option>
                                                     @if (Model.OrganizationUnits != null)
@@ -336,14 +336,14 @@
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Place.ToString()))
                                     {
                                         <div class="form-group row">
-                                            <label class="col-md-2">                                                
+                                            <label class="col-md-3">                                                
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.Place.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                                                
                                                 @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Place.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
                                                 {
                                                     <span class="mandatorystar">*</span>
                                                 }
                                             </label>
-                                            <div class="col-md-10">                                                
+                                            <div class="col-md-9">                                                
                                                 @Html.TextBoxFor(p => Model.NewCase.Place)
                                             </div>
                                         </div>
@@ -351,14 +351,14 @@
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.UserCode.ToString()))
                                     {
                                         <div class="form-group row">
-                                            <label class="col-md-2">                                                
+                                            <label class="col-md-3">                                                
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.UserCode.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                                                
                                                 @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.UserCode.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
                                                 {
                                                     <span class="mandatorystar">*</span>
                                                 }
                                             </label>
-                                            <div class="col-md-10">                                                                                             
+                                            <div class="col-md-9">                                                                                             
                                                 @Html.TextBoxFor(u => Model.NewCase.UserCode)
                                             </div>
                                         </div>
@@ -378,14 +378,14 @@
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString()))
                                     {
                                         <div class="form-group row">
-                                            <label class="col-md-2">                                                
+                                            <label class="col-md-3">                                                
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                                                
                                                 @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.InventoryNumber.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
                                                 {
                                                     <span class="mandatorystar">*</span>
                                                 }
                                             </label>
-                                            <div class="col-md-10">
+                                            <div class="col-md-9">
                                                 @Html.TextBoxFor(i => Model.NewCase.InventoryNumber)
                                             </div>
                                         </div>
@@ -393,14 +393,14 @@
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString()))
                                     {
                                         <div class="form-group row">
-                                            <label class="col-md-2">                                                
+                                            <label class="col-md-3">                                                
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                                                
                                                 @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
                                                 {
                                                     <span class="mandatorystar">*</span>
                                                 }
                                             </label>
-                                            <div class="col-md-10">
+                                            <div class="col-md-9">
                                                 @Html.TextBoxFor(i => Model.NewCase.InventoryType)
                                             </div>
                                         </div>
@@ -408,14 +408,14 @@
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString()))
                                     {
                                         <div class="form-group row">
-                                            <label class="col-md-2">                                                
+                                            <label class="col-md-3">                                                
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                                                
                                                 @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.InventoryLocation.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
                                                 {
                                                     <span class="mandatorystar">*</span>
                                                 }
                                             </label>
-                                            <div class="col-md-10">                                                
+                                            <div class="col-md-9">                                                
                                                 @Html.TextBoxFor(i => Model.NewCase.InventoryLocation)
                                             </div>
                                         </div>
@@ -435,14 +435,14 @@
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()))
                                     {
                                         <div class="form-group row">
-                                            <label class="col-md-2">                                                
+                                            <label class="col-md-3">                                                
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                                                
                                                 @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
                                                 {
                                                     <span class="mandatorystar">*</span>
                                                 }
                                             </label>
-                                            <div class="col-md-10">                                                
+                                            <div class="col-md-9">                                                
                                                 <div id="divCaseType" class="btn-group">
                                                     <div class="btn btn-default" id="divBreadcrumbs_CaseType">@Model.CaseTypeParantPath</div>
                                                     <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -462,14 +462,14 @@
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()))
                                     {
                                         <div class="form-group row">
-                                            <label class="col-md-2">
+                                            <label class="col-md-3">
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                                                
                                                 @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
                                                 {
                                                     <span class="mandatorystar">*</span>
                                                 }
                                             </label>
-                                            <div class="col-md-10">
+                                            <div class="col-md-9">
                                                 <div id="divProductArea" class="btn-group">
                                                     <div class="btn btn-default" id="divBreadcrumbs_ProductArea">@Model.ProductAreaParantPath</div>
                                                     <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -488,14 +488,14 @@
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.System_Id.ToString()))
                                     {
                                         <div class="form-group row">
-                                            <label class="col-md-2">                                                
+                                            <label class="col-md-3">                                                
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.System_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                                                
                                                 @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.System_Id.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
                                                 {
                                                     <span class="mandatorystar">*</span>
                                                 }
                                             </label>
-                                            <div class="col-md-10">                                                                                                
+                                            <div class="col-md-9">                                                                                                
                                                 <select id="NewCase_System_Id" name="NewCase.System_Id">
                                                     <option value="">&nbsp;</option>
                                                     @if (Model.Systems != null)
@@ -513,14 +513,14 @@
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Category_Id.ToString()))
                                     {
                                         <div class="form-group row">
-                                            <label class="col-md-2">                                                
+                                            <label class="col-md-3">                                                
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                                                
                                                 @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Category_Id.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
                                                 {
                                                     <span class="mandatorystar">*</span>
                                                 }
                                             </label>
-                                            <div class="col-md-10">                                                
+                                            <div class="col-md-9">                                                
                                                 <select id="NewCase_Category_Id" name="NewCase.Category_Id">
                                                     <option value="">&nbsp;</option>
                                                     @if (Model.Categories != null)
@@ -538,7 +538,7 @@
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString()))
                                     {
                                         <div class="form-group row">
-                                            <label class="col-md-2">                                               
+                                            <label class="col-md-3">                                               
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                                                
                                                 @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Supplier_Id.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
                                                 {
@@ -547,7 +547,7 @@
                                             </label>                                        
                                             @if (Model.Suppliers != null)
                                             {
-                                                <div class="col-md-10">                                                   
+                                                <div class="col-md-9">                                                   
                                                     <select id="NewCase_Supplier_Id" name="NewCase.Supplier_Id">
                                                         <option value="">&nbsp;</option>
                                                         @foreach (var e in Model.Suppliers.Where(e => e.IsActive == 1))
@@ -563,14 +563,14 @@
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString()))
                                     {
                                         <div class="form-group row">
-                                            <label class="col-md-2">                                                
+                                            <label class="col-md-3">                                                
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                                                
                                                 @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
                                                 {
                                                     <span class="mandatorystar">*</span>
                                                 }
                                             </label>
-                                            <div class="col-md-10">                                                
+                                            <div class="col-md-9">                                                
                                                 @Html.TextBoxFor(i => Model.NewCase.InvoiceNumber)
                                             </div>
                                         </div>
@@ -579,14 +579,14 @@
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString()))
                                     {
                                         <div class="form-group row">
-                                            <label class="col-md-2">                                                
+                                            <label class="col-md-3">                                                
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                                                
                                                 @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
                                                 {
                                                     <span class="mandatorystar">*</span>
                                                 }
                                             </label>
-                                            <div class="col-md-10">
+                                            <div class="col-md-9">
                                                 @Html.TextBoxFor(r => Model.NewCase.ReferenceNumber)
                                             </div>
                                         </div>
@@ -595,14 +595,14 @@
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Caption.ToString()))
                                     {
                                         <div class="form-group row">
-                                            <label class="col-md-2">                                                
+                                            <label class="col-md-3">                                                
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.Caption.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                                                
                                                 @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Caption.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
                                                 {
                                                     <span class="mandatorystar">*</span>
                                                 }
                                             </label>
-                                            <div class="col-md-10">                                                
+                                            <div class="col-md-9">                                                
                                                 @Html.TextBoxFor(c => Model.NewCase.Caption)
                                             </div>
                                         </div>
@@ -611,14 +611,14 @@
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Description.ToString()))
                                     {
                                         <div class="form-group row">
-                                            <label class="col-md-2">                                                
+                                            <label class="col-md-3">                                                
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                                                
                                                 @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Description.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
                                                 {
                                                     <span class="mandatorystar">*</span>
                                                 }
                                             </label>
-                                            <div class="col-md-10">                                                
+                                            <div class="col-md-9">                                                
                                                 @Html.TextAreaFor(d => Model.NewCase.Description)
                                             </div>
                                         </div>
@@ -627,14 +627,14 @@
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString()))
                                     {
                                         <div class="form-group row">
-                                            <label class="col-md-2">                                                
+                                            <label class="col-md-3">                                                
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                                                
                                                 @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Miscellaneous.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
                                                 {
                                                     <span class="mandatorystar">*</span>
                                                 }
                                             </label>
-                                            <div class="col-md-10">                                                
+                                            <div class="col-md-9">                                                
                                                 @Html.TextAreaFor(m => Model.NewCase.Miscellaneous)
                                             </div>
                                         </div>
@@ -643,10 +643,10 @@
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString()))
                                     {
                                         <div class="form-group row">
-                                            <label class="col-md-2">                                                
+                                            <label class="col-md-3">                                                
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                                                
                                             </label>
-                                            <div class="col-md-10">
+                                            <div class="col-md-9">
                                                 <input type="checkbox" name="NewCase.ContactBeforeAction" @(Model.NewCase.ContactBeforeAction == 1 ? "checked=checked" : "") value="1"/>
                                                 @Translation.Get("Should the initiator be contacted before action?", Enums.TranslationSource.TextTranslation)
                                                 <input type="hidden" name="NewCase.ContactBeforeAction" value="0" />
@@ -657,10 +657,10 @@
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.SMS.ToString()))
                                     {
                                         <div class="form-group row">
-                                            <label class="col-md-2">                                                
+                                            <label class="col-md-3">                                                
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.SMS.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                                                
                                             </label>
-                                            <div class="col-md-10">
+                                            <div class="col-md-9">
                                                 <input type="checkbox" name="NewCase.SMS" @(Model.NewCase.SMS == 1 ? "checked=checked" : "") value="1"/>
                                                 @Translation.Get("Send SMS when case is closed", Enums.TranslationSource.TextTranslation)
                                                 <input type="hidden" name="NewCase.SMS" value="0" />
@@ -671,14 +671,14 @@
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Available.ToString()))
                                     {
                                         <div class="form-group row">
-                                            <label class="col-md-2">                                                
+                                            <label class="col-md-3">                                                
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.Available.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                                                
                                                 @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Available.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
                                                 {
                                                     <span class="mandatorystar">*</span>
                                                 }
                                             </label>
-                                            <div class="col-md-10">                                                
+                                            <div class="col-md-9">                                                
                                                 @Translation.Get("Initiator is available during the following times", Enums.TranslationSource.TextTranslation)
                                                 <br />
                                                 &nbsp;@Html.TextBoxFor(m => Model.NewCase.Available)
@@ -689,10 +689,10 @@
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Cost.ToString()))
                                     {
                                         <div class="form-group row">
-                                            <label class="col-md-2">                                                
+                                            <label class="col-md-3">                                                
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.Cost.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                                                
                                             </label>
-                                            <div class="col-md-10">
+                                            <div class="col-md-9">
                                                 <table>
                                                     <tr>
                                                         <td>@Translation.Get("Item Cost", Enums.TranslationSource.TextTranslation)<br />
@@ -722,7 +722,7 @@
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
                                     {
                                         <div class="form-group row">
-                                            <label class="col-md-2">                                                
+                                            <label class="col-md-3">                                                
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.Filename.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                                                
                                             </label>
                                             <div class="col-md-5">                                                
@@ -756,7 +756,7 @@
                                         </div>
                                     }
                                     <div class="form-group row">
-                                        <label class="col-md-2"></label>                                        
+                                        <label class="col-md-3"></label>                                        
                                     </div>                                    
                                 </div>
                             </div>

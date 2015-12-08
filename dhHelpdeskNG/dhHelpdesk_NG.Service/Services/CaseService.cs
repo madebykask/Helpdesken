@@ -10,6 +10,7 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models.Case.ChidCase;
     using DH.Helpdesk.BusinessData.Models.Case.Output;
+    using DH.Helpdesk.BusinessData.Models.Email;
     using DH.Helpdesk.BusinessData.Models.Invoice;
     using DH.Helpdesk.BusinessData.Models.User.Input;
     using DH.Helpdesk.BusinessData.OldComponents;
@@ -37,7 +38,6 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.Services.Localization;
     using DH.Helpdesk.Services.Services.CaseStatistic;
     using DH.Helpdesk.Services.utils;
-
     using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
 
     public interface ICaseService
@@ -122,7 +122,7 @@ namespace DH.Helpdesk.Services.Services
 
         int? SaveInternalLogMessage(int id, string textInternal, out IDictionary<string, string> errors);
 
-        CaseDataSet GetCaseDataSet(DateTime? fromDate, DateTime? toDate);
+        Dictionary<int, string> GetCaseFiles(List<int> caseIds);
 
         List<CaseFilterFavorite> GetMyFavorites(int customerId, int userId);
 
@@ -851,7 +851,7 @@ namespace DH.Helpdesk.Services.Services
                                     if (!String.IsNullOrEmpty(m.Body) && !String.IsNullOrEmpty(m.Subject))
                                     {
                                         var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(helpdeskMailFromAdress));                                        
-                                        var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, log.HighPriority, files);
+                                        var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, log.HighPriority, files);
                                         el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                                         var now = DateTime.Now;
                                         el.CreatedDate = now;
@@ -878,7 +878,7 @@ namespace DH.Helpdesk.Services.Services
                             for (int i = 0; i < to.Length; i++)
                             {
                                 var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(helpdeskMailFromAdress));
-                                var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, log.HighPriority, files);
+                                var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, log.HighPriority, files);
                                 el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                                 var now = DateTime.Now;
                                 el.CreatedDate = now;
@@ -1043,37 +1043,19 @@ namespace DH.Helpdesk.Services.Services
             return this._caseHistoryRepository.GetCaseHistoryByCaseId(caseId).ToList(); 
         }
 
-        public CaseDataSet GetCaseDataSet(DateTime? fromDate, DateTime? toDate)
+        public Dictionary<int, string> GetCaseFiles(List<int> caseIds)
         {
-            var ret = new CaseDataSet();
-            using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
-            {                                
-                ret.CaseTypeQuery = uow.GetRepository<CaseType>().GetAll().ToList();
-                ret.CategoryQuery = uow.GetRepository<Category>().GetAll().ToList();
-                ret.CausingPartQuery = uow.GetRepository<CausingPart>().GetAll().ToList();
-                ret.ClosingReasonQuery = uow.GetRepository<FinishingCause>().GetAll().ToList();
-                ret.CustomerQuery = uow.GetRepository<Customer>().GetAll().ToList();
-                ret.DepartmentQuery = uow.GetRepository<Department>().GetAll().ToList();
-                ret.ImpactQuery = uow.GetRepository<Impact>().GetAll().ToList();                
-                ret.OrganizationUnitQuery = uow.GetRepository<OU>().GetAll().ToList();
-                ret.PriorityQuery = uow.GetRepository<Priority>().GetAll().ToList();
-                ret.ProductAreaQuery = uow.GetRepository<ProductArea>().GetAll().ToList();
-                ret.RegionQuery = uow.GetRepository<Region>().GetAll().ToList();
-                ret.StateSecondaryQuery = uow.GetRepository<StateSecondary>().GetAll().ToList();
-                ret.StatusQuery = uow.GetRepository<Status>().GetAll().ToList();
-                ret.SupplierQuery = uow.GetRepository<Supplier>().GetAll().ToList();
-                ret.SystemQuery = uow.GetRepository<System>().GetAll().ToList();
-                ret.UrgencyQuery = uow.GetRepository<Urgency>().GetAll().ToList();
-                ret.UserQuery = uow.GetRepository<User>().GetAll().ToList();
-                ret.WorkingGroupQuery = uow.GetRepository<WorkingGroupEntity>().GetAll().ToList();
-                ret.RegistrationSourceCustomerQuery = uow.GetRepository<RegistrationSourceCustomer>().GetAll().ToList();                
-                ret.LanguageQuery = uow.GetRepository<Language>().GetAll().ToList();
-                ret.CaseStatisticsQuery = uow.GetRepository<DH.Helpdesk.Domain.Cases.CaseStatistic>().GetAll().ToList();
-                ret.CaseFileQuery = _caseFileRepository.GetCaseFilesByDate(fromDate, toDate);
-                ret.LogQuery = _logService.GetCaseLogs(fromDate, toDate).ToList();
-                //ret.LogFileQuery = uow.GetRepository<LogFile>().GetAll().ToList(); 
-             }
+            var preCaseFiles = this._caseFileRepository.GetAll().Where(f => caseIds.Contains(f.Case_Id)).ToList();
 
+            var groupedCaseFiles = preCaseFiles.GroupBy(f => f.Case_Id)
+                                               .Select(g => new
+                                                            {
+                                                                caseId = g.Key,
+                                                                fileNames = g.Aggregate(string.Empty, (x, i) => x + Environment.NewLine + i.FileName)
+                                                            }).ToDictionary(d=> d.caseId, d=> d.fileNames);
+
+            var casesWithoutFile = caseIds.Where(c => !groupedCaseFiles.ContainsKey(c)).ToDictionary(d => d, d => string.Empty);
+            var ret = groupedCaseFiles.Union(casesWithoutFile).ToDictionary(d=> d.Key, d=> d.Value);
             return ret;
         }
 
@@ -1154,7 +1136,8 @@ namespace DH.Helpdesk.Services.Services
                                 {
                                     var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(customEmailSender1));                                    
                                     fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 1);
-                                    var e_res = _emailService.SendEmail(customEmailSender1, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, false, files);
+                                    var e_res = _emailService.SendEmail(customEmailSender1, el.EmailAddress, m.Subject, m.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, files);
+                                   
                                     el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                                     var now = DateTime.Now;
                                     el.CreatedDate = now;
@@ -1171,7 +1154,7 @@ namespace DH.Helpdesk.Services.Services
                             {
                                 var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(customEmailSender1));                                
                                 fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 2);
-                                var e_res = _emailService.SendEmail(customEmailSender1, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, false, files);
+                                var e_res = _emailService.SendEmail(customEmailSender1, el.EmailAddress, m.Subject, m.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, files);
                                 el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                                 var now = DateTime.Now;
                                 el.CreatedDate = now;
@@ -1210,7 +1193,7 @@ namespace DH.Helpdesk.Services.Services
                                         {
                                             var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(customEmailSender1));                                            
                                             fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 1);
-                                            var e_res = _emailService.SendEmail(customEmailSender1, el.EmailAddress, mm.Subject, mm.Body, fields, el.MessageId, false, files);
+                                            var e_res = _emailService.SendEmail(customEmailSender1, el.EmailAddress, mm.Subject, mm.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, files);
                                             el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                                             var now = DateTime.Now;
                                             el.CreatedDate = now;
@@ -1268,7 +1251,7 @@ namespace DH.Helpdesk.Services.Services
                                         {
                                             var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(customEmailSender1));                                            
                                             fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 1);
-                                            var e_res = _emailService.SendEmail(customEmailSender1, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, false, files);
+                                            var e_res = _emailService.SendEmail(customEmailSender1, el.EmailAddress, m.Subject, m.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, files);
                                             el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                                             var now = DateTime.Now;
                                             el.CreatedDate = now;
@@ -1308,7 +1291,7 @@ namespace DH.Helpdesk.Services.Services
                             var smsTo = GetSmsRecipient(customerSetting, newCase.Administrator.CellPhone);
                             var el = new EmailLog(caseHistoryId, mailTemplateId, smsTo, _emailService.GetMailMessageId(helpdeskMailFromAdress));                            
                             fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 4);
-                            var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, GetSmsSubject(customerSetting), m.Body, fields, el.MessageId);
+                            var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, GetSmsSubject(customerSetting), m.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, files);
                             el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                             var now = DateTime.Now;
                             el.CreatedDate = now;
@@ -1337,7 +1320,7 @@ namespace DH.Helpdesk.Services.Services
                                 {
                                     var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.Priority.EMailList, _emailService.GetMailMessageId(helpdeskMailFromAdress));                                    
                                     fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 5);
-                                    var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                    var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, files);
                                     el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                                     var now = DateTime.Now;
                                     el.CreatedDate = now;
@@ -1385,7 +1368,9 @@ namespace DH.Helpdesk.Services.Services
                                                                 m.Subject,
                                                                 m.Body,
                                                                 fields,
-                                                                el.MessageId);
+                                                                EmailResponse.GetEmptyEmailResponse(),
+                                                                el.MessageId,
+                                                                false, files);
 
                             el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                             var now = DateTime.Now;
@@ -1422,7 +1407,7 @@ namespace DH.Helpdesk.Services.Services
                                 {
                                     var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(helpdeskMailFromAdress));                                    
                                     fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 7);
-                                    var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, false, files);
+                                    var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, files);
                                     el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                                     var now = DateTime.Now;
                                     el.CreatedDate = now;
@@ -1465,7 +1450,7 @@ namespace DH.Helpdesk.Services.Services
                                 {
                                     var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(customEmailSender2));                                    
                                     fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 8);
-                                    var e_res = _emailService.SendEmail(customEmailSender2, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, false, files);
+                                    var e_res = _emailService.SendEmail(customEmailSender2, el.EmailAddress, m.Subject, m.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, files);
                                     el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                                     var now = DateTime.Now;
                                     el.CreatedDate = now;
@@ -1487,7 +1472,7 @@ namespace DH.Helpdesk.Services.Services
 
                                     var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(customEmailSender2));                                    
                                     fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 9);
-                                    var e_res = _emailService.SendEmail(customEmailSender2, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, false, files);
+                                    var e_res = _emailService.SendEmail(customEmailSender2, el.EmailAddress, m.Subject, m.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, files);
                                     el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                                     var now = DateTime.Now;
                                     el.CreatedDate = now;
@@ -1511,7 +1496,7 @@ namespace DH.Helpdesk.Services.Services
                                     var smsTo = GetSmsRecipient(customerSetting, newCase.PersonsCellphone);
                                     var el = new EmailLog(caseHistoryId, mailTemplateId, smsTo, _emailService.GetMailMessageId(helpdeskMailFromAdress));                                    
                                     fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 10);
-                                    var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, GetSmsSubject(customerSetting), mt.Body, fields, el.MessageId);
+                                    var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, GetSmsSubject(customerSetting), mt.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, files);
                                     el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                                     var now = DateTime.Now;
                                     el.CreatedDate = now;
@@ -1593,7 +1578,7 @@ namespace DH.Helpdesk.Services.Services
                     this._emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
                 
                 var fields = this.GetCaseFieldsForEmail(case_, log, cms, el.EmailLogGUID.ToString(), 3);
-                var e_res = this._emailService.SendEmail(cms.HelpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                var e_res = this._emailService.SendEmail(cms.HelpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId);
                 el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                 var now = DateTime.Now;
                 el.CreatedDate = now;

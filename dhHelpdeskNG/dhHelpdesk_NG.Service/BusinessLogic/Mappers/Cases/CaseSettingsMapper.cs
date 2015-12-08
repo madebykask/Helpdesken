@@ -15,7 +15,7 @@
                             this IQueryable<CaseFieldSetting> query,
                             int languageId, bool hasLeadTime = false)
         {
-            var exceptFields = new string[] { LogFields.AttachedFile, LogFields.ExternalLogNote, LogFields.InternalLogNote };
+            var exceptFields = new string[] { LogFields.AttachedFile, LogFields.ExternalLogNote, LogFields.InternalLogNote, CaseInfoFields.AttachedFile };
             var entities = query.Select(f => new CaseSettingsMapData
                                                  {
                                                     FieldName = f.Name,                                                    

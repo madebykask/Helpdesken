@@ -90,6 +90,18 @@ EditPage.prototype.getValidationErrorMessage = function () {
     return messages.join('');
 };
 
+EditPage.prototype.getDate = function (val) {
+    if (val == undefined || val == null || val == "")
+        return null;
+    else {
+        var dateStr = val.split(' ');
+        if (dateStr.length > 0)
+            return new Date(dateStr[0]);
+        else
+            return null;
+    }
+};
+
 EditPage.prototype.isFormValid = function() {
     var me = this;
 
@@ -97,7 +109,19 @@ EditPage.prototype.isFormValid = function() {
         me.$productAreaObj.addClass("error");
         dhHelpdesk.cases.utils.showError(me.productAreaErrorMessage);
         return false;
-    }    
+    }            
+            
+    var curFinishDate = $('#' + me.p.caseFieldNames.FinishingDate).val();
+    if (curFinishDate != undefined && curFinishDate != '') {
+        var regDate = me.getDate(me.p.caseRegDate);            
+        var finishDate = me.getDate(curFinishDate);
+        if (regDate > finishDate) {
+            dhHelpdesk.cases.utils.showError(me.p.finishingDateMessage);
+            $('#' + me.p.caseFieldNames.FinishingDate).addClass("error");
+            return false;
+        };        
+    }
+    
 
     if (!me.$form.valid()) {
         dhHelpdesk.cases.utils.showError(me.getValidationErrorMessage());
@@ -271,16 +295,24 @@ EditPage.prototype.showDeleteConfirmationDlg = function () {
     return false;
 };
 
-EditPage.prototype.MakeDeleteParams = function(c) {
+EditPage.prototype.MakeDeleteParams = function (c) {
+    var me = this;
     var res = {
         caseId: c.id
     };
+
     if (c.customerId != 0) {
         res.customerId = c.customerId;
     }
+
     if (c.parentCaseId != 0) {
         res.parentCaseId = c.parentCaseId;
     }
+
+    if (me.p.backUrl != null) {
+        res.backUrl = me.p.backUrl;
+    }
+
     return res;
 };
 
@@ -397,7 +429,7 @@ EditPage.prototype.init = function (p) {
     me.p = p;
     /// controls binding
     me.$form = $('#target');
-    me.$watchDateChangers = $('.departments-list, #case__Priority_Id');
+    me.$watchDateChangers = $('.departments-list, #case__Priority_Id, #case__StateSecondary_Id');
     me.$department = $('.departments-list');
     me.$SLASelect = $('#case__Priority_Id');
     me.$SLAInput = $('input.sla-value');
@@ -427,6 +459,16 @@ EditPage.prototype.init = function (p) {
         var SLA = parseInt(me.$SLASelect.find('option:selected').attr('data-sla'), 10);
         if (isNaN(SLA)) {
             SLA = parseInt(me.$SLAInput.attr('data-sla'), 10);
+        }
+        if (this.id == "case__StateSecondary_Id") {
+            $.post('/Cases/ChangeStateSecondary', { 'id': $(this).val() }, function (data) {
+                if (data.ReCalculateWatchDate == 1) {
+                    if (!isNaN(deptId) && (!isNaN(SLA) && SLA === 0)) {
+                        return me.fetchWatchDateByDept.call(me, deptId);
+                    }
+                }
+            }, 'json');
+            return;
         }
 
         if (!isNaN(deptId) && (!isNaN(SLA) && SLA === 0)) {

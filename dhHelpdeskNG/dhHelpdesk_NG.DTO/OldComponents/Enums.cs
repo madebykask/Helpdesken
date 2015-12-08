@@ -94,7 +94,19 @@
             Problem = 59,
             RegistrationSourceCustomer = 60,
             AddUserBtn = 61,
-            CostCentre = 62
+            CostCentre = 62,
+            IsAbout_ReportedBy = 63,
+            IsAbout_Persons_Name = 64,
+            IsAbout_Persons_EMail = 65,
+            IsAbout_Persons_Phone = 66,
+            IsAbout_Persons_CellPhone = 67,
+            IsAbout_Customer_Id = 68,
+            IsAbout_Region_Id = 69,
+            IsAbout_Department_Id = 70,
+            IsAbout_OU_Id = 71,
+            IsAbout_CostCentre = 72,
+            IsAbout_Place = 73,
+            IsAbout_UserCode = 74
         }
     }
 }

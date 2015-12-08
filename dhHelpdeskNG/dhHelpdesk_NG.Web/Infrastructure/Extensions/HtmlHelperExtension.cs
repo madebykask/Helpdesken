@@ -592,7 +592,39 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                     sb.Append("</tr>");
                 }
             }
+            // Watchdate
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.WatchDate.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.WatchDate != o.WatchDate)
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    if (o.WatchDate == null)
+                    {
+                        sb.Append(tdMarkup);
+                        sb.Append(from);
+                        sb.Append(outFormatter.FormatDate(cur.WatchDate.Value));
+                    }
+                    else
+                    {
+                        if (cur.WatchDate == null)
+                        {
+                            sb.Append(tdMarkup);
+                            sb.Append(ey);
+                        }
+                        else
+                        {
+                            sb.Append(tdMarkup);
+                            sb.Append(outFormatter.FormatDate(o.WatchDate.Value));
+                            sb.Append(from);
+                            sb.Append(outFormatter.FormatDate(cur.WatchDate.Value));
+                        }
 
+                        sb.Append("</td>");
+                        sb.Append("</tr>");
+                    }
+                }
+            }
             // CaseFile
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Filename.ToString()).ShowOnStartPage == 1)
             {                 
