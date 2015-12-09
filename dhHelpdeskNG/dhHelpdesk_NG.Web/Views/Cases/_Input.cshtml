@@ -494,7 +494,7 @@
                         {
                             @Html.HiddenFor(m => Model.case_.RegLanguage_Id);
                         }
-                        <div style="@Model.caseFieldSettings.displayAboutUserInfoHtml()"  class="notifier-block hideshow">
+                        <div style="@Model.caseFieldSettings.displayAboutUserInfoHtml()"  class="regarding-block hideshowregarding">
                                 <h4><a href="#" class="showbtn"><i class="icon-plus-sign"></i></a><a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a> @Translation.Get("Angående")</h4>
                                 <div class="row">
                                     <div class="span12">
@@ -506,7 +506,7 @@
                                                     <th class="span5"></th>
                                                 </tr>
                                             </thead>
-                                            <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy, CaseSolutionFields.UserNumber)">
+                                            <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy, CaseSolutionFields.UserNumber)">
                                                 <td>
                                                     @CaseFieldCaption(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy, "Användar ID")
                                                 </td>

@@ -166,7 +166,12 @@
         $( ".showbtn" ).on( "click", function() {
             $( this ).parents( ".notifier-block" ).removeClass( "hideshow" );
         });
-
+        $(".hidebtn").on("click", function () {
+            $(this).parents(".regarding-block").addClass("hideshowregarding");
+        });
+        $(".showbtn").on("click", function () {
+            $(this).parents(".regarding-block").removeClass("hideshowregarding");
+        });
         $( ".hidebtn" ).on( "click", function() {
             $( this ).parents( ".computer-block" ).addClass( "hideshow" );
         });

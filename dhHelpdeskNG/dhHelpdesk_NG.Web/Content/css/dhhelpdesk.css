@@ -3333,6 +3333,20 @@ div.DTFC_LeftFootWrapper table {
 .editmode .hideshow .displaytr {
     /*display: none;*/
 }
+
+/**HIDE SHOW REGARDING*******/
+
+.editmode .hideshowregarding .caselogoverflow {
+    height:300px; overflow:auto;
+}
+.editmode .hideshowregarding .showbtn
+ {
+    display: inline-block;
+}
+.editmode .hideshowregarding .hidebtn,
+.editmode .hideshowregarding .displaytr {
+    display: none;
+}
 /*****END TEMPORARY SOLUTION******/
  /*.newmode .hidebtn, .newmode .showbtn {
     display: none;
