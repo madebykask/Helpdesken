@@ -280,6 +280,36 @@
             return ret;
         }
 
+        public static string displayAboutUserInfoHtml(this IList<CaseFieldSetting> cfs)
+        {
+            var ret = "display:none";
+
+            if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Region_Id.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Department_Id.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_OU_Id.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_CostCentre.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_UserCode.ToString()).ShowOnStartPage == 1)
+                return string.Empty;
+
+            return ret;
+        }
+
         public static string displayComputerInfoHtml(this IList<CaseFieldSetting> cfs)
         {
             var ret = "display:none";
