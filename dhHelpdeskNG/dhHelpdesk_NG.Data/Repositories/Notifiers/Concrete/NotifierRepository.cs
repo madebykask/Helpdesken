@@ -283,7 +283,7 @@
                                 || cu.Email.ToLower().Contains(s) || cu.UserCode.ToLower().Contains(s)
                                 || (cu.SurName.ToLower() + " " + cu.FirstName.ToLower()).Contains(s)
                                 || (cu.FirstName.ToLower() + " " + cu.SurName.ToLower()).Contains(s)
-                                || k.Region.Name.ToLower().Contains(s))
+                                || cu.Department.DepartmentName.ToLower().Contains(s))
                                 
                         select
                             new UserSearchResults
