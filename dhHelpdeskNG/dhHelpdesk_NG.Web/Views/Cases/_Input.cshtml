@@ -494,8 +494,11 @@
                         {
                             @Html.HiddenFor(m => Model.case_.RegLanguage_Id);
                         }
-                        <div style="@Model.caseFieldSettings.displayAboutUserInfoHtml()"  class="regarding-block hideshowregarding">
-                                <h4><a href="#" class="showbtn"><i class="icon-plus-sign"></i></a><a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a> @Translation.Get("Angående")</h4>
+      
+                        <div style="@Model.caseFieldSettings.displayAboutUserInfoHtml()"  class='@(Model.case_.Id != 0 ? "regarding-block hideshowregarding" : "regarding-block hideshow")'>
+                                <h4><a href="#" class="showbtn"><i class="icon-plus-sign"></i></a><a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a> @Translation.Get("Angående")&nbsp;  @if (Model.case_.Id != 0)
+                                                                                                                                                                                                      { @Model.case_.ReportedBy } &nbsp; @if (Model.case_.Id != 0)
+                                                                                                                                                                                                      { @Model.case_.PersonsName } </h4>
                                 <div class="row">
                                     <div class="span12">
                                         <table class="tableform">
@@ -1377,7 +1380,7 @@
 
                                                         foreach (var e in Model.workingGroups.Where(e => e.IsActive == 1 || Model.case_.WorkingGroup_Id == e.Id))
                                                         {
-                                                          <option value="@e.Id" class="@(e.IsActive != 1?"inactive":string.Empty)" @e.Id.IdIsSelected(Model.case_.WorkingGroup_Id.ToString()) >@e.WorkingGroupName</option>
+                                                          <option value="@e.Id" class="@(e.IsActive != 1 ? "inactive" : string.Empty)" @e.Id.IdIsSelected(Model.case_.WorkingGroup_Id.ToString()) >@e.WorkingGroupName</option>
                                                         }
                                                     }
                                                 </select>
