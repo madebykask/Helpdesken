@@ -96,6 +96,9 @@ using DH.Helpdesk.BusinessData.Enums.Case;
         [HttpGet]
         public PartialViewResult ShowReport(string reportName, ReportFilterJSModel filter)
         {
+            if (filter.RegisterTo.HasValue)
+                filter.RegisterTo = filter.RegisterTo.Value.AddDays(1);
+
             var selectedReport = filter.MapToSelectedFilter();
             var model = GetReportViewerData(reportName, selectedReport);
             

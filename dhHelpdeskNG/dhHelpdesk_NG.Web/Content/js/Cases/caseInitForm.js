@@ -201,11 +201,11 @@ function GetComputerUserSearchOptions() {
         highlighter: function (obj) {
             var item = JSON.parse(obj);
             var orgQuery = this.query;
-            if (item.regionname == null)
-                item.regionname = ""
+            if (item.departmentname == null)
+                item.departmentname = ""
             var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
-            var result = item.name + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email + ' - ' + item.regionname;
-            var resultBy_NameFamily = item.name_family + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email + ' - ' + item.regionname;
+            var result = item.name + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email + ' - ' + item.departmentname;
+            var resultBy_NameFamily = item.name_family + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email + ' - ' + item.departmentname;
                      
             if (result.toLowerCase().indexOf(orgQuery.toLowerCase()) > -1)               
                 return result.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
