@@ -87,6 +87,7 @@
     <Compile Include="EntityConfigurations\Cases\CaseStatisticConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CausingPartConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CaseLockConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Cases\CaseFilterFavoriteConfiguration.cs" />
     <Compile Include="EntityConfigurations\Changes\ChangeCouncilConfiguration.cs" />
     <Compile Include="EntityConfigurations\CheckLists\CheckListsConfiguration.cs" />
     <Compile Include="EntityConfigurations\FileViewLogConfiguration.cs" />
@@ -165,6 +166,7 @@
     <Compile Include="Infrastructure\Context\ICustomerContext.cs" />
     <Compile Include="Infrastructure\Context\IUserContext.cs" />
     <Compile Include="Infrastructure\Context\IWorkContext.cs" />
+    <Compile Include="Infrastructure\Helpers\QueryHelper.cs" />
     <Compile Include="Infrastructure\ModelFactories\Email\Concrete\EmailFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Email\IEmailFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Notifiers\Concrete\NotifierFieldSettingsFactory.cs" />
@@ -183,10 +185,12 @@
     <Compile Include="Mappers\Cases\BusinessModelToEntity\CaseNotifierToEntityMapper.cs" />
     <Compile Include="Mappers\Cases\BusinessModelToEntity\CausingPartToEntityMapper.cs" />
     <Compile Include="Mappers\Cases\BusinessModelToEntity\CaseLockToEntityMapper.cs" />
+    <Compile Include="Mappers\Cases\BusinessModelToEntity\CaseFilterFavoriteToEntityMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseLockToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseToCaseOverviewMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CausingPartToOverviewMapper.cs" />
+    <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseFilterFavoriteToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Changes\BusinessModelToEntity\HistoryToChangeHistoryEntityMapper.cs" />
     <Compile Include="Mappers\Changes\BusinessModelToEntity\ChangeFieldSettingsToChangeFieldSettingsEntityMapper.cs" />
     <Compile Include="Mappers\Changes\EntityToBusinessModel\ChangeEntityToChangeDetailedOverviewMapper.cs" />
@@ -351,6 +355,8 @@
     <Compile Include="Repositories\Cases\CaseSolutionSettingRepository.cs" />
     <Compile Include="Repositories\Cases\Concrete\CaseLockRepository.cs" />
     <Compile Include="Repositories\Cases\Concrete\CausingPartRepository.cs" />
+    <Compile Include="Repositories\Cases\Concrete\CaseFilterFavoriteRepository.cs" />
+    <Compile Include="Repositories\Cases\ICaseFilterFavoriteRepository.cs" />
     <Compile Include="Repositories\Cases\ICaseLockRepository.cs" />
     <Compile Include="Repositories\Cases\ICaseSolutionSettingRepository.cs" />
     <Compile Include="Repositories\Cases\ICausingPartRepository.cs" />
@@ -408,7 +414,9 @@
     <Compile Include="Repositories\Changes\IChangeGroupRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeLogRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeFileRepository.cs" />
+    <Compile Include="Repositories\DataLog\DataLogRepository.cs" />
     <Compile Include="Repositories\EmailLogRepository.cs" />
+    <Compile Include="Repositories\FileIndexing\FileIndexingRepository.cs" />
     <Compile Include="Repositories\IComputerUsersRepository.cs" />
     <Compile Include="Repositories\IComputerUserLogRepository.cs" />
     <Compile Include="Repositories\IComputerUsersBlackListRepository.cs" />

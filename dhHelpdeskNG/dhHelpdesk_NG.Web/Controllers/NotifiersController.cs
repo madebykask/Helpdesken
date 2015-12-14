@@ -546,7 +546,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                 if (organizationUnitId != null && organizationUnitId.Value > 0)
                     inputParams.Add("OrganizationUnitId", organizationUnitId.Value.ToString()); // Takes default from saved Notifier
-            }
+            }            
             
             if (displaySettings.Division.Show)
             {
@@ -579,6 +579,7 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
+        [BadRequestOnNotValid]
         public RedirectToRouteResult Notifier(InputModel model)
         {
             var updatedNotifier = this.updatedNotifierFactory.Create(model, DateTime.Now);

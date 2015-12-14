@@ -377,6 +377,28 @@
                                     </td>
                                 </tr>             
                             }
+
+                            
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("Återstående åtgärdstid"): 
+                                    </td>
+                                    <td>
+                                        @Html.CheckBoxFor(m => m.CaseRemainingTimeChecked, new { @class = "switchcheckbox" })
+                                    </td>
+                                    <td colspan="2">
+                                        <select id="lstfilterCaseRemainingTime" name="lstfilterCaseRemainingTime">
+                                            <option></option>
+                                            @foreach (var time in Model.filterCaseRemainingTime)
+                                            {
+                                               var curId = int.Parse(time.Value);
+                                                <option id="time" value="@time.Value" @curId.IdIsSelected(Model.SelectedCaseRemainingTime)>@time.Text</option>                                   
+                                               
+                                            }
+                                        </select>
+                                    </td>
+                                </tr>  
+                          
                         </table>
                     </div>
                 </div>

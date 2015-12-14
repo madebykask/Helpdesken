@@ -5,9 +5,7 @@
 
     public class CaseInvoiceOrderEntity : Entity
     {
-        public int InvoiceId { get; set; }
-
-        public virtual CaseInvoiceEntity Invoice { get; set; }
+        public int InvoiceId { get; set; }        
 
         public short Number { get; set; }
 
@@ -31,17 +29,19 @@
 
         public string Persons_Cellphone { get; set; }
 
-        public int Region_Id { get; set; }
+        public int? Region_Id { get; set; }
 
-        public int Department_Id { get; set; }
+        public int? Department_Id { get; set; }
 
-        public int OU_Id { get; set; }
+        public int? OU_Id { get; set; }
 
         public string Place { get; set; }
 
         public string UserCode { get; set; }
 
         public string CostCentre { get; set; }
+
+        public virtual CaseInvoiceEntity Invoice { get; set; }
 
         public virtual ICollection<CaseInvoiceArticleEntity> Articles { get; set; } 
 

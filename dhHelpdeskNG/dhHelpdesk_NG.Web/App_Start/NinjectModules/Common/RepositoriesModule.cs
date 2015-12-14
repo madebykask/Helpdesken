@@ -267,6 +267,8 @@
             this.Bind<IRegistrationSourceCustomerRepository>().To<RegistrationSourceCustomerRepository>();
             this.Bind<ICaseLockRepository>().To<CaseLockRepository>();
             this.Bind<IReportServiceRepository>().To<ReportServiceRepository>();
+            this.Bind<ICaseFilterFavoriteRepository>().To<CaseFilterFavoriteRepository>();
+            
         }
 
         #endregion

@@ -90,6 +90,18 @@ EditPage.prototype.getValidationErrorMessage = function () {
     return messages.join('');
 };
 
+EditPage.prototype.getDate = function (val) {
+    if (val == undefined || val == null || val == "")
+        return null;
+    else {
+        var dateStr = val.split(' ');
+        if (dateStr.length > 0)
+            return new Date(dateStr[0]);
+        else
+            return null;
+    }
+};
+
 EditPage.prototype.isFormValid = function() {
     var me = this;
 
@@ -97,7 +109,19 @@ EditPage.prototype.isFormValid = function() {
         me.$productAreaObj.addClass("error");
         dhHelpdesk.cases.utils.showError(me.productAreaErrorMessage);
         return false;
-    }    
+    }            
+            
+    var curFinishDate = $('#' + me.p.caseFieldNames.FinishingDate).val();
+    if (curFinishDate != undefined && curFinishDate != '') {
+        var regDate = me.getDate(me.p.caseRegDate);            
+        var finishDate = me.getDate(curFinishDate);
+        if (regDate > finishDate) {
+            dhHelpdesk.cases.utils.showError(me.p.finishingDateMessage);
+            $('#' + me.p.caseFieldNames.FinishingDate).addClass("error");
+            return false;
+        };        
+    }
+    
 
     if (!me.$form.valid()) {
         dhHelpdesk.cases.utils.showError(me.getValidationErrorMessage());
@@ -183,17 +207,19 @@ EditPage.prototype.doSave = function(submitUrl) {
     me.$form.attr("action", action);
     if (me.isFormValid()) {
         if (me.case.isNew()) {
+            me.stopCaseLockTimer();
             me.$form.submit();
             return false;
         } 
 
+        me.stopCaseLockTimer();
         $.post(window.parameters.caseLockChecker, {
                 caseId: me.p.currentCaseId,
                 caseChangedTime: me.p.caseChangedTime,
                 lockGuid: me.p.caseLockGuid
             },
             function (data) {
-                if (data == true) {
+                if (data == true) {                    
                     me.$form.submit();
                 } else {
                     //Case is Locked
@@ -205,6 +231,12 @@ EditPage.prototype.doSave = function(submitUrl) {
         me.setCaseStatus(me.CASE_IN_IDLE);
     }
     return false;
+};
+
+EditPage.prototype.stopCaseLockTimer = function () {
+    var me = this;
+    if (me.timerId != undefined)
+        clearInterval(me.timerId);    
 };
 
 EditPage.prototype.setCaseStatus = function (status) {
@@ -333,44 +365,30 @@ EditPage.prototype.InvoiceRulesForClosing = function (type) {
     }
 };
 
+
 EditPage.prototype.onSaveClick = function () {
     var me = this;
     var c = me.case;
     var url = me.EDIT_CASE_URL;
-    if (!me.InvoiceRulesForClosing("save"))
-    {
-        return false;
-    }
-
     if (c.isNew() && c.isChildCase()) {
         url = me.SAVE_GOTO_PARENT_CASE_URL;
     }
+    
     return me.checkAndSave(url);
 };
 
 EditPage.prototype.onSaveAndCloseClick = function () {
     var me = this;
-    if (!me.InvoiceRulesForClosing("saveclose")) {
-        return false;
-    }
     return me.checkAndSave(me.NEW_CLOSE_CASE_URL);    
 };
 
 EditPage.prototype.onSaveAndNewClick = function () {
     var me = this;
-    if (!me.InvoiceRulesForClosing("save")) {
-        return false;
-    }
     return me.checkAndSave(me.SAVE_ADD_CASE_URL);    
 };
 
 EditPage.prototype.canDeleteCase = function () {
     var me = this;
-    if (dhHelpdesk.CaseArticles.HasNotInvoicedArticles()) {
-        var message = dhHelpdesk.CaseArticles.translate("Du får inte ta bort ett ärende med invalda fast ofakturerade artiklar. Var god granska dina ordrar.");
-        ShowToastMessage(message);
-        return false;
-    }
     return !(me.$btnDelete.hasClass('disabled') || me.case.isAnyNotClosedChild());
 };
 
@@ -383,16 +401,24 @@ EditPage.prototype.showDeleteConfirmationDlg = function () {
     return false;
 };
 
-EditPage.prototype.MakeDeleteParams = function(c) {
+EditPage.prototype.MakeDeleteParams = function (c) {
+    var me = this;
     var res = {
         caseId: c.id
     };
+
     if (c.customerId != 0) {
         res.customerId = c.customerId;
     }
+
     if (c.parentCaseId != 0) {
         res.parentCaseId = c.parentCaseId;
     }
+
+    if (me.p.backUrl != null) {
+        res.backUrl = me.p.backUrl;
+    }
+
     return res;
 };
 
@@ -403,6 +429,7 @@ EditPage.prototype.doDeleteCase = function(c) {
     var me = this;
     var $form = $(['<form action="', me.DELETE_CASE_URL, '?', $.param(me.MakeDeleteParams(c)), '" method="post"></form>'].join(String.EMPTY));
     $('body').append($form);
+    me.stopCaseLockTimer();
     $form.submit();
 };
 
@@ -475,6 +502,7 @@ EditPage.prototype.onPageLeave = function(ev) {
         me.leaveDlg.show().done(function (result) {
             me.leaveDlg.hide();
             if (result === ConfirmationDialog.YES) {
+                me.stopCaseLockTimer();
                 window.location.href = gotoUrl;
             }
         });
@@ -493,6 +521,7 @@ EditPage.prototype.onCloseClick = function(ev) {
         url = me.CASE_OVERVIEW_URL;
     }
 
+    me.stopCaseLockTimer();
     window.location.href = url;
     return false;
 };
@@ -506,7 +535,7 @@ EditPage.prototype.init = function (p) {
     me.p = p;
     /// controls binding
     me.$form = $('#target');
-    me.$watchDateChangers = $('.departments-list, #case__Priority_Id');
+    me.$watchDateChangers = $('.departments-list, #case__Priority_Id, #case__StateSecondary_Id');
     me.$department = $('.departments-list');
     me.$SLASelect = $('#case__Priority_Id');
     me.$SLAInput = $('input.sla-value');
@@ -536,6 +565,16 @@ EditPage.prototype.init = function (p) {
         var SLA = parseInt(me.$SLASelect.find('option:selected').attr('data-sla'), 10);
         if (isNaN(SLA)) {
             SLA = parseInt(me.$SLAInput.attr('data-sla'), 10);
+        }
+        if (this.id == "case__StateSecondary_Id") {
+            $.post('/Cases/ChangeStateSecondary', { 'id': $(this).val() }, function (data) {
+                if (data.ReCalculateWatchDate == 1) {
+                    if (!isNaN(deptId) && (!isNaN(SLA) && SLA === 0)) {
+                        return me.fetchWatchDateByDept.call(me, deptId);
+                    }
+                }
+            }, 'json');
+            return;
         }
 
         if (!isNaN(deptId) && (!isNaN(SLA) && SLA === 0)) {
@@ -597,8 +636,8 @@ EditPage.prototype.init = function (p) {
         me.$btnDelete.addClass('disabled');
     }
 
-    if (p.currentCaseId > 0) {
-        me.timerId = setInterval(callAsMe(me.ReExtendCaseLock, me), me.p.extendValue * 1000);
+    if (p.currentCaseId > 0 && me.p.timerInterval > 0) {
+        me.timerId = setInterval(callAsMe(me.ReExtendCaseLock, me), me.p.timerInterval * 1000);
     }
 
     me.formOnBootValues = me.$form.serialize();

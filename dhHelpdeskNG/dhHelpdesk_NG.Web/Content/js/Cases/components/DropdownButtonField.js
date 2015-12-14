@@ -30,6 +30,10 @@ DropdownButtonField.prototype.init = function (opt) {
 */
 DropdownButtonField.prototype.setValue = function (value) {
     var me = this;
+
+    if (value.length >= 1)
+        value = value[0];
+
     var el = me.$baseEl.find('.dropdown-menu a[value=' + value + ']');
     if (el.length > 0) {
         me.setValueFromDomElement(el[0]);

@@ -270,11 +270,11 @@
     <Compile Include="Infrastructure\TimeZoneResolver\TimeZoneResolver.cs" />
     <Compile Include="Services\CaseStatistic\CaseStatisticService.cs" />
     <Compile Include="Services\Concrete\CaseLockService.cs" />
-    <Compile Include="Services\Concrete\ReportServiceService.cs" />
+    <Compile Include="Services\Concrete\Reports\ReportServiceService.cs" />
     <Compile Include="Services\Concrete\OrganizationJsonService.cs" />
     <Compile Include="Services\Concrete\Reports\ReportService.cs" />
     <Compile Include="Services\Concrete\Users\UsersPasswordHistoryService.cs" />
-    <Compile Include="Services\IReportServiceService.cs" />
+    <Compile Include="Services\Reports\IReportServiceService.cs" />
     <Compile Include="Services\ICaseLockService.cs" />
     <Compile Include="Services\Grid\GridSettingsService.cs" />
     <Compile Include="Services\ISurveyService.cs" />
@@ -415,6 +415,7 @@
     <Compile Include="Services\Licenses\IManufacturersService.cs" />
     <Compile Include="Services\Licenses\IProductsService.cs" />
     <Compile Include="Services\Licenses\IVendorsService.cs" />
+    <Compile Include="Services\DataLog\DataLogService.cs" />
     <Compile Include="Services\LogFileService.cs" />
     <Compile Include="Services\OperationLogService.cs" />
     <Compile Include="Services\CountryService.cs" />

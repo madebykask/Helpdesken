@@ -29,6 +29,9 @@
         public IList<Field> filterCaseProgress { get; set; }
         public IList<ItemOverview> filterCustomers { get; set; }
         public IList<ItemOverview> filterMaxRows { get; set; }
+        //public CaseRemainingTimeViewModel filterCaseRemainingTime { get; set; }
+
+        public IList<SelectListItem> filterCaseRemainingTime { get; set; }
 
         public bool SearchInMyCasesOnly { get; set; }
 
@@ -85,6 +88,10 @@
         /// List of selected performers for "Administrator" case field in search form
         /// </summary>
         public int[] lstfilterPerformer { get; set; }
+
+        public SelectList CaseRemainingTimeList { get; set; }
+        public int[] lstfilterCaseRemainingTime { get; set; }
+        public CaseStatisticsViewModel CaseStatisticsModel { get; set; }
     }
 
     public class AdvancedSearchSpecificFilterData

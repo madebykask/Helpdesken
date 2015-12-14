@@ -4,8 +4,10 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
     using System.Collections.Generic;
     using DH.Helpdesk.BusinessData.Models.Case.CaseLock;
     using DH.Helpdesk.Dal.Dal;
+    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Domain.Cases;
 
-    public interface ICaseLockRepository : INewRepository
+    public interface ICaseLockRepository : IRepository<CaseLockEntity>
     {
         List<LockedCaseOverview> GetLockedCases(int? customerId);
 
@@ -16,6 +18,8 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
         CaseLock GetCaseLockByGUID(Guid lockGUID);
 
         CaseLock GetCaseLockByCaseId(int caseId);
+
+        void CaseLockCleanUp();
         
         void LockCase(CaseLock caseLock);
 

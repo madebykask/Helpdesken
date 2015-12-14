@@ -185,12 +185,11 @@
         public readonly ICaseSettingRepository _casesettingRepository;
         private readonly IModuleRepository _moduleRepository;
         private readonly IUserModuleRepository _userModuleRepository;
-
         private readonly IUnitOfWorkFactory unitOfWorkFactory;
-
         private readonly IUserPermissionsChecker userPermissionsChecker;
-
         private readonly ITranslator translator;
+        private readonly IUsersPasswordHistoryRepository _userPasswordHistoryRepository;
+        
 
         private readonly IEntityToBusinessModelMapper<Setting, CustomerSettings> customerSettingsToBusinessModelMapper;
         
@@ -214,6 +213,7 @@
             IUnitOfWorkFactory unitOfWorkFactory, 
             IUserPermissionsChecker userPermissionsChecker, 
             ITranslator translator,
+            IUsersPasswordHistoryRepository userPasswordHistoryRepository,
             IEntityToBusinessModelMapper<Setting, CustomerSettings> customerSettingsToBusinessModelMapper)
         {
             this._accountActivityRepository = accountActivityRepository;
@@ -234,6 +234,7 @@
             this.unitOfWorkFactory = unitOfWorkFactory;
             this.userPermissionsChecker = userPermissionsChecker;
             this.translator = translator;
+            this._userPasswordHistoryRepository = userPasswordHistoryRepository;
             this.customerSettingsToBusinessModelMapper = customerSettingsToBusinessModelMapper;
         }
 
@@ -395,10 +396,36 @@
                     user.UserWorkingGroups.Clear();
                     user.CustomerUsers.Clear();
                     user.Departments.Clear();
-                    user.OLs.Clear();
+                    user.OLs.Clear();                    
                     user.OTs.Clear();
-                   
 
+                    //Remove Case Settings
+                    var userCaseSettings = this._casesettingRepository.GetAll().Where(cs => cs.User_Id == id).ToList();
+                    if (userCaseSettings.Any())
+                    {
+                        foreach (var caseSetting in userCaseSettings)
+                            this._casesettingRepository.Delete(caseSetting);
+                    }
+
+                    // Remove User Modules 
+                    var userModules = this._userModuleRepository.GetAll().Where(um => um.User_Id == id).ToList();
+                    if (userModules.Any())
+                    {
+                        foreach (var userModule in userModules)
+                            this._userModuleRepository.Delete(userModule);
+                    }
+
+                    // Remove User Password History 
+                    var passwordHistories = this._userPasswordHistoryRepository.GetAll().Where(up=> up.User_Id == id).ToList();
+                    if (passwordHistories.Any())
+                    {
+                        foreach (var passHistory in passwordHistories)
+                        {
+                            this._userPasswordHistoryRepository.Delete(passHistory);
+                            this.Commit();
+                        }
+                    }
+                    
                     this._userRepository.Delete(user);
                     this.Commit();
 

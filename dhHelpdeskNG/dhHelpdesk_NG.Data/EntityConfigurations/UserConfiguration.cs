@@ -145,11 +145,12 @@
             this.Property(x => x.TimeAutoAuthorize).IsRequired();
             this.Property(x => x.TimeRegistration).IsRequired();
            // Property(x => x.UserGroup_Id).IsRequired();
-            this.Property(x => x.UserID).IsRequired().HasColumnName("UserId").HasMaxLength(20);
+            this.Property(x => x.UserID).IsRequired().HasColumnName("UserId").HasMaxLength(40);
             this.Property(x => x.WatchDateMail).IsRequired();
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             this.Property(u => u.ShowSolutionTime).IsRequired();
             this.Property(u => u.TimeZoneId).IsOptional();
+            this.Property(u => u.ShowCaseStatistics).IsRequired();
 
             this.ToTable("tblUsers");
         }

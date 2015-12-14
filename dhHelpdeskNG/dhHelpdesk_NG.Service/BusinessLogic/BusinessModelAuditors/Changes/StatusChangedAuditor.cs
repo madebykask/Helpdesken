@@ -12,6 +12,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
     using DH.Helpdesk.Services.BusinessLogic.MailTools.TemplateFormatters;
     using DH.Helpdesk.Services.Requests.Changes;
     using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.BusinessData.Models.Email;
 
     public sealed class StatusChangedAuditor : IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditData>
     {
@@ -110,7 +111,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
                 return;
             }
 
-            this.emailService.SendEmail(from, ownerEmails, mail);
+            this.emailService.SendEmail(from, ownerEmails, mail, EmailResponse.GetEmptyEmailResponse());
 
             var mailUniqueIdentifier = this.mailUniqueIdentifierProvider.Provide(
                 businessModel.Context.DateAndTime,

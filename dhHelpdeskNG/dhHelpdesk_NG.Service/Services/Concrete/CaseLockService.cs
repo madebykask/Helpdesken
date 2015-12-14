@@ -42,6 +42,11 @@
             return this._caseLockRepository.GetCaseLockByCaseId(caseId);
         }
 
+        public void CaseLockCleanUp()
+        {
+            this._caseLockRepository.CaseLockCleanUp();
+        }
+
         public void LockCase(CaseLock caseLock)
         {
             this._caseLockRepository.LockCase(caseLock);            

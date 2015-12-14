@@ -45,7 +45,8 @@
             TimeZoneInfo userTimeZone,
             string applicationType,
             bool calculateRemainingTime,
-            out CaseRemainingTimeData remainingTime,
+            out CaseRemainingTimeData remainingTime,            
+            out CaseAggregateData aggregateData,
             int? relatedCasesCaseId = null,
             string relatedCasesUserId = null,
             int[] caseIds = null);
@@ -90,6 +91,8 @@
             string applicationType)
         {
             CaseRemainingTimeData remainingTime;
+            CaseAggregateData aggregateData;
+
             return this.Search(
                         f,
                         csl,
@@ -105,7 +108,8 @@
                         userTimeZone,
                         applicationType,
                         false,
-                        out remainingTime);
+                        out remainingTime,
+                        out aggregateData);
         }
 
         public IList<CaseSearchResult> Search(
@@ -124,24 +128,19 @@
                                 string applicationType,
                                 bool calculateRemainingTime,
                                 out CaseRemainingTimeData remainingTime,
+                                out CaseAggregateData aggregateData,
                                 int? relatedCasesCaseId = null,
                                 string relatedCasesUserId = null,
                                 int[] caseIds = null)
         {
-            int productAreaId;
-            var csf = new CaseSearchFilter();
-            csf = csf.Copy(f);
-
-            // ärenden som tillhör barn till föräldrer ska visas om vi filtrerar på föräldern
-            if (int.TryParse(csf.ProductArea, out productAreaId))
-            {
-                csf.ProductArea = this.productAreaService.GetProductAreaWithChildren(productAreaId, ", ", "Id");
-            }
-
+            
+            var csf = DoFilterValidation(f);            
+            
             var workTimeFactory = new WorkTimeCalculatorFactory(this.holidayService, workingDayStart, workingDayEnd, userTimeZone);
             var resonisbleFieldSettings = customerCaseFieldsSettings.Where(it => it.Name == GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString()).FirstOrDefault();
             var isFieldResponsibleVisible =
                 resonisbleFieldSettings != null && resonisbleFieldSettings.ShowOnStartPage == 1;
+
             var context = new CaseSearchContext()
                               {
                                     f = csf,
@@ -163,10 +162,10 @@
                                     relatedCasesUserId = relatedCasesUserId,
                                     caseIds = caseIds
                               };
-            var result = this.caseSearchRepository.Search(context, out remainingTime);
+            var result = this.caseSearchRepository.Search(context, out remainingTime, out aggregateData);
 
             var workingHours = workingDayEnd - workingDayStart;
-            if (f.CaseRemainingTimeFilter.HasValue && calculateRemainingTime)
+            if (f.CaseRemainingTimeFilter.HasValue)
             {
                 IEnumerable<CaseRemainingTime> filteredCaseRemainigTimes;
                 if (f.CaseRemainingTimeFilter < 0)
@@ -197,6 +196,26 @@
             }
 
             return result;
+        }
+
+        private CaseSearchFilter DoFilterValidation(CaseSearchFilter filter)
+        {
+            var filterValidate = filter.Copy(filter);
+
+            //Applied in FreeTextSearchSafeForSQLInject
+            //if (!string.IsNullOrEmpty(filterValidate.FreeTextSearch))
+            //    filterValidate.FreeTextSearch = filterValidate.FreeTextSearch.Replace("'", "''");
+
+            //if (!string.IsNullOrEmpty(filterValidate.CaptionSearch))
+            //    filterValidate.CaptionSearch = filterValidate.CaptionSearch.Replace("'", "''");
+
+            // ärenden som tillhör barn till föräldrer ska visas om vi filtrerar på föräldern
+            int productAreaId;
+            if (int.TryParse(filter.ProductArea, out productAreaId))
+            {
+                filterValidate.ProductArea = this.productAreaService.GetProductAreaWithChildren(productAreaId, ", ", "Id");
+            }
+            return filterValidate;
         }
     }
 }

@@ -6,7 +6,7 @@
         <ChartCategoryHierarchy>
           <ChartMembers>
             <ChartMember>
-              <Group Name="CasesPerDate_CategoryGroup">
+              <Group Name="ChartCasesPerDate_CategoryGroup">
                 <GroupExpressions>
                   <GroupExpression>=Fields!DateKey.Value</GroupExpression>
                 </GroupExpressions>
@@ -16,7 +16,7 @@
                   <Value>=Fields!DateKey.Value</Value>
                 </SortExpression>
               </SortExpressions>
-              <Label>Date</Label>
+              <Label>=Fields!DateKey.Value</Label>
             </ChartMember>
           </ChartMembers>
         </ChartCategoryHierarchy>
@@ -40,20 +40,6 @@
                     <UseValueAsLabel>true</UseValueAsLabel>
                     <Visible>true</Visible>
                   </ChartDataLabel>
-                  <ActionInfo>
-                    <Actions>
-                      <Action>
-                        <Drillthrough>
-                          <ReportName>CasesPerDate</ReportName>
-                          <Parameters>
-                            <Parameter Name="CustomerId">
-                              <Value>=Fields!Id.Value</Value>
-                            </Parameter>
-                          </Parameters>
-                        </Drillthrough>
-                      </Action>
-                    </Actions>
-                  </ActionInfo>
                   <Style />
                   <ChartMarker>
                     <Style />
@@ -88,7 +74,7 @@
                   <FontSize>8pt</FontSize>
                 </Style>
                 <ChartAxisTitle>
-                  <Caption>Date</Caption>
+                  <Caption />
                   <Style>
                     <FontSize>8pt</FontSize>
                   </Style>
@@ -114,7 +100,6 @@
                   <Length>0.5</Length>
                 </ChartMinorTickMarks>
                 <CrossAt>NaN</CrossAt>
-                <Scalar>true</Scalar>
                 <Minimum>NaN</Minimum>
                 <Maximum>NaN</Maximum>
                 <Angle>-45</Angle>
@@ -168,7 +153,7 @@
                   <FontSize>8pt</FontSize>
                 </Style>
                 <ChartAxisTitle>
-                  <Caption>Cases</Caption>
+                  <Caption />
                   <Style>
                     <FontSize>8pt</FontSize>
                   </Style>
@@ -251,7 +236,7 @@
             </Style>
           </ChartTitle>
         </ChartTitles>
-        <Palette>BrightPastel</Palette>
+        <Palette>SeaGreen</Palette>
         <ChartBorderSkin>
           <Style>
             <BackgroundColor>Gray</BackgroundColor>
@@ -268,8 +253,8 @@
           </Style>
         </ChartNoDataMessage>
         <DataSetName>CasesPerDate</DataSetName>
-        <Height>13.54287cm</Height>
-        <Width>23.04521cm</Width>
+        <Height>16.9cm</Height>
+        <Width>25.6cm</Width>
         <Style>
           <Border>
             <Color>LightGrey</Color>
@@ -280,13 +265,15 @@
         </Style>
       </Chart>
     </ReportItems>
-    <Height>5.4985in</Height>
+    <Height>16.9cm</Height>
     <Style />
   </Body>
-  <Width>9.42708in</Width>
+  <Width>25.6cm</Width>
   <Page>
-    <PageHeight>29.7cm</PageHeight>
-    <PageWidth>21cm</PageWidth>
+    <PageHeight>21cm</PageHeight>
+    <PageWidth>29.7cm</PageWidth>
+    <InteractiveHeight>16.9cm</InteractiveHeight>
+    <InteractiveWidth>25.6cm</InteractiveWidth>
     <LeftMargin>2cm</LeftMargin>
     <RightMargin>2cm</RightMargin>
     <TopMargin>2cm</TopMargin>
@@ -331,7 +318,7 @@ ORDER BY tblDate.DateKey</CommandText>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
       </Fields>
-    </DataSet>   
+    </DataSet>
   </DataSets>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>
   <rd:ReportID>2a653c68-33b1-4f86-9f48-c79d6a0195fa</rd:ReportID>

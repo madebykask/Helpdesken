@@ -61,11 +61,14 @@ var GRID_STATE = {
         me.$buttonsToDisableWhenGridLoads = $('ul.secnav a.btn, ul.secnav div.btn-group button, ul.secnav input[type=button], .submit, #btnClearFilter');
         me.$buttonsToDisableWhenNoColumns = $('#btnNewCase a.btn, #btnCaseTemplate a.btn, .submit, #btnClearFilter');
         me.$caseRecordCount = $('[data-field="TotalAmountCases"]');
-        
+        me.$statisticsViewPlace = $('[data-field="caseStatisticsPlace"]');
+        me.$hidExpandedGroup = $('#hidExpandedGroup');
+
         me.filterForm = new FilterForm();
         me.filterForm.init({
             $el: $('#frmCaseSearch'),
             filter: appSettings.searchFilter.data,
+            favorites: appSettings.userFilterFavorites,            
             onBeforeSearch: callAsMe(me.canMakeSearch, me),
             onSearch: Utils.applyAsMe(me.fetchData, me, [{ isSearchInitByUser: true }])
         });
@@ -81,12 +84,11 @@ var GRID_STATE = {
             me.fetchData.call(me, { isSearchInitByUser: true });
             return false;
         });
-        
-
+                       
         $('#btnNewCase a, #divCaseTemplate a:not(.category)').click(function() {
             me.abortAjaxReq();
             return true;
-        });
+        });       
         
         me.setGridState(window.GRID_STATE.IDLE);
         me.setGridSettings(appSettings.gridSettings);
@@ -317,6 +319,7 @@ var GRID_STATE = {
         }
         me.setGridState(window.GRID_STATE.IDLE);
         $(document).trigger("OnCasesLoaded");
+        
     };
 
     Page.prototype.onRemainingViewClick = function(aElement) {
@@ -341,6 +344,11 @@ var GRID_STATE = {
         });
     };
 
+    Page.prototype.loadStatisticsView = function (statisticsData) {
+        var me = this;
+        me.$statisticsViewPlace.html(statisticsData);
+    };
+
 
     Page.prototype.onGetData = function (response, opt) {
         var me = this;
@@ -348,6 +356,9 @@ var GRID_STATE = {
             me.loadData(response.data, opt);
             if (response.remainingView) {
                 me.loadRemainingView(response.remainingView);
+            }
+            if (response.statisticsView) {
+                me.loadStatisticsView(response.statisticsView);
             }
         } else {
             me.showMsg(ERROR_MSG_TYPE);
@@ -361,17 +372,20 @@ var GRID_STATE = {
             me.hXHR.abort();
         }
     };
+    
 
     Page.prototype.fetchData = function(params) {
         var me = this;
         var fetchParams;
+        var expandedGroup = $(me.$hidExpandedGroup).val();
         var baseParams = me.filterForm.getFilterToSend();
         var p = params || {};
         baseParams.push(
             { name: 'sortBy', value: me.gridSettings.sortOptions.sortBy },
             { name: 'sortDir', value: me.gridSettings.sortOptions.sortDir },
             { name: 'pageIndex', value: me.gridSettings.pageOptions.pageIndex },
-            { name: 'recPerPage', value: me.gridSettings.pageOptions.recPerPage });
+            { name: 'recPerPage', value: me.gridSettings.pageOptions.recPerPage },
+            { name: 'expandedGroup', value: expandedGroup });
 
         if (p.appendFetch != null && p.appendFetch.length > 0) {
             fetchParams = baseParams.concat(p.appendFetch);
@@ -539,7 +553,7 @@ $(function () {
                 moveCaseRemainingTimeIntoHidePlace();
             }
 
-            bindCaseRemainingTime();
+            bindCaseRemainingTime();            
         });
 
         return that;

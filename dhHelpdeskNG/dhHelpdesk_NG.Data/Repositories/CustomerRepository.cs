@@ -257,6 +257,10 @@ using System;
                                                                             ? null
                                                                             : newSetting.CaseClosingReasonFilter;
                 userSettingEntity.CaseInitiatorFilterShow = newSetting.CaseInitiatorFilterShow;
+
+                userSettingEntity.CaseRemainingTimeFilter = (newSetting.CaseRemainingTime == string.Empty)
+                                                             ? null
+                                                             : newSetting.CaseRemainingTime;
             }
         }
     }

@@ -100,11 +100,11 @@
 
             var emptyFn = function() {};
 
-@*            $("#case-action-save").click(function (e) {
-                //If case wants to be closed/finished it will first check if any orders exists with not invoiced articles
-                //if thats not the case, it will look for the invoice button and ask user for extra validation
-                //on closing/finishing the case if there are articles connected to the selected productarea
-                debugger
+            $("#case-action-save").click(function (e) {
+                e.preventDefault();                
+            });
+
+            $("#case-action-save-and-close").click(function (e) {
                 e.preventDefault();
                 //if there are articles selected but not invoiced and the case is finishing/closing
                 if (FinishDateAndTypeIsEmtpy()) {
@@ -129,7 +129,7 @@
                 else {
                     SubmitCase();
                 }
-            });*@
+            });
 
             //$("#case-action-save-and-close").click(function (e) {
             //    e.preventDefault();
@@ -252,7 +252,12 @@
         $( ".showbtn" ).on( "click", function() {
             $( this ).parents( ".notifier-block" ).removeClass( "hideshow" );
         });
-
+        $(".hidebtn").on("click", function () {
+            $(this).parents(".regarding-block").addClass("hideshowregarding");
+        });
+        $(".showbtn").on("click", function () {
+            $(this).parents(".regarding-block").removeClass("hideshowregarding");
+        });
         $( ".hidebtn" ).on( "click", function() {
             $( this ).parents( ".computer-block" ).addClass( "hideshow" );
         });

@@ -14,6 +14,8 @@
             
         }
 
+        public int CustomerId { get; set; }
+
         public CustomSelectList ReportList { get; set; }
 
         public ReportFilterModel ReportFilter { get; set; }
@@ -24,11 +26,9 @@
 
     public sealed class ReportFilterModel : ReportFilter
     {
-        public ReportSelectedFilter Selected { get; set; }
+        public ReportSelectedFilter Selected { get; set; }        
 
-        public string CaseTypeSelectedText { get; set; }
-
-        public int UserOrientationName { get; set; }
+        public int UserNameOrientation { get; set; }
     }
 
     public sealed class ReportPresentationModel

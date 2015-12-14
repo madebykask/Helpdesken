@@ -111,9 +111,20 @@
                              @Translation.Get("Fritextfält")
                          </td>
                          <td class="span4">
-                             <input type="text" id="txtFreeTextSearch" value="@Model.CaseSearchFilterData.caseSearchFilter.FreeTextSearch" name="txtFreeTextSearch" />
+                             <input type="text" id="txtFreeTextSearch" value="@Model.CaseSearchFilterData.caseSearchFilter.FreeTextSearch" name="txtFreeTextSearch" />                                                          
                          </td>
-                     </tr>                   
+                     </tr>    
+                     <tr>
+                         <td class="span3">
+                             @Translation.Get("Bifogad fil")
+                         </td>
+                         <td class="span4">
+                             <div>
+                                @Html.CheckBoxFor(m => Model.CaseSearchFilterData.caseSearchFilter.SearchThruFiles, new { id = "chkSearchThruFiles", @class = "switchcheckbox" })
+                             </div>
+                         </td>
+                     </tr>               
+
                      <tr class="date-block">
                          <td>                                
                              @Translation.Get(GlobalEnums.TranslationCaseFields.RegTime.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSearchFilterData.filterCustomerId)                                   

@@ -41,10 +41,10 @@
                             <a href="@GetLogLink(r)">@(r.User == null ? r.RegUser : Html.FormatUserName(r.User, Model.Setting))</a>
                         </td>
                         <td>
-                            <a href="@GetLogLink(r)">@r.TextExternal.ForHtmlView()</a>
+                            <a href="@GetLogLink(r)"> @Html.AttributeEncode(r.TextExternal).ForHtmlView()</a>
                         </td>
                         <td>
-                            <a href="@GetLogLink(r)">@r.TextInternal.ForHtmlView()</a>
+                            <a href="@GetLogLink(r)"> @Html.AttributeEncode(r.TextInternal).ForHtmlView()</a>
                         </td>
                         <td>
                             @if (r.CaseHistory != null)

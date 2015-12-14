@@ -197,6 +197,10 @@
 
         public CaseColumnsSettingsModel ColumnSettingModel { get; set; }
 
+        public bool CaseRemainingTimeChecked { get; set; }
+        public IList<SelectListItem> filterCaseRemainingTime { get; set; }
+        public string SelectedCaseRemainingTime { get; set; }
+
         /// <summary>
         /// Flag to display "filter by intitator" field on case overview page
         /// </summary>

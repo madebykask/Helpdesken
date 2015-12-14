@@ -96,6 +96,8 @@
 
         public DbSet<CaseFile> CaseFiles { get; set; }
 
+        public DbSet<CaseFilterFavoriteEntity> CaseFilterFavorite { get; set; }
+
         public DbSet<CaseHistory> CaseHistories { get; set; }
 
         public DbSet<CaseLockEntity> CaseLock { get; set; }
@@ -123,6 +125,8 @@
         public DbSet<CaseSolutionSetting> CaseSolutionSettings { get; set; }
 
         public DbSet<Category> Categories { get; set; }
+
+        public DbSet<CausingPart> CausingParts { get; set; }
 
         public DbSet<ChangeCategoryEntity> ChangeCategories { get; set; }
 
@@ -569,6 +573,7 @@
             modelBuilder.Configurations.Add(new CaseFieldSettingConfiguration());
             modelBuilder.Configurations.Add(new CaseFieldSettingLanguageConfiguration());
             modelBuilder.Configurations.Add(new CaseFileConfiguration());
+            modelBuilder.Configurations.Add(new CaseFilteFavoriteConfiguration());
             modelBuilder.Configurations.Add(new CaseHistoryConfiguration());
             modelBuilder.Configurations.Add(new CaseLockConfiguration());
             modelBuilder.Configurations.Add(new CaseStatisticConfiguration());

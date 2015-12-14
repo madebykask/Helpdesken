@@ -83,6 +83,11 @@
             this.AddRange(listSelectedItems);
         }
 
+        public SelectedItems(string strItems, bool ignoreNegativeItems = true, string separator = ",")
+        {                       
+            this.AddItems(strItems, ignoreNegativeItems, separator);
+        }
+
         public void AddItem(int item)
         {
             this.Add(item);
@@ -93,7 +98,7 @@
             this.AddRange(items);
         }
 
-        public void AddItems(string strItems, string separator = ",")
+        public void AddItems(string strItems, bool ignoreNegativeItems = true, string separator = ",")
         {
             if (!string.IsNullOrEmpty(strItems))
             {
@@ -101,13 +106,30 @@
                 int o = 0;
                 foreach (var item in items)
                     if (int.TryParse(item, out o))
-                        this.Add(o);                
+                    {
+                        if (ignoreNegativeItems)
+                        {
+                            if (o > 0)
+                                this.Add(o);
+                        }
+                        else
+                            this.Add(o);
+                    }
             }
         }
 
         public string GetSelectedStr()
         {
-            return string.Join(",", this.ToArray());
+            return string.Join(",", this.ToArray());            
+        }
+
+        public string GetSelectedStrOrNull()
+        {
+            var ret = string.Join(",", this.ToArray());
+            if (string.IsNullOrWhiteSpace(ret))
+                return null;
+            else
+                return ret;
         }
 
         public void ClearItems()

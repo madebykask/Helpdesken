@@ -98,6 +98,7 @@
         /// Flag to display "Solution time" grid on case overview page
         /// </summary>
         public int ShowSolutionTime { get; set; }
+        public int ShowCaseStatistics { get; set; }
 
         public string TimeZoneId { get; set; }
 

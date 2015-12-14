@@ -13,6 +13,19 @@
         public string Tooltip { get; set; }
         public bool IsUnread { get; set; }
         public bool IsUrgent { get; set; }
-        public IList<Field> Columns { get; set; }
+        public IList<Field> Columns { get; set; }        
+    }
+
+    public class CaseAggregateData
+    {
+        public CaseAggregateData()
+        {
+            this.Status = new Dictionary<int, int>();
+            this.SubStatus = new Dictionary<int, int>();
+        }
+
+        public IDictionary<int, int> Status { get; set; }
+
+        public IDictionary<int, int> SubStatus { get; set; }
     }
 }

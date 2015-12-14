@@ -9,6 +9,7 @@
 
 namespace DH.Helpdesk.NewSelfService.NinjectModules.Modules
 {
+    using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models.Case.CaseLock;
     using DH.Helpdesk.BusinessData.Models.Case.Input;
     using DH.Helpdesk.BusinessData.Models.Case.Output;
@@ -125,6 +126,16 @@ namespace DH.Helpdesk.NewSelfService.NinjectModules.Modules
             this.Bind<IEntityToBusinessModelMapper<CaseLockEntity, CaseLock>>()
                 .To<CaseLockToBusinessModelMapper>()
                 .InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<CaseFilterFavorite, CaseFilterFavoriteEntity>>()
+                .To<CaseFilterFavoritToEntityMapper>()
+                .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<CaseFilterFavoriteEntity, CaseFilterFavorite>>()
+                .To<CaseFilterFavoriteToBusinessModelMapper>()
+                .InSingletonScope();
+
+  
         }
     }
 }

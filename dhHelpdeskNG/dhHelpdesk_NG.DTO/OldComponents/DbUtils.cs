@@ -154,6 +154,14 @@
                     return string.Empty;
             }
 
+            public static string FreeTextSafeForSqlInject(this string valueToCheck)
+            {
+                if (!string.IsNullOrWhiteSpace(valueToCheck))
+                    return valueToCheck.Replace("'", "''");
+                else
+                    return string.Empty;
+            }
+
             public static int[] ToIds(this string ids)
             {
                 if (string.IsNullOrEmpty(ids))

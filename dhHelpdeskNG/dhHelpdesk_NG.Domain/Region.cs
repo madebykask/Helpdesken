@@ -22,6 +22,8 @@
 
         public DateTime CreatedDate { get; set; }
 
+        public string Code { get; set; }
+
         public virtual ICollection<Department> Departments { get; set; }
     }
 }

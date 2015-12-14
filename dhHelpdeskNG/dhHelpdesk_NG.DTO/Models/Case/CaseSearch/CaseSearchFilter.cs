@@ -5,35 +5,7 @@
     using DH.Helpdesk.BusinessData.Enums.Case;
 
     public class CaseSearchFilter
-    {
-        #region Form inputs names
-        public const string InitiatorNameAttribute = "CaseInitiatorFilter";
-        public const string RegionNameAttribute = "lstFilterRegion";
-        
-        public const string DepartmentNameAttribute = "lstfilterDepartment";        
-        public const string RegisteredByNameAttribute = "lstfilterUser";
-        public const string CaseTypeIdNameAttribute = "hidFilterCaseTypeId";
-        public const string ProductAreaIdNameAttribute = "hidFilterProductAreaId";
-        public const string CategoryNameAttribute = "lstfilterCategory";
-        public const string WorkingGroupNameAttribute = "lstfilterWorkingGroup";
-        public const string ResponsibleNameAttribute = "lstfilterResponsible";
-        public const string PerformerNameAttribute = "lstfilterPerformer";
-        public const string PriorityNameAttribute = "lstfilterPriority";
-        public const string StatusNameAttribute = "lstfilterStatus";
-        public const string StateSecondaryNameAttribute = "lstfilterStateSecondary";
-
-        public const string CaseRegistrationDateStartFilterNameAttribute = "CaseRegistrationDateStartFilter";
-        public const string CaseRegistrationDateEndFilterFilterNameAttribute = "CaseRegistrationDateEndFilter";
-        public const string CaseWatchDateStartFilterNameAttribute = "CaseWatchDateStartFilter";
-        public const string CaseWatchDateEndFilterNameAttribute = "CaseWatchDateEndFilter";
-        public const string CaseClosingDateStartFilterNameAttribute = "CaseClosingDateStartFilter";
-        public const string CaseClosingDateEndFilterNameAttribute = "CaseClosingDateEndFilter";
-
-        public const string ClosingReasonNameAttribute = "hidFilterClosingReasonId";
-        public const string FreeTextSearchNameAttribute = "txtFreeTextSearch";
-        public const string FilterCaseProgressNameAttribute = "lstfilterCaseProgress";
-        #endregion
-
+    {        
         #region Case state filter string constants, aka Case progress
         public const string UnreadCases = "4";
         public const string HoldCases = "3";
@@ -68,8 +40,11 @@
         public string Status { get; set; }
         public string StateSecondary { get; set; }
         public string CaseProgress { get; set; }
+        public string CaseFilterFavorite { get; set; }
         public string FreeTextSearch { get; set; }
         public string CaptionSearch { get; set; }
+        public string CaseRemainingTime { get; set; }
+        public bool SearchThruFiles  { get; set; }
 
         public string ParantPath_ProductArea = DropDownButtonDefaultValue;
 
@@ -155,6 +130,9 @@
             r.CaseNumber = o.CaseNumber;
             r.MaxRows = o.MaxRows;
             r.CaptionSearch = o.CaptionSearch;
+            r.CaseRemainingTime = o.CaseRemainingTime;
+            r.SearchThruFiles = o.SearchThruFiles;
+            r.CaseFilterFavorite = o.CaseFilterFavorite;
 
             return r;
         }

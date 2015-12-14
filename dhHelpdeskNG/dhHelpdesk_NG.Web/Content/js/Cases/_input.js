@@ -94,15 +94,14 @@ $(function () {
             var departments = caseEntity.getUser().getDepartment().getElement();
             var administrators = caseEntity.getOther().getAdministrator().getElement();
             var departmentFilterFormat = caseEntity.getUser().getDepartmentFilterFormat().getElement();
-
             var selectedDepartment = departments.val();
-            departments.prop('disabled', true);
-            departments.empty();
-            departments.append('<option />');
+            departments.prop('disabled', true);                        
 
             $.getJSON(caseEntity.getGetDepartmentsUrl() + '?regionId=' + regions.val() +
                                         '&administratorId=' + administrators.val() + 
                                         '&departmentFilterFormat=' + departmentFilterFormat.val(), function (data) {
+                                            departments.empty();
+                                            departments.append('<option />');
                                             for (var i = 0; i < data.length; i++) {
                                                 var item = data[i];
                                                 var option = $("<option value='" + item.Value + "'>" + item.Name + "</option>");
@@ -126,14 +125,14 @@ $(function () {
             var departmentFilterFormat = caseEntity.getUser().getDepartmentFilterFormat().getElement();
 
             var selectedOu = ous.val();
-            ous.prop('disabled', true);
-            ous.empty();
-            ous.append('<option />');
+            ous.prop('disabled', true);            
 
             $.getJSON(caseEntity.getGetDepartmentOusUrl() +
                     '?id=' + departments.val() +
                     '&customerId=' + customerId +
-                    '&departmentFilterFormat=' + departmentFilterFormat.val(), function (data) {
+                    '&departmentFilterFormat=' + departmentFilterFormat.val(), function (data) {                                                
+                        ous.empty();
+                        ous.append('<option />');
                         for (var i = 0; i < data.list.length; i++) {
                             var item = data.list[i];
                             var option = $("<option value='" + item.id + "'>" + item.name + "</option>");

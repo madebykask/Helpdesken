@@ -39,7 +39,6 @@
                     <li><a href="#" id="AddFAQ" class="btn">@Translation.Get("Ny FAQ", Enums.TranslationSource.TextTranslation)</a></li>
                     <li class="secspace"></li>
                 }
-
                 <li>
                     <div class="checkbox">
                         @if (Model.Disable_SendMailAboutCaseToNotifier || Model.EditMode == Enums.AccessMode.ReadOnly)
@@ -96,6 +95,13 @@
 <div class="row">
     <div class="span12">
         <table class="tableform">
+            @if (TempData["PreventError"] != null)
+            {
+                var msg = (string)TempData["PreventError"];
+                <div class="alert alert-error">
+                    @msg
+                </div>   
+            }
             <thead>
                 <tr>
                     <th class="span3"></th>

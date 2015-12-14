@@ -117,8 +117,7 @@
     <Reference Include="RazorPDF">
       <HintPath>..\packages\RazorPDF.1.0.0\lib\net40\RazorPDF.dll</HintPath>
     </Reference>
-    <Reference Include="ReportViewerForMvc, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="ReportViewerForMvc">
       <HintPath>..\packages\ReportViewerForMvc.1.0.1\lib\net45\ReportViewerForMvc.dll</HintPath>
     </Reference>
     <Reference Include="System.Data" />
@@ -399,7 +398,6 @@
     <Content Include="Areas\Admin\Content\js\Users\index.js" />
     <Content Include="Areas\Admin\Content\js\Users\user.js" />
     <Content Include="Areas\Reports\Content\js\reportViewer.logic.js" />
-    <Content Include="Areas\Reports\Content\js\reportViewer.specialfilter.js" />
     <Content Include="Areas\Reports\Content\js\reports.js" />
     <Content Include="Content\bootstrap-tagsinput.css" />
     <Content Include="Content\css\bootstrap-tagsinput.css" />
@@ -972,6 +970,8 @@
     <Compile Include="Controllers\TranslationController.cs" />
     <Compile Include="Controllers\UserInteractionController.cs" />
     <Compile Include="Areas\Inventory\Controllers\WorkstationController.cs" />
+    <Compile Include="Enums\Case\CaseFilterFileds.cs" />
+    <Compile Include="Enums\Case\RemainingTimes.cs" />
     <Compile Include="Enums\Case\OverviewType.cs" />
     <Compile Include="Enums\Changes\ChangeDeletedItem.cs" />
     <Compile Include="Enums\Changes\ClickedButton.cs" />
@@ -1253,7 +1253,10 @@
     <Compile Include="Models\Case\ChildCase\ChildCaseViewModel.cs" />
     <Compile Include="Models\Case\CaseMasterDataFieldsModel.cs" />
     <Compile Include="Models\Case\ChildCase\ParentCaseInfo.cs" />
+    <Compile Include="Models\Case\CaseRemainingTimeTable.cs" />
+    <Compile Include="Models\Case\CaseStatisticsViewModel.cs" />
     <Compile Include="Models\Case\Input\CaseEditInput.cs" />
+    <Compile Include="Models\Case\MyFavoriteFilterModel.cs" />
     <Compile Include="Models\Case\Output\CaseSeachFilterData.cs" />
     <Compile Include="Models\CaseSolution\CaseSolutionInputViewModel.cs" />
     <Compile Include="Models\Case\CaseOverview.cs" />
@@ -1739,7 +1742,6 @@
     <Content Include="Areas\Admin\Views\Users\Index\_LockedCaseTable.cshtml" />
     <Content Include="Areas\Reports\Views\Report\ReportViewer\_PresentReport.cshtml" />
     <Content Include="Areas\Reports\Views\Report\ReportViewer\_Overview.cshtml" />
-    <Content Include="Areas\Reports\Views\Report\ReportViewer\_CustomerSpecificFilter.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="ReportViewerWebForm.aspx" />
     <Content Include="Scripts\jquery-1.8.3.js" />
@@ -2320,6 +2322,7 @@
     <Content Include="Views\CheckList\_Actions.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DatePickerLocalTZ.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DateReadOnlyLocalTZ.cshtml" />
+    <Content Include="Views\Cases\_Statistics.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
@@ -3001,7 +3004,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Shared\_Search.cshtml" />
+    <Content Include="Views\Cases\_Search.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\_NoHits.cshtml" />
@@ -3126,7 +3129,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>64738</DevelopmentServerPort>
+          <DevelopmentServerPort>49289</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:57747/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

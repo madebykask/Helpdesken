@@ -27,6 +27,8 @@
         IEnumerable<ItemOverview> GetOverviews(int customerId);
 
         IEnumerable<ItemOverview> GetOverviews(int customerId, IEnumerable<int> caseTypesIds);
+
+        IList<CaseType> GetChildsInRow(IList<CaseType> caseTypes, bool isTakeOnlyActive = false);
     }
 
     public class CaseTypeService : ICaseTypeService
@@ -147,6 +149,41 @@
         public IEnumerable<ItemOverview> GetOverviews(int customerId, IEnumerable<int> caseTypesIds)
         {
             return this.caseTypeRepository.GetOverviews(customerId, caseTypesIds);
+        }
+
+        public IList<CaseType> GetChildsInRow(IList<CaseType> caseTypes, bool isTakeOnlyActive = false)
+        {
+            var childCaseTypes = new List<CaseType>();
+            var parentCaseTypes = caseTypes.Where(ct=> !ct.Parent_CaseType_Id.HasValue && (isTakeOnlyActive? ct.IsActive == 1: true)).ToList();
+            foreach (var p in parentCaseTypes)
+            {
+                childCaseTypes.AddRange(GetChilds(p.Name, p.IsActive, p.SubCaseTypes.ToList(), isTakeOnlyActive));
+            }
+
+            return parentCaseTypes.Union(childCaseTypes).OrderBy(c => c.Name).ToList();
+        }
+
+        private IList<CaseType> GetChilds(string parentName, int parentState, IList<CaseType> subCaseTypes, bool isTakeOnlyActive = false)
+        {
+            var ret = new List<CaseType>();
+            var newSubCaseTypes = subCaseTypes.Where(ct=> (isTakeOnlyActive? ct.IsActive == 1: true)).ToList();
+            foreach (var s in newSubCaseTypes)
+            {
+                var newParentName = string.Format("{0} - {1}", parentName, s.Name);
+                var newCT = new CaseType()
+                {
+                    Id = s.Id,
+                    Name = newParentName,
+                    IsActive = parentState,
+                    Parent_CaseType_Id = s.Parent_CaseType_Id
+                };
+                ret.Add(newCT);
+                
+                if (s.SubCaseTypes.Any())
+                    ret.AddRange(GetChilds(newParentName, parentState, s.SubCaseTypes.ToList(), isTakeOnlyActive));
+            }
+
+            return ret;
         }
     }
 }

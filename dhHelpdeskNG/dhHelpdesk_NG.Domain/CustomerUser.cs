@@ -23,6 +23,8 @@
         /// </summary>
         public string CaseDepartmentFilter { get; set; }
 
+        public string CaseRemainingTimeFilter { get; set; }
+
         public string CaseStateSecondaryFilter { get; set; }
 
         /// <summary>

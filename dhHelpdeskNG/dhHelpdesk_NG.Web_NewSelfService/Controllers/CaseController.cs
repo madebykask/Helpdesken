@@ -873,6 +873,7 @@
                 var workTimeCalc = TimeZoneInfo.Local;
                 var showRemainingTime = false;
                 CaseRemainingTimeData remainingTimeData;
+                CaseAggregateData aggregateData;
                 var caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(cusId).ToArray();
                 srm.Cases = this._caseSearchService.Search(
                     sm.caseSearchFilter,
@@ -889,7 +890,8 @@
                     workTimeCalc,
                     currentApplicationType,
                     showRemainingTime,
-                    out remainingTimeData).ToList(); // Take(maxRecords)
+                    out remainingTimeData,
+                    out aggregateData).ToList(); // Take(maxRecords)
 
                 if (currentApplicationType == ApplicationTypes.LineManager)
                 {

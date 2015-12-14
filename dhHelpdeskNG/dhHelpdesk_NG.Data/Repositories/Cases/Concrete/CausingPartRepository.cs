@@ -7,15 +7,16 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Collections.Generic;
+using System.Linq;
+
+using DH.Helpdesk.BusinessData.Models.Case.Output;
+using DH.Helpdesk.Dal.Infrastructure;
+using DH.Helpdesk.Dal.Mappers;
+using DH.Helpdesk.Domain.Cases;
 namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 {
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using DH.Helpdesk.BusinessData.Models.Case.Output;
-    using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Dal.Mappers;
-    using DH.Helpdesk.Domain.Cases;
+   
 
     /// <summary>
     /// The causing type repository.

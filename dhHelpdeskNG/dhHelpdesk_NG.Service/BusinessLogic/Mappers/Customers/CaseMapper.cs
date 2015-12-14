@@ -6,12 +6,14 @@
     using DH.Helpdesk.BusinessData.Models.Statistics.Output;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Problems;
+    using DH.Helpdesk.BusinessData.OldComponents;
 
     public static class CaseMapper
     {
         public static CustomerCases[] MapToCustomerCases(
-                                            this IQueryable<Customer> query, 
-                                            IQueryable<Problem> problems, 
+                                            this IQueryable<Customer> query,
+                                            IQueryable<CaseFieldSetting> caseFieldSettings,
+                                            IQueryable<Problem> problems,
                                             int userId)
         {
             var entities = query.Select(cus => new
@@ -21,7 +23,16 @@
                                                 CasesInProgress = cus.Cases.Where(c => c.FinishingDate == null && c.Deleted == 0).Count(),
                                                 CasesUnreaded = cus.Cases.Where(c => c.Unread == 1 && c.Deleted == 0 && c.FinishingDate == null).Count(),
                                                 CasesInRest = cus.Cases.Where(c => c.FinishingDate == null && c.StateSecondary_Id != null && c.StateSecondary.IncludeInCaseStatistics == 0 && c.Deleted == 0).Count(),
-                                                CasesMy = cus.Cases.Where(c => c.FinishingDate == null && c.Deleted == 0 && c.Performer_User_Id == userId).Count()
+                                                CasesMy = cus.Cases.Where(c => c.FinishingDate == null &&
+                                                                          c.Deleted == 0 &&
+                                                                          (c.Performer_User_Id == userId ||
+                                                                          (caseFieldSettings.Where(cf => cf.Customer_Id == cus.Id &&
+                                                                                                        cf.Name == GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString() &&
+                                                                                                        cf.ShowOnStartPage == 1).FirstOrDefault() == null ? false :
+                                                                                                        c.CaseResponsibleUser_Id == userId
+                                                                          ))
+                                                                         ).Count()
+
                                                 }).ToArray();
 
             var overviews = entities.Select(c => new CustomerCases(

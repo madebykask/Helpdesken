@@ -29,7 +29,8 @@ var GRID_STATE = {
     var allCustomers = [];
     var customerTableRepository = [];
     var globalCounter = 0;
-
+    var chkSearchThruFiles = $('#chkSearchThruFiles');
+    var txtFreeTextSearch = $('#txtFreeTextSearch');
     function strJoin() {
         return Array.prototype.join.call(arguments, JOINER);
     }
@@ -288,6 +289,8 @@ var GRID_STATE = {
             me.setSortField.call(me, $(this).attr('fieldname'), $(this));
         };
 
+        baseParams.push({ name: 'searchThruFiles', value: chkSearchThruFiles.bootstrapSwitch('state') });
+
         baseParams.push(
             { name: 'sortBy', value: me.sortSettings.sortBy },
             { name: 'sortDir', value: me.sortSettings.sortDir },
@@ -482,13 +485,28 @@ var GRID_STATE = {
     window.app = new Page();
 
     $(document).ready(function() {
-        app.init.call(window.app, window.gridSettings, window.doSearchAtBegining);        
+        app.init.call(window.app, window.gridSettings, window.doSearchAtBegining);
+        SetSearchThruFileState();
     });
+
+    txtFreeTextSearch.on('input', function (evt, params) {
+        SetSearchThruFileState();
+    });
+
+    function SetSearchThruFileState() {
+        if (txtFreeTextSearch.val().trim() == "") {
+            chkSearchThruFiles.bootstrapSwitch('state', false);
+            chkSearchThruFiles.bootstrapSwitch('disabled', true);
+        }
+        else {
+            chkSearchThruFiles.bootstrapSwitch('disabled', false);
+        }        
+    }
 
     $('#lstfilterCustomers.chosen-select').on('change', function (evt, params) {
         SetSpecificConditionTab(true);
-    });
-
+    });        
+    
     function SetSpecificConditionTab(resetFilterObjs) {
         var selectedCustomers = $('#lstfilterCustomers.chosen-select option');
         var selectedCount = 0;

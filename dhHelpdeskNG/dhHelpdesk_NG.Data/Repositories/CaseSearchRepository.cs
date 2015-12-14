@@ -22,15 +22,17 @@
     using DH.Helpdesk.Common.Enums.Cases;
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Dal.Repositories;
 
     using ProductAreaEntity = DH.Helpdesk.Domain.ProductArea;
+    using DH.Helpdesk.Dal.Enums;
 
     /// <summary>
     /// The CaseSearchRepository interface.
     /// </summary>
     public interface ICaseSearchRepository
     {
-        IList<CaseSearchResult> Search(CaseSearchContext context, out CaseRemainingTimeData remainingTime);
+        IList<CaseSearchResult> Search(CaseSearchContext context, out CaseRemainingTimeData remainingTime, out CaseAggregateData aggregateData);
     }
 
     public class CaseSearchRepository : ICaseSearchRepository
@@ -48,7 +50,6 @@
 
         private readonly ICaseTypeRepository caseTypeRepository;
         
-
         private readonly ILogRepository logRepository;
 
         public CaseSearchRepository(
@@ -60,10 +61,10 @@
             this._customerUserRepository = customerUserRepository;
             this._productAreaRepository = productAreaRepository;
             this.caseTypeRepository = caseTypeRepository;
-            this.logRepository = logRepository;
-        }
+            this.logRepository = logRepository;            
+        }    
 
-        public IList<CaseSearchResult> Search(CaseSearchContext context, out CaseRemainingTimeData remainingTime)
+        public IList<CaseSearchResult> Search(CaseSearchContext context, out CaseRemainingTimeData remainingTime, out CaseAggregateData aggregateData)
         {
             var now = DateTime.UtcNow;
             var dsn = ConfigurationManager.ConnectionStrings["HelpdeskOleDbContext"].ConnectionString;
@@ -84,6 +85,8 @@
             var caseTypes = this.caseTypeRepository.GetCaseTypeOverviews(f.CustomerId).ToArray();
             var displayLeftTime = userCaseSettings.Any(it => it.Name == TimeLeftColumn);
             remainingTime = new CaseRemainingTimeData();
+            aggregateData = new CaseAggregateData();
+
             var sql = this.ReturnCaseSearchSql(
                                         context.f,
                                         context.customerSetting,
@@ -107,7 +110,10 @@
             }
 
             var workTimeCalculator = this.InitCalcFromSQL(dsn, sql, workTimeCalcFactory, now);
-            
+
+            IDictionary<int,int> aggregateStatus = new Dictionary<int,int>();
+            IDictionary<int,int> aggregateSubStatus = new Dictionary<int,int>();
+
             using (var con = new OleDbConnection(dsn)) 
             {
                 using (var cmd = new OleDbCommand())
@@ -118,7 +124,7 @@
                         cmd.Connection = con;
                         cmd.CommandType = CommandType.Text;
                         cmd.CommandText = sql;
-                        cmd.CommandTimeout = 300;
+                        cmd.CommandTimeout = 300;                        
                         var dr = cmd.ExecuteReader();
                         if (dr != null && dr.HasRows)
                         {
@@ -132,6 +138,24 @@
                                 var sortOrder = string.Empty;
                                 DateTime caseRegistrationDate;
 
+                                int? curStatus = dr.SafeGetNullableInteger("aggregate_Status");
+                                if (curStatus.HasValue)
+                                {                                
+                                    if (aggregateData.Status.Keys.Contains(curStatus.Value))
+                                        aggregateData.Status[curStatus.Value] += 1;
+                                    else
+                                        aggregateData.Status.Add(curStatus.Value, 1);
+                                }
+
+                                int? curSubStatus = dr.SafeGetNullableInteger("aggregate_SubStatus");
+                                if (curSubStatus.HasValue)
+                                {
+                                    if (aggregateData.SubStatus.Keys.Contains(curSubStatus.Value))
+                                        aggregateData.SubStatus[curSubStatus.Value] += 1;
+                                    else
+                                        aggregateData.SubStatus.Add(curSubStatus.Value, 1);
+                                }
+ 
                                 DateTime.TryParse(dr["RegTime"].ToString(), out caseRegistrationDate);
                                 DateTime dtTmp;
                                 DateTime? caseFinishingDate = null;
@@ -274,7 +298,7 @@
                                 row.Id = dr.SafeGetInteger("Id"); 
                                 row.Columns = cols;
                                 row.IsUnread = dr.SafeGetInteger("Status") == 1;
-                                row.IsUrgent = timeLeft.HasValue && timeLeft <= 0;
+                                row.IsUrgent = timeLeft.HasValue && timeLeft <= 0;                                
                                 ret.Add(row); 
                             }
                         }
@@ -308,7 +332,7 @@
                     return this.SortSearchResult(filtered, s);
                 }
             }
-
+            
             return this.SortSearchResult(ret, s);
         }
 
@@ -702,6 +726,9 @@
             columns.Add("tblCase.Verified");
             columns.Add("tblCase.VerifiedDescription");
             columns.Add("tblCase.LeadTime");
+            columns.Add("tblCase.Status_Id as aggregate_Status");
+            columns.Add("tblCase.StateSecondary_Id as aggregate_SubStatus");
+             
             columns.Add(string.Format("'0' as [{0}]", TimeLeftColumn));
             columns.Add("tblStateSecondary.IncludeInCaseStatistics");
             if (caseSettings.ContainsKey(GlobalEnums.TranslationCaseFields.CausingPart.ToString()))
@@ -961,7 +988,9 @@
 
             // användaren får bara se avdelningar som den har behörighet till
             sb.Append(" and (tblCase.Department_Id In (select Department_Id from tblDepartmentUser where [User_Id] = " + userId + ")");
-            sb.Append(" or not exists (select Department_Id from tblDepartmentUser where ([User_Id] = " + userId + "))");
+            sb.Append(" or not exists (select du.Department_Id from tblDepartmentUser du " +
+                                                "Inner join tblDepartment d on (d.Id = du.Department_Id) " +
+                                      "where (du.[User_Id] = " + userId + ") and d.customer_id = " + f.CustomerId + ")");
             sb.Append(") ");
 
             // finns kryssruta på användaren att den bara får se sina egna ärenden
@@ -1034,10 +1063,10 @@
             if (!string.IsNullOrWhiteSpace(f.UserPerformer))
             {
                 var performersDict = f.UserPerformer.Split(',').ToDictionary(it => it, it => true);
-                var searchingUnassigned = restrictedCasePermission != 1 && customerUserSetting.User.ShowNotAssignedCases == 1 && performersDict.ContainsKey("0");
+                var searchingUnassigned = restrictedCasePermission != 1 && customerUserSetting.User.ShowNotAssignedCases == 1 && performersDict.ContainsKey(int.MinValue.ToString());
                 if (searchingUnassigned)
                 {
-                    performersDict.Remove("0");
+                    performersDict.Remove(int.MinValue.ToString());
                 }
 
                 if (performersDict.Count > 0 || searchingUnassigned)
@@ -1179,6 +1208,7 @@
                 else
                 {
                     var text = f.FreeTextSearch;
+                    var safeText = f.FreeTextSearch.Replace("'","''");
                     sb.Append(" AND (");
                     sb.Append(this.GetSqlLike("[tblCase].[CaseNumber]", text));
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[ReportedBy]", text));
@@ -1188,17 +1218,28 @@
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Phone]", text));
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_CellPhone]", text));
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Place]", text));
-                    sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Caption]", text));
-                    sb.AppendFormat(" OR [tblCase].[Description] LIKE '%{0}%'", text);
+                    sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Caption]", text));                    
+                    sb.AppendFormat(" OR [tblCase].[Description] LIKE '%{0}%'", safeText);
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Miscellaneous]", text));
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblDepartment].[Department]", text));
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblDepartment].[DepartmentId]", text));
-                    sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblLog] WHERE [tblLog].[Text_Internal] LIKE '%{0}%' OR [tblLog].[Text_External] LIKE '%{0}%'))", text);
+                    sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblLog] WHERE [tblLog].[Text_Internal] LIKE '%{0}%' OR [tblLog].[Text_External] LIKE '%{0}%'))", safeText);
                     sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblFormFieldValue] WHERE {0}))", this.GetSqlLike("FormFieldValue", text));
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[ReferenceNumber]", text));
                     sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[InvoiceNumber]", text));
-                    sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[InventoryNumber]", text));
-            
+                    sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[InventoryNumber]", text));                                            
+                    
+                    // Get CaseNumbers from Indexing Service
+                    if (f.SearchThruFiles)
+                    {
+                        if (!string.IsNullOrEmpty(customerSetting.FileIndexingServerName) && !string.IsNullOrEmpty(customerSetting.FileIndexingCatalogName))
+                        {
+                            var caseNumbers = GetCasesContainsText(customerSetting.FileIndexingServerName, customerSetting.FileIndexingCatalogName, safeText);
+                            if (!string.IsNullOrEmpty(caseNumbers))
+                                sb.AppendFormat(" OR [tblCase].[CaseNumber] In ({0}) ", caseNumbers);
+                        }
+                    }
+
                     sb.Append(") ");
                 }
             }
@@ -1245,6 +1286,21 @@
             return sb.ToString();
         }
 
+        private string GetCasesContainsText(string indexingServerName, string catalogName, string searchText)
+        {
+            var res = string.Empty;
+            if (string.IsNullOrEmpty(indexingServerName) ||
+                string.IsNullOrEmpty(catalogName) || string.IsNullOrEmpty(searchText))
+                return string.Empty;
+            else
+            {                
+                var caseNumbers = FileIndexingRepository.GetCaseNumbersBy(indexingServerName, catalogName, searchText);                
+                if (caseNumbers.Any())
+                    res = string.Join(",", caseNumbers.ToArray());
+            }                        
+            return res;
+        }
+
         private string GetSqlLike(string field, string text, string combinator = Combinator_OR)
         {
             var sb = new StringBuilder();
@@ -1253,7 +1309,7 @@
             {
                 sb.Append(" (");
                 var words = text
-                        .SafeForSqlInject()
+                        .FreeTextSafeForSqlInject()
                         .ToLower()
                         .Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -1271,7 +1327,7 @@
 
             return sb.ToString();
         }
-
+        
         private string InsensitiveSearch(string fieldName)
         {
             var ret = fieldName;

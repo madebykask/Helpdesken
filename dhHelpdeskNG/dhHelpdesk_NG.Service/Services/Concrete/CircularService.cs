@@ -573,7 +573,7 @@
 
         private void SendMail(QuestionnaireMailItem mailItem, DateTime operationDate)
         {
-            this.emailService.SendEmail(mailItem.MailItem);
+            this.emailService.SendEmail(mailItem.MailItem, EmailResponse.GetEmptyEmailResponse());
 
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {

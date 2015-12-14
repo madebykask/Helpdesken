@@ -26,6 +26,7 @@ namespace DH.Helpdesk.Domain
         public string ExternalSite { get; set; }
         public int CaseLockTimer { get; set; }
         public int CaseLockBufferTime { get; set; }
+        public int CaseLockExtendTime { get; set; }
 
         public virtual Language DefaultLanguage { get; set; }
     }

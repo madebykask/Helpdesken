@@ -88,6 +88,7 @@
             regionToUpdate.Name = region.Name;
             regionToUpdate.IsActive = region.IsActive;
             regionToUpdate.IsDefault = region.IsDefault;
+            regionToUpdate.Code = region.Code;
             this._regionService.SaveRegion(regionToUpdate, out errors);
 
             if (errors.Count == 0)
