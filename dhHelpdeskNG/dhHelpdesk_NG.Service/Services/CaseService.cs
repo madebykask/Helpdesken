@@ -1173,7 +1173,7 @@ namespace DH.Helpdesk.Services.Services
                     mailTemplateId = 0;
 
                     if (newCase.ProductArea.MailID.HasValue)
-                        mailTemplateId = newCase.ProductArea.MailTemplate.MailID;
+                        mailTemplateId = newCase.ProductArea.MailID.Value;
                     
 
                     if (mailTemplateId > 0)
