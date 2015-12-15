@@ -1063,7 +1063,7 @@
             if (!string.IsNullOrWhiteSpace(f.UserPerformer))
             {
                 var performersDict = f.UserPerformer.Split(',').ToDictionary(it => it, it => true);
-                var searchingUnassigned = restrictedCasePermission != 1 && customerUserSetting.User.ShowNotAssignedCases == 1 && performersDict.ContainsKey(int.MinValue.ToString());
+                var searchingUnassigned = restrictedCasePermission != 1 && performersDict.ContainsKey(int.MinValue.ToString());
                 if (searchingUnassigned)
                 {
                     performersDict.Remove(int.MinValue.ToString());
@@ -1079,7 +1079,7 @@
                     sb.AppendFormat("tblCase.Performer_User_Id in ({0}) ", string.Join(",", performersDict.Keys).SafeForSqlInject());
                 }
 
-                if (searchingUnassigned)
+                if (searchingUnassigned || customerUserSetting.User.ShowNotAssignedCases == 1)
                 {
                     if (performersDict.Count > 0)
                     {
@@ -1094,7 +1094,7 @@
                     sb.Append(") ");
                 }
             }
-
+           
             // ansvarig
             if (!string.IsNullOrWhiteSpace(f.UserResponsible))
                 sb.Append(" and (tblCase.CaseResponsibleUser_Id in (" + f.UserResponsible.SafeForSqlInject() + "))"); 
