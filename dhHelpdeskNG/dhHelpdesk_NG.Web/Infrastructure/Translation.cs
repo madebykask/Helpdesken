@@ -101,7 +101,7 @@
                             var text = (trans != null ? trans.TextTranslated : string.Empty);
                             if (string.IsNullOrEmpty(text) && SessionFacade.CurrentLanguageId != LanguageIds.Swedish)
                             {
-                                trans = translation.TextTranslations.Where(x => x.Language_Id == SessionFacade.CurrentCustomer.Language_Id).FirstOrDefault();
+                                trans = translation.TextTranslations.Where(x => x.Language_Id == SessionFacade.CurrentLanguageId).FirstOrDefault();
                                 text = (trans != null ? trans.TextTranslated : string.Empty);
                             }
 

@@ -10,5 +10,7 @@
     public sealed class LanguageIds
     {
         public const int Swedish = 1;
+
+        public const int English = 2;
     }
 }
