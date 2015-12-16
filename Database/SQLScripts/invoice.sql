@@ -92,7 +92,7 @@ DROP COLUMN DeliveryPeriod
  END
 
 
-IF object_id('tblCaseInvoiceSettings', 'U') is not null
+if not exists(select * from sysobjects WHERE Name = N'tblCaseInvoiceSettings')
 begin
 	CREATE TABLE [dbo].[tblCaseInvoiceSettings](
 		[Id] [int] IDENTITY(1,1) NOT NULL,
@@ -107,45 +107,42 @@ begin
 		[Id] ASC
 	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 90) ON [PRIMARY]
 	) ON [PRIMARY]
+	
+	ALTER TABLE [dbo].[tblCaseInvoiceSettings]  WITH CHECK ADD  CONSTRAINT [FK_tblCaseInvoiceSettings_tblCustomer] FOREIGN KEY([CustomerId])
+	REFERENCES [dbo].[tblCustomer] ([Id])
+	
+
+ALTER TABLE [dbo].[tblCaseInvoiceSettings] CHECK CONSTRAINT [FK_tblCaseInvoiceSettings_tblCustomer]
+
 end
 go
 
-ALTER TABLE [dbo].[tblCaseInvoiceSettings]  WITH CHECK ADD  CONSTRAINT [FK_tblCaseInvoiceSettings_tblCustomer] FOREIGN KEY([CustomerId])
-REFERENCES [dbo].[tblCustomer] ([Id])
-GO
-
-ALTER TABLE [dbo].[tblCaseInvoiceSettings] CHECK CONSTRAINT [FK_tblCaseInvoiceSettings_tblCustomer]
-GO
+	
 
 
 
-
-           IF COL_LENGTH('tblCaseInvoiceSettings','OurReference') IS NULL
+ IF COL_LENGTH('tblCaseInvoiceSettings','OurReference') IS NULL
  BEGIN
 	alter table tblCaseInvoiceSettings
 	add OurReference nvarchar(50) null
  end
 
-            IF COL_LENGTH('tblInvoiceArticle','OurReference') IS NULL
- BEGIN
-	alter table tblCaseInvoiceSettings
-	add OurReference nvarchar(50) null
- end
-             IF COL_LENGTH('tblInvoiceArticle','TextDemand') IS NULL
+
+ IF COL_LENGTH('tblInvoiceArticle','TextDemand') IS NULL
  BEGIN
 	alter table tblInvoiceArticle
-	add TextDemand bit null
+	add TextDemand bit null default(0)
  end
 
-             IF COL_LENGTH('tblInvoiceArticle','Blocked') IS NULL
+ IF COL_LENGTH('tblInvoiceArticle','Blocked') IS NULL
  BEGIN
 	alter table tblInvoiceArticle
-	add Blocked bit null
+	add Blocked bit null default(0)
  end
 
 
  
-IF object_id('tblInvoiceArticle_tblProductArea', 'U') is not null
+if not exists(select * from sysobjects WHERE Name = N'tblInvoiceArticle_tblProductArea')
 begin
 	CREATE TABLE [dbo].[tblInvoiceArticle_tblProductArea](
 		[InvoiceArticle_Id] [int] NOT NULL,
@@ -156,22 +153,24 @@ begin
 		[ProductArea_Id] ASC
 	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
-end
-GO
 
-ALTER TABLE [dbo].[tblInvoiceArticle_tblProductArea]  WITH CHECK ADD  CONSTRAINT [FK_tblInvoiceArticle_tblProductArea_tblInvoiceArticle] FOREIGN KEY([InvoiceArticle_Id])
+	ALTER TABLE [dbo].[tblInvoiceArticle_tblProductArea]  WITH CHECK ADD  CONSTRAINT [FK_tblInvoiceArticle_tblProductArea_tblInvoiceArticle] FOREIGN KEY([InvoiceArticle_Id])
 REFERENCES [dbo].[tblInvoiceArticle] ([Id])
-GO
+
 
 ALTER TABLE [dbo].[tblInvoiceArticle_tblProductArea] CHECK CONSTRAINT [FK_tblInvoiceArticle_tblProductArea_tblInvoiceArticle]
-GO
+
 
 ALTER TABLE [dbo].[tblInvoiceArticle_tblProductArea]  WITH CHECK ADD  CONSTRAINT [FK_tblInvoiceArticle_tblProductArea_tblProductArea] FOREIGN KEY([ProductArea_Id])
 REFERENCES [dbo].[tblProductArea] ([Id])
-GO
+
 
 ALTER TABLE [dbo].[tblInvoiceArticle_tblProductArea] CHECK CONSTRAINT [FK_tblInvoiceArticle_tblProductArea_tblProductArea]
+
+end
 GO
+
+
 
 IF COL_LENGTH('tblInvoiceArticle','ProductAreaId') IS NOT NULL
 begin
