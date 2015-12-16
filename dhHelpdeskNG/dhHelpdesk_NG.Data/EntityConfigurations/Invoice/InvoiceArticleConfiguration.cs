@@ -26,11 +26,18 @@
                 .HasForeignKey(a => a.UnitId)
                 .WillCascadeOnDelete(false);
             this.Property(a => a.Ppu).IsOptional();
-            this.Property(a => a.ProductAreaId).IsRequired();
-            this.HasRequired(a => a.ProductArea)
-                .WithMany()
-                .HasForeignKey(a => a.ProductAreaId)
-                .WillCascadeOnDelete(false);
+            this.HasMany(p => p.ProductAreas)
+                .WithMany(a => a.InvoiceArticles)
+                .Map(m => {
+                    m.MapLeftKey("InvoiceArticle_Id");
+                    m.MapRightKey("ProductArea_id");
+                    m.ToTable("tblInvoiceArticle_tblProductArea");
+                });
+            //this.Property(a => a.ProductAreaId).IsRequired();
+            //this.HasRequired(a => a.ProductArea)
+            //    .WithMany()
+            //    .HasForeignKey(a => a.ProductAreaId)
+            //    .WillCascadeOnDelete(false);
             this.Property(a => a.CustomerId).IsRequired();
             this.HasRequired(a => a.Customer)
                 .WithMany()

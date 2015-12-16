@@ -108,6 +108,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IMailTemplateService _mailTemplateService;
         
         
+        
 
         private readonly ICaseNotifierModelFactory caseNotifierModelFactory;
 
@@ -149,6 +150,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         private readonly IWatchDateCalendarService watchDateCalendarServcie;
 
+        private readonly ICaseInvoiceSettingsService caseInvoiceSettingsService;
         #endregion
 
         #region ***Constructor***
@@ -210,7 +212,8 @@ namespace DH.Helpdesk.Web.Controllers
             IRegistrationSourceCustomerService registrationSourceCustomerService,
             ICaseLockService caseLockService,
             IMailTemplateService mailTemplateService,
-            IWatchDateCalendarService watchDateCalendarServcie)
+            IWatchDateCalendarService watchDateCalendarServcie,
+            ICaseInvoiceSettingsService CaseInvoiceSettingsService)
             : base(masterDataService)
         {
             this._masterDataService = masterDataService;
@@ -262,6 +265,7 @@ namespace DH.Helpdesk.Web.Controllers
             this.caseSolutionSettingService = caseSolutionSettingService;
             this.invoiceHelper = invoiceHelper;
             this.caseModelFactory = caseModelFactory;
+            this.caseInvoiceSettingsService = CaseInvoiceSettingsService;
             this.caseOverviewSettingsService = caseOverviewSettingsService;
             this.gridSettingsService = gridSettingsService;
             this._organizationService = organizationService;
@@ -1222,6 +1226,7 @@ namespace DH.Helpdesk.Web.Controllers
             return this.RedirectToAction("index", "cases", new { id = customerId });
         }
 
+
         [UserCasePermissions]
         public ActionResult Edit(int id, 
             string redirectFrom = "", 
@@ -1288,29 +1293,16 @@ namespace DH.Helpdesk.Web.Controllers
                     m.ParantPath_OU = ParentPathDefaultValue;
                 }
 
-                var caseInvoices = this.invoiceArticleService.GetCaseInvoices(id);
-                m.InvoiceArticles = this.invoiceArticlesModelFactory.CreateCaseInvoiceArticlesModel(caseInvoices);
-                //foreach (var invoice in m.InvoiceArticles.Invoices)
-                //{
-                //    foreach (var order in invoice.Orders)
-                //    {
-                //        var UserId = 0;
-                //        if (order.InvoicedByUserId.HasValue && order.InvoicedByUserId != 0)
-                //        {
-                //            UserId = order.InvoicedByUserId.Value;
-                //            var user = _userService.GetUser(UserId);
-                //            order.InvoicedByUser = user.FirstName + " " + user.SurName;
-                //        }
-                //        else
-                //        {
-                //            order.InvoicedByUser = "";
-                //        }
-                        
-                //    }
-                //}
+                var moduleCaseInvoice = this._settingService.GetCustomerSetting(m.case_.Customer_Id).ModuleCaseInvoice;
+                if (moduleCaseInvoice == 1)
+                {
+                    var caseInvoices = this.invoiceArticleService.GetCaseInvoicesWithTimeZone(id, TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
+                    m.InvoiceArticles = this.invoiceArticlesModelFactory.CreateCaseInvoiceArticlesModel(caseInvoices);
+                }  
                 m.CustomerSettings = this.workContext.Customer.Settings;
-                
-            }            
+
+                m.CustomerSettings.ModuleCaseInvoice = this._settingService.GetCustomerSetting(m.case_.Customer_Id).ModuleCaseInvoice.ToBool(); // TODO FIX
+            }        
 
             AddViewDataValues();
 
@@ -1908,7 +1900,6 @@ namespace DH.Helpdesk.Web.Controllers
 
                 fileContent = this._logFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
             }
-
             var defaultFileName = GetDefaultFileName(fileName);
             Response.AddHeader("Content-Disposition", string.Format("attachment; filename={0}", defaultFileName));
 
@@ -2578,8 +2569,14 @@ namespace DH.Helpdesk.Web.Controllers
                         SessionFacade.CurrentUser.Id,
                         this.User.Identity.Name,
                         out errors,
-                        this.invoiceHelper.ToCaseInvoices(caseInvoiceArticles, null, null),
                         parentCase);
+            
+            var moduleCaseInvoice = this._settingService.GetCustomerSetting(case_.Customer_Id).ModuleCaseInvoice;
+            if (moduleCaseInvoice == 1)
+            {
+                DoInvoiceWork(caseInvoiceArticles, case_.Id, case_.Customer_Id);
+            }
+
             
             if (updateNotifierInformation.HasValue && updateNotifierInformation.Value)
             {
@@ -3516,7 +3513,7 @@ namespace DH.Helpdesk.Web.Controllers
             int? templateistrue = 0,
             int? parentCaseId = null)
         {
-            var m = new CaseInputViewModel();
+            var m = new CaseInputViewModel ();
             m.BackUrl = backUrl;
             m.CanGetRelatedCases = SessionFacade.CurrentUser.IsAdministrator();
             SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
@@ -3772,7 +3769,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 m.changes = this._changeService.GetChanges(customerId);
             }
-
+            
             m.finishingCauses = this._finishingCauseService.GetFinishingCauses(customerId);
             m.problems = this._problemService.GetCustomerProblems(customerId);
             m.currencies = this._currencyService.GetCurrencies();
@@ -3956,7 +3953,7 @@ namespace DH.Helpdesk.Web.Controllers
                 //m.ous = this._ouService.GetOUs(customerId);
                 m.ous = this._organizationService.GetOUs(m.case_.Department_Id).ToList();
             }
-
+           
             // hämta parent path för casetype
             if (m.case_.CaseType_Id > 0)
             {
@@ -3988,7 +3985,7 @@ namespace DH.Helpdesk.Web.Controllers
                     }
                 }
             }
-
+            
 
             // check department info
             m.ShowInvoiceFields = 0;
@@ -4528,7 +4525,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             ret.SelectedDepartments = userCaseSettings.Departments;
 
-
+            
             const bool IsTakeOnlyActive = true;
             ret.RegisteredByCheck = userCaseSettings.RegisteredBy != string.Empty;
             ret.RegisteredByUserList = this._userService.GetUserOnCases(customerId, IsTakeOnlyActive).MapToSelectList(customerSettings);
@@ -4775,6 +4772,13 @@ namespace DH.Helpdesk.Web.Controllers
 
         #endregion       
 
+        private void DoInvoiceWork(string caseInvoiceData, int caseId, int customerId)
+        {
+            var caseOverview = this._caseService.GetCaseOverview(caseId);
+            var articles = this.invoiceArticleService.GetArticles(customerId);
+            var Invoices = this.invoiceHelper.ToCaseInvoices(caseInvoiceData, caseOverview, articles); //there will only be one?
+            this.invoiceArticleService.DoInvoiceWork(Invoices, caseId, customerId, SessionFacade.CurrentUser.Id);
+        }
         #endregion
     }
 }

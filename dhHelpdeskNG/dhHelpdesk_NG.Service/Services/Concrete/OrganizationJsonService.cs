@@ -62,7 +62,7 @@
             if (regionId.HasValue)
             {
                 var curRegion = this.regionService.GetRegion(regionId.Value);
-                if (curRegion.IsActive != 0)
+                if (curRegion != null && curRegion.IsActive != 0)
                 {
                     dep = dep.Where(x => x.Region_Id == regionId).ToList();
                 }

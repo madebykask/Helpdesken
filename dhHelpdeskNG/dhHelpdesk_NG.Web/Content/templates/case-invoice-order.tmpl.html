@@ -4,14 +4,14 @@
             <td class='width100'>
                 <table class='width100 table table-striped table-bordered table-hover'>
                     <tr>
-                        <th>{{:ArtNoHeader}}</th>
+                        <th class="case-invoice-colnarrow">{{:ArtNoHeader}}</th>
                         <th>{{:NameHeader}}</th>
                         <th>{{:NameEngHeader}}</th>
-                        <th>{{:UnitsHeader}}</th>
+                        <th class="case-invoice-colnarrow">{{:UnitsHeader}}</th>
                         <th>{{:TypeHeader}}</th>
-                        <th>{{:PpuHeader}}</th>
-                        <th>{{:TotalHeader}}</th>
-                        <th></th>
+                        <th>{{:PpuHeader}} SEK</th>
+                        <th style="text-align: right;">{{:TotalHeader}}</th>
+                        <th class="case-invoice-colextranarrow"></th>
                     </tr>
                     <tbody class='articles-rows'>
                         {{for Articles tmpl="caseInvoiceArticle" /}}                        
@@ -24,42 +24,15 @@
         </tr>
     </table>
     <div class='width100 textbold' style='text-align: right;'>
-        {{:TotalLabel}}: <span class='articles-total'>{{:Total}}</span>
-    </div>  
+        {{:TotalLabel}}: <span class='articles-total'>{{:Total}}</span> SEK
+    </div>
     <table>
         <tbody>
             <tr>
-                <td>
-                    {{:DeliveryPeriodTitle}}
+                <td>{{:attachedFilesTitle}}
                 </td>
                 <td>
-                    <input type="text" class="delivery-period" style="margin-bottom: -2px;" value="{{:DeliveryPeriod}}" />                                
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div style="margin-bottom: 1em;"></div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    {{:ReferenceTitle}}
-                </td>
-                <td>
-                    <input type="text" maxlength="40" autocomplete="Off" class="reference" style="margin-bottom: -2px;" value="{{:Reference}}" />
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div style="margin-bottom: 1em;"></div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    {{:attachedFilesTitle}}
-                </td>
-                <td>
-                    <button onclick="dhHelpdesk.CaseArticles.SelectCaseFiles('{{:Id}}'); return false;">{{:attachFilesTitle}}</button>        
+                    <button class="btn" onclick="dhHelpdesk.CaseArticles.SelectCaseFiles('{{:Id}}'); return false;">{{:attachFilesTitle}}</button>
                 </td>
             </tr>
             <tr>
@@ -69,9 +42,196 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    <div id="files-container"></div>                    
+                    <div id="files-container"></div>
                 </td>
             </tr>
+            <tr>
+                <td>
+                    <button class="btn OtherReferenceBtn" onclick="dhHelpdesk.CaseArticles.OtherReference('{{:Id}}')">{{:ReferenceTitle}}</button>
+                </td>
+            </tr>
+            {{if ShowReportedBy}}
+            <tr class="InitiatorFieldsOrder{{:Id}} InitiatorField">
+                <td>{{:ReportedByTitle}}
+                </td>
+                <td>
+                    <input type="text" id="ReportedBy_{{:Id}}" maxlength="40" autocomplete="Off" class="reportedby" style="margin-bottom: -2px;" value="{{:ReportedBy}}" data-orderid="{{:Id}}"/>
+                </td>
+            </tr>
+            {{else}}
+            <tr>
+                <td>
+                    <input type="hidden" value="{{:ReportedBy}}" id="ReportedBy_{{:Id}}" />
+                </td>
+            </tr>
+            {{/if}}
+           {{if ShowPersons_Name}}
+            <tr class="InitiatorFieldsOrder{{:Id}}  InitiatorField">
+                <td>{{:Persons_NameTitle}}
+                </td>
+                <td>
+                    <input type="text" id="Persons_Name_{{:Id}}" class="name" maxlength="40" autocomplete="Off" style="margin-bottom: -2px;" value="{{:Persons_Name}}" data-orderid="{{:Id}}"/>
+                </td>
+            </tr>
+            {{else}}
+            <tr style="display: none;">
+                <td>
+                    <input type="hidden" id="Persons_Name_{{:Id}}" value="{{:Persons_Name}}" class="name" />
+                </td>
+            </tr>
+            {{/if}}
+            {{if ShowPersons_Email}}
+            <tr class="InitiatorFieldsOrder{{:Id}} InitiatorField">
+                <td>{{:Persons_EmailTitle}}
+                </td>
+                <td>
+                    <input type="text" id="Persons_Email_{{:Id}}" class="email" maxlength="40" autocomplete="Off" style="margin-bottom: -2px;" value="{{:Persons_Email}}" data-orderid="{{:Id}}"/>
+                </td>
+            </tr>
+            {{else}}
+            <tr style="display: none;">
+                <td>
+                    <input type="hidden" id="Persons_Email_{{:Id}}" class="phone" value="{{:Persons_Email}}" />
+                </td>
+            </tr>
+            {{/if}}
+            {{if ShowPersons_Phone}}
+            <tr class="InitiatorFieldsOrder{{:Id}} InitiatorField">
+                <td>{{:Persons_PhoneTitle}}
+                </td>
+                <td>
+                    <input type="text" id="Persons_Phone_{{:Id}}" class="phone" maxlength="40" autocomplete="Off" style="margin-bottom: -2px;" value="{{:Persons_Phone}}" data-orderid="{{:Id}}"/>
+                </td>
+            </tr>
+            {{else}}
+            <tr style="display: none;">
+                <td>
+                    <input type="hidden" id="Persons_Phone_{{:Id}}" class="phone" value="{{:Persons_Phone}}" />
+                </td>
+            </tr>
+            {{/if}}
+            {{if ShowPersons_CellPhone}}
+            <tr class="InitiatorFieldsOrder{{:Id}} InitiatorField">
+                <td>{{:Persons_CellPhoneTitle}}
+                </td>
+                <td>
+                    <input type="text" id="Persons_CellPhone_{{:Id}}" class="cellphone" maxlength="40" autocomplete="Off" style="margin-bottom: -2px;" value="{{:Persons_CellPhone}}" data-orderid="{{:Id}}"/>
+                </td>
+            </tr>
+            {{else}}
+            <tr>
+                <td>
+                    <input type="hidden" class="cellphone" id="Persons_CellPhone_{{:Id}}" value="{{:Persons_CellPhone}}" />
+                </td>
+            </tr>
+            {{/if}}
+            {{if ShowRegion_Id}}
+            <tr class="InitiatorFieldsOrder{{:Id}} InitiatorField">
+                <td>{{:Region_IdTitle}}
+                </td>
+                <td>
+                    <select class="region RegionSelect" id="RegionSelect-Order{{:Id}}" data-orderid="{{:Id}}">
+                    </select>
+                    <input type="hidden" class="region RegionId" id="RegionId_{{:Id}}" value="{{:Region_Id}}" />
+                </td>
+            </tr>
+            {{else}}
+            <tr>
+                <td>
+                    <input type="hidden" value="{{:Region_Id}}" />
+                </td>
+            </tr>
+            {{/if}}
+             {{if ShowDepartment_Id}}
+            <tr class="InitiatorFieldsOrder{{:Id}} InitiatorField">
+                <td>{{:Department_IdTitle}}
+                </td>
+                <td>
+                    <select class="department DepartmentSelect" id="DepartmentSelect-Order{{:Id}}" data-orderid="{{:Id}}">
+                        <option value=""></option>
+                    </select>
+                    <input type="hidden" id="DepartmentId_{{:Id}}" class="DepartmentId"  value="{{:Department_Id}}" />
+                </td>
+            </tr>
+            {{else}}
+            <tr style="display: none;">
+                <td>
+                    <input type="hidden" class="department" id="DepartmentId_{{:Id}}" value="{{:Department_Id}}" />
+                </td>
+            </tr>
+            {{/if}}
+            {{if ShowOU_Id}}
+            <tr class="InitiatorFieldsOrder{{:Id}} InitiatorField">
+                <td>{{:OU_IdTitle}}
+                </td>
+                <td>
+                    <select class="ou OUSelect" id="OUSelect-Order{{:Id}}"">
+                        <option value=""></option>
+                    </select>
+                    <input type="hidden" id="OUId_{{:Id}}" class="OUId" value="{{:OU_Id}}" />
+                </td>
+            </tr>
+            {{else}}
+            <tr style="display: none;">
+                <td>
+                    <input type="hidden" id="OUId_{{:Id}}" value="{{:OU_Id}}" />
+                </td>
+            </tr>
+            {{/if}}
+            {{if ShowCostCentre}}
+            <tr class="InitiatorFieldsOrder{{:Id}} InitiatorField">
+                <td>{{:CostCentreTitle}}
+                </td>
+                <td>
+                    <input type="text" maxlength="40" autocomplete="Off" style="margin-bottom: -2px;" value="{{:CostCentre}}" />
+                </td>
+            </tr>
+            {{else}}
+                <tr style="display: none;">
+                    <td>
+                        <input type="hidden" value="{{:CostCentre}}" />
+                    </td>
+                </tr>
+            {{/if}}
+            {{if ShowPlace}}
+            <tr class="InitiatorFieldsOrder{{:Id}} InitiatorField">
+                <td>{{:PlaceTitle}}
+                </td>
+                <td>
+                    <input type="text" id="Place_{{:Id}}" class="place" maxlength="40" autocomplete="Off" style="margin-bottom: -2px;" value="{{:Place}}" />
+                </td>
+            </tr>
+            {{else}}
+            <tr style="display: none;">
+                <td>
+                    <input type="hidden" id="Place_{{:Id}}" class="place" value="{{:Place}}" />
+                </td>
+            </tr>
+            {{/if}}
+            {{if ShowUserCode}}
+                <tr class="InitiatorFieldsOrder{{:Id}} InitiatorField">
+                    <td>{{:UserCodeTitle}}
+                    </td>
+                    <td>
+                        <input type="text" id="UserCodeId_{{:Id}}" class="usercode" maxlength="40" autocomplete="Off" style="margin-bottom: -2px;" value="{{:UserCode}}" />
+                    </td>
+                </tr>
+            {{else}}
+                <tr style="display: none;">
+                    <td>
+                        <input type="hidden" class="usercode" id="UserCodeId_{{:Id}}" value="{{:UserCode}}" />
+                    </td>
+                </tr>
+            {{/if}}
+            <tr>
+                <td colspan="2">
+                    <div style="margin-bottom: 1em;"></div>
+                </td>
+            </tr>
+            
         </tbody>
-    </table> 
-</div>   
+    </table>
+    <div>
+        <button class="btn doInvoice" onclick="dhHelpdesk.CaseArticles.DoOrderInvoice('{{:Id}}'); return false;" data-orderid="{{:Id}}">{{:doInvoiceTitle}}</button>
+    </div>
+</div>

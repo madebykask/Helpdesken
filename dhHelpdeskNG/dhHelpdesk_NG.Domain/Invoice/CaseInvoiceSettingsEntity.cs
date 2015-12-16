@@ -5,5 +5,13 @@
         public int CustomerId { get; set; }
 
         public string ExportPath { get; set; }
+
+        public string Currency { get; set; }
+
+        public string OrderNoPrefix { get; set; }
+
+        public string Issuer { get; set; }
+
+        public string OurReference { get; set; }
     }
 }

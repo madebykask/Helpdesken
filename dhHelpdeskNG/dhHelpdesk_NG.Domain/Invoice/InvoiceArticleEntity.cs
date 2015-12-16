@@ -1,4 +1,5 @@
-﻿namespace DH.Helpdesk.Domain.Invoice
+﻿using System.Collections.Generic;
+namespace DH.Helpdesk.Domain.Invoice
 {
     public class InvoiceArticleEntity : Entity
     {
@@ -20,9 +21,13 @@
 
         public decimal? Ppu { get; set; }
 
-        public int ProductAreaId { get; set; }
+        //public int ProductAreaId { get; set; } old deprecated not used
 
-        public virtual ProductArea ProductArea { get; set; }
+        public virtual ICollection<ProductArea> ProductAreas { get; set; }
+
+        public bool TextDemand { get; set; }
+
+        public bool Blocked { get; set; }
 
         public int CustomerId { get; set; }
 

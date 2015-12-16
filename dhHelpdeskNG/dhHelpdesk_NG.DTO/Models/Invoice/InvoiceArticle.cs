@@ -1,8 +1,14 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Invoice
 {
+    using System;
+    using System.Web.Script.Serialization;
+    using System.Xml;
+    using System.Xml.Schema;
+    using System.Xml.Serialization;
     using DH.Helpdesk.BusinessData.Models.Customer.Input;
     using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
     using DH.Helpdesk.Common.ValidationAttributes;
+    using System.Collections.Generic;
 
     public sealed class InvoiceArticle
     {
@@ -17,17 +23,17 @@
                     int? unitId, 
                     InvoiceArticleUnit unit, 
                     decimal? ppu, 
-                    int productAreaId, 
-                    ProductAreaOverview productArea, 
+                    List<Domain.ProductArea> productAreas,        
                     int customerId, 
+                    bool textDemand,
+                    bool blocked,
                     CustomerOverview customer)
         {
             this.Description = description;
             this.NameEng = nameEng;
             this.Customer = customer;
             this.CustomerId = customerId;
-            this.ProductArea = productArea;
-            this.ProductAreaId = productAreaId;
+            this.ProductAreas = productAreas;
             this.Ppu = ppu;
             this.Unit = unit;
             this.UnitId = unitId;
@@ -35,6 +41,8 @@
             this.Number = number;
             this.Parent = parent;
             this.ParentId = parentId;
+            this.TextDemand = textDemand;
+            this.Blocked = blocked;
             this.Id = id;
         }
 
@@ -44,7 +52,7 @@
                     string name, 
                     string nameEng,
                     string description,
-                    ProductAreaOverview productArea,
+                    List<Domain.ProductArea> productAreas,
                     InvoiceArticleUnit unit,
                     decimal? ppu)
         {
@@ -53,7 +61,7 @@
             this.Name = name;
             this.NameEng = nameEng;
             this.Description = description;
-            this.ProductArea = productArea;
+            this.ProductAreas = productAreas;
             this.Unit = unit;
             this.Ppu = ppu;
         }
@@ -61,12 +69,12 @@
         public InvoiceArticle(
                     string number, 
                     string name,
-                    ProductAreaOverview productArea)
+                    List<Domain.ProductArea> productAreas)
         {
             this.Number = number;
             this.Name = name;
             this.NameEng = string.Empty;
-            this.ProductArea = productArea;
+            this.ProductAreas = new List<Domain.ProductArea>();
         }
 
         [IsId]
@@ -92,14 +100,15 @@
 
         public decimal? Ppu { get; private set; }
 
-        [IsId]
-        public int ProductAreaId { get; set; }
-
-        [NotNull]
-        public ProductAreaOverview ProductArea { get; private set; }
+        [ScriptIgnore]
+        public List<Domain.ProductArea> ProductAreas { get; set; }
 
         [IsId]
         public int CustomerId { get; set; }
+
+        public bool TextDemand { get; set; }
+
+        public bool Blocked { get; set; }
 
         [NotNull]
         public CustomerOverview Customer { get; private set; }

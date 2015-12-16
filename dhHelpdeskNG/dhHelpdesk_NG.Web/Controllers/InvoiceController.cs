@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Controllers
 {
     using System;
+    using System.Linq;
     using System.Collections.Generic;
     using System.IO;
     using System.Net;
@@ -62,8 +63,15 @@
                 return this.Json(null, JsonRequestBehavior.AllowGet);
             }
 
-            var articles = this.invoiceArticleService.GetArticles(this.workContext.Customer.CustomerId, productAreaId.Value);
+            var articles = this.invoiceArticleService.GetArticles(SessionFacade.CurrentCustomer.Id, productAreaId.Value);
             return this.Json(articles, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult InvoiceSettingsValid(int customerId)
+        {
+            bool SettingsValid = this.invoiceArticleService.ValidateInvoiceSettings(customerId);
+            return this.Json(SettingsValid, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -72,6 +80,7 @@
             this.invoiceArticleService.SaveCaseInvoices(this.invoiceHelper.ToCaseInvoices(invoices, null, null), caseId);
         }
 
+        [Obsolete]
         [HttpPost]
         public ActionResult DoInvoice(int customerId, int caseId, string invoices)
         {
@@ -88,7 +97,12 @@
                 var data = this.invoiceHelper.ToCaseInvoices(invoices, caseOverview, articles);
                 foreach (var invoice in data)
                 {
-                    invoice.DoInvoice();
+                    var userId = 0;
+                    if (SessionFacade.CurrentUser.Id != null)
+                    {
+                        userId = SessionFacade.CurrentUser.Id;
+                    }
+                    invoice.DoInvoice(userId);
                 }
 
                 var output = this.invoiceHelper.ToOutputXml(data);
@@ -154,7 +168,7 @@
                     }
 
                     file.Size = fileContent.Length;
-                    file.Type = MimeHelper.GetMimeType(fileName);
+                    file.Type = MimeHelper.GetMimeTypeExtended(fileName);
 
                     files.Add(file);
                 }

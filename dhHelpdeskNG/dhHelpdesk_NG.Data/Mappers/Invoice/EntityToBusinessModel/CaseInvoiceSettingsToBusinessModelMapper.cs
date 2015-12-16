@@ -15,7 +15,11 @@
             return new CaseInvoiceSettings(
                             entity.Id,
                             entity.CustomerId,
-                            entity.ExportPath);
+                            entity.ExportPath,
+                            entity.Currency,
+                            entity.OrderNoPrefix,
+                            entity.Issuer,
+                            entity.OurReference);
         }
     }
 }

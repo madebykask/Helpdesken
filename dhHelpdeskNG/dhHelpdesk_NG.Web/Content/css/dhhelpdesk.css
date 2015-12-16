@@ -3083,11 +3083,55 @@ body.login {
     background: #ffa;
     text-align: center;
 }
+
+/*** invoice ***/
 .case-invoice-container {
     font-size: 14px;
     color: #333333;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+.case-invoice-colextranarrow {
+    width: 2%;
+}
+.case-invoice-colnarrow {
+    width: 7%;
+}
+.case-invoice-colnormal {
+    width: 14%;
+}
+.case-invoice-colwide {
+    width: 21%;
+}
+.case-invoice-orderrow {
+    background-color:#EAEAEA;
+}
+.case-invoice-multiselect{
+    margin-top: 5px;
+}
+
+.doInvoice {
+    float: right;
+}
+
+.articles-select-container .multiselect-container .options-holder 
+{
+    margin-left: 20px;
+    max-height: 200px;
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+
+/* no more invoice*/
+
+.input-mini-important {
+    width:45px!important;
+}
+
+.article-total {
+    text-align: right!important;
+}
+
 .min-width-500 {
     min-width: 500px!important;
 }
@@ -3444,6 +3488,14 @@ td.disabled
 
 .DisabledChosen {
     color: lightgray;
+}
+
+.ui-widget {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 /********************    ADMIN PART   *********************/

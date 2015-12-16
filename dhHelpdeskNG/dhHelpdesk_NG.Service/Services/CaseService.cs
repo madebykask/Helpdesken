@@ -74,7 +74,6 @@ namespace DH.Helpdesk.Services.Services
             int userId, 
             string adUser,           
             out IDictionary<string, string> errors,
-            CaseInvoice[] invoices = null,
             Case parentCase = null);
 
         int SaveCaseHistory(
@@ -919,7 +918,6 @@ namespace DH.Helpdesk.Services.Services
                 int userId, 
                 string adUser, 
                 out IDictionary<string, string> errors,
-                CaseInvoice[] invoices = null,
                 Case parentCase = null)
         {
             int ret = 0;
@@ -975,11 +973,6 @@ namespace DH.Helpdesk.Services.Services
             ret = userId == 0 ? 
                 this.SaveCaseHistory(c, userId, adUser, out errors, adUser, extraFields) : 
                 this.SaveCaseHistory(c, userId, adUser, out errors, string.Empty, extraFields);
-
-            if (invoices != null)
-            {
-                this.invoiceArticleService.SaveCaseInvoices(invoices, cases.Id);                
-            }
 
             return ret;
         }

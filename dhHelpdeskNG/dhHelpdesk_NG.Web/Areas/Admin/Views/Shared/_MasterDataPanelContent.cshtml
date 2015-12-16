@@ -50,8 +50,8 @@
         <li class="@Html.ActiveTab(new string[] { "registrationsourcecustomer" })"><a href="@Url.Action("index", "registrationsourcecustomer", new { customerId = Model.Id })">@Translation.Get(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString(), Enums.TranslationSource.CaseTranslation, Model.Id) (@Translation.Get("Källa", Enums.TranslationSource.TextTranslation))</a></li>
     </ul>
 </li>
-@*<li class="line"></li>
-<li><a href="@Url.Action("Index", "CaseInvoice", new { customerId = Model.Id })">@Translation.Get("Fakturering")</a></li>                *@
+<li class="line"></li>
+<li><a href="@Url.Action("Index", "CaseInvoice", new { customerId = Model.Id })">@Translation.Get("Fakturering")</a></li>                
 <li class="line"></li>
 <li class="dropdown-submenu">
     <a href="#">
