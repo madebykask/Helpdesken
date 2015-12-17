@@ -1,7 +1,8 @@
 ﻿@model DH.Helpdesk.NewSelfService.Models.Case.CaseLogModel
 
+
 @if (Model.CaseLogs != null)
-{
+{    
     foreach (var logItem in Model.CaseLogs.Where(l=> ! string.IsNullOrEmpty(l.Text_Internal.Trim())))
     {             
         var _regDate = logItem.RegTime.ToLocalTime();
@@ -13,8 +14,16 @@
                 @Html.DisplayFor(l => _regDate) 
             </p>
             <p>                                    
-                @Html.Raw(logItem.Text_Internal.Replace("\n", "<br />"))                                                                       
+                @Html.Raw(logItem.Text_Internal.Replace("\n", "<br />"))                                                                                       
             </p>
+            <p>
+                
+                @foreach(var f in logItem.LogFiles)
+                {                     
+                    <a href="@Url.Action("DownloadLogFile", new { id = logItem.Id, fileName = f.FileName })">@f.FileName</a>  
+                    <br />
+                }
+            </p>            
         </div>                            
     }
 }                     

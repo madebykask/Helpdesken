@@ -189,6 +189,7 @@ namespace DH.Helpdesk.NewSelfService
             kernel.Bind<ILinkGroupRepository>().To<LinkGroupRepository>();
             kernel.Bind<IUsersPasswordHistoryRepository>().To<UsersPasswordHistoryRepository>();
             kernel.Bind<ICaseFilterFavoriteRepository>().To<CaseFilterFavoriteRepository>();
+            kernel.Bind<ICaseInvoiceSettingsRepository>().To<CaseInvoiceSettingsRepository>();
             
             
             // Service             
@@ -239,7 +240,8 @@ namespace DH.Helpdesk.NewSelfService
             kernel.Bind<IOrganizationService>().To<OrganizationService>();
             kernel.Bind<ILinkService>().To<LinkService>();
             kernel.Bind<ICaseLockService>().To<CaseLockService>();
-
+            kernel.Bind<ICaseInvoiceSettingsService>().To<CaseInvoiceSettingsService>();
+            
             // Cache
             kernel.Bind<ICacheProvider>().To<CacheProvider>();
 

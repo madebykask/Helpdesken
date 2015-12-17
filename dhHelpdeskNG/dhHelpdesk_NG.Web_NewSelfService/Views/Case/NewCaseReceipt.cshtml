@@ -16,6 +16,110 @@
     }
 
 }
+<script type="text/javascript">
+    $(function() {
+        window.alreadyExistFileIds = [];
+        bindDeleteNewCaseFileBehaviorToDeleteButtons();       
+
+        $('#Log_uploader').pluploadQueue({
+            url: '@this.Url.Action("UploadLogFile")',
+            multipart_params: { Id: '@this.Model.LogFileGuid' },
+            max_file_size: '10mb',
+
+            init: {
+                FileUploaded: function() {
+
+                    $.get('@this.Url.Action("GetLogFiles")', { id: '@this.Model.LogFileGuid' }, function (files) {
+                        refreshLogFilesTable(files);
+                    });
+                },
+
+                UploadComplete: function(up, file) {
+                    //plupload_add
+                    $(".plupload_buttons").css("display", "inline");
+                    $(".plupload_upload_status").css("display", "inline");
+                    up.refresh();
+                },
+
+                Error: function(uploader, e) {
+                    if (e.status != 409) {
+                        return;
+                    }
+
+                    window.alreadyExistFileIds.push(e.file.id);
+                },
+
+                StateChanged: function(uploader) {
+                    if (uploader.state != plupload.STOPPED) {
+                        return;
+                    }
+
+                    for (var i = 0; i < window.alreadyExistFileIds.length; i++) {
+                        var fileId = window.alreadyExistFileIds[i];
+                        $('#Log_uploader ul[class="plupload_filelist"] li[id="' + fileId + '"] div[class="plupload_file_action"] a').prop('title', '@Translation.Get("File already exists", Enums.TranslationSource.TextTranslation)');
+                    }
+
+                    window.alreadyExistFileIds.length = 0;
+                    uploader.refresh();
+                }
+
+            }
+        });
+
+        $('#Log_upload_files_popup').on('hidden.bs.modal', function () {
+            if ($('#Log_uploader') != undefined) {
+                if ($('#Log_uploader').pluploadQueue().files.length > 0) {
+                    if ($('#Log_uploader').pluploadQueue().state == plupload.UPLOADING)
+                        $('#Log_uploader').pluploadQueue().stop();
+
+                    while ($('#Log_uploader').pluploadQueue().files.length > 0) {
+                        $('#Log_uploader').pluploadQueue().removeFile($('#Log_uploader').pluploadQueue().files[0]);
+                    }
+                    $('#Log_uploader').pluploadQueue().refresh();
+                }
+            }
+        });        
+    });
+
+    function refreshLogFilesTable(files) {
+        $('#LogFile_table > tbody > tr').remove();
+
+        var fileMarkup;        
+
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+
+            fileMarkup =
+                $('<tr>' +
+                    '<td>' +
+                        '<i class="glyphicon glyphicon-file">&nbsp;</i><a style="color:blue" href="@this.Url.Action("DownloadLogFile")?@(!string.IsNullOrEmpty(this.Model.LogFileGuid) ? "id=" + this.Model.LogFileGuid + "&" : string.Empty)' + 'fileName=' + file + '">' + file + '</a>' +
+                    '</td>' +
+                    '<td>' +
+                        '<a id="delete_file_button_' + i + '" class="btn btn-default btn-sm" ><span class="glyphicon glyphicon-remove"></span> </a>' +
+                    '</td>' +
+                    '</tr>');
+            
+                $('#LogFile_table > tbody').append(fileMarkup);
+            }
+
+            bindDeleteNewCaseFileBehaviorToDeleteButtons();
+        }
+
+        function bindDeleteNewCaseFileBehaviorToDeleteButtons() {
+            $('#LogFile_table a[id^="delete_file_button_"]').click(function () {
+                var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
+                var pressedDeleteFileButton = this;
+
+                $.post('@this.Url.Action("DeleteLogFile")', { id: '@this.Model.LogFileGuid', fileName: fileName }, function () {
+                    $(pressedDeleteFileButton).parents('tr:first').remove();
+                });
+            });
+        }
+
+    
+
+</script>
+
 @if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.UserInformation))
 {
     <input id="CaseId" type="hidden" value="@Model.CasePreview.Id"/>    
@@ -492,19 +596,54 @@
                             <textarea id="logNote" class="col-md-12" style="height: 100px;margin-bottom:10px;"></textarea>
                         </div>
                         <button class="btn btn-success" onclick=" SaveLogMessage() ">@Translation.Get("Send", Enums.TranslationSource.TextTranslation)</button>
+                        <span>
+                        @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString().Replace('_', '.')))
+                        {
+                    <div class="form-group row">                        
+                        <div class="col-md-5">                                                
+                            <a href="#Log_upload_files_popup" role="button" class="btn btn-default" data-toggle="modal">@Translation.Get("Attached File", Enums.TranslationSource.TextTranslation)</a>
+                            <div id="Log_upload_files_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabel" aria-hidden="true">                                                    
+                                <div class="modal-dialog">
+                                    <div class="modal-content">                                                
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                            <h5 class="modal-title">&nbsp;</h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div id="Log_uploader"></div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">@Translation.Get("Close", Enums.TranslationSource.TextTranslation)</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <table id="LogFile_table" class="table table-striped table-bordered table-hover">
+                                <tbody>
+                                    @if (this.Model.LogFilesModel == null)
+                                    {
+                                        <div id="no_uploaded_files_label">
+                                        </div>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                }            
+                            </span>
                         <hr />
                     </div>
                 </div>
-            </div>
-            <div id="Receipt_CaseLogPartial" class="onpage com-list">
+            </div>            
+            <div  id="Receipt_CaseLogPartial" class="onpage com-list">
                 <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-8">
-                @Html.Partial("_CaseLogNote", pCaseLogs)
+                    <div class="row">
+                        <div class="col-md-8">
+                            @Html.Partial("_CaseLogNote", pCaseLogs)
                         </div>
                     </div>
-                    </div>
-            </div>
+                </div>                                  
+            </div>            
         </div>
     </div>
 </div>
@@ -516,9 +655,12 @@
         if (note == "") {
             alert('Note text is empty!');
         } else {
-            $.get(SaveMessageUrl, { caseId: '@Model.CasePreview.Id', note: note }, function (_CaseLogNoteMarkup) {
+            $.get(SaveMessageUrl, { caseId: '@Model.CasePreview.Id', note: note, logFileGuid: '@Model.LogFileGuid' }, function (_CaseLogNoteMarkup) {
                 $('#Receipt_CaseLogPartial').html(_CaseLogNoteMarkup);
                 $('#logNote').val('');
+                $.get('@this.Url.Action("GetLogFiles")', { id: '@this.Model.LogFileGuid' }, function (files) {
+                    refreshLogFilesTable(files);
+                });
             });
         }
     }

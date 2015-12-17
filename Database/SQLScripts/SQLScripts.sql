@@ -123,6 +123,39 @@ ALTER TABLE [dbo].[tblInvoiceArticle_tblProductArea] CHECK CONSTRAINT [FK_tblInv
 GO
 
 
+
+if exists (select id from tblcase where CaseType_Id not in (select id from tblCaseType))
+begin
+	Begin Try
+ 	    Begin Tran        
+		Set Identity_Insert [tblCaseType] On  
+
+		insert into tblCaseType (Id, Customer_Id, CaseType, isDefault, RequireApproving, ShowOnExternalPage, Parent_CaseType_Id, RelatedField,
+																				ITILProcess, isEMailDefault, AutomaticApproveTime, Form_Id, [User_Id], [Status], Selectable, CreatedDate, ChangedDate)
+		select distinct c.CaseType_Id, c.customer_Id, 'CaseType_' + Cast(CaseType_Id as nvarchar) as ctName,
+														0,0,0,Null, '',0,0,0,Null, Null, 1,1, GETDATE(), GETDATE()  
+		from tblCase c
+		Where CaseType_Id not in (Select id from tblCaseType)
+
+		Set Identity_Insert [tblCaseType] Off
+	    Commit Tran
+	End Try
+	Begin Catch
+				RollBack Tran
+	End Catch
+end
+
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_tblCase_tblCaseType]') AND parent_object_id = OBJECT_ID(N'[dbo].[tblCase]'))
+ALTER TABLE [dbo].[tblCase]  WITH CHECK ADD  CONSTRAINT [FK_tblCase_tblCaseType] FOREIGN KEY([CaseType_Id])
+REFERENCES [dbo].[tblCaseType] ([Id])
+GO
+
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_tblCase_tblCaseType]') AND parent_object_id = OBJECT_ID(N'[dbo].[tblCase]'))
+ALTER TABLE [dbo].[tblCase] CHECK CONSTRAINT [FK_tblCase_tblCaseType]
+GO
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.19'
 
