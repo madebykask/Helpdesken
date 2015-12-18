@@ -601,7 +601,7 @@
                             {
                                 <div class="form-group row">
                                     <div class="col-md-5">
-                                        <a href="#Log_upload_files_popup" role="button" class="btn btn-default" data-toggle="modal">@Translation.Get("Attached File", Enums.TranslationSource.TextTranslation)</a>
+                                        <a href="#Log_upload_files_popup" role="button" class="btn btn-default" data-toggle="modal">@Translation.Get("Add File", Enums.TranslationSource.TextTranslation)</a>
                                         <div id="Log_upload_files_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
@@ -655,7 +655,7 @@
     function SaveLogMessage() {
         var note = $('#logNote').val();
         if (note == "") {
-            ShowToastMessage('Please enter some note in comment!', "warning", false);
+            ShowToastMessage('Comment text is empty!', "warning", false);
         } else {
             $.get(SaveMessageUrl, { caseId: '@Model.CasePreview.Id', note: note, logFileGuid: '@Model.LogFileGuid' }, function (_CaseLogNoteMarkup) {
                 $('#Receipt_CaseLogPartial').html(_CaseLogNoteMarkup);
