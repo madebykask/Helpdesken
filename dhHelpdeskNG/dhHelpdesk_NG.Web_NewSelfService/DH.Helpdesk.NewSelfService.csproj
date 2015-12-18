@@ -334,6 +334,7 @@
     <Content Include="Content\css\bootstrap.css" />
     <Content Include="Content\css\bootstrap.min.css" />
     <Content Include="Content\css\dhplus.css" />
+    <Content Include="Content\css\jquery.toastmessage.css" />
     <Content Include="Content\js\Case\edit.js" />
     <Content Include="Content\js\Shared\app.layout.js" />
     <Content Include="Content\js\typeahead.js" />
@@ -887,7 +888,6 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Case\CasePreview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">
@@ -923,9 +923,6 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Case\_CaseLogFiles.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Case\NewCase.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -941,10 +938,10 @@
     <Content Include="Views\Shared\EditorTemplates\UserModuleOverview.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Case\NewCaseReceipt.cshtml" />
+    <Content Include="Views\Case\_CaseReceipt.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Case\UserCases.cshtml" />
+    <Content Include="Views\Case\CaseOverview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Case\_CaseSearch.cshtml" />

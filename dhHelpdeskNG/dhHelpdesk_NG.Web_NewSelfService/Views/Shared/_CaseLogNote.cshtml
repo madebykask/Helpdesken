@@ -17,11 +17,16 @@
                 @Html.Raw(logItem.Text_Internal.Replace("\n", "<br />"))                                                                                       
             </p>
             <p>
-                
-                @foreach(var f in logItem.LogFiles)
-                {                     
-                    <a href="@Url.Action("DownloadLogFile", new { id = logItem.Id, fileName = f.FileName })">@f.FileName</a>  
+                @if (logItem.LogFiles != null)
+                {
+                 foreach(var f in logItem.LogFiles)
+                 {                                         
+                    <a href="@Url.Action("DownloadLogFile", new { id = logItem.Id, fileName = f.FileName })">
+                        <i class="glyphicon glyphicon-file"></i>
+                        @f.FileName
+                    </a>  
                     <br />
+                }
                 }
             </p>            
         </div>                            

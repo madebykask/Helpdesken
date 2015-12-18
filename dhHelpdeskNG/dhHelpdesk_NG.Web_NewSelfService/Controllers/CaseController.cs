@@ -95,8 +95,8 @@
             IStateSecondaryService stateSecondaryService,
             ILogFileService logFileService,
             ICaseSolutionService caseSolutionService,
-            IOrganizationService orgService,
-            OrganizationJsonService orgJsonService,
+            IOrganizationService orgService,            
+            OrganizationJsonService orgJsonService,            
             IEmailService emailService)
             : base(masterDataService, caseSolutionService)
         {
@@ -129,7 +129,7 @@
             this.workContext = workContext;
             this._orgService = orgService;
             this._orgJsonService = orgJsonService;
-            this._emailService = emailService;
+            this._emailService = emailService;            
         }
 
 
@@ -209,24 +209,24 @@
 
 
             var languageId = SessionFacade.CurrentLanguageId;
-            var caseOverview = this.GetCaseOverviewModel(currentCase, languageId);
+            var caseReceipt = this.GetCaseReceiptModel(currentCase, languageId);
 
-            caseOverview.ShowRegistringMessage = showRegistrationMessage;
-            caseOverview.ExLogFileGuid = currentCase.CaseGUID.ToString();
-            caseOverview.MailGuid = id;
+            caseReceipt.ShowRegistringMessage = showRegistrationMessage;
+            caseReceipt.ExLogFileGuid = currentCase.CaseGUID.ToString();
+            caseReceipt.MailGuid = id;
 
-            this._userTemporaryFilesStorage.DeleteFiles(caseOverview.ExLogFileGuid);
+            this._userTemporaryFilesStorage.DeleteFiles(caseReceipt.ExLogFileGuid);
             this._userTemporaryFilesStorage.DeleteFiles(id);
                         
             if(id.Is<Guid>())
             {
-                if(currentCase.StateSecondary_Id.HasValue && caseOverview.CasePreview.FinishingDate == null)
+                if(currentCase.StateSecondary_Id.HasValue && caseReceipt.CasePreview.FinishingDate == null)
                 {
                     var stateSecondary = _stateSecondaryService.GetStateSecondary(currentCase.StateSecondary_Id.Value);
                     if(stateSecondary.NoMailToNotifier == 1)
-                        caseOverview.CasePreview.FinishingDate = DateTime.UtcNow; 
+                        caseReceipt.CasePreview.FinishingDate = DateTime.UtcNow; 
                 }
-                caseOverview.CanAddExternalNote = true;
+                caseReceipt.CanAddExternalNote = true;
             }
             else
             {
@@ -236,11 +236,11 @@
                 if (registrationInfoText != null && !string.IsNullOrEmpty(registrationInfoText.Name))
                     htmlFooterData = registrationInfoText.Name;
 
-                caseOverview.CaseRegistrationMessage = htmlFooterData;
-                caseOverview.CanAddExternalNote = false;
+                caseReceipt.CaseRegistrationMessage = htmlFooterData;
+                caseReceipt.CanAddExternalNote = false;
             }
 
-            return this.View(caseOverview);
+            return this.View(caseReceipt);
         }
 
         [HttpGet]
@@ -382,7 +382,7 @@
                 return RedirectToAction("Index", "Error");                
             }
 
-            return this.View("UserCases", model);
+            return this.View("CaseOverview", model);
         }
 
         [HttpGet]
@@ -689,7 +689,7 @@
                                               pharasSearch, maxRecords, progressId,
                                               sortBy, ascending);
 
-                return this.PartialView("UserCases", model);
+                return this.PartialView("CaseOverview", model);
             }
             catch(Exception e)
             {
@@ -776,7 +776,7 @@
             return newCase.Id;
         }
 
-        private CaseOverviewModel GetCaseOverviewModel(Case currentCase, int languageId)
+        private CaseOverviewModel GetCaseReceiptModel(Case currentCase, int languageId)
         {
             var caseFieldSetting = _caseFieldSettingService.ListToShowOnCasePage(currentCase.Customer_Id, languageId)
                                                            .Where(c => c.ShowExternal == 1 ||
@@ -791,6 +791,11 @@
             var regions = _regionService.GetRegions(currentCase.Customer_Id);
             var suppliers = _supplierService.GetSuppliers(currentCase.Customer_Id);
             var systems = _systemService.GetSystems(currentCase.Customer_Id);
+            if (currentCase.CaseType != null)
+                currentCase.CaseType.Name = _caseTypeService.GetCaseTypeFullName(currentCase.CaseType_Id);
+
+            if (currentCase.ProductArea_Id.HasValue && currentCase.ProductArea != null)
+                currentCase.ProductArea.Name = string.Join(" - ",  _productAreaService.GetParentPath(currentCase.ProductArea_Id.Value, currentCase.Customer_Id));
 
             var newLogFile = new FilesModel();
 

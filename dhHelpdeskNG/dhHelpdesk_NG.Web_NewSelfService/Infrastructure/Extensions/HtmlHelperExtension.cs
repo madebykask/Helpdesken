@@ -547,11 +547,11 @@ namespace DH.Helpdesk.NewSelfService.Infrastructure.Extensions
 
             foreach (CaseType caseType in caseTypes)
             {
-                if (caseType.IsActive == 1) 
+                if (caseType.IsActive != 0) 
                 {
                     bool hasChild = false;
                     if (caseType.SubCaseTypes != null)
-                        if (caseType.SubCaseTypes.Count > 0)
+                        if (caseType.SubCaseTypes.Where(s=> s.IsActive != 0).Any())
                             hasChild = true;
 
                     if (hasChild)

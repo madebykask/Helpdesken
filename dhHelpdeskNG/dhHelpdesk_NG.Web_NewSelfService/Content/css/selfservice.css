@@ -12,7 +12,6 @@ img
 h4 {
     /*background: #f2f7fe;*/
     padding:5px;
-
     line-height: 22px;
     background: #f7f7f7;
     background-image: -webkit-gradient(linear,left 0,left 100%,from(#fff),to(#eee));
@@ -23,6 +22,8 @@ h4 {
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff',endColorstr='#ffeeeeee',GradientType=0);
     border: 1px solid #CCC;
     padding: 0 0 0 5px;
+    font-size:15px;
+    font-weight:bold;
 }
 
 h5 {

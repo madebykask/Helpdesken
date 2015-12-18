@@ -82,6 +82,23 @@ function ChangeLang(langId) {
     });
 }
 
+function ShowToastMessage(message, msgType, isSticky) {
+    var _Sticky = false;
+    if (isSticky)
+        _Sticky = true;
+    $().toastmessage('showToast', {
+        text: message,
+        sticky: _Sticky,
+        position: 'top-center',
+        type: msgType,
+        closeText: '',
+        stayTime: 4000,
+        inEffectDuration: 1000,
+        close: function () {
+            //console.log("toast is closed ...");
+        }
+    });
+}
 
 function SaveExternalMessage() {
     if (window.CaseId == null || window.CaseId == "")
@@ -89,7 +106,7 @@ function SaveExternalMessage() {
 
     var note = $('#myNote').val();
     if (note == "") {
-        alert('Note text is empty!');
+        ShowToastMessage('Please enter some note in comment!', "warning", false);
     } else {
         $.get(SaveMessageUrl, { caseId: window.CaseId, note: note }, function (_CaseLogNoteMarkup) {
             $('#CaseLogPartial').html(_CaseLogNoteMarkup);

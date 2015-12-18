@@ -5,6 +5,7 @@
 @using DH.Helpdesk.NewSelfService.Infrastructure.Common;
 @using DH.Helpdesk.Services.Infrastructure
 @using DH.Helpdesk.Common.Enums;
+@using DH.Helpdesk.BusinessData.Enums.Case;
 @using DH.Helpdesk.NewSelfService.Models.Case;
 
  @{        
@@ -77,6 +78,7 @@
 
     <link rel="stylesheet" href="@Url.Content("~/Content/css/bootstrap.css")" />
     <link rel="stylesheet" href="@Url.Content("~/Content/css/selfservice.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/jquery.toastmessage.css")" />
     <link rel="stylesheet" href="@Url.Content("~/img-profile/profile.css")" />
     <link rel="stylesheet" href="@Url.Content("~/Content/js/jquery.plupload.queue/css/jquery.plupload.queue.css")" />
 
@@ -94,6 +96,7 @@
     <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.validate.js")"></script>   
     <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.validate.unobtrusive.min.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Content/js/typeahead.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.toastmessage.js")"></script>
 
     <script type="text/javascript" src="@Url.Content("~/Content/js/Shared/sortby.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Content/js/Shared/app.layout.js")"></script>
@@ -179,11 +182,10 @@
                           </ul>
                       }
                     </div>
-                @if (!hideMenu && ConfigurationManager.AppSettings[AppSettingsKey.LoginMode].ToString().ToLower() != LoginMode.Anonymous)
-                {                    
-                    <span class="toplogout-space"> | </span> <a href="#" >  @Translation.Get("User", Enums.TranslationSource.TextTranslation): @SessionFacade.CurrentSystemUser</a>                                                       
-                }
-                
+                    @if (!hideMenu && ConfigurationManager.AppSettings[AppSettingsKey.LoginMode].ToString().ToLower() != LoginMode.Anonymous)
+                    {                    
+                        <span class="toplogout-space"> | </span> <a href="#" >  @Translation.Get("User", Enums.TranslationSource.TextTranslation): @SessionFacade.CurrentSystemUser</a>                                                       
+                    }                
             </div>
         </div>
     </div>
@@ -326,7 +328,7 @@
                             if (ongoingService.Visibled)
                             {
                             <li class="blue">
-                                <a href="@Url.Action("UserCases", "case", new { customerId = pCustomerId, progressId = "2", area = "" })">
+                                <a href="@Url.Action("UserCases", "case", new { customerId = pCustomerId, progressId = CaseProgressFilter.CasesInProgress, area = "" })">
                                     <div class="@(string.IsNullOrEmpty(ongoingService.ObjectClass) ? "ico-ongoing" : ongoingService.ObjectClass)"></div>
                                     @Translation.Get(ongoingService.ObjectValue, Enums.TranslationSource.TextTranslation)
                                 </a>
@@ -336,7 +338,7 @@
                         else
                         {
                             <li class="blue">
-                                <a href="@Url.Action("UserCases", "case", new { customerId = pCustomerId, progressId = "2", area = "" })">
+                                <a href="@Url.Action("UserCases", "case", new { customerId = pCustomerId, progressId = CaseProgressFilter.CasesInProgress, area = "" })">
                                     <div class="ico-ongoing"></div>
                                     @if (appType == ApplicationTypes.LineManager)
                                     {
@@ -359,7 +361,7 @@
                             if (finishedService.Visibled)
                             {
                             <li class="blue">
-                                <a href="@Url.Action("UserCases", "case", new { customerId = pCustomerId, progressId = "1", area = "" })">
+                                <a href="@Url.Action("UserCases", "case", new { customerId = pCustomerId, progressId = CaseProgressFilter.ClosedCases, area = "" })">
                                     <div class="@(string.IsNullOrEmpty(finishedService.ObjectClass) ? "ico-finished" : finishedService.ObjectClass)"></div>
                                     @Translation.Get(finishedService.ObjectValue, Enums.TranslationSource.TextTranslation)
                                 </a>
@@ -369,7 +371,7 @@
                         else
                         {
                             <li class="blue">
-                                <a href="@Url.Action("UserCases", "case", new { customerId = pCustomerId, progressId = "1", area = "" })">
+                                <a href="@Url.Action("UserCases", "case", new { customerId = pCustomerId, progressId = CaseProgressFilter.ClosedCases, area = "" })">
                                     <div class="ico-finished"></div>
                                     @if (appType == ApplicationTypes.LineManager)
                                     {
@@ -378,8 +380,7 @@
                                     else
                                     {
                                       @Translation.Get("Closed cases", Enums.TranslationSource.TextTranslation)
-                                    }
-                                    
+                                    }                                    
                                 </a>
                             </li>
                         }

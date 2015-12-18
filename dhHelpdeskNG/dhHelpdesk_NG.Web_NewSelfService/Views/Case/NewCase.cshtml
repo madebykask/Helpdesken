@@ -678,10 +678,9 @@
                                                     <span class="mandatorystar">*</span>
                                                 }
                                             </label>
-                                            <div class="col-md-9">                                                
-                                                @Translation.Get("Initiator is available during the following times", Enums.TranslationSource.TextTranslation)
-                                                <br />
-                                                &nbsp;@Html.TextBoxFor(m => Model.NewCase.Available)
+                                            <div class="col-md-9">                                                                                                
+                                                @Html.TextBoxFor(m => Model.NewCase.Available)
+                                                @*@Translation.Get("Initiator is available during the following times", Enums.TranslationSource.TextTranslation)*@                                                                                                                 
                                             </div>
                                         </div>
                                     }
@@ -725,7 +724,7 @@
                                             <label class="col-md-3">                                                
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.Filename.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID):                                                
                                             </label>
-                                            <div class="col-md-5">                                                
+                                            <div class="col-md-4">                                                
                                                 <a href="#NewCase_upload_files_popup" role="button" class="btn btn-default" data-toggle="modal">@Translation.Get("Add", Enums.TranslationSource.TextTranslation)</a>
                                                 <div id="NewCase_upload_files_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabel" aria-hidden="true">                                                    
                                                     <div class="modal-dialog">
@@ -743,7 +742,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <table id="NewCasefiles_table" class="table table-striped table-bordered table-hover">
+                                                <table id="NewCasefiles_table" class="table table-striped">
                                                     <tbody>
                                                         @if (this.Model.NewCase.CaseFiles == null)
                                                         {
