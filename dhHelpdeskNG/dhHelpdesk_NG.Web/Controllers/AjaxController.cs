@@ -85,6 +85,10 @@ namespace DH.Helpdesk.Web.Controllers
             var list = new HierarchyList();
             var all = this.causingPartService.GetActiveCausingParts(customerId);
             this.FillHierarchyList(null, list, all);
+
+            if (list.Groups == null)            
+                list = HierarchyList.GetEmpty();            
+
             return this.Json(list, JsonRequestBehavior.AllowGet);
         }
 
