@@ -1,6 +1,8 @@
 ﻿namespace DH.Helpdesk.NewSelfService
 {
+    using DH.Helpdesk.NewSelfService;
     using System.Web.Mvc;
+    using System.Web.Optimization;
     using System.Web.Routing;
 
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
@@ -37,6 +39,8 @@
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
+
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
     }
 }

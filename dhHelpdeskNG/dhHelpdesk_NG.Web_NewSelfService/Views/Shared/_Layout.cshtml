@@ -7,6 +7,8 @@
 @using DH.Helpdesk.Common.Enums;
 @using DH.Helpdesk.BusinessData.Enums.Case;
 @using DH.Helpdesk.NewSelfService.Models.Case;
+@using System.Web.Optimization
+
 
  @{        
         int pCustomerId = -1;
@@ -75,32 +77,20 @@
             @Translation.Get("DH-Self Service", Enums.TranslationSource.TextTranslation)
         }
     </title>            
+    
+    
+    @Styles.Render("~/Content/bundles/css")
+    @Styles.Render("~/content/css/selfservice")
+    @Styles.Render("~/img-profile/profile")
+    @Styles.Render("~/Content/css/popup")
+    
+    @Scripts.Render("~/content/js/jquery")
+    @Scripts.Render("~/content/js/bootstrap")
+    @Scripts.Render("~/bundles/common")
 
-    <link rel="stylesheet" href="@Url.Content("~/Content/css/bootstrap.css")" />
-    <link rel="stylesheet" href="@Url.Content("~/Content/css/selfservice.css")" />
-    <link rel="stylesheet" href="@Url.Content("~/Content/css/jquery.toastmessage.css")" />
-    <link rel="stylesheet" href="@Url.Content("~/img-profile/profile.css")" />
-    <link rel="stylesheet" href="@Url.Content("~/Content/js/jquery.plupload.queue/css/jquery.plupload.queue.css")" />
+     @Scripts.Render("~/Content/js/Shared/_layout")
 
     
-    <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Content/js/jquery-1.11.0.min.js")"></script>    
-    <script type="text/javascript" src="@Url.Content("~/Content/js/jquery-ui-1.9.2.min.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Content/js/bootstrap.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Content/js/bootstrap-multiselect.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Content/js/bootstrap-datepicker.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Content/js/plupload.full.min.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.plupload.queue/jquery.plupload.queue.min.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Content/js/MicrosoftAjax.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Content/js/MicrosoftMvcAjax.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.validate.js")"></script>   
-    <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.validate.unobtrusive.min.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Content/js/typeahead.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.toastmessage.js")"></script>
-
-    <script type="text/javascript" src="@Url.Content("~/Content/js/Shared/sortby.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Content/js/Shared/app.layout.js")"></script>
-            
     <!--[if lt IE 9]>
 	 <script src="@Url.Content("~/Content/js/html5shiv.js")"></script>
       <script src="@Url.Content("~/Content/js/respond.min.js")"></script>
