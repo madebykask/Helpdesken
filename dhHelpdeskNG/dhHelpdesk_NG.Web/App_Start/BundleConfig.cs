@@ -117,8 +117,10 @@
             bundles.Add(new ScriptBundle("~/bundles/modules").Include(
                             "~/Content/js/Users/modules.js"));
 
-            //bundles.Add(new ScriptBundle("~/bundles/invoices").Include(
-            //                "~/Content/js/Invoice/invoice.js"));
+            bundles.Add(new ScriptBundle("~/bundles/invoices").Include(                                                      
+                            "~/Content/js/bootstrap-multiselect.js",
+                            "~/Content/js/chosen.jquery.min.js",           
+                            "~/Content/js/Invoice/invoice.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/cases/index").Include(
                 "~/Scripts/jquery.cookie.js",

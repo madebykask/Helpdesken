@@ -9,6 +9,7 @@
     using DH.Helpdesk.Dal.Repositories.Invoice;
     using DH.Helpdesk.Domain.Invoice;
     using System;
+    using DH.Helpdesk.BusinessData.Models.Shared;
 
     public sealed class InvoiceArticleService : IInvoiceArticleService
     {
@@ -181,32 +182,36 @@
             this.SaveCaseInvoices(Invoices, caseId);
         }
 
-        public bool ValidateInvoiceSettings(int customerId)
+        public DataValidationResult ValidateInvoiceSettings(int customerId)
         {
             var caseInvoiceSettings = this.caseInvoiceSettingsService.GetSettings(customerId);
 
             if (string.IsNullOrEmpty(caseInvoiceSettings.ExportPath))
             {
-                return false;
-            }
-            if (string.IsNullOrEmpty(caseInvoiceSettings.Currency))
-            {
-                return false;
-            }
-            if (string.IsNullOrEmpty(caseInvoiceSettings.OrderNoPrefix))
-            {
-                return false;
-            }
-            if (string.IsNullOrEmpty(caseInvoiceSettings.Issuer))
-            {
-                return false;
-            }
-            if (string.IsNullOrEmpty(caseInvoiceSettings.OurReference))
-            {
-                return false;
+                return new DataValidationResult(false, "Export Path");
             }
 
-            return true;
+            if (string.IsNullOrEmpty(caseInvoiceSettings.Currency))
+            {
+                return new DataValidationResult(false, "Currency");
+            }
+
+            if (string.IsNullOrEmpty(caseInvoiceSettings.OrderNoPrefix))
+            {
+                return new DataValidationResult(false, "OrderNoPrefix");
+            }
+
+            if (string.IsNullOrEmpty(caseInvoiceSettings.Issuer))
+            {
+                return new DataValidationResult(false, "Issuer");
+            }
+
+            if (string.IsNullOrEmpty(caseInvoiceSettings.OurReference))
+            {
+                return new DataValidationResult(false, "OurReference");
+            }
+
+            return new DataValidationResult();
         }
 
         private void DoInvoiceXMLWork(CaseInvoiceOrder order, int customerId, int userId, int caseId)

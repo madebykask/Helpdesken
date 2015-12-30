@@ -4,6 +4,7 @@
 
     using DH.Helpdesk.BusinessData.Models.Invoice;
     using System;
+    using DH.Helpdesk.BusinessData.Models.Shared;    
 
     public interface IInvoiceArticleService
     {
@@ -17,7 +18,7 @@
 
         CaseInvoice[] GetCaseInvoicesWithTimeZone(int caseId, TimeZoneInfo userTimeZone);
 
-        bool ValidateInvoiceSettings(int customerId);
+        DataValidationResult ValidateInvoiceSettings(int customerId);
 
         void SaveCaseInvoices(IEnumerable<CaseInvoice> invoices, int caseId);
 

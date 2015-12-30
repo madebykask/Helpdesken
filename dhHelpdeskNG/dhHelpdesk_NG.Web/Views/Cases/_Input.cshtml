@@ -70,8 +70,8 @@
     };  
 
 </script>
-<script src="../../Content/js/Invoice/invoice.js"></script>
-@*@Scripts.Render("~/bundles/invoices", "~/bundles/cases/_input")*@
+@*<script src="../../Content/js/Invoice/invoice.js"></script>*@
+@Scripts.Render("~/bundles/invoices")
 @Scripts.Render("~/bundles/cases/_input")
 @{  
     var pDepartmentVisible = false;
@@ -244,7 +244,7 @@
                                                         <a href="#" data-field="relatedCases" style="display: none;" title="@Translation.Get("Relaterade ärenden")" class="btn"><i class="icon-list"></i></a>                                                        
                                                     }
                                                 </td>
-                                            </tr>
+                                            </tr>                                            
                                             <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Persons_Name, CaseSolutionFields.PersonsName)">
                                                 <td>
                                                     @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Persons_Name, "Anmälare")
@@ -264,7 +264,7 @@
                                             </tr>
                                             <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Persons_EMail, CaseSolutionFields.Email)">
                                                 <td class="span3">
-                                                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Persons_EMail, "E-post")
+                                                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Persons_EMail, "E-post")                                                                            
                                                 </td>
                                                 <td class="span4">
                                                      @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Persons_EMail, CaseSolutionFields.Email))

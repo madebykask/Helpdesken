@@ -70,7 +70,7 @@
         [HttpGet]
         public JsonResult InvoiceSettingsValid(int customerId)
         {
-            bool SettingsValid = this.invoiceArticleService.ValidateInvoiceSettings(customerId);
+            var SettingsValid = this.invoiceArticleService.ValidateInvoiceSettings(customerId);
             return this.Json(SettingsValid, JsonRequestBehavior.AllowGet);
         }
 

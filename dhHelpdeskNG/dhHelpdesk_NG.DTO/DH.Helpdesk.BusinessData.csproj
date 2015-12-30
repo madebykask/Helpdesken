@@ -432,6 +432,7 @@
     <Compile Include="Models\Reports\Options\RegistratedCasesDayOptions.cs" />
     <Compile Include="Models\Reports\Options\ReportGeneratorOptions.cs" />
     <Compile Include="Models\Reports\Print\CaseTypeArticleNoPrintData.cs" />
+    <Compile Include="Models\Shared\DataValidationResult.cs" />
     <Compile Include="Models\Shared\CustomSelectList.cs" />
     <Compile Include="Models\Shared\DateToDate.cs" />
     <Compile Include="Models\ReportService\ReportSelectedFilter.cs" />

@@ -108,21 +108,74 @@ begin
 end
 GO
 
-ALTER TABLE [dbo].[tblInvoiceArticle_tblProductArea]  WITH CHECK ADD  CONSTRAINT [FK_tblInvoiceArticle_tblProductArea_tblInvoiceArticle] FOREIGN KEY([InvoiceArticle_Id])
-REFERENCES [dbo].[tblInvoiceArticle] ([Id])
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_tblInvoiceArticle_tblProductArea_tblInvoiceArticle]') AND parent_object_id = OBJECT_ID(N'[dbo].[tblInvoiceArticle_tblProductArea]'))
+begin
+	ALTER TABLE [dbo].[tblInvoiceArticle_tblProductArea]  WITH CHECK ADD  CONSTRAINT [FK_tblInvoiceArticle_tblProductArea_tblInvoiceArticle] FOREIGN KEY([InvoiceArticle_Id])
+	REFERENCES [dbo].[tblInvoiceArticle] ([Id])
+end
 GO
 
 ALTER TABLE [dbo].[tblInvoiceArticle_tblProductArea] CHECK CONSTRAINT [FK_tblInvoiceArticle_tblProductArea_tblInvoiceArticle]
 GO
 
-ALTER TABLE [dbo].[tblInvoiceArticle_tblProductArea]  WITH CHECK ADD  CONSTRAINT [FK_tblInvoiceArticle_tblProductArea_tblProductArea] FOREIGN KEY([ProductArea_Id])
-REFERENCES [dbo].[tblProductArea] ([Id])
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_tblInvoiceArticle_tblProductArea_tblProductArea]') AND parent_object_id = OBJECT_ID(N'[dbo].[tblInvoiceArticle_tblProductArea]'))
+begin
+	ALTER TABLE [dbo].[tblInvoiceArticle_tblProductArea]  WITH CHECK ADD  CONSTRAINT [FK_tblInvoiceArticle_tblProductArea_tblProductArea] FOREIGN KEY([ProductArea_Id])
+	REFERENCES [dbo].[tblProductArea] ([Id])
+end
 GO
 
 ALTER TABLE [dbo].[tblInvoiceArticle_tblProductArea] CHECK CONSTRAINT [FK_tblInvoiceArticle_tblProductArea_tblProductArea]
 GO
 
+if not exists(select * from sysobjects WHERE Name = N'tblCaseInvoiceSettings')
+begin
+	CREATE TABLE [dbo].[tblCaseInvoiceSettings](
+		[Id] [int] IDENTITY(1,1) NOT NULL,
+		[CustomerId] [int] NOT NULL,
+		[ExportPath] [nvarchar](200) NULL,
+		[Currency] [nvarchar](50) NULL,
+		[OrderNoPrefix] [nvarchar](50) NULL,
+		[Issuer] [nvarchar](50) NULL,
+		[OurReference] [nvarchar](50) NULL,
+	 CONSTRAINT [PK_tblCaseInvoiceSettings] PRIMARY KEY CLUSTERED 
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 90) ON [PRIMARY]
+	) ON [PRIMARY]
+	
+	ALTER TABLE [dbo].[tblCaseInvoiceSettings]  WITH CHECK ADD  CONSTRAINT [FK_tblCaseInvoiceSettings_tblCustomer] FOREIGN KEY([CustomerId])
+	REFERENCES [dbo].[tblCustomer] ([Id])
+	
 
+	ALTER TABLE [dbo].[tblCaseInvoiceSettings] CHECK CONSTRAINT [FK_tblCaseInvoiceSettings_tblCustomer]
+
+end
+go	
+
+ IF COL_LENGTH('tblCaseInvoiceSettings','Currency') IS NULL
+ BEGIN
+	alter table tblCaseInvoiceSettings
+	add Currency nvarchar(50) null
+ END
+
+ IF COL_LENGTH('tblCaseInvoiceSettings','OrderNoPrefix') IS NULL
+ BEGIN
+	alter table tblCaseInvoiceSettings
+	add OrderNoPrefix nvarchar(50) null
+ END
+
+ IF COL_LENGTH('tblCaseInvoiceSettings','Issuer') IS NULL
+ BEGIN
+	alter table tblCaseInvoiceSettings
+	add Issuer nvarchar(50) null
+ END
+
+ IF COL_LENGTH('tblCaseInvoiceSettings','OurReference') IS NULL
+ BEGIN
+	alter table tblCaseInvoiceSettings
+	add OurReference nvarchar(50) null
+ END
 
 if exists (select id from tblcase where CaseType_Id not in (select id from tblCaseType))
 begin
@@ -145,7 +198,6 @@ begin
 	End Catch
 end
 
-
 IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_tblCase_tblCaseType]') AND parent_object_id = OBJECT_ID(N'[dbo].[tblCase]'))
 ALTER TABLE [dbo].[tblCase]  WITH CHECK ADD  CONSTRAINT [FK_tblCase_tblCaseType] FOREIGN KEY([CaseType_Id])
 REFERENCES [dbo].[tblCaseType] ([Id])
@@ -154,6 +206,8 @@ GO
 IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_tblCase_tblCaseType]') AND parent_object_id = OBJECT_ID(N'[dbo].[tblCase]'))
 ALTER TABLE [dbo].[tblCase] CHECK CONSTRAINT [FK_tblCase_tblCaseType]
 GO
+
+
 
 
 -- Last Line to update database version

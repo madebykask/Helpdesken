@@ -14,17 +14,21 @@
                     <tr>
                         <th>{{:SelectItemHeader}}</th>
                         <th>{{:UnitsHeader}}</th>
+                        <th>{{:UnitsPriceHeader}}</th>
                         <th></th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
+                <tbody> 
+                    <tr>                                                                                       
                         <td class="articles-select-container">
-                            <select class='multiselect articles-params-article'>
+                            <select class='chosen-select articles-params-article'>
                             </select>
                         </td>
                         <td>
                             <input type='text' class='articles-params-units input-small-important' value='{{:DefaultAmount}}' />
+                        </td>
+                        <td>
+                            <input type='text' class='articles-params-units-price input-small-important' value='{{:DefaultPrice}}' />
                         </td>
                         <td>
                             <input type='button' class='articles-params-add btn' value='{{:AddButtonLabel}}' />
