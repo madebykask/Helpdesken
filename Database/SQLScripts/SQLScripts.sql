@@ -207,7 +207,125 @@ IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[
 ALTER TABLE [dbo].[tblCase] CHECK CONSTRAINT [FK_tblCase_tblCaseType]
 GO
 
+-- IsAbout in Administration
+insert into tblCasefieldsettings 
+(Customer_Id, CaseField, Show, [Required], ShowExternal, FieldSize, RelatedField, DefaultValue, ListEdit, EMailIdentifier, CreatedDate, ChangedDate, Locked)
+Select Id, 'IsAbout_ReportedBy', 0, 0,0,0, '',NULL, 0, NULL, Getdate(), GetDate(), 0 from tblCustomer c
+where not exists (select * from tblCasefieldsettings where  Customer_Id = c.Id and CaseField = 'IsAbout_ReportedBy')
 
+insert into tblCasefieldsettings 
+(Customer_Id, CaseField, Show, [Required], ShowExternal, FieldSize, RelatedField, DefaultValue, ListEdit, EMailIdentifier, CreatedDate, ChangedDate, Locked)
+Select Id, 'IsAbout_Persons_Name', 0, 0,0,0, '',NULL, 0, NULL, Getdate(), GetDate(), 0 from tblCustomer c
+where not exists (select * from tblCasefieldsettings where  Customer_Id = c.Id and CaseField = 'IsAbout_Persons_Name')
+
+insert into tblCasefieldsettings 
+(Customer_Id, CaseField, Show, [Required], ShowExternal, FieldSize, RelatedField, DefaultValue, ListEdit, EMailIdentifier, CreatedDate, ChangedDate, Locked)
+Select Id, 'IsAbout_Persons_EMail', 0, 0,0,0, '',NULL, 0, NULL, Getdate(), GetDate(), 0 from tblCustomer c
+where not exists (select * from tblCasefieldsettings where  Customer_Id = c.Id and CaseField = 'IsAbout_Persons_EMail')
+
+insert into tblCasefieldsettings 
+(Customer_Id, CaseField, Show, [Required], ShowExternal, FieldSize, RelatedField, DefaultValue, ListEdit, EMailIdentifier, CreatedDate, ChangedDate, Locked)
+Select Id, 'IsAbout_Persons_Phone', 0, 0,0,0, '',NULL, 0, NULL, Getdate(), GetDate(), 0 from tblCustomer c
+where not exists (select * from tblCasefieldsettings where  Customer_Id = c.Id and CaseField = 'IsAbout_Persons_Phone')
+
+insert into tblCasefieldsettings 
+(Customer_Id, CaseField, Show, [Required], ShowExternal, FieldSize, RelatedField, DefaultValue, ListEdit, EMailIdentifier, CreatedDate, ChangedDate, Locked)
+Select Id, 'IsAbout_Persons_CellPhone', 0, 0,0,0, '',NULL, 0, NULL, Getdate(), GetDate(), 0 from tblCustomer c
+where not exists (select * from tblCasefieldsettings where  Customer_Id = c.Id and CaseField = 'IsAbout_Persons_CellPhone')
+
+insert into tblCasefieldsettings 
+(Customer_Id, CaseField, Show, [Required], ShowExternal, FieldSize, RelatedField, DefaultValue, ListEdit, EMailIdentifier, CreatedDate, ChangedDate, Locked)
+Select Id, 'IsAbout_Region_Id', 0, 0,0,0, '',NULL, 0, NULL, Getdate(), GetDate(), 0 from tblCustomer c
+where not exists (select * from tblCasefieldsettings where  Customer_Id = c.Id and CaseField = 'IsAbout_Region_Id')
+
+insert into tblCasefieldsettings 
+(Customer_Id, CaseField, Show, [Required], ShowExternal, FieldSize, RelatedField, DefaultValue, ListEdit, EMailIdentifier, CreatedDate, ChangedDate, Locked)
+Select Id, 'IsAbout_Department_Id', 0, 0,0,0, '',NULL, 0, NULL, Getdate(), GetDate(), 0 from tblCustomer c
+where not exists (select * from tblCasefieldsettings where  Customer_Id = c.Id and CaseField = 'IsAbout_Department_Id')
+
+insert into tblCasefieldsettings 
+(Customer_Id, CaseField, Show, [Required], ShowExternal, FieldSize, RelatedField, DefaultValue, ListEdit, EMailIdentifier, CreatedDate, ChangedDate, Locked)
+Select Id, 'IsAbout_OU_Id', 0, 0,0,0, '',NULL, 0, NULL, Getdate(), GetDate(), 0 from tblCustomer c
+where not exists (select * from tblCasefieldsettings where  Customer_Id = c.Id and CaseField = 'IsAbout_OU_Id')
+
+
+insert into tblCasefieldsettings 
+(Customer_Id, CaseField, Show, [Required], ShowExternal, FieldSize, RelatedField, DefaultValue, ListEdit, EMailIdentifier, CreatedDate, ChangedDate, Locked)
+Select Id, 'IsAbout_CostCentre', 0, 0,0,0, '',NULL, 0, NULL, Getdate(), GetDate(), 0 from tblCustomer c
+where not exists (select * from tblCasefieldsettings where  Customer_Id = c.Id and CaseField = 'IsAbout_CostCentre')
+
+insert into tblCasefieldsettings 
+(Customer_Id, CaseField, Show, [Required], ShowExternal, FieldSize, RelatedField, DefaultValue, ListEdit, EMailIdentifier, CreatedDate, ChangedDate, Locked)
+Select Id, 'IsAbout_Place', 0, 0,0,0, '',NULL, 0, NULL, Getdate(), GetDate(), 0 from tblCustomer c
+where not exists (select * from tblCasefieldsettings where  Customer_Id = c.Id and CaseField = 'IsAbout_Place')
+
+insert into tblCasefieldsettings 
+(Customer_Id, CaseField, Show, [Required], ShowExternal, FieldSize, RelatedField, DefaultValue, ListEdit, EMailIdentifier, CreatedDate, ChangedDate, Locked)
+Select Id, 'IsAbout_UserCode', 0, 0,0,0, '',NULL, 0, NULL, Getdate(), GetDate(), 0 from tblCustomer c
+where not exists (select * from tblCasefieldsettings where  Customer_Id = c.Id and CaseField = 'IsAbout_UserCode')
+
+
+
+-- IsAbout
+if not exists(select * from sysobjects WHERE Name = N'tblCaseIsAbout')
+BEGIN
+CREATE TABLE [dbo].[tblCaseIsAbout](
+            [Id] [int] IDENTITY(1,1) NOT NULL,
+            [Case_Id] [int] NOT NULL,
+            [ReportedBy] [nvarchar](40) NULL,
+            [Person_Name] [nvarchar](50) NULL,
+            [Person_Email] [nvarchar](100) NULL,
+            [Person_Phone] [nvarchar](40) NULL,
+            [Person_CellPhone] [nvarchar](30) NULL,
+            [Region_Id] [int] NULL,
+            [Department_Id] [int] NULL,
+            [OU_Id] [int] NULL,
+            [CostCentre] [nvarchar](50) NULL,
+            [Place] [nvarchar](100) NULL,
+            [UserCode] [nvarchar](20) NULL,
+CONSTRAINT [PK_tblCaseIsAbout] PRIMARY KEY CLUSTERED 
+(
+            [Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 90) ON [PRIMARY]
+) ON [PRIMARY]
+END
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_tblCaseIsAbout_tblCase]') AND parent_object_id = OBJECT_ID(N'[dbo].[tblCaseIsAbout]'))
+ALTER TABLE [dbo].[tblCaseIsAbout]  WITH CHECK ADD  CONSTRAINT [FK_tblCaseIsAbout_tblCase] FOREIGN KEY([Case_Id])
+REFERENCES [dbo].[tblCase] ([Id])
+GO
+
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_tblCaseIsAbout_tblCase]') AND parent_object_id = OBJECT_ID(N'[dbo].[tblCaseIsAbout]'))
+ALTER TABLE [dbo].[tblCaseIsAbout] CHECK CONSTRAINT [FK_tblCaseIsAbout_tblCase]
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_tblCaseIsAbout_tblDepartment]') AND parent_object_id = OBJECT_ID(N'[dbo].[tblCaseIsAbout]'))
+ALTER TABLE [dbo].[tblCaseIsAbout]  WITH CHECK ADD  CONSTRAINT [FK_tblCaseIsAbout_tblDepartment] FOREIGN KEY([Department_Id])
+REFERENCES [dbo].[tblDepartment] ([Id])
+GO
+
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_tblCaseIsAbout_tblDepartment]') AND parent_object_id = OBJECT_ID(N'[dbo].[tblCaseIsAbout]'))
+ALTER TABLE [dbo].[tblCaseIsAbout] CHECK CONSTRAINT [FK_tblCaseIsAbout_tblDepartment]
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_tblCaseIsAbout_tblOU]') AND parent_object_id = OBJECT_ID(N'[dbo].[tblCaseIsAbout]'))
+ALTER TABLE [dbo].[tblCaseIsAbout]  WITH CHECK ADD  CONSTRAINT [FK_tblCaseIsAbout_tblOU] FOREIGN KEY([OU_Id])
+REFERENCES [dbo].[tblOU] ([Id])
+GO
+
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_tblCaseIsAbout_tblOU]') AND parent_object_id = OBJECT_ID(N'[dbo].[tblCaseIsAbout]'))
+ALTER TABLE [dbo].[tblCaseIsAbout] CHECK CONSTRAINT [FK_tblCaseIsAbout_tblOU]
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_tblCaseIsAbout_tblRegion]') AND parent_object_id = OBJECT_ID(N'[dbo].[tblCaseIsAbout]'))
+ALTER TABLE [dbo].[tblCaseIsAbout]  WITH CHECK ADD  CONSTRAINT [FK_tblCaseIsAbout_tblRegion] FOREIGN KEY([Region_Id])
+REFERENCES [dbo].[tblRegion] ([Id])
+GO
+
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_tblCaseIsAbout_tblRegion]') AND parent_object_id = OBJECT_ID(N'[dbo].[tblCaseIsAbout]'))
+ALTER TABLE [dbo].[tblCaseIsAbout] CHECK CONSTRAINT [FK_tblCaseIsAbout_tblRegion]
+GO
 
 
 -- Last Line to update database version
