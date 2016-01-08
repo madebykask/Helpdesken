@@ -2417,6 +2417,11 @@ namespace DH.Helpdesk.Web.Controllers
                 case_.RegLanguage_Id = SessionFacade.CurrentLanguageId;
             }
 
+
+            if (case_.IsAbout != null)
+                case_.IsAbout.Id = case_.Id;
+
+
             // Positive: Send Mail to...
             if (caseMailSetting.DontSendMailToNotifier == false)
                 caseMailSetting.DontSendMailToNotifier = true;

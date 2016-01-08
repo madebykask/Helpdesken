@@ -82,6 +82,7 @@
         /// Exteded case source
         /// </summary>
         public virtual RegistrationSourceCustomer RegistrationSourceCustomer { get; set; }
+        public virtual CaseIsAboutEntity IsAbout { get; set; }
 
         public int RelatedCaseNumber { get; set; }
         public int? Problem_Id { get; set; }

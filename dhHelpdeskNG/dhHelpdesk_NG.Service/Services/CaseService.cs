@@ -165,6 +165,9 @@ namespace DH.Helpdesk.Services.Services
         private readonly CaseStatisticService _caseStatService;
         private readonly ICaseFilterFavoriteRepository _caseFilterFavoriteRepository;
 
+        private readonly ICaseIsAboutRepository _caseIsAboutRepository;
+
+
         public CaseService(
             ICaseRepository caseRepository,
             ICaseFileRepository caseFileRepository,
@@ -193,7 +196,8 @@ namespace DH.Helpdesk.Services.Services
             IFinishingCauseService finishingCauseService,
             ICaseLockService caseLockService, 
             CaseStatisticService caseStatService,
-            ICaseFilterFavoriteRepository caseFilterFavoriteRepository)
+            ICaseFilterFavoriteRepository caseFilterFavoriteRepository,
+            ICaseIsAboutRepository caseIsAboutRepository)
         {
             this._unitOfWork = unitOfWork;
             this._caseRepository = caseRepository;
@@ -224,6 +228,7 @@ namespace DH.Helpdesk.Services.Services
             this._caseLockService = caseLockService;
             this._caseStatService = caseStatService;
             this._caseFilterFavoriteRepository = caseFilterFavoriteRepository;
+            this._caseIsAboutRepository = caseIsAboutRepository;
         }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
@@ -957,6 +962,14 @@ namespace DH.Helpdesk.Services.Services
             this._caseRepository.Commit();
             this._caseStatService.UpdateCaseStatistic(c);
             
+            // save CaseIsAbout
+            //if (c.IsAbout != null)
+            //{
+            //    //this._caseIsAboutRepository
+            //    this._caseIsAboutRepository.SaveCaseIsAbout(c, out errors);
+            //    this._caseIsAboutRepository.Commit();
+            //}
+
             // save casehistory
             var extraFields = new ExtraFieldCaseHistory();
             if (caseLog != null && caseLog.FinishingType != null)
@@ -1030,6 +1043,8 @@ namespace DH.Helpdesk.Services.Services
 
             return h.Id;
         }
+
+        
 
         public IList<CaseHistory> GetCaseHistoryByCaseId(int caseId)
         {
@@ -1710,6 +1725,8 @@ namespace DH.Helpdesk.Services.Services
             
             return h;
         }
+
+        
 
         private List<Field> GetCaseFieldsForEmail(Case c, CaseLog l, CaseMailSetting cms, string emailLogGuid,int stateHelper)
         {

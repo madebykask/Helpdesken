@@ -269,8 +269,7 @@ where not exists (select * from tblCasefieldsettings where  Customer_Id = c.Id a
 -- IsAbout
 if not exists(select * from sysobjects WHERE Name = N'tblCaseIsAbout')
 BEGIN
-CREATE TABLE [dbo].[tblCaseIsAbout](
-            [Id] [int] IDENTITY(1,1) NOT NULL,
+CREATE TABLE [dbo].[tblCaseIsAbout](            
             [Case_Id] [int] NOT NULL,
             [ReportedBy] [nvarchar](40) NULL,
             [Person_Name] [nvarchar](50) NULL,
@@ -285,7 +284,7 @@ CREATE TABLE [dbo].[tblCaseIsAbout](
             [UserCode] [nvarchar](20) NULL,
 CONSTRAINT [PK_tblCaseIsAbout] PRIMARY KEY CLUSTERED 
 (
-            [Id] ASC
+            [Case_Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 90) ON [PRIMARY]
 ) ON [PRIMARY]
 END

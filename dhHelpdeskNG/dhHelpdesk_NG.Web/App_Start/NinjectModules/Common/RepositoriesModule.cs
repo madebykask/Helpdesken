@@ -110,6 +110,7 @@
             this.Bind<ICaseFieldSettingRepository>().To<CaseFieldSettingRepository>();
             this.Bind<ICaseFileRepository>().To<CaseFileRepository>();
             this.Bind<ICaseHistoryRepository>().To<CaseHistoryRepository>();
+            this.Bind<ICaseIsAboutRepository>().To<CaseIsAboutRepository>();
             this.Bind<ICaseInvoiceRowRepository>().To<CaseInvoiceRowRepository>();
             this.Bind<ICaseQuestionCategoryRepository>().To<CaseQuestionCategoryRepository>();
             this.Bind<ICaseQuestionHeaderRepository>().To<CaseQuestionHeaderRepository>();

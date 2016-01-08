@@ -88,6 +88,7 @@
     <Compile Include="EntityConfigurations\Cases\CausingPartConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CaseLockConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CaseFilterFavoriteConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Cases\CaseIsAboutConfiguration.cs" />
     <Compile Include="EntityConfigurations\Changes\ChangeCouncilConfiguration.cs" />
     <Compile Include="EntityConfigurations\CheckLists\CheckListsConfiguration.cs" />
     <Compile Include="EntityConfigurations\FileViewLogConfiguration.cs" />
@@ -356,6 +357,7 @@
     <Compile Include="Repositories\Cases\Concrete\CaseLockRepository.cs" />
     <Compile Include="Repositories\Cases\Concrete\CausingPartRepository.cs" />
     <Compile Include="Repositories\Cases\Concrete\CaseFilterFavoriteRepository.cs" />
+    <Compile Include="Repositories\Cases\ICaseIsAboutRepository.cs" />
     <Compile Include="Repositories\Cases\ICaseFilterFavoriteRepository.cs" />
     <Compile Include="Repositories\Cases\ICaseLockRepository.cs" />
     <Compile Include="Repositories\Cases\ICaseSolutionSettingRepository.cs" />
@@ -414,6 +416,7 @@
     <Compile Include="Repositories\Changes\IChangeGroupRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeLogRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeFileRepository.cs" />
+    <Compile Include="Repositories\Cases\Concrete\CaseIsAboutRepository.cs" />
     <Compile Include="Repositories\DataLog\DataLogRepository.cs" />
     <Compile Include="Repositories\EmailLogRepository.cs" />
     <Compile Include="Repositories\FileIndexing\FileIndexingRepository.cs" />
