@@ -1,4 +1,4 @@
-﻿<div title="{{:getTitle()}}">
+﻿<div title="{{:getTitle()}}" class="selectFileDialog">
     <table class='width100 table table-striped table-hover'>
         <tbody>
             {{for getFiles()}}
@@ -8,7 +8,7 @@
                 </td>
                 <td>
                     <a href="/invoice/casefile/?id={{>#parent.parent.data.getCaseId()}}&fileName={{:getEncodedFileName()}}">{{:getFileName()}}</a>
-                </td>
+                </td>             
             </tr>
             {{/for}}            
         </tbody>

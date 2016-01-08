@@ -950,7 +950,8 @@
                                                     Model.case_.Customer_Id,
                                                     Translation.Get("Lägg order"),
                                                     Translation.Get("Artiklar att fakturera"),
-                                                    Model.CaseKey)
+                                                    Model.CaseKey,
+                                                    Model.LogKey)
                                                 @Html.HiddenFor(m => m.CaseInvoiceArticles, new { @class = "case-invoice-articles" })                                                                                            
                                             }
                                         </td>

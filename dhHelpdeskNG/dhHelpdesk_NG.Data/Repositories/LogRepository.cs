@@ -164,6 +164,7 @@ namespace DH.Helpdesk.Dal.Repositories
     {
         byte[] GetFileContentByIdAndFileName(int caseId, string basePath, string fileName);
         List<string> FindFileNamesByLogId(int logId);
+        List<KeyValuePair<int, string>> FindFileNamesByCaseId(int caseId);
         List<LogFile> GetLogFilesByCaseId(int caseId);
         List<LogFile> GetLogFilesByLogId(int logId);
         void DeleteByLogIdAndFileName(int logId, string basePath, string fileName);
@@ -187,6 +188,19 @@ namespace DH.Helpdesk.Dal.Repositories
         public List<string> FindFileNamesByLogId(int logId)
         {
             return this.DataContext.LogFiles.Where(f => f.Log_Id == logId).Select(f => f.FileName).ToList();
+        }
+
+        public List<KeyValuePair<int, string>> FindFileNamesByCaseId(int caseId)
+        {
+            var ret = new List<KeyValuePair<int, string>>();
+            var logs = this.DataContext.LogFiles.Where(f => f.Log.Case_Id == caseId).ToList();
+
+            foreach (var log in logs)
+            {
+                ret.Add(new KeyValuePair<int, string>(log.Log_Id, log.FileName));
+            }
+
+            return ret;            
         }
 
         public List<LogFile> GetLogFilesByCaseId(int caseId)

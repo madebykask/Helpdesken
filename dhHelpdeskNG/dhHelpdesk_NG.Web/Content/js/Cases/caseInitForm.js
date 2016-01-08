@@ -650,6 +650,8 @@ function CaseInitForm() {
                     $(".plupload_buttons").css("display", "inline");
                     $(".plupload_upload_status").css("display", "inline");
                     up.refresh();
+
+                    $(document).trigger("OnUploadLogFile", [up, file]);
                 }
             },
             init: {

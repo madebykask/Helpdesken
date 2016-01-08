@@ -32,6 +32,8 @@
 
         private readonly ICaseFileService caseFileService;
 
+        private readonly ILogFileService logFileService;
+
         private readonly IMasterDataService masterDataService;
 
         public InvoiceController(
@@ -42,6 +44,7 @@
             ICaseService caseService, 
             ICaseInvoiceSettingsService caseInvoiceSettingsService, 
             ICaseFileService caseFileService,
+            ILogFileService logFileService,
             ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory)
             : base(masterDataService)
         {
@@ -52,6 +55,7 @@
             this.caseService = caseService;
             this.caseInvoiceSettingsService = caseInvoiceSettingsService;
             this.caseFileService = caseFileService;
+            this.logFileService = logFileService;
             this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Cases);
         }
 
@@ -130,12 +134,21 @@
         }
 
         [HttpGet]
-        public JsonResult CaseFiles(string id)
+        public JsonResult CaseFiles(string id, string logKey)
         {
             var files = new List<CaseFileModel>();
+            var basePath = string.Empty;
+            if (!GuidHelper.IsGuid(id))
+            {
+                var c = this.caseService.GetCaseById(int.Parse(id));                        
+                if (c != null)
+                    basePath = masterDataService.GetFilePath(c.Customer_Id);
+            }
+
 
             try
             {
+                #region CaseFiles
                 var fileNames = GuidHelper.IsGuid(id)
                                     ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Cases)
                                     : this.caseFileService.FindFileNamesByCaseId(int.Parse(id));
@@ -144,7 +157,8 @@
                 {
                     var file = new CaseFileModel
                     {
-                        FileName = fileName
+                        FileName = fileName,
+                        Category = ModuleName.Cases
                     };
 
                     byte[] fileContent = new byte[0];
@@ -153,14 +167,8 @@
                     {
                         if (GuidHelper.IsGuid(id))
                             fileContent = this.userTemporaryFilesStorage.GetFileContent(fileName, id, ModuleName.Cases);
-                        else
-                        {
-                            var c = this.caseService.GetCaseById(int.Parse(id));
-                            var basePath = string.Empty;
-                            if (c != null)
-                                basePath = masterDataService.GetFilePath(c.Customer_Id);
-                            fileContent = this.caseFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
-                        }
+                        else                                                    
+                            fileContent = this.caseFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);                        
                     }
                     catch (Exception)
                     {
@@ -172,6 +180,67 @@
 
                     files.Add(file);
                 }
+                #endregion
+
+                #region LogFiles
+                var tempLogfileNames = this.userTemporaryFilesStorage.FindFileNames(logKey, ModuleName.Log);                        
+
+                foreach (var fileName in tempLogfileNames)
+                {
+                    var file = new CaseFileModel
+                    {
+                        FileName = fileName,
+                        Category = ModuleName.Log
+                    };
+
+                    byte[] fileContent = new byte[0];
+
+                    try
+                    {                        
+                        fileContent = this.userTemporaryFilesStorage.GetFileContent(fileName, logKey, ModuleName.Log);                        
+                    }
+                    catch (Exception)
+                    {
+                        continue;
+                    }
+
+                    file.Size = fileContent.Length;
+                    file.Type = MimeHelper.GetMimeTypeExtended(fileName);
+
+                    files.Add(file);
+                }
+                
+                if (!GuidHelper.IsGuid(id))
+                {
+                    var savedLogFiles = new List<KeyValuePair<int, string>>();
+                    savedLogFiles = this.logFileService.FindFileNamesByCaseId(int.Parse(id));
+
+                    foreach (var logFile in savedLogFiles)
+                    {
+                        var file = new CaseFileModel
+                        {
+                            FileName = logFile.Value,
+                            Category = ModuleName.Log
+                        };
+
+                        byte[] fileContent = new byte[0];
+
+                        try
+                        {
+                            fileContent = this.logFileService.GetFileContentByIdAndFileName(logFile.Key, basePath, logFile.Value);
+                        }
+                        catch (Exception)
+                        {
+                            continue;
+                        }
+
+                        file.Size = fileContent.Length;
+                        file.Type = MimeHelper.GetMimeTypeExtended(logFile.Value);
+
+                        files.Add(file);
+                    }
+                }
+                #endregion
             }
             catch (Exception)
             {

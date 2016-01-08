@@ -12,6 +12,7 @@
     {
         byte[] GetFileContentByIdAndFileName(int logId, string basePath, string fileName);
         List<string> FindFileNamesByLogId(int logId);
+        List<KeyValuePair<int,string>> FindFileNamesByCaseId(int caseId);
         void DeleteByLogIdAndFileName(int logId, string basePath, string fileName);
         void AddFile(CaseFileDto fileDto);
         void AddFiles(List<CaseFileDto> fileDtos);
@@ -41,6 +42,11 @@
         public List<string> FindFileNamesByLogId(int logId)
         {
             return this._logFileRepository.FindFileNamesByLogId(logId);  
+        }
+
+        public List<KeyValuePair<int, string>> FindFileNamesByCaseId(int caseId)
+        {
+            return this._logFileRepository.FindFileNamesByCaseId(caseId);
         }
 
         public void DeleteByLogIdAndFileName(int logId, string basePath, string fileName)
