@@ -190,7 +190,7 @@ namespace DH.Helpdesk.NewSelfService
             kernel.Bind<IUsersPasswordHistoryRepository>().To<UsersPasswordHistoryRepository>();
             kernel.Bind<ICaseFilterFavoriteRepository>().To<CaseFilterFavoriteRepository>();
             kernel.Bind<ICaseInvoiceSettingsRepository>().To<CaseInvoiceSettingsRepository>();
-            
+            kernel.Bind<ICaseIsAboutRepository>().To<CaseIsAboutRepository>();
             
             // Service             
             kernel.Bind<IMasterDataService>().To<MasterDataService>();            

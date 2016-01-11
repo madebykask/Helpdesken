@@ -1,9 +1,20 @@
-﻿@model DH.Helpdesk.NewSelfService.Models.Case.CaseLogModel
-
+﻿@using DH.Helpdesk.NewSelfService.Infrastructure;
+@using Log = DH.Helpdesk.Domain.Log;
+@model DH.Helpdesk.NewSelfService.Models.Case.CaseLogModel
 
 @if (Model.CaseLogs != null)
-{    
-    foreach (var logItem in Model.CaseLogs.Where(l=> ! string.IsNullOrEmpty(l.Text_Internal.Trim())))
+{
+    var usedCaseLog = new List<Log>();    
+    if (SessionFacade.CurrentCustomer.UseInternalLogNoteOnExternalPage == (int)Enums.LogNote.UseExternalLogNote)
+    {
+        usedCaseLog = Model.CaseLogs.Where(l => !string.IsNullOrEmpty(l.Text_External.Trim())).ToList();
+    }
+    else
+    {
+        usedCaseLog = Model.CaseLogs.Where(l => !string.IsNullOrEmpty(l.Text_Internal.Trim())).ToList();
+    }
+
+    foreach (var logItem in usedCaseLog)
     {             
         var _regDate = logItem.RegTime.ToLocalTime();
         <div class="@(!string.IsNullOrEmpty(logItem.RegUser) ? "com-list-hd" : "com-list-com")" >
@@ -13,8 +24,15 @@
                 | 
                 @Html.DisplayFor(l => _regDate) 
             </p>
-            <p>                                    
-                @Html.Raw(logItem.Text_Internal.Replace("\n", "<br />"))                                                                                       
+            <p>
+                @if (SessionFacade.CurrentCustomer.UseInternalLogNoteOnExternalPage == (int)Enums.LogNote.UseExternalLogNote)
+                {
+                    @Html.Raw(logItem.Text_External.Replace("\n", "<br />"))                    
+                }
+                else
+                {
+                    @Html.Raw(logItem.Text_Internal.Replace("\n", "<br />"))                    
+                }                                                    
             </p>
             <p>
                 @if (logItem.LogFiles != null)

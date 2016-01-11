@@ -29,6 +29,7 @@
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Concrete;
     using DH.Helpdesk.Services.utils;
+    using DH.Helpdesk.NewSelfService.Infrastructure;
 
     public class CaseController : BaseController
     {
@@ -579,9 +580,9 @@
                                   CaseHistoryId = caseHistoryId,
                                   CaseId = caseId,
                                   LogGuid = Guid.NewGuid(),
-                                  TextExternal = "",
+                                  TextExternal = (currentCustomer.UseInternalLogNoteOnExternalPage == (int)Enums.LogNote.UseExternalLogNote? extraNote : string.Empty),
                                   UserId = null,
-                                  TextInternal = extraNote,
+                                  TextInternal = (currentCustomer.UseInternalLogNoteOnExternalPage == (int)Enums.LogNote.UseInternalLogNote? extraNote : string.Empty),
                                   WorkingTimeHour = 0,
                                   WorkingTimeMinute = 0,
                                   EquipmentPrice = 0,
