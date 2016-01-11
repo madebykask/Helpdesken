@@ -528,6 +528,25 @@ $(function () {
             $('.icon-minus-sign.hideRefrence' + orderId).css("display", "none");
         },
 
+        ShowAttached: function (orderId) {
+            
+                $('.attachedshow').show();
+            
+
+            $('.icon-plus-sign.showAttached').css("display", "none");
+            $('.icon-minus-sign.hideAttached').css("display", "inline-block");
+        },
+
+        HideAttached: function (orderId) {
+            var order = this.GetOrder(orderId);
+            if (order != null) {
+                $('.attachedshow').hide();
+            }
+
+            $('.icon-plus-sign.showAttached').css("display", "inline-block");
+            $('.icon-minus-sign.hideAttached').css("display", "none");
+        },
+
         UpdateArticle: function (e) {            
             var id = e.attr("data-id");
             var article = this.GetArticle(id);

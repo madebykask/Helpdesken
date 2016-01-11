@@ -10,7 +10,7 @@
                 <input onchange='dhHelpdesk.CaseArticles.UpdateArticle($(this).parent().parent())' type='text' class='width80 article-name' maxlength='50' value='{{:Name}}' />
             </td>
             <td>
-                <a href='javascript:void(0);' onclick='dhHelpdesk.CaseArticles.DeleteArticle($(this).parent().parent())'>x</a>
+                <a href='javascript:void(0);' onclick='dhHelpdesk.CaseArticles.DeleteArticle($(this).parent().parent())' class='btn btn-small'>x</a>
             </td>
         </tr>
 {{/if}}                    
@@ -46,7 +46,7 @@
             {{/if}}
             <td class='article-total'>{{:Total}}</td>
             <td>
-                <a href='javascript:void(0);' onclick='dhHelpdesk.CaseArticles.DeleteArticle($(this).parent().parent())'>x</a>
+                <a href='javascript:void(0);' onclick='dhHelpdesk.CaseArticles.DeleteArticle($(this).parent().parent())' class='btn btn-small'>x</a>
             </td>
         </tr>
 {{/if}}                                

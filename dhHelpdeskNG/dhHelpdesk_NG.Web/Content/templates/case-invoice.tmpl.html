@@ -1,12 +1,12 @@
 ﻿<div data-id='{{:Id}}' class="case-invoice-container overflow-visible">
     <label class="case-invoice-message error"></label>
     <div id="case-invoice-orders-tabs" style="overflow:hidden;">
-        <ul class="nav nav-tabs">
+        <ul class="nav nav-tabs"> 
             <li>
-                <i class="icon-plus-sign" style="cursor: pointer;" onclick="dhHelpdesk.CaseArticles.AddOrder('{{:Id}}'); return false;"></i>
-                <i style="display: none;" class="icon-minus-sign" style="cursor: pointer;" onclick="dhHelpdesk.CaseArticles.DeleteCurrentOrder('{{:Id}}'); return false;"></i>
+                <a><i class="icon-plus-sign icon-white" style="cursor: pointer;" onclick="dhHelpdesk.CaseArticles.AddOrder('{{:Id}}'); return false;"></i>
+                <i style="display: none;" class="icon-minus-sign" style="cursor: pointer;" onclick="dhHelpdesk.CaseArticles.DeleteCurrentOrder('{{:Id}}'); return false;"></i></a>
             </li> 
-            <li class="case-invoice-order-summary" style="display: none;"><a href="#case-invoice-order-summary{{:Id}}">{{:SummaryTitle}}</a></li>          
+            <li class="case-invoice-order-summary" style="display: none;"><a href="#case-invoice-order-summary{{:Id}}">{{:SummaryTitle}}</a></li>         
         </ul>
         <div class="ml15 mt20">
             <table class='articles-params'>

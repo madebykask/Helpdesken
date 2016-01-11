@@ -19,42 +19,48 @@
                 </table>
             </td>
             <td style='vertical-align: top;'>
-                <i class="icon-plus-sign add-blank-article" style="cursor: pointer; display: none;" onclick="dhHelpdesk.CaseArticles.AddBlankArticle('{{:Id}}'); return false;"></i>
+                <a class="btn btn-small add-blank-article" style="cursor: pointer; display: none;" onclick="dhHelpdesk.CaseArticles.AddBlankArticle('{{:Id}}'); return false;"><i class="icon-plus-sign"></i></a>
             </td>
         </tr>
     </table>
     <div class='width100 textbold' style='text-align: right;'>
         {{:TotalLabel}}: <span class='articles-total'>{{:Total}}</span> SEK &nbsp;&nbsp;&nbsp;
     </div>
-    <table>
-        <tbody>
-            <tr>                       
-                <td>
-                    {{:attachedFilesTitle}}
-                </td>                    
-                <td>
-                    <button class="btn" onclick="dhHelpdesk.CaseArticles.SelectCaseFiles('{{:Id}}'); return false;">{{:attachFilesTitle}}</button>
-                </td>
-            </tr>           
-            <tr>
-                <td colspan="2">
-                    <div style="margin-bottom: 1em;"></div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div id="files-container"></div>
-                </td>
-            </tr>
-        </tbody>
-      </table>
-        
-      <table>
-        <tbody> 
-            <tr>
-                <td class="span2">
-                        <h4>                        
-                            <i style="display:inline-block" class="icon-plus-sign showRefrence{{:Id}}" onclick="dhHelpdesk.CaseArticles.ShowOtherReference('{{:Id}}')"></i> 
+    <div class="row-fluid">
+        <div class="span6">
+            <h4>
+                <i style="display:inline-block" class="icon-plus-sign showAttached" onclick="dhHelpdesk.CaseArticles.ShowAttached('{{:Id}}')"></i> 
+                <i style="display:none"   class="icon-minus-sign hideAttached" onclick="dhHelpdesk.CaseArticles.HideAttached('{{:Id}}')"></i>         
+                {{:attachedFilesTitle}}
+                    </h4>
+                    <div class="attachedshow" style="display:none;">
+                    <table>
+                        <tbody>
+                            <tr>                       
+                                <td>
+                                    {{:attachedFilesTitle}}
+                                </td>                    
+                                <td>
+                                    <button class="btn" onclick="dhHelpdesk.CaseArticles.SelectCaseFiles('{{:Id}}'); return false;">{{:attachFilesTitle}}</button>
+                                </td>
+                            </tr>           
+                            <tr>
+                                <td colspan="2">
+                                    <div style="margin-bottom: 1em;"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <div id="files-container"></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                      </table>
+                    </div>
+        </div>
+        <div class="span6">
+            <h4>                        
+                            <i style="display:inline-block" class="icon-plus-sign showRefrence{{:Id}}" onclick="dhHelpdesk.CaseArticles.ShowOtherReference('{{:Id}}')"></i>
                             <i style="display:none"   class="icon-minus-sign hideRefrence{{:Id}}" onclick="dhHelpdesk.CaseArticles.HideOtherReference('{{:Id}}')"></i> 
                             {{:ReferenceTitle}}&nbsp;
                         </h4>
@@ -235,18 +241,12 @@
                                 </tr>
                             {{/if}}
                         </table>
-                        </div>                        
-                    </td>
-               </tr>
-            
-               <tr>
-                    <td colspan="2">
-                        <div style="margin-bottom: 1em;"></div>
-                    </td>
-               </tr>            
-        </tbody>
-    </table>
-    <div>
+                        </div>
+        </div>
+    </div>
+    <div class="row-fluid">
+    <div class="span12" style="border-top:1px solid #ccc;margin-top:20px; padding-top:20px;">
         <button class="btn doInvoice" onclick="dhHelpdesk.CaseArticles.DoOrderInvoice('{{:Id}}'); return false;" data-orderid="{{:Id}}">{{:doInvoiceTitle}}</button>
+    </div>
     </div>
 </div>

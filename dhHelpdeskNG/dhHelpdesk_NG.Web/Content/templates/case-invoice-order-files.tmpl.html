@@ -6,7 +6,7 @@
                 <a href="/invoice/casefile/?id={{>#parent.parent.data.getCaseId()}}&fileName={{:getEncodedFileName()}}"><i class="icon-file"></i>{{:getFileName()}}</a>
             </td>
             <td>
-                <a href='javascript:void(0);' onclick='dhHelpdesk.CaseArticles.RemoveOrderFile("{{:getFileName()}}")'>x</a>
+                <a href='javascript:void(0);' onclick='dhHelpdesk.CaseArticles.RemoveOrderFile("{{:getFileName()}}")' class='btn btn-small'>x</a>
             </td>
         </tr>
         {{/for}}            
