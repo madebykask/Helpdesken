@@ -599,7 +599,7 @@
                                                         if (Model.case_.IsAbout != null)
                                                         {
                                                             var curRegion = Model.regions.Where(r => r.Id == Model.case_.IsAbout.Region_Id).SingleOrDefault();
-                                                            @Html.TextBoxFor(m => curRegion.Name, new { id = "RegionName", @readonly = true })
+                                                            @Html.TextBoxFor(m => curRegion.Name, new { id = "IsAboutRegionName", @readonly = true })
                                                             @Html.HiddenFor(m => Model.case_.IsAbout.Region_Id)
                                                         }
 
@@ -643,7 +643,7 @@
                                                             if (Model.case_.IsAbout != null)
                                                             {
                                                                 var curDep = Model.departments.Where(d => d.Id == Model.case_.IsAbout.Department_Id).SingleOrDefault();
-                                                                @Html.TextBoxFor(m => curDep.DepartmentName, new { id = "DepartmentName", @readonly = true })
+                                                                @Html.TextBoxFor(m => curDep.DepartmentName, new { id = "IsAboutDepartmentName", @readonly = true })
                                                                 @Html.HiddenFor(m => Model.case_.IsAbout.Department_Id, new { @class = "departments-list" }) 
                                                             }
                                                         }
@@ -684,15 +684,15 @@
                                                         {
                                                             if (Model.case_.IsAbout != null)
                                                             {                                                                                                                   
-                                                                @Html.TextBox("OUName", Model.ous.Where(w => w.Id == Model.case_.IsAbout.OU_Id).Select(o => o.Name).SingleOrDefault(), new { id = "OuName", @readonly = true })
-                                                                @Html.HiddenFor(m => Model.case_.IsAbout.OU_Id, new { id = "case__Ou_Id", name = "case_.IsAbout.OU_Id" })  
+                                                                @Html.TextBox("IsAboutOUName", Model.ous.Where(w => w.Id == Model.case_.IsAbout.OU_Id).Select(o => o.Name).SingleOrDefault(), new { id = "IsAboutOuName", @readonly = true })
+                                                                @Html.HiddenFor(m => Model.case_.IsAbout.OU_Id, new { id = "case__IsAbout_Ou_Id", name = "case_.IsAbout.OU_Id" })  
                                                             }
                                                         }
                                                         else
                                                         {
-                                                            <select id="case__IsAbout_Ou_Id" name="case_.OU_Id" data-field="ou">
+                                                            <select id="case__IsAbout_Ou_Id" name="case_.IsAbout.OU_Id" data-field="ou">
                                                                 <option value="">&nbsp;</option>
-                                                                @if (Model.ous != null)
+                                                                @if (Model.isaboutous!= null)
                                                                 {
                                                                     var selected_OU = string.Empty;
                                                                     if (Model.case_.IsAbout != null && Model.case_.IsAbout.OU_Id.HasValue)
@@ -700,7 +700,7 @@
                                                                         selected_OU = Model.case_.IsAbout.OU_Id.ToString();
                                                                     }
 
-                                                                    foreach (var ou in Model.ous)
+                                                                    foreach (var ou in Model.isaboutous)
                                                                     {                                                                
                                                                         <option value="@ou.Id" @ou.Id.IdIsSelected(selected_OU) >@ou.Name</option>
                                                                     }
@@ -759,7 +759,7 @@
                                     </div>
                                 </div>
                         </div>
-                        <div style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.InventoryNumber, CaseSolutionFields.InventoryNumber)"  class="computer-block hideshow">
+                        <div style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.InventoryNumber, CaseSolutionFields.InventoryNumber)" class="computer-block hideshow">
                             <h4><a href="#" class="showbtn"><i class="icon-plus-sign"></i></a><a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a> @Translation.Get("Datorinformation")</h4>
                             <div class="row">
                                 <div class="span12">

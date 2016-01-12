@@ -3421,6 +3421,20 @@ div.DTFC_LeftFootWrapper table {
 .editmode .hideshowregarding .displaytr {
     display: none;
 }
+
+/**HIDE SHOW COMPUTER INFO*******/
+
+.editmode .hideshowcomputer .caselogoverflow {
+    height:300px; overflow:auto;
+}
+.editmode .hideshowcomputer .showbtn
+ {
+    display: inline-block;
+}
+.editmode .hideshowcomputer .hidebtn,
+.editmode .hideshowcomputer .displaytr {
+    display: none;
+}
 /*****END TEMPORARY SOLUTION******/
  /*.newmode .hidebtn, .newmode .showbtn {
     display: none;

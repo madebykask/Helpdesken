@@ -3958,7 +3958,15 @@ namespace DH.Helpdesk.Web.Controllers
                 //m.ous = this._ouService.GetOUs(customerId);
                 m.ous = this._organizationService.GetOUs(m.case_.Department_Id).ToList();
             }
-           
+
+            if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.IsAbout_OU_Id.ToString()).ShowOnStartPage == 1)
+            {
+                if (m.case_.IsAbout != null)
+                    m.isaboutous = this._organizationService.GetOUs(m.case_.IsAbout.Department_Id).ToList();
+                else
+                    m.isaboutous = null;
+            }
+
             // hämta parent path för casetype
             if (m.case_.CaseType_Id > 0)
             {

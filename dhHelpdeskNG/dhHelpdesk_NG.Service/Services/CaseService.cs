@@ -165,8 +165,6 @@ namespace DH.Helpdesk.Services.Services
         private readonly CaseStatisticService _caseStatService;
         private readonly ICaseFilterFavoriteRepository _caseFilterFavoriteRepository;
 
-        private readonly ICaseIsAboutRepository _caseIsAboutRepository;
-
 
         public CaseService(
             ICaseRepository caseRepository,
@@ -196,8 +194,7 @@ namespace DH.Helpdesk.Services.Services
             IFinishingCauseService finishingCauseService,
             ICaseLockService caseLockService, 
             CaseStatisticService caseStatService,
-            ICaseFilterFavoriteRepository caseFilterFavoriteRepository,
-            ICaseIsAboutRepository caseIsAboutRepository)
+            ICaseFilterFavoriteRepository caseFilterFavoriteRepository)
         {
             this._unitOfWork = unitOfWork;
             this._caseRepository = caseRepository;
@@ -228,7 +225,6 @@ namespace DH.Helpdesk.Services.Services
             this._caseLockService = caseLockService;
             this._caseStatService = caseStatService;
             this._caseFilterFavoriteRepository = caseFilterFavoriteRepository;
-            this._caseIsAboutRepository = caseIsAboutRepository;
         }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
@@ -959,16 +955,13 @@ namespace DH.Helpdesk.Services.Services
                 this._caseRepository.Update(c);
             }
 
+            
             this._caseRepository.Commit();
             this._caseStatService.UpdateCaseStatistic(c);
             
             // save CaseIsAbout
-            //if (c.IsAbout != null)
-            //{
-            //    //this._caseIsAboutRepository
-            //    this._caseIsAboutRepository.SaveCaseIsAbout(c, out errors);
-            //    this._caseIsAboutRepository.Commit();
-            //}
+            if (c.IsAbout != null)
+                this.SaveIsAbout(c, out errors);     
 
             // save casehistory
             var extraFields = new ExtraFieldCaseHistory();
@@ -990,6 +983,83 @@ namespace DH.Helpdesk.Services.Services
             return ret;
         }
         
+        private void SaveIsAbout(Case c, out IDictionary<string, string> errors)
+        {
+            errors = new Dictionary<string, string>();
+            using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            {
+                var isAboutEntity = uow.GetRepository<CaseIsAboutEntity>();
+                var allreadyExists = isAboutEntity
+                        .GetAll()
+                        .Where(it => it.Id == c.Id)
+                        .FirstOrDefault();
+                if (allreadyExists == null)
+                {
+                    if (CaseHasIsAbout(c))
+                    {
+                        isAboutEntity.Add(new CaseIsAboutEntity()
+                        {
+                            Id = c.Id,
+                            CostCentre = c.IsAbout.CostCentre,
+                            Department_Id = c.IsAbout.Department_Id,
+                            OU_Id = c.IsAbout.OU_Id,
+                            Person_Cellphone = c.IsAbout.Person_Cellphone,
+                            Person_Email = c.IsAbout.Person_Email,
+                            Person_Name = c.IsAbout.Person_Name,
+                            Person_Phone = c.IsAbout.Person_Phone,
+                            Place = c.IsAbout.Place,
+                            Region_Id = c.IsAbout.Region_Id,
+                            ReportedBy = c.IsAbout.ReportedBy,
+                            UserCode = c.IsAbout.UserCode
+                        });
+                        uow.Save();
+                    }
+                }
+                else
+                {
+                    if (CaseHasIsAbout(c))
+                    {
+                        allreadyExists.CostCentre = c.IsAbout.CostCentre;
+                        allreadyExists.Department_Id = c.IsAbout.Department_Id;
+                        allreadyExists.OU_Id = c.IsAbout.OU_Id;
+                        allreadyExists.Person_Cellphone = c.IsAbout.Person_Cellphone;
+                        allreadyExists.Person_Email = c.IsAbout.Person_Email;
+                        allreadyExists.Person_Name = c.IsAbout.Person_Name;
+                        allreadyExists.Person_Phone = c.IsAbout.Person_Phone;
+                        allreadyExists.Place = c.IsAbout.Place;
+                        allreadyExists.Region_Id = c.IsAbout.Region_Id;
+                        allreadyExists.ReportedBy = c.IsAbout.ReportedBy;
+                        allreadyExists.UserCode = c.IsAbout.UserCode;
+                        isAboutEntity.Update(allreadyExists);
+                    }
+                    else
+                        isAboutEntity.DeleteById(c.Id);
+
+                    uow.Save();
+                }                
+            }            
+        }
+
+        private bool CaseHasIsAbout(Case c)
+        {
+            if (c.IsAbout == null ||
+                (c.IsAbout != null &&
+                 string.IsNullOrEmpty(c.IsAbout.CostCentre) &&
+                 string.IsNullOrEmpty(c.IsAbout.Person_Cellphone) &&
+                 string.IsNullOrEmpty(c.IsAbout.Person_Email) &&
+                 string.IsNullOrEmpty(c.IsAbout.Person_Name) &&
+                 string.IsNullOrEmpty(c.IsAbout.Person_Phone) &&
+                 string.IsNullOrEmpty(c.IsAbout.Place) &&
+                 string.IsNullOrEmpty(c.IsAbout.ReportedBy) &&
+                 string.IsNullOrEmpty(c.IsAbout.UserCode) &&
+                 c.IsAbout.Region_Id == null &&
+                 c.IsAbout.Department_Id == null &&
+                 c.IsAbout.OU_Id == null))
+                return false;
+            else
+                return true;            
+        }
+
         private bool AddChildCase(int childCaseId, int parentCaseId, out IDictionary<string, string> errors)
         {
             errors = new Dictionary<string, string>();

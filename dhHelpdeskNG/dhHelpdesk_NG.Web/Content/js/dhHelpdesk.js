@@ -8,6 +8,13 @@ var publicReadOnlyDepartmentName = '#DepartmentName';
 var publicOUControlName = '#case__Ou_Id';
 var publicReadOnlyOUName = '#OuName';
 
+// Case Is About
+var publicIsAboutDepartmentControlName = '#case__IsAbout_Department_Id';
+var publicIsAboutReadOnlyDepartmentName = '#IsAboutDepartmentName';
+
+var publicIsAboutOUControlName = '#case__IsAbout_Ou_Id';
+var publicIsAboutReadOnlyOUName = '#IsAboutOUName';
+
 
 // controller methods:
 var publicChangeRegion = '/Cases/ChangeRegion/';
