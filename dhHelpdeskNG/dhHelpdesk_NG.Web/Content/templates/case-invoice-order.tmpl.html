@@ -195,21 +195,23 @@
                                 </td>
                             </tr>
                             {{/if}}
-                            {{if ShowCostCentre}}
+
+                            {{if ShowCostCentre}}                           
                             <tr class="InitiatorFieldsOrder{{:Id}} InitiatorField">
                                 <td>{{:CostCentreTitle}}
                                 </td>
                                 <td>
-                                    <input type="text" maxlength="40" autocomplete="Off" style="margin-bottom: -2px;" value="{{:CostCentre}}" />
+                                    <input type="text" id="CostCentre_{{:Id}}" class="costcentre" maxlength="40" autocomplete="Off" style="margin-bottom: -2px;" value="{{:CostCentre}}" data-orderid="{{:Id}}"/>
                                 </td>
                             </tr>
                             {{else}}
-                                <tr style="display: none;">
-                                    <td>
-                                        <input type="hidden" value="{{:CostCentre}}" />
-                                    </td>
-                                </tr>
+                            <tr>
+                                <td>
+                                    <input type="hidden" class="costcentre" id="Hidden10" value="{{:CostCentre}}" />
+                                </td>
+                            </tr>
                             {{/if}}
+
                             {{if ShowPlace}}
                             <tr class="InitiatorFieldsOrder{{:Id}} InitiatorField">
                                 <td>{{:PlaceTitle}}

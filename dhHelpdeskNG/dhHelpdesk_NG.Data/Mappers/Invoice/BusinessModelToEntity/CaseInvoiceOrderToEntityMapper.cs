@@ -17,6 +17,7 @@
             entity.Persons_Name = businessModel.Persons_Name;
             entity.Persons_Phone = businessModel.Persons_Phone;
             entity.Persons_Cellphone = businessModel.Persons_Cellphone;
+            entity.Persons_Email = businessModel.Persons_Email;
 
             if (businessModel.Region_Id.HasValue)
             {
