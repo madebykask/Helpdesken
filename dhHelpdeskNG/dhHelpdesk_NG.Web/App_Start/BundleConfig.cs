@@ -34,6 +34,7 @@
                             "~/Content/js/DynamicCase/iframeResizer.js",
                             "~/Content/js/DynamicCase/container.js"));
             bundles.Add(new ScriptBundle("~/bundles/common").Include(
+                            "~/Content/js/Shared/errors.js",
 #if DEBUG
                             "~/Scripts/jquery-1.8.3.js",
                             "~/Content/js/jquery.unobtrusive-ajax.min.js",

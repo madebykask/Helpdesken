@@ -1,4 +1,4 @@
-﻿@model HandleErrorInfo
+﻿@model DH.Helpdesk.Web.Models.Error.HandleErrorInfoGuid
 @{
     ViewBag.Title = "Error (" + Model.Exception.Message + ")";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -12,10 +12,10 @@
             @DateTime.Now
         </p>
         <p style="margin: 10px 0;">
-            Error message: @Model.Exception.Message
+            Please provide Error Id to support team:
         </p>
         <p id="exception" style="padding: 10px; background: #ffa;">
-            Exception: @Model.Exception.ToString()
+            Error Id: @Model.Guid
         </p>
     </div>
 </div>

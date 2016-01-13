@@ -36,6 +36,7 @@
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
     <DontImportPostSharp>True</DontImportPostSharp>
     <TargetFrameworkProfile />
+    <MvcProjectUpgradeChecked>true</MvcProjectUpgradeChecked>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -807,6 +808,7 @@
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\SupplierEditModel.cs" />
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\UserEditModel.cs" />
     <Compile Include="Areas\Orders\OrdersAreaRegistration.cs" />
+    <Content Include="Content\js\Shared\errors.js" />
     <Content Include="Content\js\snippets\clickmultimenu_dropdown.js" />
     <Content Include="Content\js\snippets\jQuery.inactiveValue.validator.js" />
     <Content Include="Content\js\snippets\tabSwitchByHashTag.js" />
@@ -1317,6 +1319,7 @@
     <Compile Include="Models\DailyReports\DailyReportInputModel.cs" />
     <Compile Include="Models\Documents\DocumentsFilterModel.cs" />
     <Compile Include="Models\DailyReports\DailyReportModel.cs" />
+    <Compile Include="Models\Error\HandleErrorInfoGuid.cs" />
     <Compile Include="Models\Faq\Output\FAQFileModelModel.cs" />
     <Compile Include="Models\IConfigurableFieldModel.cs" />
     <Compile Include="Areas\Inventory\Models\EditModel\Computer\AccesoriesEditViewModel.cs" />
@@ -1936,7 +1939,9 @@
     <Content Include="Areas\OrderAccounts\Views\Orders\AttachedFile.cshtml" />
     <Content Include="Areas\Orders\Views\Orders\DisplayTemplates\HistoryModel.cshtml" />
     <Content Include="Areas\Orders\Views\Orders\DisplayTemplates\HistoryRecordModel.cshtml" />
-    <Content Include="log4net.config.template" />
+    <Content Include="log4net.config.template">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Areas\Reports\Views\Web.config" />
     <Content Include="Areas\Reports\Views\Shared\Index.cshtml" />
     <Content Include="Areas\Reports\Views\Report\Options\RegistratedCasesDay.cshtml" />
