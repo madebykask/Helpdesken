@@ -226,3 +226,15 @@
 </li>
 
 <li class="line"></li>
+<li class="dropdown-submenu">
+    <a href="#">
+        @Translation.GetCoreTextTranslation("Affärsregler")
+    </a>
+    <ul class="dropdown-menu">
+        <li class="@Html.ActiveTab(new string[] { "businessruleslist" })">
+            <a href="@Url.Action("index", "BusinessRules", new { customerId = Model.Id })">
+                @Translation.GetCoreTextTranslation("Reglerlista")
+            </a>
+        </li>
+    </ul>
+</li>

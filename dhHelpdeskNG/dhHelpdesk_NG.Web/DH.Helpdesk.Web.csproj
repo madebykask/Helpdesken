@@ -36,7 +36,8 @@
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
     <DontImportPostSharp>True</DontImportPostSharp>
     <TargetFrameworkProfile />
-    <MvcProjectUpgradeChecked>true</MvcProjectUpgradeChecked>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -242,6 +243,7 @@
     <Compile Include="Areas\Admin\Controllers\AccountActivityController.cs" />
     <Compile Include="Areas\Admin\Controllers\BaseAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\BuildingController.cs" />
+    <Compile Include="Areas\Admin\Controllers\BusinessRulesController.cs" />
     <Compile Include="Areas\Admin\Controllers\CaseInvoiceController.cs" />
     <Compile Include="Areas\Admin\Controllers\CaseTypeController.cs" />
     <Compile Include="Areas\Admin\Controllers\CategoryController.cs" />
@@ -1745,6 +1747,8 @@
     <Content Include="Areas\Admin\Views\Users\Index\_LockedCaseTable.cshtml" />
     <Content Include="Areas\Reports\Views\Report\ReportViewer\_PresentReport.cshtml" />
     <Content Include="Areas\Reports\Views\Report\ReportViewer\_Overview.cshtml" />
+    <Content Include="Areas\Admin\Views\BusinessRules\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\BusinessRules\Edit.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="ReportViewerWebForm.aspx" />
     <Content Include="Scripts\jquery-1.8.3.js" />
@@ -3160,4 +3164,11 @@ $(ProjectDir)..\..\utils\GenerateAssemblyInfo.bat $(ProjectDir)..\CommonAssembly
 )
 </PreBuildEvent>
   </PropertyGroup>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
 </Project>
