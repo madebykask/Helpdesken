@@ -91,12 +91,12 @@
                                     }
 
 
-                                    @*if(model.IsProjectVisible())
+                                    if(model.IsProjectVisible())
                                     {                                    
                                     <li><a href="@Url.Action("Index", "Projects", new { area = "" })">
                                         <img src="@Url.Content("~/Content/icons/project.png")" alt="project" />
                                         @Translation.Get("Projekt")</a></li>
-                                    }*@
+                                    }
 
                                 }
                                 <li></li>
