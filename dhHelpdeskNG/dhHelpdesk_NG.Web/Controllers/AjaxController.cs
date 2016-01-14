@@ -152,7 +152,7 @@ namespace DH.Helpdesk.Web.Controllers
                                   {
                                       Id = brother.Id,
                                       ParentId = brother.ParentId,
-                                      Name = brother.Name,
+                                      Name = Translation.GetMasterDataTranslation(brother.Name),
                                       Description = brother.Description
                                   });
             }

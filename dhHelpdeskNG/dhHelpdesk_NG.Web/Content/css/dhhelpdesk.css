@@ -651,9 +651,9 @@ input[type="text"] {
 	white-space: nowrap;
 	text-align: left;
 	vertical-align: top;
-	line-height: 13px;
+	line-height: 15px;
 	position: relative;
-	top: 6px;
+	top: 4px;
 }
 	.user-info small
 	{
