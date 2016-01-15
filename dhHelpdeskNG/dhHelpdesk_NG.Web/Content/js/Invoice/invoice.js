@@ -330,7 +330,7 @@ $(function () {
             return this.CaseInvoicesElement.val();
         },
 
-        ApplyChanges: function (doNotClone) {
+        ApplyChanges: function () {
             this._invoicesBackup = [];           
             for (var i = 0; i < this._invoices.length; i++) {
                 this._invoicesBackup.push(this._invoices[i].Clone());
