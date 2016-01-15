@@ -58,6 +58,7 @@ namespace DH.Helpdesk.Web.Controllers
     using DHDomain = DH.Helpdesk.Domain;
     using ParentCaseInfo = DH.Helpdesk.BusinessData.Models.Case.ChidCase.ParentCaseInfo;
     using DH.Helpdesk.Web.Enums;
+    using System.Web.Script.Serialization;
 
     public class CasesController : BaseController
     {        
@@ -1219,6 +1220,14 @@ namespace DH.Helpdesk.Web.Controllers
                     if (m.CaseMailSetting.DontSendMailToNotifier == false) m.CaseMailSetting.DontSendMailToNotifier = true;
                     else m.CaseMailSetting.DontSendMailToNotifier = false;
 
+                    var moduleCaseInvoice = this._settingService.GetCustomerSetting(customerId.Value).ModuleCaseInvoice;
+                    if (moduleCaseInvoice == 1)
+                    {
+                        var caseInvoices = this.invoiceArticleService.GetCaseInvoicesWithTimeZone(m.case_.Id, TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
+                        var invoiceArticles = this.invoiceArticlesModelFactory.CreateCaseInvoiceArticlesModel(caseInvoices);
+                        m.InvoiceModel = new CaseInvoiceModel(customerId.Value, m.case_.Id, invoiceArticles, "", m.CaseKey, m.LogKey);
+                    }
+                    
                     return this.View(m);
                 }
             }
@@ -1297,11 +1306,13 @@ namespace DH.Helpdesk.Web.Controllers
                 if (moduleCaseInvoice == 1)
                 {
                     var caseInvoices = this.invoiceArticleService.GetCaseInvoicesWithTimeZone(id, TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
-                    m.InvoiceArticles = this.invoiceArticlesModelFactory.CreateCaseInvoiceArticlesModel(caseInvoices);
-                }  
+                    var invoiceArticles = this.invoiceArticlesModelFactory.CreateCaseInvoiceArticlesModel(caseInvoices);
+                    m.InvoiceModel = new CaseInvoiceModel(m.case_.Customer_Id, m.case_.Id, invoiceArticles, "", m.CaseKey, m.LogKey);
+                }              
+
                 m.CustomerSettings = this.workContext.Customer.Settings;
 
-                m.CustomerSettings.ModuleCaseInvoice = this._settingService.GetCustomerSetting(m.case_.Customer_Id).ModuleCaseInvoice.ToBool(); // TODO FIX
+                m.CustomerSettings.ModuleCaseInvoice = Convert.ToBoolean(this._settingService.GetCustomerSetting(m.case_.Customer_Id).ModuleCaseInvoice); // TODO FIX
             }        
 
             AddViewDataValues();
@@ -2346,12 +2357,60 @@ namespace DH.Helpdesk.Web.Controllers
 
         #endregion
 
+        #region Invoice
+
+        #endregion
+
+        [HttpPost]
+        public JsonResult SaveCaseInvoice(string caseInvoiceArticle, int customerId, int caseId)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(caseInvoiceArticle))
+                    return null;
+                    //return Json(new { result = "Error", data = "Invalid Invoice to save!" } );
+                
+                DoInvoiceWork(caseInvoiceArticle, caseId, customerId);
+
+                if (SessionFacade.CurrentUser == null)
+                    return null;
+                    //return Json(new { result = "Error", data = "Invoice is not available, refresh the page and try it again." });
+
+                var caseInvoices = this.invoiceArticleService.GetCaseInvoicesWithTimeZone(caseId, TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
+                var invoiceArticles = this.invoiceArticlesModelFactory.CreateCaseInvoiceArticlesModel(caseInvoices);
+                var invoiceModel = new CaseInvoiceModel(customerId, caseId, invoiceArticles, "", "", "");
+
+                var serializer = new JavaScriptSerializer();
+                var caseArticlesJson = serializer.Serialize(invoiceModel.InvoiceArticles);
+
+                //var htmlData = InvoiceExtension.CaseInvoiceArticles(
+                //                null,
+                //                invoiceModel.InvoiceArticles,
+                //                "product-area-id",
+                //                invoiceModel.CaseId,
+                //                "case-invoice-articles",
+                //                invoiceModel.CustomerId,
+                //                Translation.Get("Lägg order"),
+                //                Translation.Get("Artiklar att fakturera"),
+                //                invoiceModel.CaseKey,
+                //                invoiceModel.LogKey);
+
+                return Json(new { result = "Success", data = caseArticlesJson });
+                //return this.PartialView("_Invoice", invoiceModel);
+            }
+            catch (Exception ex)
+            {
+                //return Json(new { result = "Error", data = "Unexpected Error:" + ex.Message });
+                return null;
+            }
+        }
+
         #endregion
 
         #region ***Private Methods***
-      
+
         #region --Case Template--
-        
+
         private void CheckTemplateParameters(int? templateId, int caseId)
         {
             if (templateId.HasValue)
@@ -2391,7 +2450,7 @@ namespace DH.Helpdesk.Web.Controllers
             var caseLog = m.caseLog;
             var caseMailSetting = m.caseMailSetting;
             var updateNotifierInformation = m.updateNotifierInformation;
-            var caseInvoiceArticles = m.caseInvoiceArticles;
+            //var caseInvoiceArticles = m.caseInvoiceArticles;
             case_.Performer_User_Id = m.Performer_Id;
             case_.CaseResponsibleUser_Id = m.ResponsibleUser_Id;            
             case_.RegistrationSourceCustomer_Id = m.customerRegistrationSourceId;
@@ -2574,14 +2633,7 @@ namespace DH.Helpdesk.Web.Controllers
                         SessionFacade.CurrentUser.Id,
                         this.User.Identity.Name,
                         out errors,
-                        parentCase);
-            
-            var moduleCaseInvoice = this._settingService.GetCustomerSetting(case_.Customer_Id).ModuleCaseInvoice;
-            if (moduleCaseInvoice == 1)
-            {
-                DoInvoiceWork(caseInvoiceArticles, case_.Id, case_.Customer_Id);
-            }
-
+                        parentCase);                       
             
             if (updateNotifierInformation.HasValue && updateNotifierInformation.Value)
             {
@@ -4792,6 +4844,7 @@ namespace DH.Helpdesk.Web.Controllers
             var Invoices = this.invoiceHelper.ToCaseInvoices(caseInvoiceData, caseOverview, articles); //there will only be one?
             this.invoiceArticleService.DoInvoiceWork(Invoices, caseId, customerId, SessionFacade.CurrentUser.Id);
         }
+
         #endregion
     }
 }

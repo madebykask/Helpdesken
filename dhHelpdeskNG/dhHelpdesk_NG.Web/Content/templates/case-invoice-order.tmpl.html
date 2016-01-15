@@ -26,6 +26,7 @@
     <div class='width100 textbold' style='text-align: right;'>
         {{:TotalLabel}}: <span class='articles-total'>{{:Total}}</span> SEK &nbsp;&nbsp;&nbsp;
     </div>
+    
     <div class="row-fluid">
         <div class="span6">
             <h4>
@@ -250,5 +251,10 @@
     <div class="span12" style="border-top:1px solid #ccc;margin-top:20px; padding-top:20px;">
         <button class="btn doInvoice" onclick="dhHelpdesk.CaseArticles.DoOrderInvoice('{{:Id}}'); return false;" data-orderid="{{:Id}}">{{:doInvoiceTitle}}</button>
     </div>
+    </div>
+    <div class="loading-msg save-invoice" style="display:none">
+        <div class="content-wrapper">
+            <div class="loader"> {{:SavingMessage}} </div>
+        </div>
     </div>
 </div>

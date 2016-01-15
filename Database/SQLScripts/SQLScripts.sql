@@ -17,7 +17,7 @@ GO
  IF COL_LENGTH('tblcaseinvoiceorder','InvoiceDate') IS NULL
  BEGIN
 	alter table tblcaseinvoiceorder
-	add InvoiceDate datetime2(7) null
+	add InvoiceDate datetime null
  END
 
  IF COL_LENGTH('tblcaseinvoiceorder','InvoicedByUserId') IS NULL
@@ -326,6 +326,12 @@ IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[
 ALTER TABLE [dbo].[tblCaseIsAbout] CHECK CONSTRAINT [FK_tblCaseIsAbout_tblRegion]
 GO
 
+
+IF COL_LENGTH('tblCustomer','UseInternalLogNoteOnExternalPage') IS NULL
+ BEGIN
+	alter table tblCustomer
+	add UseInternalLogNoteOnExternalPage int not null default(0)
+ END
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.19'

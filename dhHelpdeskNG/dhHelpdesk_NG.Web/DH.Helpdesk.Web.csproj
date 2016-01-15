@@ -1258,6 +1258,7 @@
     <Compile Include="Models\Case\ChildCase\ParentCaseInfo.cs" />
     <Compile Include="Models\Case\CaseRemainingTimeTable.cs" />
     <Compile Include="Models\Case\CaseStatisticsViewModel.cs" />
+    <Compile Include="Models\Case\CaseInvoiceModel.cs" />
     <Compile Include="Models\Case\Input\CaseEditInput.cs" />
     <Compile Include="Models\Case\MyFavoriteFilterModel.cs" />
     <Compile Include="Models\Case\Output\CaseSeachFilterData.cs" />
@@ -2331,6 +2332,7 @@
     <Content Include="Views\Shared\EditorTemplates\DatePickerLocalTZ.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DateReadOnlyLocalTZ.cshtml" />
     <Content Include="Views\Cases\_Statistics.cshtml" />
+    <Content Include="Views\Cases\_Invoice.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

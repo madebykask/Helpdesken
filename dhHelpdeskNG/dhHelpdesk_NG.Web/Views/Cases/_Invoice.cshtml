@@ -1,0 +1,22 @@
+﻿@using DH.Helpdesk.Web.Infrastructure.Extensions
+@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+@using System.Web.Optimization
+@model DH.Helpdesk.Web.Models.Case.CaseInvoiceModel
+
+
+<span id="caseInvoiceArea" >
+    @if (Model != null)
+    {
+        @Html.CaseInvoiceArticles(
+            Model.InvoiceArticles,
+            "product-area-id",
+            Model.CaseId,
+            "case-invoice-articles",
+            Model.CustomerId,
+            Translation.Get("Lägg order"),
+            Translation.Get("Artiklar att fakturera"),
+            Model.CaseKey,
+            Model.LogKey)
+        @Html.HiddenFor(m => Model.CaseInvoiceArticles, new { @class = "case-invoice-articles"}) 
+    }
+</span> 

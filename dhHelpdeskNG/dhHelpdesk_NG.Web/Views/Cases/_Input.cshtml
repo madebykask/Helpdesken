@@ -940,19 +940,9 @@
                                                 </ul>
                                                 @Html.HiddenFor(model => model.case_.ProductArea_Id, new { @class = "product-area-id" })
                                             </div>
-                                            @if (Model.CustomerSettings.ModuleCaseInvoice)
-                                            {
-                                                  @Html.CaseInvoiceArticles(
-                                                    Model.InvoiceArticles,
-                                                    "product-area-id",
-                                                    Model.case_.Id,
-                                                    "case-invoice-articles",
-                                                    Model.case_.Customer_Id,
-                                                    Translation.Get("Lägg order"),
-                                                    Translation.Get("Artiklar att fakturera"),
-                                                    Model.CaseKey,
-                                                    Model.LogKey)
-                                                @Html.HiddenFor(m => m.CaseInvoiceArticles, new { @class = "case-invoice-articles" })                                                                                            
+                                            @if (Model.CustomerSettings.ModuleCaseInvoice && Model.InvoiceModel != null)
+                                            {                                                
+                                                @Html.Partial("_Invoice", Model.InvoiceModel)                                                                                             
                                             }
                                         </td>
                                     </tr>

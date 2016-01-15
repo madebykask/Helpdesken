@@ -137,6 +137,9 @@
         public JsonResult CaseFiles(string id, string logKey)
         {
             var files = new List<CaseFileModel>();
+            if (string.IsNullOrEmpty(id) || id == "undefined")
+                return this.Json(files.ToArray(), JsonRequestBehavior.AllowGet);
+
             var basePath = string.Empty;
             if (!GuidHelper.IsGuid(id))
             {
@@ -183,43 +186,15 @@
                 #endregion
 
                 #region LogFiles
-                var tempLogfileNames = this.userTemporaryFilesStorage.FindFileNames(logKey, ModuleName.Log);                        
-
-                foreach (var fileName in tempLogfileNames)
+                if (!string.IsNullOrEmpty(logKey) && logKey != "undefined")
                 {
-                    var file = new CaseFileModel
-                    {
-                        FileName = fileName,
-                        Category = ModuleName.Log
-                    };
+                    var tempLogfileNames = this.userTemporaryFilesStorage.FindFileNames(logKey, ModuleName.Log);
 
-                    byte[] fileContent = new byte[0];
-
-                    try
-                    {                        
-                        fileContent = this.userTemporaryFilesStorage.GetFileContent(fileName, logKey, ModuleName.Log);                        
-                    }
-                    catch (Exception)
-                    {
-                        continue;
-                    }
-
-                    file.Size = fileContent.Length;
-                    file.Type = MimeHelper.GetMimeTypeExtended(fileName);
-
-                    files.Add(file);
-                }
-                
-                if (!GuidHelper.IsGuid(id))
-                {
-                    var savedLogFiles = new List<KeyValuePair<int, string>>();
-                    savedLogFiles = this.logFileService.FindFileNamesByCaseId(int.Parse(id));
-
-                    foreach (var logFile in savedLogFiles)
+                    foreach (var fileName in tempLogfileNames)
                     {
                         var file = new CaseFileModel
                         {
-                            FileName = logFile.Value,
+                            FileName = fileName,
                             Category = ModuleName.Log
                         };
 
@@ -227,7 +202,7 @@
 
                         try
                         {
-                            fileContent = this.logFileService.GetFileContentByIdAndFileName(logFile.Key, basePath, logFile.Value);
+                            fileContent = this.userTemporaryFilesStorage.GetFileContent(fileName, logKey, ModuleName.Log);
                         }
                         catch (Exception)
                         {
@@ -235,9 +210,40 @@
                         }
 
                         file.Size = fileContent.Length;
-                        file.Type = MimeHelper.GetMimeTypeExtended(logFile.Value);
+                        file.Type = MimeHelper.GetMimeTypeExtended(fileName);
 
                         files.Add(file);
+                    }
+
+                    if (!GuidHelper.IsGuid(id))
+                    {
+                        var savedLogFiles = new List<KeyValuePair<int, string>>();
+                        savedLogFiles = this.logFileService.FindFileNamesByCaseId(int.Parse(id));
+
+                        foreach (var logFile in savedLogFiles)
+                        {
+                            var file = new CaseFileModel
+                            {
+                                FileName = logFile.Value,
+                                Category = ModuleName.Log
+                            };
+
+                            byte[] fileContent = new byte[0];
+
+                            try
+                            {
+                                fileContent = this.logFileService.GetFileContentByIdAndFileName(logFile.Key, basePath, logFile.Value);
+                            }
+                            catch (Exception)
+                            {
+                                continue;
+                            }
+
+                            file.Size = fileContent.Length;
+                            file.Type = MimeHelper.GetMimeTypeExtended(logFile.Value);
+
+                            files.Add(file);
+                        }
                     }
                 }
                 #endregion

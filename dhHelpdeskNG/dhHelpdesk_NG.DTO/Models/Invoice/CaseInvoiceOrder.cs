@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Invoice
 {
     using System;
+    using System.Collections.Generic;
     using System.Globalization;
     using System.Xml;
     using System.Xml.Schema;
@@ -32,7 +33,7 @@
                 CaseInvoiceArticle[] articles,
                 CaseInvoiceOrderFile[] files)
         {
-            this.Articles = articles;
+            this.Articles = articles != null ? articles : new List<CaseInvoiceArticle>().ToArray();
             this.InvoiceId = invoiceId;
             this.InvoiceDate = invoiceDate;
             this.InvoicedByUserId = invoicedByUserId;
@@ -51,7 +52,7 @@
             this.Place = place;
             this.UserCode = userCode;
             this.CostCentre = costCentre;
-            this.Files = files;
+            this.Files = files != null ? files : new List<CaseInvoiceOrderFile>().ToArray();
         }
 
         public CaseInvoiceOrder(
