@@ -11,7 +11,7 @@
         {
             this.ProjectId = projectId;
             this.Content = content;
-            this.BasePath = BasePath;
+            this.BasePath = basePath;
             this.Name = name;
             this.CreatedDate = createdDate;
         }
