@@ -2362,46 +2362,29 @@ namespace DH.Helpdesk.Web.Controllers
         #endregion
 
         [HttpPost]
-        public JsonResult SaveCaseInvoice(string caseInvoiceArticle, int customerId, int caseId)
+        public JsonResult SaveCaseInvoice(string caseInvoiceArticle, int customerId, int caseId, string caseKey, string logKey)
         {
             try
             {
-                if (string.IsNullOrEmpty(caseInvoiceArticle))
-                    return null;
-                    //return Json(new { result = "Error", data = "Invalid Invoice to save!" } );
+                if (string.IsNullOrEmpty(caseInvoiceArticle))                    
+                    return Json(new { result = "Error", data = "Invalid Invoice to save!" } );
                 
                 DoInvoiceWork(caseInvoiceArticle, caseId, customerId);
 
-                if (SessionFacade.CurrentUser == null)
-                    return null;
-                    //return Json(new { result = "Error", data = "Invoice is not available, refresh the page and try it again." });
+                if (SessionFacade.CurrentUser == null)                    
+                    return Json(new { result = "Error", data = "Invoice is not available, refresh the page and try it again." });
 
                 var caseInvoices = this.invoiceArticleService.GetCaseInvoicesWithTimeZone(caseId, TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
                 var invoiceArticles = this.invoiceArticlesModelFactory.CreateCaseInvoiceArticlesModel(caseInvoices);
-                var invoiceModel = new CaseInvoiceModel(customerId, caseId, invoiceArticles, "", "", "");
+                var invoiceModel = new CaseInvoiceModel(customerId, caseId, invoiceArticles, string.Empty, caseKey, logKey);
 
                 var serializer = new JavaScriptSerializer();
-                var caseArticlesJson = serializer.Serialize(invoiceModel.InvoiceArticles);
-
-                //var htmlData = InvoiceExtension.CaseInvoiceArticles(
-                //                null,
-                //                invoiceModel.InvoiceArticles,
-                //                "product-area-id",
-                //                invoiceModel.CaseId,
-                //                "case-invoice-articles",
-                //                invoiceModel.CustomerId,
-                //                Translation.Get("Lägg order"),
-                //                Translation.Get("Artiklar att fakturera"),
-                //                invoiceModel.CaseKey,
-                //                invoiceModel.LogKey);
-
-                return Json(new { result = "Success", data = caseArticlesJson });
-                //return this.PartialView("_Invoice", invoiceModel);
+                var caseArticlesJson = serializer.Serialize(invoiceModel.InvoiceArticles);                
+                return Json(new { result = "Success", data = caseArticlesJson });                
             }
             catch (Exception ex)
             {
-                //return Json(new { result = "Error", data = "Unexpected Error:" + ex.Message });
-                return null;
+                return Json(new { result = "Error", data = "Unexpected Error:" + ex.Message });                
             }
         }
 
