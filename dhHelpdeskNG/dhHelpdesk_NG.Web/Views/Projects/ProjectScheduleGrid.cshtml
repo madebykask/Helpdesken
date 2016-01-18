@@ -35,6 +35,9 @@
     <tbody>
         @for (int i = 0; i < Model.ProjectScheduleEditModels.Count; i++)
         {
+            var startDateId = "ProjectScheduleEditModels_" + i.ToString() + "__StartDate";
+            var finishDateId = "ProjectScheduleEditModels_" + i.ToString() + "__FinishDate";
+            
             <tr>
                 <td>
                     <i class="icon-plus-sign project-schedule-expand-button" style="cursor: pointer"></i>
@@ -62,13 +65,14 @@
                     @Html.TextAreaFor(x => x.ProjectScheduleEditModels[i].Description)
 
                     @Html.LabelFor(x => x.ProjectScheduleEditModels[i].StartDate)
-                    <div class="input-append date dateie" data-date="" id="dt-start">
-                        @Html.EditorFor(x => x.ProjectScheduleEditModels[i].StartDate)<span class="add-on"><i class="icon-calendar"></i></span>
+                    <div class="input-append date dateie" data-date="" id="dt-start">                        
+                        @Html.EditorFor(x => x.ProjectScheduleEditModels[i].StartDate, "DatePicker", new { id = startDateId })
+                        @*<span class="add-on"><i class="icon-calendar"></i></span>                       *@
                     </div>
 
                     @Html.LabelFor(x => x.ProjectScheduleEditModels[i].FinishDate)
                     <div class="input-append date dateie" data-date="" id="dt-finish">
-                        @Html.EditorFor(x => x.ProjectScheduleEditModels[i].FinishDate)<span class="add-on"><i class="icon-calendar"></i></span>
+                        @Html.EditorFor(x => x.ProjectScheduleEditModels[i].FinishDate, "DatePicker", new { id = finishDateId })@*<span class="add-on"><i class="icon-calendar"></i></span>*@
                     </div>
 
                     @Html.LabelFor(x => x.ProjectScheduleEditModels[i].CaseNumber)
@@ -83,7 +87,7 @@
 
 <script type="text/javascript">
 
-    $('#dt-start, #dt-finish').datepicker({ dateFormat: 'mm/dd/yyyy' }).val();
+    //$('#dt-finish').datepicker().val();
 
     $(".expanded-content").hide();
     $(function () {

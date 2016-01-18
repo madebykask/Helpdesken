@@ -72,14 +72,22 @@
 
         private static ProjectScheduleEditModel MapProjectScheduleOverview(ProjectScheduleOverview projectOverview)
         {
+            DateTime? startDate = null;
+            if (projectOverview.StartDate.HasValue)
+                startDate = DateTime.SpecifyKind(projectOverview.StartDate.Value, DateTimeKind.Utc);
+
+            DateTime? finishDate = null;
+            if (projectOverview.FinishDate.HasValue)
+                finishDate = DateTime.SpecifyKind(projectOverview.FinishDate.Value, DateTimeKind.Utc);
+
             return new ProjectScheduleEditModel
             {
                 Id = projectOverview.Id,
                 Name = projectOverview.Name,
                 Description = projectOverview.Description,
                 State = (ScheduleStates)projectOverview.State,
-                StartDate = projectOverview.StartDate.HasValue ? DateTime.SpecifyKind(projectOverview.StartDate.Value, DateTimeKind.Utc).ToShortDateString() : string.Empty,
-                FinishDate = projectOverview.FinishDate.HasValue ? DateTime.SpecifyKind(projectOverview.FinishDate.Value, DateTimeKind.Utc).ToShortDateString() : string.Empty,
+                StartDate = startDate,
+                FinishDate = finishDate,
                 CaseNumber = projectOverview.CaseNumber,
                 Position = projectOverview.Position,
                 ProjectId = projectOverview.ProjectId,
