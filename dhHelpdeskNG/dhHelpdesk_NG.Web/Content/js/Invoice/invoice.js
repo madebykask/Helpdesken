@@ -373,9 +373,11 @@ $(function () {
                     $(".ui-dialog-titlebar-close").show();                    
                     $('.btn.close-invoice, .btn.save-invoice').removeClass("disabled");
                     $('.btn.close-invoice, .btn.save-invoice').css("pointer-events", "");
-                    var creditBtn = dhHelpdesk.CaseArticles.OrderActionsInstance.get_creditOrderButton();
-                    creditBtn.removeClass("disabled");
-                    creditBtn.css("pointer-events", "");
+                    if (dhHelpdesk.CaseArticles != null && dhHelpdesk.CaseArticles.OrderActionsInstance != null) {
+                        var creditBtn = dhHelpdesk.CaseArticles.OrderActionsInstance.get_creditOrderButton();
+                        creditBtn.removeClass("disabled");
+                        creditBtn.css("pointer-events", "");
+                    }
                     break;
 
                 case _INVOICE_SAVING:
@@ -383,9 +385,11 @@ $(function () {
                     $('.loading-msg.save-invoice').show();                    
                     $('.btn.close-invoice, .btn.save-invoice').addClass("disabled");
                     $('.btn.close-invoice, .btn.save-invoice').css("pointer-events", "none");
-                    var creditBtn = dhHelpdesk.CaseArticles.OrderActionsInstance.get_creditOrderButton();
-                    creditBtn.addClass("disabled");
-                    creditBtn.css("pointer-events", "none");
+                    if (dhHelpdesk.CaseArticles != null && dhHelpdesk.CaseArticles.OrderActionsInstance != null) {
+                        var creditBtn = dhHelpdesk.CaseArticles.OrderActionsInstance.get_creditOrderButton();
+                        creditBtn.addClass("disabled");
+                        creditBtn.css("pointer-events", "none");
+                    }
                     break;
             }
         },
@@ -511,9 +515,11 @@ $(function () {
                     var caseArticle = article.ToCaseArticle();
                     caseArticle.Article = article;
                     order.AddArticle(caseArticle);
+                    return caseArticle;
                 }
                 else {
                     this.ShowAlreadyInvoicedMessage();
+                    return null;
                 }
 
             }
@@ -609,7 +615,7 @@ $(function () {
         },
 
         UpdateArticle: function (e) {            
-            var id = e.attr("data-id");
+            var id = e.attr("data-id");            
             var article = this.GetArticle(id);
             if (article != null) {
                 article.Update();
@@ -871,7 +877,7 @@ $(function () {
             var addEl = th._container.find(".articles-params-add");
             addEl
                 .unbind('click')
-                .click(function () {
+                .click(function () {                    
                     if (!th.GetInvoiceStatusOfCurrentOrder()) {
                         var unitsEl = th._container.find(".articles-params-units");
                         var units = unitsEl.val();
@@ -884,7 +890,8 @@ $(function () {
                         
                         var articlesEl = th._container.find(".articles-params-article");
                         var articleId = articlesEl.val();
-                        var article = th.GetInvoiceArticle(articleId);                        
+                        var article = th.GetInvoiceArticle(articleId);
+                        var elementForFocus = null;
                         if (article != null) {
                             var currentOrder = th.GetCurrentOrder();
                             if (article.HasChildren()) {
@@ -894,28 +901,47 @@ $(function () {
                                     
                                     if (!child.HasPpu) {                                        
                                         child.Ppu = units_Price;                                        
-                                        currentOrder.AddArticle(child);                                                                                
+                                        currentOrder.AddArticle(child);
+                                        if (elementForFocus == null && units_Price == "") {
+                                            elementForFocus = $('#ArtPrice_' + caseArticle.Id);
+                                        }
                                     }
                                     else
                                         currentOrder.AddArticle(child);
 
-                                    if (child.Article.TextDemand)
-                                        dhHelpdesk.CaseArticles.AddBlankArticle(currentOrder.Id);
+                                    if (child.Article.TextDemand) {
+                                        var addedElement = dhHelpdesk.CaseArticles.AddBlankArticle(currentOrder.Id);
+                                        if (elementForFocus == null && addedElement != null)
+                                            elementForFocus = $('#Description_' + addedElement.Id);
+                                    }
                                 }
                             } else {
                                 var caseArticle = article.ToCaseArticle();
                                 caseArticle.Amount = units;
                                 if (!caseArticle.HasPpu) {
-                                    caseArticle.Ppu = units_Price;
-                                    caseArticle.Article.Ppu = units_Price;
-                                    currentOrder.AddArticle(caseArticle);                                                                        
+                                    caseArticle.Ppu = units_Price;                                    
+                                    currentOrder.AddArticle(caseArticle);
+                                    if (elementForFocus == null && units_Price == "") {
+                                        elementForFocus = $('#ArtPrice_' + caseArticle.Id);
+                                    }
+                                        
                                 }
                                 else
                                     currentOrder.AddArticle(caseArticle);
 
-                                if (caseArticle.Article.TextDemand)
-                                    dhHelpdesk.CaseArticles.AddBlankArticle(currentOrder.Id);
+                                if (caseArticle.Article.TextDemand) {
+                                    var addedElement = dhHelpdesk.CaseArticles.AddBlankArticle(currentOrder.Id);
+                                    if (elementForFocus == null && addedElement != null)
+                                        elementForFocus = $('#Description_' + addedElement.Id);
+                                }
+
                             }                            
+
+                            
+                            if (elementForFocus == null)                                
+                                articlesEl.trigger('chosen:activate');
+                            else
+                                elementForFocus.focus();
 
                             // Reset number of units to default
                             unitsEl.val(dhHelpdesk.CaseArticles.DefaultAmount);                            
@@ -980,17 +1006,21 @@ $(function () {
                     if (selectedArticle.HasChildren()) {
                         units_PriceEl.val('');
                         units_PriceEl.prop("readonly", false);
+                        units_PriceEl.prop("disabled", false);
+
                     }
                     else
                     {                                                
                         if (!selectedArticle.HasPpu) {
                             units_PriceEl.val('');
                             units_PriceEl.prop("readonly", false);
+                            units_PriceEl.prop("disabled", false);
                         }
                         else
                         {
                             units_PriceEl.val(selectedArticle.Ppu);
                             units_PriceEl.prop("readonly", true);
+                            units_PriceEl.prop("disabled", true);
                         }
                     }
                 }                
@@ -1007,7 +1037,7 @@ $(function () {
                 $('.case-invoice-container *').attr("disabled", true);
                 $('#actions-credit-order').attr("disabled", true);
             }
-            dhHelpdesk.CaseArticles.DoDelimit();
+            //dhHelpdesk.CaseArticles.DoDelimit();
             th.FillOrganisationDataForOtherReference();
         },
 
@@ -1041,6 +1071,7 @@ $(function () {
             e.after(button);
 
             var onChangeProductArea = function () {
+                
                 button.hide();
                 $.getJSON("/invoice/articles?productAreaId=" + th.ProductAreaElement.val(), function (data) {
                     th.ClearInvoiceArticles();
@@ -1375,7 +1406,7 @@ $(function () {
                 for (var i = 0; i < orders.length; i++) {
                     model.AddOrder(orders[i].GetViewModel());
                 }
-                model.Total = this.GetArticlesTotal();
+                model.Total = dhHelpdesk.CaseArticles.DoDelimit(this.GetArticlesTotal().toString());
 
                 return model;
             },
@@ -1416,8 +1447,19 @@ $(function () {
                     }
                 });
 
-                dhHelpdesk.CaseArticles.OnEvent("OnAddArticle", function (e, order, article) {
-                    $('.article-amount').last().focus();
+                dhHelpdesk.CaseArticles.OnEvent("OnAddArticle", function (e, order, article) {                    
+                    //if (article.Article != null && !article.Article.HasPpu && (article.Article.Ppu == 0 || article.Article.Ppu == "" || article.Article.Ppu == null))
+                    //    $('.article-amount').last().focus();
+                    //else
+                    //    if (article.Article != null && article.Article.TextDemand)
+                    //        $('#' + lastArticle.Id).focus();
+                    //    else {
+                    //        if (dhHelpdesk.CaseArticles._container != null) {
+                    //            var articlesEl = dhHelpdesk.CaseArticles._container.find(".articles-params-article");
+                    //            articlesEl.focus();
+                    //        }
+                    //    }
+                    //$('.article-amount').last().focus();
                     th.ShowSummary();
                 });
 
@@ -1749,7 +1791,7 @@ $(function () {
                 var model = new dhHelpdesk.CaseArticles.CaseInvoiceOrderViewModel();
                 model.Id = this.Id != null ? this.Id : dhHelpdesk.CaseArticles.GenerateId();
                 model.Number = this.Number + 1;
-                model.Total = this.GetArticlesTotal();                
+                model.Total = dhHelpdesk.CaseArticles.DoDelimit(this.GetArticlesTotal().toString());
                 model.InvoiceDate = this.InvoiceDate != null && this.InvoiceDate != "" ? dhHelpdesk.CaseArticles.JSONDateToDateTime(this.InvoiceDate) : "";
                 model.InvoicedByUser = this.InvoicedByUser != null ? this.InvoicedByUser : "";
                 model.InvoicedByUserId = this.InvoicedByUserId != null ? this.InvoicedByUserId : "";
@@ -1975,7 +2017,7 @@ $(function () {
             },
 
             this.UpdateTotal = function () {
-                this.Container.find(".articles-total").text(this.GetArticlesTotal());
+                this.Container.find(".articles-total").text(dhHelpdesk.CaseArticles.DoDelimit(this.GetArticlesTotal().toString()));
                 if (this.Invoice != null) {
                     this.Invoice.UpdateTotal();
                 }
@@ -2154,9 +2196,9 @@ $(function () {
                 return this.Article == null || this.Article.IsBlank();
             };
 
-            this.GetTotal = function () {
-                if (this.Article != null) {
-                    return this.Amount * this.GetPpu();
+            this.GetTotal = function () {                
+                if (this.Article != null) {                    
+                    return (this.Amount * this.GetPpu()) ;
                 }
                 return 0;
             };
@@ -2202,7 +2244,7 @@ $(function () {
                 model.Amount = this.Amount;
                 model.UnitName = this.GetUnitName();
                 model.Ppu = this.GetPpu();
-                model.Total = this.GetTotal();
+                model.Total = dhHelpdesk.CaseArticles.DoDelimit(this.GetTotal().toString());
                 model.IsArticlePpuExists = this.IsArticlePpuExists();
                 model.IsCredited = this.CreditedFrom != null;
                 return model;
@@ -2237,12 +2279,12 @@ $(function () {
                         ppu = dhHelpdesk.CaseArticles.DefaultPpu;
                         ePpu.val(ppu);
                     }
-                    this.Ppu = ppu;
+                    this.Ppu = ppu; 
                 }
 
-                this.Container.find(".article-total").text(this.GetTotal());
-                this.Order.UpdateTotal();
-                dhHelpdesk.CaseArticles.DoDelimit(); //todo finish this... Need new validation and cleaning of data when saved (isinteger is false with space)
+                var totalPrice = this.GetTotal().toString();
+                this.Container.find(".article-total").text(dhHelpdesk.CaseArticles.DoDelimit(totalPrice));
+                this.Order.UpdateTotal();                
             },
 
             this.Refresh = function () {
@@ -2334,23 +2376,10 @@ $(function () {
             }
         },
 
-        DoDelimit: function()
+        DoDelimit: function(val)
         {
-            return;
-            var allArticlePrices = $('.article-ppu');
-            $.each(allArticlePrices, function (index, value) {
-                $(value).val(dhHelpdesk.CaseArticles.delimitInput($(value).val()));
-            });
-            var allTotalPrices = $('.article-total, .articles-total, .article-ppu-fixed');
-            $.each(allTotalPrices, function (index, value) {
-                $(value).text(dhHelpdesk.CaseArticles.delimitInput($(value).text()));
-            });
-        },
-
-        delimitInput: function (val) {
             var decimalDelimiter = ',';
-            var thousandDelimiter = ' ';
-            val = val.replace(' ', '');            
+            var thousandDelimiter = ' ';            
             x = val.split(this.decimalDelimiter);
             intVal = x[0];
             DecimalVal = x.length > 1 ? decimalDelimiter + x[1] : '';
@@ -2358,9 +2387,9 @@ $(function () {
             while (rgx.test(intVal)) {
                 intVal = intVal.replace(rgx, '$1' + thousandDelimiter + '$2');
             }
-            return intVal + DecimalVal;
+            return intVal + DecimalVal;            
         },
-
+        
         InvoiceArticleUnit: function () {
             this.Id = null;
             this.Name = null;
