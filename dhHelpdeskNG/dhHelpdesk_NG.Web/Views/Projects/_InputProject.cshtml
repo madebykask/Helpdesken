@@ -84,13 +84,13 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="span3">@Translation.Get("Bifogad fil", Enums.TranslationSource.TextTranslation)
+                    <td class="span3" style="vertical-align:top">@Translation.Get("Bifogad fil", Enums.TranslationSource.TextTranslation)
                     </td>
                     <td>
+                        <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)</a>
                         <div id="filesContainer">
                             @Html.Action("AttachedFiles", new { guid = Model.Guid, area = string.Empty })
                         </div>
-                        <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Bifogad fil", Enums.TranslationSource.TextTranslation)</a>
                     </td>
                 </tr>
             </table>
