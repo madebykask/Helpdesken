@@ -299,6 +299,9 @@
     <Compile Include="Areas\Admin\Infrastructure\ModelFactories\CaseInvoiceFactory.cs" />
     <Compile Include="Areas\Admin\Infrastructure\ModelFactories\ICaseInvoiceFactory.cs" />
     <Compile Include="Areas\Admin\Models\AccountActivityInputViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\BusinessRules\BusinessRuleItemViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\BusinessRules\BusinessRulesViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\BusinessRules\EditBusinessRuleViewModel.cs" />
     <Compile Include="Areas\Admin\Models\CaseTypeInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\CategoryViewModels.cs" />
     <Compile Include="Areas\Admin\Models\CausingPart\CausingPartsViewModel.cs" />
@@ -372,6 +375,7 @@
     <Compile Include="Areas\Admin\Models\SystemInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\UrgencyInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\WorkingGroupInputViewModel.cs" />
+    <Content Include="Areas\Admin\Content\js\BusinessRules\businessRules.list.js" />
     <Content Include="Areas\Admin\Content\js\CaseOverview\customerOverview.js" />
     <Content Include="Areas\Admin\Content\js\Category\index.js" />
     <Content Include="Areas\Admin\Content\js\CausingPart\index.js" />
@@ -1756,6 +1760,8 @@
     <Content Include="Scripts\jquery-ui-1.9.2.js" />
     <Content Include="Scripts\jquery-ui-1.9.2.min.js" />
     <Content Include="Scripts\jquery.cookie.js" />
+    <Content Include="Scripts\knockout-3.4.0.debug.js" />
+    <Content Include="Scripts\knockout-3.4.0.js" />
     <Content Include="Views\DailyReport\Index.cshtml" />
     <Content Include="Areas\Orders\Views\OrderFieldSettings\Index.cshtml" />
     <Content Include="Areas\Orders\Views\OrderFieldSettings\EditorTemplates\FullFieldSettingsModel.cshtml" />

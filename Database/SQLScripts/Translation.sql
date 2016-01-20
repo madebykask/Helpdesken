@@ -4189,5 +4189,33 @@ If not exists (select * from tblTextTranslation where Text_Id = 1572 and Languag
             insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1572, 'Rules List', 2)
 GO
 
+If not exists (select * from tblText where Id = 1573)
+            insert into tblText (Id, Textstring) VALUES (1573, 'Regler')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1573 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1573, 'Rules', 2)
+GO
+
+If not exists (select * from tblText where Id = 1574)
+            insert into tblText (Id, Textstring) VALUES (1574, 'Regelnamn')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1574 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1574, 'Rule name', 2)
+GO
+
+If not exists (select * from tblText where Id = 1575)
+            insert into tblText (Id, Textstring) VALUES (1575, 'Händelse')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1575 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1575, 'Event', 2)
+GO
+
+If not exists (select * from tblText where Id = 1576)
+            insert into tblText (Id, Textstring) VALUES (1576, 'Regel')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1576 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1576, 'Rule', 2)
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

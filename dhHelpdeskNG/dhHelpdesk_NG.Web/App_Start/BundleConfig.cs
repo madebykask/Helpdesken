@@ -226,7 +226,15 @@
                             "~/Content/js/Orders/order.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/orderaccounts/order").Include(
-                "~/Content/js/Account/order.js"));            
+                "~/Content/js/Account/order.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
+#if DEBUG
+                "~/Scripts/knockout-3.4.0.debug.js"
+#else
+                "~/Scripts/knockout-3.4.0.js"
+#endif
+                ));
 
             #region Admin scripts
 
@@ -361,6 +369,10 @@
 
             bundles.Add(new ScriptBundle("~/bundles/cases/caseByIds").Include(
                             "~/Content/js/Cases/caseByIds.logic.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/businessrules/businessRules").Include(
+                "~/Areas/Admin/Content/js/BusinessRules/businessRules.list.js"));
+
             #endregion
         }
     }

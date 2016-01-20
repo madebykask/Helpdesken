@@ -1,3 +1,18 @@
-﻿@{
+﻿@model DH.Helpdesk.Web.Areas.Admin.Models.BusinessRules.EditBusinessRuleViewModel
+@{
     ViewBag.Title = "Busines Rule Edit";
 }
+<div class="secnavs fixed">
+    <div class="pull-left">
+        <ul class="secnav">
+            <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Spara"), "new", null, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
+            <li>@Html.ActionLink(@Translation.GetCoreTextTranslation("Avbryt"), "index", new { customerId = Model.Department.Customer_Id}, new { @class = "btn" })</li>
+        </ul>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/knockout")
+@Scripts.Render("~/bundles/businessRules")
+<script type="text/javascript">
+        
+</script>
