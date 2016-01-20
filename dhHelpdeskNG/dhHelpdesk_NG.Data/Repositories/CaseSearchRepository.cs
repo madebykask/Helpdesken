@@ -298,7 +298,7 @@
                                 row.Id = dr.SafeGetInteger("Id"); 
                                 row.Columns = cols;
                                 row.IsUnread = dr.SafeGetInteger("Status") == 1;
-                                row.IsUrgent = timeLeft.HasValue && timeLeft <= 0;                                
+                                row.IsUrgent = timeLeft.HasValue && timeLeft < 0;                                
                                 ret.Add(row); 
                             }
                         }
@@ -1249,7 +1249,7 @@
             {
                 var text = f.CaptionSearch;
                 sb.Append(" AND (");
-                sb.Append(this.GetSqlLike("[tblCase].[Caption]", text));
+                sb.AppendFormat("LOWER({0}) LIKE '%{1}%'", "[tblCase].[Caption]", text);
                 sb.Append(") ");
             }
 

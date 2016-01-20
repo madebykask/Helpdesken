@@ -36,7 +36,21 @@
                                  @Translation.Get(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSearchFilterData.filterCustomerId)                                  
                              </td>
                              <td>
-                                @Html.ListBoxFor(m => m.CaseSearchFilterData.lstfilterPerformer, Model.CaseSearchFilterData.AvailablePerformersList, new { id = "lstfilterPerformer", @class = "chosen-select", multiple = "multiple", name="lstfilterPerformer" })                                  
+                                <select id="lstfilterPerformer" name="lstfilterPerformer" data-field="performers" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                    @foreach (var e in Model.CaseSearchFilterData.AvailablePerformersList.Items)
+                                    {
+                                        int id;
+                                        int.TryParse(e.Id, out id);                                        
+                                        if (e.IsActive)
+                                        {
+                                            <option value="@e.Id" @id.IdIsSelected(Model.CaseSearchFilterData.AvailablePerformersList.SelectedItems.GetSelectedStr())>@e.Value</option>
+                                        }
+                                        else
+                                        {                                        
+                                            <option class="DisabledChosen" value="@e.Id" @id.IdIsSelected(Model.CaseSearchFilterData.AvailablePerformersList.SelectedItems.GetSelectedStr())>@e.Value</option>
+                                        }                                    
+                                    }
+                                </select>                              
                              </td>
                          </tr>                 
                      }
@@ -51,7 +65,7 @@
                                 {
                                     <option value="@e.Id" @e.Id.IdIsSelected(Model.CaseSearchFilterData.caseSearchFilter.CaseProgress)>@e.StringValue</option>
                                 }
-                        </select>
+                            </select>
                         </td>
                     </tr>                                     
                      

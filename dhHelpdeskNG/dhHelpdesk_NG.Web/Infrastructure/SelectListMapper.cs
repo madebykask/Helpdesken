@@ -6,6 +6,8 @@
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.BusinessData.Models.Shared;
+    using System;
     
     public static class SelectListMapper
     {
@@ -80,6 +82,43 @@
             public string Id { get; set; }
             
             public string Name { get; set; }
+        }
+
+
+        public static CustomSelectList MapToCustomSelectList(
+            this IEnumerable<User> userCollection,
+            string selectedItems,
+            Setting customerSettings,
+            bool addEmpty = false)
+        {
+            CustomSelectList list = new CustomSelectList();
+            if (customerSettings.IsUserFirstLastNameRepresentation == 0)
+            {
+                list.Items.AddItems(
+                    userCollection.OrderBy(it => it.SurName)
+                        .ThenBy(it => it.FirstName)
+                        .Select(
+                            it => new ListItem(it.Id.ToString(), string.Format("{0} {1}", it.SurName, it.FirstName), Convert.ToBoolean(it.IsActive)))
+                        .ToList());
+                list.SelectedItems.AddItems(selectedItems);
+            }
+            else
+            {
+                list.Items.AddItems(
+                    userCollection.OrderBy(it => it.SurName)
+                        .ThenBy(it => it.FirstName)
+                        .Select(
+                            it => new ListItem(it.Id.ToString(), string.Format("{0} {1}", it.FirstName, it.SurName), Convert.ToBoolean(it.IsActive)))
+                        .ToList());
+                list.SelectedItems.AddItems(selectedItems);
+            }
+
+            if (addEmpty)
+            {
+                list.Items.AddItem(new ListItem("0", string.Empty, true ));
+            }
+
+            return list;
         }
     }
 }

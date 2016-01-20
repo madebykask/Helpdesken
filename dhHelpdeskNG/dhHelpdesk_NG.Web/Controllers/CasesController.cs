@@ -3171,10 +3171,10 @@ namespace DH.Helpdesk.Web.Controllers
                 }
             }
 
-            //ansvarig
             var performers = this._userService.GetAvailablePerformersOrUserId(cusId);
+            //performers
             performers.Insert(0, ObjectExtensions.notAssignedPerformer());
-            fd.AvailablePerformersList = performers.MapToSelectList(fd.customerSetting);
+            fd.AvailablePerformersList = performers.MapToCustomSelectList(fd.caseSearchFilter.UserPerformer, fd.customerSetting);
             if (!string.IsNullOrEmpty(fd.caseSearchFilter.UserPerformer))
             {
                 fd.lstfilterPerformer = fd.caseSearchFilter.UserPerformer.Split(',').Select(int.Parse).ToArray();
@@ -3197,7 +3197,9 @@ namespace DH.Helpdesk.Web.Controllers
             fd.customerSetting = this._settingService.GetCustomerSetting(cusId);
             fd.filterCustomers = customers;
             fd.filterCustomerId = cusId;
-            fd.AvailablePerformersList = this._userService.GetUsers(cusId).MapToSelectList(fd.customerSetting);
+            // Case #53981
+            var userSearch = new UserSearch() { CustomerId = cusId, StatusId = 3 };
+            fd.AvailablePerformersList = this._userService.SearchSortAndGenerateUsers(userSearch).MapToCustomSelectList(fd.caseSearchFilter.UserPerformer, fd.customerSetting);
             if (!string.IsNullOrEmpty(fd.caseSearchFilter.UserPerformer))
             {
                 fd.lstfilterPerformer = fd.caseSearchFilter.UserPerformer.Split(',').Select(int.Parse).ToArray();
