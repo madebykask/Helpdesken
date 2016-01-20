@@ -33,20 +33,18 @@
                     @Html.ValidationSummary(true)
                     @Html.Partial("_InputProject", new ProjectEditViewModel { Users = Model.Users, ProjectEditModel = Model.ProjectEditModel, Guid = Model.Guid.ToString(CultureInfo.InvariantCulture) }) // todo Implement Mappers
                 }
-                <div class="content mt20">
+                
+                
                     <div class="container">
-                        <ul class="nav nav-tabs">
-                            <li class="active">
-                                <a href="#fragment-1">@Translation.Get("Delprojekt")</a>
-                            </li>
-                        </ul>
-                        <div class="tab-content">
+                        <h4>@Translation.Get("Delprojekt")</h4>
+                        <div class="tab-content" style="margin:-11px 0 0 -5px;">
                             <div class="tab-pane tab-pane-border active">
                                 @using (Html.BeginForm("AddProjectSchedule", "Projects", FormMethod.Post, new { id = "project_schedule_edit_form" }))
                                 {   
                                     @Html.ValidationSummary(true)
                                     @Html.Partial("EditorTemplates/NewProjectScheduleEditModel", Model.NewProjectScheduleEditModel)
-                                    <input type="submit" value="@Translation.Get("Nytt delprojekt")" class="btn"/>
+                                    
+                                    <hr />
                                 }
                                 @using (Html.BeginForm("EditProject", "Projects", FormMethod.Post, new { id = "project_schedules_edit_form" }))
                                 {
@@ -56,13 +54,14 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                
             </div>
             <div class="tab-pane tab-pane-border" id="fragment-2">
                 @using (Html.BeginForm("AddProjectLog", "Projects", FormMethod.Post, new { id = "log_edit_form" }))
                 {
                     @Html.EditorFor(x => x.ProjectLog)
-                    <input type="submit" value="@Translation.Get("Lägg till")" class="btn"/>
+                    
+                    <hr />
                 }
                 @Html.Partial("LogGrid", Model.ProjectLogs)
             </div>

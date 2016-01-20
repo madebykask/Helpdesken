@@ -6,10 +6,13 @@
         <div class="span12">
             <table>
                 <tr>
-                    <td class="span3">@Html.LabelFor(x => x.LogText)
+                    <td class="span2">@Html.LabelFor(x => x.LogText)
                     </td>
-                    <td class="span9">
+                    <td style="padding-right:10px;">
                         @Html.TextAreaFor(x => x.LogText)
+                    </td>
+                    <td>
+                        <input type="submit" value="@Translation.Get("Lägg till")" class="btn"/>
                     </td>
                 </tr>
             </table>
