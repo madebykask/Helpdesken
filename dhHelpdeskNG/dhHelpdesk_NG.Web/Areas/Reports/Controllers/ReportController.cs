@@ -582,6 +582,7 @@ using DH.Helpdesk.BusinessData.Enums.Case;
                 var reportFile = Path.Combine(basePath, fileLocation);
                 reportViewer.ProcessingMode = ProcessingMode.Local;
                 reportViewer.SizeToReportContent = true;
+                reportViewer.ShowZoomControl = false;                
                 reportViewer.LocalReport.ReportPath = reportFile;
                 foreach (var dataSet in reportData.DataSets)
                     reportViewer.LocalReport.DataSources.Add(new ReportDataSource(dataSet.DataSetName, dataSet.DataSet));
