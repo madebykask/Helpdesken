@@ -1074,6 +1074,9 @@ input[type=text].error, select.error, textarea.error,  .btn-group.error .btn
 {
     color: #ff0000;
 }
+.ui-wrapper {
+    padding-bottom: 20px !important;
+}
 /*******************************************************************************************/
 .navbar-inner
 {
