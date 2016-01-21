@@ -4217,5 +4217,12 @@ If not exists (select * from tblTextTranslation where Text_Id = 1576 and Languag
             insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1576, 'Rule', 2)
 GO
 
+If not exists (select * from tblText where Id = 1577)
+            insert into tblText (Id, Textstring) VALUES (1577, 'Du kan inte ta bort noteringen, eftersom du saknar behörighet att ta bort bifogade filer')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1577 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1577, 'You can not delete this lognote, because you have no permission to delete attached files', 2)
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

@@ -1135,7 +1135,7 @@ namespace DH.Helpdesk.Web.Controllers
                 }
                 else
                 {
-                    err = Translation.Get("Du har inga rättigheter att ta bort bifogade filer") + ".";
+                    err = Translation.Get("Du kan inte ta bort noteringen, eftersom du saknar behörighet att ta bort bifogade filer") + ".";
                     TempData["PreventError"] = err;
                     return this.RedirectToAction("editlog", "cases", new { id = id, customerId = SessionFacade.CurrentCustomer.Id });
                 }
