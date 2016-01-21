@@ -1716,14 +1716,14 @@ namespace DH.Helpdesk.Web.Controllers
         #region --Files--
 
         [HttpGet]
-        public ActionResult Files(string id)
+        public ActionResult Files(string id, string savedFiles)
         {
             //var files = this._caseFileService.GetCaseFiles(int.Parse(id));
             var files = GuidHelper.IsGuid(id)
                                 ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Cases)
                                 : this._caseFileService.FindFileNamesByCaseId(int.Parse(id));
 
-            var cfs = MakeCaseFileModel(files);
+            var cfs = MakeCaseFileModel(files, savedFiles);
             var customerId = 0;
             if (!GuidHelper.IsGuid(id)) {
                 customerId = this._caseService.GetCaseById(int.Parse(id)).Customer_Id;
@@ -1735,7 +1735,8 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 UseVD = true;
             }
-            var model = new CaseFilesModel(id, cfs.ToArray(), UseVD);
+            
+            var model = new CaseFilesModel(id, cfs.ToArray(), savedFiles, UseVD);
             return this.PartialView("_CaseFiles", model);
         }
         
@@ -3599,7 +3600,7 @@ namespace DH.Helpdesk.Web.Controllers
             m.CaseFilesModel = new CaseFilesModel();
             m.LogFilesModel = new FilesModel();
             m.CaseFileNames = GetCaseFileNames(caseId.ToString());
-            m.CaseFileNames = GetLogFileNames(caseId.ToString());
+            m.LogFileNames = GetLogFileNames(caseId.ToString());
 
             if (isCreateNewCase)
             {
@@ -3658,7 +3659,10 @@ namespace DH.Helpdesk.Web.Controllers
                     UseVD = true;
                 }
 
-                m.CaseFilesModel = new CaseFilesModel(caseId.ToString(global::System.Globalization.CultureInfo.InvariantCulture), this._caseFileService.GetCaseFiles(caseId).OrderBy(x => x.CreatedDate).ToArray(), UseVD);
+                var canDelete = (SessionFacade.CurrentUser.DeleteAttachedFilePermission == 1);
+                m.SavedFiles = canDelete? string.Empty : m.CaseFileNames;                
+
+                m.CaseFilesModel = new CaseFilesModel(caseId.ToString(global::System.Globalization.CultureInfo.InvariantCulture), this._caseFileService.GetCaseFiles(caseId, canDelete).OrderBy(x => x.CreatedDate).ToArray(), m.SavedFiles, UseVD);
                 if (m.case_.User_Id.HasValue)
                 {
                     m.RegByUser = this._userService.GetUser(m.case_.User_Id.Value);
@@ -4383,15 +4387,18 @@ namespace DH.Helpdesk.Web.Controllers
             return li;
         }
 
-        private List<CaseFileModel> MakeCaseFileModel(List<string> files)
+        private List<CaseFileModel> MakeCaseFileModel(List<string> files, string savedFiles)
         {
             var res = new List<CaseFileModel>();
             int i = 0;
 
+            var savedFileList = string.IsNullOrEmpty(savedFiles)? null : savedFiles.Split('|').ToList();
+
             foreach (var f in files)
             {
                 i++;
-                var cf = new CaseFileModel(i, i, f, DateTime.Now, SessionFacade.CurrentUser.FirstName + " " + SessionFacade.CurrentUser.SurName);
+                var canDelete = !(savedFileList != null && savedFileList.Contains(f));
+                var cf = new CaseFileModel(i, i, f, DateTime.Now, SessionFacade.CurrentUser.FirstName + " " + SessionFacade.CurrentUser.SurName, canDelete);
                 res.Add(cf);
             }
 

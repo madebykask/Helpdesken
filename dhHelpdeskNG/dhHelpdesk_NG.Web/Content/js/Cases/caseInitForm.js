@@ -685,7 +685,7 @@ function CaseInitForm() {
     }
 
     var getCaseFiles = function () {
-        $.get('/Cases/Files', { id: $('#CaseKey').val(), now: Date.now() }, function (data) {
+        $.get('/Cases/Files', { id: $('#CaseKey').val(), savedFiles: $('#SavedFiles').val(),  now: Date.now() }, function (data) {
             $('#divCaseFiles').html(data);
             // Raise event about rendering of uploaded file
             $(document).trigger("OnUploadedCaseFileRendered", []);

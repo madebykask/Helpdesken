@@ -19,7 +19,7 @@
         bool FileExists(int caseId, string fileName);
         void DeleteByCaseIdAndFileName(int caseId, string basePath, string fileName);
 
-        CaseFileModel[] GetCaseFiles(int caseId);
+        CaseFileModel[] GetCaseFiles(int caseId, bool canDelete);
     }
 
     public class CaseFileService : ICaseFileService
@@ -74,9 +74,9 @@
             this._caseFileRepository.DeleteByCaseIdAndFileName(caseId, basePath, fileName);  
         }
 
-        public CaseFileModel[] GetCaseFiles(int caseId)
+        public CaseFileModel[] GetCaseFiles(int caseId, bool canDelete)
         {
-            return this._caseFileRepository.GetCaseFiles(caseId);
+            return this._caseFileRepository.GetCaseFiles(caseId, canDelete);
         }
 
         public List<string> FindFileNamesByCaseId(int caseId)

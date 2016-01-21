@@ -149,6 +149,8 @@
 
         public string LogFileNames { get; set; }
 
+        public string SavedFiles { get; set; }
+
         /// <summary>
         /// Gets or sets the case owner default working group.
         /// </summary>

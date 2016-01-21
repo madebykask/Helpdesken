@@ -9,13 +9,15 @@
                 int caseId, 
                 string fileName, 
                 DateTime createdDate, 
-                string userName)
+                string userName,
+                bool canDelete)
         {
             this.UserName = userName;
             this.CreatedDate = createdDate;
             this.FileName = fileName;
             this.CaseId = caseId;
             this.Id = id;
+            this.CanDelete = canDelete;
         }
 
         public int Id { get; private set; }
@@ -27,5 +29,7 @@
         public DateTime CreatedDate { get; private set; }
 
         public string UserName { get; private set; }
+
+        public bool CanDelete { get; private set; }
     }
 }

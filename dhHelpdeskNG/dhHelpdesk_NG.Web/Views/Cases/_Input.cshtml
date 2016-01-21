@@ -185,6 +185,7 @@
                         @Html.HiddenFor(model => model.CaseMailSetting.DontConnectUserToWorkingGroup, new { data_field = "dontConnectUserToWorkingGroup" })
                         @Html.HiddenFor(model => model.CaseFileNames)
                         @Html.HiddenFor(model => model.LogFileNames)
+                        @Html.HiddenFor(model => model.SavedFiles)
                         @Html.HiddenFor(model => model.case_.Unread)
                         @Html.HiddenFor(model => model.ProductAreaHasChild)
                         @Html.Hidden("WriteTextToExternalNote", Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString()))
