@@ -6,9 +6,10 @@
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Web.Infrastructure.Filters.Projects;
     using DH.Helpdesk.Web.Models.Projects;
+    using System.Web.Mvc;
 
     public interface IIndexProjectViewModelFactory
     {
-        IndexProjectViewModel Create(List<ProjectOverview> overviews, List<User> users, ProjectFilter filter);
+        IndexProjectViewModel Create(List<ProjectOverview> overviews, SelectList users, ProjectFilter filter);
     }
 }

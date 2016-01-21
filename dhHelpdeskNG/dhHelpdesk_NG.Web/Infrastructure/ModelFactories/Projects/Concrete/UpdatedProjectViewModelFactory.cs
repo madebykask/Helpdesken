@@ -14,7 +14,7 @@
     {
         public UpdatedProjectViewModel Create(
             ProjectOverview projectOverview,
-            List<User> users,
+            SelectList users,
             List<ProjectCollaboratorOverview> collaboratorOverviews,
             List<ProjectScheduleOverview> schedules,
             List<ProjectLogOverview> logs,
@@ -25,7 +25,7 @@
             // project.ProjectCollaboratorIds = collaboratorOverviews.Select(x => x.UserId.ToString()).ToList();
             project.ProjectCollaboratorIds = collaboratorOverviews.Select(x => x.UserId).ToList();
 
-            var items = users.Select(x => new { Value = x.Id, Name = string.Format("{0} {1}", x.FirstName, x.SurName) });
+            var items = users.Select(x => new { Value = x.Value, Name = x.Text });
             var ids = collaboratorOverviews.Select(x => x.UserId).ToList();
             var list = new MultiSelectList(items, "Value", "Name", ids);
 

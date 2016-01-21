@@ -57,6 +57,8 @@
 
         private readonly IMasterDataService masterDataService;
 
+        private readonly ISettingService settingService;
+
         public ProjectsController(
             IMasterDataService masterDataService,
             IProjectService projectService,
@@ -71,7 +73,8 @@
             IUpdatedProjectScheduleFactory updatedProjectScheduleFactory,
             IIndexProjectViewModelFactory indexProjectViewModelFactory,
             IEditorStateCacheFactory userEditorValuesStorageFactory,
-            ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory)
+            ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory,
+            ISettingService settingService)
             : base(masterDataService)
         {
             this.masterDataService = masterDataService;
@@ -86,6 +89,7 @@
             this.updatedProjectFactory = updatedProjectFactory;
             this.updatedProjectScheduleFactory = updatedProjectScheduleFactory;
             this.indexProjectViewModelFactory = indexProjectViewModelFactory;
+            this.settingService = settingService;
 
             this.userEditorValuesStorage = userEditorValuesStorageFactory.CreateForModule(ModuleName.Project);
             this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Project);
@@ -103,8 +107,10 @@
                 filter.ProjectManagerId,
                 filter.ProjectNameLikeString,
                 sortField);
-            var users = this.userService.GetUsers(SessionFacade.CurrentCustomer.Id).ToList();
 
+            var cs = this.settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
+            var users = this.userService.GetUsers(SessionFacade.CurrentCustomer.Id).MapToSelectList(cs);
+           
             var viewModel = this.indexProjectViewModelFactory.Create(projects, users, filter);
             return this.View(viewModel);
         }
@@ -198,11 +204,9 @@
         [HttpGet]
         public ActionResult NewProject()
         {
-            var users =
-                this.userService.GetUsers(SessionFacade.CurrentCustomer.Id)
-                    .OrderBy(x => x.FirstName)
-                    .ThenBy(x => x.SurName)
-                    .ToList();
+            var cs = this.settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
+            var users = this.userService.GetUsers(SessionFacade.CurrentCustomer.Id).MapToSelectList(cs);           
+
             var viewModel = this.newProjectViewModelFactory.Create(users, Guid.NewGuid().ToString());
 
             return this.View(viewModel);
@@ -214,7 +218,8 @@
         {
             if (!this.ModelState.IsValid)
             {
-                var users = this.userService.GetUsers(SessionFacade.CurrentCustomer.Id).ToList();
+                var cs = this.settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
+                var users = this.userService.GetUsers(SessionFacade.CurrentCustomer.Id).MapToSelectList(cs);
                 var model = this.newProjectViewModelFactory.Create(users, guid);
                 model.ProjectEditModel = projectEditModel;
                 return this.View(model);
@@ -424,12 +429,9 @@
 
             // todo
             var cases = this.caseService.GetCases().Where(x => x.Customer_Id == SessionFacade.CurrentCustomer.Id && x.Project_Id == id).ToList();
-            var users =
-                this.userService.GetUsers(SessionFacade.CurrentCustomer.Id)
-                    .OrderBy(x => x.FirstName)
-                    .ThenBy(x => x.SurName)
-                    .ToList();
-
+            var cs = this.settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
+            var users = this.userService.GetUsers(SessionFacade.CurrentCustomer.Id).MapToSelectList(cs);
+            
             var viewModel = this.updatedProjectViewModelFactory.Create(
                 project,
                 users,
