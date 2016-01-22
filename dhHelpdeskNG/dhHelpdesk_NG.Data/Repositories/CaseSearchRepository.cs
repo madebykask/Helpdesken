@@ -219,6 +219,11 @@
                                         var dtTo = DatesHelper.Max(caseRegistrationDate, now);
                                         var calcTime = workTimeCalculator.CalculateWorkTime(dtFrom, dtTo, departmentId);
                                         timeLeft = (SLAtime * 60 - calcTime + timeOnPause) / 60;
+                                        var floatingPoint = (SLAtime * 60 - calcTime + timeOnPause) % 60;
+                                        
+                                        if (timeLeft == 0 && floatingPoint < 0)
+                                            timeLeft--; 
+                                        
                                     }
 
                                     if (timeLeft.HasValue)
