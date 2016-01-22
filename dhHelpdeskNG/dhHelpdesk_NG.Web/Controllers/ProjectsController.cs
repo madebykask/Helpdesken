@@ -426,9 +426,8 @@
             var projectCollaborators = this.projectService.GetProjectCollaborators(id).OrderBy(x => x.UserName).ToList();
             var projectSchedules = this.projectService.GetProjectSchedules(id);
             var projectLogs = this.projectService.GetProjectLogs(id);
-
-            // todo
-            var cases = this.caseService.GetCases().Where(x => x.Customer_Id == SessionFacade.CurrentCustomer.Id && x.Project_Id == id).ToList();
+            
+            var cases = this.caseService.GetProjectCases(SessionFacade.CurrentCustomer.Id, id).ToList();            
             var cs = this.settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
             var users = this.userService.GetUsers(SessionFacade.CurrentCustomer.Id).MapToSelectList(cs);
             

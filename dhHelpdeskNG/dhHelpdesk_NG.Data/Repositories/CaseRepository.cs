@@ -21,6 +21,7 @@
         Case GetDetachedCaseById(int id);
         List<DynamicCase> GetAllDynamicCases();
         DynamicCase GetDynamicCase(int id);
+        IList<Case> GetProjectCases(int customerId, int projectId);
         void SetNullProblemByProblemId(int problemId);
         void UpdateFinishedDate(int problemId, DateTime? time);
         void UpdateFollowUpDate(int caseId, DateTime? time);
@@ -78,6 +79,12 @@
                         };
 
             return query.Distinct().ToList();
+        }
+
+        public IList<Case> GetProjectCases(int customerId, int projectId)
+        {
+            var cases = this.DataContext.Cases.Where(c=> c.Customer_Id == customerId && c.Priority_Id == projectId).ToList();                        
+            return cases;
         }
 
         public DynamicCase GetDynamicCase(int id)

@@ -5,6 +5,8 @@ if (window.dhHelpdesk == null)
 $(function () {    
     _INVOICE_IDLE = 'invoice_idle';
     _INVOICE_SAVING = 'invoice_saving';
+    var changeRegionUrl = '/Cases/ChangeRegion/';
+    var changeDepartmentUrl = '/Cases/ChangeDepartment/';    
 
     //used for translating casefields
     var AllCaseFields = [];
@@ -243,7 +245,7 @@ $(function () {
             var DepartmentFilterFormat = 0; 
             var RegionId = $('#RegionSelect-Order' + OrderId).parent().find('input:hidden').val()
             var CustomerId = $('#case__Customer_Id').val();
-            $.post(publicChangeRegion, { 'id': RegionId, 'customerId': CustomerId, 'departmentFilterFormat': DepartmentFilterFormat }, function (data) {
+            $.post(changeRegionUrl, { 'id': RegionId, 'customerId': CustomerId, 'departmentFilterFormat': DepartmentFilterFormat }, function (data) {
                 if (data != undefined) {
                     var selector = '#DepartmentSelect-Order' + OrderId;
                     $(selector).empty();
@@ -268,7 +270,7 @@ $(function () {
             var DepartmentFilterFormat = 0;
             var DepartmentId = $('#DepartmentId_' + OrderId).val();
             var CustomerId = $('#case__Customer_Id').val();
-            $.post(publicChangeDepartment, { 'id': DepartmentId, 'CustomerId': CustomerId, 'departmentFilterFormat': DepartmentFilterFormat }, function (data) {
+            $.post(changeDepartmentUrl, { 'id': DepartmentId, 'CustomerId': CustomerId, 'departmentFilterFormat': DepartmentFilterFormat }, function (data) {
                 if (data != undefined) {
                     var selector = '#OUSelect-Order' + OrderId;
                     $(selector).empty();

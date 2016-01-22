@@ -44,6 +44,8 @@ namespace DH.Helpdesk.Services.Services
     {
         IList<Case> GetCases();
 
+        IList<Case> GetProjectCases(int customerId, int projectId);
+
         IList<Case> GetCasesByCustomers(IEnumerable<int> customerIds);
 
         Case InitCase(int customerId, int userId, int languageId, string ipAddress, CaseRegistrationSource source, Setting customerSetting, string adUser);
@@ -789,6 +791,11 @@ namespace DH.Helpdesk.Services.Services
         public IList<Case> GetCases()
         {
             return this._caseRepository.GetAll().ToList();
+        }
+
+        public IList<Case> GetProjectCases(int customerId, int projectId)
+        {
+            return this._caseRepository.GetProjectCases(customerId, projectId);
         }
 
         public IList<Case> GetCasesByCustomers(IEnumerable<int> customerIds) 

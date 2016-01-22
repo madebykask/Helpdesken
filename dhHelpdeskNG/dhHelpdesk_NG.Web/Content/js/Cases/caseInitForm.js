@@ -3,6 +3,26 @@
 * This code was taken from dhHelpdesk.js and still has dependencies from it
 * @TODO: code review wanted to spare connections between functions from that file
 */
+var publicCustomerId = $('#case__Customer_Id').val();
+
+var publicDepartmentControlName = '#case__Department_Id';
+var publicReadOnlyDepartmentName = '#DepartmentName';
+
+var publicOUControlName = '#case__Ou_Id';
+var publicReadOnlyOUName = '#OuName';
+
+// Case Is About
+var publicIsAboutDepartmentControlName = '#case__IsAbout_Department_Id';
+var publicIsAboutReadOnlyDepartmentName = '#IsAboutDepartmentName';
+
+var publicIsAboutOUControlName = '#case__IsAbout_Ou_Id';
+var publicIsAboutReadOnlyOUName = '#IsAboutOUName';
+
+
+// controller methods:
+var publicChangeRegion = '/Cases/ChangeRegion/';
+var publicChangeDepartment = '/Cases/ChangeDepartment/';
+
 
 function SetFocusToReportedByOnCase() {
     if ($('#ShowReportedBy').val() == 1) {
