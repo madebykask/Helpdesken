@@ -272,7 +272,7 @@
         private string XMLSalesLines(CaseInvoiceArticle[] articles)
         {
             var xml = "";
-            foreach (var article in articles)
+            foreach (var article in articles.Where(a=> a.Article != null))
             {
                 xml += XMLSalesLine(article);
             }

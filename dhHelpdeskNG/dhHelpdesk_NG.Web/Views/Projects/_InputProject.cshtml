@@ -36,8 +36,17 @@
                 <tr>
                     <td class="span3">@Translation.Get("Projektledare", Enums.TranslationSource.TextTranslation)
                     </td>
-                    <td class="span9">
-                        @Html.DropDownListFor(x => x.ProjectEditModel.ProjectManagerId, Model.Users, string.Empty)
+                    <td class="span9">                        
+                        <select data-val="true" data-val-number="The field Projektledare must be a number." id="ProjectEditModel_ProjectManagerId" name="ProjectEditModel.ProjectManagerId">
+                            <option value=""></option>
+                            @{var selected = Model.ProjectEditModel.ProjectManagerId.HasValue? Model.ProjectEditModel.ProjectManagerId.ToString():string.Empty;}
+                            @foreach (var u in Model.Users)
+                            {
+                                int id;
+                                int.TryParse(u.Value, out id);
+                                <option value="@u.Value" @id.IdIsSelected(selected)> @u.Text </option>
+                            }
+                        </select>
                     </td>
                 </tr>
                 <tr>
