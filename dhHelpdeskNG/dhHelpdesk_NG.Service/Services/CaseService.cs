@@ -1257,8 +1257,8 @@ namespace DH.Helpdesk.Services.Services
                     // get mail template from productArea
                     mailTemplateId = 0;
 
-                    if (newCase.ProductArea.MailID.HasValue)
-                        mailTemplateId = newCase.ProductArea.MailID.Value;
+                    if (newCase.ProductArea.MailTemplate != null)
+                        mailTemplateId = newCase.ProductArea.MailTemplate.MailID;
                     
 
                     if (mailTemplateId > 0)
