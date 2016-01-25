@@ -7,7 +7,13 @@
             <li id="menu1">
                 <input type="submit" value="@Translation.Get("Spara")" class="btn" id="subbut"/>
             </li>
-            <li id="menu3">@Html.ActionLink(Translation.Get("Ta bort"), "DeleteProject", new { id = Model.ProjectEditModel.Id }, new { @class = "btn" })</li>
+            @*<li id="menu3">@Html.ActionLink(Translation.Get("Ta bort"), "DeleteProject", new { id = Model.ProjectEditModel.Id }, new { @class = "btn" })</li>*@
+            <li>
+                @Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "DeleteProject",
+                    new { id = Model.ProjectEditModel.Id}, 
+                    new { @class = "btn deleteDialog", 
+                            deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) })
+            </li>
             <li id="menu2">@Html.ActionLink(Translation.Get("Avbryt"), "Index", null, new { @class = "btn" })</li>
         </ul>
     </div>

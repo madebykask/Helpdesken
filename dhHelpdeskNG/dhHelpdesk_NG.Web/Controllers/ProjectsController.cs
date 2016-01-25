@@ -240,7 +240,6 @@
             return this.RedirectToAction("EditProject", new { id = projectBussinesModel.Id });
         }
 
-        [HttpGet]
         public ActionResult DeleteProject(int id)
         {
             this.projectService.DeleteProject(id);
