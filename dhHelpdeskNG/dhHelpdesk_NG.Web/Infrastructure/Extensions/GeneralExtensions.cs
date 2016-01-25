@@ -89,6 +89,22 @@
             return "display:none";
         }
 
+        public static string GetFieldStyle(this CaseInputViewModel model, GlobalEnums.TranslationCaseFields caseFieldName)
+        {
+            //var fieldSetting = model.CaseSolutionSettingModels.FirstOrDefault(x => x.CaseSolutionField == caseTemplateFieldName);
+
+            //// if (!model.caseFieldSettings.IsFieldRequired(caseFieldName) && fieldSetting != null && fieldSetting.CaseSolutionMode == CaseSolutionModes.Hide)
+            //if (fieldSetting != null && fieldSetting.CaseSolutionMode == CaseSolutionModes.Hide)
+            //    return "display:none";
+
+            if ((model.caseFieldSettings.IsFieldVisible(caseFieldName)))
+            {
+                return string.Empty;
+            }
+
+            return "display:none";
+        }
+
         public static string GetCaseTemplateFieldStyle(this CaseInputViewModel model, GlobalEnums.TranslationCaseFields caseFieldName, CaseSolutionFields caseTemplateFieldName)
         {
             //bool isGlobalVisibility = model.caseFieldSettings.IsFieldVisible(caseFieldName);
@@ -130,7 +146,24 @@
 
             return isReadOnly;
         }
-        
+
+        public static bool IsReadOnly(this CaseInputViewModel model, GlobalEnums.TranslationCaseFields caseFieldName)
+        {
+            bool isGlobalVisibility = model.caseFieldSettings.IsFieldVisible(caseFieldName);
+
+            if (model.DynamicCase != null && model.caseFieldSettings.IsFieldLocked(caseFieldName))
+                return true;
+
+            if (!isGlobalVisibility)
+            {
+                return false;
+            }
+
+            bool isReadOnly = model.EditMode == Enums.AccessMode.ReadOnly;
+
+            return isReadOnly;
+        }
+
         public static bool IsReadOnly(this CaseInputViewModel model, CaseSolutionFields caseTemplateFieldName)
         {
             var fieldSetting = model.CaseSolutionSettingModels.FirstOrDefault(x => x.CaseSolutionField == caseTemplateFieldName);
