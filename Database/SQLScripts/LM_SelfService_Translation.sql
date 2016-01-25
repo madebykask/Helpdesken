@@ -460,3 +460,16 @@ GO
 If not exists (select * from tblTextTranslation where text_id = 1482 and Language_Id = 1)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1482, 1, 'Skicka')
 GO
+
+If not exists (select * from tbltext where id = 1578)
+	insert into tbltext (id, TextString, TextType) VALUES (1578, 'Select for: Hiring a new co-worker, Re-hiring a co-worker returning to IKEA, IKEA Co-workers moving between countries, IKEA Co-workers changing Business Unit.', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1578 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1578, 2, 'Select for: Hiring a new co-worker, Re-hiring a co-worker returning to IKEA, IKEA Co-workers moving between countries, IKEA Co-workers changing Business Unit.')
+GO
+
+If not exists (select * from tbltext where id = 1579)
+	insert into tbltext (id, TextString, TextType) VALUES (1579, 'Select for: Changes to Function, Team, Job, Cost Centre or Basic Pay/Salary changes.', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1579 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1579, 2, 'Select for: Changes to Function, Team, Job, Cost Centre or Basic Pay/Salary changes.')
