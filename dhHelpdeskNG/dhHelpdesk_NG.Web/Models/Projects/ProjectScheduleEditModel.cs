@@ -3,6 +3,7 @@
     using System.ComponentModel.DataAnnotations;
 
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+    using System;
 
     public class ProjectScheduleEditModel
     {
@@ -34,10 +35,10 @@
         public string Description { get; set; }
 
         [LocalizedDisplay("Startdatum")]
-        public string StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
 
         [LocalizedDisplay("Slutdatum")]
-        public string FinishDate { get; set; }
+        public DateTime? FinishDate { get; set; }
 
         [LocalizedDisplay("Ärende")]
         public decimal? CaseNumber { get; set; }

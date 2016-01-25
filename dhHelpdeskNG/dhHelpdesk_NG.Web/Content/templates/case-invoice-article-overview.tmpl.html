@@ -9,13 +9,13 @@
     </tr>
 {{else}}    
     <tr data-id='{{:Id}}' title='{{:Description}}'>
-        <td>{{:Number}}</td>
-        <td>{{:Name}}</td>
-        <td>{{:NameEng}}</td>
-        <td>{{:Amount}}</td>
-        <td>{{:UnitName}}</td>
-        <td>{{:Ppu}}</td>
-        <td>{{:Total}}</td>
+        <td class="case-invoice-colnarrow">{{:Number}}</td>
+        <td class="case-invoice-colwide">{{:Name}}</td>
+        <td class="case-invoice-colwide">{{:NameEng}}</td>
+        <td class="case-invoice-colnarrow">{{:Amount}}</td>
+        <td class="case-invoice-colnarrow">{{:UnitName}}</td>
+        <td class="case-invoice-colnarrow">{{:Ppu}}</td>
+        <td style="text-align: right;" class="case-invoice-colextranarrow">{{:Total}}</td>
         <td>
             {{if IsInvoiced }}
                 <i class='icon-flag icon-green'></i>

@@ -1,4 +1,6 @@
-﻿
-@model DateTime?
-           
-@Model
+﻿@model DateTime?
+
+@if (Model.HasValue)
+{
+    <span>@Model.Value.ToLocalTime()</span>
+}

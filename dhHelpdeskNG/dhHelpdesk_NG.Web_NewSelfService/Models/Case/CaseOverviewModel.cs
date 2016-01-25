@@ -9,6 +9,7 @@ namespace DH.Helpdesk.NewSelfService.Models.Case
     using DH.Helpdesk.BusinessData.Models;
 
     using Log = DH.Helpdesk.Domain.Log;
+using System;
 
     
 
@@ -66,6 +67,8 @@ namespace DH.Helpdesk.NewSelfService.Models.Case
         public List<CaseListToCase> FieldSettings { get; set; }
 
         public FilesModel LogFilesModel { get; set; }
+
+        public string LogFileGuid { get; set; }  
                 
     }
   

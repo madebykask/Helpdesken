@@ -14,7 +14,7 @@
     {
         public UpdatedProjectViewModel Create(
             ProjectOverview projectOverview,
-            List<User> users,
+            SelectList users,
             List<ProjectCollaboratorOverview> collaboratorOverviews,
             List<ProjectScheduleOverview> schedules,
             List<ProjectLogOverview> logs,
@@ -25,7 +25,7 @@
             // project.ProjectCollaboratorIds = collaboratorOverviews.Select(x => x.UserId.ToString()).ToList();
             project.ProjectCollaboratorIds = collaboratorOverviews.Select(x => x.UserId).ToList();
 
-            var items = users.Select(x => new { Value = x.Id, Name = string.Format("{0} {1}", x.FirstName, x.SurName) });
+            var items = users.Select(x => new { Value = x.Value, Name = x.Text });
             var ids = collaboratorOverviews.Select(x => x.UserId).ToList();
             var list = new MultiSelectList(items, "Value", "Name", ids);
 
@@ -72,14 +72,22 @@
 
         private static ProjectScheduleEditModel MapProjectScheduleOverview(ProjectScheduleOverview projectOverview)
         {
+            DateTime? startDate = null;
+            if (projectOverview.StartDate.HasValue)
+                startDate = DateTime.SpecifyKind(projectOverview.StartDate.Value, DateTimeKind.Utc);
+
+            DateTime? finishDate = null;
+            if (projectOverview.FinishDate.HasValue)
+                finishDate = DateTime.SpecifyKind(projectOverview.FinishDate.Value, DateTimeKind.Utc);
+
             return new ProjectScheduleEditModel
             {
                 Id = projectOverview.Id,
                 Name = projectOverview.Name,
                 Description = projectOverview.Description,
                 State = (ScheduleStates)projectOverview.State,
-                StartDate = projectOverview.StartDate.HasValue ? DateTime.SpecifyKind(projectOverview.StartDate.Value, DateTimeKind.Utc).ToShortDateString() : string.Empty,
-                FinishDate = projectOverview.FinishDate.HasValue ? DateTime.SpecifyKind(projectOverview.FinishDate.Value, DateTimeKind.Utc).ToShortDateString() : string.Empty,
+                StartDate = startDate,
+                FinishDate = finishDate,
                 CaseNumber = projectOverview.CaseNumber,
                 Position = projectOverview.Position,
                 ProjectId = projectOverview.ProjectId,

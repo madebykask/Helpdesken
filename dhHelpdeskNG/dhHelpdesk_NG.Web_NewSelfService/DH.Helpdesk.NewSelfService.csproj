@@ -37,6 +37,7 @@
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
     <TargetFrameworkProfile />
     <DontImportPostSharp>True</DontImportPostSharp>
+    <MvcProjectUpgradeChecked>true</MvcProjectUpgradeChecked>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -208,6 +209,7 @@
     <Compile Include="..\CommonAssembly\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\CommonModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\EmailModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\NotifiersModule.cs" />
@@ -334,6 +336,22 @@
     <Content Include="Content\css\bootstrap.css" />
     <Content Include="Content\css\bootstrap.min.css" />
     <Content Include="Content\css\dhplus.css" />
+    <Content Include="Content\css\jquery.toastmessage.css" />
+    <Content Include="Content\img\backgrounds.gif" />
+    <Content Include="Content\img\buttons-disabled.png" />
+    <Content Include="Content\img\buttons.png" />
+    <Content Include="Content\img\delete.gif" />
+    <Content Include="Content\img\done.gif" />
+    <Content Include="Content\img\error.gif" />
+    <Content Include="Content\img\glyphicons-halflings-blue.png" />
+    <Content Include="Content\img\glyphicons-halflings-dh.png" />
+    <Content Include="Content\img\glyphicons-halflings-green.png" />
+    <Content Include="Content\img\glyphicons-halflings-red.png" />
+    <Content Include="Content\img\glyphicons-halflings-white.png" />
+    <Content Include="Content\img\glyphicons-halflings-yellow.png" />
+    <Content Include="Content\img\glyphicons-halflings.png" />
+    <Content Include="Content\img\throbber.gif" />
+    <Content Include="Content\img\transp50.png" />
     <Content Include="Content\js\Case\edit.js" />
     <Content Include="Content\js\Shared\app.layout.js" />
     <Content Include="Content\js\typeahead.js" />
@@ -887,7 +905,6 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Case\CasePreview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">
@@ -923,9 +940,6 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Case\_CaseLogFiles.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Case\NewCase.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -941,10 +955,10 @@
     <Content Include="Views\Shared\EditorTemplates\UserModuleOverview.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Case\NewCaseReceipt.cshtml" />
+    <Content Include="Views\Case\_CaseReceipt.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Case\UserCases.cshtml" />
+    <Content Include="Views\Case\CaseOverview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Case\_CaseSearch.cshtml" />
@@ -1220,7 +1234,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>55079</DevelopmentServerPort>
+          <DevelopmentServerPort>57531</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:59809/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

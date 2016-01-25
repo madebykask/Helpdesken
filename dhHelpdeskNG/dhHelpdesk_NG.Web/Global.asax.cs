@@ -117,12 +117,15 @@
             }
 
             var workContext = ManualDependencyResolver.Get<IWorkContext>();
+            var guid = Guid.NewGuid();
             LogManager.Error.Error(new ErrorContext(
+                                        guid,
                                         ex,
                                         currentController,
                                         currentAction,
                                         httpContext,
                                         workContext).ToString());
+
 
             httpContext.ClearError();
             httpContext.Response.Clear();
@@ -131,7 +134,7 @@
             routeData.Values["controller"] = "Error";
             routeData.Values["action"] = action;
 
-            controller.ViewData.Model = new HandleErrorInfo(ex, currentController, currentAction);
+            controller.ViewData.Model = new DH.Helpdesk.Web.Models.Error.HandleErrorInfoGuid(ex, currentController, currentAction, guid);
             ((IController)controller).Execute(new RequestContext(new HttpContextWrapper(httpContext), routeData));
         }
 #endif

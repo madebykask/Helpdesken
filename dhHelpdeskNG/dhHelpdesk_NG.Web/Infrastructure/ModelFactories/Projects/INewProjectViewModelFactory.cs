@@ -4,9 +4,10 @@
 
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Web.Models.Projects;
+    using System.Web.Mvc;
 
     public interface INewProjectViewModelFactory
     {
-        NewProjectViewModel Create(List<User> users, string guid);
+        NewProjectViewModel Create(SelectList users, string guid);
     }
 }

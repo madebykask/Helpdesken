@@ -66,6 +66,10 @@
                 return typeof dhHelpdesk.CaseArticles !== "undefined" &&
                     dhHelpdesk.CaseArticles.HasNotInvoicedArticles();
             }
+            var hasInvoicedArticles = function () {
+                return typeof dhHelpdesk.CaseArticles !== "undefined" &&
+                    dhHelpdesk.CaseArticles.HasInvoicedArticles();
+            };
 
             var invoiceArticlesBeforeClose = function (onOk, onCancel) {
                 if (!hasNotInvoicedArticles()) {
@@ -73,13 +77,26 @@
                     return;
                 }
 
-                confirmDialog(dc('@Translation.Get("Are you sure you want to close the case without sending your selected articles to invoicing?")'),
+                confirmDialog(dc('@Translation.Get("Är du säker på att du vill stänga ärendet utan att fakturera artiklar?")'),
                     onOk, onCancel);                
             }
 
             var openInvoiceWindow = function () {
-                dhHelpdesk.CaseArticles.OpenInvoiceWindow('@Translation.Get("Please send selected articles for invoicing or delete them in order to close the case.")');
-            }
+                dhHelpdesk.CaseArticles.OpenInvoiceWindow('@Translation.Get("Var god ta bort eller skicka valda men ofakturerade artiklar innan du stänger ärendet.")');
+            };
+            var openInvoiceWindowWithMessage = function (message) {
+                dhHelpdesk.CaseArticles.OpenInvoiceWindow(message);
+            };
+
+            //var FinishDateAndTypeIsEmtpy = function () {
+            //    debugger
+            //    if ($('#CaseLog_FinishingDate').val() == '' || $('#CaseLog_FinishingType').val() == '') {
+            //        return true;
+            //    }
+            //    else {
+            //        return false;
+            //    }
+            //};
 
             var emptyFn = function() {};
 
@@ -89,15 +106,76 @@
 
             $("#case-action-save-and-close").click(function (e) {
                 e.preventDefault();
-                invoiceArticlesBeforeClose(emptyFn, openInvoiceWindow);
+                //if there are articles selected but not invoiced and the case is finishing/closing
+                if (FinishDateAndTypeIsEmtpy()) {
+                    if (hasNotInvoicedArticles()) {
+                        messageDialog(dc('@Translation.Get("Du får inte avsluta ett ärende med invalda fast ofakturerade artiklar. Var god granska dina ordrar.")'));
+                        return false;
+                    }
+                    else {
+                        if ($('#InvoiceModuleBtnOpen').is(':visible')) {
+                            if (!hasInvoicedArticles() && !hasNotInvoicedArticles()) {
+                                confirmDialog(dc('@Translation.Get("Produktområdet har länkade artiklar men inga artiklar är invalda. Vill du verkligen avsluta ärendet?")'), SubmitCase, InvoiceDialogOnNotFinishSaveCase);
+                            }
+                            else {
+                                SubmitCase();
+                            }
+                        }
+                        else {
+                            SubmitCase();
+                        }
+                    }
+                }
+                else {
+                    SubmitCase();
+                }
             });
 
-            $("#case-action-save-and-new").click(function (e) {
-                e.preventDefault();                
-                invoiceArticlesBeforeClose(emptyFn, openInvoiceWindow);
-            });
+            //$("#case-action-save-and-close").click(function (e) {
+            //    e.preventDefault();
+            //    invoiceArticlesBeforeClose(emptyFn, openInvoiceWindow);
+            //});
 
-            $("#case-action-close").click(function (e) {
+@*            $("#case-action-save-and-new").click(function (e) {
+                debugger
+                //If case wants to be closed/finished it will first check if any orders exists with not invoiced articles
+                //if thats not the case, it will look for the invoice button and ask user for extra validation
+                //on closing/finishing the case if there are articles connected to the selected productarea
+
+                e.preventDefault();
+                //if there are articles selected but not invoiced and the case is finishing/closing
+                if (!FinishDateAndTypeIsEmtpy()) {
+                    if (hasNotInvoicedArticles()) {
+                        messageDialog(dc('@Translation.Get("Du får inte avsluta ett ärende med invalda fast ofakturerade artiklar. Var god granska dina ordrar.")'));
+                        return false;
+                    }
+                    else {
+                        if ($('#InvoiceModuleBtnOpen').is(':visible')) {
+                            if (!hasInvoicedArticles() && !hasNotInvoicedArticles()) {
+                                debugger
+                                confirmDialog(dc('@Translation.Get("Produktområdet har länkade artiklar men inga artiklar är invalda. Vill du verkligen avsluta ärendet?")'), EditCaseAndAddCase, InvoiceDialogOnNotFinishSaveCase);
+                            }
+                            else {
+                                EditCaseAndAddCase();
+                            }
+                        }
+                        else {
+                            EditCaseAndAddCase();
+                        }
+                    }
+                }
+                else {
+                    debugger
+                    var a = EditPage;
+                    var b = a.prototype.NEW_CLOSE_CASE_URL;
+                    return false;
+                }
+
+                //e.preventDefault();
+                //invoiceArticlesBeforeClose(emptyFn, openInvoiceWindow);
+            });*@
+
+@*            $("#case-action-close").click(function (e) {
                 e.preventDefault();
                 var targetUrl = $(this).attr("href");
                 invoiceArticlesBeforeClose(function ()
@@ -113,12 +191,20 @@
             
             $("#case-action-delete").click(function (e) {                               
                 if (hasNotInvoicedArticles()) {
-                    messageDialog(dc('@Translation.Get("You may not delete a case with selected articles in the order section. Please review your orders.")'));
+                    messageDialog(dc('@Translation.Get("Du får inte ta bort ett ärende som har invalda men ofakturerade artiklar.")'));
                     return false;
                 }
                 return true;                       
-            })
+            })*@
         });
+
+        var SubmitCase = function () {
+            $('#target').submit(); return false;
+        };
+
+        var InvoiceDialogOnNotFinishSaveCase = function () {
+            openInvoiceWindowWithMessage('@Translation.Get("Var god granska dina ordrar och artiklar.")');
+        };
      
         function redirectToUrl(url) {            
             window.location.href = url;
@@ -166,12 +252,17 @@
         $( ".showbtn" ).on( "click", function() {
             $( this ).parents( ".notifier-block" ).removeClass( "hideshow" );
         });
-
+        $(".hidebtn").on("click", function () {
+            $(this).parents(".regarding-block").addClass("hideshowregarding");
+        });
+        $(".showbtn").on("click", function () {
+            $(this).parents(".regarding-block").removeClass("hideshowregarding");
+        });
         $( ".hidebtn" ).on( "click", function() {
             $( this ).parents( ".computer-block" ).addClass( "hideshow" );
         });
         $( ".showbtn" ).on( "click", function() {
-            $( this ).parents( ".computer-block" ).removeClass( "hideshow" );
+            $(this).parents(".computer-block").removeClass("hideshow");
         });
 
         $( ".hidebtn" ).on( "click", function() {
@@ -242,7 +333,7 @@
                 {
                     <li>
                         <div id="divActionMenu" class="btn-group">
-                            <button class="btn dropdown-toggle" data-toggle="dropdown">
+                            <button class="btn dropdown-toggle" data-toggle="dropdown" id="btnActionMenu">
                                 @Translation.Get("Åtgärder", Enums.TranslationSource.TextTranslation)
                                 <span class="caret">&nbsp;</span>
                             </button>
@@ -349,13 +440,13 @@
         </div>
         <div class="pull-right">
             <ul class="secnav">
-                <li><a href="@Url.Action("Case", "Print", new { caseId = @Model.case_.Id, customerId = @Model.case_.Customer_Id })" title="@Translation.Get("Skriv ut")" class="btn" target="_blank"><i class="icon-file"></i></a></li>
+                <li><a href="@Url.Action("Case", "Print", new { caseId = @Model.case_.Id, customerId = @Model.case_.Customer_Id })" title="@Translation.Get("Skriv ut")" class="btn print-case" target="_blank"><i class="icon-file"></i></a></li>
                 @if (Html.MasterModel().CustomerSetting.ModuleInventory > 0)
                 {                                                            
-                    <li><a href="#" title="@Translation.Get("Visa inventarie", Enums.TranslationSource.TextTranslation)" class="btn"><i class="icon-th-large"></i></a></li>
+                    <li><a href="#" title="@Translation.Get("Visa inventarie", Enums.TranslationSource.TextTranslation)" class="btn show-inventory"><i class="icon-th-large"></i></a></li>
                 }
-                <li><a onclick="UnLockCase('@Model.CaseLock.LockGUID')" href="@Model.case_.Id.GetUrlForNavigationBetweenCases()" title="@Translation.Get("Föregående ärende", Enums.TranslationSource.TextTranslation)" class="btn"><i class="icon-chevron-left"></i></a></li>
-                <li><a onclick="UnLockCase('@Model.CaseLock.LockGUID')" href="@Model.case_.Id.GetUrlForNavigationBetweenCases(true)"  title="@Translation.Get("Nästa ärende", Enums.TranslationSource.TextTranslation)" class="btn"><i class="icon-chevron-right"></i></a></li>
+                <li><a onclick="UnLockCase('@Model.CaseLock.LockGUID')" href="@Model.case_.Id.GetUrlForNavigationBetweenCases()" title="@Translation.Get("Föregående ärende", Enums.TranslationSource.TextTranslation)" class="btn previous-case"><i class="icon-chevron-left"></i></a></li>
+                <li><a onclick="UnLockCase('@Model.CaseLock.LockGUID')" href="@Model.case_.Id.GetUrlForNavigationBetweenCases(true)"  title="@Translation.Get("Nästa ärende", Enums.TranslationSource.TextTranslation)" class="btn next-case"><i class="icon-chevron-right"></i></a></li>
             </ul>
         </div>
     </div>

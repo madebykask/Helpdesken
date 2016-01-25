@@ -1,14 +1,15 @@
-﻿<table class='width100 table table-striped table-hover'>
+﻿<table class='width100 table table-striped table-hover' >        
     <tbody>
         {{for getFiles()}}
         <tr>
             <td>
-                <a href="/invoice/casefile/?id={{>#parent.parent.data.getCaseId()}}&fileName={{:getEncodedFileName()}}">{{:getFileName()}}</a>
+                <a href="/invoice/casefile/?id={{>#parent.parent.data.getCaseId()}}&fileName={{:getEncodedFileName()}}"><i class="icon-file"></i>{{:getFileName()}}</a>
             </td>
             <td>
-                <a href='javascript:void()' onclick='dhHelpdesk.CaseArticles.RemoveOrderFile("{{:getFileName()}}")'>x</a>
+                <a href='javascript:void(0);' onclick='dhHelpdesk.CaseArticles.RemoveOrderFile("{{:getFileName()}}")' class='btn btn-small'>x</a>
             </td>
         </tr>
         {{/for}}            
     </tbody>
-</table>    
+</table>
+

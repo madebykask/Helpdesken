@@ -29,15 +29,24 @@
             </table>
         </div>
     </div>
-    <h4><i class="icon-plus-sign project-expand-button" style="cursor: pointer"></i>@Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)</h4>
+    <h4><i class='@(Model.ProjectEditModel.Id != 0 ? "icon-plus-sign project-expand-button" : "icon-minus-sign project-expand-button")' style="cursor: pointer"></i>@Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)</h4>
     <div class="row expanded-project-content">
         <div class="span12">
             <table>
                 <tr>
                     <td class="span3">@Translation.Get("Projektledare", Enums.TranslationSource.TextTranslation)
                     </td>
-                    <td class="span9">
-                        @Html.DropDownListFor(x => x.ProjectEditModel.ProjectManagerId, Model.Users, string.Empty)
+                    <td class="span9">                        
+                        <select data-val="true" data-val-number="The field Projektledare must be a number." id="ProjectEditModel_ProjectManagerId" name="ProjectEditModel.ProjectManagerId">
+                            <option value=""></option>
+                            @{var selected = Model.ProjectEditModel.ProjectManagerId.HasValue? Model.ProjectEditModel.ProjectManagerId.ToString():string.Empty;}
+                            @foreach (var u in Model.Users)
+                            {
+                                int id;
+                                int.TryParse(u.Value, out id);
+                                <option value="@u.Value" @id.IdIsSelected(selected)> @u.Text </option>
+                            }
+                        </select>
                     </td>
                 </tr>
                 <tr>
@@ -84,13 +93,13 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="span3">@Translation.Get("Bifogad fil", Enums.TranslationSource.TextTranslation)
+                    <td class="span3" style="vertical-align:top">@Translation.Get("Bifogad fil", Enums.TranslationSource.TextTranslation)
                     </td>
                     <td>
+                        <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)</a>
                         <div id="filesContainer">
                             @Html.Action("AttachedFiles", new { guid = Model.Guid, area = string.Empty })
                         </div>
-                        <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Bifogad fil", Enums.TranslationSource.TextTranslation)</a>
                     </td>
                 </tr>
             </table>
@@ -101,7 +110,11 @@
 
 <script type="text/javascript">
 
-    $(".expanded-project-content").hide();
+    var currentId = '@Model.ProjectEditModel.Id'
+    if (currentId != 0) {
+        $(".expanded-project-content").hide();
+    }
+    
     $(function () {
         $(".project-expand-button").click(function () {
             event.stopPropagation();

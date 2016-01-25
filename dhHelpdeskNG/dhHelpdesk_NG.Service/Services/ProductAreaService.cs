@@ -94,7 +94,7 @@
         /// </returns>
         IEnumerable<ProductAreaOverview> GetProductAreaOverviews(int customerId);
 
-        int SaveProductArea(ProductAreaOverview productArea);
+        int SaveProductArea(ProductAreaOverview productArea);        
     }
 
     public class ProductAreaService : IProductAreaService

@@ -82,7 +82,7 @@
         /// <summary>
         /// List of available performers for "Administrator" case field in search form
         /// </summary>
-        public SelectList AvailablePerformersList { get; set; }
+        public CustomSelectList AvailablePerformersList { get; set; }
 
         /// <summary>
         /// List of selected performers for "Administrator" case field in search form

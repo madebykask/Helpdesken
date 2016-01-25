@@ -6,13 +6,13 @@
     @{
     var model = Html.MasterModel();
     
-    var GlobalSetting = model.GlobalSettings.Where(x => x.ApplicationName != null).FirstOrDefault();
+    var GlobalSetting = model != null ? model.GlobalSettings.Where(x => x.ApplicationName != null).FirstOrDefault() : null;
 }
 <head>
     <meta content="html/text; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <title>@GlobalSetting.ApplicationName</title>
+    <title>@(GlobalSetting != null ? GlobalSetting.ApplicationName : "")</title>
     <script type="text/javascript">
         var trans_yes = '@Translation.Get("Ja", Enums.TranslationSource.TextTranslation)';
         var trans_no = '@Translation.Get("Nej", Enums.TranslationSource.TextTranslation)';
@@ -91,12 +91,12 @@
                                     }
 
 
-                                    @*if(model.IsProjectVisible())
+                                    if(model.IsProjectVisible())
                                     {                                    
                                     <li><a href="@Url.Action("Index", "Projects", new { area = "" })">
                                         <img src="@Url.Content("~/Content/icons/project.png")" alt="project" />
                                         @Translation.Get("Projekt")</a></li>
-                                    }*@
+                                    }
 
                                 }
                                 <li></li>

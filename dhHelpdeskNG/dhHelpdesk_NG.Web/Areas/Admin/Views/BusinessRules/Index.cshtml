@@ -1,0 +1,77 @@
+﻿@model DH.Helpdesk.Web.Areas.Admin.Models.BusinessRules.BusinessRulesViewModel
+@{
+    ViewBag.Title = "Business Rules List";
+}
+<div class="secnavs fixed">
+    <div class="pull-left">
+        <ul class="secnav">
+            <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Lägg till"), "New", new { customerId = Model.Customer.Id }, new { @class = "btn" })</li>
+        </ul>
+    </div>
+    @Html.Partial("_MasterDataPanel", Model.Customer)
+</div>
+
+<div class="content admin">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#fragment-1">@Translation.GetCoreTextTranslation("Affärsregler") - @Model.Customer.Name</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment-1">
+                <table class="table table-striped table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Translation.GetCoreTextTranslation("Regel")
+                            </th>
+                            <th>
+                                @Translation.GetCoreTextTranslation("Händelse")
+                            </th>
+                            Ämne
+                            <th>
+                                @Translation.GetCoreTextTranslation("Ämne")
+                            </th>
+                            <th>
+                                @Translation.GetCoreTextTranslation("Skapad datum")
+                            </th>
+                            <th>
+                                @Translation.GetCoreTextTranslation("Skapad av")
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var rule in Model.BusinessRules)
+                        {
+                            <tr>
+                                <td>
+                                    <a href="@Url.Action("edit", "BusinessRules", new { area = "admin", id = rule.Id, customerId = Model.Customer.Id })">@Html.DisplayFor(m => rule.RuleName)</a>
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("edit", "BusinessRules", new { area = "admin", id = rule.Id, customerId = Model.Customer.Id })">@Html.DisplayFor(m => rule.EventName)</a>
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("edit", "BusinessRules", new { area = "admin", id = rule.Id, customerId = Model.Customer.Id })">@Html.DisplayFor(m => rule.SubjectName)</a>
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("edit", "BusinessRules", new { area = "admin", id = rule.Id, customerId = Model.Customer.Id })">@Html.DisplayFor(m => rule.CreatedDate, "Date")</a>
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("edit", "BusinessRules", new { area = "admin", id = rule.Id, customerId = Model.Customer.Id })">@Html.DisplayFor(m => rule.CreatedByName)</a>
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/knockout")
+@Scripts.Render("~/bundles/businessRules")
+
+<script type="text/javascript">
+        
+</script>

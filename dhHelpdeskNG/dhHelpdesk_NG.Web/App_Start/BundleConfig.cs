@@ -34,6 +34,7 @@
                             "~/Content/js/DynamicCase/iframeResizer.js",
                             "~/Content/js/DynamicCase/container.js"));
             bundles.Add(new ScriptBundle("~/bundles/common").Include(
+                            "~/Content/js/Shared/errors.js",
 #if DEBUG
                             "~/Scripts/jquery-1.8.3.js",
                             "~/Content/js/jquery.unobtrusive-ajax.min.js",
@@ -117,7 +118,9 @@
             bundles.Add(new ScriptBundle("~/bundles/modules").Include(
                             "~/Content/js/Users/modules.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/invoices").Include(
+            bundles.Add(new ScriptBundle("~/bundles/invoices").Include(                                                      
+                            "~/Content/js/bootstrap-multiselect.js",
+                            "~/Content/js/chosen.jquery.min.js",           
                             "~/Content/js/Invoice/invoice.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/cases/index").Include(
@@ -223,7 +226,15 @@
                             "~/Content/js/Orders/order.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/orderaccounts/order").Include(
-                "~/Content/js/Account/order.js"));            
+                "~/Content/js/Account/order.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
+#if DEBUG
+                "~/Scripts/knockout-3.4.0.debug.js"
+#else
+                "~/Scripts/knockout-3.4.0.js"
+#endif
+                ));
 
             #region Admin scripts
 
@@ -358,6 +369,10 @@
 
             bundles.Add(new ScriptBundle("~/bundles/cases/caseByIds").Include(
                             "~/Content/js/Cases/caseByIds.logic.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/businessrules/businessRules").Include(
+                "~/Areas/Admin/Content/js/BusinessRules/businessRules.list.js"));
+
             #endregion
         }
     }

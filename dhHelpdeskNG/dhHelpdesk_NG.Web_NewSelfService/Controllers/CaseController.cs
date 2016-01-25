@@ -29,6 +29,7 @@
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Concrete;
     using DH.Helpdesk.Services.utils;
+    using DH.Helpdesk.NewSelfService.Infrastructure;
 
     public class CaseController : BaseController
     {
@@ -95,8 +96,8 @@
             IStateSecondaryService stateSecondaryService,
             ILogFileService logFileService,
             ICaseSolutionService caseSolutionService,
-            IOrganizationService orgService,
-            OrganizationJsonService orgJsonService,
+            IOrganizationService orgService,            
+            OrganizationJsonService orgJsonService,            
             IEmailService emailService)
             : base(masterDataService, caseSolutionService)
         {
@@ -129,7 +130,7 @@
             this.workContext = workContext;
             this._orgService = orgService;
             this._orgJsonService = orgJsonService;
-            this._emailService = emailService;
+            this._emailService = emailService;            
         }
 
 
@@ -209,24 +210,24 @@
 
 
             var languageId = SessionFacade.CurrentLanguageId;
-            var caseOverview = this.GetCaseOverviewModel(currentCase, languageId);
+            var caseReceipt = this.GetCaseReceiptModel(currentCase, languageId);
 
-            caseOverview.ShowRegistringMessage = showRegistrationMessage;
-            caseOverview.ExLogFileGuid = currentCase.CaseGUID.ToString();
-            caseOverview.MailGuid = id;
+            caseReceipt.ShowRegistringMessage = showRegistrationMessage;
+            caseReceipt.ExLogFileGuid = currentCase.CaseGUID.ToString();
+            caseReceipt.MailGuid = id;
 
-            this._userTemporaryFilesStorage.DeleteFiles(caseOverview.ExLogFileGuid);
+            this._userTemporaryFilesStorage.DeleteFiles(caseReceipt.ExLogFileGuid);
             this._userTemporaryFilesStorage.DeleteFiles(id);
                         
             if(id.Is<Guid>())
             {
-                if(currentCase.StateSecondary_Id.HasValue && caseOverview.CasePreview.FinishingDate == null)
+                if(currentCase.StateSecondary_Id.HasValue && caseReceipt.CasePreview.FinishingDate == null)
                 {
                     var stateSecondary = _stateSecondaryService.GetStateSecondary(currentCase.StateSecondary_Id.Value);
                     if(stateSecondary.NoMailToNotifier == 1)
-                        caseOverview.CasePreview.FinishingDate = DateTime.UtcNow; 
+                        caseReceipt.CasePreview.FinishingDate = DateTime.UtcNow; 
                 }
-                caseOverview.CanAddExternalNote = true;
+                caseReceipt.CanAddExternalNote = true;
             }
             else
             {
@@ -236,13 +237,12 @@
                 if (registrationInfoText != null && !string.IsNullOrEmpty(registrationInfoText.Name))
                     htmlFooterData = registrationInfoText.Name;
 
-                caseOverview.CaseRegistrationMessage = htmlFooterData;
-                caseOverview.CanAddExternalNote = false;
+                caseReceipt.CaseRegistrationMessage = htmlFooterData;
+                caseReceipt.CanAddExternalNote = false;
             }
 
-            return this.View(caseOverview);
+            return this.View(caseReceipt);
         }
-
 
         [HttpGet]
         public ActionResult NewCase(int customerId, int? caseTemplateId)
@@ -337,13 +337,11 @@
             return this.View("NewCase", model);
         }
 
-
         public ActionResult GetDepartmentsByRegion(int? id, int customerId, int departmentFilterFormat)
         {
             var list = this._orgJsonService.GetActiveDepartmentForRegion(id, customerId, departmentFilterFormat);
             return this.Json(new { success = true, data = list }, JsonRequestBehavior.AllowGet);
         }
-
 
         public ActionResult GetOrgUnitsByDepartments(int? id, int customerId)
         {
@@ -385,7 +383,7 @@
                 return RedirectToAction("Index", "Error");                
             }
 
-            return this.View("UserCases", model);
+            return this.View("CaseOverview", model);
         }
 
         [HttpGet]
@@ -557,18 +555,18 @@
         }
 
         [HttpGet]
-        public ActionResult _CaseLogNote(int caseId, string note)
-        {            
-            SaveExternalMessage(caseId, note);            
+        public ActionResult _CaseLogNote(int caseId, string note, string logFileGuid)
+        {
+            SaveExternalMessage(caseId, note, logFileGuid);            
             CaseLogModel model = new CaseLogModel()
                   {
                       CaseId = caseId,
-                      CaseLogs = this._logService.GetLogsByCaseId(caseId).OrderByDescending(l=> l.RegTime).ToList()
+                      CaseLogs = this._logService.GetLogsByCaseId(caseId).OrderByDescending(l=> l.RegTime).ToList()                      
                   };            
             return this.PartialView(model);
         }
-        
-        private void SaveExternalMessage(int caseId, string extraNote) 
+
+        private void SaveExternalMessage(int caseId, string extraNote, string logFileGuid) 
         {
             IDictionary<string, string> errors;            
             var currentCase = _caseService.GetCaseById(caseId);
@@ -582,9 +580,9 @@
                                   CaseHistoryId = caseHistoryId,
                                   CaseId = caseId,
                                   LogGuid = Guid.NewGuid(),
-                                  TextExternal = "",
+                                  TextExternal = (currentCustomer.UseInternalLogNoteOnExternalPage == (int)Enums.LogNote.UseExternalLogNote? extraNote : string.Empty),
                                   UserId = null,
-                                  TextInternal = extraNote,
+                                  TextInternal = (currentCustomer.UseInternalLogNoteOnExternalPage == (int)Enums.LogNote.UseInternalLogNote? extraNote : string.Empty),
                                   WorkingTimeHour = 0,
                                   WorkingTimeMinute = 0,
                                   EquipmentPrice = 0,
@@ -628,8 +626,9 @@
                     if(emailTo.Count > 0)
                         caseLog.EmailRecepientsExternalLog = string.Join(Environment.NewLine, emailTo);
                 }
-            }            
-            var temporaryLogFiles = this._userTemporaryFilesStorage.GetFiles(currentCase.CaseGUID.ToString(), "");
+            }
+
+            var temporaryLogFiles = this._userTemporaryFilesStorage.GetFiles(logFileGuid, ModuleName.Log);
             caseLog.Id = this._logService.SaveLog(caseLog, temporaryLogFiles.Count, out errors);            
             var basePath = this._masterDataService.GetFilePath(currentCase.Customer_Id);
             // save log files
@@ -642,7 +641,8 @@
                                                        ConfigurationManager.AppSettings[AppSettingsKey.HelpdeskPath].ToString(),
                                                        cs.DontConnectUserToWorkingGroup
                                                      );            
-            this._caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, basePath, newLogFiles);            
+            this._caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, basePath, newLogFiles);
+            this._userTemporaryFilesStorage.DeleteFiles(logFileGuid);
         }
 
         [HttpPost]
@@ -690,7 +690,7 @@
                                               pharasSearch, maxRecords, progressId,
                                               sortBy, ascending);
 
-                return this.PartialView("UserCases", model);
+                return this.PartialView("CaseOverview", model);
             }
             catch(Exception e)
             {
@@ -702,6 +702,42 @@
         public List<CaseSolution> GetCaseSolutions(int customerId)
         {
             return _caseSolutionService.GetCaseSolutions(customerId).Where(t => t.ShowInSelfService).ToList();
+        }   
+
+        [HttpPost]
+        public void UploadLogFile(string id, string name)
+        {
+            var uploadedFile = this.Request.Files[0];
+            var uploadedData = new byte[uploadedFile.InputStream.Length];
+            uploadedFile.InputStream.Read(uploadedData, 0, uploadedData.Length);
+
+            if (GuidHelper.IsGuid(id))
+            {
+                if (this._userTemporaryFilesStorage.FileExists(name, id, ModuleName.Log))
+                {
+                    //return;
+                    //this.userTemporaryFilesStorage.DeleteFile(name, id, ModuleName.Log); 
+                    //throw new HttpException((int)HttpStatusCode.Conflict, null); because it take a long time.
+                }
+                this._userTemporaryFilesStorage.AddFile(uploadedData, name, id, ModuleName.Log);
+            }
+        }
+
+        [HttpGet]
+        public JsonResult GetLogFiles(string id)
+        {
+            var fileNames = GuidHelper.IsGuid(id)
+                                ? this._userTemporaryFilesStorage.GetFileNames(id, ModuleName.Log)
+                                : this._logFileService.FindFileNamesByLogId(int.Parse(id));
+
+            return this.Json(fileNames, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public void DeleteLogFile(string id, string fileName)
+        {
+            if (GuidHelper.IsGuid(id))
+                this._userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id, ModuleName.Log);            
         }
 
         private int Save(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey)
@@ -741,7 +777,7 @@
             return newCase.Id;
         }
 
-        private CaseOverviewModel GetCaseOverviewModel(Case currentCase, int languageId)
+        private CaseOverviewModel GetCaseReceiptModel(Case currentCase, int languageId)
         {
             var caseFieldSetting = _caseFieldSettingService.ListToShowOnCasePage(currentCase.Customer_Id, languageId)
                                                            .Where(c => c.ShowExternal == 1 ||
@@ -756,6 +792,11 @@
             var regions = _regionService.GetRegions(currentCase.Customer_Id);
             var suppliers = _supplierService.GetSuppliers(currentCase.Customer_Id);
             var systems = _systemService.GetSystems(currentCase.Customer_Id);
+            if (currentCase.CaseType != null)
+                currentCase.CaseType.Name = _caseTypeService.GetCaseTypeFullName(currentCase.CaseType_Id);
+
+            if (currentCase.ProductArea_Id.HasValue && currentCase.ProductArea != null)
+                currentCase.ProductArea.Name = string.Join(" - ",  _productAreaService.GetParentPath(currentCase.ProductArea_Id.Value, currentCase.Customer_Id));
 
             var newLogFile = new FilesModel();
 
@@ -775,7 +816,8 @@
                     LogFilesModel = newLogFile,
                     Regions = regions,
                     Suppliers = suppliers,
-                    Systems = systems
+                    Systems = systems,
+                    LogFileGuid = Guid.NewGuid().ToString()
                 };
             }
             return model;
@@ -978,9 +1020,7 @@
             model.CaseFileKey = Guid.NewGuid().ToString();
 
             return model;
-        }
-
-        public object _orgUnitService { get; private set; }
+        }       
 
         private List<string> GetVisibleFieldGroups(List<CaseListToCase> fieldList)
         {
@@ -1070,7 +1110,6 @@
 
             return ret;
         }
-
 
     }
 }

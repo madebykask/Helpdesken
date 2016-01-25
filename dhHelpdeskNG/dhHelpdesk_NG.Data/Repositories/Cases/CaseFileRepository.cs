@@ -17,7 +17,7 @@ using System;
         bool FileExists(int caseId, string fileName);
         void DeleteByCaseIdAndFileName(int caseId, string basePath, string fileName);
         int GetCaseNumberForUploadedFile(int caseId);
-        CaseFileModel[] GetCaseFiles(int caseId);
+        CaseFileModel[] GetCaseFiles(int caseId, bool canDelete);
         List<CaseFile> GetCaseFilesByDate(DateTime? fromDate, DateTime? toDate);
         void DeleteFileViewLogs(int caseId);
     }
@@ -100,7 +100,7 @@ using System;
 
         }
 
-        public CaseFileModel[] GetCaseFiles(int caseId)
+        public CaseFileModel[] GetCaseFiles(int caseId, bool canDelete)
         {
             var entities = (from f in this.DataContext.CaseFiles
                             join u in this.DataContext.Users on f.UserId equals u.Id into uj
@@ -121,7 +121,8 @@ using System;
                                         f.CaseId,
                                         f.FileName,
                                         f.CreatedDate,
-                                        f.UserName))
+                                        f.UserName,
+                                        canDelete))
                                         .ToArray();
         }
 

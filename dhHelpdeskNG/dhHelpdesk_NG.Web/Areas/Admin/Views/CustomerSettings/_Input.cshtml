@@ -39,7 +39,7 @@
                                         @Translation.Get("Filter", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @Html.TextBoxFor(model => model.Setting.LDAPFilter, new { maxlength = "50", style = "width: 400px;" })
+                                        @Html.TextBoxFor(model => model.Setting.LDAPFilter, new { maxlength = "100", style = "width: 400px;" })
                                         &nbsp;@Translation.Get("(mail=*@datahalland.se)", Enums.TranslationSource.TextTranslation)
                                     </td>
                                 </tr>
@@ -250,12 +250,12 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    @*<td><label class="checkbox">
+                                    <td><label class="checkbox">
                                         <input type="checkbox" name="setting.ModuleProject" @(Model.Setting.ModuleProject == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="setting.ModuleProject" value="0" />
                                         &nbsp;@Translation.Get("Projekt", Enums.TranslationSource.TextTranslation)
                                         </label>
-                                    </td>*@
+                                    </td>
                                     <td><label class="checkbox">
                                             <input type="checkbox" name="setting.ModuleChangeManagement" @(Model.Setting.ModuleChangeManagement == 1 ? "checked=checked" : "") value="1"/>
                                             <input type="hidden" name="setting.ModuleChangeManagement" value="0" />

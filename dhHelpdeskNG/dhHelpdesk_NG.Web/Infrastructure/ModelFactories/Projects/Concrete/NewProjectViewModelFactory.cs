@@ -9,9 +9,9 @@
 
     public class NewProjectViewModelFactory : INewProjectViewModelFactory
     {
-        public NewProjectViewModel Create(List<User> users, string guid)
+        public NewProjectViewModel Create(SelectList users, string guid)
         {
-            var items = users.Select(x => new { Value = x.Id, Name = string.Format("{0} {1}", x.FirstName, x.SurName) });
+            var items = users.Select(x => new { Value = x.Value, Name = x.Text });
             var list = new MultiSelectList(items, "Value", "Name");
             //var list = new List<SelectListItem>();
             return new NewProjectViewModel

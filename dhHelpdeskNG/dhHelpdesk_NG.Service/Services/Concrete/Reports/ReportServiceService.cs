@@ -59,14 +59,15 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
             var reportFilter = new ReportFilter();                        
             reportFilter.CaseCreationDate = new DateToDate(DateTime.Now.AddMonths(-1), DateTime.Now);
 
-            var administrators = this._userService.GetUsers(customerId).ToList();
+            var userSearch = new UserSearch() { CustomerId = customerId, StatusId = 3 };
+            var administrators = this._userService.SearchSortAndGenerateUsers(userSearch).ToList();            
             reportFilter.Administrators = administrators;
 
             var departments = this._departmentService.GetDepartments(customerId, ActivationStatus.All);
             if (addOUsToDepartments)
                 departments = AddOrganizationUnitsToDepartments(departments);
 
-            var workingGroups = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId).ToList();                
+            var workingGroups = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId, false).ToList();                
 
             var caseTypes = this._caseTypeService.GetCaseTypes(customerId).ToList();
             var caseTypesInRow = this._caseTypeService.GetChildsInRow(caseTypes).ToList();

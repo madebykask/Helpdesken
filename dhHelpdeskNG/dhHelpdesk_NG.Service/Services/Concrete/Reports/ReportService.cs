@@ -251,7 +251,7 @@
                 var departmentRep = uow.GetRepository<Department>();
                 var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
                 var caseTypeRep = uow.GetRepository<CaseType>();
-                var fields = fieldRep.GetAll().GetByNullableCustomer(customerId)
+                var fields = fieldRep.GetAll().GetByNullableCustomer(customerId).Where(c => !c.Name.ToLower().Contains("isabout_"))
                     .GetShowable()
                     .ToList()
                     .Where(it => GridColumnsDefinition.IsAvailavbleToViewInCaseoverview(it.Name))

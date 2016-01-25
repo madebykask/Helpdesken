@@ -1,15 +1,16 @@
-﻿ 
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.Dal.Infrastructure;
+using DH.Helpdesk.Dal.Mappers;
+using DH.Helpdesk.Domain.Cases;
+using DH.Helpdesk.Dal.Dal;
+using DH.Helpdesk.Domain;
+
  namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
  {
-     using System;
-     using System.Collections.Generic;
-     using System.Linq;     
-     using DH.Helpdesk.BusinessData.Models.Case;
-     using DH.Helpdesk.Dal.Infrastructure;
-     using DH.Helpdesk.Dal.Mappers;    
-     using DH.Helpdesk.Domain.Cases;
-     using DH.Helpdesk.Dal.Dal;
-     using DH.Helpdesk.Domain;
+    
 
      public sealed class CaseFilterFavoriteRepository : RepositoryBase<CaseFilterFavoriteEntity>, ICaseFilterFavoriteRepository
      {         

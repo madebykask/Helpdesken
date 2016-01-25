@@ -82,6 +82,12 @@
 
             public static readonly string CaseLog = "CaseLog";
             
-        }          
+        }
+
+        public enum LogNote
+        {
+            UseExternalLogNote = 0,
+            UseInternalLogNote = 1
+        }
     }
 }

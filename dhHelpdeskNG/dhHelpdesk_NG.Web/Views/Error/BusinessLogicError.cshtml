@@ -1,18 +1,24 @@
-﻿@model HandleErrorInfo
+﻿@model DH.Helpdesk.Web.Models.Error.HandleErrorInfoGuid
 @{
     ViewBag.Title = "Error (" + Model.Exception.Message + ")";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="content">
     <div class="container">
-        <p class="error-title">
-            Sorry, business error occurred while processing your request.
-        </p>
-        <p class="error-title">
-            @DateTime.Now
-        </p>
+        <h2 style="margin: 10px 0;">
+            Sorry, an error occurred while processing your request.
+        </h2>
         <p class="error-message">
             @Model.Exception.Message
+        </p>
+        <p style="margin: 10px 0;">
+            @DateTime.Now
+        </p>
+        <p style="margin: 10px 0;">
+            Please provide Error Id to support team:
+        </p>
+        <p id="exception" style="padding: 10px; background: #ffa;">
+            Error Id: @Model.Guid
         </p>
     </div>
 </div>

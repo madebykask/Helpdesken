@@ -17,8 +17,6 @@
                 .HasForeignKey(o => o.InvoiceId)
                 .WillCascadeOnDelete(false);
             this.Property(o => o.Number).IsRequired();
-            this.Property(o => o.DeliveryPeriod).IsOptional().HasMaxLength(200);
-            this.Property(o => o.Reference).IsOptional().HasMaxLength(100);
             this.Property(o => o.Date).IsRequired();
             this.HasMany(o => o.Articles)
                 .WithRequired(a => a.Order)

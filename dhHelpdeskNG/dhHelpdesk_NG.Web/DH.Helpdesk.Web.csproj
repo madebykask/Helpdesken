@@ -36,6 +36,7 @@
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
     <DontImportPostSharp>True</DontImportPostSharp>
     <TargetFrameworkProfile />
+    <MvcProjectUpgradeChecked>true</MvcProjectUpgradeChecked>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -241,6 +242,7 @@
     <Compile Include="Areas\Admin\Controllers\AccountActivityController.cs" />
     <Compile Include="Areas\Admin\Controllers\BaseAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\BuildingController.cs" />
+    <Compile Include="Areas\Admin\Controllers\BusinessRulesController.cs" />
     <Compile Include="Areas\Admin\Controllers\CaseInvoiceController.cs" />
     <Compile Include="Areas\Admin\Controllers\CaseTypeController.cs" />
     <Compile Include="Areas\Admin\Controllers\CategoryController.cs" />
@@ -297,6 +299,9 @@
     <Compile Include="Areas\Admin\Infrastructure\ModelFactories\CaseInvoiceFactory.cs" />
     <Compile Include="Areas\Admin\Infrastructure\ModelFactories\ICaseInvoiceFactory.cs" />
     <Compile Include="Areas\Admin\Models\AccountActivityInputViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\BusinessRules\BusinessRuleItemViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\BusinessRules\BusinessRulesViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\BusinessRules\EditBusinessRuleViewModel.cs" />
     <Compile Include="Areas\Admin\Models\CaseTypeInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\CategoryViewModels.cs" />
     <Compile Include="Areas\Admin\Models\CausingPart\CausingPartsViewModel.cs" />
@@ -370,6 +375,7 @@
     <Compile Include="Areas\Admin\Models\SystemInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\UrgencyInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\WorkingGroupInputViewModel.cs" />
+    <Content Include="Areas\Admin\Content\js\BusinessRules\businessRules.list.js" />
     <Content Include="Areas\Admin\Content\js\CaseOverview\customerOverview.js" />
     <Content Include="Areas\Admin\Content\js\Category\index.js" />
     <Content Include="Areas\Admin\Content\js\CausingPart\index.js" />
@@ -807,6 +813,7 @@
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\SupplierEditModel.cs" />
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\UserEditModel.cs" />
     <Compile Include="Areas\Orders\OrdersAreaRegistration.cs" />
+    <Content Include="Content\js\Shared\errors.js" />
     <Content Include="Content\js\snippets\clickmultimenu_dropdown.js" />
     <Content Include="Content\js\snippets\jQuery.inactiveValue.validator.js" />
     <Content Include="Content\js\snippets\tabSwitchByHashTag.js" />
@@ -967,6 +974,7 @@
     <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="Controllers\TestController.cs" />
+    <Compile Include="Controllers\TranslationController.cs" />
     <Compile Include="Controllers\UserInteractionController.cs" />
     <Compile Include="Areas\Inventory\Controllers\WorkstationController.cs" />
     <Compile Include="Enums\Case\CaseFilterFileds.cs" />
@@ -1254,6 +1262,7 @@
     <Compile Include="Models\Case\ChildCase\ParentCaseInfo.cs" />
     <Compile Include="Models\Case\CaseRemainingTimeTable.cs" />
     <Compile Include="Models\Case\CaseStatisticsViewModel.cs" />
+    <Compile Include="Models\Case\CaseInvoiceModel.cs" />
     <Compile Include="Models\Case\Input\CaseEditInput.cs" />
     <Compile Include="Models\Case\MyFavoriteFilterModel.cs" />
     <Compile Include="Models\Case\Output\CaseSeachFilterData.cs" />
@@ -1316,6 +1325,7 @@
     <Compile Include="Models\DailyReports\DailyReportInputModel.cs" />
     <Compile Include="Models\Documents\DocumentsFilterModel.cs" />
     <Compile Include="Models\DailyReports\DailyReportModel.cs" />
+    <Compile Include="Models\Error\HandleErrorInfoGuid.cs" />
     <Compile Include="Models\Faq\Output\FAQFileModelModel.cs" />
     <Compile Include="Models\IConfigurableFieldModel.cs" />
     <Compile Include="Areas\Inventory\Models\EditModel\Computer\AccesoriesEditViewModel.cs" />
@@ -1741,6 +1751,8 @@
     <Content Include="Areas\Admin\Views\Users\Index\_LockedCaseTable.cshtml" />
     <Content Include="Areas\Reports\Views\Report\ReportViewer\_PresentReport.cshtml" />
     <Content Include="Areas\Reports\Views\Report\ReportViewer\_Overview.cshtml" />
+    <Content Include="Areas\Admin\Views\BusinessRules\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\BusinessRules\Edit.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="ReportViewerWebForm.aspx" />
     <Content Include="Scripts\jquery-1.8.3.js" />
@@ -1748,6 +1760,8 @@
     <Content Include="Scripts\jquery-ui-1.9.2.js" />
     <Content Include="Scripts\jquery-ui-1.9.2.min.js" />
     <Content Include="Scripts\jquery.cookie.js" />
+    <Content Include="Scripts\knockout-3.4.0.debug.js" />
+    <Content Include="Scripts\knockout-3.4.0.js" />
     <Content Include="Views\DailyReport\Index.cshtml" />
     <Content Include="Areas\Orders\Views\OrderFieldSettings\Index.cshtml" />
     <Content Include="Areas\Orders\Views\OrderFieldSettings\EditorTemplates\FullFieldSettingsModel.cshtml" />
@@ -1935,7 +1949,9 @@
     <Content Include="Areas\OrderAccounts\Views\Orders\AttachedFile.cshtml" />
     <Content Include="Areas\Orders\Views\Orders\DisplayTemplates\HistoryModel.cshtml" />
     <Content Include="Areas\Orders\Views\Orders\DisplayTemplates\HistoryRecordModel.cshtml" />
-    <Content Include="log4net.config.template" />
+    <Content Include="log4net.config.template">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Areas\Reports\Views\Web.config" />
     <Content Include="Areas\Reports\Views\Shared\Index.cshtml" />
     <Content Include="Areas\Reports\Views\Report\Options\RegistratedCasesDay.cshtml" />
@@ -2322,6 +2338,7 @@
     <Content Include="Views\Shared\EditorTemplates\DatePickerLocalTZ.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DateReadOnlyLocalTZ.cshtml" />
     <Content Include="Views\Cases\_Statistics.cshtml" />
+    <Content Include="Views\Cases\_Invoice.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
@@ -3128,7 +3145,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>49289</DevelopmentServerPort>
+          <DevelopmentServerPort>54933</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:57747/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

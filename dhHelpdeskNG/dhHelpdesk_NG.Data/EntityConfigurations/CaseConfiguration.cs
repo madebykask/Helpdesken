@@ -83,6 +83,10 @@
                 .HasForeignKey(c => c.CausingPartId)
                 .WillCascadeOnDelete(false);
 
+            this.HasOptional(s => s.IsAbout) 
+                .WithRequired(ad => ad.Case)
+                .WillCascadeOnDelete(true); 
+
             this.Property(x => x.AgreedDate).IsOptional();
             this.Property(x => x.ApprovedDate).IsOptional();
             this.Property(x => x.ApprovedBy_User_Id).IsOptional();

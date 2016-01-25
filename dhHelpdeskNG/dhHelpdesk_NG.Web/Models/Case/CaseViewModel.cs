@@ -86,6 +86,7 @@
         public IList<Priority> priorities { get; set; }
         public IList<ProjectOverview> projects { get; set; }
         public IList<OU> ous { get; set; }  //unit
+        public IList<OU> isaboutous { get; set; }  //Is about ous
         public IList<Region> regions { get; set; }
         public IList<Status> statuses { get; set; }
         public IList<StateSecondary> stateSecondaries { get; set; }
@@ -148,6 +149,8 @@
 
         public string LogFileNames { get; set; }
 
+        public string SavedFiles { get; set; }
+
         /// <summary>
         /// Gets or sets the case owner default working group.
         /// </summary>
@@ -159,9 +162,11 @@
 
         public string FinishingCause { get; set; }
 
-        public CaseInvoiceArticlesModel InvoiceArticles { get; set; }
+        //public CaseInvoiceArticlesModel InvoiceArticles { get; set; }
 
-        public string CaseInvoiceArticles { get; set; }
+        //public string CaseInvoiceArticles { get; set; }
+
+        public CaseInvoiceModel InvoiceModel { get; set; }
 
         public CustomerSettings CustomerSettings { get; set; }
 

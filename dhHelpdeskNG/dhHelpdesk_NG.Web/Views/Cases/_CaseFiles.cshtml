@@ -47,7 +47,7 @@
                         @file.UserName
                     </td>
                     <td>
-                        @if (SessionFacade.CurrentUser.DeleteAttachedFilePermission == 1)
+                        @if (file.CanDelete)
                         {
                             if (!caseInactive)
                             {

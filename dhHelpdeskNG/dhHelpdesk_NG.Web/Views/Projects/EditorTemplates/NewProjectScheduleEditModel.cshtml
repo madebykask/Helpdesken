@@ -6,14 +6,15 @@
         <div class="span12">
             <table>
                 <tr>
-                    <td>@Html.LabelFor(x => x.ProjectScheduleEditModel.Position)
+                    <td style="padding-right:10px;">@Html.LabelFor(x => x.ProjectScheduleEditModel.Position)
                     </td>
-                    <td>@Html.DropDownListFor(x => x.ProjectScheduleEditModel.Position, new SelectList(Model.Positions, "Value", "Text", Model.ProjectScheduleEditModel.Position))
+                    <td style="padding-right:20px;">@Html.DropDownListFor(x => x.ProjectScheduleEditModel.Position, new SelectList(Model.Positions, "Value", "Text", Model.ProjectScheduleEditModel.Position), new { @class="inputw50" })
                     </td>
-                    <td>@Html.LabelFor(x => x.ProjectScheduleEditModel.Name)
+                    <td style="padding-right:10px;">@Html.LabelFor(x => x.ProjectScheduleEditModel.Name)
                     </td>
-                    <td>@Html.EditorFor(x => x.ProjectScheduleEditModel.Name)
+                    <td style="padding-right:10px;">@Html.EditorFor(x => x.ProjectScheduleEditModel.Name)
                     </td>
+                    <td><input type="submit" value="@Translation.Get("Nytt delprojekt")" class="btn"/></td>
                 </tr>
             </table>
         </div>

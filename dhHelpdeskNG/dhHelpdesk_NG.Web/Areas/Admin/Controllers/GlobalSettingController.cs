@@ -12,6 +12,7 @@
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
     using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Common.Enums;
 
     public class GlobalSettingController : BaseController
     {
@@ -417,7 +418,7 @@
 
             var gridModel = new TranslationGridModel();
             //gridModel.AllTexts = this._textTranslationService.GetAllTexts(texttypeid).ToList();
-            var allTexts = this._textTranslationService.GetAllTexts(searchOption.TextType, SessionFacade.CurrentCustomer.Language_Id).ToList();
+            var allTexts = this._textTranslationService.GetAllTexts(searchOption.TextType, LanguageIds.English).ToList();
             if (string.IsNullOrEmpty(searchOption.TextSearch))
                 gridModel.AllTexts = allTexts.OrderBy(a => a.TextToTranslate).ToList();
             else
@@ -1097,7 +1098,7 @@
         public PartialViewResult ChangeTextType(int id)
         {
             var model = new TranslationGridModel();
-            model.AllTexts = this._textTranslationService.GetAllTexts(id, SessionFacade.CurrentCustomer.Language_Id).ToList();            
+            model.AllTexts = this._textTranslationService.GetAllTexts(id, LanguageIds.English).ToList();            
             var view = "~/areas/admin/views/GlobalSetting/_TranslationsList.cshtml";
 
             var searchOpt = new SearchOption { TextType = id, TextSearch = "", CompareMethod = 1 };

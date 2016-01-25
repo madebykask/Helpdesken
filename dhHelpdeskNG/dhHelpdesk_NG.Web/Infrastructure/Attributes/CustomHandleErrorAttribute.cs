@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.Attributes
 {
+    using System;
     using System.Web;
     using System.Web.Mvc;
 
@@ -39,6 +40,8 @@
             var controllerName = (string)filterContext.RouteData.Values["controller"];
             var actionName = (string)filterContext.RouteData.Values["action"];
 
+            var guid = Guid.NewGuid();
+
             // if the request is AJAX return JSON else view.
             if (filterContext.HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
@@ -48,13 +51,14 @@
                                                Data = new
                                                           {
                                                               error = true,
-                                                              message = filterContext.Exception.Message
+                                                              message = filterContext.Exception.Message,
+                                                              guidMessage = String.Format("Sorry, an error occurred while processing your request.\r\nPlease provide Error Id to support team:\r\n{0}", guid),
                                                           }
                                            };
             }
             else
             {
-                var model = new HandleErrorInfo(filterContext.Exception, controllerName, actionName);
+                var model = new DH.Helpdesk.Web.Models.Error.HandleErrorInfoGuid(filterContext.Exception, controllerName, actionName, guid);
 
                 filterContext.Result = new ViewResult
                                            {
@@ -69,7 +73,8 @@
 
             // log the error using log4net.
             LogManager.Error.Error(new ErrorContext(
-                                        filterContext.Exception,        
+                                        guid,
+                                        filterContext.Exception,
                                         controllerName,
                                         actionName,
                                         filterContext.HttpContext.ApplicationInstance.Context,

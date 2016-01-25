@@ -88,6 +88,7 @@
     <Compile Include="EntityConfigurations\Cases\CausingPartConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CaseLockConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CaseFilterFavoriteConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Cases\CaseIsAboutConfiguration.cs" />
     <Compile Include="EntityConfigurations\Changes\ChangeCouncilConfiguration.cs" />
     <Compile Include="EntityConfigurations\CheckLists\CheckListsConfiguration.cs" />
     <Compile Include="EntityConfigurations\FileViewLogConfiguration.cs" />

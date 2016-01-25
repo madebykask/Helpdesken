@@ -104,6 +104,8 @@
 
         public DbSet<CaseInvoiceRow> CaseInvoiceRows { get; set; }
 
+        public DbSet<CaseIsAboutEntity> CaseIsAbout { get; set; }
+
         public DbSet<CaseQuestionCategory> CaseQuestionCategories { get; set; }
 
         public DbSet<CaseQuestionHeader> CaseQuestionHeaders { get; set; }
@@ -579,6 +581,7 @@
             modelBuilder.Configurations.Add(new CaseStatisticConfiguration());
 
             modelBuilder.Configurations.Add(new CaseInvoiceRowConfiguration());
+            modelBuilder.Configurations.Add(new CaseIsAboutConfiguration());
             modelBuilder.Configurations.Add(new CaseQuestionCategoryConfiguration());
             modelBuilder.Configurations.Add(new CaseQuestionConfiguration());
             modelBuilder.Configurations.Add(new CaseQuestionHeaderConfiguration());

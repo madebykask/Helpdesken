@@ -17,8 +17,8 @@
                 editModel.State == null ? 0 : (int)editModel.State.Value,
                 editModel.Time,
                 editModel.Description,
-                editModel.StartDate == null ? null : (DateTime?)DateTime.Parse(editModel.StartDate),
-                editModel.FinishDate == null ? null : (DateTime?)DateTime.Parse(editModel.FinishDate),
+                editModel.StartDate,
+                editModel.FinishDate,
                 editModel.CaseNumber,
                 changeTime);
         }

@@ -12,13 +12,13 @@
 
     public class IndexProjectViewModelFactory : IIndexProjectViewModelFactory
     {
-        public IndexProjectViewModel Create(List<ProjectOverview> overviews, List<User> users, ProjectFilter filter)
+        public IndexProjectViewModel Create(List<ProjectOverview> overviews, SelectList users, ProjectFilter filter)
         {
             return new IndexProjectViewModel
                        {
                            Projects = overviews ?? new List<ProjectOverview>(),
                            Filter = filter ?? new ProjectFilter(),
-                           Users = users.Select(x => new SelectListItem { Text = string.Format("{0} {1}", x.FirstName, x.SurName), Value = x.Id.ToString(CultureInfo.InvariantCulture) }).ToList()
+                           Users = users.Select(x => new SelectListItem { Text = x.Text, Value = x.Value }).ToList()
                        };
         }
     }

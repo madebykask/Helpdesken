@@ -90,7 +90,7 @@
                                             userName = a.SurName + " " + a.FirstName;
                                         }  
                                                                                                                     
-                                        <option value="@a.Id" @a.Id.IdIsSelected(selectedItems)>
+                                        <option class="@(a.IsActive == 0? "DisabledChosen" : "")" value="@a.Id" @a.Id.IdIsSelected(selectedItems)>
                                             @userName
                                         </option>
                                     }
@@ -157,19 +157,10 @@
                                 <td>
                                     <select id="lstfilterWorkingGroup" name="lstfilterWorkingGroup" data-field="workinggroups" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                         @foreach (var w in Model.ReportFilter.WorkingGroups)
-                                        {
-                                            if (w.IsActive == 1)
-                                            {
-                                            <option value="@w.Id" @w.Id.IdIsSelected(selectedItems)>
+                                        {                                            
+                                            <option value="@w.Id" @w.Id.IdIsSelected(selectedItems) class="@(w.IsActive == 0? "DisabledChosen" : "")">
                                                 @w.WorkingGroupName
-                                            </option>
-                                            }
-                                            else
-                                            {
-                                            <option value="@w.Id" @w.Id.IdIsSelected(selectedItems) class="DisabledChosen" >
-                                                @w.WorkingGroupName
-                                            </option>
-                                            }
+                                            </option>                                         
                                         }
                                     </select>
                                 </td>
@@ -240,7 +231,7 @@
     </div>
     <div class="container">
         <div class="row">
-            <div class="span6">
+            <div class="">
                 @Html.Partial("ReportViewer/_PresentReport", Model.ReportViewerData)
             </div>
         </div>

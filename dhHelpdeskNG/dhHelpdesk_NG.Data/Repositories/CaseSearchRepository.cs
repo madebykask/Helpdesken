@@ -219,6 +219,11 @@
                                         var dtTo = DatesHelper.Max(caseRegistrationDate, now);
                                         var calcTime = workTimeCalculator.CalculateWorkTime(dtFrom, dtTo, departmentId);
                                         timeLeft = (SLAtime * 60 - calcTime + timeOnPause) / 60;
+                                        var floatingPoint = (SLAtime * 60 - calcTime + timeOnPause) % 60;
+                                        
+                                        if (timeLeft == 0 && floatingPoint < 0)
+                                            timeLeft--; 
+                                        
                                     }
 
                                     if (timeLeft.HasValue)
@@ -298,7 +303,7 @@
                                 row.Id = dr.SafeGetInteger("Id"); 
                                 row.Columns = cols;
                                 row.IsUnread = dr.SafeGetInteger("Status") == 1;
-                                row.IsUrgent = timeLeft.HasValue && timeLeft <= 0;                                
+                                row.IsUrgent = timeLeft.HasValue && timeLeft < 0;                                
                                 ret.Add(row); 
                             }
                         }
@@ -1063,7 +1068,7 @@
             if (!string.IsNullOrWhiteSpace(f.UserPerformer))
             {
                 var performersDict = f.UserPerformer.Split(',').ToDictionary(it => it, it => true);
-                var searchingUnassigned = restrictedCasePermission != 1 && customerUserSetting.User.ShowNotAssignedCases == 1 && performersDict.ContainsKey(int.MinValue.ToString());
+                var searchingUnassigned = restrictedCasePermission != 1 && performersDict.ContainsKey(int.MinValue.ToString());
                 if (searchingUnassigned)
                 {
                     performersDict.Remove(int.MinValue.ToString());
@@ -1079,7 +1084,7 @@
                     sb.AppendFormat("tblCase.Performer_User_Id in ({0}) ", string.Join(",", performersDict.Keys).SafeForSqlInject());
                 }
 
-                if (searchingUnassigned)
+                if (searchingUnassigned || customerUserSetting.User.ShowNotAssignedCases == 1)
                 {
                     if (performersDict.Count > 0)
                     {
@@ -1094,7 +1099,7 @@
                     sb.Append(") ");
                 }
             }
-
+           
             // ansvarig
             if (!string.IsNullOrWhiteSpace(f.UserResponsible))
                 sb.Append(" and (tblCase.CaseResponsibleUser_Id in (" + f.UserResponsible.SafeForSqlInject() + "))"); 
@@ -1249,7 +1254,7 @@
             {
                 var text = f.CaptionSearch;
                 sb.Append(" AND (");
-                sb.Append(this.GetSqlLike("[tblCase].[Caption]", text));
+                sb.AppendFormat("LOWER({0}) LIKE '%{1}%'", "[tblCase].[Caption]", text);
                 sb.Append(") ");
             }
 

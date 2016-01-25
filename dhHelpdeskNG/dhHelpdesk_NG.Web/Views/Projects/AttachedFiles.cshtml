@@ -1,9 +1,45 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Models.Projects.FilesModel
 
-<table>
+@if (Model != null && Model.Files != null && Model.Files.Any())
+{    
+
+    <table border="0" style="width:350px">
+        <thead>
+            <tr>
+                <th style="color:grey; text-align:left">
+                    @Translation.Get("Filnamn")
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                
+                foreach (var file in Model.Files)
+                {
+                    //var date = TimeZoneInfo.ConvertTimeFromUtc(file.CreatedDate.ToUniversalTime(), userTimezone);
+                    <tr>
+                        <td>
+                           <i class="icon-file"></i>@Html.ActionLink(file, "DownloadFile", new { guid = Model.Guid, fileName = file }) 
+                        </td>
+                        <td>
+                            <a onclick="deleteFile('@Model.Guid', '@file')" class="btn bt-small" data-field="deleteFile" title="@Translation.Get("Ta bort")"><i class="icon-remove"></i></a> 
+                        </td>
+                    </tr>
+                                   
+                }
+            }
+        </tbody>
+    </table> 
+}
+
+
+
+@*<table>
     @foreach (var file in Model.Files)
     {
+        
         <tr>
             <td>
                 @Html.ActionLink(file, "DownloadFile", new { guid = Model.Guid, fileName = file })
@@ -13,4 +49,4 @@
             </td>
         </tr>
     }
-</table>
+</table>*@

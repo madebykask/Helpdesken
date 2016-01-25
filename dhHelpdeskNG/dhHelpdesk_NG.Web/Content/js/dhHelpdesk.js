@@ -2,16 +2,7 @@
 var dhHelpdesk = {};
 var publicCustomerId = $('#case__Customer_Id').val();
 
-var publicDepartmentControlName = '#case__Department_Id';
-var publicReadOnlyDepartmentName = '#DepartmentName';
-
-var publicOUControlName = '#case__Ou_Id';
-var publicReadOnlyOUName = '#OuName';
-
-
-// controller methods:
-var publicChangeRegion = '/Cases/ChangeRegion/';
-var publicChangeDepartment = '/Cases/ChangeDepartment/';
+var _departmentControlName = '#case__Department_Id';
 
 
 //tabbar
@@ -401,7 +392,7 @@ function NewNotifierEvent(id) {
             $('#case__Region_Id').val(data.regionid);            
             $('#RegionName').val(data.regionname);
 
-            $(publicDepartmentControlName).val(data.departmentid);
+            $(_departmentControlName).val(data.departmentid);
             refreshDepartment(data.regionid, departmentFilterFormat, data.departmentid, data.ouid);           
 
         }

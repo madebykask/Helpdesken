@@ -43,7 +43,7 @@
                                           UserId = userId,
                                           AvailableColumns =
                                               this.caseSettingService
-                                              .GetAvailableCaseOverviewGridColumnSettings(customerId).OrderBy(it => Translation.Get(it.Name, Enums.TranslationSource.CaseTranslation, customerId)),
+                                              .GetAvailableCaseOverviewGridColumnSettings(customerId).Where(c=> !c.Name.ToLower().Contains("isabout_")).OrderBy(it => Translation.Get(it.Name, Enums.TranslationSource.CaseTranslation, customerId)),
                                           SelectedColumns =
                                               this.caseSettingService
                                               .GetSelectedCaseOverviewGridColumnSettings(

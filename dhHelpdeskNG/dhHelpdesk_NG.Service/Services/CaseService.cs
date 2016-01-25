@@ -44,6 +44,8 @@ namespace DH.Helpdesk.Services.Services
     {
         IList<Case> GetCases();
 
+        IList<Case> GetProjectCases(int customerId, int projectId);
+
         IList<Case> GetCasesByCustomers(IEnumerable<int> customerIds);
 
         Case InitCase(int customerId, int userId, int languageId, string ipAddress, CaseRegistrationSource source, Setting customerSetting, string adUser);
@@ -74,7 +76,6 @@ namespace DH.Helpdesk.Services.Services
             int userId, 
             string adUser,           
             out IDictionary<string, string> errors,
-            CaseInvoice[] invoices = null,
             Case parentCase = null);
 
         int SaveCaseHistory(
@@ -165,6 +166,7 @@ namespace DH.Helpdesk.Services.Services
 
         private readonly CaseStatisticService _caseStatService;
         private readonly ICaseFilterFavoriteRepository _caseFilterFavoriteRepository;
+
 
         public CaseService(
             ICaseRepository caseRepository,
@@ -791,6 +793,11 @@ namespace DH.Helpdesk.Services.Services
             return this._caseRepository.GetAll().ToList();
         }
 
+        public IList<Case> GetProjectCases(int customerId, int projectId)
+        {
+            return this._caseRepository.GetProjectCases(customerId, projectId);
+        }
+
         public IList<Case> GetCasesByCustomers(IEnumerable<int> customerIds) 
         {
             return this._caseRepository
@@ -919,7 +926,6 @@ namespace DH.Helpdesk.Services.Services
                 int userId, 
                 string adUser, 
                 out IDictionary<string, string> errors,
-                CaseInvoice[] invoices = null,
                 Case parentCase = null)
         {
             int ret = 0;
@@ -956,9 +962,14 @@ namespace DH.Helpdesk.Services.Services
                 this._caseRepository.Update(c);
             }
 
+            
             this._caseRepository.Commit();
             this._caseStatService.UpdateCaseStatistic(c);
             
+            // save CaseIsAbout
+            if (c.IsAbout != null)
+                this.SaveIsAbout(c, out errors);     
+
             // save casehistory
             var extraFields = new ExtraFieldCaseHistory();
             if (caseLog != null && caseLog.FinishingType != null)
@@ -976,14 +987,86 @@ namespace DH.Helpdesk.Services.Services
                 this.SaveCaseHistory(c, userId, adUser, out errors, adUser, extraFields) : 
                 this.SaveCaseHistory(c, userId, adUser, out errors, string.Empty, extraFields);
 
-            if (invoices != null)
-            {
-                this.invoiceArticleService.SaveCaseInvoices(invoices, cases.Id);                
-            }
-
             return ret;
         }
         
+        private void SaveIsAbout(Case c, out IDictionary<string, string> errors)
+        {
+            errors = new Dictionary<string, string>();
+            using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            {
+                var isAboutEntity = uow.GetRepository<CaseIsAboutEntity>();
+                var allreadyExists = isAboutEntity
+                        .GetAll()
+                        .Where(it => it.Id == c.Id)
+                        .FirstOrDefault();
+                if (allreadyExists == null)
+                {
+                    if (CaseHasIsAbout(c))
+                    {
+                        isAboutEntity.Add(new CaseIsAboutEntity()
+                        {
+                            Id = c.Id,
+                            CostCentre = c.IsAbout.CostCentre,
+                            Department_Id = c.IsAbout.Department_Id,
+                            OU_Id = c.IsAbout.OU_Id,
+                            Person_Cellphone = c.IsAbout.Person_Cellphone,
+                            Person_Email = c.IsAbout.Person_Email,
+                            Person_Name = c.IsAbout.Person_Name,
+                            Person_Phone = c.IsAbout.Person_Phone,
+                            Place = c.IsAbout.Place,
+                            Region_Id = c.IsAbout.Region_Id,
+                            ReportedBy = c.IsAbout.ReportedBy,
+                            UserCode = c.IsAbout.UserCode
+                        });
+                        uow.Save();
+                    }
+                }
+                else
+                {
+                    if (CaseHasIsAbout(c))
+                    {
+                        allreadyExists.CostCentre = c.IsAbout.CostCentre;
+                        allreadyExists.Department_Id = c.IsAbout.Department_Id;
+                        allreadyExists.OU_Id = c.IsAbout.OU_Id;
+                        allreadyExists.Person_Cellphone = c.IsAbout.Person_Cellphone;
+                        allreadyExists.Person_Email = c.IsAbout.Person_Email;
+                        allreadyExists.Person_Name = c.IsAbout.Person_Name;
+                        allreadyExists.Person_Phone = c.IsAbout.Person_Phone;
+                        allreadyExists.Place = c.IsAbout.Place;
+                        allreadyExists.Region_Id = c.IsAbout.Region_Id;
+                        allreadyExists.ReportedBy = c.IsAbout.ReportedBy;
+                        allreadyExists.UserCode = c.IsAbout.UserCode;
+                        isAboutEntity.Update(allreadyExists);
+                    }
+                    else
+                        isAboutEntity.DeleteById(c.Id);
+
+                    uow.Save();
+                }                
+            }            
+        }
+
+        private bool CaseHasIsAbout(Case c)
+        {
+            if (c.IsAbout == null ||
+                (c.IsAbout != null &&
+                 string.IsNullOrEmpty(c.IsAbout.CostCentre) &&
+                 string.IsNullOrEmpty(c.IsAbout.Person_Cellphone) &&
+                 string.IsNullOrEmpty(c.IsAbout.Person_Email) &&
+                 string.IsNullOrEmpty(c.IsAbout.Person_Name) &&
+                 string.IsNullOrEmpty(c.IsAbout.Person_Phone) &&
+                 string.IsNullOrEmpty(c.IsAbout.Place) &&
+                 string.IsNullOrEmpty(c.IsAbout.ReportedBy) &&
+                 string.IsNullOrEmpty(c.IsAbout.UserCode) &&
+                 c.IsAbout.Region_Id == null &&
+                 c.IsAbout.Department_Id == null &&
+                 c.IsAbout.OU_Id == null))
+                return false;
+            else
+                return true;            
+        }
+
         private bool AddChildCase(int childCaseId, int parentCaseId, out IDictionary<string, string> errors)
         {
             errors = new Dictionary<string, string>();
@@ -1037,6 +1120,8 @@ namespace DH.Helpdesk.Services.Services
 
             return h.Id;
         }
+
+        
 
         public IList<CaseHistory> GetCaseHistoryByCaseId(int caseId)
         {
@@ -1173,7 +1258,7 @@ namespace DH.Helpdesk.Services.Services
                     mailTemplateId = 0;
 
                     if (newCase.ProductArea.MailID.HasValue)
-                        mailTemplateId = newCase.ProductArea.MailTemplate.MailID;
+                        mailTemplateId = newCase.ProductArea.MailID.Value;
                     
 
                     if (mailTemplateId > 0)
@@ -1232,7 +1317,7 @@ namespace DH.Helpdesk.Services.Services
 
                     // get mail template from productArea
                     if (newCase.ProductArea.MailID.HasValue)
-                        mailTemplateId = newCase.ProductArea.MailTemplate.MailID;
+                        mailTemplateId = newCase.ProductArea.MailID.Value;
                     
                     if (mailTemplateId > 0)
                     {
@@ -1717,6 +1802,8 @@ namespace DH.Helpdesk.Services.Services
             
             return h;
         }
+
+        
 
         private List<Field> GetCaseFieldsForEmail(Case c, CaseLog l, CaseMailSetting cms, string emailLogGuid,int stateHelper)
         {

@@ -3,6 +3,26 @@
 * This code was taken from dhHelpdesk.js and still has dependencies from it
 * @TODO: code review wanted to spare connections between functions from that file
 */
+var publicCustomerId = $('#case__Customer_Id').val();
+
+var publicDepartmentControlName = '#case__Department_Id';
+var publicReadOnlyDepartmentName = '#DepartmentName';
+
+var publicOUControlName = '#case__Ou_Id';
+var publicReadOnlyOUName = '#OuName';
+
+// Case Is About
+var publicIsAboutDepartmentControlName = '#case__IsAbout_Department_Id';
+var publicIsAboutReadOnlyDepartmentName = '#IsAboutDepartmentName';
+
+var publicIsAboutOUControlName = '#case__IsAbout_Ou_Id';
+var publicIsAboutReadOnlyOUName = '#IsAboutOUName';
+
+
+// controller methods:
+var publicChangeRegion = '/Cases/ChangeRegion/';
+var publicChangeDepartment = '/Cases/ChangeDepartment/';
+
 
 function SetFocusToReportedByOnCase() {
     if ($('#ShowReportedBy').val() == 1) {
@@ -108,6 +128,30 @@ function refreshOrganizationUnit(departmentId, departmentFilterFormat, selectedO
     });
 }
 
+function refreshIsAboutOrganizationUnit(departmentId, departmentFilterFormat, selectedOrganizationUnitId) {
+    $(publicIsAboutOUControlName).val('');
+    $(publicIsAboutReadOnlyOUName).val('');
+    var ctlOption = publicIsAboutOUControlName + ' option';
+    $(publicIsAboutOUControlName).prop('disabled', true);
+    $.post(publicChangeDepartment, { 'id': departmentId, 'customerId': publicCustomerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {
+        $(ctlOption).remove();
+        $(publicIsAboutOUControlName).append('<option value="">&nbsp;</option>');
+        if (data != undefined) {
+            for (var i = 0; i < data.list.length; i++) {
+                var item = data.list[i];
+                var option = $("<option value='" + item.id + "'>" + item.name + "</option>");
+                if (option.val() == selectedOrganizationUnitId) {
+                    $(publicIsAboutOUControlName).val(selectedOrganizationUnitId);
+                    $(publicIsAboutReadOnlyOUName).val(item.name);
+                    option.prop("selected", true);
+                }
+                $(publicIsAboutOUControlName).append(option);
+            }
+        }
+    }, 'json').always(function () {
+        $(publicIsAboutOUControlName).prop('disabled', false);
+    });
+}
 
 function refreshDepartment(regionId, departmentFilterFormat, selectedDepartmentId, selectedOU) {
     $(publicDepartmentControlName).val('');
@@ -132,6 +176,32 @@ function refreshDepartment(regionId, departmentFilterFormat, selectedDepartmentI
     }, 'json').always(function () {
         $(publicDepartmentControlName).prop('disabled', false);
         refreshOrganizationUnit(selectedDepartmentId, departmentFilterFormat, selectedOU);
+    });
+}
+
+function refreshIsAboutDepartment(regionId, departmentFilterFormat, selectedDepartmentId, selectedOU) {
+    $(publicIsAboutDepartmentControlName).val('');
+    $(publicIsAboutReadOnlyDepartmentName).val('');
+    var ctlOption = publicIsAboutDepartmentControlName + ' option';
+    $(publicIsAboutDepartmentControlName).prop('disabled', true);
+    $.post(publicChangeRegion, { 'id': regionId, 'customerId': publicCustomerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {
+        $(ctlOption).remove();
+        $(publicIsAboutDepartmentControlName).append('<option value="">&nbsp;</option>');
+        if (data != undefined) {
+            for (var i = 0; i < data.list.length; i++) {
+                var item = data.list[i];
+                var option = $("<option value='" + item.id + "'>" + item.name + "</option>");
+                if (option.val() == selectedDepartmentId) {
+                    $(publicIsAboutDepartmentControlName).val(selectedDepartmentId);
+                    $(publicIsAboutReadOnlyDepartmentName).val(item.name);
+                    option.prop("selected", true);
+                }
+                $(publicIsAboutDepartmentControlName).append(option);
+            }
+        }
+    }, 'json').always(function () {
+        $(publicIsAboutDepartmentControlName).prop('disabled', false);
+        refreshIsAboutOrganizationUnit(selectedDepartmentId, departmentFilterFormat, selectedOU);
     });
 }
 
@@ -223,7 +293,7 @@ function GetComputerUserSearchOptions() {
             var departmentFilterFormat = $('#DepartmentFilterFormat').val();
                         
             $('#case__ReportedBy').val(item.num);
-            
+         
             // Raise event about UserId changed.
             $(document).trigger("OnUserIdChanged", [item.num]);
             
@@ -264,6 +334,134 @@ function GetComputerUserSearchOptions() {
     return options;
 }
 
+function GetComputerUserSearchOptionsForIsAbout() {
+    var options = {
+        items: 20,
+        minLength: 2,
+        source: function (query, process) {
+            return $.ajax({
+                url: '/cases/search_user',
+                type: 'post',
+                data: { query: query, customerId: $('#case__Customer_Id').val() },
+                dataType: 'json',
+                success: function (result) {
+                    var resultList = jQuery.map(result, function (item) {
+                        var aItem = {
+                            id: item.Id
+                                    , num: item.UserId
+                                    , name: item.FirstName + ' ' + item.SurName
+                                    , email: item.Email
+                                    , place: item.Location
+                                    , phone: item.Phone
+                                    , usercode: item.UserCode
+                                    , cellphone: item.CellPhone
+                                    , regionid: item.Region_Id
+                                    , regionname: item.RegionName
+                                    , departmentid: item.Department_Id
+                                    , departmentname: item.DepartmentName
+                                    , ouid: item.OU_Id
+                                    , ouname: item.OUName
+                                    , name_family: item.SurName + ' ' + item.FirstName
+                                    , customername: item.CustomerName
+                        };
+                        return JSON.stringify(aItem);
+
+                    });
+
+                    return process(resultList);
+                }
+            });
+        },
+
+        matcher: function (obj) {
+            var item = JSON.parse(obj);
+            //console.log(JSON.stringify(item));
+            return ~item.name.toLowerCase().indexOf(this.query.toLowerCase())
+                || ~item.name_family.toLowerCase().indexOf(this.query.toLowerCase())
+                || ~item.num.toLowerCase().indexOf(this.query.toLowerCase())
+                || ~item.phone.toLowerCase().indexOf(this.query.toLowerCase())
+                || ~item.email.toLowerCase().indexOf(this.query.toLowerCase());
+        },
+
+        sorter: function (items) {
+            var beginswith = [], caseSensitive = [], caseInsensitive = [], item;
+            while (aItem = items.shift()) {
+                var item = JSON.parse(aItem);
+                if (!item.num.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(item));
+                else if (~item.num.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
+                else caseInsensitive.push(JSON.stringify(item));
+            }
+
+            return beginswith.concat(caseSensitive, caseInsensitive);
+        },
+
+        highlighter: function (obj) {
+            var item = JSON.parse(obj);
+            var orgQuery = this.query;
+            if (item.departmentname == null)
+                item.departmentname = ""
+            var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
+            var result = item.name + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email + ' - ' + item.departmentname;
+            var resultBy_NameFamily = item.name_family + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email + ' - ' + item.departmentname;
+
+            if (result.toLowerCase().indexOf(orgQuery.toLowerCase()) > -1)
+                return result.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
+                    return '<strong>' + match + '</strong>';
+                });
+            else
+                return resultBy_NameFamily.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
+                    return '<strong>' + match + '</strong>';
+                });
+
+        },
+
+        updater: function (obj) {
+            var item = JSON.parse(obj);
+            var departmentFilterFormat = $('#DepartmentFilterFormat').val();
+
+            $('#case__IsAbout_ReportedBy').val(item.num);
+
+            // Raise event about UserId changed.
+            $(document).trigger("OnUserIdChanged", [item.num]);
+
+           
+            // Case Is About
+            if (item.name != "" && item.name != null)
+                $('#case__IsAbout_Person_Name').val(item.name);
+
+            if (item.email != "" && item.email != null)
+                $('#case__IsAbout_Person_Email').val(item.email);
+
+            if (item.phone != "" && item.phone != null)
+                $('#case__IsAbout_Person_Phone').val(item.phone);
+
+            if (item.cellphone != "" && item.cellphone != null)
+                $('#case__IsAbout_Person_Cellphone').val(item.cellphone);
+
+            if (item.place != "" && item.place != null)
+                $('#case__IsAbout_Place').val(item.place);
+
+            if (item.usercode != "" && item.usercode != null)
+                $('#case__IsAbout_UserCode').val(item.usercode);
+
+
+            if (item.regionid != "" && item.regionid != null) {
+                $('#case__IsAbout_Region_Id').val(item.regionid);
+                $('#IsAboutRegionName').val(item.regionname);
+            }
+
+            if (item.regionid != "" && item.regionid != null &&
+                item.departmentid != "" && item.departmentid != null) {
+                $(publicIsAboutDepartmentControlName).val(item.departmentid).trigger('change');
+                refreshIsAboutDepartment(item.regionid, departmentFilterFormat, item.departmentid, item.ouid);
+            }
+            return item.num;
+        }
+    };
+
+    return options;
+}
+
 
 
 /**
@@ -281,6 +479,7 @@ function CaseInitForm() {
 
     $('#case__ReportedBy').typeahead(GetComputerUserSearchOptions());
     $('#case__InventoryNumber').typeahead(GetComputerSearchOptions());
+    $('#case__IsAbout_ReportedBy').typeahead(GetComputerUserSearchOptionsForIsAbout());
 
     $('#CountryId').change(function () {
         CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeCountry/', '#case__Supplier_Id', $('#DepartmentFilterFormat').val());
@@ -293,6 +492,11 @@ function CaseInitForm() {
         refreshDepartment(regionId, departmentFilterFormat);
     });
 
+    $('#case__IsAbout_Region_Id').change(function () {
+        var regionId = $(this).val();
+        var departmentFilterFormat = $('#DepartmentFilterFormat').val();
+        refreshIsAboutDepartment(regionId, departmentFilterFormat);
+    });
 
     $(publicDepartmentControlName).change(function () {
         // Remove after implementing http://redmine.fastdev.se/issues/10995        
@@ -300,6 +504,14 @@ function CaseInitForm() {
         var departmentFilterFormat = $('#DepartmentFilterFormat').val();
         refreshOrganizationUnit(departmentId, departmentFilterFormat);
         showInvoice(departmentId);
+    });
+
+    $(publicIsAboutDepartmentControlName).change(function () {
+        // Remove after implementing http://redmine.fastdev.se/issues/10995        
+        var departmentId = $(this).val();
+        var departmentFilterFormat = $('#DepartmentFilterFormat').val();
+        refreshIsAboutOrganizationUnit(departmentId, departmentFilterFormat);
+        //showInvoice(departmentId);
     });
 
     function showInvoice(departmentId) {
@@ -473,6 +685,7 @@ function CaseInitForm() {
             params += "&departmentId=" + $(publicDepartmentControlName).val();
         if ($(publicOUControlName).val() != '')
             params += "&organizationUnitId=" + $(publicOUControlName).val();
+        
 
         var win = window.open('/Notifiers/NewNotifierPopup' + params, '_blank', 'left=100,top=100,width=990,height=480,toolbar=0,resizable=1,menubar=0,status=0,scrollbars=1');
 
@@ -492,7 +705,7 @@ function CaseInitForm() {
     }
 
     var getCaseFiles = function () {
-        $.get('/Cases/Files', { id: $('#CaseKey').val(), now: Date.now() }, function (data) {
+        $.get('/Cases/Files', { id: $('#CaseKey').val(), savedFiles: $('#SavedFiles').val(),  now: Date.now() }, function (data) {
             $('#divCaseFiles').html(data);
             // Raise event about rendering of uploaded file
             $(document).trigger("OnUploadedCaseFileRendered", []);
@@ -650,6 +863,8 @@ function CaseInitForm() {
                     $(".plupload_buttons").css("display", "inline");
                     $(".plupload_upload_status").css("display", "inline");
                     up.refresh();
+
+                    $(document).trigger("OnUploadLogFile", [up, file]);
                 }
             },
             init: {

@@ -7,7 +7,13 @@
             <li id="menu1">
                 <input type="submit" value="@Translation.Get("Spara")" class="btn" id="subbut"/>
             </li>
-            <li id="menu3">@Html.ActionLink(Translation.Get("Ta bort"), "DeleteProject", new { id = Model.ProjectEditModel.Id }, new { @class = "btn" })</li>
+            @*<li id="menu3">@Html.ActionLink(Translation.Get("Ta bort"), "DeleteProject", new { id = Model.ProjectEditModel.Id }, new { @class = "btn" })</li>*@
+            <li>
+                @Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "DeleteProject",
+                    new { id = Model.ProjectEditModel.Id}, 
+                    new { @class = "btn deleteDialog", 
+                            deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) })
+            </li>
             <li id="menu2">@Html.ActionLink(Translation.Get("Avbryt"), "Index", null, new { @class = "btn" })</li>
         </ul>
     </div>
@@ -33,20 +39,18 @@
                     @Html.ValidationSummary(true)
                     @Html.Partial("_InputProject", new ProjectEditViewModel { Users = Model.Users, ProjectEditModel = Model.ProjectEditModel, Guid = Model.Guid.ToString(CultureInfo.InvariantCulture) }) // todo Implement Mappers
                 }
-                <div class="content mt20">
+                
+                
                     <div class="container">
-                        <ul class="nav nav-tabs">
-                            <li class="active">
-                                <a href="#fragment-1">@Translation.Get("Delprojekt")</a>
-                            </li>
-                        </ul>
-                        <div class="tab-content">
+                        <h4>@Translation.Get("Delprojekt")</h4>
+                        <div class="tab-content" style="margin:-11px 0 0 -5px;">
                             <div class="tab-pane tab-pane-border active">
                                 @using (Html.BeginForm("AddProjectSchedule", "Projects", FormMethod.Post, new { id = "project_schedule_edit_form" }))
                                 {   
                                     @Html.ValidationSummary(true)
                                     @Html.Partial("EditorTemplates/NewProjectScheduleEditModel", Model.NewProjectScheduleEditModel)
-                                    <input type="submit" value="@Translation.Get("Nytt delprojekt")" class="btn"/>
+                                    
+                                    <hr />
                                 }
                                 @using (Html.BeginForm("EditProject", "Projects", FormMethod.Post, new { id = "project_schedules_edit_form" }))
                                 {
@@ -56,13 +60,14 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                
             </div>
             <div class="tab-pane tab-pane-border" id="fragment-2">
                 @using (Html.BeginForm("AddProjectLog", "Projects", FormMethod.Post, new { id = "log_edit_form" }))
                 {
                     @Html.EditorFor(x => x.ProjectLog)
-                    <input type="submit" value="@Translation.Get("Lägg till")" class="btn"/>
+                    
+                    <hr />
                 }
                 @Html.Partial("LogGrid", Model.ProjectLogs)
             </div>
