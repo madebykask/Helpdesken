@@ -2028,6 +2028,39 @@
             "case_.WatchDate": {
                 required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.WatchDate.ToString())")
             },
+            "case_.IsAbout.ReportedBy": {
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString())")   
+            },
+            "case_.IsAbout.Department_Id": {
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.IsAbout_Department_Id.ToString())") 
+            },
+            "case_.IsAbout.Person_Name": {
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString())")
+            },
+            "case_.IsAbout.Person_Email": {
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString())")
+            },
+            "case_.IsAbout.Person_Cellphone": {
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString())")
+            },
+            "case_.IsAbout.Person_Phone": {
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString())")
+            },
+            "case_.IsAbout.Region_Id": {
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.IsAbout_Region_Id.ToString())")
+            },
+            "case_.IsAbout.OU_Id": {
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.IsAbout_OU_Id.ToString())")
+            },
+            "case_.IsAbout.CostCentre":{
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.IsAbout_CostCentre.ToString())")
+            },
+            "case_.IsAbout.Place": {
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString())")
+            },
+            "case_.IsAbout.UserCode": {
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.IsAbout_UserCode.ToString())")
+            },
             "CaseLog.FinishingType": {
                 required: function(){
                     if ($('#CaseLog_FinishingDate').closest('tr').css('display') != 'none' && $('#CaseLog_FinishingType').closest('tr').css('display') != 'none')
@@ -2185,7 +2218,40 @@
             },
             "CaseLog.FinishingDate": {
                 required: "@Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-            }          
+            }, 
+            "case_.IsAbout.Department_Id": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
+            },
+            "case_.IsAbout.ReportedBy": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
+            },
+            "ccase_.IsAbout.Person_Name": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
+            },
+            "case_.IsAbout.Person_Email": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
+            },
+            "case_.IsAbout.Person_Cellphone": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
+            },
+            "case_.IsAbout.Person_Phone": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
+            },
+            "case_.IsAbout.Region_Id": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_Region_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
+            },
+            "case_.IsAbout.OU_Id": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_OU_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
+            },
+            "case_.IsAbout.CostCentre":{
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_CostCentre.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
+            },
+            "case_.IsAbout.Place": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
+            },
+            "case_.IsAbout.UserCode": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_UserCode.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
+            }
         },
 //        submitHandler: function(form) {
 //        }
