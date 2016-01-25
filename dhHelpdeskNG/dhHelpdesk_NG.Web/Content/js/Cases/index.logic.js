@@ -265,7 +265,7 @@ var GRID_STATE = {
     };
 
     Page.prototype.formatCell = function (caseId, cellValue) {
-        var out = [strJoin('<td><a href="/Cases/Edit/', caseId, '">', cellValue == null ? '&nbsp;' : cellValue, '</a></td>')];
+        var out = [strJoin('<td><a href="/Cases/Edit/', caseId, '">', cellValue == null ? '&nbsp;' : cellValue.replace(/<[^>]+>/ig,""), '</a></td>')];
         return out.join(JOINER);
     };
 
