@@ -412,19 +412,19 @@ $(function () {
             });
 
             region.getElement().change(function () {
-                ClearCostCentre();
+                //ClearCostCentre();
                 // uncomment for implementing http://redmine.fastdev.se/issues/10995
                 // dhHelpdesk.cases.utils.refreshDepartments(caseEntity);
             });
 
             department.getElement().change(function () {
-                ClearCostCentre();
+                //ClearCostCentre();
                 // uncomment for implementing http://redmine.fastdev.se/issues/10995
                 /*dhHelpdesk.cases.utils.refreshOus(caseEntity);
                 dhHelpdesk.cases.utils.refreshAdministrators(caseEntity, true);*/
             });
             ou.getElement().change(function () {
-                ClearCostCentre();
+                //ClearCostCentre();
             });
 
             dhHelpdesk.cases.utils.onEvent("OnUserIdChanged", function(e, uId) {

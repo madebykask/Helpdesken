@@ -72,6 +72,7 @@
                                          UserId = notifier.UserId ?? string.Empty, 
                                          homeDirectory = string.Empty, 
                                          homeDrive = string.Empty,
+                                         CostCentre = notifier.CostCentre,
                                          ChangeTime = DateTime.Now
                                      };
             

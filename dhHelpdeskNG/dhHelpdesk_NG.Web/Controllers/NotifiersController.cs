@@ -303,7 +303,8 @@ namespace DH.Helpdesk.Web.Controllers
             string cellPhone, 
             int? regionId, 
             int? departmentId, 
-            int? organizationUnitId)
+            int? organizationUnitId,
+            string costcentre)
         {
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
             var inputParams = new Dictionary<string,string>();
@@ -385,6 +386,9 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (!string.IsNullOrEmpty(cellPhone))
                 inputParams.Add("CellPhone", cellPhone);
+
+            if (!string.IsNullOrEmpty(costcentre))
+                inputParams.Add("CostCentre", costcentre);
             
             var model = this.newNotifierModelFactory.Create(
                 settings,
