@@ -157,6 +157,16 @@ namespace DH.Helpdesk.Common.Extensions.String
                     case "change": str = "Ändringshantering"; break;
                     case "project": str = "Projekt"; break;
                     case "registrationsourcecustomer": str = "Källa"; break;
+                    case "isabout_reportedby": str = "Användar ID"; break;
+                    case "isabout_persons_name": str = "Namn"; break;
+                    case "isabout_persons_email": str = "E-post"; break;
+                    case "isabout_persons_phone": str = "Telefon"; break;
+                    case "isabout_persons_cellphone": str = "Mobilnr."; break;
+                    case "isabout_region_id": str = "Område"; break;
+                    case "isabout_department_id": str = "Avdelning"; break;
+                    case "isabout_ou_id": str = "Enhet"; break;
+                    case "isabout_costcentre": str = "Kostnad"; break;
+                    case "isabout_place": str = "Plats"; break;
                 }
             }
             #endregion 
@@ -231,6 +241,16 @@ namespace DH.Helpdesk.Common.Extensions.String
                     case "change": str = "Change"; break;
                     case "project": str = "Project"; break;
                     case "registrationsourcecustomer": str = "Source"; break;
+                    case "isabout_reportedby": str = "User ID"; break;
+                    case "isabout_persons_name": str = "Initiator"; break;
+                    case "isabout_persons_email": str = "E-mail"; break;
+                    case "isabout_persons_phone": str = "Phone"; break;
+                    case "isabout_persons_cellphone": str = "Cell Phone"; break;
+                    case "isabout_region_id": str = "Region"; break;
+                    case "isabout_department_id": str = "Department"; break;
+                    case "isabout_ou_id": str = "Unit"; break;
+                    case "isabout_costcentre": str = "Cost"; break;
+                    case "isabout_place": str = "Placement"; break;
                 }
             }
             #endregion 
