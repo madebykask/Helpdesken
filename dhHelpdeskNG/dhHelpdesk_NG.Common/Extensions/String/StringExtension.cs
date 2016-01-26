@@ -167,6 +167,7 @@ namespace DH.Helpdesk.Common.Extensions.String
                     case "isabout_ou_id": str = "Enhet"; break;
                     case "isabout_costcentre": str = "Kostnad"; break;
                     case "isabout_place": str = "Plats"; break;
+                    case "isabout_usercode": str = "Ansvarskod"; break;
                 }
             }
             #endregion 
@@ -251,6 +252,7 @@ namespace DH.Helpdesk.Common.Extensions.String
                     case "isabout_ou_id": str = "Unit"; break;
                     case "isabout_costcentre": str = "Cost"; break;
                     case "isabout_place": str = "Placement"; break;
+                    case "isabout_usercode": str = "Orderer Code"; break;
                 }
             }
             #endregion 
