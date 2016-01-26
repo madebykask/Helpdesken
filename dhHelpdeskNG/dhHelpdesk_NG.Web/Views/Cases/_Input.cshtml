@@ -31,6 +31,7 @@
         moveLockedCaseMessage: '@Translation.Get("Ärendet kan inte uppdateras då det är upplåst. Stäng ärendet och försök igen.")',        
         lostChangesConfirmation: '@Html.Raw(Translation.Get("Dina ändringar har inte sparats. Fortsätt?"))',
         finishingDateMessage: '@Html.Raw(Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) + " " + Translation.Get("kan inte vara tidigare än registreringsdatum."))',
+        checkInactiveDataErrorMessage: '@Html.Raw(Translation.Get("Problem med kommunikation med servern."))',
         caseRegDate: '@Model.case_.RegTime',      
         caseFieldNames:{
             CustomerId: "case__Customer_Id",
