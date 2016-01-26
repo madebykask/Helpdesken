@@ -709,6 +709,10 @@ namespace DH.Helpdesk.Services.Services
             out ParentCaseInfo parentCaseInfo)
         {
             var c = this._caseRepository.GetDetachedCaseById(copyFromCaseid);
+            if (c.IsAbout == null)
+            {
+                var tt = 1;
+            }
             if (c == null)
             {
                 throw new ArgumentException(string.Format("bad parent case id {0}", copyFromCaseid));
