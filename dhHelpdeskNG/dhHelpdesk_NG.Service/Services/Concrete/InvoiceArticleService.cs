@@ -223,19 +223,19 @@
             }
             order.DoInvoice(userId);
 
-            var output = this.OrderToOutputXML(order, customerId, caseId);
-            if (output == null)
-            {
-                throw new Exception("Couldn't create invoice-XML");
-            }
-            //create or check if directory exists
-            if (!Directory.Exists(caseInvoiceSettings.ExportPath))
-            {
-                Directory.CreateDirectory(caseInvoiceSettings.ExportPath);
-            }
+            //var output = this.OrderToOutputXML(order, customerId, caseId);
+            //if (output == null)
+            //{
+            //    throw new Exception("Couldn't create invoice-XML");
+            //}
+            ////create or check if directory exists
+            //if (!Directory.Exists(caseInvoiceSettings.ExportPath))
+            //{
+            //    Directory.CreateDirectory(caseInvoiceSettings.ExportPath);
+            //}
 
-            var path = Path.Combine(caseInvoiceSettings.ExportPath, this.GetExportFileName());
-            output.Save(path);
+            //var path = Path.Combine(caseInvoiceSettings.ExportPath, this.GetExportFileName());
+            //output.Save(path);
         }
 
         private string GetExportFileName()
