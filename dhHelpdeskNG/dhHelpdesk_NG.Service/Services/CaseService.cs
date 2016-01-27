@@ -709,6 +709,10 @@ namespace DH.Helpdesk.Services.Services
             out ParentCaseInfo parentCaseInfo)
         {
             var c = this._caseRepository.GetDetachedCaseById(copyFromCaseid);
+            if (c.IsAbout == null)
+            {
+                var tt = 1;
+            }
             if (c == null)
             {
                 throw new ArgumentException(string.Format("bad parent case id {0}", copyFromCaseid));
@@ -1257,8 +1261,8 @@ namespace DH.Helpdesk.Services.Services
                     // get mail template from productArea
                     mailTemplateId = 0;
 
-                    if (newCase.ProductArea.MailID.HasValue)
-                        mailTemplateId = newCase.ProductArea.MailID.Value;
+                    if (newCase.ProductArea.MailTemplate != null)
+                        mailTemplateId = newCase.ProductArea.MailTemplate.MailID;
                     
 
                     if (mailTemplateId > 0)

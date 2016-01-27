@@ -221,7 +221,7 @@
                                         timeLeft = (SLAtime * 60 - calcTime + timeOnPause) / 60;
                                         var floatingPoint = (SLAtime * 60 - calcTime + timeOnPause) % 60;
                                         
-                                        if (timeLeft == 0 && floatingPoint < 0)
+                                        if (timeLeft <= 0 && floatingPoint < 0)
                                             timeLeft--; 
                                         
                                     }

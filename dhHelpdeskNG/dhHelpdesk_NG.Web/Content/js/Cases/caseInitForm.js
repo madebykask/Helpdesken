@@ -235,7 +235,9 @@ function GetComputerUserSearchOptions() {
                                     , ouid: item.OU_Id
                                     , ouname: item.OUName
                                     , name_family: item.SurName + ' ' + item.FirstName
-                                    , customername : item.CustomerName
+                                    , customername: item.CustomerName
+                                    , costcentre: item.CostCentre
+                                
                         };
                         return JSON.stringify(aItem);
                         
@@ -315,6 +317,10 @@ function GetComputerUserSearchOptions() {
             if (item.usercode != "" && item.usercode != null)
                 $('#case__UserCode').val(item.usercode);
 
+            if (item.costcentre != "" && item.costcentre != null)
+                $('#case__CostCentre').val(item.costcentre);
+            
+
 
             if (item.regionid != "" && item.regionid != null) {
                 $('#case__Region_Id').val(item.regionid);
@@ -326,6 +332,8 @@ function GetComputerUserSearchOptions() {
                 $(publicDepartmentControlName).val(item.departmentid).trigger('change');
                 refreshDepartment(item.regionid, departmentFilterFormat, item.departmentid, item.ouid);
             }
+
+            
 
             return item.num;
         }
@@ -363,6 +371,7 @@ function GetComputerUserSearchOptionsForIsAbout() {
                                     , ouname: item.OUName
                                     , name_family: item.SurName + ' ' + item.FirstName
                                     , customername: item.CustomerName
+                                    , costcentre: item.CostCentre
                         };
                         return JSON.stringify(aItem);
 
@@ -444,6 +453,8 @@ function GetComputerUserSearchOptionsForIsAbout() {
             if (item.usercode != "" && item.usercode != null)
                 $('#case__IsAbout_UserCode').val(item.usercode);
 
+            if (item.costcentre != "" && item.costcentre != null)
+                $('#case__IsAbout_CostCentre').val(item.costcentre);
 
             if (item.regionid != "" && item.regionid != null) {
                 $('#case__IsAbout_Region_Id').val(item.regionid);
@@ -685,7 +696,8 @@ function CaseInitForm() {
             params += "&departmentId=" + $(publicDepartmentControlName).val();
         if ($(publicOUControlName).val() != '')
             params += "&organizationUnitId=" + $(publicOUControlName).val();
-        
+        if ($("#case__CostCentre").val() != '')
+            params += "&costcentre=" + $("#case__CostCentre").val();
 
         var win = window.open('/Notifiers/NewNotifierPopup' + params, '_blank', 'left=100,top=100,width=990,height=480,toolbar=0,resizable=1,menubar=0,status=0,scrollbars=1');
 

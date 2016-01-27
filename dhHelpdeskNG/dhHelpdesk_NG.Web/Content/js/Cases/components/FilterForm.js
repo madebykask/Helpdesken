@@ -14,6 +14,17 @@ var controlsId = ['CaseInitiatorFilter', 'lstFilterRegion', 'lstfilterDepartment
         'CaseClosingDateStartFilter', 'CaseClosingDateEndFilter', 'lstfilterCaseRemainingTime'
 ];
 
+var chosenSelects = ['#lstFilterRegion', '#lstfilterDepartment', '#lstfilterUser',
+                    '#lstfilterCategory', '#lstfilterWorkingGroup', '#lstfilterResponsible', '#lstfilterPerformer',
+                    '#lstfilterPriority', '#lstfilterStatus', '#lstfilterStateSecondary'                    
+];
+
+var DateFields = ['#CaseRegistrationDateStartFilter', '#CaseRegistrationDateEndFilter',
+                  '#CaseWatchDateStartFilter', '#CaseWatchDateEndFilter',
+                  '#CaseClosingDateStartFilter', '#CaseClosingDateEndFilter'
+];
+
+
 /// initial state of search form
 FilterForm.prototype.init = function (opt) {
     var me = this;
@@ -35,7 +46,7 @@ FilterForm.prototype.init = function (opt) {
     me.$btnResetFilter = me.$el.find('.btn-reset');
     me.$btnClearFilter = me.$el.find('.btn-clear');
     me.$searchField = me.$el.find('#txtFreeTextSearch');
-    me.initiatorField = me.$el.find('#CaseInitiatorFilter');
+    me.initiatorField = '#caseInitiatorText';
     me.$searchOnlyInMyCases = $('#SearchInMyCasesOnly');
     me.$dateFields = ['CaseRegistrationDateStartFilter', 'CaseRegistrationDateEndFilter',
                       'CaseWatchDateStartFilter', 'CaseWatchDateEndFilter',
@@ -62,7 +73,7 @@ FilterForm.prototype.init = function (opt) {
     me.$deleteFavoriteUrl = window.params.deleteFavoriteUrl;
     me.$loadFavoritesUrl = window.params.loadFavoritesUrl;
     
-        
+
     /************** EVENTS BINDING ************************/
     me.$searchField.keydown(function (ev) {
         if (ev.keyCode == 13) {
@@ -70,15 +81,7 @@ FilterForm.prototype.init = function (opt) {
             me.onSearchClick.call(me);
             return false;
         }
-    });
-    
-    me.initiatorField.keydown(function (ev) {
-        if (ev.keyCode == 13) {
-            ev.preventDefault();
-            me.onSearchClick.call(me);
-            return false;
-        }
-    });
+    });    
 
     me.$btnResetFilter.click(function(ev) {
         ev.preventDefault();
@@ -165,6 +168,26 @@ FilterForm.prototype.init = function (opt) {
         }
     });
 
+    $(me.initiatorField).keydown(function (ev) {
+        if (ev.keyCode == 13) {            
+            ev.preventDefault();
+            me.onSearchClick.call(me);
+            return false;
+        }
+    });
+   
+    $.each(chosenSelects, function (index) {
+        var _chosen = $(chosenSelects[index]).chosen().data('chosen');
+        if (_chosen != undefined) {
+            _chosen.container.bind('keydown', function (ev) {
+                if (ev.keyCode == 13) {
+                    ev.preventDefault();
+                    return false;
+                }
+            });
+        }
+    });    
+                
     $('#btnCancelFavorite').on('click', function (ev) {
         me.$favoriteDialog.modal('hide');
     });
@@ -180,6 +203,11 @@ FilterForm.prototype.init = function (opt) {
         autoclose: true,
         clearBtn: true,
         weekStart: 1
+
+    }).keydown(function (ev) {
+        if (ev.keyCode == 13) {
+            ev.preventDefault();
+        }
     });
 
     if (me.isFilterEmpty()) {

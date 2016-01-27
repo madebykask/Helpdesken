@@ -25,5 +25,7 @@
         public static readonly string Email = "General.Email";
 
         public static readonly string Code = "General.Code";
+
+        public static readonly string CostCentre = "General.CostCentre";
     }
 }

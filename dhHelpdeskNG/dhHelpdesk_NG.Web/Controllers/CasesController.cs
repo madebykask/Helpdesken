@@ -1448,7 +1448,8 @@ namespace DH.Helpdesk.Web.Controllers
                 departmentid = cu.Department_Id,
                 departmentname = cu.Department.DepartmentName,
                 ouid = cu.OU_Id,
-                ouname = cu.OU != null ? (cu.OU.Parent != null ? cu.OU.Parent.Name + " - " : string.Empty) + cu.OU.Name : string.Empty
+                ouname = cu.OU != null ? (cu.OU.Parent != null ? cu.OU.Parent.Name + " - " : string.Empty) + cu.OU.Name : string.Empty,
+                costcentre = string.IsNullOrEmpty(cu.CostCentre)? string.Empty : cu.CostCentre
             };
             return this.Json(u);
         }

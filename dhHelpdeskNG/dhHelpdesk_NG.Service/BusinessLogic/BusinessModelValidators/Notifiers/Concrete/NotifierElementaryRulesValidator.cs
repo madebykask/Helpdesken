@@ -226,6 +226,11 @@
                 CreateValidationRule(settings.Code));
 
             this.elementaryRulesValidator.ValidateStringField(
+               validatableNotifier.CostCentre,
+               GeneralField.CostCentre,
+               CreateValidationRule(settings.CostCentre));
+
+            this.elementaryRulesValidator.ValidateStringField(
                 validatableNotifier.PostalAddress,
                 AddressField.PostalAddress,
                 CreateValidationRule(settings.PostalAddress));
@@ -238,7 +243,7 @@
             this.elementaryRulesValidator.ValidateStringField(
                 validatableNotifier.City,
                 AddressField.City,
-                CreateValidationRule(settings.City));
+                CreateValidationRule(settings.City));            
 
             this.elementaryRulesValidator.ValidateStringField(
                 validatableNotifier.Title,

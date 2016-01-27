@@ -48,11 +48,9 @@ namespace DH.Helpdesk.Web.Controllers
                 }
             }
 
-            link = absolute + basePath + c.CaseNumber + "/" + fileName;
-            link = link.Replace("%", "%25");
-            var UriLink = new Uri(link).ToString();
-            UriLink = UriLink.Replace("#", "%23");
-            return UriLink;
+            link = absolute + basePath + c.CaseNumber + "/" + EncodeStr(fileName);
+            
+            return link;
         }
 
         [HttpGet]
@@ -75,12 +73,30 @@ namespace DH.Helpdesk.Web.Controllers
                         basePath = basePath + "/";
                     }
                 }
-                link = absolute + basePath + "L" + id + "/" + fileName;
+                link = absolute + basePath + "L" + id + "/" + EncodeStr(fileName);
             }
-            link = link.Replace("%", "%25");
-            var UriLink = new Uri(link).ToString();
-            UriLink = UriLink.Replace("#", "%23");
-            return UriLink;
+           
+            return link;
         }
+
+        private string EncodeStr(string str)
+        {
+            str = str.Replace("%", "%25");
+            str = str.Replace("@", "%40");
+            str = str.Replace("#", "%23");
+            str = str.Replace("¤", "%C2%A4");
+            str = str.Replace("$", "%24");
+            str = str.Replace("{", "%7B");
+            str = str.Replace("}", "%7D");
+            str = str.Replace("[", "%5B");
+            str = str.Replace("]", "%5D");
+            str = str.Replace(",", "%2C");
+            str = str.Replace("'", "%27");
+            str = str.Replace(";", "%3B");
+            str = str.Replace("+", "%2B");
+                        
+            return str;
+        }
+
     }
 }

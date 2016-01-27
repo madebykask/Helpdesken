@@ -4224,5 +4224,19 @@ If not exists (select * from tblTextTranslation where Text_Id = 1577 and Languag
             insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1577, 'You can not delete this lognote, because you have no permission to delete attached files', 2)
 GO
 
+If not exists (select * from tblText where Id = 1580)
+            insert into tblText (Id, Textstring) VALUES (1580, 'Problem med kommunikation med servern.')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1580 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1580, 'Problem with Connection to server.', 2)
+GO
+
+If not exists (select * from tblText where Id = 1581)
+            insert into tblText (Id, Textstring) VALUES (1581, 'Ärendet kan inte sparars, då det har blivit upplåst av en systemadministratör. Stäng ärendet och försök igen.')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1581 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1581, 'Case can no longer be updated, as it has been unlocked by a system administrator. Please close and try again.', 2)
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

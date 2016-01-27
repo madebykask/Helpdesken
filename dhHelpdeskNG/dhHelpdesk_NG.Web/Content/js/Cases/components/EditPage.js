@@ -181,7 +181,7 @@ EditPage.prototype.checkAndSave = function (submitUrl) {
             url: params.caseActiveDataChecker,
             contentType: "application/json",
             success: function (data) {
-                if (data == 'valid') {
+                if (data == 'valid') {                    
                     return me.doSave(submitUrl);
                 } else {
                     //Case has inactive value(s)                    
@@ -189,8 +189,8 @@ EditPage.prototype.checkAndSave = function (submitUrl) {
                     me.setCaseStatus(me.CASE_IN_IDLE);
                 }
             },
-            error: function (xhr, ajaxOptions, thrownError) {
-                ShowToastMessage("Error in check inactive items! <br/> \"" + thrownError + "\"", "error", true);
+            error: function (xhr, ajaxOptions, thrownError) {                                
+                ShowToastMessage(params.checkInactiveDataErrorMessage + " <br/> \"" + thrownError + "\"", "error", true);
                 me.setCaseStatus(me.CASE_IN_IDLE);
                 return;
             }

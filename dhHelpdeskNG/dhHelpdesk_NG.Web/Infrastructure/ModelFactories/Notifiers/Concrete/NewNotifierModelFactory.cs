@@ -57,7 +57,7 @@
             var place = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Place, (inputParams.ContainsKey("Placement") ? inputParams["Placement"] : null), 100);
             var phone = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Phone, (inputParams.ContainsKey("Phone") ? inputParams["Phone"] : null));
             var cellPhone = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.CellPhone, (inputParams.ContainsKey("CellPhone") ? inputParams["CellPhone"] : null));
-            var email = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Email, (inputParams.ContainsKey("Email") ? inputParams["Email"] : null), 100);
+            var email = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Email, (inputParams.ContainsKey("Email") ? inputParams["Email"] : null), 100);            
             var code = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Code, null);
 
             var postalAddress = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(
@@ -115,7 +115,6 @@
             }
 
             var costCentre = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.CostCentre, (inputParams.ContainsKey("CostCentre") ? inputParams["CostCentre"] : null));
-
             var unit = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Unit, null);
 
             DropDownFieldModel division;

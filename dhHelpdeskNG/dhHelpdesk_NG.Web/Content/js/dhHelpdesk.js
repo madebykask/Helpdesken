@@ -388,7 +388,8 @@ function NewNotifierEvent(id) {
             $('#case__PersonsCellphone').val(data.cellphone);
             $('#case__Place').val(data.place);
             $('#case__UserCode').val(data.usercode);
-            
+            $('#case__CostCentre').val(data.costcentre);
+
             $('#case__Region_Id').val(data.regionid);            
             $('#RegionName').val(data.regionname);
 
