@@ -4238,5 +4238,10 @@ If not exists (select * from tblTextTranslation where Text_Id = 1581 and Languag
             insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1581, 'Case can no longer be updated, as it has been unlocked by a system administrator. Please close and try again.', 2)
 GO
 
+---- Version: 5.3.20
+
+
+
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
