@@ -49,6 +49,7 @@
                         entity.Place,
                         entity.UserCode,
                         entity.CostCentre,
+                        entity.CreditForOrder_Id,
                         entity.Articles.Select(a => this.caseArticleMapper.Map(a)).OrderBy(a => a.Position).ToArray(),
                         entity.Files.Select(f => this.filesMapper.Map(f)).OrderBy(f => f.FileName).ToArray());
         }

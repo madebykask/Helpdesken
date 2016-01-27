@@ -3142,8 +3142,9 @@ body.login {
     margin-top: 5px;
 }
 
-.doInvoice {
+.btn.orderButtons {
     float: right;
+    margin-left:5px;
 }
 
 .articles-select-container .multiselect-container .options-holder 

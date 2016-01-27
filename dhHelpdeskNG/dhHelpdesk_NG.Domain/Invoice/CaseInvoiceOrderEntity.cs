@@ -8,11 +8,7 @@
         public int InvoiceId { get; set; }        
 
         public short Number { get; set; }
-
-        public string DeliveryPeriod { get; set; }
-
-        public string Reference { get; set; }
-
+      
         public DateTime? InvoiceDate { get; set; }
 
         public int? InvoicedByUserId { get; set; }
@@ -40,6 +36,8 @@
         public string UserCode { get; set; }
 
         public string CostCentre { get; set; }
+
+        public int? CreditForOrder_Id { get; set; }
 
         public virtual CaseInvoiceEntity Invoice { get; set; }
 

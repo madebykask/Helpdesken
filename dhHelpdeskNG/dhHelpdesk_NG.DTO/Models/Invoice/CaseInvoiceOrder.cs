@@ -30,6 +30,7 @@
                 string place,
                 string userCode,
                 string costCentre,
+                int? CreditForOrder_Id,
                 CaseInvoiceArticle[] articles,
                 CaseInvoiceOrderFile[] files)
         {
@@ -52,6 +53,7 @@
             this.Place = place;
             this.UserCode = userCode;
             this.CostCentre = costCentre;
+            this.CreditForOrder_Id = CreditForOrder_Id;
             this.Files = files != null ? files : new List<CaseInvoiceOrderFile>().ToArray();
         }
 
@@ -73,9 +75,10 @@
                 string place,
                 string userCode,
                 string costCentre,
+                int? CreditForOrder_Id,
                 CaseInvoiceArticle[] articles,
                 CaseInvoiceOrderFile[] files) :
-                this(id, invoiceId, null, number, invoiceDate, invoicedByUserId, date, reportedBy, persons_Name, persons_Email, persons_Phone, persons_Cellphone, region_Id, department_Id, ou_Id, place, userCode, costCentre, articles, files)
+            this(id, invoiceId, null, number, invoiceDate, invoicedByUserId, date, reportedBy, persons_Name, persons_Email, persons_Phone, persons_Cellphone, region_Id, department_Id, ou_Id, place, userCode, costCentre, CreditForOrder_Id, articles, files)
         {
         }
 
@@ -120,6 +123,8 @@
         public string UserCode { get; set; }
 
         public string CostCentre { get; set; }
+
+        public int? CreditForOrder_Id { get; set; }
 
         public CaseInvoiceArticle[] Articles { get; private set; }
 
