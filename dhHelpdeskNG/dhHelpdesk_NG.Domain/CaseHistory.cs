@@ -85,6 +85,11 @@
         public string CaseLog { get; set; }
         public string ClosingReason { get; set; }
         public int? RegistrationSourceCustomer_Id { get; set; }
+        public string IsAbout_Persons_Name { get; set; }
+        public string IsAbout_ReportedBy { get; set; }
+        public string IsAbout_Persons_Phone { get; set; }
+        public string IsAbout_UserCode { get; set; }
+        public int? IsAbout_Department_Id { get; set; }
 
 //        /// <summary>
 //        /// Number of parent case (if any)
@@ -109,6 +114,7 @@
         public virtual Status Status { get; set; }
         public virtual WorkingGroupEntity WorkingGroup { get; set; }
         public virtual RegistrationSourceCustomer RegistrationSourceCustomer { get; set; }
+        public virtual Department IsAbout_Department { get; set; }
     }
 }
 

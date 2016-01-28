@@ -37,6 +37,12 @@
                             .HasForeignKey(x => x.Department_Id)
                             .WillCascadeOnDelete(false);
 
+            this.HasOptional(x => x.IsAbout_Department)
+                            .WithMany()
+                            .HasForeignKey(x => x.IsAbout_Department_Id)
+                            .WillCascadeOnDelete(false);
+
+
             this.HasOptional(c => c.Problem)
                               .WithMany()
                               .HasForeignKey(c => c.Problem_Id);
@@ -124,7 +130,11 @@
             this.Property(x => x.LogFile).IsOptional();
             this.Property(x => x.CaseLog).IsOptional();
             this.Property(x => x.ClosingReason).IsOptional();
-            
+            this.Property(x => x.IsAbout_Persons_Name).IsOptional().HasMaxLength(50);
+            this.Property(x => x.IsAbout_ReportedBy).IsOptional().HasMaxLength(40);
+            this.Property(x => x.IsAbout_Persons_Phone).IsOptional().HasMaxLength(40);
+            this.Property(x => x.IsAbout_UserCode).IsOptional().HasMaxLength(20);
+            this.Property(x => x.IsAbout_Department_Id).IsOptional();
             
             this.ToTable("tblcasehistory");
         }

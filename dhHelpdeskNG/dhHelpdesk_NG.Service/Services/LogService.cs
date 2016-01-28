@@ -365,7 +365,12 @@
                                 LogFile = it.LogFile,
                                 CaseLog = it.CaseLog,
                                 ClosingReason = it.ClosingReason,
-                                RegistrationSourceCustomer_Id = it.RegistrationSourceCustomer_Id
+                                RegistrationSourceCustomer_Id = it.RegistrationSourceCustomer_Id,
+                                IsAbout_Persons_Name = it.IsAbout_Persons_Name,
+                                IsAbout_Department_Id = it.IsAbout_Department_Id,
+                                IsAbout_Persons_Phone = it.IsAbout_Persons_Phone,
+                                IsAbout_ReportedBy = it.IsAbout_ReportedBy,
+                                IsAbout_UserCode = it.IsAbout_UserCode
                             })
                         .ToArray();
                 newCaseHistories.ForEach(caseHistoryRepository.Add);

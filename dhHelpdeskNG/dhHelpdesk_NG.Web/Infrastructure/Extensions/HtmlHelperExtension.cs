@@ -639,6 +639,87 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                     }
                 }
             }
+            // IsAbout user
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.IsAbout_ReportedBy != o.IsAbout_ReportedBy)
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    sb.Append(tdOpenMarkup);
+                    sb.Append(o.IsAbout_ReportedBy.RemoveHTMLTags());
+                    sb.Append(from);
+                    sb.Append(cur.IsAbout_ReportedBy.RemoveHTMLTags());
+                    sb.Append(tdCloseMarkup);
+                    sb.Append("</tr>");
+                }
+            }
+            //IsAbout Persons name
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.IsAbout_Persons_Name != o.IsAbout_Persons_Name)
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    sb.Append(tdOpenMarkup);
+                    sb.Append(o.IsAbout_Persons_Name.RemoveHTMLTags());
+                    sb.Append(from);
+                    sb.Append(cur.IsAbout_Persons_Name.RemoveHTMLTags());
+                    sb.Append(tdCloseMarkup);
+                    sb.Append("</tr>");
+                }
+            }
+            // IsAbout Persons_phone 
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.IsAbout_Persons_Phone != o.IsAbout_Persons_Phone)
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    sb.Append(tdOpenMarkup);
+                    sb.Append(o.IsAbout_Persons_Phone.RemoveHTMLTags());
+                    sb.Append(from);
+                    sb.Append(cur.IsAbout_Persons_Phone.RemoveHTMLTags());
+                    sb.Append(tdCloseMarkup);
+                    sb.Append("</tr>");
+                }
+            }
+            // IsAbout Department
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.IsAbout_Department_Id.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.IsAbout_Department_Id != o.IsAbout_Department_Id)
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    sb.Append(tdOpenMarkup);
+                    if (o.IsAbout_Department != null)
+                        sb.Append(o.IsAbout_Department.DepartmentDescription(departmentFilterFormat).RemoveHTMLTags());
+                    else
+                        sb.Append(ey);
+                    sb.Append(from);
+                    if (cur.IsAbout_Department != null)
+                        sb.Append(cur.IsAbout_Department.DepartmentDescription(departmentFilterFormat).RemoveHTMLTags());
+                    else
+                        sb.Append(ey);
+                    sb.Append(tdCloseMarkup);
+                    sb.Append("</tr>");
+                }
+            }
+            // IsAbout UserCode
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.IsAbout_UserCode.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.IsAbout_UserCode != o.IsAbout_UserCode)
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_UserCode.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    sb.Append(tdOpenMarkup);
+                    sb.Append(o.IsAbout_UserCode.RemoveHTMLTags());
+                    sb.Append(from);
+                    sb.Append(cur.IsAbout_UserCode.RemoveHTMLTags());
+                    sb.Append(tdCloseMarkup);//
+                    sb.Append("</tr>");
+                }
+            }
             // CaseFile
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Filename.ToString()).ShowOnStartPage == 1)
             {                 
