@@ -67,7 +67,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         public JsonResult GetAllCoreTextTranslations()
         {
-            var texts = _textTranslationService.GetAllTextsAndTranslations(0);
+            var texts = _textTranslationService.GetAllTextsAndTranslations(0).Take(100);
             return this.Json(texts, JsonRequestBehavior.AllowGet);
         }
 
