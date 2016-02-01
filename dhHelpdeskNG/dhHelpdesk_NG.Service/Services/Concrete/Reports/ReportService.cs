@@ -251,7 +251,7 @@
                 var departmentRep = uow.GetRepository<Department>();
                 var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
                 var caseTypeRep = uow.GetRepository<CaseType>();
-                var fields = fieldRep.GetAll().GetByNullableCustomer(customerId).Where(c => !c.Name.ToLower().Contains("isabout_"))
+                var fields = fieldRep.GetAll().GetByNullableCustomer(customerId)
                     .GetShowable()
                     .ToList()
                     .Where(it => GridColumnsDefinition.IsAvailavbleToViewInCaseoverview(it.Name))
@@ -889,7 +889,51 @@
                     {
                         return query.OrderBy(c => c.User.OrdererCode).ToList();
                     }
-
+                    else if (sort.Name == UserFields.IsAbout_User)
+                    {
+                        return query.OrderBy(c => c.User.IsAbout_User).ToList();
+                    }
+                    else if (sort.Name == UserFields.IsAbout_Persons_Name)
+                    {
+                        return query.OrderBy(c => c.User.IsAbout_Persons_Name).ToList();
+                    }
+                    else if (sort.Name == UserFields.IsAbout_Persons_Phone)
+                    {
+                        return query.OrderBy(c => c.User.IsAbout_Persons_Phone).ToList();
+                    }
+                    else if (sort.Name == UserFields.IsAbout_UserCode)
+                    {
+                        return query.OrderBy(c => c.User.IsAbout_UserCode).ToList();
+                    }
+                    else if (sort.Name == UserFields.IsAbout_Persons_Email)
+                    {
+                        return query.OrderBy(c => c.User.IsAbout_Persons_Email).ToList();
+                    }
+                    else if (sort.Name == UserFields.IsAbout_Persons_CellPhone)
+                    {
+                        return query.OrderBy(c => c.User.IsAbout_Persons_CellPhone).ToList();
+                    }
+                    else if (sort.Name == UserFields.IsAbout_CostCentre)
+                    {
+                        return query.OrderBy(c => c.User.IsAbout_ConstCentre).ToList();
+                    }
+                    else if (sort.Name == UserFields.IsAbout_Place)
+                    {
+                        return query.OrderBy(c => c.User.IsAbout_Place).ToList();
+                    }
+                    else if (sort.Name == UserFields.IsAbout_Department)
+                    {
+                        return query.OrderBy(c => c.User.IsAbout_Department).ToList();
+                    }
+                    else if (sort.Name == UserFields.IsAbout_OU)
+                    {
+                        return query.OrderBy(c => c.User.IsAbout_OU).ToList();
+                    }
+                    else if (sort.Name == UserFields.IsAbout_Region)
+                    {
+                        return query.OrderBy(c => c.User.IsAbout_Region).ToList();
+                    }
+                    
                     // Computer
                     if (sort.Name == ComputerFields.PcNumber)
                     {
@@ -1107,7 +1151,51 @@
                     {
                         return query.OrderByDescending(c => c.User.OrdererCode).ToList();
                     }
-
+                    else if (sort.Name == UserFields.IsAbout_User)
+                    {
+                        return query.OrderByDescending(c => c.User.IsAbout_User).ToList();
+                    }
+                    else if (sort.Name == UserFields.IsAbout_Persons_Name)
+                    {
+                        return query.OrderByDescending(c => c.User.IsAbout_Persons_Name).ToList();
+                    }
+                    else if (sort.Name == UserFields.IsAbout_Persons_Phone)
+                    {
+                        return query.OrderBy(c => c.User.IsAbout_Persons_Phone).ToList();
+                    }
+                    else if (sort.Name == UserFields.IsAbout_UserCode)
+                    {
+                        return query.OrderBy(c => c.User.IsAbout_UserCode).ToList();
+                    }
+                    else if (sort.Name == UserFields.IsAbout_Persons_Email)
+                    {
+                        return query.OrderBy(c => c.User.IsAbout_Persons_Email).ToList();
+                    }
+                    else if (sort.Name == UserFields.IsAbout_Persons_CellPhone)
+                    {
+                        return query.OrderBy(c => c.User.IsAbout_Persons_CellPhone).ToList();
+                    }
+                    else if (sort.Name == UserFields.IsAbout_CostCentre)
+                    {
+                        return query.OrderBy(c => c.User.IsAbout_ConstCentre).ToList();
+                    }
+                    else if (sort.Name == UserFields.IsAbout_Place)
+                    {
+                        return query.OrderBy(c => c.User.IsAbout_Place).ToList();
+                    }
+                    else if (sort.Name == UserFields.IsAbout_Department)
+                    {
+                        return query.OrderBy(c => c.User.IsAbout_Department).ToList();
+                    }
+                    else if (sort.Name == UserFields.IsAbout_OU)
+                    {
+                        return query.OrderBy(c => c.User.IsAbout_OU).ToList();
+                    }
+                    else if (sort.Name == UserFields.IsAbout_Region)
+                    {
+                        return query.OrderBy(c => c.User.IsAbout_Region).ToList();
+                    }
+                   
                     // Computer
                     if (sort.Name == ComputerFields.PcNumber)
                     {

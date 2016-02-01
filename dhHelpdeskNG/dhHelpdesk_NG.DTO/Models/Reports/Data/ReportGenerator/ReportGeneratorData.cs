@@ -123,6 +123,27 @@ using DH.Helpdesk.BusinessData.Enums.Case.Fields;
 
         public string CausingPart { get; set; }
 
+        public string IsAbout_User { get; set; }
+
+        public string IsAbout_Persons_Name { get; set; }
+
+        public string IsAbout_Persons_Phone { get; set; }
+
+        public string IsAbout_Persons_CellPhone { get; set; }
+
+        public string IsAbout_Persons_Email { get; set; }
+
+        public string IsAbout_Department { get; set; }
+
+        public string IsAbout_Region { get; set; }
+
+        public string IsAbout_OU { get; set; }
+
+        public string IsAbout_CostCentre { get; set; }
+
+        public string IsAbout_Place { get; set; }
+
+        public string IsAbout_UserCode { get; set; }
         //--
 
         public Log LogData { get; set; }
