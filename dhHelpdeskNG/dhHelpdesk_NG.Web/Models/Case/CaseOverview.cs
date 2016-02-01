@@ -15,5 +15,11 @@
         public string CaseType { get; set; }
 
         public string WatchDate { get; set; }
+
+        public string Initiator { get; set; }
+
+        public string Department { get; set; }
+
+        public string Administrator { get; set; }
     }
 }
