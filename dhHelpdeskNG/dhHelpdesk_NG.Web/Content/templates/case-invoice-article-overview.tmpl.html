@@ -1,7 +1,7 @@
 ﻿{{if IsBlank }}    
     <tr data-id='{{:Id}}' title='{{:Description}}'>
         <td colspan='7'>{{:Name}}</td>
-        <td>
+        <td style="width:2%">
             {{if IsInvoiced }}
                 <i class='icon-flag icon-green'></i>
             {{/if}}   
@@ -12,11 +12,17 @@
         <td class="case-invoice-colnarrow">{{:Number}}</td>
         <td class="case-invoice-colwide">{{:Name}}</td>
         <td class="case-invoice-colwide">{{:NameEng}}</td>
-        <td class="case-invoice-colnarrow">{{:Amount}}</td>
+        <td class="case-invoice-colnarrow">
+            {{if IsCredited }}
+                -{{:Amount}}
+            {{else}}
+                 {{:Amount}}
+            {{/if}}
+        </td>
         <td class="case-invoice-colnarrow">{{:UnitName}}</td>
         <td class="case-invoice-colnarrow">{{:Ppu}}</td>
         <td style="text-align: right;" class="case-invoice-colextranarrow">{{:Total}}</td>
-        <td>
+        <td style="width:2%">
             {{if IsInvoiced }}
                 <i class='icon-flag icon-green'></i>
             {{/if}}

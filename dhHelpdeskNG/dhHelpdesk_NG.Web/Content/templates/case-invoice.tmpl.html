@@ -3,8 +3,7 @@
     <div id="case-invoice-orders-tabs" style="overflow:hidden;">
         <ul class="nav nav-tabs"> 
             <li>
-                <a><i class="icon-plus-sign icon-white" style="cursor: pointer;" onclick="dhHelpdesk.CaseArticles.AddOrder('{{:Id}}'); return false;"></i>
-                <i style="display: none;" class="icon-minus-sign" style="cursor: pointer;" onclick="dhHelpdesk.CaseArticles.DeleteCurrentOrder('{{:Id}}'); return false;"></i></a>
+                <a onclick="dhHelpdesk.CaseArticles.AddOrder('{{:Id}}'); return false;"><i class="icon-plus-sign icon-white" style="cursor: pointer;"></i></a>
             </li> 
             <li class="case-invoice-order-summary" style="display: none;"><a href="#case-invoice-order-summary{{:Id}}">{{:SummaryTitle}}</a></li>         
         </ul>

@@ -21,7 +21,7 @@
     {{/if}}
     <tr>
         {{if IsInvoiced}}
-        <td colspan="5" class='textbold' style='text-align: left;'>{{:InvoicedByTitle}}: {{:InvoicedByUser}} - {{:InvoiceDate}}</td>
+        <td colspan="5" style='text-align: left;'><span class='textbold'>{{:InvoicedByTitle}}: {{:InvoicedByUser}} - {{:InvoiceDate}}</span>  {{:InvoiceTime}}</td>
         <td colspan="2" class='textbold' style='text-align: right;'>{{:TotalLabel}}: {{:Total}}</td>
         <td colspan="1"></td>
         {{else}}

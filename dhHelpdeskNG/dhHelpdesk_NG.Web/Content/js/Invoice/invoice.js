@@ -112,18 +112,26 @@ $(function () {
             return jsonDate;
         },
 
-        DateToDisplayDateTime: function (date) {
+        DateToDisplayDate: function (date) {
             var displayDate = "";
             if (date != null) {
                 var _invoiceDate = new Date(parseFloat(date.substr(6)));
                 displayDate =  _invoiceDate.getFullYear() + "-" +
-                               (_invoiceDate.getMonth() + 1) + "-" +
-                                _invoiceDate.getDate() + " " +                                   
-                                _invoiceDate.getHours() + ":" +
-                                _invoiceDate.getMinutes() + ":" +
-                                _invoiceDate.getSeconds();                
+                               ((_invoiceDate.getMonth() + 1).toString().length < 2 ? "0" + (_invoiceDate.getMonth() + 1) : (_invoiceDate.getMonth() + 1)) + "-" +
+                               (_invoiceDate.getDate().toString().length < 2 ? "0" + _invoiceDate.getDate() : _invoiceDate.getDate());
             }
             return displayDate;
+        },
+
+        DateToDisplayTime: function (date) {
+            var displayTime = "";
+            if (date != null) {
+                var _invoiceDate = new Date(parseFloat(date.substr(6)));
+                displayTime =   (_invoiceDate.getHours().toString().length < 2 ? "0" + _invoiceDate.getHours().toString() : _invoiceDate.getHours().toString()) + ":" +
+                                (_invoiceDate.getMinutes().toString().length < 2 ? "0" + _invoiceDate.getMinutes().toString() : _invoiceDate.getMinutes().toString()) + ":" +
+                                (_invoiceDate.getSeconds().toString().length < 2 ? "0" + _invoiceDate.getSeconds().toString() : _invoiceDate.getSeconds().toString());
+            }
+            return displayTime;
         },
 
         RaiseEvent: function (eventType, extraParameters) {
@@ -135,7 +143,7 @@ $(function () {
         },
 
         MakeInvalid: function (e) {
-            e.css("border-color", "red");
+            e.css("border-color", "red");            
         },
 
         MakeValid: function (e) {
@@ -559,11 +567,14 @@ $(function () {
                     if (!th.IsNewCase()) {
                         var order = th.GetOrder(orderId);
                         if (!order.HasInvoicedArticles()) {
-                            if (order.Validate()) {
+                            var orderValidation = order.Validate();
+                            if (orderValidation.IsValid) {                                
                                 if (order.InvoiceValidate()) {
                                     order.DoInvoice();
                                 }
                             }
+                            else
+                                dhHelpdesk.CaseArticles.ShowErrorMessage("Ordern " + (order.Number + 1) + " kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ordern." + orderValidation.Message);
                         }
                         else {
                             th.ShowAlreadyInvoicedMessage();
@@ -1619,8 +1630,10 @@ $(function () {
                 var orders = this.GetOrders();
                 for (var i = 0; i < orders.length; i++) {
                     var order = orders[i];
-                    if (!order.Validate()) {
-                        isValid = false;
+                    var orderValidate = order.Validate();
+                    if (!orderValidate.IsValid) {
+                        dhHelpdesk.CaseArticles.ShowErrorMessage("Ordern " + (order.Number + 1) + " kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ordern." + orderValidate.Message);
+                        return false;                        
                     }
                 }
                 return isValid;
@@ -1913,7 +1926,8 @@ $(function () {
                 model.Id = this.Id != null ? this.Id : dhHelpdesk.CaseArticles.GenerateId();
                 model.Number = this.Number + 1;
                 model.Total = dhHelpdesk.CaseArticles.DoDelimit(this.GetArticlesTotal().toString());
-                model.InvoiceDate = this.InvoiceDate != null && this.InvoiceDate != "" ? dhHelpdesk.CaseArticles.DateToDisplayDateTime(this.InvoiceDate) : "";
+                model.InvoiceDate = this.InvoiceDate != null && this.InvoiceDate != "" ? dhHelpdesk.CaseArticles.DateToDisplayDate(this.InvoiceDate) : "";
+                model.InvoiceTime = this.InvoiceDate != null && this.InvoiceDate != "" ? dhHelpdesk.CaseArticles.DateToDisplayTime(this.InvoiceDate) : "";
                 model.InvoicedByUser = this.InvoicedByUser != null ? this.InvoicedByUser : "";
                 model.InvoicedByUserId = this.InvoicedByUserId != null ? this.InvoicedByUserId : "";
                 if (this.InvoicedByUser == null || this.InvoicedByUser == "") {
@@ -2172,15 +2186,17 @@ $(function () {
             },
 
             this.Validate = function () {
-                var isValid = true;
+                var ret = { IsValid: true, Message: "" };
                 var articles = this.GetArticles();
                 for (var i = 0; i < articles.length; i++) {
                     var article = articles[i];
-                    if (!article.Validate()) {
-                        isValid = false;
+                    var articleValidation = article.Validate();
+                    if (!articleValidation.IsValid) {
+                        ret.IsValid = false;
+                        ret.Message += "<br/>  - " + articleValidation.Message;
                     }
                 }
-                return isValid;
+                return ret;
             },
 
             this.InvoiceValidate = function () {
@@ -2443,6 +2459,7 @@ $(function () {
             },
 
             this.Validate = function () {
+                var ret = { IsValid: true, Message: "" };
                 var isValid = true;
                 if (!this.IsArticlePpuExists()) {
                     var ePpu = this.Container.find(".article-ppu");
@@ -2450,19 +2467,14 @@ $(function () {
                         var ppu = ePpu.val();
                         if (!dhHelpdesk.CaseArticles.IsInteger(ppu)) {
                             dhHelpdesk.CaseArticles.MakeInvalid(ePpu);
-                            isValid = false;
+                            if (ret.Message != "")
+                                ret.Message += " ,";
+                            ret.Message += "PPE";
+                            ret.IsValid = false;
                         }
                         else {
                             dhHelpdesk.CaseArticles.MakeValid(ePpu);
-                        }
-
-                        //old validation before delimit -- remove this
-                        //if (!dhHelpdesk.CaseArticles.IsInteger(ppu) || ppu <= 0) {
-                        //    dhHelpdesk.CaseArticles.MakeInvalid(ePpu);
-                        //    isValid = false;
-                        //} else {
-                        //    dhHelpdesk.CaseArticles.MakeValid(ePpu);
-                        //}
+                        }                        
                     }
                 }
 
@@ -2472,7 +2484,13 @@ $(function () {
                         var name = eName.val();
                         if (dhHelpdesk.CaseArticles.IsNullOrEmpty(name)) {
                             dhHelpdesk.CaseArticles.MakeInvalid(eName);
-                            isValid = false;
+                            if (ret.Message != "")
+                                ret.Message += " ,";
+                            if (eName.attr("Id").indexOf("Description_") == 0)
+                                ret.Message += "Beskrivning";
+                            else
+                                ret.Message += "Namn";
+                            ret.IsValid = false;
                         } else {
                             dhHelpdesk.CaseArticles.MakeValid(eName);
                         }
@@ -2487,7 +2505,10 @@ $(function () {
                         amount <= 0 ||
                         (this.CreditedFrom != null && amount > this.CreditedFrom.Amount)) {
                         dhHelpdesk.CaseArticles.MakeInvalid(eAmount);
-                        isValid = false;
+                        if (ret.Message != "")
+                            ret.Message += " ,";
+                        ret.Message += "Enheter";
+                        ret.IsValid = false;
                     } else {
                         dhHelpdesk.CaseArticles.MakeValid(eAmount);
                     }
@@ -2508,15 +2529,18 @@ $(function () {
                     });
                     var eArticleRow = this.Container.find(".article-amount").parent().parent();
                     if (!TextIsValid) {
-                        isValid = false;
+                        ret.IsValid = false;
                         dhHelpdesk.CaseArticles.MarkTextInvalid(eArticleRow);
-                        dhHelpdesk.CaseArticles.ShowErrorMessage(dhHelpdesk.CaseArticles.translate('En artikel saknar textrad.'));
+                        if (ret.Message != "")
+                            ret.Message += " ,";
+                        ret.Message += "Textrad";
+                        //dhHelpdesk.CaseArticles.ShowErrorMessage(dhHelpdesk.CaseArticles.translate('En artikel saknar textrad.'));
                     }
                     else {
                         dhHelpdesk.CaseArticles.MarkTextValid(eArticleRow);
                     }
                 }
-                return isValid;
+                return ret;
             }
         },
 
@@ -2598,6 +2622,7 @@ $(function () {
             this.Total = null;
             this.Articles = [];
             this.InvoiceDate = "";
+            this.InvoiceTime = "";
             this.InvoicedByUser = "";
             this.InvoicedByUserId = "";
             this.IsInvoiced = false;

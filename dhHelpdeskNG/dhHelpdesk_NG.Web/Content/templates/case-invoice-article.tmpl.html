@@ -2,14 +2,14 @@
     {{if IsInvoiced }}
         <tr data-id='{{:Id}}' title='{{:Description}}'>
             <td colspan='7'>{{:Name}}</td>
-            <td><i class='icon-flag icon-green'></i></td>
+            <td style="width:2%"><i class='icon-flag icon-green'></i></td>
         </tr>
 {{else}}
         <tr data-id='{{:Id}}' title='{{:Description}}'>
             <td colspan='7'>
                 <input id="Description_{{:Id}}" onchange='dhHelpdesk.CaseArticles.UpdateArticle($(this).parent().parent())' type='text' class='width80 article-name' maxlength='50' value='{{:Name}}' />
             </td>
-            <td>
+            <td style="width:5%">
                 <a href='javascript:void(0);' onclick='dhHelpdesk.CaseArticles.DeleteArticle($(this).parent().parent())' class='btn btn-small'>x</a>
             </td>
         </tr>
@@ -24,7 +24,7 @@
             <td>{{:UnitName}}</td>
             <td class="article-ppu-fixed">{{:Ppu}}</td>
             <td class="article-total" style="text-align: right;">{{:Total}}</td>
-            <td><i class='icon-flag icon-green'></i></td>
+            <td style="width:2%"><i class='icon-flag icon-green'></i></td>
         </tr>
 {{else}}
         <tr data-id='{{:Id}}' title='{{:Description}}'>
@@ -45,7 +45,7 @@
             </td>
             {{/if}}
             <td class='article-total'>{{:Total}}</td>
-            <td>
+            <td style="width:5%">
                 <a href='javascript:void(0);' onclick='dhHelpdesk.CaseArticles.DeleteArticle($(this).parent().parent())' class='btn btn-small'>x</a>
             </td>
         </tr>
