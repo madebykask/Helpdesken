@@ -13,6 +13,7 @@
     {
         IDictionary<string, string> Validate(Category categoryToValidate);
         IList<Category> GetCategories(int customerId);
+        IList<Category> GetActiveCategories(int customerId);
         Category GetCategory(int id, int customerId);
         DeleteMessage DeleteCategory(int id);
         //IList<Category> GetCaseCategory(int customer);
@@ -81,6 +82,11 @@
         public IList<Category> GetCategories(int customerId)
         {
             return this._categoryRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
+        }
+
+        public IList<Category> GetActiveCategories(int customerId)
+        {
+            return this._categoryRepository.GetMany(x => x.Customer_Id == customerId && x.IsActive == 1).OrderBy(x => x.Name).ToList();
         }
 
         public Category GetCategory(int id, int customerId)

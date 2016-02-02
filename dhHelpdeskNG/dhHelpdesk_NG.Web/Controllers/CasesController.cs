@@ -3119,7 +3119,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             //kategori                        
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseCategoryFilter))
-                fd.filterCategory = this._categoryService.GetCategories(cusId);
+                fd.filterCategory = this._categoryService.GetActiveCategories(cusId);
             //prio
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CasePriorityFilter))
                 fd.filterPriority = this._priorityService.GetPriorities(cusId);
