@@ -19,8 +19,23 @@ $(function () {
 
     var caseButtonsToDisable = $('.btn.save, .btn.save-close, .btn.save-new, .btn.caseDeleteDialog, ' + 
                              '#case-action-close, #divActionMenu, #btnActionMenu, #divCaseTemplate, #btnCaseTemplateTree, .btn.print-case,' +
-                             '.btn.show-inventory, .btn.previous-case, .btn.next-case');    
-    
+                             '.btn.show-inventory, .btn.previous-case, .btn.next-case');
+
+    var invoiceButtons = '.btn.close-invoice, .btn.save-invoice, .btn.save-close-invoice';
+
+    var saveInvoiceIndicator = '.loading-msg.save-invoice';
+
+    dhHelpdesk.Common = {
+        MakeTextNumeric: function (elementName) {
+            $(elementName).on("keypress keyup blur", function (event) {
+                if (event.which == 37 || event.which == 38 || event.which == 39 || event.which == 40 ||
+                    event.which == 9 || (event.shiftKey && event.which == 9) || (event.which >= 48 && event.which <= 57))
+                    return;
+                event.preventDefault();
+            });
+        }
+    }
+
     dhHelpdesk.CaseArticles = {
         DefaultAmount: 1,
 
@@ -400,25 +415,15 @@ $(function () {
         SetInvoiceState: function (state) {
             switch (state) {
                 case _INVOICE_IDLE:
-                    $('.loading-msg.save-invoice').hide();
-                    $('.btn.close-invoice, .btn.save-invoice, .btn.save-close-invoice').removeClass("disabled");
-                    $('.btn.close-invoice, .btn.save-invoice, .btn.save-close-invoice').css("pointer-events", "");
-                    if (dhHelpdesk.CaseArticles != null && dhHelpdesk.CaseArticles.OrderActionsInstance != null) {
-                        var creditBtn = dhHelpdesk.CaseArticles.OrderActionsInstance.get_creditOrderButton();
-                        creditBtn.removeClass("disabled");
-                        creditBtn.css("pointer-events", "");
-                    }
+                    $(saveInvoiceIndicator).hide();
+                    $(invoiceButtons).removeClass("disabled");
+                    $(invoiceButtons).css("pointer-events", "");                    
                     break;
 
                 case _INVOICE_SAVING:
-                    $('.loading-msg.save-invoice').show();
-                    $('.btn.close-invoice, .btn.save-invoice, .btn.save-close-invoice').addClass("disabled");
-                    $('.btn.close-invoice, .btn.save-invoice, .btn.save-close-invoice').css("pointer-events", "none");
-                    if (dhHelpdesk.CaseArticles != null && dhHelpdesk.CaseArticles.OrderActionsInstance != null) {
-                        var creditBtn = dhHelpdesk.CaseArticles.OrderActionsInstance.get_creditOrderButton();
-                        creditBtn.addClass("disabled");
-                        creditBtn.css("pointer-events", "none");
-                    }
+                    $(saveInvoiceIndicator).show();
+                    $(invoiceButtons).addClass("disabled");
+                    $(invoiceButtons).css("pointer-events", "none");                    
                     break;
             }
         },
@@ -576,7 +581,7 @@ $(function () {
                                 }
                             }
                             else
-                                dhHelpdesk.CaseArticles.ShowErrorMessage("Ordern " + (order.Number + 1) + " kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ordern." + orderValidation.Message);
+                                dhHelpdesk.CaseArticles.ShowErrorMessage(order.Caption + " kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ordern." + orderValidation.Message);
                         }
                         else {
                             th.ShowAlreadyInvoicedMessage();
@@ -869,6 +874,15 @@ $(function () {
             $('.case-invoice-container').remove();
         },        
 
+        CleanUpAllOrders: function () {
+            var cleanOrders = [];            
+            for (var i = 0; i < this.allVailableOrders.length; i++) {
+                if (this.allVailableOrders[i].Id > 0)
+                    cleanOrders.push(this.allVailableOrders[i]);
+            }
+            this.allVailableOrders = cleanOrders;
+        },
+
         CreateContainer: function (message) {
             
             var th = this;
@@ -929,7 +943,8 @@ $(function () {
                 autoOpen: false,
                 open: function (event, ui) {
                     $(".ui-dialog-titlebar-close", ui.dialog | ui).hide();
-                    dhHelpdesk.CaseArticles.RaiseEvent("OnChangeOrder", [th.GetCurrentOrder()]);
+                    dhHelpdesk.CaseArticles.CleanUpAllOrders();
+                    dhHelpdesk.CaseArticles.RaiseEvent("OnChangeOrder", [th.GetCurrentOrder()]);                    
                 }
             });
 
@@ -945,34 +960,11 @@ $(function () {
             });
 
             dhHelpdesk.CaseArticles.OrderActionsInstance.get_actionsContainer().prepend($(dhHelpdesk.CaseArticles.CaseInvoiceOrderActionsTemplate.render(orderActionsViewModel)));            
-                      
-            th._container.find(".articles-params-units").on("keypress keyup blur", function (event) {
-                if (event.which == 37 || event.which == 38 || event.which == 39 || event.which == 40 ||
-                    event.which == 9 || (event.shiftKey && event.which == 9) || (event.which >= 48 && event.which <= 57))
-                    return;
-                    event.preventDefault();                
-            });
-
-            th._container.find(".articles-params-units-price").on("keypress keyup blur", function (event) {
-                if (event.which == 37 || event.which == 38 || event.which == 39 || event.which == 40 ||
-                    event.which == 9 || (event.shiftKey && event.which == 9) || (event.which >= 48 && event.which <= 57))
-                    return;
-                event.preventDefault();
-            });            
-            
-            $(".article-ppu").on("keypress keyup blur", function (event) {
-                if (event.which == 37 || event.which == 38 || event.which == 39 || event.which == 40 ||
-                    event.which == 9 || (event.shiftKey && event.which == 9) || (event.which >= 48 && event.which <= 57))
-                    return;
-                event.preventDefault();
-            });
-
-            $(".article-amount").on("keypress keyup blur", function (event) {
-                if (event.which == 37 || event.which == 38 || event.which == 39 || event.which == 40 ||
-                    event.which == 9 || (event.shiftKey && event.which == 9) || (event.which >= 48 && event.which <= 57))
-                    return;
-                event.preventDefault();
-            });
+                    
+            dhHelpdesk.Common.MakeTextNumeric(".articles-params-units");            
+            dhHelpdesk.Common.MakeTextNumeric(".articles-params-units-price");
+            dhHelpdesk.Common.MakeTextNumeric(".article-ppu");
+            dhHelpdesk.Common.MakeTextNumeric(".article-amount");
 
             var addEl = th._container.find(".articles-params-add");
             addEl
@@ -1604,19 +1596,8 @@ $(function () {
 
                 dhHelpdesk.CaseArticles.OnEvent("OnAddArticle", function (e, order, article) {                   
                     th.ShowSummary();
-                    $(".article-ppu").on("keypress keyup blur", function (event) {
-                        if (event.which == 37 || event.which == 38 || event.which == 39 || event.which == 40 ||
-                            event.which == 9 || (event.shiftKey && event.which == 9) || (event.which >= 48 && event.which <= 57))
-                            return;
-                        event.preventDefault();
-                    });
-
-                    $(".article-amount").on("keypress keyup blur", function (event) {
-                        if (event.which == 37 || event.which == 38 || event.which == 39 || event.which == 40 ||
-                            event.which == 9 || (event.shiftKey && event.which == 9) || (event.which >= 48 && event.which <= 57))
-                            return;
-                        event.preventDefault();
-                    });
+                    dhHelpdesk.Common.MakeTextNumeric(".article-ppu");
+                    dhHelpdesk.Common.MakeTextNumeric(".article-amount");                    
                 });
 
                 dhHelpdesk.CaseArticles.OnEvent("OnDeleteArticle", function (e, order, articleId) {
@@ -1672,7 +1653,7 @@ $(function () {
                     var order = orders[i];
                     var orderValidate = order.Validate();
                     if (!orderValidate.IsValid) {
-                        dhHelpdesk.CaseArticles.ShowErrorMessage("Ordern " + (order.Number + 1) + " kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ordern." + orderValidate.Message);
+                        dhHelpdesk.CaseArticles.ShowErrorMessage(order.Caption + " kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ordern." + orderValidate.Message);
                         return false;                        
                     }
                 }
