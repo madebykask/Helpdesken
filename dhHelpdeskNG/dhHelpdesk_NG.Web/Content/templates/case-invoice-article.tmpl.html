@@ -34,7 +34,7 @@
             <td>{{if IsCredited}}
                 -
                 {{/if}}
-                <input onchange='dhHelpdesk.CaseArticles.UpdateArticle($(this).parent().parent())' type='text' maxlength='5' class='article-amount input-mini-important' value='{{:Amount}}' />
+                <input id="article-amount_{{:Id}}" onchange='dhHelpdesk.CaseArticles.UpdateArticle($(this).parent().parent())' type='text' maxlength='5' class='article-amount input-mini-important' value='{{:Amount}}' />
             </td>
             <td>{{:UnitName}}</td>
             {{if IsArticlePpuExists}}

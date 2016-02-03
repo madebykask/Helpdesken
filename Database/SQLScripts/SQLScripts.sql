@@ -36,6 +36,12 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	ALTER TABLE tblCaseHistory ADD IsAbout_UserCode nvarchar(20) NULL
 GO
 
+ALTER TABLE tblCase ALTER COLUMN Persons_Phone nvarchar(50)
+ALTER TABLE tblCase ALTER COLUMN Persons_CellPhone nvarchar(50)
+
+ALTER TABLE tblCaseHistory ALTER COLUMN Persons_Phone nvarchar(50)
+ALTER TABLE tblCaseHistory ALTER COLUMN Persons_CellPhone nvarchar(50)
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.20'
 
