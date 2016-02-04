@@ -60,15 +60,17 @@
         }
 
         [HttpGet]
-        public JsonResult Articles(int? productAreaId)
+        public JsonResult Articles(int caseId, int? productAreaId)
         {
+            var hasInvoice = this.invoiceArticleService.GetCaseInvoices(caseId).Any();
+
             if (!productAreaId.HasValue)
             {
-                return this.Json(null, JsonRequestBehavior.AllowGet);
+                return this.Json(new { CaseHasInvoice = hasInvoice, Data = "" }, JsonRequestBehavior.AllowGet);
             }
 
             var articles = this.invoiceArticleService.GetArticles(SessionFacade.CurrentCustomer.Id, productAreaId.Value);
-            return this.Json(articles, JsonRequestBehavior.AllowGet);
+            return this.Json(new { CaseHasInvoice = hasInvoice, Data = articles }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]

@@ -18,12 +18,14 @@ $(function () {
     var CurrentLanguageId = 1; //defaultlang - swedish    
 
     var caseButtonsToDisable = $('.btn.save, .btn.save-close, .btn.save-new, .btn.caseDeleteDialog, ' + 
-                             '#case-action-close, #divActionMenu, #btnActionMenu, #divCaseTemplate, #btnCaseTemplateTree, .btn.print-case,' +
-                             '.btn.show-inventory, .btn.previous-case, .btn.next-case');
+                                 '#case-action-close, #divActionMenu, #btnActionMenu, #divCaseTemplate, #btnCaseTemplateTree, .btn.print-case,' +
+                                 '.btn.show-inventory, .btn.previous-case, .btn.next-case');
 
     var invoiceButtons = '.btn.close-invoice, .btn.save-invoice, .btn.save-close-invoice';
 
     var saveInvoiceIndicator = '.loading-msg.save-invoice';
+
+    var invoiceButtonIndicator = $("#invoiceButtonIndicator");
 
     dhHelpdesk.Common = {
         MakeTextNumeric: function (elementName) {
@@ -37,9 +39,7 @@ $(function () {
     }
 
     dhHelpdesk.CaseArticles = {
-        DefaultAmount: 1,
-
-        MaxAmountValue: 99999,
+        DefaultAmount: 1,        
 
         DefaultPpu: 0,
 
@@ -84,6 +84,21 @@ $(function () {
         CustomerId: null,
 
         OrderActionsInstance: null,
+
+        ResetAddArticlePlace: function(){
+            var articleEl = this._container.find(".chosen-select.articles-params-article");
+            articleEl.find('option:selected').prop('selected', false);
+            articleEl.trigger('chosen:updated');
+            articleEl.trigger('chosen:activate');
+
+            var units_El = this._container.find(".articles-params-units");
+            units_El.val(dhHelpdesk.CaseArticles.DefaultAmount);
+
+            var units_PriceEl = this._container.find(".articles-params-units-price");
+            units_PriceEl.val('');
+            units_PriceEl.prop("readonly", false);
+            units_PriceEl.prop("disabled", false);            
+        },
 
         translate: function (text) {
             var AllTranslationsLength = AllTranslations.length;
@@ -610,6 +625,8 @@ $(function () {
             else {
                 var curOrd = dhHelpdesk.CaseArticles.GetOrder(orderId);                
                 dhHelpdesk.CaseArticles.GetInvoice(curOrd.Invoice.Id).AddOrder(curOrd.GetCreditedOrder());
+                dhHelpdesk.Common.MakeTextNumeric(".article-ppu");
+                dhHelpdesk.Common.MakeTextNumeric(".article-amount");
             }
         },
 
@@ -670,7 +687,7 @@ $(function () {
             var curAmount = parseInt(obj.val());
             var article = this.GetArticle(id);
             if (article != null) {
-                if (article.Order.CreditForOrder_Id != null) {
+                if (article.Amount != null && article.Order.CreditForOrder_Id != null) {
                     var validatedAmount = this.ValidateAmount(article.Order.Id, article.Article.Id, id, curAmount);                    
                     obj.val(validatedAmount);
                 }                
@@ -699,11 +716,15 @@ $(function () {
 
             var newUsedAmout = totalCreditUsed + parseInt(newAmount);
             if (totalOrderAmount < newUsedAmout) {
+                
                 if (totalOrderAmount - totalCreditUsed > 0) {
                     newAmount = totalOrderAmount - totalCreditUsed;
+                    //dhHelpdesk.CaseArticles.ShowWarningMessage(dhHelpdesk.CaseArticles.translate("Maximum value for this article is: " + newAmount));
                 }
-                else
+                else {
                     newAmount = 0;
+                    //dhHelpdesk.CaseArticles.ShowWarningMessage(dhHelpdesk.CaseArticles.translate("All Credits already used!"))                    
+                }
             }
            
             return newAmount;
@@ -987,10 +1008,52 @@ $(function () {
         CleanUpAllOrders: function () {
             var cleanOrders = [];            
             for (var i = 0; i < this.allVailableOrders.length; i++) {
-                if (this.allVailableOrders[i].Id > 0)
-                    cleanOrders.push(this.allVailableOrders[i]);
+                if (this.allVailableOrders[i].Id > 0) {
+                    var articles = [];
+                    if (this.allVailableOrders[i].Articles != undefined)
+                        articles = this.allVailableOrders[i].Articles;
+                    else if (this.allVailableOrders[i]._articles != undefined)
+                        articles = this.allVailableOrders[i]._articles;
+
+                    var validArticles = [];
+                    for (var j = 0; j < articles.length; j++) {
+                        if (articles[j].Id > 0) {
+                            validArticles.push(articles[j]);
+                        }
+                    }
+                    this.allVailableOrders[i].Articles = validArticles;
+                    cleanOrders.push(this.allVailableOrders[i]);                        
+                }
+
             }
             this.allVailableOrders = cleanOrders;
+        },
+
+        UpdateAvailableArticles: function (orderId, articleId, isAdded, article) {            
+            for (var i = 0; i < this.allVailableOrders.length; i++) {
+                if (this.allVailableOrders[i].Id == orderId) {
+                    var articles = [];
+                    if (this.allVailableOrders[i].Articles != undefined)
+                        articles = this.allVailableOrders[i].Articles;
+                    else if (this.allVailableOrders[i]._articles != undefined)
+                        articles = this.allVailableOrders[i]._articles;
+
+                    for (var j = 0; j < articles.length; j++) {
+                        if (articles[j].Id == articleId) {
+                            if (isAdded)
+                                articles[j] = article;
+                            else
+                                articles.splice(j, 1);
+                            return true;
+                        }
+                    }
+
+                    if (isAdded)
+                        articles.push(article);
+                    return true;
+                }
+            }
+            return false;
         },
 
         CreateContainer: function (message) {
@@ -1101,12 +1164,20 @@ $(function () {
                                 for (var i = 0; i < article.Children.length; i++) {
                                     var child = article.Children[i].ToCaseArticle();
                                     child.Amount = units;
-                                    
+
+                                    // Validate Amount
+                                    if (currentOrder.CreditForOrder_Id != null && units != null) {
+                                        child.Order = currentOrder;
+                                        var validatedAmount = dhHelpdesk.CaseArticles.ValidateAmount(child.Order.Id, child.Article.Id, null, units);
+                                        child.Amount = validatedAmount;
+                                        articlesEl.val(validatedAmount);
+                                    }
+
                                     if (!child.HasPpu) {                                        
-                                        child.Ppu = units_Price;                                        
+                                        child.Ppu = units_Price;                                                                                
                                         currentOrder.AddArticle(child);
                                         if (elementForFocus == null && units_Price == "") {
-                                            elementForFocus = $('#ArtPrice_' + caseArticle.Id);
+                                            elementForFocus = $('#ArtPrice_' + child.Id);
                                         }
                                     }
                                     else
@@ -1150,12 +1221,16 @@ $(function () {
 
                             
                             if (elementForFocus == null)                                
-                                articlesEl.trigger('chosen:activate');                                
+                                articlesEl.trigger('chosen:activate');
                             else
                                 elementForFocus.focus();
 
-                            articlesEl.val('').trigger('chosen:updated');                            
-                            unitsEl.val(dhHelpdesk.CaseArticles.DefaultAmount);                            
+                            articlesEl.val('').trigger('chosen:updated');
+                            units_PriceEl.val('');
+                            units_PriceEl.prop("readonly", false);
+                            units_PriceEl.prop("disabled", false);
+                            unitsEl.val(dhHelpdesk.CaseArticles.DefaultAmount);
+                                                    
                         }
                     }
                     else {
@@ -1196,8 +1271,7 @@ $(function () {
 
             var articles = th.GetInvoiceArticles();
             if (articles == null || articles.length == 0) {
-                addArticleEl.hide();
-                return;
+                addArticleEl.hide();                
             } else {
                 addArticleEl.show();
             }
@@ -1291,51 +1365,52 @@ $(function () {
             var onChangeProductArea = function () {
                 
                 button.hide();
-                $.getJSON("/invoice/articles?productAreaId=" + th.ProductAreaElement.val(), function (data) {
+                invoiceButtonIndicator.show();
+                $.getJSON("/invoice/articles?caseId="+ th.CaseId + "&productAreaId=" + th.ProductAreaElement.val(), function (data) {
                     th.ClearInvoiceArticles();
-                    if (data == null || data.length == 0) {
-                        
-                    }
-                    else {
-                        //if (th.ModuleCaseInvoiceElement.val() == "True") { //todo fix this. No need to do alot of stuff when module is not active. Maybe put it before json request                        
+                    if (data.Data == "" && data.Data.length == 0) {
+                        if (data.CaseHasInvoice)
                             button.show();
-
-                            for (var i = 0; i < data.length; i++) {
-                                var a = data[i];
-                                var article = new dhHelpdesk.CaseArticles.InvoiceArticle();
-                                article.Id = a.Id;
-                                article.ParentId = a.ParentId;
-                                article.Number = a.Number;
-                                article.Name = a.Name;
-                                article.NameEng = a.NameEng;
-                                article.Description = a.Description;
-                                article.TextDemand = a.TextDemand;
-                                article.UnitId = a.UnitId;
-                                if (a.Unit != null) {
-                                    article.Unit = new dhHelpdesk.CaseArticles.InvoiceArticleUnit();
-                                    article.Unit.Id = a.Unit.Id;
-                                    article.Unit.Name = a.Unit.Name;
-                                    article.Unit.CustomerId = a.Unit.CustomerId;
-                                }
-                                article.Ppu = a.Ppu;
-                                article.HasPpu = (a.Ppu != null && a.Ppu != 0);
-                                article.ProductAreaId = a.ProductAreaId;
-                                article.CustomerId = a.CustomerId;
-                                th.AddInvoiceArticle(article);
-                            }
-
-                            var articles = th.GetInvoiceArticles();
-                            for (var j = 0; j < articles.length; j++) {
-                                var parent = articles[j];
-                                for (var k = 0; k < articles.length; k++) {
-                                    var child = articles[k];
-                                    if (child.ParentId == parent.Id) {
-                                        parent.AddChild(child);
-                                    }
-                                }
-                            }                        
+                        invoiceButtonIndicator.hide();
                     }
-                    //}
+                    else {                        
+                        for (var i = 0; i < data.Data.length; i++) {
+                            var a = data.Data[i];
+                            var article = new dhHelpdesk.CaseArticles.InvoiceArticle();
+                            article.Id = a.Id;
+                            article.ParentId = a.ParentId;
+                            article.Number = a.Number;
+                            article.Name = a.Name;
+                            article.NameEng = a.NameEng;
+                            article.Description = a.Description;
+                            article.TextDemand = a.TextDemand;
+                            article.UnitId = a.UnitId;
+                            if (a.Unit != null) {
+                                article.Unit = new dhHelpdesk.CaseArticles.InvoiceArticleUnit();
+                                article.Unit.Id = a.Unit.Id;
+                                article.Unit.Name = a.Unit.Name;
+                                article.Unit.CustomerId = a.Unit.CustomerId;
+                            }
+                            article.Ppu = a.Ppu;
+                            article.HasPpu = (a.Ppu != null && a.Ppu != 0);
+                            article.ProductAreaId = a.ProductAreaId;
+                            article.CustomerId = a.CustomerId;
+                            th.AddInvoiceArticle(article);
+                        }
+
+                        var articles = th.GetInvoiceArticles();
+                        for (var j = 0; j < articles.length; j++) {
+                            var parent = articles[j];
+                            for (var k = 0; k < articles.length; k++) {
+                                var child = articles[k];
+                                if (child.ParentId == parent.Id) {
+                                    parent.AddChild(child);
+                                }
+                            }
+                        }
+                        button.show();
+                        invoiceButtonIndicator.hide();
+                    }                    
                 });
             };
 
@@ -1602,10 +1677,19 @@ $(function () {
                 $('.articles-params-units').focus();
                 $('.articles-params-units').click();                
                 // Deselect Article drop down 
-                var articleEl = this.Container.find(".chosen-select.articles-params-article");                              
+                
+                var units_PriceEl = this.Container.find(".articles-params-units-price");
+                units_PriceEl.val('');
+                units_PriceEl.prop("readonly", false);
+                units_PriceEl.prop("disabled", false);
+
+                var units_El = this.Container.find(".articles-params-units");
+                units_El.val(dhHelpdesk.CaseArticles.DefaultAmount);                
+
+                var articleEl = this.Container.find(".chosen-select.articles-params-article");
                 articleEl.find('option:selected').prop('selected', false);                
                 articleEl.trigger('chosen:updated');
-
+                articleEl.trigger('chosen:activate');
                 dhHelpdesk.CaseArticles.HideOtherReference(order.Id);                
             },
             
@@ -1670,9 +1754,14 @@ $(function () {
                 model.Id = this.Id != null ? this.Id : dhHelpdesk.CaseArticles.GenerateId                
                 var orders = this.GetOrders();
                 for (var i = 0; i < orders.length; i++) {
-                    model.AddOrder(orders[i].GetViewModel());
+                    if (orders[i]._articles.length > 0)
+                        model.AddOrder(orders[i].GetViewModel());
                 }
-                model.Total = dhHelpdesk.CaseArticles.DoDelimit(this.GetArticlesTotal().toString());
+
+                var totals = this.GetArticlesTotal();
+                model.Total = dhHelpdesk.CaseArticles.DoDelimit(totals.Total.toString());
+                model.TotalInvoiced = dhHelpdesk.CaseArticles.DoDelimit(totals.Invoiced.toString());
+                model.TotalNotInvoiced = dhHelpdesk.CaseArticles.DoDelimit(totals.NotInvoiced.toString());                
 
                 return model;
             },
@@ -1717,9 +1806,8 @@ $(function () {
                     th.ShowSummary();
                     dhHelpdesk.Common.MakeTextNumeric(".article-ppu");
                     dhHelpdesk.Common.MakeTextNumeric(".article-amount");
-                   // alert('add art');
-                    
-                });
+                    dhHelpdesk.CaseArticles.UpdateAvailableArticles(order.Id, article.Id, true, article);                                                           
+                });                
 
                 dhHelpdesk.CaseArticles.OnEvent("OnDeleteArticle", function (e, order, articleId) {
                     if (th.HasArticles()) {
@@ -1727,6 +1815,7 @@ $(function () {
                     } else {
                         th.HideSummary();
                     }
+                    dhHelpdesk.CaseArticles.UpdateAvailableArticles(order.Id, articleId, false, null);
                 });
 
                 // Set handler for OnChangeOrder event
@@ -1735,6 +1824,7 @@ $(function () {
                         return;
                     }                    
                    
+                    var addArticleEl = dhHelpdesk.CaseArticles._container.find(".articles-params");
                     if (currentOrder.HasInvoicedArticles()) {
                         if (currentOrder.CreditForOrder_Id == null)
                             dhHelpdesk.CaseArticles.OrderActionsInstance.get_creditOrderButton(currentOrder.Id).show();
@@ -1747,18 +1837,29 @@ $(function () {
                             $(allInitiatorFields[i]).attr("disabled", true);
                         });
                         $("#invoiceSelectFile_" + currentOrder.Id).attr("disabled", true);
+                        addArticleEl.hide();                        
                     } else {
                         dhHelpdesk.CaseArticles.OrderActionsInstance.get_creditOrderButton(currentOrder.Id).hide();                        
-                        $("#doInvoiceButton_" + currentOrder.Id).show                        
+                        $("#doInvoiceButton_" + currentOrder.Id).show();
+                        var articles = dhHelpdesk.CaseArticles.GetInvoiceArticles();
+                        if (articles == null || articles.length == 0)
+                            addArticleEl.hide();
+                        else {
+                            dhHelpdesk.CaseArticles.ResetAddArticlePlace();
+                            addArticleEl.show();
+                        }
                     }
                 });
             },
         
             this.GetArticlesTotal = function () {                
-                var total = 0;
+                var total = { Invoiced: 0, NotInvoiced: 0, Total: 0 };
                 var orders = this.GetOrders();
                 for (var i = 0; i < orders.length; i++) {
-                    total += orders[i].GetArticlesTotal();
+                    var t = orders[i].GetArticlesTotal();
+                    total.Invoiced += t.Invoiced;
+                    total.NotInvoiced += t.NotInvoiced;
+                    total.Total += t.Total;
                 }
                 return total;
             },
@@ -1972,10 +2073,15 @@ $(function () {
             },
 
             this.GetArticlesTotal = function () {
-                var total = 0;
+                var total = {Invoiced:0, NotInvoiced:0, Total:0};
                 var articles = this.GetArticles();
                 for (var i = 0; i < articles.length; i++) {
-                    total += articles[i].GetTotal();
+                    if (articles[i].IsInvoiced)
+                        total.Invoiced += articles[i].GetTotal();
+                    else
+                        total.NotInvoiced += articles[i].GetTotal();
+
+                    total.Total += articles[i].GetTotal();
                 }
                 return total;
             },
@@ -2062,7 +2168,8 @@ $(function () {
                     var article = a.GetCreditedArticle(credited, alreadyUsedAmount);
                     if (a.Article != null)
                         alreadyUsedAmount.push({ Id: a.Article.Id, Amount: article.Amount });
-                    credited.AddArticle(article);
+                    if (a.Article == null || (a.Article != null && parseInt(article.Amount) > 0))
+                        credited.AddArticle(article);
                 }
                 return credited;
             },
@@ -2071,7 +2178,10 @@ $(function () {
                 var model = new dhHelpdesk.CaseArticles.CaseInvoiceOrderViewModel();
                 model.Id = this.Id != null ? this.Id : dhHelpdesk.CaseArticles.GenerateId();
                 model.Number = this.Number + 1;
-                model.Total = dhHelpdesk.CaseArticles.DoDelimit(this.GetArticlesTotal().toString());
+
+                var totalPrices = this.GetArticlesTotal();
+                model.Total = dhHelpdesk.CaseArticles.DoDelimit(totalPrices.Total.toString());
+                
                 model.InvoiceDate = this.InvoiceDate != null && this.InvoiceDate != "" ? dhHelpdesk.CaseArticles.DateToDisplayDate(this.InvoiceDate) : "";
                 model.InvoiceTime = this.InvoiceDate != null && this.InvoiceDate != "" ? dhHelpdesk.CaseArticles.DateToDisplayTime(this.InvoiceDate) : "";
                 model.InvoicedByUser = this.InvoicedByUser != null ? this.InvoicedByUser : "";
@@ -2312,7 +2422,7 @@ $(function () {
             },
 
             this.UpdateTotal = function () {
-                this.Container.find(".articles-total").text(dhHelpdesk.CaseArticles.DoDelimit(this.GetArticlesTotal().toString()));
+                this.Container.find(".articles-total").text(dhHelpdesk.CaseArticles.DoDelimit(this.GetArticlesTotal().Total.toString()));                
                 if (this.Invoice != null) {
                     this.Invoice.UpdateTotal();
                 }
@@ -2584,7 +2694,7 @@ $(function () {
                 }
                 this.Amount = amount;                
             
-                var ePpu = this.Container.find(".article-ppu");                                
+                var ePpu = this.Container.find(".article-ppu");                
                 if (ePpu.length > 0) {
                     var ppu = ePpu.val();
                     if (!dhHelpdesk.CaseArticles.IsInteger(ppu) || ppu <= 0) {
@@ -2599,8 +2709,8 @@ $(function () {
                     if (ord.Articles != undefined) {
                         for (var j = 0; j < ord.Articles.length; j++) {
                             if (this.Id == ord.Articles[j].Id) {
-                                ord.Articles[j].Amount = parseInt(amount);
-                                ord.Articles[j].Ppu = parseInt(ppu);
+                                ord.Articles[j].Amount = parseInt(this.Amount);
+                                ord.Articles[j].Ppu = parseInt(this.Ppu);
                             }
                         }
                     }
@@ -2608,8 +2718,8 @@ $(function () {
                         if (ord._articles != undefined) {
                             for (var j = 0; j < ord._articles.length; j++) {
                                 if (this.Id == ord._articles[j].Id) {
-                                    ord._articles[j].Amount = parseInt(amount);
-                                    ord._articles[j].Ppu = parseInt(ppu);
+                                    ord._articles[j].Amount = parseInt(this.Amount);
+                                    ord._articles[j].Ppu = parseInt(this.Ppu);
                                 }
                             }
                         }
@@ -2756,7 +2866,11 @@ $(function () {
             this.SummaryTitle = dhHelpdesk.CaseArticles.translate("Översikt");
             this.TotalLabel = dhHelpdesk.CaseArticles.translate("Total");            
             this.TotalAllLabel = dhHelpdesk.CaseArticles.translate("Totalt alla ordrar");
+            this.TotalInvoicedLabel = dhHelpdesk.CaseArticles.translate("Totalt fakturerade ordrar");
+            this.TotalNotInvoicedLabel = dhHelpdesk.CaseArticles.translate("Totalt ej fakturerade ordrar");
             this.Total = null;
+            this.TotalInvoiced = null;
+            this.TotalNotInvoiced = null;
             this.Orders = [];
 
             this.AddOrder = function (order) {
@@ -2770,7 +2884,7 @@ $(function () {
             this.NameHeader = dhHelpdesk.CaseArticles.translate("Artikelnamn SWE");
             this.NameEngHeader = dhHelpdesk.CaseArticles.translate("Artikelnamn ENG");
             this.UnitsHeader = dhHelpdesk.CaseArticles.translate("Enheter");
-            this.UnitsPriceHeader = dhHelpdesk.CaseArticles.translate("MyPrice");
+            this.UnitsPriceHeader = dhHelpdesk.CaseArticles.translate("PPE SEK");
             this.TypeHeader = dhHelpdesk.CaseArticles.translate("Typ");
             this.PpuHeader = dhHelpdesk.CaseArticles.translate("PPE");
             this.TotalHeader = dhHelpdesk.CaseArticles.translate("Total");
@@ -2792,7 +2906,7 @@ $(function () {
             this.UserCodeTitle = dhHelpdesk.CaseArticles.translateCaseFields("UserCode");
             this.CostCentreTitle = dhHelpdesk.CaseArticles.translateCaseFields("CostCentre");
 
-            this.Total = null;
+            this.Total = null;            
             this.Articles = [];
             this.InvoiceDate = "";
             this.InvoiceTime = "";
@@ -3396,7 +3510,7 @@ $(function () {
                     }
                  
                     dhHelpdesk.CaseArticles.ApplyChanges();
-                    if (callBack != null) {                        
+                    if (callBack != undefined && callBack != null) {                        
                         callBack(obj);
                     }
                     dhHelpdesk.CaseArticles.SetInvoiceState(_INVOICE_IDLE);                    
@@ -3405,7 +3519,7 @@ $(function () {
             });
     };
 
-    loadAllData(null);
+    loadAllData();
 });
 
 

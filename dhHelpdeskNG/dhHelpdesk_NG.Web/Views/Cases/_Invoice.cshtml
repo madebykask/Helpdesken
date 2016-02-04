@@ -3,8 +3,9 @@
 @using System.Web.Optimization
 @model DH.Helpdesk.Web.Models.Case.CaseInvoiceModel
 
-
-<span id="caseInvoiceArea" >
+<span id="caseInvoiceArea" >        
+    @*TODO: Use CSS to load indicator gif*@
+    <img src="../../Content/img/ajax-loader.GIF" id="invoiceButtonIndicator" style="width:25px;height:25px;padding-bottom:5px;" alt="@Translation.Get("Vänta")..." />
     @if (Model != null)
     {
         @Html.CaseInvoiceArticles(
@@ -19,4 +20,4 @@
             Model.LogKey)
         @Html.HiddenFor(m => Model.CaseInvoiceArticles, new { @class = "case-invoice-articles"}) 
     }
-</span> 
+</span>

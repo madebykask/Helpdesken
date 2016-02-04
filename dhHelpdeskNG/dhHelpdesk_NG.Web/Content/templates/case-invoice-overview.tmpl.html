@@ -24,14 +24,15 @@
         <td colspan="5" style='text-align: left;'><span class='textbold'>{{:InvoicedByTitle}}: {{:InvoicedByUser}} - {{:InvoiceDate}}</span>  {{:InvoiceTime}}</td>
         <td colspan="2" class='textbold' style='text-align: right;'>{{:TotalLabel}}: {{:Total}}</td>
         <td colspan="1"></td>
-        {{else}}
-        <td colspan="7" class='textbold' style='text-align: right;'>{{:TotalLabel}}: {{:Total}}
-        </td>
+        {{else}}        
+        <td colspan="7" class='textbold' style='text-align: right;'>{{:TotalLabel}}: {{:Total}}</td>
         <td colspan="1"></td>
         {{/if}}
     </tr>
     {{/for}}
 </table>
 <div class='textbold' style='text-align: right;'>
-    {{:TotalAllLabel}}: {{:Total}}
+    {{:TotalInvoicedLabel}}: {{:TotalInvoiced}} &nbsp;&nbsp;&nbsp;  
+    {{:TotalNotInvoicedLabel}}: {{:TotalNotInvoiced}} &nbsp;&nbsp;&nbsp;
+    {{:TotalAllLabel}}: {{:Total}}    
 </div>
