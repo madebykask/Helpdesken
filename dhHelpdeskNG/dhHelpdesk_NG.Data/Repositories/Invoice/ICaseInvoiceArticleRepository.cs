@@ -8,6 +8,8 @@
     {
         CaseInvoice[] GetCaseInvoices(int caseId);
 
+        CaseInvoiceOrder GetCaseInvoiceOrder(int caseId, int invoiceOrderId);
+
         void SaveCaseInvoices(IEnumerable<CaseInvoice> invoices, int caseId);
     }
 }

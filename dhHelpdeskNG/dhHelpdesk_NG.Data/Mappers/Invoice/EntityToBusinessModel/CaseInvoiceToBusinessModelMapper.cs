@@ -80,8 +80,7 @@
                                                     a.Name,
                                                     a.Amount,
                                                     a.Ppu,
-                                                    a.Position,
-                                                    a.IsInvoiced)).ToArray():null,
+                                                    a.Position)).ToArray():null,
                                  o.Articles != null ?
                                     o.Files.Select(f => this.filesMapper.Map(f)).OrderBy(f => f.FileName).ToArray() : null
                                     

@@ -16,7 +16,7 @@
         private readonly IBusinessModelToEntityMapper<CaseInvoice, CaseInvoiceEntity> invoiceToEntityMapper;
 
         private readonly IBusinessModelToEntityMapper<CaseInvoiceOrder, CaseInvoiceOrderEntity> orderMapper;
-
+        
         private readonly IBusinessModelToEntityMapper<CaseInvoiceArticle, CaseInvoiceArticleEntity> articleMapper;
 
         private readonly IBusinessModelToEntityMapper<CaseInvoiceOrderFile, CaseInvoiceOrderFileEntity> filesMapper;
@@ -25,14 +25,14 @@
                 IDatabaseFactory databaseFactory, 
                 IEntityToBusinessModelMapper<CaseInvoiceEntity, CaseInvoice> invoiceToBusinessModelMapper, 
                 IBusinessModelToEntityMapper<CaseInvoice, CaseInvoiceEntity> invoiceToEntityMapper, 
-                IBusinessModelToEntityMapper<CaseInvoiceOrder, CaseInvoiceOrderEntity> orderMapper, 
+                IBusinessModelToEntityMapper<CaseInvoiceOrder, CaseInvoiceOrderEntity> orderMapper,                 
                 IBusinessModelToEntityMapper<CaseInvoiceArticle, CaseInvoiceArticleEntity> articleMapper, 
                 IBusinessModelToEntityMapper<CaseInvoiceOrderFile, CaseInvoiceOrderFileEntity> filesMapper)
             : base(databaseFactory)
         {
             this.invoiceToBusinessModelMapper = invoiceToBusinessModelMapper;
             this.invoiceToEntityMapper = invoiceToEntityMapper;
-            this.orderMapper = orderMapper;
+            this.orderMapper = orderMapper;            
             this.articleMapper = articleMapper;
             this.filesMapper = filesMapper;
         }
@@ -44,6 +44,17 @@
                         .ToList();
 
             return entities.Select(i => this.invoiceToBusinessModelMapper.Map(i)).ToArray();
+        }
+
+        public CaseInvoiceOrder GetCaseInvoiceOrder(int caseId, int invoiceOrderId)
+        {
+            CaseInvoiceOrder ret = null;
+            var invoices = this.GetCaseInvoices(caseId).FirstOrDefault();
+            if (invoices != null && invoices.Orders != null)
+            {
+                return invoices.Orders.Where(o => o.Id == invoiceOrderId).FirstOrDefault();
+            }            
+            return ret;
         }
 
         public void SaveCaseInvoices(IEnumerable<CaseInvoice> invoices, int caseId)

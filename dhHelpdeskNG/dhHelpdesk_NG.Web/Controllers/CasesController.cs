@@ -2364,14 +2364,16 @@ namespace DH.Helpdesk.Web.Controllers
         #endregion
 
         [HttpPost]
-        public JsonResult SaveCaseInvoice(string caseInvoiceArticle, int customerId, int caseId, string caseKey, string logKey)
+        public JsonResult SaveCaseInvoice(string caseInvoiceArticle, int customerId, 
+                                          int caseId, string caseKey, string logKey, 
+                                          int? orderIdToXML)
         {
             try
             {
                 if (string.IsNullOrEmpty(caseInvoiceArticle))                    
                     return Json(new { result = "Error", data = "Invalid Invoice to save!" } );
                 
-                DoInvoiceWork(caseInvoiceArticle, caseId, customerId);
+                DoInvoiceWork(caseInvoiceArticle, caseId, customerId, orderIdToXML);
 
                 if (SessionFacade.CurrentUser == null)                    
                     return Json(new { result = "Error", data = "Invoice is not available, refresh the page and try it again." });
@@ -4830,12 +4832,12 @@ namespace DH.Helpdesk.Web.Controllers
 
         #endregion       
 
-        private void DoInvoiceWork(string caseInvoiceData, int caseId, int customerId)
+        private void DoInvoiceWork(string caseInvoiceData, int caseId, int customerId, int? orderIdToXML)
         {
             var caseOverview = this._caseService.GetCaseOverview(caseId);
             var articles = this.invoiceArticleService.GetArticles(customerId);
             var Invoices = this.invoiceHelper.ToCaseInvoices(caseInvoiceData, caseOverview, articles); //there will only be one?
-            this.invoiceArticleService.DoInvoiceWork(Invoices, caseId, customerId, SessionFacade.CurrentUser.Id);
+            this.invoiceArticleService.DoInvoiceWork(Invoices, caseId, customerId, SessionFacade.CurrentUser.Id, orderIdToXML);
         }
 
         #endregion

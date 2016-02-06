@@ -8,7 +8,7 @@
         public void Map(CaseInvoiceArticle businessModel, CaseInvoiceArticleEntity entity)
         {
             entity.OrderId = businessModel.OrderId;
-            entity.IsInvoiced = businessModel.IsInvoiced;
+            //entity.IsInvoiced = businessModel.IsInvoiced;
             entity.ArticleId = businessModel.ArticleId;
             entity.Name = businessModel.Name;
             entity.Amount = businessModel.Amount;

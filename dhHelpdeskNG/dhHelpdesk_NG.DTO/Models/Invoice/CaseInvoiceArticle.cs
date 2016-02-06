@@ -21,8 +21,7 @@
                 string name, 
                 int? amount,
                 decimal? ppu,
-                short position,
-                bool isInvoiced)
+                short position)
         {
             this.OrderId = orderId;
             this.Order = order;
@@ -30,8 +29,7 @@
             this.Article = article;
             this.ArticleId = articleId;
             this.Position = position;
-            this.Amount = amount;
-            this.IsInvoiced = isInvoiced;
+            this.Amount = amount;            
             this.Name = name;
             this.Id = id;
         }        
@@ -57,18 +55,11 @@
 
         public decimal? Ppu { get; private set; }
 
-        public short Position { get; private set; }
-
-        public bool IsInvoiced { get; private set; }
+        public short Position { get; private set; }        
 
         public bool IsNew()
         {
             return this.Id <= 0;
-        }
-
-        public void DoInvoice()
-        {
-            this.IsInvoiced = true;
         }
 
         public XmlSchema GetSchema()

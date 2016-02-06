@@ -134,12 +134,8 @@
 
         public void DoInvoice(int userId)
         {
-            InvoicedByUserId = userId;
-            foreach (var article in this.Articles)
-            {
-                this.InvoiceDate = DateTime.UtcNow;
-                article.DoInvoice();
-            }
+            this.InvoicedByUserId = userId;
+            this.InvoiceDate = DateTime.UtcNow;            
         }
 
         public XmlSchema GetSchema()

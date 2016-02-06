@@ -60,8 +60,7 @@
                                             a.Name,
                                             a.Amount,
                                             a.Ppu,
-                                            a.Position,
-                                            a.IsInvoiced)).ToArray(),
+                                            a.Position)).ToArray(),
                                             o.Files.Select(f => new CaseInvoiceOrderFile(HttpUtility.UrlDecode(f.FileName))).ToArray())).ToArray());
             if (caseOverview != null)
             {
@@ -71,19 +70,19 @@
                 }                
             }
 
-            foreach (var order in invoice.Orders)
-            {
-                if (order.InvoicedByUserId != null)
-                {
-                    if (order.InvoicedByUserId != 0)
-                    {
-                        foreach (var article in order.Articles)
-                        {
-                            article.DoInvoice();
-                        }
-                    }
-                }
-            }
+            //foreach (var order in invoice.Orders)
+            //{
+            //    if (order.InvoicedByUserId != null)
+            //    {
+            //        if (order.InvoicedByUserId != 0)
+            //        {
+            //            foreach (var article in order.Articles)
+            //            {
+            //                article.DoInvoice();
+            //            }
+            //        }
+            //    }
+            //}
             return new[] { invoice };
         }
 
@@ -198,8 +197,7 @@
             public decimal? Ppu { get; set; }
 
             public short Position { get; set; }
-
-            public bool IsInvoiced { get; set; }
+            
         }
     }    
 }

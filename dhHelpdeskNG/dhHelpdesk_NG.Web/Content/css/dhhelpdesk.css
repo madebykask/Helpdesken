@@ -1827,6 +1827,18 @@ table th.thpointer {
         min-height: 200px
     }
 
+    .gif-loader {
+        width:25px !important;
+        height:25px !important;
+        background:url('/content/img/ajax-loader.gif');
+        background-size:cover;
+        background-size: contain;
+        background-repeat:no-repeat;
+        background-position:center center;
+        border:none;
+        display: inline-block;
+    }
+
 .case-overview.page .table-cases 
 {
     table-layout:fixed !important;
