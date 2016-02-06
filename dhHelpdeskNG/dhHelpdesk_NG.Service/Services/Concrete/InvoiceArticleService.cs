@@ -201,9 +201,8 @@
             return new DataValidationResult();
         }       
 
-        public void DoInvoiceWork(CaseInvoice[] caseInvoiceData, int caseId, int customerId, int CurrentUserId, int? orderIdToXML )
-        {   
-         
+        public void DoInvoiceWork(CaseInvoice[] caseInvoiceData, int caseId, int customerId, int? orderIdToXML )
+        {            
             this.SaveCaseInvoices(caseInvoiceData, caseId);
             
             if (orderIdToXML.HasValue)
@@ -252,7 +251,7 @@
             salesHeader.OurReferenceName = settings.OurReference;
             salesHeader.YourReferenceName = YourReferenceRow(order.CostCentre, order.Persons_Name);
             salesHeader.OrderNo = OrderNoRow(settings.OrderNoPrefix, order.CaseNumber.ToString(), order.Number);
-            salesHeader.OurReferenceName = settings.Currency;
+            salesHeader.CurrencyCode = settings.Currency;
 
             // Articles
             var salesLines = new List<SalesDocSalesLine>();

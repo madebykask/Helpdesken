@@ -9,9 +9,13 @@
                         <th>{{:NameEngHeader}}</th>
                         <th class="case-invoice-colnarrow">{{:UnitsHeader}}</th>
                         <th>{{:TypeHeader}}</th>
-                        <th>{{:PpuHeader}} SEK</th>
-                        <th style="text-align: right;">{{:TotalHeader}}</th>
-                        <th class="case-invoice-colextranarrow"></th>
+                        <th>{{:PpuHeader}} SEK</th>                        
+                        {{if IsInvoiced }}
+                            <th colspan="2" style="text-align: right;"> {{:TotalHeader}}</th>
+                        {{else}}
+                            <th colspan="1" style="text-align: right;"> {{:TotalHeader}}</th>
+                            <th class="case-invoice-colextranarrow"></th>
+                        {{/if}}
                     </tr>
                     <tbody class='articles-rows'>
                         {{for Articles tmpl="caseInvoiceArticle" /}}                        

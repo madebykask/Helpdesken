@@ -253,28 +253,28 @@ $(function () {
             return null;
         },
 
-        HasNotInvoicedArticles: function () {
-            var invoices = this.GetInvoices();
-            for (var i = 0; i < invoices.length; i++) {
-                var invoice = invoices[i];
-                if (invoice.HasNotInvoicedArticles()) {
-                    return true;
-                }
-            }
+        //HasNotInvoicedArticles: function () {
+        //    var invoices = this.GetInvoices();
+        //    for (var i = 0; i < invoices.length; i++) {
+        //        var invoice = invoices[i];
+        //        if (invoice.HasNotInvoicedArticles()) {
+        //            return true;
+        //        }
+        //    }
 
-            return false;
-        },
+        //    return false;
+        //},
 
-        HasInvoicedArticles: function () {
-            var invoices = this.GetInvoices();
-            for (var i = 0; i < invoices.length; i++) {
-                var invoice = invoices[i]
-                if (invoice.HasInvoicedArticles()) {
-                    return true;
-                }
-            }
-            return false;
-        },
+        //HasInvoicedArticles: function () {
+        //    var invoices = this.GetInvoices();
+        //    for (var i = 0; i < invoices.length; i++) {
+        //        var invoice = invoices[i]
+        //        if (invoice.HasInvoicedArticles()) {
+        //            return true;
+        //        }
+        //    }
+        //    return false;
+        //},
 
         GetOrder: function (id) {
             var invoices = this.GetInvoices();
@@ -591,7 +591,7 @@ $(function () {
                 if (data != null && data.IsValid == true) {
                     if (!th.IsNewCase()) {
                         var order = th.GetOrder(orderId);
-                        if (!order.HasInvoicedArticles()) {
+                        if (!order.IsOrderInvoiced()) {
                             var orderValidation = order.Validate();
                             if (orderValidation.IsValid) {                                
                                 if (order.InvoiceValidate()) {
@@ -720,11 +720,11 @@ $(function () {
                 
                 if (totalOrderAmount - totalCreditUsed > 0) {
                     newAmount = totalOrderAmount - totalCreditUsed;
-                    //dhHelpdesk.CaseArticles.ShowWarningMessage(dhHelpdesk.CaseArticles.translate("Maximum value for this article is: " + newAmount));
+                    dhHelpdesk.CaseArticles.ShowWarningMessage(dhHelpdesk.CaseArticles.translate("Maximum amount for this article is") + ": " + newAmount);
                 }
                 else {
                     newAmount = 0;
-                    //dhHelpdesk.CaseArticles.ShowWarningMessage(dhHelpdesk.CaseArticles.translate("All Credits already used!"))                    
+                    dhHelpdesk.CaseArticles.ShowWarningMessage(dhHelpdesk.CaseArticles.translate("All credits already used!"));
                 }
             }
            
@@ -747,9 +747,12 @@ $(function () {
             if (totalOrderAmount < newUsedAmout) {
                 if (totalOrderAmount - totalCreditUsed > 0) {
                     newAmount = totalOrderAmount - totalCreditUsed;
+                    dhHelpdesk.CaseArticles.ShowWarningMessage(dhHelpdesk.CaseArticles.translate("Maximum amount for this article is") + ": " + newAmount);
                 }
-                else
+                else {
                     newAmount = 0;
+                    dhHelpdesk.CaseArticles.ShowWarningMessage(dhHelpdesk.CaseArticles.translate("All credits already used!"));
+                }
             }
 
             return newAmount;
@@ -825,7 +828,7 @@ $(function () {
             var currentOrder = this.GetOrder(orderId);
             var OrderIsInvoiced = false;
             if (currentOrder != null) {
-                if (!currentOrder.HasInvoicedArticles()) {
+                if (!currentOrder.IsOrderInvoiced()) {
                     return false;
                 }
                 else {
@@ -1132,7 +1135,7 @@ $(function () {
             //// set order actions 
             dhHelpdesk.CaseArticles.OrderActionsInstance = dhHelpdesk.CaseArticles.orderActions({ actionsContainer: th._container.find("#orderButtonsArea") });
             var orderActionsViewModel = dhHelpdesk.CaseArticles.orderActionsViewModel({
-                creditOrderEnabled: curOrder.HasInvoicedArticles(),
+                creditOrderEnabled: curOrder.IsOrderInvoiced(),
                 creditOrderTitle: dhHelpdesk.CaseArticles.translate("Kreditera order"),
                 creditOrderId: curOrder.Id
             });
@@ -1557,8 +1560,7 @@ $(function () {
                 article.Id = dhHelpdesk.CaseArticles.GenerateId();
                 article.Article = this;
                 article.Name = this.Name;
-                article.Amount = dhHelpdesk.CaseArticles.DefaultAmount;
-                //article.IsInvoiced = false;
+                article.Amount = dhHelpdesk.CaseArticles.DefaultAmount;                
                 article.Ppu = this.Ppu;
                 article.HasPpu = this.HasPpu;
                 return article;
@@ -1615,27 +1617,27 @@ $(function () {
                 return false;
             },
 
-            this.HasNotInvoicedArticles = function () {
-                var orders = this.GetOrders();
-                for (var i = 0; i < orders.length; i++) {
-                    var order = orders[i];
-                    if (order.HasNotInvoicedArticles()) {
-                        return true;
-                    }
-                }
-                return false;
-            },
+            //this.HasNotInvoicedArticles = function () {
+            //    var orders = this.GetOrders();
+            //    for (var i = 0; i < orders.length; i++) {
+            //        var order = orders[i];
+            //        if (order.HasNotInvoicedArticles()) {
+            //            return true;
+            //        }
+            //    }
+            //    return false;
+            //},
 
-            this.HasInvoicedArticles = function () {
-                var orders = this.GetOrders();
-                for (var i = 0; i < orders.length; i++) {
-                    var order = orders[i];
-                    if (order.HasInvoicedArticles()) {
-                        return true;
-                    }
-                }
-                return false;
-            },
+            //this.HasInvoicedArticles = function () {
+            //    var orders = this.GetOrders();
+            //    for (var i = 0; i < orders.length; i++) {
+            //        var order = orders[i];
+            //        if (order.HasInvoicedArticles()) {
+            //            return true;
+            //        }
+            //    }
+            //    return false;
+            //},
 
             this._refreshTabs = function () {
                 var tabs = this.Container.find("#case-invoice-orders-tabs");
@@ -1668,8 +1670,9 @@ $(function () {
                 var container = this.Container.find(".orders-container");
                 container.append(order.Container);
                 
-                var tabs = this.Container.find("#case-invoice-orders-tabs");                
-                var newTab = $("<li class='case-invoice-order-tab active'><a href='#case-invoice-order" + order.Id + "'>" + order.Caption  + "</a><li>");
+                var tabs = this.Container.find("#case-invoice-orders-tabs");
+                var tabIcon = (order.IsOrderInvoiced() ? "<i class='icon-ok icon-green'></i>&nbsp;&nbsp;" : "");
+                var newTab = $("<li class='case-invoice-order-tab active'><a href='#case-invoice-order" + order.Id + "'>" + tabIcon + order.Caption  + "</a><li>");
                 if (this._orders.length == 1) {
                     tabs.find("ul").prepend(newTab);
                 } else {
@@ -1734,14 +1737,14 @@ $(function () {
                         '}';
             },
 
-            this.DoInvoice = function () {
-                alert('Orders');
-                var orders = this.GetOrders();
-                for (var i = 0; i < orders.length; i++) {
-                    orders[i].DoInvoice();
-                    orders[i].IsInvoiced = true;
-                }                
-            },
+            //this.DoInvoice = function () {
+            //    alert('Orders');
+            //    var orders = this.GetOrders();
+            //    for (var i = 0; i < orders.length; i++) {
+            //        orders[i].DoInvoice();
+            //        orders[i].IsInvoiced = true;
+            //    }                
+            //},
 
             this.Clone = function () {                
                 var clone = new dhHelpdesk.CaseArticles.CaseInvoice();
@@ -1831,7 +1834,7 @@ $(function () {
                     }                    
                    
                     var addArticleEl = dhHelpdesk.CaseArticles._container.find(".articles-params");
-                    if (currentOrder.HasInvoicedArticles()) {
+                    if (currentOrder.IsOrderInvoiced()) {
                         if (currentOrder.CreditForOrder_Id == null)
                             dhHelpdesk.CaseArticles.OrderActionsInstance.get_creditOrderButton(currentOrder.Id).show();
                         else
@@ -1898,10 +1901,10 @@ $(function () {
             this.Number = null;
             this.InvoiceDate = null;
             this.InvoicedByUser = null;
-            this.InvoicedByUserId = null;
-            this.IsInvoiced = null;
+            this.InvoicedByUserId = null;            
             this.Date = null;
             this.Caption = null;
+            this.IsInvoiced = false;
 
             //////////////
             /// INITIATOR FIELDS
@@ -1955,19 +1958,13 @@ $(function () {
                 return false;
             },
 
-            this.HasNotInvoicedArticles = function () {
-                return !this.IsInvoiced;
-                //for (var i = 0; i < articles.length; i++) {
-                //    var article = articles[i];
-                //    if (!article.IsInvoiced) {
-                //        return true;
-                //    }
-                //}
-                //return false;
+            this.IsOrderInvoiced = function () {
+                return (this.InvoicedByUserId != undefined && this.InvoicedByUserId != null && this.InvoicedByUserId > 0) ||
+                       (this.InvoiceDate != undefined && this.InvoiceDate != null);
             },
 
-            this.HasInvoicedArticles = function () {
-                return articles = !this.IsInvoiced;
+            //this.HasInvoicedArticles = function () {
+            //    return articles = !this.IsInvoiced;
                 //for (var i = 0; i < articles.length; i++) {
                 //    var article = articles[i];
                 //    if (article.IsInvoiced) {
@@ -1975,7 +1972,7 @@ $(function () {
                 //    }
                 //}
                 //return false;
-            },
+            //},
 
             this.EnableAddBlank = function (enable) {
                 var addBlank = this.Container.find(".add-blank-article");
@@ -2085,7 +2082,7 @@ $(function () {
                 var total = {Invoiced:0, NotInvoiced:0, Total:0};
                 var articles = this.GetArticles();
                 for (var i = 0; i < articles.length; i++) {
-                    if (articles[i].Order.IsInvoiced)
+                    if (articles[i].Order.IsOrderInvoiced())
                         total.Invoiced += articles[i].GetTotal();
                     else
                         total.NotInvoiced += articles[i].GetTotal();
@@ -2099,14 +2096,7 @@ $(function () {
                 return this._articles.length == 0;
             },
 
-            this.DoInvoice = function () {                
-                this.InvoicedByUser = " ";
-                this.CreditedFrom = null;
-                var articles = this.GetArticles();
-                for (var i = 0; i < articles.length; i++) {
-                    articles[i].DoInvoice();
-                }
-                
+            this.DoInvoice = function () {                               
                 var btnSave = $(".btn.save-invoice");
                 //pass order_id to generate xml for order
                 btnSave.attr("data-doInvoiceOrder", this.Id);
@@ -2123,6 +2113,7 @@ $(function () {
                 clone.InvoicedByUser = this.InvoicedByUser;
                 clone.InvoicedByUserId = this.InvoicedByUserId;
                 clone.Caption = this.Caption;
+                clone.IsInvoiced = this.IsInvoiced;
 
                 ////// INITIATOR FIELDS
                 clone.ReportedBy = this.ReportedBy;
@@ -2144,7 +2135,7 @@ $(function () {
                 for (var i = 0; i < articles.length; i++) {
                     clone.AddArticle(articles[i].Clone());
                 }
-                clone.files = this.files.clone();
+                clone.files = this.files.clone(clone.IsInvoiced);
 
                 return clone;
             },
@@ -2173,10 +2164,7 @@ $(function () {
                 var articles = this.GetArticles();
                 var alreadyUsedAmount = [];
                 for (var i = 0; i < articles.length; i++) {
-                    var a = articles[i];
-                    //if (!a.IsInvoiced) {
-                    //    continue;
-                    //}
+                    var a = articles[i];                    
                     var article = a.GetCreditedArticle(credited, alreadyUsedAmount);
                     if (a.Article != null)
                         alreadyUsedAmount.push({ Id: a.Article.Id, Amount: article.Amount });
@@ -2197,13 +2185,8 @@ $(function () {
                 model.InvoiceDate = this.InvoiceDate != null && this.InvoiceDate != "" ? dhHelpdesk.CaseArticles.DateToDisplayDate(this.InvoiceDate) : "";
                 model.InvoiceTime = this.InvoiceDate != null && this.InvoiceDate != "" ? dhHelpdesk.CaseArticles.DateToDisplayTime(this.InvoiceDate) : "";
                 model.InvoicedByUser = this.InvoicedByUser != null ? this.InvoicedByUser : "";
-                model.InvoicedByUserId = this.InvoicedByUserId != null ? this.InvoicedByUserId : "";
-                if (dhHelpdesk.CaseArticles.IsNullOrEmpty(this.InvoicedByUser)) {
-                    model.IsInvoiced = false;
-                }
-                else {
-                    model.IsInvoiced = true;
-                }
+                model.InvoicedByUserId = this.InvoicedByUserId != null ? this.InvoicedByUserId : "";                
+                model.IsInvoiced = this.IsOrderInvoiced();                
 
                 ////////initiator field
                 model.ReportedBy = this.ReportedBy != null ? this.ReportedBy : "";
@@ -2285,7 +2268,7 @@ $(function () {
 
                 ReportedBy.blur(function () {
                     var curOrd = dhHelpdesk.CaseArticles.GetCurrentOrder();
-                    if (!curOrd.HasInvoicedArticles()) {
+                    if (!curOrd.IsOrderInvoiced()) {
                         th.ReportedBy = $(this).val();
                         email.blur();
                         personsName.blur();
@@ -2307,7 +2290,7 @@ $(function () {
                 var personsName = this.Container.find(publicClassName + ".name");
                 personsName.blur(function () {                    
                     var curOrd = dhHelpdesk.CaseArticles.GetCurrentOrder();                    
-                    if (!curOrd.HasInvoicedArticles()) {
+                    if (!curOrd.IsOrderInvoiced()) {
                         th.Persons_Name = $(this).val();
                     }
                     else {
@@ -2319,7 +2302,7 @@ $(function () {
                 var email = this.Container.find(publicClassName + ".email");
                 email.blur(function () {
                     var curOrd = dhHelpdesk.CaseArticles.GetCurrentOrder();
-                    if (!curOrd.HasInvoicedArticles()) {
+                    if (!curOrd.IsOrderInvoiced()) {
                         th.Persons_Email = $(this).val();
                     }
                     else {
@@ -2331,7 +2314,7 @@ $(function () {
                 var phone = this.Container.find(publicClassName + ".phone");
                 phone.blur(function () {
                     var curOrd = dhHelpdesk.CaseArticles.GetCurrentOrder();
-                    if (!curOrd.HasInvoicedArticles()) {
+                    if (!curOrd.IsOrderInvoiced()) {
                         th.Persons_Phone = $(this).val();
                     }
                     else {
@@ -2343,7 +2326,7 @@ $(function () {
                 var CellPhone = this.Container.find(publicClassName + ".cellphone");
                 CellPhone.blur(function () {
                     var curOrd = dhHelpdesk.CaseArticles.GetCurrentOrder();
-                    if (!curOrd.HasInvoicedArticles()) {
+                    if (!curOrd.IsOrderInvoiced()) {
                         th.Persons_CellPhone = $(this).val();
                     }
                     else {
@@ -2355,7 +2338,7 @@ $(function () {
                 var region = this.Container.find(publicClassName + ".region");
                 region.change(function () {
                     var curOrd = dhHelpdesk.CaseArticles.GetCurrentOrder();
-                    if (!curOrd.HasInvoicedArticles()) {
+                    if (!curOrd.IsOrderInvoiced()) {
                         $(this).parent().find('input:hidden').val($(this).val());
                         th.Region_Id = $(this).val();
                         var OrderId = $(this).data("orderid");
@@ -2371,7 +2354,7 @@ $(function () {
                 var department = this.Container.find(publicClassName + ".department");
                 department.change(function () {
                     var curOrd = dhHelpdesk.CaseArticles.GetCurrentOrder();
-                    if (!curOrd.HasInvoicedArticles()) {
+                    if (!curOrd.IsOrderInvoiced()) {
                         $(this).parent().find('input:hidden').val($(this).val());
                         th.Department_Id = $(this).val();
                         var OrderId = $(this).data("orderid");
@@ -2386,7 +2369,7 @@ $(function () {
                 var ou = this.Container.find(publicClassName + ".ou");
                 ou.change(function () {
                     var curOrd = dhHelpdesk.CaseArticles.GetCurrentOrder();
-                    if (!curOrd.HasInvoicedArticles()) {
+                    if (!curOrd.IsOrderInvoiced()) {
                         $(this).parent().find('input:hidden').val($(this).val());
                         th.OU_Id = $(this).val();
                     }
@@ -2399,7 +2382,7 @@ $(function () {
                 var place = this.Container.find(publicClassName + ".place");
                 place.blur(function () {
                     var curOrd = dhHelpdesk.CaseArticles.GetCurrentOrder();
-                    if (!curOrd.HasInvoicedArticles()) {
+                    if (!curOrd.IsOrderInvoiced()) {
                         th.Place = $(this).val();
                     }
                     else {
@@ -2411,7 +2394,7 @@ $(function () {
                 var costcentre = this.Container.find(publicClassName + ".costcentre");
                 costcentre.blur(function () {
                     var curOrd = dhHelpdesk.CaseArticles.GetCurrentOrder();
-                    if (!curOrd.HasInvoicedArticles()) {
+                    if (!curOrd.IsOrderInvoiced()) {
                         th.CostCentre = $(this).val();
                     }
                     else {
@@ -2423,7 +2406,7 @@ $(function () {
                 var usercode = this.Container.find(publicClassName + ".usercode");
                 usercode.blur(function () {
                     var curOrd = dhHelpdesk.CaseArticles.GetCurrentOrder();
-                    if (!curOrd.HasInvoicedArticles()) {
+                    if (!curOrd.IsOrderInvoiced()) {
                         th.UserCode = $(this).val();
                     }
                     else {
@@ -2470,7 +2453,8 @@ $(function () {
             this.UpdateFiles = function () {
                 var model = dhHelpdesk.CaseArticles.caseFilesViewModel({
                     caseId: dhHelpdesk.CaseArticles.caseFiles.getCaseId(),
-                    files: this.files.getFiles()
+                    files: this.files.getFiles(),
+                    isInvoiced: this.IsOrderInvoiced()
                 });
                 this.Container.find("#files-container").html(dhHelpdesk.CaseArticles.CaseInvoiceOrderFilesTemplate.render(model));
             },
@@ -2488,7 +2472,7 @@ $(function () {
 
                 var caseFile = dhHelpdesk.CaseArticles.caseFiles.getFile(fileName);
                 if (caseFile != null) {
-                    this.files.addFile(caseFile.clone());
+                    this.files.addFile(caseFile.clone(this.IsInvoiced));
                 }
             },
 
@@ -2557,8 +2541,7 @@ $(function () {
             this.Article = null;
             this.Name = null;
             this.Amount = null;
-            this.Position = null;
-            //this.IsInvoiced = null;
+            this.Position = null;            
             this.Ppu = null;
             this.HasPpu = false;
             
@@ -2574,8 +2557,7 @@ $(function () {
                         '"Name":"' + (this.Name != null ? this.Name : '') + '", ' +
                         '"Amount":"' + (this.Amount != null && !this.IsBlank() ? this.Amount : '') + '", ' +
                         '"Ppu":"' + (this.Ppu != null ? this.Ppu : '') + '", ' +
-                        '"Position":"' + this.Position + '"' +
-                        //'"IsInvoiced":' + (this.IsInvoiced ? '"true"' : '"false"') +
+                        '"Position":"' + this.Position + '"' +                        
                     '}';
             };
 
@@ -2585,8 +2567,7 @@ $(function () {
                 clone.Article = this.Article;
                 clone.Name = this.Name;
                 clone.Amount = this.Amount;
-                clone.Position = this.Position;
-                //clone.IsInvoiced = this.IsInvoiced;
+                clone.Position = this.Position;                
                 clone.Ppu = this.Ppu;
                 clone.HasPpu = this.HasPpu;
                 clone.CreditedFrom = this.CreditedFrom;
@@ -2614,8 +2595,7 @@ $(function () {
                     }
                 }
                 
-                article.Position = this.Position;
-                //article.IsInvoiced = false;
+                article.Position = this.Position;                
                 article.Ppu = this.Ppu;
                 article.HasPpu = this.HasPpu;
                 
@@ -2668,8 +2648,7 @@ $(function () {
 
             this.GetViewModel = function () {
                 var model = new dhHelpdesk.CaseArticles.CaseArticleViewModel();
-                model.IsBlank = this.IsBlank();
-                model.IsInvoiced = this.IsInvoiced;
+                model.IsBlank = this.IsBlank();                
                 model.Name = this.Name != null ? this.Name : "";
                 model.NameEng = this.Article != null && this.Article.NameEng != null ? this.Article.NameEng : "";
                 model.Description = this.Article != null && this.Article.Description != null ? this.Article.Description : "";
@@ -2680,7 +2659,8 @@ $(function () {
                 model.Ppu = this.GetPpu();
                 model.Total = dhHelpdesk.CaseArticles.DoDelimit(this.GetTotal().toString());
                 model.IsArticlePpuExists = this.IsArticlePpuExists();
-                model.IsCredited = this.Order.CreditForOrder_Id != null;                
+                model.IsCredited = this.Order.CreditForOrder_Id != null;
+                model.IsInvoiced = this.Order.IsInvoiced;
                 return model;
             };
 
@@ -2748,7 +2728,7 @@ $(function () {
             },
 
             this.DoInvoice = function () {
-                this.IsInvoiced = true;
+                //this.IsInvoiced = true;
                 this.CreditedFrom = null;
                 this.Refresh();
             },
@@ -2971,7 +2951,7 @@ $(function () {
             this.attachFilesTitle = dhHelpdesk.CaseArticles.translate("Lägg till");
             this.doInvoiceTitle = dhHelpdesk.CaseArticles.translate("Fakturera");
             this.doCreditTitle = dhHelpdesk.CaseArticles.translate("Kreditera");
-            this.SavingMessage = dhHelpdesk.CaseArticles.translate("Saving...");
+            this.SavingMessage = dhHelpdesk.CaseArticles.translate("Saving...");            
 
             this.AddArticle = function (article) {
                 this.Articles.push(article);
@@ -2979,8 +2959,7 @@ $(function () {
         },
 
         CaseArticleViewModel: function () {
-            this.IsBlank = null;
-            this.IsInvoiced = null;
+            this.IsBlank = null;            
             this.Id = null;
             this.Name = null;
             this.NameEng = null;
@@ -2992,6 +2971,7 @@ $(function () {
             this.Total = null;
             this.IsArticlePpuExists = null;
             this.IsCredited = false;
+            this.IsInvoiced = false;
         },
 
         // View model for order actions
@@ -3040,8 +3020,7 @@ $(function () {
             var getTitle = function () {
                 return title;
             };            
-
-            
+                        
             that.getCaseId = getCaseId;
             that.getFiles = getFiles;
             that.getTitle = getTitle;
@@ -3093,11 +3072,11 @@ $(function () {
                 } while (found);
             };
 
-            var clone = function () {
+            var clone = function (isInvoiced) {
                 var c = dhHelpdesk.CaseArticles.orderFilesCollection({});
                 var fs = getFiles();
                 for (var i = 0; i < fs.length; i++) {
-                    c.addFile(fs[i].clone());
+                    c.addFile(fs[i].clone(isInvoiced));
                 }
 
                 return c;
@@ -3122,6 +3101,7 @@ $(function () {
             var type = spec.type || '';            
             var createdDate = spec.createdDate || '';
             var user = spec.user || '';
+            var isOrderInvoiced = spec.isOrderInvoiced || false;
 
             var getFileCategory = function () {
                 return category;
@@ -3149,16 +3129,21 @@ $(function () {
 
             var getEncodedFileName = function () {
                 return encodeURIComponent(getFileName());
-            };           
+            };
 
-            var clone = function () {                
+            var getIsOrderInvoiced = function () {
+                return isOrderInvoiced;
+            };
+
+            var clone = function (isOrderInvoiced) {                
                 var f = dhHelpdesk.CaseArticles.caseFile({
                     fileName: getFileName(),
                     size: getSize(),
                     type: getType(),
                     category: getFileCategory(),
                     createdDate: getCreatedDate(),
-                    user: getUser()
+                    user: getUser(),
+                    isOrderInvoiced: (isOrderInvoiced != undefined? isOrderInvoiced : false)   
                 });                
                 return f;
             };
@@ -3168,14 +3153,15 @@ $(function () {
                             '"FileName":"' + getEncodedFileName() + '"' +
                         '}';
             };
-
+            
             that.getFileName = getFileName;
             that.getSize = getSize;
             that.getType = getType;
             that.getFileCategory = getFileCategory;
             that.getCreatedDate = getCreatedDate;
             that.getUser = getUser;
-            that.getEncodedFileName = getEncodedFileName;            
+            that.getEncodedFileName = getEncodedFileName;
+            that.getIsOrderInvoiced = getIsOrderInvoiced;
             that.clone = clone;
             that.toJson = toJson;
 
@@ -3453,11 +3439,13 @@ $(function () {
                             order.Number = ord.Number;                            
                             order.InvoiceDate = ord.InvoiceDate;
                             order.InvoicedByUser = ord.InvoicedByUser;
-                            order.InvoicedByUserId = ord.InvoicedByUserId;
-                            if (ord.InvoicedByUserId != 0) {
-                                order.IsInvoiced = true;
-                            }
+                            order.InvoicedByUserId = ord.InvoicedByUserId;                                                                                    
                             order.Caption = ord.Caption;
+                            if ((ord.InvoicedByUserId != undefined && ord.InvoicedByUserId != null && ord.InvoicedByUserId > 0) ||
+                                (ord.InvoiceDate != undefined && ord.InvoiceDate != null))
+                                order.IsInvoiced = true;
+                            else
+                                order.IsInvoiced = false;
 
                             /////////////////////////
                             ///////Initiator labels
@@ -3513,8 +3501,7 @@ $(function () {
                                     caseArticle.Amount = article.Amount;
                                     caseArticle.Ppu = article.Ppu;
                                     caseArticle.UnitId = article.UnitId;
-                                    caseArticle.Position = article.Position;
-                                    //caseArticle.IsInvoiced = article.IsInvoiced;
+                                    caseArticle.Position = article.Position;                                    
                                     order.AddArticle(caseArticle);
                                 }
                             }

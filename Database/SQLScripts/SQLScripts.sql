@@ -42,6 +42,18 @@ ALTER TABLE tblCase ALTER COLUMN Persons_CellPhone nvarchar(50)
 ALTER TABLE tblCaseHistory ALTER COLUMN Persons_Phone nvarchar(50)
 ALTER TABLE tblCaseHistory ALTER COLUMN Persons_CellPhone nvarchar(50)
 
+
+
+ IF COL_LENGTH('tblCaseInvoiceArticle','IsInvoiced') IS NOT NULL
+ BEGIN
+    IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[DF_tblCaseInvoiceArticle_IsInvoiced]') AND type = 'D')
+	BEGIN
+		ALTER TABLE [dbo].[tblCaseInvoiceArticle] Drop CONSTRAINT [DF_tblCaseInvoiceArticle_IsInvoiced]
+	END
+	ALTER TABLE tblCaseInvoiceArticle
+	DROP COLUMN IsInvoiced
+ END
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.20'
 

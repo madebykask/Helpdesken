@@ -17,7 +17,6 @@
         public decimal? Ppu { get; set; }
 
         public short Position { get; set; }
-
-        //public bool IsInvoiced { get; set; }
+        
     }
 }

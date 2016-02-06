@@ -161,11 +161,7 @@
         public bool UpdateNotifierInformation { get; set; }
 
         public string FinishingCause { get; set; }
-
-        //public CaseInvoiceArticlesModel InvoiceArticles { get; set; }
-
-        //public string CaseInvoiceArticles { get; set; }
-
+     
         public CaseInvoiceModel InvoiceModel { get; set; }
 
         public CustomerSettings CustomerSettings { get; set; }

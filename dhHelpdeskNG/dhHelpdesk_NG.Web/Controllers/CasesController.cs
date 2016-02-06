@@ -2436,8 +2436,7 @@ namespace DH.Helpdesk.Web.Controllers
             var case_ = m.case_;
             var caseLog = m.caseLog;
             var caseMailSetting = m.caseMailSetting;
-            var updateNotifierInformation = m.updateNotifierInformation;
-            //var caseInvoiceArticles = m.caseInvoiceArticles;
+            var updateNotifierInformation = m.updateNotifierInformation;            
             case_.Performer_User_Id = m.Performer_Id;
             case_.CaseResponsibleUser_Id = m.ResponsibleUser_Id;            
             case_.RegistrationSourceCustomer_Id = m.customerRegistrationSourceId;
@@ -4836,8 +4835,8 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var caseOverview = this._caseService.GetCaseOverview(caseId);
             var articles = this.invoiceArticleService.GetArticles(customerId);
-            var Invoices = this.invoiceHelper.ToCaseInvoices(caseInvoiceData, caseOverview, articles); //there will only be one?
-            this.invoiceArticleService.DoInvoiceWork(Invoices, caseId, customerId, SessionFacade.CurrentUser.Id, orderIdToXML);
+            var Invoices = this.invoiceHelper.ToCaseInvoices(caseInvoiceData, caseOverview, articles, SessionFacade.CurrentUser.Id, orderIdToXML); //there will only be one?
+            this.invoiceArticleService.DoInvoiceWork(Invoices, caseId, customerId, orderIdToXML);
         }
 
         #endregion

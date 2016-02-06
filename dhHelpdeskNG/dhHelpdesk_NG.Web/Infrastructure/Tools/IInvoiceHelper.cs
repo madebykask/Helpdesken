@@ -7,7 +7,7 @@
 
     public interface IInvoiceHelper
     {
-        CaseInvoice[] ToCaseInvoices(string invoices, CaseOverview caseOverview, InvoiceArticle[] articles);
+        CaseInvoice[] ToCaseInvoices(string invoices, CaseOverview caseOverview, InvoiceArticle[] articles, int curUserId, int? orderIdToXML);
 
         XmlDocument ToOutputXml(CaseInvoice[] invoices);
 

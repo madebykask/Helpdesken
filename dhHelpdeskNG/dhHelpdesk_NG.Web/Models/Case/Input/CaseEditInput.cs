@@ -27,8 +27,6 @@
 
         public bool? updateNotifierInformation { get; set; }
 
-        //public string caseInvoiceArticles { get; set; }
-
         public int? customerRegistrationSourceId { get; set; }
 
         public CaseLockModel caseLock { get; set; }

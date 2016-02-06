@@ -16,7 +16,9 @@
         public CaseInvoice[] ToCaseInvoices(
                     string invoices, 
                     CaseOverview caseOverview, 
-                    InvoiceArticle[] articles)
+                    InvoiceArticle[] articles,
+                    int curUserId,
+                    int? orderIdToXML)
         {
             if (string.IsNullOrEmpty(invoices))
             {
@@ -35,8 +37,8 @@
                                     o.Id,
                                     o.InvoiceId,
                                     o.Number,
-                                    o.InvoiceDate,
-                                    o.InvoicedByUserId,
+                                    (orderIdToXML.HasValue && o.Id == orderIdToXML.Value ? now : o.InvoiceDate),
+                                    (orderIdToXML.HasValue && o.Id == orderIdToXML.Value ? curUserId : o.InvoicedByUserId),
                                     now,
                                     o.ReportedBy,
                                     o.Persons_Name,

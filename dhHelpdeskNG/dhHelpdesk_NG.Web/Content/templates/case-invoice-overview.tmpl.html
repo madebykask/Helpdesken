@@ -1,34 +1,35 @@
 ﻿<table class="table table-bordered">
     {{for Orders}}
-    <tr class="case-invoice-orderrow">               
-         <th colspan="8"> {{:TitleCaption}} </th>                 
-    </tr>
-    <tr>
-        <th class="case-invoice-colnarrow">{{:ArtNoHeader}}</th>
-        <th class="case-invoice-colwide">{{:NameHeader}}</th>
-        <th class="case-invoice-colwide">{{:NameEngHeader}}</th>
-        <th class="case-invoice-colnarrow">{{:UnitsHeader}}</th>
-        <th class="case-invoice-colnarrow">{{:TypeHeader}}</th>
-        <th class="case-invoice-colnarrow">{{:PpuHeader}} SEK</th>
-        <th style="text-align: right;" class="case-invoice-colnarrow">{{:TotalHeader}}</th>
-        <th class="case-invoice-colextranarrow"></th>
-    </tr>
-    {{for Articles tmpl="caseInvoiceArticleOverview" /}}
-    {{if IsInvoiced}}
-    <tr>
-        <td colspan="8">{{:Persons_Name}} - {{:CostCentre}}</td>
-    </tr>
-    {{/if}}
-    <tr>
+        <tr class="case-invoice-orderrow">               
+             {{if IsInvoiced}}
+                <th colspan="8"><i class='icon-ok icon-green'></i> {{:TitleCaption}} </th>
+             {{else}}        
+                <th colspan="8"> {{:TitleCaption}} </th> 
+             {{/if}}                             
+        </tr>
+        <tr>            
+            <th class="case-invoice-colnarrow">{{:ArtNoHeader}}</th>
+            <th class="case-invoice-colwide">{{:NameHeader}}</th>
+            <th class="case-invoice-colwide">{{:NameEngHeader}}</th>
+            <th class="case-invoice-colnarrow">{{:UnitsHeader}}</th>
+            <th class="case-invoice-colnarrow">{{:TypeHeader}}</th>
+            <th class="case-invoice-colwide">{{:PpuHeader}} SEK</th>
+            <th style="text-align: right;" class="case-invoice-colwide" colspan="2">{{:TotalHeader}}</th>                                
+        </tr>
+        {{for Articles tmpl="caseInvoiceArticleOverview" /}}
         {{if IsInvoiced}}
-        <td colspan="5" style='text-align: left;'><span class='textbold'>{{:InvoicedByTitle}}: {{:InvoicedByUser}} - {{:InvoiceDate}}</span>  {{:InvoiceTime}}</td>
-        <td colspan="2" class='textbold' style='text-align: right;'>{{:TotalLabel}}: {{:Total}}</td>
-        <td colspan="1"></td>
-        {{else}}        
-        <td colspan="7" class='textbold' style='text-align: right;'>{{:TotalLabel}}: {{:Total}}</td>
-        <td colspan="1"></td>
+            <tr>
+                <td colspan="8">{{:Persons_Name}} - {{:CostCentre}}</td>
+            </tr>
         {{/if}}
-    </tr>
+        <tr>
+            {{if IsInvoiced}}
+                <td colspan="6" style='text-align: left;'><span class='textbold'>{{:InvoicedByTitle}}: {{:InvoicedByUser}} - {{:InvoiceDate}}</span>  {{:InvoiceTime}}</td>
+                <td colspan="2" class='textbold' style='text-align: right;'>{{:TotalLabel}}: {{:Total}}</td>                
+            {{else}}        
+                <td colspan="8" class='textbold' style='text-align: right;'>{{:TotalLabel}}: {{:Total}}</td>        
+            {{/if}}
+        </tr>
     {{/for}}
 </table>
 <div class='textbold' style='text-align: right;'>
