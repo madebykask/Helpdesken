@@ -1,9 +1,11 @@
-﻿using System;
+﻿using DH.Helpdesk.Common.Types;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
+using System.Xml;
 
 namespace DH.Helpdesk.BusinessData.Models.Invoice.Xml
 {
@@ -289,6 +291,8 @@ namespace DH.Helpdesk.BusinessData.Models.Invoice.Xml
         }
     }
 
+    
+
     public static class Mappers
     {
         public static KeyValuePair<bool,string> ConvertToXML(this SalesDoc it)
@@ -296,19 +300,21 @@ namespace DH.Helpdesk.BusinessData.Models.Invoice.Xml
             var ret = new KeyValuePair<bool, string>(false, "");
 
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(SalesDoc));
+            XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces();
+            namespaces.Add(string.Empty, string.Empty);
             try
             {
-                using (StringWriter textWriter = new StringWriter())
-                {
-                    xmlSerializer.Serialize(textWriter, it);                    
-                    ret = new KeyValuePair<bool, string>(true, textWriter.ToString());                 
+                using (StringWriter textWriter = new Utf16StringWriter())
+                {                    
+                    xmlSerializer.Serialize(textWriter, it, namespaces);
+                    ret = new KeyValuePair<bool, string>(true, textWriter.ToString());
                 }
             }
             catch (Exception ex)
             {
-                ret = new KeyValuePair<bool, string>(false, ex.Message);                
+                ret = new KeyValuePair<bool, string>(false, ex.Message);
             }
-
+                     
             return ret;            
         }        
     }
