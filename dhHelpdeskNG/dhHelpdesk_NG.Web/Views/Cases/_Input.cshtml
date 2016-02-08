@@ -668,7 +668,7 @@
                                                                         }
                                                                         else
                                                                         {
-                                                                            foreach (var e in Model.departments.Where(e => e.IsActive == 1 ))
+                                                                            foreach (var e in Model.departments.Where(e => e.IsActive == 1))
                                                                             {                                                                        
                                                                                 <option value="@e.Id" @e.Id.IdIsSelected(selected_Department)>@e.DepartmentDescription(Model.DepartmentFilterFormat)</option>
                                                                             }
@@ -695,7 +695,7 @@
                                                             {
                                                                 <select id="case__IsAbout_Ou_Id" name="case_.IsAbout.OU_Id" data-field="ou">
                                                                     <option value="">&nbsp;</option>
-                                                                    @if (Model.isaboutous!= null)
+                                                                    @if (Model.isaboutous != null)
                                                                     {
                                                                         var selected_OU = string.Empty;
                                                                         if (Model.case_.IsAbout != null && Model.case_.IsAbout.OU_Id.HasValue)
@@ -1656,9 +1656,11 @@
                                             }
                                             else
                                             {
-                                                @Html.TextBoxFor(m => m.finishingCauses.SingleOrDefault(x => x.Id == Model.case_.CausingPartId).Name, new { @readonly = true })
+                                                @Html.TextBoxFor(m => m.causingParts.SingleOrDefault(x => x.Id == Model.case_.CausingPartId).Name, new { @readonly = true })
                                                 @Html.HiddenFor(x => x.case_.CausingPartId)
                                             }
+
+
                                         </td>
                                     </tr>
                                     @if (Model.changes != null)

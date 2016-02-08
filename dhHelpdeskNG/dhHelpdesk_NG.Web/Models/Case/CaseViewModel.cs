@@ -25,6 +25,8 @@
     using DH.Helpdesk.BusinessData.Models.MailTemplates;
     
     using ParentCaseInfo = DH.Helpdesk.Web.Models.Case.ChildCase.ParentCaseInfo;
+    using DH.Helpdesk.Domain.Cases;
+    using DH.Helpdesk.BusinessData.Models.Case.Output;
 
     public class CaseInputViewModel
     {
@@ -93,6 +95,7 @@
         public IList<Supplier> suppliers { get; set; }
         public IList<Helpdesk.Domain.System> systems { get; set; }
         public IList<Urgency> urgencies { get; set; }
+        public IEnumerable<CausingPartOverview> causingParts { get; set; }
         
         /// <summary>
         /// user id for "Administrator" field

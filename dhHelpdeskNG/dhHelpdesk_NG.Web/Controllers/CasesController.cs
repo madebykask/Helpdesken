@@ -107,7 +107,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ILanguageService _languageService;
         private readonly IGlobalSettingService _globalSettingService;
         private readonly IMailTemplateService _mailTemplateService;
-        
+        private readonly ICausingPartService _causingPartService;
         
         
 
@@ -214,7 +214,8 @@ namespace DH.Helpdesk.Web.Controllers
             ICaseLockService caseLockService,
             IMailTemplateService mailTemplateService,
             IWatchDateCalendarService watchDateCalendarServcie,
-            ICaseInvoiceSettingsService CaseInvoiceSettingsService)
+            ICaseInvoiceSettingsService CaseInvoiceSettingsService,
+            ICausingPartService causingPartService)
             : base(masterDataService)
         {
             this._masterDataService = masterDataService;
@@ -278,6 +279,7 @@ namespace DH.Helpdesk.Web.Controllers
             this._defaultMaxRows = 10;
             this._defaultCaseLockBufferTime = 30; // Second
             this._defaultExtendCaseLockTime = 60; // Second
+            this._causingPartService = causingPartService;
         }
 
         #endregion
@@ -3757,6 +3759,11 @@ namespace DH.Helpdesk.Web.Controllers
             if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()).ShowOnStartPage == 1)
             {
                 m.urgencies = this._urgencyService.GetUrgencies(customerId);
+            }
+
+            if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CausingPart.ToString()).ShowOnStartPage == 1)
+            {
+                m.causingParts = this._causingPartService.GetCausingParts(customerId);
             }
 
             // "Workging group" field
