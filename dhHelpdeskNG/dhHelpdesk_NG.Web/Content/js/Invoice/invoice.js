@@ -25,7 +25,7 @@ $(function () {
 
     var saveInvoiceIndicator = '.loading-msg.save-invoice';
 
-    var invoiceButtonIndicator = $("#invoiceButtonIndicator");
+    var invoiceButtonIndicator = $("#invoiceButtonIndicator"); 
 
     dhHelpdesk.System = {
         RaiseEvent: function (eventType, extraParameters) {
@@ -185,6 +185,8 @@ $(function () {
     }
 
     dhHelpdesk.CaseArticles = {
+        MaxDescriptionCount: 50,
+
         DefaultAmount: 1,        
 
         DefaultPpu: 0,
@@ -669,6 +671,12 @@ $(function () {
                 }                
                 article.Update();
             }
+        },
+        
+        UpdateCharacterCount: function (objectId) {
+            var len = $("#Description_" + objectId).val().length;
+            var newLen = dhHelpdesk.Common.Translate("Tecken kvar") + ": " + (this.MaxDescriptionCount - len).toString();
+            $("#DescriptionCount_" + objectId).text(newLen);
         },
 
         ValidateAmount: function (curOrder_Id, curArticle_Id, excludeArticleId, newAmount) {           
@@ -2576,6 +2584,7 @@ $(function () {
                 model.IsArticlePpuExists = this.IsArticlePpuExists();
                 model.IsCredited = this.Order.CreditForOrder_Id != null;
                 model.IsInvoiced = this.Order.IsInvoiced;
+                model.DescriptionCount = dhHelpdesk.Common.Translate("Tecken kvar") + ": " + (dhHelpdesk.CaseArticles.MaxDescriptionCount - model.Name.length);
                 return model;
             };
 
@@ -2886,6 +2895,7 @@ $(function () {
             this.IsArticlePpuExists = null;
             this.IsCredited = false;
             this.IsInvoiced = false;
+            this.DescriptionCount = '';
         },
         
         OrderActionsViewModel: function (spec) {

@@ -6,7 +6,12 @@
     {{else}}
         <tr data-id='{{:Id}}' title='{{:Description}}'>
             <td colspan='7'>
-                <input id="Description_{{:Id}}" onchange='dhHelpdesk.CaseArticles.UpdateArticle($(this).parent().parent())' type='text' class='width80 article-name' maxlength='50' value='{{:Name}}' />
+                <input id="Description_{{:Id}}" 
+                        onkeypress="dhHelpdesk.CaseArticles.UpdateCharacterCount({{:Id}})"                        
+                        onkeyup="dhHelpdesk.CaseArticles.UpdateCharacterCount({{:Id}})"
+                        onchange='dhHelpdesk.CaseArticles.UpdateArticle($(this).parent().parent())' 
+                        type='text' class='width80 article-name' maxlength='50' value='{{:Name}}' />
+                <span id="DescriptionCount_{{:Id}}" style="color:GrayText;font-size:smaller">{{:DescriptionCount}} </span>
             </td>
             <td style="width:5%">
                 <a href='javascript:void(0);' onclick='dhHelpdesk.CaseArticles.DeleteArticle($(this).parent().parent())' class='btn btn-small'>x</a>
