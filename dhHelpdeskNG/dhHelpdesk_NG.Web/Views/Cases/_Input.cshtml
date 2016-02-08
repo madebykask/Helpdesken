@@ -1656,11 +1656,21 @@
                                             }
                                             else
                                             {
-                                                @Html.TextBoxFor(m => m.causingParts.SingleOrDefault(x => x.Id == Model.case_.CausingPartId).Name, new { @readonly = true })
-                                                @Html.HiddenFor(x => x.case_.CausingPartId)
+                                                var causingpart = Model.case_.CausingPartId.HasValue ? Model.causingParts.SingleOrDefault(x => x.Id == Model.case_.CausingPartId) : null;
+
+                                                if (causingpart == null)
+                                                {
+                                                    @Html.TextBoxFor(m => m.case_.CausingPartId, new { @readonly = true })
+                                                }
+                                                else
+                                                {
+                                                    var transName = Translation.GetMasterDataTranslation(causingpart.Name);
+                                                     @Html.TextBoxFor(m => transName, new { @readonly = true })
+                                                     @Html.HiddenFor(x => x.case_.CausingPartId)
+                                                }
+                                                
                                             }
-
-
+                                            
                                         </td>
                                     </tr>
                                     @if (Model.changes != null)
