@@ -14,7 +14,39 @@
                         </td>
                         <td class="span9">
                             @Html.TextBoxFor(m => m.ExportPath, new { maxlength = "200" })
+                        </td>                       
+                    </tr>
+                    <tr>
+                        <td class="span3">
+                            @Translation.Get("Currency")
                         </td>
+                        <td class="span9">
+                            @Html.TextBoxFor(m => m.Currency, new { maxlength = "50" })
+                        </td>                       
+                    </tr>
+                    <tr>
+                        <td class="span3">
+                            @Translation.Get("Issuer")
+                        </td>
+                        <td class="span9">
+                            @Html.TextBoxFor(m => m.Issuer, new { maxlength = "50" })
+                        </td>                       
+                    </tr>
+                    <tr>
+                        <td class="span3">
+                            @Translation.Get("Our reference")
+                        </td>
+                        <td class="span9">
+                            @Html.TextBoxFor(m => m.OurReference, new { maxlength = "50" })
+                        </td>                       
+                    </tr>
+                    <tr>
+                        <td class="span3">
+                            @Translation.Get("Order no prefix")
+                        </td>
+                        <td class="span9">
+                            @Html.TextBoxFor(m => m.OrderNoPrefix, new { maxlength = "50" })
+                        </td>                       
                     </tr>
                 </table>
             </div>

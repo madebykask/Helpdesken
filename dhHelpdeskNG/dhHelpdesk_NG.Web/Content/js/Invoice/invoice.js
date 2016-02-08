@@ -34,28 +34,7 @@ $(function () {
 
         OnEvent: function (event, handler) {
             $(document).on(event, handler);
-        },
-
-        PopulateSelectBoxesFromSelect: function (ClassSelector, IdSelectorForData) {
-            var Selectors = $('.' + ClassSelector);
-            var ValList = [];
-            var TextList = [];
-            $('#' + IdSelectorForData + ' option').each(function () {
-                ValList.push($(this).val());
-                TextList.push($(this).text());
-            });
-            $.each(Selectors, function (i, selector) {
-                var thisSelector = $(selector);
-                thisSelector.empty();
-                var OptionsListToAppend = "";
-                $.each(ValList, function (i, item) {
-                    OptionsListToAppend = OptionsListToAppend + '<option value="' + item + '">' + TextList[i] + '</option>';
-                });
-                thisSelector.append(OptionsListToAppend);
-                var IdInDB = thisSelector.parent().find('input:hidden').val();
-                thisSelector.val(IdInDB);
-            });
-        },
+        }        
     }
 
     dhHelpdesk.Math = {
@@ -346,13 +325,13 @@ $(function () {
         },
 
         FillRegions: function (OrderId) {
-            dhHelpdesk.System.PopulateSelectBoxesFromSelect('RegionSelect', 'case__Region_Id');
-        },
+            this.PopulateSelectBoxesFromSelect('RegionSelect', 'case__Region_Id');
+        },        
 
         FillDepartments: function (OrderId) {
             var DepartmentFilterFormat = 0; 
             var RegionId = $('#RegionSelect-Order' + OrderId).parent().find('input:hidden').val()
-            var CustomerId = $('#case__Customer_Id').val();
+            var CustomerId = $('#case__Customer_Id').val();            
             $.post(changeRegionUrl, { 'id': RegionId, 'customerId': CustomerId, 'departmentFilterFormat': DepartmentFilterFormat }, function (data) {
                 if (data != undefined) {
                     var selector = '#DepartmentSelect-Order' + OrderId;
@@ -369,9 +348,30 @@ $(function () {
                     }
                 }
             }, 'json').always(function () {
-                $('#DepartmentId_' + OrderId).val($('#DepartmentSelect-Order' + OrderId).val());
+                $('#DepartmentId_' + OrderId).val($('#DepartmentSelect-Order' + OrderId).val());                                
                 dhHelpdesk.CaseArticles.FillOUs(OrderId);
             });            
+        },
+
+        PopulateSelectBoxesFromSelect: function (ClassSelector, IdSelectorForData) {
+            var Selectors = $('.' + ClassSelector);
+            var ValList = [];
+            var TextList = [];
+            $('#' + IdSelectorForData + ' option').each(function () {
+                ValList.push($(this).val());
+                TextList.push($(this).text());
+            });
+            $.each(Selectors, function (i, selector) {
+                var thisSelector = $(selector);
+                thisSelector.empty();
+                var OptionsListToAppend = "";
+                $.each(ValList, function (i, item) {
+                    OptionsListToAppend = OptionsListToAppend + '<option value="' + item + '">' + TextList[i] + '</option>';
+                });
+                thisSelector.append(OptionsListToAppend);
+                var IdInDB = thisSelector.parent().find('input:hidden').val();
+                thisSelector.val(IdInDB);
+            });
         },
 
         FillOUs: function (OrderId) {
@@ -2272,6 +2272,7 @@ $(function () {
                         $(this).parent().find('input:hidden').val($(this).val());
                         th.Department_Id = $(this).val();
                         var OrderId = $(this).data("orderid");
+                        $('#CostCentre_' + OrderId).val('');
                         dhHelpdesk.CaseArticles.FillOUs(OrderId);
                     }
                     else {
@@ -2309,14 +2310,14 @@ $(function () {
                 costcentre.blur(function () {
                     var curOrd = dhHelpdesk.CaseArticles.GetCurrentOrder();
                     if (!curOrd.IsOrderInvoiced()) {
-                        th.CostCentre = $(this).val();
+                        th.CostCentre = $(this).val();                        
                     }
                     else {
                         dhHelpdesk.CaseArticles.ShowAlreadyInvoicedMessage();                        
                         $(this).val(curOrd.CostCentre);
                     }
                 });
-
+              
                 var usercode = this.Container.find(publicClassName + ".usercode");
                 usercode.blur(function () {
                     var curOrd = dhHelpdesk.CaseArticles.GetCurrentOrder();
@@ -2358,7 +2359,7 @@ $(function () {
             this.InvoiceValidate = function () {
                 var isValid = true;
                 if (dhHelpdesk.Common.IsNullOrEmpty(this.CostCentre)) {
-                    dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.Translate("Kostnadställe saknas."));
+                    dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.Translate("Kostnadställe saknas.") + " " + this.Caption);
                     isValid = false;
                 }
                 return isValid;
