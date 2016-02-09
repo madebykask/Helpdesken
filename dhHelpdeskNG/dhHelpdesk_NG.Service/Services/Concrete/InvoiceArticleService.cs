@@ -181,12 +181,7 @@
             if (string.IsNullOrEmpty(caseInvoiceSettings.Currency))
             {
                 return new DataValidationResult(false, "Currency");
-            }
-
-            if (string.IsNullOrEmpty(caseInvoiceSettings.OrderNoPrefix))
-            {
-                return new DataValidationResult(false, "OrderNoPrefix");
-            }
+            }            
 
             if (string.IsNullOrEmpty(caseInvoiceSettings.Issuer))
             {
@@ -198,11 +193,17 @@
                 return new DataValidationResult(false, "OurReference");
             }
 
-            return new DataValidationResult();
-        }       
+            if (string.IsNullOrEmpty(caseInvoiceSettings.DocTemplate))
+            {
+                return new DataValidationResult(false, "DocTemplate");
+            }
 
-        public void DoInvoiceWork(CaseInvoice[] caseInvoiceData, int caseId, int customerId, int? orderIdToXML )
+            return new DataValidationResult();
+        }
+
+        public ProcessResult DoInvoiceWork(CaseInvoice[] caseInvoiceData, int caseId, decimal caseNumber, int customerId, int? orderIdToXML)
         {            
+
             this.SaveCaseInvoices(caseInvoiceData, caseId);
             
             if (orderIdToXML.HasValue)
@@ -212,85 +213,135 @@
                 {
                     var caseInvoiceSettings = this.caseInvoiceSettingsService.GetSettings(customerId);
                     if (caseInvoiceSettings == null)
+                        return new ProcessResult(System.Reflection.MethodBase.GetCurrentMethod().Name, 
+                                                 ProcessResult.ResultTypeEnum.ERROR, "There is no invoice settings for Customer");
+                    
+                    var res = ExportOrder(orderToExport, caseInvoiceSettings, caseId, caseNumber);
+                    if (!res.IsSuccess)
                     {
-                        throw new Exception("No invoice settings for Customer");
+                        this.caseInvoiceArticleRepository.CancelInvoiced(caseId, orderIdToXML.Value);
+                        return new ProcessResult(res.ProcessName, ProcessResult.ResultTypeEnum.WARNING, res.LastMessage);
                     }
-                    ExportOrder(orderToExport, caseInvoiceSettings, caseId);
                 }                
-            }                       
+            }
+
+            return new ProcessResult(System.Reflection.MethodBase.GetCurrentMethod().Name);
+           
         }
         
-        private void ExportOrder(CaseInvoiceOrder order, CaseInvoiceSettings caseInvoiceSettings, int caseId)
-        {
-            var salesDoc = MapToSalesDoc(order, caseInvoiceSettings, caseId);           
-            var xmlData = salesDoc.ConvertToXML();
-            if (xmlData.Key)
-            {                
-                if (!Directory.Exists(caseInvoiceSettings.ExportPath))
-                    Directory.CreateDirectory(caseInvoiceSettings.ExportPath);
-                
-                var path = Path.Combine(caseInvoiceSettings.ExportPath, GetExportFileName());
-                TextWriter tw = new StreamWriter(path, true);
-                tw.WriteLine(xmlData.Value);
-                tw.Close();
-            }
-            else
-                throw new Exception("An error occurred while converting order to XML. " +  xmlData.Value);
+        private ProcessResult ExportOrder(CaseInvoiceOrder order, CaseInvoiceSettings caseInvoiceSettings, int caseId, decimal caseNumber)
+        {            
+            try
+            {
+                var salesDoc = MapToSalesDoc(order, caseInvoiceSettings, caseId, caseNumber);
+                var xmlData = salesDoc.ConvertToXML();
+                if (xmlData.IsSuccess)
+                {
+                    try
+                    {
+                        if (!Directory.Exists(caseInvoiceSettings.ExportPath))
+                            Directory.CreateDirectory(caseInvoiceSettings.ExportPath);
 
+                        var path = Path.Combine(caseInvoiceSettings.ExportPath, GetExportFileName());
+                        TextWriter tw = new StreamWriter(path, true);
+                        tw.WriteLine(xmlData.Data.ToString());
+                        tw.Close();
+                        return new ProcessResult(xmlData.ProcessName);
+                    }
+                    catch (Exception ex1)
+                    {
+                        return new ProcessResult(xmlData.ProcessName, ProcessResult.ResultTypeEnum.ERROR, "An error occurred while save XML file. <br/>" + ex1.Message);
+                    }
+                }
+                else
+                    return new ProcessResult(xmlData.ProcessName, ProcessResult.ResultTypeEnum.ERROR, "An error occurred while converting order to XML.<br/>" + xmlData.LastMessage);
+            }
+            catch (Exception ex)
+            {
+                return new ProcessResult(System.Reflection.MethodBase.GetCurrentMethod().Name, ProcessResult.ResultTypeEnum.ERROR, ex.Message);
+            }            
         }
 
-        private SalesDoc MapToSalesDoc(CaseInvoiceOrder order, CaseInvoiceSettings settings, int caseId)
-        {
+        private SalesDoc MapToSalesDoc(CaseInvoiceOrder order, CaseInvoiceSettings settings, int caseId, decimal caseNumber)
+        {            
             var salesDoc = new SalesDoc();
 
-            // Header
-            var salesHeader = new SalesDocSalesHeader();            
-            salesHeader.DocType = order.CreditForOrder_Id.HasValue ? "Credit" : "Order";
+            #region Invoice data
+
+            var salesHeader = new SalesDocSalesHeader();
+            salesHeader.CompanyNo = settings.Issuer;
+            salesHeader.DocTemplate = settings.DocTemplate;
+            salesHeader.DocType = order.CreditForOrder_Id.HasValue ? InvoiceXMLDocType.Credit : InvoiceXMLDocType.Order;
             salesHeader.SellToCustomerNo = settings.Issuer;
-            salesHeader.OrderDate = order.InvoiceDate.HasValue? order.InvoiceDate.Value.ToShortDateString() : string.Empty;
-            salesHeader.OurReferenceName = settings.OurReference;
-            salesHeader.YourReferenceName = YourReferenceRow(order.CostCentre, order.Persons_Name);
-            salesHeader.OrderNo = OrderNoRow(settings.OrderNoPrefix, order.CaseNumber.ToString(), order.Number);
+            salesHeader.Date = order.InvoiceDate.HasValue ? order.InvoiceDate.Value.ToShortDateString() : string.Empty;
+            salesHeader.DueDate = order.InvoiceDate.HasValue ? order.InvoiceDate.Value.ToShortDateString() : string.Empty;
+            salesHeader.OurReference2 = settings.OurReference;
+            salesHeader.YourReference2 = YourReferenceRow(order.CostCentre, order.Persons_Name);
+            salesHeader.OrderNo = OrderNoRow(settings.OrderNoPrefix, order.Number, caseNumber.ToString());
             salesHeader.CurrencyCode = settings.Currency;
 
-            // Articles
-            var salesLines = new List<SalesDocSalesLine>();
+            #endregion
+
+            #region Article and Lines
+
+            var salesLines = new List<SalesDocSalesHeaderSalesLine>();
+            int lineNo = 0;
             foreach (var article in order.Articles)
             {
                 if (article.ArticleId.HasValue)
-                    salesLines.Add(new SalesDocSalesLine() 
+                {
+                    lineNo++;
+                    salesLines.Add(new SalesDocSalesHeaderSalesLine()
                     {
-                        ItemNo = article.Article != null? article.Article.Number : string.Empty,
-                        Description = string.Empty,
-                        Quantity = article.Amount.HasValue? article.Amount.ToString() : string.Empty,
-                        UnitOfMeasureCode = (article.Article != null && article.Article.Unit != null? article.Article.Unit.Name: string.Empty),
+                        LineNo = lineNo.ToString(),
+                        LineType = InvoiceXMLLineType.Article,
+                        Number = article.Article != null ? article.Article.Number : string.Empty,
+                        Description = null,
+                        Quantity = article.Amount.HasValue ? article.Amount.ToString() : string.Empty,
+                        UnitOfMeasureCode = (article.Article != null && article.Article.Unit != null ? article.Article.Unit.Name : string.Empty),
                         UnitPrice = article.Ppu.HasValue ? article.Ppu.Value.ToString() : string.Empty
                     });
+                }
                 else
-                    salesLines.Add(new SalesDocSalesLine()
+                {
+                    salesLines.Add(new SalesDocSalesHeaderSalesLine()
                     {
-                        ItemNo= string.Empty,
-                        Description = article.Name,                                    
+                        LineNo = string.Empty,
+                        LineType = InvoiceXMLLineType.Description,
+                        Number = string.Empty,
+                        Description = article.Name,
                         Quantity = string.Empty,
                         UnitOfMeasureCode = string.Empty,
                         UnitPrice = string.Empty
                     });
+                }
             }
 
-            // Attachments
-            var salesAttachments = new List<SalesDocAttachment>();
+            salesHeader.SalesLine = salesLines.ToArray();
+
+            #endregion
+
+            #region Attachment
+
+            var salesAttachments = new List<SalesDocSalesHeaderAttachment>();
+            byte attachmentNo = 0;
             foreach (var file in order.Files)
             {
-                salesAttachments.Add(new SalesDocAttachment()
+                attachmentNo++;
+                salesAttachments.Add(new SalesDocSalesHeaderAttachment()
                 {
-                    FileName = file.FileName,
-                    EncodedFile = CaseInvoiceOrderFileToBase64Encode(file, caseId, settings.CustomerId)
+                    AttachmentEntryNo = attachmentNo,
+                    Filename = Path.GetFileNameWithoutExtension(file.FileName),
+                    Extension = Path.GetExtension(file.FileName).Replace(".", string.Empty),
+                    Attachment = CaseInvoiceOrderFileToBase64Encode(file, caseId, settings.CustomerId)
                 });
             }
-            
+            salesHeader.Attachment = salesAttachments.ToArray();
+
+            #endregion
+
             salesDoc.SalesHeader = salesHeader;
-            salesDoc.SalesLine = salesLines.ToArray();
-            salesDoc.Attachments = salesAttachments.ToArray();
+
             return salesDoc;
         }
        
@@ -307,9 +358,9 @@
             return reference;
         }
 
-        private string OrderNoRow(string prefix, string caseNumber, int orderNumber)
+        private string OrderNoRow(string prefix, int orderNumber, string caseNumber)
         {
-            return string.Format("{0}{1}-{2}", prefix, caseNumber, orderNumber.ToString());
+            return string.Format("{0}{1}-{2}", prefix, orderNumber.ToString(), caseNumber);
         }
 
         private string OrderXMLHeader()

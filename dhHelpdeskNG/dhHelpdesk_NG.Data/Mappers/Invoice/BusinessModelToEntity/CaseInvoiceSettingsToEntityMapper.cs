@@ -13,6 +13,7 @@
             entity.OrderNoPrefix = businessModel.OrderNoPrefix;
             entity.Issuer = businessModel.Issuer;
             entity.OurReference = businessModel.OurReference;
+            entity.DocTemplate = businessModel.DocTemplate;
         }
     }
 }

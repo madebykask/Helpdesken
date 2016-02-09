@@ -83,7 +83,6 @@
                                                     a.Position)).ToArray():null,
                                  o.Articles != null ?
                                     o.Files.Select(f => this.filesMapper.Map(f)).OrderBy(f => f.FileName).ToArray() : null
-                                    
                                  ))
                                 .OrderBy(o => o.Number).ToArray());
         }

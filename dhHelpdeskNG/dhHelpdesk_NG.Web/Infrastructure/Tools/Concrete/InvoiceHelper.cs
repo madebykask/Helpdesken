@@ -71,20 +71,7 @@
                     order.CaseNumber = caseOverview.CaseNumber;
                 }                
             }
-
-            //foreach (var order in invoice.Orders)
-            //{
-            //    if (order.InvoicedByUserId != null)
-            //    {
-            //        if (order.InvoicedByUserId != 0)
-            //        {
-            //            foreach (var article in order.Articles)
-            //            {
-            //                article.DoInvoice();
-            //            }
-            //        }
-            //    }
-            //}
+         
             return new[] { invoice };
         }
 

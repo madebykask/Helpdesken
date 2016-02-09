@@ -24,7 +24,7 @@
 
         void DeleteCaseInvoices(int caseId);
 
-        void DoInvoiceWork(CaseInvoice[] caseInvoiceData, int caseId, int customerId, int? orderIdToXML);
+        ProcessResult DoInvoiceWork(CaseInvoice[] caseInvoiceData, int caseId, decimal caseNumber, int customerId, int? orderIdToXML);
 
         int SaveArticle(InvoiceArticle article);
 

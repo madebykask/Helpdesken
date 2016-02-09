@@ -43,6 +43,7 @@
 
         public virtual ICollection<CaseInvoiceArticleEntity> Articles { get; set; } 
 
-        public virtual ICollection<CaseInvoiceOrderFileEntity> Files { get; set; } 
+        public virtual ICollection<CaseInvoiceOrderFileEntity> Files { get; set; }
+        
     }
 }

@@ -6,9 +6,22 @@ using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 using System.Xml;
+using DH.Helpdesk.BusinessData.Models.Shared;
 
 namespace DH.Helpdesk.BusinessData.Models.Invoice.Xml
 {
+    public class InvoiceXMLDocType
+    {
+        public static string Order = "Order";
+        public static string Credit = "Credit";
+    }
+
+    public class InvoiceXMLLineType
+    {
+        public static string Article = "Item";
+        public static string Description = "Text";
+    }
+
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
     [System.Xml.Serialization.XmlRootAttribute(Namespace = "", IsNullable = false)]
@@ -16,10 +29,6 @@ namespace DH.Helpdesk.BusinessData.Models.Invoice.Xml
     {
 
         private SalesDocSalesHeader salesHeaderField;
-
-        private SalesDocSalesLine[] salesLineField;
-
-        private SalesDocAttachment[] attachmentsField;
 
         /// <remarks/>
         public SalesDocSalesHeader SalesHeader
@@ -33,34 +42,6 @@ namespace DH.Helpdesk.BusinessData.Models.Invoice.Xml
                 this.salesHeaderField = value;
             }
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("SalesLine")]
-        public SalesDocSalesLine[] SalesLine
-        {
-            get
-            {
-                return this.salesLineField;
-            }
-            set
-            {
-                this.salesLineField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlArrayItemAttribute("Attachment", IsNullable = false)]
-        public SalesDocAttachment[] Attachments
-        {
-            get
-            {
-                return this.attachmentsField;
-            }
-            set
-            {
-                this.attachmentsField = value;
-            }
-        }
     }
 
     /// <remarks/>
@@ -68,19 +49,57 @@ namespace DH.Helpdesk.BusinessData.Models.Invoice.Xml
     public partial class SalesDocSalesHeader
     {
 
+        private string companyNoField;
+
+        private string docTemplateField;
+
         private string docTypeField;
 
         private string sellToCustomerNoField;
 
-        private string orderDateField;
+        private string dateField;
 
-        private string ourReferenceNameField;
+        private string dueDateField;
 
-        private string yourReferenceNameField;
+        private string ourReference2Field;
+
+        private string yourReference2Field;
 
         private string orderNoField;
 
         private string currencyCodeField;
+
+        private string jobNoField;
+
+        private SalesDocSalesHeaderSalesLine[] salesLineField;
+
+        private SalesDocSalesHeaderAttachment[] attachmentField;
+
+        /// <remarks/>
+        public string CompanyNo
+        {
+            get
+            {
+                return this.companyNoField;
+            }
+            set
+            {
+                this.companyNoField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string DocTemplate
+        {
+            get
+            {
+                return this.docTemplateField;
+            }
+            set
+            {
+                this.docTemplateField = value;
+            }
+        }
 
         /// <remarks/>
         public string DocType
@@ -109,41 +128,54 @@ namespace DH.Helpdesk.BusinessData.Models.Invoice.Xml
         }
 
         /// <remarks/>
-        public string OrderDate
+        public string Date
         {
             get
             {
-                return this.orderDateField;
+                return this.dateField;
             }
             set
             {
-                this.orderDateField = value;
+                this.dateField = value;
             }
         }
 
         /// <remarks/>
-        public string OurReferenceName
+        public string DueDate
         {
             get
             {
-                return this.ourReferenceNameField;
+                return this.dueDateField;
             }
             set
             {
-                this.ourReferenceNameField = value;
+                this.dueDateField = value;
             }
         }
 
         /// <remarks/>
-        public string YourReferenceName
+        public string OurReference2
         {
             get
             {
-                return this.yourReferenceNameField;
+                return this.ourReference2Field;
             }
             set
             {
-                this.yourReferenceNameField = value;
+                this.ourReference2Field = value;
+            }
+        }
+
+        /// <remarks/>
+        public string YourReference2
+        {
+            get
+            {
+                return this.yourReference2Field;
+            }
+            set
+            {
+                this.yourReference2Field = value;
             }
         }
 
@@ -172,14 +204,59 @@ namespace DH.Helpdesk.BusinessData.Models.Invoice.Xml
                 this.currencyCodeField = value;
             }
         }
+
+        /// <remarks/>
+        public string JobNo
+        {
+            get
+            {
+                return this.jobNoField;
+            }
+            set
+            {
+                this.jobNoField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("SalesLine")]
+        public SalesDocSalesHeaderSalesLine[] SalesLine
+        {
+            get
+            {
+                return this.salesLineField;
+            }
+            set
+            {
+                this.salesLineField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("Attachment")]
+        public SalesDocSalesHeaderAttachment[] Attachment
+        {
+            get
+            {
+                return this.attachmentField;
+            }
+            set
+            {
+                this.attachmentField = value;
+            }
+        }
     }
 
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    public partial class SalesDocSalesLine
+    public partial class SalesDocSalesHeaderSalesLine
     {
 
-        private string itemNoField;
+        private string lineNoField;
+
+        private string lineTypeField;
+
+        private string numberField;
 
         private string descriptionField;
 
@@ -190,15 +267,41 @@ namespace DH.Helpdesk.BusinessData.Models.Invoice.Xml
         private string unitPriceField;
 
         /// <remarks/>
-        public string ItemNo
+        public string LineNo
         {
             get
             {
-                return this.itemNoField;
+                return this.lineNoField;
             }
             set
             {
-                this.itemNoField = value;
+                this.lineNoField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string LineType
+        {
+            get
+            {
+                return this.lineTypeField;
+            }
+            set
+            {
+                this.lineTypeField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string Number
+        {
+            get
+            {
+                return this.numberField;
+            }
+            set
+            {
+                this.numberField = value;
             }
         }
 
@@ -257,65 +360,87 @@ namespace DH.Helpdesk.BusinessData.Models.Invoice.Xml
 
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    public partial class SalesDocAttachment
+    public partial class SalesDocSalesHeaderAttachment
     {
 
-        private string fileNameField;
+        private byte attachmentEntryNoField;
 
-        private string encodedFileField;
+        private string filenameField;
+
+        private string extensionField;
+
+        private string attachmentField;
 
         /// <remarks/>
-        public string FileName
+        public byte AttachmentEntryNo
         {
             get
             {
-                return this.fileNameField;
+                return this.attachmentEntryNoField;
             }
             set
             {
-                this.fileNameField = value;
+                this.attachmentEntryNoField = value;
             }
         }
 
         /// <remarks/>
-        public string EncodedFile
+        public string Filename
         {
             get
             {
-                return this.encodedFileField;
+                return this.filenameField;
             }
             set
             {
-                this.encodedFileField = value;
+                this.filenameField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string Extension
+        {
+            get
+            {
+                return this.extensionField;
+            }
+            set
+            {
+                this.extensionField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string Attachment
+        {
+            get
+            {
+                return this.attachmentField;
+            }
+            set
+            {
+                this.attachmentField = value;
             }
         }
     }
 
-    
-
     public static class Mappers
     {
-        public static KeyValuePair<bool,string> ConvertToXML(this SalesDoc it)
-        {
-            var ret = new KeyValuePair<bool, string>(false, "");
-
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(SalesDoc));
-            XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces();
-            namespaces.Add(string.Empty, string.Empty);
+        public static ProcessResult ConvertToXML(this SalesDoc it)
+        {            
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(SalesDoc));            
             try
             {
-                using (StringWriter textWriter = new Utf16StringWriter())
+                using (StringWriter textWriter = new Utf8StringWriter())
                 {                    
-                    xmlSerializer.Serialize(textWriter, it, namespaces);
-                    ret = new KeyValuePair<bool, string>(true, textWriter.ToString());
+                    xmlSerializer.Serialize(textWriter, it);
+                    return new ProcessResult(System.Reflection.MethodBase.GetCurrentMethod().Name, textWriter.ToString());
                 }
             }
             catch (Exception ex)
             {
-                ret = new KeyValuePair<bool, string>(false, ex.Message);
-            }
-                     
-            return ret;            
+                return new ProcessResult(System.Reflection.MethodBase.GetCurrentMethod().Name, ProcessResult.ResultTypeEnum.ERROR, ex.Message);
+            }                                 
         }        
     }
 

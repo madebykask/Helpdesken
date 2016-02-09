@@ -9,7 +9,7 @@
 
     public sealed class CaseInvoiceOrder
     {
-        public CaseInvoiceOrder(
+        public CaseInvoiceOrder(                
                 int id, 
                 int invoiceId,
                 CaseInvoice invoice, 
@@ -52,7 +52,7 @@
             this.UserCode = userCode;
             this.CostCentre = costCentre;
             this.CreditForOrder_Id = CreditForOrder_Id;
-            this.Files = files != null ? files : new List<CaseInvoiceOrderFile>().ToArray();
+            this.Files = files != null ? files : new List<CaseInvoiceOrderFile>().ToArray();            
         }
 
         public CaseInvoiceOrder(

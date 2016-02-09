@@ -54,6 +54,12 @@ ALTER TABLE tblCaseHistory ALTER COLUMN Persons_CellPhone nvarchar(50)
 	DROP COLUMN IsInvoiced
  END
 
+ IF COL_LENGTH('tblCaseInvoiceSettings','DocTemplate') IS NULL
+ BEGIN
+	alter table tblCaseInvoiceSettings
+	add DocTemplate nvarchar(50) null
+ end
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.20'
 

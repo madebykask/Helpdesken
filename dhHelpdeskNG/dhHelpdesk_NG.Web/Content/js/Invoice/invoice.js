@@ -127,7 +127,7 @@ $(function () {
                 position: 'top-center',
                 type: type,
                 closeText: '',
-                stayTime: 4000,
+                stayTime: 5000,
                 inEffectDuration: 1000,
                 close: function () {
                 }
@@ -447,6 +447,8 @@ $(function () {
                     if (returnedData != undefined && returnedData != null && returnedData.result == "Success") {                                                
                         $("[data-invoice]").attr("data-invoice-case-articles", returnedData.data);
                         $('#InvoiceModuleBtnOpen').remove();
+                        if (returnedData.warningMessage != undefined && !dhHelpdesk.Common.IsNullOrEmpty(returnedData.warningMessage))
+                            dhHelpdesk.Common.ShowWarningMessage(returnedData.warningMessage)
                         loadAllData(callBack, that);
                     }
                     else {                        
@@ -1276,7 +1278,7 @@ $(function () {
                        
             articlesEl.chosen({
                 width: "500px",
-                height: "100px",
+                height: "100px",                
                 placeholder_text_single: dhHelpdesk.Common.Translate("Välj artikel"),
                 'no_results_text': '?',                                
             })
@@ -1622,7 +1624,7 @@ $(function () {
                     tabs.find("li.case-invoice-order-tab:last").after(newTab);
                 }
                 this._refreshTabs();
-                dhHelpdesk.CaseArticles.FillOrganisationDataForOtherReference();
+                //dhHelpdesk.CaseArticles.FillOrganisationDataForOtherReference();
                 newTab.find("a").click();
 
                 $('.articles-params-units').focus();

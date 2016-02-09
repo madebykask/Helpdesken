@@ -13,5 +13,7 @@
         public string Issuer { get; set; }
 
         public string OurReference { get; set; }
+
+        public string DocTemplate { get; set; }
     }
 }

@@ -11,5 +11,7 @@
         CaseInvoiceOrder GetCaseInvoiceOrder(int caseId, int invoiceOrderId);
 
         void SaveCaseInvoices(IEnumerable<CaseInvoice> invoices, int caseId);
+
+        void CancelInvoiced(int caseId, int InvoiceOrderId);
     }
 }

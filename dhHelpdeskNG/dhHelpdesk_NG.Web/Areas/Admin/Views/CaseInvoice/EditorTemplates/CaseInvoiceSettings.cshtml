@@ -48,6 +48,14 @@
                             @Html.TextBoxFor(m => m.OrderNoPrefix, new { maxlength = "50" })
                         </td>                       
                     </tr>
+                    <tr>
+                        <td class="span3">
+                            @Translation.Get("Doc template")
+                        </td>
+                        <td class="span9">
+                            @Html.TextBoxFor(m => m.DocTemplate, new { maxlength = "50" })
+                        </td>                       
+                    </tr>
                 </table>
             </div>
         </div>        

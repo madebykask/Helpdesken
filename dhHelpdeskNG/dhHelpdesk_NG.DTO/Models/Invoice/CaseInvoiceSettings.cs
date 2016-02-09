@@ -9,7 +9,8 @@
                 string currency,
                 string orderNoPrefix,
                 string issuer,
-                string ourReference)
+                string ourReference,
+                string docTemplate)
         {
             this.Id = id;
             this.CustomerId = customerId;
@@ -18,6 +19,7 @@
             this.OrderNoPrefix = orderNoPrefix;
             this.Issuer = issuer;
             this.OurReference = ourReference;
+            this.DocTemplate = docTemplate;
         }
 
         public CaseInvoiceSettings(int customerId)
@@ -42,5 +44,7 @@
         public string Issuer { get; set; }
 
         public string OurReference { get; set; }
+
+        public string DocTemplate { get; set; }
     }
 }

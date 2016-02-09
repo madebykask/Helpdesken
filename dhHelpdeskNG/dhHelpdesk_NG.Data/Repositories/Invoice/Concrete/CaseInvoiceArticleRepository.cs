@@ -57,6 +57,21 @@
             return ret;
         }
 
+        public void CancelInvoiced(int caseId, int invoiceOrderId)
+        {            
+            //var invoices = this.GetCaseInvoices(caseId).FirstOrDefault();
+            //if (invoices != null && invoices.Orders != null)
+            //{
+                var orderEntity = this.DbContext.CaseInvoiceOrders.Find(invoiceOrderId);
+                if (orderEntity != null)
+                {
+                    orderEntity.InvoiceDate = null;
+                    orderEntity.InvoicedByUserId = null;                    
+                    this.Commit();
+                }                    
+            //}           
+        }
+
         public void SaveCaseInvoices(IEnumerable<CaseInvoice> invoices, int caseId)
         {
             foreach (var invoice in invoices)
