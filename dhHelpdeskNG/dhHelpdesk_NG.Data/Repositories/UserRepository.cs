@@ -33,6 +33,7 @@ namespace DH.Helpdesk.Dal.Repositories
         List<ItemWithEmail> FindUsersEmails(List<int> userIds);
 
         IEnumerable<User> GetUsers(int customerId);
+        IEnumerable<User> GetUsersByUserGroup(int customerId);
         IEnumerable<User> GetUsersForWorkingGroup(int customerId, int workingGroupId);
         IEnumerable<User> GetUsersForWorkingGroup(int workingGroupId);
         IList<CustomerWorkingGroupForUser> ListForWorkingGroupsInUser(int userId);
@@ -40,6 +41,7 @@ namespace DH.Helpdesk.Dal.Repositories
         IList<LoggedOnUsersOnIndexPage> LoggedOnUsers();
 
         IList<User> GetUsersForUserSettingList(UserSearch searchUser);
+        IList<User> GetUsersForUserSettingListByUserGroup(UserSearch searchUser);
         UserOverview Login(string uId, string pwd);
         UserOverview GetUser(int userid);
 
@@ -230,6 +232,15 @@ namespace DH.Helpdesk.Dal.Repositories
             return query;
         }
 
+        public IEnumerable<User> GetUsersByUserGroup(int customerId)
+        {
+            var query = from u in this.DataContext.Users
+                        where u.CustomerUsers.Any(c => c.Customer_Id == customerId && c.User.UserGroup_Id != 4) // u.Customer_Id == customerId &&
+                        select u;
+
+            return query;
+        }
+
         public IEnumerable<User> FindUsersByName(string name)
         {
             return this.DataContext.Users
@@ -284,7 +295,42 @@ namespace DH.Helpdesk.Dal.Repositories
             var query = from u in this.DataContext.Users
                         join cu in this.DataContext.CustomerUsers on u.Id equals cu.User_Id into cuGroup
                         from cuOJ in cuGroup.DefaultIfEmpty()
-                        where ((cuOJ != null && cuOJ.Customer_Id == searchUser.CustomerId) || u.Customer_Id == searchUser.CustomerId)
+                        where ((cuOJ != null && cuOJ.Customer_Id == searchUser.CustomerId))
+                        select u;
+
+
+            if (searchUser.StatusId == 2)
+                query = query.Where(x => x.IsActive == 0);
+            else if (searchUser.StatusId == 1)
+                query = query.Where(x => x.IsActive == 1); //&& x.Customer_Id == searchUser.CustomerId
+            else if (searchUser.StatusId == 3)
+                query = query.Where(x => x.IsActive == 1 || x.IsActive == 0);
+
+
+            if (!string.IsNullOrWhiteSpace(searchUser.SearchUs))
+            {
+                string s = searchUser.SearchUs.ToLower();
+                query = query.Where(x => x.UserID.ToLower().Contains(s)
+                    || x.ArticleNumber.ToLower().Contains(s)
+                    || x.CellPhone.ToLower().Contains(s)
+                    || x.Email.ToLower().Contains(s)
+                    || x.FirstName.ToLower().Contains(s)
+                    || x.Phone.ToLower().Contains(s)
+                    || x.SurName.ToLower().Contains(s)
+                    || x.UserGroup.Name.ToLower().Contains(s));
+            }
+
+            return query.OrderBy(x => x.SurName).ThenBy(x => x.FirstName).Distinct().ToList();
+            //return query.OrderBy(x => x.UserID).Distinct().ToList();
+        }
+
+        public IList<User> GetUsersForUserSettingListByUserGroup(UserSearch searchUser)
+        {
+
+            var query = from u in this.DataContext.Users
+                        join cu in this.DataContext.CustomerUsers on u.Id equals cu.User_Id into cuGroup
+                        from cuOJ in cuGroup.DefaultIfEmpty()
+                        where ((cuOJ != null && cuOJ.Customer_Id == searchUser.CustomerId) && cuOJ.User.UserGroup_Id != 4)
                         select u;
 
 
@@ -312,7 +358,6 @@ namespace DH.Helpdesk.Dal.Repositories
             return query.OrderBy(x => x.SurName).ThenBy(x => x.FirstName).Distinct().ToList();
             //return query.OrderBy(x => x.UserID).Distinct().ToList();
         }
-
 
         public IList<LoggedOnUsersOnIndexPage> LoggedOnUsers()
         {

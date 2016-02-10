@@ -47,6 +47,7 @@
         IList<User> GetSystemOwners(int customerId);
         IList<User> GetUsers();
         IList<User> GetUsers(int customerId);
+        IList<User> GetUsersByUserGroup(int customerId);
 
         /// <summary>
         /// Fetches active users with performer flag.
@@ -62,6 +63,7 @@
         IList<User> GetAvailablePerformersForWorkingGroup(int customerId, int? workingGroup = null);
 
         IList<User> SearchSortAndGenerateUsers(UserSearch SearchUsers);
+        IList<User> SearchSortAndGenerateUsersByUserGroup(UserSearch SearchUsers);
         IList<UserGroup> GetUserGroups();
         IList<UserRole> GetUserRoles();
         IList<UserWorkingGroup> GetUserWorkingGroups();
@@ -315,6 +317,11 @@
             return this._userRepository.GetUsers(customerId).OrderBy(x => x.SurName).ThenBy(x => x.FirstName).ToList();
         }
 
+        public IList<User> GetUsersByUserGroup(int customerId)
+        {
+            return this._userRepository.GetUsersByUserGroup(customerId).OrderBy(x => x.SurName).ThenBy(x => x.FirstName).ToList();
+        }
+
         public IList<User> GetAvailablePerformersOrUserId(int customerId, int? userId = null)
         {
             return
@@ -347,6 +354,11 @@
         public IList<User> SearchSortAndGenerateUsers(UserSearch searchUsers)
         {
             return this._userRepository.GetUsersForUserSettingList(searchUsers).OrderBy(x => x.FirstName).ToList();
+        }
+
+        public IList<User> SearchSortAndGenerateUsersByUserGroup(UserSearch searchUsers)
+        {
+            return this._userRepository.GetUsersForUserSettingListByUserGroup(searchUsers).OrderBy(x => x.FirstName).ToList();
         }
 
         public IList<UserGroup> GetUserGroups()
