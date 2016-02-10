@@ -1795,12 +1795,16 @@ namespace DH.Helpdesk.Services.Services
             h.CausingPartId = c.CausingPartId;
             h.DefaultOwnerWG_Id = c.DefaultOwnerWG_Id;
             h.RegistrationSourceCustomer_Id = c.RegistrationSourceCustomer_Id;
-            h.IsAbout_Persons_Name = c.IsAbout.Person_Name;
-            h.IsAbout_UserCode = c.IsAbout.UserCode;
-            h.IsAbout_ReportedBy = c.IsAbout.ReportedBy;
-            h.IsAbout_Persons_Phone = c.IsAbout.Person_Phone;
-            h.IsAbout_Department_Id = c.IsAbout.Department_Id;
 
+            if (c.IsAbout != null)
+            {
+                h.IsAbout_Persons_Name = c.IsAbout.Person_Name;
+                h.IsAbout_UserCode = c.IsAbout.UserCode;
+                h.IsAbout_ReportedBy = c.IsAbout.ReportedBy;
+                h.IsAbout_Persons_Phone = c.IsAbout.Person_Phone;
+                h.IsAbout_Department_Id = c.IsAbout.Department_Id;
+            }
+           
             if (extraField != null)
             {
                 h.CaseFile = extraField.CaseFile;
