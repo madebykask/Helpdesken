@@ -308,7 +308,7 @@ function GetComputerUserSearchOptions() {
             if (item.name != "" && item.name != null)
                 $('#case__PersonsName').val(item.name);
 
-            if (item.email != null)
+            if (item.email != "" && item.email != null)
                 $('#case__PersonsEmail').val(item.email);
             
             if (item.phone != null)
