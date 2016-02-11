@@ -763,11 +763,25 @@
                 errors.Add("User.Customer_Id", "Du måste ange en standardkund");
             }
 
+          
             if (user.UserWorkingGroups != null)
                 foreach (var delete in user.UserWorkingGroups.ToList())
                     user.UserWorkingGroups.Remove(delete);
             else
-                user.UserWorkingGroups = UserWorkingGroups;
+                user.UserWorkingGroups = new List<UserWorkingGroup>();
+
+            if (user != null)
+            {
+                if (UserWorkingGroups != null)
+                {
+                    foreach (var uwg in UserWorkingGroups)
+                    {
+                        if (uwg.UserRole != 0)
+                            user.UserWorkingGroups.Add(uwg);
+                    }
+                }
+            }
+
 
             if (user.OTs != null)
                 foreach (var delete in user.OTs.ToList())
