@@ -334,7 +334,7 @@ namespace DH.Helpdesk.Services.Services
                 }
 
                 return query.GetForStartPage(customers, count, forStartPage)
-                        .MapToOverviews();
+                        .MapToOverviews().OrderBy(x => x.CalendarDate).ThenBy(x => x.CustomerName);
             }
         }
     }
