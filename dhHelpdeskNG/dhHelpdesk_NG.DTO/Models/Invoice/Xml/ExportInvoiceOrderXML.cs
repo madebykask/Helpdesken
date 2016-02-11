@@ -61,15 +61,13 @@ namespace DH.Helpdesk.BusinessData.Models.Invoice.Xml
 
         private string dueDateField;
 
-        private string ourReference2Field;
+        private string ourReferenceField;
 
         private string yourReference2Field;
 
         private string orderNoField;
 
         private string currencyCodeField;
-
-        private string jobNoField;
 
         private SalesDocSalesHeaderSalesLine[] salesLineField;
 
@@ -154,15 +152,15 @@ namespace DH.Helpdesk.BusinessData.Models.Invoice.Xml
         }
 
         /// <remarks/>
-        public string OurReference2
+        public string OurReference
         {
             get
             {
-                return this.ourReference2Field;
+                return this.ourReferenceField;
             }
             set
             {
-                this.ourReference2Field = value;
+                this.ourReferenceField = value;
             }
         }
 
@@ -202,19 +200,6 @@ namespace DH.Helpdesk.BusinessData.Models.Invoice.Xml
             set
             {
                 this.currencyCodeField = value;
-            }
-        }
-
-        /// <remarks/>
-        public string JobNo
-        {
-            get
-            {
-                return this.jobNoField;
-            }
-            set
-            {
-                this.jobNoField = value;
             }
         }
 
@@ -423,6 +408,8 @@ namespace DH.Helpdesk.BusinessData.Models.Invoice.Xml
             }
         }
     }
+
+
 
     public static class Mappers
     {

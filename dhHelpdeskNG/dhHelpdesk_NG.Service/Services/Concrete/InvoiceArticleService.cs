@@ -250,7 +250,7 @@
                     }
                     catch (Exception ex1)
                     {
-                        return new ProcessResult(xmlData.ProcessName, ProcessResult.ResultTypeEnum.ERROR, "An error occurred while save XML file. <br/>" + ex1.Message);
+                        return new ProcessResult(xmlData.ProcessName, ProcessResult.ResultTypeEnum.ERROR, "An error occurred while saving XML file. <br/>" + ex1.Message);
                     }
                 }
                 else
@@ -275,7 +275,7 @@
             salesHeader.SellToCustomerNo = settings.Issuer;
             salesHeader.Date = order.InvoiceDate.HasValue ? order.InvoiceDate.Value.ToShortDateString() : string.Empty;
             salesHeader.DueDate = order.InvoiceDate.HasValue ? order.InvoiceDate.Value.ToShortDateString() : string.Empty;
-            salesHeader.OurReference2 = settings.OurReference;
+            salesHeader.OurReference = settings.OurReference;
             salesHeader.YourReference2 = YourReferenceRow(order.CostCentre, order.Persons_Name);
             salesHeader.OrderNo = OrderNoRow(settings.OrderNoPrefix, order.Number, caseNumber.ToString());
             salesHeader.CurrencyCode = settings.Currency;
@@ -288,9 +288,9 @@
             int lineNo = 0;
             foreach (var article in order.Articles)
             {
+                lineNo++;
                 if (article.ArticleId.HasValue)
-                {
-                    lineNo++;
+                {                    
                     salesLines.Add(new SalesDocSalesHeaderSalesLine()
                     {
                         LineNo = lineNo.ToString(),
@@ -306,7 +306,7 @@
                 {
                     salesLines.Add(new SalesDocSalesHeaderSalesLine()
                     {
-                        LineNo = string.Empty,
+                        LineNo = lineNo.ToString(),
                         LineType = InvoiceXMLLineType.Description,
                         Number = string.Empty,
                         Description = article.Name,
