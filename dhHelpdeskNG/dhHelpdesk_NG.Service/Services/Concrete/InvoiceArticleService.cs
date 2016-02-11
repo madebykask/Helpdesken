@@ -26,6 +26,8 @@
 
         private readonly ICaseFileService caseFileService;
 
+        private readonly IDepartmentService departmentService;
+
         private readonly IMasterDataService masterDataService;
 
         private readonly IUnitOfWorkFactory unitOfWorkFactory;
@@ -37,6 +39,7 @@
                 ICaseInvoiceSettingsService caseInvoiceSettingsService,
                 IUserService userService,
                 ICaseFileService caseFileService,
+                IDepartmentService departmentService,
                 IMasterDataService masterDataService,
                 IUnitOfWorkFactory unitOfWorkFactory)
         {
@@ -46,6 +49,7 @@
             this.caseInvoiceSettingsService = caseInvoiceSettingsService;
             this.userService = userService;
             this.caseFileService = caseFileService;
+            this.departmentService = departmentService;
             this.masterDataService = masterDataService;
             this.unitOfWorkFactory = unitOfWorkFactory;
         }
@@ -232,7 +236,7 @@
         private ProcessResult ExportOrder(CaseInvoiceOrder order, CaseInvoiceSettings caseInvoiceSettings, int caseId, decimal caseNumber)
         {            
             try
-            {
+            {                
                 var salesDoc = MapToSalesDoc(order, caseInvoiceSettings, caseId, caseNumber);
                 var xmlData = salesDoc.ConvertToXML();
                 if (xmlData.IsSuccess)
@@ -272,7 +276,7 @@
             salesHeader.CompanyNo = settings.Issuer;
             salesHeader.DocTemplate = settings.DocTemplate;
             salesHeader.DocType = order.CreditForOrder_Id.HasValue ? InvoiceXMLDocType.Credit : InvoiceXMLDocType.Order;
-            salesHeader.SellToCustomerNo = settings.Issuer;
+            salesHeader.SellToCustomerNo = GetSellToCustomerNo(order.Department_Id);
             salesHeader.Date = order.InvoiceDate.HasValue ? order.InvoiceDate.Value.ToShortDateString() : string.Empty;
             salesHeader.DueDate = order.InvoiceDate.HasValue ? order.InvoiceDate.Value.ToShortDateString() : string.Empty;
             salesHeader.OurReference = settings.OurReference;
@@ -382,6 +386,17 @@
             var encodedString = Convert.ToBase64String(fileContent);
             return encodedString;
         }
-              
+
+        private string GetSellToCustomerNo(int? departmentId)
+        {
+            var res = string.Empty;
+            if (departmentId.HasValue)
+            {
+                var dep = this.departmentService.GetDepartment(departmentId.Value);
+                if (dep != null)
+                    res = dep.DepartmentId;
+            }
+            return res;
+        }
     }
 }
