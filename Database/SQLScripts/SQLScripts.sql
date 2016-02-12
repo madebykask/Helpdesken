@@ -65,6 +65,52 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	ALTER TABLE tblProductArea ADD ShowOnExternalPage int Default(1) NOT NULL
 GO
 
+
+IF COL_LENGTH('tblInvoiceArticle','Number') IS NOT NULL
+begin
+    alter table tblinvoicearticle 
+	alter column Number Nvarchar(15) not null
+end
+ 
+IF COL_LENGTH('tblInvoiceArticle','ProductAreaId') IS NOT NULL
+begin
+	alter table tblInvoiceArticle drop column ProductAreaId
+end
+
+IF COL_LENGTH('tblInvoiceArticle','Ppu') IS NOT NULL
+begin
+	alter table tblinvoicearticle 
+	alter column Ppu decimal(18,3) null
+end
+
+
+IF COL_LENGTH('tblInvoiceArticle','NameEng') IS NULL
+ BEGIN
+	alter table tblInvoiceArticle
+	add NameEng Nvarchar(100) not null 
+ end
+
+
+ IF COL_LENGTH('tblInvoiceArticle','Description') IS NULL
+ BEGIN
+	alter table tblInvoiceArticle
+	add [Description] nvarchar(200) not null 
+ end
+
+ 
+
+  IF COL_LENGTH('tblInvoiceArticle','TextDemand') IS NULL
+ BEGIN
+	alter table tblInvoiceArticle
+	add TextDemand bit null 
+ end
+
+ IF COL_LENGTH('tblInvoiceArticle','Blocked') IS NULL
+ BEGIN
+	alter table tblInvoiceArticle
+	add Blocked bit null 
+ end
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.20'
 
