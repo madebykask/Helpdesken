@@ -181,6 +181,7 @@
         public readonly IUserRepository _userRepository;
         public readonly IUserGroupRepository _userGroupRepository;
         public readonly IUserRoleRepository _userRoleRepository;
+        public readonly IWorkingGroupRepository _workingGroupRepository;
         public readonly IUserWorkingGroupRepository _userWorkingGroupRepository;
         public readonly IDepartmentUserRepository _departmentUserRepository;
         public readonly ILogProgramRepository _logprogramRepository;
@@ -206,6 +207,7 @@
             IUserRepository userRepository,
             IUserGroupRepository userGroupRepository,
             IUserRoleRepository userRoleRepository,
+            IWorkingGroupRepository workingGroupRepository,
             IUserWorkingGroupRepository userWorkingGroupRepository,
             IDepartmentUserRepository departmentUserRepository,
             ILogProgramRepository logprogramRepository,
@@ -227,6 +229,7 @@
             this._userRepository = userRepository;
             this._userGroupRepository = userGroupRepository;
             this._userRoleRepository = userRoleRepository;
+            this._workingGroupRepository = workingGroupRepository;
             this._userWorkingGroupRepository = userWorkingGroupRepository;
             this._departmentUserRepository = departmentUserRepository;
             this._logprogramRepository = logprogramRepository;
@@ -634,7 +637,7 @@
                 {
                     var dep = this._departmentRepository.GetById(id);
 
-                    if (dep != null)
+                    if (dep != null && customersSelected.Contains(dep.Customer_Id))
                         user.Departments.Add(dep);
                 }
             }
@@ -653,7 +656,9 @@
                     {
                         // http://redmine.fastdev.se/issues/10997
                         //Filter 0 because problem in Case
-                        if (uwg.UserRole != 0)
+                        var wg = this._workingGroupRepository.GetById(uwg.WorkingGroup_Id);
+
+                        if (uwg.UserRole != 0 && wg != null && customersSelected.Contains(wg.Customer_Id))
                             user.UserWorkingGroups.Add(uwg);
 
                         //user.userWorkingGroups.Add(uwg);
