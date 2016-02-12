@@ -4268,5 +4268,11 @@ If not exists (select * from tblTextTranslation where Text_Id = 1585 and Languag
             insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1585, 'We have detected that your browser’s time zone differs from the one in your Profile. To change it go to profile settings.', 2)
 GO
 
+If not exists (select * from tblText where Id = 1586)
+            insert into tblText (Id, Textstring) VALUES (1586, 'Visa produktområde på självservice')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1586 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1586, 'Show Product Area on Self Service', 2)
+GO
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

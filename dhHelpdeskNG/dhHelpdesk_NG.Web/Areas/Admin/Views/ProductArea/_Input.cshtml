@@ -103,6 +103,17 @@
                                         <input type="hidden" name="productarea.IsActive" value="0" />
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Visa", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" name="productarea.ShowOnExternalPage" @(Model.ProductArea.ShowOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="productarea.ShowOnExternalPage" value="0" />
+                                        &nbsp;@Translation.Get("Visa produktområde på självservice", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                    </td>
+                                </tr>
                             </table>
                         </div>
                     </div>
