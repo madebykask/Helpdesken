@@ -47,6 +47,7 @@
             entity.Place = businessModel.Place;
             entity.CostCentre = businessModel.CostCentre;
             entity.UserCode = businessModel.UserCode;
+            entity.CreditForOrder_Id = businessModel.CreditForOrder_Id;
         }
     }
 }

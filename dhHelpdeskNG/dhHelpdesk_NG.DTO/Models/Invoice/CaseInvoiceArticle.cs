@@ -8,21 +8,18 @@
 
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    [Serializable]
-    [XmlRoot("SalesLine")]
-    public sealed class CaseInvoiceArticle : IXmlSerializable
+    public sealed class CaseInvoiceArticle
     {
         public CaseInvoiceArticle(
-                int id,      
+                int id,
                 int orderId,
                 CaseInvoiceOrder order,
-                int? articleId, 
+                int? articleId,
                 InvoiceArticle article,
-                string name, 
+                string name,
                 int? amount,
                 decimal? ppu,
-                short position,
-                bool isInvoiced)
+                short position)
         {
             this.OrderId = orderId;
             this.Order = order;
@@ -31,13 +28,12 @@
             this.ArticleId = articleId;
             this.Position = position;
             this.Amount = amount;
-            this.IsInvoiced = isInvoiced;
             this.Name = name;
             this.Id = id;
-        }        
+        }
 
         public CaseInvoiceArticle()
-        {            
+        {
         }
 
         public int Id { get; private set; }
@@ -59,54 +55,10 @@
 
         public short Position { get; private set; }
 
-        public bool IsInvoiced { get; private set; }
-
         public bool IsNew()
         {
             return this.Id <= 0;
         }
 
-        public void DoInvoice()
-        {
-            this.IsInvoiced = true;
-        }
-
-        public XmlSchema GetSchema()
-        {
-            return null;
-        }
-
-        public void ReadXml(XmlReader reader)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void WriteXml(XmlWriter writer)
-        {
-            if (this.Article == null)
-            {
-                writer.WriteElementString("Description", this.Name);
-            }
-
-            if (this.Article != null)
-            {
-                writer.WriteElementString("ItemNo", this.Article.Number);
-                if (this.Article.Unit != null)
-                {
-                    writer.WriteElementString("UnitOfMeasureCode", this.Article.Unit.Name);                    
-                }
-
-                var ppu = this.Ppu.HasValue ? this.Ppu.Value : (this.Article.Ppu.HasValue ? this.Article.Ppu.Value : (decimal?)null);
-                if (ppu.HasValue)
-                {
-                    writer.WriteElementString("UnitPrice", ppu.Value.ToString(CultureInfo.InvariantCulture));                    
-                }
-            }
-
-            if (this.Amount.HasValue)
-            {
-                writer.WriteElementString("Quantity", this.Amount.Value.ToString(CultureInfo.InvariantCulture));
-            }
-        }
     }
 }

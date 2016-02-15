@@ -107,7 +107,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ILanguageService _languageService;
         private readonly IGlobalSettingService _globalSettingService;
         private readonly IMailTemplateService _mailTemplateService;
-        
+        private readonly ICausingPartService _causingPartService;
         
         
 
@@ -214,7 +214,8 @@ namespace DH.Helpdesk.Web.Controllers
             ICaseLockService caseLockService,
             IMailTemplateService mailTemplateService,
             IWatchDateCalendarService watchDateCalendarServcie,
-            ICaseInvoiceSettingsService CaseInvoiceSettingsService)
+            ICaseInvoiceSettingsService CaseInvoiceSettingsService,
+            ICausingPartService causingPartService)
             : base(masterDataService)
         {
             this._masterDataService = masterDataService;
@@ -278,6 +279,7 @@ namespace DH.Helpdesk.Web.Controllers
             this._defaultMaxRows = 10;
             this._defaultCaseLockBufferTime = 30; // Second
             this._defaultExtendCaseLockTime = 60; // Second
+            this._causingPartService = causingPartService;
         }
 
         #endregion
@@ -2364,25 +2366,35 @@ namespace DH.Helpdesk.Web.Controllers
         #endregion
 
         [HttpPost]
-        public JsonResult SaveCaseInvoice(string caseInvoiceArticle, int customerId, int caseId, string caseKey, string logKey)
+        public JsonResult SaveCaseInvoice(string caseInvoiceArticle, int customerId, 
+                                          int caseId, string caseKey, string logKey, 
+                                          int? orderIdToXML)
         {
             try
             {
                 if (string.IsNullOrEmpty(caseInvoiceArticle))                    
                     return Json(new { result = "Error", data = "Invalid Invoice to save!" } );
-                
-                DoInvoiceWork(caseInvoiceArticle, caseId, customerId);
 
-                if (SessionFacade.CurrentUser == null)                    
+                if (SessionFacade.CurrentUser == null)
                     return Json(new { result = "Error", data = "Invoice is not available, refresh the page and try it again." });
 
-                var caseInvoices = this.invoiceArticleService.GetCaseInvoicesWithTimeZone(caseId, TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
-                var invoiceArticles = this.invoiceArticlesModelFactory.CreateCaseInvoiceArticlesModel(caseInvoices);
-                var invoiceModel = new CaseInvoiceModel(customerId, caseId, invoiceArticles, string.Empty, caseKey, logKey);
+                var saveRes = DoInvoiceWork(caseInvoiceArticle, caseId, customerId, orderIdToXML);
 
-                var serializer = new JavaScriptSerializer();
-                var caseArticlesJson = serializer.Serialize(invoiceModel.InvoiceArticles);                
-                return Json(new { result = "Success", data = caseArticlesJson });                
+                if (saveRes.IsSuccess)
+                {
+                    var caseInvoices = this.invoiceArticleService.GetCaseInvoicesWithTimeZone(caseId, TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
+                    var invoiceArticles = this.invoiceArticlesModelFactory.CreateCaseInvoiceArticlesModel(caseInvoices);
+                    var invoiceModel = new CaseInvoiceModel(customerId, caseId, invoiceArticles, string.Empty, caseKey, logKey);
+                    var serializer = new JavaScriptSerializer();
+                    var caseArticlesJson = serializer.Serialize(invoiceModel.InvoiceArticles);
+                    var warningMessage = saveRes.ResultType == ProcessResult.ResultTypeEnum.WARNING ? saveRes.LastMessage : string.Empty;
+
+                    return Json(new { result = "Success", data = caseArticlesJson, warningMessage = warningMessage });
+                }
+                else
+                {
+                    return Json(new { result = "Error", data = saveRes.LastMessage });
+                }
             }
             catch (Exception ex)
             {
@@ -2434,8 +2446,7 @@ namespace DH.Helpdesk.Web.Controllers
             var case_ = m.case_;
             var caseLog = m.caseLog;
             var caseMailSetting = m.caseMailSetting;
-            var updateNotifierInformation = m.updateNotifierInformation;
-            //var caseInvoiceArticles = m.caseInvoiceArticles;
+            var updateNotifierInformation = m.updateNotifierInformation;            
             case_.Performer_User_Id = m.Performer_Id;
             case_.CaseResponsibleUser_Id = m.ResponsibleUser_Id;            
             case_.RegistrationSourceCustomer_Id = m.customerRegistrationSourceId;
@@ -3119,7 +3130,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             //kategori                        
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseCategoryFilter))
-                fd.filterCategory = this._categoryService.GetCategories(cusId);
+                fd.filterCategory = this._categoryService.GetActiveCategories(cusId);
             //prio
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CasePriorityFilter))
                 fd.filterPriority = this._priorityService.GetPriorities(cusId);
@@ -3756,6 +3767,11 @@ namespace DH.Helpdesk.Web.Controllers
             if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()).ShowOnStartPage == 1)
             {
                 m.urgencies = this._urgencyService.GetUrgencies(customerId);
+            }
+
+            if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CausingPart.ToString()).ShowOnStartPage == 1)
+            {
+                m.causingParts = this._causingPartService.GetCausingParts(customerId);
             }
 
             // "Workging group" field
@@ -4830,12 +4846,12 @@ namespace DH.Helpdesk.Web.Controllers
 
         #endregion       
 
-        private void DoInvoiceWork(string caseInvoiceData, int caseId, int customerId)
+        private ProcessResult DoInvoiceWork(string caseInvoiceData, int caseId, int customerId, int? orderIdToXML)
         {
             var caseOverview = this._caseService.GetCaseOverview(caseId);
             var articles = this.invoiceArticleService.GetArticles(customerId);
-            var Invoices = this.invoiceHelper.ToCaseInvoices(caseInvoiceData, caseOverview, articles); //there will only be one?
-            this.invoiceArticleService.DoInvoiceWork(Invoices, caseId, customerId, SessionFacade.CurrentUser.Id);
+            var Invoices = this.invoiceHelper.ToCaseInvoices(caseInvoiceData, caseOverview, articles, SessionFacade.CurrentUser.Id, orderIdToXML); //there will only be one?
+            return this.invoiceArticleService.DoInvoiceWork(Invoices, caseId, caseOverview.CaseNumber, customerId, orderIdToXML);
         }
 
         #endregion

@@ -23,5 +23,27 @@
         public const string Place = "Place";
 
         public const string OrdererCode = "UserCode";
+
+        public const string IsAbout_User = "IsAbout_ReportedBy";
+
+        public const string IsAbout_Persons_Name = "IsAbout_Persons_Name";
+
+        public const string IsAbout_Persons_Phone = "IsAbout_Persons_Phone";
+
+        public const string IsAbout_Persons_Email = "IsAbout_Persons_Email";
+
+        public const string IsAbout_Persons_CellPhone = "IsAbout_Persons_CellPhone";
+
+        public const string IsAbout_Department = "IsAbout_Department_Id";
+
+        public const string IsAbout_Region = "IsAbout_Region_Id";
+
+        public const string IsAbout_OU = "IsAbout_OU_Id";
+
+        public const string IsAbout_CostCentre = "IsAbout_CostCentre";
+
+        public const string IsAbout_UserCode = "IsAbout_UserCode";
+
+        public const string IsAbout_Place = "IsAbout_Place";
     }
 }

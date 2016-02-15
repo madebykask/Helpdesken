@@ -62,7 +62,7 @@
                     return new HttpNotFoundResult("No parent product area found...");
             }
 
-            var productArea = new ProductArea { Customer_Id = customer.Id, Parent_ProductArea_Id = parentId, IsActive = 1 };
+            var productArea = new ProductArea { Customer_Id = customer.Id, Parent_ProductArea_Id = parentId, IsActive = 1, ShowOnExternalPage = 1 };
             var model = this.CreateInputViewModel(productArea, customer);
 
             return this.View(model);
@@ -108,6 +108,7 @@
             productAreaToSave.Priority_Id = productArea.Priority_Id;
             productAreaToSave.MailID = productArea.MailID;
             productAreaToSave.IsActive = productArea.IsActive;
+            productAreaToSave.ShowOnExternalPage = productArea.ShowOnExternalPage;
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
             this._productAreaService.SaveProductArea(productAreaToSave, wgSelected, out errors);

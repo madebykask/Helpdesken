@@ -23,6 +23,23 @@
                 .HasForeignKey(a => a.OrderId)
                 .WillCascadeOnDelete(true);
 
+            this.Property(o => o.ReportedBy).IsOptional().HasMaxLength(100);
+            this.Property(o => o.Persons_Name).IsOptional().HasMaxLength(100);
+            this.Property(o => o.Persons_Email).IsOptional().HasMaxLength(100);
+            this.Property(o => o.Persons_Phone).IsOptional().HasMaxLength(100);
+            this.Property(o => o.Persons_Cellphone).IsOptional().HasMaxLength(100);
+
+
+            this.Property(o => o.Region_Id).IsOptional();
+            this.Property(o => o.Department_Id).IsOptional();
+            this.Property(o => o.OU_Id).IsOptional();
+
+            this.Property(o => o.Place).IsOptional().HasMaxLength(100);
+            this.Property(o => o.UserCode).IsOptional().HasMaxLength(100);
+            this.Property(o => o.CostCentre).IsOptional().HasMaxLength(100);
+
+            this.Property(o => o.CreditForOrder_Id).IsOptional();            
+
             this.ToTable("tblCaseInvoiceOrder");   
         }
     }

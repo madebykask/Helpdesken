@@ -289,7 +289,10 @@
             ret = query.Select(q => new FullCaseOverview(
                                 q.Id,
                                 new UserOverview(q.User, q.Notifier, q.Email, q.Phone, q.CellPhone,q.Customer, q.Region, q.Department,
-                                                 ouFullNames[q.Unit], q.Place, q.OrdererCode),
+                                                 ouFullNames[q.Unit], q.Place, q.OrdererCode, q.IsAbout_User, q.IsAbout_Persons_Name,
+                                                 q.IsAbout_Persons_Phone, q.IsAbout_UserCode, q.IsAbout_Persons_Email, q.IsAbout_Persons_CellPhone,
+                                                 q.IsAbout_CostCentre, q.IsAbout_Place, q.IsAbout_Department,
+                                                 q.IsAbout_OU, q.IsAbout_Region),
 
                                 new ComputerOverview(q.PcNumber, q.ComputerType, q.ComputerPlace),
 
@@ -344,7 +347,18 @@
                         entity.Department.DepartmentName,
                         entity.Ou.Name,
                         entity.Place,
-                        entity.UserCode);
+                        entity.UserCode,
+                        entity.IsAbout.ReportedBy,
+                        entity.IsAbout.UserCode,
+                        entity.IsAbout.Person_Name,
+                        entity.IsAbout.Person_Phone,
+                        entity.IsAbout.Person_Cellphone,
+                        entity.IsAbout.Person_Email,
+                        entity.IsAbout.CostCentre,
+                        entity.IsAbout.Place,
+                        entity.IsAbout.Department_Id.ToString(),
+                        entity.IsAbout.Region_Id.ToString(),
+                        entity.IsAbout.OU_Id.ToString());
         }
 
         private static ComputerOverview CreateComputerOverview(Case entity)

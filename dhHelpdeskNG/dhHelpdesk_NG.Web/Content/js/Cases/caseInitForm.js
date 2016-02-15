@@ -107,7 +107,7 @@ function refreshOrganizationUnit(departmentId, departmentFilterFormat, selectedO
     $(publicOUControlName).val('');
     $(publicReadOnlyOUName).val('');
     var ctlOption = publicOUControlName + ' option';    
-    $(publicOUControlName).prop('disabled', true);    
+    //$(publicOUControlName).prop('disabled', true);    
     $.post(publicChangeDepartment, { 'id': departmentId, 'customerId': publicCustomerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {                
         $(ctlOption).remove();
         $(publicOUControlName).append('<option value="">&nbsp;</option>');
@@ -124,7 +124,7 @@ function refreshOrganizationUnit(departmentId, departmentFilterFormat, selectedO
             }
         }
     }, 'json').always(function () {
-        $(publicOUControlName).prop('disabled', false);
+        //$(publicOUControlName).prop('disabled', false);
     });
 }
 
@@ -132,7 +132,7 @@ function refreshIsAboutOrganizationUnit(departmentId, departmentFilterFormat, se
     $(publicIsAboutOUControlName).val('');
     $(publicIsAboutReadOnlyOUName).val('');
     var ctlOption = publicIsAboutOUControlName + ' option';
-    $(publicIsAboutOUControlName).prop('disabled', true);
+    //$(publicIsAboutOUControlName).prop('disabled', true);
     $.post(publicChangeDepartment, { 'id': departmentId, 'customerId': publicCustomerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {
         $(ctlOption).remove();
         $(publicIsAboutOUControlName).append('<option value="">&nbsp;</option>');
@@ -149,7 +149,7 @@ function refreshIsAboutOrganizationUnit(departmentId, departmentFilterFormat, se
             }
         }
     }, 'json').always(function () {
-        $(publicIsAboutOUControlName).prop('disabled', false);
+        //$(publicIsAboutOUControlName).prop('disabled', false);
     });
 }
 
@@ -158,6 +158,7 @@ function refreshDepartment(regionId, departmentFilterFormat, selectedDepartmentI
     $(publicReadOnlyDepartmentName).val('');
     var ctlOption = publicDepartmentControlName + ' option';    
     $(publicDepartmentControlName).prop('disabled', true);
+    $(publicOUControlName).prop('disabled', true);
     $.post(publicChangeRegion, { 'id': regionId, 'customerId': publicCustomerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {
         $(ctlOption).remove();
         $(publicDepartmentControlName).append('<option value="">&nbsp;</option>');
@@ -176,6 +177,8 @@ function refreshDepartment(regionId, departmentFilterFormat, selectedDepartmentI
     }, 'json').always(function () {
         $(publicDepartmentControlName).prop('disabled', false);
         refreshOrganizationUnit(selectedDepartmentId, departmentFilterFormat, selectedOU);
+    }).done(function () {
+        $(publicOUControlName).prop('disabled', false);
     });
 }
 
@@ -184,6 +187,7 @@ function refreshIsAboutDepartment(regionId, departmentFilterFormat, selectedDepa
     $(publicIsAboutReadOnlyDepartmentName).val('');
     var ctlOption = publicIsAboutDepartmentControlName + ' option';
     $(publicIsAboutDepartmentControlName).prop('disabled', true);
+    $(publicIsAboutOUControlName).prop('disabled', true);
     $.post(publicChangeRegion, { 'id': regionId, 'customerId': publicCustomerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {
         $(ctlOption).remove();
         $(publicIsAboutDepartmentControlName).append('<option value="">&nbsp;</option>');
@@ -202,6 +206,8 @@ function refreshIsAboutDepartment(regionId, departmentFilterFormat, selectedDepa
     }, 'json').always(function () {
         $(publicIsAboutDepartmentControlName).prop('disabled', false);
         refreshIsAboutOrganizationUnit(selectedDepartmentId, departmentFilterFormat, selectedOU);
+    }).done(function () {
+        $(publicIsAboutOUControlName).prop('disabled', false);
     });
 }
 
@@ -305,19 +311,19 @@ function GetComputerUserSearchOptions() {
             if (item.email != "" && item.email != null)
                 $('#case__PersonsEmail').val(item.email);
             
-            if (item.phone != "" && item.phone != null)
+            if (item.phone != null)
                 $('#case__PersonsPhone').val(item.phone);
 
-            if (item.cellphone != "" && item.cellphone != null)
+            if (item.cellphone != null)
                 $('#case__PersonsCellphone').val(item.cellphone);
 
-            if (item.place != "" && item.place != null)
+            if (item.place != null)
                 $('#case__Place').val(item.place);
 
-            if (item.usercode != "" && item.usercode != null)
+            if (item.usercode != null)
                 $('#case__UserCode').val(item.usercode);
 
-            if (item.costcentre != "" && item.costcentre != null)
+            if (item.costcentre != null)
                 $('#case__CostCentre').val(item.costcentre);
             
 
@@ -329,11 +335,8 @@ function GetComputerUserSearchOptions() {
 
             if (item.regionid != "" && item.regionid != null && 
                 item.departmentid != "" && item.departmentid != null) {
-                $(publicDepartmentControlName).val(item.departmentid).trigger('change');
                 refreshDepartment(item.regionid, departmentFilterFormat, item.departmentid, item.ouid);
             }
-
-            
 
             return item.num;
         }
@@ -438,22 +441,22 @@ function GetComputerUserSearchOptionsForIsAbout() {
             if (item.name != "" && item.name != null)
                 $('#case__IsAbout_Person_Name').val(item.name);
 
-            if (item.email != "" && item.email != null)
+            if (item.email != null)
                 $('#case__IsAbout_Person_Email').val(item.email);
 
-            if (item.phone != "" && item.phone != null)
+            if (item.phone != null)
                 $('#case__IsAbout_Person_Phone').val(item.phone);
 
-            if (item.cellphone != "" && item.cellphone != null)
+            if (item.cellphone != null)
                 $('#case__IsAbout_Person_Cellphone').val(item.cellphone);
 
-            if (item.place != "" && item.place != null)
+            if (item.place != null)
                 $('#case__IsAbout_Place').val(item.place);
 
-            if (item.usercode != "" && item.usercode != null)
+            if (item.usercode != null)
                 $('#case__IsAbout_UserCode').val(item.usercode);
 
-            if (item.costcentre != "" && item.costcentre != null)
+            if (item.costcentre != null)
                 $('#case__IsAbout_CostCentre').val(item.costcentre);
 
             if (item.regionid != "" && item.regionid != null) {
@@ -463,7 +466,6 @@ function GetComputerUserSearchOptionsForIsAbout() {
 
             if (item.regionid != "" && item.regionid != null &&
                 item.departmentid != "" && item.departmentid != null) {
-                $(publicIsAboutDepartmentControlName).val(item.departmentid).trigger('change');
                 refreshIsAboutDepartment(item.regionid, departmentFilterFormat, item.departmentid, item.ouid);
             }
             return item.num;
@@ -517,12 +519,10 @@ function CaseInitForm() {
         showInvoice(departmentId);
     });
 
-    $(publicIsAboutDepartmentControlName).change(function () {
-        // Remove after implementing http://redmine.fastdev.se/issues/10995        
+    $(publicIsAboutDepartmentControlName).change(function () {   
         var departmentId = $(this).val();
         var departmentFilterFormat = $('#DepartmentFilterFormat').val();
         refreshIsAboutOrganizationUnit(departmentId, departmentFilterFormat);
-        //showInvoice(departmentId);
     });
 
     function showInvoice(departmentId) {
@@ -541,7 +541,7 @@ function CaseInitForm() {
                 if (data != undefined) {
                     var exists = $('#case__WorkingGroup_Id option[value=' + data.WorkingGroup_Id + ']').length;
                     if (exists > 0 && data.WorkingGroup_Id > 0) {
-                        $("#case__WorkingGroup_Id").val(data.WorkingGroup_Id);
+                        $("#case__WorkingGroup_Id").val(data.WorkingGroup_Id).change();
                     }
                     exists = $('#case__StateSecondary_Id option[value=' + data.StateSecondary_Id + ']').length;
                     if (exists > 0 && data.StateSecondary_Id > 0) {

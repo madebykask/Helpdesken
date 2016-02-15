@@ -4238,5 +4238,41 @@ If not exists (select * from tblTextTranslation where Text_Id = 1581 and Languag
             insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1581, 'Case can no longer be updated, as it has been unlocked by a system administrator. Please close and try again.', 2)
 GO
 
+---- Version: 5.3.20
+
+If not exists (select * from tblText where Id = 1582)
+            insert into tblText (Id, Textstring) VALUES (1582, 'Ett fel inträffade, klicka')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1582 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1582, 'An unexpected error ocurred, please click', 2)
+GO
+
+If not exists (select * from tblText where Id = 1583)
+            insert into tblText (Id, Textstring) VALUES (1583, 'här')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1583 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1583, 'here', 2)
+GO
+
+If not exists (select * from tblText where Id = 1584)
+            insert into tblText (Id, Textstring) VALUES (1584, 'för att ladda om sidan.')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1584 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1584, 'to refresh the page.', 2)
+GO
+
+If not exists (select * from tblText where Id = 1585)
+            insert into tblText (Id, Textstring) VALUES (1585, 'Vi har angett din tidszon baserat på din webbläsare. Om du föredrar att arbeta mot en annan tidszon så kan du ändra det i Profil i toppmenyn.')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1585 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1585, 'We have detected that your browser’s time zone differs from the one in your Profile. To change it go to profile settings.', 2)
+GO
+
+If not exists (select * from tblText where Id = 1586)
+            insert into tblText (Id, Textstring) VALUES (1586, 'Visa produktområde på självservice')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1586 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1586, 'Show Product Area on Self Service', 2)
+GO
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

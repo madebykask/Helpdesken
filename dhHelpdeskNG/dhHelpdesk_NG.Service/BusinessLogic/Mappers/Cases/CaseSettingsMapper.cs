@@ -69,6 +69,17 @@
             var unit = CreateFieldSetting(fieldSettings.FindByName(UserFields.Unit));
             var place = CreateFieldSetting(fieldSettings.FindByName(UserFields.Place));
             var ordererCode = CreateFieldSetting(fieldSettings.FindByName(UserFields.OrdererCode));
+            var isaboutuser = CreateFieldSetting(fieldSettings.FindByName(UserFields.IsAbout_User));
+            var isaboutpersonsname = CreateFieldSetting(fieldSettings.FindByName(UserFields.IsAbout_Persons_Name));
+            var isaboutpersonsphone = CreateFieldSetting(fieldSettings.FindByName(UserFields.IsAbout_Persons_Phone));
+            var isaboutpersonscellphone = CreateFieldSetting(fieldSettings.FindByName(UserFields.IsAbout_Persons_CellPhone));
+            var isaboutpersonsemail = CreateFieldSetting(fieldSettings.FindByName(UserFields.IsAbout_Persons_Email));
+            var isaboutdepartment = CreateFieldSetting(fieldSettings.FindByName(UserFields.IsAbout_Department));
+            var isaboutregion = CreateFieldSetting(fieldSettings.FindByName(UserFields.IsAbout_Region));
+            var isaboutou = CreateFieldSetting(fieldSettings.FindByName(UserFields.IsAbout_OU));
+            var isaboutcostcentre = CreateFieldSetting(fieldSettings.FindByName(UserFields.IsAbout_CostCentre));
+            var isaboutplace = CreateFieldSetting(fieldSettings.FindByName(UserFields.IsAbout_Place));
+            var isaboutusercode = CreateFieldSetting(fieldSettings.FindByName(UserFields.IsAbout_UserCode));
 
             return new UserSettings(
                         user,
@@ -81,7 +92,18 @@
                         department,
                         unit,
                         place,
-                        ordererCode);
+                        ordererCode,
+                        isaboutuser,
+                        isaboutpersonsname,
+                        isaboutpersonsphone,
+                        isaboutpersonscellphone,
+                        isaboutpersonsemail,
+                        isaboutdepartment,
+                        isaboutregion,
+                        isaboutou,
+                        isaboutcostcentre,
+                        isaboutplace,
+                        isaboutusercode);
         }
 
         private static ComputerSettings CreateComputerSettings(NamedObjectCollection<CaseSettingsMapData> fieldSettings)

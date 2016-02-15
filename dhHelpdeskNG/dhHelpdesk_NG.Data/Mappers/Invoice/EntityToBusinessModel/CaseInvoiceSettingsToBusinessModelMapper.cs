@@ -19,7 +19,8 @@
                             entity.Currency,
                             entity.OrderNoPrefix,
                             entity.Issuer,
-                            entity.OurReference);
+                            entity.OurReference,
+                            entity.DocTemplate);
         }
     }
 }

@@ -33,8 +33,7 @@
                         entity.Name,
                         entity.Amount,
                         entity.Ppu,
-                        entity.Position,
-                        entity.IsInvoiced);
+                        entity.Position);
         }
     }
 }

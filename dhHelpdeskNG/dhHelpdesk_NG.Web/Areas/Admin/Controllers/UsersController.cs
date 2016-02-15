@@ -87,7 +87,16 @@
 
             if (this.Session["UserSearch"] == null)
             {
-                model.UserOverviewList.Users = this._userService.GetUsers().OrderBy(x => x.UserID).ToList();
+                if (SessionFacade.CurrentUser.UserGroupId == 3)
+                {
+                    model.UserOverviewList.Users = this._userService.GetUsersByUserGroup(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.UserID).ToList();
+                }
+                else
+                {
+                    model.UserOverviewList.Users = this._userService.GetUsers(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.UserID).ToList();
+                }
+                //model.UserOverviewList.Users = this._userService.GetUsers(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.UserID).ToList();
+                //model.UserOverviewList.Users = this._userService.GetUsers().OrderBy(x => x.UserID).ToList();
                 model.UserOverviewList.Sorting = new UserSort { FieldName = "", IsAsc = true };
                 //model.Users = this._userService.GetUsers(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.UserID).ToList();
             }
@@ -95,7 +104,15 @@
             {                       
                 var filter = (UserSearch)this.Session["UserSearch"];
                 model.Filter = filter;
-                model.UserOverviewList.Users = this._userService.SearchSortAndGenerateUsers(filter);
+                if (SessionFacade.CurrentUser.UserGroupId == 3)
+                {
+                    model.UserOverviewList.Users = this._userService.SearchSortAndGenerateUsersByUserGroup(filter);
+                }
+                else
+                {
+                    model.UserOverviewList.Users = this._userService.SearchSortAndGenerateUsers(filter);
+                }
+                
                 model.UserOverviewList.Sorting = new UserSort { FieldName = "", IsAsc = true };
                 model.StatusUsers.FirstOrDefault(x => x.Value == filter.StatusId.ToString()).Selected = true;               
             }
@@ -120,11 +137,12 @@
             
             if (this.Session["UserSearch"] == null && filter.SearchUs == null)
             {
-                model.UserOverviewList.Users = this._userService.GetUsers().OrderBy(x => x.UserID).ToList();
+                model.UserOverviewList.Users = this._userService.GetUsers(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.UserID).ToList();
                 model.UserOverviewList.Sorting = new UserSort { FieldName = "", IsAsc = true };
                 //model.Users = this._userService.GetUsers(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.UserID).ToList();
             }
-                if (this.Session["UserSearch"] == null && filter.SearchUs != null)
+
+            if (this.Session["UserSearch"] == null && filter.SearchUs != null)
             {
                 model.UserOverviewList.Users = this._userService.SearchSortAndGenerateUsers(filter);
                 model.UserOverviewList.Sorting = new UserSort { FieldName = "", IsAsc = true };
@@ -134,7 +152,14 @@
 
                 model.Filter = filter;
                 this.Session["UserSearch"] = filter;
-                model.UserOverviewList.Users = this._userService.SearchSortAndGenerateUsers(filter);
+                if (SessionFacade.CurrentUser.UserGroupId == 3)
+                {
+                    model.UserOverviewList.Users = this._userService.SearchSortAndGenerateUsersByUserGroup(filter);
+                }
+                else
+                {
+                    model.UserOverviewList.Users = this._userService.SearchSortAndGenerateUsers(filter);
+                }
             }
 
            if (userSearch != null)

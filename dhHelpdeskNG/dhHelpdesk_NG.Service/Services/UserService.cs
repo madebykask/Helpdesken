@@ -47,6 +47,7 @@
         IList<User> GetSystemOwners(int customerId);
         IList<User> GetUsers();
         IList<User> GetUsers(int customerId);
+        IList<User> GetUsersByUserGroup(int customerId);
 
         /// <summary>
         /// Fetches active users with performer flag.
@@ -62,6 +63,7 @@
         IList<User> GetAvailablePerformersForWorkingGroup(int customerId, int? workingGroup = null);
 
         IList<User> SearchSortAndGenerateUsers(UserSearch SearchUsers);
+        IList<User> SearchSortAndGenerateUsersByUserGroup(UserSearch SearchUsers);
         IList<UserGroup> GetUserGroups();
         IList<UserRole> GetUserRoles();
         IList<UserWorkingGroup> GetUserWorkingGroups();
@@ -179,6 +181,7 @@
         public readonly IUserRepository _userRepository;
         public readonly IUserGroupRepository _userGroupRepository;
         public readonly IUserRoleRepository _userRoleRepository;
+        public readonly IWorkingGroupRepository _workingGroupRepository;
         public readonly IUserWorkingGroupRepository _userWorkingGroupRepository;
         public readonly IDepartmentUserRepository _departmentUserRepository;
         public readonly ILogProgramRepository _logprogramRepository;
@@ -204,6 +207,7 @@
             IUserRepository userRepository,
             IUserGroupRepository userGroupRepository,
             IUserRoleRepository userRoleRepository,
+            IWorkingGroupRepository workingGroupRepository,
             IUserWorkingGroupRepository userWorkingGroupRepository,
             IDepartmentUserRepository departmentUserRepository,
             ILogProgramRepository logprogramRepository,
@@ -225,6 +229,7 @@
             this._userRepository = userRepository;
             this._userGroupRepository = userGroupRepository;
             this._userRoleRepository = userRoleRepository;
+            this._workingGroupRepository = workingGroupRepository;
             this._userWorkingGroupRepository = userWorkingGroupRepository;
             this._departmentUserRepository = departmentUserRepository;
             this._logprogramRepository = logprogramRepository;
@@ -315,6 +320,11 @@
             return this._userRepository.GetUsers(customerId).OrderBy(x => x.SurName).ThenBy(x => x.FirstName).ToList();
         }
 
+        public IList<User> GetUsersByUserGroup(int customerId)
+        {
+            return this._userRepository.GetUsersByUserGroup(customerId).OrderBy(x => x.SurName).ThenBy(x => x.FirstName).ToList();
+        }
+
         public IList<User> GetAvailablePerformersOrUserId(int customerId, int? userId = null)
         {
             return
@@ -347,6 +357,11 @@
         public IList<User> SearchSortAndGenerateUsers(UserSearch searchUsers)
         {
             return this._userRepository.GetUsersForUserSettingList(searchUsers).OrderBy(x => x.FirstName).ToList();
+        }
+
+        public IList<User> SearchSortAndGenerateUsersByUserGroup(UserSearch searchUsers)
+        {
+            return this._userRepository.GetUsersForUserSettingListByUserGroup(searchUsers).OrderBy(x => x.FirstName).ToList();
         }
 
         public IList<UserGroup> GetUserGroups()
@@ -622,7 +637,7 @@
                 {
                     var dep = this._departmentRepository.GetById(id);
 
-                    if (dep != null)
+                    if (dep != null && customersSelected.Contains(dep.Customer_Id))
                         user.Departments.Add(dep);
                 }
             }
@@ -641,7 +656,9 @@
                     {
                         // http://redmine.fastdev.se/issues/10997
                         //Filter 0 because problem in Case
-                        if (uwg.UserRole != 0)
+                        var wg = this._workingGroupRepository.GetById(uwg.WorkingGroup_Id);
+
+                        if (uwg.UserRole != 0 && wg != null && customersSelected.Contains(wg.Customer_Id))
                             user.UserWorkingGroups.Add(uwg);
 
                         //user.userWorkingGroups.Add(uwg);
@@ -751,11 +768,25 @@
                 errors.Add("User.Customer_Id", "Du måste ange en standardkund");
             }
 
+          
             if (user.UserWorkingGroups != null)
                 foreach (var delete in user.UserWorkingGroups.ToList())
                     user.UserWorkingGroups.Remove(delete);
             else
-                user.UserWorkingGroups = UserWorkingGroups;
+                user.UserWorkingGroups = new List<UserWorkingGroup>();
+
+            if (user != null)
+            {
+                if (UserWorkingGroups != null)
+                {
+                    foreach (var uwg in UserWorkingGroups)
+                    {
+                        if (uwg.UserRole != 0)
+                            user.UserWorkingGroups.Add(uwg);
+                    }
+                }
+            }
+
 
             if (user.OTs != null)
                 foreach (var delete in user.OTs.ToList())

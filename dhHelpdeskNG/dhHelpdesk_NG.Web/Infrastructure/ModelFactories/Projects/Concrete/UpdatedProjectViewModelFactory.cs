@@ -104,7 +104,12 @@
                 CaseNumber = caseEntity.CaseNumber.ToString(),
                 Caption = caseEntity.Caption,
                 RegistrationDate = DateTime.SpecifyKind(caseEntity.RegTime, DateTimeKind.Utc).ToShortDateString(),
-                WatchDate = caseEntity.WatchDate.HasValue ? DateTime.SpecifyKind(caseEntity.WatchDate.Value, DateTimeKind.Utc).ToShortDateString() : string.Empty,
+                Initiator = caseEntity.PersonsName,
+                Administrator = caseEntity.Administrator.SurName + " " + caseEntity.Administrator.FirstName,
+                Department = caseEntity.Department.DepartmentName,
+                //WatchDate = caseEntity.WatchDate.HasValue ? DateTime.SpecifyKind(caseEntity.WatchDate.Value, DateTimeKind.Utc).ToShortDateString() : string.Empty,
+                //CaseType = caseEntity.CaseType.Name,
+                //SubState = caseEntity.StateSecondary.Name,
             };
         }
     }

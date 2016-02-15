@@ -37,6 +37,12 @@
                             .HasForeignKey(x => x.Department_Id)
                             .WillCascadeOnDelete(false);
 
+            this.HasOptional(x => x.IsAbout_Department)
+                            .WithMany()
+                            .HasForeignKey(x => x.IsAbout_Department_Id)
+                            .WillCascadeOnDelete(false);
+
+
             this.HasOptional(c => c.Problem)
                               .WithMany()
                               .HasForeignKey(c => c.Problem_Id);
@@ -95,10 +101,10 @@
             this.Property(x => x.IpAddress).IsRequired().HasMaxLength(15);
             this.Property(x => x.Miscellaneous).IsRequired().HasMaxLength(1000);
             this.Property(x => x.OtherCost).IsRequired();
-            this.Property(x => x.PersonsCellphone).IsRequired().HasMaxLength(30).HasColumnName("Persons_CellPhone");
+            this.Property(x => x.PersonsCellphone).IsRequired().HasMaxLength(50).HasColumnName("Persons_CellPhone");
             this.Property(x => x.PersonsEmail).IsRequired().HasMaxLength(100).HasColumnName("Persons_EMail");
             this.Property(x => x.PersonsName).IsRequired().HasMaxLength(50).HasColumnName("Persons_Name");
-            this.Property(x => x.PersonsPhone).IsRequired().HasMaxLength(30).HasColumnName("Persons_Phone");
+            this.Property(x => x.PersonsPhone).IsRequired().HasMaxLength(50).HasColumnName("Persons_Phone");
             this.Property(x => x.Place).IsRequired().HasMaxLength(100);
             this.Property(x => x.PlanDate).IsOptional();
             this.Property(x => x.ProductAreaSetDate).IsOptional();
@@ -124,7 +130,11 @@
             this.Property(x => x.LogFile).IsOptional();
             this.Property(x => x.CaseLog).IsOptional();
             this.Property(x => x.ClosingReason).IsOptional();
-            
+            this.Property(x => x.IsAbout_Persons_Name).IsOptional().HasMaxLength(50);
+            this.Property(x => x.IsAbout_ReportedBy).IsOptional().HasMaxLength(40);
+            this.Property(x => x.IsAbout_Persons_Phone).IsOptional().HasMaxLength(40);
+            this.Property(x => x.IsAbout_UserCode).IsOptional().HasMaxLength(20);
+            this.Property(x => x.IsAbout_Department_Id).IsOptional();
             
             this.ToTable("tblcasehistory");
         }

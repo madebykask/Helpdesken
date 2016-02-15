@@ -142,8 +142,8 @@
             var newCustomerSetting = new Setting()
             {
                 Customer_Id = customer.Id,
-                ModuleCase = 1
-               
+                ModuleCase = 1,
+                CaseComplaintDays = 14             
             };
 
             this._customerService.SaveCustomerSettings(customer, newCustomerSetting, null, customer.Language_Id, out errors);
@@ -339,6 +339,7 @@
                 setting.CaseFiles = 6;
                 setting.ComputerUserInfoListLocation = 1;
                 setting.ModuleCase = 1;
+                setting.CaseComplaintDays = 14;
             }
 
             if (vmodel.Setting != null)

@@ -81,6 +81,18 @@
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.Unit, UserFields.Unit, headers);
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.Place, UserFields.Place, headers);
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.OrdererCode, UserFields.OrdererCode, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.IsAbout_User, UserFields.IsAbout_User, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.IsAbout_Persons_Name, UserFields.IsAbout_Persons_Name, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.IsAbout_Persons_Phone, UserFields.IsAbout_Persons_Phone, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.IsAbout_UserCode, UserFields.IsAbout_UserCode, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.IsAbout_Persons_Email, UserFields.IsAbout_Persons_Email, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.IsAbout_Persons_CellPhone, UserFields.IsAbout_Persons_CellPhone, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.IsAbout_CostCentre, UserFields.IsAbout_CostCentre, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.IsAbout_Place, UserFields.IsAbout_Place, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.IsAbout_Department, UserFields.IsAbout_Department, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.IsAbout_OU, UserFields.IsAbout_OU, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.IsAbout_Region, UserFields.IsAbout_Region, headers);
+
         }
 
         private static void CreateComputerHeaders(ComputerSettings settings, List<GridColumnHeaderModel> headers)
@@ -174,6 +186,17 @@
             FieldSettingsHelper.CreateValueIfNeeded(settings.Unit, UserFields.Unit, fields.Unit, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.Place, UserFields.Place, fields.Place, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.OrdererCode, UserFields.OrdererCode, fields.OrdererCode, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.IsAbout_User, UserFields.IsAbout_User, fields.IsAbout_User, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.IsAbout_Persons_Name, UserFields.IsAbout_Persons_Name, fields.IsAbout_Persons_Name, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.IsAbout_Persons_Phone, UserFields.IsAbout_Persons_Phone, fields.IsAbout_Persons_Phone, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.IsAbout_UserCode, UserFields.IsAbout_UserCode, fields.IsAbout_UserCode, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.IsAbout_Persons_Email, UserFields.IsAbout_Persons_Email, fields.IsAbout_Persons_Email, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.IsAbout_Persons_CellPhone, UserFields.IsAbout_Persons_CellPhone, fields.IsAbout_Persons_CellPhone, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.IsAbout_CostCentre, UserFields.IsAbout_CostCentre, fields.IsAbout_ConstCentre, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.IsAbout_Place, UserFields.IsAbout_Place, fields.IsAbout_Place, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.IsAbout_Department, UserFields.IsAbout_Department, fields.IsAbout_Department, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.IsAbout_OU, UserFields.IsAbout_OU, fields.IsAbout_OU, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.IsAbout_Region, UserFields.IsAbout_Region, fields.IsAbout_Region, values); 
         }
 
         private static void CreateComputerValues(ComputerSettings settings, ComputerOverview fields, List<NewGridRowCellValueModel> values)

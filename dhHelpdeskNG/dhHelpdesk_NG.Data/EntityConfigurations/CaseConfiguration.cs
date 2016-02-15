@@ -110,10 +110,10 @@
             this.Property(x => x.IpAddress).IsOptional().HasMaxLength(15);
             this.Property(x => x.Miscellaneous).IsRequired().HasMaxLength(1000);
             this.Property(x => x.OtherCost).IsRequired();
-            this.Property(x => x.PersonsCellphone).IsRequired().HasMaxLength(30).HasColumnName("Persons_CellPhone");
+            this.Property(x => x.PersonsCellphone).IsRequired().HasMaxLength(50).HasColumnName("Persons_CellPhone");
             this.Property(x => x.PersonsEmail).IsRequired().HasMaxLength(100).HasColumnName("Persons_EMail");
             this.Property(x => x.PersonsName).IsRequired().HasMaxLength(50).HasColumnName("Persons_Name");
-            this.Property(x => x.PersonsPhone).IsRequired().HasMaxLength(40).HasColumnName("Persons_Phone");
+            this.Property(x => x.PersonsPhone).IsRequired().HasMaxLength(50).HasColumnName("Persons_Phone");
             this.Property(x => x.Performer_User_Id).IsOptional();
             this.Property(x => x.Priority_Id).IsOptional();
             this.Property(x => x.Place).IsRequired().HasMaxLength(100);

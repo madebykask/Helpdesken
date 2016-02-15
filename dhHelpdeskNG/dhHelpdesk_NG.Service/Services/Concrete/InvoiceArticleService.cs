@@ -10,8 +10,9 @@
     using DH.Helpdesk.Domain.Invoice;
     using System;
     using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.BusinessData.Models.Invoice.Xml;   
 
-    public sealed class InvoiceArticleService : IInvoiceArticleService
+    public class InvoiceArticleService : IInvoiceArticleService
     {
         private readonly IInvoiceArticleUnitRepository invoiceArticleUnitRepository;
 
@@ -25,6 +26,8 @@
 
         private readonly ICaseFileService caseFileService;
 
+        private readonly IDepartmentService departmentService;
+
         private readonly IMasterDataService masterDataService;
 
         private readonly IUnitOfWorkFactory unitOfWorkFactory;
@@ -36,6 +39,7 @@
                 ICaseInvoiceSettingsService caseInvoiceSettingsService,
                 IUserService userService,
                 ICaseFileService caseFileService,
+                IDepartmentService departmentService,
                 IMasterDataService masterDataService,
                 IUnitOfWorkFactory unitOfWorkFactory)
         {
@@ -45,6 +49,7 @@
             this.caseInvoiceSettingsService = caseInvoiceSettingsService;
             this.userService = userService;
             this.caseFileService = caseFileService;
+            this.departmentService = departmentService;
             this.masterDataService = masterDataService;
             this.unitOfWorkFactory = unitOfWorkFactory;
         }
@@ -83,6 +88,16 @@
             CaseInvoices = SetInvoicedByUsername(CaseInvoices);
             CaseInvoices = SetInvoiceOrderToTimeZone(CaseInvoices, userTimeZone);
             return CaseInvoices;
+        }
+
+        public int SaveArticle(InvoiceArticle article)
+        {
+            return this.invoiceArticleRepository.SaveArticle(article);
+        }
+
+        public int SaveUnit(InvoiceArticleUnit unit)
+        {
+            return this.invoiceArticleUnitRepository.SaveUnit(unit);
         }
 
         /// <summary>
@@ -158,30 +173,6 @@
             }
         }
 
-        public void DoInvoiceWork(CaseInvoice[] caseInvoiceData, int caseId, int customerId, int CurrentUserId)
-        {
-            var Invoices = caseInvoiceData; //there will only be one?
-            foreach (var order in Invoices.FirstOrDefault().Orders)
-            {
-                if (order.InvoicedByUserId == null)
-                {
-                    bool DoInvoice = false;
-                    foreach (var article in order.Articles)
-                    {
-                        if (article.IsInvoiced)
-                        {
-                            DoInvoice = true;
-                        }
-                    }
-                    if (DoInvoice)
-                    {
-                        this.DoInvoiceXMLWork(order, customerId, CurrentUserId, caseId);
-                    }
-                }
-            }
-            this.SaveCaseInvoices(Invoices, caseId);
-        }
-
         public DataValidationResult ValidateInvoiceSettings(int customerId)
         {
             var caseInvoiceSettings = this.caseInvoiceSettingsService.GetSettings(customerId);
@@ -194,12 +185,7 @@
             if (string.IsNullOrEmpty(caseInvoiceSettings.Currency))
             {
                 return new DataValidationResult(false, "Currency");
-            }
-
-            if (string.IsNullOrEmpty(caseInvoiceSettings.OrderNoPrefix))
-            {
-                return new DataValidationResult(false, "OrderNoPrefix");
-            }
+            }            
 
             if (string.IsNullOrEmpty(caseInvoiceSettings.Issuer))
             {
@@ -211,31 +197,179 @@
                 return new DataValidationResult(false, "OurReference");
             }
 
+            if (string.IsNullOrEmpty(caseInvoiceSettings.DocTemplate))
+            {
+                return new DataValidationResult(false, "DocTemplate");
+            }
+
             return new DataValidationResult();
         }
 
-        private void DoInvoiceXMLWork(CaseInvoiceOrder order, int customerId, int userId, int caseId)
-        {
-            var caseInvoiceSettings = this.caseInvoiceSettingsService.GetSettings(customerId);
-            if (caseInvoiceSettings == null)
-            {
-                throw new Exception("No invoice settings for Customer");
+        public ProcessResult DoInvoiceWork(CaseInvoice[] caseInvoiceData, int caseId, decimal caseNumber, int customerId, int? orderIdToXML)
+        {            
+
+            this.SaveCaseInvoices(caseInvoiceData, caseId);
+            
+            if (orderIdToXML.HasValue)
+            {               
+                var orderToExport = this.caseInvoiceArticleRepository.GetCaseInvoiceOrder(caseId, orderIdToXML.Value);
+                if (orderToExport != null)
+                {
+                    var caseInvoiceSettings = this.caseInvoiceSettingsService.GetSettings(customerId);
+                    if (caseInvoiceSettings == null)
+                        return new ProcessResult(System.Reflection.MethodBase.GetCurrentMethod().Name, 
+                                                 ProcessResult.ResultTypeEnum.ERROR, "There is no invoice settings for Customer");
+                    
+                    var res = ExportOrder(orderToExport, caseInvoiceSettings, caseId, caseNumber);
+                    if (!res.IsSuccess)
+                    {
+                        this.caseInvoiceArticleRepository.CancelInvoiced(caseId, orderIdToXML.Value);
+                        return new ProcessResult(res.ProcessName, ProcessResult.ResultTypeEnum.WARNING, res.LastMessage);
+                    }
+                }                
             }
-            order.DoInvoice(userId);
 
-            //var output = this.OrderToOutputXML(order, customerId, caseId);
-            //if (output == null)
-            //{
-            //    throw new Exception("Couldn't create invoice-XML");
-            //}
-            ////create or check if directory exists
-            //if (!Directory.Exists(caseInvoiceSettings.ExportPath))
-            //{
-            //    Directory.CreateDirectory(caseInvoiceSettings.ExportPath);
-            //}
+            return new ProcessResult(System.Reflection.MethodBase.GetCurrentMethod().Name);
+           
+        }
+        
+        private ProcessResult ExportOrder(CaseInvoiceOrder order, CaseInvoiceSettings caseInvoiceSettings, int caseId, decimal caseNumber)
+        {            
+            try
+            {                
+                var salesDoc = MapToSalesDoc(order, caseInvoiceSettings, caseId, caseNumber);
+                var xmlData = salesDoc.ConvertToXML();
+                if (xmlData.IsSuccess)
+                {
+                    try
+                    {
+                        if (!Directory.Exists(caseInvoiceSettings.ExportPath))
+                            Directory.CreateDirectory(caseInvoiceSettings.ExportPath);
 
-            //var path = Path.Combine(caseInvoiceSettings.ExportPath, this.GetExportFileName());
-            //output.Save(path);
+                        var path = Path.Combine(caseInvoiceSettings.ExportPath, GetExportFileName());
+                        TextWriter tw = new StreamWriter(path, true);
+                        tw.WriteLine(xmlData.Data.ToString());
+                        tw.Close();
+                        return new ProcessResult(xmlData.ProcessName);
+                    }
+                    catch (Exception ex1)
+                    {
+                        return new ProcessResult(xmlData.ProcessName, ProcessResult.ResultTypeEnum.ERROR, "An error occurred while saving XML file. <br/>" + ex1.Message);
+                    }
+                }
+                else
+                    return new ProcessResult(xmlData.ProcessName, ProcessResult.ResultTypeEnum.ERROR, "An error occurred while converting order to XML.<br/>" + xmlData.LastMessage);
+            }
+            catch (Exception ex)
+            {
+                return new ProcessResult(System.Reflection.MethodBase.GetCurrentMethod().Name, ProcessResult.ResultTypeEnum.ERROR, ex.Message);
+            }            
+        }
+
+        private SalesDoc MapToSalesDoc(CaseInvoiceOrder order, CaseInvoiceSettings settings, int caseId, decimal caseNumber)
+        {            
+            var salesDoc = new SalesDoc();
+
+            #region Invoice data
+
+            var salesHeader = new SalesDocSalesHeader();
+            salesHeader.CompanyNo = settings.Issuer;
+            salesHeader.DocTemplate = settings.DocTemplate;
+            salesHeader.DocType = order.CreditForOrder_Id.HasValue ? InvoiceXMLDocType.Credit : InvoiceXMLDocType.Order;
+            salesHeader.SellToCustomerNo = GetSellToCustomerNo(order.Department_Id);
+            salesHeader.Date = order.InvoiceDate.HasValue ? order.InvoiceDate.Value.ToShortDateString() : string.Empty;
+            salesHeader.DueDate = order.InvoiceDate.HasValue ? order.InvoiceDate.Value.ToShortDateString() : string.Empty;
+            salesHeader.OurReference = settings.OurReference;
+            salesHeader.YourReference2 = YourReferenceRow(order.CostCentre, order.Persons_Name);
+            salesHeader.OrderNo = OrderNoRow(settings.OrderNoPrefix, order.Number, caseNumber.ToString());
+            salesHeader.CurrencyCode = settings.Currency;
+
+            #endregion
+
+            #region Article and Lines
+
+            var salesLines = new List<SalesDocSalesHeaderSalesLine>();
+            int lineNo = 0;
+            foreach (var article in order.Articles)
+            {
+                lineNo++;
+                if (article.ArticleId.HasValue)
+                {                    
+                    salesLines.Add(new SalesDocSalesHeaderSalesLine()
+                    {
+                        LineNo = lineNo.ToString(),
+                        LineType = InvoiceXMLLineType.Article,
+                        Number = article.Article != null ? article.Article.Number : string.Empty,
+                        Description = null,
+                        Quantity = article.Amount.HasValue ? article.Amount.ToString() : string.Empty,
+                        UnitOfMeasureCode = (article.Article != null && article.Article.Unit != null ? article.Article.Unit.Name : string.Empty),
+                        UnitPrice = article.Ppu.HasValue ? article.Ppu.Value.ToString() : string.Empty
+                    });
+                }
+                else
+                {
+                    salesLines.Add(new SalesDocSalesHeaderSalesLine()
+                    {
+                        LineNo = lineNo.ToString(),
+                        LineType = InvoiceXMLLineType.Description,
+                        Number = string.Empty,
+                        Description = article.Name,
+                        Quantity = string.Empty,
+                        UnitOfMeasureCode = string.Empty,
+                        UnitPrice = string.Empty
+                    });
+                }
+            }
+
+            salesHeader.SalesLine = salesLines.ToArray();
+
+            #endregion
+
+            #region Attachment
+
+            var salesAttachments = new List<SalesDocSalesHeaderAttachment>();
+            byte attachmentNo = 0;
+            foreach (var file in order.Files)
+            {
+                attachmentNo++;
+                salesAttachments.Add(new SalesDocSalesHeaderAttachment()
+                {
+                    AttachmentEntryNo = attachmentNo,
+                    Filename = Path.GetFileNameWithoutExtension(file.FileName),
+                    Extension = Path.GetExtension(file.FileName).Replace(".", string.Empty),
+                    Attachment = CaseInvoiceOrderFileToBase64Encode(file, caseId, settings.CustomerId)
+                });
+            }
+            salesHeader.Attachment = salesAttachments.ToArray();
+
+            #endregion
+
+            salesDoc.SalesHeader = salesHeader;
+
+            return salesDoc;
+        }
+       
+        private string YourReferenceRow(string costCentre, string referenceName)
+        {
+            var reference = costCentre;
+            reference += "/";
+            
+            if (referenceName == null)
+                referenceName = string.Empty;
+
+            var truncatedToNLength = new string(referenceName.Take((41 - reference.Length)).ToArray());
+            reference += truncatedToNLength;
+            return reference;
+        }
+
+        private string OrderNoRow(string prefix, int orderNumber, string caseNumber)
+        {
+            return string.Format("{0}{1}-{2}", prefix, orderNumber.ToString(), caseNumber);
+        }
+
+        private string OrderXMLHeader()
+        {
+            return "<?xml version=\"1.0\" encoding=\"UTF-16\" standalone=\"no\"?>";
         }
 
         private string GetExportFileName()
@@ -243,98 +377,6 @@
             return string.Format("{0}_{1}.xml", DateTime.Now.ToShortDateString(), Guid.NewGuid());
         }
 
-        //IKEA SPECIFIC, MOVE TO OWN CLASS??
-        private XmlDocument OrderToOutputXML(CaseInvoiceOrder order, int CustomerId, int CaseId)
-        {
-            if (order == null)
-            {
-                return null;
-            }
-            var invoiceSettings = caseInvoiceSettingsService.GetSettings(CustomerId);
-
-            var xml = "";
-            xml += OrderXMLHeader();
-            xml += "<SalesDoc>";
-            xml += XMLSalesHeader(order, invoiceSettings);
-            xml += XMLSalesLines(order.Articles);
-            xml += XMLAttachments(order.Files, CaseId, CustomerId);
-            xml += "</SalesDoc>";
-
-            using (var ms = new MemoryStream())
-            {
-                XmlDocument xmlDoc = new XmlDocument();
-                xmlDoc.LoadXml(xml);
-                return xmlDoc;
-            }
-        }
-
-        //IKEA XML HELPER CLASS -- MOVE
-        private string XMLSalesLines(CaseInvoiceArticle[] articles)
-        {
-            var xml = "";
-            foreach (var article in articles.Where(a=> a.Article != null))
-            {
-                xml += XMLSalesLine(article);
-            }
-            return xml;
-        }
-
-        //IKEA XML HELPER CLASS -- MOVE
-        private string XMLSalesLine(CaseInvoiceArticle article)
-        {
-            var xml = "";
-            xml += "<SalesLine>";
-            xml += XMLRow("ItemNo", article.Article.Number);
-            xml += XMLRow("Description", article.Article.Description);
-            xml += XMLRow("Quantity", article.Amount.ToString());
-            xml += XMLRow("UnitOfMeasureCode", article.Article.Unit.Name);
-            var articlePrice = article.Ppu;
-            if (articlePrice == null)
-            {
-                articlePrice = article.Article.Ppu;
-            }
-            xml += XMLRow("UnitPrice", articlePrice.ToString());
-            xml += "</SalesLine>";
-            return xml;
-        }
-
-        //IKEA XML HELPER CLASS -- MOVE
-        private string XMLSalesHeader(CaseInvoiceOrder order, CaseInvoiceSettings settings)
-        {
-            var xml = "";
-            xml += "<SalesHeader>";
-            xml += XMLRow("DocType", "valueplaceholder");
-            xml += XMLRow("SellToCustomerNo", settings.Issuer);
-            xml += XMLRow("OrderDate", order.InvoiceDate.Value.ToShortDateString());
-            xml += XMLRow("OurReferenceName", settings.OurReference);
-            xml += XMLRow("YourReferenceName", YourReferenceRow(order.CostCentre, order.Persons_Name));
-            xml += XMLRow("OrderNo", OrderNoRow(settings.OrderNoPrefix, order.CaseNumber.ToString(), order.Number));
-            xml += XMLRow("CurrencyCode", settings.Currency);
-            //JOBNO <JobNo />??
-            xml += "</SalesHeader>";
-            return xml;
-        }
-
-        //IKEA XML HELPER CLASS -- MOVE
-        private string XMLAttachments(CaseInvoiceOrderFile[] Files, int CaseId, int CustomerId)
-        {
-            string xml = "";
-            if (Files.Any())
-            {
-                xml += "<Attachments>";
-                foreach (var attachment in Files)
-                {
-                    xml += "<Attachment>";
-                    xml += XMLRow("FileName", attachment.FileName);
-                    xml += XMLRow("EncodedFile", CaseInvoiceOrderFileToBase64Encode(attachment, CaseId, CustomerId));
-                    xml += "</Attachment>";
-                }
-                xml += "</Attachments>";
-            }
-            return xml;
-        }
-
-        //IKEA XML HELPER CLASS -- MOVE
         private string CaseInvoiceOrderFileToBase64Encode(CaseInvoiceOrderFile file, int caseId, int CustomerId)
         {
             byte[] fileContent;
@@ -345,62 +387,16 @@
             return encodedString;
         }
 
-        /// <summary>
-        /// sets format and assures that string is not longer than 41 characters per IKEA requirement
-        /// </summary>
-        /// <param name="CostCentre"></param>
-        /// <param name="ReferenceName"></param>
-        /// <returns></returns>
-        private string YourReferenceRow(string CostCentre, string ReferenceName)
+        private string GetSellToCustomerNo(int? departmentId)
         {
-            var reference = CostCentre;
-            reference += "/";
-            var truncatedToNLength = new string(ReferenceName.Take((41 - reference.Length)).ToArray());
-            reference += truncatedToNLength;
-            return reference;
-        }
-
-        /// <summary>
-        /// Orderno, only for formatting it //IKEA XML HELPER CLASS -- MOVE
-        /// </summary>
-        /// <param name="Prefix"></param>
-        /// <param name="CaseNumber"></param>
-        /// <param name="OrderNumber"></param>
-        /// <returns></returns>
-        private string OrderNoRow(string Prefix, string CaseNumber, int OrderNumber)
-        {
-            string OrderNo = Prefix + CaseNumber + "-" + OrderNumber.ToString();
-            return OrderNo;
-        }
-
-        //IKEA XML HELPER CLASS -- MOVE
-        private string XMLRow(string tag, string value)
-        {
-            var NewXMLRow = "";
-            if (string.IsNullOrEmpty(value))
+            var res = string.Empty;
+            if (departmentId.HasValue)
             {
-                NewXMLRow = "<" + tag + "/>";
+                var dep = this.departmentService.GetDepartment(departmentId.Value);
+                if (dep != null)
+                    res = dep.DepartmentId;
             }
-            else
-            {
-                NewXMLRow = "<" + tag + ">" + value + "</" + tag + ">";
-            }
-            return NewXMLRow;
-        }
-        //IKEA XML HELPER CLASS -- MOVE
-        private string OrderXMLHeader()
-        {
-            return "<?xml version=\"1.0\" encoding=\"UTF-16\" standalone=\"no\"?>";
-        }
-
-        public int SaveArticle(InvoiceArticle article)
-        {
-            return this.invoiceArticleRepository.SaveArticle(article);
-        }
-
-        public int SaveUnit(InvoiceArticleUnit unit)
-        {
-            return this.invoiceArticleUnitRepository.SaveUnit(unit);
+            return res;
         }
     }
 }

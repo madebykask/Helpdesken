@@ -42,6 +42,7 @@ using DH.Helpdesk.Web.Models.Case.Output;
 using DH.Helpdesk.Web.Models.Shared;
 using DHDomain = DH.Helpdesk.Domain;
 using DH.Helpdesk.Domain;
+using System.Web.Script.Serialization;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -64,11 +65,19 @@ namespace DH.Helpdesk.Web.Controllers
             var TranslatedString = Translation.Get(text).ToString();
             return this.Json(TranslatedString, JsonRequestBehavior.AllowGet);
         }
-
-        public JsonResult GetAllCoreTextTranslations()
+       
+        public ActionResult GetAllCoreTextTranslations()
         {
             var texts = _textTranslationService.GetAllTextsAndTranslations(0);
             return this.Json(texts, JsonRequestBehavior.AllowGet);
+
+            var serializer = new JavaScriptSerializer { MaxJsonLength = Int32.MaxValue };
+            var result = new ContentResult
+            {
+                Content = serializer.Serialize(texts),
+                ContentType = "application/json"
+            };
+            return result;
         }
 
         public JsonResult GetCaseFieldsForTranslation()

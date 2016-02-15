@@ -16,7 +16,9 @@
         public CaseInvoice[] ToCaseInvoices(
                     string invoices, 
                     CaseOverview caseOverview, 
-                    InvoiceArticle[] articles)
+                    InvoiceArticle[] articles,
+                    int curUserId,
+                    int? orderIdToXML)
         {
             if (string.IsNullOrEmpty(invoices))
             {
@@ -35,8 +37,8 @@
                                     o.Id,
                                     o.InvoiceId,
                                     o.Number,
-                                    o.InvoiceDate,
-                                    o.InvoicedByUserId,
+                                    (orderIdToXML.HasValue && o.Id == orderIdToXML.Value ? now : o.InvoiceDate),
+                                    (orderIdToXML.HasValue && o.Id == orderIdToXML.Value ? curUserId : o.InvoicedByUserId),
                                     now,
                                     o.ReportedBy,
                                     o.Persons_Name,
@@ -49,6 +51,7 @@
                                     o.Place,
                                     o.UserCode,
                                     o.CostCentre,
+                                    o.CreditForOrder_Id,
                                     o.Articles
                                     .Select(a => new CaseInvoiceArticle(
                                             a.Id,
@@ -59,8 +62,7 @@
                                             a.Name,
                                             a.Amount,
                                             a.Ppu,
-                                            a.Position,
-                                            a.IsInvoiced)).ToArray(),
+                                            a.Position)).ToArray(),
                                             o.Files.Select(f => new CaseInvoiceOrderFile(HttpUtility.UrlDecode(f.FileName))).ToArray())).ToArray());
             if (caseOverview != null)
             {
@@ -69,20 +71,7 @@
                     order.CaseNumber = caseOverview.CaseNumber;
                 }                
             }
-
-            foreach (var order in invoice.Orders)
-            {
-                if (order.InvoicedByUserId != null)
-                {
-                    if (order.InvoicedByUserId != 0)
-                    {
-                        foreach (var article in order.Articles)
-                        {
-                            article.DoInvoice();
-                        }
-                    }
-                }
-            }
+         
             return new[] { invoice };
         }
 
@@ -160,6 +149,8 @@
 
             public string CostCentre { get; set; }
 
+            public int? CreditForOrder_Id { get; set; }
+
             public CaseInvoiceArticleData[] Articles { get; set; }
 
             public CaseInvoiceOrderFileData[] Files { get; set; }
@@ -195,8 +186,7 @@
             public decimal? Ppu { get; set; }
 
             public short Position { get; set; }
-
-            public bool IsInvoiced { get; set; }
+            
         }
     }    
 }

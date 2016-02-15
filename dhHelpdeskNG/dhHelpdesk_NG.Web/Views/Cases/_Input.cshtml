@@ -326,11 +326,11 @@
                                                 <td class="span4">
                                                     @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Persons_Phone, CaseSolutionFields.PersonsPhone))
                                                     {
-                                                        @Html.TextBoxFor(model => model.case_.PersonsPhone, new { maxlength = "40" })
+                                                        @Html.TextBoxFor(model => model.case_.PersonsPhone, new { maxlength = "50" })
                                                     }
                                                     else
                                                     {
-                                                       @Html.TextBoxFor(model => model.case_.PersonsPhone, new { maxlength = "40", @readonly = "readonly" })
+                                                       @Html.TextBoxFor(model => model.case_.PersonsPhone, new { maxlength = "50", @readonly = "readonly" })
                                                     }
                                                 </td>
                                             </tr>
@@ -341,11 +341,11 @@
                                                 <td class="span4">
                                                     @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Persons_CellPhone, CaseSolutionFields.PersonsCellPhone))
                                                     {
-                                                        @Html.TextBoxFor(model => model.case_.PersonsCellphone, new { maxlength = "30" })
+                                                        @Html.TextBoxFor(model => model.case_.PersonsCellphone, new { maxlength = "50" })
                                                     }
                                                     else
                                                     {
-                                                        @Html.TextBoxFor(model => model.case_.PersonsCellphone, new { maxlength = "30", @readonly = "readonly" })
+                                                        @Html.TextBoxFor(model => model.case_.PersonsCellphone, new { maxlength = "50", @readonly = "readonly" })
                                                     }
                                                 </td>
                                             </tr>
@@ -668,7 +668,7 @@
                                                                         }
                                                                         else
                                                                         {
-                                                                            foreach (var e in Model.departments.Where(e => e.IsActive == 1 ))
+                                                                            foreach (var e in Model.departments.Where(e => e.IsActive == 1))
                                                                             {                                                                        
                                                                                 <option value="@e.Id" @e.Id.IdIsSelected(selected_Department)>@e.DepartmentDescription(Model.DepartmentFilterFormat)</option>
                                                                             }
@@ -695,7 +695,7 @@
                                                             {
                                                                 <select id="case__IsAbout_Ou_Id" name="case_.IsAbout.OU_Id" data-field="ou">
                                                                     <option value="">&nbsp;</option>
-                                                                    @if (Model.isaboutous!= null)
+                                                                    @if (Model.isaboutous != null)
                                                                     {
                                                                         var selected_OU = string.Empty;
                                                                         if (Model.case_.IsAbout != null && Model.case_.IsAbout.OU_Id.HasValue)
@@ -1656,9 +1656,21 @@
                                             }
                                             else
                                             {
-                                                @Html.TextBoxFor(m => m.finishingCauses.SingleOrDefault(x => x.Id == Model.case_.CausingPartId).Name, new { @readonly = true })
-                                                @Html.HiddenFor(x => x.case_.CausingPartId)
+                                                var causingpart = Model.case_.CausingPartId.HasValue ? Model.causingParts.SingleOrDefault(x => x.Id == Model.case_.CausingPartId) : null;
+
+                                                if (causingpart == null)
+                                                {
+                                                    @Html.TextBoxFor(m => m.case_.CausingPartId, new { @readonly = true })
+                                                }
+                                                else
+                                                {
+                                                    var transName = Translation.GetMasterDataTranslation(causingpart.Name);
+                                                     @Html.TextBoxFor(m => transName, new { @readonly = true })
+                                                     @Html.HiddenFor(x => x.case_.CausingPartId)
+                                                }
+                                                
                                             }
+                                            
                                         </td>
                                     </tr>
                                     @if (Model.changes != null)
