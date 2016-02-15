@@ -372,8 +372,29 @@ namespace DH.Helpdesk.Web.Controllers
             if (!string.IsNullOrEmpty(userId))
                 inputParams.Add("UserId", userId);
 
+            fName = fName.TrimStart();
+            var spacePos = fName.IndexOf(" ");
+            var firstName = string.Empty;
+            var lastName = string.Empty;
+            
+
             if (!string.IsNullOrEmpty(fName))
-               inputParams.Add("FName", fName);
+            {
+                if (spacePos > 0)
+                {
+                    firstName = fName.Substring(0, spacePos);
+                    if (fName.Length >= spacePos + 1)
+                        lastName = fName.Substring(spacePos + 1);
+                }
+                else
+                {
+                    firstName = fName;
+                }
+
+                inputParams.Add("FName", fName);                
+                inputParams.Add("FirstName", firstName);                
+                inputParams.Add("LastName", lastName);                
+            }
 
             if (!string.IsNullOrEmpty(email))
                 inputParams.Add("Email", email);

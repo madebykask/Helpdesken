@@ -48,11 +48,11 @@
 
 
             var loginName = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.LoginName, null);
-            var firstName = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.FirstName, (inputParams.ContainsKey("FName") ? inputParams["FName"] : null));
+            var firstName = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.FirstName, (inputParams.ContainsKey("FirstName") ? inputParams["FirstName"] : null));
             var initials = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Initials, null, 10);
-            var lastName = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.LastName, null);
+            var lastName = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.LastName, (inputParams.ContainsKey("LastName") ? inputParams["LastName"] : null));
 
-            var displayName = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.DisplayName, null);
+            var displayName = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.DisplayName, (inputParams.ContainsKey("FName") ? inputParams["FName"] : null));
 
             var place = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Place, (inputParams.ContainsKey("Placement") ? inputParams["Placement"] : null), 100);
             var phone = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Phone, (inputParams.ContainsKey("Phone") ? inputParams["Phone"] : null));
