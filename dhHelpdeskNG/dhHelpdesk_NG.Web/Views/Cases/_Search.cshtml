@@ -214,7 +214,7 @@
                                     int curId;                                    
                                     if (int.TryParse(p.Id, out curId))
                                     {
-                                       <option value="@p.Value" @curId.IdIsSelected(selectedPerformers)>@p.Value</option>                                 
+                                       <option value="@curId" @curId.IdIsSelected(selectedPerformers)>@p.Value</option>                                 
                                     }
                                 }
                             </select>                                       
