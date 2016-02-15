@@ -113,7 +113,7 @@
 
             IDictionary<int,int> aggregateStatus = new Dictionary<int,int>();
             IDictionary<int,int> aggregateSubStatus = new Dictionary<int,int>();
-
+            var secSortOrder = string.Empty;
             using (var con = new OleDbConnection(dsn)) 
             {
                 using (var cmd = new OleDbCommand())
@@ -193,24 +193,29 @@
                                     if (watchDate.HasValue)
                                     {
                                         var watchDateDue = watchDate.Value.MakeTomorrow();
+                                        int workTime = 0;     
                                         //// calc time by watching date
                                         if (watchDateDue > now)
                                         {
                                             // #52951 timeOnPause shouldn't calculate when watchdate has value
-                                            timeLeft = (workTimeCalculator.CalculateWorkTime(
-                                                now,
-                                                watchDateDue,
-                                                departmentId) ) / 60;                                            
+                                            workTime = workTimeCalculator.CalculateWorkTime(
+                                                                                            now,
+                                                                                            watchDateDue,
+                                                                                            departmentId);
                                         }
                                         else
                                         {
                                             //// for cases that should be closed in the past
                                             // #52951 timeOnPause shouldn't calculate when watchdate has value
-                                            timeLeft = (-workTimeCalculator.CalculateWorkTime(
-                                            watchDateDue,
-                                            now,
-                                            departmentId)) / 60;
-                                        }                                        
+                                            workTime = -workTimeCalculator.CalculateWorkTime(
+                                                                                             watchDateDue,
+                                                                                             now,
+                                                                                             departmentId);
+                                        }
+                                        
+                                        timeLeft =  workTime / 60;
+                                        var floatingPoint = workTime % 60;
+                                        secSortOrder = floatingPoint.ToString();
                                     }
                                     else if (SLAtime > 0)
                                     {
@@ -220,7 +225,8 @@
                                         var calcTime = workTimeCalculator.CalculateWorkTime(dtFrom, dtTo, departmentId);
                                         timeLeft = (SLAtime * 60 - calcTime + timeOnPause) / 60;
                                         var floatingPoint = (SLAtime * 60 - calcTime + timeOnPause) % 60;
-                                        
+                                        secSortOrder = floatingPoint.ToString();
+
                                         if (timeLeft <= 0 && floatingPoint < 0)
                                             timeLeft--; 
                                         
@@ -297,7 +303,8 @@
 
                                     cols.Add(field);
                                 }
-                                row.SortOrder = sortOrder; 
+                                row.SortOrder = sortOrder;
+                                row.SecSortOrder = secSortOrder;
                                 row.Tooltip = toolTip; 
                                 row.CaseIcon = GetCaseIcon(dr);
                                 row.Id = dr.SafeGetInteger("Id"); 
@@ -438,14 +445,17 @@
                         {
                             int intVal;
                             int? val = int.TryParse(it.SortOrder, out intVal) ? (int?)intVal : null;
-                            return new { index = indx++, val };
+
+                            double dVal;
+                            double? floatingPoint = double.TryParse(it.SecSortOrder, out dVal) ? (double?)dVal : null;
+                            return new { index = indx++, val, dVal };
                         });
                 if (s.Ascending)
                 {
-                    return structToSort.OrderBy(it => it.val).Select(it => csr[it.index]).ToList();
+                    return structToSort.OrderBy(it => it.val).ThenBy(it=> it.dVal).Select(it => csr[it.index]).ToList();
                 }
 
-                return structToSort.OrderByDescending(it => it.val).Select(it => csr[it.index]).ToList();
+                return structToSort.OrderByDescending(it => it.val).ThenByDescending(it => it.dVal).Select(it => csr[it.index]).ToList();
             }
 
             return csr;
