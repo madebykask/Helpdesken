@@ -33,6 +33,7 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             int calendarPermission,
             int faqPermission,
             int bulletinBoardPermission,
+            int documentPermission,
             int setPriorityPermission,
             int invoicePermission,
             int dataSecurityPermission,
@@ -71,6 +72,7 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             this.FAQPermission = faqPermission;
             this.FollowUpPermission = followUpPermission;
             this.BulletinBoardPermission = bulletinBoardPermission;
+            this.DocumentPermission = documentPermission;
             this.SetPriorityPermission = setPriorityPermission;
             this.InvoicePermission = invoicePermission;
             this.DataSecurityPermission = dataSecurityPermission;
@@ -134,6 +136,8 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
         public int FAQPermission { get; set; }
 
         public int BulletinBoardPermission { get; set; }
+
+        public int DocumentPermission { get; set; }
 
         public int SetPriorityPermission { get; set; }
 

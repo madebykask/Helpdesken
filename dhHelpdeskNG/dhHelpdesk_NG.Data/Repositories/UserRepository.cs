@@ -455,6 +455,7 @@ namespace DH.Helpdesk.Dal.Repositories
                         x.CalendarPermission,
                         x.FAQPermission,
                         x.BulletinBoardPermission,
+                        x.DocumentPermission,
                         x.SetPriorityPermission,
                         x.InvoicePermission,
                         x.DataSecurityPermission,

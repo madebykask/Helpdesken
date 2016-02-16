@@ -84,7 +84,8 @@
                 Phone = overview.Phone,
                 Email = overview.Email,
                 UserWorkingGroups = overview.UserWorkingGroups,
-                StartPage = overview.StartPage
+                StartPage = overview.StartPage,
+                DocumentPermission = overview.DocumentPermission
             };
         }
 
@@ -113,6 +114,7 @@
                 user.CalendarPermission,
                 user.FAQPermission,
                 user.BulletinBoardPermission,
+                user.DocumentPermission,
                 user.SetPriorityPermission,
                 user.InvoicePermission,
                 user.DataSecurityPermission,

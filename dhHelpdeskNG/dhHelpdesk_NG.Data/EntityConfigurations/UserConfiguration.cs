@@ -151,6 +151,7 @@
             this.Property(u => u.ShowSolutionTime).IsRequired();
             this.Property(u => u.TimeZoneId).IsOptional();
             this.Property(u => u.ShowCaseStatistics).IsRequired();
+            this.Property(x => x.DocumentPermission).IsRequired();
 
             this.ToTable("tblUsers");
         }

@@ -65,6 +65,11 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	ALTER TABLE tblProductArea ADD ShowOnExternalPage int Default(1) NOT NULL
 GO
 
+-- New field in tblUsers
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'DocumentPermission' and sysobjects.name = N'tblUsers')
+	ALTER TABLE tblUsers ADD DocumentPermission int Default(0) NOT NULL
+GO
+
 
 IF COL_LENGTH('tblInvoiceArticle','Number') IS NOT NULL
 begin
