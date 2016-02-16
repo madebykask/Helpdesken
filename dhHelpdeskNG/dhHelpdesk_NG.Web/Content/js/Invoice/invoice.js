@@ -3443,7 +3443,7 @@ $(function () {
             });
     };
 
-    //loadAllData();
+    loadAllData();
 });
 
 

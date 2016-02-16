@@ -111,6 +111,12 @@ IF COL_LENGTH('tblInvoiceArticle','NameEng') IS NULL
 	add Blocked bit null 
  end
 
+ IF COL_LENGTH('tblProductArea','ShowOnExternalPage') IS NULL
+ BEGIN
+	alter table tblProductArea
+	add ShowOnExternalPage int not null default((1))
+ end
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.20'
 
