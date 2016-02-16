@@ -1439,7 +1439,7 @@ namespace DH.Helpdesk.Web.Controllers
             var u = new
             {
                 num = cu.UserId,
-                name = cu.SurName + ' ' + cu.FirstName,
+                name = cu.FirstName + ' ' + cu.SurName,
                 email = cu.Email,
                 place = cu.Location,
                 phone = cu.Phone,
@@ -1448,7 +1448,7 @@ namespace DH.Helpdesk.Web.Controllers
                 regionid = (cu.Department != null) ? cu.Department.Region_Id == null ? string.Empty : cu.Department.Region_Id.Value.ToString() : string.Empty,
                 regionname = (cu.Department != null) ? cu.Department.Region != null ? cu.Department.Region.Name : string.Empty : string.Empty,
                 departmentid = cu.Department_Id,
-                departmentname = cu.Department.DepartmentName,
+                departmentname = (cu.Department != null? cu.Department.DepartmentName : string.Empty),
                 ouid = cu.OU_Id,
                 ouname = cu.OU != null ? (cu.OU.Parent != null ? cu.OU.Parent.Name + " - " : string.Empty) + cu.OU.Name : string.Empty,
                 costcentre = string.IsNullOrEmpty(cu.CostCentre)? string.Empty : cu.CostCentre

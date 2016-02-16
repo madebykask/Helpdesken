@@ -547,11 +547,11 @@ namespace DH.Helpdesk.NewSelfService.Infrastructure.Extensions
 
             foreach (CaseType caseType in caseTypes)
             {
-                if (caseType.IsActive != 0) 
+                if (caseType.IsActive != 0 && caseType.ShowOnExternalPage != 0) 
                 {
                     bool hasChild = false;
                     if (caseType.SubCaseTypes != null)
-                        if (caseType.SubCaseTypes.Where(s=> s.IsActive != 0).Any())
+                        if (caseType.SubCaseTypes.Where(s=> s.IsActive != 0 && s.ShowOnExternalPage != 0).Any())
                             hasChild = true;
 
                     if (hasChild)
@@ -614,7 +614,7 @@ namespace DH.Helpdesk.NewSelfService.Infrastructure.Extensions
 
                 bool hasChild = false;
                 if (pa.SubProductAreas != null)
-                    if (pa.SubProductAreas.Where(s => s.IsActive != 0).ToList().Count > 0)
+                    if (pa.SubProductAreas.Where(s => s.IsActive != 0 && s.ShowOnExternalPage != 0).ToList().Count > 0)
                         hasChild = true;
 
                 if (hasChild)
@@ -626,7 +626,7 @@ namespace DH.Helpdesk.NewSelfService.Infrastructure.Extensions
                 if (hasChild)
                 {
                     htmlOutput += "<ul class='dropdown-menu'>";
-                    htmlOutput += BuildProcuctAreaDropdownButton(pa.SubProductAreas.Where(s => s.IsActive != 0).ToList());
+                    htmlOutput += BuildProcuctAreaDropdownButton(pa.SubProductAreas.Where(s => s.IsActive != 0 && s.ShowOnExternalPage != 0).ToList());
                     htmlOutput += "</ul>";
                 }
                 htmlOutput += "</li>";

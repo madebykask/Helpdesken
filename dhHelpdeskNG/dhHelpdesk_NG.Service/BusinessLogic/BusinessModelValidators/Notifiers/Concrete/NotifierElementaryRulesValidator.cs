@@ -183,7 +183,7 @@
             this.elementaryRulesValidator.ValidateStringField(
                 validatableNotifier.FirstName,
                 GeneralField.FirstName,
-                CreateValidationRule(settings.FirstName));
+                CreateValidationRule(new FieldProcessingSetting(true, settings.FirstName.Required)));
 
             this.elementaryRulesValidator.ValidateStringField(
                 validatableNotifier.Initials,
@@ -193,7 +193,7 @@
             this.elementaryRulesValidator.ValidateStringField(
                 validatableNotifier.LastName,
                 GeneralField.LastName,
-                CreateValidationRule(settings.LastName));
+                CreateValidationRule(new FieldProcessingSetting(true, settings.LastName.Required)));
 
             this.elementaryRulesValidator.ValidateStringField(
                 validatableNotifier.DisplayName,
