@@ -1439,7 +1439,7 @@ namespace DH.Helpdesk.Web.Controllers
             var u = new
             {
                 num = cu.UserId,
-                name = cu.SurName + ' ' + cu.FirstName,
+                name = cu.FirstName + ' ' + cu.SurName,
                 email = cu.Email,
                 place = cu.Location,
                 phone = cu.Phone,

@@ -853,12 +853,22 @@
                 return string.Empty;
             }
 
-            var sb = new StringBuilder();
+            var sb = new StringBuilder();                        
 
             // kund 
             sb.Append(" where (tblCase.Customer_Id = " + f.CustomerId + ")");
             sb.Append(" and (tblCase.Deleted = 0)");
+
+
+            //CaseType
+            sb.Append(" and (tblCaseType.ShowOnExternalPage <> 0)");
+
+            //ProductArea
+            sb.Append(" and (tblCase.ProductArea_Id Is Null or tblCase.ProductArea_Id in (select id from tblProductArea where ShowOnExternalPage <> 0))");
             
+
+            if (f.ReportedBy.Trim() == string.Empty)
+                f.ReportedBy = "''";
             switch (f.CaseListType.ToLower())
             {
 

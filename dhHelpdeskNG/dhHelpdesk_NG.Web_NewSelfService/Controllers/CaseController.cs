@@ -970,10 +970,10 @@
             var orgUnits = this._orgService.GetOUs(customerId).ToList();
 
             //Case Type tree            
-            var caseTypes = this._caseTypeService.GetCaseTypes(customerId);
+            var caseTypes = this._caseTypeService.GetCaseTypes(customerId).Where(c=> c.ShowOnExternalPage != 0).ToList();
 
             //Product Area tree            
-            var productAreas = this._productAreaService.GetTopProductAreas(customerId);
+            var productAreas = this._productAreaService.GetTopProductAreas(customerId).Where(p=> p.ShowOnExternalPage != 0).ToList();
 
             //System list            
             var systems = this._systemService.GetSystems(customerId);
