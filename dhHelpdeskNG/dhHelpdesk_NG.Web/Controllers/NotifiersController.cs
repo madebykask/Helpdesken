@@ -279,6 +279,16 @@ namespace DH.Helpdesk.Web.Controllers
         [BadRequestOnNotValid]
         public RedirectToRouteResult NewNotifier(InputModel model)
         {
+            if ((model.LastName == null || !model.FirstName.Show) || (model.LastName == null || !model.LastName.Show))
+            {
+                var splitedName = GetSplitedName(model.DisplayName != null? model.DisplayName.Value : string.Empty);
+
+                if (model.LastName == null || !model.FirstName.Show)
+                    model.FirstName = new StringFieldModel(false, "FirstName", splitedName.Key);
+
+                if (model.LastName == null || !model.LastName.Show)
+                    model.LastName = new StringFieldModel(false, "LastName", splitedName.Value);
+            }
             var newNotifier = this.newNotifierFactory.Create(model, SessionFacade.CurrentCustomer.Id, DateTime.Now);
             this.notifierService.AddNotifier(newNotifier);
             return this.RedirectToAction("Index");
@@ -288,6 +298,17 @@ namespace DH.Helpdesk.Web.Controllers
         [BadRequestOnNotValid]
         public JsonResult NewNotifierPopup(InputModel model)
         {
+            if ((model.LastName == null || !model.FirstName.Show) || (model.LastName == null || !model.LastName.Show))
+            {
+                var splitedName = GetSplitedName(model.DisplayName != null ? model.DisplayName.Value : string.Empty);
+
+                if (model.LastName == null || !model.FirstName.Show)                    
+                    model.FirstName = new StringFieldModel(false, "FirstName", splitedName.Key);
+
+                if (model.LastName == null || !model.LastName.Show)
+                    model.LastName = new StringFieldModel(false,"LastName", splitedName.Value);
+            }
+
             var newNotifier = this.newNotifierFactory.Create(model, SessionFacade.CurrentCustomer.Id, DateTime.Now);
             this.notifierService.AddNotifier(newNotifier);
             return new JsonResult { Data = newNotifier.Id };
@@ -372,29 +393,12 @@ namespace DH.Helpdesk.Web.Controllers
             if (!string.IsNullOrEmpty(userId))
                 inputParams.Add("UserId", userId);
 
-            fName = fName.TrimStart();
-            var spacePos = fName.IndexOf(" ");
-            var firstName = string.Empty;
-            var lastName = string.Empty;
+
+            var splitedName = GetSplitedName(fName);
+            inputParams.Add("FName", fName);                
+            inputParams.Add("FirstName", splitedName.Key);                
+            inputParams.Add("LastName", splitedName.Value);                
             
-
-            if (!string.IsNullOrEmpty(fName))
-            {
-                if (spacePos > 0)
-                {
-                    firstName = fName.Substring(0, spacePos);
-                    if (fName.Length >= spacePos + 1)
-                        lastName = fName.Substring(spacePos + 1);
-                }
-                else
-                {
-                    firstName = fName;
-                }
-
-                inputParams.Add("FName", fName);                
-                inputParams.Add("FirstName", firstName);                
-                inputParams.Add("LastName", lastName);                
-            }
 
             if (!string.IsNullOrEmpty(email))
                 inputParams.Add("Email", email);
@@ -740,7 +744,30 @@ namespace DH.Helpdesk.Web.Controllers
             return this.RedirectToAction("Notifiers");
         }
 
+        private KeyValuePair<string, string> GetSplitedName(string fullName)
+        {
+            var firstName = string.Empty;
+            var lastName = string.Empty;
 
+            if (!string.IsNullOrEmpty(fullName))
+            {
+                fullName = fullName.TrimStart();
+                var spacePos = fullName.IndexOf(" ");
+
+                if (spacePos > 0)
+                {
+                    firstName = fullName.Substring(0, spacePos);
+                    if (fullName.Length >= spacePos + 1)
+                        lastName = fullName.Substring(spacePos + 1);
+                }
+                else
+                {
+                    firstName = fullName;
+                }
+            }
+
+            return new KeyValuePair<string, string>(firstName, lastName);
+        }
         #endregion
     }
 }

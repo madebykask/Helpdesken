@@ -455,7 +455,7 @@
                     return structToSort.OrderBy(it => it.val).ThenBy(it=> it.dVal).Select(it => csr[it.index]).ToList();
                 }
 
-                return structToSort.OrderByDescending(it => it.val).ThenByDescending(it => it.dVal).Select(it => csr[it.index]).ToList();
+                return structToSort.OrderByDescending(it => it.val).ThenBy(it => it.dVal).Select(it => csr[it.index]).ToList();
             }
 
             return csr;
