@@ -439,7 +439,32 @@
             var res = new List<string>();
             while (lookingProductAreaId.HasValue && this.productAreaCache.ContainsKey(lookingProductAreaId.Value) && recursionsMax-- > 0)
             {
+                res.Add(this.productAreaCache[lookingProductAreaId.Value].Name);                               
+                lookingProductAreaId = this.productAreaCache[lookingProductAreaId.Value].Parent_ProductArea_Id;
+            }
+
+            return res.AsQueryable().Reverse().ToArray();
+        }
+
+        public IEnumerable<string> GetParentPathOnExternalPage(int productAreaId, int customerId, out bool checkShowOnExtenal)
+        {
+            checkShowOnExtenal = true;
+            if (this.productAreaCache == null || this.cachiedForCustomer != customerId)
+            {
+                this.productAreaCache = this.GetProductAreasForCustomer(customerId).ToDictionary(it => it.Id, it => it);
+                this.cachiedForCustomer = customerId;
+            }
+
+            var recursionsMax = 10;
+            int? lookingProductAreaId = productAreaId;
+            var res = new List<string>();
+            while (lookingProductAreaId.HasValue && this.productAreaCache.ContainsKey(lookingProductAreaId.Value) && recursionsMax-- > 0)
+            {
                 res.Add(this.productAreaCache[lookingProductAreaId.Value].Name);
+
+                if (this.productAreaCache[lookingProductAreaId.Value].ShowOnExternalPage == 0)
+                    checkShowOnExtenal = false;
+
                 lookingProductAreaId = this.productAreaCache[lookingProductAreaId.Value].Parent_ProductArea_Id;
             }
 

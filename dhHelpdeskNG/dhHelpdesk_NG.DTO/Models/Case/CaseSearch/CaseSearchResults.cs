@@ -14,7 +14,8 @@
         public string Tooltip { get; set; }
         public bool IsUnread { get; set; }
         public bool IsUrgent { get; set; }
-        public IList<Field> Columns { get; set; }        
+        public IList<Field> Columns { get; set; }
+        public bool Ignored { get; set; }
     }
 
     public class CaseAggregateData

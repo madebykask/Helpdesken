@@ -241,7 +241,8 @@
                                         }
                                     }
                                 }
-
+                                var isExternalEnv = (context.applicationType.ToLower() == ApplicationTypes.LineManager || context.applicationType.ToLower() == ApplicationTypes.SelfService);
+                                row.Ignored = false;
                                 foreach (var c in userCaseSettings)
                                 {
                                     Field field = null;
@@ -256,7 +257,8 @@
                                                 bool translateField;
                                                 bool treeTranslation;
                                                 int baseId = 0;
-                                              
+                                                bool preventToAddRecord = false;
+                                                
                                                 var value = GetDatareaderValue(
                                                                                 dr,
                                                                                 i,
@@ -266,11 +268,18 @@
                                                                                 timeLeft,
                                                                                 caseTypes,
                                                                                 productAreaNamesResolver,
+                                                                                isExternalEnv,
                                                                                 out translateField,
                                                                                 out treeTranslation,
                                                                                 out dateValue,
                                                                                 out fieldType,
-                                                                                out baseId);
+                                                                                out baseId,
+                                                                                out preventToAddRecord);
+
+                                                // according to some rules it can/canot be shown
+                                                if (!row.Ignored)
+                                                  row.Ignored = preventToAddRecord;
+
                                                 field = new Field
                                                             {
                                                                 Key = c.Name,
@@ -311,7 +320,8 @@
                                 row.Columns = cols;
                                 row.IsUnread = dr.SafeGetInteger("Status") == 1;
                                 row.IsUrgent = timeLeft.HasValue && timeLeft < 0;                                
-                                ret.Add(row); 
+                                if (!row.Ignored)
+                                    ret.Add(row); 
                             }
                         }
 
@@ -502,6 +512,33 @@
             return string.Join(" - ", list.Select(c => c.Name).Reverse());
         }
 
+        private static string GetCaseTypeFullPathOnExternal(
+                            CaseTypeOverview[] caseTypes,
+                            int caseTypeId,
+                            out bool checkShowOnExternal)
+        {
+            checkShowOnExternal = true;
+            var caseType = caseTypes.FirstOrDefault(c => c.Id == caseTypeId);
+            if (caseType == null)
+            {
+                return string.Empty;
+            }
+
+            var list = new List<CaseTypeOverview>();
+            var parent = caseType;
+            do
+            {
+                list.Add(parent);
+                
+                if (parent.ShowOnExternalPage == 0)
+                    checkShowOnExternal = false;
+
+                parent = caseTypes.FirstOrDefault(c => c.Id == parent.ParentId);
+            }
+            while (parent != null);
+
+            return string.Join(" - ", list.Select(c => c.Name).Reverse());
+        }
         private static string GetDatareaderValue(
                                 IDataReader dr, 
                                 int col, 
@@ -511,11 +548,13 @@
                                 int? timeLeft,
                                 IEnumerable<CaseTypeOverview> caseTypes,
                                 IProductAreaNameResolver productAreaNamesResolver,
+                                bool isExternalEnv, 
                                 out bool translateField, 
                                 out bool treeTranslation, 
                                 out DateTime? dateValue, 
                                 out FieldTypes fieldType,
-                                out int baseId) 
+                                out int baseId,
+                                out bool preventToAddRecord) 
         {
             var ret = string.Empty;
             var sep = " - ";
@@ -524,7 +563,8 @@
             fieldType = FieldTypes.String;
             dateValue = null;
             baseId = 0;
-            
+            preventToAddRecord = false;
+
             switch (fieldName.ToLower())
             {
                 case "regtime":
@@ -542,10 +582,21 @@
                     ret = dr.SafeGetString("PriorityName");
                     translateField = true;
                     break;
-                case "casetype_id": 
-                    ret = GetCaseTypeFullPath(
-                                caseTypes.ToArray(),
-                                int.Parse(dr[col].ToString()));
+                case "casetype_id":
+                    if (isExternalEnv)
+                    {
+                        bool cOut = true;
+                        ret = GetCaseTypeFullPathOnExternal(
+                                    caseTypes.ToArray(),
+                                    int.Parse(dr[col].ToString()), out cOut);
+                        preventToAddRecord = !cOut;
+                    }
+                    else
+                    {
+                        ret = GetCaseTypeFullPath(
+                                    caseTypes.ToArray(),
+                                    int.Parse(dr[col].ToString()));
+                    }
                     translateField = true;
                     break;
 
@@ -586,15 +637,34 @@
                     ProductAreaEntity p = dr.SafeGetInteger("ProductArea_Id").getProductAreaItem(pal);
                     if (p != null)
                     {
-                        if (ConfigurationManager.AppSettings["InitFromSelfService"] == "true")
+                        // SelfService/LM 
+                        if (isExternalEnv)
                         {
-                            ret = p.Name;
+                            bool pOut = true;
+                            var pRes = productAreaNamesResolver.GetParentPathOnExternalPage(p.Id, customerSetting.Customer_Id, out pOut);
+                            preventToAddRecord = !pOut;
+
+                            if (ConfigurationManager.AppSettings["InitFromSelfService"] == "true")
+                            {
+                                ret = p.Name;
+                            }
+                            else
+                            {
+                                ret = string.Join(" - ", pRes);
+                            }
                         }
-                        else
+                        else                        
                         {
-                            ret = string.Join(" - ", productAreaNamesResolver.GetParentPath(p.Id, customerSetting.Customer_Id));
-                        }
-                            
+                            if (ConfigurationManager.AppSettings["InitFromSelfService"] == "true")
+                            {
+                                ret = p.Name;
+                            }
+                            else
+                            {
+                                ret = string.Join(" - ", productAreaNamesResolver.GetParentPath(p.Id, customerSetting.Customer_Id));
+                            }
+                        } 
+  
                         baseId = p.Id;
                     }                    
                     treeTranslation = true;
