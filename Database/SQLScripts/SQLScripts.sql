@@ -117,6 +117,13 @@ IF COL_LENGTH('tblInvoiceArticle','NameEng') IS NULL
 	add ShowOnExternalPage int not null default((1))
  end
 
+ if exists (select * from tblCaseType where CaseType = 'CaseType_' + cast(Id as nvarchar) and [status] = 1 )
+ begin
+	 Update tblCaseType set [Status] = 0
+	 where CaseType = 'CaseType_' + cast(Id as nvarchar)
+ end
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.20'
 
