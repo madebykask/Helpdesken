@@ -12,6 +12,8 @@ namespace DH.Helpdesk.Web.Models
         public BulletinBoard BulletinBoard { get; set; }
 
         public IEnumerable<BulletinBoard> BulletinBoards { get; set; }
+
+        public bool UserHasBulletinBoardAdminPermission { get; set; }
     }
 
     public class BulletinBoardInputViewModel
@@ -22,5 +24,7 @@ namespace DH.Helpdesk.Web.Models
         public IList<SelectListItem> WGsSelected { get; set; }
 
         public BulletinBoardInputViewModel() { }
+
+        public bool UserHasBulletinBoardAdminPermission { get; set; }
     }
 }

@@ -4,9 +4,12 @@ using System.Linq;
 using System.Web.Mvc;
 
 namespace DH.Helpdesk.Web.Controllers
-{    
+{
+    using DH.Helpdesk.BusinessData.Enums.Admin.Users;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Users;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Models;
@@ -15,15 +18,18 @@ namespace DH.Helpdesk.Web.Controllers
     {
         private readonly IBulletinBoardService _bulletinBoardService;
         private readonly IWorkingGroupService _workingGroupService;
+        private readonly IUserPermissionsChecker _userPermissionsChecker;
 
         public BulletinBoardController(
             IBulletinBoardService bulletinBoardService,
             IWorkingGroupService workingGroupService,
-            IMasterDataService masterDataService)
+            IMasterDataService masterDataService,
+            IUserPermissionsChecker userPermissionsChecker)
             : base(masterDataService)
         {
             this._bulletinBoardService = bulletinBoardService;
             this._workingGroupService = workingGroupService;
+            this._userPermissionsChecker = userPermissionsChecker;
         }
 
         public ActionResult Index()
@@ -172,8 +178,11 @@ namespace DH.Helpdesk.Web.Controllers
 
         private BulletinBoardIndexViewModel IndexInputViewModel()
         {
-            var model = new BulletinBoardIndexViewModel { };  
+            var userHasBulletinBoardAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.BulletinBoardPermission);
 
+            var model = new BulletinBoardIndexViewModel { };
+
+            model.UserHasBulletinBoardAdminPermission = userHasBulletinBoardAdminPermission;
             return model;
         }
 
@@ -192,6 +201,7 @@ namespace DH.Helpdesk.Web.Controllers
                     wgsAvailable.Add(wg);
                 }
             }
+            var userHasBulletinBoardAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.BulletinBoardPermission);
 
             var model = new BulletinBoardInputViewModel
             {
@@ -207,6 +217,8 @@ namespace DH.Helpdesk.Web.Controllers
                     Value = x.Id.ToString()
                 }).ToList(),
             };
+
+            model.UserHasBulletinBoardAdminPermission = userHasBulletinBoardAdminPermission;
 
             return model;
         }

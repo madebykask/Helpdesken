@@ -19,6 +19,8 @@
         CalendarPermission,
         CreateOrderPermission,
         AdministerOrderPermission,
-        CreateSubCasePermission
+        CreateSubCasePermission,
+        DocumentPermission,
+        BulletinBoardPermission
     }
 }
