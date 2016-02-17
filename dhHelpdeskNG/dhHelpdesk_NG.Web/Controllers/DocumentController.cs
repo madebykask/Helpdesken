@@ -18,6 +18,9 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Web.Infrastructure.Extensions;
     using DH.Helpdesk.Web.Models;
     using DH.Helpdesk.Web.Models.Documents;
+    using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Users;
+    using DH.Helpdesk.BusinessData.Enums.Admin.Users;
 
     public class TreeNodeType
     {
@@ -32,17 +35,20 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IDocumentService _documentService;
         private readonly IUserService _userService;
         private readonly IWorkingGroupService _workingGroupService;
+        private readonly IUserPermissionsChecker _userPermissionsChecker;
 
         public DocumentController(
             IDocumentService documentService,
             IUserService userService,
             IWorkingGroupService workingGroupService,
-            IMasterDataService masterDataService)
+            IMasterDataService masterDataService,
+            IUserPermissionsChecker userPermissionsChecker)
             : base(masterDataService)
         {
             this._documentService = documentService;
             this._userService = userService;
             this._workingGroupService = workingGroupService;
+            this._userPermissionsChecker = userPermissionsChecker;
         }
 
         [HttpPost]
@@ -323,7 +329,9 @@ namespace DH.Helpdesk.Web.Controllers
             var docTree = _documentService.FindCategoriesWithSubcategoriesByCustomerId(customerId);            
             var categoryTreeItems = docTree.Select(this.CategoryToTreeItem).ToList();
             var categoriesTreeContent = new TreeContent(categoryTreeItems, "0");
-                        
+
+            var userHasDocumentAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.DocumentPermission);
+
             var activeTab = SessionFacade.FindActiveTab("Document");
             activeTab = (activeTab == null) ? "DocumentTab" : activeTab;
 
@@ -341,7 +349,8 @@ namespace DH.Helpdesk.Web.Controllers
             ViewBag.SelectedCategory = Id;
             ViewBag.SelectedListType = docType;
             model.DocSearch = ds;
-            
+
+            model.UserHasDocumentAdminPermission = userHasDocumentAdminPermission;
             return model;
         }
 
@@ -419,6 +428,8 @@ namespace DH.Helpdesk.Web.Controllers
             var usSelected = document.Us ?? new List<User>();
             var usAvailable = new List<User>();
 
+            var userHasDocumentAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.DocumentPermission);
+
             foreach (var us in this._userService.GetUsers())
             {
                 if (!usSelected.Contains(us))
@@ -466,6 +477,7 @@ namespace DH.Helpdesk.Web.Controllers
                 }).ToList(),                
             };
 
+            model.UserHasDocumentAdminPermission = userHasDocumentAdminPermission;
             //model.ShowOnStartPage = document.ShowOnStartPage;
 
             return model;

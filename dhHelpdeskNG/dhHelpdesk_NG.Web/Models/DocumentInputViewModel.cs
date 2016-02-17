@@ -76,5 +76,7 @@ namespace DH.Helpdesk.Web.Models
         public IList<SelectListItem> WGsSelected { get; set; }        
 
         public TreeContent DocumentTree { get; set; }
+
+        public bool UserHasDocumentAdminPermission { get; set; }
     }
 }
