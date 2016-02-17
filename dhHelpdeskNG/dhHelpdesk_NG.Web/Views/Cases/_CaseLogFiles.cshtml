@@ -1,4 +1,5 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Common.Tools
 @model DH.Helpdesk.BusinessData.Models.Case.FilesModel     
 @using System.Web.Optimization
 
@@ -35,11 +36,11 @@
                         </td>
                         <td>
                             @* TODO: fix this, set deleteattachedfilepermission to true if usergroupid is administrator *@
-                            @if (SessionFacade.CurrentUser.DeleteAttachedFilePermission == 1 || SessionFacade.CurrentUser.UserGroupId == 4)
-                            {
-                            <a id="@string.Format("delete_logfile_button_{0}", i)" class="btn bt-small" data-field="deleteFile" title="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)">
-                                <i class="icon-remove"></i>
-                            </a>
+                            @if (!GuidHelper.IsGuid(Model.Id) && (SessionFacade.CurrentUser.DeleteAttachedFilePermission == 1 || SessionFacade.CurrentUser.UserGroupId == 4))
+                            {                            
+                                <a id="@string.Format("delete_logfile_button_{0}", i)" class="btn bt-small" data-field="deleteFile" title="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)">
+                                    <i class="icon-remove"></i>
+                                </a>
                             }
                         </td>
                     </tr>
