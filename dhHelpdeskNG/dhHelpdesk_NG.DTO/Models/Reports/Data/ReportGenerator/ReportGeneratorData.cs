@@ -97,6 +97,8 @@ using DH.Helpdesk.BusinessData.Enums.Case.Fields;
 
         public int? SolvedInTime { get; set; }
 
+        public DateTime? FinishingDate { get; set; }
+
         //--
 
         public string WorkingGroup { get; set; }

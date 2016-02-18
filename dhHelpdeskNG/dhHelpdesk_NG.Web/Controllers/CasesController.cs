@@ -376,7 +376,7 @@ namespace DH.Helpdesk.Web.Controllers
             f.CustomerId = int.Parse(frm.ReturnFormValue("currentCustomerId"));
             f.Customer = frm.ReturnFormValue("lstfilterCustomers");
             f.CaseProgress = frm.ReturnFormValue("lstFilterCaseProgress");            
-            f.UserPerformer = frm.ReturnFormValue("CaseSearchFilterData.lstFilterPerformer");            
+            f.UserPerformer = frm.ReturnFormValue("lstFilterPerformer");            
             f.Initiator = frm.ReturnFormValue("CaseInitiatorFilter");
             f.CaseRegistrationDateStartFilter = frm.GetDate("CaseRegistrationDateStartFilter");
             f.CaseRegistrationDateEndFilter = frm.GetDate("CaseRegistrationDateEndFilter");

@@ -100,7 +100,7 @@
                         .Select(
                             it => new ListItem(it.Id.ToString(), string.Format("{0} {1}", it.SurName, it.FirstName), Convert.ToBoolean(it.IsActive)))
                         .ToList());
-                list.SelectedItems.AddItems(selectedItems);
+                list.SelectedItems.AddItems(selectedItems, false);
             }
             else
             {
@@ -110,7 +110,7 @@
                         .Select(
                             it => new ListItem(it.Id.ToString(), string.Format("{0} {1}", it.FirstName, it.SurName), Convert.ToBoolean(it.IsActive)))
                         .ToList());
-                list.SelectedItems.AddItems(selectedItems);
+                list.SelectedItems.AddItems(selectedItems, false);
             }
 
             if (addEmpty)
