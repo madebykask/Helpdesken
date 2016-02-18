@@ -305,8 +305,8 @@
                                                    q.PlannedActionDate, q.WatchDate, Convert.ToBoolean(q.Verified), q.VerifiedDescription,
                                                    q.SolutionRate, q.CausingPart),
 
-                                q.LogData != null ? new LogsOverview((q.LogData.FinishingType.HasValue ? closingReasonFullNames[q.LogData.FinishingType.ToString()] : string.Empty), 
-                                                                      q.LogData.FinishingDate) : new LogsOverview(string.Empty, null)
+                                q.LogData != null ? new LogsOverview((q.LogData.FinishingType.HasValue && q.FinishingDate.HasValue? closingReasonFullNames[q.LogData.FinishingType.ToString()] : string.Empty), 
+                                                                      q.FinishingDate) : new LogsOverview(string.Empty, null)
 
                                 )).ToList();
            
