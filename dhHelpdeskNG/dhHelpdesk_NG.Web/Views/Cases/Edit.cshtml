@@ -106,8 +106,9 @@
 
             $("#case-action-save-and-close").click(function (e) {
                 e.preventDefault();
+                SubmitCase();
                 //if there are articles selected but not invoiced and the case is finishing/closing
-                if (FinishDateAndTypeIsEmtpy()) {
+                @*if (FinishDateAndTypeIsEmtpy()) {
                     if (hasNotInvoicedArticles()) {
                         messageDialog(dc('@Translation.Get("Du får inte avsluta ett ärende med invalda fast ofakturerade artiklar. Var god granska dina ordrar.")'));
                         return false;
@@ -128,7 +129,7 @@
                 }
                 else {
                     SubmitCase();
-                }
+                }*@
             });
 
             //$("#case-action-save-and-close").click(function (e) {
