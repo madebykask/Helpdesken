@@ -374,7 +374,7 @@ namespace DH.Helpdesk.Web.Controllers
             f.CustomerId = int.Parse(frm.ReturnFormValue("currentCustomerId"));
             f.Customer = frm.ReturnFormValue("lstfilterCustomers");
             f.CaseProgress = frm.ReturnFormValue("lstFilterCaseProgress");            
-            f.UserPerformer = frm.ReturnFormValue("CaseSearchFilterData.lstFilterPerformer");            
+            f.UserPerformer = frm.ReturnFormValue("lstFilterPerformer");            
             f.Initiator = frm.ReturnFormValue("CaseInitiatorFilter");
             f.CaseRegistrationDateStartFilter = frm.GetDate("CaseRegistrationDateStartFilter");
             f.CaseRegistrationDateEndFilter = frm.GetDate("CaseRegistrationDateEndFilter");
@@ -1446,7 +1446,7 @@ namespace DH.Helpdesk.Web.Controllers
                 regionid = (cu.Department != null) ? cu.Department.Region_Id == null ? string.Empty : cu.Department.Region_Id.Value.ToString() : string.Empty,
                 regionname = (cu.Department != null) ? cu.Department.Region != null ? cu.Department.Region.Name : string.Empty : string.Empty,
                 departmentid = cu.Department_Id,
-                departmentname = cu.Department.DepartmentName,
+                departmentname = (cu.Department != null? cu.Department.DepartmentName : string.Empty),
                 ouid = cu.OU_Id,
                 ouname = cu.OU != null ? (cu.OU.Parent != null ? cu.OU.Parent.Name + " - " : string.Empty) + cu.OU.Name : string.Empty,
                 costcentre = string.IsNullOrEmpty(cu.CostCentre)? string.Empty : cu.CostCentre

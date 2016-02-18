@@ -3048,7 +3048,7 @@ $(function () {
             });
     };
 
-    loadAllData(null);
+    //loadAllData(null);
 });
 
 
