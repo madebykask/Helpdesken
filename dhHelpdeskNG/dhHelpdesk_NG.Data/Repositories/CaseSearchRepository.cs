@@ -622,7 +622,12 @@
                     IList<CaseSettings> userCaseSettings)
         {
             var sql = new List<string>();
-            var caseSettings = userCaseSettings.ToDictionary(it => it.Name, it => it);
+            var validateUserCaseSettings = new List<CaseSettings>();
+            foreach (var us in userCaseSettings)
+                if (!validateUserCaseSettings.Select(v => v.Name).Contains(us.Name))
+                    validateUserCaseSettings.Add(us);
+
+            var caseSettings = validateUserCaseSettings.ToDictionary(it => it.Name, it => it);
             // fields
             sql.Add("select distinct");
 
