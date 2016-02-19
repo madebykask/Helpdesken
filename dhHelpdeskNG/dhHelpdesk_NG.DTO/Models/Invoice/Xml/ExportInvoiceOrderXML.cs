@@ -13,7 +13,7 @@ namespace DH.Helpdesk.BusinessData.Models.Invoice.Xml
     public class InvoiceXMLDocType
     {
         public static string Order = "Order";
-        public static string Credit = "Credit";
+        public static string Credit = "ReturnOrder";
     }
 
     public class InvoiceXMLLineType

@@ -4281,5 +4281,11 @@ GO
 If not exists (select * from tblTextTranslation where Text_Id = 1587 and Language_Id=2)
             insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1587, 'User has admin permissions to document', 2)
 GO
+UPDATE tblText Set TextString = 'Ärendet har blivit sparat eller upplåst efter att du öppnade det. Stäng ärendet och försök igen.' WHERE Id=1581
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'Case has been saved or unlocked since you opened it. Please close and try again.' WHERE Text_Id=1581 AND Language_Id=2;
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

@@ -116,6 +116,19 @@ IF COL_LENGTH('tblInvoiceArticle','NameEng') IS NULL
 	add Blocked bit null 
  end
 
+ IF COL_LENGTH('tblProductArea','ShowOnExternalPage') IS NULL
+ BEGIN
+	alter table tblProductArea
+	add ShowOnExternalPage int not null default((1))
+ end
+
+ if exists (select * from tblCaseType where CaseType = 'CaseType_' + cast(Id as nvarchar) and [status] = 1 )
+ begin
+	 Update tblCaseType set [Status] = 0
+	 where CaseType = 'CaseType_' + cast(Id as nvarchar)
+ end
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.20'
 

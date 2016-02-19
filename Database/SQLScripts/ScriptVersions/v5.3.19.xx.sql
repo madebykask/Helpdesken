@@ -186,7 +186,7 @@ begin
 		insert into tblCaseType (Id, Customer_Id, CaseType, isDefault, RequireApproving, ShowOnExternalPage, Parent_CaseType_Id, RelatedField,
 																				ITILProcess, isEMailDefault, AutomaticApproveTime, Form_Id, [User_Id], [Status], Selectable, CreatedDate, ChangedDate)
 		select distinct c.CaseType_Id, c.customer_Id, 'CaseType_' + Cast(CaseType_Id as nvarchar) as ctName,
-														0,0,0,Null, '',0,0,0,Null, Null, 1,1, GETDATE(), GETDATE()  
+														0,0,0,Null, '',0,0,0,Null, Null, 0,1, GETDATE(), GETDATE()  
 		from tblCase c
 		Where CaseType_Id not in (Select id from tblCaseType)
 

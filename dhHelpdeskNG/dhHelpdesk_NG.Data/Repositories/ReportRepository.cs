@@ -182,6 +182,7 @@
                             Available = c.Available,
                             Cost = c.Cost,
                             AttachedFile = "",
+                            FinishingDate = c.FinishingDate,
                                            
                             RegistrationSource = c.RegistrationSourceCustomer_Id.HasValue ? _regsource.SourceName : "",
                             SolvedInTime = _caseStatis.WasSolvedInTime,
