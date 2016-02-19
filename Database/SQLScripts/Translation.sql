@@ -4287,5 +4287,9 @@ GO
 UPDATE tblTextTranslation Set TextTranslation = 'Case has been saved or unlocked since you opened it. Please close and try again.' WHERE Text_Id=1581 AND Language_Id=2;
 GO
 
+-- Version 5.3.21 
+
+
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
