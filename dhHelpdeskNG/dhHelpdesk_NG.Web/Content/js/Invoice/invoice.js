@@ -25,7 +25,9 @@ $(function () {
 
     var saveInvoiceIndicator = '.loading-msg.save-invoice';
 
-    var invoiceButtonIndicator = $("#invoiceButtonIndicator"); 
+    var invoiceButtonIndicator = $("#invoiceButtonIndicator");
+
+    var projectElement = $("#case__Project_Id");
 
     dhHelpdesk.System = {
         RaiseEvent: function (eventType, extraParameters) {
@@ -511,6 +513,7 @@ $(function () {
             blankOrder.UserCode = $('#case__UserCode').val();
             blankOrder.CostCentre = $('#case__CostCentre').val();
             blankOrder.CreditForOrder_Id = null;
+            blankOrder.Project_Id = projectElement.val();
             blankOrder.IsInvoiced = false;
 
             return blankOrder;
@@ -1668,8 +1671,18 @@ $(function () {
             this.ToJson = function () {
                 var ordersResult = "";
                 var orders = this.GetOrders();
+                
+                var projectId = null;
+                if (projectElement != undefined)
+                    projectId = projectElement.val();
+
                 for (var i = 0; i < orders.length; i++) {
-                    ordersResult += orders[i].ToJson();
+                    var curOrder = orders[i];
+
+                    if (!curOrder.IsInvoiced && curOrder.CreditForOrder_Id == null)
+                        curOrder.Project_Id = projectId;
+
+                    ordersResult += curOrder.ToJson();
                     if (i < orders.length - 1) {
                         ordersResult += ", ";
                     }
@@ -1856,6 +1869,7 @@ $(function () {
             this.UserCode = null;
             this.CostCentre = null;
             this.CreditForOrder_Id = null;
+            this.Project_Id = null;
             /////
 
             this._articles = [];
@@ -1997,6 +2011,7 @@ $(function () {
                         '"Place":"' + (this.Place != null ? this.Place : '') + '", ' +
                         '"UserCode":"' + (this.UserCode != null ? this.UserCode : '') + '", ' +
                         '"CreditForOrder_Id":"' + (this.CreditForOrder_Id != null ? this.CreditForOrder_Id : '') + '", ' +
+                        '"Project_Id":"' + (this.Project_Id != null ? this.Project_Id : '') + '", ' +
                         '"Articles": [' + articlesResult + '],' +
                         '"Files": [' + filesResult + ']' +
                         '}';
@@ -2052,6 +2067,7 @@ $(function () {
                 clone.UserCode = this.UserCode;
                 clone.CostCentre = this.CostCentre;
                 clone.CreditForOrder_Id = this.CreditForOrder_Id;
+                clone.Project_Id = this.Project_Id;
 
                 clone.CreditedFrom = this.CreditedFrom;
                 clone.Initialize();
@@ -2083,6 +2099,7 @@ $(function () {
                 credited.UserCode = this.UserCode;
                 credited.CostCentre = this.CostCentre;
                 credited.CreditForOrder_Id = this.Id;
+                credited.Project_Id = this.Project_Id;
 
                 credited.Initialize();
                 var articles = this.GetArticles();
@@ -2866,6 +2883,7 @@ $(function () {
             this.ShowCostCentre = false;
             
             this.CreditForOrder_Id = null;
+            this.Project_Id = null;
 
             this.CreditOrderEnabled = false;
             this.CreditOrderTitle = "";
@@ -3386,6 +3404,8 @@ $(function () {
                             order.UserCode = ord.UserCode;
                             order.CostCentre = ord.CostCentre;
                             order.CreditForOrder_Id = ord.CreditForOrder_Id;
+                            order.Project_Id = ord.Project_Id;
+
 
                             order.Date = ord.Date;
 
@@ -3443,7 +3463,7 @@ $(function () {
             });
     };
 
-    //loadAllData(null);
+    loadAllData();
 });
 
 

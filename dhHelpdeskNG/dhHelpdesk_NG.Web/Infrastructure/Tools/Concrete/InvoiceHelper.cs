@@ -52,6 +52,7 @@
                                     o.UserCode,
                                     o.CostCentre,
                                     o.CreditForOrder_Id,
+                                    o.Project_Id,
                                     o.Articles
                                     .Select(a => new CaseInvoiceArticle(
                                             a.Id,
@@ -150,6 +151,8 @@
             public string CostCentre { get; set; }
 
             public int? CreditForOrder_Id { get; set; }
+
+            public int? Project_Id { get; set; }
 
             public CaseInvoiceArticleData[] Articles { get; set; }
 

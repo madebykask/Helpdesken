@@ -22,6 +22,8 @@
 
         private readonly ICaseInvoiceSettingsService caseInvoiceSettingsService;
 
+        private readonly IProjectService projectService;
+
         private readonly IUserService userService;
 
         private readonly ICaseFileService caseFileService;
@@ -38,6 +40,7 @@
                 ICaseInvoiceArticleRepository caseInvoiceArticleRepository,
                 ICaseInvoiceSettingsService caseInvoiceSettingsService,
                 IUserService userService,
+                IProjectService projectService,
                 ICaseFileService caseFileService,
                 IDepartmentService departmentService,
                 IMasterDataService masterDataService,
@@ -48,6 +51,7 @@
             this.caseInvoiceArticleRepository = caseInvoiceArticleRepository;
             this.caseInvoiceSettingsService = caseInvoiceSettingsService;
             this.userService = userService;
+            this.projectService = projectService;
             this.caseFileService = caseFileService;
             this.departmentService = departmentService;
             this.masterDataService = masterDataService;
@@ -283,6 +287,7 @@
             salesHeader.YourReference2 = YourReferenceRow(order.CostCentre, order.Persons_Name);
             salesHeader.OrderNo = OrderNoRow(settings.OrderNoPrefix, order.Number, caseNumber.ToString());
             salesHeader.CurrencyCode = settings.Currency;
+            salesHeader.JobNo = order.Project_Id.HasValue? GetJobNo(order.Project_Id.Value) : string.Empty;
 
             #endregion
 
@@ -396,6 +401,23 @@
                 if (dep != null)
                     res = dep.DepartmentId;
             }
+            return res;
+        }
+
+        private string GetJobNo(int projectId)
+        {
+            var res = string.Empty;
+            var project = projectService.GetProject(projectId);
+            if (project != null)
+            {  
+
+                var splited = project.Name.Split(' ').ToArray();
+                if (splited.Any())
+                    res = splited[0];
+                else
+                    res = project.Name;
+            }
+
             return res;
         }
     }

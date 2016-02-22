@@ -48,6 +48,7 @@
             entity.CostCentre = businessModel.CostCentre;
             entity.UserCode = businessModel.UserCode;
             entity.CreditForOrder_Id = businessModel.CreditForOrder_Id;
+            entity.Project_Id = businessModel.Project_Id;
         }
     }
 }
