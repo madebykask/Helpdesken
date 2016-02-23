@@ -3139,8 +3139,8 @@ $(function () {
             var getFile = function (fileName) { //this has a problem if there is a weird filename, example "Ä(4).pdf" todo: fix this
                 var fs = getFiles();
                 for (var i = 0; i < fs.length; i++) {
-                    var f = fs[i];
-                    if (f.getEncodedFileName() == fileName) {
+                    var f = fs[i];                    
+                    if (f.getEncodedFileName() == fileName || f.getFileName() == fileName) {
                         return f;
                     }
                 }
