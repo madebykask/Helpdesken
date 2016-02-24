@@ -430,7 +430,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var userHasDocumentAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.DocumentPermission);
 
-            foreach (var us in this._userService.GetUsers())
+            foreach (var us in this._userService.GetUsers(SessionFacade.CurrentCustomer.Id))
             {
                 if (!usSelected.Contains(us))
                     usAvailable.Add(us);
@@ -457,12 +457,12 @@ namespace DH.Helpdesk.Web.Controllers
 
                 UsAvailable = usAvailable.Select(x => new SelectListItem
                 {
-                    Text = x.FirstName + " " + x.SurName,
+                    Text = x.SurName + " " + x.FirstName,
                     Value = x.Id.ToString()
                 }).ToList(),
                 UsSelected = usSelected.Select(x => new SelectListItem
                 {
-                    Text = x.FirstName + " " + x.SurName,
+                    Text = x.SurName + " " + x.FirstName,
                     Value = x.Id.ToString()
                 }).ToList(),
                 WGsAvailable = wgsAvailable.Select(x => new SelectListItem
