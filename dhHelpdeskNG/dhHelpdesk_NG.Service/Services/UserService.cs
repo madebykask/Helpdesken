@@ -317,7 +317,7 @@
 
         public IList<User> GetUsers(int customerId)
         {
-            return this._userRepository.GetUsers(customerId).OrderBy(x => x.SurName).ThenBy(x => x.FirstName).ToList();
+            return this._userRepository.GetUsers(customerId).Where(x => x.IsActive == 1).OrderBy(x => x.SurName).ThenBy(x => x.FirstName).ToList();
         }
 
         public IList<User> GetUsersByUserGroup(int customerId)
