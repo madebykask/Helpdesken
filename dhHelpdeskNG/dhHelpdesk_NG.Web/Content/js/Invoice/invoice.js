@@ -5,8 +5,9 @@ if (window.dhHelpdesk == null)
 $(function () {    
     _INVOICE_IDLE = 'invoice_idle';
     _INVOICE_SAVING = 'invoice_saving';
-    var changeRegionUrl = '/Cases/ChangeRegion/';
-    var changeDepartmentUrl = '/Cases/ChangeDepartment/';    
+    var regionUrl = '/Organization/GetRegions/';
+    var departmentUrl = '/Organization/GetDepartments/';
+    var ouUrl = '/Organization/GetOUs/';
 
     //used for translating casefields
     var AllCaseFields = [];
@@ -186,6 +187,171 @@ $(function () {
         },  
     }
 
+    dhHelpdesk.OrganizationLevels = {
+        Region: function () {
+            var _region = this;
+            this.Items = [];
+
+            this.Fill = function (customerId, methodUrl) {
+                if (customerId == null)
+                    return;
+
+                $.get(methodUrl, { customerId: customerId
+                }, function (data) {
+                    _region.Items = [];
+                    if (data != undefined) {
+                        for (var i = 0; i < data.regions.length; i++) {
+                            var item = data.regions[i];
+                            _region.Items.push({ Id: item.Id, Name: item.Name, IsActive: item.IsActive });
+                        }
+                    }
+                });
+            }
+
+            this.GetById = function (regionId) {
+                for (var i = 0; i < _region.Items.length; i++) {
+                    var item = _region.Items[i];
+                    if (item.Id == regionId)
+                        return item;
+                }
+                return null;
+            }
+
+            this.GetActiveItems = function (alternativeId) {
+                var ret = [];
+                for (var i = 0; i < _region.Items.length; i++) {
+                    var item = _region.Items[i];
+                    if (item.Id == alternativeId || item.IsActive)
+                        ret.push({ Id: item.Id, Name: item.Name });
+                }
+                
+                return ret.sort(SortByName);
+            }
+
+            var SortByName = function (a, b) {
+                var aName = a.Name.toLowerCase();
+                var bName = b.Name.toLowerCase();
+                return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
+            }
+
+        },
+
+        Department: function (region) {
+            var _department = this;
+            var _region = region;
+            this.Items = [];
+
+            this.Fill = function (customerId, methodUrl) {
+                if (customerId == null)
+                    return;
+
+                $.get(methodUrl, { customerId: customerId }, function (data) {
+                    _department.Items = [];
+                    if (data != undefined) {
+                        for (var i = 0; i < data.departments.length; i++) {
+                            var item = data.departments[i];
+                            var curRegion = (item.RegionId != null ? _region.GetById(item.RegionId) : null);
+                            _department.Items.push({ Id: item.Id, Name: item.Name, IsActive: item.IsActive, RegionId: item.RegionId, Region: curRegion });
+                        }
+                    }
+                });                
+            }
+
+            this.GetById = function (departmentId) {
+                for (var i = 0; i < _department.Items.length; i++) {
+                    var item = _department.Items[i];
+                    if (item.Id == departmentId)
+                        return item;
+                }
+                return null;
+            }
+
+            this.GetActiveItems = function (regionId, alternativeId) {
+                var ret = [];
+                for (var i = 0; i < _department.Items.length; i++) {
+                    var item = _department.Items[i];
+                    if ((item.Id == alternativeId || item.IsActive) && (regionId == null || regionId == "" || item.RegionId == regionId))
+                        ret.push({ Id: item.Id, Name: item.Name });
+                }
+
+                return ret.sort(SortByName);
+            }
+
+            var SortByName = function (a, b) {
+                var aName = a.Name.toLowerCase();
+                var bName = b.Name.toLowerCase(); 
+                return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
+            }
+            
+        },
+
+        OU: function (department) {
+            var _ou = this;
+            var _department = department;
+            this.Items = [];
+
+            this.Fill = function (customerId, methodUrl) {
+                if (customerId == null)
+                    return;
+
+                $.get(methodUrl, { customerId: customerId }, function (data) {
+                    _ou.Items = [];
+                    if (data != undefined) {
+                        for (var i = 0; i < data.ous.length; i++) {
+                            var item = data.ous[i];
+                            var curDepartment = (item.DepartmentId != null ? _department.GetById(item.DepartmentId) : null);
+                            _ou.Items.push({ Id: item.Id, Name: item.Name, IsActive: item.IsActive, DepartmentId: item.DepartmentId, Department: curDepartment });
+                        }
+                    }
+                });               
+            }
+
+            this.GetById = function (ouId) {
+                for (var i = 0; i < _ou.Items.length; i++) {
+                    var item = _ou.Items[i];
+                    if (item.Id == ouId)
+                        return item;
+                }
+                return null;
+            }
+
+            this.GetActiveItems = function (departmentId, alternativeId) {
+                var ret = [];
+                for (var i = 0; i < _ou.Items.length; i++) {
+                    var item = _ou.Items[i];
+                    if ((item.Id == alternativeId || item.IsActive) && item.DepartmentId == departmentId)
+                        ret.push({ Id: item.Id, Name: item.Name });
+                }
+
+                return ret.sort(SortByName);
+            }
+
+            var SortByName = function (a, b) {
+                var aName = a.Name.toLowerCase();
+                var bName = b.Name.toLowerCase();
+                return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
+            }
+        },
+
+        OrganizationStruct: function (customerId, regionMethodUrl, departmentMethodUrl, ouMethodUrl) {
+            var base = this;            
+            var RegionPath = regionMethodUrl;
+            var DepartmentPath = departmentMethodUrl;
+            var OUPath = ouMethodUrl;
+
+            this.CusromerId = customerId;
+            this.Region = new dhHelpdesk.OrganizationLevels.Region();
+            this.Department = new dhHelpdesk.OrganizationLevels.Department(this.Region);
+            this.OU = new dhHelpdesk.OrganizationLevels.OU(this.Department);            
+
+            this.Initialize = function () {                
+                base.Region.Fill(base.CusromerId, RegionPath);                
+                base.Department.Fill(base.CusromerId, DepartmentPath);
+                base.OU.Fill(base.CusromerId, OUPath);
+            }           
+        }
+    }
+
     dhHelpdesk.CaseArticles = {
         MaxDescriptionCount: 50,
 
@@ -204,6 +370,8 @@ $(function () {
         _invoiceArticles: [],
 
         allVailableOrders: [],
+
+        OrganizationData: null, 
 
         ProductAreaElement: null,
 
@@ -318,88 +486,71 @@ $(function () {
             return null;
         },
 
-        FillOrganisationDataForOtherReference: function () {
-            this.FillRegions();
+        FillInvoiceOrganisationData: function () {
             $.each(this._invoices, function (i, invoice) {
-                $.each(invoice._orders, function (j, order) {
-                    dhHelpdesk.CaseArticles.FillDepartments(order.Id);
-                    dhHelpdesk.CaseArticles.FillOUs(order.Id);
+                $.each(invoice._orders, function (j, order) {                    
+                    dhHelpdesk.CaseArticles.FillOrderOrganizationData(order);
                 });
             });
         },
 
-        FillRegions: function (OrderId) {
-            this.PopulateSelectBoxesFromSelect('RegionSelect', 'case__Region_Id');
-        },        
-
-        FillDepartments: function (OrderId) {
-            var DepartmentFilterFormat = 0; 
-            var RegionId = $('#RegionSelect-Order' + OrderId).parent().find('input:hidden').val()
-            var CustomerId = $('#case__Customer_Id').val();            
-            $.post(changeRegionUrl, { 'id': RegionId, 'customerId': CustomerId, 'departmentFilterFormat': DepartmentFilterFormat }, function (data) {
-                if (data != undefined) {
-                    var selector = '#DepartmentSelect-Order' + OrderId;
-                    $(selector).empty();
-                    $(selector).append("<option value=''></option>");
-                    for (var i = 0; i < data.list.length; i++) {
-                        var item = data.list[i];
-                        var option = $("<option value='" + item.id + "'>" + item.name + "</option>");
-                        if (option.val() == $(selector).parent().find('input:hidden').val()) {
-                            $(selector).val($(selector).parent().find('input:hidden').val());
-                            option.prop("selected", true);
-                        }
-                        $(selector).append(option);
-                    }
-                }
-            }, 'json').always(function () {
-                $('#DepartmentId_' + OrderId).val($('#DepartmentSelect-Order' + OrderId).val());                                
-                dhHelpdesk.CaseArticles.FillOUs(OrderId);
-            });            
+        FillOrderOrganizationData: function (order) {
+            dhHelpdesk.CaseArticles.FillOrderRegion(order);                        
         },
 
-        PopulateSelectBoxesFromSelect: function (ClassSelector, IdSelectorForData) {
-            var Selectors = $('.' + ClassSelector);
-            var ValList = [];
-            var TextList = [];
-            $('#' + IdSelectorForData + ' option').each(function () {
-                ValList.push($(this).val());
-                TextList.push($(this).text());
-            });
-            $.each(Selectors, function (i, selector) {
-                var thisSelector = $(selector);
-                thisSelector.empty();
-                var OptionsListToAppend = "";
-                $.each(ValList, function (i, item) {
-                    OptionsListToAppend = OptionsListToAppend + '<option value="' + item + '">' + TextList[i] + '</option>';
-                });
-                thisSelector.append(OptionsListToAppend);
-                var IdInDB = thisSelector.parent().find('input:hidden').val();
-                thisSelector.val(IdInDB);
-            });
+        FillOrderRegion: function (order) {
+            var regions = dhHelpdesk.CaseArticles.OrganizationData.Region.GetActiveItems(order.Region_Id);
+            var elementId = "RegionSelect-Order" + order.Id;
+            dhHelpdesk.CaseArticles.PopulateDropDownItem(elementId, regions, order.Region_Id);
+            dhHelpdesk.CaseArticles.FillOrderDepartment(order, order.Region_Id, false);
         },
 
-        FillOUs: function (OrderId) {
-            var DepartmentFilterFormat = 0;
-            var DepartmentId = $('#DepartmentId_' + OrderId).val();
-            var CustomerId = $('#case__Customer_Id').val();
-            $.post(changeDepartmentUrl, { 'id': DepartmentId, 'CustomerId': CustomerId, 'departmentFilterFormat': DepartmentFilterFormat }, function (data) {
-                if (data != undefined) {
-                    var selector = '#OUSelect-Order' + OrderId;
-                    $(selector).empty();
-                    $(selector).append("<option value=''></option>");
-                    for (var i = 0; i < data.list.length; i++) {
-                        var item = data.list[i];
-                        var option = $("<option value='" + item.id + "'>" + item.name + "</option>");
-                        if (option.val() == $(selector).parent().find('input:hidden').val()) {
-                            $(selector).val($(selector).parent().find('input:hidden').val());
-                            option.prop("selected", true);
-                        }
-                        $(selector).append(option);
-                    }
-                }
-            });
+        FillOrderDepartment: function (order, regionId, noSelection) {
+            var departments = dhHelpdesk.CaseArticles.OrganizationData.Department.GetActiveItems(regionId, order.Department_Id);
+            var elementId = "DepartmentSelect-Order" + order.Id;
+
+            var selectedItem = order.Department_Id;
+            if (noSelection)
+                selectedItem = null;
+
+            dhHelpdesk.CaseArticles.PopulateDropDownItem(elementId, departments, selectedItem);
+            dhHelpdesk.CaseArticles.FillOrderOU(order, selectedItem, noSelection);
         },
-        
+
+        FillOrderOU: function (order, departmentId, noSelection) {
+            var ous = dhHelpdesk.CaseArticles.OrganizationData.OU.GetActiveItems(departmentId, order.OU_Id);
+            var elementId = "OUSelect-Order" + order.Id;
+            var selectedItem = order.OU_Id;
+            if (noSelection)
+                selectedItem = null;
+
+            dhHelpdesk.CaseArticles.PopulateDropDownItem(elementId, ous, selectedItem);
+        },
+
+        PopulateDropDownItem: function (elementId, items, selectedItem_Id) {            
+            var selector = $('#' + elementId);
+            selector.empty();
+
+            var defaultOption = "";
+            if (selectedItem_Id != null)
+                defaultOption = '<option value=""> </option>';
+            else
+                defaultOption = '<option value="" selected> </option>';
+
+            selector.append(defaultOption);
+
+            $.each(items, function (i, item) {
+                var curOption = "";
+                if (item.Id == selectedItem_Id)
+                    curOption = '<option value="' + item.Id + '" selected>' + item.Name + '</option>';
+                else
+                    curOption = '<option value="' + item.Id + '">' + item.Name + '</option>';
+
+                selector.append(curOption);
+            });
+
+        },                                       
+               
         GetArticle: function (id) {
             var invoices = this.GetInvoices();
             for (var i = 0; i < invoices.length; i++) {
@@ -1323,13 +1474,13 @@ $(function () {
             if (th.IsFinishedCase()) {
                 $('.case-invoice-container *').attr("disabled", true);
                 $('#actions-credit-order').attr("disabled", true);
-            }
-            //dhHelpdesk.CaseArticles.DoDelimit();
-            th.FillOrganisationDataForOtherReference();
+            }            
+            th.FillInvoiceOrganisationData();
         },
 
         Initialize: function (e) {
-            var th = this;
+            var th = this;                                   
+          
             th.ProductAreaElement = $(document).find("." + e.attr("data-invoice-product-area"));
             th.ModuleCaseInvoiceElement = $('#ModuleCaseInvoice');
             th.CaseId = e.attr("data-invoice-case-id");
@@ -1627,7 +1778,8 @@ $(function () {
                     tabs.find("li.case-invoice-order-tab:last").after(newTab);
                 }
                 this._refreshTabs();
-                //dhHelpdesk.CaseArticles.FillOrganisationDataForOtherReference();
+                dhHelpdesk.CaseArticles.FillOrderOrganizationData(order);
+
                 newTab.find("a").click();
 
                 $('.articles-params-units').focus();
@@ -1826,7 +1978,7 @@ $(function () {
             },
 
             this.UpdateTotal = function () {
-                //this.Container.find("#case-invoice-order-summary-total").text(this.GetArticlesTotal());
+                
             },
 
             this.Validate = function () {
@@ -2282,8 +2434,8 @@ $(function () {
                     if (!curOrd.IsOrderInvoiced()) {
                         $(this).parent().find('input:hidden').val($(this).val());
                         th.Region_Id = $(this).val();
-                        var OrderId = $(this).data("orderid");
-                        dhHelpdesk.CaseArticles.FillDepartments(OrderId);
+                        var OrderId = $(this).data("orderid");                        
+                        dhHelpdesk.CaseArticles.FillOrderDepartment(curOrd, th.Region_Id, true);
                     }
                     else {
                         dhHelpdesk.CaseArticles.ShowAlreadyInvoicedMessage();                        
@@ -2299,8 +2451,8 @@ $(function () {
                         $(this).parent().find('input:hidden').val($(this).val());
                         th.Department_Id = $(this).val();
                         var OrderId = $(this).data("orderid");
-                        $('#CostCentre_' + OrderId).val('');
-                        dhHelpdesk.CaseArticles.FillOUs(OrderId);
+                        $('#CostCentre_' + OrderId).val('');                        
+                        dhHelpdesk.CaseArticles.FillOrderOU(curOrd, th.Department_Id, true);
                     }
                     else {
                         dhHelpdesk.CaseArticles.ShowAlreadyInvoicedMessage();                        
@@ -3240,6 +3392,12 @@ $(function () {
         }
     });
 
+    var loadOrganizationData = function () {
+        var customerId = $('#case__Customer_Id').val();
+        dhHelpdesk.CaseArticles.OrganizationData = new dhHelpdesk.OrganizationLevels.OrganizationStruct(customerId, regionUrl, departmentUrl, ouUrl);
+        dhHelpdesk.CaseArticles.OrganizationData.Initialize();
+    };
+
     var loadCaseFiles = function () {        
         dhHelpdesk.CaseArticles.CaseKey = $(document).find("[data-invoice]").attr("data-invoice-case-key");
         dhHelpdesk.CaseArticles.LogKey = $(document).find("[data-invoice]").attr("data-invoice-log-key");
@@ -3336,6 +3494,7 @@ $(function () {
 
     var loadAllData = function (callBack, obj) {
         loadTranslationList()
+            .then(loadOrganizationData)
             .then(loadCaseFieldTranslations)
             .then(loadCaseFieldSettings)
             .then(loadCaseInvoiceTemplate)
@@ -3351,6 +3510,7 @@ $(function () {
                 $("[data-invoice]").each(function () {
                     var $this = $(this);
                     var data = $.parseJSON($this.attr("data-invoice-case-articles"));
+                    
                     if (data == null || data.Invoices.length == 0) {
                         var blankInvoice = new dhHelpdesk.CaseArticles.CaseInvoice();
                         blankInvoice.Id = dhHelpdesk.Common.GenerateId();
