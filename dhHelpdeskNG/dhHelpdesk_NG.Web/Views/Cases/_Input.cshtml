@@ -326,11 +326,11 @@
                                                 <td class="span4">
                                                     @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Persons_Phone, CaseSolutionFields.PersonsPhone))
                                                     {
-                                                        @Html.TextBoxFor(model => model.case_.PersonsPhone, new { maxlength = "40" })
+                                                        @Html.TextBoxFor(model => model.case_.PersonsPhone, new { maxlength = "50" })
                                                     }
                                                     else
                                                     {
-                                                       @Html.TextBoxFor(model => model.case_.PersonsPhone, new { maxlength = "40", @readonly = "readonly" })
+                                                       @Html.TextBoxFor(model => model.case_.PersonsPhone, new { maxlength = "50", @readonly = "readonly" })
                                                     }
                                                 </td>
                                             </tr>
@@ -341,11 +341,11 @@
                                                 <td class="span4">
                                                     @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Persons_CellPhone, CaseSolutionFields.PersonsCellPhone))
                                                     {
-                                                        @Html.TextBoxFor(model => model.case_.PersonsCellphone, new { maxlength = "30" })
+                                                        @Html.TextBoxFor(model => model.case_.PersonsCellphone, new { maxlength = "50" })
                                                     }
                                                     else
                                                     {
-                                                        @Html.TextBoxFor(model => model.case_.PersonsCellphone, new { maxlength = "30", @readonly = "readonly" })
+                                                        @Html.TextBoxFor(model => model.case_.PersonsCellphone, new { maxlength = "50", @readonly = "readonly" })
                                                     }
                                                 </td>
                                             </tr>

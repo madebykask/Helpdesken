@@ -317,6 +317,12 @@ IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[
 ALTER TABLE [dbo].[tblCaseIsAbout] CHECK CONSTRAINT [FK_tblCaseIsAbout_tblOU]
 GO
 
+ALTER TABLE tblCase ALTER COLUMN Persons_Phone nvarchar(50)
+ALTER TABLE tblCase ALTER COLUMN Persons_CellPhone nvarchar(50)
+
+ALTER TABLE tblCaseHistory ALTER COLUMN Persons_Phone nvarchar(50)
+ALTER TABLE tblCaseHistory ALTER COLUMN Persons_CellPhone nvarchar(50)
+
 IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_tblCaseIsAbout_tblRegion]') AND parent_object_id = OBJECT_ID(N'[dbo].[tblCaseIsAbout]'))
 ALTER TABLE [dbo].[tblCaseIsAbout]  WITH CHECK ADD  CONSTRAINT [FK_tblCaseIsAbout_tblRegion] FOREIGN KEY([Region_Id])
 REFERENCES [dbo].[tblRegion] ([Id])
