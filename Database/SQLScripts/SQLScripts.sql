@@ -12,6 +12,12 @@ begin
 	ALTER TABLE [dbo].[tblCaseInvoiceOrder]  WITH CHECK ADD  CONSTRAINT [FK_tblCaseInvoiceOrder_tblProject] FOREIGN KEY([Project_Id])
 	REFERENCES [dbo].[tblProject] ([Id])
 end
+ALTER TABLE tblCase ALTER COLUMN Persons_Phone nvarchar(50)
+ALTER TABLE tblCase ALTER COLUMN Persons_CellPhone nvarchar(50)
+
+ALTER TABLE tblCaseHistory ALTER COLUMN Persons_Phone nvarchar(50)
+ALTER TABLE tblCaseHistory ALTER COLUMN Persons_CellPhone nvarchar(50)
+
 GO
 
 -- Last Line to update database version

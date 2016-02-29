@@ -1319,10 +1319,10 @@ namespace DH.Helpdesk.Services.Services
                         customEmailSender1 = customEmailSender1.Trim();
                     }
 
-                    // get mail template from productArea
-                    if (newCase.ProductArea.MailID.HasValue)
-                        mailTemplateId = newCase.ProductArea.MailID.Value;
-                    
+                    // get mail template from productArea                   
+                    if (newCase.ProductArea.MailTemplate != null)
+                        mailTemplateId = newCase.ProductArea.MailTemplate.MailID;   
+
                     if (mailTemplateId > 0)
                     {
                         MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
