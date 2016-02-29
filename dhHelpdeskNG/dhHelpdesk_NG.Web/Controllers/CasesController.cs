@@ -2361,9 +2361,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         #endregion
 
-        #region Invoice
-
-        #endregion
+        #region --Invoice--
 
         [HttpPost]
         public JsonResult SaveCaseInvoice(string caseInvoiceArticle, int customerId, 
@@ -2401,6 +2399,7 @@ namespace DH.Helpdesk.Web.Controllers
                 return Json(new { result = "Error", data = "Unexpected Error:" + ex.Message });                
             }
         }
+        #endregion
 
         #endregion
 
