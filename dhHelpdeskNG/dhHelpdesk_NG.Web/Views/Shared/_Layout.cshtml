@@ -155,7 +155,7 @@
                                             <img src="@Url.Content("~/Content/icons/faq.png")" />
                                             @Translation.Get("FAQ")</a></li>
                                     }
-                                    @if(model.IsCalendarVisible())
+                                    @if(model.IsCalendarVisible() && SessionFacade.CurrentUser.UserGroupId > 2)
                                     {    
                                         <li><a href="@Url.Action("index", "calendar", new { area = "" })">
                                             <img src="@Url.Content("~/Content/icons/news.png")" />
