@@ -175,10 +175,13 @@
                 //invoiceArticlesBeforeClose(emptyFn, openInvoiceWindow);
             });*@
 
-@*            $("#case-action-close").click(function (e) {
+            $("#case-action-close").click(function (e) {
                 e.preventDefault();
                 var targetUrl = $(this).attr("href");
-                invoiceArticlesBeforeClose(function ()
+                if ('@Model.CaseLock.LockGUID' != '')
+                    UnLockCase('@Model.CaseLock.LockGUID', targetUrl);
+
+                @*invoiceArticlesBeforeClose(function ()
                 {
                     if ('@Model.CaseLock.LockGUID' != '')
                         UnLockCase('@Model.CaseLock.LockGUID', targetUrl);
@@ -186,9 +189,9 @@
                     {
                         redirectToUrl(targetUrl);
                     }
-                }, openInvoiceWindow);
+                }, openInvoiceWindow);*@
             });
-            
+       @*     
             $("#case-action-delete").click(function (e) {                               
                 if (hasNotInvoicedArticles()) {
                     messageDialog(dc('@Translation.Get("Du får inte ta bort ett ärende som har invalda men ofakturerade artiklar.")'));
