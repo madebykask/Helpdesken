@@ -39,6 +39,6 @@ namespace DH.Helpdesk.Web.Models.CheckLists
 
         public CheckListServiceModel Services { get; set; }
 
-        
+        public CheckListActionBM CheckListActions { get; set; }
     }
 }

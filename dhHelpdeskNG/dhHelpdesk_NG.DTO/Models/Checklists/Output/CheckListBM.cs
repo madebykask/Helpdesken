@@ -14,6 +14,7 @@ namespace DH.Helpdesk.BusinessData.Models.Checklists.Output
         { }
 
         public CheckListBM(
+                int checkListId,
                 int customerId,                
                 int? wgId,
                 string checklistName,
@@ -21,6 +22,7 @@ namespace DH.Helpdesk.BusinessData.Models.Checklists.Output
                 DateTime createdDate
                )
         {
+            this.Id = checkListId;
             this.CustomerId = customerId;            
             this.WorkingGroupId = wgId;
             this.ChecklistName = checklistName;
