@@ -368,41 +368,84 @@ namespace DH.Helpdesk.Web.Controllers
 
             var customerId = SessionFacade.CurrentCustomer.Id;
             var documents = new List<DocumentOverview>();
-            var docs = _documentService.GetDocuments(customerId)
-                                       .Select(c => new
-                                       {
-                                           Id = c.Id,
-                                           DocName = c.Name,
-                                           Size = c.Size,
-                                           ChangeDate = c.ChangedDate,
-                                           UserName = (c.ChangedByUser == null) ? " " : c.ChangedByUser.SurName + " " + c.ChangedByUser.FirstName,
-                                           CategoryId = c.DocumentCategory_Id
-                                       })
-                                       .ToList();
 
-            if (docType == TreeNodeType.tnCategory)
-                docs = docs.Where(d => d.CategoryId == Id).ToList();
-
-            switch (ds.SortBy)
+            if (SessionFacade.CurrentUser.UserGroupId > 2)
             {
-                case "Size":
-                    docs = (ds.Ascending) ? docs.OrderBy(d => d.Size).ToList() : docs.OrderByDescending(d => d.Size).ToList();
-                    break;
+                var docs = _documentService.GetDocumentsForAdministrators(customerId)
+                                           .Select(c => new
+                                           {
+                                               Id = c.Id,
+                                               DocName = c.Name,
+                                               Size = c.Size,
+                                               ChangeDate = c.ChangedDate,
+                                               UserName = (c.ChangedByUser == null) ? " " : c.ChangedByUser.SurName + " " + c.ChangedByUser.FirstName,
+                                               CategoryId = c.DocumentCategory_Id
+                                           })
+                                           .ToList();
 
-                case "ChangedDate":
-                    docs = (ds.Ascending) ? docs.OrderBy(d => d.ChangeDate).ToList() : docs.OrderByDescending(d => d.ChangeDate).ToList();
-                    break;
+                if (docType == TreeNodeType.tnCategory)
+                    docs = docs.Where(d => d.CategoryId == Id).ToList();
 
-                case "UserName":
-                    docs = (ds.Ascending) ? docs.OrderBy(d => d.UserName).ToList() : docs.OrderByDescending(d => d.UserName).ToList();
-                    break;
+                switch (ds.SortBy)
+                {
+                    case "Size":
+                        docs = (ds.Ascending) ? docs.OrderBy(d => d.Size).ToList() : docs.OrderByDescending(d => d.Size).ToList();
+                        break;
 
-                default:
-                    docs = (ds.Ascending) ? docs.OrderBy(d => d.DocName).ToList() : docs.OrderByDescending(d => d.DocName).ToList();
-                    break;
+                    case "ChangedDate":
+                        docs = (ds.Ascending) ? docs.OrderBy(d => d.ChangeDate).ToList() : docs.OrderByDescending(d => d.ChangeDate).ToList();
+                        break;
+
+                    case "UserName":
+                        docs = (ds.Ascending) ? docs.OrderBy(d => d.UserName).ToList() : docs.OrderByDescending(d => d.UserName).ToList();
+                        break;
+
+                    default:
+                        docs = (ds.Ascending) ? docs.OrderBy(d => d.DocName).ToList() : docs.OrderByDescending(d => d.DocName).ToList();
+                        break;
+                }
+                documents = docs.Select(c => new DocumentOverview(c.Id, c.DocName, c.Size.RoundQty(), c.ChangeDate, c.UserName)).ToList();
             }
+            else
+            {
+                var docs = _documentService.GetDocuments(customerId)
+                                           .Select(c => new
+                                           {
+                                               Id = c.Id,
+                                               DocName = c.Name,
+                                               Size = c.Size,
+                                               ChangeDate = c.ChangedDate,
+                                               UserName = (c.ChangedByUser == null) ? " " : c.ChangedByUser.SurName + " " + c.ChangedByUser.FirstName,
+                                               CategoryId = c.DocumentCategory_Id
+                                           })
+                                           .ToList();
 
-            documents = docs.Select(c => new DocumentOverview(c.Id, c.DocName, c.Size.RoundQty(), c.ChangeDate, c.UserName)).ToList();
+                if (docType == TreeNodeType.tnCategory)
+                    docs = docs.Where(d => d.CategoryId == Id).ToList();
+
+                switch (ds.SortBy)
+                {
+                    case "Size":
+                        docs = (ds.Ascending) ? docs.OrderBy(d => d.Size).ToList() : docs.OrderByDescending(d => d.Size).ToList();
+                        break;
+
+                    case "ChangedDate":
+                        docs = (ds.Ascending) ? docs.OrderBy(d => d.ChangeDate).ToList() : docs.OrderByDescending(d => d.ChangeDate).ToList();
+                        break;
+
+                    case "UserName":
+                        docs = (ds.Ascending) ? docs.OrderBy(d => d.UserName).ToList() : docs.OrderByDescending(d => d.UserName).ToList();
+                        break;
+
+                    default:
+                        docs = (ds.Ascending) ? docs.OrderBy(d => d.DocName).ToList() : docs.OrderByDescending(d => d.DocName).ToList();
+                        break;
+                }
+                documents = docs.Select(c => new DocumentOverview(c.Id, c.DocName, c.Size.RoundQty(), c.ChangeDate, c.UserName)).ToList();
+            }
+           
+
+            //documents = docs.Select(c => new DocumentOverview(c.Id, c.DocName, c.Size.RoundQty(), c.ChangeDate, c.UserName)).ToList();
             return documents;
         }
 
