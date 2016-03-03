@@ -861,11 +861,13 @@
                 {
                     caseListType = CaseListTypes.ManagerCases;
                     cs.RegUserId = curUser;
-                    cs.ReportedBy = "'" + SessionFacade.CurrentUserIdentity.EmployeeNumber + "'";
+                    cs.ReportedBy = string.Format("'{0}'", SessionFacade.CurrentUserIdentity.EmployeeNumber);
                 }
 
                 if (caseListCondition.Contains(CaseListTypes.CoWorkerCases))
                 {
+                    cs.RegUserId = curUser;
+
                     if (caseListType == CaseListTypes.ManagerCases)
                         caseListType = CaseListTypes.ManagerCoWorkerCases;
                     else
@@ -876,12 +878,12 @@
                     {
                         foreach (var emp in employees)
                         {
-                            if (emp.EmployeeNumber != "")
+                            if (!string.IsNullOrEmpty(emp.EmployeeNumber))
                             {
-                                if (cs.ReportedBy == "")
-                                    cs.ReportedBy = "'" + emp.EmployeeNumber + "'";
+                                if (string.IsNullOrEmpty(cs.ReportedBy))
+                                    cs.ReportedBy = string.Format("'{0}'", emp.EmployeeNumber);
                                 else
-                                    cs.ReportedBy = cs.ReportedBy + "," + "'" + emp.EmployeeNumber + "'";
+                                    cs.ReportedBy = string.Format("{0},'{1}'", cs.ReportedBy, emp.EmployeeNumber);
                             }
                         }
                     }

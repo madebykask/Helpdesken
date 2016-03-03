@@ -27,6 +27,7 @@
     using DH.Helpdesk.BusinessData.Models.Error;
     using DH.Helpdesk.NewSelfService.Infrastructure.Common.Concrete;
     using DH.Helpdesk.Common.Tools;
+    using DH.Helpdesk.Common.Extensions.String;
 
 
     public class BaseController : Controller
@@ -116,7 +117,7 @@
                     SessionFacade.CurrentLanguageId = SessionFacade.CurrentCustomer.Language_Id;
             }
 
-            if(ConfigurationManager.AppSettings[AppSettingsKey.LoginMode].ToString().ToLower() == LoginMode.SSO)
+            if (ConfigurationManager.AppSettings[AppSettingsKey.LoginMode].ToString().CleanSpaceAndLowStr() == LoginMode.SSO)
             {
                 ClaimsPrincipal principal = User as ClaimsPrincipal;
 
@@ -141,22 +142,22 @@
 
                         if(pureType != null)
                         {
-                            if(pureType.Replace(" ", "").ToLower() == ConfigurationManager.AppSettings[Enums.FederationServiceKeys.ClaimDomain].ToString().Replace(" ", "").ToLower())
+                            if (pureType.CleanSpaceAndLowStr() == ConfigurationManager.AppSettings[Enums.FederationServiceKeys.ClaimDomain].ToString().CleanSpaceAndLowStr())
                                 userIdentity.Domain = value;
 
-                            if(pureType.Replace(" ", "").ToLower() == ConfigurationManager.AppSettings[Enums.FederationServiceKeys.ClaimUserId].ToString().Replace(" ", "").ToLower())
+                            if(pureType.CleanSpaceAndLowStr() == ConfigurationManager.AppSettings[Enums.FederationServiceKeys.ClaimUserId].ToString().CleanSpaceAndLowStr())
                                 userIdentity.UserId = value;
 
-                            if(pureType.Replace(" ", "").ToLower() == ConfigurationManager.AppSettings[Enums.FederationServiceKeys.ClaimEmployeeNumber].ToString().Replace(" ", "").ToLower())
+                            if (pureType.CleanSpaceAndLowStr() == ConfigurationManager.AppSettings[Enums.FederationServiceKeys.ClaimEmployeeNumber].ToString().CleanSpaceAndLowStr())
                                 userIdentity.EmployeeNumber = value;
 
-                            if(pureType.Replace(" ", "").ToLower() == ConfigurationManager.AppSettings[Enums.FederationServiceKeys.ClaimFirstName].ToString().Replace(" ", "").ToLower())
+                            if (pureType.CleanSpaceAndLowStr() == ConfigurationManager.AppSettings[Enums.FederationServiceKeys.ClaimFirstName].ToString().CleanSpaceAndLowStr())
                                 userIdentity.FirstName = value;
 
-                            if(pureType.Replace(" ", "").ToLower() == ConfigurationManager.AppSettings[Enums.FederationServiceKeys.ClaimLastName].ToString().Replace(" ", "").ToLower())
+                            if (pureType.CleanSpaceAndLowStr() == ConfigurationManager.AppSettings[Enums.FederationServiceKeys.ClaimLastName].ToString().CleanSpaceAndLowStr())
                                 userIdentity.LastName = value;
 
-                            if(pureType.Replace(" ", "").ToLower() == ConfigurationManager.AppSettings[Enums.FederationServiceKeys.ClaimEmail].ToString().Replace(" ", "").ToLower())
+                            if (pureType.CleanSpaceAndLowStr() == ConfigurationManager.AppSettings[Enums.FederationServiceKeys.ClaimEmail].ToString().CleanSpaceAndLowStr())
                                 userIdentity.Email = value;
                         }
                     }
@@ -173,7 +174,7 @@
                         CreatedDate = DateTime.Now
                     };
 
-                    if(ConfigurationManager.AppSettings[AppSettingsKey.SSOLog].ToString().ToLower() == "true" &&
+                    if (ConfigurationManager.AppSettings[AppSettingsKey.SSOLog].ToString().CleanSpaceAndLowStr() == BooleanString.TRUE &&
                         string.IsNullOrEmpty(SessionFacade.CurrentSystemUser))
                         _masterDataService.SaveSSOLog(ssoLog);
 
@@ -287,7 +288,7 @@
             
             this.SetTextTranslation(filterContext);
         }
-
+        
         public ActionResult ChangeLanguage(string language, string currentUrl, string lastParams)
         {
             if(SessionFacade.AllLanguages != null)

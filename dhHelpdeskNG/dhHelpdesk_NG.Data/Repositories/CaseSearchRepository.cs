@@ -948,7 +948,7 @@
 
                 //CoWorkers Cases Only
                 case CaseListTypes.CoWorkerCases:
-                    sb.Append(" and (tblCase.[ReportedBy] in (" + f.ReportedBy + "))");
+                    sb.Append(" and (tblCase.[RegUserId] = '" + userUserId + "' or tblCase.[ReportedBy] in (" + f.ReportedBy + "))");
                     break;
 
                 //Manager & Coworkers Cases

@@ -32,9 +32,9 @@
         var me = this;
         me.$departmentControl.children().remove();
         me.$orgUnitControl.children().remove();
-        if (me.isIdExistsInSelect(me.$regionControl, regionId)) {
-            me.refreshDepartment(regionId, departmentId, selectedOrgUnitId);
-        }
+        //if (me.isIdExistsInSelect(me.$regionControl, regionId)) {
+        me.refreshDepartment(regionId, departmentId, selectedOrgUnitId);
+        //}
     };
 
     /**
