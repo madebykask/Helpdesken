@@ -14,6 +14,7 @@
         public int IsActive { get; set; }
         public int? WorkingGroup_Id { get; set; }
         public int? Priority_Id { get; set; }
+        public int ShowOnExternalPage { get; set; }
         public string Description { get; set; }
         public string InformUserText { get; set; }
         public string Name { get; set; }

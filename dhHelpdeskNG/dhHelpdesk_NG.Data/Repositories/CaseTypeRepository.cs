@@ -74,7 +74,7 @@
         {
             var entities =
                 this.DataContext.CaseTypes.Where(c => c.Customer_Id == customerId && c.IsActive != 0)
-                    .Select(c => new { c.Id, ParentId = c.Parent_CaseType_Id, c.Name })
+                    .Select(c => new { c.Id, ParentId = c.Parent_CaseType_Id, c.Name, c.ShowOnExternalPage })
                     .OrderBy(c => c.Name)
                     .ToList();
             return entities
@@ -82,7 +82,8 @@
                                      {
                                          Id = c.Id,
                                          ParentId = c.ParentId,
-                                         Name = c.Name
+                                         Name = c.Name,
+                                         ShowOnExternalPage = c.ShowOnExternalPage
                                      });
         }
 
