@@ -20,5 +20,10 @@ ALTER TABLE tblCaseHistory ALTER COLUMN Persons_CellPhone nvarchar(50)
 
 GO
 
+ -- New field in tblProductArea
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ShowOnExternalPage' and sysobjects.name = N'tblProductArea')
+	ALTER TABLE tblProductArea ADD ShowOnExternalPage int Default(1) NOT NULL
+GO
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.21'

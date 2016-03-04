@@ -8,35 +8,37 @@
         public static void RegisterBundles(BundleCollection bundles)
         {
             #region Stylesheet
-                     
-            bundles.Add(new StyleBundle("~/content/css/selfservice").Include(
-                            "~/Content/css/jquery.toastmessage.css",
-                            "~/Content/css/bootstrap.css",          
-                            "~/Content/css/selfservice.css"));
-
-            bundles.Add(new StyleBundle("~/img-profile/profile").Include(
-                            "~/img-profile/profile.css"));
-
-            bundles.Add(new StyleBundle("~/Content/css/popup").Include(
-                            "~/Content/css/*.css",
-                            "~/Content/themes/base/minified/jquery-ui.min.css",
-                            "~/Content/js/jquery.plupload.queue/css/jquery.plupload.queue.css"));
+            bundles.Add(new StyleBundle("~/img-profile/css").Include(
+                           "~/img-profile/profile.css"));
 
             bundles.Add(new StyleBundle("~/Content/bundles/css").Include(
-                           "~/Content/css/*.css",
-                           "~/Content/themes/base/minified/jquery-ui.min.css",
-                           "~/Content/js/jquery.plupload.queue/css/jquery.plupload.queue.css"));
-            
+                            "~/Content/css/*.css",
+                            "~/Content/themes/base/minified/jquery-ui.min.css",
+                            "~/Content/js/jquery.plupload.queue/css/jquery.plupload.queue.css"));     
             #endregion
 
             #region Scripts
 
             bundles.Add(new ScriptBundle("~/content/js/jquery").Include(
-                            "~/Content/js/jquery.js",
-                            "~/Content/js/jquery-1.11.0.min.js",
-                            "~/Content/js/jquery-ui-1.9.2.min.js",
+                            #if DEBUG
+                            "~/Scripts/jquery-1.8.3.js",
+                            "~/Content/js/jquery.unobtrusive-ajax.min.js",
                             "~/Content/js/jquery.validate.js",
-                            "~/Content/js/jquery.validate.unobtrusive.min.js"));
+                            #else
+                            "~/Scripts/jquery-1.8.3.min.js",
+                            "~/Content/js/jquery.unobtrusive-ajax.min.js",
+                            "~/Content/js/jquery.validate.min.js",
+                            #endif
+                            "~/Content/js/jquery.unobtrusive-ajax.min.js",
+                            "~/Content/js/jquery.validate.unobtrusive.min.js",
+                            #if DEBUG
+                            "~/Scripts/jquery-ui-1.9.2.js",
+                            "~/Content/js/chosen.jquery.js"
+                            #else
+                            "~/Scripts/jquery-ui-1.9.2.min.js",
+                            "~/Content/js/chosen.jquery.min.js"
+                            #endif
+                            ));
 
             bundles.Add(new ScriptBundle("~/content/js/bootstrap").Include(
                             "~/Content/js/bootstrap.js",
