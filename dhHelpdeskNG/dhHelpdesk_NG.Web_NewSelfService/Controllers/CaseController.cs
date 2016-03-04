@@ -172,12 +172,49 @@
                     return RedirectToAction("Index", "Error");
                 }
 
-                if (currentCase != null && currentCase.RegUserId != SessionFacade.CurrentUserIdentity.UserId)
+                bool userHasAccessToCase = false;
+                var currentApplicationType = ConfigurationManager.AppSettings[AppSettingsKey.CurrentApplicationType].ToString().ToLower();
+                var curUserId = SessionFacade.CurrentUserIdentity.UserId;
+                if (currentApplicationType == ApplicationTypes.LineManager)
                 {
-                    ErrorGenerator.MakeError("Case not found among your cases!");
-                    return RedirectToAction("Index", "Error");
+                    var coWorkers = SessionFacade.CurrentCoWorkers != null ?
+                                        SessionFacade.CurrentCoWorkers.Select(c => c.EmployeeNumber).ToList() : 
+                                        new List<string>();
+
+                    var caseListCondition = ConfigurationManager.AppSettings[AppSettingsKey.CaseList].ToString().ToLower().Split(',');
+                    if (caseListCondition.Contains(CaseListTypes.ManagerCases))
+                    {
+                        if (caseListCondition.Contains(CaseListTypes.CoWorkerCases))
+                        {
+                            if (currentCase.RegUserId.GetUserFromAdPath().ToLower() == curUserId.ToLower() || coWorkers.Contains(currentCase.ReportedBy))
+                                userHasAccessToCase = true;               
+                        }
+                        else
+                        {
+                            if (currentCase.RegUserId.GetUserFromAdPath().ToLower() == curUserId.ToLower() || 
+                                currentCase.ReportedBy == SessionFacade.CurrentUserIdentity.EmployeeNumber)
+                                userHasAccessToCase = true;                                                                       
+                        }                        
+                    }
+                    else
+                    if (caseListCondition.Contains(CaseListTypes.CoWorkerCases))
+                    {
+                        if (coWorkers.Contains(currentCase.ReportedBy) || 
+                            (string.IsNullOrEmpty(currentCase.ReportedBy) && currentCase.RegUserId.GetUserFromAdPath().ToLower() == curUserId.ToLower()))
+                            userHasAccessToCase = true;                        
+                    }                                    
+                }
+                else
+                {
+                    if (currentCase.RegUserId.GetUserFromAdPath().ToLower() == curUserId.ToLower())
+                        userHasAccessToCase = true;   
                 }
 
+                if (!userHasAccessToCase)
+                {
+                        ErrorGenerator.MakeError("Case not found among your cases!");
+                        return RedirectToAction("Index", "Error");
+                }                
             }
 
             if(currentCase == null)
@@ -628,21 +665,32 @@
                 }
             }
 
-            var temporaryLogFiles = this._userTemporaryFilesStorage.GetFiles(logFileGuid, ModuleName.Log);
-            caseLog.Id = this._logService.SaveLog(caseLog, temporaryLogFiles.Count, out errors);            
-            var basePath = this._masterDataService.GetFilePath(currentCase.Customer_Id);
-            // save log files
-            var newLogFiles = temporaryLogFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseLog.Id)).ToList();
-            this._logFileService.AddFiles(newLogFiles);            
-            // send emails
             var caseMailSetting = new CaseMailSetting(
-                                                       currentCustomer.NewCaseEmailList,
-                                                       currentCustomer.HelpdeskEmail,
-                                                       ConfigurationManager.AppSettings[AppSettingsKey.HelpdeskPath].ToString(),
-                                                       cs.DontConnectUserToWorkingGroup
-                                                     );            
-            this._caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, basePath, newLogFiles);
-            this._userTemporaryFilesStorage.DeleteFiles(logFileGuid);
+                                                          currentCustomer.NewCaseEmailList,
+                                                          currentCustomer.HelpdeskEmail,
+                                                          ConfigurationManager.AppSettings[AppSettingsKey.HelpdeskPath].ToString(),
+                                                          cs.DontConnectUserToWorkingGroup
+                                                        );
+
+            var temporaryLogFiles = new List<WebTemporaryFile>();
+            if (!string.IsNullOrEmpty(logFileGuid))
+            {
+                temporaryLogFiles = this._userTemporaryFilesStorage.GetFiles(logFileGuid, ModuleName.Log);
+                caseLog.Id = this._logService.SaveLog(caseLog, temporaryLogFiles.Count, out errors);
+                var basePath = this._masterDataService.GetFilePath(currentCase.Customer_Id);
+                // save log files
+                var newLogFiles = temporaryLogFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseLog.Id)).ToList();
+                this._logFileService.AddFiles(newLogFiles);
+                // send emails
+               
+                this._caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, basePath, newLogFiles);
+                this._userTemporaryFilesStorage.DeleteFiles(logFileGuid);
+            }
+            else
+            {
+                caseLog.Id = this._logService.SaveLog(caseLog, temporaryLogFiles.Count, out errors);
+                this._caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, string.Empty, null);
+            }
         }
 
         [HttpPost]
