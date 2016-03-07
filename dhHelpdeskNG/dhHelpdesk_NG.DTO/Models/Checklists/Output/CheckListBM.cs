@@ -32,8 +32,7 @@ namespace DH.Helpdesk.BusinessData.Models.Checklists.Output
 
 
         public int CustomerId { get; private set; }
-
-        [IsId]
+       
         public int Id { get; set; }
 
         public int? WorkingGroupId { get; private set; }

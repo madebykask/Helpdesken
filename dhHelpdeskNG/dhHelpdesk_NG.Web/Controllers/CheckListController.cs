@@ -93,7 +93,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var chLServices = this._CheckListServiceService.GetCheckListServices(id).ToList();
 
-            var model = this.CreatcheckListInput(chL, chLServices);       // , chLServices                
+            var model = this.CreatcheckListInput(chL);       // , chLServices                
 
             model.Services = new CheckListServiceModel();
 
@@ -119,8 +119,7 @@ namespace DH.Helpdesk.Web.Controllers
                     var allActions = this._CheckListActionService.GetActions(s.Id).ToList();
 
                     var actionsInput = allActions.Select(a => new CheckListActionsInputModel
-                             (
-                                
+                             (               
                                  a.Service_Id,
                                  a.Id,
                                  a.IsActive,
@@ -137,7 +136,7 @@ namespace DH.Helpdesk.Web.Controllers
                             var New_action = CreatActionInput(s.Id);
                             model.Services.ActionsList.Insert(0, New_action);
                         }
-
+                       
                 }
             }
            
@@ -273,24 +272,24 @@ namespace DH.Helpdesk.Web.Controllers
             return model;
         }
 
-        private CheckListInputModel CreatcheckListInput(CheckListBM checklist, List<CheckListServiceBM> checkListServices)
+        private CheckListInputModel CreatcheckListInput(CheckListBM checklist)
         {
 
             var workingGroups = this._WorkingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id);
+            var chLServices = this._CheckListServiceService.GetCheckListServices(checklist.Id).ToList();
 
             var new_Service = (dynamic)null;
             var checkListActions = new List<CheckListActionBM>();
-           
-            if (checkListServices != null)
+
+            if (chLServices != null)
             {
-                foreach (var s in checkListServices)
+                foreach (var s in chLServices)
                 {
                     checkListActions = this._CheckListActionService.GetActions(s.Id).ToList();
                 }
 
-                //new_Service = checkListServices.Select(s => new CheckListServiceModel(s.CheckListId, s.Id, null, s.IsActive, s.Name, checkListServices, String.Empty, checkListActions)).ToList();
+                new_Service = chLServices.Select(s => new CheckListServiceModel()).ToList();
             }
-
             //else
             //    new_Service = new CheckListServiceModel(checklist.Id, 0, 1, "");
 
@@ -309,9 +308,8 @@ namespace DH.Helpdesk.Web.Controllers
                 CheckListId = checklist.Id,
                 WGId = checklist.WorkingGroupId,
                 CheckListName = checklist.ChecklistName,
-                WorkingGroups = wgs
-                //,
-                //CheckListActions = checkListActions
+                WorkingGroups = wgs,
+                CheckListActions = checkListActions
                 //,
                 //Services = new_Service
             };
@@ -595,7 +593,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                 var model = new CheckListServiceModel()
                 {
-                    CheckList_Id = new_CheckListService.Id,
+                    CheckList_Id = new_CheckListService.CheckListId,
                     IsActive = new_CheckListService.IsActive,
                     Service_Id = new_CheckListService.Id,
                     ServiceName = new_CheckListService.Name                            
