@@ -1360,7 +1360,7 @@ namespace DH.Helpdesk.Web.Controllers
                     var customerSettings = this._settingService.GetCustomerSetting(customerId);
                     m.OutFormatter = new OutputFormatter(customerSettings.IsUserFirstLastNameRepresentation == 1);
                     m.ResponsibleUsersAvailable = responsibleUsersAvailable.MapToSelectList(customerSettings, isAddEmpty);
-                    m.SendToDialogModel = this.CreateNewSendToDialogModel(customerId, responsibleUsersAvailable.ToList());
+                    m.SendToDialogModel = this.CreateNewSendToDialogModel(customerId, responsibleUsersAvailable.ToList(), cs);
                     m.CaseLog.SendMailAboutCaseToNotifier = false;
                     m.MinWorkingTime = cs.MinRegWorkingTime != 0 ? cs.MinRegWorkingTime : 30;                    
                     // check department info
@@ -3844,7 +3844,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             m.standardTexts = this._standardTextService.GetStandardTexts(customerId);
             m.Languages = this._languageService.GetActiveLanguages();
-            m.SendToDialogModel = this.CreateNewSendToDialogModel(customerId, responsibleUsersList.ToList());
+            m.SendToDialogModel = this.CreateNewSendToDialogModel(customerId, responsibleUsersList.ToList(), customerSetting);
             m.CaseLog = this._logService.InitCaseLog(SessionFacade.CurrentUser.Id, string.Empty);
             m.CaseKey = m.case_.Id == 0 ? m.case_.CaseGUID.ToString() : m.case_.Id.ToString(global::System.Globalization.CultureInfo.InvariantCulture);
             m.LogKey = m.CaseLog.LogGuid.ToString();
@@ -4546,18 +4546,33 @@ namespace DH.Helpdesk.Web.Controllers
             return ret;
         }
 
-        private SendToDialogModel CreateNewSendToDialogModel(int customerId, IList<DHDomain.User> users)
-        {
+        private SendToDialogModel CreateNewSendToDialogModel(int customerId, IList<DHDomain.User> users, Setting customerSetting)
+        {            
             var emailGroups = _emailGroupService.GetEmailGroupsWithEmails(customerId);
             var workingGroups = _workingGroupService.GetWorkingGroupsWithActiveEmails(customerId);
             var administrators = new List<ItemOverview>();
 
             if (users != null)
-                foreach (var u in users)
+            {
+                var validUsers = users.Where(u => u.IsActive != 0 &&
+                                                 u.Performer == 1 &&
+                                                 _emailService.IsValidEmail(u.Email) &&
+                                                 !String.IsNullOrWhiteSpace(u.Email)).ToList();
+
+                if (customerSetting.IsUserFirstLastNameRepresentation == 1)
                 {
-                    if (u.IsActive == 1 && u.Performer == 1 && _emailService.IsValidEmail(u.Email) && !String.IsNullOrWhiteSpace(u.Email))
-                        administrators.Add(new ItemOverview(u.SurName + " " + u.FirstName, u.Email));
+                    foreach (var u in users.OrderBy(it=> it.FirstName).ThenBy(it=> it.SurName))                    
+                        if (u.IsActive == 1 && u.Performer == 1 && _emailService.IsValidEmail(u.Email) && !String.IsNullOrWhiteSpace(u.Email))
+                            administrators.Add(new ItemOverview(string.Format("{0} {1}", u.FirstName, u.FirstName), u.Email));
                 }
+                else
+                {
+                    foreach (var u in users.OrderBy(it => it.SurName).ThenBy(it => it.FirstName))
+                        if (u.IsActive == 1 && u.Performer == 1 && _emailService.IsValidEmail(u.Email) && !String.IsNullOrWhiteSpace(u.Email))
+                            administrators.Add(new ItemOverview(string.Format("{0} {1}", u.SurName, u.FirstName), u.Email));
+                }               
+            }
+
             var emailGroupList = new MultiSelectList(emailGroups, "Id", "Name");
             var emailGroupEmails = emailGroups.Select(g => new GroupEmailsModel(g.Id, g.Emails)).ToList();
             var workingGroupList = new MultiSelectList(workingGroups, "Id", "Name");

@@ -105,8 +105,8 @@
             else
             {
                 list.Items.AddItems(
-                    userCollection.OrderBy(it => it.SurName)
-                        .ThenBy(it => it.FirstName)
+                    userCollection.OrderBy(it => it.FirstName)
+                        .ThenBy(it => it.SurName)
                         .Select(
                             it => new ListItem(it.Id.ToString(), string.Format("{0} {1}", it.FirstName, it.SurName), Convert.ToBoolean(it.IsActive)))
                         .ToList());

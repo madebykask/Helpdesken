@@ -24,7 +24,7 @@
         private readonly IProblemService problemService;
         private readonly IProblemLogService problemLogService;
         private readonly IFinishingCauseService finishingCauseService;
-
+        private readonly ISettingService settingService;
         private readonly ICaseService caseService;
 
         private readonly IUserService userService;
@@ -35,6 +35,7 @@
                 IUserService userService,
                 IProblemLogService problemLogService,
                 ICaseService caseService,
+                ISettingService settingService,
                 IFinishingCauseService finishingCauseService)
             : base(masterDataService)
         {
@@ -43,6 +44,7 @@
             this.problemLogService = problemLogService;
             this.caseService = caseService;
             this.finishingCauseService = finishingCauseService;
+            this.settingService = settingService;
         }
 
         // todo refactor
@@ -63,7 +65,7 @@
             return item;
         }
 
-        public static ProblemOutputModel MapProblemOverviewToOutputModel(ProblemOverview problemOverview)
+        public ProblemOutputModel MapProblemOverviewToOutputModel(ProblemOverview problemOverview, bool isFirstNameFirst)
         {
             return new ProblemOutputModel
                        {
@@ -71,7 +73,8 @@
                            Name = problemOverview.Name,
                            Description = problemOverview.Description,
                            ProblemNumber = problemOverview.ProblemNumber,
-                           ResponsibleUserName = problemOverview.ResponsibleUserName,
+                           ResponsibleUserName = (isFirstNameFirst? string.Format("{0} {1}", problemOverview.ResponsibleUserName, problemOverview.ResponsibleUserSurName): 
+                                                                    string.Format("{0} {1}", problemOverview.ResponsibleUserSurName, problemOverview.ResponsibleUserName)),
                            State = problemOverview.FinishingDate.HasValue ? "Finished" : "Active"
                        };
         }
@@ -133,10 +136,11 @@
         public ActionResult Index()
         {
             var filter = SessionFacade.FindPageFilters<ProblemFilter>(PageName.Problems) ?? new ProblemFilter { EntityStatus = EntityStatus.Active };
-
             var problems = this.problemService.GetCustomerProblems(SessionFacade.CurrentCustomer.Id, filter.EntityStatus);
+            var customerId = SessionFacade.CurrentCustomer.Id;
+            var settings = this.settingService.GetCustomerSetting(customerId);
 
-            var problemOutputModels = problems.Select(MapProblemOverviewToOutputModel).ToList();
+            var problemOutputModels = problems.Select(t=> MapProblemOverviewToOutputModel(t, settings.IsUserFirstLastNameRepresentation==1)).ToList();
 
             // ToDo Artem: do not use ViewModel naming in classic MVC applications.
             var viewModel = new ProblemOutputViewModel { Problems = problemOutputModels, Show = (Enums.Show)filter.EntityStatus };
@@ -148,7 +152,8 @@
         public PartialViewResult Search(EntityStatus show)
         {
             var problems = this.problemService.GetCustomerProblems(SessionFacade.CurrentCustomer.Id, show);
-            var problemOutputModels = problems.Select(MapProblemOverviewToOutputModel).ToList();
+            var settings = this.settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
+            var problemOutputModels = problems.Select(t=> MapProblemOverviewToOutputModel(t, settings.IsUserFirstLastNameRepresentation == 1)).ToList();
 
             SessionFacade.SavePageFilters(PageName.Problems, new ProblemFilter { EntityStatus = show });
 

@@ -36,19 +36,22 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IUserService _userService;
         private readonly IWorkingGroupService _workingGroupService;
         private readonly IUserPermissionsChecker _userPermissionsChecker;
+        private readonly ISettingService _settingService;
 
         public DocumentController(
             IDocumentService documentService,
             IUserService userService,
             IWorkingGroupService workingGroupService,
             IMasterDataService masterDataService,
-            IUserPermissionsChecker userPermissionsChecker)
+            IUserPermissionsChecker userPermissionsChecker,
+            ISettingService settingService)
             : base(masterDataService)
         {
             this._documentService = documentService;
             this._userService = userService;
             this._workingGroupService = workingGroupService;
             this._userPermissionsChecker = userPermissionsChecker;
+            this._settingService = settingService;
         }
 
         [HttpPost]
@@ -470,19 +473,31 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var usSelected = document.Us ?? new List<User>();
             var usAvailable = new List<User>();
-
+            var curCustomerId = SessionFacade.CurrentCustomer.Id;            
             var userHasDocumentAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.DocumentPermission);
+            var customerSettings = this._settingService.GetCustomerSetting(curCustomerId);
 
-            foreach (var us in this._userService.GetUsers(SessionFacade.CurrentCustomer.Id))
+            if (customerSettings.IsUserFirstLastNameRepresentation == 1)
             {
-                if (!usSelected.Contains(us))
-                    usAvailable.Add(us);
-            }
+                foreach (var us in this._userService.GetUsers(curCustomerId).OrderBy(u => u.FirstName).ThenBy(u => u.SurName))                
+                    if (!usSelected.Contains(us))
+                        usAvailable.Add(us);
 
+                usSelected = usSelected.OrderBy(us => us.FirstName).ThenBy(us => us.SurName).ToList();
+            }
+            else
+            {
+                foreach (var us in this._userService.GetUsers(curCustomerId).OrderBy(u => u.SurName).ThenBy(u => u.FirstName))               
+                    if (!usSelected.Contains(us))
+                        usAvailable.Add(us);
+
+                usSelected = usSelected.OrderBy(us => us.SurName).ThenBy(us => us.FirstName).ToList();
+            }
+            
             var wgsSelected = document.WGs ?? new List<WorkingGroupEntity>();
             var wgsAvailable = new List<WorkingGroupEntity>();
 
-            foreach (var wg in this._workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id))
+            foreach (var wg in this._workingGroupService.GetWorkingGroups(curCustomerId))
             {
                 if (!wgsSelected.Contains(wg))
                     wgsAvailable.Add(wg);
@@ -492,7 +507,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 Document = document,
 
-                DocumentCats = this._documentService.GetDocumentCategories(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                DocumentCats = this._documentService.GetDocumentCategories(curCustomerId).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
@@ -500,14 +515,20 @@ namespace DH.Helpdesk.Web.Controllers
 
                 UsAvailable = usAvailable.Select(x => new SelectListItem
                 {
-                    Text = x.SurName + " " + x.FirstName,
+                    Text = (customerSettings.IsUserFirstLastNameRepresentation == 1 ? 
+                                string.Format("{0} {1}", x.FirstName, x.SurName) : 
+                                string.Format("{0} {1}", x.SurName, x.FirstName)),
                     Value = x.Id.ToString()
                 }).ToList(),
+
                 UsSelected = usSelected.Select(x => new SelectListItem
                 {
-                    Text = x.SurName + " " + x.FirstName,
+                    Text = (customerSettings.IsUserFirstLastNameRepresentation == 1 ?
+                                string.Format("{0} {1}", x.FirstName, x.SurName) :
+                                string.Format("{0} {1}", x.SurName, x.FirstName)),
                     Value = x.Id.ToString()
                 }).ToList(),
+
                 WGsAvailable = wgsAvailable.Select(x => new SelectListItem
                 {
                     Text = x.WorkingGroupName,

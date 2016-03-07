@@ -44,6 +44,8 @@ namespace DH.Helpdesk.BusinessData.Models.Problem.Output
         /// </summary>
         public string ResponsibleUserName { get; set; }
 
+        public string ResponsibleUserSurName { get; set; }
+
         /// <summary>
         /// Gets or sets the finishing date.
         /// </summary>
