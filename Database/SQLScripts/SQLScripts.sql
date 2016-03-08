@@ -25,5 +25,9 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	ALTER TABLE tblProductArea ADD ShowOnExternalPage int Default(1) NOT NULL
 GO
 
+-- DocumentPermission for Systemadministrators
+UPDATE tblUsers Set DocumentPermission = 1 WHERE UserGroup_Id = 4;
+GO
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.21'
