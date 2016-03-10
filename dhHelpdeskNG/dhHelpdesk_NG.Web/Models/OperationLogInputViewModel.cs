@@ -5,6 +5,7 @@
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Web.Models.Shared;
 
     public class OperationLogIndexViewModel
     {
@@ -31,9 +32,14 @@
         public IList<SelectListItem> OperationLogCategories { get; set; }
         public IList<SelectListItem> OperationObjectsAvailable { get; set; }
         public IList<SelectListItem> OperationObjectsSelected { get; set; }
-        
-        
+
+        public IList<OperationLogEMailLog> OperationLogEmailLog { get; set; }
+
+        public SendToDialogModel SendToDialogModel { get; set; }
+        public OperationLogList OperationLogList { get; set; }
 
         public OperationLogInputViewModel() { }
+
+        public SelectList ResponsibleUsersAvailable { get; set; }
     }
 }

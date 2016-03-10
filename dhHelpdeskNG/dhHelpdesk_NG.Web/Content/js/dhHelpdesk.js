@@ -247,6 +247,18 @@ function SendToDialogCaseCallback(email) {
     }
 }
 
+function SendToDialogOperationLogCallback(email) {
+    if (email.length > 0) {
+
+        var str = '';
+        for (var i = 0; i < email.length; i++) {
+            str += email[i] + '\r\n';
+        }
+        $('#divEmailRecepientsOperationLog').show();
+        $('#OperationLogList_EmailRecepientsOperationLog').val(str);
+    }
+}
+
 //multiselct med sök
 $('.multiselect').multiselect({
     enableFiltering: true,

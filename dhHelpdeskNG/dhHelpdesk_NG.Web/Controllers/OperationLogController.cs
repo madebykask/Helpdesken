@@ -9,6 +9,12 @@
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Models;
+    using DH.Helpdesk.Web.Models.Shared;
+    using DHDomain = DH.Helpdesk.Domain;
+    using DH.Helpdesk.BusinessData.Models.Shared;
+    using System;
+    using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.Models;
 
     public class OperationLogController : BaseController
     {
@@ -17,6 +23,11 @@
         private readonly IOperationLogCategoryService _operationLogCategoryService;
         private readonly IOperationObjectService _operationObjectService;
         private readonly IWorkingGroupService _workingGroupService;
+        private readonly IUserService _userService;
+        private readonly ISettingService _settingService;
+        private readonly IEmailGroupService _emailGroupService;
+        private readonly IEmailService _emailService;
+        private readonly IOperationLogEmailLogService _operationLogEmailLogService;
 
         public OperationLogController(
             IOperationLogService operationLogService,
@@ -24,7 +35,12 @@
             IOperationObjectService operationObjectService,
             IOperationLogCategoryService operationLogCategoryService,
             IWorkingGroupService workingGroupService,
-            IMasterDataService masterDataService)
+            IMasterDataService masterDataService,
+            IUserService userService,
+            ISettingService settingService,
+            IEmailGroupService emailGroupService,
+            IEmailService emailService,
+            IOperationLogEmailLogService operationLogEmailLogService)
             : base(masterDataService)
         {
             this._operationLogService = operationLogService;
@@ -32,6 +48,11 @@
             this._operationLogCategoryService = operationLogCategoryService;
             this._operationObjectService = operationObjectService;
             this._workingGroupService = workingGroupService;
+            this._userService = userService;
+            this._settingService = settingService;
+            this._emailGroupService = emailGroupService;
+            this._emailService = emailService;
+            this._operationLogEmailLogService = operationLogEmailLogService;
         }
 
         public ActionResult Index()
@@ -49,7 +70,7 @@
             {
                 model.OperationLogs = this._operationLogService.GetOperationLogs(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.CreatedDate).ToList();
                 CS.SortBy = "CreatedDate";
-                CS.Ascending = true;
+                CS.Ascending = false;
                 SessionFacade.CurrentOperationLogSearch = CS;
             }
             
@@ -101,11 +122,13 @@
         {
             var model = this.OperationLogInputViewModel(new OperationLog { Customer_Id = SessionFacade.CurrentCustomer.Id });
 
+            AddViewDataValues();
+
             return this.View(model);
         }
 
         [HttpPost]
-        public ActionResult New(OperationLog operationlog, int[] WGsSelected, int OperationLogHour, int OperationLogMinute, int chkSecurity)
+        public ActionResult New(OperationLog operationlog, OperationLogList operationLogList, int[] WGsSelected, int OperationLogHour, int OperationLogMinute, int chkSecurity)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
             operationlog.User_Id = SessionFacade.CurrentUser.Id;
@@ -113,7 +136,28 @@
             if (chkSecurity == 0)
                 WGsSelected = null;
 
+            //var operationLogList = new OperationLogList();
+            var customer = this._customerService.GetCustomer(operationlog.Customer_Id);
+
+            var operationObject = this._operationObjectService.GetOperationObject(operationlog.OperationObject_Id);
+            var operationCategory = new OperationLogCategory();
+
+            if (operationlog.OperationLogCategory_Id != null)
+            {
+                operationCategory = this._operationLogCategoryService.GetOperationLogCategory(operationlog.OperationLogCategory_Id, customer.Id);
+            }
+
+            operationLogList.Language_Id = customer.Language_Id;
+            operationLogList.OperationLogAction = operationlog.LogAction;
+            operationLogList.OperationLogDescription = operationlog.LogText;
+            operationLogList.OperationObjectName = operationObject.Name;
+            operationLogList.OperationLogCategoryName = operationCategory.OLCName;
+
             this._operationLogService.SaveOperationLog(operationlog, WGsSelected, out errors);
+
+            // send emails
+            if (operationLogList.EmailRecepientsOperationLog != null)
+                this._operationLogService.SendOperationLogEmail(operationlog, operationLogList, customer);
 
             if (errors.Count == 0)
                 return this.RedirectToAction("index", "operationlog");
@@ -133,14 +177,31 @@
 
             var model = this.OperationLogInputViewModel(operationlog);
 
+            AddViewDataValues();
+
             return this.View(model);
         }
 
         [HttpPost]
-        public ActionResult Edit(int id, OperationLog operationlog, int[] WGsSelected, int OperationLogHour, int OperationLogMinute,int chkSecurity)
+        public ActionResult Edit(int id, OperationLog operationlog, OperationLogList operationLogList, int[] WGsSelected, int OperationLogHour, int OperationLogMinute,int chkSecurity)
         {
             var operationlogToSave = this._operationLogService.GetOperationLog(id);
             this.UpdateModel(operationlogToSave, "OperationLog");
+            var customer = this._customerService.GetCustomer(operationlog.Customer_Id);
+
+            var operationObject = this._operationObjectService.GetOperationObject(operationlog.OperationObject_Id);
+            var operationCategory = new OperationLogCategory();
+
+            if (operationlog.OperationLogCategory_Id != null)
+            {
+                operationCategory = this._operationLogCategoryService.GetOperationLogCategory(operationlog.OperationLogCategory_Id, customer.Id);
+            }
+
+            operationLogList.Language_Id = customer.Language_Id;
+            operationLogList.OperationLogAction = operationlog.LogAction;
+            operationLogList.OperationLogDescription = operationlog.LogText;
+            operationLogList.OperationObjectName = operationObject.Name;
+            operationLogList.OperationLogCategoryName = operationCategory.OLCName;
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
@@ -150,6 +211,11 @@
             if (chkSecurity==0) 
                WGsSelected = null;
             this._operationLogService.SaveOperationLog(operationlogToSave, WGsSelected, out errors);
+
+
+            // send emails
+            if (operationLogList.EmailRecepientsOperationLog != null)
+                 this._operationLogService.SendOperationLogEmail(operationlogToSave, operationLogList, customer);
 
             if (errors.Count == 0)
                 return this.RedirectToAction("index", "operationlog");
@@ -175,6 +241,9 @@
         {
             var wgsSelected = operationlog.WGs ?? new List<WorkingGroupEntity>();
             var wgsAvailable = new List<WorkingGroupEntity>();
+            var customerId = SessionFacade.CurrentCustomer.Id;
+            var cs = this._settingService.GetCustomerSetting(customerId);
+            const bool isAddEmpty = true;
 
             foreach (var wg in this._workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id))
             {                
@@ -205,14 +274,22 @@
                     Value = x.Id.ToString()
                 }).ToList(),
 
-                OperationLogCategories = this._operationLogCategoryService.GetOperationLogCategories (SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                OperationLogCategories = this._operationLogCategoryService.GetOperationLogCategories(customerId).Select(x => new SelectListItem
                 {
                     Text = x.OLCName,
                     Value = x.Id.ToString()
                 }).ToList()                 
                                 
             };
+
             
+            model.OperationLogEmailLog = this._operationLogEmailLogService.GetOperationLogEmailLogs(operationlog.Id);
+
+            var customerSettings = this._settingService.GetCustomerSetting(customerId);
+            var responsibleUsersAvailable = this._userService.GetAvailablePerformersOrUserId(customerId, operationlog.User_Id);
+            model.ResponsibleUsersAvailable = responsibleUsersAvailable.MapToSelectList(customerSettings, isAddEmpty);
+            model.SendToDialogModel = this.CreateNewSendToDialogModel(customerId, responsibleUsersAvailable.ToList(), cs);
+
             model.OperationLogHour = model.OperationLog.WorkingTime / 60;
             model.OperationLogMinute = model.OperationLog.WorkingTime - (model.OperationLogHour*60);
 
@@ -233,6 +310,53 @@
             };
 
             return model;
+        }
+
+        private SendToDialogModel CreateNewSendToDialogModel(int customerId, IList<DHDomain.User> users, Setting customerSetting)
+        {
+            var emailGroups = _emailGroupService.GetEmailGroupsWithEmails(customerId);
+            var workingGroups = _workingGroupService.GetWorkingGroupsWithActiveEmails(customerId);
+            var administrators = new List<ItemOverview>();
+
+            if (users != null)
+            {
+                var validUsers = users.Where(u => u.IsActive != 0 &&
+                                                 u.Performer == 1 &&
+                                                 _emailService.IsValidEmail(u.Email) &&
+                                                 !String.IsNullOrWhiteSpace(u.Email)).ToList();
+
+                if (customerSetting.IsUserFirstLastNameRepresentation == 1)
+                {
+                    foreach (var u in users.OrderBy(it => it.FirstName).ThenBy(it => it.SurName))
+                        if (u.IsActive == 1 && u.Performer == 1 && _emailService.IsValidEmail(u.Email) && !String.IsNullOrWhiteSpace(u.Email))
+                            administrators.Add(new ItemOverview(string.Format("{0} {1}", u.FirstName, u.SurName), u.Email));
+                }
+                else
+                {
+                    foreach (var u in users.OrderBy(it => it.SurName).ThenBy(it => it.FirstName))
+                        if (u.IsActive == 1 && u.Performer == 1 && _emailService.IsValidEmail(u.Email) && !String.IsNullOrWhiteSpace(u.Email))
+                            administrators.Add(new ItemOverview(string.Format("{0} {1}", u.SurName, u.FirstName), u.Email));
+                }
+            }
+
+            var emailGroupList = new MultiSelectList(emailGroups, "Id", "Name");
+            var emailGroupEmails = emailGroups.Select(g => new GroupEmailsModel(g.Id, g.Emails)).ToList();
+            var workingGroupList = new MultiSelectList(workingGroups, "Id", "Name");
+            var workingGroupEmails = workingGroups.Select(g => new GroupEmailsModel(g.Id, g.Emails)).ToList();
+            var administratorList = new MultiSelectList(administrators, "Value", "Name");
+
+            return new SendToDialogModel(
+                emailGroupList,
+                emailGroupEmails,
+                workingGroupList,
+                workingGroupEmails,
+                administratorList);
+        }
+
+        private void AddViewDataValues()
+        {
+            ViewData["Callback"] = "SendToDialogOperationLogCallback";
+            ViewData["Id"] = "divSendToDialogCase";
         }
     }
 }

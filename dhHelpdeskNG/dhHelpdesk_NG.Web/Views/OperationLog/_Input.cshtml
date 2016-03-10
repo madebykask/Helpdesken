@@ -192,23 +192,89 @@
                 <div class="container"> <!-- Email Container -->                    
                     <h4>@Translation.Get("E-post", Enums.TranslationSource.TextTranslation)</h4>
                     <div class="row">
-                        <div class="span12">                            
-                            <table class="tableform" id="E-post" border="0">
+                         <div class="span12">                               
+                            <table class ="tableform" border="0">
                                <tr>
-                                  <td class="span3">
-                                     
+                                  <td class="span3">                                
+                                    @Translation.Get("Skicka till", Enums.TranslationSource.TextTranslation)                                    
                                   </td>
-                                  <td class="span9">
-                                     @*<div id="divSendInternalLogNoteTo" >
-                                         @Html.Partial("_GetEmail", Model)
-                                     </div>*@
+                                  <td>
+                                      <div class="checkbox">
+                                            <input type="checkbox" id="chkOperationLogEmail" name="chkOperationLogEmail" value="1"/>                                    
+                                            <input type="hidden" name="chkOperationLogEmail" value="0" />
+                                            @*@Html.CheckBoxFor(model => model.OperationLogList.SendMailAboutLog)*@
+                                            <span class="lbl">@Translation.Get("Skicka driftlogg till", Enums.TranslationSource.TextTranslation)</span>
+                                        </div>                                                       
+                                  </td>                                   
+                               </tr> 
+                            </table >                                 
+                         </div>                         
+                     </div>
+                    <div id="divEmailRecepientsOperationLog" style="display: none" class="row">
+                        <div class="span12">                               
+                            <table border="0">
+                               <tr>
+                                  <td class="span3">                                                            
                                   </td>
-                               </tr>
-                            </table>
-                        </div>
+                                  <td>
+                                      @Html.TextAreaFor(model => model.OperationLogList.EmailRecepientsOperationLog, new { @readonly = "readonly" })                                              
+                                  </td>                                   
+                               </tr> 
+                            </table>                                 
+                         </div>                      
+                        
                     </div>
                 </div> <!-- Email Container -->
-
+                @if (Model.OperationLogEmailLog != null)
+                {
+                <div class="container"> <!-- Logg Container -->                    
+                    <h4>@Translation.Get("Logg", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="row">
+                         <div class="span12">                               
+                            <table class ="tableform" border="0">
+                               <tr>
+                                  <td>                                
+                                        <b>@Translation.Get("Skapad datum", Enums.TranslationSource.TextTranslation)</b>                       
+                                  </td>
+                                  <td>
+                                        <b>@Translation.Get("Mottagare", Enums.TranslationSource.TextTranslation)</b>                                  
+                                  </td>
+                                   <td>
+                                        <b>@Translation.Get("Typ", Enums.TranslationSource.TextTranslation)</b>                                  
+                                  </td>   
+                                  @* <td>
+                                        <b>@Translation.Get("Meddelande", Enums.TranslationSource.TextTranslation)</b>                                  
+                                  </td>      *@                                
+                               </tr>
+                                @foreach (var email in Model.OperationLogEmailLog)
+                                { 
+                                   <tr>
+                                       <td style="width:150px">
+                                           <label>@email.CreatedDate</label>
+                                       </td>
+                                       <td style="width:200px">
+                                           <label>@email.Recipients</label>
+                                       </td>
+                                       <td style="width:150px">
+                                           @if (email.SMSText != "")
+                                           {
+                                              <label>@Translation.Get("SMS", Enums.TranslationSource.TextTranslation)</label>
+                                           }
+                                           else
+                                           {
+                                              <label>@Translation.Get("E-post", Enums.TranslationSource.TextTranslation)</label> 
+                                           }
+                                       </td>
+                                       @*<td>
+                                           <label>@email.SMSText</label>
+                                       </td>*@
+                                   </tr>
+                                }
+                            </table >                                 
+                         </div>                         
+                     </div>
+                </div> <!-- Logg Container -->
+                }
                 @Html.HiddenFor(model => model.OperationLog.Customer_Id)
                 @Html.HiddenFor(model => model.OperationLog.Id)                                    
 
@@ -216,7 +282,7 @@
      </div>
   </div>
 </div>
-
+@Html.Partial("_SendToDialog", Model.SendToDialogModel)
 
 <script type="text/javascript">
 
@@ -249,7 +315,13 @@
         return false;
     });
 
-   
+    $("#chkOperationLogEmail").click(function () {
+        if ($("#chkOperationLogEmail").is(":checked")) {
+            $("#divSendToDialogCase").dialog("option", "width", 450);
+            $("#divSendToDialogCase").dialog("option", "height", 550);
+            $("#divSendToDialogCase").dialog("open");
+        }
+    });
 
     $(function () {
         var validator = $("#target").validate({

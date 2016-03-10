@@ -15,6 +15,11 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
 
     using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
+    using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.Services.Infrastructure.Email;
+    using DH.Helpdesk.BusinessData.OldComponents;
+    using System.Configuration;
+    using DH.Helpdesk.BusinessData.Models.Email;
 
     public interface IOperationLogService
     {
@@ -27,6 +32,7 @@ namespace DH.Helpdesk.Services.Services
         DeleteMessage DeleteOperationLog(int id);
         void Commit();
 
+        void SendOperationLogEmail(OperationLog operationLogId, OperationLogList operationLogList, Customer customer);
         /// <summary>
         /// The get operation log overviews.
         /// </summary>
@@ -54,12 +60,18 @@ namespace DH.Helpdesk.Services.Services
         private readonly IUnitOfWorkFactory unitOfWorkFactory;
 
         private readonly IWorkContext workContext;
+        private readonly IMailTemplateService _mailTemplateService;
+        private readonly IEmailService _emailService;
+        private readonly IOperationLogEMailLogRepository _operationLogEmailLogRepository;
 
         public OperationLogService(
             IOperationLogRepository operationLogRepository,
             IUnitOfWork unitOfWork,
             IWorkingGroupRepository workingGroupRepository, 
-            IUnitOfWorkFactory unitOfWorkFactory, 
+            IUnitOfWorkFactory unitOfWorkFactory,
+            IMailTemplateService mailTemplateService,
+            IEmailService emailService,
+            IOperationLogEMailLogRepository operationLogEmailLogRepository,
             IWorkContext workContext)
         {
             this._operationLogRepository = operationLogRepository;
@@ -67,6 +79,9 @@ namespace DH.Helpdesk.Services.Services
             this._workingGroupRepository = workingGroupRepository;
             this.unitOfWorkFactory = unitOfWorkFactory;
             this.workContext = workContext;
+            this._mailTemplateService = mailTemplateService;
+            this._emailService = emailService;
+            this._operationLogEmailLogRepository = operationLogEmailLogRepository;
         }
 
         public IList<OperationLog> GetOperationLogs(int customerId)
@@ -235,6 +250,77 @@ namespace DH.Helpdesk.Services.Services
             }            
         }
 
+        public void SendOperationLogEmail(OperationLog operationLog, OperationLogList operationLogList, Customer customer)
+        {
+            
+
+            var helpdeskMailFromAdress = customer.HelpdeskEmail; 
+
+            // get list of fields to replace [#1] tags in the subjcet and body texts
+            List<Field> fields = GetFieldsForEmail(operationLogList);
+
+            if (operationLog == null || operationLog.Id <= 0 ||
+                string.IsNullOrWhiteSpace(operationLogList.EmailRecepientsOperationLog))
+            {
+                return;
+            }
+
+            var template = this._mailTemplateService.GetMailTemplateForCustomerAndLanguage(
+                                                operationLog.Customer_Id,
+                                                operationLogList.Language_Id,
+                                                (int)GlobalEnums.MailTemplates.OperationLog);
+            if (template == null)
+            {
+                return;
+            }
+
+            if (!String.IsNullOrEmpty(template.Body) && !String.IsNullOrEmpty(template.Subject))
+            {
+                var to = operationLogList.EmailRecepientsOperationLog
+                                    .Replace(" ", "")
+                                    .Replace(Environment.NewLine, "|")
+                                    .Split('|', ';', ',');
+
+                foreach (var t in to)
+                {
+                    var curMail = t.Trim();
+                    if (!string.IsNullOrWhiteSpace(t) && this._emailService.IsValidEmail(t))
+                    {
+
+                        
+                        if (!string.IsNullOrWhiteSpace(curMail) && _emailService.IsValidEmail(curMail))
+                        {
+                            var el = new OperationLogEMailLog(operationLog.Id, string.Empty, t);
+                            fields = GetFieldsForEmail(operationLogList);
+                            var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.Recipients, template.Subject, template.Body, fields, EmailResponse.GetEmptyEmailResponse(), null, false, null);
+
+                            //el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                            var now = DateTime.Now;
+                            el.CreatedDate = now;
+                            //el.ChangedDate = now;
+                            this._operationLogEmailLogRepository.Add(el);
+                            this._operationLogEmailLogRepository.Commit();
+                        }
+
+                    }
+                }
+            }
+        }
+
+        private List<Field> GetFieldsForEmail(OperationLogList loglist)
+        {
+            List<Field> ret = new List<Field>();
+
+            ret.Add(new Field { Key = "[#1]", StringValue = loglist.OperationObjectName });
+            ret.Add(new Field { Key = "[#2]", StringValue = loglist.OperationLogCategoryName });
+            ret.Add(new Field { Key = "[#3]", StringValue = loglist.OperationLogDescription });
+            ret.Add(new Field { Key = "[#4]", StringValue = loglist.OperationLogAction });
+            //ret.Add(new Field { Key = "[#5]", StringValue = loglist. });
+            
+            
+            return ret;
+        }
+
         public void Commit()
         {
             this._unitOfWork.Commit();
@@ -295,7 +381,7 @@ namespace DH.Helpdesk.Services.Services
                                     OperationCategoriy_ID = g.Key.OLCID
                                 };
 
-                return query.ToList();
+                return query.OrderByDescending(x => x.CreatedDate).ToList();
             }            
         }
     }

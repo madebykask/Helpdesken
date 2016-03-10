@@ -27,6 +27,7 @@
             PlannedDateOccurs = 12,
             AssignedCaseToPriority = 13,
             SmsClosedCase = 14,
+            OperationLog = 60,
         }
 
         public enum TranslationCaseFields
