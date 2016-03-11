@@ -580,26 +580,30 @@ function CaseInitForm() {
 
     $('#case__ProductArea_Id').change(function () {
         var $workingGroup = $("#case__WorkingGroup_Id");
-        $("#ProductAreaHasChild").val(0);
+        $("#ProductAreaHasChild").val(0);        
         document.getElementById("divProductArea").classList.remove("error");
-        if ($(this).val() > 0) {
-            $.post('/Cases/ChangeProductArea/', { 'id': $(this).val() }, 'json').done(function(data) {
+        if ($(this).val() > 0 ) {
+            $.post('/Cases/ChangeProductArea/', { 'id': $(this).val() }, 'json').done(function (data) {
                 if (data != undefined) {
+                    var alreadySetByCaseTemplate = ($('#CaseTemplate_WorkingGroup_Id').val() != "");
                     var exists = $workingGroup.find('option[value=' + data.WorkingGroup_Id + ']').length;
-                    if (exists > 0 && data.WorkingGroup_Id > 0) {
-                        $workingGroup.val(data.WorkingGroup_Id).trigger('change');
-                    }
+                    if (exists > 0 && data.WorkingGroup_Id > 0 && !alreadySetByCaseTemplate)
+                        $workingGroup.val(data.WorkingGroup_Id).trigger('change');                                        
 
                     exists = $('#case__Priority_Id option[value=' + data.Priority_Id + ']').length;
-                    if (exists > 0 && data.Priority_Id > 0) {
+                    if (exists > 0 && data.Priority_Id > 0 && !alreadySetByCaseTemplate) {
                         $("#case__Priority_Id").val(data.Priority_Id);
                         $("#case__Priority_Id").change();
                     }
-
                     $("#ProductAreaHasChild").val(data.HasChild);
                 }
+
+                $('#CaseTemplate_WorkingGroup_Id').val("");
             });
+            
         }
+        
+        
     });
 
     $('#case__WorkingGroup_Id').change(function () {
@@ -623,8 +627,7 @@ function CaseInitForm() {
             }
             // set workinggroup id
             var exists = $('#case__WorkingGroup_Id option[value=' + data.WorkingGroup_Id + ']').length;
-            if (exists > 0 && data.WorkingGroup_Id > 0) {
-                //alert(data.WorkingGroup_Id);
+            if (exists > 0 && data.WorkingGroup_Id > 0) {               
                 $("#case__WorkingGroup_Id").val(data.WorkingGroup_Id);
             }
         }, 'json');

@@ -190,10 +190,13 @@
                         @Html.HiddenFor(model => model.SavedFiles)
                         @Html.HiddenFor(model => model.case_.Unread)
                         @Html.HiddenFor(model => model.ProductAreaHasChild)
+                        
                         @Html.Hidden("WriteTextToExternalNote", Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString()))
                         @Html.Hidden("Today", DateTime.Now.ToShortDateString())
                         @Html.Hidden("CurLanguageId", SessionFacade.CurrentLanguageId)
                         @Html.Hidden("SelectedValueCarrier", "")
+                        @Html.Hidden("CaseTemplate_WorkingGroup_Id", "")
+
                         @Html.HiddenFor(model => Model.CaseLock.LockGUID)
                         @*<input type="button" id="sla_test" value="SLA Test" onclick="CalcSLA();" />*@
                         @if (Model.IsItChildCase())

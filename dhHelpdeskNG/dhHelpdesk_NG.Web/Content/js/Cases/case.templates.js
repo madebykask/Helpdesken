@@ -8,6 +8,9 @@ function SetValueIfElVisible(el, val, opt) {
             if (!opt.doNotTriggerEvent) {
                 $(el).trigger('change');
             }
+            if (el.selector == "#case__WorkingGroup_Id") {
+                $("#CaseTemplate_WorkingGroup_Id").val(val);
+            }
         }
     }
 }
@@ -176,6 +179,7 @@ function ApplyTemplate(data, doOverwrite) {
                     break;
                 case 'CaseWorkingGroup_Id':
                     el = $("#case__WorkingGroup_Id");
+                    $("#case__WorkingGroup_Id").val("");
                     //#13311(redmine) Case template_list of administrators doesn´t narrows depending on the choice of working group
                     //cfg['doNotTriggerEvent'] = true;
                     SetValueIfElVisible(el, val, cfg);
