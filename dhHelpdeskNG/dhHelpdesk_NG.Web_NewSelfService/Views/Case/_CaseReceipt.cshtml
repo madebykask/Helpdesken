@@ -26,14 +26,15 @@
         bindDeleteNewCaseFileBehaviorToDeleteButtons();
 
         $('#Log_uploader').pluploadQueue({
-            url: '@this.Url.Action("UploadLogFile")',
-            multipart_params: { Id: '@this.Model.LogFileGuid' },
+            runtimes: 'html5,html4',
+            url: '@Url.Action("UploadLogFile", "Case")',
+            multipart_params: { Id: '@Model.LogFileGuid', myTime: Date.now() },
             max_file_size: '10mb',
 
             init: {
                 FileUploaded: function () {
 
-                    $.get('@this.Url.Action("GetLogFiles")', { id: '@this.Model.LogFileGuid' }, function (files) {
+                    $.get('@Url.Action("GetLogFiles", "Case")', { id: '@Model.LogFileGuid', myTime: Date.now() }, function (files) {
                         refreshLogFilesTable(files);
                     });
                 },
@@ -47,6 +48,7 @@
 
                 Error: function (uploader, e) {
                     if (e.status != 409) {
+                        console.error(e);
                         return;
                     }
 
@@ -96,7 +98,7 @@
             fileMarkup =
                 $('<tr>' +
                     '<td>' +
-                        '<i class="glyphicon glyphicon-file">&nbsp;</i><a style="color:blue" href="@this.Url.Action("DownloadLogFile")?@(!string.IsNullOrEmpty(this.Model.LogFileGuid) ? "id=" + this.Model.LogFileGuid + "&" : string.Empty)' + 'fileName=' + file + '">' + file + '</a>' +
+                        '<i class="glyphicon glyphicon-file">&nbsp;</i><a style="color:blue" href="@Url.Action("DownloadLogFile")?@(!string.IsNullOrEmpty(this.Model.LogFileGuid) ? "id=" + this.Model.LogFileGuid + "&" : string.Empty)' + 'fileName=' + file + '">' + file + '</a>' +
                     '</td>' +
                     '<td>' +
                         '<a id="delete_file_button_' + i + '" class="btn btn-default btn-sm" ><span class="glyphicon glyphicon-remove"></span> </a>' +
@@ -114,13 +116,11 @@
             var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
             var pressedDeleteFileButton = this;
 
-            $.post('@this.Url.Action("DeleteLogFile")', { id: '@this.Model.LogFileGuid', fileName: fileName }, function () {
+            $.post('@Url.Action("DeleteLogFile")', { id: '@Model.LogFileGuid', fileName: fileName, myTime: Date.now() }, function () {
                     $(pressedDeleteFileButton).parents('tr:first').remove();
                 });
             });
         }
-
-
 
 </script>
 
