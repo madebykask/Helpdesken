@@ -143,81 +143,46 @@ namespace DH.Helpdesk.Services.Services
             //    errors.Add("Link.URLAddress", "Du måste ange en URL-adress");
 
 
-            //using (var uow = this.unitOfWorkFactory.Create())
-            //{
-            //    var linkRep = uow.GetRepository<Link>();
-            //    var userRep = uow.GetRepository<User>();
-
-            //    Link entity;
-            //    var now = DateTime.Now;
-            //    if (link.IsNew())
-            //    {
-            //        entity = new Link();
-            //        LinkMapper.MapToEntity(link, entity);
-            //        entity.CreatedDate = now;
-            //        entity.ChangedDate = now;
-            //        linkRep.Add(entity);
-            //    }
-            //    else
-            //    {
-            //        entity = linkRep.GetById(link.Id);
-            //        LinkMapper.MapToEntity(link, entity);
-            //        entity.ChangedDate = now;
-            //        linkRep.Update(entity);
-            //    }
-
-            //    if (entity.Us != null)
-            //        entity.Us.Clear();
-                
-            //    var newUsers = new List<User>();
-
-            //    if (us != null)
-            //    {
-            //        foreach (var u in us)
-            //        {
-            //            User userEntity = userRep.GetById(u);
-            //            entity.Us.Add(userEntity);
-            //        }
-            //    }
-
-            //    uow.Save();
-            //}                        
-
-
-
-
-
-
-
-
-            if (link.Us != null)
-                foreach (var delete in link.Us.ToList())
-                    link.Us.Remove(delete);
-            else
-                link.Us = new List<User>();
-
-            if (us != null)
+            using (var uow = this.unitOfWorkFactory.Create())
             {
-                foreach (int id in us)
+                var linkRep = uow.GetRepository<Link>();
+                var userRep = uow.GetRepository<User>();
+
+                Link entity;
+                var now = DateTime.Now;
+                if (link.IsNew())
                 {
-                    var u = this._userRepository.GetById(id);
-
-                    if (u != null)
-                        link.Us.Add(u);
+                    entity = new Link();
+                    LinkMapper.MapToEntity(link, entity);
+                    entity.CreatedDate = now;
+                    entity.ChangedDate = now;
+                    linkRep.Add(entity);
                 }
-            }
+                else
+                {
+                    entity = linkRep.GetById(link.Id);
+                    LinkMapper.MapToEntity(link, entity);
+                    entity.ChangedDate = now;
+                    linkRep.Update(entity);
+                }
 
-            if (link.Id == 0)
-                this._linkRepository.Add(link);
-            else
-            {
-                this._linkRepository.Update(link);
-                foreach (var delete in link.Us.ToList())
-                    this._userRepository.(delete);
-            }
+                if (entity.Us != null)
+                    entity.Us.Clear();
+                else
+                    entity.Us = new List<User>();                                
 
-            if (errors.Count == 0)
-                this.Commit();
+                if (us != null)
+                {
+                    foreach (var u in us)
+                    {
+                        User userEntity = userRep.GetById(u);                        
+                        entity.Us.Add(userEntity);
+                    }
+                }
+
+                uow.Save();
+            }                        
+
         }
 
         public void Commit()
