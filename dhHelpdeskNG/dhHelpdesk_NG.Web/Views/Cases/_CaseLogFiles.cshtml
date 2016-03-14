@@ -41,6 +41,14 @@
                                 <a id="@string.Format("delete_logfile_button_{0}", i)" class="btn bt-small" data-field="deleteFile" title="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)">
                                     <i class="icon-remove"></i>
                                 </a>
+                            }else
+                            {
+                               if (GuidHelper.IsGuid(Model.Id))
+                                {
+                                   <a id="@string.Format("delete_logfile_button_{0}", i)" class="btn bt-small" data-field="deleteFile" title="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)">
+                                    <i class="icon-remove"></i>
+                                </a>
+                               }
                             }
                         </td>
                     </tr>
