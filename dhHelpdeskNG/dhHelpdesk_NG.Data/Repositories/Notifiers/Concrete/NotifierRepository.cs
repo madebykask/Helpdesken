@@ -277,7 +277,8 @@
                         join d in this.DataContext.Departments on cu.Department_Id equals d.Id into res
                         from k in res.DefaultIfEmpty()
                         where
-                            cu.Customer_Id == customerId
+                            cu.Customer_Id == customerId &&
+                            cu.Status != 0
                             && (cu.UserId.ToLower().Contains(s) || cu.FirstName.ToLower().Contains(s)
                                 || cu.SurName.ToLower().Contains(s) || cu.Phone.ToLower().Contains(s)
                                 || cu.Location.ToLower().Contains(s) || cu.Cellphone.ToLower().Contains(s)
