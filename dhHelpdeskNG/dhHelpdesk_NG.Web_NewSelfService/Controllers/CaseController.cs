@@ -186,12 +186,12 @@
                     {
                         if (caseListCondition.Contains(CaseListTypes.CoWorkerCases))
                         {
-                            if (currentCase.RegUserId.GetUserFromAdPath().ToLower() == curUserId.ToLower() || coWorkers.Contains(currentCase.ReportedBy))
+                            if (currentCase.RegUserId.ToLower() == curUserId.ToLower() || coWorkers.Contains(currentCase.ReportedBy))
                                 userHasAccessToCase = true;               
                         }
                         else
                         {
-                            if (currentCase.RegUserId.GetUserFromAdPath().ToLower() == curUserId.ToLower() || 
+                            if (currentCase.RegUserId.ToLower() == curUserId.ToLower() || 
                                 currentCase.ReportedBy == SessionFacade.CurrentUserIdentity.EmployeeNumber)
                                 userHasAccessToCase = true;                                                                       
                         }                        
@@ -200,13 +200,13 @@
                     if (caseListCondition.Contains(CaseListTypes.CoWorkerCases))
                     {
                         if (coWorkers.Contains(currentCase.ReportedBy) || 
-                            (string.IsNullOrEmpty(currentCase.ReportedBy) && currentCase.RegUserId.GetUserFromAdPath().ToLower() == curUserId.ToLower()))
+                            (string.IsNullOrEmpty(currentCase.ReportedBy) && currentCase.RegUserId.ToLower() == curUserId.ToLower()))
                             userHasAccessToCase = true;                        
                     }                                    
                 }
                 else
                 {
-                    if (currentCase.RegUserId.GetUserFromAdPath().ToLower() == curUserId.ToLower())
+                    if (currentCase.RegUserId.ToLower() == curUserId.ToLower())
                         userHasAccessToCase = true;   
                 }
 

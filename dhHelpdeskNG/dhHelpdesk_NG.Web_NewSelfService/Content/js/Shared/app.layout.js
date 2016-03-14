@@ -108,7 +108,7 @@ function SaveExternalMessage() {
     if (note == "") {
         ShowToastMessage('Comment text is empty!', "warning", false);
     } else {
-        $.get(SaveMessageUrl, { caseId: window.CaseId, note: note }, function (_CaseLogNoteMarkup) {
+        $.get(SaveMessageUrl, { caseId: window.CaseId, note: note, myTime:Date.now() }, function (_CaseLogNoteMarkup) {
             $('#CaseLogPartial').html(_CaseLogNoteMarkup);
             $('#myNote').val('');
         });

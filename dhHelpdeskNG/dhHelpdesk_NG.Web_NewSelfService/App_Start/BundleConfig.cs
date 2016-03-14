@@ -59,7 +59,10 @@
             bundles.Add(new ScriptBundle("~/Content/js/Shared/_layout").Include(
                           "~/Content/js/Shared/sortby.js",
                           "~/Content/js/Shared/app.layout.js"));
-                    
+
+            bundles.Add(new ScriptBundle("~/Content/js/Case/edit").Include(
+                          "~/Content/js/Case/edit.js"));
+
             #endregion
         }
     }

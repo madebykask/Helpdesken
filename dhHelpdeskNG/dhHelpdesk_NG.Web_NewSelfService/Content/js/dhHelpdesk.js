@@ -52,7 +52,7 @@ function SelectValueInOtherDropdownOnChange(id, postTo, ctl) {
 
 function CaseCascadingSelectlistChange(id, customerId, postTo, ctl, departmentFilterFormat) {
     var ctlOption = ctl + ' option';
-    $.post(postTo, { 'id': id, 'customerId': customerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {
+    $.post(postTo, { 'id': id, 'customerId': customerId, 'departmentFilterFormat': departmentFilterFormat, myTime: Date.now() }, function (data) {
         $(ctlOption).remove();
         $(ctl).append('<option value="">&nbsp;</option>');
         if (data != undefined) {
@@ -626,7 +626,7 @@ function bindDeleteCaseFileBehaviorToDeleteButtons() {
         var key = $('#CaseKey').val();
         var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
         var pressedDeleteFileButton = this;
-        $.post("/Cases/DeleteCaseFile", { id: key, fileName: fileName }, function () {
+        $.post("/Cases/DeleteCaseFile", { id: key, fileName: fileName, myTime: Date.now() }, function () {
             $(pressedDeleteFileButton).parents('tr:first').remove();
         });
     });
@@ -638,7 +638,7 @@ function bindDeleteLogFileBehaviorToDeleteButtons() {
         var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
         var pressedDeleteFileButton = this;
 
-        $.post("/Cases/DeleteLogFile", { id: key, fileName: fileName }, function () {
+        $.post("/Cases/DeleteLogFile", { id: key, fileName: fileName, myTime:Date.now() }, function () {
             $(pressedDeleteFileButton).parents('tr:first').remove();
         });
     });
@@ -649,7 +649,7 @@ function SetPriority() {
     var urgencyId = $('#case__Urgency_Id').val();
 
     if (urgencyId > 0 && impactId > 0) {
-        $.post('/Cases/GetPriorityIdForImpactAndUrgency', { 'impactId': impactId, 'urgencyId': urgencyId }, function (data) {
+        $.post('/Cases/GetPriorityIdForImpactAndUrgency', { 'impactId': impactId, 'urgencyId': urgencyId, myTime:Date.now() }, function (data) {
             if (data != null) {
                 var exists = $('#case__Priority_Id Option[value=' + data + ']').length;
                 if (exists > 0) {

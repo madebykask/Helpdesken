@@ -106,8 +106,7 @@ function GetComputerSearchOptions() {
 function refreshOrganizationUnit(departmentId, departmentFilterFormat, selectedOrganizationUnitId) {
     $(publicOUControlName).val('');
     $(publicReadOnlyOUName).val('');
-    var ctlOption = publicOUControlName + ' option';    
-    //$(publicOUControlName).prop('disabled', true);    
+    var ctlOption = publicOUControlName + ' option';        
     $.post(publicChangeDepartment, { 'id': departmentId, 'customerId': publicCustomerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {                
         $(ctlOption).remove();
         $(publicOUControlName).append('<option value="">&nbsp;</option>');
@@ -124,7 +123,7 @@ function refreshOrganizationUnit(departmentId, departmentFilterFormat, selectedO
             }
         }
     }, 'json').always(function () {
-        //$(publicOUControlName).prop('disabled', false);
+       // $(publicOUControlName).prop('disabled', false);
     });
 }
 
@@ -335,6 +334,7 @@ function GetComputerUserSearchOptions() {
 
             if (item.regionid != "" && item.regionid != null && 
                 item.departmentid != "" && item.departmentid != null) {
+                //$(publicDepartmentControlName).val(item.departmentid).trigger('change');
                 refreshDepartment(item.regionid, departmentFilterFormat, item.departmentid, item.ouid);
             }
 
