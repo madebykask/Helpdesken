@@ -95,14 +95,14 @@
             };
         }
 
-        public static LogOutputModel MapLogs(ProblemLogOverview arg)
+        public static LogOutputModel MapLogs(ProblemLogOverview arg, bool isFirstName)
         {
             return new LogOutputModel
                        {
                            Id = arg.Id,
                            Date = DateTime.SpecifyKind(arg.ChangedDate, DateTimeKind.Utc).ToShortDateString(),
                            LogNote = arg.LogText,
-                           RegistratedBy = arg.ChangedByUserName
+                           RegistratedBy = (isFirstName? string.Format("{0} {1}", arg.ChangedByUserName, arg.ChangedByUserSurName) : string.Format("{0} {1}", arg.ChangedByUserSurName, arg.ChangedByUserName))
                        };
         }
 
@@ -387,13 +387,22 @@
 
             // todo!!!
             var cases = this.caseService.GetCases().Where(x => x.Problem_Id == id);
+            var setting = this.settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
+            var isFirstName = (setting.IsUserFirstLastNameRepresentation == 1);
 
             var users = this.userService.GetUsers(SessionFacade.CurrentCustomer.Id);
-
             var problemOutputModel = MapProblemOverviewToEditOutputModel(problem);
-            var outputLogs = logs.Select(MapLogs).ToList();
+
+            var outputLogs = logs.Select(x=> MapLogs(x, isFirstName)).ToList();
+
             var outputCases = cases.Select(MapCase).ToList();
-            var userOutputModels = users.Select(x => new SelectListItem { Text = string.Format("{0} {1}", x.FirstName, x.SurName), Value = x.Id.ToString(CultureInfo.InvariantCulture) }).ToList();
+            
+            
+            var userOutputModels = users.Select(x => new SelectListItem 
+                { 
+                    Text = (isFirstName? string.Format("{0} {1}", x.FirstName, x.SurName) : string.Format("{0} {1}", x.SurName, x.FirstName)), 
+                    Value = x.Id.ToString(CultureInfo.InvariantCulture) 
+                }).OrderBy(x=> x.Text).ToList();
 
             return new ProblemEditViewModel { Problem = problemOutputModel, Users = userOutputModels, Logs = outputLogs, Cases = outputCases };
         }

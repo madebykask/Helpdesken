@@ -36,6 +36,8 @@ namespace DH.Helpdesk.BusinessData.Models.Problem.Output
         /// </summary>
         public string ChangedByUserName { get; set; }
 
+        public string ChangedByUserSurName { get; set; }
+
         /// <summary>
         /// Gets or sets the log text.
         /// </summary>

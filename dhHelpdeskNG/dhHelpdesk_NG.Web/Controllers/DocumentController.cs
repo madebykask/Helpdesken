@@ -371,6 +371,8 @@ namespace DH.Helpdesk.Web.Controllers
 
             var customerId = SessionFacade.CurrentCustomer.Id;
             var documents = new List<DocumentOverview>();
+            var cs = this._settingService.GetCustomerSetting(customerId);
+            var isFirstName = (cs.IsUserFirstLastNameRepresentation == 1);
 
             if (SessionFacade.CurrentUser.UserGroupId > 2)
             {
@@ -381,7 +383,10 @@ namespace DH.Helpdesk.Web.Controllers
                                                DocName = c.Name,
                                                Size = c.Size,
                                                ChangeDate = c.ChangedDate,
-                                               UserName = (c.ChangedByUser == null) ? " " : c.ChangedByUser.SurName + " " + c.ChangedByUser.FirstName,
+                                               UserName = (c.ChangedByUser == null) ? " " :
+                                                       (isFirstName ? string.Format("{0} {1}", c.ChangedByUser.FirstName, c.ChangedByUser.SurName) :
+                                                                      string.Format("{0} {1}", c.ChangedByUser.SurName, c.ChangedByUser.FirstName)),
+
                                                CategoryId = c.DocumentCategory_Id
                                            })
                                            .ToList();

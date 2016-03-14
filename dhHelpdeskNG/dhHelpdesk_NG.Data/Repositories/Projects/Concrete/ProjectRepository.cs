@@ -75,7 +75,9 @@ namespace DH.Helpdesk.Dal.Repositories.Projects.Concrete
             EntityStatus entityStatus,
             int? projectManagerId,
             string projectNameLike,
-            SortField sortField)
+            SortField sortField,
+            bool isFirstName
+            )
         {
             string toLowerProjectNameLike = projectNameLike == null ? string.Empty : projectNameLike.ToLower();
             IQueryable<Project> projects =
@@ -112,7 +114,10 @@ namespace DH.Helpdesk.Dal.Repositories.Projects.Concrete
                         }
                         else if (sortField.Name == ProjectFields.Manager)
                         {
-                            projects = projects.OrderBy(x => x.Manager.FirstName).ThenBy(x => x.Manager.SurName);
+                            if (isFirstName)
+                                projects = projects.OrderBy(x => x.Manager.FirstName).ThenBy(x => x.Manager.SurName);
+                            else
+                                projects = projects.OrderBy(x => x.Manager.SurName).ThenBy(x => x.Manager.FirstName);
                         }
                         else if (sortField.Name == ProjectFields.Date)
                         {
@@ -139,9 +144,14 @@ namespace DH.Helpdesk.Dal.Repositories.Projects.Concrete
                         }
                         else if (sortField.Name == ProjectFields.Manager)
                         {
-                            projects =
-                                projects.OrderByDescending(x => x.Manager.FirstName)
-                                    .ThenBy(x => x.Manager.SurName);
+                            if (isFirstName)
+                                projects =
+                                    projects.OrderByDescending(x => x.Manager.FirstName)
+                                        .ThenBy(x => x.Manager.SurName);
+                            else
+                                projects =
+                                projects.OrderByDescending(x => x.Manager.SurName)
+                                    .ThenBy(x => x.Manager.FirstName);                            
                         }
                         else if (sortField.Name == ProjectFields.Date)
                         {

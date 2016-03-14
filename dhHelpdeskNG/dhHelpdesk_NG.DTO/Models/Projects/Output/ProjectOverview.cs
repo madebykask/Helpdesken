@@ -16,6 +16,8 @@
 
         public string ProjectManagerName { get; set; }
 
+        public string ProjectManagerSurName { get; set; }
+
         public int IsActive { get; set; }
 
         public string Description { get; set; }

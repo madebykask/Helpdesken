@@ -25,6 +25,7 @@ namespace DH.Helpdesk.Dal.Repositories.Projects
             EntityStatus entityStatus,
             int? projectManagerId,
             string projectNameLike,
-            SortField sortField);
+            SortField sortField,
+            bool isFirstName);
     }
 }

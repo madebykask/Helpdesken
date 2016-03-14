@@ -101,14 +101,19 @@
             var filter = SessionFacade.FindPageFilters<ProjectFilter>(PageName.Projects) ?? new ProjectFilter();
             SortField sortField = ExtractSortField(filter);
 
+            var cs = this.settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
+            var isFirstName = (cs.IsUserFirstLastNameRepresentation ==1);
             var projects = this.projectService.GetCustomerProjects(
                 SessionFacade.CurrentCustomer.Id,
                 (EntityStatus)filter.State,
                 filter.ProjectManagerId,
                 filter.ProjectNameLikeString,
-                sortField);
+                sortField,
+                isFirstName
+                );
 
-            var cs = this.settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
+            projects = SetNameOriation(projects, isFirstName);
+            
             var users = this.userService.GetUsers(SessionFacade.CurrentCustomer.Id).MapToSelectList(cs);
            
             var viewModel = this.indexProjectViewModelFactory.Create(projects, users, filter);
@@ -121,14 +126,18 @@
             SessionFacade.SavePageFilters(PageName.Projects, filter);
 
             SortField sortField = ExtractSortField(filter);
+            var cs = this.settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
+            var isFirstName = (cs.IsUserFirstLastNameRepresentation == 1);
 
             List<ProjectOverview> projects = this.projectService.GetCustomerProjects(
                 SessionFacade.CurrentCustomer.Id,
                 (EntityStatus)filter.State,
                 filter.ProjectManagerId,
                 filter.ProjectNameLikeString,
-                sortField);
+                sortField,
+                isFirstName);
 
+            projects = SetNameOriation(projects, isFirstName);
             var viewModel = new ProjectOverviewSorting(projects, filter.SortField);
 
             return this.PartialView("ProjectGrid", viewModel);
@@ -450,6 +459,16 @@
                 sortField = new SortField(filter.SortField.Name, filter.SortField.SortBy.Value);
             }
             return sortField;
+        }
+
+        private List<ProjectOverview> SetNameOriation(List<ProjectOverview> projects, bool isFirstName)
+        {
+            foreach (var project in projects)
+            {
+                project.ProjectManagerName = (isFirstName ? string.Format("{0} {1}", project.ProjectManagerName, project.ProjectManagerSurName) :
+                                                            string.Format("{0} {1}", project.ProjectManagerSurName, project.ProjectManagerName));
+            }
+            return projects;
         }
     }
 }

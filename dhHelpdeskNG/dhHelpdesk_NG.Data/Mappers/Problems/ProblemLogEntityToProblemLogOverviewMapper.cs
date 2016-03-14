@@ -32,7 +32,8 @@ namespace DH.Helpdesk.Dal.Mappers.Problems
                        {
                            Id = entity.Id,
                            ProblemId = entity.Problem_Id,
-                           ChangedByUserName = string.Format("{0} {1}", entity.ChangedByUser.FirstName, entity.ChangedByUser.SurName),
+                           ChangedByUserName = entity.ChangedByUser.FirstName, 
+                           ChangedByUserSurName = entity.ChangedByUser.SurName,
                            ChangedDate = entity.ChangedDate,
                            LogText = entity.LogText,
                            CreatedDate = entity.CreatedDate,

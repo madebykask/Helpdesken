@@ -24,7 +24,8 @@ namespace DH.Helpdesk.Services.Services
             EntityStatus entityStatus,
             int? projectManagerId,
             string projectNameLike,
-            SortField sortField);
+            SortField sortField,
+            bool isFirstName);
 
         void AddSchedule(NewProjectSchedule schedule);
 

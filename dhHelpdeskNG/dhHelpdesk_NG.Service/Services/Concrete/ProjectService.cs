@@ -85,9 +85,10 @@
             return projects;
         }
 
-        public List<ProjectOverview> GetCustomerProjects(int customerId, EntityStatus entityStatus, int? projectManagerId, string projectNameLike, SortField sortField)
+        public List<ProjectOverview> GetCustomerProjects(int customerId, EntityStatus entityStatus, int? projectManagerId, 
+                                                         string projectNameLike, SortField sortField, bool isFirstName)
         {
-            var projects = this.projectRepository.Find(customerId, entityStatus, projectManagerId, projectNameLike, sortField);
+            var projects = this.projectRepository.Find(customerId, entityStatus, projectManagerId, projectNameLike, sortField, isFirstName);
             return projects;
         }
 
