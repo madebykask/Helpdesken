@@ -438,7 +438,8 @@
             var cases = this.caseService.GetProjectCases(SessionFacade.CurrentCustomer.Id, id).ToList();            
             var cs = this.settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
             var users = this.userService.GetUsers(SessionFacade.CurrentCustomer.Id).MapToSelectList(cs);
-            
+            var isFirstName = (cs.IsUserFirstLastNameRepresentation == 1);
+
             var viewModel = this.updatedProjectViewModelFactory.Create(
                 project,
                 users,
@@ -447,6 +448,9 @@
                 projectLogs,
                 cases);
 
+            foreach (var log in viewModel.ProjectLogs)
+                log.ResponsibleUser = (isFirstName ? string.Format("{0} {1}", log.ResponsibleUser, log.ResponsibleUserSurName) :
+                                                     string.Format("{0} {1}", log.ResponsibleUserSurName, log.ResponsibleUser));
             return viewModel;
         }
 

@@ -12,7 +12,8 @@
                            Id = entity.Id,
                            LogText = entity.LogText,
                            ProjectId = entity.Project_Id,
-                           ResponsibleUser = string.Format("{0} {1}", entity.User.FirstName, entity.User.SurName),
+                           ResponsibleUser = entity.User.FirstName, 
+                           ResponsibleUserSurName = entity.User.SurName,
                            ChangedDate = entity.ChangeDate
                        };
         }
