@@ -143,6 +143,53 @@ namespace DH.Helpdesk.Services.Services
             //    errors.Add("Link.URLAddress", "Du måste ange en URL-adress");
 
 
+            //using (var uow = this.unitOfWorkFactory.Create())
+            //{
+            //    var linkRep = uow.GetRepository<Link>();
+            //    var userRep = uow.GetRepository<User>();
+
+            //    Link entity;
+            //    var now = DateTime.Now;
+            //    if (link.IsNew())
+            //    {
+            //        entity = new Link();
+            //        LinkMapper.MapToEntity(link, entity);
+            //        entity.CreatedDate = now;
+            //        entity.ChangedDate = now;
+            //        linkRep.Add(entity);
+            //    }
+            //    else
+            //    {
+            //        entity = linkRep.GetById(link.Id);
+            //        LinkMapper.MapToEntity(link, entity);
+            //        entity.ChangedDate = now;
+            //        linkRep.Update(entity);
+            //    }
+
+            //    if (entity.Us != null)
+            //        entity.Us.Clear();
+                
+            //    var newUsers = new List<User>();
+
+            //    if (us != null)
+            //    {
+            //        foreach (var u in us)
+            //        {
+            //            User userEntity = userRep.GetById(u);
+            //            entity.Us.Add(userEntity);
+            //        }
+            //    }
+
+            //    uow.Save();
+            //}                        
+
+
+
+
+
+
+
+
             if (link.Us != null)
                 foreach (var delete in link.Us.ToList())
                     link.Us.Remove(delete);
@@ -163,7 +210,11 @@ namespace DH.Helpdesk.Services.Services
             if (link.Id == 0)
                 this._linkRepository.Add(link);
             else
+            {
                 this._linkRepository.Update(link);
+                foreach (var delete in link.Us.ToList())
+                    this._userRepository.(delete);
+            }
 
             if (errors.Count == 0)
                 this.Commit();

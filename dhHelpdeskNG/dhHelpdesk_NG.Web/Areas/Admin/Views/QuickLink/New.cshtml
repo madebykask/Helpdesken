@@ -20,15 +20,18 @@
 
         $(function () {
             var validator = $("#target").validate({
+
+
+
                 rules: {
                     "Link.URLName": {
                         required: true
-                    }
+                    },
                     //"Link.URLAddress": {
                     //    required: function (element) {
                     //        return $("#Link_Document_Id").val() == "";
                     //    }
-                    //},
+                    //}
                     //"Link.Document_Id": {
                     //    required: function (element) {
                     //        return $("#Link_URLAddress").val() == "";
@@ -39,14 +42,15 @@
                     "Link.URLName": {
                         required: "@Translation.Get("Du måste ange ett URL-namn", Enums.TranslationSource.TextTranslation)"
                     },
-                    //"Link.URLAddress": {
-                     //   required: "@Translation.Get("Du måste ange antingen en URL-adress eller ett dokument", Enums.TranslationSource.TextTranslation)"
+                @*"Link.URLAddress": {
+                    required: "@Translation.Get("Du måste ange antingen en adress eller ett dokument", Enums.TranslationSource.TextTranslation)"
                     //                },
                     //                "Link.Document_Id": {
                     //                    required: "@Translation.Get("Du måste ange antingen en URL-adress eller ett dokument", Enums.TranslationSource.TextTranslation)"
-                //}
+                }*@
                 },
                 submitHandler: function (form) {
+                    $("#UsSelected option").attr("selected", "selected");
                     form.submit();
                 }
             });
