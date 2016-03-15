@@ -129,7 +129,10 @@
         private static List<ManualLog> CreateNewLogCollection(InputModel model, IEmailService emailService)
         {
             var newLogs = new List<ManualLog>();
-            CreateNewLogIfNeeded(model.Log.Logs.Value, Subtopic.Log, newLogs, emailService);
+
+            if (model.Log != null && model.Log.Logs != null)
+                CreateNewLogIfNeeded(model.Log.Logs.Value, Subtopic.Log, newLogs, emailService);
+
             return newLogs;
         }
 

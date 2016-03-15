@@ -2,7 +2,7 @@
 @model DH.Helpdesk.Web.Models.Changes.ChangeEdit.OrdererModel
  
 <table class="tableform">
-    @Html.EditorFor(m => m.Id, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "change_orderer_id" }, { "maxlength", "40"}} })
+    @Html.EditorFor(m => m.Id, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "change_orderer_id" }, { "maxlength", "40"}, {"autocomplete" , "Off"}} })
     @Html.EditorFor(m => m.Name, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "change_orderer_name" } }})
     @Html.EditorFor(m => m.Phone, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "change_orderer_phone" }} })
     @Html.EditorFor(m => m.CellPhone, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "change_orderer_cellphone" }} })

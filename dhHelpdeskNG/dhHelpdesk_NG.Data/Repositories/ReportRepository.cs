@@ -63,7 +63,7 @@
 
                         join isAbout in this.DataContext.CaseIsAbout on c.Id equals (int?)isAbout.Id into isabouts
                         from _isAbout in isabouts.DefaultIfEmpty()
-
+                       
                         join r in this.DataContext.Regions on c.Region_Id equals (int?)r.Id into rs
                         from _r in rs.DefaultIfEmpty()
 
@@ -115,14 +115,11 @@
                         join user3 in this.DataContext.Users on c.Performer_User_Id equals (int?)user3.Id into user3s
                         from _user3 in user3s.DefaultIfEmpty()
 
-                        join d1 in this.DataContext.Departments on _isAbout.Department_Id equals (int?)d1.Id into ds1
-                        from _d1 in ds1.DefaultIfEmpty()
+                        //join r1 in this.DataContext.Regions on _isAbout.Region_Id equals (int?)r1.Id into rs1
+                        //from _r1 in rs1.DefaultIfEmpty()
 
-                        join r1 in this.DataContext.Regions on _isAbout.Region_Id equals (int?)r1.Id into rs1
-                        from _r1 in rs1.DefaultIfEmpty()
-
-                        join ou in this.DataContext.OUs on _isAbout.OU_Id equals (int?)ou.Id into ou
-                        from _ou in ou.DefaultIfEmpty()
+                        //join d1 in this.DataContext.Departments on _isAbout.Department_Id equals (int?)d1.Id into ds1
+                        //from _d1 in ds1.DefaultIfEmpty()                                              
 
                         where c.Customer_Id == customerId && c.Deleted != 1 && (c.RegTime >= periodFrom && c.RegTime <= periodUntil)
                               && (caseTypeId.Any()? caseTypeId.Contains(c.CaseType_Id) : true)
@@ -148,14 +145,14 @@
                             IsAbout_Persons_Name = _isAbout.Person_Name,
                             IsAbout_Persons_Phone = _isAbout.Person_Phone,
                             IsAbout_Persons_CellPhone = _isAbout.Person_Cellphone,
-                            IsAbout_Department = _isAbout.Department_Id.HasValue ? _d1.DepartmentName : "",
-                            IsAbout_Region = _isAbout.Region_Id.HasValue ? _r1.Name : "",
-                            IsAbout_OU = _isAbout.OU_Id.HasValue ? _ou.Name : "",
+                            IsAbout_Region = "", //_isAbout.Region_Id.HasValue ? _r1.Name : "",   //Disabled for version 5.3.21
+                            IsAbout_Department = "", //_isAbout.Department_Id.HasValue ? _d1.DepartmentName : "",
+                            IsAbout_OU = "", //_isAbout.OU_Id.HasValue ? _isAbout.OU_Id.ToString() : "",
                             IsAbout_CostCentre = _isAbout.CostCentre,
                             IsAbout_Place = _isAbout.Place,
                             IsAbout_UserCode = _isAbout.UserCode,
                             IsAbout_Persons_Email = _isAbout.Person_Email,
-
+                            
                             PcNumber = c.InventoryNumber,
                             ComputerType = c.InventoryType,
                             ComputerPlace = c.InventoryLocation,
