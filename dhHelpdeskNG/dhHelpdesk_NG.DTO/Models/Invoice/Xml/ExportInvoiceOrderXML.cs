@@ -69,6 +69,8 @@ namespace DH.Helpdesk.BusinessData.Models.Invoice.Xml
 
         private string currencyCodeField;
 
+        private string jobNoField;
+
         private SalesDocSalesHeaderSalesLine[] salesLineField;
 
         private SalesDocSalesHeaderAttachment[] attachmentField;
@@ -200,6 +202,19 @@ namespace DH.Helpdesk.BusinessData.Models.Invoice.Xml
             set
             {
                 this.currencyCodeField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string JobNo
+        {
+            get
+            {
+                return this.jobNoField;
+            }
+            set
+            {
+                this.jobNoField = value;
             }
         }
 
@@ -408,8 +423,6 @@ namespace DH.Helpdesk.BusinessData.Models.Invoice.Xml
             }
         }
     }
-
-
 
     public static class Mappers
     {

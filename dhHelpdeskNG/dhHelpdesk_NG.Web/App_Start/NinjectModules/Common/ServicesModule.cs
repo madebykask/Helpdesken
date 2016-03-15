@@ -79,6 +79,7 @@
             this.Bind<IMailTemplateService>().To<MailTemplateService>();
             this.Bind<IMasterDataService>().To<MasterDataService>();
             this.Bind<IOperationLogCategoryService>().To<OperationLogCategoryService>();
+            this.Bind<IOperationLogEmailLogService>().To<OperationLogEmailLogService>();
             this.Bind<IOperationObjectService>().To<OperationObjectService>();
             this.Bind<IOrderService>().To<OrderService>();
             this.Bind<IOperationLogService>().To<OperationLogService>();

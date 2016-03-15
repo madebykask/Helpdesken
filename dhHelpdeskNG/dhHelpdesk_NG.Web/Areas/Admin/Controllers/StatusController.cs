@@ -126,7 +126,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     Text = x.WorkingGroupName,
                     Value = x.Id.ToString()
                 }).ToList(),
-                StateSecondary = this._stateSecondaryService.GetStateSecondaries(customer.Id).Select(x => new SelectListItem
+                StateSecondary = this._stateSecondaryService.GetActiveStateSecondaries(customer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()

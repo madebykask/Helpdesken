@@ -14,6 +14,7 @@ namespace DH.Helpdesk.BusinessData.Models.Checklists.Output
         { }
 
         public CheckListActionBM(
+                int id,
                 int serviceId,                   
                 int isActive,
                 string actionName,
@@ -21,6 +22,7 @@ namespace DH.Helpdesk.BusinessData.Models.Checklists.Output
                 DateTime createdDate
                )
         {
+            this.Id = id;
             this.Service_Id = serviceId;     
             this.IsActive = isActive;
             this.ActionName = actionName;
@@ -28,10 +30,9 @@ namespace DH.Helpdesk.BusinessData.Models.Checklists.Output
             this.CreatedDate = createdDate;
         }
 
-        
+        public int Id { get; set; }
         public int Service_Id { get; private set; }
         [IsId]
-        public int Id { get; set; }
         public int IsActive { get; private set; }
         public string ActionName { get; private set; }
         public DateTime ChangedDate { get; private set; }

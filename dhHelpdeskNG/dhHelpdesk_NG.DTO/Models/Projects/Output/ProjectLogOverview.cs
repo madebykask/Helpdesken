@@ -12,6 +12,8 @@
 
         public string ResponsibleUser { get; set; }
 
+        public string ResponsibleUserSurName { get; set; }
+
         public DateTime ChangedDate { get; set; }
     }
 }

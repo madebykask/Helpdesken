@@ -45,5 +45,22 @@
                                             NewWindowWidth = l.NewWindowWidth
                                         }).ToArray();
         }
+
+        public static void MapToEntity(Link model, Link entity)
+        {
+            entity.Customer_Id = model.Customer_Id;
+            entity.CaseSolution_Id = model.CaseSolution_Id;
+            entity.Document_Id = model.Document_Id;
+            entity.LinkGroup_Id = model.LinkGroup_Id;
+            entity.NewWindowHeight = model.NewWindowHeight;
+            entity.NewWindowWidth = model.NewWindowWidth;
+            entity.OpenInNewWindow = model.OpenInNewWindow;
+            entity.SortOrder = model.SortOrder;
+            entity.URLAddress = model.URLAddress;
+            entity.URLName = model.URLName;
+            entity.ShowOnStartPage = model.ShowOnStartPage;
+            entity.CreatedDate = model.CreatedDate;
+            entity.ChangedDate = model.ChangedDate;
+        }
     }
 }

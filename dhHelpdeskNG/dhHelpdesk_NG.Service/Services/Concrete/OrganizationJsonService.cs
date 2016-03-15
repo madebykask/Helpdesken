@@ -80,8 +80,14 @@
         /// <returns></returns>
         public IdName[] GetActiveDepartmentForRegion(int? regionId, int customerId, int departmentFilterFormat)
         {
-            var dep = this.departmentService.GetDepartments(customerId)
+            var dep = new List<Domain.Department>();
+            if (regionId.HasValue)
+                dep = this.departmentService.GetDepartments(customerId)
                                              .Where(d => d.Region_Id == null || (d.Region != null && d.Region.IsActive != 0))
+                                             .ToList();
+            else
+                dep = this.departmentService.GetDepartments(customerId)
+                                             .Where(d => d.IsActive != 0)
                                              .ToList();
 
             if (regionId.HasValue)

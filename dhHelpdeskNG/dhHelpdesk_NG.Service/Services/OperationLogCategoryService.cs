@@ -14,7 +14,7 @@
 
         IList<OperationLogCategory> GetOperationLogCategories(int customerId);
 
-        OperationLogCategory GetOperationLogCategory(int id, int customerId);
+        OperationLogCategory GetOperationLogCategory(int? id, int customerId);
         DeleteMessage DeleteOperationLogCategory(int id);
         //void DeleteOperationLogCategory(OperationLogCategory operationLogCategory);
         void NewOperationLogCategory(OperationLogCategory operationLogCategory);
@@ -50,7 +50,7 @@
             return this._operationLogCategoryRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.OLCName).ToList();
         }
 
-        public OperationLogCategory GetOperationLogCategory(int id, int customerId)
+        public OperationLogCategory GetOperationLogCategory(int? id, int customerId)
         {
             return this._operationLogCategoryRepository.Get(x => x.Id == id && x.Customer_Id == customerId);
         }

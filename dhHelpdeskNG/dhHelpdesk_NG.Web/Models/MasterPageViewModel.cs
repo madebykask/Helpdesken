@@ -110,9 +110,7 @@
              
         public bool IsBulletinBoardVisible()
         {
-            return this.CustomerSetting.ModuleBulletinBoard.ToBool()
-                   && (SessionFacade.CurrentUser.BulletinBoardPermission.ToBool()
-                       || this.IsCustomerOrSystemAdministrator());
+            return this.CustomerSetting.ModuleBulletinBoard.ToBool();
         }
 
         public bool IsPlanningVisible()
@@ -142,7 +140,7 @@
 
         public bool IsDocumentVisible()
         {
-            return this.CustomerSetting.ModuleDocument.ToBool() && this.IsAdministrator();
+            return this.CustomerSetting.ModuleDocument.ToBool();
         }
 
         public bool IsComputerUserVisible()

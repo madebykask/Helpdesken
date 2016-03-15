@@ -20,11 +20,14 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Models;
+using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Users;
+    using DH.Helpdesk.BusinessData.Enums.Admin.Users;
 
     /// <summary>
     /// The calendar controller.
     /// </summary>
-    [CustomAuthorize(UserPermsissions = "CalendarPermission", Roles = "3,4")]
+    //[CustomAuthorize(UserPermsissions = "CalendarPermission", Roles = "3,4")]
     public class CalendarController : BaseController
     {
         /// <summary>
@@ -36,7 +39,7 @@ namespace DH.Helpdesk.Web.Controllers
         /// The working group service.
         /// </summary>
         private readonly IWorkingGroupService workingGroupService;
-
+        private readonly IUserPermissionsChecker _userPermissionsChecker;
         /// <summary>
         /// Initializes a new instance of the <see cref="CalendarController"/> class.
         /// </summary>
@@ -52,11 +55,13 @@ namespace DH.Helpdesk.Web.Controllers
         public CalendarController(
             ICalendarService calendarService,
             IWorkingGroupService workingGroupService,
-            IMasterDataService masterDataService)
+            IMasterDataService masterDataService,
+            IUserPermissionsChecker userPermissionsChecker)
             : base(masterDataService)
         {
             this.calendarService = calendarService;
             this.workingGroupService = workingGroupService;
+            this._userPermissionsChecker = userPermissionsChecker;
         }
 
         /// <summary>
@@ -279,7 +284,10 @@ namespace DH.Helpdesk.Web.Controllers
         /// </returns>
         private CalendarIndexViewModel IndexViewModel()
         {
+            var userHasCalenderAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CalendarPermission);
+
             var model = new CalendarIndexViewModel();
+            model.UserHasCalendarAdminPermission = userHasCalenderAdminPermission;
 
             return model;
         }
@@ -300,6 +308,8 @@ namespace DH.Helpdesk.Web.Controllers
 
             var workingGroups = this.workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id);
             var wgsSelectedIds = wgsSelected.Select(g => g.Id).ToArray();
+
+            var userHasCalenderAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CalendarPermission);
 
             foreach (var wg in workingGroups)
             {
@@ -323,7 +333,7 @@ namespace DH.Helpdesk.Web.Controllers
                     Value = x.Id.ToString()
                 }).ToList(),
             };
-
+            model.UserHasCalendarAdminPermission = userHasCalenderAdminPermission;
             return model;
         }
     }

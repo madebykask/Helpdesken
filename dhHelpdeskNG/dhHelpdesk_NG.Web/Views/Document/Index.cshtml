@@ -33,16 +33,19 @@
 <div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
-            <li id="menu1" style="@menu1Style">@Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + 
-                                                                Translation.Get("dokument", Enums.TranslationSource.TextTranslation),
-                                                                "new", null, new { @class = "btn" })
-            </li>
+            @if (Model.UserHasDocumentAdminPermission)
+            {
+                <li id="menu1" style="@menu1Style">@Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + 
+                                                                    Translation.Get("dokument", Enums.TranslationSource.TextTranslation),
+                                                                    "new", null, new { @class = "btn" })
+                </li>
 
-            <li id="menu2" style="@menu2Style">@Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " +  
-                                                                Translation.Get("Dokument", Enums.TranslationSource.TextTranslation)  + " " +  
-                                                                Translation.Get("kategori", Enums.TranslationSource.TextTranslation) ,
-                                                                "newcategory", null, new { @class = "btn" })
-            </li>
+                <li id="menu2" style="@menu2Style">@Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " +  
+                                                                    Translation.Get("Dokument", Enums.TranslationSource.TextTranslation)  + " " +  
+                                                                    Translation.Get("kategori", Enums.TranslationSource.TextTranslation) ,
+                                                                    "newcategory", null, new { @class = "btn" })
+                </li>
+            }
         </ul>
     </div>
 </div>
@@ -52,9 +55,12 @@
             <li id="DocumentTab" class="@menu1TabClass" >
                 <a href="#fragment-1">@Translation.Get("Dokument", Enums.TranslationSource.TextTranslation)</a>
             </li>
-            <li id="CategoriesTab" class="@menu2TabClass">
-                <a href="#fragment-2">@Translation.Get("Kategorier", Enums.TranslationSource.TextTranslation)</a>
-            </li>
+            @if (Model.UserHasDocumentAdminPermission)
+            {
+                <li id="CategoriesTab" class="@menu2TabClass">
+                    <a href="#fragment-2">@Translation.Get("Kategorier", Enums.TranslationSource.TextTranslation)</a>
+                </li>
+            }
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border @menu1TabClass" id="fragment-1">

@@ -92,160 +92,7 @@
                 }
              }
             return res;
-        }
-       
-        //public static List<FullCaseOverview> MapToCaseOverviews(this IQueryable<Case> query, CaseDataSet caseDataSet)
-        //{            
-        //    var ret = new List<FullCaseOverview>();
-        //    foreach (var caseEntity in query.ToList())
-        //    {
-        //        caseEntity.Customer = caseDataSet.CustomerQuery.Where(c => c.Id == caseEntity.Customer_Id).FirstOrDefault() ?? new Customer() { Name = string.Empty};
-
-        //        caseEntity.CaseType = new CaseType { Name = string.Empty };
-        //        caseEntity.CaseType.Name = caseEntity.CaseType_Id.GetCaseTypeFullName(caseDataSet.CaseTypeQuery.AsQueryable());
-                
-        //        caseEntity.RegLanguage = caseDataSet.LanguageQuery.Where(l => l.Id == caseEntity.RegLanguage_Id).FirstOrDefault() ?? new Language() { Name = string.Empty };                
-
-        //        caseEntity.Region = new Region { Name = string.Empty };
-        //        if (caseEntity.Region_Id.HasValue)
-        //            caseEntity.Region = caseDataSet.RegionQuery.Where(r => r.Id == caseEntity.Region_Id.Value).FirstOrDefault() ?? caseEntity.Region;
-
-        //        caseEntity.Department = new Department { DepartmentName = string.Empty };
-        //        if (caseEntity.Department_Id.HasValue)
-        //            caseEntity.Department = caseDataSet.DepartmentQuery.Where(r => r.Id == caseEntity.Department_Id.Value).FirstOrDefault() ?? caseEntity.Department;
-
-        //        caseEntity.Ou = new OU { Name = string.Empty };
-        //        if (caseEntity.OU_Id.HasValue)                                 
-        //            caseEntity.Ou.Name = caseEntity.OU_Id.GetOUFullName(caseDataSet.OrganizationUnitQuery.AsQueryable());                
-
-        //        caseEntity.User = new User { FirstName = string.Empty, SurName = string.Empty };
-        //        if (caseEntity.User_Id.HasValue)
-        //            caseEntity.User = caseDataSet.UserQuery.Where(u => u.Id == caseEntity.User_Id.Value).FirstOrDefault() ?? caseEntity.User;
-
-        //        caseEntity.CaseResponsibleUser = new User { FirstName = string.Empty, SurName = string.Empty };
-        //        if (caseEntity.CaseResponsibleUser_Id.HasValue)
-        //            caseEntity.CaseResponsibleUser = caseDataSet.UserQuery.Where(u => u.Id == caseEntity.CaseResponsibleUser_Id.Value).FirstOrDefault() ?? caseEntity.CaseResponsibleUser;
-
-        //        caseEntity.Administrator = new User { FirstName = string.Empty, SurName = string.Empty };
-        //        if (caseEntity.Performer_User_Id.HasValue)
-        //            caseEntity.Administrator = caseDataSet.UserQuery.Where(u => u.Id == caseEntity.Performer_User_Id.Value).FirstOrDefault() ?? caseEntity.Administrator;
-
-        //        caseEntity.LastChangedByUser= new User { FirstName = string.Empty, SurName = string.Empty };
-        //        if (caseEntity.ChangeByUser_Id.HasValue)
-        //            caseEntity.LastChangedByUser = caseDataSet.UserQuery.Where(u => u.Id == caseEntity.ChangeByUser_Id.Value).FirstOrDefault() ?? caseEntity.LastChangedByUser;
-
-        //        caseEntity.Category = new Category { Name = string.Empty };
-        //        if (caseEntity.Category_Id.HasValue)
-        //            caseEntity.Category = caseDataSet.CategoryQuery.Where(c => c.Id == caseEntity.Category_Id.Value).FirstOrDefault() ?? caseEntity.Category;
-
-        //        caseEntity.ProductArea = new ProductArea { Name = string.Empty };
-        //        if (caseEntity.ProductArea_Id.HasValue)                
-        //            caseEntity.ProductArea.Name = GetProductAreaFullName(caseEntity.ProductArea_Id.Value, caseDataSet.ProductAreaQuery.ToList());                                    
-
-        //        caseEntity.System = new System { SystemName = string.Empty };
-        //        if (caseEntity.System_Id.HasValue)
-        //            caseEntity.System = caseDataSet.SystemQuery.Where(s => s.Id == caseEntity.System_Id.Value).FirstOrDefault() ?? caseEntity.System;
-
-        //        caseEntity.Urgency = new Urgency { Name = string.Empty };
-        //        if (caseEntity.Urgency_Id.HasValue)
-        //            caseEntity.Urgency = caseDataSet.UrgencyQuery.Where(u => u.Id == caseEntity.Urgency_Id.Value).FirstOrDefault() ?? caseEntity.Urgency;
-
-        //        caseEntity.Impact = new Impact { Name = string.Empty };
-        //        if (caseEntity.Impact_Id.HasValue)
-        //            caseEntity.Impact = caseDataSet.ImpactQuery.Where(i => i.Id == caseEntity.Impact_Id.Value).FirstOrDefault() ?? caseEntity.Impact;
-
-        //        caseEntity.Supplier = new Supplier { Name = string.Empty };
-        //        if (caseEntity.Supplier_Id.HasValue)
-        //            caseEntity.Supplier = caseDataSet.SupplierQuery.Where(s => s.Id == caseEntity.Supplier_Id.Value).FirstOrDefault() ?? caseEntity.Supplier;
-
-        //        caseEntity.Workinggroup = new WorkingGroupEntity { WorkingGroupName = string.Empty };
-        //        if (caseEntity.WorkingGroup_Id.HasValue)
-        //            caseEntity.Workinggroup = caseDataSet.WorkingGroupQuery.Where(w => w.Id == caseEntity.WorkingGroup_Id.Value).FirstOrDefault() ?? caseEntity.Workinggroup;
-
-        //        caseEntity.Priority = new Priority { Name = string.Empty };
-        //        if (caseEntity.Priority_Id.HasValue)
-        //            caseEntity.Priority = caseDataSet.PriorityQuery.Where(p => p.Id == caseEntity.Priority_Id.Value).FirstOrDefault() ?? caseEntity.Priority;
-
-        //        caseEntity.Status = new Status { Name = string.Empty };
-        //        if (caseEntity.Status_Id.HasValue)
-        //            caseEntity.Status = caseDataSet.StatusQuery.Where(s => s.Id == caseEntity.Status_Id.Value).FirstOrDefault() ?? caseEntity.Status;
-
-        //        caseEntity.StateSecondary = new StateSecondary { Name = string.Empty };
-        //        if (caseEntity.StateSecondary_Id.HasValue)
-        //            caseEntity.StateSecondary = caseDataSet.StateSecondaryQuery.Where(s => s.Id == caseEntity.StateSecondary_Id.Value).FirstOrDefault() ?? caseEntity.StateSecondary;
-
-        //        caseEntity.CausingPart = new CausingPart { Name = string.Empty };
-        //        if (caseEntity.CausingPartId.HasValue)
-        //            caseEntity.CausingPart = caseDataSet.CausingPartQuery.Where(s => s.Id == caseEntity.CausingPartId.Value).FirstOrDefault() ?? caseEntity.CausingPart;
-
-        //        caseEntity.RegistrationSourceCustomer = new RegistrationSourceCustomer { SourceName = string.Empty };
-        //        if (caseEntity.RegistrationSourceCustomer_Id.HasValue)
-        //            caseEntity.RegistrationSourceCustomer = caseDataSet.RegistrationSourceCustomerQuery.Where(s => s.Id == caseEntity.RegistrationSourceCustomer_Id.Value).FirstOrDefault() ?? caseEntity.RegistrationSourceCustomer;                
-
-        //        caseEntity.Logs = new List<Log>();                
-        //        var lastLog = caseDataSet.LogQuery.Where(l => l.Case_Id == caseEntity.Id).OrderByDescending(l=> l.LogDate).FirstOrDefault();
-        //        var logFiles = new List<LogFile>();
-        //        var finishingType = new FinishingCause { Name = string.Empty };
-
-        //        if (lastLog == null)
-        //        {                    
-        //            caseEntity.Logs.Add(new Log
-        //            {                    
-        //                Text_External = string.Empty,
-        //                Text_Internal = string.Empty,
-        //                FinishingDate = caseEntity.FinishingDate,
-        //                LogFiles = logFiles,
-        //                FinishingTypeEntity = finishingType                        
-        //            });
-        //        }
-        //        else
-        //        {
-        //            if (lastLog.FinishingType.HasValue)                    
-        //                finishingType = new FinishingCause { Name = lastLog.FinishingType.Value.GetClosingReasonFullName(caseDataSet.ClosingReasonQuery.AsQueryable()) };
-                    
-        //            caseEntity.Logs.Add(new Log
-        //            {
-        //                Text_Internal = lastLog.Text_Internal,
-        //                Text_External = lastLog.Text_External,
-        //                Charge = lastLog.Charge,
-        //                LogFiles = logFiles,
-        //                FinishingDate = caseEntity.FinishingDate,
-        //                FinishingTypeEntity = finishingType,
-        //                LogDate = lastLog.LogDate
-        //            });
-        //        }
-
-        //        /*foreach (var log in allLogs)
-        //        {
-                    
-        //            if (log.FinishingType.HasValue)
-        //            {
-        //                finishingType = new FinishingCause { Name = log.FinishingType.Value.GetClosingReasonFullName(caseDataSet.ClosingReasonQuery.AsQueryable()) };
-        //            }
-                    
-        //            //logFiles = caseDataSet.LogFileQuery.Where(lf => lf.Log_Id == log.Id).ToList();                    
-
-        //            caseEntity.Logs.Add(new Log
-        //                                    {
-        //                                        Text_Internal = log.Text_Internal,
-        //                                        Text_External = log.Text_External,
-        //                                        Charge = log.Charge,
-        //                                        LogFiles = logFiles,
-        //                                        FinishingDate = caseEntity.FinishingDate,
-        //                                        FinishingTypeEntity = finishingType,
-        //                                        LogDate = log.LogDate
-        //                                    });                                                                                
-        //        }*/                                                
-                
-        //        caseEntity.CaseFiles = new List<CaseFile>();
-        //        caseEntity.CaseFiles = caseDataSet.CaseFileQuery.Where(cf => cf.Case_Id == caseEntity.Id).ToList();
-
-        //        var caseStatistic = caseDataSet.CaseStatisticsQuery.Where(cs => cs.CaseId == caseEntity.Id).FirstOrDefault();
-        //        ret.Add(CreateFullOverview(caseEntity, caseStatistic));                
-        //    }
-
-        //    return ret;
-        //}
+        }             
 
         public static List<FullCaseOverview> MapToCaseOverviews(this List<ReportGeneratorFields> query, 
                                                                 IQueryable<CaseType> caseTypes, 
@@ -291,8 +138,11 @@
                                 new UserOverview(q.User, q.Notifier, q.Email, q.Phone, q.CellPhone,q.Customer, q.Region, q.Department,
                                                  ouFullNames[q.Unit], q.Place, q.OrdererCode, q.IsAbout_User, q.IsAbout_Persons_Name,
                                                  q.IsAbout_Persons_Phone, q.IsAbout_UserCode, q.IsAbout_Persons_Email, q.IsAbout_Persons_CellPhone,
-                                                 q.IsAbout_CostCentre, q.IsAbout_Place, q.IsAbout_Department,
-                                                 q.IsAbout_OU, q.IsAbout_Region),
+                                                 q.IsAbout_CostCentre, q.IsAbout_Place, 
+                                                 string.Empty,string.Empty, string.Empty),
+                                                 // Disabled to Release version 5.3.21
+                                                 //q.IsAbout_Department,
+                                                 //ouFullNames[q.IsAbout_OU]"", q.IsAbout_Region),
 
                                 new ComputerOverview(q.PcNumber, q.ComputerType, q.ComputerPlace),
 

@@ -18,6 +18,9 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Web.Infrastructure.Extensions;
     using DH.Helpdesk.Web.Models;
     using DH.Helpdesk.Web.Models.Documents;
+    using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Users;
+    using DH.Helpdesk.BusinessData.Enums.Admin.Users;
 
     public class TreeNodeType
     {
@@ -32,17 +35,23 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IDocumentService _documentService;
         private readonly IUserService _userService;
         private readonly IWorkingGroupService _workingGroupService;
+        private readonly IUserPermissionsChecker _userPermissionsChecker;
+        private readonly ISettingService _settingService;
 
         public DocumentController(
             IDocumentService documentService,
             IUserService userService,
             IWorkingGroupService workingGroupService,
-            IMasterDataService masterDataService)
+            IMasterDataService masterDataService,
+            IUserPermissionsChecker userPermissionsChecker,
+            ISettingService settingService)
             : base(masterDataService)
         {
             this._documentService = documentService;
             this._userService = userService;
             this._workingGroupService = workingGroupService;
+            this._userPermissionsChecker = userPermissionsChecker;
+            this._settingService = settingService;
         }
 
         [HttpPost]
@@ -323,7 +332,9 @@ namespace DH.Helpdesk.Web.Controllers
             var docTree = _documentService.FindCategoriesWithSubcategoriesByCustomerId(customerId);            
             var categoryTreeItems = docTree.Select(this.CategoryToTreeItem).ToList();
             var categoriesTreeContent = new TreeContent(categoryTreeItems, "0");
-                        
+
+            var userHasDocumentAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.DocumentPermission);
+
             var activeTab = SessionFacade.FindActiveTab("Document");
             activeTab = (activeTab == null) ? "DocumentTab" : activeTab;
 
@@ -341,7 +352,8 @@ namespace DH.Helpdesk.Web.Controllers
             ViewBag.SelectedCategory = Id;
             ViewBag.SelectedListType = docType;
             model.DocSearch = ds;
-            
+
+            model.UserHasDocumentAdminPermission = userHasDocumentAdminPermission;
             return model;
         }
 
@@ -359,41 +371,89 @@ namespace DH.Helpdesk.Web.Controllers
 
             var customerId = SessionFacade.CurrentCustomer.Id;
             var documents = new List<DocumentOverview>();
-            var docs = _documentService.GetDocuments(customerId)
-                                       .Select(c => new
-                                       {
-                                           Id = c.Id,
-                                           DocName = c.Name,
-                                           Size = c.Size,
-                                           ChangeDate = c.ChangedDate,
-                                           UserName = (c.ChangedByUser == null) ? " " : c.ChangedByUser.SurName + " " + c.ChangedByUser.FirstName,
-                                           CategoryId = c.DocumentCategory_Id
-                                       })
-                                       .ToList();
+            var cs = this._settingService.GetCustomerSetting(customerId);
+            var isFirstName = (cs.IsUserFirstLastNameRepresentation == 1);
 
-            if (docType == TreeNodeType.tnCategory)
-                docs = docs.Where(d => d.CategoryId == Id).ToList();
-
-            switch (ds.SortBy)
+            if (SessionFacade.CurrentUser.UserGroupId > 2)
             {
-                case "Size":
-                    docs = (ds.Ascending) ? docs.OrderBy(d => d.Size).ToList() : docs.OrderByDescending(d => d.Size).ToList();
-                    break;
+                var docs = _documentService.GetDocumentsForAdministrators(customerId)
+                                           .Select(c => new
+                                           {
+                                               Id = c.Id,
+                                               DocName = c.Name,
+                                               Size = c.Size,
+                                               ChangeDate = c.ChangedDate,
+                                               UserName = (c.ChangedByUser == null) ? " " :
+                                                       (isFirstName ? string.Format("{0} {1}", c.ChangedByUser.FirstName, c.ChangedByUser.SurName) :
+                                                                      string.Format("{0} {1}", c.ChangedByUser.SurName, c.ChangedByUser.FirstName)),
 
-                case "ChangedDate":
-                    docs = (ds.Ascending) ? docs.OrderBy(d => d.ChangeDate).ToList() : docs.OrderByDescending(d => d.ChangeDate).ToList();
-                    break;
+                                               CategoryId = c.DocumentCategory_Id
+                                           })
+                                           .ToList();
 
-                case "UserName":
-                    docs = (ds.Ascending) ? docs.OrderBy(d => d.UserName).ToList() : docs.OrderByDescending(d => d.UserName).ToList();
-                    break;
+                if (docType == TreeNodeType.tnCategory)
+                    docs = docs.Where(d => d.CategoryId == Id).ToList();
 
-                default:
-                    docs = (ds.Ascending) ? docs.OrderBy(d => d.DocName).ToList() : docs.OrderByDescending(d => d.DocName).ToList();
-                    break;
+                switch (ds.SortBy)
+                {
+                    case "Size":
+                        docs = (ds.Ascending) ? docs.OrderBy(d => d.Size).ToList() : docs.OrderByDescending(d => d.Size).ToList();
+                        break;
+
+                    case "ChangedDate":
+                        docs = (ds.Ascending) ? docs.OrderBy(d => d.ChangeDate).ToList() : docs.OrderByDescending(d => d.ChangeDate).ToList();
+                        break;
+
+                    case "UserName":
+                        docs = (ds.Ascending) ? docs.OrderBy(d => d.UserName).ToList() : docs.OrderByDescending(d => d.UserName).ToList();
+                        break;
+
+                    default:
+                        docs = (ds.Ascending) ? docs.OrderBy(d => d.DocName).ToList() : docs.OrderByDescending(d => d.DocName).ToList();
+                        break;
+                }
+                documents = docs.Select(c => new DocumentOverview(c.Id, c.DocName, c.Size.RoundQty(), c.ChangeDate, c.UserName)).ToList();
             }
+            else
+            {
+                var docs = _documentService.GetDocuments(customerId)
+                                           .Select(c => new
+                                           {
+                                               Id = c.Id,
+                                               DocName = c.Name,
+                                               Size = c.Size,
+                                               ChangeDate = c.ChangedDate,
+                                               UserName = (c.ChangedByUser == null) ? " " : c.ChangedByUser.SurName + " " + c.ChangedByUser.FirstName,
+                                               CategoryId = c.DocumentCategory_Id
+                                           })
+                                           .ToList();
 
-            documents = docs.Select(c => new DocumentOverview(c.Id, c.DocName, c.Size.RoundQty(), c.ChangeDate, c.UserName)).ToList();
+                if (docType == TreeNodeType.tnCategory)
+                    docs = docs.Where(d => d.CategoryId == Id).ToList();
+
+                switch (ds.SortBy)
+                {
+                    case "Size":
+                        docs = (ds.Ascending) ? docs.OrderBy(d => d.Size).ToList() : docs.OrderByDescending(d => d.Size).ToList();
+                        break;
+
+                    case "ChangedDate":
+                        docs = (ds.Ascending) ? docs.OrderBy(d => d.ChangeDate).ToList() : docs.OrderByDescending(d => d.ChangeDate).ToList();
+                        break;
+
+                    case "UserName":
+                        docs = (ds.Ascending) ? docs.OrderBy(d => d.UserName).ToList() : docs.OrderByDescending(d => d.UserName).ToList();
+                        break;
+
+                    default:
+                        docs = (ds.Ascending) ? docs.OrderBy(d => d.DocName).ToList() : docs.OrderByDescending(d => d.DocName).ToList();
+                        break;
+                }
+                documents = docs.Select(c => new DocumentOverview(c.Id, c.DocName, c.Size.RoundQty(), c.ChangeDate, c.UserName)).ToList();
+            }
+           
+
+            //documents = docs.Select(c => new DocumentOverview(c.Id, c.DocName, c.Size.RoundQty(), c.ChangeDate, c.UserName)).ToList();
             return documents;
         }
 
@@ -418,17 +478,31 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var usSelected = document.Us ?? new List<User>();
             var usAvailable = new List<User>();
+            var curCustomerId = SessionFacade.CurrentCustomer.Id;            
+            var userHasDocumentAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.DocumentPermission);
+            var customerSettings = this._settingService.GetCustomerSetting(curCustomerId);
 
-            foreach (var us in this._userService.GetUsers())
+            if (customerSettings.IsUserFirstLastNameRepresentation == 1)
             {
-                if (!usSelected.Contains(us))
-                    usAvailable.Add(us);
-            }
+                foreach (var us in this._userService.GetUsers(curCustomerId).OrderBy(u => u.FirstName).ThenBy(u => u.SurName))                
+                    if (!usSelected.Contains(us))
+                        usAvailable.Add(us);
 
+                usSelected = usSelected.OrderBy(us => us.FirstName).ThenBy(us => us.SurName).ToList();
+            }
+            else
+            {
+                foreach (var us in this._userService.GetUsers(curCustomerId).OrderBy(u => u.SurName).ThenBy(u => u.FirstName))               
+                    if (!usSelected.Contains(us))
+                        usAvailable.Add(us);
+
+                usSelected = usSelected.OrderBy(us => us.SurName).ThenBy(us => us.FirstName).ToList();
+            }
+            
             var wgsSelected = document.WGs ?? new List<WorkingGroupEntity>();
             var wgsAvailable = new List<WorkingGroupEntity>();
 
-            foreach (var wg in this._workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id))
+            foreach (var wg in this._workingGroupService.GetWorkingGroups(curCustomerId))
             {
                 if (!wgsSelected.Contains(wg))
                     wgsAvailable.Add(wg);
@@ -438,7 +512,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 Document = document,
 
-                DocumentCats = this._documentService.GetDocumentCategories(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                DocumentCats = this._documentService.GetDocumentCategories(curCustomerId).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
@@ -446,14 +520,20 @@ namespace DH.Helpdesk.Web.Controllers
 
                 UsAvailable = usAvailable.Select(x => new SelectListItem
                 {
-                    Text = x.FirstName + " " + x.SurName,
+                    Text = (customerSettings.IsUserFirstLastNameRepresentation == 1 ? 
+                                string.Format("{0} {1}", x.FirstName, x.SurName) : 
+                                string.Format("{0} {1}", x.SurName, x.FirstName)),
                     Value = x.Id.ToString()
                 }).ToList(),
+
                 UsSelected = usSelected.Select(x => new SelectListItem
                 {
-                    Text = x.FirstName + " " + x.SurName,
+                    Text = (customerSettings.IsUserFirstLastNameRepresentation == 1 ?
+                                string.Format("{0} {1}", x.FirstName, x.SurName) :
+                                string.Format("{0} {1}", x.SurName, x.FirstName)),
                     Value = x.Id.ToString()
                 }).ToList(),
+
                 WGsAvailable = wgsAvailable.Select(x => new SelectListItem
                 {
                     Text = x.WorkingGroupName,
@@ -466,6 +546,7 @@ namespace DH.Helpdesk.Web.Controllers
                 }).ToList(),                
             };
 
+            model.UserHasDocumentAdminPermission = userHasDocumentAdminPermission;
             //model.ShowOnStartPage = document.ShowOnStartPage;
 
             return model;

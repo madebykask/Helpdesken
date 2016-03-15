@@ -70,6 +70,7 @@
                                 o.UserCode,
                                 o.CostCentre,
                                 o.CreditForOrder_Id,
+                                o.Project_Id,
                                 o.Articles != null? 
                                     o.Articles.Select(a => new CaseInvoiceArticle(
                                                     a.Id,

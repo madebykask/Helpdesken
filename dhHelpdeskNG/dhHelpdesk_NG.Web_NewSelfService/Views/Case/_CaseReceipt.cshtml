@@ -4,6 +4,9 @@
 @using DH.Helpdesk.NewSelfService.Models.Case
 @using DH.Helpdesk.Services.Infrastructure
 @using DH.Helpdesk.NewSelfService.Infrastructure.Common
+@using DH.Helpdesk.Common.Enums
+@using System.Configuration
+
 @model DH.Helpdesk.NewSelfService.Models.Case.CaseOverviewModel
 
 @{
@@ -14,22 +17,24 @@
     {
         pCaseLogs = helper.GetCaseLogs(currentCaseId);
     }
-
+    var appType = ConfigurationManager.AppSettings[AppSettingsKey.CurrentApplicationType].ToString().ToLower();
 }
+
 <script type="text/javascript">
     $(function () {
         window.alreadyExistFileIds = [];
         bindDeleteNewCaseFileBehaviorToDeleteButtons();
 
         $('#Log_uploader').pluploadQueue({
-            url: '@this.Url.Action("UploadLogFile")',
-            multipart_params: { Id: '@this.Model.LogFileGuid' },
+            runtimes: 'html5,html4',
+            url: '@Url.Action("UploadLogFile", "Case")',
+            multipart_params: { Id: '@Model.LogFileGuid', myTime: Date.now() },
             max_file_size: '10mb',
 
             init: {
                 FileUploaded: function () {
 
-                    $.get('@this.Url.Action("GetLogFiles")', { id: '@this.Model.LogFileGuid' }, function (files) {
+                    $.get('@Url.Action("GetLogFiles", "Case")', { id: '@Model.LogFileGuid', myTime: Date.now() }, function (files) {
                         refreshLogFilesTable(files);
                     });
                 },
@@ -43,6 +48,7 @@
 
                 Error: function (uploader, e) {
                     if (e.status != 409) {
+                        console.error(e);
                         return;
                     }
 
@@ -92,7 +98,7 @@
             fileMarkup =
                 $('<tr>' +
                     '<td>' +
-                        '<i class="glyphicon glyphicon-file">&nbsp;</i><a style="color:blue" href="@this.Url.Action("DownloadLogFile")?@(!string.IsNullOrEmpty(this.Model.LogFileGuid) ? "id=" + this.Model.LogFileGuid + "&" : string.Empty)' + 'fileName=' + file + '">' + file + '</a>' +
+                        '<i class="glyphicon glyphicon-file">&nbsp;</i><a style="color:blue" href="@Url.Action("DownloadLogFile")?@(!string.IsNullOrEmpty(this.Model.LogFileGuid) ? "id=" + this.Model.LogFileGuid + "&" : string.Empty)' + 'fileName=' + file + '">' + file + '</a>' +
                     '</td>' +
                     '<td>' +
                         '<a id="delete_file_button_' + i + '" class="btn btn-default btn-sm" ><span class="glyphicon glyphicon-remove"></span> </a>' +
@@ -110,13 +116,11 @@
             var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
             var pressedDeleteFileButton = this;
 
-            $.post('@this.Url.Action("DeleteLogFile")', { id: '@this.Model.LogFileGuid', fileName: fileName }, function () {
+            $.post('@Url.Action("DeleteLogFile")', { id: '@Model.LogFileGuid', fileName: fileName, myTime: Date.now() }, function () {
                     $(pressedDeleteFileButton).parents('tr:first').remove();
                 });
             });
         }
-
-
 
 </script>
 
@@ -579,76 +583,77 @@
         </div>
     </div>
 }
+
 <!-- Case Info Fields -->
-@if (!Model.CasePreview.FinishingDate.HasValue)
+@if (!Model.CasePreview.FinishingDate.HasValue && appType == ApplicationTypes.SelfService)
 {
-<h4>@Translation.Get("Comments", Enums.TranslationSource.TextTranslation) </h4>
+    <h4>@Translation.Get("Comments", Enums.TranslationSource.TextTranslation) </h4>
 
-<div class="row">
-    <div class="col-md-3 dh-col">
-        <div class="container form-horizontal">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-8">
-                        <label>
-                            @Translation.Get("Add comment", Enums.TranslationSource.TextTranslation):
-                        </label>
-                        <div>
-                            <textarea id="logNote" class="col-md-12" style="height: 100px; margin-bottom: 10px;"></textarea>
-                        </div>
+    <div class="row">
+        <div class="col-md-3 dh-col">
+            <div class="container form-horizontal">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label>
+                                @Translation.Get("Add comment", Enums.TranslationSource.TextTranslation):
+                            </label>
+                            <div>
+                                <textarea id="logNote" class="col-md-12" style="height: 100px; margin-bottom: 10px;"></textarea>
+                            </div>
 
-                        <span>
-                            @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString().Replace('_', '.')))
-                            {
-                                <div class="form-group row">
-                                    <div class="col-md-5">
-                                        <a href="#Log_upload_files_popup" role="button" class="btn btn-default" data-toggle="modal">@Translation.Get("Add File", Enums.TranslationSource.TextTranslation)</a>
-                                        <div id="Log_upload_files_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                                        <h5 class="modal-title">&nbsp;</h5>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <div id="Log_uploader"></div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">@Translation.Get("Close", Enums.TranslationSource.TextTranslation)</button>
+                            <span>
+                                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString().Replace('_', '.')))
+                                {
+                                    <div class="form-group row">
+                                        <div class="col-md-5">
+                                            <a href="#Log_upload_files_popup" role="button" class="btn btn-default" data-toggle="modal">@Translation.Get("Add File", Enums.TranslationSource.TextTranslation)</a>
+                                            <div id="Log_upload_files_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                            <h5 class="modal-title">&nbsp;</h5>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div id="Log_uploader"></div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">@Translation.Get("Close", Enums.TranslationSource.TextTranslation)</button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
+                                            <table id="LogFile_table" class="table table-striped" style="margin-top: 10px">
+                                                <tbody>
+                                                    @if (this.Model.LogFilesModel == null)
+                                                    {
+                                                        <div id="no_uploaded_files_label">
+                                                        </div>
+                                                    }
+                                                </tbody>
+                                            </table>
                                         </div>
-                                        <table id="LogFile_table" class="table table-striped" style="margin-top: 10px">
-                                            <tbody>
-                                                @if (this.Model.LogFilesModel == null)
-                                                {
-                                                    <div id="no_uploaded_files_label">
-                                                    </div>
-                                                }
-                                            </tbody>
-                                        </table>
                                     </div>
-                                </div>
-                            }
-                            <button class="btn btn-success" onclick=" SaveLogMessage() ">@Translation.Get("Send", Enums.TranslationSource.TextTranslation)</button>
-                        </span>
-                        <hr />
+                                }
+                                <button class="btn btn-success" onclick=" SaveLogMessage() ">@Translation.Get("Send", Enums.TranslationSource.TextTranslation)</button>
+                            </span>
+                            <hr />
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-8">
-                        <div id="Receipt_CaseLogPartial" class="onpage com-list">
-                            @Html.Partial("_CaseLogNote", pCaseLogs)
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div id="Receipt_CaseLogPartial" class="onpage com-list">
+                                @Html.Partial("_CaseLogNote", pCaseLogs)
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 }
 
 <script>

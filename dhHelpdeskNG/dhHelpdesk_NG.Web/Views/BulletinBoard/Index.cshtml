@@ -9,7 +9,10 @@
 <div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
-            <li>@Html.ActionLink(Translation.Get("Nytt anslag", Enums.TranslationSource.TextTranslation) , "new", null, new { @class = "btn" })</li>
+             @if (Model.UserHasBulletinBoardAdminPermission)
+            {
+                <li>@Html.ActionLink(Translation.Get("Nytt anslag", Enums.TranslationSource.TextTranslation) , "new", null, new { @class = "btn" })</li>
+             }
         </ul>
     </div>
 </div>

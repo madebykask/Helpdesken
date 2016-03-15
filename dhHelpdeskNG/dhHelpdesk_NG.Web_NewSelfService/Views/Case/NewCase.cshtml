@@ -1,9 +1,14 @@
 ﻿@using System.Web.Script.Serialization
 @using DH.Helpdesk.BusinessData.OldComponents
+@using System.Web.Optimization
+
 @model DH.Helpdesk.NewSelfService.Models.Case.NewCaseModel
 @{
     var jsSerializer = new JavaScriptSerializer();
 }
+
+@Scripts.Render("~/Content/js/Case/edit")
+
 <script type="text/javascript">
     window.appOptions = @Html.Raw(jsSerializer.Serialize(Model.JsApplicationOptions));
     $(function() {
@@ -12,13 +17,13 @@
 
         $('#NewCasefile_uploader').pluploadQueue({
             url: '@this.Url.Action("NewCaseUploadFile")',
-            multipart_params: { Id: '@this.Model.CaseFileKey' },
+            multipart_params: { Id: '@this.Model.CaseFileKey', curTime:Date.now() },
             max_file_size: '10mb',
 
             init: {
                 FileUploaded: function() {
 
-                    $.get('@this.Url.Action("NewCaseFiles")', { id: '@this.Model.CaseFileKey' }, function(files) {
+                    $.get('@this.Url.Action("NewCaseFiles")', { id: '@this.Model.CaseFileKey', curTime:Date.now()   }, function(files) {
                         refreshNewCaseFilesTable(files);
                     });
                 },
@@ -99,7 +104,7 @@
                 var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
                 var pressedDeleteFileButton = this;
 
-                $.post('@this.Url.Action("DeleteNewCaseFile")', { id: '@this.Model.CaseFileKey', fileName: fileName }, function () {
+                $.post('@this.Url.Action("DeleteNewCaseFile")', { id: '@this.Model.CaseFileKey', fileName: fileName, curTime:Date.now() }, function () {
                     $(pressedDeleteFileButton).parents('tr:first').remove();
                 });
             });
@@ -940,7 +945,7 @@
     }
 
     function NewCase() {
-        $("#NewCaseForm").attr("action", '/Case/NewCase');
+        $("#NewCaseForm").attr("action", '@Url.Content("~/Case/NewCase")');
         $("#NewCaseForm").submit();
     }
     
@@ -1207,4 +1212,7 @@
         return ret;
     }
 </script>
-<script src="../content/js/case/edit.js"></script>
+
+@*<script 
+    src="../content/js/case/edit.js">
+</script>*@

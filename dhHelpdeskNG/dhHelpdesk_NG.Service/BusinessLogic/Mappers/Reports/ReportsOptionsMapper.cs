@@ -244,6 +244,7 @@
                 productAreasResult = productAreaLineRelations ? productAreaEntities.BuildLineRelations() : productAreaEntities.BuildRelations();                
             }
 
+            string[] exceptionList = {"IsAbout_Region_Id", "IsAbout_Department_Id", "IsAbout_OU_Id"};
             if (fields != null)
             {
                 fieldsResult = fields.Select(f => new
@@ -252,6 +253,7 @@
                                     FieldName = f.Name
                                 })                                
                                 .ToList()
+                                .Where(f=> !exceptionList.Contains(f.FieldName))
                                 .Select(f => new ItemOverview(f.FieldName, f.Id.ToString(CultureInfo.InvariantCulture)))                                
                                 .ToList();
 

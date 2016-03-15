@@ -528,7 +528,6 @@ using DH.Helpdesk.BusinessData.Enums.Case;
         
             if (lastState != null)
             {
-                model.CaseCreationDate = lastState.SelectedFilter.CaseCreationDate;
                 model.Selected = lastState.SelectedFilter;                                
             }
 

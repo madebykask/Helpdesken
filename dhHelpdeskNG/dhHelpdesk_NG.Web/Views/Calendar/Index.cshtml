@@ -5,7 +5,10 @@
 <div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
-            <li>@Html.ActionLink(Translation.Get("Ny händelse") , "new", null, new { @class = "btn" })</li>
+            @if (Model.UserHasCalendarAdminPermission)
+            {
+                <li>@Html.ActionLink(Translation.Get("Ny händelse") , "new", null, new { @class = "btn" })</li>
+            }
         </ul>
     </div>
 </div>

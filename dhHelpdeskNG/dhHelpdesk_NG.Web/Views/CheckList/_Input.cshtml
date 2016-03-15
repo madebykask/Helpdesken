@@ -28,14 +28,14 @@
                 
             </thead>                          
             <tbody>
-               @* @foreach (var item in Model.CheckListsList)
+                @foreach (var item in Model.ListOfExistances)
                 {                       
-                    <tr style="cursor: pointer" onclick="window.location.href = '@Url.Action("getSelectedCheckList", new RouteValueDictionary { { "id", item.CheckListId } })'">
+                    <tr style="cursor: pointer" onclick="window.location.href = '@Url.Action("getSelectedCheckList", new RouteValueDictionary { { "id", item.Value } })'">
                         <td>
-                           @Html.DisplayFor(x => item.CheckListName)
+                            <a href="@Url.Action("edit", "checklist", new { id = item.Value })">@Html.DisplayFor(modelItem => item.Text)</a>
                         </td>
                     </tr>                                                                                        
-                }*@
+                }
             </tbody>
                    
             </table>

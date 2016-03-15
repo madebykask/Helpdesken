@@ -266,5 +266,10 @@ namespace DH.Helpdesk.Common.Extensions.String
                 return string.Empty;
             return value.Length > 105 ? value.Substring(0, 105) : value;
         }
+
+        public static string CleanSpaceAndLowStr(this string value)
+        {
+            return value.Replace(" ", string.Empty).ToLower();
+        }
     }
 }

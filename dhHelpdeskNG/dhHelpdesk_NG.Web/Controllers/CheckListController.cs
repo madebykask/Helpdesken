@@ -108,7 +108,7 @@ namespace DH.Helpdesk.Web.Controllers
                 Value = x.Id.ToString()
             }).ToList();
 
-            sL.Insert(0, new SelectListItem { Text = "", Value = "0", Selected = true });
+            //sL.Insert(0, new SelectListItem { Text = "", Value = "0", Selected = true });
             model.Services.ServicesList = sL;            
 
 
@@ -119,7 +119,7 @@ namespace DH.Helpdesk.Web.Controllers
                     var allActions = this._CheckListActionService.GetActions(s.Id).ToList();
 
                     var actionsInput = allActions.Select(a => new CheckListActionsInputModel
-                             (
+                             (               
                                  a.Service_Id,
                                  a.Id,
                                  a.IsActive,
@@ -128,15 +128,15 @@ namespace DH.Helpdesk.Web.Controllers
                                  a.ChangedDate
                              )).ToList();
 
+                    
                         model.Services.ActionsList = actionsInput;
 
-                    if (allActions.Count == 0)
-                    {
-                        var New_action = CreatActionInput(s.Id);
-                        model.Services.ActionsList.Insert(0, New_action);
-                    }
-                        
-                    
+                        if (allActions.Count == 0)
+                        {
+                            var New_action = CreatActionInput(s.Id);
+                            model.Services.ActionsList.Insert(0, New_action);
+                        }
+                       
                 }
             }
            
@@ -202,6 +202,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var new_Action = new CheckListActionBM
             (
+                cL_Action.Action_Id,
                 ch_Service.Service_Id,
                 cL_Action.IsActive,
                 ch_Service.ActionInput,
@@ -271,18 +272,24 @@ namespace DH.Helpdesk.Web.Controllers
             return model;
         }
 
-        private CheckListInputModel CreatcheckListInput(CheckListBM checklist) //, List<CheckListServiceBM> checkListServices
+        private CheckListInputModel CreatcheckListInput(CheckListBM checklist)
         {
 
             var workingGroups = this._WorkingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id);
+            var chLServices = this._CheckListServiceService.GetCheckListServices(checklist.Id).ToList();
 
             var new_Service = (dynamic)null;
+            var checkListActions = new List<CheckListActionBM>();
 
-            //if (checkListServices != null)
-            //{
-            //    new_Service = checkListServices.Select(s => new CheckListServiceModel(s.CheckListId, s.Id, s.IsActive, s.Name)).ToList();
-            //}
+            if (chLServices != null)
+            {
+                foreach (var s in chLServices)
+                {
+                    checkListActions = this._CheckListActionService.GetActions(s.Id).ToList();
+                }
 
+                new_Service = chLServices.Select(s => new CheckListServiceModel()).ToList();
+            }
             //else
             //    new_Service = new CheckListServiceModel(checklist.Id, 0, 1, "");
 
@@ -301,7 +308,8 @@ namespace DH.Helpdesk.Web.Controllers
                 CheckListId = checklist.Id,
                 WGId = checklist.WorkingGroupId,
                 CheckListName = checklist.ChecklistName,
-                WorkingGroups = wgs
+                WorkingGroups = wgs,
+                CheckListActions = checkListActions
                 //,
                 //Services = new_Service
             };
@@ -342,7 +350,7 @@ namespace DH.Helpdesk.Web.Controllers
                                     {
                                         Text = x.ChecklistName,
                                         Value = x.Id.ToString()
-                                    }).ToList();
+                                    }).OrderBy(x => x.Text).ToList();
             checkListsNames.Insert(0, new SelectListItem { Text = "", Value = "0", Selected = true });
 
             var model = new CheckListIndexViewModel
@@ -353,7 +361,7 @@ namespace DH.Helpdesk.Web.Controllers
                     Text = x.WorkingGroupName,
                     Value = x.Id.ToString()
                 }).ToList(),
-
+                
                 //CheckListsList = null,
 
                 ListOfExistances = checkListsNames,
@@ -375,6 +383,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 var new_CheckList = new CheckListBM
                 (
+                    checklist.CheckListId,
                     SessionFacade.CurrentCustomer.Id,
                     checklist.WGId,
                     checklist.CheckListName,
@@ -418,6 +427,7 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var update_CheckList = new CheckListBM
             (
+                checklist.CheckListId,
                 SessionFacade.CurrentCustomer.Id,
                 checklist.WGId,
                 checklist.CheckListName,
@@ -568,13 +578,13 @@ namespace DH.Helpdesk.Web.Controllers
                 var new_CheckListService = new CheckListServiceBM
                 (
                     SessionFacade.CurrentCustomer.Id,
-                    checkListService.CheckList_Id, 
-                    checkListService.Service_Id,    
-                    1,  
+                    checkListService.CheckList_Id,
+                    checkListService.Service_Id,
+                    1,
                     checkListService.ServiceName,
                     DateTime.Now,
                     DateTime.Now
-               );
+                );
 
                 if (checkListService.Service_Id > 0)
                     new_CheckListService.Id = checkListService.Service_Id;
@@ -583,7 +593,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                 var model = new CheckListServiceModel()
                 {
-                    CheckList_Id = new_CheckListService.Id,
+                    CheckList_Id = new_CheckListService.CheckListId,
                     IsActive = new_CheckListService.IsActive,
                     Service_Id = new_CheckListService.Id,
                     ServiceName = new_CheckListService.Name                            

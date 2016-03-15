@@ -34,6 +34,7 @@ namespace DH.Helpdesk.Web.Models
         /// Gets or sets the calendars.
         /// </summary>
         public IEnumerable<CalendarOverview> Calendars { get; set; }
+        public bool UserHasCalendarAdminPermission { get; set; }
     }
 
     /// <summary>
@@ -57,5 +58,6 @@ namespace DH.Helpdesk.Web.Models
         public IList<SelectListItem> WGsSelected { get; set; }
 
         public CalendarInputViewModel() { }
+        public bool UserHasCalendarAdminPermission { get; set; }
     }
 }

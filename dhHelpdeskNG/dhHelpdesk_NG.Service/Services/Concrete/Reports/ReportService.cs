@@ -302,21 +302,7 @@
                 if (caseTypeId.HasValue)
                 {
                     LoadCaseTypeChildrenIds(caseTypeId.Value, caseTypeIds, uow);
-                }                                
-                
-                //var caseDataSet = _caseService.GetCaseDataSet(periodFrom.Value, periodUntil.Value);
-
-                //var overviews = caseRep.GetAll()
-                //                       .Search(customerId,
-                //                               departmentIds,
-                //                               workingGroupIds,
-                //                               caseTypeIds,
-                //                               periodFrom,
-                //                               periodUntil,
-                //                               text,
-                //                               sort,
-                //                               selectCount)
-                //                       .MapToCaseOverviews(caseDataSet);
+                }                                                              
 
                 var caseTypes = caseTypeRep.GetAll().GetByCustomer(customerId);
                 var productAreas = productAreaRep.GetAll().GetByCustomer(customerId);
@@ -330,8 +316,7 @@
                                                caseTypeIds,
                                                periodFrom,
                                                periodUntil);
-
-                //var caseFiles = this._caseService.GetCaseFiles(caseData.Select(d => d.Id).ToList());
+                
                 var overviews = caseData.MapToCaseOverviews(caseTypes, productAreas, ous, finishingCauses);
 
                 var sortedOverviews = Sort(overviews, sort);

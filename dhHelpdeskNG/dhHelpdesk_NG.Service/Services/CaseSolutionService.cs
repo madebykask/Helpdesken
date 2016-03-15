@@ -106,7 +106,7 @@ namespace DH.Helpdesk.Services.Services
 
                 var caseSolutions = _caseSolutionRepository.GetMany(s => s.CaseSolutionCategory_Id == category.Id &&
                                                                          (s.WorkingGroup.UserWorkingGroups.Select(
-                                                                             x => x.User_Id).Contains(userId) || s.WorkingGroup_Id == null));
+                                                                             x => x.User_Id).Contains(userId) || s.WorkingGroup_Id == null)).OrderBy(cs => cs.Name);
                 if (caseSolutions != null)
                 {
                     curCategory.CaseTemplates = new List<CaseTemplateNode>();

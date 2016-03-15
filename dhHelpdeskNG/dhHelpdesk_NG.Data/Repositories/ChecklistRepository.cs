@@ -52,7 +52,7 @@ namespace DH.Helpdesk.Dal.Repositories
             if (checkListActionsEntitys != null)
             {
 
-                return checkListActionsEntitys.Select(c => new CheckListActionBM(c.ChecklistService_Id, c.IsActive, c.Name, c.ChangedDate, c.CreatedDate)).ToList();
+                return checkListActionsEntitys.Select(c => new CheckListActionBM(c.Id, c.ChecklistService_Id, c.IsActive, c.Name, c.ChangedDate, c.CreatedDate)).ToList();
             }
             else
                 return null;

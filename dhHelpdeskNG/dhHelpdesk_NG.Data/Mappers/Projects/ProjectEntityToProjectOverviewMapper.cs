@@ -24,7 +24,8 @@
                 EndDate = entity.EndDate,
                 IsActive = entity.IsActive,
                 ProjectManagerId = entity.ProjectManager,
-                ProjectManagerName = projectManagerName
+                ProjectManagerName = (entity.Manager == null? string.Empty : entity.Manager.FirstName),
+                ProjectManagerSurName =  (entity.Manager == null? string.Empty : entity.Manager.SurName)
             };
         }
     }

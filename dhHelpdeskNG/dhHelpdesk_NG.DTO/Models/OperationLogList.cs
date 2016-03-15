@@ -14,5 +14,9 @@
         public int Customer_Id { get; set; }
         public int OperationObject_ID { get; set; }
         public int OperationCategoriy_ID { get; set; }
+        public int Language_Id { get; set; }
+
+        public bool SendMailAboutLog { get; set; }
+        public string EmailRecepientsOperationLog { get; set; }
     }
 }

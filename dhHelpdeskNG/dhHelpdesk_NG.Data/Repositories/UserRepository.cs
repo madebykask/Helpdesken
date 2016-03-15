@@ -180,10 +180,19 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public List<ItemOverview> FindUsersWithPermissionsForCustomers(int[] customers)
         {
+            bool isFirstName = true;
+            if (customers.Any())
+            {
+                var customerId = customers[0];
+                var cs = this.DataContext.Settings.Where(s => s.Customer_Id == customerId).SingleOrDefault();
+                if (cs != null)
+                    isFirstName = (cs.IsUserFirstLastNameRepresentation == 1);
+            }
+
             var users =
                 this.DataContext.Users.Where(
                         u => u.IsActive != 0)
-                    .Select(u => new { Name = u.FirstName + u.SurName, Value = u.Id, u.Cs })
+                        .Select(u => new { Name = (isFirstName ? u.FirstName + " " + u.SurName : u.SurName + " " + u.FirstName), Value = u.Id, u.Cs })
                     .ToList();
 
             return
@@ -455,6 +464,7 @@ namespace DH.Helpdesk.Dal.Repositories
                         x.CalendarPermission,
                         x.FAQPermission,
                         x.BulletinBoardPermission,
+                        x.DocumentPermission,
                         x.SetPriorityPermission,
                         x.InvoicePermission,
                         x.DataSecurityPermission,

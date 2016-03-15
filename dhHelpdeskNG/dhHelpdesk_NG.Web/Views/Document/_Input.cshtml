@@ -64,7 +64,10 @@
                                             @Translation.Get("Filnamn", Enums.TranslationSource.TextTranslation):
                                         </td>
                                         <td>
-                                            <input type="file" id="fileUploadedName" name="fileUploadedName" />                                                                                        
+                                            @if (Model.UserHasDocumentAdminPermission)
+                                            {
+                                                <input type="file" id="fileUploadedName" name="fileUploadedName" />                                                                                        
+                                            }
                                         </td>
                                     </tr>
                                 }
@@ -78,7 +81,10 @@
                                             @Html.ActionLink(Model.Document.FileName, "DocumentFile", new { document = Model.Document.Id})                                            
                                             <input type="hidden" name="FileName" id="FileName" value="@Model.Document.FileName" />
                                             <input type="hidden" name="Id" id="Id" value="@Model.Document.Id" />
-                                            <input type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" name="remove" id="remove" class="btn" onclick="deleteFile(@Model.Document.Id)" />
+                                            @if (Model.UserHasDocumentAdminPermission)
+                                            {
+                                                <input type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" name="remove" id="remove" class="btn" onclick="deleteFile(@Model.Document.Id)" />
+                                            }
                                         </td>
                                     </tr> 
                                 }

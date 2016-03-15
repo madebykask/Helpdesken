@@ -293,6 +293,16 @@
         </tr>
         <tr>
             <td>
+                @Translation.Get("Dokumenthantering", Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                <input data-field="documentPermission" type="checkbox" name="User.DocumentPermission" @(Model.User.DocumentPermission == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="User.DocumentPermission" value="0" />
+                &nbsp; &nbsp;@Translation.Get("Användaren har rättighet att administrera dokument", Enums.TranslationSource.TextTranslation)
+            </td>
+        </tr>
+        <tr>
+            <td>
                 @Translation.Get("Fakturering", Enums.TranslationSource.TextTranslation)
             </td>
             <td>

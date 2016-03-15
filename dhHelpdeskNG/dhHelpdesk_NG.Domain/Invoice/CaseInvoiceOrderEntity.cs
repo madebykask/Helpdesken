@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Domain.Invoice
 {
+    using DH.Helpdesk.Domain.Projects;
     using global::System;
     using global::System.Collections.Generic;
 
@@ -39,11 +40,13 @@
 
         public int? CreditForOrder_Id { get; set; }
 
+        public int? Project_Id { get; set; }
+
         public virtual CaseInvoiceEntity Invoice { get; set; }
 
         public virtual ICollection<CaseInvoiceArticleEntity> Articles { get; set; } 
 
-        public virtual ICollection<CaseInvoiceOrderFileEntity> Files { get; set; }
+        public virtual ICollection<CaseInvoiceOrderFileEntity> Files { get; set; }       
         
     }
 }

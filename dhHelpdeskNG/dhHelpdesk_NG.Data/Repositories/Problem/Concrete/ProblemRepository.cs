@@ -86,6 +86,10 @@ namespace DH.Helpdesk.Dal.Repositories.Problem.Concrete
         public List<ProblemOverview> FindByCustomerIdAndStatus(int customerId, EntityStatus entityStatus)
         {
             var problems = this.DbContext.Problems.Where(x => x.Customer_Id == customerId);
+            var setting = this.DbContext.Settings.Where(s => s.Customer_Id == customerId).SingleOrDefault();
+            bool isFirstNameLastName = true;
+            if (setting != null)
+                isFirstNameLastName = (setting.IsUserFirstLastNameRepresentation == 1);
 
             switch (entityStatus)
             {

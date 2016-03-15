@@ -122,6 +122,16 @@
                 permissions.Add(UserPermission.AdministerOrderPermission);
             }
 
+            if (user.BulletinBoardPermission.ToBool())
+            {
+                permissions.Add(UserPermission.BulletinBoardPermission);
+            }
+
+            if (user.DocumentPermission.ToBool())
+            {
+                permissions.Add(UserPermission.DocumentPermission);
+            }
+
             return permissions;
         }
 
