@@ -4290,6 +4290,40 @@ UPDATE tblTextTranslation Set TextTranslation = 'Case has been saved or unlocked
 GO
 
 
+UPDATE tblText Set TextString = 'Användaren får skapa ärendemallar' WHERE Id=818
+Go
+
+UPDATE tblText Set TextString = 'Användaren har rättighet till aktuellt' WHERE Id=1001
+Go
+
+UPDATE tblText Set TextString = 'Widgets på startsidan' WHERE Id=1326
+GO
+
+UPDATE tblText Set TextString = 'Användaren har rättighet att administrera ärendemallar' WHERE Id=1330
+GO
+
+UPDATE tblText Set TextString = 'Användaren har rättighet att administrera Aktuellt' WHERE Id=1331
+GO
+
+UPDATE tblText Set TextString = 'Använd # för att söka efter ärendenummer' WHERE Id=1334
+GO
+
+UPDATE tblText Set TextString = '(Välj bred på högst 3 kolumner för bästa resultat).' WHERE Id=1339
+GO
+
+UPDATE tblText Set TextString = 'Inga standardkolumner har valts för din användare på denna kund, för att filter, klicka på fliken Inställningar och gå till Filter Ärendeöversikt.' WHERE Id=1370
+GO
+
+UPDATE tblText Set TextString = 'Lista användaren' WHERE Id=1387
+GO
+
+update tbltext set TextString = 'Enligt förnamn' where id = 1388
+GO
+
+update tbltext set TextString = 'Intern loggpost i ärende' where id = 1570
+GO
+
+
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
