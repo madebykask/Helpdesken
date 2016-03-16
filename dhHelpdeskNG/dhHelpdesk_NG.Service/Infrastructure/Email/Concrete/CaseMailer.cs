@@ -51,7 +51,8 @@
             string helpdeskMailFromAdress, 
             List<string> files,
             MailSenders mailSenders,
-            bool isCreatingCase)
+            bool isCreatingCase,
+            bool caseMailSetting_DontSendMail)
         {
 
             if (!isCreatingCase)
@@ -59,7 +60,7 @@
                 if (log == null || log.Id <= 0 || string.IsNullOrWhiteSpace(log.TextExternal) ||
                     !log.SendMailAboutCaseToNotifier ||
                     dontSendMailToNotfier ||
-                    newCase.FinishingDate != null)
+                    (caseMailSetting_DontSendMail == false && newCase.FinishingDate != null))
                 {
                     return;
                 }

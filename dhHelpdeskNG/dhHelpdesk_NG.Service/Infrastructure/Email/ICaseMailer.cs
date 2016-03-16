@@ -16,7 +16,8 @@
                 string helpdeskMailFromAdress,
                 List<string> files,
                 MailSenders mailSenders,
-                bool isCreatingCase);
+                bool isCreatingCase,
+                bool caseMailSetting_DontSendMail);
 
         void InformOwnerDefaultGroupIfNeeded(
                 int caseHistoryId,

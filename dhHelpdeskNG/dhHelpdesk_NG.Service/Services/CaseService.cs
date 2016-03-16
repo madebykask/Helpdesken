@@ -1636,7 +1636,7 @@ namespace DH.Helpdesk.Services.Services
                                             newCase,
                                             helpdeskMailFromAdress,
                                             files,
-                                            cms.CustomeMailFromAddress, isCreatingCase);
+                                            cms.CustomeMailFromAddress, isCreatingCase, cms.DontSendMailToNotifier);
             }
 
             this.caseMailer.InformAboutInternalLogIfNeeded(
