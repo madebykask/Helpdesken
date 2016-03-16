@@ -1664,8 +1664,7 @@
 
                                                 if (causingpart == null)
                                                 {
-                                                    var transName = Translation.GetMasterDataTranslation(Model.case_.CausingPart.Name);
-                                                    @Html.TextBoxFor(m => transName, new { @readonly = true })
+                                                    @Html.TextBoxFor(m => m.case_.CausingPart.Name, new { @readonly = true })
                                                 }
                                                 else
                                                 {
