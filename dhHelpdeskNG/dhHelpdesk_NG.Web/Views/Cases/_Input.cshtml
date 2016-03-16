@@ -1664,7 +1664,17 @@
 
                                                 if (causingpart == null)
                                                 {
-                                                    @Html.TextBoxFor(m => m.case_.CausingPart.Name, new { @readonly = true })
+                                                    if (Model.case_.CausingPart != null)
+                                                    {
+                                                        var transName = Translation.GetMasterDataTranslation(Model.case_.CausingPart.Name);
+                                                        @Html.TextBoxFor(m => transName, new { @readonly = true })
+                                                       
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.TextBoxFor(m => m.case_.CausingPart.Name, new { @readonly = true })
+                                                    }
+
                                                 }
                                                 else
                                                 {
@@ -1672,7 +1682,7 @@
                                                      @Html.TextBoxFor(m => transName, new { @readonly = true })
                                                      @Html.HiddenFor(x => x.case_.CausingPartId)
                                                 }
-                                                
+
                                             }
                                             
                                         </td>
