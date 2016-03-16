@@ -280,8 +280,7 @@ namespace DH.Helpdesk.Dal.Repositories
                         join c in this.DataContext.Customers on cu.Customer_Id equals c.Id
                         join wg in this.DataContext.WorkingGroups on c.Id equals wg.Customer_Id
                         join u in this.DataContext.Users on userId equals u.Id
-                        from uwg in this.DataContext.UserWorkingGroups.Where(x => x.WorkingGroup_Id == wg.Id && x.User_Id == userId).DefaultIfEmpty()
-                        where wg.IsActive == 1
+                        from uwg in this.DataContext.UserWorkingGroups.Where(x => x.WorkingGroup_Id == wg.Id && x.User_Id == userId).DefaultIfEmpty()                        
                         group uwg by new { wg.WorkingGroupName, userId, c.Name, wg.Id, uwg.UserRole, CustomerId = c.Id, uwg.IsDefault } into g
                         select new CustomerWorkingGroupForUser
                         {
