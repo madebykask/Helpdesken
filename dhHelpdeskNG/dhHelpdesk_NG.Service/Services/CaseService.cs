@@ -1159,8 +1159,8 @@ namespace DH.Helpdesk.Services.Services
         {
             //get sender email adress
             var helpdeskMailFromAdress = string.Empty;
-            var containsProductAreaMail = false;
-
+            var containsProductAreaMailOrNewCaseMail = false;
+            
             if (!string.IsNullOrEmpty((cms.HelpdeskMailFromAdress)))
             {
                 helpdeskMailFromAdress = cms.HelpdeskMailFromAdress.Trim();                
@@ -1233,6 +1233,7 @@ namespace DH.Helpdesk.Services.Services
                                     el.ChangedDate = now;
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
+                                    containsProductAreaMailOrNewCaseMail = true;
                                 }
                             }
                         }
@@ -1289,6 +1290,7 @@ namespace DH.Helpdesk.Services.Services
                                             el.ChangedDate = now;
                                             _emailLogRepository.Add(el);
                                             _emailLogRepository.Commit();
+                                            containsProductAreaMailOrNewCaseMail = true;
                                         }
                                     }
                                 }
@@ -1347,7 +1349,7 @@ namespace DH.Helpdesk.Services.Services
                                             el.ChangedDate = now;
                                             _emailLogRepository.Add(el);
                                             _emailLogRepository.Commit();
-                                            containsProductAreaMail = true;
+                                            containsProductAreaMailOrNewCaseMail = true;
                                         }
                                     }
                                 }
@@ -1475,7 +1477,7 @@ namespace DH.Helpdesk.Services.Services
             // send email
 
             // send email when product area is set
-            if (!isClosingCase && !isCreatingCase && !containsProductAreaMail
+            if (!isClosingCase && !isCreatingCase && !containsProductAreaMailOrNewCaseMail
                 && oldCase.ProductAreaSetDate == null && newCase.RegistrationSource == 3
                 && !cms.DontSendMailToNotifier
                 && newCase.ProductArea != null
@@ -1626,7 +1628,7 @@ namespace DH.Helpdesk.Services.Services
             //                }
             //            }
             //        }
-            if (!containsProductAreaMail)
+            if (!containsProductAreaMailOrNewCaseMail)
             {
                 this.caseMailer.InformNotifierIfNeeded(
                                             caseHistoryId,
