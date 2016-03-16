@@ -1475,7 +1475,7 @@ namespace DH.Helpdesk.Services.Services
             // send email
 
             // send email when product area is set
-            if (!isClosingCase && !isCreatingCase
+            if (!isClosingCase && !isCreatingCase && !containsProductAreaMail
                 && oldCase.ProductAreaSetDate == null && newCase.RegistrationSource == 3
                 && !cms.DontSendMailToNotifier
                 && newCase.ProductArea != null
