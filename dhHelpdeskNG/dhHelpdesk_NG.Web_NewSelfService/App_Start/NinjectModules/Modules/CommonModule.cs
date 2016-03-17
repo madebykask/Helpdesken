@@ -17,6 +17,8 @@ namespace DH.Helpdesk.NewSelfService.NinjectModules.Modules
     using DH.Helpdesk.BusinessData.Models.Customer.Input;
     using DH.Helpdesk.BusinessData.Models.Invoice;
     using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
+    using DH.Helpdesk.BusinessData.Models.Projects.Input;
+    using DH.Helpdesk.BusinessData.Models.Projects.Output;
     using DH.Helpdesk.Dal.Infrastructure.Translate;
     using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Dal.Mappers.Cases.BusinessModelToEntity;
@@ -26,10 +28,12 @@ namespace DH.Helpdesk.NewSelfService.NinjectModules.Modules
     using DH.Helpdesk.Dal.Mappers.Invoice.EntityToBusinessModel;
     using DH.Helpdesk.Dal.Mappers.ProductArea.BusinessModelToEntity;
     using DH.Helpdesk.Dal.Mappers.ProductArea.EntityToBusinessModel;
+    using DH.Helpdesk.Dal.Mappers.Projects;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Cases;
     using DH.Helpdesk.Domain.Computers;
     using DH.Helpdesk.Domain.Invoice;
+    using DH.Helpdesk.Domain.Projects;
     using DH.Helpdesk.NewSelfService.Infrastructure.Translate;
     using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
     using DH.Helpdesk.Services.BusinessLogic.Admin.Users.Concrete;
@@ -142,7 +146,55 @@ namespace DH.Helpdesk.NewSelfService.NinjectModules.Modules
             this.Bind<IBusinessModelToEntityMapper<CaseInvoiceSettings, CaseInvoiceSettingsEntity>>()
                 .To<CaseInvoiceSettingsToEntityMapper>()
                 .InSingletonScope();
-  
+
+            this.Bind<INewBusinessModelToEntityMapper<NewProject, Project>>()
+               .To<NewProjectToProjectEntityMapper>()
+               .InSingletonScope();
+
+            this.Bind<INewBusinessModelToEntityMapper<NewProjectCollaborator, ProjectCollaborator>>()
+               .To<NewProjectCollaboratorlToProjectCollaboratorEntityMapper>()
+               .InSingletonScope();
+
+            this.Bind<INewBusinessModelToEntityMapper<NewProjectFile, ProjectFile>>()
+                .To<NewProjectFileToProjectFileEntityMapper>()
+                .InSingletonScope();
+
+            this.Bind<INewBusinessModelToEntityMapper<NewProjectSchedule, ProjectSchedule>>()
+                .To<NewProjectScheduleToProjectScheduleEntityMapper>()
+                .InSingletonScope();
+
+            this.Bind<INewBusinessModelToEntityMapper<NewProjectLog, ProjectLog>>()
+                .To<NewProjectLogToProjectLogEntityMapper>()
+                .InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<UpdatedProject, Project>>()
+                .To<UpdatedProjectToProjectEntityMapper>()
+                .InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<UpdatedProjectSchedule, ProjectSchedule>>()
+                .To<UpdatedProjectScheduleToProjectScheduleEntityMapper>()
+                .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<Project, ProjectOverview>>()
+                .To<ProjectEntityToProjectOverviewMapper>()
+                .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<ProjectCollaborator, ProjectCollaboratorOverview>>()
+                .To<ProjectCollaboratorEntityToNewProjectCollaboratorMapper>()
+                .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<ProjectFile, ProjectFileOverview>>()
+                .To<ProjectFileEntityToProjectFileOverviewMapper>()
+                .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<ProjectLog, ProjectLogOverview>>()
+                .To<ProjectLogEntityToProjectLogOverviewMapper>()
+                .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<ProjectSchedule, ProjectScheduleOverview>>()
+                .To<ProjectScheduleEntityToProjectScheduleOverviewMapper>()
+                .InSingletonScope();
+            
         }
     }
 }

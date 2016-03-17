@@ -40,6 +40,7 @@ namespace DH.Helpdesk.Services.Services
         /// The result.
         /// </returns>
         IList<Document> GetDocuments(int customerId);
+        IList<Document> GetExternalPageDocuments(int customerId);
         IList<Document> GetDocumentsForAdministrators(int customerId);
         /// <summary>
         /// The get document categories.
@@ -248,6 +249,7 @@ namespace DH.Helpdesk.Services.Services
             {
                 var rep = uow.GetRepository<Document>();
 
+                
                 var entities = rep.GetAll()
                         .GetByCustomer(customerId).RestrictByWorkingGroupsAndUsers(this.workContext)
                         .Select(d => new
@@ -275,6 +277,44 @@ namespace DH.Helpdesk.Services.Services
                                 FileName = d.FileName,
                                 Description = d.Description
                             }).ToList();
+            }
+        }
+
+        public IList<Document> GetExternalPageDocuments(int customerId)
+        {
+
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var rep = uow.GetRepository<Document>();
+
+
+                var entities = rep.GetAll()
+                        .GetByCustomer(customerId)
+                        .Select(d => new
+                        {
+                            d.Id,
+                            d.Name,
+                            d.Size,
+                            d.ChangedDate,
+                            d.ChangedByUser,
+                            d.DocumentCategory_Id,
+                            d.FileName,
+                            d.Description
+                        })
+                        .OrderBy(d => d.Name)
+                        .ToList();
+
+                return entities.Select(d => new Document
+                {
+                    Id = d.Id,
+                    Name = d.Name,
+                    Size = d.Size,
+                    ChangedDate = d.ChangedDate,
+                    ChangedByUser = d.ChangedByUser,
+                    DocumentCategory_Id = d.DocumentCategory_Id,
+                    FileName = d.FileName,
+                    Description = d.Description
+                }).ToList();
             }
         }
 

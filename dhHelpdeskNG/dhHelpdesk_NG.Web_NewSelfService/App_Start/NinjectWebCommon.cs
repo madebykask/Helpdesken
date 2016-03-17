@@ -162,8 +162,7 @@ namespace DH.Helpdesk.NewSelfService
             kernel.Bind<IProblemLogRepository>().To<ProblemLogRepository>();
             kernel.Bind<IProblemEMailLogRepository>().To<ProblemEMailLogRepository>();
             kernel.Bind<IProblemRepository>().To<ProblemRepository>();
-            kernel.Bind<IImpactRepository>().To<ImpactRepository>();
-            kernel.Bind<IProjectRepository>().To<ProjectRepository>();
+            kernel.Bind<IImpactRepository>().To<ImpactRepository>();            
             kernel.Bind<IFinishingCauseRepository>().To<FinishingCauseRepository>();
             kernel.Bind<IFinishingCauseCategoryRepository>().To<FinishingCauseCategoryRepository>();
             kernel.Bind<IStateSecondaryRepository>().To<StateSecondaryRepository>();
@@ -190,7 +189,12 @@ namespace DH.Helpdesk.NewSelfService
             kernel.Bind<IUsersPasswordHistoryRepository>().To<UsersPasswordHistoryRepository>();
             kernel.Bind<ICaseFilterFavoriteRepository>().To<CaseFilterFavoriteRepository>();
             kernel.Bind<ICaseInvoiceSettingsRepository>().To<CaseInvoiceSettingsRepository>();
-            
+            kernel.Bind<IProjectCollaboratorRepository>().To<ProjectCollaboratorRepository>();
+            kernel.Bind<IProjectFileRepository>().To<ProjectFileRepository>();
+            kernel.Bind<IProjectLogRepository>().To<ProjectLogRepository>();
+            kernel.Bind<IProjectRepository>().To<ProjectRepository>();
+            kernel.Bind<IProjectScheduleRepository>().To<ProjectScheduleRepository>();
+
             // Service             
             kernel.Bind<IMasterDataService>().To<MasterDataService>();            
             kernel.Bind<ISettingService>().To<SettingService>();
