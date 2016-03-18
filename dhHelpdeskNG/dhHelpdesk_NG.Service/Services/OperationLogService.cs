@@ -31,6 +31,7 @@ namespace DH.Helpdesk.Services.Services
         void SaveOperationLog(OperationLog operationlog, int[] wgs, out IDictionary<string, string> errors);
         DeleteMessage DeleteOperationLog(int id);
         void Commit();
+        int GetOperationLogId();
 
         void SendOperationLogEmail(OperationLog operationLogId, OperationLogList operationLogList, Customer customer);
         /// <summary>
@@ -151,6 +152,11 @@ namespace DH.Helpdesk.Services.Services
                         .IncludePath(o => o.WGs)
                         .SingleOrDefault();
             }
+        }
+
+        public int GetOperationLogId()
+        {
+            return this._operationLogRepository.GetOperationLogId();
         }
 
         public IList<OperationLog> GetAllOpertionLogs()

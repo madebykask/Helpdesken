@@ -155,6 +155,11 @@
 
             this._operationLogService.SaveOperationLog(operationlog, WGsSelected, out errors);
 
+            //get the id for new operationlog
+            var newOperationLogId = this._operationLogService.GetOperationLogId();
+
+            operationlog.Id = newOperationLogId;
+
             // send emails
             if (operationLogList.EmailRecepientsOperationLog != null)
                 this._operationLogService.SendOperationLogEmail(operationlog, operationLogList, customer);

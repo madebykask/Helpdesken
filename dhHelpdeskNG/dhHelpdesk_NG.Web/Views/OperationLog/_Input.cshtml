@@ -22,7 +22,7 @@
                         <div class="span12">                              
                             <table class="tableform" border="0">
                                 <tr>
-                                    <td>
+                                    <td class="span3">
                                         @Translation.Get("Driftsobjekt", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>                                           
@@ -146,8 +146,8 @@
                                    <td>
                                        @Translation.Get("Visa på startsidan", Enums.TranslationSource.TextTranslation):
                                    </td>
-                                   <td class="checkbox">                                        
-                                       <input type="checkbox" class="switchcheckbox" name="OperationLog.ShowOnStartPage" @(Model.OperationLog.ShowOnStartPage == 1 ? "checked=checked" : "") value ="1" />                                        
+                                   <td class="span9">                                        
+                                       <input type="checkbox" name="OperationLog.ShowOnStartPage" @(Model.OperationLog.ShowOnStartPage == 1 ? "checked=checked" : "") value ="1" />                                        
                                        <input type="hidden" name="OperationLog.ShowOnStartPage" value="0" />                                                                                                             
                                    </td>                                    
                                </tr>
@@ -155,8 +155,8 @@
                                    <td> 
                                        @Translation.Get("Informera handläggarna", Enums.TranslationSource.TextTranslation):
                                    </td>
-                                   <td class="checkbox">
-                                       <input type="checkbox" class="switchcheckbox" name="OperationLog.InformUsers" @(Model.OperationLog.InformUsers == 1 ? "checked=checked" : "")  value="1" />                                        
+                                   <td class="span9">
+                                       <input type="checkbox" name="OperationLog.InformUsers" @(Model.OperationLog.InformUsers == 1 ? "checked=checked" : "")  value="1" />                                        
                                        <input type="hidden" name="OperationLog.InformUsers" value="0" />                                                                               
                                        @Translation.Get("Popup", Enums.TranslationSource.TextTranslation)
                                    </td>                                
@@ -166,11 +166,10 @@
                                        @Translation.Get("Visa på självservice", Enums.TranslationSource.TextTranslation)
                                    </td>
                                    <td>
-                                       <input type="checkbox" class="switchcheckbox" name="OperationLog.PublicInformation" @(Model.OperationLog.PublicInformation == 1 ? "checked=checked" : "")  value="1" />                                        
+                                       <input type="checkbox" name="OperationLog.PublicInformation" @(Model.OperationLog.PublicInformation == 1 ? "checked=checked" : "")  value="1" />                                        
                                        <input type="hidden" name="OperationLog.PublicInformation" value="0" /> 
-                                        
-                                       <label class="radio inline">
-                                       <input type="checkbox" class="switchcheckbox" name="OperationLog.Popup" @(Model.OperationLog.Popup == 1 ? "checked=checked" : "")  value="1" />                                                                                                                       
+                                       @Translation.Get("Visa", Enums.TranslationSource.TextTranslation)&nbsp;
+                                       <input type="checkbox" name="OperationLog.Popup" @(Model.OperationLog.Popup == 1 ? "checked=checked" : "")  value="1" />                                                                                                                       
                                        <input type="hidden" name="OperationLog.Popup" value="0" />                                                                               
                                        @Translation.Get("Popup", Enums.TranslationSource.TextTranslation)
                                         </label>
@@ -225,7 +224,7 @@
                         
                     </div>
                 </div> <!-- Email Container -->
-                @if (Model.OperationLogEmailLog != null)
+                @if (Model.OperationLogEmailLog.Count > 0)
                 {
                 <div class="container"> <!-- Logg Container -->                    
                     <h4>@Translation.Get("Logg", Enums.TranslationSource.TextTranslation)</h4>

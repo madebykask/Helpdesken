@@ -27,6 +27,8 @@ namespace DH.Helpdesk.Dal.Repositories
         void DeleteByOperationObjectId(int operationObjectId);
 
         List<int> FindOperationObjectId(int operationObjectId);
+
+        int GetOperationLogId();
     }
 
     /// <summary>
@@ -101,6 +103,16 @@ namespace DH.Helpdesk.Dal.Repositories
                     .Select(x => x.Id)
                     .ToList();
             return entities;
+        }
+
+        public int GetOperationLogId()
+        {
+            var Ids = (from op in this.DataContext.OperationLogs select op.Id).ToList();
+
+            if (Ids.Any())
+                return Ids.Max();
+            else
+                return 0;
         }
     }
 
