@@ -4289,7 +4289,12 @@ GO
 UPDATE tblTextTranslation Set TextTranslation = 'Case has been saved or unlocked since you opened it. Please close and try again.' WHERE Text_Id=1581 AND Language_Id=2;
 GO
 
-
+If not exists (select * from tblText where Id = 1588)
+            insert into tblText (Id, Textstring) VALUES (1588, 'Steg')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1588 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1588, 'Step', 2)
+GO
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
