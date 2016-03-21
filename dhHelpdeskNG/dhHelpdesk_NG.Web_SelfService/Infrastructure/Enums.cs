@@ -53,6 +53,41 @@
         public static class DeletedItemKey
         {
             public static readonly string DeletedLogs = "DeletedLogs";
+        }        
+
+        public static class FederationServiceKeys
+        {
+            public static readonly string ClaimDomain = "ClaimDomain";
+
+            public static readonly string ClaimUserId = "ClaimUserId";
+
+            public static readonly string ClaimEmployeeNumber = "ClaimEmployeeNumber";
+
+            public static readonly string ClaimFirstName = "ClaimFirstName";
+
+            public static readonly string ClaimLastName = "ClaimLastName";
+
+            public static readonly string ClaimEmail = "ClaimEmail";
+        }
+
+        public static class CaseFieldGroups
+        {
+            public static readonly string UserInformation = "UserInformation";
+
+            public static readonly string ComputerInformation = "ComputerInformation";
+
+            public static readonly string CaseInfo = "CaseInfo";
+
+            public static readonly string Other = "Other";
+
+            public static readonly string CaseLog = "CaseLog";
+            
+        }
+
+        public enum LogNote
+        {
+            UseExternalLogNote = 0,
+            UseInternalLogNote = 1
         }
     }
 }

@@ -1,0 +1,54 @@
+﻿@model DH.Helpdesk.SelfService.Models.Start.StartPageModel
+
+@{
+    ViewBag.Title = "Index";
+          
+    var welcomePart = "";
+    if (Model.WelcomeHtml != null) 
+    {   
+        welcomePart = Model.WelcomeHtml.SetHtmlParameters();            
+    }
+}
+
+<div class="container-fluid dh-container">
+    <div class="row">
+        <div class="col-md-6">            
+            <div class="row">            
+               <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">                              
+                             @Html.Raw(welcomePart)                                                                                                         
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @if (SessionFacade.CurrentCustomer.ShowBulletinBoardOnExtPage != 0 && Model.BulletinBoard != null && Model.BulletinBoard.Any())
+        {
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><span class="glyphicon glyphicon-star"></span>@Translation.Get("Bulletin Board", Enums.TranslationSource.TextTranslation) </div>
+                    <div class="panel-body">                    
+                        @if (Model.BulletinBoard != null)
+                        {
+                            foreach (var b in Model.BulletinBoard)
+                            {                                                                                   
+                                <p> <strong> @Html.DisplayFor(m=> b.ShowDate , "Date")  </strong> <br /> &nbsp;&nbsp; @Html.Raw(b.Text) </p>                              
+                            }
+                        }                    
+                        <div class="bulletinimg">
+                        </div>                    
+                    </div>
+                </div>
+            </div>
+        }
+        <!--ON GOING--->
+       
+    </div>
+    <div class="row">
+        <div class="col-md-10 small">            
+            <div class="footerdhhd"><img src="@Url.Content("~/Content/img/dh_solutions_slogan.png")" />&nbsp;
+                <br /><i>@Translation.Get("Version")&nbsp;@ApplicationFacade.Version</i></div>            
+        </div>
+    </div>
+</div>

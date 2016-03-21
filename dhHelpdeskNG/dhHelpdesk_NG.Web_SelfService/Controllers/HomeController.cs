@@ -4,26 +4,21 @@
 
     using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.SelfService.Infrastructure;
 
-    public class HomeController : Controller
-    {
-        private readonly ICustomerService _customerService;
-
-        
-        public HomeController(
-            ICustomerService customerService,
-            IMasterDataService masterDataService)
+    public class HomeController : BaseController
+    {                
+        public HomeController( IMasterDataService masterDataService,           
+                               ICaseSolutionService caseSolutionService                               
+                              ):base(masterDataService, caseSolutionService)
             
         {
-            this._customerService = customerService;
+            //this._customerService = customerService;
         }
         
-        public ActionResult Index()
-        {
-            var customer = this._customerService.GetCustomer(1);
-
-            return this.View(customer);
-
+        public RedirectToRouteResult Index(int customerId=-1)
+        {     
+           return RedirectToAction("Index", "Start", new { customerId = customerId });                      
         }
     }
 }

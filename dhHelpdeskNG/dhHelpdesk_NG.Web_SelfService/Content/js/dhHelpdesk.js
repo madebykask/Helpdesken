@@ -6,6 +6,7 @@
 $('.nav-tabs li:not(.disabled) a').click(function (e) {
     e.preventDefault();
     $(this).tab('show');
+    //activeTab.val($(this).attr('href'));
 });
 
 $("input:text:visible:first").focus();
@@ -51,7 +52,7 @@ function SelectValueInOtherDropdownOnChange(id, postTo, ctl) {
 
 function CaseCascadingSelectlistChange(id, customerId, postTo, ctl, departmentFilterFormat) {
     var ctlOption = ctl + ' option';
-    $.post(postTo, { 'id': id, 'customerId': customerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {
+    $.post(postTo, { 'id': id, 'customerId': customerId, 'departmentFilterFormat': departmentFilterFormat, myTime: Date.now() }, function (data) {
         $(ctlOption).remove();
         $(ctl).append('<option value="">&nbsp;</option>');
         if (data != undefined) {
@@ -592,37 +593,40 @@ function GetComputerSearchOptions() {
 }
 
 //multiselct med sök
-$('.multiselect').multiselect({
-    enableFiltering: true,
-    filterPlaceholder: '',
-    maxHeight: 250,
-    //maxHeight: false,
-    buttonClass: 'btn',
-    buttonWidth: '220px',
-    buttonContainer: '<span class="btn-group" />',
-    buttonText: function (options) {
-        if (options.length == 0) {
-            return '-- <i class="caret"></i>';
+var ms = $('.multiselect');
+if (ms.lenght > 0) {
+    ms.multiselect({
+        enableFiltering: true,
+        filterPlaceholder: '',
+        maxHeight: 250,
+        //maxHeight: false,
+        buttonClass: 'btn',
+        buttonWidth: '220px',
+        buttonContainer: '<span class="btn-group" />',
+        buttonText: function (options) {
+            if (options.length == 0) {
+                return '-- <i class="caret"></i>';
+            }
+            else if (options.length > 2) {
+                return options.length + ' selected  <i class="caret"></i>';
+            }
+            else {
+                var selected = '';
+                options.each(function () {
+                    selected += $(this).text() + ', ';
+                });
+                return selected.substr(0, selected.length - 2) + ' <i class="caret"></i>';
+            }
         }
-        else if (options.length > 2) {
-            return options.length + ' selected  <i class="caret"></i>';
-        }
-        else {
-            var selected = '';
-            options.each(function () {
-                selected += $(this).text() + ', ';
-            });
-            return selected.substr(0, selected.length - 2) + ' <i class="caret"></i>';
-        }
-    }
-});
+    });
+}
 
 function bindDeleteCaseFileBehaviorToDeleteButtons() {
     $('#case_files_table a[id^="delete_casefile_button_"]').click(function () {
         var key = $('#CaseKey').val();
         var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
         var pressedDeleteFileButton = this;
-        $.post("/Cases/DeleteCaseFile", { id: key, fileName: fileName }, function () {
+        $.post("/Cases/DeleteCaseFile", { id: key, fileName: fileName, myTime: Date.now() }, function () {
             $(pressedDeleteFileButton).parents('tr:first').remove();
         });
     });
@@ -634,7 +638,7 @@ function bindDeleteLogFileBehaviorToDeleteButtons() {
         var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
         var pressedDeleteFileButton = this;
 
-        $.post("/Cases/DeleteLogFile", { id: key, fileName: fileName }, function () {
+        $.post("/Cases/DeleteLogFile", { id: key, fileName: fileName, myTime:Date.now() }, function () {
             $(pressedDeleteFileButton).parents('tr:first').remove();
         });
     });
@@ -645,7 +649,7 @@ function SetPriority() {
     var urgencyId = $('#case__Urgency_Id').val();
 
     if (urgencyId > 0 && impactId > 0) {
-        $.post('/Cases/GetPriorityIdForImpactAndUrgency', { 'impactId': impactId, 'urgencyId': urgencyId }, function (data) {
+        $.post('/Cases/GetPriorityIdForImpactAndUrgency', { 'impactId': impactId, 'urgencyId': urgencyId, myTime:Date.now() }, function (data) {
             if (data != null) {
                 var exists = $('#case__Priority_Id Option[value=' + data + ']').length;
                 if (exists > 0) {

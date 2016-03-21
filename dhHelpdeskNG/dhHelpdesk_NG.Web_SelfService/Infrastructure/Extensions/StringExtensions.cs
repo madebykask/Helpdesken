@@ -7,6 +7,7 @@
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.utils;
+    using System.Text.RegularExpressions;
 
     public static class StringExtensions
     {
@@ -207,6 +208,176 @@
                         ret = SessionFacade.CurrentCaseSearch.Search.Ascending ? "icon-chevron-down" : "icon-chevron-up";
 
             return ret;
+        }
+
+        public static string SetUrlParameters(this string value, int id = 0)
+        {
+            string res = value;
+            string lowerStr = res.ToLower();
+
+            if (lowerStr.IndexOf("&clearsession=1") > 0)
+            {
+                res = Regex.Replace(res, @"&clearsession=1", string.Empty, RegexOptions.IgnoreCase);  
+                lowerStr = res.ToLower();
+            }
+
+            if (lowerStr.IndexOf("[caseid]") > 0 && id > 0)
+            {
+                res = Regex.Replace(res, @"\[caseid\]", id.ToString(), RegexOptions.IgnoreCase);
+                lowerStr = res.ToLower();
+            }
+
+            if (lowerStr.IndexOf("[userid]") > 0 && SessionFacade.CurrentSystemUser != null)
+            {
+                res = Regex.Replace(res, @"\[userid\]", SessionFacade.CurrentSystemUser, RegexOptions.IgnoreCase);
+                lowerStr = res.ToLower();
+            }                
+
+            if (lowerStr.IndexOf("[username]") > 0 && SessionFacade.CurrentUserIdentity != null)
+            {
+                res = Regex.Replace(res, @"\[username\]", SessionFacade.CurrentUserIdentity.FirstName, RegexOptions.IgnoreCase);
+                lowerStr = res.ToLower();
+            } 
+               
+            if (lowerStr.IndexOf("[userfamily]") > 0 && SessionFacade.CurrentUserIdentity != null)
+            {
+                res = Regex.Replace(res, @"\[userfamily\]", SessionFacade.CurrentUserIdentity.LastName, RegexOptions.IgnoreCase);
+                lowerStr = res.ToLower();
+            }                 
+
+            if (lowerStr.IndexOf("[usersurname]") > 0 && SessionFacade.CurrentUserIdentity != null)
+            {
+                res = Regex.Replace(res, @"\[usersurname\]", SessionFacade.CurrentUserIdentity.LastName, RegexOptions.IgnoreCase);
+                lowerStr = res.ToLower();
+            }                
+
+            if (lowerStr.IndexOf("[userlastname]") > 0 && SessionFacade.CurrentUserIdentity != null)
+            {
+                res = Regex.Replace(res, @"\[userlastname\]", SessionFacade.CurrentUserIdentity.LastName, RegexOptions.IgnoreCase);
+                lowerStr = res.ToLower();
+            }              
+
+            if (lowerStr.IndexOf("[language]") > 0 && SessionFacade.CurrentLanguageId > 0)                
+            {                    
+                var langId = SessionFacade.AllLanguages.Where(a => a.Id == SessionFacade.CurrentLanguageId).Select(a => a.LanguageId).SingleOrDefault();
+                res = Regex.Replace(res, @"\[language\]", langId, RegexOptions.IgnoreCase);
+                lowerStr = res.ToLower();                
+            }
+
+            if (lowerStr.IndexOf("[customerid]") > 0 && SessionFacade.CurrentCustomer != null)
+            {
+                res = Regex.Replace(res, @"\[customerid\]", SessionFacade.CurrentCustomer.Id.ToString(), RegexOptions.IgnoreCase);
+                lowerStr = res.ToLower();
+            }                                                  
+
+            return res;
+        }
+
+        public static string SetHtmlParameters(this string value)
+        {
+            string res = value;
+            string lowerStr = res.ToLower();
+
+            //Current Customer Id
+            if (lowerStr.IndexOf("[#1]") > 0 && SessionFacade.CurrentCustomer != null)
+            {
+                res = Regex.Replace(res, @"\[#1\]", SessionFacade.CurrentCustomer.Id.ToString(), RegexOptions.IgnoreCase);
+                lowerStr = res.ToLower();
+            }
+
+            //Current Customer Name
+            if (lowerStr.IndexOf("[#2]") > 0 && SessionFacade.CurrentCustomer != null)
+            {
+                res = Regex.Replace(res, @"\[#2\]", SessionFacade.CurrentCustomer.Name, RegexOptions.IgnoreCase);
+                lowerStr = res.ToLower();
+            }
+
+            //Current LanguageId
+            if (lowerStr.IndexOf("[#3]") > 0 && SessionFacade.CurrentLanguageId > 0)
+            {
+                var langId = SessionFacade.AllLanguages.Where(a => a.Id == SessionFacade.CurrentLanguageId).Select(a => a.LanguageId).SingleOrDefault();
+                res = Regex.Replace(res, @"\[#3\]", langId, RegexOptions.IgnoreCase);
+                lowerStr = res.ToLower();
+            }
+
+            //Current LanguageName
+            if (lowerStr.IndexOf("[#4]") > 0 && SessionFacade.CurrentLanguageId > 0)
+            {
+                var langName = SessionFacade.AllLanguages.Where(a => a.Id == SessionFacade.CurrentLanguageId).Select(a => a.Name).SingleOrDefault();
+                res = Regex.Replace(res, @"\[#4\]", Translation.Get(langName), RegexOptions.IgnoreCase);
+                lowerStr = res.ToLower();
+            }
+
+            //RegUser
+            if (lowerStr.IndexOf("[#5]") > 0 && SessionFacade.CurrentSystemUser != null)
+            {
+                res = Regex.Replace(res, @"\[#5\]", SessionFacade.CurrentSystemUser, RegexOptions.IgnoreCase);
+                lowerStr = res.ToLower();
+            }
+
+            //Principal User Id
+            if (lowerStr.IndexOf("[#6]") > 0 && SessionFacade.CurrentUserIdentity != null)
+            {
+                res = Regex.Replace(res, @"\[#6\]", 
+                                    SessionFacade.CurrentUserIdentity.UserId == null ? string.Empty : SessionFacade.CurrentUserIdentity.UserId,
+                                    RegexOptions.IgnoreCase);
+                lowerStr = res.ToLower();
+            }  
+
+            //UserName
+            if (lowerStr.IndexOf("[#7]") > 0 && SessionFacade.CurrentUserIdentity != null)
+            {
+                res = Regex.Replace(res, @"\[#7\]",
+                                    SessionFacade.CurrentUserIdentity.FirstName == null ? string.Empty : SessionFacade.CurrentUserIdentity.FirstName, 
+                                    RegexOptions.IgnoreCase);
+                lowerStr = res.ToLower();
+            }
+
+            //UserLastName
+            if (lowerStr.IndexOf("[#8]") > 0 && SessionFacade.CurrentUserIdentity != null)
+            {
+                res = Regex.Replace(res, @"\[#8\]",
+                                    SessionFacade.CurrentUserIdentity.LastName == null ? string.Empty : SessionFacade.CurrentUserIdentity.LastName, 
+                                    RegexOptions.IgnoreCase);
+                lowerStr = res.ToLower();
+            }
+
+            //User email
+            if (lowerStr.IndexOf("[#9]") > 0 && SessionFacade.CurrentUserIdentity != null)
+            {
+                res = Regex.Replace(res, @"\[#9\]",
+                                    SessionFacade.CurrentUserIdentity.Email == null ? string.Empty : SessionFacade.CurrentUserIdentity.Email,
+                                    RegexOptions.IgnoreCase);
+                lowerStr = res.ToLower();
+            }
+
+            //User Domain
+            if (lowerStr.IndexOf("[#10]") > 0 && SessionFacade.CurrentUserIdentity != null)
+            {
+                res = Regex.Replace(res, @"\[#10\]", 
+                                    SessionFacade.CurrentUserIdentity.Domain == null? string.Empty:SessionFacade.CurrentUserIdentity.Domain, 
+                                    RegexOptions.IgnoreCase);
+                lowerStr = res.ToLower();
+            }
+
+            //Employee Number
+            if (lowerStr.IndexOf("[#11]") > 0 && SessionFacade.CurrentUserIdentity != null)
+            {
+                res = Regex.Replace(res, @"\[#11\]", 
+                                    SessionFacade.CurrentUserIdentity.EmployeeNumber == null? string.Empty:SessionFacade.CurrentUserIdentity.EmployeeNumber, 
+                                    RegexOptions.IgnoreCase);
+                lowerStr = res.ToLower();
+            }
+
+            //Version Number
+            if (lowerStr.IndexOf("[#12]") > 0)
+            {
+                
+                res = Regex.Replace(res, @"\[#12\]", ApplicationFacade.Version, RegexOptions.IgnoreCase);
+                lowerStr = res.ToLower();
+            }
+
+            return res;
         }
 
         public static string GetMailTemplateName(this int value)

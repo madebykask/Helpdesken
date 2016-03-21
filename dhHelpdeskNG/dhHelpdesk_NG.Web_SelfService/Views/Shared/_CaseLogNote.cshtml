@@ -1,0 +1,52 @@
+﻿@using DH.Helpdesk.SelfService.Infrastructure;
+@using Log = DH.Helpdesk.Domain.Log;
+@model DH.Helpdesk.SelfService.Models.Case.CaseLogModel
+
+@if (Model.CaseLogs != null)
+{
+    var usedCaseLog = new List<Log>();    
+    if (SessionFacade.CurrentCustomer.UseInternalLogNoteOnExternalPage == (int)Enums.LogNote.UseExternalLogNote)
+    {
+        usedCaseLog = Model.CaseLogs.Where(l => !string.IsNullOrEmpty(l.Text_External.Trim())).ToList();
+    }
+    else
+    {
+        usedCaseLog = Model.CaseLogs.Where(l => !string.IsNullOrEmpty(l.Text_Internal.Trim())).ToList();
+    }
+
+    foreach (var logItem in usedCaseLog)
+    {             
+        var _regDate = logItem.RegTime.ToLocalTime();
+        <div class="@(!string.IsNullOrEmpty(logItem.RegUser) ? "com-list-hd" : "com-list-com")" >
+            <div class="list-arrow"></div>
+            <p> 
+                @(logItem.User_Id == null ? (logItem.RegUser == SessionFacade.CurrentSystemUser ? Translation.Get("Me", Enums.TranslationSource.TextTranslation) : logItem.RegUser) : logItem.User.FirstName + " " + logItem.User.SurName) 
+                | 
+                @Html.DisplayFor(l => _regDate) 
+            </p>
+            <p>
+                @if (SessionFacade.CurrentCustomer.UseInternalLogNoteOnExternalPage == (int)Enums.LogNote.UseExternalLogNote)
+                {
+                    @Html.Raw(logItem.Text_External.Replace("\n", "<br />"))                    
+                }
+                else
+                {
+                    @Html.Raw(logItem.Text_Internal.Replace("\n", "<br />"))                    
+                }                                                    
+            </p>
+            <p>
+                @if (logItem.LogFiles != null)
+                {
+                 foreach(var f in logItem.LogFiles)
+                 {                                         
+                    <a href="@Url.Action("DownloadLogFile", new { id = logItem.Id, fileName = f.FileName })">
+                        <i class="glyphicon glyphicon-file"></i>
+                        @f.FileName
+                    </a>  
+                    <br />
+                }
+                }
+            </p>            
+        </div>                            
+    }
+}                     

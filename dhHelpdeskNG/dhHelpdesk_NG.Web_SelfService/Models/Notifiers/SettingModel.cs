@@ -17,17 +17,17 @@
             string lableText,
             bool required,
             string ldapAttribute)
-            : this(showInDetails, showInNotifiers, caption,lableText, ldapAttribute)
+            : this(showInDetails, showInNotifiers, caption, ldapAttribute)
         {
             this.Required = required;
         }
 
-        public SettingModel(bool showInDetails, bool showInNotifiers, string caption, string lableText, string ldapAttribute)
+        public SettingModel(bool showInDetails, bool showInNotifiers, string caption, string ldapAttribute)
         {
             this.ShowInDetails = showInDetails;
             this.ShowInNotifiers = showInNotifiers;
             this.Caption = caption;
-            this.LableText = lableText;
+            this.LableText = LableText;
             this.LdapAttribute = ldapAttribute;
         }
 

@@ -46,11 +46,13 @@ namespace DH.Helpdesk.SelfService.Infrastructure.WorkContext.Concrete
             {
                 throw new NotImplementedException();
             }
-        }   
+        }
 
         public ICollection<UserWorkingGroup> UserWorkingGroups
         {
-            get { return SessionFacade.CurrentUser.UserWorkingGroups; }
+            //get { return SessionFacade.CurrentUser.UserWorkingGroups; }
+            get { return null; }
+
         }
 
         public IEnumerable<UserModuleOverview> Modules

@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace DH.Helpdesk.SelfService.Infrastructure
+﻿namespace DH.Helpdesk.SelfService.Infrastructure
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web;
+
     public class UserCaseInfo
     {
         public int UserId { get; set; }
@@ -15,6 +15,13 @@ namespace DH.Helpdesk.SelfService.Infrastructure
     public static class ApplicationFacade
     {
         private const string _USER_CASE_INFO = "USER_CASE_INFO";
+
+        static ApplicationFacade()
+        {
+            Version = DH.Helpdesk.Version.FULL_VERSION;
+        }
+
+        public static string Version { get; private set; }
 
         public static IList<UserCaseInfo> UserCaseInfo
         {

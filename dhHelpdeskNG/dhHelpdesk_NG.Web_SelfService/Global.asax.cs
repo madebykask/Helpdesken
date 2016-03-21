@@ -1,6 +1,8 @@
 ﻿namespace DH.Helpdesk.SelfService
 {
+    using DH.Helpdesk.SelfService;
     using System.Web.Mvc;
+    using System.Web.Optimization;
     using System.Web.Routing;
 
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
@@ -22,7 +24,6 @@
                 "{controller}/{action}/{id}", // URL with parameters
                 new { controller = "Home", action = "Index", id = UrlParameter.Optional } // Parameter defaults
             );
-
         }
 
         protected void Application_Start()
@@ -33,8 +34,13 @@
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
 
+            ECT.FormLib.FormLibSetup.Setup();
+            ECT.FormLib.FormLibSetup.SetupRoutes(RouteTable.Routes);
+
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
+
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
     }
 }

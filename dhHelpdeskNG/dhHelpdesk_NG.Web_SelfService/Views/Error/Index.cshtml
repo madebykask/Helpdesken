@@ -1,0 +1,39 @@
+﻿@using DH.Helpdesk.SelfService.Infrastructure
+@model DH.Helpdesk.SelfService.Models.Error.Error
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<div class="container-fluid dh-container">
+    <ul class="nav nav-tabs">
+        <li class="active" ><a href="#home" data-toggle="tab">@Translation.Get("Error Code", Enums.TranslationSource.TextTranslation) @Model.ErrorCode</a></li>       
+    </ul>
+    <div class="content">
+        <div class="tab-pane active" id="home">
+            <div class="container-fluid dh-container">
+                <div class="row">
+                    <div class="col-md-5">
+                            <div class="alert alert-info">
+                                <p style="color:red"> @Translation.Get(Model.ErrorMessage) </p>
+                            </div>
+                            <div class="alert alert-grey">
+                                <p> ErrorCode: @Model.ErrorCode </p>
+                            </div>
+                            @if (!string.IsNullOrEmpty(Model.BackURL))
+                            {
+                                <div>                                
+                                    <a href ="@Url.Content(Model.BackURL)" class="btn btn-default"> @Translation.Get("Go Back") </a>
+                                </div>           
+                            }
+                    </div>
+                    <div class="col-md-3">                  
+                        <img src="@Url.Content("~/img-profile/ikea-error-web.png")"  style="margin:30px 30px 0 30px;" />
+                    </div>
+                </div>
+            </div>
+        </div>        
+    </div>
+</div>
+
+ 
