@@ -13,6 +13,7 @@
         private readonly IDocumentService _documentService;
         private readonly ILinkService _linkService;
         private readonly ICustomerService _customerService;
+        private readonly ISettingService _settingService;
         private readonly IUserService _userService;
         private readonly ICaseSolutionService _casesolutionService;
 
@@ -22,6 +23,7 @@
             ICustomerService customerService,
             IUserService userService,
             ICaseSolutionService casesolutionService,
+            ISettingService settingService,
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
@@ -30,6 +32,7 @@
             this._customerService = customerService;
             this._userService = userService;
             this._casesolutionService = casesolutionService;
+            this._settingService = settingService;
         }
 
         public ActionResult Index(int customerId)
@@ -113,6 +116,8 @@
         {
             var usSelected = link.Us ?? new List<User>();
             var usAvailable = new List<User>();
+            var cs = this._settingService.GetCustomerSetting(customer.Id);
+            var isFirstName = (cs.IsUserFirstLastNameRepresentation == 1);
 
             foreach (var u in this._userService.GetUsers(customer.Id))
             {
@@ -130,26 +135,31 @@
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
+
                 CaseSolutions = this._casesolutionService.GetCaseSolutions(customer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
+
                 LinkGroups = this._linkService.GetLinkGroups(customer.Id).Select(x => new SelectListItem
                 {
                     Text = x.LinkGroupName,
                     Value = x.Id.ToString()
                 }).ToList(),
+
                 UsAvailable = usAvailable.Select(x => new SelectListItem
                 {
-                    Text = x.FirstName + ' ' + x.SurName,
+                    Text = (isFirstName ? string.Format("{0} {1}", x.FirstName, x.SurName) : string.Format("{0} {1}", x.SurName, x.FirstName)),
                     Value = x.Id.ToString()
-                }).ToList(),
+                }).OrderBy(a => a.Text).ToList(),
+
                 UsSelected = usSelected.Select(x => new SelectListItem
                 {
-                    Text = x.FirstName + ' ' + x.SurName,
+                    Text = (isFirstName ? string.Format("{0} {1}", x.FirstName, x.SurName) : string.Format("{0} {1}", x.SurName, x.FirstName)),
                     Value = x.Id.ToString()
-                }).ToList()
+                }).OrderBy(s=> s.Text).ToList()
+
             };
 
             return model;

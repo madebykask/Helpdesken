@@ -44,8 +44,9 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             var customerId = SessionFacade.CurrentCustomer.Id;            
 
             var cats = _documentsService.GetDocumentCategories(customerId).Where(d => d.ShowOnExternalPage).Select(d=> d.Id).ToList();            
-            var docs = _documentsService.GetDocuments(customerId).Where(d => d.DocumentCategory_Id.HasValue && cats.Contains(d.DocumentCategory_Id.Value))
-                                                                 .ToList();
+            var docs = _documentsService.GetExternalPageDocuments(customerId)
+                                        .Where(d => d.DocumentCategory_Id.HasValue && cats.Contains(d.DocumentCategory_Id.Value))
+                                        .ToList();
 
             model.Documents = docs;
             return View(model);

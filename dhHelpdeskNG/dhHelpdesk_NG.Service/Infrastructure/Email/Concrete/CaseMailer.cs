@@ -1,16 +1,17 @@
-﻿namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
-{
-    using System;
-    using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
-    using DH.Helpdesk.BusinessData.Models.Case;
-    using DH.Helpdesk.BusinessData.OldComponents;
-    using DH.Helpdesk.Dal.Infrastructure.ModelFactories.Email;
-    using DH.Helpdesk.Dal.Repositories;
-    using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Services.Services;
-    using System.Configuration;
-    using DH.Helpdesk.BusinessData.Models.Email;
+using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.OldComponents;
+using DH.Helpdesk.Dal.Infrastructure.ModelFactories.Email;
+using DH.Helpdesk.Dal.Repositories;
+using DH.Helpdesk.Domain;
+using DH.Helpdesk.Services.Services;
+using System.Configuration;
+using DH.Helpdesk.BusinessData.Models.Email;
+
+namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
+{
 
     public sealed class CaseMailer : ICaseMailer
     {
@@ -51,15 +52,16 @@
             string helpdeskMailFromAdress, 
             List<string> files,
             MailSenders mailSenders,
-            bool isCreatingCase)
+            bool isCreatingCase,
+            bool caseMailSetting_DontSendMail)
         {
 
-            if (!isCreatingCase)
-            {
+            //if (!isCreatingCase)
+            //{
                 if (log == null || log.Id <= 0 || string.IsNullOrWhiteSpace(log.TextExternal) ||
                     !log.SendMailAboutCaseToNotifier ||
                     dontSendMailToNotfier ||
-                    newCase.FinishingDate != null)
+                    (caseMailSetting_DontSendMail == false && newCase.FinishingDate != null))
                 {
                     return;
                 }
@@ -119,7 +121,7 @@
                         }
                     }
                 }
-            }
+            //}
         }
 
         public void InformOwnerDefaultGroupIfNeeded(

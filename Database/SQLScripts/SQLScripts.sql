@@ -29,5 +29,19 @@ GO
 UPDATE tblUsers Set DocumentPermission = 1 WHERE UserGroup_Id = 4;
 GO
 
+
+IF COL_LENGTH('tblUserGridSettings','Parameter') IS NOT NULL
+begin
+    alter table tblUserGridSettings 
+	alter column Parameter Nvarchar(50) null
+end
+GO
+
+IF COL_LENGTH('tblUserGridSettings','Value') IS NOT NULL
+begin
+    alter table tblUserGridSettings 
+	alter column Value Nvarchar(50) null
+end
+GO
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.21'

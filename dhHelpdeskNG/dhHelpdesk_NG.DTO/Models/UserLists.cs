@@ -23,6 +23,7 @@ namespace DH.Helpdesk.BusinessData.Models
         public int WorkingGroup_Id { get; set; }
         public string CustomerName { get; set; }
         public string WorkingGroupName { get; set; }
+        public bool IsActive { get; set; }
 
         public int CustomerId { get; set; }
     }

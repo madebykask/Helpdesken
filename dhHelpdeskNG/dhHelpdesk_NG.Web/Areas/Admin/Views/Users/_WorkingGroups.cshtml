@@ -36,8 +36,8 @@
                                     <input type="radio" style="display: none;" data-field="userWorkingGroup" name="@uwg.CustomerId" value="-1" />
                                 }
                             </td>
-                            <td>
-                                @Translation.Get(uwg.WorkingGroupName, Enums.TranslationSource.TextTranslation)
+                            <td>                                                      
+                                <span class ='@(!uwg.IsActive? "disabled" : "")'  >  @Translation.Get(uwg.WorkingGroupName, Enums.TranslationSource.TextTranslation) </span>                               
                             </td>
                             <td>
                                 <input type="checkbox" name="@string.Format("UserWorkingGroups[{0}].UserRole", i)" id="UserWorkingGroup_[@i]_2" @(uwg.RoleToUWG == WorkingGroupUserPermission.ADMINSTRATOR? "checked=checked" : "") data-field-id="@i" class="userRole" value="2" />

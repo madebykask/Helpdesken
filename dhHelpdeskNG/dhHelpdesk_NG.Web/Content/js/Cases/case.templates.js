@@ -190,7 +190,8 @@ function ApplyTemplate(data, doOverwrite) {
                     break;
                 case 'Priority_Id':
                     el = $("#case__Priority_Id");
-                    cfg['doNotTriggerEvent'] = true;
+                    //Diabled to show WatchDate 
+                    //cfg['doNotTriggerEvent'] = true;
                     SetValueIfElVisible(el, val, cfg);
                     break;
                 case 'Project_Id':

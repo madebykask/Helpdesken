@@ -4563,7 +4563,7 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     foreach (var u in users.OrderBy(it=> it.FirstName).ThenBy(it=> it.SurName))                    
                         if (u.IsActive == 1 && u.Performer == 1 && _emailService.IsValidEmail(u.Email) && !String.IsNullOrWhiteSpace(u.Email))
-                            administrators.Add(new ItemOverview(string.Format("{0} {1}", u.FirstName, u.FirstName), u.Email));
+                            administrators.Add(new ItemOverview(string.Format("{0} {1}", u.FirstName, u.SurName), u.Email));
                 }
                 else
                 {

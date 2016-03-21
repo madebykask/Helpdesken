@@ -90,18 +90,19 @@ end
 
 
 IF COL_LENGTH('tblInvoiceArticle','NameEng') IS NULL
- BEGIN
+BEGIN    
 	alter table tblInvoiceArticle
-	add NameEng Nvarchar(100) not null 
- end
+	add NameEng Nvarchar(100) null 	
+end
+Go
 
 
  IF COL_LENGTH('tblInvoiceArticle','Description') IS NULL
  BEGIN
-	alter table tblInvoiceArticle
-	add [Description] nvarchar(200) not null 
+    alter table tblInvoiceArticle
+	add [Description] nvarchar(200) null   
  end
-
+ Go
  
 
   IF COL_LENGTH('tblInvoiceArticle','TextDemand') IS NULL

@@ -267,7 +267,8 @@ namespace DH.Helpdesk.Dal.Repositories
                             WorkingGroupName = wg.WorkingGroupName,
                             User_Id = uwg.User_Id,
                             WorkingGroup_Id = uwg.WorkingGroup_Id,
-                            RoleToUWG = uwg.UserRole
+                            RoleToUWG = uwg.UserRole,
+                            IsActive = wg.IsActive == 0 ? false : true
                         };
 
             var queryList = query.OrderBy(x => x.WorkingGroupName).ToList();
@@ -280,9 +281,8 @@ namespace DH.Helpdesk.Dal.Repositories
                         join c in this.DataContext.Customers on cu.Customer_Id equals c.Id
                         join wg in this.DataContext.WorkingGroups on c.Id equals wg.Customer_Id
                         join u in this.DataContext.Users on userId equals u.Id
-                        from uwg in this.DataContext.UserWorkingGroups.Where(x => x.WorkingGroup_Id == wg.Id && x.User_Id == userId).DefaultIfEmpty()
-                        where wg.IsActive == 1
-                        group uwg by new { wg.WorkingGroupName, userId, c.Name, wg.Id, uwg.UserRole, CustomerId = c.Id, uwg.IsDefault } into g
+                        from uwg in this.DataContext.UserWorkingGroups.Where(x => x.WorkingGroup_Id == wg.Id && x.User_Id == userId).DefaultIfEmpty()                        
+                        group uwg by new { wg.WorkingGroupName, userId, c.Name, wg.Id, uwg.UserRole, CustomerId = c.Id, uwg.IsDefault, wg.IsActive } into g
                         select new CustomerWorkingGroupForUser
                         {
                             WorkingGroupName = g.Key.WorkingGroupName,
@@ -291,6 +291,7 @@ namespace DH.Helpdesk.Dal.Repositories
                             IsStandard = g.Key.IsDefault,
                             WorkingGroup_Id = g.Key.Id,
                             RoleToUWG = g.Key.UserRole == null ? 0 : g.Key.UserRole,
+                            IsActive = g.Key.IsActive == 0? false : true,
                             CustomerId = g.Key.CustomerId
                         };
 

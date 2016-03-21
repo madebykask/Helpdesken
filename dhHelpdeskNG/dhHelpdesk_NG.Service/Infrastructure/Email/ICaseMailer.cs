@@ -1,10 +1,10 @@
-﻿namespace DH.Helpdesk.Services.Infrastructure.Email
+﻿using System.Collections.Generic;
+
+using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.Domain;
+
+namespace DH.Helpdesk.Services.Infrastructure.Email
 {
-    using System.Collections.Generic;
-
-    using DH.Helpdesk.BusinessData.Models.Case;
-    using DH.Helpdesk.Domain;
-
     public interface ICaseMailer
     {
         void InformNotifierIfNeeded(
@@ -16,7 +16,8 @@
                 string helpdeskMailFromAdress,
                 List<string> files,
                 MailSenders mailSenders,
-                bool isCreatingCase);
+                bool isCreatingCase,
+                bool caseMailSetting_DontSendMail);
 
         void InformOwnerDefaultGroupIfNeeded(
                 int caseHistoryId,
