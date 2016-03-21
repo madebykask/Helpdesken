@@ -4328,6 +4328,7 @@ GO
 update tbltext set TextString = 'Intern loggpost i ärende' where id = 1570
 GO
 
+-- *** Version 5.3.22
 
 
 -- *** Run this last when put translation script above this line **--
