@@ -4,6 +4,8 @@
 @using DH.Helpdesk.Web.Enums
 @using DH.Helpdesk.BusinessData.OldComponents
 @using DH.Helpdesk.Web.Infrastructure.Extensions
+@using System.Web.Optimization
+
 
 @if (Model != null)
 {
@@ -77,37 +79,5 @@
                 </div>
             </div>
         </div>
-    </div>                                        
-
-    <script type="text/javascript">
-        function saveExpanded(id) {
-            var curExpanded = $('#hidExpandedGroup').val();        
-            switch (curExpanded) {
-                case "":
-                    $('#hidExpandedGroup').val(id);                
-                    $('#Caption_' + id).text(getExpandCaption($('#Caption_' + id).text()));
-                    break;
-
-                case id:
-                    $('#hidExpandedGroup').val('');
-                    $('#Caption_' + id).text(getCollapseCaption($('#Caption_' + id).text()));
-                    break;
-
-                default:
-                    $('#Caption_' + id).text(getExpandCaption($('#Caption_' + id).text()));
-                    $('#Caption_' + curExpanded).text(getCollapseCaption($('#Caption_' + curExpanded).text()));
-                    $('#hidExpandedGroup').val(id);
-                    break;
-            }        
-        }
-
-        function getExpandCaption(cap) {
-            return cap.replace("+ ", "- ");
-        }
-
-        function getCollapseCaption(cap) {
-            return cap.replace("- ", "+ ");
-        }    
-  
-    </script>
+    </div>
 }

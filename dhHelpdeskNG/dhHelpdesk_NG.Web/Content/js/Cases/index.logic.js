@@ -7,6 +7,38 @@ var GRID_STATE = {
     NO_COL_SELECTED: 3
 };
 
+var statisticsExpandHiddenElm = '#hidExpandedGroup';
+var groupStatisticsCaptionPrefix = '#Caption_';
+
+function saveExpanded (id) {
+    var curExpanded = $(statisticsExpandHiddenElm).val();
+    switch (curExpanded) {
+        case "":
+            $(statisticsExpandHiddenElm).val(id);
+            $(groupStatisticsCaptionPrefix + id).text(getExpandCaption($(groupStatisticsCaptionPrefix + id).text()));
+            break;
+
+        case id:
+            $(statisticsExpandHiddenElm).val('');
+            $(groupStatisticsCaptionPrefix + id).text(getCollapseCaption($(groupStatisticsCaptionPrefix + id).text()));
+            break;
+
+        default:
+            $(groupStatisticsCaptionPrefix + id).text(getExpandCaption($(groupStatisticsCaptionPrefix + id).text()));
+            $(groupStatisticsCaptionPrefix + curExpanded).text(getCollapseCaption($(groupStatisticsCaptionPrefix + curExpanded).text()));
+            $(statisticsExpandHiddenElm).val(id);
+            break;
+    }    
+}
+
+function getExpandCaption(cap) {
+    return cap.replace("+ ", "- ");
+}
+
+function getCollapseCaption(cap) {
+    return cap.replace("- ", "+ ");
+}
+
 (function($) {
     /// message types
     var ERROR_MSG_TYPE = 0;
@@ -17,6 +49,8 @@ var GRID_STATE = {
 
     var SORT_ASC = 0;
     var SORT_DESC = 1;
+
+    
 
 
     function getClsForSortDir(sortDir) {
