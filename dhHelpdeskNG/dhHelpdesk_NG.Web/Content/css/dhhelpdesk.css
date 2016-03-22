@@ -3555,6 +3555,11 @@ span.disabled
     color: lightgray;
 }
 
+a.inactive 
+{
+    color: lightgray;
+}
+
 .ui-widget {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }

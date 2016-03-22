@@ -131,6 +131,7 @@
             this.Property(x => x.FinishingDate);
             this.Property(x => x.FinishingDescription);
             this.Property(x => x.UpdateNotifierInformation).IsOptional();
+            this.Property(x => x.Status).IsRequired();
 
             this.ToTable("tblcasesolution");
         }

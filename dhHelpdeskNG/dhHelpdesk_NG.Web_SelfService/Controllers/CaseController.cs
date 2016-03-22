@@ -330,6 +330,13 @@
             if(caseTemplateId != null && caseTemplateId.Value > 0)
             {
                 var caseTemplate = this._caseSolutionService.GetCaseSolution(caseTemplateId.Value);
+
+                if (caseTemplate.Status == 0 || !caseTemplate.ShowInSelfService)
+                {
+                    ErrorGenerator.MakeError("Selected template is not available anymore!");
+                    return RedirectToAction("Index", "Error");
+                }
+
                 if(caseTemplate != null)
                 {
                     if(caseTemplate.CaseType_Id != null)

@@ -102,22 +102,23 @@
                         </thead>
                         <tbody>
                             @foreach (var item in Model.Rows)
-                            {                               
+                            {
+                                var inactiveVal = item.IsActive ? string.Empty : "inactive";
                                 <tr>
                                     <td>
-                                        <a href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.Name)</a>
+                                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.Name)</a>
                                     </td>
                                     <td>
-                                        <a href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.CategoryName)</a>
+                                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.CategoryName)</a>
                                     </td>
                                     <td>
-                                        <a href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.CaseCaption)</a>
+                                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.CaseCaption)</a>
                                     </td>
                                     <td>
-                                        <a href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.PerormerUserName)</a>
+                                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.PerformerUserName)</a>
                                     </td>
                                     <td>
-                                        <a href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.PriorityName)</a>
+                                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.PriorityName)</a>
                                     </td>
                                 </tr>
                             }

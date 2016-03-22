@@ -29,7 +29,10 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Common.Concrete
 
         public List<CaseSolution> GetCaseTemplates(int customerId)
         {
-            return _caseSolutionService.GetCaseSolutions(customerId).Where(t => t.ShowInSelfService).OrderBy(t => (t.OrderNum == null) ? 9999 : t.OrderNum).ThenBy(t => t.Name).ToList();           
+            return _caseSolutionService.GetCaseSolutions(customerId)
+                                       .Where(t => t.ShowInSelfService && t.Status != 0)
+                                       .OrderBy(t => (t.OrderNum == null) ? 9999 : t.OrderNum)
+                                       .ThenBy(t => t.Name).ToList();           
         }
 
         public List<ActionSetting> GetActionSettings(int customerId)

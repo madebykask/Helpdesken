@@ -77,6 +77,7 @@ namespace DH.Helpdesk.Services.Services
             List<CaseTemplateCategoryNode> ret2 = new List<CaseTemplateCategoryNode>();
 
             var noneCatCaseSolutions = _caseSolutionRepository.GetMany(s => s.Customer_Id == customerId && s.CaseSolutionCategory_Id == null &&
+                                                                            s.Status != 0 &&
                                                                         (s.WorkingGroup.UserWorkingGroups.Select(
                                                                          x => x.User_Id).Contains(userId) ||
                                                                          s.WorkingGroup_Id == null)).OrderBy(cs => cs.Name);
@@ -105,6 +106,7 @@ namespace DH.Helpdesk.Services.Services
                 curCategory.IsRootTemplate = false;
 
                 var caseSolutions = _caseSolutionRepository.GetMany(s => s.CaseSolutionCategory_Id == category.Id &&
+                                                                         s.Status != 0 &&
                                                                          (s.WorkingGroup.UserWorkingGroups.Select(
                                                                              x => x.User_Id).Contains(userId) || s.WorkingGroup_Id == null)).OrderBy(cs => cs.Name);
                 if (caseSolutions != null)
