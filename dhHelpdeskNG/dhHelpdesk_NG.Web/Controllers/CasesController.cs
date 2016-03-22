@@ -930,6 +930,9 @@ namespace DH.Helpdesk.Web.Controllers
             if (showCaseStatistics)
             {                
                 var expandedGroup = frm.ReturnFormValue("expandedGroup");
+                if (string.IsNullOrEmpty(expandedGroup))
+                    expandedGroup = SessionFacade.CaseOverviewGridSettings.ExpandedStatistics;
+
                 statisticsView = this.RenderPartialViewToString(
                     "_Statistics",
                     GetCaseStatisticsModel(aggregateData, m.cases.Count(), expandedGroup, statisticsFields));    
@@ -2399,6 +2402,16 @@ namespace DH.Helpdesk.Web.Controllers
                 return Json(new { result = "Error", data = "Unexpected Error:" + ex.Message });                
             }
         }
+        #endregion
+
+        #region --Ajax--
+
+        public JsonResult SaveStatisticsStateInSession(string value)
+        {
+            SessionFacade.CaseOverviewGridSettings.ExpandedStatistics = value;
+            return Json("Success", JsonRequestBehavior.AllowGet);
+        }
+
         #endregion
 
         #endregion

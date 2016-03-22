@@ -28,7 +28,16 @@ function saveExpanded (id) {
             $(groupStatisticsCaptionPrefix + curExpanded).text(getCollapseCaption($(groupStatisticsCaptionPrefix + curExpanded).text()));
             $(statisticsExpandHiddenElm).val(id);
             break;
-    }    
+    }
+
+    var methodUrl = "/Cases/SaveStatisticsStateInSession/";
+    var dataValue = $(statisticsExpandHiddenElm).val();
+    $.get(methodUrl,
+        {
+            value: dataValue,
+            myTime: Date.now()
+        }
+    );
 }
 
 function getExpandCaption(cap) {
