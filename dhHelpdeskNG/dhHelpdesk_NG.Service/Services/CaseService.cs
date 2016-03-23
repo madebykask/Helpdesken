@@ -697,6 +697,9 @@ namespace DH.Helpdesk.Services.Services
             c.RegUserId = adUser.GetUserFromAdPath();
             c.RegUserDomain = adUser.GetDomainFromAdPath();
             c.CaseFiles = null;
+            c.LeadTime = 0;
+            c.ExternalTime = 0;
+
             return c;
         }
 
@@ -1743,6 +1746,7 @@ namespace DH.Helpdesk.Services.Services
             h.Department_Id = c.Department_Id;  
             h.Description = c.Description;
             h.ExternalTime = c.ExternalTime;
+            h.LeadTime = c.LeadTime;
             h.FinishingDate = c.FinishingDate;
             h.FinishingDescription = c.FinishingDescription;
             h.FollowUpDate = c.FollowUpDate;
