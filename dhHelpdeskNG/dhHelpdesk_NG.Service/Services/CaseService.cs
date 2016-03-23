@@ -1478,14 +1478,15 @@ namespace DH.Helpdesk.Services.Services
             }
 
             // send email
-
+            
             // send email when product area is set
             if (!isClosingCase && !isCreatingCase && !containsProductAreaMailOrNewCaseMail
                 && oldCase.ProductAreaSetDate == null && newCase.RegistrationSource == 3
                 && !cms.DontSendMailToNotifier
                 && newCase.ProductArea != null
-                && newCase.ProductArea.MailID.HasValue
-                && newCase.ProductArea.MailID.Value > 0 && !string.IsNullOrEmpty(newCase.PersonsEmail))
+                && newCase.ProductArea.MailTemplate != null
+                && newCase.ProductArea.MailTemplate.MailID > 0 
+                && !string.IsNullOrEmpty(newCase.PersonsEmail))
                 {
                     var to = newCase.PersonsEmail.Split(';', ',');
                     foreach (var t in to)
@@ -1493,7 +1494,7 @@ namespace DH.Helpdesk.Services.Services
                         var curMail = t.Trim();
                         if (!string.IsNullOrWhiteSpace(curMail) && _emailService.IsValidEmail(curMail))
                         {
-                            int mailTemplateId = newCase.ProductArea.MailID.Value;
+                            int mailTemplateId = newCase.ProductArea.MailTemplate.MailID;
                             MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                             if (m != null)
                             {
