@@ -18,5 +18,7 @@
 
         public bool SendMailAboutLog { get; set; }
         public string EmailRecepientsOperationLog { get; set; }
+        public string SMSTextOperationLog { get; set; }
+        public string SMSRecepientsOperationLog { get; set; }
     }
 }
