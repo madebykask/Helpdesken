@@ -302,6 +302,8 @@
 
             errors = new Dictionary<string, string>();
 
+            productArea.ChangedDate = DateTime.UtcNow;
+
             if (string.IsNullOrEmpty(productArea.Name))
                 errors.Add("ProductArea.Name", "Du måste ange ett ämnesområde");
 

@@ -15,7 +15,6 @@
             this.Property(x => x.Description).IsOptional().HasMaxLength(300).HasColumnName("CategoryDescription");
             this.Property(x => x.IsActive).IsRequired().HasColumnName("Status");
             this.Property(x => x.Name).IsRequired().HasMaxLength(50).HasColumnName("Category");
-            this.Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 

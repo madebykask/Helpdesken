@@ -84,6 +84,8 @@
 
             errors = new Dictionary<string, string>();
 
+            impact.ChangedDate = DateTime.UtcNow;
+
             if (string.IsNullOrEmpty(impact.Name))
                 errors.Add("Impact.Name", "Du måste ange en påverkan");
 

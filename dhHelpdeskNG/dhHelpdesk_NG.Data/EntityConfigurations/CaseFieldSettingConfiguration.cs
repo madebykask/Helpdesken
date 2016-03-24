@@ -26,7 +26,6 @@
             this.Property(x => x.Required).IsRequired();
             this.Property(x => x.ShowOnStartPage).IsRequired().HasColumnName("Show");
             this.Property(x => x.ShowExternal).IsRequired();
-            this.Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.RelatedField).IsRequired().HasMaxLength(50).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);

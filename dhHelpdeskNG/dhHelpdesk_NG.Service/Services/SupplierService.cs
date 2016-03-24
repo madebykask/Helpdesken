@@ -102,7 +102,7 @@
                 throw new ArgumentNullException("supplier");
 
             supplier.SupplierNumber = supplier.SupplierNumber ?? "";
-            
+            supplier.ChangedDate = DateTime.UtcNow;
             errors = new Dictionary<string, string>();
 
             if (string.IsNullOrEmpty(supplier.Name))

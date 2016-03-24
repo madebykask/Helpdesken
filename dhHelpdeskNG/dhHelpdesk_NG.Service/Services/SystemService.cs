@@ -103,6 +103,7 @@
             system.SystemOwnerUserId = system.SystemOwnerUserId ?? string.Empty;
             system.ViceSystemResponsibleUserId = system.ViceSystemResponsibleUserId ?? string.Empty;
             system.SystemOwnerUserId = system.SystemOwnerUserId ?? string.Empty;
+            system.ChangedDate = DateTime.UtcNow;
 
             if (string.IsNullOrEmpty(system.SystemName))
                 errors.Add("Domain.System.SystemName", "Du måste ange ett systemnamn");
