@@ -33,7 +33,6 @@
             this.Property(x => x.NoMailToNotifier).IsRequired();
             this.Property(x => x.ResetOnExternalUpdate).IsRequired();
             this.Property(x => x.IsDefault).IsRequired().HasColumnName("isDefault");
-            this.Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             this.Property(x => x.WorkingGroup_Id).IsOptional();

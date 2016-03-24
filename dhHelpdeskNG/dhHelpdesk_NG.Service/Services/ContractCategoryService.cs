@@ -71,6 +71,7 @@
                 throw new ArgumentNullException("contractcategory");
 
             errors = new Dictionary<string, string>();
+            contractCategory.ChangedDate = DateTime.UtcNow;
 
             if (string.IsNullOrEmpty(contractCategory.Name))
                 errors.Add("ContractCategory.Name", "Du måste ange en avtalskategori");

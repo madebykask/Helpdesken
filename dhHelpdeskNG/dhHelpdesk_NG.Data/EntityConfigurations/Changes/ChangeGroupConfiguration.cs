@@ -15,7 +15,6 @@
             this.Property(g => g.ChangeGroup).IsRequired().HasMaxLength(50);
             this.Property(g => g.Customer_Id).IsRequired();
             this.Property(g => g.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
-            this.Property(g => g.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
 
             this.ToTable("tblchangegroup");
         }

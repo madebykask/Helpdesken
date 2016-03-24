@@ -185,6 +185,8 @@
 
             errors = new Dictionary<string, string>();
 
+            mailtemplate.ChangedDate = DateTime.UtcNow;
+
             if (mailtemplate.MailTemplateGUID == Guid.Empty)
             {
                 mailtemplate.MailTemplateGUID = Guid.NewGuid();

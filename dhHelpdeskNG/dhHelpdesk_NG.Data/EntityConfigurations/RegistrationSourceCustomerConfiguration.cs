@@ -15,7 +15,6 @@
             this.Property(x => x.IsActive).IsRequired().HasColumnName("IsActive");
             this.Property(x => x.SourceName).IsRequired().HasMaxLength(50).HasColumnName("SourceName");
             this.Property(x => x.SystemCode).IsOptional();
-            this.Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 

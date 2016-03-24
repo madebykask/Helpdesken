@@ -33,7 +33,6 @@
             this.Property(x => x.Name).IsRequired().HasMaxLength(50).HasColumnName("FinishingCause");
             this.Property(x => x.Parent_FinishingCause_Id).IsOptional();
             this.Property(x => x.PromptUser).IsRequired();
-            this.Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 

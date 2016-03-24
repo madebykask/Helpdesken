@@ -233,6 +233,7 @@
             errors = new Dictionary<string, string>();
             workingGroup.EMail = workingGroup.EMail ?? string.Empty;
             workingGroup.SendExternalEmailToWGUsers = workingGroup.SendExternalEmailToWGUsers.HasValue ? workingGroup.SendExternalEmailToWGUsers.Value : 0;
+            workingGroup.ChangedDate = DateTime.UtcNow;
 
             if (string.IsNullOrEmpty(workingGroup.WorkingGroupName))
             {
@@ -257,6 +258,7 @@
                 entityToUpdate.AllocateCaseMail = workingGroup.AllocateCaseMail;
                 entityToUpdate.SendExternalEmailToWGUsers = workingGroup.SendExternalEmailToWGUsers;
                 entityToUpdate.StateSecondary_Id = workingGroup.StateSecondary_Id;
+                entityToUpdate.ChangedDate = DateTime.UtcNow;
                 this.workingGroupRepository.Update(entityToUpdate);
             }
 

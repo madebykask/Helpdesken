@@ -92,6 +92,7 @@
                 throw new ArgumentNullException("statesecondary");
 
             errors = new Dictionary<string, string>();
+            stateSecondary.ChangedDate = DateTime.UtcNow;
 
             if (string.IsNullOrEmpty(stateSecondary.Name))
                 errors.Add("StateSecondary.Name", "Du måste ange en understatus");

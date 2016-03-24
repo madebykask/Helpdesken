@@ -141,6 +141,7 @@
                 throw new ArgumentNullException("finishingcausecategory");
 
             errors = new Dictionary<string, string>();
+            finishingCauseCategory.ChangedDate = DateTime.UtcNow;
 
             if (string.IsNullOrEmpty(finishingCauseCategory.Name))
                 errors.Add("FinishingCauseCategory.Name", "Du måste ange en avslutningskategori");
@@ -160,6 +161,7 @@
                 throw new ArgumentNullException("finishingcause");
 
             errors = new Dictionary<string, string>();
+            finishingCause.ChangedDate = DateTime.UtcNow;
 
             if (string.IsNullOrEmpty(finishingCause.Name))
                 errors.Add("FinishingCause.Name", "Du måste ange en avslutsorsak");

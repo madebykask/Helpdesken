@@ -96,6 +96,7 @@
                 throw new ArgumentNullException("status");
 
             errors = new Dictionary<string, string>();
+            status.ChangedDate = DateTime.UtcNow;
 
             if (string.IsNullOrEmpty(status.Name))
                 errors.Add("Status.Name", "Du måste ange en status");
