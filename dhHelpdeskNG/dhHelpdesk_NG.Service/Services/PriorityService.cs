@@ -116,6 +116,7 @@
             priority.RelatedField = priority.RelatedField == null ? string.Empty : priority.RelatedField;
             priority.EMailList = priority.EMailList == null ? string.Empty : priority.EMailList;
             priority.FileName = priority.FileName == null ? string.Empty : priority.FileName;
+            priority.ChangedDate = DateTime.UtcNow;
 
             errors = new Dictionary<string, string>();
 
