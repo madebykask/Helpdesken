@@ -232,20 +232,19 @@ namespace DH.Helpdesk.Services.Services
                 var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
 
                 OperationLog entity;
-                var now = DateTime.Now;
                 if (operationlog.IsNew())
                 {
                     entity = new OperationLog();
                     OperationLogMapper.MapToEntity(operationlog, entity);
-                    entity.CreatedDate = now;
-                    entity.ChangedDate = now;
+                    //entity.CreatedDate = DateTime.UtcNow;
+                    entity.ChangedDate = DateTime.UtcNow;
                     operationLogRep.Add(entity);
                 }
                 else
                 {
                     entity = operationLogRep.GetById(operationlog.Id);
                     OperationLogMapper.MapToEntity(operationlog, entity);
-                    entity.ChangedDate = now;
+                    entity.ChangedDate = DateTime.UtcNow;
                     operationLogRep.Update(entity);
                 }
 

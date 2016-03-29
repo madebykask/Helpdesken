@@ -132,7 +132,7 @@
         }
 
         [HttpPost]
-        public ActionResult New(OperationLog operationlog, OperationLogList operationLogList, int[] WGsSelected, int OperationLogHour, int OperationLogMinute, int chkSecurity)
+        public ActionResult New(OperationLog operationlog, OperationLogList operationLogList, int[] WGsSelected, string[] SRsSelected, string[] UsersSelected, int OperationLogHour, int OperationLogMinute, int chkSecurity, int? chkOperationLogSMS, string txtSMS)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
             operationlog.User_Id = SessionFacade.CurrentUser.Id;
@@ -168,6 +168,24 @@
             if (operationLogList.EmailRecepientsOperationLog != null)
                 this._operationLogService.SendOperationLogEmail(operationlog, operationLogList, customer);
 
+            // send sms
+            if (chkOperationLogSMS == 1)
+            {
+                var SystemRepsSelected = string.Empty;
+                var AdministratorsSelected = string.Empty;
+                var SMSRecipients = string.Empty;
+
+                if (SRsSelected != null)
+                    SystemRepsSelected = ConvertStringArrayToString(SRsSelected);
+
+                if (UsersSelected != null)
+                    AdministratorsSelected = ConvertStringArrayToString(UsersSelected);
+
+                SMSRecipients = SystemRepsSelected + AdministratorsSelected;
+
+                this._operationLogService.SendOperationLogSMS(operationlog, SMSRecipients, txtSMS, customer);
+            }
+
             if (errors.Count == 0)
                 return this.RedirectToAction("index", "operationlog");
 
@@ -192,7 +210,7 @@
         }
 
         [HttpPost]
-        public ActionResult Edit(int id, OperationLog operationlog, OperationLogList operationLogList, int[] WGsSelected, string[] SRsSelected, string[] UsersSelected, int OperationLogHour, int OperationLogMinute, int chkSecurity, int chkOperationLogSMS, string txtSMS)
+        public ActionResult Edit(int id, OperationLog operationlog, OperationLogList operationLogList, int[] WGsSelected, string[] SRsSelected, string[] UsersSelected, int OperationLogHour, int OperationLogMinute, int chkSecurity, int? chkOperationLogSMS, string txtSMS)
         {
             var operationlogToSave = this._operationLogService.GetOperationLog(id);
             this.UpdateModel(operationlogToSave, "OperationLog");

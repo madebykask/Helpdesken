@@ -120,12 +120,13 @@
                         IQueryable<Region> regions,
                         IQueryable<Department> departments)
         {
-            var overviews = regions.Select(m => new { m.Id, m.Name, Type = "Region" }).Union(
-                            departments.Select(a => new { a.Id, Name = a.DepartmentName, Type = "Department" }))
-                            .OrderBy(o => o.Type)
-                            .ThenBy(o => o.Name)
-                            .ToArray();
-
+            var reg = regions.Select(r => new { Id = r.Id, Name = r.Name, Type = "Region" }).ToArray();
+            var dep = departments.Select(d => new { Id = d.Id, Name = d.DepartmentName, Type = "Department" }).ToArray();
+            var overviews = reg.Union(dep)
+                               .OrderBy(o => o.Type)
+                               .ThenBy(o => o.Name)
+                               .ToArray();
+        
             return new ProductsFilterData(
                         overviews.Where(o => o.Type == "Region").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
                         overviews.Where(o => o.Type == "Department").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray());
