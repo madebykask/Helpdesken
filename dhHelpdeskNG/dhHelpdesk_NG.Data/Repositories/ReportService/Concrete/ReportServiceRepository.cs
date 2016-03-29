@@ -77,8 +77,21 @@
                             "GROUP BY tblDate.DateKey, tblCustomer.Name, tblCustomer.Id " +
                             "ORDER BY tblDate.DateKey")
                             );
-                    break; 
+                    break;
 
+                case "CasePrint":
+                    ret.Add(
+                          new KeyValuePair<string, string>(
+                            "CasePrint",
+                            "SELECT COUNT(tblCase.Casenumber) AS Volume, cast(convert(date, cast(tblDate.DateKey as nvarchar),11) as nvarchar) as DateKey, tblCustomer.Id " +
+                            "FROM  tblCustomer INNER JOIN " +
+                                "tblCase ON tblCustomer.Id = tblCase.Customer_Id RIGHT OUTER JOIN " +
+                                "tblDate ON CAST(tblCase.RegTime AS Date) = tblDate.FullDate " +
+                            _whereClause +
+                            "GROUP BY tblDate.DateKey, tblCustomer.Name, tblCustomer.Id " +
+                            "ORDER BY tblDate.DateKey")
+                            );
+                    break; 
                 default:
                     return ret;
             }

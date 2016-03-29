@@ -17,6 +17,10 @@
             this.SelectedCaseStatus = new SelectedItems();
         }
 
+        public int CaseId { get; set; }
+
+        public int LanguageId { get; set; }
+
         public DateToDate CaseCreationDate { get; set; }
 
         public SelectedItems SelectedCustomers { get; set; }
