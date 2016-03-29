@@ -10,6 +10,7 @@
     using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.BusinessData.Models.WorkingGroup;
 
     public interface IWorkingGroupService
     {
@@ -17,7 +18,7 @@
 
         IList<WorkingGroupEntity> GetWorkingGroups(int customerId, bool isTakeOnlyActive = true);
 
-        IList<WorkingGroupEntity> GetWorkingGroupsForSMS(int customerId, bool isTakeOnlyActive = true);
+        IList<WorkingGroupForSMS> GetWorkingGroupsForSMS(int customerId, bool isTakeOnlyActive = true);
 
         IList<WorkingGroupEntity> GetWorkingGroups(int customerId, int userId, bool isTakeOnlyActive = true);
 
@@ -59,12 +60,14 @@
 
         private readonly IWorkContext workContext;
 
+        private readonly ISettingService settingService;
 
         public WorkingGroupService(
             IUnitOfWork unitOfWork,
             IUserRepository userRepository,
             IUserWorkingGroupRepository userWorkingGroupRepository,
             IWorkingGroupRepository workingGroupRepository,
+            ISettingService settingService,
             IWorkContext workContext)
         {
             this.unitOfWork = unitOfWork;
@@ -72,6 +75,7 @@
             this.userRepository = userRepository;
             this.userWorkingGroupRepository = userWorkingGroupRepository;
             this.workContext = workContext;
+            this.settingService = settingService;
         }
 
         public IList<WorkingGroupEntity> GetAllWorkingGroups()
@@ -120,15 +124,34 @@
 
         }
 
-        public IList<WorkingGroupEntity> GetWorkingGroupsForSMS(int customerId, bool isTakeOnlyActive = true)
+        public IList<WorkingGroupForSMS> GetWorkingGroupsForSMS(int customerId, bool isTakeOnlyActive = true)
         {
+            var cs = this.settingService.GetCustomerSetting(customerId);
+
+            var ret = new List<WorkingGroupForSMS>();
             var userWorkingGroups = this.userWorkingGroupRepository.GetAll()
                                                                    .Select(uw => uw.WorkingGroup_Id);
-            return this.workingGroupRepository
+            var workingGroups =  this.workingGroupRepository
                     .GetMany(x => x.Customer_Id == customerId && (!isTakeOnlyActive || (isTakeOnlyActive && x.IsActive == 1)))
-                    .Where(w => userWorkingGroups.Contains(w.Id))
-                    .OrderBy(x => x.WorkingGroupName).ToList();
+                    .Where(w => userWorkingGroups.Contains(w.Id)).ToList();
+                    
 
+            var selectedWGId = workingGroups.Select(w=> w.Id).ToList();
+            var userWorkingGroup = this.userWorkingGroupRepository.GetAll().Where(uw => selectedWGId.Contains(uw.WorkingGroup_Id))
+                                                                 .ToList();
+            
+            foreach(var wg in workingGroups)
+            {
+                var phones = userWorkingGroup.Where(uw=> uw.WorkingGroup_Id == wg.Id &&  !string.IsNullOrEmpty(uw.User.CellPhone))
+                                .Select(uw=> new {phone = string.Format("{0}@{1}",uw.User.CellPhone.Replace(" ",""),cs.SMSEMailDomain)})                                
+                                .ToArray();
+
+                var phone = string.Join(",", phones.Select(p=> p.phone).ToArray());
+
+                ret.Add(new WorkingGroupForSMS(wg.Id, wg.WorkingGroupName, phone));
+            }
+
+            return ret.OrderBy(w => w.WorkingGroupName).ToList();
         }
 
         public IList<WorkingGroupEntity> GetWorkingGroupsForIndexPage(int customerId)

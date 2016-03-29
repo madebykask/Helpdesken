@@ -16,6 +16,7 @@
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models;
     using System.Text;
+    using DH.Helpdesk.BusinessData.Models.WorkingGroup;
 
     public class OperationLogController : BaseController
     {
@@ -210,7 +211,7 @@
         }
 
         [HttpPost]
-        public ActionResult Edit(int id, OperationLog operationlog, OperationLogList operationLogList, int[] WGsSelected, string[] SRsSelected, string[] UsersSelected, int OperationLogHour, int OperationLogMinute, int chkSecurity, int? chkOperationLogSMS, string txtSMS)
+        public ActionResult Edit(int id, OperationLog operationlog, OperationLogList operationLogList, int[] WGsSelected, string[] SRsSelected, string[] WGsSMSSelected, string[] UsersSelected, int OperationLogHour, int OperationLogMinute, int chkSecurity, int? chkOperationLogSMS, string txtSMS)
         {
             var operationlogToSave = this._operationLogService.GetOperationLog(id);
             this.UpdateModel(operationlogToSave, "OperationLog");
@@ -250,6 +251,7 @@
                 var SystemRepsSelected = string.Empty;
                 var AdministratorsSelected = string.Empty;
                 var SMSRecipients = string.Empty;
+                var WGsForSMSSelected = string.Empty;
 
                 if (SRsSelected != null)
                     SystemRepsSelected = ConvertStringArrayToString(SRsSelected);
@@ -257,7 +259,10 @@
                 if (UsersSelected != null)
                     AdministratorsSelected = ConvertStringArrayToString(UsersSelected);
 
-                SMSRecipients = SystemRepsSelected + AdministratorsSelected;
+                if (WGsSMSSelected != null)
+                    WGsForSMSSelected = ConvertStringArrayToString(WGsSMSSelected);
+
+                SMSRecipients = SystemRepsSelected + AdministratorsSelected + WGsForSMSSelected;
 
                 this._operationLogService.SendOperationLogSMS(operationlogToSave, SMSRecipients, txtSMS, customer);
             }
@@ -289,7 +294,7 @@
             var customerId = SessionFacade.CurrentCustomer.Id;
             var cs = this._settingService.GetCustomerSetting(customerId);
             const bool isAddEmpty = true;
-            var wgsAvailableSMS = new List<WorkingGroupEntity>();
+            var wgsAvailableSMS = new List<WorkingGroupForSMS>();
             wgsAvailableSMS = _workingGroupService.GetWorkingGroupsForSMS(customerId).ToList();
             var usAvailable = new List<User>();
             usAvailable = _userService.GetAdminstratorsForSMS(customerId).ToList();
@@ -338,7 +343,7 @@
                 SMSWorkingGroupAvailable = wgsAvailableSMS.Select(x => new SelectListItem
                 {
                     Text = x.WorkingGroupName,
-                    Value = x.Id.ToString()
+                    Value = x.PhoneNumbers
                 }).ToList(),
 
                 SMSWorkingGroupSelected = new List<SelectListItem>(),
