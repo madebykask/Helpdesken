@@ -353,6 +353,7 @@ namespace DH.Helpdesk.Services.Services
                 var to = SMSRecipients
                                    .Replace(" ", "")
                                    .Replace(Environment.NewLine, "|")
+                                   .Replace("-", "")
                                    .Split('|', ';', ',');
 
                 foreach (var t in to)
