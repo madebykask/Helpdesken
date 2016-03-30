@@ -3462,7 +3462,7 @@ If not exists (select * from tblTextTranslation where text_id = 1405 and Languag
 GO
 
 If not exists (select * from tbltext where id = 1406)
-	insert into tbltext (id, TextString) VALUES (1406, 'Självservice - Meny')
+	insert into tbltext (id, TextString) VALUES (1406, 'Självservice - Meny')																	 
 GO
 
 If not exists (select * from tblTextTranslation where text_id = 1406 and Language_Id = 2)
@@ -4328,8 +4328,20 @@ GO
 update tbltext set TextString = 'Intern loggpost i ärende' where id = 1570
 GO
 
--- *** Version 5.3.22
+update tbltext set TextString = 'Självservice – Meny' where id = 1406
+GO
 
+
+-- *** Version 5.3.22
+If not exists (select * from tblText where Id = 1589)
+            insert into tblText (Id, Textstring) VALUES (1589, 'Sätt prioriteten som standard på ärenden som registreras via e-mail')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1589 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1589, 'Default priority when cases are registered by e-mail', 2)
+GO
+
+update tbltext set TextString = 'Standard vid' where id = 1494
+GO
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
