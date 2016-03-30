@@ -16,11 +16,11 @@
         }
 
         [NotNull]
-        [LocalizedDisplay("Created Date")]
+        [LocalizedDisplay("Skapad datum")]
         public FieldSettingModel CreatedDateFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Changed Date")]
+        [LocalizedDisplay("Senast ändrad datum")]
         public FieldSettingModel ChangedDateFieldSettingModel { get; set; }
     }
 }

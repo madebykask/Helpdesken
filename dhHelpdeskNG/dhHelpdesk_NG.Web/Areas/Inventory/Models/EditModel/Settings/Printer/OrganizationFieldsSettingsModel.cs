@@ -16,11 +16,11 @@
         }
 
         [NotNull]
-        [LocalizedDisplay("Department")]
+        [LocalizedDisplay("Avdelning")]
         public FieldSettingModel DepartmentFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Unit")]
+        [LocalizedDisplay("Enhet")]
         public FieldSettingModel UnitFieldSettingModel { get; set; }
     }
 }

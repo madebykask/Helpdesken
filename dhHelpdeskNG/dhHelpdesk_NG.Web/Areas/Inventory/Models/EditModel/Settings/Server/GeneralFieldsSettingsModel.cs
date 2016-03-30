@@ -24,23 +24,23 @@
         }
 
         [NotNull]
-        [LocalizedDisplay("Name")]
+        [LocalizedDisplay("Namn")]
         public FieldSettingModel NameFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Manufacturer")]
+        [LocalizedDisplay("Tillverkare")]
         public FieldSettingModel ManufacturerFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Description")]
+        [LocalizedDisplay("Beskrivning")]
         public FieldSettingModel DescriptionFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Model")]
+        [LocalizedDisplay("Modell")]
         public FieldSettingModel ModelFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Serial Number")]
+        [LocalizedDisplay("Serienummer")]
         public FieldSettingModel SerialNumberFieldSettingModel { get; set; }
     }
 }

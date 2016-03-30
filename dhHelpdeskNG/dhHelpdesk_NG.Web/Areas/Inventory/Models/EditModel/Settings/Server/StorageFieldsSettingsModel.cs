@@ -15,7 +15,7 @@
         }
 
         [NotNull]
-        [LocalizedDisplay("Capasity")]
+        [LocalizedDisplay("Kapacitet")]
         public FieldSettingModel CapasityFieldSettingModel { get; set; }
     }
 }

@@ -18,11 +18,11 @@
         }
 
         [NotNull]
-        [LocalizedDisplay("Bar Code")]
+        [LocalizedDisplay("Streckkod")]
         public FieldSettingModel BarCodeFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Purchase Date")]
+        [LocalizedDisplay("Inköpsdatum")]
         public FieldSettingModel PurchaseDateFieldSettingModel { get; set; }
     }
 }

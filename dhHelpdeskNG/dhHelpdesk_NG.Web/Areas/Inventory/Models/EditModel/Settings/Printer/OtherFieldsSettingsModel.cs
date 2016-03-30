@@ -22,11 +22,11 @@
         }
 
         [NotNull]
-        [LocalizedDisplay("Number Of Trays")]
+        [LocalizedDisplay("Antal fack")]
         public FieldSettingModel NumberOfTraysFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Driver")]
+        [LocalizedDisplay("Drivrutin")]
         public FieldSettingModel DriverFieldSettingModel { get; set; }
 
         [NotNull]

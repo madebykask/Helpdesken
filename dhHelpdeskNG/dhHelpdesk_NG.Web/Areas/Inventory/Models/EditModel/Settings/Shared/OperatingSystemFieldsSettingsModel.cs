@@ -24,7 +24,7 @@
         }
 
         [NotNull]
-        [LocalizedDisplay("Operating System")]
+        [LocalizedDisplay("Operativsystem")]
         public FieldSettingModel OperatingSystemFieldSettingModel { get; set; }
 
         [NotNull]
@@ -32,15 +32,15 @@
         public FieldSettingModel VersionFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Service Pack")]
+        [LocalizedDisplay("Servicepack")]
         public FieldSettingModel ServicePackSystemFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Registration Code")]
+        [LocalizedDisplay("Registreringskod")]
         public FieldSettingModel RegistrationCodeSystemFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Product Key")]
+        [LocalizedDisplay("Produktnyckel")]
         public FieldSettingModel ProductKeyFieldSettingModel { get; set; }
     }
 }
