@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_PopupLayout.cshtml";
 }
 
-<table class="table table-striped table-bordered table-hover table-pointer">
+<table class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
             <th>@Translation.Get("Datornamn")</th>
@@ -16,7 +16,7 @@
     <tbody>
         @foreach (var computer in Model.Computers)
         {
-            <tr onclick=" window.open('@Url.Action("Edit", "Workstation", new { area="Inventory", id = computer.ComputerId })', '_blank'); ">
+            <tr>
                 <td>@computer.ComputerName</td>
                 <td>@computer.User</td>
                 <td>@Html.DisplayFor(m => computer.ScanDate, "Date")</td>
