@@ -110,6 +110,7 @@
             {
                 instanceToWrite = srcIntance;
                 instanceToWrite.CreatedDate = DateTime.UtcNow;
+                instanceToWrite.ChangedDate = DateTime.UtcNow;
             }
             
             // check items in DB with the same SystemCode as we have.

@@ -10,6 +10,7 @@
 namespace DH.Helpdesk.Domain.Cases
 {
     using global::System.Collections.Generic;
+    using global::System;
 
     /// <summary>
     /// The causing type.
@@ -41,6 +42,11 @@ namespace DH.Helpdesk.Domain.Cases
         /// </summary>
         public int CustomerId { get; set; }
 
+        public DateTime CreatedDate { get; set; }
+
+        public DateTime ChangedDate { get; set; }
+
+    
         /// <summary>
         /// Gets or sets the customer.
         /// </summary>

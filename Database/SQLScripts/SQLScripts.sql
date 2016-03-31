@@ -8,6 +8,11 @@ begin
 end
 GO
 
+if exists(select * from sys.default_constraints where name like 'DF_tblCausingPart_CreatedDate')
+Begin
+  alter table tblCausingPart
+  drop constraint DF_tblCausingPart_CreatedDate
+end
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.22'

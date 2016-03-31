@@ -11,6 +11,8 @@
                     @Html.HiddenFor(m => m.CausingPart.Id)
                     @Html.HiddenFor(m => m.CausingPart.ParentId)
                     @Html.HiddenFor(m => m.CausingPart.CustomerId)
+                    @Html.HiddenFor(m => m.CausingPart.CreatedDate)
+                    @Html.HiddenFor(m => m.CausingPart.ChangedDate)
                     @if (Model.Customer != null)
                     {
                         @Html.HiddenFor(m => m.Customer.Name)

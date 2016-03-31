@@ -14,6 +14,7 @@ using DH.Helpdesk.BusinessData.Models.Case.Output;
 using DH.Helpdesk.Dal.Infrastructure;
 using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Domain.Cases;
+using System;
 namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 {
    
@@ -124,6 +125,10 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
         public void SaveCausingPart(CausingPartOverview causingPart)
         {
             var entity = new CausingPart();
+            if (causingPart.Id <= 0)
+                causingPart.CreatedDate = DateTime.UtcNow;
+
+            causingPart.ChangedDate = DateTime.UtcNow;
             this.causingPartToEntityMapper.Map(causingPart, entity);
             
             if (entity.IsNew())
