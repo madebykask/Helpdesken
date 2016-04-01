@@ -809,7 +809,7 @@
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                         </td>
                                         <td class="span9">
-                                            @Html.TextAreaFor(model => model.CaseSolution.Text_External, new { style = "height:100px;", maxlength = "3000" })
+                                            @Html.TextAreaFor(model => model.CaseSolution.Text_External, new { style = "height:100px;"})
                                         </td>
                                         <td class="span9">
                                             @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.ExternalLogNote, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.tblLog_Text_External)
@@ -823,7 +823,7 @@
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                         </td>
                                         <td>
-                                            @Html.TextAreaFor(model => model.CaseSolution.Text_Internal, new { style = "height:100px;", maxlength = "3000" })
+                                            @Html.TextAreaFor(model => model.CaseSolution.Text_Internal, new { style = "height:100px;"})
                                         </td>
                                         <td class="span9">
                                             @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.InternalLogNote, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.tblLog_Text_Internal)
@@ -1140,12 +1140,19 @@
         rules: {
             "CaseSolution.Name": {
                 required: true
-            }
+            },
+            "CaseSolution.Text_External": {
+                maxlength: 3000
+            },
+            "CaseSolution.Text_Internal": {
+                maxlength: 3000
+            }            
         },
+
         messages: {
             "CaseSolution.Name": {
                 required: "@Translation.Get("Du måste ange ett namn på ärendemallen", Enums.TranslationSource.TextTranslation)"
-        }
+            }
     },
        submitHandler: function (form) {
            form.submit();
