@@ -4343,5 +4343,13 @@ GO
 update tbltext set TextString = 'Standard vid' where id = 1494
 GO
 
+If not exists (select * from tblText where Id = 1590)
+            insert into tblText (Id, Textstring) VALUES (1590, 'Ange inte mer än 3000 tecken')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1590 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1590, 'Please enter no more than 3000 characters', 2)
+GO
+
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

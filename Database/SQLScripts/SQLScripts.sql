@@ -14,5 +14,19 @@ Begin
   drop constraint DF_tblCausingPart_CreatedDate
 end
 
+
+ALTER TABLE tblCaseSolution ALTER COLUMN Text_External nvarchar(max) not null
+GO
+
+ALTER TABLE tblCaseSolution ALTER COLUMN Text_Internal nvarchar(max) not null
+GO
+
+ALTER TABLE tblLog ALTER COLUMN Text_External nvarchar(max) not null
+GO
+
+ALTER TABLE tblLog ALTER COLUMN Text_Internal nvarchar(max) not null
+GO
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.22'
