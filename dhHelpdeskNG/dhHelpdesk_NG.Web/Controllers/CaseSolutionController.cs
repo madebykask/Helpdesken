@@ -209,7 +209,7 @@ namespace DH.Helpdesk.Web.Controllers
             return this.View(model);
         }
 
-
+        [ValidateInput(false)] 
         [HttpPost]
         public ActionResult New(CaseSolution caseSolution, CaseSolutionInputViewModel caseSolutionInputViewModel, CaseSolutionSettingModel[] caseSolutionSettingModels, int PageId)
         {
@@ -358,6 +358,7 @@ namespace DH.Helpdesk.Web.Controllers
                     JsonRequestBehavior.AllowGet);
         }
 
+        [ValidateInput(false)] 
         [HttpPost]
         public ActionResult Edit(
             CaseSolutionInputViewModel caseSolutionInputViewModel, 
