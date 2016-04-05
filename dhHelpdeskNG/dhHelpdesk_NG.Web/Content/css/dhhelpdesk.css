@@ -2864,6 +2864,15 @@ body.login {
 	padding:30px 0;
 }
 
+/* modal print for A4 portraite*/
+.modal.modalprintA4P {
+    width:800px;
+    height:800px;
+    margin-left: -400px;
+}
+.modal.modalprintA4P .modal-body {
+    max-height:700px;
+}
 /**************************** Validation **************************************************/
 
 .field-validation-error

@@ -950,7 +950,7 @@
                                             </div>
                                             @if (Model.CustomerSettings.ModuleCaseInvoice && Model.InvoiceModel != null)
                                             {                                                
-                                                @Html.Partial("_Invoice", Model.InvoiceModel)                                                                                             
+                                                @Html.Partial("_Invoice", Model.InvoiceModel)
                                             }
                                         </td>
                                     </tr>
@@ -1935,7 +1935,14 @@
                 <button type="button" class="btn btn-cancel">@Translation.Get("Nej")</button>
             </div>
         </div>
-    </div>
+    </div>    
+    
+    if(Model.case_.Id > 0 && Model.CasePrintView != null)
+    {
+        <div>
+            @Html.Partial("_CasePrint", Model.CasePrintView)
+        </div>        
+    }     
 }
 
 @functions    {

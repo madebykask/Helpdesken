@@ -27,6 +27,7 @@
     using ParentCaseInfo = DH.Helpdesk.Web.Models.Case.ChildCase.ParentCaseInfo;
     using DH.Helpdesk.Domain.Cases;
     using DH.Helpdesk.BusinessData.Models.Case.Output;
+    using Microsoft.Reporting.WebForms;
 
     public class CaseInputViewModel
     {
@@ -195,6 +196,8 @@
         public int ClosedChildCasesCount { get; set; }
 
         public ParentCaseInfo ParentCaseInfo { get; set; }
+
+        public ReportModel CasePrintView { get; set; }
 
         public bool IsItChildCase()
         {

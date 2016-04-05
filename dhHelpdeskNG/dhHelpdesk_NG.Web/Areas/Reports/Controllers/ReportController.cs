@@ -54,7 +54,7 @@ using DH.Helpdesk.BusinessData.Enums.Case;
 
         private readonly IReportServiceService _ReportServiceService;
 
-        private readonly  string _reportFolderName = "Reports";
+        private const string _reportFolderName = "Reports";
 
         public ReportController(
             IMasterDataService masterDataService,
