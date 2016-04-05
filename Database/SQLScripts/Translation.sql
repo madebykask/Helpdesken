@@ -4350,6 +4350,13 @@ If not exists (select * from tblTextTranslation where Text_Id = 1590 and Languag
             insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1590, 'Please enter no more than 3000 characters', 2)
 GO
 
+If not exists (select * from tblText where Id = 1591)
+            insert into tblText (Id, Textstring) VALUES (1591, 'Denna inställning gäller bara på nytt ärende')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1591 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1591, 'This option is only valid in new case', 2)
+GO
+
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
