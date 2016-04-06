@@ -39,6 +39,15 @@ $(function () {
         DoSearch(searchText);
     });
 
+    $(edtSearch).keydown(function (e) {
+        if (e.keyCode == 13) {
+            e.preventDefault();
+            var searchText = $(edtSearch).val();
+            DoSearch(searchText);
+            return false;
+        }
+    });
+
     function DoSearch(searchText) {
         $.get(searchOverview,
                 {
@@ -46,7 +55,10 @@ $(function () {
                     myTime: Date.now()
                 },
                 function (filteredModel) {
-                   // $(caseSolutionRowsArea).html(filteredModel);
+                    $(caseSolutionRowsArea).html(filteredModel);                    
+                    $(edtSearch).focus();
+                    $(edtSearch).val(searchText);
+                    $(edtSearch).select();
                 });
     }
 });

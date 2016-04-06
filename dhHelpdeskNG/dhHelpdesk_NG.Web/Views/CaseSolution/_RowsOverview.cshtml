@@ -3,12 +3,24 @@
 @using DH.Helpdesk.Common.Enums.CaseSolution
 
 @{
+    var searchText = (SessionFacade.CurrentCaseSolutionSearch != null &&
+                     SessionFacade.CurrentCaseSolutionSearch.SearchCss != null) ? SessionFacade.CurrentCaseSolutionSearch.SearchCss : string.Empty;
     var _asc = SessionFacade.CurrentCaseSolutionSearch.Ascending;    
 }
 
 @Scripts.Render("~/bundles/casetemplates/index")
 
 <div id="caseTemplateRowsArea">
+    <div>
+        <table>
+            <tr>
+                <td>                    
+                    <input type="text" id="caseSolutionSearch", maxlength = "50", style = "width: 200px;" value="@searchText" />
+                    <input type="button" id="btnCaseSolutionSearch" class="btn" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)"/>
+                </td>
+            </tr>
+        </table>
+    </div>
     <table class="table table-striped table-bordered table-hover" id="tblCaseSolution">
         <thead>
             <tr>

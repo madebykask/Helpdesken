@@ -120,33 +120,7 @@ namespace DH.Helpdesk.Web.Controllers
             this._causingPartService = causingPartService;
             this._organizationService = organizationService;
             this._registrationSourceCustomerService = registrationSourceCustomerService;
-        }
-
-        //[HttpPost]
-        //public ActionResult Index(CaseSolutionSearch SearchCaseSolutions)
-        //{
-        //    var caseSolutionSearch = new CaseSolutionSearch();
-        //    if (SessionFacade.CurrentCaseSolutionSearch != null)
-        //    {
-        //        caseSolutionSearch = SessionFacade.CurrentCaseSolutionSearch;
-        //    }
-
-        //    if (SearchCaseSolutions != null)
-        //    {
-        //        caseSolutionSearch.SearchCss = SearchCaseSolutions.SearchCss;
-        //        SessionFacade.CurrentCaseSolutionSearch = caseSolutionSearch;
-        //    }
-
-        //    var data = this._caseSolutionService.SearchAndGenerateCaseSolutions(SessionFacade.CurrentCustomer.Id, caseSolutionSearch)
-        //                                        .OrderBy(x => x.Name)
-        //                                        .Where(x => x.TemplatePath == null)
-        //                                        .ToList();
-
-        //    var model = this.IndexInputViewModel(data);
-        //    model.SearchCss = caseSolutionSearch.SearchCss;
-
-        //    return this.View(model);
-        //}
+        }        
 
         #region Template 
 
@@ -194,7 +168,7 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult Search(string searchText)
+        public PartialViewResult Search(string searchText)
         {
             var caseSolutionSearch = new CaseSolutionSearch();
             if (SessionFacade.CurrentCaseSolutionSearch != null)
@@ -204,8 +178,7 @@ namespace DH.Helpdesk.Web.Controllers
             SessionFacade.CurrentCaseSolutionSearch = caseSolutionSearch;
 
             var model = CreateIndexViewModel(caseSolutionSearch);
-            //return PartialView("_RowsOverview", model.Rows);
-            return View("Index",model);
+            return PartialView("_RowsOverview", model.Rows);            
         }
 
         public ActionResult New(int? backToPageId)
