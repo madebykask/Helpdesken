@@ -28,6 +28,8 @@ namespace DH.Helpdesk.Dal.Repositories
         /// The <see cref="SupplierOverview"/>.
         /// </returns>
         SupplierOverview GetSupplierOverview(int id);
+
+        void ResetDefault(int exclude, int customerId);
     }
 
     /// <summary>
@@ -69,6 +71,15 @@ namespace DH.Helpdesk.Dal.Repositories
                            ContactName = entity.ContactName,
                            SupplierNumber = entity.SupplierNumber
                        };
+        }
+
+        public void ResetDefault(int exclude, int customerId)
+        {
+            foreach (Supplier obj in this.GetMany(s => s.IsDefault == 1 && s.Id != exclude && s.Customer_Id == customerId))
+            {
+                obj.IsDefault = 0;
+                this.Update(obj);
+            }
         }
     }
 }

@@ -24,7 +24,7 @@ namespace DH.Helpdesk.Dal.Repositories
         /// <param name="exclude">
         /// The exclude.
         /// </param>
-        void ResetDefault(int exclude);
+        void ResetDefault(int exclude, int customerId);
 
         /// <summary>
         /// The get status overview.
@@ -60,9 +60,9 @@ namespace DH.Helpdesk.Dal.Repositories
         /// <param name="exclude">
         /// The exclude.
         /// </param>
-        public void ResetDefault(int exclude)
+        public void ResetDefault(int exclude, int customerId)
         {
-            foreach (Status obj in this.GetMany(s => s.IsDefault == 1 && s.Id != exclude))
+            foreach (Status obj in this.GetMany(s => s.IsDefault == 1 && s.Id != exclude && s.Customer_Id == customerId))
             {
                 obj.IsDefault = 0;
                 this.Update(obj);

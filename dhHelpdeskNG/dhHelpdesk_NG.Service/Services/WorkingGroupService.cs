@@ -287,7 +287,22 @@
 
             if (workingGroup.IsDefault == 1)
             {
-                this.workingGroupRepository.ResetDefault(workingGroup.Id);
+                this.workingGroupRepository.ResetDefault(workingGroup.Id, workingGroup.Customer_Id);
+            }
+
+            if (workingGroup.IsDefaultBulletinBoard == 1)
+            {
+                this.workingGroupRepository.ResetBulletinBoardDefault(workingGroup.Id, workingGroup.Customer_Id);
+            }
+
+            if (workingGroup.IsDefaultCalendar == 1)
+            {
+                this.workingGroupRepository.ResetCalendarDefault(workingGroup.Id, workingGroup.Customer_Id);
+            }
+
+            if (workingGroup.IsDefaultOperationLog == 1)
+            {
+                this.workingGroupRepository.ResetOperationLogDefault(workingGroup.Id, workingGroup.Customer_Id);
             }
 
             if (errors.Count == 0)

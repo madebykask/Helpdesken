@@ -12,7 +12,7 @@
         //IList<StateSecondary> GetStateSecondariesAvailable(int customerId, string[] reg);
         //IList<StateSecondary> GetStateSecondariesSelected(int customerId, string[] reg);
 
-        void ResetDefault(int exclude);
+        void ResetDefault(int exclude, int customerId);
 
         ItemOverview GetDefaultOverview(int customerId);
     }
@@ -24,9 +24,9 @@
         {
         }
 
-        public void ResetDefault(int exclude)
+        public void ResetDefault(int exclude, int customerId)
         {
-            foreach (StateSecondary obj in this.GetMany(s => s.IsDefault == 1 && s.Id != exclude))
+            foreach (StateSecondary obj in this.GetMany(s => s.IsDefault == 1 && s.Id != exclude && s.Customer_Id == customerId))
             {
                 obj.IsDefault = 0;
                 this.Update(obj);

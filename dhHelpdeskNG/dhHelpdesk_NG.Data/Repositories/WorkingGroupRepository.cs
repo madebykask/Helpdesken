@@ -24,7 +24,10 @@ namespace DH.Helpdesk.Dal.Repositories
 
         string GetWorkingGroupName(int workingGroupId);
 
-        void ResetDefault(int exclude);
+        void ResetDefault(int exclude, int customerId);
+        void ResetBulletinBoardDefault(int exclude, int customerId);
+        void ResetCalendarDefault(int exclude, int customerId);
+        void ResetOperationLogDefault(int exclude, int customerId);
 
         IEnumerable<ItemOverview> GetOverviews(int customerId);
 
@@ -119,11 +122,38 @@ namespace DH.Helpdesk.Dal.Repositories
                     .FirstOrDefault();
         }
 
-        public void ResetDefault(int exclude)
+        public void ResetDefault(int exclude, int customerId)
         {
-            foreach (WorkingGroupEntity obj in this.GetMany(s => s.IsDefault == 1 && s.Id != exclude))
+            foreach (WorkingGroupEntity obj in this.GetMany(s => s.IsDefault == 1 && s.Id != exclude && s.Customer_Id == customerId))
             {
                 obj.IsDefault = 0;
+                this.Update(obj);
+            }
+        }
+
+        public void ResetBulletinBoardDefault(int exclude, int customerId)
+        {
+            foreach (WorkingGroupEntity obj in this.GetMany(s => s.IsDefaultBulletinBoard == 1 && s.Id != exclude && s.Customer_Id == customerId))
+            {
+                obj.IsDefaultBulletinBoard = 0;
+                this.Update(obj);
+            }
+        }
+
+        public void ResetCalendarDefault(int exclude, int customerId)
+        {
+            foreach (WorkingGroupEntity obj in this.GetMany(s => s.IsDefaultCalendar == 1 && s.Id != exclude && s.Customer_Id == customerId))
+            {
+                obj.IsDefaultCalendar = 0;
+                this.Update(obj);
+            }
+        }
+
+        public void ResetOperationLogDefault(int exclude, int customerId)
+        {
+            foreach (WorkingGroupEntity obj in this.GetMany(s => s.IsDefaultOperationLog == 1 && s.Id != exclude && s.Customer_Id == customerId))
+            {
+                obj.IsDefaultOperationLog = 0;
                 this.Update(obj);
             }
         }

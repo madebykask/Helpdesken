@@ -110,7 +110,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                                 LinkText = template.Body.Substring(Pos1, Pos2 - Pos1);
 
                                 urlSelfService = "<br><a href='" + siteSelfService + "'>" + LinkText + "</a>";
-
+                                template.Body = template.Body.Replace(LinkText + "[/#98]", "");
                             }
                             else
                             {
@@ -140,7 +140,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                                             LinkText = template.Body.Substring(Pos1, Pos2 - Pos1);
 
                                             urlHelpdesk = "<br><a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
-
+                                            template.Body = template.Body.Replace(LinkText + "[/#99]", "");
                                    
 
                                         field.StringValue = urlHelpdesk;
@@ -242,7 +242,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                     LinkText = template.Body.Substring(Pos1, Pos2 - Pos1);
 
                     url = "<br><a href='" + site + "'>" + LinkText + "</a>";
-
+                    template.Body = template.Body.Replace(LinkText + "[/#98]", "");
                 }
                 else
                 {
@@ -271,7 +271,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                             LinkText = template.Body.Substring(Pos1, Pos2 - Pos1);
 
                             urlHelpdesk = "<br><a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
-
+                            template.Body = template.Body.Replace(LinkText + "[/#99]", "");
 
 
                             field.StringValue = urlHelpdesk;
@@ -351,7 +351,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                             LinkText = template.Body.Substring(Pos1, Pos2 - Pos1);
 
                             urlSelfService = "<br><a href='" + siteSelfService + "'>" + LinkText + "</a>";
-
+                            template.Body = template.Body.Replace(LinkText + "[/#98]", "");
                         }
                         else
                         {
@@ -380,7 +380,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                                     LinkText = template.Body.Substring(Pos1, Pos2 - Pos1);
 
                                     urlHelpdesk = "<br><a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
-
+                                    template.Body = template.Body.Replace(LinkText + "[/#99]", "");
                                 }
                      
                                 field.StringValue = urlHelpdesk;

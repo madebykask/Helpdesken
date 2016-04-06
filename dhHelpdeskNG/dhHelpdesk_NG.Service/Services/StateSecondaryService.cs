@@ -103,7 +103,7 @@
                 this._stateSecondaryRepository.Update(stateSecondary);
 
             if (stateSecondary.IsDefault == 1)
-                this._stateSecondaryRepository.ResetDefault(stateSecondary.Id);
+                this._stateSecondaryRepository.ResetDefault(stateSecondary.Id, stateSecondary.Customer_Id);
 
             if (errors.Count == 0)
                 this.Commit();
