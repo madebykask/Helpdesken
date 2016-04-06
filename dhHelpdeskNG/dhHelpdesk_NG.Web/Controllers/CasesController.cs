@@ -368,6 +368,7 @@ using Microsoft.Reporting.WebForms;
             return PartialView("AdvancedSearch/_SpecificSearchTab", model);
         }
 
+        [ValidateInput(false)]
         public ActionResult DoAdvancedSearch(FormCollection frm)
         {
             if (SessionFacade.CurrentUser == null || SessionFacade.CurrentCustomer == null)
@@ -701,6 +702,7 @@ using Microsoft.Reporting.WebForms;
             return this.View("Index", m);
         }
 
+        [ValidateInput(false)]
         public ActionResult SearchAjax(FormCollection frm)
         {
             if (SessionFacade.CurrentUser == null || SessionFacade.CurrentCustomer == null)
@@ -1421,11 +1423,10 @@ using Microsoft.Reporting.WebForms;
         #endregion
 
         #region --Auto Complete Fields--
-
+        [ValidateInput(false)]
         [HttpPost]
         public ActionResult Search_User(string query, int customerId)
         {
-
             var result = this._computerService.SearchComputerUsers(customerId, query);
 
             var ComputerUserSearchRestriction = _settingService.GetCustomerSetting(customerId).ComputerUserSearchRestriction;
@@ -2225,6 +2226,7 @@ using Microsoft.Reporting.WebForms;
             return this.PartialView(model);
         }
 
+        [ValidateInput(false)]
         [HttpGet]
         public JsonResult RelatedCasesCount(int caseId, string userId)
         {
