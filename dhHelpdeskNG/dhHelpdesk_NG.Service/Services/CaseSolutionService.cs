@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace DH.Helpdesk.Services.Services
-{   
+{
 
+    using DH.Helpdesk.Common.Enums.CaseSolution;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Cases;
@@ -15,7 +16,7 @@ namespace DH.Helpdesk.Services.Services
     {
         IList<CaseSolution> GetCaseSolutions(int customerId);
         IList<CaseSolutionCategory> GetCaseSolutionCategories(int customerId);
-        IList<CaseSolution> SearchAndGenerateCaseSolutions(int customerId, ICaseSolutionSearch SearchCaseSolutions);
+        IList<CaseSolution> SearchAndGenerateCaseSolutions(int customerId, ICaseSolutionSearch SearchCaseSolutions, bool isFirstNamePresentation);
 
         //int GetAntal(int customerId, int userid);
 
@@ -165,13 +166,12 @@ namespace DH.Helpdesk.Services.Services
             return this._caseSolutionRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
         }
 
-        public IList<CaseSolution> SearchAndGenerateCaseSolutions(int customerId, ICaseSolutionSearch SearchCaseSolutions)
+        public IList<CaseSolution> SearchAndGenerateCaseSolutions(int customerId, ICaseSolutionSearch SearchCaseSolutions, bool isFirstNamePresentation)
         {
             var query = (from cs in this._caseSolutionRepository.GetAll().Where(x => x.Customer_Id == customerId)
                          select cs);
 
-
-
+            #region Search
 
             if (!string.IsNullOrEmpty(SearchCaseSolutions.SearchCss))
             {
@@ -185,56 +185,69 @@ namespace DH.Helpdesk.Services.Services
                                       || x.Text_Internal.ToLower().Contains(SearchCaseSolutions.SearchCss)
                                    );
             }
-            //|| x.ReportedBy.Contains(SearchCaseSolutions.SearchCss) 
+
+            #endregion
+
+            #region Sort
 
             if (!string.IsNullOrEmpty(SearchCaseSolutions.SortBy) && (SearchCaseSolutions.SortBy != "undefined"))
             {
                 switch (SearchCaseSolutions.SortBy)
                 {
-                    // For fields which are from other Entities 
-                    case "CaseType":
-                        if (SearchCaseSolutions.Ascending)
-                            query = query.OrderBy(l => (l.CaseType != null ? l.CaseType.Name : string.Empty));
-                        else
-                            query = query.OrderByDescending(l => (l.CaseType != null ? l.CaseType.Name : string.Empty));
+
+                    case CaseSolutionIndexColumns.Name:
+                        query = (SearchCaseSolutions.Ascending) ?
+                                query.OrderBy(l => (l.Name != null ? l.Name : string.Empty)) :
+                                query.OrderByDescending(l => (l.Name != null ? l.Name : string.Empty));
                         break;
 
-                    case "PerformerUser":
-                        if (SearchCaseSolutions.Ascending)
-                            query = query.OrderBy(l => (l.PerformerUser != null ? l.PerformerUser.FirstName : string.Empty));
-                        else
-                            query = query.OrderByDescending(l => (l.PerformerUser != null ? l.PerformerUser.FirstName : string.Empty));
+                    case CaseSolutionIndexColumns.Category:
+                        query = (SearchCaseSolutions.Ascending) ?
+                                query.OrderBy(l => (l.CaseSolutionCategory != null ? l.CaseSolutionCategory.Name : string.Empty)) :
+                                query.OrderByDescending(l => (l.CaseSolutionCategory != null ? l.CaseSolutionCategory.Name : string.Empty));
                         break;
 
-                    case "Priority":
-                        if (SearchCaseSolutions.Ascending)
-                            query = query.OrderBy(l => (l.Priority != null ? l.Priority.Name : string.Empty));
-                        else
-                            query = query.OrderByDescending(l => (l.Priority != null ? l.Priority.Name : string.Empty));
+                    case CaseSolutionIndexColumns.Caption:
+                        query = (SearchCaseSolutions.Ascending) ?
+                                query.OrderBy(l => (l.Caption != null ? l.Caption : string.Empty)) :
+                                query.OrderByDescending(l => (l.Caption != null ? l.Caption : string.Empty));
                         break;
 
-                    case "FinishingCause":
-                        if (SearchCaseSolutions.Ascending)
-                            query = query.OrderBy(l => (l.FinishingCause != null ? l.FinishingCause.Name : string.Empty));
-                        else
-                            query = query.OrderByDescending(l => (l.FinishingCause != null ? l.FinishingCause.Name : string.Empty));
+                    case CaseSolutionIndexColumns.Administrator:
+                        if (SearchCaseSolutions.Ascending)                        
+                            query = isFirstNamePresentation ?
+                                        query.OrderBy(l => (l.PerformerUser != null ? l.PerformerUser.FirstName : string.Empty))
+                                            .ThenBy(l => (l.PerformerUser != null ? l.PerformerUser.SurName : string.Empty)) :
+
+                                        query.OrderBy(l => (l.PerformerUser != null ? l.PerformerUser.SurName : string.Empty))
+                                        .ThenBy(l => (l.PerformerUser != null ? l.PerformerUser.FirstName : string.Empty));                        
+                        else                        
+                            query = isFirstNamePresentation ?
+                                       query.OrderByDescending(l => (l.PerformerUser != null ? l.PerformerUser.FirstName : string.Empty))
+                                           .ThenByDescending(l => (l.PerformerUser != null ? l.PerformerUser.SurName : string.Empty)) :
+
+                                       query.OrderByDescending(l => (l.PerformerUser != null ? l.PerformerUser.SurName : string.Empty))
+                                       .ThenByDescending(l => (l.PerformerUser != null ? l.PerformerUser.FirstName : string.Empty));                     
                         break;
 
-                    case "Category":
-                        if (SearchCaseSolutions.Ascending)
-                            query = query.OrderBy(l => (l.CaseSolutionCategory != null ? l.CaseSolutionCategory.Name : string.Empty));
-                        else
-                            query = query.OrderByDescending(l => (l.CaseSolutionCategory != null ? l.CaseSolutionCategory.Name : string.Empty));
+                    case CaseSolutionIndexColumns.Priority:
+                        query = (SearchCaseSolutions.Ascending)?
+                                    query.OrderBy(l => (l.Priority != null ? l.Priority.Name : string.Empty)):                        
+                                    query.OrderByDescending(l => (l.Priority != null ? l.Priority.Name : string.Empty));
                         break;
 
-                    default: // Primary Fields (Dosen't have relation to other Entities)                       
-                        if (SearchCaseSolutions.Ascending)
-                            query = query.OrderBy(x => x.GetType().GetProperty(SearchCaseSolutions.SortBy).GetValue(x, null));
-                        else
-                            query = query.OrderByDescending(x => x.GetType().GetProperty(SearchCaseSolutions.SortBy).GetValue(x, null));
+
+
+
+                    default:                        
+                        query = (SearchCaseSolutions.Ascending) ?
+                                query.OrderBy(l => (l.Name != null ? l.Name : string.Empty)) :
+                                query.OrderByDescending(l => (l.Name != null ? l.Name : string.Empty));
                         break;
                 }
             }
+
+            #endregion
 
             return query.ToList();
         }

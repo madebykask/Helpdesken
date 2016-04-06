@@ -22,6 +22,7 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Web.Models.CaseSolution;
 
     using Ninject.Infrastructure.Language;
+    using DH.Helpdesk.Common.Enums.CaseSolution;
 
     public class CaseSolutionController : UserInteractionController
     {
@@ -121,74 +122,90 @@ namespace DH.Helpdesk.Web.Controllers
             this._registrationSourceCustomerService = registrationSourceCustomerService;
         }
 
+        //[HttpPost]
+        //public ActionResult Index(CaseSolutionSearch SearchCaseSolutions)
+        //{
+        //    var caseSolutionSearch = new CaseSolutionSearch();
+        //    if (SessionFacade.CurrentCaseSolutionSearch != null)
+        //    {
+        //        caseSolutionSearch = SessionFacade.CurrentCaseSolutionSearch;
+        //    }
+
+        //    if (SearchCaseSolutions != null)
+        //    {
+        //        caseSolutionSearch.SearchCss = SearchCaseSolutions.SearchCss;
+        //        SessionFacade.CurrentCaseSolutionSearch = caseSolutionSearch;
+        //    }
+
+        //    var data = this._caseSolutionService.SearchAndGenerateCaseSolutions(SessionFacade.CurrentCustomer.Id, caseSolutionSearch)
+        //                                        .OrderBy(x => x.Name)
+        //                                        .Where(x => x.TemplatePath == null)
+        //                                        .ToList();
+
+        //    var model = this.IndexInputViewModel(data);
+        //    model.SearchCss = caseSolutionSearch.SearchCss;
+
+        //    return this.View(model);
+        //}
+
+        #region Template 
+
+        public ActionResult Index()
+        {
+            //Set default
+            var cs = new CaseSolutionSearch()
+                        {
+                            Ascending = true,
+                            SearchCss = string.Empty,
+                            SortBy = CaseSolutionIndexColumns.Name 
+                        };
+            
+            if (SessionFacade.CurrentCaseSolutionSearch != null)            
+                cs = SessionFacade.CurrentCaseSolutionSearch;
+            else
+                SessionFacade.CurrentCaseSolutionSearch = cs;
+            
+            if (string.IsNullOrEmpty(SessionFacade.FindActiveTab("CaseSolution")))            
+                SessionFacade.SaveActiveTab("CaseSolution", "CaseTemplate");
+            
+            var model = CreateIndexViewModel(cs);                                                
+            return this.View(model);
+        }      
+
         [HttpPost]
         public void RememberTab(string topic, string tab)
         {
             SessionFacade.SaveActiveTab(topic, tab);
         }
 
-        public ActionResult Index()
-        {
-            CaseSolutionIndexViewModel model;
-            if (SessionFacade.CurrentCaseSolutionSearch != null)
-            {
-                var CS = SessionFacade.CurrentCaseSolutionSearch;
-                var CaseSolutions = this._caseSolutionService.SearchAndGenerateCaseSolutions(SessionFacade.CurrentCustomer.Id, CS);
-                
-                //Only return casesolution where templatepath is null - these case solutions are E-Forms shown in myhr/linemanager/selfservice
-                var data = CaseSolutions.OrderBy(x => x.Name).Where(x => x.TemplatePath == null).ToList();
-                model = this.IndexInputViewModel(data);
-                model.SearchCss = CS.SearchCss;
-            }
-            else
-            {
-                //Only return casesolution where templatepath is null - these case solutions are E-Forms shown in myhr/linemanager/selfservice
-                var data = this._caseSolutionService.GetCaseSolutions(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.Name).Where(x => x.TemplatePath == null).ToList();
-                model = this.IndexInputViewModel(data);
-                SessionFacade.CurrentCaseSolutionSearch = new CaseSolutionSearch() { SortBy = "Name", Ascending = true };
-            }
-
-            if (string.IsNullOrEmpty(SessionFacade.FindActiveTab("CaseSolution")))
-            {
-                SessionFacade.SaveActiveTab("CaseSolution", "CaseTemplate");
-            }
-
-            return this.View(model);
-        }
-
-        [HttpPost]
-        public ActionResult Index(CaseSolutionSearch SearchCaseSolutions)
+        [HttpGet]
+        public PartialViewResult Sort(string fieldName, bool asc)
         {
             var caseSolutionSearch = new CaseSolutionSearch();
-            if (SessionFacade.CurrentCaseSolutionSearch != null)
-            {
-                caseSolutionSearch = SessionFacade.CurrentCaseSolutionSearch;
-            }
-            
-            if (SearchCaseSolutions != null)
-            {
-                caseSolutionSearch.SearchCss = SearchCaseSolutions.SearchCss;
-                SessionFacade.CurrentCaseSolutionSearch = caseSolutionSearch;
-            }
+            if (SessionFacade.CurrentCaseSolutionSearch != null)            
+                caseSolutionSearch = SessionFacade.CurrentCaseSolutionSearch;            
 
-            var data = this._caseSolutionService.SearchAndGenerateCaseSolutions(SessionFacade.CurrentCustomer.Id, caseSolutionSearch).OrderBy(x => x.Name).Where(x => x.TemplatePath == null).ToList();
-            var model = this.IndexInputViewModel(data);
-            model.SearchCss = caseSolutionSearch.SearchCss;
-
-            return this.View(model);
-        }
-
-        public void Sort(string fieldName)
-        {
-            var caseSolutionSearch = new CaseSolutionSearch();
-            if (SessionFacade.CurrentCaseSolutionSearch != null)
-            {
-                caseSolutionSearch = SessionFacade.CurrentCaseSolutionSearch;
-            }
-
-            caseSolutionSearch.Ascending = !caseSolutionSearch.Ascending;
+            caseSolutionSearch.Ascending = !asc;
             caseSolutionSearch.SortBy = fieldName;
             SessionFacade.CurrentCaseSolutionSearch = caseSolutionSearch;
+
+            var model = CreateIndexViewModel(caseSolutionSearch);
+            return PartialView("_RowsOverview", model.Rows);
+        }
+
+        [HttpGet]
+        public ActionResult Search(string searchText)
+        {
+            var caseSolutionSearch = new CaseSolutionSearch();
+            if (SessionFacade.CurrentCaseSolutionSearch != null)
+                caseSolutionSearch = SessionFacade.CurrentCaseSolutionSearch;
+
+            caseSolutionSearch.SearchCss = searchText;            
+            SessionFacade.CurrentCaseSolutionSearch = caseSolutionSearch;
+
+            var model = CreateIndexViewModel(caseSolutionSearch);
+            //return PartialView("_RowsOverview", model.Rows);
+            return View("Index",model);
         }
 
         public ActionResult New(int? backToPageId)
@@ -255,23 +272,6 @@ namespace DH.Helpdesk.Web.Controllers
             return this.View(model);
         }
 
-        public ActionResult NewCategory()
-        {
-            return this.View(new CaseSolutionCategory() { Customer_Id = SessionFacade.CurrentCustomer.Id });
-        }
-
-        [HttpPost]
-        public ActionResult NewCategory(CaseSolutionCategory caseSolutionCategory)
-        {
-            IDictionary<string, string> errors = new Dictionary<string, string>();
-            this._caseSolutionService.SaveCaseSolutionCategory(caseSolutionCategory, out errors);
-
-            if (errors.Count == 0)
-                return this.RedirectToAction("index", "casesolution");
-
-            return this.View(caseSolutionCategory);
-        }
-
         public ActionResult Edit(int id, int? backToPageId)
         {
             var caseSolution = this._caseSolutionService.GetCaseSolution(id);
@@ -295,7 +295,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             return this.View(model);
         }
-        
+
         public ActionResult GetTemplate(int id)
         {
             var caseSolution = this._caseSolutionService.GetCaseSolution(id);
@@ -334,35 +334,35 @@ namespace DH.Helpdesk.Web.Controllers
 
             return this.Json(
                 new
-                    {
-                        caseSolution.CaseType_Id,
-                        caseSolution.PerformerUser_Id,
-                        caseSolution.Category_Id,
-                        caseSolution.ReportedBy,
-                        caseSolution.Department_Id,
-                        NoMailToNotifier = caseSolution.NoMailToNotifier.ToBool(),
-                        caseSolution.ProductArea_Id,
-                        caseSolution.Caption,
-                        caseSolution.Description,
-                        caseSolution.Miscellaneous,
-                        caseSolution.CaseWorkingGroup_Id,
-                        caseSolution.Priority_Id,
-                        caseSolution.Project_Id,
-                        caseSolution.Text_External,
-                        caseSolution.Text_Internal,
-                        caseSolution.FinishingCause_Id,
-                        caseSolution.RegistrationSource,
-                        caseSolution.Status_Id,
-                        caseSolution.StateSecondary_Id
-                    },
+                {
+                    caseSolution.CaseType_Id,
+                    caseSolution.PerformerUser_Id,
+                    caseSolution.Category_Id,
+                    caseSolution.ReportedBy,
+                    caseSolution.Department_Id,
+                    NoMailToNotifier = caseSolution.NoMailToNotifier.ToBool(),
+                    caseSolution.ProductArea_Id,
+                    caseSolution.Caption,
+                    caseSolution.Description,
+                    caseSolution.Miscellaneous,
+                    caseSolution.CaseWorkingGroup_Id,
+                    caseSolution.Priority_Id,
+                    caseSolution.Project_Id,
+                    caseSolution.Text_External,
+                    caseSolution.Text_Internal,
+                    caseSolution.FinishingCause_Id,
+                    caseSolution.RegistrationSource,
+                    caseSolution.Status_Id,
+                    caseSolution.StateSecondary_Id
+                },
                     JsonRequestBehavior.AllowGet);
         }
 
-        [ValidateInput(false)] 
+        [ValidateInput(false)]
         [HttpPost]
         public ActionResult Edit(
-            CaseSolutionInputViewModel caseSolutionInputViewModel, 
-            CaseSolutionSettingModel[] CaseSolutionSettingModels, 
+            CaseSolutionInputViewModel caseSolutionInputViewModel,
+            CaseSolutionSettingModel[] CaseSolutionSettingModels,
             int PageId)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
@@ -408,6 +408,74 @@ namespace DH.Helpdesk.Web.Controllers
             return this.View(model);
         }
 
+        [HttpPost]
+        public RedirectToRouteResult Delete(int id, int pageId)
+        {
+            if (this._caseSolutionService.DeleteCaseSolution(id, SessionFacade.CurrentCustomer.Id) == DeleteMessage.Success)
+            {
+                switch (pageId)
+                {
+                    case 1:
+                        return this.RedirectToAction("index", "Cases");
+
+                    default:
+                        return this.RedirectToAction("index", "casesolution");
+
+                }
+            }
+            else
+            {
+                this.TempData.Add("Error", string.Empty);
+                return this.RedirectToAction("edit", "casesolution", new { id = id });
+            }
+        }
+
+
+        public JsonResult ChangeRegion(int? regionId)
+        {
+            var list = this._departmentService.GetActiveDepartmentsBy(SessionFacade.CurrentCustomer.Id, regionId)
+                                            .Select(d => new
+                                            {
+                                                id = d.Id,
+                                                name = d.DepartmentName
+                                            });
+
+            return this.Json(new { list });
+        }
+
+        public JsonResult ChangeDepartment(int? departmentId)
+        {
+            var list = this._organizationService.GetOrganizationUnits(departmentId)
+                                            .Select(o => new
+                                            {
+                                                id = o.Value,
+                                                name = o.Name
+                                            });
+
+            return this.Json(new { list });
+        }
+        
+        #endregion
+
+        #region Category
+
+        public ActionResult NewCategory()
+        {
+            return this.View(new CaseSolutionCategory() { Customer_Id = SessionFacade.CurrentCustomer.Id });
+        }
+
+        [HttpPost]
+        public ActionResult NewCategory(CaseSolutionCategory caseSolutionCategory)
+        {
+            IDictionary<string, string> errors = new Dictionary<string, string>();
+            this._caseSolutionService.SaveCaseSolutionCategory(caseSolutionCategory, out errors);
+
+            if (errors.Count == 0)
+                return this.RedirectToAction("index", "casesolution");
+
+            return this.View(caseSolutionCategory);
+        }
+
         public ActionResult EditCategory(int id)
         {
             var caseSolutionCategory = this._caseSolutionService.GetCaseSolutionCategory(id);
@@ -431,28 +499,6 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
-        public RedirectToRouteResult Delete(int id, int pageId)
-        {
-            if (this._caseSolutionService.DeleteCaseSolution(id, SessionFacade.CurrentCustomer.Id) == DeleteMessage.Success)
-            {
-                switch (pageId)
-                {
-                    case 1:
-                        return this.RedirectToAction("index", "Cases");                        
-
-                    default:
-                        return this.RedirectToAction("index", "casesolution");
-
-                }
-            }
-            else
-            {
-                this.TempData.Add("Error", string.Empty);
-                return this.RedirectToAction("edit", "casesolution", new { id = id });
-            }
-        }
-
-        [HttpPost]
         public ActionResult DeleteCategory(int id)
         {
             if (this._caseSolutionService.DeleteCaseSolutionCategory(id) == DeleteMessage.Success)
@@ -464,39 +510,42 @@ namespace DH.Helpdesk.Web.Controllers
             }
         }
 
-        public JsonResult ChangeRegion(int? regionId)
-        {
-            var list = this._departmentService.GetActiveDepartmentsBy(SessionFacade.CurrentCustomer.Id, regionId)
-                                            .Select( d=> new
-                                            {
-                                                id = d.Id,
-                                                name = d.DepartmentName                                                
-                                            });                                    
+        #endregion
 
-            return this.Json(new { list });
-        }
+        #region Private Methods
 
-        public JsonResult ChangeDepartment(int? departmentId)
-        {
-            var list = this._organizationService.GetOrganizationUnits(departmentId)
-                                            .Select(o => new
-                                            {
-                                                id = o.Value,
-                                                name = o.Name
-                                            });
+        private CaseSolutionIndexViewModel CreateIndexViewModel(CaseSolutionSearch caseSolutionSearch)
+        {            
+            var customerId = SessionFacade.CurrentCustomer.Id;
+            var isUserFirstLastNameRepresentation = this._settingService.GetCustomerSetting(customerId)
+                                                                        .IsUserFirstLastNameRepresentation == 1;
 
-            return this.Json(new { list });
-        }
+            //Only return casesolution where templatepath is null - these case solutions are E-Forms shown in myhr/linemanager/selfservice
+            var caseSolutions = this._caseSolutionService.SearchAndGenerateCaseSolutions(customerId, caseSolutionSearch, isUserFirstLastNameRepresentation)
+                                                         .Where(x => x.TemplatePath == null).ToList();                        
 
-        private CaseSolutionIndexViewModel IndexInputViewModel(List<CaseSolution> srcRowsData)
-        {
+            var _rows = caseSolutions.Select(cs=> new RowIndexViewModel
+                                                        {
+                                                            Id = cs.Id,
+                                                            Name = cs.Name,
+                                                            CategoryName = cs.CaseSolutionCategory == null? string.Empty : cs.CaseSolutionCategory.Name,
+                                                            CaseCaption = cs.Caption,
+                                                            PerformerUserName = cs.PerformerUser == null? string.Empty :
+                                                                                (isUserFirstLastNameRepresentation? 
+                                                                                    string.Format("{0} {1}", cs.PerformerUser.FirstName, cs.PerformerUser.SurName):
+                                                                                    string.Format("{0} {1}", cs.PerformerUser.SurName, cs.PerformerUser.FirstName)
+                                                                                ),
+                                                            PriorityName = cs.Priority == null ? string.Empty : cs.Priority.Name,
+                                                            IsActive = (cs.Status != 0)
+                                                        }).ToArray();
+
             var activeTab = SessionFacade.FindActiveTab("CaseSolution");
-            activeTab = activeTab ?? "CaseTemplate";
-            var isUserFirstLastNameRepresentation = this._settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id).IsUserFirstLastNameRepresentation == 1;
+            activeTab = activeTab ?? "CaseTemplate";            
+
             var model = new CaseSolutionIndexViewModel(activeTab)
             {
-                Rows = srcRowsData.MapToRowIndexViewModel(isUserFirstLastNameRepresentation),
-                CaseSolutionCategories = this._caseSolutionService.GetCaseSolutionCategories(SessionFacade.CurrentCustomer.Id)
+                 Rows = _rows,                
+                CaseSolutionCategories = this._caseSolutionService.GetCaseSolutionCategories(customerId)
             };
 
             return model;
@@ -827,5 +876,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             return caseSolutionSchedule;
         }
+
+        #endregion
     }
 }
