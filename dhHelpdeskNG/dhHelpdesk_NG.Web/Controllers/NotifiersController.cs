@@ -703,6 +703,7 @@ namespace DH.Helpdesk.Web.Controllers
             return this.PartialView(model);
         }
 
+        [ValidateInput(false)]
         [HttpPost]
         [BadRequestOnNotValid]
         public PartialViewResult Search(SearchInputModel inputModel)
