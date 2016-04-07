@@ -73,8 +73,7 @@
             OtherFields.Verified,
             OtherFields.VerifiedDescription,
             OtherFields.WorkingGroup,
-            CaseInfoFields.RegistrationSourceCustomer,
-            UserFields.CostCentre,
+            CaseInfoFields.RegistrationSourceCustomer,            
             
             UserFields.IsAbout_User,
             UserFields.IsAbout_Persons_Name            
