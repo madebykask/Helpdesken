@@ -11,8 +11,8 @@ namespace DH.Helpdesk.Dal.Repositories
     public interface IPriorityRepository : IRepository<Priority>
     {
         void ReOrderPriorities(List<string> priorityIds);
-        void ResetDefault(int exclude);
-        void ResetEmailDefault(int exclude);
+        void ResetDefault(int exclude, int customerId);
+        void ResetEmailDefault(int exclude, int customerId);
     }
 
     public class PriorityRepository : RepositoryBase<Priority>, IPriorityRepository
@@ -38,18 +38,18 @@ namespace DH.Helpdesk.Dal.Repositories
             }
         }
 
-        public void ResetDefault(int exclude)
+        public void ResetDefault(int exclude, int customerId)
         {
-            foreach (Priority obj in this.GetMany(s => s.IsDefault == 1 && s.Id != exclude))
+            foreach (Priority obj in this.GetMany(s => s.IsDefault == 1 && s.Id != exclude && s.Customer_Id == customerId))
             {
                 obj.IsDefault = 0;
                 this.Update(obj);
             }
         }
 
-        public void ResetEmailDefault(int exclude)
+        public void ResetEmailDefault(int exclude, int customerId)
         {
-            foreach (Priority obj in this.GetMany(s => s.IsEmailDefault == 1 && s.Id != exclude))
+            foreach (Priority obj in this.GetMany(s => s.IsEmailDefault == 1 && s.Id != exclude && s.Customer_Id == customerId))
             {
                 obj.IsEmailDefault = 0;
                 this.Update(obj);

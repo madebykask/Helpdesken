@@ -102,11 +102,14 @@
                 throw new ArgumentNullException("supplier");
 
             supplier.SupplierNumber = supplier.SupplierNumber ?? "";
-            
+            supplier.ChangedDate = DateTime.UtcNow;
             errors = new Dictionary<string, string>();
 
             if (string.IsNullOrEmpty(supplier.Name))
                 errors.Add("Supplier.Name", "Du måste ange en leverantör");
+
+            if (supplier.IsDefault == 1)
+                this._supplierRepository.ResetDefault(supplier.Id, supplier.Customer_Id);
 
             if (supplier.Id == 0)
                 this._supplierRepository.Add(supplier);

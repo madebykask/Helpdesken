@@ -443,7 +443,11 @@
         </div>
         <div class="pull-right">
             <ul class="secnav">
-                <li><a href="@Url.Action("Case", "Print", new { caseId = @Model.case_.Id, customerId = @Model.case_.Customer_Id })" title="@Translation.Get("Skriv ut")" class="btn print-case" target="_blank"><i class="icon-file"></i></a></li>
+                @if(Model.case_.Id > 0)
+                {
+                   <li><a title="@Translation.Get("Skriv ut")" class="btn print-case"><i class="icon-file"></i></a></li>
+                }
+                @*<li><a href="@Url.Action("Case", "Print", new { caseId = @Model.case_.Id, customerId = @Model.case_.Customer_Id })" title="@Translation.Get("Skriv ut")" class="btn print-case" target="_blank"><i class="icon-file"></i></a></li>*@
                 @if (Html.MasterModel().CustomerSetting.ModuleInventory > 0)
                 {                                                            
                     <li><a href="#" title="@Translation.Get("Visa inventarie", Enums.TranslationSource.TextTranslation)" class="btn show-inventory"><i class="icon-th-large"></i></a></li>

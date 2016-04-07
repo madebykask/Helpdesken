@@ -560,6 +560,10 @@ EditPage.prototype.init = function (p) {
     me.$btnSaveClose.on('click', Utils.callAsMe(me.onSaveAndCloseClick, me));
     me.$btnSaveNew.on('click', Utils.callAsMe(me.onSaveAndNewClick, me));
 
+    me.$btnPrint = $('.btn.print-case');
+    me.$printArea = $('#CasePrintArea');
+    me.$printDialog = $('#PrintCaseDialog');
+    
     me.$watchDateChangers.on('change', function () {
         var deptId = parseInt(me.$department.val(), 10);
         var SLA = parseInt(me.$SLASelect.find('option:selected').attr('data-sla'), 10);
@@ -617,6 +621,28 @@ EditPage.prototype.init = function (p) {
     });
 
     $('.lang.dropdown-submenu a').on('click', Utils.callAsMe(me.onPageLeave, me));
+        
+    me.$btnPrint.click(function (e) {
+        $.get("/Cases/ShowCasePrintPreview/",
+                {
+                    caseId: p.currentCaseId,
+                    curTime: new Date().getTime()
+                },                
+
+                function (_reportPresentation) {
+                    me.$printArea.html(_reportPresentation);
+
+                    $('#PrintCaseDialog').draggable({
+                        handle: ".modal-header"
+                    });
+
+                    $('#PrintCaseDialog').modal('show');
+                }
+             );
+
+       
+    });
+
     //////// event bind end ///////////
 
 

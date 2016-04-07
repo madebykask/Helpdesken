@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace DH.Helpdesk.SelfService.Infrastructure.Print
+namespace DH.Helpdesk.NewSelfService.Infrastructure.Print
 {
     using System.Collections;
     using System.IO;

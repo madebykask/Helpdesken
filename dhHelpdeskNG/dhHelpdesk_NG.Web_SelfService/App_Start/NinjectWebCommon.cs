@@ -9,8 +9,10 @@ namespace DH.Helpdesk.SelfService
     using System.Web;
 
     using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Dal.Repositories;
-    using DH.Helpdesk.Dal.Repositories.Cases;
+    using DH.Helpdesk.Dal.Repositories.ActionSetting;
+    using DH.Helpdesk.Dal.Repositories.ActionSetting.Concrete;
     using DH.Helpdesk.Dal.Repositories.Computers;
     using DH.Helpdesk.Dal.Repositories.Computers.Concrete;
     using DH.Helpdesk.Dal.Repositories.MailTemplates;
@@ -24,7 +26,13 @@ namespace DH.Helpdesk.SelfService
     using DH.Helpdesk.Dal.Repositories.Users.Concrete;
     using DH.Helpdesk.Dal.Repositories.WorkstationModules;
     using DH.Helpdesk.Dal.Repositories.WorkstationModules.Concrete;
+    using DH.Helpdesk.Dal.Repositories.ADFS;
+    using DH.Helpdesk.Dal.Repositories.ADFS.Concrete;
+    using DH.Helpdesk.SelfService.Infrastructure.WorkContext;
+    using DH.Helpdesk.SelfService.Infrastructure.WorkContext.Concrete;
     using DH.Helpdesk.SelfService.NinjectModules.Modules;
+    using DH.Helpdesk.SelfService.NinjectModules.Modules;
+    using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Infrastructure;
     using DH.Helpdesk.Services.Infrastructure.Concrete;
     using DH.Helpdesk.Services.Services;
@@ -39,6 +47,11 @@ namespace DH.Helpdesk.SelfService
     using DH.Helpdesk.SelfService.Infrastructure.Tools;
     using DH.Helpdesk.SelfService.Infrastructure.Tools.Concrete;
     using DH.Helpdesk.Dal.Repositories.Problem.Concrete;
+    using DH.Helpdesk.Dal.Repositories.Invoice;
+    using DH.Helpdesk.Dal.Repositories.Invoice.Concrete;
+    using DH.Helpdesk.SelfService.WebServices;
+    using DH.Helpdesk.Dal.Repositories.Cases;
+    using DH.Helpdesk.Dal.Repositories.Cases.Concrete;
     
     public static class NinjectWebCommon 
     {
@@ -68,11 +81,12 @@ namespace DH.Helpdesk.SelfService
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
-            var kernel = new StandardKernel(new WorkContextModule(),  new UserModule() , new ProblemModule() , new CommonModule(), new EmailModule() , new NotifiersModule());
+            var kernel = new StandardKernel(new WorkContextModule(),  new UserModule() , new ProblemModule() , new CommonModule(), new EmailModule() , new NotifiersModule() , new ToolsModule());
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
             
             RegisterServices(kernel);
+            ManualDependencyResolver.SetKernel(kernel);
             return kernel;
         }
 
@@ -148,15 +162,39 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IProblemLogRepository>().To<ProblemLogRepository>();
             kernel.Bind<IProblemEMailLogRepository>().To<ProblemEMailLogRepository>();
             kernel.Bind<IProblemRepository>().To<ProblemRepository>();
-            kernel.Bind<IImpactRepository>().To<ImpactRepository>();
-            kernel.Bind<IProjectRepository>().To<ProjectRepository>();
+            kernel.Bind<IImpactRepository>().To<ImpactRepository>();            
             kernel.Bind<IFinishingCauseRepository>().To<FinishingCauseRepository>();
             kernel.Bind<IFinishingCauseCategoryRepository>().To<FinishingCauseCategoryRepository>();
             kernel.Bind<IStateSecondaryRepository>().To<StateSecondaryRepository>();
-            kernel.Bind<INotifierFieldSettingLanguageRepository>().To<NotifierFieldSettingLanguageRepository>();            
-              
-                                           
-                                      
+            kernel.Bind<ICaseSolutionRepository>().To<CaseSolutionRepository>();
+            kernel.Bind<ICaseSolutionCategoryRepository>().To<CaseSolutionCategoryRepository>();
+            kernel.Bind<ICaseSolutionScheduleRepository>().To<CaseSolutionScheduleRepository>();
+            kernel.Bind<INotifierFieldSettingLanguageRepository>().To<NotifierFieldSettingLanguageRepository>();
+            kernel.Bind<IActionSettingRepository>().To<ActionSettingRepository>();
+            kernel.Bind<IInvoiceArticleUnitRepository>().To<InvoiceArticleUnitRepository>();
+            kernel.Bind<IInvoiceArticleRepository>().To<InvoiceArticleRepository>();
+            kernel.Bind<ICaseInvoiceArticleRepository>().To<CaseInvoiceArticleRepository>();            
+            kernel.Bind<IBulletinBoardRepository>().To<BulletinBoardRepository>();
+            kernel.Bind<ICaseSolutionSettingRepository>().To<CaseSolutionSettingRepository>();
+            kernel.Bind<IDocumentRepository>().To<DocumentRepository>();
+            kernel.Bind<IDocumentCategoryRepository>().To<DocumentCategoryRepository>();
+            kernel.Bind<IFormRepository>().To<FormRepository>();
+            kernel.Bind<IADFSRepository>().To<ADFSRepository>();
+            kernel.Bind<IHolidayRepository>().To<HolidayRepository>();
+            kernel.Bind<IHolidayHeaderRepository>().To<HolidayHeaderRepository>();
+            kernel.Bind<IDomainRepository>().To<DomainRepository>();
+            kernel.Bind<ILinkRepository>().To<LinkRepository>();
+            kernel.Bind<ICaseLockRepository>().To<CaseLockRepository>();
+            kernel.Bind<ILinkGroupRepository>().To<LinkGroupRepository>();
+            kernel.Bind<IUsersPasswordHistoryRepository>().To<UsersPasswordHistoryRepository>();
+            kernel.Bind<ICaseFilterFavoriteRepository>().To<CaseFilterFavoriteRepository>();
+            kernel.Bind<ICaseInvoiceSettingsRepository>().To<CaseInvoiceSettingsRepository>();
+            kernel.Bind<IProjectCollaboratorRepository>().To<ProjectCollaboratorRepository>();
+            kernel.Bind<IProjectFileRepository>().To<ProjectFileRepository>();
+            kernel.Bind<IProjectLogRepository>().To<ProjectLogRepository>();
+            kernel.Bind<IProjectRepository>().To<ProjectRepository>();
+            kernel.Bind<IProjectScheduleRepository>().To<ProjectScheduleRepository>();
+
             // Service             
             kernel.Bind<IMasterDataService>().To<MasterDataService>();            
             kernel.Bind<ISettingService>().To<SettingService>();
@@ -192,10 +230,38 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IImpactService>().To<ImpactService>();
             kernel.Bind<IProjectService>().To<ProjectService>();
             kernel.Bind<IFinishingCauseService>().To<FinishingCauseService>();
-            kernel.Bind<IStateSecondaryService>().To<StateSecondaryService>();            
-                             
+            kernel.Bind<IStateSecondaryService>().To<StateSecondaryService>();
+            kernel.Bind<ICaseSolutionService>().To<CaseSolutionService>();
+            kernel.Bind<IActionSettingService>().To<ActionSettingService>();
+            kernel.Bind<IInvoiceArticleService>().To<InvoiceArticleService>();            
+            kernel.Bind<IAMAPIService>().To<AMAPIService>();
+            kernel.Bind<IBulletinBoardService>().To<BulletinBoardService>();
+            kernel.Bind<ICaseSolutionSettingService>().To<CaseSolutionSettingService>();
+            kernel.Bind<IDocumentService>().To<DocumentService>();
+            kernel.Bind<ISurveyService>().To<SurveyService>();
+            kernel.Bind<IHolidayService>().To<HolidayService>();
+            kernel.Bind<IOrganizationService>().To<OrganizationService>();
+            kernel.Bind<ILinkService>().To<LinkService>();
+            kernel.Bind<ICaseLockService>().To<CaseLockService>();
+            kernel.Bind<ICaseInvoiceSettingsService>().To<CaseInvoiceSettingsService>();
+            
             // Cache
             kernel.Bind<ICacheProvider>().To<CacheProvider>();
+
+
+            // FormLib
+            var connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["DSN"].ConnectionString;
+
+            kernel.Bind<ECT.Model.Abstract.IGlobalViewRepository>()
+            .To<ECT.Model.Contrete.GlobalViewRepository>().InRequestScope().WithConstructorArgument("connectionString", connectionString);
+
+            kernel.Bind<ECT.Model.Abstract.IContractRepository>()
+            .To<ECT.Model.Contrete.ContractRepository>().InRequestScope().WithConstructorArgument("connectionString", connectionString);
+
+            kernel.Bind<ECT.Model.Abstract.IUserRepository>()
+            .To<ECT.Model.Contrete.UserRepository>().InRequestScope().WithConstructorArgument("connectionString", connectionString);
+
+            kernel.Bind<ECT.Core.Service.IFileService>().To<ECT.Service.FileService>().InRequestScope();
         }        
     }
    

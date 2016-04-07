@@ -184,12 +184,39 @@
                             body = body.Replace("[#14]", string.Empty); 
                         }
 
+                        if (body.Contains("[/#98]"))
+                        {
+                            string str1 = "[#98]";
+                            string str2 = "[/#98]";
+                            string LinkText;
+
+                            int Pos1 = body.IndexOf(str1) + str1.Length;
+                            int Pos2 = body.IndexOf(str2);
+                            LinkText = body.Substring(Pos1, Pos2 - Pos1);
+
+                            body = body.Replace(LinkText + "[/#98]", string.Empty);
+                        }
+
+                        if (body.Contains("[/#99]"))
+                        {
+                            string str1 = "[#99]";
+                            string str2 = "[/#99]";
+                            string LinkText;
+
+                            int Pos1 = body.IndexOf(str1) + str1.Length;
+                            int Pos2 = body.IndexOf(str2);
+                            LinkText = body.Substring(Pos1, Pos2 - Pos1);
+
+                            body = body.Replace(LinkText + "[/#99]", string.Empty);
+                        }
+
                         msg.Subject = AddInformationToMailBodyAndSubject(subject, fields);
                         msg.From = new MailAddress(from);
                         msg.IsBodyHtml = true;
                         msg.BodyEncoding = System.Text.Encoding.UTF8;
                         msg.Body = AddInformationToMailBodyAndSubject(body, fields).Replace(Environment.NewLine, "<br />");
 
+                        
                         // för log filer 
                         if (files != null && attachFiles)
                         {

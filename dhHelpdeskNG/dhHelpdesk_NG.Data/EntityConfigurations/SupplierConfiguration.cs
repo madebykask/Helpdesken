@@ -31,7 +31,6 @@
             this.Property(x => x.SortOrder).IsRequired();
             this.Property(x => x.SupplierNumber).IsRequired().HasMaxLength(50);
             this.Property(x => x.SyncChangedDate).IsOptional();
-            this.Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 

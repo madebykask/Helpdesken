@@ -22,7 +22,7 @@
                         <div class="span12">                              
                             <table class="tableform" border="0">
                                 <tr>
-                                    <td>
+                                    <td class="span3">
                                         @Translation.Get("Driftsobjekt", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>                                           
@@ -146,8 +146,8 @@
                                    <td>
                                        @Translation.Get("Visa på startsidan", Enums.TranslationSource.TextTranslation):
                                    </td>
-                                   <td class="checkbox">                                        
-                                       <input type="checkbox" class="switchcheckbox" name="OperationLog.ShowOnStartPage" @(Model.OperationLog.ShowOnStartPage == 1 ? "checked=checked" : "") value ="1" />                                        
+                                   <td class="span9">                                        
+                                       <input type="checkbox" name="OperationLog.ShowOnStartPage" @(Model.OperationLog.ShowOnStartPage == 1 ? "checked=checked" : "") value ="1" />                                        
                                        <input type="hidden" name="OperationLog.ShowOnStartPage" value="0" />                                                                                                             
                                    </td>                                    
                                </tr>
@@ -155,8 +155,8 @@
                                    <td> 
                                        @Translation.Get("Informera handläggarna", Enums.TranslationSource.TextTranslation):
                                    </td>
-                                   <td class="checkbox">
-                                       <input type="checkbox" class="switchcheckbox" name="OperationLog.InformUsers" @(Model.OperationLog.InformUsers == 1 ? "checked=checked" : "")  value="1" />                                        
+                                   <td class="span9">
+                                       <input type="checkbox" name="OperationLog.InformUsers" @(Model.OperationLog.InformUsers == 1 ? "checked=checked" : "")  value="1" />                                        
                                        <input type="hidden" name="OperationLog.InformUsers" value="0" />                                                                               
                                        @Translation.Get("Popup", Enums.TranslationSource.TextTranslation)
                                    </td>                                
@@ -166,11 +166,10 @@
                                        @Translation.Get("Visa på självservice", Enums.TranslationSource.TextTranslation)
                                    </td>
                                    <td>
-                                       <input type="checkbox" class="switchcheckbox" name="OperationLog.PublicInformation" @(Model.OperationLog.PublicInformation == 1 ? "checked=checked" : "")  value="1" />                                        
+                                       <input type="checkbox" name="OperationLog.PublicInformation" @(Model.OperationLog.PublicInformation == 1 ? "checked=checked" : "")  value="1" />                                        
                                        <input type="hidden" name="OperationLog.PublicInformation" value="0" /> 
-                                        
-                                       <label class="radio inline">
-                                       <input type="checkbox" class="switchcheckbox" name="OperationLog.Popup" @(Model.OperationLog.Popup == 1 ? "checked=checked" : "")  value="1" />                                                                                                                       
+                                       @Translation.Get("Visa", Enums.TranslationSource.TextTranslation)&nbsp;
+                                       <input type="checkbox" name="OperationLog.Popup" @(Model.OperationLog.Popup == 1 ? "checked=checked" : "")  value="1" />                                                                                                                       
                                        <input type="hidden" name="OperationLog.Popup" value="0" />                                                                               
                                        @Translation.Get("Popup", Enums.TranslationSource.TextTranslation)
                                         </label>
@@ -225,7 +224,80 @@
                         
                     </div>
                 </div> <!-- Email Container -->
-                @if (Model.OperationLogEmailLog != null)
+                @if (Model.CustomerSettings.SMSEMailDomain != "")
+                {
+                    <div class="container"> <!-- SMS Container -->                    
+                        <h4><input type="checkbox" id="chkOperationLogSMS" name="chkOperationLogSMS" value="1"/>&nbsp;@Translation.Get("SMS", Enums.TranslationSource.TextTranslation)</h4>
+                        <div class="row" id="divOperationLogSMS" style="display:none">
+                             <div class="span12">                               
+                                <table class ="tableform" border="0">
+                                   <tr>
+                                      <td class="span3">                                
+                                        @Translation.Get("SMS Text", Enums.TranslationSource.TextTranslation)                                    
+                                      </td>
+                                      <td>
+                                        <textarea class="CellText" name="txtSMS" rows="8" maxlength="500"></textarea>                              
+                                      </td>                                   
+                                   </tr> 
+                                   <tr>
+                                      <td class="span3">                                
+                                        @Translation.Get("Mottagare SMS", Enums.TranslationSource.TextTranslation)                                    
+                                      </td>
+                                      <td>
+                                        &nbsp;                         
+                                      </td>                                   
+                                   </tr>
+                                    <tr>
+                                      <td class="span3">                                
+                                        @Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation)                                    
+                                      </td>
+                                      <td style="width:200px">
+                                         @Html.ListBox("UsersAvailable", Model.AdministratorsAvailable, new { style = "height: 100px" })
+                                      </td>
+                                      <td style="vertical-align:middle;width:20px">
+                                          <input type="button" value="&gt;" id="addUs" class="btn"/>
+                                        <input type="button" value="&lt;" id="removeUs" class="btn"/>                                                                        
+                                      </td>
+                                      <td style="width:200px">
+                                        @Html.ListBox("UsersSelected", Model.AdministratorsSelected, new { style = "height: 100px" })
+                                      </td>               
+                                   </tr>
+                                   <tr>
+                                      <td class="span3">                                
+                                        @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)                                    
+                                      </td>
+                                      <td style="width:200px">
+                                         @Html.ListBox("WGsSMSAvailable", Model.SMSWorkingGroupAvailable, new { style = "height: 100px" })
+                                      </td>
+                                      <td style="vertical-align:middle;width:20px">
+                                          <input type="button" value="&gt;" id="addWGsSMS" class="btn"/>
+                                        <input type="button" value="&lt;" id="removeWGsSMS" class="btn"/>                                                                        
+                                      </td>
+                                      <td style="width:200px">
+                                        @Html.ListBox("WGsSMSSelected", Model.SMSWorkingGroupSelected, new { style = "height: 100px" })
+                                      </td>                                
+                                   </tr>
+                                    <tr>
+                                      <td class="span3">                                
+                                        @Translation.Get("Systemansvarig", Enums.TranslationSource.TextTranslation)                                    
+                                      </td>
+                                      <td style="width:200px">
+                                         @Html.ListBox("SRsAvailable", Model.SystemResponsiblesAvailable, new { style = "height: 100px" })
+                                      </td>
+                                      <td style="vertical-align:middle;width:20px">
+                                          <input type="button" value="&gt;" id="addSRs" class="btn"/>
+                                        <input type="button" value="&lt;" id="removeSRs" class="btn"/>                                                                        
+                                      </td>
+                                      <td style="width:200px">
+                                        @Html.ListBox("SRsSelected", Model.SystemResponsiblesSelected, new { style = "height: 100px" })
+                                      </td>                                
+                                   </tr>  
+                                </table >                                 
+                             </div>                         
+                         </div>
+                    </div> <!-- SMS Container -->
+                }
+                @if (Model.OperationLogEmailLog.Count > 0)
                 {
                 <div class="container"> <!-- Logg Container -->                    
                     <h4>@Translation.Get("Logg", Enums.TranslationSource.TextTranslation)</h4>
@@ -242,9 +314,9 @@
                                    <td>
                                         <b>@Translation.Get("Typ", Enums.TranslationSource.TextTranslation)</b>                                  
                                   </td>   
-                                  @* <td>
+                                  <td>
                                         <b>@Translation.Get("Meddelande", Enums.TranslationSource.TextTranslation)</b>                                  
-                                  </td>      *@                                
+                                  </td>                              
                                </tr>
                                 @foreach (var email in Model.OperationLogEmailLog)
                                 { 
@@ -265,9 +337,9 @@
                                               <label>@Translation.Get("E-post", Enums.TranslationSource.TextTranslation)</label> 
                                            }
                                        </td>
-                                       @*<td>
+                                       <td>
                                            <label>@email.SMSText</label>
-                                       </td>*@
+                                       </td>
                                    </tr>
                                 }
                             </table >                                 
@@ -298,6 +370,10 @@
 
     function submitForm() {
         $("#WGsSelected option").attr("selected", "selected");
+        $("#UsersSelected option").attr("selected", "selected");
+        $("#SRsSelected option").attr("selected", "selected")
+        $("#WGsSMSSelected option").attr("selected", "selected")
+        $("#txtSMS").val();
         $("#target").submit();
     }
 
@@ -321,6 +397,57 @@
             $("#divSendToDialogCase").dialog("option", "height", 550);
             $("#divSendToDialogCase").dialog("open");
         }
+    });
+
+    $("#chkOperationLogSMS").click(function () {
+        if ($("#chkOperationLogSMS").is(":checked")) {
+            $("#divOperationLogSMS").show();
+        }
+        $("#chkOperationLogSMS").click(function () {
+            $("#divOperationLogSMS").toggle();
+        });
+    });
+
+    $("#addWGsSMS").click(function () {
+        $("#WGsSMSAvailable option:selected").remove().appendTo("#WGsSMSSelected");
+        $("#WGsSMSAvailable").get(0).selectedIndex = -1;
+        $("#WGsSMSSelected").get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $("#removeWGsSMS").click(function () {
+        $("#WGsSMSSelected option:selected").remove().appendTo("#WGsSMSAvailable");
+        $("#WGsSMSAvailable").get(0).selectedIndex = -1;
+        $("#WGsSMSAvailable").get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $("#addUs").click(function () {
+        $("#UsersAvailable option:selected").remove().appendTo("#UsersSelected");
+        $("#UsersAvailable").get(0).selectedIndex = -1;
+        $("#UsersSelected").get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $("#removeUs").click(function () {
+        $("#UsersSelected option:selected").remove().appendTo("#UsersAvailable");
+        $("#UsersAvailable").get(0).selectedIndex = -1;
+        $("#UsersAvailable").get(0).selectedIndex = -1;
+        return false;
+    });
+    
+    $("#addSRs").click(function () {
+        $("#SRsAvailable option:selected").remove().appendTo("#SRsSelected");
+        $("#SRsAvailable").get(0).selectedIndex = -1;
+        $("#SRsSelected").get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $("#removeSRs").click(function () {
+        $("#SRsSelected option:selected").remove().appendTo("#SRsAvailable");
+        $("#SRsAvailable").get(0).selectedIndex = -1;
+        $("#SRsAvailable").get(0).selectedIndex = -1;
+        return false;
     });
 
     $(function () {

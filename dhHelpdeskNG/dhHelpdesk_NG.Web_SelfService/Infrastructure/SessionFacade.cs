@@ -9,7 +9,12 @@
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Computers;    
     using DH.Helpdesk.SelfService.Models;
-
+    using DH.Helpdesk.Common.Types;
+    using DH.Helpdesk.BusinessData.Models.CoWorkers;
+    using DH.Helpdesk.Common.Classes.ServiceAPI.AMAPI.Output;
+    using DH.Helpdesk.BusinessData.Models.Language.Output;
+    using DH.Helpdesk.BusinessData.Models.Error;    
+    
     public static class SessionFacade
     {
         private const string _CURRENT_USER = "CURRENT_USER";
@@ -17,10 +22,12 @@
         private const string _CASE_TRANSLATION = "CASE_TRANSLATION";
         private const string _COMPUTER_USER_SEARCH = "COMPUTER_USER_SEARCH";
         private const string _CURRENT_CUSTOMER = "CURRENT_CUSTOMER";
+        private const string _CURRENT_CUSTOMER_ID = "CURRENT_CUSTOMER_ID";
         private const string _CURRENT_LANGUAGE = "CURRENT_LANGUAGE";
         private const string _SIGNED_IN_USER = "SIGNED_IN_USER";
         private const string _TEXT_TRANSLATION = "TEXT_TRANSLATION";
         private const string _ACTIVE_TAB = "ACTIVE_TAB";
+        private const string _CURRENT_SYSTEM_USER = "CURRENT_SYSTEM_USER";
 
         private const string _PAGE_FILTERS = "PAGE_FILTERS";
         private const string _CUSTOM_VALUES = "CUSTOM_VALUES";
@@ -28,8 +35,99 @@
         private const string _CURRENT_CALENDER_SEARCH = "CURRENT_CALENDER_SEARCH";
         private const string _CURRENT_BULLETINBOARD_SEARCH = "CURRENT_BULLETINBOARD_SEARCH";
         private const string _CURRENT_CASESOLUTION_SEARCH = "CURRENT_CASESOLUTION_SEARCH";
-        private const string _CURRENT_OPERATIONLOG_SEARCH = "CURRENT_OPERATIONLOG_SEARCH";
+        private const string _CURRENT_OPERATIONLOG_SEARCH = "CURRENT_OPERATIONLOG_SEARCH";        
         private const string _CURRENT_DOCUMENT_SEARCH = "CURRENT_DOCUMENT_SEARCH";
+        private const string _CURRENT_USER_IDENTITY = "CURRENT_USER_IDENTITY";
+        private const string _CURRENT_COWORKERS = "CURRENT_COWORKERS";
+        private const string _USER_HAS_ACCESS = "USER_HAS_ACCESS";
+        private const string _ALL_LANGUAGES = "ALL_LANGUAGES";
+        private const string _LAST_CORRECT_URL = "LAST_CORRECT_URL";
+        private const string _LAST_ERROR = "LAST_ERROR";
+
+        public static int CurrentCustomerID
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_CURRENT_CUSTOMER_ID] == null)
+                    return -1;
+                return (int) HttpContext.Current.Session[_CURRENT_CUSTOMER_ID];
+            }
+            set
+            {
+                if (HttpContext.Current.Session[_CURRENT_CUSTOMER_ID] == null)
+                    HttpContext.Current.Session.Add(_CURRENT_CUSTOMER_ID, value);
+                else
+                    HttpContext.Current.Session[_CURRENT_CUSTOMER_ID] = value;
+            }
+        }
+
+        public static string CurrentSystemUser
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_CURRENT_SYSTEM_USER] == null)
+                    return null;
+                return (string) HttpContext.Current.Session[_CURRENT_SYSTEM_USER];
+            }
+            set
+            {
+                if (HttpContext.Current.Session[_CURRENT_SYSTEM_USER] == null)
+                    HttpContext.Current.Session.Add(_CURRENT_SYSTEM_USER, value);
+                else
+                    HttpContext.Current.Session[_CURRENT_SYSTEM_USER] = value;
+            }
+        }
+
+        public static bool UserHasAccess
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_USER_HAS_ACCESS] == null)
+                    return false;
+                return (bool)HttpContext.Current.Session[_USER_HAS_ACCESS];
+            }
+            set
+            {
+                if (HttpContext.Current.Session[_USER_HAS_ACCESS] == null)
+                    HttpContext.Current.Session.Add(_USER_HAS_ACCESS, value);
+                else
+                    HttpContext.Current.Session[_USER_HAS_ACCESS] = value;
+            }
+        }
+
+        public static string LastCorrectUrl
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_LAST_CORRECT_URL] == null)
+                    return null;
+                return (string )HttpContext.Current.Session[_LAST_CORRECT_URL];
+            }
+            set
+            {
+                if (HttpContext.Current.Session[_LAST_CORRECT_URL] == null)
+                    HttpContext.Current.Session.Add(_LAST_CORRECT_URL, value);
+                else
+                    HttpContext.Current.Session[_LAST_CORRECT_URL] = value;
+            }
+        }
+
+        public static ErrorModel LastError
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_LAST_ERROR] == null)
+                    return null;
+                return (ErrorModel)HttpContext.Current.Session[_LAST_ERROR];
+            }
+            set
+            {
+                if (HttpContext.Current.Session[_LAST_ERROR] == null)
+                    HttpContext.Current.Session.Add(_LAST_ERROR, value);
+                else
+                    HttpContext.Current.Session[_LAST_ERROR] = value;
+            }
+        }
 
         public static UserOverview CurrentUser
         {
@@ -45,6 +143,57 @@
                     HttpContext.Current.Session.Add(_CURRENT_USER, value);
                 else
                     HttpContext.Current.Session[_CURRENT_USER] = value;
+            }
+        }
+
+        public static List<SubordinateResponseItem> CurrentCoWorkers
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_CURRENT_COWORKERS] == null)
+                    return null;
+                return (List<SubordinateResponseItem>)HttpContext.Current.Session[_CURRENT_COWORKERS];
+            }
+            set
+            {
+                if (HttpContext.Current.Session[_CURRENT_COWORKERS] == null)
+                    HttpContext.Current.Session.Add(_CURRENT_COWORKERS, value);
+                else
+                    HttpContext.Current.Session[_CURRENT_COWORKERS] = value;
+            }
+        }
+
+        public static List<LanguageOverview> AllLanguages
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_ALL_LANGUAGES] == null)
+                    return null;
+                return (List<LanguageOverview>)HttpContext.Current.Session[_ALL_LANGUAGES];
+            }
+            set
+            {
+                if (HttpContext.Current.Session[_ALL_LANGUAGES] == null)
+                    HttpContext.Current.Session.Add(_ALL_LANGUAGES, value);
+                else
+                    HttpContext.Current.Session[_ALL_LANGUAGES] = value;
+            }
+        }
+
+        public static UserIdentity CurrentUserIdentity
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_CURRENT_USER_IDENTITY] == null)
+                    return null;
+                return (UserIdentity)HttpContext.Current.Session[_CURRENT_USER_IDENTITY];
+            }
+            set
+            {
+                if (HttpContext.Current.Session[_CURRENT_USER_IDENTITY] == null)
+                    HttpContext.Current.Session.Add(_CURRENT_USER_IDENTITY, value);
+                else
+                    HttpContext.Current.Session[_CURRENT_USER_IDENTITY] = value;
             }
         }
 

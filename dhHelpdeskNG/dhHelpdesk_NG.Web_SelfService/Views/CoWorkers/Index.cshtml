@@ -1,0 +1,225 @@
+﻿@model DH.Helpdesk.SelfService.Models.CoWorkers.CoWorkersModel
+
+@{
+    ViewBag.Title = "Index";
+    
+}
+<!-- Modal -->
+
+<input type="hidden" name="JsonCoworkers" id ="JsonCoworkers" value="@Model.CoWorkers.ToJavaScriptObject()" />
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header cohead">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h5 class="modal-title" id="myModalLabel"><strong>Previous service requests for Ruben van Burgsteden</strong></h5>
+            </div>
+            <div class="modal-body">
+                <table class="table table-striped table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Service request no</th>
+                            <th>Request type 
+                            </th>
+                            <th>Status
+                            </th>
+                            <th>Case End Date
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                12345
+                            </td>
+                            <td>Hiring Administration
+                            </td>
+                            <td>In progress Unit HR
+                            </td>
+                            <td>2014-06-05
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                34674
+                            </td>
+                            <td>Notify - New Hire - No Show
+                            </td>
+                            <td>In progress Unit HR
+                            </td>
+                            <td>2014-05-03
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                34233
+                            </td>
+                            <td>Absence Administration
+                            </td>
+                            <td>Service Request Completed
+                            </td>
+                            <td>2014-05-01
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                23554
+                            </td>
+                            <td>Notify - New Hire - No Show
+                            </td>
+                            <td>Service Request Completed
+                            </td>
+                            <td>2014-01-05
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Translation.Get("Close", Enums.TranslationSource.TextTranslation)</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid dh-container">
+    <ul class="nav nav-tabs">
+        <li class="active" ><a href="#home" data-toggle="tab">@Translation.Get("Co-Workers", Enums.TranslationSource.TextTranslation)</a></li>       
+    </ul>
+    <div class="content">
+        <div class="tab-pane active" id="home">
+            <div class="container-fluid dh-container">
+                <div class="row">
+                    <div class="col-md-3 dh-col">
+                        <div class="container">
+                            <div class="form-group">
+                                <label>
+                                    @Translation.Get("Search Phrase", Enums.TranslationSource.TextTranslation)
+                                </label>
+                                <div>
+                                    @*<select><option>All Teams</option><option>Tema One</option><option>Tema One</option></select>*@
+                                    <input type="text" name ="searchTxt" id="searchTxt" /> 
+                                    <button type="submit" onclick="DoSearch()" class="btn btn-default">@Translation.Get("Search", Enums.TranslationSource.TextTranslation)</button>
+                                </div> 
+                            </div>
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-5 dh-col pull-right">
+                        <img src="@Url.Content("~/img-profile/ikea-people.png")" class="pull-right" style="margin:-38px 30px 0 0;" />                         
+                    </div>
+                    
+                </div>
+                <div class="row">
+                    <div class="col-md-12 table-responsive">
+                        <table id="coWorkerTable" class="table table-striped table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>@Translation.Get("Co-worker Employee Number", Enums.TranslationSource.TextTranslation)</th>
+                                    <th>@Translation.Get("Co-worker First name", Enums.TranslationSource.TextTranslation)</th>
+                                    <th>@Translation.Get("Co-worker Last name", Enums.TranslationSource.TextTranslation)</th>
+                                    <th>@Translation.Get("Job title – job key", Enums.TranslationSource.TextTranslation)</th>
+                                    <th>@Translation.Get("E-mail", Enums.TranslationSource.TextTranslation)</th>
+                                    <th>@Translation.Get("IKEA Inside", Enums.TranslationSource.TextTranslation)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cw_List">
+                                @if (Model.CoWorkers != null)
+                                {
+                                    foreach (var cw in Model.CoWorkers)
+                                    {
+                                        if (cw.EmployeeNumber != "")
+                                        {
+                                             <tr>
+                                                <td>
+                                                    @*<button class="btn btn-dhblue btn-xs" data-toggle="modal" data-target="#myModal" title="Previous service requests for this co-worker"><span class="glyphicon glyphicon-folder-open"></span></button>*@
+                                                </td>
+                                                <td>
+                                                    @cw.EmployeeNumber 
+                                                </td>
+                                                <td>
+                                                    @cw.FirstName 
+                                                </td>
+                                                <td>
+                                                    @cw.LastName 
+                                                </td>
+                                                <td>
+                                                    @cw.JobKey - @cw.JobTitle
+                                                </td>
+                                                 <td>
+                                                    @cw.Email 
+                                                </td>
+                                                <td>
+                                                    [IKEA Inside]
+                                                </td>
+                                                    @*<span class="glyphicon glyphicon-arrow-right"></span>*@
+                                             </tr>
+                                        }
+                                    }
+                                }                                                               
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>        
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    function DoSearch() {
+        var s = $("#searchTxt").val();        
+                        
+        var cwTable = $('#coWorkerTable');
+        cwTable.children('tbody').remove();
+
+        var newBody = "";
+        
+        var cws = jQuery.parseJSON($("#JsonCoworkers").val());                
+
+        if (cws != null) {
+            for (var i = 0; i < cws.length ; i++) {
+                cw = cws[i];
+                var txtSearch = cw.EmployeeNumber + " " + cw.FirstName + " " + cw.LastName + " " + cw.JobKey + " " + cw.JobTitle + " " + cw.Email;
+
+                if ((cw.EmployeeNumber != "") && (txtSearch.toLowerCase().indexOf(s.toLowerCase()) >= 0)) {
+                    newBody +=
+                               "<tr> " +
+                                    "<td>" +
+                                    "</td>" +
+                                    "<td>" +
+                                        cw.EmployeeNumber + 
+                                    "</td>" +
+                                    "<td>" +
+                                        cw.FirstName +
+                                    "</td>" +
+                                    "<td>" +
+                                        cw.LastName +
+                                    "</td>" +
+                                    "<td>" +
+                                        cw.JobKey + "-" + cw.JobTitle +
+                                    "</td>" +
+                                    "<td>" +
+                                        cw.Email + 
+                                    "</td>" +
+                                    "<td>" +
+                                        "[IKEA Inside]" +
+                                    "</td>" +
+                               "</tr>";
+                }
+            }
+        }
+
+        //alert(cws);
+        cwTable.append(newBody);
+    }
+
+    function AddNewTab(caption) {
+        //alert(caption);
+    }
+
+</script>

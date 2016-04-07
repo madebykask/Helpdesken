@@ -18,6 +18,7 @@
         Domain.System GetSystem(int id);
 
         DeleteMessage DeleteSystem(int id);
+        IList<Domain.System> GetSystemResponsibles(int customerId);
 
         void SaveSystem(Domain.System system, out IDictionary<string, string> errors);
         void Commit();
@@ -53,6 +54,11 @@
         public IList<Domain.System> GetSystems(int customerId)
         {
             return this._systemRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.SystemName).ToList();
+        }
+
+        public IList<Domain.System> GetSystemResponsibles(int customerId)
+        {
+            return this._systemRepository.GetMany(x => x.Customer_Id == customerId && x.ContactPhone != null && x.ContactPhone.Length > 5).OrderBy(x => x.ContactName).ToList();
         }
 
         public Domain.System GetSystem(int id)
@@ -97,6 +103,7 @@
             system.SystemOwnerUserId = system.SystemOwnerUserId ?? string.Empty;
             system.ViceSystemResponsibleUserId = system.ViceSystemResponsibleUserId ?? string.Empty;
             system.SystemOwnerUserId = system.SystemOwnerUserId ?? string.Empty;
+            system.ChangedDate = DateTime.UtcNow;
 
             if (string.IsNullOrEmpty(system.SystemName))
                 errors.Add("Domain.System.SystemName", "Du måste ange ett systemnamn");

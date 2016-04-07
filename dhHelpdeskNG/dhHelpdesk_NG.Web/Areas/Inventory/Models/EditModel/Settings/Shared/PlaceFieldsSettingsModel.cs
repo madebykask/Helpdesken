@@ -16,11 +16,11 @@
         }
 
         [NotNull]
-        [LocalizedDisplay("Room")]
+        [LocalizedDisplay("Rum")]
         public FieldSettingModel RoomFieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Location")]
+        [LocalizedDisplay("Placering")]
         public FieldSettingModel LocationFieldSettingModel { get; set; }
     }
 }

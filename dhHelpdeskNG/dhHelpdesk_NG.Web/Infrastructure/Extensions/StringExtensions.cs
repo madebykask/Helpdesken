@@ -230,7 +230,7 @@
 
             if (SessionFacade.CurrentCaseSolutionSearch != null)
                 if (SessionFacade.CurrentCaseSolutionSearch.SortBy == value)
-                    ret = SessionFacade.CurrentCaseSolutionSearch.Ascending ? "icon-chevron-down" : "icon-chevron-up";
+                    ret = SessionFacade.CurrentCaseSolutionSearch.Ascending ? "icon-chevron-up" : "icon-chevron-down";
 
             return ret;
         }

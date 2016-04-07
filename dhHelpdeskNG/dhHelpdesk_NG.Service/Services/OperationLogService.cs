@@ -31,8 +31,10 @@ namespace DH.Helpdesk.Services.Services
         void SaveOperationLog(OperationLog operationlog, int[] wgs, out IDictionary<string, string> errors);
         DeleteMessage DeleteOperationLog(int id);
         void Commit();
+        int GetOperationLogId();
 
         void SendOperationLogEmail(OperationLog operationLogId, OperationLogList operationLogList, Customer customer);
+        void SendOperationLogSMS(OperationLog operationLogId, string SMSRecipients, string txtSMS, Customer customer);
         /// <summary>
         /// The get operation log overviews.
         /// </summary>
@@ -63,6 +65,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly IMailTemplateService _mailTemplateService;
         private readonly IEmailService _emailService;
         private readonly IOperationLogEMailLogRepository _operationLogEmailLogRepository;
+        private readonly ISettingService _settingService;
 
         public OperationLogService(
             IOperationLogRepository operationLogRepository,
@@ -72,6 +75,7 @@ namespace DH.Helpdesk.Services.Services
             IMailTemplateService mailTemplateService,
             IEmailService emailService,
             IOperationLogEMailLogRepository operationLogEmailLogRepository,
+            ISettingService settingService,
             IWorkContext workContext)
         {
             this._operationLogRepository = operationLogRepository;
@@ -82,6 +86,7 @@ namespace DH.Helpdesk.Services.Services
             this._mailTemplateService = mailTemplateService;
             this._emailService = emailService;
             this._operationLogEmailLogRepository = operationLogEmailLogRepository;
+            this._settingService = settingService;
         }
 
         public IList<OperationLog> GetOperationLogs(int customerId)
@@ -140,17 +145,25 @@ namespace DH.Helpdesk.Services.Services
 
         public OperationLog GetOperationLog(int id)
         {
+            var ret = new OperationLog();
+            ret = null;
             using (var uow = this.unitOfWorkFactory.Create())
             {
                 var operationLogRep = uow.GetRepository<OperationLog>();
 
-                return operationLogRep.GetAll()
+                ret = operationLogRep.GetAll()
                         .RestrictByWorkingGroupsAndUsers(this.workContext)
                         .GetById(id)
                         .IncludePath(o => o.Us)
                         .IncludePath(o => o.WGs)
                         .SingleOrDefault();
             }
+            return ret;
+        }
+
+        public int GetOperationLogId()
+        {
+            return this._operationLogRepository.GetOperationLogId();
         }
 
         public IList<OperationLog> GetAllOpertionLogs()
@@ -219,20 +232,19 @@ namespace DH.Helpdesk.Services.Services
                 var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
 
                 OperationLog entity;
-                var now = DateTime.Now;
                 if (operationlog.IsNew())
                 {
                     entity = new OperationLog();
                     OperationLogMapper.MapToEntity(operationlog, entity);
-                    entity.CreatedDate = now;
-                    entity.ChangedDate = now;
+                    //entity.CreatedDate = DateTime.UtcNow;
+                    entity.ChangedDate = DateTime.UtcNow;
                     operationLogRep.Add(entity);
                 }
                 else
                 {
                     entity = operationLogRep.GetById(operationlog.Id);
                     OperationLogMapper.MapToEntity(operationlog, entity);
-                    entity.ChangedDate = now;
+                    entity.ChangedDate = DateTime.UtcNow;
                     operationLogRep.Update(entity);
                 }
 
@@ -305,6 +317,66 @@ namespace DH.Helpdesk.Services.Services
                     }
                 }
             }
+        }
+
+        public void SendOperationLogSMS(OperationLog operationLog, string SMSRecipients, string txtSMS, Customer customer)
+        {
+            var setting = this._settingService.GetCustomerSetting(customer.Id);
+            var helpdeskMailFromAdress = customer.HelpdeskEmail;
+            var smsEmailDomain = setting.SMSEMailDomain;
+            var smsEMailDomainUserId = string.Empty;
+            var smsEMailDomainUserName = string.Empty;
+            var smsEMailDomainPassword = string.Empty;
+            var smsSubject = string.Empty;
+
+            if (setting.SMSEMailDomainUserId != null)
+                smsEMailDomainUserId = setting.SMSEMailDomainUserId;
+            else
+                smsEMailDomainUserId = "";
+
+            if (setting.SMSEMailDomainUserName != null)
+                smsEMailDomainUserName = setting.SMSEMailDomainUserName;
+            else
+                smsEMailDomainUserName = "";
+
+            if (setting.SMSEMailDomainPassword != null)
+                smsEMailDomainPassword = setting.SMSEMailDomainPassword;
+            else
+                smsEMailDomainPassword = "";
+
+            smsSubject = smsEMailDomainUserName;
+            if (smsEMailDomainPassword != "")
+                smsSubject = smsSubject + " " + smsEMailDomainPassword;
+
+            if (smsEMailDomainUserId != "")
+            {
+                var to = SMSRecipients
+                                   .Replace(" ", "")
+                                   .Replace(Environment.NewLine, "|")
+                                   .Replace("-", "")
+                                   .Split('|', ';', ',');
+
+                foreach (var t in to)
+                {
+                    var curMail = t.Trim();
+                    if (!string.IsNullOrWhiteSpace(t) && this._emailService.IsValidEmail(t))
+                    {
+                        if (!string.IsNullOrWhiteSpace(curMail) && _emailService.IsValidEmail(curMail))
+                        {
+                            var el = new OperationLogEMailLog(operationLog.Id, txtSMS, t);
+              
+                            var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.Recipients, smsSubject, el.SMSText, null, EmailResponse.GetEmptyEmailResponse(), null, false, null);
+
+                            var now = DateTime.Now;
+                            el.CreatedDate = now;
+                            this._operationLogEmailLogRepository.Add(el);
+                            this._operationLogEmailLogRepository.Commit();
+                        }
+
+                    }
+                }
+            }
+
         }
 
         private List<Field> GetFieldsForEmail(OperationLogList loglist)

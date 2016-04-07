@@ -176,6 +176,9 @@
             bundles.Add(new ScriptBundle("~/bundles/casetemplates/edit").Include(
                 "~/Content/js/CaseTemplates/edit.logic.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/casetemplates/index").Include(
+                "~/Content/js/CaseTemplates/index.logic.js"));
+
 
             bundles.Add(new ScriptBundle("~/bundles/changes/change").Include(
                             "~/Content/js/Changes/change.js"));

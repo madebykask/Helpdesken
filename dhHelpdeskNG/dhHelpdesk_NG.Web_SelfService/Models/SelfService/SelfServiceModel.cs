@@ -1,4 +1,6 @@
-﻿using DH.Helpdesk.SelfService.Models.Case;
+﻿using DH.Helpdesk.Domain;
+using DH.Helpdesk.SelfService.Models;
+using DH.Helpdesk.SelfService.Models.Case;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,8 +23,6 @@ namespace DH.Helpdesk.SelfService.Models.SelfService
         public int LanguageId { get; set; }
 
         public string AUser { get; set; }
-
-        public string ExLogFileGuid { get; set; }
 
         public string MailGuid { get; set; }
 

@@ -294,8 +294,9 @@ namespace DH.Helpdesk.Web.Controllers
             return this.RedirectToAction("Index");
         }
 
-        [HttpPost]
+        [ValidateInput(false)]
         [BadRequestOnNotValid]
+        [HttpPost]        
         public JsonResult NewNotifierPopup(InputModel model)
         {
             if ((model.LastName == null || !model.FirstName.Show) || (model.LastName == null || !model.LastName.Show))
@@ -314,6 +315,7 @@ namespace DH.Helpdesk.Web.Controllers
             return new JsonResult { Data = newNotifier.Id };
         }
 
+        [ValidateInput(false)]
         [HttpGet]
         public ViewResult NewNotifierPopup(
             string userId,
@@ -391,8 +393,10 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             if (!string.IsNullOrEmpty(userId))
+            {
+                userId = userId.Replace("<", "").Replace(">", "");
                 inputParams.Add("UserId", userId);
-
+            }
 
             var splitedName = GetSplitedName(fName);
             inputParams.Add("FName", fName);                
@@ -699,6 +703,7 @@ namespace DH.Helpdesk.Web.Controllers
             return this.PartialView(model);
         }
 
+        [ValidateInput(false)]
         [HttpPost]
         [BadRequestOnNotValid]
         public PartialViewResult Search(SearchInputModel inputModel)

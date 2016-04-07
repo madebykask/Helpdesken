@@ -15,6 +15,8 @@
     using System;
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models;
+    using System.Text;
+    using DH.Helpdesk.BusinessData.Models.WorkingGroup;
 
     public class OperationLogController : BaseController
     {
@@ -28,6 +30,7 @@
         private readonly IEmailGroupService _emailGroupService;
         private readonly IEmailService _emailService;
         private readonly IOperationLogEmailLogService _operationLogEmailLogService;
+        private readonly ISystemService _systemService;
 
         public OperationLogController(
             IOperationLogService operationLogService,
@@ -40,7 +43,8 @@
             ISettingService settingService,
             IEmailGroupService emailGroupService,
             IEmailService emailService,
-            IOperationLogEmailLogService operationLogEmailLogService)
+            IOperationLogEmailLogService operationLogEmailLogService,
+            ISystemService systemService)
             : base(masterDataService)
         {
             this._operationLogService = operationLogService;
@@ -53,6 +57,7 @@
             this._emailGroupService = emailGroupService;
             this._emailService = emailService;
             this._operationLogEmailLogService = operationLogEmailLogService;
+            this._systemService = systemService;
         }
 
         public ActionResult Index()
@@ -128,7 +133,7 @@
         }
 
         [HttpPost]
-        public ActionResult New(OperationLog operationlog, OperationLogList operationLogList, int[] WGsSelected, int OperationLogHour, int OperationLogMinute, int chkSecurity)
+        public ActionResult New(OperationLog operationlog, OperationLogList operationLogList, int[] WGsSelected, string[] SRsSelected, string[] UsersSelected, int OperationLogHour, int OperationLogMinute, int chkSecurity, int? chkOperationLogSMS, string txtSMS)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
             operationlog.User_Id = SessionFacade.CurrentUser.Id;
@@ -155,9 +160,32 @@
 
             this._operationLogService.SaveOperationLog(operationlog, WGsSelected, out errors);
 
+            //get the id for new operationlog
+            var newOperationLogId = this._operationLogService.GetOperationLogId();
+
+            operationlog.Id = newOperationLogId;
+
             // send emails
             if (operationLogList.EmailRecepientsOperationLog != null)
                 this._operationLogService.SendOperationLogEmail(operationlog, operationLogList, customer);
+
+            // send sms
+            if (chkOperationLogSMS == 1)
+            {
+                var SystemRepsSelected = string.Empty;
+                var AdministratorsSelected = string.Empty;
+                var SMSRecipients = string.Empty;
+
+                if (SRsSelected != null)
+                    SystemRepsSelected = ConvertStringArrayToString(SRsSelected);
+
+                if (UsersSelected != null)
+                    AdministratorsSelected = ConvertStringArrayToString(UsersSelected);
+
+                SMSRecipients = SystemRepsSelected + AdministratorsSelected;
+
+                this._operationLogService.SendOperationLogSMS(operationlog, SMSRecipients, txtSMS, customer);
+            }
 
             if (errors.Count == 0)
                 return this.RedirectToAction("index", "operationlog");
@@ -183,7 +211,7 @@
         }
 
         [HttpPost]
-        public ActionResult Edit(int id, OperationLog operationlog, OperationLogList operationLogList, int[] WGsSelected, int OperationLogHour, int OperationLogMinute,int chkSecurity)
+        public ActionResult Edit(int id, OperationLog operationlog, OperationLogList operationLogList, int[] WGsSelected, string[] SRsSelected, string[] WGsSMSSelected, string[] UsersSelected, int OperationLogHour, int OperationLogMinute, int chkSecurity, int? chkOperationLogSMS, string txtSMS)
         {
             var operationlogToSave = this._operationLogService.GetOperationLog(id);
             this.UpdateModel(operationlogToSave, "OperationLog");
@@ -217,6 +245,28 @@
             if (operationLogList.EmailRecepientsOperationLog != null)
                  this._operationLogService.SendOperationLogEmail(operationlogToSave, operationLogList, customer);
 
+            // send sms
+            if (chkOperationLogSMS == 1)
+            {
+                var SystemRepsSelected = string.Empty;
+                var AdministratorsSelected = string.Empty;
+                var SMSRecipients = string.Empty;
+                var WGsForSMSSelected = string.Empty;
+
+                if (SRsSelected != null)
+                    SystemRepsSelected = ConvertStringArrayToString(SRsSelected);
+
+                if (UsersSelected != null)
+                    AdministratorsSelected = ConvertStringArrayToString(UsersSelected);
+
+                if (WGsSMSSelected != null)
+                    WGsForSMSSelected = ConvertStringArrayToString(WGsSMSSelected);
+
+                SMSRecipients = SystemRepsSelected + AdministratorsSelected + WGsForSMSSelected;
+
+                this._operationLogService.SendOperationLogSMS(operationlogToSave, SMSRecipients, txtSMS, customer);
+            }
+
             if (errors.Count == 0)
                 return this.RedirectToAction("index", "operationlog");
             
@@ -244,6 +294,16 @@
             var customerId = SessionFacade.CurrentCustomer.Id;
             var cs = this._settingService.GetCustomerSetting(customerId);
             const bool isAddEmpty = true;
+            var wgsAvailableSMS = new List<WorkingGroupForSMS>();
+            wgsAvailableSMS = _workingGroupService.GetWorkingGroupsForSMS(customerId).ToList();
+            var usAvailable = new List<User>();
+            usAvailable = _userService.GetAdminstratorsForSMS(customerId).ToList();
+            var systemRespAvailable = new List<System>();
+            systemRespAvailable = _systemService.GetSystemResponsibles(customerId).ToList();
+            var smsEmailDomain = "";
+
+            if (cs.SMSEMailDomain != null)
+                smsEmailDomain = cs.SMSEMailDomain;
 
             foreach (var wg in this._workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id))
             {                
@@ -278,8 +338,31 @@
                 {
                     Text = x.OLCName,
                     Value = x.Id.ToString()
-                }).ToList()                 
-                                
+                }).ToList(),
+
+                SMSWorkingGroupAvailable = wgsAvailableSMS.Select(x => new SelectListItem
+                {
+                    Text = x.WorkingGroupName,
+                    Value = x.PhoneNumbers
+                }).ToList(),
+
+                SMSWorkingGroupSelected = new List<SelectListItem>(),
+                 
+                AdministratorsAvailable = usAvailable.Select(x => new SelectListItem
+                {
+                    Text = x.SurName + " " + x.FirstName,
+                    Value = x.CellPhone + "@" + smsEmailDomain
+                }).ToList(),
+
+                AdministratorsSelected = new List<SelectListItem>(),
+
+                SystemResponsiblesAvailable = systemRespAvailable.Select(x => new SelectListItem
+                {
+                    Text = x.ContactName,
+                    Value = x.ContactPhone + "@" + smsEmailDomain
+                }).ToList(),
+
+                SystemResponsiblesSelected = new List<SelectListItem>()
             };
 
             
@@ -287,12 +370,13 @@
 
             var customerSettings = this._settingService.GetCustomerSetting(customerId);
             var responsibleUsersAvailable = this._userService.GetAvailablePerformersOrUserId(customerId, operationlog.User_Id);
-            model.ResponsibleUsersAvailable = responsibleUsersAvailable.MapToSelectList(customerSettings, isAddEmpty);
+            model.ResponsibleUsersAvailable = responsibleUsersAvailable.MapToSelectList(cs, isAddEmpty);
             model.SendToDialogModel = this.CreateNewSendToDialogModel(customerId, responsibleUsersAvailable.ToList(), cs);
 
             model.OperationLogHour = model.OperationLog.WorkingTime / 60;
             model.OperationLogMinute = model.OperationLog.WorkingTime - (model.OperationLogHour*60);
 
+            model.CustomerSettings = cs;
             return model;
         }
 
@@ -357,6 +441,17 @@
         {
             ViewData["Callback"] = "SendToDialogOperationLogCallback";
             ViewData["Id"] = "divSendToDialogCase";
+        }
+
+        private string ConvertStringArrayToString(string[] array)
+        {
+            StringBuilder builder = new StringBuilder();
+            foreach (string value in array)
+            {
+                builder.Append(value);
+                builder.Append(',');
+            }
+            return builder.ToString();
         }
     }
 }

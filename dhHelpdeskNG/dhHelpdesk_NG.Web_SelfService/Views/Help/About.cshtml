@@ -1,0 +1,28 @@
+﻿@model DH.Helpdesk.SelfService.Models.Help.AboutModel
+
+@{
+    ViewBag.Title = "About";
+
+    var htmlArea = "";
+    if (Model.HtmlPageData != null)
+    {
+        htmlArea = Model.HtmlPageData.SetHtmlParameters();
+    }
+}
+
+<div class="container-fluid dh-container">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#home" data-toggle="tab">@Translation.Get("About", Enums.TranslationSource.TextTranslation)</a></li>
+    </ul>
+    <div class="content">
+        <div class="tab-pane active" id="home">
+            <div class="container-fluid dh-container">
+                <div class="row">
+                    <div class="col-md-12 table-responsive">                        
+                          @Html.Raw(htmlArea)                                                  
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

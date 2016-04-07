@@ -64,7 +64,6 @@
             this.Property(x => x.ContactName).IsOptional().HasMaxLength(50);
             this.Property(x => x.ContactEMail).IsOptional().HasMaxLength(50);
             this.Property(x => x.ContactPhone).IsOptional().HasMaxLength(50);
-            this.Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 

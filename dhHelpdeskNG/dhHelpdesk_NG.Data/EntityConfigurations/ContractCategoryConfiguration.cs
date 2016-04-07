@@ -38,7 +38,6 @@
             this.Property(x => x.Name).IsRequired().HasMaxLength(50).HasColumnName("ContractCategory");
             this.Property(x => x.StateSecondary_Id1).IsOptional().HasColumnName("CreateCase_StateSecondary_Id1");
             this.Property(x => x.StateSecondary_Id2).IsOptional().HasColumnName("CreateCase_StateSecondary_Id2");
-            this.Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 

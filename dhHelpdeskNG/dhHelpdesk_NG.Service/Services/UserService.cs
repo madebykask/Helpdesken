@@ -48,6 +48,7 @@
         IList<User> GetUsers();
         IList<User> GetUsers(int customerId);
         IList<User> GetUsersByUserGroup(int customerId);
+        IList<User> GetAdminstratorsForSMS(int customerId, int active = 1);
 
         /// <summary>
         /// Fetches active users with performer flag.
@@ -288,6 +289,11 @@
         public IList<User> GetAdministrators(int customerId, int active = 1)
         {
             return this._userRepository.GetMany(x => x.UserGroup.Id != 1 && x.IsActive == active).Where(x => x.CustomerUsers.Any(i => i.Customer_Id == customerId)).OrderBy(x => x.SurName).ThenBy(x => x.FirstName).ToList();
+        }
+
+        public IList<User> GetAdminstratorsForSMS(int customerId, int active = 1)
+        {
+            return this._userRepository.GetMany(x => x.UserGroup.Id != 1 && x.IsActive == active && x.CellPhone.Length > 5).Where(x => x.CustomerUsers.Any(i => i.Customer_Id == customerId)).OrderBy(x => x.SurName).ThenBy(x => x.FirstName).ToList();
         }
 
         public IList<User> GetSystemOwners(int customerId)

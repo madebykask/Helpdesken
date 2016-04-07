@@ -29,6 +29,8 @@
                     return Translator.Translate(ComputerStatuses.Stolen.ToString());
                 case ComputerStatuses.NotConnectedToUser:
                     return Translator.Translate(ComputerStatuses.NotConnectedToUser.ToString());
+                case 0:
+                    return "";
                 default:
                     throw new ArgumentOutOfRangeException();
             }

@@ -129,7 +129,7 @@
 
             if (caseType.IsDefault == 1)
             {
-                this.caseTypeRepository.ResetDefault(caseType.Id);
+                this.caseTypeRepository.ResetDefault(caseType.Id, caseType.Customer_Id);
             }
 
             if (errors.Count == 0)

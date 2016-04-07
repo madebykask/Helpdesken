@@ -116,6 +116,7 @@
             priority.RelatedField = priority.RelatedField == null ? string.Empty : priority.RelatedField;
             priority.EMailList = priority.EMailList == null ? string.Empty : priority.EMailList;
             priority.FileName = priority.FileName == null ? string.Empty : priority.FileName;
+            priority.ChangedDate = DateTime.UtcNow;
 
             errors = new Dictionary<string, string>();
 
@@ -131,10 +132,10 @@
                 this._priorityRepository.Update(priority);
 
             if (priority.IsDefault == 1)
-                this._priorityRepository.ResetDefault(priority.Id);
+                this._priorityRepository.ResetDefault(priority.Id, priority.Customer_Id);
 
             if (priority.IsEmailDefault == 1)
-                this._priorityRepository.ResetEmailDefault(priority.Id);
+                this._priorityRepository.ResetEmailDefault(priority.Id, priority.Customer_Id);
 
             if (errors.Count == 0)
                 this.Commit();

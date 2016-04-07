@@ -96,6 +96,7 @@
                 throw new ArgumentNullException("status");
 
             errors = new Dictionary<string, string>();
+            status.ChangedDate = DateTime.UtcNow;
 
             if (string.IsNullOrEmpty(status.Name))
                 errors.Add("Status.Name", "Du måste ange en status");
@@ -106,7 +107,7 @@
                 this._statusRepository.Update(status);
 
             if (status.IsDefault == 1)
-                this._statusRepository.ResetDefault(status.Id);
+                this._statusRepository.ResetDefault(status.Id, status.Customer_Id);
 
             if (errors.Count == 0)
                 this.Commit();

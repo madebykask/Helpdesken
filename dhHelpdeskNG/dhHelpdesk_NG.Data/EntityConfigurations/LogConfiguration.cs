@@ -40,8 +40,8 @@
             this.Property(l => l.Case_Id).IsRequired();
             this.Property(l => l.LogGUID).IsRequired();
             this.Property(l => l.LogDate).IsRequired();
-            this.Property(l => l.Text_External).IsRequired().HasMaxLength(3000);
-            this.Property(l => l.Text_Internal).IsRequired().HasMaxLength(3000);
+            this.Property(l => l.Text_External).IsRequired();
+            this.Property(l => l.Text_Internal).IsRequired();
             this.Property(l => l.User_Id).IsOptional();
             this.Property(l => l.InformCustomer).IsRequired();
             this.Property(l => l.FinishingDate).IsOptional();

@@ -1,0 +1,23 @@
+﻿@using DH.Helpdesk.Web.Infrastructure.Extensions
+@using ReportViewerForMvc
+@model DH.Helpdesk.Web.Models.Shared.ReportModel
+          
+<div id="CasePrintArea">
+    @if (Model != null && Model.Report != null &&  Model.CanShow)
+    {
+        <div id="PrintCaseDialog" class="modal modalprintA4P fade ">
+            <div class="modal-dialog">            
+                <div class="modal-header" style="cursor: move;">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h5> 
+                        <span id="headerCaption"> @Translation.Get("Ärende") @Translation.Get("skriv ut") </span> 
+                    </h5>
+                </div>
+                <div class="modal-body">
+                        @Html.ReportViewer(Model.Report)
+                </div>               
+            </div>    
+        </div>                         
+    }
+</div>
+

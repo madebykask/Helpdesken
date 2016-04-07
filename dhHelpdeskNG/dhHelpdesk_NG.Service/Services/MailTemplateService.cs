@@ -155,6 +155,7 @@
             mailtemplatelanguage.Subject = mailtemplatelanguage.Subject ?? "";
             mailtemplatelanguage.Body = mailtemplatelanguage.Body ?? "";
             mailtemplatelanguage.MailTemplateName = mailtemplatelanguage.MailTemplateName ?? "";
+            mailtemplatelanguage.MailTemplate.ChangedDate = DateTime.UtcNow;
 
             if (mailtemplatelanguage.MailTemplate.MailID > 99)
             {
@@ -184,6 +185,8 @@
                 throw new ArgumentNullException("mailtemplate");
 
             errors = new Dictionary<string, string>();
+
+            mailtemplate.ChangedDate = DateTime.UtcNow;
 
             if (mailtemplate.MailTemplateGUID == Guid.Empty)
             {

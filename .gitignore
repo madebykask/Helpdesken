@@ -28,6 +28,6 @@ dhHelpdeskNG/dhHelpdesk_NG.Web/Web.config
 dhHelpdeskNG/dhHelpdesk_NG.Web/App_Data/Uploaded Files/Reports/
 dhHelpdeskNG/dhHelpdesk_NG.Web/log4net.config
 dhHelpdeskNG/packages/*
-dhHelpdeskNG/dhHelpdesk_NG.Web_NewSelfService/Web.config
+dhHelpdeskNG/dhHelpdesk_NG.Web_SelfService/Web.config
 dhHelpdeskNG/CommonAssembly/SharedAssemblyInfo.cs
 

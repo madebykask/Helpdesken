@@ -8,6 +8,8 @@
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Grid;
     using DH.Helpdesk.Web.Models.Case;
+    using DH.Helpdesk.BusinessData.Models.Grid;
+    using DH.Helpdesk.BusinessData.Enums.Case.Fields;
 
     public class CaseOverviewGridSettingsService
     {
@@ -36,6 +38,20 @@
         public CaseColumnsSettingsModel GetSettings(int customerId, int userGroupId, int userId)
         {
             var gridSettings = this.gridSettingsService.GetForCustomerUserGrid(customerId, userGroupId, userId, GridSettingsService.CASE_OVERVIEW_GRID_ID);
+            var exceptedList = new string[]
+                { 
+                    UserFields.IsAbout_CostCentre.ToLower(), 
+                    UserFields.IsAbout_Department.ToLower(),
+                    UserFields.IsAbout_OU.ToLower(),
+                    UserFields.IsAbout_Persons_CellPhone.ToLower(),
+                    UserFields.IsAbout_Persons_Email.ToLower(),
+                    UserFields.IsAbout_Persons_Phone.ToLower(),
+                    UserFields.IsAbout_Place.ToLower(),
+                    UserFields.IsAbout_Region.ToLower(),
+                    UserFields.IsAbout_UserCode.ToLower()                   
+                };
+
+            
             var colSettingModel = new CaseColumnsSettingsModel
                                       {
                                           CustomerId = customerId,
@@ -43,7 +59,9 @@
                                           UserId = userId,
                                           AvailableColumns =
                                               this.caseSettingService
-                                              .GetAvailableCaseOverviewGridColumnSettings(customerId).Where(c=> !c.Name.ToLower().Contains("isabout_")).OrderBy(it => Translation.Get(it.Name, Enums.TranslationSource.CaseTranslation, customerId)),
+                                                  .GetAvailableCaseOverviewGridColumnSettings(customerId)
+                                                  .Where(c=> !exceptedList.Contains(c.Name.ToLower()))
+                                                  .OrderBy(it => Translation.Get(it.Name, Enums.TranslationSource.CaseTranslation, customerId)),
                                           SelectedColumns =
                                               this.caseSettingService
                                               .GetSelectedCaseOverviewGridColumnSettings(

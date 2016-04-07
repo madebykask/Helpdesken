@@ -3462,7 +3462,7 @@ If not exists (select * from tblTextTranslation where text_id = 1405 and Languag
 GO
 
 If not exists (select * from tbltext where id = 1406)
-	insert into tbltext (id, TextString) VALUES (1406, 'Självservice - Meny')
+	insert into tbltext (id, TextString) VALUES (1406, 'Självservice - Meny')																	 
 GO
 
 If not exists (select * from tblTextTranslation where text_id = 1406 and Language_Id = 2)
@@ -4289,7 +4289,12 @@ GO
 UPDATE tblTextTranslation Set TextTranslation = 'Case has been saved or unlocked since you opened it. Please close and try again.' WHERE Text_Id=1581 AND Language_Id=2;
 GO
 
-
+If not exists (select * from tblText where Id = 1588)
+            insert into tblText (Id, Textstring) VALUES (1588, 'Steg')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1588 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1588, 'Step', 2)
+GO
 UPDATE tblText Set TextString = 'Användaren får skapa ärendemallar' WHERE Id=818
 Go
 
@@ -4323,6 +4328,34 @@ GO
 update tbltext set TextString = 'Intern loggpost i ärende' where id = 1570
 GO
 
+update tbltext set TextString = 'Självservice – Meny' where id = 1406
+GO
+
+
+-- *** Version 5.3.22
+If not exists (select * from tblText where Id = 1589)
+            insert into tblText (Id, Textstring) VALUES (1589, 'Sätt prioriteten som standard på ärenden som registreras via e-mail')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1589 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1589, 'Default priority when cases are registered by e-mail', 2)
+GO
+
+update tbltext set TextString = 'Standard vid' where id = 1494
+GO
+
+If not exists (select * from tblText where Id = 1590)
+            insert into tblText (Id, Textstring) VALUES (1590, 'Ange inte mer än 3000 tecken')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1590 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1590, 'Please enter no more than 3000 characters', 2)
+GO
+
+If not exists (select * from tblText where Id = 1591)
+            insert into tblText (Id, Textstring) VALUES (1591, 'Denna inställning gäller bara på nytt ärende')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1591 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1591, 'This option is only valid in new case', 2)
+GO
 
 
 -- *** Run this last when put translation script above this line **--

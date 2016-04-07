@@ -15,19 +15,13 @@
     }
 }
  
-<h4>    
+<h4 style="@Model.displayLogInfoHtml()">    
     @if (Model.case_.CaseNumber > 0)
     {
         @Translation.Get("Ärende") <span>@Model.case_.CaseNumber - </span>
     }
-    @if (Model.CaseLog.Id == 0)
-    {
-        @Translation.Get("Kommunikation")
-    }
-    else
-    {
-        @Translation.Get("Kommunikation")
-    }
+
+    @Translation.Get("Kommunikation")    
 </h4>
 @if (Model.templateistrue != 1 && !readonlyMode)
 {

@@ -483,6 +483,7 @@
     <Content Include="Content\js\Cases\index.logic.js" />
     <Content Include="Content\js\Cases\relatedCases.logic.js" />
     <Content Include="Content\js\Cases\caseInitForm.js" />
+    <Content Include="Content\js\CaseTemplates\index.logic.js" />
     <Content Include="Content\js\CaseTemplates\edit.logic.js" />
     <Content Include="Content\js\Changes\inventoryDialog.js" />
     <Compile Include="Areas\Inventory\Controllers\ComputerInventoryBaseController.cs" />
@@ -1348,6 +1349,7 @@
     <Compile Include="Models\Questionnaire\Output\StatisticsViewModel.cs" />
     <Compile Include="Models\Shared\ConfigurableContainerModel.cs" />
     <Compile Include="Models\Shared\ConfigurableSearchFieldModel.cs" />
+    <Compile Include="Models\Shared\ReportModel.cs" />
     <Compile Include="Models\Shared\CustomersInfoModel.cs" />
     <Compile Include="Models\Shared\DateAndTimeModel.cs" />
     <Compile Include="Models\Shared\DateRange.cs" />
@@ -2341,6 +2343,8 @@
     <Content Include="Views\Shared\EditorTemplates\DateReadOnlyLocalTZ.cshtml" />
     <Content Include="Views\Cases\_Statistics.cshtml" />
     <Content Include="Views\Cases\_Invoice.cshtml" />
+    <Content Include="Views\Cases\_CasePrint.cshtml" />
+    <Content Include="Views\CaseSolution\_RowsOverview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace DH.Helpdesk.SelfService.Controllers
+namespace DH.Helpdesk.NewSelfService.Controllers
 {
     using System.Globalization;
     using System.Linq;
@@ -17,10 +17,10 @@ namespace DH.Helpdesk.SelfService.Controllers
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
     using DH.Helpdesk.Services.Services;
-    using DH.Helpdesk.SelfService.Infrastructure;
-    using DH.Helpdesk.SelfService.Infrastructure.Extensions;
-    using DH.Helpdesk.SelfService.Infrastructure.Print;
-    using DH.Helpdesk.SelfService.Models.Print.Case;
+    using DH.Helpdesk.NewSelfService.Infrastructure;
+    using DH.Helpdesk.NewSelfService.Infrastructure.Extensions;
+    using DH.Helpdesk.NewSelfService.Infrastructure.Print;
+    using DH.Helpdesk.NewSelfService.Models.Print.Case;
 
     /// <summary>
     /// The print controller.
@@ -154,9 +154,11 @@ namespace DH.Helpdesk.SelfService.Controllers
             IProductAreaService productAreaService, 
             ICaseFileService caseFileService, 
             IStatusService statusService,                                     
-            ISettingService settingService, 
-            IFinishingCauseService finishingCauseService)
-            : base(masterDataService)
+            ISettingService settingService,
+            IFinishingCauseService finishingCauseService,
+            ICaseSolutionService caseSolutionService,
+            ISSOService ssoService)
+            : base(masterDataService, ssoService, caseSolutionService)
         {
             this.caseService = caseService;
             this.caseFieldSettingService = caseFieldSettingService;
@@ -201,11 +203,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             var ous = this.ouService.GetOUs(customerId);
             caseModel.Ou = ous.FirstOrDefault(o => caseModel.OuId == o.Id);
             caseModel.Logs = this.logService.GetCaseLogOverviews(caseId);
-
-            if (caseModel.UserId.HasValue)
-            {
-                caseModel.User = this.userService.GetUserOverview(caseModel.UserId.Value);
-            }
+            caseModel.User = this.userService.GetUserOverview(caseModel.UserId);
 
             var caseType = this.caseTypeService.GetCaseType(caseModel.CaseTypeId);
             if (caseType != null)
@@ -243,10 +241,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 caseModel.CaseResponsibleUser = this.userService.GetUserOverview(caseModel.CaseResponsibleUserId.Value);
             }
 
-            if (caseModel.PerformerUserId.HasValue)
-            {
-                caseModel.PerformerUser = this.userService.GetUserOverview(caseModel.PerformerUserId.Value);
-            }
+            caseModel.PerformerUser = this.userService.GetUserOverview(caseModel.PerformerUserId);
 
             if (caseModel.StatusId.HasValue)
             {
@@ -257,7 +252,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                         {
                             CustomerId = customerId,
                             Case = caseModel,
-                            CaseFilesModel = new FilesModel(caseId.ToString(CultureInfo.InvariantCulture), this.caseFileService.FindFileNamesByCaseId(caseId), false),
+                            CaseFilesModel = new FilesModel(caseId.ToString(CultureInfo.InvariantCulture), this.caseFileService.FindFileNamesByCaseId(caseId)),
                             CaseFieldSettings = fields,
                             CaseLog = this.logService.InitCaseLog(SessionFacade.CurrentUser.Id, string.Empty),
                             FinishingCauses = this.finishingCauseService.GetFinishingCauses(customerId),

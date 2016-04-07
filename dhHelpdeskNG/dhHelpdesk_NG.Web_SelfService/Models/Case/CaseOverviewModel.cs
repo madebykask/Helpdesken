@@ -9,6 +9,7 @@ namespace DH.Helpdesk.SelfService.Models.Case
     using DH.Helpdesk.BusinessData.Models;
 
     using Log = DH.Helpdesk.Domain.Log;
+using System;
 
     
 
@@ -20,7 +21,10 @@ namespace DH.Helpdesk.SelfService.Models.Case
         }
 
         public CaseOverviewModel(string infoText, Case casePreview, List<string> caseFieldGroups, List<Log> caseLogs, List<CaseListToCase> fieldSettings,
-                                 IList<Region> regions, IList<System> systems, IList<Supplier> suppliers )
+                                 IList<Region> regions, IList<System> systems, 
+                                 IList<Supplier> suppliers,
+                                 bool showRegistringMessage
+            )
         {
             this.InfoText = infoText;            
             this.CasePreview = casePreview;
@@ -30,12 +34,21 @@ namespace DH.Helpdesk.SelfService.Models.Case
             this.Regions = regions;
             this.Systems = systems;
             this.Suppliers = suppliers;
+            this.ShowRegistringMessage = showRegistringMessage;
         }
+
+        public bool ShowRegistringMessage { get; set; }
+
+        public bool CanAddExternalNote { get; set; }
+
+        public string ExLogFileGuid { get; set; }
 
         public string InfoText { get; set; }        
 
-        public string ReceiptFooterMessage { get; set; }        
- 
+        public string CaseRegistrationMessage { get; set; }
+
+        public string MailGuid { get; set; }        
+
         [StringLength(3000)]
         public string ExtraNote { get; set; }
 
@@ -54,6 +67,8 @@ namespace DH.Helpdesk.SelfService.Models.Case
         public List<CaseListToCase> FieldSettings { get; set; }
 
         public FilesModel LogFilesModel { get; set; }
+
+        public string LogFileGuid { get; set; }  
                 
     }
   

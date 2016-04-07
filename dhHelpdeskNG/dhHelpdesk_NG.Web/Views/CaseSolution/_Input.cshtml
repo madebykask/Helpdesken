@@ -49,6 +49,15 @@
                                         <input type="hidden" name="Casesolution.ShowInSelfService" value="0" />
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="checkbox" style="padding-left: 20px">
+                                        <input type="checkbox" name="Casesolution.Status" @(Model.CaseSolution.Status != 0 ? "checked=checked" : "") value ="1" />
+                                        <input type="hidden" name="Casesolution.Status" value="0" />
+                                    </td>
+                                </tr>
                             </table>
                         </div>
                     </div>
@@ -56,6 +65,16 @@
                     <div class="row">
                         <div class="span12">
                             <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+                                            
+                                    </td>
+                                    <td class="span9">                                        
+                                    </td>
+                                    <td class="span9">                                        
+                                        @Translation.Get("Denna inställning gäller bara på nytt ärende", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                </tr>
                                 <tr>
                                     @*<th colspan="3" class="header">@Translation.Get("Användarinformation")</th>*@
                                     @{  var myIndex = 0;
@@ -800,7 +819,7 @@
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                         </td>
                                         <td class="span9">
-                                            @Html.TextAreaFor(model => model.CaseSolution.Text_External, new { style = "height:100px;", maxlength = "3000" })
+                                            @Html.TextAreaFor(model => model.CaseSolution.Text_External, new { style = "height:100px;" })
                                         </td>
                                         <td class="span9">
                                             @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.ExternalLogNote, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.tblLog_Text_External)
@@ -814,7 +833,7 @@
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                         </td>
                                         <td>
-                                            @Html.TextAreaFor(model => model.CaseSolution.Text_Internal, new { style = "height:100px;", maxlength = "3000" })
+                                            @Html.TextAreaFor(model => model.CaseSolution.Text_Internal, new { style = "height:100px;" })
                                         </td>
                                         <td class="span9">
                                             @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.InternalLogNote, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.tblLog_Text_Internal)
@@ -1131,12 +1150,25 @@
         rules: {
             "CaseSolution.Name": {
                 required: true
-            }
+            },
+            "CaseSolution.Text_External": {
+                maxlength: 3000
+            },
+            "CaseSolution.Text_Internal": {
+                maxlength: 3000
+            }            
         },
+
         messages: {
             "CaseSolution.Name": {
                 required: "@Translation.Get("Du måste ange ett namn på ärendemallen", Enums.TranslationSource.TextTranslation)"
-        }
+            },
+            "CaseSolution.Text_External": {
+                maxlength: "@Translation.Get("Ange inte mer än 3000 tecken", Enums.TranslationSource.TextTranslation)"
+            },
+            "CaseSolution.Text_Internal": {
+                maxlength: "@Translation.Get("Ange inte mer än 3000 tecken", Enums.TranslationSource.TextTranslation)"
+            }
     },
        submitHandler: function (form) {
            form.submit();

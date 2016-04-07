@@ -92,6 +92,7 @@
                 throw new ArgumentNullException("statesecondary");
 
             errors = new Dictionary<string, string>();
+            stateSecondary.ChangedDate = DateTime.UtcNow;
 
             if (string.IsNullOrEmpty(stateSecondary.Name))
                 errors.Add("StateSecondary.Name", "Du måste ange en understatus");
@@ -102,7 +103,7 @@
                 this._stateSecondaryRepository.Update(stateSecondary);
 
             if (stateSecondary.IsDefault == 1)
-                this._stateSecondaryRepository.ResetDefault(stateSecondary.Id);
+                this._stateSecondaryRepository.ResetDefault(stateSecondary.Id, stateSecondary.Customer_Id);
 
             if (errors.Count == 0)
                 this.Commit();

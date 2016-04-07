@@ -35,6 +35,8 @@ namespace DH.Helpdesk.Dal.Mappers.Cases.BusinessModelToEntity
             entity.Name = businessModel.Name;
             entity.Description = businessModel.Description;
             entity.Status = businessModel.IsActive.ToInt();
+            entity.CreatedDate = businessModel.CreatedDate;
+            entity.ChangedDate = businessModel.ChangedDate;                            
         }
     }
 }

@@ -83,6 +83,8 @@
 
             errors = new Dictionary<string, string>();
 
+            urgency.ChangedDate = DateTime.UtcNow;
+
             if (string.IsNullOrEmpty(urgency.Name))
                 errors.Add("Urgency.Name", "Du måste ange en brådskandegrad");
 

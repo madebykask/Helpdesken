@@ -34,6 +34,12 @@
         public IList<SelectListItem> OperationObjectsSelected { get; set; }
 
         public IList<OperationLogEMailLog> OperationLogEmailLog { get; set; }
+        public IList<SelectListItem> SMSWorkingGroupSelected { get; set; }
+        public IList<SelectListItem> SMSWorkingGroupAvailable { get; set; }
+        public IList<SelectListItem> AdministratorsAvailable { get; set; }
+        public IList<SelectListItem> AdministratorsSelected { get; set; }
+        public IList<SelectListItem> SystemResponsiblesAvailable { get; set; }
+        public IList<SelectListItem> SystemResponsiblesSelected { get; set; }
 
         public SendToDialogModel SendToDialogModel { get; set; }
         public OperationLogList OperationLogList { get; set; }
@@ -41,5 +47,7 @@
         public OperationLogInputViewModel() { }
 
         public SelectList ResponsibleUsersAvailable { get; set; }
+
+        public Setting CustomerSettings { get; set; }
     }
 }

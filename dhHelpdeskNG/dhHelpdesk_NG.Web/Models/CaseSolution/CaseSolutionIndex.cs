@@ -15,9 +15,11 @@
 
         public string CaseCaption { get; set; }
 
-        public string PerormerUserName { get; set; }
+        public string PerformerUserName { get; set; }
 
         public string PriorityName { get; set; }
+
+        public bool IsActive { get; set; }
     }
 
     public static class CaseSolutionRowIndexMapper
@@ -53,9 +55,10 @@
                                                ? string.Empty
                                                : it.CaseSolutionCategory.Name,
                                        CaseCaption = it.Caption,
-                                       PerormerUserName = userName,
+                                       PerformerUserName = userName,
                                        PriorityName =
-                                           it.Priority == null ? string.Empty : it.Priority.Name
+                                           it.Priority == null ? string.Empty : it.Priority.Name,
+                                       IsActive = (it.Status != 0)
                                    };
                     }).ToArray();
         }

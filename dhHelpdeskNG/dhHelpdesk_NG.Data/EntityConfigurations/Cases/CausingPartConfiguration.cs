@@ -12,6 +12,7 @@ namespace DH.Helpdesk.Dal.EntityConfigurations.Cases
     using System.Data.Entity.ModelConfiguration;
 
     using DH.Helpdesk.Domain.Cases;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     /// <summary>
     /// The causing type configuration.
@@ -39,6 +40,9 @@ namespace DH.Helpdesk.Dal.EntityConfigurations.Cases
             this.Property(c => c.Name).IsRequired().HasMaxLength(100);
             this.Property(c => c.Description).IsOptional().HasMaxLength(300);
             this.Property(c => c.Status).IsRequired();
+
+            this.Property(c => c.CreatedDate).IsRequired();
+            this.Property(c => c.ChangedDate).IsRequired();
 
             this.ToTable("tblCausingPart");
         }

@@ -59,6 +59,9 @@ namespace DH.Helpdesk.Web.Controllers
     using ParentCaseInfo = DH.Helpdesk.BusinessData.Models.Case.ChidCase.ParentCaseInfo;
     using DH.Helpdesk.Web.Enums;
     using System.Web.Script.Serialization;
+using Microsoft.Reporting.WebForms;
+    using DH.Helpdesk.BusinessData.Models.ReportService;
+    using DH.Helpdesk.Services.Services.Reports;
 
     public class CasesController : BaseController
     {        
@@ -66,6 +69,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         private const string ParentPathDefaultValue = "--";
         private const string ChildCasesHashTab = "childcases-tab";
+        private const string _reportFolderName = "Reports";
 
         private readonly ICaseService _caseService;
         private readonly ICaseSearchService _caseSearchService;
@@ -152,6 +156,9 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IWatchDateCalendarService watchDateCalendarServcie;
 
         private readonly ICaseInvoiceSettingsService caseInvoiceSettingsService;
+
+        private readonly IReportServiceService _ReportServiceService;
+         
         #endregion
 
         #region ***Constructor***
@@ -215,7 +222,8 @@ namespace DH.Helpdesk.Web.Controllers
             IMailTemplateService mailTemplateService,
             IWatchDateCalendarService watchDateCalendarServcie,
             ICaseInvoiceSettingsService CaseInvoiceSettingsService,
-            ICausingPartService causingPartService)
+            ICausingPartService causingPartService,
+            IReportServiceService reportServiceService)
             : base(masterDataService)
         {
             this._masterDataService = masterDataService;
@@ -280,6 +288,7 @@ namespace DH.Helpdesk.Web.Controllers
             this._defaultCaseLockBufferTime = 30; // Second
             this._defaultExtendCaseLockTime = 60; // Second
             this._causingPartService = causingPartService;
+            this._ReportServiceService = reportServiceService;
         }
 
         #endregion
@@ -359,6 +368,7 @@ namespace DH.Helpdesk.Web.Controllers
             return PartialView("AdvancedSearch/_SpecificSearchTab", model);
         }
 
+        [ValidateInput(false)]
         public ActionResult DoAdvancedSearch(FormCollection frm)
         {
             if (SessionFacade.CurrentUser == null || SessionFacade.CurrentCustomer == null)
@@ -692,6 +702,7 @@ namespace DH.Helpdesk.Web.Controllers
             return this.View("Index", m);
         }
 
+        [ValidateInput(false)]
         public ActionResult SearchAjax(FormCollection frm)
         {
             if (SessionFacade.CurrentUser == null || SessionFacade.CurrentCustomer == null)
@@ -930,6 +941,9 @@ namespace DH.Helpdesk.Web.Controllers
             if (showCaseStatistics)
             {                
                 var expandedGroup = frm.ReturnFormValue("expandedGroup");
+                if (string.IsNullOrEmpty(expandedGroup))
+                    expandedGroup = SessionFacade.CaseOverviewGridSettings.ExpandedStatistics;
+
                 statisticsView = this.RenderPartialViewToString(
                     "_Statistics",
                     GetCaseStatisticsModel(aggregateData, m.cases.Count(), expandedGroup, statisticsFields));    
@@ -1409,11 +1423,10 @@ namespace DH.Helpdesk.Web.Controllers
         #endregion
 
         #region --Auto Complete Fields--
-
+        [ValidateInput(false)]
         [HttpPost]
         public ActionResult Search_User(string query, int customerId)
         {
-
             var result = this._computerService.SearchComputerUsers(customerId, query);
 
             var ComputerUserSearchRestriction = _settingService.GetCustomerSetting(customerId).ComputerUserSearchRestriction;
@@ -1952,6 +1965,13 @@ namespace DH.Helpdesk.Web.Controllers
             return Json("Success");
         }
 
+        public PartialViewResult ShowCasePrintPreview(int caseId)
+        {
+            var model = GetCaseReportViewerData("CaseDetailsList", caseId);
+            model.CanShow = true;
+            return PartialView("_CasePrint", model);
+        }
+
         public RedirectToRouteResult Copy(int id, int customerId)
         {
             return this.RedirectToAction("new", "cases", new { customerId = customerId, copyFromCaseId = id });
@@ -2206,6 +2226,7 @@ namespace DH.Helpdesk.Web.Controllers
             return this.PartialView(model);
         }
 
+        [ValidateInput(false)]
         [HttpGet]
         public JsonResult RelatedCasesCount(int caseId, string userId)
         {
@@ -2399,6 +2420,16 @@ namespace DH.Helpdesk.Web.Controllers
                 return Json(new { result = "Error", data = "Unexpected Error:" + ex.Message });                
             }
         }
+        #endregion
+
+        #region --Ajax--
+
+        public JsonResult SaveStatisticsStateInSession(string value)
+        {
+            SessionFacade.CaseOverviewGridSettings.ExpandedStatistics = value;
+            return Json("Success", JsonRequestBehavior.AllowGet);
+        }
+
         #endregion
 
         #endregion
@@ -4140,6 +4171,8 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             m.CaseTemplateTreeButton = this.GetCaseTemplateTreeModel(customerId, userId);
+
+            m.CasePrintView = new ReportModel(false);            
             return m;
         }
 
@@ -4741,6 +4774,50 @@ namespace DH.Helpdesk.Web.Controllers
             ret.ColumnSettingModel = this.caseOverviewSettingsService.GetSettings(customerId, SessionFacade.CurrentUser.UserGroupId, userId);
 
             return ret;
+        }
+
+        private ReportModel GetCaseReportViewerData(string reportName, int caseId)
+        {
+            var reportSelectedFilter = new ReportSelectedFilter();
+            reportSelectedFilter.SelectedCustomers.Add(SessionFacade.CurrentCustomer.Id);
+
+            reportSelectedFilter.GeneralParameter.Add(new GeneralParameter("@CaseId", caseId));
+            reportSelectedFilter.GeneralParameter.Add(new GeneralParameter("@LanguageId", SessionFacade.CurrentLanguageId));
+            //reportSelectedFilter.CaseId = caseId;
+            //reportSelectedFilter.LanguageId = SessionFacade.CurrentLanguageId;
+
+            var reportData = _ReportServiceService.GetReportData(reportName, reportSelectedFilter);
+
+            ReportModel model = new ReportModel();
+
+            if (reportData == null || (reportData != null && !reportData.DataSets.Any()))
+            {
+                model = null;
+            }
+            else
+            {
+                ReportViewer reportViewer = new ReportViewer();
+                var basePath = Request.MapPath(Request.ApplicationPath);
+                var fileLocation = Path.Combine(_reportFolderName, string.Format("{0}.rdl", reportData.ReportName));
+                var reportFile = Path.Combine(basePath, fileLocation);
+                
+                reportViewer.ProcessingMode = ProcessingMode.Local;
+                reportViewer.SizeToReportContent = true;
+                reportViewer.ShowZoomControl = false;                
+                reportViewer.LocalReport.ReportPath = reportFile;
+
+                var parameters = new List<ReportParameter>();
+                parameters.Add(new ReportParameter("CaseId", caseId.ToString()));
+                parameters.Add(new ReportParameter("LanguageId", SessionFacade.CurrentLanguageId.ToString()));                
+                reportViewer.LocalReport.SetParameters(parameters);
+
+                foreach (var dataSet in reportData.DataSets)
+                    reportViewer.LocalReport.DataSources.Add(new ReportDataSource(dataSet.DataSetName, dataSet.DataSet));
+
+                model.Report = reportViewer;
+            }
+
+            return model;
         }
 
         #endregion

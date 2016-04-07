@@ -944,6 +944,7 @@
     <Compile Include="Enums\Changes\ChangeStatus.cs" />
     <Compile Include="Enums\Changes\Subtopic.cs" />
     <Compile Include="Models\Users\UserProfileCustomerSettings.cs" />
+    <Compile Include="Models\WorkingGroup\WorkingGroupForSMS.cs" />
     <Compile Include="Models\WorktimeCalculator\IWorkTimeCalculatorFactory.cs" />
     <Compile Include="Models\WorktimeCalculator\WorkTimeCalculator.cs" />
     <Compile Include="Models\WorkingDay\TimeRangesHolder.cs" />

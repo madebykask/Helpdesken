@@ -88,8 +88,8 @@
             this.Property(x => x.ProductArea_Id).IsOptional();
             this.Property(x => x.Project_Id).IsOptional();
             this.Property(x => x.ReportedBy).IsOptional().HasMaxLength(40);
-            this.Property(x => x.Text_External).IsRequired().HasMaxLength(3000);
-            this.Property(x => x.Text_Internal).IsRequired().HasMaxLength(3000);
+            this.Property(x => x.Text_External).IsRequired();
+            this.Property(x => x.Text_Internal).IsRequired();
             this.Property(x => x.WorkingGroup_Id).IsOptional();
             this.Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
@@ -131,6 +131,7 @@
             this.Property(x => x.FinishingDate);
             this.Property(x => x.FinishingDescription);
             this.Property(x => x.UpdateNotifierInformation).IsOptional();
+            this.Property(x => x.Status).IsRequired();
 
             this.ToTable("tblcasesolution");
         }

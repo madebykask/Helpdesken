@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.ReportService
 {        
-    using DH.Helpdesk.BusinessData.Models.Shared;    
+    using DH.Helpdesk.BusinessData.Models.Shared;
+using System.Collections.Generic;    
     
     public class ReportSelectedFilter
     {
@@ -15,7 +16,12 @@
             this.SelectedCaseTypes = new SelectedItems();
             this.SelectedProductAreas = new SelectedItems();
             this.SelectedCaseStatus = new SelectedItems();
+            this.GeneralParameter = new List<GeneralParameter>();
         }
+
+        public int CaseId { get; set; }
+
+        public int LanguageId { get; set; }
 
         public DateToDate CaseCreationDate { get; set; }
 
@@ -35,6 +41,21 @@
 
         public SelectedItems SelectedCaseStatus { get; set; }
                 
+        public List<GeneralParameter> GeneralParameter {get; set;}
+
     }
        
+    public class GeneralParameter 
+    {
+        public GeneralParameter(string paramName, object paramValue)
+        {
+            ParamName = paramName;
+            ParamValue = paramValue;
+        }
+
+        public string ParamName {get; set;}
+
+        public object ParamValue {get; set;}
+
+    }
 }

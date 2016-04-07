@@ -71,6 +71,7 @@ namespace DH.Helpdesk.Domain
         public DateTime? PlanDate { get; set; }
         public int? CausingPartId { get; set; }
         public int? RegistrationSource { get; set; }
+        public int Status { get; set; }
 
         public virtual CaseSolutionCategory CaseSolutionCategory { get; set; }
         public virtual CaseSolutionSchedule CaseSolutionSchedule { get; set; }

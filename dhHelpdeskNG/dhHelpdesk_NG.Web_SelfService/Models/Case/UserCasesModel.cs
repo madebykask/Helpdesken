@@ -21,10 +21,14 @@ namespace DH.Helpdesk.SelfService.Models.Case
 
         public int MaxRecords { get; set; }
 
+        public string ProgressId { get; set; }
+        
+        public List<DynamicCase> DynamicCases { get; set; }
+
         public CaseSearchResultModel CaseSearchResult { get; set; }
     }
 
-    public class CaseSearchResultModel
+ public class CaseSearchResultModel
     {
         public IList<CaseSettings> CaseSettings { get; set; }
 

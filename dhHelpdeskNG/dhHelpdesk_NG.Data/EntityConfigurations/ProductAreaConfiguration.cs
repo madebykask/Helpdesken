@@ -49,7 +49,6 @@
             this.Property(x => x.Name).IsRequired().HasMaxLength(50).HasColumnName("ProductArea");
             this.Property(x => x.Parent_ProductArea_Id).IsOptional();
             this.Property(x => x.WorkingGroup_Id).IsOptional();
-            this.Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             this.Property(x => x.ShowOnExternalPage).IsRequired();

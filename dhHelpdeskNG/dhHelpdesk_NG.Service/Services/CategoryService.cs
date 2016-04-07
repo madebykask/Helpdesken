@@ -101,6 +101,7 @@
 
         public void UpdateCategory(Category category)
         {
+            category.ChangedDate = DateTime.UtcNow;
             this._categoryRepository.Update(category);
         }
 
@@ -138,6 +139,8 @@
                 throw new ArgumentNullException("category");
 
             errors = new Dictionary<string, string>();
+
+            category.ChangedDate = DateTime.UtcNow;
 
             if (string.IsNullOrEmpty(category.Name))
                 errors.Add("Category.Name", "Du måste ange en kategori");

@@ -40,7 +40,7 @@
         public FieldSettingModel URL2FieldSettingModel { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Owner")]
+        [LocalizedDisplay("Ägare")]
         public FieldSettingModel OwnerFieldSettingModel { get; set; }
     }
 }

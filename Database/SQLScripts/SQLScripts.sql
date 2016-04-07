@@ -1,47 +1,32 @@
--- update DB from 5.3.20 to 5.3.21 version
+-- update DB from 5.3.21 to 5.3.22 version
 
- IF COL_LENGTH('tblCaseInvoiceOrder','Project_Id') IS NULL
- BEGIN
-	alter table tblCaseInvoiceOrder
-	add Project_Id int null
- end
- GO
 
-IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_tblCaseInvoiceOrder_tblProject]') AND parent_object_id = OBJECT_ID(N'[dbo].[tblCaseInvoiceOrder]'))
+IF COL_LENGTH('tblCaseSolution','Status') IS NULL
 begin
-	ALTER TABLE [dbo].[tblCaseInvoiceOrder]  WITH CHECK ADD  CONSTRAINT [FK_tblCaseInvoiceOrder_tblProject] FOREIGN KEY([Project_Id])
-	REFERENCES [dbo].[tblProject] ([Id])
-end
-ALTER TABLE tblCase ALTER COLUMN Persons_Phone nvarchar(50)
-ALTER TABLE tblCase ALTER COLUMN Persons_CellPhone nvarchar(50)
-
-ALTER TABLE tblCaseHistory ALTER COLUMN Persons_Phone nvarchar(50)
-ALTER TABLE tblCaseHistory ALTER COLUMN Persons_CellPhone nvarchar(50)
-
-GO
-
- -- New field in tblProductArea
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ShowOnExternalPage' and sysobjects.name = N'tblProductArea')
-	ALTER TABLE tblProductArea ADD ShowOnExternalPage int Default(1) NOT NULL
-GO
-
--- DocumentPermission for Systemadministrators
-UPDATE tblUsers Set DocumentPermission = 1 WHERE UserGroup_Id = 4;
-GO
-
-
-IF COL_LENGTH('tblUserGridSettings','Parameter') IS NOT NULL
-begin
-    alter table tblUserGridSettings 
-	alter column Parameter Nvarchar(50) null
+    alter table tblCaseSolution 
+	add [Status] int not null default(1)
 end
 GO
 
-IF COL_LENGTH('tblUserGridSettings','Value') IS NOT NULL
-begin
-    alter table tblUserGridSettings 
-	alter column Value Nvarchar(50) null
+if exists(select * from sys.default_constraints where name like 'DF_tblCausingPart_CreatedDate')
+Begin
+  alter table tblCausingPart
+  drop constraint DF_tblCausingPart_CreatedDate
 end
+
+
+ALTER TABLE tblCaseSolution ALTER COLUMN Text_External nvarchar(max) not null
 GO
+
+ALTER TABLE tblCaseSolution ALTER COLUMN Text_Internal nvarchar(max) not null
+GO
+
+ALTER TABLE tblLog ALTER COLUMN Text_External nvarchar(max) not null
+GO
+
+ALTER TABLE tblLog ALTER COLUMN Text_Internal nvarchar(max) not null
+GO
+
+
 -- Last Line to update database version
-UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.21'
+UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.22'

@@ -61,6 +61,8 @@
         public GridPageOptions pageOptions;
 
         public string cls;
+
+        public string ExpandedStatistics; 
     }
     
 }

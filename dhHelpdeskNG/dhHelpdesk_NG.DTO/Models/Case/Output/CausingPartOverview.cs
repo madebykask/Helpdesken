@@ -14,6 +14,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case.Output
 
     using DH.Helpdesk.BusinessData.Interfaces;
     using DH.Helpdesk.Common.ValidationAttributes;
+    using System;
 
     /// <summary>
     /// The causing type overview.
@@ -52,6 +53,10 @@ namespace DH.Helpdesk.BusinessData.Models.Case.Output
         /// Gets or sets the customer id.
         /// </summary>
         public int CustomerId { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+
+        public DateTime ChangedDate { get; set; }
 
         /// <summary>
         /// Gets or sets the parent.

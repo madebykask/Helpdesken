@@ -309,7 +309,7 @@
                 foreach(var caseFieldSetting in caseFieldSettings)
                 {
                     //caseFieldSetting.NameOrigin = "";
-
+                    caseFieldSetting.ChangedDate = DateTime.UtcNow;
                     if(caseFieldSetting.Id == 0)
                         _caseFieldSettingRepository.Add(caseFieldSetting);
                     else

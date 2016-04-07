@@ -1,0 +1,1255 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{9DBE7D20-DEE8-427C-9A68-FC338B1108FC}</ProjectGuid>
+    <ProjectTypeGuids>{E53F8FEA-EAE0-44A6-8774-FFD645390401};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DH.Helpdesk.SelfService</RootNamespace>
+    <AssemblyName>DH.Helpdesk.SelfService</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <IISExpressSSLPort>44300</IISExpressSSLPort>
+    <IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
+    <SkipPostSharp>True</SkipPostSharp>
+    <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
+    <TargetFrameworkProfile />
+    <DontImportPostSharp>True</DontImportPostSharp>
+    <MvcProjectUpgradeChecked>true</MvcProjectUpgradeChecked>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime">
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="ECT.Core, Version=0.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>FormLibContent\Assemblies\ECT.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="ECT.FormLib, Version=0.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>FormLibContent\Assemblies\ECT.FormLib.dll</HintPath>
+    </Reference>
+    <Reference Include="ECT.Model, Version=0.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>FormLibContent\Assemblies\ECT.Model.dll</HintPath>
+    </Reference>
+    <Reference Include="ECT.Service, Version=0.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>FormLibContent\Assemblies\ECT.Service.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.0\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.0\lib\net40\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp">
+      <HintPath>..\packages\iTextSharp.4.1.2\lib\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Mvc.FixedDisplayModes">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.FixedDisplayModes.1.0.0\lib\net40\Microsoft.Web.Mvc.FixedDisplayModes.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Ninject.3.2.2.0\lib\net40\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Web.Common, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Ninject.Web.Common.3.2.2.0\lib\net40-full\Ninject.Web.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Web.Mvc, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Ninject.MVC3.3.2.1.0\lib\net40-full\Ninject.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="PostSharp, Version=4.0.36.0, Culture=neutral, PublicKeyToken=b13fd38b8f9c99d7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\PostSharp.4.0.36\lib\net35-client\PostSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.IdentityModel.Tokens.ValidatingIssuerNameRegistry">
+      <HintPath>..\packages\System.IdentityModel.Tokens.ValidatingIssuerNameRegistry.4.5.1\lib\net45\System.IdentityModel.Tokens.ValidatingIssuerNameRegistry.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.4.0.20710.0\lib\net40\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.1\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.2.0.30506.0\lib\net40\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.DynamicData">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Entity">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.ApplicationServices">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Routing">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Abstractions">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Configuration">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Services">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.EnterpriseServices">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WebActivator">
+      <HintPath>..\packages\WebActivator.1.5\lib\net40\WebActivator.dll</HintPath>
+    </Reference>
+    <Reference Include="WebActivatorEx">
+      <HintPath>..\packages\WebActivatorEx.2.0.5\lib\net40\WebActivatorEx.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease">
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\CommonAssembly\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\NinjectModules\Modules\CommonModule.cs" />
+    <Compile Include="App_Start\NinjectModules\Modules\EmailModule.cs" />
+    <Compile Include="App_Start\NinjectModules\Modules\NotifiersModule.cs" />
+    <Compile Include="App_Start\NinjectModules\Modules\ProblemModule.cs" />
+    <Compile Include="App_Start\NinjectWebCommon.cs" />
+    <Compile Include="App_Start\ToolsModule.cs" />
+    <Compile Include="App_Start\UserModule.cs" />
+    <Compile Include="App_Start\WorkContextModule.cs" />
+    <Compile Include="Controllers\CaseController.cs" />
+    <Compile Include="Controllers\CaseSearchController.cs" />
+    <Compile Include="Controllers\CoWorkersController.cs" />
+    <Compile Include="Controllers\DashboardController.cs" />
+    <Compile Include="Controllers\DocumentsController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\HelpController.cs" />
+    <Compile Include="Controllers\InfoController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\StartController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Infrastructure\ApplicationFacade.cs" />
+    <Compile Include="Infrastructure\BadRequestOnNotValidAttribute.cs" />
+    <Compile Include="Infrastructure\BaseController.cs" />
+    <Compile Include="Infrastructure\BaseInputViewModel.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Notifiers\Concrete\NewNotifierFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Notifiers\Concrete\UpdatedNotifierFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Notifiers\Concrete\UpdatedSettingsFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Notifiers\INewNotifierFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Notifiers\IUpdatedNotifierFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Notifiers\IUpdatedSettingsFactory.cs" />
+    <Compile Include="Infrastructure\Common\Concrete\CommonFunctions.cs" />
+    <Compile Include="Infrastructure\Common\Concrete\ErrorGenerator.cs" />
+    <Compile Include="Infrastructure\Common\ICommonFunctions.cs" />
+    <Compile Include="Infrastructure\Constants.cs" />
+    <Compile Include="Infrastructure\Enums.cs" />
+    <Compile Include="Infrastructure\Extensions\BooleanExtansions.cs" />
+    <Compile Include="Infrastructure\Extensions\ControllerExtensions.cs" />
+    <Compile Include="Infrastructure\Extensions\DateExtensions.cs" />
+    <Compile Include="Infrastructure\Extensions\FileExtensions.cs" />
+    <Compile Include="Infrastructure\Extensions\GeneralExtensions.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtension.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\Content\DropDownContent.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\Content\DropDownItem.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\Content\DropDownWithSubmenusContent.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\Content\DropDownWithSubmenusItem.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\Content\TreeContent.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\Content\TreeItem.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\DropDownExtension.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\DropDownWithSubmenusExtension.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\TreeExtension.cs" />
+    <Compile Include="Infrastructure\Extensions\IntegerExtensions.cs" />
+    <Compile Include="Infrastructure\Extensions\ObjectExtensions.cs" />
+    <Compile Include="Infrastructure\Extensions\RequestExtension.cs" />
+    <Compile Include="Infrastructure\Extensions\StringExtensions.cs" />
+    <Compile Include="Infrastructure\Filters\Notifiers\NotifierFilters.cs" />
+    <Compile Include="Infrastructure\LocalizedAttributes\ConditionalValidationAttribute.cs" />
+    <Compile Include="Infrastructure\LocalizedAttributes\LocalizedDisplayAttribute.cs" />
+    <Compile Include="Infrastructure\LocalizedAttributes\LocalizedMaxLengthFromAttribute.cs" />
+    <Compile Include="Infrastructure\LocalizedAttributes\LocalizedRequiredAttribute.cs" />
+    <Compile Include="Infrastructure\LocalizedAttributes\LocalizedRequiredFromAttribute.cs" />
+    <Compile Include="Infrastructure\LocalizedAttributes\LocalizedStringLengthAttribute.cs" />
+    <Compile Include="Infrastructure\LocalizedAttributes\Rules\ModelClientValidationMaxLengthFromRule.cs" />
+    <Compile Include="Infrastructure\LocalizedAttributes\Rules\ModelClientValidationRequiredFromRule.cs" />
+    <Compile Include="Infrastructure\Permission.cs" />
+    <Compile Include="Infrastructure\SessionFacade.cs" />
+    <Compile Include="Infrastructure\StringModelBinding.cs" />
+    <Compile Include="Infrastructure\Tools\Concrete\DeletedFile.cs" />
+    <Compile Include="Infrastructure\Tools\Concrete\DeletedItem.cs" />
+    <Compile Include="Infrastructure\Tools\Concrete\UserEditorValuesStorage.cs" />
+    <Compile Include="Infrastructure\Tools\Concrete\UserEditorValuesStorageFactory.cs" />
+    <Compile Include="Infrastructure\Tools\Concrete\UserTemporaryFilesStorage.cs" />
+    <Compile Include="Infrastructure\Tools\Concrete\UserTemporaryFilesStorageFactory.cs" />
+    <Compile Include="Infrastructure\Tools\IUserEditorValuesStorage.cs" />
+    <Compile Include="Infrastructure\Tools\IUserEditorValuesStorageFactory.cs" />
+    <Compile Include="Infrastructure\Tools\IUserTemporaryFilesStorage.cs" />
+    <Compile Include="Infrastructure\Tools\IUserTemporaryFilesStorageFactory.cs" />
+    <Compile Include="Infrastructure\Tools\WebTemporaryFile.cs" />
+    <Compile Include="Infrastructure\Translate\Translator.cs" />
+    <Compile Include="Infrastructure\Translation.cs" />
+    <Compile Include="Infrastructure\WorkContext\Concrete\UserContext.cs" />
+    <Compile Include="Infrastructure\WorkContext\Concrete\WorkContext.cs" />
+    <Compile Include="Models\Case\CaseOverviewModel.cs" />
+    <Compile Include="Models\Case\CaseLogModel.cs" />
+    <Compile Include="Models\Case\NewCaseModel.cs" />
+    <Compile Include="Models\Case\UserCasesModel.cs" />
+    <Compile Include="Models\Common\GridColumnHeaderModel.cs" />
+    <Compile Include="Models\Common\GridRowCellValueModel.cs" />
+    <Compile Include="Models\Common\SortFieldModel.cs" />
+    <Compile Include="Models\Help\AboutModel.cs" />
+    <Compile Include="Models\CoWorkers\CoWorkersModel.cs" />
+    <Compile Include="Models\Documents\DocumentsModel.cs" />
+    <Compile Include="Models\Error\Error.cs" />
+    <Compile Include="Models\Help\HelpModel.cs" />
+    <Compile Include="Models\ISearchModel.cs" />
+    <Compile Include="Models\MasterPageViewModel.cs" />
+    <Compile Include="Models\Notifiers\ConfigurableFields\BooleanFieldModel.cs" />
+    <Compile Include="Models\Notifiers\ConfigurableFields\ConfigurableFieldModel.cs" />
+    <Compile Include="Models\Notifiers\ConfigurableFields\DropDownFieldModel.cs" />
+    <Compile Include="Models\Notifiers\ConfigurableFields\IntegerFieldModel.cs" />
+    <Compile Include="Models\Notifiers\ConfigurableFields\StringFieldModel.cs" />
+    <Compile Include="Models\Notifiers\IndexModel.cs" />
+    <Compile Include="Models\Notifiers\InputModel.cs" />
+    <Compile Include="Models\Notifiers\NotifierDetailedOverviewModel.cs" />
+    <Compile Include="Models\Notifiers\NotifiersGridModel.cs" />
+    <Compile Include="Models\Notifiers\NotifiersModel.cs" />
+    <Compile Include="Models\Notifiers\SearchDropDownModel.cs" />
+    <Compile Include="Models\Notifiers\SearchInputModel.cs" />
+    <Compile Include="Models\Notifiers\SearchModel.cs" />
+    <Compile Include="Models\Notifiers\SettingModel.cs" />
+    <Compile Include="Models\Notifiers\SettingsModel.cs" />
+    <Compile Include="Models\SearchModel.cs" />
+    <Compile Include="Models\SelfService\SelfServiceConfigurationModel.cs" />
+    <Compile Include="Models\SelfService\SelfServiceModel.cs" />
+    <Compile Include="Models\Start\StartPageModel.cs" />
+    <Compile Include="WebServices\Common\AsyncHelper.cs" />
+    <Compile Include="WebServices\Concrete\AMAPIService.cs" />
+    <Compile Include="WebServices\IAMAPIService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\bootstrap-datepicker.css" />
+    <Content Include="Content\bootstrap-datepicker3.css" />
+    <Content Include="Content\css\bootstrap.css" />
+    <Content Include="Content\css\bootstrap.min.css" />
+    <Content Include="Content\css\dhplus.css" />
+    <Content Include="Content\css\jquery.toastmessage.css" />
+    <Content Include="Content\img\backgrounds.gif" />
+    <Content Include="Content\img\buttons-disabled.png" />
+    <Content Include="Content\img\buttons.png" />
+    <Content Include="Content\img\delete.gif" />
+    <Content Include="Content\img\done.gif" />
+    <Content Include="Content\img\error.gif" />
+    <Content Include="Content\img\glyphicons-halflings-blue.png" />
+    <Content Include="Content\img\glyphicons-halflings-dh.png" />
+    <Content Include="Content\img\glyphicons-halflings-green.png" />
+    <Content Include="Content\img\glyphicons-halflings-red.png" />
+    <Content Include="Content\img\glyphicons-halflings-white.png" />
+    <Content Include="Content\img\glyphicons-halflings-yellow.png" />
+    <Content Include="Content\img\glyphicons-halflings.png" />
+    <Content Include="Content\img\throbber.gif" />
+    <Content Include="Content\img\transp50.png" />
+    <Content Include="Content\js\Case\edit.js" />
+    <Content Include="Content\js\Shared\app.layout.js" />
+    <Content Include="Content\js\typeahead.js" />
+    <Content Include="img-profile\profile.css" />
+    <Content Include="Content\css\selfservice.css" />
+    <Content Include="Content\dialog.css" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\icons\case.png" />
+    <Content Include="Content\icons\case_close.png" />
+    <Content Include="Content\icons\case_close_notapproved.png" />
+    <Content Include="Content\icons\case_log_urgent.png" />
+    <Content Include="Content\img\dh_solutions_slogan.png" />
+    <Content Include="img-profile\ikea-error-web.png" />
+    <Content Include="img-profile\ikea-error.png" />
+    <Content Include="img-profile\ikea-image.png" />
+    <Content Include="img-profile\ikea-map.png" />
+    <Content Include="img-profile\ikea-notepad.png" />
+    <Content Include="img-profile\ikea-people.png" />
+    <Content Include="img-profile\ikea-peoplestart.png" />
+    <Content Include="img-profile\IKEA.png" />
+    <Content Include="Content\img\about.jpg" />
+    <Content Include="Content\img\close.gif" />
+    <Content Include="Content\img\dhhelpdesk-login.png" />
+    <Content Include="Content\img\dhhelpdesk-menuend.png" />
+    <Content Include="Content\img\dhhelpdesk.png" />
+    <Content Include="Content\img\error.png" />
+    <Content Include="Content\img\ico-cancel.png" />
+    <Content Include="Content\img\ico-chat.png" />
+    <Content Include="Content\img\ico-coworkers.png" />
+    <Content Include="Content\img\ico-customerservice.png" />
+    <Content Include="Content\img\ico-dhhelpdesk.png" />
+    <Content Include="Content\img\ico-dhsolutions.png" />
+    <Content Include="Content\img\ico-documents.png" />
+    <Content Include="Content\img\ico-finished.png" />
+    <Content Include="Content\img\ico-help.png" />
+    <Content Include="Content\img\ico-home.png" />
+    <Content Include="Content\img\ico-license.png" />
+    <Content Include="Content\img\ico-new.png" />
+    <Content Include="Content\img\ico-ongoing.png" />
+    <Content Include="Content\img\ico-save.png" />
+    <Content Include="Content\img\notice.png" />
+    <Content Include="Content\img\success.png" />
+    <Content Include="Content\img\warning.png" />
+    <Content Include="Content\js\bootstrap-datepicker.js" />
+    <Content Include="Content\js\bootstrap-multiselect.js" />
+    <Content Include="Content\js\bootstrap.js" />
+    <Content Include="Content\js\dhHelpdesk-head.js" />
+    <Content Include="Content\js\dhHelpdesk.js" />
+    <Content Include="Content\js\html5shiv.js" />
+    <Content Include="Content\js\jquery-1.11.0.min.js" />
+    <Content Include="Content\js\jquery-1.8.3.min.js" />
+    <Content Include="Content\js\jquery-ui-1.9.2.min.js" />
+    <Content Include="Content\js\jquery.js" />
+    <Content Include="Content\js\jquery.plupload.queue\css\jquery.plupload.queue.css" />
+    <Content Include="Content\js\jquery.plupload.queue\img\backgrounds.gif" />
+    <Content Include="Content\js\jquery.plupload.queue\img\buttons-disabled.png" />
+    <Content Include="Content\js\jquery.plupload.queue\img\buttons.png" />
+    <Content Include="Content\js\jquery.plupload.queue\img\delete.gif" />
+    <Content Include="Content\js\jquery.plupload.queue\img\done.gif" />
+    <Content Include="Content\js\jquery.plupload.queue\img\error.gif" />
+    <Content Include="Content\js\jquery.plupload.queue\img\throbber.gif" />
+    <Content Include="Content\js\jquery.plupload.queue\img\transp50.png" />
+    <Content Include="Content\js\jquery.plupload.queue\jquery.plupload.queue.js" />
+    <Content Include="Content\js\jquery.plupload.queue\jquery.plupload.queue.min.js" />
+    <Content Include="Content\js\jquery.toastmessage.js" />
+    <Content Include="Content\js\jquery.typing-0.2.0.min.js" />
+    <Content Include="Content\js\jquery.ui.plupload\css\jquery.ui.plupload.css" />
+    <Content Include="Content\js\jquery.ui.plupload\img\loading.gif" />
+    <Content Include="Content\js\jquery.ui.plupload\img\plupload.png" />
+    <Content Include="Content\js\jquery.ui.plupload\jquery.ui.plupload.js" />
+    <Content Include="Content\js\jquery.ui.plupload\jquery.ui.plupload.min.js" />
+    <Content Include="Content\js\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Content\js\jquery.validate.js" />
+    <Content Include="Content\js\jquery.validate.min.js" />
+    <Content Include="Content\js\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.ar.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.az.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.bg.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.ca.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.cs.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.cy.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.da.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.de.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.el.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.es.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.et.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.fa.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.fi.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.fr.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.gl.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.he.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.hr.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.hu.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.id.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.is.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.it.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.ja.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.ka.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.kk.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.kr.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.lt.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.lv.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.mk.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.ms.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.nb.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.nl-BE.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.nl.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.no.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.pl.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.pt-BR.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.pt.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.ro.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.rs-latin.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.rs.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.ru.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.sk.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.sl.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.sq.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.sv.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.sw.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.th.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.tr.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.ua.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.vi.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.zh-CN.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.zh-TW.js" />
+    <Content Include="Content\js\MicrosoftAjax.debug.js" />
+    <Content Include="Content\js\MicrosoftAjax.js" />
+    <Content Include="Content\js\MicrosoftMvcAjax.debug.js" />
+    <Content Include="Content\js\MicrosoftMvcAjax.js" />
+    <Content Include="Content\js\MicrosoftMvcValidation.debug.js" />
+    <Content Include="Content\js\MicrosoftMvcValidation.js" />
+    <Content Include="Content\js\Moxie.swf" />
+    <Content Include="Content\js\Moxie.xap" />
+    <Content Include="Content\js\plupload.full.min.js" />
+    <Content Include="Content\js\plupload\i18n\cs.js" />
+    <Content Include="Content\js\plupload\i18n\da.js" />
+    <Content Include="Content\js\plupload\i18n\de.js" />
+    <Content Include="Content\js\plupload\i18n\el.js" />
+    <Content Include="Content\js\plupload\i18n\es.js" />
+    <Content Include="Content\js\plupload\i18n\et.js" />
+    <Content Include="Content\js\plupload\i18n\fa.js" />
+    <Content Include="Content\js\plupload\i18n\fi.js" />
+    <Content Include="Content\js\plupload\i18n\fr-ca.js" />
+    <Content Include="Content\js\plupload\i18n\fr.js" />
+    <Content Include="Content\js\plupload\i18n\hr.js" />
+    <Content Include="Content\js\plupload\i18n\hu.js" />
+    <Content Include="Content\js\plupload\i18n\it.js" />
+    <Content Include="Content\js\plupload\i18n\ja.js" />
+    <Content Include="Content\js\plupload\i18n\ko.js" />
+    <Content Include="Content\js\plupload\i18n\lv.js" />
+    <Content Include="Content\js\plupload\i18n\nl.js" />
+    <Content Include="Content\js\plupload\i18n\pl.js" />
+    <Content Include="Content\js\plupload\i18n\pt-br.js" />
+    <Content Include="Content\js\plupload\i18n\ro.js" />
+    <Content Include="Content\js\plupload\i18n\ru.js" />
+    <Content Include="Content\js\plupload\i18n\sk.js" />
+    <Content Include="Content\js\plupload\i18n\sr.js" />
+    <Content Include="Content\js\plupload\i18n\sv.js" />
+    <Content Include="Content\js\plupload\jquery.plupload.queue\css\jquery.plupload.queue.css" />
+    <Content Include="Content\js\plupload\jquery.plupload.queue\img\backgrounds.gif" />
+    <Content Include="Content\js\plupload\jquery.plupload.queue\img\buttons-disabled.png" />
+    <Content Include="Content\js\plupload\jquery.plupload.queue\img\buttons.png" />
+    <Content Include="Content\js\plupload\jquery.plupload.queue\img\delete.gif" />
+    <Content Include="Content\js\plupload\jquery.plupload.queue\img\done.gif" />
+    <Content Include="Content\js\plupload\jquery.plupload.queue\img\error.gif" />
+    <Content Include="Content\js\plupload\jquery.plupload.queue\img\throbber.gif" />
+    <Content Include="Content\js\plupload\jquery.plupload.queue\img\transp50.png" />
+    <Content Include="Content\js\plupload\jquery.plupload.queue\jquery.plupload.queue.js" />
+    <Content Include="Content\js\plupload\jquery.ui.plupload\css\jquery.ui.plupload.css" />
+    <Content Include="Content\js\plupload\jquery.ui.plupload\img\plupload-bw.png" />
+    <Content Include="Content\js\plupload\jquery.ui.plupload\img\plupload.png" />
+    <Content Include="Content\js\plupload\jquery.ui.plupload\jquery.ui.plupload.js" />
+    <Content Include="Content\js\plupload\plupload.browserplus.js" />
+    <Content Include="Content\js\plupload\plupload.flash.js" />
+    <Content Include="Content\js\plupload\plupload.flash.swf" />
+    <Content Include="Content\js\plupload\plupload.full.js" />
+    <Content Include="Content\js\plupload\plupload.gears.js" />
+    <Content Include="Content\js\plupload\plupload.html4.js" />
+    <Content Include="Content\js\plupload\plupload.html5.js" />
+    <Content Include="Content\js\plupload\plupload.js" />
+    <Content Include="Content\js\plupload\plupload.silverlight.js" />
+    <Content Include="Content\js\plupload\plupload.silverlight.xap" />
+    <Content Include="Content\js\respond.min.js" />
+    <Content Include="Content\js\Shared\custom.validation.maxlengthfrom.js" />
+    <Content Include="Content\js\Shared\custom.validation.requiredfrom.js" />
+    <Content Include="Content\js\Shared\sortby.js" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\jquery-ui.css" />
+    <Content Include="Content\themes\base\jquery.ui.accordion.css" />
+    <Content Include="Content\themes\base\jquery.ui.all.css" />
+    <Content Include="Content\themes\base\jquery.ui.autocomplete.css" />
+    <Content Include="Content\themes\base\jquery.ui.base.css" />
+    <Content Include="Content\themes\base\jquery.ui.button.css" />
+    <Content Include="Content\themes\base\jquery.ui.core.css" />
+    <Content Include="Content\themes\base\jquery.ui.datepicker.css" />
+    <Content Include="Content\themes\base\jquery.ui.dialog.css" />
+    <Content Include="Content\themes\base\jquery.ui.menu.css" />
+    <Content Include="Content\themes\base\jquery.ui.progressbar.css" />
+    <Content Include="Content\themes\base\jquery.ui.resizable.css" />
+    <Content Include="Content\themes\base\jquery.ui.selectable.css" />
+    <Content Include="Content\themes\base\jquery.ui.slider.css" />
+    <Content Include="Content\themes\base\jquery.ui.spinner.css" />
+    <Content Include="Content\themes\base\jquery.ui.tabs.css" />
+    <Content Include="Content\themes\base\jquery.ui.theme.css" />
+    <Content Include="Content\themes\base\jquery.ui.tooltip.css" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\minified\jquery-ui.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.accordion.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.autocomplete.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.button.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.core.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.datepicker.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.dialog.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.menu.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.progressbar.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.resizable.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.selectable.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.spinner.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\Hiring\Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\Hiring\New.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\Hiring\_Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\Hiring\_TabOrganisationalAssignment.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\Hiring\_TabPayment.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\Hiring\_TabPersonal.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\Hiring\_TabServiceRequestDetails.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\Hiring\_TabSsc.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\Web.config" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\_ViewStart.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\Absences\Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\Absences\New.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\Absences\_Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\Absences\_TabAbsences.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\Absences\_TabServiceRequestDetails.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\Absences\_TabSscUseOnly.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\AdditionalPaymentsDeduction\Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\AdditionalPaymentsDeduction\New.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\AdditionalPaymentsDeduction\_Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\AdditionalPaymentsDeduction\_TabPayment.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\AdditionalPaymentsDeduction\_TabServiceRequestDetails.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\ChangeTermsConditions\Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\ChangeTermsConditions\New.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\ChangeTermsConditions\_Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\ChangeTermsConditions\_TabOrganisationalAssignment.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\ChangeTermsConditions\_TabPayment.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\ChangeTermsConditions\_TabServiceRequestDetails.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\ChangeTermsConditions\_TabSsc.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\HiringBasic\Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\HiringBasic\New.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\HiringBasic\_Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\HiringBasic\_TabPersonal.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\HiringBasic\_TabServiceRequestDetails.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\Hiring\Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\Hiring\New.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\Hiring\Pdfs\ContactCentre.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\Hiring\Pdfs\Permanent.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\Hiring\Pdfs\TemporaryFixedTerm.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\Hiring\Pdfs\ZeroHour.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\Hiring\_Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\Hiring\_TabDocuments.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\Hiring\_TabOrganisationalAssignment.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\Hiring\_TabPayment.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\Hiring\_TabPersonal.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\Hiring\_TabServiceRequestDetails.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\Hiring\_TabSsc.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\NewHireNotShowingUp\Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\NewHireNotShowingUp\New.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\NewHireNotShowingUp\_Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\NewHireNotShowingUp\_TabServiceRequestDetails.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\PersonalInformation\Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\PersonalInformation\New.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\PersonalInformation\_Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\PersonalInformation\_TabPersonal.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\PersonalInformation\_TabServiceRequestDetails.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\VoluntaryDeductions\Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\VoluntaryDeductions\New.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\VoluntaryDeductions\_Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\VoluntaryDeductions\_TabPayment.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\VoluntaryDeductions\_TabServiceRequestDetails.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\Web.config" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\_ViewStart.cshtml" />
+    <Content Include="FormLibContent\Assemblies\ECT.Core.dll" />
+    <Content Include="FormLibContent\Assemblies\ECT.FormLib.dll" />
+    <Content Include="FormLibContent\Assemblies\ECT.Model.dll" />
+    <Content Include="FormLibContent\Assemblies\ECT.Service.dll" />
+    <Content Include="FormLibContent\Assemblies\itextsharp.dll" />
+    <Content Include="FormLibContent\Assets\css\bootstrap-responsive.css" />
+    <Content Include="FormLibContent\Assets\css\bootstrap.css" />
+    <Content Include="FormLibContent\Assets\css\datepicker-new.css" />
+    <Content Include="FormLibContent\Assets\css\datepicker.css" />
+    <Content Include="FormLibContent\Assets\css\ect.css" />
+    <Content Include="FormLibContent\Assets\img\glyphicons-halflings-white.png" />
+    <Content Include="FormLibContent\Assets\img\glyphicons-halflings.png" />
+    <Content Include="FormLibContent\Assets\img\ico-save.png" />
+    <Content Include="FormLibContent\Assets\img\ikea-logo.png" />
+    <Content Include="FormLibContent\Assets\img\IKEA_logo_BW.jpg" />
+    <Content Include="FormLibContent\Assets\img\IKEA_logo_BW.png" />
+    <Content Include="FormLibContent\Assets\img\IKEA_logo_RGB.JPG" />
+    <Content Include="FormLibContent\Assets\img\IKEA_logo_RGB.png" />
+    <Content Include="FormLibContent\Assets\img\IKEA_logo_RGB_2.jpg" />
+    <Content Include="FormLibContent\Assets\img\InterGroup_logo.jpg" />
+    <Content Include="FormLibContent\Assets\img\InterGroup_logo1.jpg" />
+    <Content Include="FormLibContent\Assets\img\NetherlandsSignatures\DianaHartman.jpg" />
+    <Content Include="FormLibContent\Assets\img\NetherlandsSignatures\ElsMeeuwissen.JPG" />
+    <Content Include="FormLibContent\Assets\img\NetherlandsSignatures\FrannySchule.bmp" />
+    <Content Include="FormLibContent\Assets\img\NetherlandsSignatures\JelleVisser.JPG" />
+    <Content Include="FormLibContent\Assets\img\NetherlandsSignatures\LiesbethdeKruif.jpg" />
+    <Content Include="FormLibContent\Assets\img\NetherlandsSignatures\MartynBrache.jpg" />
+    <Content Include="FormLibContent\Assets\img\NetherlandsSignatures\NandadeBruin.bmp" />
+    <Content Include="FormLibContent\Assets\img\NetherlandsSignatures\NicodeJong.jpg" />
+    <Content Include="FormLibContent\Assets\img\NetherlandsSignatures\PatriceDreano.JPG" />
+    <Content Include="FormLibContent\Assets\img\NetherlandsSignatures\ReneKorthals.jpg" />
+    <Content Include="FormLibContent\Assets\img\NetherlandsSignatures\RobWerkman.jpg" />
+    <Content Include="FormLibContent\Assets\img\NetherlandsSignatures\SandraSchouten.JPG" />
+    <Content Include="FormLibContent\Assets\img\NetherlandsSignatures\TruusHoeve.png" />
+    <Content Include="FormLibContent\Assets\img\SignatureEn.jpg" />
+    <Content Include="FormLibContent\Assets\js\bootstrap-datepicker.js" />
+    <Content Include="FormLibContent\Assets\js\bootstrap.js" />
+    <Content Include="FormLibContent\Assets\js\ect.js" />
+    <Content Include="FormLibContent\Assets\js\holder.js" />
+    <Content Include="FormLibContent\Assets\js\html5shiv.js" />
+    <Content Include="FormLibContent\Assets\js\integration.js" />
+    <Content Include="FormLibContent\Assets\js\jquery-1.11.0.js" />
+    <Content Include="FormLibContent\Assets\js\jquery.js" />
+    <Content Include="FormLibContent\Assets\js\jquery.loadTemplate-1.2.5.min.js" />
+    <Content Include="FormLibContent\Assets\js\jquery.validate.additional-methods.js" />
+    <Content Include="FormLibContent\Assets\js\jquery.validate.js" />
+    <Content Include="FormLibContent\Assets\js\json2.js" />
+    <Content Include="FormLibContent\Assets\js\prettify.js" />
+    <Content Include="FormLibContent\Assets\js\typeahead.js" />
+    <Content Include="FormLibContent\Assets\plupload\i18n\cs.js" />
+    <Content Include="FormLibContent\Assets\plupload\i18n\da.js" />
+    <Content Include="FormLibContent\Assets\plupload\i18n\de.js" />
+    <Content Include="FormLibContent\Assets\plupload\i18n\el.js" />
+    <Content Include="FormLibContent\Assets\plupload\i18n\es.js" />
+    <Content Include="FormLibContent\Assets\plupload\i18n\et.js" />
+    <Content Include="FormLibContent\Assets\plupload\i18n\fa.js" />
+    <Content Include="FormLibContent\Assets\plupload\i18n\fi.js" />
+    <Content Include="FormLibContent\Assets\plupload\i18n\fr-ca.js" />
+    <Content Include="FormLibContent\Assets\plupload\i18n\fr.js" />
+    <Content Include="FormLibContent\Assets\plupload\i18n\hr.js" />
+    <Content Include="FormLibContent\Assets\plupload\i18n\hu.js" />
+    <Content Include="FormLibContent\Assets\plupload\i18n\it.js" />
+    <Content Include="FormLibContent\Assets\plupload\i18n\ja.js" />
+    <Content Include="FormLibContent\Assets\plupload\i18n\ko.js" />
+    <Content Include="FormLibContent\Assets\plupload\i18n\lv.js" />
+    <Content Include="FormLibContent\Assets\plupload\i18n\nl.js" />
+    <Content Include="FormLibContent\Assets\plupload\i18n\pl.js" />
+    <Content Include="FormLibContent\Assets\plupload\i18n\pt-br.js" />
+    <Content Include="FormLibContent\Assets\plupload\i18n\ro.js" />
+    <Content Include="FormLibContent\Assets\plupload\i18n\ru.js" />
+    <Content Include="FormLibContent\Assets\plupload\i18n\sk.js" />
+    <Content Include="FormLibContent\Assets\plupload\i18n\sr.js" />
+    <Content Include="FormLibContent\Assets\plupload\i18n\sv.js" />
+    <Content Include="FormLibContent\Assets\plupload\jquery.plupload.queue\css\jquery.plupload.queue.css" />
+    <Content Include="FormLibContent\Assets\plupload\jquery.plupload.queue\img\backgrounds.gif" />
+    <Content Include="FormLibContent\Assets\plupload\jquery.plupload.queue\img\backgrounds.png" />
+    <Content Include="FormLibContent\Assets\plupload\jquery.plupload.queue\img\buttons-disabled.png" />
+    <Content Include="FormLibContent\Assets\plupload\jquery.plupload.queue\img\buttons.png" />
+    <Content Include="FormLibContent\Assets\plupload\jquery.plupload.queue\img\delete.gif" />
+    <Content Include="FormLibContent\Assets\plupload\jquery.plupload.queue\img\done.gif" />
+    <Content Include="FormLibContent\Assets\plupload\jquery.plupload.queue\img\done.png" />
+    <Content Include="FormLibContent\Assets\plupload\jquery.plupload.queue\img\error.gif" />
+    <Content Include="FormLibContent\Assets\plupload\jquery.plupload.queue\img\error.png" />
+    <Content Include="FormLibContent\Assets\plupload\jquery.plupload.queue\img\throbber.gif" />
+    <Content Include="FormLibContent\Assets\plupload\jquery.plupload.queue\img\transp50.png" />
+    <Content Include="FormLibContent\Assets\plupload\jquery.plupload.queue\jquery.plupload.queue.js" />
+    <Content Include="FormLibContent\Assets\plupload\jquery.ui.plupload\css\jquery.ui.plupload.css" />
+    <Content Include="FormLibContent\Assets\plupload\jquery.ui.plupload\img\plupload-bw.png" />
+    <Content Include="FormLibContent\Assets\plupload\jquery.ui.plupload\img\plupload.png" />
+    <Content Include="FormLibContent\Assets\plupload\jquery.ui.plupload\jquery.ui.plupload.js" />
+    <Content Include="FormLibContent\Assets\plupload\plupload.browserplus.js" />
+    <Content Include="FormLibContent\Assets\plupload\plupload.flash.js" />
+    <Content Include="FormLibContent\Assets\plupload\plupload.flash.swf" />
+    <Content Include="FormLibContent\Assets\plupload\plupload.full.js" />
+    <Content Include="FormLibContent\Assets\plupload\plupload.full.source.js" />
+    <Content Include="FormLibContent\Assets\plupload\plupload.gears.js" />
+    <Content Include="FormLibContent\Assets\plupload\plupload.html4.js" />
+    <Content Include="FormLibContent\Assets\plupload\plupload.html5.js" />
+    <Content Include="FormLibContent\Assets\plupload\plupload.js" />
+    <Content Include="FormLibContent\Assets\plupload\plupload.silverlight.js" />
+    <Content Include="FormLibContent\Assets\plupload\plupload.silverlight.xap" />
+    <Content Include="FormLibContent\Assets\plupload\_readme.txt" />
+    <Content Include="FormLibContent\Assets\Selectize\css\selectize.bootstrap2.css" />
+    <Content Include="FormLibContent\Assets\Selectize\css\selectize.bootstrap3.css" />
+    <Content Include="FormLibContent\Assets\Selectize\css\selectize.css" />
+    <Content Include="FormLibContent\Assets\Selectize\css\selectize.default.css" />
+    <Content Include="FormLibContent\Assets\Selectize\css\selectize.legacy.css" />
+    <Content Include="FormLibContent\Assets\Selectize\js\es5-shim.js" />
+    <Content Include="FormLibContent\Assets\Selectize\js\selectize.js" />
+    <Content Include="FormLibContent\Assets\Selectize\js\selectize.min.js" />
+    <Content Include="FormLibContent\Assets\Selectize\js\standalone\selectize.js" />
+    <Content Include="FormLibContent\Assets\Selectize\js\standalone\selectize.min.js" />
+    <Content Include="FormLibContent\Xmls\Global\Absences.xml" />
+    <Content Include="FormLibContent\Xmls\Global\AdditionalPaymentsDeduction.xml" />
+    <Content Include="FormLibContent\Xmls\Global\ChangeTermsConditions.xml" />
+    <Content Include="FormLibContent\Xmls\Global\Hiring.xml" />
+    <Content Include="FormLibContent\Xmls\Global\HiringBasic.xml" />
+    <Content Include="FormLibContent\Xmls\Global\IndividualAdvancePaymentsLoans.xml" />
+    <Content Include="FormLibContent\Xmls\Global\NewHireNotShowingUp.xml" />
+    <Content Include="FormLibContent\Xmls\Global\PersonalInfoChange.xml" />
+    <Content Include="FormLibContent\Xmls\Global\Templates\AbsencesState.xml" />
+    <Content Include="FormLibContent\Xmls\Global\Templates\AdditionalPaymentsDeductionState.xml" />
+    <Content Include="FormLibContent\Xmls\Global\Templates\ChangeTermsConditionsState.xml" />
+    <Content Include="FormLibContent\Xmls\Global\Templates\HiringBasicOneState.xml" />
+    <Content Include="FormLibContent\Xmls\Global\Templates\HiringBasicState.xml" />
+    <Content Include="FormLibContent\Xmls\Global\Templates\HiringState.xml" />
+    <Content Include="FormLibContent\Xmls\Global\Templates\IndividualAdvancePaymentsLoansState.xml" />
+    <Content Include="FormLibContent\Xmls\Global\Templates\Languages.xml" />
+    <Content Include="FormLibContent\Xmls\Global\Templates\NewHireNotShowingUpState.xml" />
+    <Content Include="FormLibContent\Xmls\Global\Templates\PersonalInfoChangeState.xml" />
+    <Content Include="FormLibContent\Xmls\Global\Templates\Predefined_TerminationReason.xml" />
+    <Content Include="FormLibContent\Xmls\Global\Templates\Regexs.xml" />
+    <Content Include="FormLibContent\Xmls\Global\Templates\TerminationBasicOneState.xml" />
+    <Content Include="FormLibContent\Xmls\Global\Templates\TerminationBasicState.xml" />
+    <Content Include="FormLibContent\Xmls\Global\Templates\TerminationCompleteState.xml" />
+    <Content Include="FormLibContent\Xmls\Global\Templates\VoluntaryDeductionsState.xml" />
+    <Content Include="FormLibContent\Xmls\Global\TerminationBasic.xml" />
+    <Content Include="FormLibContent\Xmls\Global\TerminationComplete.xml" />
+    <Content Include="FormLibContent\Xmls\Global\VoluntaryDeductions.xml" />
+    <Content Include="FormLibContent\Xmls\I18n.xml" />
+    <Content Include="FormLibContent\Xmls\Ireland\AdditionalPaymentsDeduction.xml" />
+    <Content Include="FormLibContent\Xmls\Ireland\ChangeTermsConditions.xml" />
+    <Content Include="FormLibContent\Xmls\Ireland\ContractsConfiguration.xml" />
+    <Content Include="FormLibContent\Xmls\Ireland\Hiring.xml" />
+    <Content Include="FormLibContent\Xmls\Ireland\HiringBasic.xml" />
+    <Content Include="FormLibContent\Xmls\Ireland\NewHireNotShowingUp.xml" />
+    <Content Include="FormLibContent\Xmls\Ireland\PersonalInformation.xml" />
+    <Content Include="FormLibContent\Xmls\Ireland\Templates\AdditionalPaymentsDeductionState.xml" />
+    <Content Include="FormLibContent\Xmls\Ireland\Templates\ChangeTermsConditionsState.xml" />
+    <Content Include="FormLibContent\Xmls\Ireland\Templates\HiringBasicOneState.xml" />
+    <Content Include="FormLibContent\Xmls\Ireland\Templates\HiringBasicState.xml" />
+    <Content Include="FormLibContent\Xmls\Ireland\Templates\HiringState.xml" />
+    <Content Include="FormLibContent\Xmls\Ireland\Templates\Languages.xml" />
+    <Content Include="FormLibContent\Xmls\Ireland\Templates\NewHireNotShowingUpState.xml" />
+    <Content Include="FormLibContent\Xmls\Ireland\Templates\PersonalInformationState.xml" />
+    <Content Include="FormLibContent\Xmls\Ireland\Templates\Regexs.xml" />
+    <Content Include="FormLibContent\Xmls\Ireland\Templates\VoluntaryDeductionsState.xml" />
+    <Content Include="FormLibContent\Xmls\Ireland\VoluntaryDeductions.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\Absences.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\AdditionalPaymentsDeduction.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\ChangeTermsConditions.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\ContractsConfiguration.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\Hiring.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\HiringBasic.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\I18n.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\IndividualAdvancePaymentsLoans.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\NewHireNotShowingUp.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\PersonalInformation.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\Templates\AbsencesState.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\Templates\AdditionalPaymentsDeductionState.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\Templates\ChangeTermsConditionsState.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\Templates\HiringBasicOneState.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\Templates\HiringBasicState.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\Templates\HiringState.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\Templates\IndividualAdvancePaymentsLoansState.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\Templates\Languages.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\Templates\NewHireNotShowingUpState.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\Templates\PersonalInformationState.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\Templates\Predefined_Allowances2_NetGross2.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\Templates\Predefined_Allowances3_NetGross3.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\Templates\Predefined_Allowances_NetGross.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\Templates\Predefined_BusinessUnit_JobTitle.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\Templates\Predefined_BusinessUnit_LocalJobTitle.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\Templates\Predefined_BusinessUnit_PrimarySite.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\Templates\Predefined_BusinessUnit_ReportsToLineManager.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\Templates\Predefined_Company_BusinessUnit.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\Templates\Predefined_Company_NewBusinessUnit.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\Templates\Predefined_Deductions2_NetGross2.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\Templates\Predefined_Deductions3_NetGross3.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\Templates\Predefined_Deductions_NetGross.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\Templates\Predefined_Department_CrossChargeCostCentre.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\Templates\Predefined_Department_HomeCostCentre.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\Templates\Predefined_JobTitle_PayScaleLevel.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\Templates\Predefined_TerminationReason.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\Templates\Regexs.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\Templates\TerminationBasicOneState.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\Templates\TerminationBasicState.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\Templates\TerminationCompleteState.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="FormLibContent\Xmls\Netherlands\Templates\VoluntaryDeductionsState.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\TerminationBasic.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\TerminationComplete.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\VoluntaryDeductions.xml" />
+    <Content Include="FormLibContent\Xmls\Shared\SharedData.xml" />
+    <Content Include="FormLibContent\Xmls\UnitedKingdom\Absences.xml" />
+    <Content Include="FormLibContent\Xmls\UnitedKingdom\AdditionalPaymentsDeduction.xml" />
+    <Content Include="FormLibContent\Xmls\UnitedKingdom\ChangeTermsConditions.xml" />
+    <Content Include="FormLibContent\Xmls\UnitedKingdom\ContractsConfiguration.xml" />
+    <Content Include="FormLibContent\Xmls\UnitedKingdom\Hiring.xml" />
+    <Content Include="FormLibContent\Xmls\UnitedKingdom\HiringBasic.xml" />
+    <Content Include="FormLibContent\Xmls\UnitedKingdom\NewHireNotShowingUp.xml" />
+    <Content Include="FormLibContent\Xmls\UnitedKingdom\PersonalInformation.xml" />
+    <Content Include="FormLibContent\Xmls\UnitedKingdom\Templates\AbsencesState.xml" />
+    <Content Include="FormLibContent\Xmls\UnitedKingdom\Templates\AdditionalPaymentsDeductionState.xml" />
+    <Content Include="FormLibContent\Xmls\UnitedKingdom\Templates\ChangeTermsConditionsState.xml" />
+    <Content Include="FormLibContent\Xmls\UnitedKingdom\Templates\HiringBasicOneState.xml" />
+    <Content Include="FormLibContent\Xmls\UnitedKingdom\Templates\HiringBasicState.xml" />
+    <Content Include="FormLibContent\Xmls\UnitedKingdom\Templates\HiringState.xml" />
+    <Content Include="FormLibContent\Xmls\UnitedKingdom\Templates\Languages.xml" />
+    <Content Include="FormLibContent\Xmls\UnitedKingdom\Templates\NewHireNotShowingUpState.xml" />
+    <Content Include="FormLibContent\Xmls\UnitedKingdom\Templates\PersonalInformationState.xml" />
+    <Content Include="FormLibContent\Xmls\UnitedKingdom\Templates\Regexs.xml" />
+    <Content Include="FormLibContent\Xmls\UnitedKingdom\Templates\VoluntaryDeductionsState.xml" />
+    <Content Include="FormLibContent\Xmls\UnitedKingdom\VoluntaryDeductions.xml" />
+    <Content Include="Global.asax" />
+    <None Include="Scripts\jquery-1.8.3.intellisense.js" />
+    <Content Include="img-profile\SelfService-StartPage.jpg" />
+    <Content Include="Scripts\jquery-1.8.3.js" />
+    <Content Include="Scripts\jquery-1.8.3.min.js" />
+    <Content Include="Scripts\jquery-ui-1.9.2.js" />
+    <Content Include="Scripts\jquery-ui-1.9.2.min.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">
+      <Project>{90defcb6-e297-4f99-a532-da1e0522aa49}</Project>
+      <Name>DH.Helpdesk.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\dhHelpdesk_NG.Data\DH.Helpdesk.Dal.csproj">
+      <Project>{A8F6B7B8-8055-4BB7-82C4-85004F52E6EF}</Project>
+      <Name>DH.Helpdesk.Dal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\dhHelpdesk_NG.Domain\DH.Helpdesk.Domain.csproj">
+      <Project>{5BD5F918-3BE4-474D-AC30-9DBD02FC385D}</Project>
+      <Name>DH.Helpdesk.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\dhHelpdesk_NG.DTO\DH.Helpdesk.BusinessData.csproj">
+      <Project>{C4520E52-CB9E-4FD6-BEE9-92AA532685A2}</Project>
+      <Name>DH.Helpdesk.BusinessData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\dhHelpdesk_NG.Service\DH.Helpdesk.Services.csproj">
+      <Project>{3A5BFA9B-C033-4C1C-81AF-7B4E1BEDCFA3}</Project>
+      <Name>DH.Helpdesk.Services</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Case\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Case\NewCase.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\DisplayTemplates\Date.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\DisplayTemplates\DateAndTime.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\EditorTemplates\DatePicker.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\EditorTemplates\UserModuleOverview.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Case\_CaseReceipt.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Case\CaseOverview.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Case\_CaseSearch.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\DisplayTemplates\DateReadOnly.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="FormLibContent\Areas\Global\Views\Absences\Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\Absences\New.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\Absences\_Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\Absences\_TabAbsences.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\Absences\_TabServiceRequestDetails.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\AdditionalPaymentsDeduction\Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\AdditionalPaymentsDeduction\New.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\AdditionalPaymentsDeduction\_Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\AdditionalPaymentsDeduction\_TabPayment.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\AdditionalPaymentsDeduction\_TabServiceRequestDetails.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\ChangeTermsConditions\Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\ChangeTermsConditions\New.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\ChangeTermsConditions\_Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\ChangeTermsConditions\_TabGlobalView.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\ChangeTermsConditions\_TabOrganisationalAssignment.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\ChangeTermsConditions\_TabPayment.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\ChangeTermsConditions\_TabServiceRequestDetails.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\Hiring\Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\Hiring\New.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\Hiring\Pdfs\Contract.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\Hiring\_Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\Hiring\_TabContract.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\Hiring\_TabDocuments.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\Hiring\_TabEmployment.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\Hiring\_TabGlobalView.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\Hiring\_TabPayment.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\Hiring\_TabPersonal.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\IndividualAdvancePaymentsLoans\Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\IndividualAdvancePaymentsLoans\New.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\IndividualAdvancePaymentsLoans\_Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\IndividualAdvancePaymentsLoans\_TabPayment.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\IndividualAdvancePaymentsLoans\_TabServiceRequestDetails.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\NewHireNotShowingUp\Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\NewHireNotShowingUp\New.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\NewHireNotShowingUp\_Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\NewHireNotShowingUp\_TabServiceRequestDetails.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\PersonalInfoChange\Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\PersonalInfoChange\New.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\PersonalInfoChange\_Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\PersonalInfoChange\_TabPersonal.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\PersonalInfoChange\_TabServiceRequestDetails.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\Shared\_Documents.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\TerminationComplete\Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\TerminationComplete\New.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\TerminationComplete\_Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\TerminationComplete\_TabBasic.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\TerminationComplete\_TabComplete.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\TerminationComplete\_TabServiceRequestDetails.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\VoluntaryDeductions\Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\VoluntaryDeductions\New.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\VoluntaryDeductions\_Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\VoluntaryDeductions\_TabPayment.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\VoluntaryDeductions\_TabServiceRequestDetails.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\Web.config" />
+    <Content Include="FormLibContent\Areas\Global\Views\_ViewStart.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\Absences\Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\Absences\New.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\Absences\Pdfs\EmergencyLeave.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\Absences\Pdfs\ParentalLeave.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\Absences\Pdfs\ShortTermCareLeave.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\Absences\Pdfs\UnpaidLeave.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\Absences\_Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\Absences\_TabAbsences.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\Absences\_TabDocuments.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\Absences\_TabGlobalView.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\Absences\_TabServiceRequestDetails.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\ChangeTermsConditions\Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\ChangeTermsConditions\New.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\ChangeTermsConditions\Pdfs\Appendix1.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\ChangeTermsConditions\Pdfs\ChangeTermsConditions.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\ChangeTermsConditions\_Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\ChangeTermsConditions\_TabDocuments.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\ChangeTermsConditions\_TabGlobalView.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\ChangeTermsConditions\_TabOrganisationalAssignment.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\ChangeTermsConditions\_TabPayment.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\ChangeTermsConditions\_TabServiceRequestDetails.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\HiringBasic\Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\HiringBasic\New.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\HiringBasic\_Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\HiringBasic\_TabGlobalView.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\HiringBasic\_TabPersonal.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\HiringBasic\_TabServiceRequestDetails.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\Hiring\Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\Hiring\New.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\Hiring\Pdfs\Contract.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\Hiring\Pdfs\ContractDutch.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\Hiring\Pdfs\ContractHoliday.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\Hiring\Pdfs\NetherlandsApprenticeContract.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\Hiring\Pdfs\NetherlandsServiceOfficeContract.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\Hiring\_Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\Hiring\_TabDocuments.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\Hiring\_TabGlobalView.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\Hiring\_TabOrganisationalAssignment.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\Hiring\_TabPayment.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\Hiring\_TabPersonal.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\Hiring\_TabServiceRequestDetails.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\Shared\_Documents.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\TerminationComplete\Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\TerminationComplete\New.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\TerminationComplete\Pdfs\Termination.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\TerminationComplete\_Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\TerminationComplete\_TabBasic.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\TerminationComplete\_TabComplete.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\TerminationComplete\_TabDocuments.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\TerminationComplete\_TabGlobalView.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\TerminationComplete\_TabServiceRequestDetails.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\Web.config" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\_ViewStart.cshtml" />
+    <Content Include="FormLibContent\Views\Shared\Web.config" />
+    <Content Include="FormLibContent\Views\Shared\_Attachments.cshtml" />
+    <Content Include="FormLibContent\Views\Shared\_CurrentUser.cshtml" />
+    <Content Include="FormLibContent\Views\Shared\_ErrorMessage.cshtml" />
+    <Content Include="FormLibContent\Views\Shared\_FormInfo.cshtml" />
+    <Content Include="FormLibContent\Views\Shared\_GlobalNavigation.cshtml" />
+    <Content Include="FormLibContent\Views\Shared\_GlobalViewData.cshtml" />
+    <Content Include="FormLibContent\Views\Shared\_InternalLogNote.cshtml" />
+    <Content Include="FormLibContent\Views\Shared\_Layout.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="FormLibContent\Views\Shared\_Navigation.cshtml" />
+    <Content Include="FormLibContent\Views\Shared\_Validate.cshtml" />
+    <Content Include="FormLibContent\Views\_ViewStart.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="FormLibContent\Areas\Netherlands\Views\AdditionalPaymentsDeduction\Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\AdditionalPaymentsDeduction\New.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\AdditionalPaymentsDeduction\_Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\AdditionalPaymentsDeduction\_TabPayment.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\AdditionalPaymentsDeduction\_TabServiceRequestDetails.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\IndividualAdvancePaymentsLoans\Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\IndividualAdvancePaymentsLoans\New.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\IndividualAdvancePaymentsLoans\_Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\IndividualAdvancePaymentsLoans\_TabPayment.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\IndividualAdvancePaymentsLoans\_TabServiceRequestDetails.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\PersonalInformation\Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\PersonalInformation\New.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\PersonalInformation\_Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\PersonalInformation\_TabGlobalView.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\PersonalInformation\_TabPersonal.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\PersonalInformation\_TabServiceRequestDetails.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\TerminationBasic\Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\TerminationBasic\New.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\TerminationBasic\Pdfs\Termination.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\TerminationBasic\_Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\TerminationBasic\_TabBasic.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\TerminationBasic\_TabDocuments.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\TerminationBasic\_TabGlobalView.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\TerminationBasic\_TabServiceRequestDetails.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\VoluntaryDeductions\Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\VoluntaryDeductions\New.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\VoluntaryDeductions\_Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\VoluntaryDeductions\_TabGlobalView.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\VoluntaryDeductions\_TabPayment.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\VoluntaryDeductions\_TabServiceRequestDetails.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\Shared\Pdfs\Appendix1.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\Shared\Pdfs\Appendix2.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\HiringBasic\Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\HiringBasic\New.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\HiringBasic\_Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\HiringBasic\_TabGlobalView.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\HiringBasic\_TabPersonal.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\HiringBasic\_TabServiceRequestDetails.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\Hiring\_TabOrganisationalAssignment.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\Hiring\_TabServiceRequestDetails.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\ChangeTermsConditions\Pdfs\Appendix2.cshtml" />
+    <Content Include="FormLibContent\Views\Shared\_GlobalNavRev.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\TerminationBasic\Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\TerminationBasic\New.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\TerminationBasic\_Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\TerminationBasic\_TabBasic.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\TerminationBasic\_TabComplete.cshtml" />
+    <Content Include="FormLibContent\Areas\Global\Views\TerminationBasic\_TabServiceRequestDetails.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\NewHireNotShowingUp\Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\NewHireNotShowingUp\New.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\NewHireNotShowingUp\_Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\NewHireNotShowingUp\_TabServiceRequestDetails.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\TerminationBasic\_TabComplete.cshtml" />
+    <Content Include="FormLibContent\Views\Shared\_GlobalAttachments.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\ChangeTermsConditions\Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\ChangeTermsConditions\New.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\ChangeTermsConditions\_Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\ChangeTermsConditions\_TabOrganisationalAssignment.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\ChangeTermsConditions\_TabPayment.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\ChangeTermsConditions\_TabServiceRequestDetails.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\ChangeTermsConditions\_TabSsc.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\Hiring\Pdfs\CoWorker.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\Hiring\_TabDocuments.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\VoluntaryDeductions\Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\VoluntaryDeductions\New.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\VoluntaryDeductions\_Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\VoluntaryDeductions\_TabPayment.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\VoluntaryDeductions\_TabServiceRequestDetails.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\ChangeTermsConditions\_TabGlobalView.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\Hiring\_TabGlobalView.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\AdditionalPaymentsDeduction\Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\AdditionalPaymentsDeduction\New.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\AdditionalPaymentsDeduction\_Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\AdditionalPaymentsDeduction\_TabPayment.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\AdditionalPaymentsDeduction\_TabServiceRequestDetails.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\HiringBasic\Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\HiringBasic\New.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\HiringBasic\_Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\HiringBasic\_TabPersonal.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\HiringBasic\_TabServiceRequestDetails.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\NewHireNotShowingUp\Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\NewHireNotShowingUp\New.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\NewHireNotShowingUp\_Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\NewHireNotShowingUp\_TabServiceRequestDetails.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\PersonalInformation\Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\PersonalInformation\New.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\PersonalInformation\_Edit.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\PersonalInformation\_TabPersonal.cshtml" />
+    <Content Include="FormLibContent\Areas\Ireland\Views\PersonalInformation\_TabServiceRequestDetails.cshtml" />
+    <Content Include="FormLibContent\Assets\Selectize\less\plugins\drag_drop.less" />
+    <Content Include="FormLibContent\Assets\Selectize\less\plugins\dropdown_header.less" />
+    <Content Include="FormLibContent\Assets\Selectize\less\plugins\optgroup_columns.less" />
+    <Content Include="FormLibContent\Assets\Selectize\less\plugins\remove_button.less" />
+    <Content Include="FormLibContent\Assets\Selectize\less\selectize.bootstrap2.less" />
+    <Content Include="FormLibContent\Assets\Selectize\less\selectize.bootstrap3.less" />
+    <Content Include="FormLibContent\Assets\Selectize\less\selectize.default.less" />
+    <Content Include="FormLibContent\Assets\Selectize\less\selectize.legacy.less" />
+    <Content Include="FormLibContent\Assets\Selectize\less\selectize.less" />
+    <Content Include="Content\img-profile\vssver2.scc" />
+    <Content Include="Content\js\vssver2.scc" />
+    <Content Include="img-profile\MyHR - Global User Guide for Line Managers.pdf" />
+    <Content Include="img-profile\Pay query form.xlsm" />
+    <None Include="Properties\PublishProfiles\DH Dev.pubxml" />
+    <None Include="Properties\PublishProfiles\DH.Helpdesk.SelfService.Release.pubxml" />
+    <None Include="Properties\PublishProfiles\DH.Helpdesk.SelfService.Release_AL.pubxml" />
+    <Content Include="Views\Documents\Index.cshtml" />
+    <Content Include="Views\Start\Index.cshtml" />
+    <Content Include="Views\Help\Index.cshtml" />
+    <Content Include="Views\Help\FindYourWay.cshtml" />
+    <Content Include="Views\Help\About.cshtml" />
+    <Content Include="Views\CoWorkers\Index.cshtml" />
+    <Content Include="Views\Error\Index.cshtml" />
+    <None Include="Properties\PublishProfiles\Test.pubxml" />
+    <Content Include="Views\Shared\_CaseLogNote.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Content\highlighter\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>58740</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:59809/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Import Project="..\packages\PostSharp.4.0.36\tools\PostSharp.targets" Condition="Exists('..\packages\PostSharp.4.0.36\tools\PostSharp.targets')" />
+  <Target Name="EnsurePostSharpImported" BeforeTargets="BeforeBuild" Condition="'$(PostSharp30Imported)' == ''">
+    <Error Condition="!Exists('..\packages\PostSharp.4.0.36\tools\PostSharp.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://www.postsharp.net/links/nuget-restore." />
+    <Error Condition="Exists('..\packages\PostSharp.4.0.36\tools\PostSharp.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://www.postsharp.net/links/nuget-restore." />
+  </Target>
+</Project>
