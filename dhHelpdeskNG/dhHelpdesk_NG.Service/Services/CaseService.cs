@@ -1244,7 +1244,6 @@ namespace DH.Helpdesk.Services.Services
 
                                         urlSelfService = "<br><a href='" + siteSelfService + "'>" + LinkText + "</a>";
 
-                                        m.Body = m.Body.Replace(LinkText + "[/#98]", "");
                                     }
                                     else
                                     {
@@ -1269,7 +1268,7 @@ namespace DH.Helpdesk.Services.Services
                                         LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
 
                                         urlHelpdesk = "<br><a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
-                                        m.Body = m.Body.Replace(LinkText + "[/#99]", "");
+               
                                     }
                                     else
                                     {
@@ -1352,7 +1351,7 @@ namespace DH.Helpdesk.Services.Services
                                                 LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
 
                                                 urlSelfService = "<br><a href='" + siteSelfService + "'>" + LinkText + "</a>";
-                                                m.Body = m.Body.Replace(LinkText + "[/#98]", "");
+                                            
                                             }
                                             else
                                             {
@@ -1377,7 +1376,7 @@ namespace DH.Helpdesk.Services.Services
                                                 LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
 
                                                 urlHelpdesk = "<br><a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
-                                                m.Body = m.Body.Replace(LinkText + "[/#99]", "");
+                             
                                             }
                                             else
                                             {
@@ -1462,7 +1461,7 @@ namespace DH.Helpdesk.Services.Services
                                                 LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
 
                                                 urlSelfService = "<br><a href='" + siteSelfService + "'>" + LinkText + "</a>";
-                                                m.Body = m.Body.Replace(LinkText + "[/#98]", "");
+                                       
                                             }
                                             else
                                             {
@@ -1487,7 +1486,7 @@ namespace DH.Helpdesk.Services.Services
                                                 LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
 
                                                 urlHelpdesk = "<br><a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
-                                                m.Body = m.Body.Replace(LinkText + "[/#99]", "");
+                                        
                                             }
                                             else
                                             {
@@ -1552,7 +1551,7 @@ namespace DH.Helpdesk.Services.Services
                                 LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
 
                                 urlSelfService = "<br><a href='" + siteSelfService + "'>" + LinkText + "</a>";
-                                m.Body = m.Body.Replace(LinkText + "[/#98]", "");
+                      
                             }
                             else
                             {
@@ -1577,7 +1576,7 @@ namespace DH.Helpdesk.Services.Services
                                 LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
 
                                 urlHelpdesk = "<br><a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
-                                m.Body = m.Body.Replace(LinkText + "[/#99]", "");
+                            
                             }
                             else
                             {
@@ -1631,7 +1630,7 @@ namespace DH.Helpdesk.Services.Services
                                         LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
 
                                         urlSelfService = "<br><a href='" + siteSelfService + "'>" + LinkText + "</a>";
-                                        m.Body = m.Body.Replace(LinkText + "[/#98]", "");
+                         
                                     }
                                     else
                                     {
@@ -1656,7 +1655,6 @@ namespace DH.Helpdesk.Services.Services
                                         LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
 
                                         urlHelpdesk = "<br><a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
-                                        m.Body = m.Body.Replace(LinkText + "[/#99]", "");
                                     }
                                     else
                                     {
@@ -1722,7 +1720,6 @@ namespace DH.Helpdesk.Services.Services
                                 LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
 
                                 urlSelfService = "<br><a href='" + siteSelfService + "'>" + LinkText + "</a>";
-                                m.Body = m.Body.Replace(LinkText + "[/#98]", "");
                             }
                             else
                             {
@@ -1747,7 +1744,6 @@ namespace DH.Helpdesk.Services.Services
                                 LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
 
                                 urlHelpdesk = "<br><a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
-                                m.Body = m.Body.Replace(LinkText + "[/#99]", "");
                             }
                             else
                             {
@@ -1861,7 +1857,7 @@ namespace DH.Helpdesk.Services.Services
                                         LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
 
                                         urlSelfService = "<br><a href='" + siteSelfService + "'>" + LinkText + "</a>";
-                                        m.Body = m.Body.Replace(LinkText + "[/#98]", "");
+                                 
                                     }
                                     else
                                     {
@@ -1886,7 +1882,7 @@ namespace DH.Helpdesk.Services.Services
                                         LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
 
                                         urlHelpdesk = "<br><a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
-                                        m.Body = m.Body.Replace(LinkText + "[/#99]", "");
+                                     
                                     }
                                     else
                                     {
@@ -1933,7 +1929,7 @@ namespace DH.Helpdesk.Services.Services
                                         LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
 
                                         urlSelfService = "<br><a href='" + siteSelfService + "'>" + LinkText + "</a>";
-                                        m.Body = m.Body.Replace(LinkText + "[/#98]", "");
+                               
                                     }
                                     else
                                     {
@@ -1958,7 +1954,7 @@ namespace DH.Helpdesk.Services.Services
                                         LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
 
                                         urlHelpdesk = "<br><a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
-                                        m.Body = m.Body.Replace(LinkText + "[/#99]", "");
+                                   
                                     }
                                     else
                                     {
@@ -2007,7 +2003,7 @@ namespace DH.Helpdesk.Services.Services
                                         LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
 
                                         urlSelfService = "<br><a href='" + siteSelfService + "'>" + LinkText + "</a>";
-                                        m.Body = m.Body.Replace(LinkText + "[/#98]", "");
+              
                                     }
                                     else
                                     {
@@ -2032,7 +2028,7 @@ namespace DH.Helpdesk.Services.Services
                                         LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
 
                                         urlHelpdesk = "<br><a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
-                                        m.Body = m.Body.Replace(LinkText + "[/#99]", "");
+                      
                                     }
                                     else
                                     {
