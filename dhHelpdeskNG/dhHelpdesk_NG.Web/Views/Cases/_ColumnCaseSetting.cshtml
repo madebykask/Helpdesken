@@ -53,15 +53,15 @@
                                                    <input type="hidden" style="width: 80px;" name="minWidthValue" id="minWidthValue" value="100" />
 
                                                    <select id="labellist">
-                                            @foreach (CaseOverviewGridColumnSetting fieldSetting in Model.AvailableColumns)
+                                                       @foreach (CaseOverviewGridColumnSetting fieldSetting in Model.AvailableColumns)
                                                        {
                                                            <option value="@fieldSetting.Name">@Translation.Get(fieldSetting.Name, Enums.TranslationSource.CaseTranslation, Model.CustomerId)</option>
                                                        }
                                                    </select>
                                                </td>                                           
                                                <td>
-                                                   <select id="newColStyle">
-                                            @foreach (SelectListItem fieldSetting in CaseColumnsSettingsModel.FieldStyles)
+                                                   <select id="newColStyle">                                                       
+                                                       @foreach (SelectListItem fieldSetting in CaseColumnsSettingsModel.FieldStyles)
                                                        {
                                                            <option value="@fieldSetting.Value">@fieldSetting.Text</option>
                                                        }

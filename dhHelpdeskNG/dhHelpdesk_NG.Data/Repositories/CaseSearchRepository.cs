@@ -748,6 +748,10 @@
             columns.Add("tblDepartment.SearchKey");
             columns.Add("tblCase.ReferenceNumber");
             columns.Add("tblRegistrationSourceCustomer.SourceName as RegistrationSourceCustomer");
+
+            columns.Add("tblCaseIsAbout.ReportedBy as IsAbout_ReportedBy");
+            columns.Add("tblCaseIsAbout.Person_Name as IsAbout_Persons_Name");            
+
             if (customerSetting != null)
             {
                 if (customerSetting.IsUserFirstLastNameRepresentation == 1)
@@ -841,8 +845,10 @@
             tables.Add("left outer join tblSystem on tblCase.System_Id = tblSystem.Id ");  
             tables.Add("left outer join tblUrgency on tblCase.Urgency_Id = tblUrgency.Id ");  
             tables.Add("left outer join tblImpact on tblCase.Impact_Id = tblImpact.Id ");
-            tables.Add("left outer join tblRegistrationSourceCustomer on tblCase.RegistrationSourceCustomer_Id = tblRegistrationSourceCustomer.Id");
-            tables.Add("left outer join tblUsers on tblUsers.Id = tblCase.Performer_User_Id");
+            tables.Add("left outer join tblRegistrationSourceCustomer on tblCase.RegistrationSourceCustomer_Id = tblRegistrationSourceCustomer.Id ");
+            tables.Add("left outer join tblUsers on tblUsers.Id = tblCase.Performer_User_Id ");
+            tables.Add("left outer join tblCaseIsAbout on tblCaseIsAbout.Case_Id = tblCase.Id ");
+            
             if (customerSetting != null)
             {
                 const int SHOW_IF_DEFAULT_USER_GROUP = 0;

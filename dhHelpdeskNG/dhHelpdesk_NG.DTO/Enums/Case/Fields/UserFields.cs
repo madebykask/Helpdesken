@@ -22,7 +22,7 @@
 
         public const string Place = "Place";
 
-        public const string OrdererCode = "UserCode";
+        public const string OrdererCode = "UserCode";        
 
         public const string IsAbout_User = "IsAbout_ReportedBy";
 
@@ -45,5 +45,7 @@
         public const string IsAbout_UserCode = "IsAbout_UserCode";
 
         public const string IsAbout_Place = "IsAbout_Place";
+
+
     }
 }
