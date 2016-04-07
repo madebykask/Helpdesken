@@ -237,7 +237,11 @@ namespace DH.Helpdesk.Services.Services
                         break;
 
 
-
+                    case CaseSolutionIndexColumns.Status:
+                        query = (SearchCaseSolutions.Ascending) ?
+                                query.OrderBy(l => l.Status) :
+                                query.OrderByDescending(l => l.Status);
+                        break;
 
                     default:                        
                         query = (SearchCaseSolutions.Ascending) ?

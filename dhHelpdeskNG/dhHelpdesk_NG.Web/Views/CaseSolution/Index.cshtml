@@ -1,14 +1,9 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure.Extensions
 @using System.Web.Optimization
 @model DH.Helpdesk.Web.Models.CaseSolution.CaseSolutionIndexViewModel
-@{
-    ViewBag.Title = "Index";
-}
-
-@*@Scripts.Render("~/bundles/casetemplates/index")*@
 
 @{
-   
+    ViewBag.Title = "Index";   
 
     var menu1Style = "";
     var menu2Style = "";
@@ -16,27 +11,30 @@
     var menu1TabClass = "";
     var menu2TabClass = "";
 
-    switch (Model.ActiveTab.ToLower())
+    if (!string.IsNullOrEmpty(Model.ActiveTab)) 
     {
-        case "categories":
-            menu2Style = "display: block";
-            menu1Style = "display: none";
-            menu2TabClass = "active";
-            menu1TabClass = "";
-            break;
+        switch (Model.ActiveTab.ToLower())
+        {
+            case "categories":
+                menu2Style = "display: block";
+                menu1Style = "display: none";
+                menu2TabClass = "active";
+                menu1TabClass = "";
+                break;
 
-        default:
-            menu1Style = "display: block";
-            menu2Style = "display: none";
-            menu1TabClass = "active";
-            menu2TabClass = "";
+            default:
+                menu1Style = "display: block";
+                menu2Style = "display: none";
+                menu1TabClass = "active";
+                menu2TabClass = "";
 
-            break;
+                break;
+        }
     }
             
 }
 
-
+@Scripts.Render("~/bundles/casetemplates/index")
 <div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
@@ -91,28 +89,3 @@
     </div>
 
 </div>
-<script type="text/javascript">
-
-    var customerId = $("#currentCustomerId").val();
-
-    $('#CaseTemplateTab').click(function () {
-        $.post("/CaseSolution/RememberTab", { topic: "CaseSolution", tab: "CaseTemplate" });
-        $('#menu1').show();
-        $('#menu2').hide();
-    });
-
-    $('#CategoriesTab').click(function () {
-        $.post("/CaseSolution/RememberTab", { topic: "CaseSolution", tab: "Categories" });
-        $('#menu2').show();
-        $('#menu1').hide();
-    });
-
-    //$(document).ready(function () {
-    //    $("#currentCustomer").change(function () {
-    //        $("#caseSolutionOverview").submit();
-    //    });
-    //});
-
-   
-
-</script>

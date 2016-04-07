@@ -40,9 +40,13 @@
                     @Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation)
                     <i class="@CaseSolutionIndexColumns.Administrator.SetCaseSolutionSortIcon()"></i>
                 </th>
-                <th class="sortable" data-sort="@CaseSolutionIndexColumns.Priority" data-asc="@_asc" style="cursor: pointer; cursor: hand; width: 50%">
+                <th class="sortable" data-sort="@CaseSolutionIndexColumns.Priority" data-asc="@_asc" style="cursor: pointer; cursor: hand; width: 20%">
                     @Translation.Get("Prioritet", Enums.TranslationSource.TextTranslation)
                     <i class="@CaseSolutionIndexColumns.Priority.SetCaseSolutionSortIcon()"></i>
+                </th>
+                <th class="sortable" data-sort="@CaseSolutionIndexColumns.Status" data-asc="@_asc" style="cursor: pointer; cursor: hand; width: 30%">
+                    @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
+                    <i class="@CaseSolutionIndexColumns.Status.SetCaseSolutionSortIcon()"></i>
                 </th>
             </tr>
         </thead>
@@ -65,6 +69,9 @@
                     </td>
                     <td>
                         <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.PriorityName)</a>
+                    </td>
+                     <td>
+                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })"> @item.IsActive.BoolToYesNo()</a>
                     </td>
                 </tr>
             }

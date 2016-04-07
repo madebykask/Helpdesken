@@ -146,10 +146,11 @@ namespace DH.Helpdesk.Web.Controllers
             return this.View(model);
         }      
 
-        [HttpPost]
-        public void RememberTab(string topic, string tab)
+        [HttpGet]
+        public JsonResult RememberTab(string topic, string tab)
         {
             SessionFacade.SaveActiveTab(topic, tab);
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]

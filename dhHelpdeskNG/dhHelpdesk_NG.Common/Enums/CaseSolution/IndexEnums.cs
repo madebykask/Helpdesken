@@ -10,6 +10,8 @@
 
         public const string Administrator = "PerformerUser";
 
-        public const string Priority = "Priority";        
+        public const string Priority = "Priority";
+
+        public const string Status = "Status";        
     }
 }
