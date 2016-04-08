@@ -609,6 +609,9 @@ EditPage.prototype.init = function (p) {
         });
     });
 
+    
+
+
     $('.date').each(function () {
         var $this = $(this);
         var errorLabel = $this.find('label.error:visible');
@@ -635,13 +638,35 @@ EditPage.prototype.init = function (p) {
                     $('#PrintCaseDialog').draggable({
                         handle: ".modal-header"
                     });
-
-                    $('#PrintCaseDialog').modal('show');
+                    
+                    $('#PrintCaseDialog').modal({
+                        "backdrop": "static",
+                        "keyboard": true,
+                        "show": true
+                    });
+                   
+                    var _iframe = $("#caseReportContainer").find("iframe");
+                    if (_iframe != null && _iframe != undefined) {
+                        update_iFrame(_iframe.attr("id"));                        
+                    }
                 }
              );
 
        
     });
+
+    
+
+    var update_iFrame = function (iframeId) {
+        setTimeout(function () {           
+            var elm = document.getElementById(iframeId);
+            if (elm != null && elm != undefined) {
+                var newH = $(elm).height() + 50;
+                $(elm).css({ height: newH.toString() + "px" });
+            }            
+        }, 3000);
+    }
+
 
     //////// event bind end ///////////
 

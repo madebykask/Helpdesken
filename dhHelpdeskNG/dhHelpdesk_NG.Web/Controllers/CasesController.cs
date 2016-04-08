@@ -4810,6 +4810,7 @@ using Microsoft.Reporting.WebForms;
                 parameters.Add(new ReportParameter("CaseId", caseId.ToString()));
                 parameters.Add(new ReportParameter("LanguageId", SessionFacade.CurrentLanguageId.ToString()));                
                 reportViewer.LocalReport.SetParameters(parameters);
+                reportViewer.LocalReport.Refresh();
 
                 foreach (var dataSet in reportData.DataSets)
                     reportViewer.LocalReport.DataSources.Add(new ReportDataSource(dataSet.DataSetName, dataSet.DataSet));
