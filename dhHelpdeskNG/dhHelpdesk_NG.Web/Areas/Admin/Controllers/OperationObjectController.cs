@@ -123,7 +123,7 @@
             #region selectlistitem
 
             List<SelectListItem> sl = new List<SelectListItem>();
-            for (int i = 0; i < 10; i++)
+            for (int i = 1; i < 10; i++)
             {
                 sl.Add(new SelectListItem
                 {

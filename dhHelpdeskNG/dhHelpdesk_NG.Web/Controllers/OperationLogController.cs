@@ -77,6 +77,7 @@
                 CS.SortBy = "CreatedDate";
                 CS.Ascending = false;
                 SessionFacade.CurrentOperationLogSearch = CS;
+                model.OperationLogList = this._operationLogService.SearchAndGenerateOperationLog(SessionFacade.CurrentCustomer.Id, CS);
             }
             
             return this.View(model);
@@ -301,6 +302,7 @@
             var systemRespAvailable = new List<System>();
             systemRespAvailable = _systemService.GetSystemResponsibles(customerId).ToList();
             var smsEmailDomain = "";
+            var operationObject = this._operationObjectService.GetOperationObject(operationlog.OperationObject_Id);
 
             if (cs.SMSEMailDomain != null)
                 smsEmailDomain = cs.SMSEMailDomain;
@@ -362,7 +364,8 @@
                     Value = x.ContactPhone + "@" + smsEmailDomain
                 }).ToList(),
 
-                SystemResponsiblesSelected = new List<SelectListItem>()
+                SystemResponsiblesSelected = new List<SelectListItem>(),
+                OperationObjectShow = operationObject.ShowOnStartPage
             };
 
             

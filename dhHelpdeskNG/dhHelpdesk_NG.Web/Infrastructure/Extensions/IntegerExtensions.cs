@@ -16,6 +16,13 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return Translation.Get("Nej", Enums.TranslationSource.TextTranslation);
         }
 
+        public static string TranslateOperationObjectBit(this int i)
+        {
+            if (i > 0)
+                return Translation.Get("Ja", Enums.TranslationSource.TextTranslation);
+            return Translation.Get("Nej", Enums.TranslationSource.TextTranslation);
+        }
+
         public static string GetClassforYesNo(this int i)
         {
             if (i == 1)
