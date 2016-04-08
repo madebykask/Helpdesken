@@ -543,10 +543,13 @@ using DH.Helpdesk.BusinessData.Enums.Case;
 
         private CustomSelectList GetReportList(string defaultReportName)
         {
+            /* TODO: It must change some how find the files from "Reports" path */ 
             var ret = new CustomSelectList();
-            ret.Items.AddItem("0", "CasesPerSource");
+            ret.Items.AddItem("0", "CasesPerCasetype");
             ret.Items.AddItem("1", "CasesPerDate");
-
+            ret.Items.AddItem("2", "CasesPerSource");            
+            ret.Items.AddItem("3", "CasesPerWorkingGroup");
+            
             var defaultSelected = ret.Items.Where(i => i.Value.ToLower() == defaultReportName.ToLower()).FirstOrDefault();
             if (defaultSelected != null)
                 ret.SelectedItems.AddItem(int.Parse(defaultSelected.Id));

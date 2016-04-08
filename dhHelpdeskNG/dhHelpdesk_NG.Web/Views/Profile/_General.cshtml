@@ -116,19 +116,12 @@
         }
     </table>
     <h4>@Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)</h4>
-    <table class="tableform">
+    
+    <table class="tableform">       
         <tr>
             <td class="span3">
                 @Translation.Get("Ärendeöversikt", Enums.TranslationSource.TextTranslation)
             </td>
-            <td>
-                <input type="checkbox" name="User.ShowNotAssignedCases" @(Model.User.ShowNotAssignedCases == 1 ? "checked=checked" : "") value="1"/>
-                <input type="hidden" name="User.ShowNotAssignedCases" value="0" />
-                &nbsp; &nbsp;@Translation.Get("Visa alltid ej tilldelade ärenden på ärendeöversikten", Enums.TranslationSource.TextTranslation)
-            </td>
-        </tr>
-        <tr>
-            <td></td>
             <td>
                 <input type="checkbox" name="User.ShowCaseStatistics" @(Model.User.ShowCaseStatistics == 1 ? "checked=checked" : "") value="1"/>
                 <input type="hidden" name="User.ShowCaseStatistics" value="0" />

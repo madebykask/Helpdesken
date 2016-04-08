@@ -59,7 +59,7 @@ namespace DH.Helpdesk.Web.Controllers
     using ParentCaseInfo = DH.Helpdesk.BusinessData.Models.Case.ChidCase.ParentCaseInfo;
     using DH.Helpdesk.Web.Enums;
     using System.Web.Script.Serialization;
-using Microsoft.Reporting.WebForms;
+    using Microsoft.Reporting.WebForms;
     using DH.Helpdesk.BusinessData.Models.ReportService;
     using DH.Helpdesk.Services.Services.Reports;
 
@@ -69,7 +69,7 @@ using Microsoft.Reporting.WebForms;
 
         private const string ParentPathDefaultValue = "--";
         private const string ChildCasesHashTab = "childcases-tab";
-        private const string _reportFolderName = "Reports";
+        private const string _reportFolderName = "StaticReports";
 
         private readonly ICaseService _caseService;
         private readonly ICaseSearchService _caseSearchService;
@@ -4783,9 +4783,7 @@ using Microsoft.Reporting.WebForms;
 
             reportSelectedFilter.GeneralParameter.Add(new GeneralParameter("@CaseId", caseId));
             reportSelectedFilter.GeneralParameter.Add(new GeneralParameter("@LanguageId", SessionFacade.CurrentLanguageId));
-            //reportSelectedFilter.CaseId = caseId;
-            //reportSelectedFilter.LanguageId = SessionFacade.CurrentLanguageId;
-
+            
             var reportData = _ReportServiceService.GetReportData(reportName, reportSelectedFilter);
 
             ReportModel model = new ReportModel();

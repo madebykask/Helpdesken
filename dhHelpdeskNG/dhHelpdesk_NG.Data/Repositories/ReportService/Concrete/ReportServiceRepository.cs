@@ -64,6 +64,8 @@
 
         private List<Tuple<string, string, int>> GetQueriesFor(string reportIdentity, ReportSelectedFilter filters)
         {
+
+            /* TODO: It must change some how takes the query dynamicly from file */ 
             var ret = new List<Tuple<string, string, int>>();
             var _whereClause = GetWhereClauseBy(filters);
             switch (reportIdentity)
@@ -97,6 +99,38 @@
                             "GROUP BY tblDate.DateKey, tblCustomer.Name, tblCustomer.Id " +
                             "ORDER BY tblDate.DateKey",(int) QueryType.SQLQUERY)                            
                             );
+                    break;
+
+                case "CasesPerCasetype":
+                    ret.Add(
+                          new Tuple<string, string, int>(
+                            "CasesPerDate",
+                            "SELECT COUNT(tblCase.Casenumber) AS Volume, tblDate.CalendarYearMonth, tblCaseType.CaseType " +
+                            "FROM tblCase INNER JOIN " +
+                                 "tblCaseType ON tblCase.CaseType_Id = tblCaseType.Id RIGHT OUTER JOIN "+
+                                 "tblDate ON CAST(tblCase.RegTime AS Date) = tblDate.FullDate " + 
+                            _whereClause +
+                            "GROUP BY tblDate.CalendarYearMonth, tblCaseType.CaseType " +
+                            "ORDER BY tblDate.CalendarYearMonth", (int)QueryType.SQLQUERY)
+                            );
+                    break;
+
+                case "CasesPerWorkingGroup":
+                    ret.Add(
+                          new Tuple<string, string, int>(
+                            "CasesPerWorkGroup",
+                            "SELECT COUNT(tblCase.Casenumber) AS Volume, tblCustomer.Name, tblDate.DateKey, tblCustomer.Id, " +
+                                   "tblCase.WorkingGroup_Id, tblWorkingGroup.WorkingGroup, tblDate.CalendarYearMonth " +
+                            "FROM tblCustomer INNER JOIN " + 
+                                 "tblCase ON tblCustomer.Id = tblCase.Customer_Id INNER JOIN " +
+                                 "tblWorkingGroup ON tblCustomer.Id = tblWorkingGroup.Customer_Id AND "+
+                                 "tblCase.WorkingGroup_Id = tblWorkingGroup.Id RIGHT OUTER JOIN " +
+                                 "tblDate ON CAST(tblCase.RegTime AS Date) = tblDate.FullDate " +
+                            _whereClause +
+                            "GROUP BY tblDate.DateKey, tblCustomer.Name, tblCustomer.Id, tblCase.WorkingGroup_Id, " + 
+                                     "tblWorkingGroup.WorkingGroup, tblDate.CalendarYearMonth " +
+                            "ORDER BY tblDate.DateKey", (int)QueryType.SQLQUERY)
+                            );                                        
                     break;
 
                 case "CaseDetailsList":
@@ -178,7 +212,7 @@
                 {
                     // Dep + OU
                     if (filters.SeletcedOUs.Any()) 
-                        _whereStr += string.Format("AND tblCase.Department_Id in ({0}) or tblCase.OU_Id in ({1}) ", 
+                        _whereStr += string.Format("AND (tblCase.Department_Id in ({0}) or tblCase.OU_Id in ({1})) ", 
                                                    filters.SeletcedDepartments.GetSelectedStr().SafeForSqlInject(),
                                                    filters.SeletcedOUs.GetSelectedStr().SafeForSqlInject());                        
                     else
@@ -190,10 +224,7 @@
                     if (filters.SeletcedOUs.Any())
                         _whereStr += string.Format("AND tblCase.OU_Id in ({0}) ", filters.SeletcedOUs.GetSelectedStr().SafeForSqlInject());                        
                 }
-
-                if (filters.SeletcedDepartments.Any())
-                    _whereStr += string.Format("AND tblCase.Department_Id in ({0}) ", filters.SeletcedDepartments.GetSelectedStr().SafeForSqlInject());
-
+               
                 if (filters.SelectedWorkingGroups.Any())                
                     _whereStr += string.Format("AND tblCase.WorkingGroup_Id in ({0}) ", filters.SelectedWorkingGroups.GetSelectedStr().SafeForSqlInject());
 

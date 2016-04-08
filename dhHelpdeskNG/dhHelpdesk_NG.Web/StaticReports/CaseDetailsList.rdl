@@ -172,21 +172,22 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="FieldValue1">
+                    <Textbox Name="Textbox3">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=IIF(Fields!FieldName.Value Like "LogNote", " ", Fields!FieldValue.Value)</Value>
+                              <Value>=IIF(Fields!FieldName.Value Like "LogNote", " ", Replace(Fields!FieldValue.Value, Chr(10),"&lt;br/&gt;"))</Value>
+                              <MarkupType>HTML</MarkupType>
                               <Style />
                             </TextRun>
                           </TextRuns>
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>FieldValue1</rd:DefaultName>
+                      <rd:DefaultName>Textbox3</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -238,7 +239,7 @@
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>2.87183cm</Height>
+    <Height>2.84891cm</Height>
     <Style />
   </Body>
   <Width>18.5cm</Width>
