@@ -2,21 +2,21 @@
 <Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <Body>
     <ReportItems>
-      <Chart Name="ChartCasesPerDate">
+      <Chart Name="Chart1">
         <ChartCategoryHierarchy>
           <ChartMembers>
             <ChartMember>
-              <Group Name="ChartCasesPerDate_CategoryGroup">
+              <Group Name="Chart1_CategoryGroup">
                 <GroupExpressions>
-                  <GroupExpression>=Fields!WorkingGroup.Value</GroupExpression>
+                  <GroupExpression>=Fields!CaseType.Value</GroupExpression>
                 </GroupExpressions>
               </Group>
               <SortExpressions>
                 <SortExpression>
-                  <Value>=Fields!WorkingGroup.Value</Value>
+                  <Value>=Fields!CaseType.Value</Value>
                 </SortExpression>
               </SortExpressions>
-              <Label>=Fields!WorkingGroup.Value</Label>
+              <Label>=Fields!CaseType.Value</Label>
             </ChartMember>
           </ChartMembers>
         </ChartCategoryHierarchy>
@@ -40,20 +40,6 @@
                     <UseValueAsLabel>true</UseValueAsLabel>
                     <Visible>true</Visible>
                   </ChartDataLabel>
-                  <ActionInfo>
-                    <Actions>
-                      <Action>
-                        <Drillthrough>
-                          <ReportName>Details</ReportName>
-                          <Parameters>
-                            <Parameter Name="WorkingGroup">
-                              <Value>=Fields!WorkingGroup_Id.Value</Value>
-                            </Parameter>
-                          </Parameters>
-                        </Drillthrough>
-                      </Action>
-                    </Actions>
-                  </ActionInfo>
                   <Style />
                   <ChartMarker>
                     <Style />
@@ -93,6 +79,7 @@
                     <FontSize>8pt</FontSize>
                   </Style>
                 </ChartAxisTitle>
+                <Interval>1</Interval>
                 <ChartMajorGridLines>
                   <Enabled>False</Enabled>
                   <Style>
@@ -110,15 +97,13 @@
                   </Style>
                 </ChartMinorGridLines>
                 <ChartMinorTickMarks>
-                  <Enabled>True</Enabled>
                   <Length>0.5</Length>
                 </ChartMinorTickMarks>
                 <CrossAt>NaN</CrossAt>
-                <Scalar>true</Scalar>
                 <Minimum>NaN</Minimum>
                 <Maximum>NaN</Maximum>
                 <Angle>-45</Angle>
-                <IncludeZero>false</IncludeZero>
+                <AllowLabelRotation>Rotate45</AllowLabelRotation>
                 <LabelsAutoFitDisabled>true</LabelsAutoFitDisabled>
                 <ChartAxisScaleBreak>
                   <Style />
@@ -249,6 +234,7 @@
               <TextAlign>General</TextAlign>
               <VerticalAlign>Top</VerticalAlign>
             </Style>
+            <DockOutsideChartArea>true</DockOutsideChartArea>
           </ChartTitle>
         </ChartTitles>
         <Palette>SeaGreen</Palette>
@@ -267,7 +253,7 @@
             <VerticalAlign>Top</VerticalAlign>
           </Style>
         </ChartNoDataMessage>
-        <DataSetName>CasesPerWorkGroup</DataSetName>
+        <DataSetName>CasesPerDate</DataSetName>
         <Height>16.9cm</Height>
         <Width>25.6cm</Width>
         <Style>
@@ -305,41 +291,23 @@
     </DataSource>
   </DataSources>
   <DataSets>
-    <DataSet Name="CasesPerWorkGroup">
+    <DataSet Name="CasesPerDate">
       <Query>
         <DataSourceName>Helpdesk_local</DataSourceName>
-        <CommandText>SELECT        COUNT(tblCase.Casenumber) AS Volume, tblCustomer.Name, tblDate.DateKey, tblCustomer.Id, tblCase.WorkingGroup_Id, tblWorkingGroup.WorkingGroup, 
-                         tblDate.CalendarYearMonth
-FROM            tblCustomer INNER JOIN
-                         tblCase ON tblCustomer.Id = tblCase.Customer_Id INNER JOIN
-                         tblWorkingGroup ON tblCustomer.Id = tblWorkingGroup.Customer_Id AND tblCase.WorkingGroup_Id = tblWorkingGroup.Id RIGHT OUTER JOIN
+        <CommandText>SELECT        COUNT(tblCase.Casenumber) AS Volume, tblDate.CalendarYearMonth, tblCaseType.CaseType
+FROM            tblCase INNER JOIN
+                         tblCaseType ON tblCase.CaseType_Id = tblCaseType.Id RIGHT OUTER JOIN
                          tblDate ON CAST(tblCase.RegTime AS Date) = tblDate.FullDate
-GROUP BY tblDate.DateKey, tblCustomer.Name, tblCustomer.Id, tblCase.WorkingGroup_Id, tblWorkingGroup.WorkingGroup, tblDate.CalendarYearMonth
-ORDER BY tblDate.DateKey</CommandText>
+GROUP BY tblDate.CalendarYearMonth, tblCaseType.CaseType
+ORDER BY tblDate.CalendarYearMonth</CommandText>
       </Query>
       <Fields>
         <Field Name="Volume">
           <DataField>Volume</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="DateKey">
-          <DataField>DateKey</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="Name">
-          <DataField>Name</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Id">
-          <DataField>Id</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="WorkingGroup_Id">
-          <DataField>WorkingGroup_Id</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="WorkingGroup">
-          <DataField>WorkingGroup</DataField>
+        <Field Name="CaseType">
+          <DataField>CaseType</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="CalendarYearMonth">

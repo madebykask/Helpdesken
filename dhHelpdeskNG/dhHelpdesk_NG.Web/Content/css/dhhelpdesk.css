@@ -2867,11 +2867,11 @@ body.login {
 /* modal print for A4 portraite*/
 .modal.modalprintA4P {
     width:800px;
-    height:800px;
+    height:700px;
     margin-left: -400px;
 }
 .modal.modalprintA4P .modal-body {
-    max-height:700px;
+    max-height:600px;
 }
 /**************************** Validation **************************************************/
 
