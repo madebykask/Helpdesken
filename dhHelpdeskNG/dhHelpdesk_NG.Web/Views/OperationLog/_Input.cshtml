@@ -147,7 +147,7 @@
                                        @Translation.Get("Visa på startsidan", Enums.TranslationSource.TextTranslation):
                                    </td>
                                    <td class="span9">                                        
-                                       <input type="checkbox" name="OperationLog.ShowOnStartPage" @(Model.OperationLog.ShowOnStartPage == 1 ? "checked=checked" : "") value ="1" @(Model.OperationObjectShow == 0 ? "disabled=disabled" : "")/>                                        
+                                       <input id="chkShowOnStartPage" type="checkbox" name="OperationLog.ShowOnStartPage" @(Model.OperationLog.ShowOnStartPage == 1 ? "checked=checked" : "") value ="1" @(Model.OperationObjectShow == 0 ? "disabled=disabled" : "")/>                                        
                                        <input type="hidden" name="OperationLog.ShowOnStartPage" value="0" />                                                                                                             
                                    </td>                                    
                                </tr>
@@ -366,6 +366,25 @@
         $("#chkSecurity").click(function () {        
             $("#securityOptions").toggle();
         });
+
+        $("#OperationLog_OperationObject_Id").on("change", function () {
+            var selectedId = $("#OperationLog_OperationObject_Id option:selected").val();
+            if (selectedId != undefined && selectedId > 0) {
+                $.get("/OperationLog/GetOperationObjectAttr/", { id: selectedId },
+                    function (data) {
+                        if (data != null) {
+                            if (data != "0") {                                
+                                $("#chkShowOnStartPage").removeAttr("disabled");
+                                $("#chkShowOnStartPage").attr("checked","checked");
+                            }
+                            else {
+                                $("#chkShowOnStartPage").removeAttr("checked");
+                                $("#chkShowOnStartPage").attr("disabled", "disabled");
+                            }
+                        }                        
+                });                
+            }
+        });
     });
 
     function submitForm() {
@@ -466,6 +485,7 @@
                 form.submit();
             }
         });
-        });
+    });
+
 
 </script>

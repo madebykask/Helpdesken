@@ -35,7 +35,7 @@
 
         public IList<OperationObject> GetOperationObjects(int customerId)
         {
-            return this._operationObjectRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
+            return this._operationObjectRepository.GetMany(x => x.Customer_Id == customerId && x.IsActive == 1).OrderBy(x => x.Name).ToList();
         }
 
         public OperationObject GetOperationObject(int id)

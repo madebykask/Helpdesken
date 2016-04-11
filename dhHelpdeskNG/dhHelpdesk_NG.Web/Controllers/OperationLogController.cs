@@ -95,7 +95,8 @@
             CS.OperationObject_Filter = OLSearch_Filter.OperationObject_Filter;
             CS.CustomerId = OLSearch_Filter.CustomerId;
             CS.PeriodFrom = OLSearch_Filter.PeriodFrom;
-            CS.PeriodTo = OLSearch_Filter.PeriodTo;
+            if (CS.PeriodTo != null)
+                CS.PeriodTo = OLSearch_Filter.PeriodTo.Value.AddDays(1);
             CS.Text_Filter = OLSearch_Filter.Text_Filter;
            
             var c = this._operationLogService.SearchAndGenerateOperationLog(SessionFacade.CurrentCustomer.Id, CS );
@@ -199,7 +200,11 @@
         public ActionResult Edit(int id)
         {
             var operationlog = this._operationLogService.GetOperationLog(id);
+            //Get operationobject showonstartpage
+            var currObject = this._operationObjectService.GetOperationObject(operationlog.OperationObject_Id);
 
+            if (currObject != null)
+                operationlog.ShowOnStartPage = currObject.ShowOnStartPage;
 
             if (operationlog == null)
                 return new HttpNotFoundResult("No OperationLog found...");
@@ -288,6 +293,17 @@
             }
         }
    
+        [HttpGet]
+        public JsonResult GetOperationObjectAttr(int id)
+        {
+            var res = "";
+            var curObj = this._operationObjectService.GetOperationObject(id);
+            if (curObj != null)            
+                res = curObj.ShowOnStartPage.ToString();            
+
+            return Json(res, JsonRequestBehavior.AllowGet);
+        }
+
         private OperationLogInputViewModel OperationLogInputViewModel(OperationLog operationlog)
         {
             var wgsSelected = operationlog.WGs ?? new List<WorkingGroupEntity>();
@@ -303,6 +319,10 @@
             systemRespAvailable = _systemService.GetSystemResponsibles(customerId).ToList();
             var smsEmailDomain = "";
             var operationObject = this._operationObjectService.GetOperationObject(operationlog.OperationObject_Id);
+            var operationObjectShow = 0;
+
+            if (operationObject != null)
+                operationObjectShow = operationObject.ShowOnStartPage;
 
             if (cs.SMSEMailDomain != null)
                 smsEmailDomain = cs.SMSEMailDomain;
@@ -365,7 +385,8 @@
                 }).ToList(),
 
                 SystemResponsiblesSelected = new List<SelectListItem>(),
-                OperationObjectShow = operationObject.ShowOnStartPage
+
+                OperationObjectShow = operationObjectShow
             };
 
             
@@ -382,7 +403,6 @@
             model.CustomerSettings = cs;
             return model;
         }
-
 
         private OperationLogIndexViewModel GetIndex()
         {                        
