@@ -37,6 +37,7 @@
             
             this.Property(x => x.OperationLogCategory_Id).IsOptional();
             this.Property(x => x.Customer_Id).IsRequired();
+            this.Property(x => x.OperationObject_Id).IsRequired();
             this.Property(x => x.PublicInformation).IsRequired();
             //Property(x => x.ShowDate).IsOptional();
             this.Property(x => x.ShowOnStartPage).IsRequired();
@@ -49,6 +50,11 @@
             this.HasOptional(x => x.Category)
                 .WithMany()
                 .HasForeignKey(x => x.OperationLogCategory_Id)
+                .WillCascadeOnDelete(false);
+
+            this.HasRequired(x => x.Object)
+                .WithMany()
+                .HasForeignKey(x => x.OperationObject_Id)
                 .WillCascadeOnDelete(false);
 
             this.ToTable("tblOperationLog");

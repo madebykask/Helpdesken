@@ -15,7 +15,7 @@
                         <div class="label green">                            
                             @operationLog.CustomerName | Skapad @operationLog.CreatedDate.ToFormattedDateTime() Uppdaterad @operationLog.ChangedDate.ToFormattedDateTime()
                         </div>
-                        <div class="captionrow">@operationLog.Category.OLCName</div>
+                        <div class="captionrow">@operationLog.Object.Name</div>
                         <div class="textrow">@operationLog.LogText</div>
                     </div>
                 }            
