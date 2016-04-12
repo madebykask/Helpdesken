@@ -4783,6 +4783,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             reportSelectedFilter.GeneralParameter.Add(new GeneralParameter("@CaseId", caseId));
             reportSelectedFilter.GeneralParameter.Add(new GeneralParameter("@LanguageId", SessionFacade.CurrentLanguageId));
+            reportSelectedFilter.GeneralParameter.Add(new GeneralParameter("@UserId", SessionFacade.CurrentUser.Id));
             
             var reportData = _ReportServiceService.GetReportData(reportName, reportSelectedFilter);
 
@@ -4806,10 +4807,11 @@ namespace DH.Helpdesk.Web.Controllers
 
                 var parameters = new List<ReportParameter>();
                 parameters.Add(new ReportParameter("CaseId", caseId.ToString()));
-                parameters.Add(new ReportParameter("LanguageId", SessionFacade.CurrentLanguageId.ToString()));                
+                parameters.Add(new ReportParameter("LanguageId", SessionFacade.CurrentLanguageId.ToString()));
+                parameters.Add(new ReportParameter("UserId", SessionFacade.CurrentUser.Id.ToString()));
                 reportViewer.LocalReport.SetParameters(parameters);
+                
                 reportViewer.LocalReport.Refresh();
-
                 foreach (var dataSet in reportData.DataSets)
                     reportViewer.LocalReport.DataSources.Add(new ReportDataSource(dataSet.DataSetName, dataSet.DataSet));
 

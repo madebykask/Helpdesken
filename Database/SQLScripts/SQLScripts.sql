@@ -342,7 +342,8 @@ GO
 
 Create Proc dbo.[sp_GetCaseInfo] 
 	@CaseId int, 	
-	@LanguageId int
+	@LanguageId int,
+	@UserId int
 as
 	Declare @CurrentCustomerId int
 	Select @CurrentCustomerId = Customer_Id from tblCase where id = @CaseId
@@ -367,7 +368,7 @@ as
 		User_Id Nvarchar(Max), UserCode Nvarchar(Max), WatchDate datetime, Verified Nvarchar(Max),
 		VerifiedDescription Nvarchar(Max), WorkingGroup_Id Nvarchar(Max) ,
 		RegUserId Nvarchar(Max), RegUserName Nvarchar(Max), RegUserDomain Nvarchar(Max),
-		Project Nvarchar(Max), Problem Nvarchar(Max), Change Nvarchar(Max)
+		Project Nvarchar(Max), Problem Nvarchar(Max), Change Nvarchar(Max), CurrentUser Nvarchar(Max)
 		) 
 
 	Insert into @CaseTable 
@@ -388,7 +389,7 @@ as
 	Status_Id, Supplier_Id, System_Id, Urgency_Id,
 	User_Id, UserCode, WatchDate, Verified ,
 	VerifiedDescription, WorkingGroup_Id,
-	RegUserId, RegUserName, RegUserDomain, Project, Problem, Change
+	RegUserId, RegUserName, RegUserDomain, Project, Problem, Change, CurrentUser
 	) 
 	select Top 1
 		c.Id, c.AgreedDate, c.Available, c.Caption, c.Casenumber,
@@ -447,7 +448,8 @@ as
 		c.VerifiedDescription, w.WorkingGroup,			 			
 		c.RegUserId, c.RegUserName, c.RegUserDomain,
 		prj.Name as Project, prob.ProblemName as Problem,
-		ch.ChangeTitle as Change 
+		ch.ChangeTitle as Change, 
+		cUser.FirstName + ' ' + cUser.SurName as CurrentUser
 								
 		from tblCase c 
 			Inner Join tblCustomer cu on (c.Customer_Id = cu.Id)	 
@@ -474,8 +476,8 @@ as
 			Left outer join tblDepartment di on (ci.Department_Id = di.Id)
 			Left outer join tblProject prj on (c.Project_Id = prj.Id)
 			Left outer join tblChange ch on (c.Change_Id = ch.Id)
+			Left outer join tblUsers cUser on (cUser.Id = @UserId)
 			 
-
 			Outer apply (select top 1 l.FinishingDate, l.FinishingType As FinishingCause_Id
 						from tblLog l Left Outer Join tblFinishingCause ft on (l.FinishingType = ft.Id)
 						where l.Case_Id = c.Id order by l.id desc) as LastLog
@@ -504,6 +506,15 @@ as
 	Set @FieldId = 1;
 	Set @InOrder = 1;
 	set @FieldName = '';
+		
+	Insert into @ResultSet (Id, FieldName, FieldCaption, FieldValue, InOrder, LineType) 
+		Select @FieldId, @FieldName, '', c.CurrentUser, @InOrder, 'U'		
+		From @CaseTable c;
+
+	Set @FieldId = @FieldId + 1;
+	Set @InOrder = @InOrder + 1;
+	Set @FieldName = '';	
+
 
 	Begin /* Case Field Data */
 		Select @FieldName = FieldName, @FieldCaption = FieldCaption From @AvailableFields where FieldName = 'CaseNumber'  
