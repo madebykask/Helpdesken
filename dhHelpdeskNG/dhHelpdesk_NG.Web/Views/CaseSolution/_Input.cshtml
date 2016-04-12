@@ -602,7 +602,7 @@
                                          <td>
                                             @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.FileName, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.Filename)
                                         </td>
-                                    </tr>
+                                 </tr>
                                 <tr>
                                     <th colspan="3" class="header">@Translation.Get("Övrigt")</th>
                                 </tr>
@@ -854,6 +854,18 @@
                                         </td>
                                     </tr>
                                 }
+
+                                <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString())">
+                                        <td>
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
+                                        </td>
+                                        <td>                                        
+                                        </td>
+                                         <td>
+                                            @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.LogFileName, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.tblLog_Filename)
+                                        </td>
+                                 </tr>
+
                                 <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.FinishingDate.ToString())">
                                     <td>
                                         @Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)

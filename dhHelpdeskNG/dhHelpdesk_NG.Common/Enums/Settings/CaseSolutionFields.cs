@@ -54,6 +54,7 @@
         FileName = 50,
         RegistrationSourceCustomer = 51,
         AddUserBtn = 52,
-        CostCentre = 53
+        CostCentre = 53,
+        LogFileName = 54
     }
 }
