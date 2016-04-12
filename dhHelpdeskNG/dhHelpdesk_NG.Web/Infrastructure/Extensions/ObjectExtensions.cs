@@ -533,7 +533,8 @@
                string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ClosingReason, CaseSolutionFields.FinishingCause)))
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString()).ShowOnStartPage == 1)
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString()).ShowOnStartPage == 1 &&
+               string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Filename, CaseSolutionFields.LogFileName)))
                 return string.Empty;
 
             return ret;
