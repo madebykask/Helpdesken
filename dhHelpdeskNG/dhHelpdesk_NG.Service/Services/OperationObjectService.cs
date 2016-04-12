@@ -12,6 +12,8 @@
     {
         IList<OperationObject> GetOperationObjects(int customerId);
 
+        IList<OperationObject> GetActiveOperationObjects(int customerId);
+
         OperationObject GetOperationObject(int id);
 
         DeleteMessage DeleteOperationObject(int id);
@@ -35,7 +37,14 @@
 
         public IList<OperationObject> GetOperationObjects(int customerId)
         {
+            return this._operationObjectRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
+        }
+
+        public IList<OperationObject> GetActiveOperationObjects(int customerId)
+        {
+            
             return this._operationObjectRepository.GetMany(x => x.Customer_Id == customerId && x.IsActive == 1).OrderBy(x => x.Name).ToList();
+           
         }
 
         public OperationObject GetOperationObject(int id)

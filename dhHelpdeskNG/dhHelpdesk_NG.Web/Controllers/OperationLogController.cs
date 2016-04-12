@@ -338,7 +338,7 @@
                 
                 OperationLog = operationlog ,
 
-                OperationObjects = this._operationObjectService.GetOperationObjects(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                OperationObjects = this._operationObjectService.GetActiveOperationObjects(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
@@ -410,7 +410,7 @@
             {
                 OperationLogs = this._operationLogService.GetAllOpertionLogs(),
                 Customers = this._customerService.GetAllCustomers(),
-                OperationObjects = this._operationObjectService.GetOperationObjects(SessionFacade.CurrentCustomer.Id),
+                OperationObjects = this._operationObjectService.GetActiveOperationObjects(SessionFacade.CurrentCustomer.Id),
                 OperationLogList = this._operationLogService.GetListForIndexPage(),
                 OperationLogCategories = this._operationLogCategoryService.GetOperationLogCategories(SessionFacade.CurrentCustomer.Id),
                 OLSearch_Filter = new OperationLogSearch ()
