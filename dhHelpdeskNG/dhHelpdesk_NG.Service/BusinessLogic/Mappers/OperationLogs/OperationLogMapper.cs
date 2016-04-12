@@ -32,7 +32,8 @@
                                         CustomerName = o.Customer.Name,
                                         Object = new OperationLogObjectOverview
                                         {
-                                            Name = o.Object != null ? o.Object.Name : null
+                                            Name = o.Object != null ? o.Object.Name : null,
+                                            Status = o.Object.IsActive
                                         }
                                     }).ToArray();
         }
