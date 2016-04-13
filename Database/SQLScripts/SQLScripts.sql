@@ -15,18 +15,6 @@ Begin
 end
 
 
-ALTER TABLE tblCaseSolution ALTER COLUMN Text_External nvarchar(max) not null
-GO
-
-ALTER TABLE tblCaseSolution ALTER COLUMN Text_Internal nvarchar(max) not null
-GO
-
-ALTER TABLE tblLog ALTER COLUMN Text_External nvarchar(max) not null
-GO
-
-ALTER TABLE tblLog ALTER COLUMN Text_Internal nvarchar(max) not null
-GO
-
 IF OBJECT_ID('dbo.GetHierarchy') IS NOT NULL
   DROP FUNCTION dbo.GetHierarchy
 GO

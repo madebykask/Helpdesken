@@ -15,7 +15,8 @@
     <div class="secnavs fixed">
         <div class="pull-left">
             <ul class="secnav">
-                <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "new", null, new {onclick = "$('#target').submit();return false;", @class = "btn"})</li>
+                @*<li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "new", null, new {onclick = "$('#target').submit();return false;", @class = "btn"})</li>*@
+                <li><a class="btn" id="SaveCaseSolution">@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)</a></li>
                 @switch(backPageId)
                 {
                     case 0:
