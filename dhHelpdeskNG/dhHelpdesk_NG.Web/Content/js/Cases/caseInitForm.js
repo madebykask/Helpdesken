@@ -23,6 +23,7 @@ var publicIsAboutReadOnlyOUName = '#IsAboutOUName';
 var publicChangeRegion = '/Cases/ChangeRegion/';
 var publicChangeDepartment = '/Cases/ChangeDepartment/';
 
+var skipRefreshOU = false;
 
 function SetFocusToReportedByOnCase() {
     if ($('#ShowReportedBy').val() == 1) {
@@ -103,7 +104,7 @@ function GetComputerSearchOptions() {
 }
 
 
-function refreshOrganizationUnit(departmentId, departmentFilterFormat, selectedOrganizationUnitId) {
+function refreshOrganizationUnit(departmentId, departmentFilterFormat, selectedOrganizationUnitId) {        
     $(publicOUControlName).val('');
     $(publicReadOnlyOUName).val('');
     var ctlOption = publicOUControlName + ' option';        
@@ -169,12 +170,17 @@ function refreshDepartment(regionId, departmentFilterFormat, selectedDepartmentI
                     $(publicDepartmentControlName).val(selectedDepartmentId);
                     $(publicReadOnlyDepartmentName).val(item.name);
                     option.prop("selected", true);
+                    $(publicDepartmentControlName).append(option);
+                    skipRefreshOU = true;
+                    $(publicDepartmentControlName).trigger('change');                    
                 }
-                $(publicDepartmentControlName).append(option);
+                else
+                    $(publicDepartmentControlName).append(option);                
             }
         }
     }, 'json').always(function () {
         $(publicDepartmentControlName).prop('disabled', false);
+        skipRefreshOU = false;
         refreshOrganizationUnit(selectedDepartmentId, departmentFilterFormat, selectedOU);
     }).done(function () {
         $(publicOUControlName).prop('disabled', false);
@@ -513,7 +519,10 @@ function CaseInitForm() {
 
     $(publicDepartmentControlName).change(function () {
         // Remove after implementing http://redmine.fastdev.se/issues/10995        
-        var departmentId = $(this).val();
+        if (skipRefreshOU)
+            return;
+
+        var departmentId = $(this).val();        
         var departmentFilterFormat = $('#DepartmentFilterFormat').val();
         refreshOrganizationUnit(departmentId, departmentFilterFormat);
         showInvoice(departmentId);

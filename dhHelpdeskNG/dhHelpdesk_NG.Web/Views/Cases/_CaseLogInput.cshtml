@@ -110,7 +110,7 @@
                 <td>
                     @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_External, CaseSolutionFields.ExternalLogNote) && !readonlyMode)
                     {
-                        @Html.TextAreaFor(model => Model.CaseLog.TextExternal, new { style = "height:105px;" })
+                        @Html.TextAreaFor(model => Model.CaseLog.TextExternal, new { style = "height:105px;", maxlength="3000" })
                     }
                     else
                     {
@@ -135,7 +135,7 @@
                 <td>
                     @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote) && !readonlyMode)
                     {
-                        @Html.TextAreaFor(model => Model.CaseLog.TextInternal, new { style = "height:105px;" })
+                        @Html.TextAreaFor(model => Model.CaseLog.TextInternal, new { style = "height:105px;", maxlength = "3000" })
                     }
                     else
                     {
@@ -378,6 +378,37 @@
 }
 
 <script>
+    $('#CaseLog_TextExternal').on('onchange', function () {
+        checkLength(this);
+    });
+
+    $('#CaseLog_TextExternal').on('onkeyup', function () {
+        checkLength(this);
+    });
+
+    $('#CaseLog_TextExternal').on('onpaste', function () {
+        checkLength(this);
+    });
+
+    $('#CaseLog_TextInternal').on('onchange', function () {
+        checkLength(this);
+    });
+
+    $('#CaseLog_TextInternal').on('onkeyup', function () {
+        checkLength(this);
+    });
+
+    $('#CaseLog_TextInternal').on('onpaste', function () {
+        checkLength(this);
+    });
+
+    var maxLength = 3000;
+    function checkLength(el) {
+        if (el.value.length > maxLength) {
+            el.value = el.value.substring(0, maxLength);
+        }
+    }
+
     $(function () {
         $('#CaseLog_TextExternal').resizable();
         $('#CaseLog_TextInternal').resizable();

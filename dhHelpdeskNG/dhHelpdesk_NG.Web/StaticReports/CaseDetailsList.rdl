@@ -38,6 +38,7 @@
                           <Color>LightGrey</Color>
                           <Style>Solid</Style>
                         </Border>
+                        <BackgroundColor>=IIF((Fields!LineType.Value Like "G"), "Gainsboro", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -81,7 +82,7 @@
                             <Value>=Fields!FieldCaption.Value</Value>
                             <Style>
                               <FontSize>=IIF(Fields!LineType.Value Like "H", "18pt", "10pt")</FontSize>
-                              <FontWeight>=IIF((Fields!LineType.Value Like "H") or (Fields!LineType.Value Like "G"), "Bold", "Default")</FontWeight>
+                              <FontWeight>=IIF((Fields!LineType.Value Like "H") or (Fields!LineType.Value Like "G"), "Bold", "Bold")</FontWeight>
                             </Style>
                           </TextRun>
                         </TextRuns>
@@ -94,6 +95,7 @@
                         <Color>LightGrey</Color>
                         <Style>Solid</Style>
                       </Border>
+                      <BackgroundColor>=IIF((Fields!LineType.Value Like "G"), "Gainsboro", "White")</BackgroundColor>
                       <PaddingLeft>2pt</PaddingLeft>
                       <PaddingRight>2pt</PaddingRight>
                       <PaddingTop>2pt</PaddingTop>
@@ -112,6 +114,13 @@
             <Operator>NotEqual</Operator>
             <FilterValues>
               <FilterValue>L</FilterValue>
+            </FilterValues>
+          </Filter>
+          <Filter>
+            <FilterExpression>=Fields!LineType.Value</FilterExpression>
+            <Operator>NotEqual</Operator>
+            <FilterValues>
+              <FilterValue>U</FilterValue>
             </FilterValues>
           </Filter>
         </Filters>
@@ -288,7 +297,7 @@
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>=User!UserID</Value>
+                  <Value>=First(Fields!FieldValue.Value, "PrintCase")</Value>
                   <Style>
                     <FontSize>8pt</FontSize>
                   </Style>
@@ -397,6 +406,9 @@
           <QueryParameter Name="@LanguageId">
             <Value>=Parameters!LanguageId.Value</Value>
           </QueryParameter>
+          <QueryParameter Name="@UserId">
+            <Value>=Parameters!UserId.Value</Value>
+          </QueryParameter>
         </QueryParameters>
         <CommandType>StoredProcedure</CommandType>
         <CommandText>sp_GetCaseInfo</CommandText>
@@ -438,6 +450,10 @@
     <ReportParameter Name="LanguageId">
       <DataType>Integer</DataType>
       <Prompt>Language Id</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="UserId">
+      <DataType>Integer</DataType>
+      <Prompt>User Id</Prompt>
     </ReportParameter>
   </ReportParameters>
   <Language>se-SE</Language>

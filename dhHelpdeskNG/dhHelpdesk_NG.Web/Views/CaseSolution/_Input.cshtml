@@ -819,10 +819,10 @@
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                         </td>
                                         <td class="span9">
-                                            @Html.TextAreaFor(model => model.CaseSolution.Text_External, new { style = "height:100px;" })
+                                            @Html.TextAreaFor(model => model.CaseSolution.Text_External, new { style = "height:100px;", maxlength="3000"})                                            
                                         </td>
                                         <td class="span9">
-                                            @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.ExternalLogNote, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.tblLog_Text_External)
+                                            @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.ExternalLogNote, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.tblLog_Text_External)                                            
                                         </td>
                                     </tr>
                                 }
@@ -833,7 +833,7 @@
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                         </td>
                                         <td>
-                                            @Html.TextAreaFor(model => model.CaseSolution.Text_Internal, new { style = "height:100px;" })
+                                            @Html.TextAreaFor(model => model.CaseSolution.Text_Internal, new { style = "height:100px;", maxlength="3000" })                                            
                                         </td>
                                         <td class="span9">
                                             @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.InternalLogNote, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.tblLog_Text_Internal)
@@ -1162,35 +1162,63 @@
         rules: {
             "CaseSolution.Name": {
                 required: true
-            },
-            "CaseSolution.Text_External": {
-                maxlength: 3000
-            },
-            "CaseSolution.Text_Internal": {
-                maxlength: 3000
-            }            
+            }
+            
+            //"CaseSolution.Text_External": {
+            //    maxlength: 3000
+            //}
         },
-
+        
         messages: {
             "CaseSolution.Name": {
                 required: "@Translation.Get("Du måste ange ett namn på ärendemallen", Enums.TranslationSource.TextTranslation)"
-            },
-            "CaseSolution.Text_External": {
-                maxlength: "@Translation.Get("Ange inte mer än 3000 tecken", Enums.TranslationSource.TextTranslation)"
-            },
-            "CaseSolution.Text_Internal": {
-                maxlength: "@Translation.Get("Ange inte mer än 3000 tecken", Enums.TranslationSource.TextTranslation)"
             }
-    },
+        },
        submitHandler: function (form) {
            form.submit();
        }
    });
 </script>
 <script>
-    $(function () {
-        $('#CaseLog_TextExternal').resizable();
-        $('#CaseLog_TextInternal').resizable();
+    $('#CaseSolution_Text_External').on('onchange', function () {
+        checkLength(this);
+    });
+
+    $('#CaseSolution_Text_External').on('onkeyup', function () {
+        checkLength(this);
+    });
+
+    $('#CaseSolution_Text_External').on('onpaste', function () {
+        checkLength(this);
+    });
+
+    $('#CaseSolution_Text_Internal').on('onchange', function () {
+        checkLength(this);
+    });
+
+    $('#CaseSolution_Text_Internal').on('onkeyup', function () {
+        checkLength(this);
+    });
+
+    $('#CaseSolution_Text_Internal').on('onpaste', function () {
+        checkLength(this);
+    });
+
+    var maxLength = 3000;
+    function checkLength(el) {
+        if (el.value.length > maxLength) {
+            el.value = el.value.substring(0, maxLength);
+        }
+    }
+
+    $(function () {       
+       
+        $('#CaseSolution_Text_External').resizable();
+        $('#CaseSolution_Text_Internal').resizable();
+              
+        $('#SaveCaseSolution').on('click', function () {                                 
+            $('#target').submit();
+        })
     });
 
 </script>
