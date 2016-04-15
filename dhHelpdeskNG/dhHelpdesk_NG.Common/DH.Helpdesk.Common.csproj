@@ -72,6 +72,7 @@
     <Compile Include="Enums\CaseSolution\IndexEnums.cs" />
     <Compile Include="Enums\DataLogTypes.cs" />
     <Compile Include="Enums\InfoTextType.cs" />
+    <Compile Include="Enums\Invoice\InvoiceOrderStatus.cs" />
     <Compile Include="Enums\StringTags.cs" />
     <Compile Include="Enums\LoginMode.cs" />
     <Compile Include="Enums\InfoTextGroup.cs" />

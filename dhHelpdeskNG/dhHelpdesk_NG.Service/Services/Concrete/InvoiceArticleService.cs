@@ -10,7 +10,8 @@
     using DH.Helpdesk.Domain.Invoice;
     using System;
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.Invoice.Xml;   
+    using DH.Helpdesk.BusinessData.Models.Invoice.Xml;
+    using DH.Helpdesk.Common.Enums;   
 
     public class InvoiceArticleService : IInvoiceArticleService
     {
@@ -78,6 +79,11 @@
             var CaseInvoices = this.caseInvoiceArticleRepository.GetCaseInvoices(caseId);
             CaseInvoices = SetInvoicedByUsername(CaseInvoices);
             return CaseInvoices;
+        }
+
+        public CaseInvoiceOrder[] GetInvoiceOrders(int caseId, InvoiceOrderStatus status)
+        {
+            return this.caseInvoiceArticleRepository.GetOrders(caseId, status);
         }
 
         /// <summary>

@@ -677,9 +677,28 @@ function CaseInitForm() {
 
     $('#divProductArea ul.dropdown-menu li a').click(function (e) {
         e.preventDefault();
-        var val = $(this).attr('value');
-        $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(this));
-        $("#case__ProductArea_Id").val(val).trigger('change');;
+        var me = this;
+        var val = $(me).attr('value');
+        var curCaseId = $('#case__Id').val();
+        var caseInvoiceIsActive = $('#CustomerSettings_ModuleCaseInvoice').val().toLowerCase() == 'true';
+        /* When invoice is active, user can not change the product area while */
+        if (caseInvoiceIsActive) {
+            $.get('/Cases/CanChangeProductArea/', { caseId: curCaseId }, function (res) {
+                if (res != null && !res) {
+                    ShowToastMessage('ProductArea cannot be changed while you have order which is not invoiced yet!', 'warning', false);
+                }
+                else
+                {
+                    $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(me));
+                    $("#case__ProductArea_Id").val(val).trigger('change');
+                }
+            });
+        }
+        else {
+            $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(this));
+            $("#case__ProductArea_Id").val(val).trigger('change');
+        }
+        
     });
 
     $('#AddNotifier').click(function (e) {

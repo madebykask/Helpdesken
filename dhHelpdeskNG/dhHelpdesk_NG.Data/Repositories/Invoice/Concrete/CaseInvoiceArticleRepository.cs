@@ -8,6 +8,7 @@
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Domain.Invoice;
+    using DH.Helpdesk.Common.Enums;
 
     public class CaseInvoiceArticleRepository : Repository, ICaseInvoiceArticleRepository
     {
@@ -19,7 +20,7 @@
         
         private readonly IBusinessModelToEntityMapper<CaseInvoiceArticle, CaseInvoiceArticleEntity> articleMapper;
 
-        private readonly IBusinessModelToEntityMapper<CaseInvoiceOrderFile, CaseInvoiceOrderFileEntity> filesMapper;
+        private readonly IBusinessModelToEntityMapper<CaseInvoiceOrderFile, CaseInvoiceOrderFileEntity> filesMapper;        
 
         public CaseInvoiceArticleRepository(
                 IDatabaseFactory databaseFactory, 
@@ -34,7 +35,7 @@
             this.invoiceToEntityMapper = invoiceToEntityMapper;
             this.orderMapper = orderMapper;            
             this.articleMapper = articleMapper;
-            this.filesMapper = filesMapper;
+            this.filesMapper = filesMapper;            
         }
 
         public CaseInvoice[] GetCaseInvoices(int caseId)
@@ -55,6 +56,83 @@
                 return invoices.Orders.Where(o => o.Id == invoiceOrderId).FirstOrDefault();
             }            
             return ret;
+        }
+
+        public CaseInvoiceOrder[] GetOrders(int caseId, InvoiceOrderStatus orderStatus)
+        {
+            var res = new List<CaseInvoiceOrder>();
+            var invoiceEntities = this.DbContext.CaseInvoices
+                                             .Where(i => i.CaseId == caseId)
+                                             .ToList();
+
+            var orderEntities = new List<CaseInvoiceOrderEntity>();
+            foreach (var invoiceEntity in invoiceEntities)
+            {
+                var invoiceModel = invoiceToBusinessModelMapper.Map(invoiceEntity);
+                var orderModels = new List<CaseInvoiceOrder>();
+
+                switch (orderStatus)
+                {
+                    case InvoiceOrderStatus.All:
+                        orderModels = invoiceModel.Orders.ToList();
+                        break;
+
+                    case InvoiceOrderStatus.AllNotInvoiced:
+                        orderModels = invoiceModel.Orders
+                                                  .Where(o => !o.InvoicedByUserId.HasValue)
+                                                  .ToList();
+                        break;
+
+                    case InvoiceOrderStatus.AllInvoiced:
+                        orderModels = invoiceModel.Orders
+                                                  .Where(o => o.InvoicedByUserId.HasValue)
+                                                  .ToList();
+                        break;
+
+                    case InvoiceOrderStatus.Orders:
+                        orderModels = invoiceModel.Orders
+                                                  .Where(o => !o.CreditForOrder_Id.HasValue)
+                                                  .ToList();
+                        break;
+
+                    case InvoiceOrderStatus.OrderNotInvoiced:
+                        orderModels = invoiceModel.Orders
+                                                  .Where(o => !o.CreditForOrder_Id.HasValue && !o.InvoicedByUserId.HasValue)
+                                                  .ToList();
+                        break;
+
+                    case InvoiceOrderStatus.OrderInvoiced:
+                        orderModels = invoiceModel.Orders
+                                                  .Where(o => !o.CreditForOrder_Id.HasValue && o.InvoicedByUserId.HasValue)
+                                                  .ToList();
+                        break;
+
+                    case InvoiceOrderStatus.Credits:
+                        orderModels = invoiceModel.Orders
+                                                  .Where(o => o.CreditForOrder_Id.HasValue)
+                                                  .ToList();
+                        break;
+
+                    case InvoiceOrderStatus.CreditNotInvoiced:
+                        orderModels = invoiceModel.Orders
+                                                  .Where(o => o.CreditForOrder_Id.HasValue && !o.InvoicedByUserId.HasValue)
+                                                  .ToList();
+                        break;
+
+                    case InvoiceOrderStatus.CreditInvoiced:
+                        orderModels = invoiceModel.Orders
+                                                  .Where(o => o.CreditForOrder_Id.HasValue && o.InvoicedByUserId.HasValue)
+                                                  .ToList();
+                        break;
+
+                    default:
+                        return res.ToArray();
+                }
+
+                res.AddRange(orderModels);                
+            }
+
+            return res.ToArray();
         }
 
         public void CancelInvoiced(int caseId, int invoiceOrderId)

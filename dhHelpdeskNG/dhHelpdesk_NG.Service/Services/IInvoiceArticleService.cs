@@ -4,7 +4,8 @@
 
     using DH.Helpdesk.BusinessData.Models.Invoice;
     using System;
-    using DH.Helpdesk.BusinessData.Models.Shared;    
+    using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.Common.Enums;    
 
     public interface IInvoiceArticleService
     {
@@ -25,6 +26,8 @@
         void DeleteCaseInvoices(int caseId);
 
         ProcessResult DoInvoiceWork(CaseInvoice[] caseInvoiceData, int caseId, decimal caseNumber, int customerId, int? orderIdToXML);
+
+        CaseInvoiceOrder[] GetInvoiceOrders(int caseId, InvoiceOrderStatus status);
 
         int SaveArticle(InvoiceArticle article);
 

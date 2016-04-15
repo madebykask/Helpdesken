@@ -2420,6 +2420,19 @@ namespace DH.Helpdesk.Web.Controllers
                 return Json(new { result = "Error", data = "Unexpected Error:" + ex.Message });                
             }
         }
+
+        [HttpGet]
+        public JsonResult CanChangeProductArea(int caseId)
+        {
+            var res = true;
+            
+            var notInvoicedOrders = this.invoiceArticleService.GetInvoiceOrders(caseId, InvoiceOrderStatus.AllNotInvoiced);
+            if (notInvoicedOrders.Any())
+                res = false;
+
+            return Json(res, JsonRequestBehavior.AllowGet);
+        }
+
         #endregion
 
         #region --Ajax--
