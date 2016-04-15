@@ -4,7 +4,7 @@
 @model DH.Helpdesk.Web.Models.Case.CaseInvoiceModel
 
 <span id="caseInvoiceArea" >                
-    @*<i id="invoiceButtonIndicator" class="gif-loader">&nbsp;</i>
+    <i id="invoiceButtonIndicator" class="gif-loader">&nbsp;</i>
     @if (Model != null)
     {
         @Html.CaseInvoiceArticles(
@@ -18,5 +18,5 @@
             Model.CaseKey,
             Model.LogKey)
         @Html.HiddenFor(m => Model.CaseInvoiceArticles, new { @class = "case-invoice-articles"}) 
-    }    *@
+    }    
 </span>
