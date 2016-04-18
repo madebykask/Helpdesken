@@ -3368,7 +3368,7 @@ $(function () {
             return that;
         },
 
-        CaseFiles: null
+        CaseFiles: null        
     }
 
     dhHelpdesk.System.OnEvent("OnUploadCaseFile", function (e, uploader, files) {

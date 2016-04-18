@@ -62,32 +62,8 @@
                 });
             };
 
-            var hasNotInvoicedArticles = function () {
-                return typeof dhHelpdesk.CaseArticles !== "undefined" &&
-                    dhHelpdesk.CaseArticles.HasNotInvoicedArticles();
-            }
-            var hasInvoicedArticles = function () {
-                return typeof dhHelpdesk.CaseArticles !== "undefined" &&
-                    dhHelpdesk.CaseArticles.HasInvoicedArticles();
-            };
+        
 
-            var invoiceArticlesBeforeClose = function (onOk, onCancel) {
-                if (!hasNotInvoicedArticles()) {
-                    onOk();
-                    return;
-                }
-
-                confirmDialog(dc('@Translation.Get("Är du säker på att du vill stänga ärendet utan att fakturera artiklar?")'),
-                    onOk, onCancel);                
-            }
-
-            var openInvoiceWindow = function () {
-                dhHelpdesk.CaseArticles.OpenInvoiceWindow('@Translation.Get("Var god ta bort eller skicka valda men ofakturerade artiklar innan du stänger ärendet.")');
-            };
-            var openInvoiceWindowWithMessage = function (message) {
-                dhHelpdesk.CaseArticles.OpenInvoiceWindow(message);
-            };
-     
             var emptyFn = function() {};
 
             $("#case-action-save").click(function (e) {
@@ -97,22 +73,16 @@
             $("#case-action-save-and-close").click(function (e) {
                 e.preventDefault();                                
             });
-          
+
+            $("#case-action-save-and-new").click(function (e) {
+                e.preventDefault();                                
+            });
+                      
             $("#case-action-close").click(function (e) {
                 e.preventDefault();
                 var targetUrl = $(this).attr("href");
                 if ('@Model.CaseLock.LockGUID' != '')
-                    UnLockCase('@Model.CaseLock.LockGUID', targetUrl);
-
-                @*invoiceArticlesBeforeClose(function ()
-                {
-                    if ('@Model.CaseLock.LockGUID' != '')
-                        UnLockCase('@Model.CaseLock.LockGUID', targetUrl);
-                    else
-                    {
-                        redirectToUrl(targetUrl);
-                    }
-                }, openInvoiceWindow);*@
+                    UnLockCase('@Model.CaseLock.LockGUID', targetUrl);               
             });
             
              @*$("#case-action-delete").click(function (e) {                               
@@ -122,15 +92,7 @@
                 }
                 return true;                       
             })*@
-        });
-
-        var SubmitCase = function () {
-            $('#target').submit(); return false;
-        };
-
-        var InvoiceDialogOnNotFinishSaveCase = function () {
-            openInvoiceWindowWithMessage('@Translation.Get("Var god granska dina ordrar och artiklar.")');
-        };
+        });                
      
         function redirectToUrl(url) {            
             window.location.href = url;
@@ -157,7 +119,6 @@
                     }
                 });            
         };
-
         
         function UnLockCase(lockGuid, url) {
             $.post('@Url.Content("~/Cases/UnLockCase/")', { lockGUID: lockGuid }, function (data) {                
@@ -281,15 +242,11 @@
 
                                 @if (SessionFacade.CurrentUser.MoveCasePermission == 1)
                                 {                                
-                                    <li><a data-toggle="modal" href="#divMoveCase">@Translation.Get("Flytta", Enums.TranslationSource.TextTranslation)</a></li>
-                                    <!-- TODO special jцnkцpings kommun
-                                    <li><a href="#" >Translation.Get("Flytta ärende till annan site", Enums.TranslationSource.TextTranslation)</a></li>
-                                    -->
+                                    <li><a data-toggle="modal" href="#divMoveCase">@Translation.Get("Flytta", Enums.TranslationSource.TextTranslation)</a></li>                                    
                                 }
                                 @if (SessionFacade.CurrentUser.CopyCasePermission == 1)
                                 {     
-                                    <li><a data-toggle="modal" href="#divCopyCase">@Translation.Get("Kopiera", Enums.TranslationSource.TextTranslation)</a></li>@*                           
-                                    <li><a href="/cases/copy/@Model.case_.Id?customerId=@Model.case_.Customer_Id" >@Translation.Get("Kopiera", Enums.TranslationSource.TextTranslation)</a></li>*@
+                                    <li><a data-toggle="modal" href="#divCopyCase">@Translation.Get("Kopiera", Enums.TranslationSource.TextTranslation)</a></li>
                                 }
 
                                 @if (SessionFacade.CurrentUser.FollowUpPermission == 1)
@@ -327,22 +284,7 @@
                                             }
                                         </ul>
                                     </li>                                    
-                                }
-                                
-
-@*
-                            if (Html.MasterModel().CustomerSetting.ModuleChangeManagement == 1 && Model.case_.Change_Id == null)
-                            {
-                                <!--TODO kontroll av behцrighet -->
-                                <li><a href="#">@Translation.Get("Skapa дndring", Enums.TranslationSource.TextTranslation)</a></li>
-                            }
-                            if (Html.MasterModel().CustomerSetting.ModuleOrder == 1 && ((SessionFacade.CurrentUser.OrderPermission > 0 || SessionFacade.CurrentUser.UserGroupId > 2)))
-                            {
-                                <!--TODO kontroll att order inte finns -->
-                                <li><a href="#" >@Translation.Get("Skapa bestдllning", Enums.TranslationSource.TextTranslation)</a></li>
-                            }
-                            *@
-
+                                }                                
                             </ul>
                         </div>
                     </li>
@@ -370,7 +312,7 @@
                 {
                    <li><a title="@Translation.Get("Skriv ut")" class="btn print-case"><i class="icon-file"></i></a></li>
                 }
-                @*<li><a href="@Url.Action("Case", "Print", new { caseId = @Model.case_.Id, customerId = @Model.case_.Customer_Id })" title="@Translation.Get("Skriv ut")" class="btn print-case" target="_blank"><i class="icon-file"></i></a></li>*@
+                
                 @if (Html.MasterModel().CustomerSetting.ModuleInventory > 0)
                 {                                                            
                     <li><a href="#" title="@Translation.Get("Visa inventarie", Enums.TranslationSource.TextTranslation)" class="btn show-inventory"><i class="icon-th-large"></i></a></li>

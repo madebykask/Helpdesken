@@ -2422,13 +2422,13 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpGet]
-        public JsonResult CanChangeProductArea(int caseId)
+        public JsonResult IsThereNotInvoicedOrder(int caseId)
         {
-            var res = true;
+            var res = false;
             
             var notInvoicedOrders = this.invoiceArticleService.GetInvoiceOrders(caseId, InvoiceOrderStatus.AllNotInvoiced);
             if (notInvoicedOrders.Any())
-                res = false;
+                res = true;
 
             return Json(res, JsonRequestBehavior.AllowGet);
         }
