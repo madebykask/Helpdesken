@@ -1825,8 +1825,8 @@
     <Content Include="Areas\Inventory\Views\Shared\EditorTemplates\NotReadonlyFields\Number.cshtml" />
     <Content Include="Areas\Inventory\Views\Shared\EditorTemplates\NotReadonlyFields\Text.cshtml" />
     <Content Include="Areas\Inventory\Views\Shared\EditorTemplates\NotReadonlyFields\WideText.cshtml" />
-    <Content Include="Areas\Inventory\Views\Shared\EditorTemplates\ChassisModel.cshtml" />
-    <Content Include="Areas\Inventory\Views\Shared\EditorTemplates\InventoryModel.cshtml" />
+    <Content Include="Areas\Inventory\Views\Shared\EditorTemplates\ChassisFieldsModel.cshtml" />
+    <Content Include="Areas\Inventory\Views\Shared\EditorTemplates\InventoryFieldsModel.cshtml" />
     <Content Include="Areas\Inventory\Views\Shared\EditorTemplates\MemoryFieldsViewModel.cshtml" />
     <Content Include="Areas\Inventory\Views\Shared\EditorTemplates\OperatingSystemFieldsViewModel.cshtml" />
     <Content Include="Areas\Inventory\Views\Shared\EditorTemplates\PlaceFieldsViewModel.cshtml" />
