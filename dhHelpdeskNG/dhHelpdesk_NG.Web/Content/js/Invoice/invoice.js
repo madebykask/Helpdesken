@@ -1268,7 +1268,7 @@ $(function () {
                         }
                     },
                     {
-                        text: dhHelpdesk.Common.Translate("Stäng"),
+                        text: dhHelpdesk.Common.Translate("Avbryt"),
                         'class': 'btn close-invoice',
                         click: function () {
                             th.CloseInvoiceWindow(th);
@@ -1968,12 +1968,12 @@ $(function () {
                         dhHelpdesk.CaseArticles.OrderActionsInstance.get_creditOrderButton(currentOrder.Id).hide();                        
                         $("#doInvoiceButton_" + currentOrder.Id).show();
                         var articles = dhHelpdesk.CaseArticles.GetInvoiceArticles();
-                        if (articles == null || articles.length == 0)
+                        if (articles == null || articles.length == 0 || currentOrder.CreditForOrder_Id != null)
                             addArticleEl.hide();
                         else {
                             dhHelpdesk.CaseArticles.ResetAddArticlePlace();
                             addArticleEl.show();
-                        }
+                        }                        
                     }
 
                     if (currentOrder.Id < 0)
@@ -2099,8 +2099,10 @@ $(function () {
                 article.Initialize();
 
                 var rows = this.Container.find(".articles-rows");
-                rows.append(article.Container);                
+                rows.append(article.Container);
+                
                 this.EnableAddBlank(this.HasNotBlankArticles());
+                
                 this.UpdateTotal();
 
                 dhHelpdesk.System.RaiseEvent("OnAddArticle", [this, article]);
@@ -2295,7 +2297,8 @@ $(function () {
                 model.InvoiceTime = this.InvoiceDate != null && this.InvoiceDate != "" ? dhHelpdesk.Common.DateToDisplayTime(this.InvoiceDate) : "";
                 model.InvoicedByUser = this.InvoicedByUser != null ? this.InvoicedByUser : "";
                 model.InvoicedByUserId = this.InvoicedByUserId != null ? this.InvoicedByUserId : "";                
-                model.IsInvoiced = this.IsOrderInvoiced();                
+                model.IsInvoiced = this.IsOrderInvoiced();
+                model.IsCredited = this.CreditForOrder_Id != null;
 
                 ////////initiator field
                 model.ReportedBy = this.ReportedBy != null ? this.ReportedBy : "";
@@ -2617,7 +2620,7 @@ $(function () {
                                 class: "btn"
                             },
                             {
-                                text: dhHelpdesk.Common.Translate("Stäng"),
+                                text: dhHelpdesk.Common.Translate("Avbryt"),
                                 click: function () {
                                     d.dialog("close");
                                 },
@@ -3017,6 +3020,7 @@ $(function () {
             this.InvoicedByUser = "";
             this.InvoicedByUserId = "";
             this.IsInvoiced = false;
+            this.IsCredited = false;
             this.TitleCaption = "";
 
             this.ShowReportedBy = false;

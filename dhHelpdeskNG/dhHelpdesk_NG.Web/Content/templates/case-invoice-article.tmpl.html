@@ -13,12 +13,16 @@
                         type='text' class='width80 article-name' maxlength='50' value='{{:Name}}' />
                 <span id="DescriptionCount_{{:Id}}" style="color:GrayText;font-size:smaller">{{:DescriptionCount}} </span>
             </td>
-            <td style="width:5%">
-                <a href='javascript:void(0);' onclick='dhHelpdesk.CaseArticles.DeleteArticle($(this).parent().parent())' class='btn btn-small'>x</a>
-            </td>
+             {{if IsCredited}}
+                
+            {{else}}
+                <td style="width:5%">
+                    <a href='javascript:void(0);' onclick='dhHelpdesk.CaseArticles.DeleteArticle($(this).parent().parent())' class='btn btn-small'>x</a>
+                </td>
+            {{/if}} 
         </tr>
     {{/if}}                    
-    {{else}}
+{{else}}
     {{if IsInvoiced }}
         <tr data-id='{{:Id}}' title='{{:Description}}'>
             <td>{{:Number}}</td>
@@ -50,9 +54,13 @@
             </td>
             {{/if}}
             <td class='article-total'>{{:Total}}</td>
-            <td style="width:5%">
-                <a href='javascript:void(0);' onclick='dhHelpdesk.CaseArticles.DeleteArticle($(this).parent().parent())' class='btn btn-small'>x</a>
-            </td>
+             
+            {{if IsCredited}}              
+            {{else}}
+                <td style="width:5%">
+                    <a href='javascript:void(0);' onclick='dhHelpdesk.CaseArticles.DeleteArticle($(this).parent().parent())' class='btn btn-small'>x</a>
+                </td>
+            {{/if}}
         </tr>
     {{/if}}                                
 {{/if}}  

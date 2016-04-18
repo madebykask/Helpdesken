@@ -87,17 +87,7 @@
             var openInvoiceWindowWithMessage = function (message) {
                 dhHelpdesk.CaseArticles.OpenInvoiceWindow(message);
             };
-
-            //var FinishDateAndTypeIsEmtpy = function () {
-            //    debugger
-            //    if ($('#CaseLog_FinishingDate').val() == '' || $('#CaseLog_FinishingType').val() == '') {
-            //        return true;
-            //    }
-            //    else {
-            //        return false;
-            //    }
-            //};
-
+     
             var emptyFn = function() {};
 
             $("#case-action-save").click(function (e) {
@@ -105,76 +95,9 @@
             });
 
             $("#case-action-save-and-close").click(function (e) {
-                e.preventDefault();                
-                //if there are articles selected but not invoiced and the case is finishing/closing
-                @*if (FinishDateAndTypeIsEmtpy()) {
-                    if (hasNotInvoicedArticles()) {
-                        messageDialog(dc('@Translation.Get("Du får inte avsluta ett ärende med invalda fast ofakturerade artiklar. Var god granska dina ordrar.")'));
-                        return false;
-                    }
-                    else {
-                        if ($('#InvoiceModuleBtnOpen').is(':visible')) {
-                            if (!hasInvoicedArticles() && !hasNotInvoicedArticles()) {
-                                confirmDialog(dc('@Translation.Get("Produktområdet har länkade artiklar men inga artiklar är invalda. Vill du verkligen avsluta ärendet?")'), SubmitCase, InvoiceDialogOnNotFinishSaveCase);
-                            }
-                            else {
-                                SubmitCase();
-                            }
-                        }
-                        else {
-                            SubmitCase();
-                        }
-                    }
-                }
-                else {
-                    SubmitCase();
-                }*@
+                e.preventDefault();                                
             });
-
-            //$("#case-action-save-and-close").click(function (e) {
-            //    e.preventDefault();
-            //    invoiceArticlesBeforeClose(emptyFn, openInvoiceWindow);
-            //});
-
-@*            $("#case-action-save-and-new").click(function (e) {
-                debugger
-                //If case wants to be closed/finished it will first check if any orders exists with not invoiced articles
-                //if thats not the case, it will look for the invoice button and ask user for extra validation
-                //on closing/finishing the case if there are articles connected to the selected productarea
-
-                e.preventDefault();
-                //if there are articles selected but not invoiced and the case is finishing/closing
-                if (!FinishDateAndTypeIsEmtpy()) {
-                    if (hasNotInvoicedArticles()) {
-                        messageDialog(dc('@Translation.Get("Du får inte avsluta ett ärende med invalda fast ofakturerade artiklar. Var god granska dina ordrar.")'));
-                        return false;
-                    }
-                    else {
-                        if ($('#InvoiceModuleBtnOpen').is(':visible')) {
-                            if (!hasInvoicedArticles() && !hasNotInvoicedArticles()) {
-                                debugger
-                                confirmDialog(dc('@Translation.Get("Produktområdet har länkade artiklar men inga artiklar är invalda. Vill du verkligen avsluta ärendet?")'), EditCaseAndAddCase, InvoiceDialogOnNotFinishSaveCase);
-                            }
-                            else {
-                                EditCaseAndAddCase();
-                            }
-                        }
-                        else {
-                            EditCaseAndAddCase();
-                        }
-                    }
-                }
-                else {
-                    debugger
-                    var a = EditPage;
-                    var b = a.prototype.NEW_CLOSE_CASE_URL;
-                    return false;
-                }
-
-                //e.preventDefault();
-                //invoiceArticlesBeforeClose(emptyFn, openInvoiceWindow);
-            });*@
-
+          
             $("#case-action-close").click(function (e) {
                 e.preventDefault();
                 var targetUrl = $(this).attr("href");

@@ -695,7 +695,7 @@ function CaseInitForm() {
             });
         }
         else {
-            $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(this));
+            $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(me));
             $("#case__ProductArea_Id").val(val).trigger('change');
         }
         

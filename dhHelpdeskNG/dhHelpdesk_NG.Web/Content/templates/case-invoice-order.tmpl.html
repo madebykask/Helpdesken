@@ -13,8 +13,12 @@
                         {{if IsInvoiced }}
                             <th colspan="2" style="text-align: right;"> {{:TotalHeader}}</th>
                         {{else}}
-                            <th colspan="1" style="text-align: right;"> {{:TotalHeader}}</th>
-                            <th class="case-invoice-colextranarrow"></th>
+                            {{if IsCredited }}
+                                <th colspan="2" style="text-align: right;"> {{:TotalHeader}} </th>
+                            {{else}}
+                                <th colspan="1" style="text-align: right;"> {{:TotalHeader}} </th>
+                                <th class="case-invoice-colextranarrow"></th>
+                            {{/if}}
                         {{/if}}
                     </tr>
                     <tbody class='articles-rows'>
@@ -23,7 +27,14 @@
                 </table>
             </td>
             <td style='vertical-align: top;'>
-                <a class="btn btn-small add-blank-article" style="cursor: pointer; display: none;" onclick="dhHelpdesk.CaseArticles.AddBlankArticle('{{:Id}}'); return false;"><i class="icon-plus-sign"></i></a>
+            {{if IsInvoiced }}                
+            {{else}}
+                {{if IsCredited }}
+                {{else}}
+                    
+                        <a class="btn btn-small add-blank-article" style="cursor: pointer; display: none;" onclick="dhHelpdesk.CaseArticles.AddBlankArticle('{{:Id}}'); return false;"><i class="icon-plus-sign"></i></a>                    
+                {{/if}}
+            {{/if}}
             </td>
         </tr>
     </table>
@@ -36,7 +47,7 @@
             <h4>                        
                 <i style="display:inline-block" class="icon-plus-sign showRefrence{{:Id}}" onclick="dhHelpdesk.CaseArticles.ShowOtherReference('{{:Id}}')"></i>
                 <i style="display:none"   class="icon-minus-sign hideRefrence{{:Id}}" onclick="dhHelpdesk.CaseArticles.HideOtherReference('{{:Id}}')"></i> 
-                {{:ReferenceTitle}}&nbsp;<span id="initiatorInfo_{{:Id}}">&nbsp;-&nbsp;{{:ReportedBy}}&nbsp;({{:Persons_Name}})</span> 
+                {{:ReferenceTitle}}&nbsp;<span id="initiatorInfo_{{:Id}}">&nbsp;-&nbsp;{{:ReportedBy}}&nbsp;({{:Persons_Name}})&nbsp;-&nbsp;{{:CostCentre}} </span> 
             </h4>
             <div>
                 <table class="tableform">
