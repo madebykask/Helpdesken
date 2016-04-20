@@ -30,6 +30,8 @@
         @Html.HiddenFor(m => m.Id, Model.Id)
         @Html.HiddenFor(m => m.CustomerId, Model.CustomerId)
         <h4>@Translation.Get("Allmänt")</h4>
+        <div class="row">
+        <div class="span12">
         <table class="tableform">
             <tr>
                 <td class="span3">
@@ -49,7 +51,9 @@
                     @Html.ValidationMessageFor(m => m.ProductId, Translation.Get("Produkt") + requiredMessage)
                 </td>
             </tr>
-        </table>                
+        </table>   
+        </div>
+        </div>             
     } 
     <script type="text/javascript">
         $(function() {

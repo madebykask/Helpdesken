@@ -128,7 +128,7 @@
                             <table class="tableform" id="Visa" border="0">
                                <tr>
                                   <td class="span3">
-                                     @Translation.Get("Visa fr.o.m", Enums.TranslationSource.TextTranslation):
+                                     @Translation.Get("Visa fr.o.m", Enums.TranslationSource.TextTranslation)
                                   </td>
                                   <td class="span9">
                                      @Html.EditorFor(model => model.OperationLog.ShowDate, "DatePicker", new { id = "divOperationLog_ShowDate" }) 
@@ -136,7 +136,7 @@
                                </tr>
                                <tr>
                                   <td>
-                                     @Translation.Get("Visa t.o.m", Enums.TranslationSource.TextTranslation):
+                                     @Translation.Get("Visa t.o.m", Enums.TranslationSource.TextTranslation)
                                   </td>
                                   <td>
                                      @Html.EditorFor(model => model.OperationLog.ShowUntilDate, "DatePicker", new { id = "divOperationLog_ShowUntilDate" }) 
@@ -144,7 +144,7 @@
                                </tr>
                                <tr>
                                    <td>
-                                       @Translation.Get("Visa på startsidan", Enums.TranslationSource.TextTranslation):
+                                       @Translation.Get("Visa på startsidan", Enums.TranslationSource.TextTranslation)
                                    </td>
                                    <td class="span9">                                        
                                        <input id="chkShowOnStartPage" type="checkbox" name="OperationLog.ShowOnStartPage" @(Model.OperationLog.ShowOnStartPage == 1 ? "checked=checked" : "") value ="1" @(Model.OperationObjectShow == 0 ? "disabled=disabled" : "")/>                                        
@@ -153,7 +153,7 @@
                                </tr>
                                <tr>
                                    <td> 
-                                       @Translation.Get("Informera handläggarna", Enums.TranslationSource.TextTranslation):
+                                       @Translation.Get("Informera handläggarna", Enums.TranslationSource.TextTranslation)
                                    </td>
                                    <td class="span9">
                                        <input type="checkbox" name="OperationLog.InformUsers" @(Model.OperationLog.InformUsers == 1 ? "checked=checked" : "")  value="1" />                                        

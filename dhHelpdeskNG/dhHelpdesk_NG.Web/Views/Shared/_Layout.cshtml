@@ -218,12 +218,12 @@
                                             @Translation.Get("Inventarier")</a></li> 
                                     }
 
-                                    @*@if(model.IsLicenseVisible())
+                                    @if(model.IsLicenseVisible())
                                     {                                    
                                         <li><a href="@Url.Action("Index", "Products", new { area = "Licenses" })">
                                             <img src="@Url.Content("~/Content/icons/Licens.png")" alt="license" />
                                             @Translation.Get("Licenshantering")</a></li>
-                                    }*@
+                                    }
                                     <li></li>
                                 </ul>
                             </li>                            

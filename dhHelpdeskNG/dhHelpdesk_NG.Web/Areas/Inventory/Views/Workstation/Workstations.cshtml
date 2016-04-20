@@ -108,14 +108,7 @@
                 @Html.LabelFor(m => m.Filter.RecordsOnPage)
             </td>
             <td>
-                @Html.TextBoxFor(m => m.Filter.RecordsOnPage)
-            </td>
-        </tr>
-        <tr>
-            <td class="span3">&nbsp;
-            </td>
-            <td>
-                <input type="submit" value="@Translation.Get("Sök")" class="btn" />
+                @Html.TextBoxFor(m => m.Filter.RecordsOnPage) <input type="submit" value="@Translation.Get("Sök")" class="btn" />
             </td>
         </tr>
     </table>

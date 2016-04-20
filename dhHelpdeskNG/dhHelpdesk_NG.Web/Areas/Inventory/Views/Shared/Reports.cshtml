@@ -30,14 +30,6 @@
             <td class="span3">@Translation.Get("Avdelning")</td>
             <td>@Html.DropDownListFor(m => m.Filter.DepartmentId, Model.Departments, string.Empty, new { id = "departments_drop_down" })</td>
         </tr>
-        <tr>
-            <td class="span3">
-                @Html.LabelFor(m => m.Filter.SearchFor)
-            </td>
-            <td>
-                @Html.TextBoxFor(m => m.Filter.SearchFor)
-            </td>
-        </tr>
         <tr id="reports_data_switch_tr">
             <td>@Translation.Get("Typ")
             </td>
@@ -64,10 +56,11 @@
             </td>
         </tr>
         <tr>
-            <td class="span3">&nbsp;
+            <td class="span3">
+                @Html.LabelFor(m => m.Filter.SearchFor)
             </td>
             <td>
-                <input type="submit" value="@Translation.Get("Sök")" class="btn" />
+                @Html.TextBoxFor(m => m.Filter.SearchFor) <input type="submit" value="@Translation.Get("Sök")" class="btn" />
             </td>
         </tr>
     </table>
