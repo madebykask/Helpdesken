@@ -685,7 +685,7 @@ function CaseInitForm() {
         if (caseInvoiceIsActive) {
             $.get('/Cases/IsThereNotInvoicedOrder/', { caseId: curCaseId, myTime:Date.now }, function (res) {
                 if (res != null && res) {
-                    ShowToastMessage('ProductArea cannot be changed while you have order which is not invoiced yet!', 'warning', false);
+                    ShowToastMessage('ProductArea cannot be changed while you have any order which is not invoiced yet!', 'warning', false);
                 }
                 else
                 {

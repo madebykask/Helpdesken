@@ -598,7 +598,7 @@ $(function () {
 
             for (var i = 0; i < this.allVailableOrders.length; i++) {                
                 var order = dhHelpdesk.CaseArticles.GetOrder(this.allVailableOrders[i].Id);
-                if (! order.InvoiceValidate())
+                if (!order.InvoiceValidate())
                     return;
             }
             
@@ -1779,7 +1779,13 @@ $(function () {
                         order.Number = dhHelpdesk.CaseArticles.allVailableOrders.length;
                     }
                 }                                   
-                               
+                   
+                // Add First order
+                if (order.Id < 0 && dhHelpdesk.CaseArticles.allVailableOrders.length == 0) {
+                    dhHelpdesk.CaseArticles.allVailableOrders.push(order);
+                    order.Number = dhHelpdesk.CaseArticles.allVailableOrders.length;
+                }
+
                 this._orders.push(order);
                 
                 var container = this.Container.find(".orders-container");
@@ -1885,9 +1891,9 @@ $(function () {
                 }
 
                 var totals = this.GetArticlesTotal();
-                model.Total = dhHelpdesk.CaseArticles.DoDelimit(totals.Total.toString());
-                model.TotalInvoiced = dhHelpdesk.CaseArticles.DoDelimit(totals.Invoiced.toString());
-                model.TotalNotInvoiced = dhHelpdesk.CaseArticles.DoDelimit(totals.NotInvoiced.toString());                
+                model.Total = dhHelpdesk.CaseArticles.DoDelimit(totals.Total);
+                model.TotalInvoiced = dhHelpdesk.CaseArticles.DoDelimit(totals.Invoiced);
+                model.TotalNotInvoiced = dhHelpdesk.CaseArticles.DoDelimit(totals.NotInvoiced);                
 
                 return model;
             },
@@ -2291,7 +2297,7 @@ $(function () {
                 model.Number = this.Number + 1;
 
                 var totalPrices = this.GetArticlesTotal();
-                model.Total = dhHelpdesk.CaseArticles.DoDelimit(totalPrices.Total.toString());
+                model.Total = dhHelpdesk.CaseArticles.DoDelimit(totalPrices.Total);
                 
                 model.InvoiceDate = this.InvoiceDate != null && this.InvoiceDate != "" ? dhHelpdesk.Common.DateToDisplayDate(this.InvoiceDate) : "";
                 model.InvoiceTime = this.InvoiceDate != null && this.InvoiceDate != "" ? dhHelpdesk.Common.DateToDisplayTime(this.InvoiceDate) : "";
@@ -2532,7 +2538,7 @@ $(function () {
             },
 
             this.UpdateTotal = function () {
-                this.Container.find(".articles-total").text(dhHelpdesk.CaseArticles.DoDelimit(this.GetArticlesTotal().Total.toString()));                
+                this.Container.find(".articles-total").text(dhHelpdesk.CaseArticles.DoDelimit(this.GetArticlesTotal().Total));                
                 if (this.Invoice != null) {
                     this.Invoice.UpdateTotal();
                 }
@@ -2768,11 +2774,11 @@ $(function () {
                 model.NameEng = this.Article != null && this.Article.NameEng != null ? this.Article.NameEng : "";
                 model.Description = this.Article != null && this.Article.Description != null ? this.Article.Description : "";
                 model.Id = this.Id;
-                model.Number = this.GetNumber();
-                model.Amount = this.Amount;
+                model.Number = dhHelpdesk.CaseArticles.DoDelimit(this.GetNumber());
+                model.Amount = dhHelpdesk.CaseArticles.DoDelimit(this.Amount);
                 model.UnitName = this.GetUnitName();
                 model.Ppu = this.GetPpu();
-                model.Total = dhHelpdesk.CaseArticles.DoDelimit(this.GetTotal().toString());
+                model.Total = dhHelpdesk.CaseArticles.DoDelimit(this.GetTotal());
                 model.IsArticlePpuExists = this.IsArticlePpuExists();
                 model.IsCredited = this.Order.CreditForOrder_Id != null;
                 model.IsInvoiced = this.Order.IsInvoiced;
@@ -2936,6 +2942,10 @@ $(function () {
 
         DoDelimit: function(val)
         {
+            if (val == null || val == undefined)
+                return "";
+
+            val = val.toString();
             var decimalDelimiter = ',';
             var thousandDelimiter = ' ';            
             x = val.split(this.decimalDelimiter);

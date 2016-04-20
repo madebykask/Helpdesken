@@ -37,11 +37,9 @@ function SetCheckboxValueIfElVisible(el, val, doNotTriggerEvent) {
     }
 }
 
-
 function IsWillBeOverwrittenByValue(domVisible, domValue, val) {
     return $(domVisible).is(':visible') && $(domValue).val() != '' && $(domValue).val() != val;
 }
-
 
 function IsWillBeOverwritten(fieldId, val) {
     switch (fieldId) {
@@ -106,8 +104,6 @@ function IsWillBeOverwritten(fieldId, val) {
     return false;
 }
 
-
-
 var overwriteWarning = {
     dlg: null,
     caseTemplateData: null,
@@ -133,8 +129,6 @@ var overwriteWarning = {
         });
     }
 };
-
-
 
 function ApplyTemplate(data, doOverwrite) {
     var cfg = { doOverwrite: doOverwrite };
@@ -293,8 +287,28 @@ function IsValueApplicableFor(templateFieldId, val) {
     return false;
 }
 
-
 function LoadTemplate(id) {
+    var caseInvoiceIsActive = false;
+    var curCaseId = $('#case__Id').val();
+    if ($('#CustomerSettings_ModuleCaseInvoice') != undefined)
+        caseInvoiceIsActive = $('#CustomerSettings_ModuleCaseInvoice').val().toLowerCase() == 'true';
+
+    if (caseInvoiceIsActive) {
+        $.get('/Cases/IsThereNotInvoicedOrder/', { caseId: curCaseId, myTime: Date.now }, function (res) {
+            if (res != null && res) {
+                ShowToastMessage('You cannot use case template while you have any order which is not invoiced yet!', 'warning', false);
+            }
+            else {
+                GetTemplateData(id)
+            }
+        });
+    }
+    else {
+        GetTemplateData(id)
+    }
+}
+
+function GetTemplateData(id) {
     $.get('/CaseSolution/GetTemplate',
         { 'id': id, myTime: Date.now },
         function (caseTemplate) {
@@ -304,7 +318,7 @@ function LoadTemplate(id) {
                 return;
             }
 
-            for (var field in caseTemplate) {                
+            for (var field in caseTemplate) {
                 if (window.IsValueApplicableFor(field, caseTemplate[field]) && window.IsWillBeOverwritten(field, caseTemplate[field])) {
                     showOverwriteWarning = true;
                     break;

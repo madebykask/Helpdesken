@@ -334,6 +334,8 @@ Create Proc dbo.[sp_GetCaseInfo]
 	@LanguageId int,
 	@UserId int
 as
+	
+
 	Declare @CurrentCustomerId int
 	Select @CurrentCustomerId = Customer_Id from tblCase where id = @CaseId
 
@@ -1484,11 +1486,14 @@ as
 
 	 /*  Log data */
     
+	
+	 
 	Declare @ExternalFieldName  Nvarchar(Max);
 	Declare @ExternalFieldCaption  Nvarchar(Max);
 	Declare @InternalFieldName  Nvarchar(Max);
 	Declare @InternalFieldCaption  Nvarchar(Max);
 
+	Declare @Nums int;
 	Declare @Log_Id int;
 	Declare @Log_LogDate datetime;
 	Declare @Log_Text_External Nvarchar(Max);
@@ -1498,28 +1503,34 @@ as
 	Declare @NewLine nvarchar(5)
 	
 	Set @NewLine = char(13) + char(10)
+	 
+	SELECT @Nums = Count(*) 
+	FROM tblLog l 
+		Left outer Join tblUsers u on (l.User_Id = u.Id),
+		tblSettings s		 
+	WHERE l.Case_Id = @CaseId and s.Customer_Id = @CurrentCustomerId			
 
-	 /* Curson defination */
-		DECLARE logData_Cursor CURSOR FOR 			
-		SELECT l.Id, l.LogDate, l.Text_External, l.Text_Internal, 
-				Case when s.IsUserFirstLastNameRepresentation = 1 then
-					cast(u.FirstName + ' ' + u.SurName as nvarchar(max))
-				else
-					cast(u.SurName + ' ' + u.FirstName as nvarchar(max))
-				End as UserName
-		FROM tblLog l 
-			Left outer Join tblUsers u on (l.User_Id = u.Id),
-			tblSettings s 
-		WHERE l.Case_Id = @CaseId and s.Customer_Id = @CurrentCustomerId
-		ORDER BY l.Id desc;
+	/* Curson defination */
+	DECLARE logData_Cursor CURSOR FOR 			
+	SELECT l.Id, l.LogDate, cast(l.Text_External as nvarchar(max)), cast(l.Text_Internal as nvarchar(max)), 
+			Case when s.IsUserFirstLastNameRepresentation = 1 then
+				cast(u.FirstName + ' ' + u.SurName as nvarchar(max))
+			else
+				cast(u.SurName + ' ' + u.FirstName as nvarchar(max))
+			End as UserName
+	FROM tblLog l 
+		Left outer Join tblUsers u on (l.User_Id = u.Id),
+		tblSettings s		 
+	WHERE l.Case_Id = @CaseId and s.Customer_Id = @CurrentCustomerId		
+	ORDER BY l.Id desc;
 
-		OPEN logData_Cursor
+	OPEN logData_Cursor
 
-		FETCH NEXT FROM logData_Cursor 
-		INTO @Log_Id, @Log_LogDate, @Log_Text_External,
-				@Log_Text_Internal, @Log_UserName;			
+	FETCH NEXT FROM logData_Cursor 
+	INTO @Log_Id, @Log_LogDate, @Log_Text_External,
+			@Log_Text_Internal, @Log_UserName;			
 		
-
+		
 	Set @ExternalFieldName  = '';
 	Select @ExternalFieldName = FieldName, @ExternalFieldCaption = FieldCaption From @AvailableFields where FieldName = 'tblLog.Text_External';
 	Set @ExternalFieldCaption = Isnull(@ExternalFieldCaption, dbo.GetDefCaseFieldCaption('tbllog_text_external', @LanguageId)) 
@@ -1527,10 +1538,14 @@ as
 	Set @InternalFieldName  = '';
 	Select @InternalFieldName = FieldName, @InternalFieldCaption = FieldCaption From @AvailableFields where FieldName = 'tblLog.Text_Internal';	      	 
 	Set @InternalFieldCaption = Isnull(@InternalFieldCaption, dbo.GetDefCaseFieldCaption('tbllog_text_internal', @LanguageId)) 
-		 		
-	WHILE @@FETCH_STATUS = 0
-	BEGIN	 
-		set @Log_Value = CONVERT(VARCHAR(10), @Log_LogDate, 120)  + '  ' + @Log_UserName;	  
+			
+	declare @i int	
+	set @i = 0
+			
+	WHILE (@i < @Nums)
+	BEGIN	 	    
+		set @i = @i + 1		
+		set @Log_Value = CONVERT(VARCHAR(10), @Log_LogDate, 120)  + '  ' + @Log_UserName;	  		
 		Insert into @ResultSet (Id, FieldName, FieldCaption, FieldValue, InOrder, LineType) 
 				values(@FieldId, 'LogNote', '', @Log_Value, @InOrder, 'L')	  	 
 
@@ -1563,9 +1578,12 @@ as
 			end		  
 		end;
 
-		FETCH NEXT FROM logData_Cursor 
-		INTO @Log_Id, @Log_LogDate, @Log_Text_External,
-			@Log_Text_Internal, @Log_UserName;
+		if (@i < @Nums)
+		begin
+			FETCH NEXT FROM logData_Cursor 
+			INTO @Log_Id, @Log_LogDate, @Log_Text_External,
+				@Log_Text_Internal, @Log_UserName;						
+		end
 
 	End; /* While Log_Cursor */ 
 	
@@ -1586,7 +1604,6 @@ as
 
 	select * from @ResultSet order by InOrder Asc
 Go
-
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.22'

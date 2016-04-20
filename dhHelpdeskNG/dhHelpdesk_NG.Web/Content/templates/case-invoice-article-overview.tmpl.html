@@ -7,7 +7,7 @@
         <td class="case-invoice-colnarrow">{{:Number}}</td>
         <td class="case-invoice-colwide">{{:Name}}</td>
         <td class="case-invoice-colwide">{{:NameEng}}</td>
-        <td class="case-invoice-colnarrow">
+        <td class="case-invoice-colnarrow" style='text-align: right;'>
             {{if IsCredited }}
                 -{{:Amount}}
             {{else}}
@@ -15,7 +15,7 @@
             {{/if}}
         </td>
         <td class="case-invoice-colnarrow">{{:UnitName}}</td>
-        <td class="case-invoice-colnarrow">{{:Ppu}}</td>
+        <td class="case-invoice-colnarrow" style='text-align: right;' >{{:Ppu}}</td>
         <td style="text-align: right;" class="case-invoice-colextranarrow" colspan="2">{{:Total}}</td>                   
     </tr>              
 {{/if}}  
