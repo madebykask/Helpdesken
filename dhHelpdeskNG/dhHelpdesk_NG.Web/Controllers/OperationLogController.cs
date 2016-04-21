@@ -95,6 +95,7 @@
             CS.OperationObject_Filter = OLSearch_Filter.OperationObject_Filter;
             CS.CustomerId = OLSearch_Filter.CustomerId;
             CS.PeriodFrom = OLSearch_Filter.PeriodFrom;
+            CS.PeriodTo = OLSearch_Filter.PeriodTo;
             if (CS.PeriodTo != null)
                 CS.PeriodTo = OLSearch_Filter.PeriodTo.Value.AddDays(1);
             CS.Text_Filter = OLSearch_Filter.Text_Filter;
