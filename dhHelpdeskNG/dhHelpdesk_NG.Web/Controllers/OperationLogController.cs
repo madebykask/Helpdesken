@@ -201,12 +201,7 @@
         public ActionResult Edit(int id)
         {
             var operationlog = this._operationLogService.GetOperationLog(id);
-            //Get operationobject showonstartpage
-            var currObject = this._operationObjectService.GetOperationObject(operationlog.OperationObject_Id);
-
-            if (currObject != null)
-                operationlog.ShowOnStartPage = currObject.ShowOnStartPage;
-
+            
             if (operationlog == null)
                 return new HttpNotFoundResult("No OperationLog found...");
 
