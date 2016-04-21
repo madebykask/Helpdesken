@@ -45,9 +45,9 @@
     <div class="row-fluid">
         <div class="span6">
             <h4>                        
-                <i style="display:inline-block" class="icon-plus-sign showRefrence{{:Id}}" onclick="dhHelpdesk.CaseArticles.ShowOtherReference('{{:Id}}')"></i>
-                <i style="display:none"   class="icon-minus-sign hideRefrence{{:Id}}" onclick="dhHelpdesk.CaseArticles.HideOtherReference('{{:Id}}')"></i> 
-                {{:ReferenceTitle}}&nbsp;<span id="initiatorInfo_{{:Id}}">&nbsp;-&nbsp;{{:ReportedBy}}&nbsp;({{:Persons_Name}})&nbsp;-&nbsp;{{:CostCentre}} </span> 
+                <i style="display:inline-block" class="icon-plus-sign showRefrence{{:Id}}" onclick="dhHelpdesk.CaseArticles.ExpandOtherReference('{{:Id}}')"></i>
+                <i style="display:none"   class="icon-minus-sign hideRefrence{{:Id}}" onclick="dhHelpdesk.CaseArticles.CollapseOtherReference('{{:Id}}')"></i> 
+                {{:ReferenceTitle}}&nbsp;<span id="initiatorInfo_{{:Id}}"></span> 
             </h4>
             <div>
                 <table class="tableform">

@@ -1,5 +1,4 @@
-﻿
-if (window.dhHelpdesk == null)
+﻿if (window.dhHelpdesk == null)
     dhHelpdesk = {};
 
 $(function () {    
@@ -30,6 +29,14 @@ $(function () {
 
     var projectElement = $("#case__Project_Id");
 
+    var creditAlertToShow = "";
+    var creditAlert = true;
+
+    dhHelpdesk.Const = {
+        _ASC_SORT : 1,
+        _DESC_SORT: 2
+    }
+
     dhHelpdesk.System = {
         RaiseEvent: function (eventType, extraParameters) {
             $(document).trigger(eventType, extraParameters);
@@ -49,7 +56,6 @@ $(function () {
         GetRandomInt: function (min, max) {
             return Math.floor(Math.random() * (max - min + 1)) + min;
         },        
-
     },
 
     dhHelpdesk.Common = {
@@ -777,10 +783,13 @@ $(function () {
                 dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate('First save the order.'));
             }
             else {
-                var curOrd = dhHelpdesk.CaseArticles.GetOrder(orderId);                
-                dhHelpdesk.CaseArticles.GetInvoice(curOrd.Invoice.Id).AddOrder(curOrd.GetCreditedOrder());
-                dhHelpdesk.Common.MakeTextNumeric(".article-ppu");
-                dhHelpdesk.Common.MakeTextNumeric(".article-amount");
+                var curOrd = dhHelpdesk.CaseArticles.GetOrder(orderId);
+                var newCredit = curOrd.GetCreditedOrder();
+                if (newCredit._articles.length > 0) {
+                    dhHelpdesk.CaseArticles.GetInvoice(curOrd.Invoice.Id).AddOrder(newCredit);
+                    dhHelpdesk.Common.MakeTextNumeric(".article-ppu");
+                    dhHelpdesk.Common.MakeTextNumeric(".article-amount");
+                }
             }
         },
 
@@ -796,7 +805,7 @@ $(function () {
             }
         },
 
-        ShowOtherReference: function (orderId) {
+        ExpandOtherReference: function (orderId) {
             var order = this.GetOrder(orderId);
             if (order != null) {
                 $('.InitiatorFieldsOrder' + orderId).show();
@@ -806,7 +815,7 @@ $(function () {
             $('.icon-minus-sign.hideRefrence' + orderId).css("display", "inline-block");
         },
 
-        HideOtherReference: function (orderId) {
+        CollapseOtherReference: function (orderId) {
             var order = this.GetOrder(orderId);
             if (order != null) {
                 $('.InitiatorFieldsOrder' + orderId).hide();
@@ -814,6 +823,21 @@ $(function () {
             
             $('.icon-plus-sign.showRefrence' + orderId).css("display", "inline-block");
             $('.icon-minus-sign.hideRefrence' + orderId).css("display", "none");
+        },
+
+        UpdateOtherReferenceTitle: function (orderId) {                        
+            var publicClassName = ".InitiatorFields_" + orderId;
+            var _reportedBy = $("#ReportedBy_" + orderId).val();
+            var _personName = $("#Persons_Name_" + orderId).val();
+            var _costCentre = $("#CostCentre_" + orderId).val();
+
+            _reportedBy = dhHelpdesk.Common.IsNullOrEmpty(_reportedBy) ? "" : " " + _reportedBy;
+            _personName = dhHelpdesk.Common.IsNullOrEmpty(_personName) ? "" : " (" + _personName + ")";
+            _costCentre = dhHelpdesk.Common.IsNullOrEmpty(_costCentre) ? "" : " - " + _costCentre;
+
+            var titleText = "-" + _reportedBy + _personName + _costCentre;
+            $('#initiatorInfo_' + orderId).text(titleText);
+            
         },
 
         ShowAttached: function (orderId) {            
@@ -879,8 +903,7 @@ $(function () {
                     dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("Maximum amount for this article is") + ": " + newAmount);
                 }
                 else {
-                    newAmount = 0;
-                    dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("All credits already used!"));
+                    newAmount = 0;                    
                 }
             }
            
@@ -903,12 +926,17 @@ $(function () {
             if (totalOrderAmount < newUsedAmout) {
                 if (totalOrderAmount - totalCreditUsed > 0) {
                     newAmount = totalOrderAmount - totalCreditUsed;
-                    dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("Maximum amount for this article is") + ": " + newAmount);
+                    creditAlertToShow = "";
+                    creditAlert = false;                    
                 }
                 else {
                     newAmount = 0;
-                    dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("All credits already used!"));
+                    creditAlertToShow = dhHelpdesk.Common.Translate("All credits already used!");
                 }
+            }
+            else {
+                creditAlertToShow = "";
+                creditAlert = false;
             }
 
             return newAmount;
@@ -1080,6 +1108,7 @@ $(function () {
                     var item = JSON.parse(obj);
                     var OrderId = this.$element.data("orderid")
 
+                    $('#ReportedBy_' + OrderId).val(item.num);
                     $('#Persons_Name_' + OrderId).val(item.name);
                     $('#Persons_Email_' + OrderId).val(item.email);
                     $('#Persons_Phone_' + OrderId).val(item.phone);
@@ -1100,6 +1129,9 @@ $(function () {
                     $('#Place_' + OrderId).val(item.place);
                     $('#UserCode_' + OrderId).val(item.usercode);
                     $('#CostCentre_' + OrderId).val(item.costcentre);
+
+                    dhHelpdesk.CaseArticles.UpdateOtherReferenceTitle(OrderId);
+
                     return item.num;
                 }
             };
@@ -1226,8 +1258,24 @@ $(function () {
                 markInvoiceButton = true;
             }
 
+            var projectCode = "";
+            if ($('#case__Project_Id') != undefined && $('#case__Project_Id') != null){
+                var projectName = $('#case__Project_Id option:selected').text();
+                if (projectName != undefined && !dhHelpdesk.Common.IsNullOrEmpty(projectName)) {
+                    var splited = projectName.split(' ');
+                    if (splited.length > 0)
+                        projectCode = splited[0];
+                    else
+                        projectCode = projectName;
+                }
+            }
+
+            var caseNumber = $("#case__CaseNumber").val();
+
             th._container.dialog({
-                title: dhHelpdesk.Common.Translate("Artiklar att fakturera"),
+                title: dhHelpdesk.Common.Translate("Artiklar att fakturera") + "  (" +
+                       dhHelpdesk.Common.Translate("Ärende") + ": "+ caseNumber +  " - " + 
+                       dhHelpdesk.Common.Translate("Projekt") + ": "+ projectCode + ")",
                 modal: true,
                 width: 1100,                
                 autoResize: true,
@@ -1820,7 +1868,8 @@ $(function () {
                 articleEl.find('option:selected').prop('selected', false);                
                 articleEl.trigger('chosen:updated');
                 articleEl.trigger('chosen:activate');
-                dhHelpdesk.CaseArticles.HideOtherReference(order.Id);                
+                dhHelpdesk.CaseArticles.UpdateOtherReferenceTitle(order.Id);
+                dhHelpdesk.CaseArticles.CollapseOtherReference(order.Id);                
             },
             
             this.DeleteOrder = function (id) {
@@ -1984,6 +2033,8 @@ $(function () {
 
                     if (currentOrder.Id < 0)
                         $("#doInvoiceButton_" + currentOrder.Id).hide();
+
+                    dhHelpdesk.CaseArticles.UpdateOtherReferenceTitle(currentOrder.Id);
                 });
             },
         
@@ -2053,7 +2104,7 @@ $(function () {
             
             this.GetArticles = function () {
                 return this._articles;
-            },
+            },           
 
             this.HasArticles = function () {
                 return this._articles.length > 0;
@@ -2258,6 +2309,9 @@ $(function () {
 
             // Get credited from this order
             this.GetCreditedOrder = function () {
+                creditAlertToShow = "";
+                creditAlert = true;
+
                 var credited = new dhHelpdesk.CaseArticles.CaseInvoiceOrder();
                 credited.Id = dhHelpdesk.Common.GenerateId();
                 credited.CreditedFrom = this;
@@ -2278,16 +2332,37 @@ $(function () {
                 credited.Project_Id = this.Project_Id;
 
                 credited.Initialize();
-                var articles = this.GetArticles();
+                var articles = this.GetSortedArticles();
+
                 var alreadyUsedAmount = [];
-                for (var i = 0; i < articles.length; i++) {
-                    var a = articles[i];                    
+                var lastOneAdded = true;
+                for (var i = 0; i < articles.length; i++) {                    
+                    var a = articles[i];
+
+                    // means we are going to add an article not text
+                    if (a.Ppu != null)
+                        lastOneAdded = true;
+
                     var article = a.GetCreditedArticle(credited, alreadyUsedAmount);
                     if (a.Article != null)
                         alreadyUsedAmount.push({ Id: a.Article.Id, Amount: article.Amount });
-                    if (a.Article == null || (a.Article != null && parseInt(article.Amount) > 0))
-                        credited.AddArticle(article);
+
+                    if (a.Article == null || (a.Article != null && parseInt(article.Amount) > 0)) {
+                        if (a.Ppu != null || (a.Ppu == null && lastOneAdded))
+                            credited.AddArticle(article);
+                        else
+                            lastOneAdded = false;
+                    }
+                    else {
+                        lastOneAdded = false;
+                    }
                 }
+
+                if (creditAlertToShow != "" && creditAlert) {
+                    dhHelpdesk.Common.ShowWarningMessage(creditAlertToShow);
+                    creditAlertToShow = "";                    
+                }
+
                 return credited;
             },
 
@@ -2404,6 +2479,7 @@ $(function () {
                             dhHelpdesk.CaseArticles.ShowAlreadyInvoicedMessage();
                             $(this).val(curOrd.ReportedBy);
                         }
+                        dhHelpdesk.CaseArticles.UpdateOtherReferenceTitle(curOrd.Id);
                     });
 
                     var personsName = this.Container.find(publicClassName + ".name");
@@ -2414,8 +2490,9 @@ $(function () {
                         }
                         else {
                             dhHelpdesk.CaseArticles.ShowAlreadyInvoicedMessage();
-                            $(this).val(curOrd.Persons_Name);
+                            $(this).val(curOrd.Persons_Name);                            
                         }
+                        dhHelpdesk.CaseArticles.UpdateOtherReferenceTitle(curOrd.Id);
                     });
 
                     var email = this.Container.find(publicClassName + ".email");
@@ -2461,13 +2538,14 @@ $(function () {
                             $(this).parent().find('input:hidden').val($(this).val());
                             th.Region_Id = $(this).val();
                             var OrderId = $(this).data("orderid");
+                            $('#CostCentre_' + OrderId).val('');
                             dhHelpdesk.CaseArticles.FillOrderDepartment(curOrd, th.Region_Id, true);
                         }
                         else {
                             dhHelpdesk.CaseArticles.ShowAlreadyInvoicedMessage();
                             $(this).val(curOrd.Region_Id);
                         }
-
+                        dhHelpdesk.CaseArticles.UpdateOtherReferenceTitle(curOrd.Id);
                     });
 
                     var department = this.Container.find(publicClassName + ".department");
@@ -2484,6 +2562,7 @@ $(function () {
                             dhHelpdesk.CaseArticles.ShowAlreadyInvoicedMessage();
                             $(this).val(curOrd.Department_Id);
                         }
+                        dhHelpdesk.CaseArticles.UpdateOtherReferenceTitle(curOrd.Id);
                     });
 
                     var ou = this.Container.find(publicClassName + ".ou");
@@ -2521,6 +2600,7 @@ $(function () {
                             dhHelpdesk.CaseArticles.ShowAlreadyInvoicedMessage();
                             $(this).val(curOrd.CostCentre);
                         }
+                        dhHelpdesk.CaseArticles.UpdateOtherReferenceTitle(curOrd.Id);
                     });
 
                     var usercode = this.Container.find(publicClassName + ".usercode");
@@ -2774,10 +2854,12 @@ $(function () {
                 model.NameEng = this.Article != null && this.Article.NameEng != null ? this.Article.NameEng : "";
                 model.Description = this.Article != null && this.Article.Description != null ? this.Article.Description : "";
                 model.Id = this.Id;
-                model.Number = dhHelpdesk.CaseArticles.DoDelimit(this.GetNumber());
-                model.Amount = dhHelpdesk.CaseArticles.DoDelimit(this.Amount);
+                model.Number = this.GetNumber();
+                model.Amount = this.Order.IsInvoiced ? dhHelpdesk.CaseArticles.DoDelimit(this.Amount) : this.Amount;
+                model.DisplayAmount = dhHelpdesk.CaseArticles.DoDelimit(this.Amount);
                 model.UnitName = this.GetUnitName();
-                model.Ppu = this.GetPpu();
+                model.Ppu = this.Order.IsInvoiced ? dhHelpdesk.CaseArticles.DoDelimit(this.GetPpu()) : this.GetPpu();
+                model.DisplayPpu = dhHelpdesk.CaseArticles.DoDelimit(this.GetPpu());
                 model.Total = dhHelpdesk.CaseArticles.DoDelimit(this.GetTotal());
                 model.IsArticlePpuExists = this.IsArticlePpuExists();
                 model.IsCredited = this.Order.CreditForOrder_Id != null;
@@ -3093,8 +3175,10 @@ $(function () {
             this.Description = null;
             this.Number = null;
             this.Amount = null;
+            this.DisplayAmount = null;
             this.UnitName = null;
             this.Ppu = null;
+            this.DisplayPpu = null;
             this.Total = null;
             this.IsArticlePpuExists = null;
             this.IsCredited = false;
