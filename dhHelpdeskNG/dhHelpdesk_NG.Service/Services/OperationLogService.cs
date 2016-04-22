@@ -112,10 +112,10 @@ namespace DH.Helpdesk.Services.Services
                          select c);
 
             if (!string.IsNullOrEmpty(SearchOperationLogs.Text_Filter))
-                query = query.Where(x => x.OperationLogAction.Contains(SearchOperationLogs.Text_Filter)
-                                      || x.OperationLogDescription.Contains(SearchOperationLogs.Text_Filter)
-                                      || x.OperationLogCategoryName.Contains(SearchOperationLogs.Text_Filter)
-                                      || x.OperationObjectName.Contains(SearchOperationLogs.Text_Filter)
+                query = query.Where(x => x.OperationLogAction.ToLower().Contains(SearchOperationLogs.Text_Filter.ToLower())
+                                      || x.OperationLogDescription.ToLower().Contains(SearchOperationLogs.Text_Filter.ToLower())
+                                      || x.OperationLogCategoryName.ToLower().Contains(SearchOperationLogs.Text_Filter.ToLower())
+                                      || x.OperationObjectName.ToLower().Contains(SearchOperationLogs.Text_Filter.ToLower())
                                    );
 
             if (SearchOperationLogs.OperationObject_Filter != null)
