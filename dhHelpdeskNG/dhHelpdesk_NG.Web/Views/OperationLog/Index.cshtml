@@ -197,8 +197,10 @@
 
     $(document).on('click', 'th', function (e) {
         var sortBy = $(this).attr('sort-data');
-        $.post("/OperationLog/Sort", { fieldName: sortBy });
-        $("#search").submit();
+        if (sortBy != undefined && sortBy != null) {
+            $.post("/OperationLog/Sort", { fieldName: sortBy });
+            $("#search").submit();
+        }
 
     });
     
