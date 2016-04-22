@@ -22,7 +22,7 @@
 
             return entities.Select(o => new OperationLogOverview
                                     {
-                                        ChangedDate = o.ChangedDate,
+                                        ChangedDate = o.ChangedDate.ToLocalTime(),
                                         CreatedDate = o.CreatedDate,
                                         LogText = o.LogText,
                                         Category = new OperationLogCategoryOverview
