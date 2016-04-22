@@ -1340,15 +1340,15 @@ namespace DH.Helpdesk.Services.Services
 
                                             string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
                                             string urlSelfService;
-                                            if (m.Body.Contains("[/#98]"))
+                                            if (mm.Body.Contains("[/#98]"))
                                             {
                                                 string str1 = "[#98]";
                                                 string str2 = "[/#98]";
                                                 string LinkText;
 
-                                                int Pos1 = m.Body.IndexOf(str1) + str1.Length;
-                                                int Pos2 = m.Body.IndexOf(str2);
-                                                LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
+                                                int Pos1 = mm.Body.IndexOf(str1) + str1.Length;
+                                                int Pos2 = mm.Body.IndexOf(str2);
+                                                LinkText = mm.Body.Substring(Pos1, Pos2 - Pos1);
 
                                                 urlSelfService = "<br><a href='" + siteSelfService + "'>" + LinkText + "</a>";
                                             
@@ -1365,15 +1365,15 @@ namespace DH.Helpdesk.Services.Services
                                             var urlHelpdesk = "";
                                             var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + caseId.ToString();
 
-                                            if (m.Body.Contains("[/#99]"))
+                                            if (mm.Body.Contains("[/#99]"))
                                             {
                                                 string str1 = "[#99]";
                                                 string str2 = "[/#99]";
                                                 string LinkText;
 
-                                                int Pos1 = m.Body.IndexOf(str1) + str1.Length;
-                                                int Pos2 = m.Body.IndexOf(str2);
-                                                LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
+                                                int Pos1 = mm.Body.IndexOf(str1) + str1.Length;
+                                                int Pos2 = mm.Body.IndexOf(str2);
+                                                LinkText = mm.Body.Substring(Pos1, Pos2 - Pos1);
 
                                                 urlHelpdesk = "<br><a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
                              
