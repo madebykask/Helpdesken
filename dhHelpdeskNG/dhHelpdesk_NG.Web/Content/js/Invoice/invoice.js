@@ -2,8 +2,9 @@
     dhHelpdesk = {};
 
 $(function () {    
-    _INVOICE_IDLE = 'invoice_idle';
-    _INVOICE_SAVING = 'invoice_saving';
+    _INVOICE_IDLE = 0;
+    _INVOICE_SAVING = 1;
+
     var regionUrl = '/Organization/GetRegions/';
     var departmentUrl = '/Organization/GetDepartments/';
     var ouUrl = '/Organization/GetOUs/';
@@ -31,6 +32,7 @@ $(function () {
 
     var creditAlertToShow = "";
     var creditAlert = true;
+
 
     dhHelpdesk.Const = {
         _ASC_SORT : 1,
@@ -418,6 +420,8 @@ $(function () {
         CustomerId: null,
 
         OrderActionsInstance: null,
+
+        invoiceButtonPureCaption: "",
 
         ResetAddArticlePlace: function(){
             var articleEl = this._container.find(".chosen-select.articles-params-article");
@@ -1467,7 +1471,7 @@ $(function () {
             caseButtonsToDisable.removeClass('disabled');
             caseButtonsToDisable.css("pointer-events", "");
             that.CloseContainer();
-            $('#InvoiceModuleBtnOpen').click();                        
+            $('#InvoiceModuleBtnOpen').click();
         },
 
         OpenInvoiceWindow: function (message) {            
@@ -1526,14 +1530,15 @@ $(function () {
                         }
                     }
                 }                
-            });
-            
+            });                        
+
             articlesSelectContainer.find("select.chosen-select").addClass("min-width-500 max-width-500 case-invoice-multiselect");            
             
             caseButtonsToDisable.addClass("disabled");
             caseButtonsToDisable.css("pointer-events", "none");
             th._container.dialog("open");
             
+           
 
             if (th.IsFinishedCase()) {
                 $('.case-invoice-container *').attr("disabled", true);
@@ -1552,12 +1557,15 @@ $(function () {
             th.CaseInvoicesElement = $(document).find("." + e.attr("data-invoice-articles-for-save"));
             th.DateFormat = e.attr("data-invoice-date-format");
             var ButtonCaption = e.attr("data-invoice-Caption");
+            this.invoiceButtonPureCaption = ButtonCaption;
+
+            var ButtonCaptionExtra = e.attr("data-invoice-CaptionExtra");
             var ButtonHint = e.attr("data-invoice-Hint");
             
             var button = $(document.createElement("input"))
                 .attr("id", "InvoiceModuleBtnOpen")
                 .attr("type", "button")
-                .attr("value", ButtonCaption)
+                .attr("value", ButtonCaption + " " + ButtonCaptionExtra)
                 .attr("title", ButtonHint)
                 .addClass("btn");
 
@@ -1672,6 +1680,15 @@ $(function () {
                 if (allOrders[i].CreditForOrder_Id == orderId)
                     ret.push(allOrders[i]);
             }            
+            return ret.sort(function (a1, a2) { return a1.Number - a2.Number; });
+        },
+
+        GetInvoicedOrders: function (allOrders) {
+            var ret = [];
+            for (var i = 0; i < allOrders.length; i++) {
+                if (allOrders[i].InvoicedByUserId != null)
+                    ret.push(allOrders[i]);
+            }
             return ret.sort(function (a1, a2) { return a1.Number - a2.Number; });
         },
 
@@ -3730,6 +3747,17 @@ $(function () {
                     }
                  
                     dhHelpdesk.CaseArticles.ApplyChanges();
+
+
+                    var ordersCount = dhHelpdesk.CaseArticles.allVailableOrders.length;
+                    var sentCount = "";
+                    var invoicedOrders = dhHelpdesk.CaseArticles.GetInvoicedOrders(dhHelpdesk.CaseArticles.allVailableOrders)
+                    if (invoicedOrders != null)
+                        sentCount = invoicedOrders.length;
+                    
+                    if (ordersCount>0)
+                        $('#InvoiceModuleBtnOpen').val(dhHelpdesk.CaseArticles.invoiceButtonPureCaption + " (" + sentCount + "/" + ordersCount + ")");
+
                     if (callBack != undefined && callBack != null) {                        
                         callBack(obj);
                     }

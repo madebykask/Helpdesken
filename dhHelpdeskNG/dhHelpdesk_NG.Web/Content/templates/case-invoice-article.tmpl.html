@@ -28,10 +28,18 @@
             <td>{{:Number}}</td>
             <td>{{:Name}}</td>
             <td>{{:NameEng}}</td>
-            <td style='text-align: right;' >{{:Amount}}</td>
+            {{if IsCredited}}
+                <td style='text-align: right;' >-{{:Amount}}</td>
+            {{else}}
+                <td style='text-align: right;' >{{:Amount}}</td>
+            {{/if}}
             <td>{{:UnitName}}</td>
             <td class="article-ppu-fixed" style='text-align: right;' >{{:Ppu}}</td>
-            <td colspan="2" class="article-total" style="text-align: right;">{{:Total}}</td>            
+            {{if IsCredited}}
+                <td colspan="2" class="article-total" style="text-align: right;">-{{:Total}}</td>
+            {{else}}
+                <td colspan="2" class="article-total" style="text-align: right;">{{:Total}}</td>
+            {{/if}}
         </tr>
     {{else}}
         <tr data-id='{{:Id}}' title='{{:Description}}'>
@@ -52,11 +60,12 @@
             <td>
                 <input id="ArtPrice_{{:Id}}" onchange='dhHelpdesk.CaseArticles.UpdateArticle($(this).parent().parent())' type='text' maxlength='5' class='article-ppu input-small-important' value='{{:Ppu}}' />
             </td>
-            {{/if}}
-            <td class='article-total'>{{:Total}}</td>
+            {{/if}}            
              
             {{if IsCredited}}              
+                <td class='article-total'>-{{:Total}}</td>
             {{else}}
+                <td class='article-total'>{{:Total}}</td>
                 <td style="width:5%">
                     <a href='javascript:void(0);' onclick='dhHelpdesk.CaseArticles.DeleteArticle($(this).parent().parent())' class='btn btn-small'>x</a>
                 </td>

@@ -25,9 +25,17 @@
         <tr>
             {{if IsInvoiced}}
                 <td colspan="6" style='text-align: left;'><span class='textbold'>{{:InvoicedByTitle}}: {{:InvoicedByUser}} - {{:InvoiceDate}}</span>  {{:InvoiceTime}}</td>
-                <td colspan="2" class='textbold' style='text-align: right;'>{{:TotalLabel}}: {{:Total}}</td>                
-            {{else}}        
-                <td colspan="8" class='textbold' style='text-align: right;'>{{:TotalLabel}}: {{:Total}}</td>        
+                 {{if IsCredited }}
+                    <td colspan="2" class='textbold' style='text-align: right;'>{{:TotalLabel}}: -{{:Total}}</td>                
+                 {{else}}
+                    <td colspan="2" class='textbold' style='text-align: right;'>{{:TotalLabel}}: {{:Total}}</td>                
+                 {{/if}}
+            {{else}}  
+                {{if IsCredited }}      
+                    <td colspan="8" class='textbold' style='text-align: right;'>{{:TotalLabel}}: -{{:Total}}</td>        
+                {{else}}
+                    <td colspan="8" class='textbold' style='text-align: right;'>{{:TotalLabel}}: {{:Total}}</td>        
+                {{/if}}
             {{/if}}
         </tr>
     {{/for}}

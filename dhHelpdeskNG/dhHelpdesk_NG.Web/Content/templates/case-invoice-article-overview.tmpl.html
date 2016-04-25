@@ -16,6 +16,10 @@
         </td>
         <td class="case-invoice-colnarrow">{{:UnitName}}</td>
         <td class="case-invoice-colnarrow" style='text-align: right;' >{{:DisplayPpu}}</td>
-        <td style="text-align: right;" class="case-invoice-colextranarrow" colspan="2">{{:Total}}</td>                   
+        {{if IsCredited }}
+            <td style="text-align: right;" class="case-invoice-colextranarrow" colspan="2">-{{:Total}}</td>
+        {{else}}
+            <td style="text-align: right;" class="case-invoice-colextranarrow" colspan="2">{{:Total}}</td>
+        {{/if}}
     </tr>              
 {{/if}}  
