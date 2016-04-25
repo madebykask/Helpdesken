@@ -7,6 +7,9 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.EditModel
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
+    using DH.Helpdesk.Web.Infrastructure;
+    using System;
+    using System.Linq;
 
     public class ComputerModuleGridModel : IndexModel
     {
@@ -15,9 +18,9 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.EditModel
             this.Overviews = overviews;
             this.ModuleType = (int)moduleType;
 
-            this.ModuleTypes = new ModuleTypes().ToSelectList(((int)moduleType).ToString(CultureInfo.InvariantCulture));
+            this.ModuleTypes = new ModuleTypes().MapToSelectList(moduleType.GetCaption());
         }
-
+        
         public override Tabs Tab
         {
             get
