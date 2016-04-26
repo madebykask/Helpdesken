@@ -568,7 +568,7 @@ function CaseInitForm() {
 
     $('#case__Priority_Id').change(function () {
         $.post('/Cases/ChangePriority/', { 'id': $(this).val() }, function (data) {
-            if (data.ExternalLogText != null) {
+            if (data.ExternalLogText != null && data.ExternalLogText != "") {
                 $('#CaseLog_TextExternal').val(data.ExternalLogText);
             }
         }, 'json');

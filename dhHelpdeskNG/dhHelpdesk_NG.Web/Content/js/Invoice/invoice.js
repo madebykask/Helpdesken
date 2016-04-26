@@ -371,6 +371,8 @@ $(function () {
     }
 
     dhHelpdesk.CaseArticles = {
+        LastSelectedTab: null,
+
         MaxDescriptionCount: 50,
 
         DefaultAmount: 1,        
@@ -606,6 +608,11 @@ $(function () {
             if (this.CaseId == undefined || this.CaseId == null || this.IsNewCase())
                 return;
 
+            // Keep order id to show order tab after reload
+            var curOrder = this.GetCurrentOrder();
+            if (curOrder != null)
+                dhHelpdesk.CaseArticles.LastSelectedTab = curOrder.Id;            
+
             for (var i = 0; i < this.allVailableOrders.length; i++) {                
                 var order = dhHelpdesk.CaseArticles.GetOrder(this.allVailableOrders[i].Id);
                 if (!order.InvoiceValidate())
@@ -673,7 +680,7 @@ $(function () {
         },        
 
         ShowAlreadyInvoicedMessage: function () {
-            dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.Translate("Den här ordern är redan fakturerad. Du kan inte utföra den här aktiviteten."));
+            dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.Translate("Den här ordern är redan skickat. Du kan inte utföra den här aktiviteten."));
         },
        
         CreateBlankOrder: function () {
@@ -769,7 +776,7 @@ $(function () {
                         }
                     }
                     else {
-                        dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.Translate("Du måste spara ärendet en gång innan du kan fakturera") + ".");
+                        dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.Translate("Du måste spara ärendet en gång innan du kan skicka") + ".");
                     }
                 }
                 else {
@@ -1154,7 +1161,7 @@ $(function () {
             };
 
             var get_creditOrderButton = function (orderId) {                
-                 return $(document).find("#actions-credit-order_" + orderId);
+                return $(document).find("#actions-credit-order_" + orderId);
             };
 
             that.get_actionsContainer = get_actionsContainer;
@@ -1277,7 +1284,7 @@ $(function () {
             var caseNumber = $("#case__CaseNumber").val();
 
             th._container.dialog({
-                title: dhHelpdesk.Common.Translate("Artiklar att fakturera") + "  (" +
+                title: dhHelpdesk.Common.Translate("Artiklar att skickat") + "  (" +
                        dhHelpdesk.Common.Translate("Ärende") + ": "+ caseNumber +  " - " + 
                        dhHelpdesk.Common.Translate("Projekt") + ": "+ projectCode + ")",
                 modal: true,
@@ -1998,7 +2005,7 @@ $(function () {
                         // Raise OnChangeOrder event
                         dhHelpdesk.System.RaiseEvent("OnChangeOrder", [th.GetCurrentOrder()]);
                     }
-                });
+                });                
 
                 dhHelpdesk.System.OnEvent("OnAddArticle", function (e, order, article) {                   
                     th.ShowSummary();
@@ -3082,8 +3089,8 @@ $(function () {
             this.SummaryTitle = dhHelpdesk.Common.Translate("Översikt");
             this.TotalLabel = dhHelpdesk.Common.Translate("Total");            
             this.TotalAllLabel = dhHelpdesk.Common.Translate("Totalt alla ordrar");
-            this.TotalInvoicedLabel = dhHelpdesk.Common.Translate("Totalt fakturerade ordrar");
-            this.TotalNotInvoicedLabel = dhHelpdesk.Common.Translate("Totalt ej fakturerade ordrar");
+            this.TotalInvoicedLabel = dhHelpdesk.Common.Translate("Totalt skickat ordrar");
+            this.TotalNotInvoicedLabel = dhHelpdesk.Common.Translate("Totalt ej skickat ordrar");
             this.Total = null;
             this.TotalInvoiced = null;
             this.TotalNotInvoiced = null;
@@ -3107,7 +3114,7 @@ $(function () {
             this.TotalLabel = dhHelpdesk.Common.Translate("Total");
             this.TotalAllLabel = dhHelpdesk.Common.Translate("Totalt alla ordrar");
             this.ReferenceTitle = dhHelpdesk.Common.Translate("Orderreferens");
-            this.InvoicedByTitle = dhHelpdesk.Common.Translate("Fakturerad av");
+            this.InvoicedByTitle = dhHelpdesk.Common.Translate("Skickat av");
 
             //LABELS FOR initiator data
             this.ReportedByTitle = dhHelpdesk.Common.TranslateCaseFields("ReportedBy");
@@ -3175,9 +3182,9 @@ $(function () {
 
             this.attachedFilesTitle = dhHelpdesk.Common.Translate("Bifogade Filer");
             this.attachFilesTitle = dhHelpdesk.Common.Translate("Lägg till");
-            this.doInvoiceTitle = dhHelpdesk.Common.Translate("Fakturera");
+            this.doInvoiceTitle = dhHelpdesk.Common.Translate("Skicka");
             this.doCreditTitle = dhHelpdesk.Common.Translate("Kreditera");
-            this.SavingMessage = dhHelpdesk.Common.Translate("Saving...");            
+            this.SavingMessage = dhHelpdesk.Common.Translate("Spara...");            
 
             this.AddArticle = function (article) {
                 this.Articles.push(article);
@@ -3479,6 +3486,27 @@ $(function () {
             return that;
         },
 
+        ChangeTab: function (orderId) {
+            if (orderId != null) {
+                var tabs = $("#case-invoice-orders-tabs");
+                tab = tabs.find("[href='#case-invoice-order" + orderId + "']");
+                tab.click();
+                var curOrder = this.GetCurrentOrder()                
+                dhHelpdesk.CaseArticles.LastSelectedTab = null;
+            }            
+        },
+
+        UpdateInvoiceButtonStatistics: function () {
+            var ordersCount = dhHelpdesk.CaseArticles.allVailableOrders.length;
+            var sentCount = "";
+            var invoicedOrders = dhHelpdesk.CaseArticles.GetInvoicedOrders(dhHelpdesk.CaseArticles.allVailableOrders)
+            if (invoicedOrders != null)
+                sentCount = invoicedOrders.length;
+
+            if (ordersCount > 0)
+                $('#InvoiceModuleBtnOpen').val(dhHelpdesk.CaseArticles.invoiceButtonPureCaption + " (" + sentCount + "/" + ordersCount + ")");
+        },
+
         CaseFiles: null        
     }
 
@@ -3746,22 +3774,17 @@ $(function () {
                         }
                     }
                  
-                    dhHelpdesk.CaseArticles.ApplyChanges();
-
-
-                    var ordersCount = dhHelpdesk.CaseArticles.allVailableOrders.length;
-                    var sentCount = "";
-                    var invoicedOrders = dhHelpdesk.CaseArticles.GetInvoicedOrders(dhHelpdesk.CaseArticles.allVailableOrders)
-                    if (invoicedOrders != null)
-                        sentCount = invoicedOrders.length;
-                    
-                    if (ordersCount>0)
-                        $('#InvoiceModuleBtnOpen').val(dhHelpdesk.CaseArticles.invoiceButtonPureCaption + " (" + sentCount + "/" + ordersCount + ")");
+                    dhHelpdesk.CaseArticles.ApplyChanges();                    
+                    dhHelpdesk.CaseArticles.UpdateInvoiceButtonStatistics();
 
                     if (callBack != undefined && callBack != null) {                        
                         callBack(obj);
                     }
-                    dhHelpdesk.CaseArticles.SetInvoiceState(_INVOICE_IDLE);                    
+
+                    // Change tab to the last selected tab (Doesn't work for new order)
+                    dhHelpdesk.CaseArticles.ChangeTab(dhHelpdesk.CaseArticles.LastSelectedTab);
+                    
+                    dhHelpdesk.CaseArticles.SetInvoiceState(_INVOICE_IDLE);
 
                 });
             });
