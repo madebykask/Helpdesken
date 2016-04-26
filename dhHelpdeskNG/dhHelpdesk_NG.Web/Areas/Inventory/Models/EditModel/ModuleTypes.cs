@@ -27,7 +27,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.EditModel
         {
             var list =
                 (from ModuleTypes d in Enum.GetValues(enumeration.GetType())
-                 select new { ID = Convert.ToInt32(d), Name = Translation.GetCoreTextTranslation(d.GetCaption()) }).ToList();
+                 select new { ID = Convert.ToInt32(d), Name = Translation.GetCoreTextTranslation(d.GetCaption()) }).OrderBy(d => d.Name).ToList();
             return new SelectList(list, "ID", "Name", selected);
         }
 

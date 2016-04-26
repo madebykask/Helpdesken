@@ -32,14 +32,15 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels
 
         private SelectList GetReportList(List<ItemOverview> propertyTypes)
         {
-            var reportTypes = from Enum d in Enum.GetValues(typeof(ReportTypes))
+            var reportTypes = from ReportTypes d in Enum.GetValues(typeof(ReportTypes))
                               select
                                   new
                                   {
                                       Value = Convert.ToInt32(d).ToString(CultureInfo.InvariantCulture),
-                                      Name = Translation.Get(d.ToString())
+                                      Name = Translation.GetCoreTextTranslation(d.GetCaption())
                                   };
-            var reportTypeList = reportTypes.Union(propertyTypes.Select(x => new { x.Value, x.Name }));
+
+            var reportTypeList = reportTypes.OrderBy(x => x.Name).Union(propertyTypes.Select(x => new { x.Value, x.Name }));
             var reportTypeSelectList = new SelectList(reportTypeList, "Value", "Name");
 
             return reportTypeSelectList;
