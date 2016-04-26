@@ -509,9 +509,23 @@
                             <div style="@Model.caseFieldSettings.displayAboutUserInfoHtml()"  class='@(Model.case_.Id != 0 ? "regarding-block hideshowregarding" : "regarding-block hideshow")'>
                                     <h4><a href="#" class="showbtn"><i class="icon-plus-sign"></i></a>
                                         <a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a>
-                                         @Translation.Get("Angående")&nbsp;  @if (Model.case_.IsAbout != null)
-                                                                                                                                                                                                          { @Model.case_.IsAbout.ReportedBy } &nbsp; @if (Model.case_.IsAbout != null)
-                                                                                                                                                                                                                                                     { @Model.case_.IsAbout.Person_Name } </h4>
+                                         @Translation.Get("Angående") -&nbsp;  @if (Model.case_.IsAbout != null && @Model.case_.IsAbout.ReportedBy != null)
+                                                    { @Model.case_.IsAbout.ReportedBy }&nbsp;
+                                                    @if (Model.case_.IsAbout != null && Model.case_.IsAbout.Person_Name != null)
+                                                     {
+                                                         @Model.case_.IsAbout.Person_Name 
+                                                     } &nbsp;
+                                                    @if (Model.case_.IsAbout != null && Model.case_.IsAbout.Department_Id != null)
+                                                     {
+                                                         var curDep = Model.departments.Where(d => d.Id == Model.case_.IsAbout.Department_Id).SingleOrDefault();
+                                                        @curDep.DepartmentName 
+                                                    } &nbsp;
+                                                    @if (Model.case_.IsAbout != null && Model.case_.IsAbout.OU_Id != null)
+                                                     {
+                                                         var curOu = Model.isaboutous.Where(w => w.Id == Model.case_.IsAbout.OU_Id).SingleOrDefault();
+                                                        @curOu.Name 
+                                                    }
+                                    </h4>
                                     <div class="row">
                                         <div class="span12">
                                             <table class="tableform">
