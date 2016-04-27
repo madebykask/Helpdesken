@@ -138,7 +138,7 @@ EditPage.prototype.primaryValidation = function (submitUrl) {
     if (me.invoiceIsActive && me.CaseWillFinish()) {
         $.get('/Cases/IsThereNotInvoicedOrder/', { caseId: me.p.currentCaseId, myTime: Date.now }, function (res) {
             if (res != null && res)
-                dhHelpdesk.cases.utils.showError("You cannot close the case while it has not-invoiced order!");
+                dhHelpdesk.cases.utils.showError(me.p.invoicePreventsToCloseCaseMessage);
             else
                 me.checkAndSave(submitUrl);
         });
@@ -340,51 +340,9 @@ EditPage.prototype.onSaveAndCloseYes = function () {
 };
 
 
-
 EditPage.prototype.ReturnFalse = function () {
     return false;
 };
-
-//EditPage.prototype.InvoiceRulesForClosing = function (type) {
-//    var me = this;
-//    if (me.CaseWillFinish()) {
-//        if (dhHelpdesk.CaseArticles.HasNotInvoicedArticles()) {
-//            var message = dhHelpdesk.CaseArticles.translate("Du får inte avsluta ett ärende med invalda fast ofakturerade artiklar. Var god granska dina ordrar.");
-//            ShowToastMessage(message);
-//            return false;
-//        }
-//        else {
-//            if ($('#InvoiceModuleBtnOpen').is(':visible')) { //productarea invoicebtn is visible
-//                if (!dhHelpdesk.CaseArticles.HasInvoicedArticles() && !dhHelpdesk.CaseArticles.HasNotInvoicedArticles()) {
-//                    var message = dhHelpdesk.CaseArticles.translate("Produktområdet har länkade artiklar men inga artiklar är invalda. Vill du verkligen avsluta ärendet?");
-//                    debugger
-//                    var functionOnYes = "";
-//                    if ("save") {
-//                        functionOnYes = me.onSaveYes;
-//                    }
-//                    else if ("savenew") {
-//                        functionOnYes = me.onSaveAndNewYes;
-//                    }
-//                    else if ("saveclose")
-//                    {
-//                        functionOnYes = me.onSaveAndCloseYes;
-//                    }
-//                    me.confirmDialog($("<div>" + message + "<div>"), functionOnYes, EditPage.prototype.ReturnFalse);
-//                }
-//                else {
-//                    return true;
-//                }
-//            }
-//            else {
-//                return true;
-//            }
-//        }
-//    }
-//    else {
-//        return true;
-//    }
-//};
-
 
 EditPage.prototype.onSaveClick = function () {
     var me = this;

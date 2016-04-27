@@ -36,7 +36,7 @@ function ChangeCaseLanguageTo(newLanguageId, updateDropDown) {
     $("#case_.RegLanguage_Id").val(newLanguageId);
 }
 
-function ShowToastMessage(message, msgType, isSticky) {
+function ShowToastMessage(message, msgType, isSticky) {    
     var _Sticky = false;
     if (isSticky)
         _Sticky = true;
@@ -46,7 +46,7 @@ function ShowToastMessage(message, msgType, isSticky) {
         position: 'top-center',
         type: msgType,
         closeText: '',
-        stayTime: 3000,
+        stayTime: 5000,
         inEffectDuration: 1000,
         close: function () {
             //console.log("toast is closed ...");

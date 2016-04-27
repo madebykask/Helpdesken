@@ -22,6 +22,7 @@
         userCaseLocker: '@Model.CaseLock.UserId',
         extendValue: '@Model.CaseLock.ExtendValue',
         timerInterval: '@Model.CaseLock.TimerInterval',
+        invoicePreventsToCloseCaseMessage: '@Translation.Get("Du kan inte avsluta ärendet eftersom det finns öppna order.")',        
         caseLockChecker: '@Url.Content("~/Cases/IsCaseAvailable/")',
         caseLockExtender: '@Url.Content("~/Cases/ReExtendCaseLock/")',
         caseActiveDataChecker: '@Url.Content("~/Cases/CheckCaseForActiveData/")',
