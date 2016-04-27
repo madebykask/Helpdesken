@@ -37,9 +37,9 @@
         <div class="tab-content overflow-visible">
             <div id="fragment-1" class="tab-pane tab-pane-border active">
                 @using (Ajax.BeginForm("GetReportOptions", "Report", null,
-                    new AjaxOptions { UpdateTargetId = "reportContent", OnComplete = "onLoadOptions" }, new { id = "getReportOptionsForm" }))
+                    new AjaxOptions { UpdateTargetId = "reportContent", OnComplete = "onLoadOptions" }, new { id = "getReportOptionsForm", @class = "nobm" }))
                 {
-                    <table class="tableform">    
+                    <table class="tableform nobm">    
                         <tr>
                             <td class="span3">@Translation.Get("Rapport")</td>
                             <td>@Html.DropDownListFor(m => m.ReportId, Model.Reports)</td>
