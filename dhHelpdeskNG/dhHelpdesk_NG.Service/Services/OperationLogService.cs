@@ -13,6 +13,7 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.OperationLogs;
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications.OperationLog;
 
     using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
     using DH.Helpdesk.BusinessData.Models.Case;
@@ -404,7 +405,13 @@ namespace DH.Helpdesk.Services.Services
             {
                 var operationLogRepository = uow.GetRepository<OperationLog>();
 
-                return operationLogRepository.GetAll()
+                var query = operationLogRepository.GetAll();
+
+                query = query
+                       .GetFromDate()
+                       .GetUntilDate();
+              
+                return query
                         .RestrictByWorkingGroupsAndUsers(this.workContext)
                         .GetForStartPage(customers, count, forStartPage)
                         .MapToOverviews();

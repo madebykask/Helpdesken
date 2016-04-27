@@ -101,9 +101,13 @@
             CS.Text_Filter = OLSearch_Filter.Text_Filter;
            
             var c = this._operationLogService.SearchAndGenerateOperationLog(SessionFacade.CurrentCustomer.Id, CS );
-            
+
             if (OLSearch_Filter != null)
+            {
                 SessionFacade.CurrentOperationLogSearch = CS;
+                if (CS.PeriodTo != null)
+                    CS.PeriodTo = CS.PeriodTo.Value.AddDays(-1);
+            }
 
             var model = this.GetIndex();
 

@@ -218,6 +218,7 @@
     <Compile Include="BusinessLogic\Specifications\Licenses\LicenseSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Licenses\ProductSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Links\LinkSpecifications.cs" />
+    <Compile Include="BusinessLogic\Specifications\OperationLog\OperationLogSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Orders\OrderEmailLogSpecificatons.cs" />
     <Compile Include="BusinessLogic\Specifications\Orders\OrderFieldSettingsSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Orders\OrderHistorySpecifications.cs" />
