@@ -12,14 +12,10 @@
                         onchange='dhHelpdesk.CaseArticles.UpdateArticle($(this).parent().parent())' 
                         type='text' class='width80 article-name' maxlength='50' value='{{:Name}}' />
                 <span id="DescriptionCount_{{:Id}}" style="color:GrayText;font-size:smaller">{{:DescriptionCount}} </span>
-            </td>
-             {{if IsCredited}}
-                
-            {{else}}
-                <td style="width:5%">
-                    <a href='javascript:void(0);' onclick='dhHelpdesk.CaseArticles.DeleteArticle($(this).parent().parent())' class='btn btn-small'>x</a>
-                </td>
-            {{/if}} 
+            </td>             
+            <td style="width:5%">
+                <a href='javascript:void(0);' onclick='dhHelpdesk.CaseArticles.DeleteArticle($(this).parent().parent())' class='btn btn-small'>x</a>
+            </td>            
         </tr>
     {{/if}}                    
 {{else}}
@@ -54,22 +50,27 @@
                 <input id="article-amount_{{:Id}}" onchange='dhHelpdesk.CaseArticles.UpdateArticle($(this).parent().parent())' type='text' maxlength='5'  class='article-amount input-mini-important' value='{{:Amount}}' />                
             </td>
             <td>{{:UnitName}}</td>
-            {{if IsArticlePpuExists}}
-            <td class="article-ppu-fixed">{{:Ppu}}</td>
+
+            {{if IsCredited}}
+                    <td class="article-ppu-fixed" style="text-align: right;">{{:Ppu}}</td>
             {{else}}
-            <td>
-                <input id="ArtPrice_{{:Id}}" onchange='dhHelpdesk.CaseArticles.UpdateArticle($(this).parent().parent())' type='text' maxlength='5' class='article-ppu input-small-important' value='{{:Ppu}}' />
-            </td>
-            {{/if}}            
-             
+                {{if IsArticlePpuExists}}                
+                    <td class="article-ppu-fixed">{{:Ppu}}</td>                
+                {{else}}
+                <td>
+                    <input id="ArtPrice_{{:Id}}" onchange='dhHelpdesk.CaseArticles.UpdateArticle($(this).parent().parent())' type='text' maxlength='5' class='article-ppu input-small-important' value='{{:Ppu}}' />
+                </td>
+                {{/if}}
+            {{/if}}
+
             {{if IsCredited}}              
                 <td class='article-total'>-{{:Total}}</td>
             {{else}}
-                <td class='article-total'>{{:Total}}</td>
-                <td style="width:5%">
-                    <a href='javascript:void(0);' onclick='dhHelpdesk.CaseArticles.DeleteArticle($(this).parent().parent())' class='btn btn-small'>x</a>
-                </td>
+                <td class='article-total'>{{:Total}}</td>               
             {{/if}}
+            <td style="width:5%">
+                <a href='javascript:void(0);' onclick='dhHelpdesk.CaseArticles.DeleteArticle($(this).parent().parent())' class='btn btn-small'>x</a>
+            </td>
         </tr>
     {{/if}}                                
 {{/if}}  

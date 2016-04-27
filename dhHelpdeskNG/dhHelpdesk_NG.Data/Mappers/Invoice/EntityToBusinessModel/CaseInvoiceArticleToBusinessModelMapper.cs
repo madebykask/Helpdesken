@@ -33,7 +33,8 @@
                         entity.Name,
                         entity.Amount,
                         entity.Ppu,
-                        entity.Position);
+                        entity.Position,
+                        entity.CreditedForArticle_Id);
         }
     }
 }

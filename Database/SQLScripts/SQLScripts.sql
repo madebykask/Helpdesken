@@ -6,6 +6,12 @@ Where cs.Id not in (Select CaseSolution_Id from tblCaseSolutionFieldSettings csf
 					where cs.Id = csf.CaseSolution_Id and FieldName_Id = 54)
 
 
+IF COL_LENGTH('tblCaseInvoiceArticle','CreditedForArticle_Id') IS NULL
+begin
+    alter table tblCaseInvoiceArticle 
+	add [CreditedForArticle_Id] int null
+end
+GO
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.23'

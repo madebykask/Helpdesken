@@ -12,13 +12,9 @@
                         <th>{{:PpuHeader}} SEK</th>                        
                         {{if IsInvoiced }}
                             <th colspan="2" style="text-align: right;"> {{:TotalHeader}}</th>
-                        {{else}}
-                            {{if IsCredited }}
-                                <th colspan="2" style="text-align: right;"> {{:TotalHeader}} </th>
-                            {{else}}
-                                <th colspan="1" style="text-align: right;"> {{:TotalHeader}} </th>
-                                <th class="case-invoice-colextranarrow"></th>
-                            {{/if}}
+                        {{else}}                            
+                            <th colspan="1" style="text-align: right;"> {{:TotalHeader}} </th>
+                            <th class="case-invoice-colextranarrow"></th>                            
                         {{/if}}
                     </tr>
                     <tbody class='articles-rows'>
