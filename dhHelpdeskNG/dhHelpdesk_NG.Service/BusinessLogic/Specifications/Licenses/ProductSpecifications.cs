@@ -19,6 +19,18 @@
             return query;
         }
 
+        public static IQueryable<Product> GetProductsByIDs(this IQueryable<Product> query, int[] products)
+        {
+            if (products == null || !products.Any())
+            {
+                return query;
+            }
+
+            query = query.Where(p => products.Contains(p.Id));
+            
+            return query;
+        }
+
         public static IQueryable<Product> GetDepartmentsProducts(this IQueryable<Product> query, 
                                                                  int[] departments,
                                                                  IQueryable<Software> software,

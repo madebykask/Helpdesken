@@ -21,7 +21,7 @@
             this.unitOfWorkFactory = unitOfWorkFactory;
         }
 
-        public ProductOverview[] GetProducts(int customerId, int[] regions, int[] departments)
+        public ProductOverview[] GetProducts(int customerId, int[] regions, int[] departments, int[] products)
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {
@@ -34,6 +34,7 @@
 
                 var overviews = productsRepository.GetAll()
                                 .GetByCustomer(customerId)
+                                .GetProductsByIDs(products)
                                 .GetRegionsProducts(regions)
                                 .GetDepartmentsProducts(departments, softwares, computers)
                                 .MapToOverviews(softwares, computers, regions, departments);
@@ -48,6 +49,7 @@
             {
                 var regionRepository = uow.GetRepository<Region>();
                 var departmentRepository = uow.GetRepository<Department>();
+                var productRepository = uow.GetRepository<Product>();
 
                 var regions = regionRepository.GetAll()
                                 .GetByCustomer(customerId);
@@ -55,7 +57,10 @@
                 var departments = departmentRepository.GetAll()
                                 .GetByCustomer(customerId);
 
-                return ProductMapper.MapToFilterData(regions, departments);
+                var products = productRepository.GetAll()
+                              .GetByCustomer(customerId);
+
+                return ProductMapper.MapToFilterData(regions, departments, products);
             }
         }
 

@@ -7,10 +7,12 @@
     {
         public ProductsFilterData(
                 ItemOverview[] regions, 
-                ItemOverview[] departments)
+                ItemOverview[] departments,
+                ItemOverview[] products)
         {
             this.Departments = departments;
             this.Regions = regions;
+            this.Products = products;
         }
 
         [NotNull]
@@ -18,5 +20,8 @@
 
         [NotNull]
         public ItemOverview[] Departments { get; private set; }
+
+        [NotNull]
+        public ItemOverview[] Products { get; private set; }
     }
 }

@@ -7,7 +7,8 @@
         ProductOverview[] GetProducts(
                                 int customerId,
                                 int[] regions,
-                                int[] departments);
+                                int[] departments,
+                                int[] products);
 
         ProductsFilterData GetProductsFilterData(int customerId);
 
