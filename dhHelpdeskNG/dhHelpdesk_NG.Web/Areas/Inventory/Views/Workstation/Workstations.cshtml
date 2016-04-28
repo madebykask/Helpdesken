@@ -23,13 +23,10 @@
     @Html.HiddenFor(m => m.Filter.SortField.Name, new { id = "sortFieldName" })
     @Html.HiddenFor(m => m.Filter.SortField.SortBy, new { id = "sortFieldBy" })
 
+<div class="expanded-search-content">    
     <table class="tableform">
         @if (Model.Settings.DepartmnetFieldSetting.IsShow)
         {
-            @*<tr>
-                <td class="span3">@Translation.Get("Område")</td>
-                <td>@Html.DropDownListFor(m => m.Filter.RegionId, Model.Regions, string.Empty, new { id = "region_dropdown" })</td>
-            </tr>*@
             <tr>
                 <td class="span3">@Translation.Get(Model.Settings.DepartmnetFieldSetting.Caption)</td>
                 <td>
@@ -95,16 +92,42 @@
                 @Html.CheckBoxFor(m => m.Filter.IsShowScrapped, new { @class = "switchcheckbox" })
             </td>
         </tr>
+   </table>
+</div>  
+<div>
+    <table class="tableform">
         <tr>
             <td class="span3">
                 @Html.LabelFor(m => m.Filter.SearchFor)
             </td>
             <td>
-                @Html.TextBoxFor(m => m.Filter.SearchFor) <input type="submit" value="@Translation.Get("Sök")" class="btn" />
+                @Html.TextBoxFor(m => m.Filter.SearchFor) <input type="submit" value="@Translation.Get("Sök")" class="btn" />&nbsp;<i class='icon-plus-sign search-expand-button' style="cursor: pointer"></i>
+              
             </td>
         </tr>
     </table>
+</div>
 }
 <div id="grid_container">
     @Html.Action("WorkstationsGrid", "Workstation", new { filter = Model.Filter })
 </div>
+<script type="text/javascript">
+
+    $(".expanded-search-content").hide();
+   
+    $(function () {
+        $(".search-expand-button").click(function () {
+            //event.stopPropagation();
+            var $target = $(event.target);
+            $(".expanded-search-content").toggle();
+
+            if ($target.closest("i").hasClass('icon-minus-sign')) {
+                $target.closest("i").removeClass('icon-minus-sign').addClass('icon-plus-sign');
+            }
+            else {
+                $target.closest("i").removeClass('icon-plus-sign').addClass('icon-minus-sign');
+            }
+        });
+    });
+
+</script>
