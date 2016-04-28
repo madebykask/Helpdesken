@@ -45,16 +45,12 @@
                 @if (Model.UserStringId.Show)
                 {
                     @Html.EditorFor(m => m.UserStringId, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "user_dialog_textbox" } } })
-                    <tr>
+                   <tr>
                         <td class="span3"></td>
                         <td class="span9">
                             @if (!Model.UserStringId.IsReadOnly)
                             {
                                 <input type="button" class="btn" id="user_dialog_button" value="@Translation.Get("Sök")" />
-                                if (computerId != null)
-                                {
-                                    <input type="button" class="btn" id="history_dialog_button" value="@Translation.Get("Historik")" />
-                                }
                             }
                         </td>
                     </tr>

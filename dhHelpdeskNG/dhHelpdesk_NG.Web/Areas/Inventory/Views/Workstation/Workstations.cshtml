@@ -26,10 +26,10 @@
     <table class="tableform">
         @if (Model.Settings.DepartmnetFieldSetting.IsShow)
         {
-            <tr>
+            @*<tr>
                 <td class="span3">@Translation.Get("Område")</td>
                 <td>@Html.DropDownListFor(m => m.Filter.RegionId, Model.Regions, string.Empty, new { id = "region_dropdown" })</td>
-            </tr>
+            </tr>*@
             <tr>
                 <td class="span3">@Translation.Get(Model.Settings.DepartmnetFieldSetting.Caption)</td>
                 <td>
@@ -93,14 +93,6 @@
             </td>
             <td>
                 @Html.CheckBoxFor(m => m.Filter.IsShowScrapped, new { @class = "switchcheckbox" })
-            </td>
-        </tr>
-        <tr>
-            <td class="span3">
-                @Html.LabelFor(m => m.Filter.RecordsOnPage)
-            </td>
-            <td>
-                @Html.TextBoxFor(m => m.Filter.RecordsOnPage)
             </td>
         </tr>
         <tr>
