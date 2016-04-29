@@ -17,11 +17,11 @@
             <th style="text-align: right;" class="case-invoice-colwide" colspan="2">{{:TotalHeader}}</th>                                
         </tr>
         {{for Articles tmpl="caseInvoiceArticleOverview" /}}
-        {{if IsInvoiced}}
-            <tr>
-                <td colspan="8">{{:Persons_Name}} - {{:CostCentre}}</td>
-            </tr>
-        {{/if}}
+        
+        <tr>
+           <td colspan="8">{{:Persons_Name}} - {{:CostCentre}}</td>
+        </tr>
+        
         <tr>
             {{if IsInvoiced}}
                 <td colspan="6" style='text-align: left;'><span class='textbold'>{{:InvoicedByTitle}}: {{:InvoicedByUser}} - {{:InvoiceDate}}</span>  {{:InvoiceTime}}</td>
@@ -41,7 +41,7 @@
     {{/for}}
 </table>
 <div class='textbold' style='text-align: right;'>
-    {{:TotalInvoicedLabel}}: {{:TotalInvoiced}} &nbsp;&nbsp;&nbsp;  
-    {{:TotalNotInvoicedLabel}}: {{:TotalNotInvoiced}} &nbsp;&nbsp;&nbsp;
-    {{:TotalAllLabel}}: {{:Total}}    
+    {{:TotalInvoicedLabel}} &nbsp; {{:TotalInvoiced}} &nbsp;&nbsp;&nbsp;  
+    {{:TotalNotInvoicedLabel}} &nbsp; {{:TotalNotInvoiced}} &nbsp;&nbsp;&nbsp;
+    {{:TotalAllLabel}} &nbsp; {{:Total}}    
 </div>

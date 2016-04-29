@@ -2107,9 +2107,16 @@ $(function () {
                 var orders = this.GetOrders();
                 for (var i = 0; i < orders.length; i++) {
                     var t = orders[i].GetArticlesTotal();
-                    total.Invoiced += t.Invoiced;
-                    total.NotInvoiced += t.NotInvoiced;
-                    total.Total += t.Total;
+                    if (orders[i].CreditForOrder_Id == null) {
+                        total.Invoiced += t.Invoiced;
+                        total.NotInvoiced += t.NotInvoiced;
+                        total.Total += t.Total;
+                    }
+                    else {
+                        total.Invoiced -= t.Invoiced;
+                        total.NotInvoiced -= t.NotInvoiced;
+                        total.Total -= t.Total;
+                    }
                 }
                 return total;
             },
@@ -3133,9 +3140,9 @@ $(function () {
             this.OrderTitle = dhHelpdesk.Common.Translate("Order");
             this.SummaryTitle = dhHelpdesk.Common.Translate("Översikt");
             this.TotalLabel = dhHelpdesk.Common.Translate("Total");            
-            this.TotalAllLabel = dhHelpdesk.Common.Translate("Totalt alla ordrar");
-            this.TotalInvoicedLabel = dhHelpdesk.Common.Translate("Totalt skickat ordrar");
-            this.TotalNotInvoicedLabel = dhHelpdesk.Common.Translate("Totalt ej skickat ordrar");
+            this.TotalAllLabel = dhHelpdesk.Common.Translate("Totalt alla");
+            this.TotalInvoicedLabel = dhHelpdesk.Common.Translate("Totalt skickat");
+            this.TotalNotInvoicedLabel = dhHelpdesk.Common.Translate("Totalt ej skickat");
             this.Total = null;
             this.TotalInvoiced = null;
             this.TotalNotInvoiced = null;
