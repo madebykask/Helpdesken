@@ -876,11 +876,18 @@ $(function () {
             var id = e.attr("data-id");
             var obj = $("#article-amount_" + id);
             var curAmount = parseInt(obj.val());
-            var article = this.GetArticle(id);
+            var article = this.GetArticle(id);            
+            
             if (article != null) {
+                if (curAmount <= 0) {
+                    obj.val(article.Amount);
+                    dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("Value can't be 0"));
+                    return;
+                }
+
                 if (article.Amount != null && article.Order.CreditForOrder_Id != null) {                  
-                    var validatedAmount = this.ValidateAmount(article.Order.Id, article.CreditedForArticle_Id, id, curAmount);
-                    obj.val(validatedAmount);
+                    var validatedAmount = this.ValidateAmount(article.Order.Id, article.CreditedForArticle_Id, id, curAmount);                    
+                    obj.val(validatedAmount);                    
                 }                
                 article.Update();
             }
@@ -2046,13 +2053,14 @@ $(function () {
                     dhHelpdesk.CaseArticles.UpdateAvailableArticles(order.Id, article.Id, true, article);                                                           
                 });                
 
-                dhHelpdesk.System.OnEvent("OnDeleteArticle", function (e, order, articleId) {
+                dhHelpdesk.System.OnEvent("OnDeleteArticle", function (e, order, deletedArticleIds) {
                     if (th.HasArticles()) {
                         th.ShowSummary();
                     } else {
                         th.HideSummary();
                     }
-                    dhHelpdesk.CaseArticles.UpdateAvailableArticles(order.Id, articleId, false, null);
+                    for (i=0; i < deletedArticleIds.length; i++)
+                        dhHelpdesk.CaseArticles.UpdateAvailableArticles(order.Id, deletedArticleIds[i], false, null);
                 });
 
                 // Set handler for OnChangeOrder event
@@ -2222,11 +2230,13 @@ $(function () {
             },
 
             this.DeleteArticle = function (id) {
+                var deletedArticleIds = [];
                 for (var i = 0; i < this._articles.length; i++) {
                     var article = this._articles[i];
                     if (article.Id == id) {
                         this._articles.splice(i, 1);
                         this._deleteFromContainer(article.Id);
+                        deletedArticleIds.push(article.Id);
                         this.EnableAddBlank(this.HasNotBlankArticles());
                         break;
                     }
@@ -2238,18 +2248,19 @@ $(function () {
                     if (!a.IsBlank()) {
                         break;
                     }
-                    articlesForDelete.push(a.Id);
+                    articlesForDelete.push(a.Id);                    
                 }
 
                 for (var j = 0; j < articlesForDelete.length; j++) {
                     var articleForDelete = articlesForDelete[j];
                     this._articles.splice(articleForDelete, 1);
                     this._deleteFromContainer(articleForDelete);
+                    deletedArticleIds.push(articleForDelete);
                 }
 
                 this.UpdateTotal();
-
-                dhHelpdesk.System.RaiseEvent("OnDeleteArticle", [this, id]);
+                 
+                dhHelpdesk.System.RaiseEvent("OnDeleteArticle", [this, deletedArticleIds]);
             },
 
             this.GetSortedArticles = function () {
@@ -2976,7 +2987,11 @@ $(function () {
                 }
 
                 var totalPrice = this.GetTotal().toString();
-                this.Container.find(".article-total").text(dhHelpdesk.CaseArticles.DoDelimit(totalPrice));
+                var minusSign = "";
+                if (this.CreditedForArticle_Id != null)
+                    minusSign = "-";
+
+                this.Container.find(".article-total").text(minusSign + dhHelpdesk.CaseArticles.DoDelimit(totalPrice));
                 this.Order.UpdateTotal();                
             },
 

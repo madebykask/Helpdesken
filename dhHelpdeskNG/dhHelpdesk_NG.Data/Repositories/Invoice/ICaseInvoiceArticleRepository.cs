@@ -11,7 +11,7 @@
 
         CaseInvoiceOrder GetCaseInvoiceOrder(int caseId, int invoiceOrderId);
 
-        CaseInvoiceOrder[] GetOrders(int caseId, InvoiceOrderStatus status);
+        CaseInvoiceOrder[] GetOrders(int caseId, InvoiceOrderStatus status);        
 
         void SaveCaseInvoices(IEnumerable<CaseInvoice> invoices, int caseId);
 
