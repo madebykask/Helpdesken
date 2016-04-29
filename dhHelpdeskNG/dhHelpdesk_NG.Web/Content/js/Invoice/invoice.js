@@ -2255,19 +2255,44 @@ $(function () {
                     if (!a.IsBlank()) {
                         break;
                     }
-                    articlesForDelete.push(a.Id);                    
+                    articlesForDelete.push(a.Id);
+                    deletedArticleIds.push(a.Id);
                 }
 
-                for (var j = 0; j < articlesForDelete.length; j++) {
-                    var articleForDelete = articlesForDelete[j];
-                    this._articles.splice(articleForDelete, 1);
-                    this._deleteFromContainer(articleForDelete);
-                    deletedArticleIds.push(articleForDelete);
-                }
+                this.DeleteArticleTexts(articlesForDelete);
+
+                //for (var j = 0; j < articlesForDelete.length; j++) {
+                //    var articleForDelete = articlesForDelete[j];
+                //    this._articles.splice(articleForDelete, 1);
+                //    this._deleteFromContainer(articleForDelete);
+                    
+                //}
 
                 this.UpdateTotal();
                  
                 dhHelpdesk.System.RaiseEvent("OnDeleteArticle", [this, deletedArticleIds]);
+            },
+
+            this.DeleteArticleTexts = function (articleIds) {
+                if (articleIds == null || !articleIds.length > 0)
+                    return
+                else {
+                    var curIdToDelete = articleIds[0];
+                    //Remove from Order
+                    for (var i = 0; i < this._articles.length; i++) {
+                        var article = this._articles[i];
+                        if (article.Id == curIdToDelete) {
+                            this._articles.splice(i, 1);
+                            this._deleteFromContainer(article.Id);                                                        
+                            break;
+                        }
+                    }
+
+                    //Remove from array
+                    articleIds.splice(0, 1);
+                    this.DeleteArticleTexts(articleIds);
+                }
+                
             },
 
             this.GetSortedArticles = function () {
@@ -2339,10 +2364,14 @@ $(function () {
             this.DoInvoice = function () {                               
                 var btnSave = $(".btn.save-invoice");
                 //pass order_id to generate xml for order
-                btnSave.attr("data-doInvoiceOrder", this.Id);
-                btnSave.click();
-
-                dhHelpdesk.System.RaiseEvent("OnChangeOrder", [this]);                
+                if (this._articles.length > 0) {
+                    btnSave.attr("data-doInvoiceOrder", this.Id);
+                    btnSave.click();
+                    dhHelpdesk.System.RaiseEvent("OnChangeOrder", [this]);
+                }
+                else {
+                    dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.Translate("There is no Aticle to send!"));
+                }
             },
 
             this.Clone = function () {
