@@ -25,7 +25,8 @@
                                         ProductName = a.License.Product.Name,
                                         LicensesNumber = a.License.NumberOfLicenses,
                                         PurchaseDate = a.License.PurshaseDate,
-                                        Department = a.License.Department != null ? a.License.Department.DepartmentName : null
+                                        Department = a.License.Department != null ? a.License.Department.DepartmentName : null,
+                                        Region = a.License.Region != null ? a.License.Region.Name : null
                                     }))
                                     .OrderBy(l => l.ProductName)
                                     .ToArray();
@@ -35,7 +36,8 @@
                                                     l.ProductName,
                                                     l.LicensesNumber,
                                                     l.PurchaseDate,
-                                                    l.Department)).ToArray();
+                                                    l.Department,
+                                                    l.Region)).ToArray();
 
             return overviews;
         }
