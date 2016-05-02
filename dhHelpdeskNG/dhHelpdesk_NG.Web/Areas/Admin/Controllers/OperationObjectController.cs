@@ -176,7 +176,7 @@
             }
             else
             {
-                show = model.StartPageShow;
+                show = model.ShowYesNo;
             }
 
             return show;
