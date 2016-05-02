@@ -3966,7 +3966,8 @@ namespace DH.Helpdesk.Web.Controllers
                         if (m.CaseLog.FinishingType.HasValue)
                             m.CaseLog.FinishingDate = DateTime.UtcNow;
                         m.case_.PersonsName = caseTemplate.PersonsName;
-                        m.case_.PersonsPhone = caseTemplate.PersonsPhone;
+                        m.case_.PersonsEmail = caseTemplate.PersonsEmail;
+                        m.case_.PersonsPhone = caseTemplate.PersonsPhone;                        
                         m.case_.Region_Id = caseTemplate.Region_Id;
                         m.case_.OU_Id = caseTemplate.OU_Id;
                         m.case_.Place = caseTemplate.Place;

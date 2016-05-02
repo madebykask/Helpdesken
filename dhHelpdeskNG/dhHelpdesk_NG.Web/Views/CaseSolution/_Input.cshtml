@@ -118,6 +118,39 @@
                                         </td>
                                     </tr>
                                 }
+
+                                 @if (Model.CaseFieldSettings.Count() != 0)
+                                 {
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString())">
+                                        <td class="span3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
+                                        </td>
+                                        <td class="span9">
+                                            @Html.TextBoxFor(model => model.CaseSolution.PersonsEmail, new { id = "PersonsEmail", maxlength = "100" })
+                                        </td>
+                                        <td class="span9">
+                                            @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.PersonsEmail, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.Persons_EMail)
+                                        </td>
+                                    </tr>
+                                 }
+
+                                @if (Model.CaseFieldSettings.Count() != 0)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Translation.Get("Informera anmälaren", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td class="checkbox" style="padding-left: 20px">
+                                            <input type="checkbox" name="Casesolution.NoMailToNotifier" @(Model.CaseSolution.NoMailToNotifier == 1 ? "checked=checked" : "") value ="1" />
+                                            <input type="hidden" name="Casesolution.NoMailToNotifier" value="0" />
+                                            &nbsp;@Translation.Get("Skicka mail till anmälaren", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td class="span9">
+                                            @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.Email, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.Persons_EMail)
+                                        </td>
+
+                                    </tr>
+                                }
                                  @if (Model.CaseFieldSettings.Count() != 0)
                                  {
                                     <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString())">
@@ -201,24 +234,7 @@
                                             @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.Place, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.Place)
                                         </td>
                                     </tr>
-                                 }
-                               @if (Model.CaseFieldSettings.Count() != 0)
-                                {
-                                    <tr>
-                                        <td>
-                                            @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)
-                                        </td>
-                                        <td class="checkbox" style="padding-left: 20px">
-                                            <input type="checkbox" name="Casesolution.NoMailToNotifier" @(Model.CaseSolution.NoMailToNotifier == 1 ? "checked=checked" : "") value ="1" />
-                                            <input type="hidden" name="Casesolution.NoMailToNotifier" value="0" />
-                                            &nbsp;@Translation.Get("Skicka mail till anmälaren", Enums.TranslationSource.TextTranslation)
-                                        </td>
-                                        <td class="span9">
-                                            @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.Email, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.Persons_EMail)
-                                        </td>
-
-                                    </tr>
-                                }
+                                 }                                                                
                               
                                  @if (Model.CaseFieldSettings.Count() != 0)
                                  {

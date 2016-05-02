@@ -13,5 +13,18 @@ begin
 end
 GO
 
+IF COL_LENGTH('tblCaseSolution','PersonsEmail') IS NULL
+begin
+    alter table tblCaseSolution 
+	add [PersonsEmail] nvarchar(100) null
+end
+GO
+
+Insert into tblCaseSolutionFieldSettings
+Select cs.Id, 55, 1, GETDATE(), GETDATE() from tblCaseSolution cs
+Where cs.Id not in (Select CaseSolution_Id from tblCaseSolutionFieldSettings csf 
+					where cs.Id = csf.CaseSolution_Id and FieldName_Id = 55)
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.23'

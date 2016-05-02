@@ -55,6 +55,7 @@
         RegistrationSourceCustomer = 51,
         AddUserBtn = 52,
         CostCentre = 53,
-        LogFileName = 54
+        LogFileName = 54,
+        PersonsEmail = 55
     }
 }

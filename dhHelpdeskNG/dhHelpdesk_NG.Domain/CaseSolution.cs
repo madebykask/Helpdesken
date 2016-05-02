@@ -37,6 +37,7 @@ namespace DH.Helpdesk.Domain
         public string PersonsName { get; set; }
         public string PersonsPhone { get; set; }
         public string PersonsCellPhone { get; set; }
+        public string PersonsEmail { get; set; }
         public int? Region_Id { get; set; }
         public int? OU_Id { get; set; }
         public string Place { get; set; }
@@ -72,7 +73,7 @@ namespace DH.Helpdesk.Domain
         public int? CausingPartId { get; set; }
         public int? RegistrationSource { get; set; }
         public int Status { get; set; }
-
+    
         public virtual CaseSolutionCategory CaseSolutionCategory { get; set; }
         public virtual CaseSolutionSchedule CaseSolutionSchedule { get; set; }
         public virtual CaseType CaseType { get; set; }

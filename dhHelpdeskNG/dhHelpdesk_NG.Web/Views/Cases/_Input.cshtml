@@ -271,12 +271,12 @@
                                                 </td>
 
                                             </tr>
-                                            <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Persons_EMail, CaseSolutionFields.Email)">
+                                            <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Persons_EMail, CaseSolutionFields.PersonsEmail)">
                                                 <td class="span3">
                                                     @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Persons_EMail, "E-post")                                                                            
                                                 </td>
                                                 <td class="span4">
-                                                     @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Persons_EMail, CaseSolutionFields.Email))
+                                                     @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Persons_EMail, CaseSolutionFields.PersonsEmail))
                                                      {
                                                          @Html.TextBoxFor(model => model.case_.PersonsEmail, new { maxlength = "100", @readonly = "readonly" })
                                                      }
