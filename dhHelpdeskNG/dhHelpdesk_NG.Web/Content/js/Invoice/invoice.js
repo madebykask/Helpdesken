@@ -1236,7 +1236,10 @@ $(function () {
         },        
 
         CleanUpAllOrders: function () {
-            var cleanOrders = [];            
+            var cleanOrders = [];
+            if (this.allVailableOrders.length == 1)
+                return;
+
             for (var i = 0; i < this.allVailableOrders.length; i++) {
                 if (this.allVailableOrders[i].Id > 0) {
                     var articles = [];
