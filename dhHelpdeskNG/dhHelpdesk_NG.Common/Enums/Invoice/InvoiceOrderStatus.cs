@@ -1,24 +1,32 @@
 ﻿namespace DH.Helpdesk.Common.Enums
 {
-    public enum InvoiceOrderStatus
+    public enum InvoiceOrderStates
+    {
+        NotSaved = 0,
+        Saved    = 1,
+        Sent     = 2,
+        Delted   = 9
+    }
+
+    public enum InvoiceOrderFetchStatus
     {
         All = -1,
 
-        AllNotInvoiced = 0,
+        AllNotSent = 0,
 
-        AllInvoiced = 1, 
+        AllSent = 1, 
 
         Orders = 2,
 
-        OrderNotInvoiced = 3,
+        OrderNotSent = 3,
 
-        OrderInvoiced = 4,
+        OrderSent = 4,
        
         Credits = 5,
 
-        CreditNotInvoiced = 6,
+        CreditNotSent = 6,
 
-        CreditInvoiced = 7
+        CreditSent = 7
 
     }
 }

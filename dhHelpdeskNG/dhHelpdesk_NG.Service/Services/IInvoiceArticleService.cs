@@ -27,7 +27,7 @@
 
         ProcessResult DoInvoiceWork(CaseInvoice[] caseInvoiceData, int caseId, decimal caseNumber, int customerId, int? orderIdToXML);
 
-        CaseInvoiceOrder[] GetInvoiceOrders(int caseId, InvoiceOrderStatus status);
+        CaseInvoiceOrder[] GetInvoiceOrders(int caseId, InvoiceOrderFetchStatus status);
 
         int SaveArticle(InvoiceArticle article);
 

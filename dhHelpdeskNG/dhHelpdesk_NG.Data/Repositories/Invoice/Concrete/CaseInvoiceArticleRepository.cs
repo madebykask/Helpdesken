@@ -58,7 +58,7 @@
             return ret;
         }
 
-        public CaseInvoiceOrder[] GetOrders(int caseId, InvoiceOrderStatus orderStatus)
+        public CaseInvoiceOrder[] GetOrders(int caseId, InvoiceOrderFetchStatus orderStatus)
         {
             var res = new List<CaseInvoiceOrder>();
             var invoiceEntities = this.DbContext.CaseInvoices
@@ -73,55 +73,55 @@
 
                 switch (orderStatus)
                 {
-                    case InvoiceOrderStatus.All:
+                    case InvoiceOrderFetchStatus.All:
                         orderModels = invoiceModel.Orders.ToList();
                         break;
 
-                    case InvoiceOrderStatus.AllNotInvoiced:
+                    case InvoiceOrderFetchStatus.AllNotSent:
                         orderModels = invoiceModel.Orders
-                                                  .Where(o => !o.InvoicedByUserId.HasValue)
+                                                  .Where(o => o.OrderState == (int) InvoiceOrderStates.Saved)
                                                   .ToList();
                         break;
 
-                    case InvoiceOrderStatus.AllInvoiced:
+                    case InvoiceOrderFetchStatus.AllSent:
                         orderModels = invoiceModel.Orders
-                                                  .Where(o => o.InvoicedByUserId.HasValue)
+                                                  .Where(o => o.OrderState == (int) InvoiceOrderStates.Sent)
                                                   .ToList();
                         break;
 
-                    case InvoiceOrderStatus.Orders:
+                    case InvoiceOrderFetchStatus.Orders:
                         orderModels = invoiceModel.Orders
                                                   .Where(o => !o.CreditForOrder_Id.HasValue)
                                                   .ToList();
                         break;
 
-                    case InvoiceOrderStatus.OrderNotInvoiced:
+                    case InvoiceOrderFetchStatus.OrderNotSent:
                         orderModels = invoiceModel.Orders
-                                                  .Where(o => !o.CreditForOrder_Id.HasValue && !o.InvoicedByUserId.HasValue)
+                                                  .Where(o => !o.CreditForOrder_Id.HasValue && o.OrderState == (int)InvoiceOrderStates.Saved)
                                                   .ToList();
                         break;
 
-                    case InvoiceOrderStatus.OrderInvoiced:
+                    case InvoiceOrderFetchStatus.OrderSent:
                         orderModels = invoiceModel.Orders
-                                                  .Where(o => !o.CreditForOrder_Id.HasValue && o.InvoicedByUserId.HasValue)
+                                                  .Where(o => !o.CreditForOrder_Id.HasValue && o.OrderState == (int)InvoiceOrderStates.Sent)
                                                   .ToList();
                         break;
 
-                    case InvoiceOrderStatus.Credits:
+                    case InvoiceOrderFetchStatus.Credits:
                         orderModels = invoiceModel.Orders
                                                   .Where(o => o.CreditForOrder_Id.HasValue)
                                                   .ToList();
                         break;
 
-                    case InvoiceOrderStatus.CreditNotInvoiced:
+                    case InvoiceOrderFetchStatus.CreditNotSent:
                         orderModels = invoiceModel.Orders
-                                                  .Where(o => o.CreditForOrder_Id.HasValue && !o.InvoicedByUserId.HasValue)
+                                                  .Where(o => o.CreditForOrder_Id.HasValue && o.OrderState == (int)InvoiceOrderStates.Saved)
                                                   .ToList();
                         break;
 
-                    case InvoiceOrderStatus.CreditInvoiced:
+                    case InvoiceOrderFetchStatus.CreditSent:
                         orderModels = invoiceModel.Orders
-                                                  .Where(o => o.CreditForOrder_Id.HasValue && o.InvoicedByUserId.HasValue)
+                                                  .Where(o => o.CreditForOrder_Id.HasValue && o.OrderState == (int)InvoiceOrderStates.Sent)
                                                   .ToList();
                         break;
 
@@ -141,7 +141,8 @@
             if (orderEntity != null)
             {
                 orderEntity.InvoiceDate = null;
-                orderEntity.InvoicedByUserId = null;                    
+                orderEntity.InvoicedByUserId = null;
+                orderEntity.OrderState = (int)InvoiceOrderStates.Saved;   
                 this.Commit();
             }                                          
         }
@@ -171,7 +172,7 @@
                     if (order.Id > 0)
                     {
                         orderEntity = this.DbContext.CaseInvoiceOrders.Find(order.Id);
-                        if (orderEntity.InvoiceDate == null)
+                        if (orderEntity.OrderState == (int)InvoiceOrderStates.Saved)
                         {
                             var articlesForDelete = new List<int>();
                             articlesForDelete.AddRange(orderEntity.Articles.Where(a => order.Articles.All(ar => ar.Id != a.Id)).Select(a => a.Id));
@@ -187,6 +188,7 @@
                     else
                     {
                         orderEntity = new CaseInvoiceOrderEntity();
+                        order.OrderState = (int)InvoiceOrderStates.Saved;
                         this.orderMapper.Map(order, orderEntity);
                         orderEntity.InvoiceId = entity.Id;
                         this.DbContext.CaseInvoiceOrders.Add(orderEntity);

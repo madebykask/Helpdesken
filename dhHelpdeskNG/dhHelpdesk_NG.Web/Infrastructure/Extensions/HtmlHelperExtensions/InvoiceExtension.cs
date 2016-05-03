@@ -8,6 +8,7 @@
     using System.Linq;
 
     using DH.Helpdesk.Web.Models.Invoice;
+    using DH.Helpdesk.Common.Enums;
 
     public static class InvoiceExtension
     {
@@ -37,7 +38,7 @@
             {
                 /* Today we have only one Invoice per case */
                 var ordersCount = caseArticles.Invoices[0].Orders.Count();
-                var sentCount = caseArticles.Invoices[0].Orders.Where(o=> o.InvoicedByUserId.HasValue).Count();
+                var sentCount = caseArticles.Invoices[0].Orders.Where(o=> o.OrderState == (int) InvoiceOrderStates.Sent).Count();
 
                 btnCaptionExtra = string.Format("({0}/{1})", sentCount, ordersCount);
             }           

@@ -10,6 +10,7 @@
 
     using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.BusinessData.Models.Invoice;
+    using DH.Helpdesk.Common.Enums;
 
     public sealed class InvoiceHelper : IInvoiceHelper
     {
@@ -53,6 +54,7 @@
                                     o.CostCentre,
                                     o.CreditForOrder_Id,
                                     o.Project_Id,
+                                    (orderIdToXML.HasValue && o.Id == orderIdToXML.Value ? (int)InvoiceOrderStates.Sent : o.OrderState),                                    
                                     o.Articles
                                     .Select(a => new CaseInvoiceArticle(
                                             a.Id,
@@ -154,6 +156,8 @@
             public int? CreditForOrder_Id { get; set; }
 
             public int? Project_Id { get; set; }
+
+            public int OrderState { get; set; }
 
             public CaseInvoiceArticleData[] Articles { get; set; }
 

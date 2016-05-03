@@ -371,6 +371,14 @@ $(function () {
     }
 
     dhHelpdesk.CaseArticles = {
+
+        OrderStates : {
+            NotSaved  : 0,
+            Saved     : 1,
+            Sent      : 2,
+            Deleted   : 9
+        },
+
         LastSelectedTab: null,
 
         LastSelectedTabCaption: "",
@@ -705,6 +713,7 @@ $(function () {
             blankOrder.CreditForOrder_Id = null;
             blankOrder.Project_Id = projectElement.val();
             blankOrder.IsInvoiced = false;
+            blankOrder.OrderState = this.OrderStates.NotSaved;
 
             return blankOrder;
         },
@@ -719,14 +728,23 @@ $(function () {
             }
         },
 
-        DeleteCurrentOrder: function (invoiceId) {
-            var invoice = this.GetInvoice(invoiceId);
-            if (invoice != null) {
-                var currentOrder = this.GetCurrentOrder();
-                if (currentOrder != null) {
-                    invoice.DeleteOrder(currentOrder.Id);
+        DoOrderDelete: function (orderId) {
+            if (this.allVailableOrders.length <= 1)
+                return;
+
+            for (var i = 0; i < this.allVailableOrders.length; i++) {
+                var order = this.allVailableOrders[i];
+                if (order.Id == id) {
+                    this._orders.splice(i, 1);
+                    var tabs = this.Container.find("#case-invoice-orders-tabs");
+                    tabs.find("[href='#case-invoice-order" + order.Id + "']").parent().remove();
+                    order.Container.remove();
+                    this._refreshTabs();
+                    this.UpdateTotal();
+                    var t = dhHelpdesk.CaseArticles.allVailableOrders;
+                    return;
                 }
-            }
+            }                            
         },
 
         CreateBlankArticle: function () {
@@ -1733,7 +1751,8 @@ $(function () {
         GetInvoicedOrders: function (allOrders) {
             var ret = [];
             for (var i = 0; i < allOrders.length; i++) {
-                if (allOrders[i].InvoicedByUserId != null)
+                //!1
+                if (allOrders[i].OrderState == this.OrderStates.Sent)
                     ret.push(allOrders[i]);
             }
             return ret.sort(function (a1, a2) { return a1.Number - a2.Number; });
@@ -1936,26 +1955,7 @@ $(function () {
                 articleEl.trigger('chosen:activate');
                 dhHelpdesk.CaseArticles.UpdateOtherReferenceTitle(order.Id);
                 dhHelpdesk.CaseArticles.CollapseOtherReference(order.Id);                
-            },
-            
-            this.DeleteOrder = function (id) {
-                if (this._orders.length <= 1) {
-                    return;
-                }
-                
-                for (var i = 0; i < this._orders.length; i++) {
-                    var order = this._orders[i];
-                    if (order.Id == id) {
-                        this._orders.splice(i, 1);
-                        var tabs = this.Container.find("#case-invoice-orders-tabs");
-                        tabs.find("[href='#case-invoice-order" + order.Id + "']").parent().remove();
-                        order.Container.remove();
-                        this._refreshTabs();
-                        this.UpdateTotal();
-                        return;
-                    }
-                }
-            },
+            },                      
 
             this.ToJson = function () {
                 var ordersResult = "";
@@ -2169,6 +2169,7 @@ $(function () {
             this.CostCentre = null;
             this.CreditForOrder_Id = null;
             this.Project_Id = null;
+            this.OrderState = null;
             /////
 
             this._articles = [];
@@ -2207,8 +2208,7 @@ $(function () {
             },
 
             this.IsOrderInvoiced = function () {
-                return (this.InvoicedByUserId != undefined && this.InvoicedByUserId != null && this.InvoicedByUserId > 0) ||
-                       (this.InvoiceDate != undefined && this.InvoiceDate != null);
+                return this.OrderState == dhHelpdesk.CaseArticles.OrderStates.Sent;             
             },
             
             this.EnableAddBlank = function (enable) {
@@ -2262,14 +2262,7 @@ $(function () {
                     deletedArticleIds.push(a.Id);
                 }
 
-                this.DeleteArticleTexts(articlesForDelete);
-
-                //for (var j = 0; j < articlesForDelete.length; j++) {
-                //    var articleForDelete = articlesForDelete[j];
-                //    this._articles.splice(articleForDelete, 1);
-                //    this._deleteFromContainer(articleForDelete);
-                    
-                //}
+                this.DeleteArticleTexts(articlesForDelete);            
 
                 this.UpdateTotal();
                  
@@ -2341,6 +2334,7 @@ $(function () {
                         '"UserCode":"' + (this.UserCode != null ? this.UserCode : '') + '", ' +
                         '"CreditForOrder_Id":"' + (this.CreditForOrder_Id != null ? this.CreditForOrder_Id : '') + '", ' +
                         '"Project_Id":"' + (this.Project_Id != null ? this.Project_Id : '') + '", ' +
+                        '"OrderState":"' + (this.OrderState != null ? this.OrderState : '0') + '", ' +
                         '"Articles": [' + articlesResult + '],' +
                         '"Files": [' + filesResult + ']' +
                         '}';
@@ -2401,7 +2395,7 @@ $(function () {
                 clone.CostCentre = this.CostCentre;
                 clone.CreditForOrder_Id = this.CreditForOrder_Id;
                 clone.Project_Id = this.Project_Id;
-
+                clone.OrderState = this.OrderState;
                 clone.CreditedFrom = this.CreditedFrom;
                 clone.Initialize();
                 var articles = this.GetArticles();
@@ -3259,6 +3253,8 @@ $(function () {
             this.CreditForOrder_Id = null;
             this.Project_Id = null;
 
+            this.OrderState = 0;
+
             this.CreditOrderEnabled = false;
             this.CreditOrderTitle = "";
 
@@ -3268,6 +3264,7 @@ $(function () {
             this.attachFilesTitle = dhHelpdesk.Common.Translate("Lägg till");
             this.doInvoiceTitle = dhHelpdesk.Common.Translate("Skicka");
             this.doCreditTitle = dhHelpdesk.Common.Translate("Kreditera");
+            this.doDeleteTitle = dhHelpdesk.Common.Translate("Ta bort");
             this.SavingMessage = dhHelpdesk.Common.Translate("Spara...");            
 
             this.AddArticle = function (article) {
@@ -3803,9 +3800,8 @@ $(function () {
                             order.InvoiceDate = ord.InvoiceDate;
                             order.InvoicedByUser = ord.InvoicedByUser;
                             order.InvoicedByUserId = ord.InvoicedByUserId;                                                                                    
-                            order.Caption = ord.Caption;
-                            if ((ord.InvoicedByUserId != undefined && ord.InvoicedByUserId != null && ord.InvoicedByUserId > 0) ||
-                                (ord.InvoiceDate != undefined && ord.InvoiceDate != null))
+                            order.Caption = ord.Caption;                                                       
+                            if (ord.OrderState == dhHelpdesk.CaseArticles.OrderStates.Sent)
                                 order.IsInvoiced = true;
                             else
                                 order.IsInvoiced = false;
@@ -3825,8 +3821,7 @@ $(function () {
                             order.CostCentre = ord.CostCentre;
                             order.CreditForOrder_Id = ord.CreditForOrder_Id;
                             order.Project_Id = ord.Project_Id;
-
-
+                            order.OrderState = ord.OrderState;
                             order.Date = ord.Date;
 
                             if (ord.Files != null) {

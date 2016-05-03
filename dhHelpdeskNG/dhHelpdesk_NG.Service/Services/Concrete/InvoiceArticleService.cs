@@ -81,7 +81,7 @@
             return CaseInvoices;
         }
 
-        public CaseInvoiceOrder[] GetInvoiceOrders(int caseId, InvoiceOrderStatus status)
+        public CaseInvoiceOrder[] GetInvoiceOrders(int caseId, InvoiceOrderFetchStatus status)
         {
             return this.caseInvoiceArticleRepository.GetOrders(caseId, status);
         }
@@ -373,9 +373,9 @@
         private int GetSequenceNumber(int caseId, CaseInvoiceOrder order)
         {
             var orders = (order.CreditForOrder_Id.HasValue)?            
-                        this.caseInvoiceArticleRepository.GetOrders(caseId, InvoiceOrderStatus.Credits)
+                        this.caseInvoiceArticleRepository.GetOrders(caseId, InvoiceOrderFetchStatus.Credits)
                         .Where(o=> o.Id < order.Id && o.CreditForOrder_Id ==  order.CreditForOrder_Id) : 
-                        this.caseInvoiceArticleRepository.GetOrders(caseId, InvoiceOrderStatus.Orders)
+                        this.caseInvoiceArticleRepository.GetOrders(caseId, InvoiceOrderFetchStatus.Orders)
                                                          .Where(o=> o.Id < order.Id);            
 
             if (orders == null)

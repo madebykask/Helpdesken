@@ -2426,7 +2426,7 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var res = false;
             
-            var notInvoicedOrders = this.invoiceArticleService.GetInvoiceOrders(caseId, InvoiceOrderStatus.AllNotInvoiced);
+            var notInvoicedOrders = this.invoiceArticleService.GetInvoiceOrders(caseId, InvoiceOrderFetchStatus.AllNotSent);
             if (notInvoicedOrders.Any())
                 res = true;
 

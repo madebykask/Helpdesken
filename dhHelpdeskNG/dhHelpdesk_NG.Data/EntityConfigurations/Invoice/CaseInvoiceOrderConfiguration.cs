@@ -39,7 +39,8 @@
             this.Property(o => o.CostCentre).IsOptional().HasMaxLength(100);
 
             this.Property(o => o.CreditForOrder_Id).IsOptional();
-            this.Property(o => o.Project_Id).IsOptional();           
+            this.Property(o => o.Project_Id).IsOptional();
+            this.Property(o => o.OrderState).IsRequired();
 
             this.ToTable("tblCaseInvoiceOrder");   
         }
