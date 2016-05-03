@@ -533,7 +533,7 @@ $(function () {
         FillOrderRegion: function (order) {
             var regions = dhHelpdesk.CaseArticles.OrganizationData.Region.GetActiveItems(order.Region_Id);
             var elementId = "RegionSelect-Order" + order.Id;
-            dhHelpdesk.CaseArticles.PopulateDropDownItem(elementId, regions, order.Region_Id);
+            dhHelpdesk.CaseArticles.PopulateDropDownItem(elementId, regions, order.Region_Id);      
             dhHelpdesk.CaseArticles.FillOrderDepartment(order, order.Region_Id, false);
         },
 
@@ -542,8 +542,10 @@ $(function () {
             var elementId = "DepartmentSelect-Order" + order.Id;
 
             var selectedItem = order.Department_Id;
-            if (noSelection)
+            if (noSelection) {
                 selectedItem = null;
+                order.Department_Id = null;
+            }
 
             dhHelpdesk.CaseArticles.PopulateDropDownItem(elementId, departments, selectedItem);
             dhHelpdesk.CaseArticles.FillOrderOU(order, selectedItem, noSelection);
@@ -553,10 +555,13 @@ $(function () {
             var ous = dhHelpdesk.CaseArticles.OrganizationData.OU.GetActiveItems(departmentId, order.OU_Id);
             var elementId = "OUSelect-Order" + order.Id;
             var selectedItem = order.OU_Id;
-            if (noSelection)
+            if (noSelection) {
                 selectedItem = null;
+                order.OU_Id = null;
+            }
 
-            dhHelpdesk.CaseArticles.PopulateDropDownItem(elementId, ous, selectedItem);
+            dhHelpdesk.CaseArticles.PopulateDropDownItem(elementId, ous, selectedItem);            
+            dhHelpdesk.CaseArticles.UpdateAvailableOrder(order);
         },
 
         PopulateDropDownItem: function (elementId, items, selectedItem_Id) {            
@@ -625,14 +630,7 @@ $(function () {
                 dhHelpdesk.CaseArticles.LastSelectedTab = curOrder.Id;
                 dhHelpdesk.CaseArticles.LastSelectedTabCaption = curOrder.Caption;
             }
-
-            for (var i = 0; i < this.allVailableOrders.length; i++) {                
-                var order = dhHelpdesk.CaseArticles.GetOrder(this.allVailableOrders[i].Id);
-                if (!order.InvoiceValidate())
-                    return;
-            }
-            
-
+                       
             dhHelpdesk.CaseArticles.SetInvoiceState(_INVOICE_SAVING);
             var res = "";
             $.post('/cases/SaveCaseInvoice/', {
@@ -713,7 +711,7 @@ $(function () {
             blankOrder.CreditForOrder_Id = null;
             blankOrder.Project_Id = projectElement.val();
             blankOrder.IsInvoiced = false;
-            blankOrder.OrderState = this.OrderStates.NotSaved;
+            blankOrder.OrderState = dhHelpdesk.CaseArticles.OrderStates.NotSaved;
 
             return blankOrder;
         },
@@ -1307,6 +1305,27 @@ $(function () {
             return false;
         },
 
+        UpdateAvailableOrder: function (order) {
+            for (var i = 0; i < this.allVailableOrders.length; i++) {
+                if (this.allVailableOrders[i].Id == order.Id) {
+                    curOrder = this.allVailableOrders[i];
+
+                    curOrder.ReportedBy = order.ReportedBy;
+                    curOrder.Persons_Name = order.Persons_Name;
+                    curOrder.Persons_Email = order.Persons_Email;
+                    curOrder.Persons_Phone = order.Persons_Phone;
+                    curOrder.Persons_CellPhone = order.Persons_CellPhone;
+                    curOrder.Region_Id = order.Region_Id;
+                    curOrder.Department_Id = order.Department_Id;
+                    curOrder.OU_Id = order.OU_Id;
+                    curOrder.Place = order.Place;
+                    curOrder.UserCode = order.UserCode;
+                    curOrder.CostCentre = order.CostCentre;
+                    return;
+                }
+            }            
+        },
+
         CreateContainer: function (message) {
             
             var th = this;
@@ -1361,6 +1380,10 @@ $(function () {
                             var me = $(".btn.save-invoice");
                             var orderIdToXML = me.attr('data-doInvoiceOrder');
                             me.attr('data-doInvoiceOrder', '');
+
+                            if (!dhHelpdesk.CaseArticles.ValidateOpenInvoiceWindow())
+                                return false;
+
                             th.ApplyChanges();                            
                             th.SaveToDatabase(th.CloseReOpenWindow, th, orderIdToXML);
                         }
@@ -1372,6 +1395,10 @@ $(function () {
                             if (!th.Validate()) {
                                 return;
                             }
+
+                            if (!dhHelpdesk.CaseArticles.ValidateOpenInvoiceWindow())
+                                return false;
+
                             th.ApplyChanges();
                             th.SaveToDatabase(th.CloseInvoiceWindow, th);
                         }
@@ -1513,12 +1540,13 @@ $(function () {
                 });
         },
          
-        ValidateOpenInvoiceWindow: function(){
-            var isValid = true;
-            //if (dhHelpdesk.Common.IsNullOrEmpty($('#case__CostCentre').val())) {
-            //    dhHelpdesk.CaseArticles.ShowErrorMessage(dhHelpdesk.Common.Translate('Kostnadsställe saknas på ärendet.'))
-            //}
-            return isValid;
+        ValidateOpenInvoiceWindow: function () {
+            for (var i = 0; i < this.allVailableOrders.length; i++) {
+                var order = dhHelpdesk.CaseArticles.GetOrder(this.allVailableOrders[i].Id);
+                if (!order.InvoiceValidate())
+                    return false;
+            }            
+            return true;
         },
 
         CloseInvoiceWindow: function (that) {            
@@ -1634,9 +1662,8 @@ $(function () {
                     dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("Please save the case and then try again!"));
                     return;
                 }
-                if (th.ValidateOpenInvoiceWindow()) {
-                    th.OpenInvoiceWindow();                    
-                }
+
+                th.OpenInvoiceWindow();                
             });
             e.after(button);
 
@@ -1750,8 +1777,7 @@ $(function () {
 
         GetInvoicedOrders: function (allOrders) {
             var ret = [];
-            for (var i = 0; i < allOrders.length; i++) {
-                //!1
+            for (var i = 0; i < allOrders.length; i++) {                
                 if (allOrders[i].OrderState == this.OrderStates.Sent)
                     ret.push(allOrders[i]);
             }
@@ -2556,10 +2582,17 @@ $(function () {
                     });
 
                     var publicClassName = ".InitiatorFields_" + th.Id;
+
                     var ReportedBy = this.Container.find(publicClassName + ".reportedby");
                     ReportedBy.typeahead(dhHelpdesk.CaseArticles.GetUserSearchOptions());
+                    ReportedBy.change(function () {
+                        var curOrderId = $(this).attr('data-orderid');
+                        th.ReportedBy = $(this).val();
+                        dhHelpdesk.CaseArticles.UpdateAvailableOrder(th);
+                        dhHelpdesk.CaseArticles.UpdateOtherReferenceTitle(curOrderId);
+                    });
 
-                    ReportedBy.blur(function () {
+                    /*ReportedBy.blur(function () {
                         var curOrd = dhHelpdesk.CaseArticles.GetCurrentOrder();
                         if (!curOrd.IsOrderInvoiced()) {
                             th.ReportedBy = $(this).val();
@@ -2579,10 +2612,17 @@ $(function () {
                             $(this).val(curOrd.ReportedBy);
                         }
                         dhHelpdesk.CaseArticles.UpdateOtherReferenceTitle(curOrd.Id);
-                    });
+                    });*/
 
                     var personsName = this.Container.find(publicClassName + ".name");
-                    personsName.blur(function () {
+                    personsName.change(function () {
+                        var curOrderId = $(this).attr('data-orderid');
+                        th.Persons_Name = $(this).val();
+                        dhHelpdesk.CaseArticles.UpdateAvailableOrder(th);
+                        dhHelpdesk.CaseArticles.UpdateOtherReferenceTitle(curOrderId);
+                    });
+
+                    /*personsName.blur(function () {
                         var curOrd = dhHelpdesk.CaseArticles.GetCurrentOrder();
                         if (!curOrd.IsOrderInvoiced()) {
                             th.Persons_Name = $(this).val();
@@ -2592,10 +2632,16 @@ $(function () {
                             $(this).val(curOrd.Persons_Name);                            
                         }
                         dhHelpdesk.CaseArticles.UpdateOtherReferenceTitle(curOrd.Id);
-                    });
+                    });*/
 
                     var email = this.Container.find(publicClassName + ".email");
-                    email.blur(function () {
+                    email.change(function () {
+                        var curOrderId = $(this).attr('data-orderid');
+                        th.Persons_Email = $(this).val();
+                        dhHelpdesk.CaseArticles.UpdateAvailableOrder(th);
+                    });
+
+                    /*email.blur(function () {
                         var curOrd = dhHelpdesk.CaseArticles.GetCurrentOrder();
                         if (!curOrd.IsOrderInvoiced()) {
                             th.Persons_Email = $(this).val();
@@ -2604,10 +2650,16 @@ $(function () {
                             dhHelpdesk.CaseArticles.ShowAlreadyInvoicedMessage();
                             $(this).val(curOrd.Persons_Email);
                         }
-                    });
+                    });*/
 
                     var phone = this.Container.find(publicClassName + ".phone");
-                    phone.blur(function () {
+                    phone.change(function () {
+                        var curOrderId = $(this).attr('data-orderid');
+                        th.Persons_Phone = $(this).val();
+                        dhHelpdesk.CaseArticles.UpdateAvailableOrder(th);
+                    });
+
+                    /*phone.blur(function () {
                         var curOrd = dhHelpdesk.CaseArticles.GetCurrentOrder();
                         if (!curOrd.IsOrderInvoiced()) {
                             th.Persons_Phone = $(this).val();
@@ -2616,10 +2668,16 @@ $(function () {
                             dhHelpdesk.CaseArticles.ShowAlreadyInvoicedMessage();
                             $(this).val(curOrd.Persons_Phone);
                         }
-                    });
+                    });*/
 
                     var CellPhone = this.Container.find(publicClassName + ".cellphone");
-                    CellPhone.blur(function () {
+                    CellPhone.change(function () {
+                        var curOrderId = $(this).attr('data-orderid');
+                        th.Persons_CellPhone = $(this).val();
+                        dhHelpdesk.CaseArticles.UpdateAvailableOrder(th);
+                    });
+
+                    /*CellPhone.blur(function () {
                         var curOrd = dhHelpdesk.CaseArticles.GetCurrentOrder();
                         if (!curOrd.IsOrderInvoiced()) {
                             th.Persons_CellPhone = $(this).val();
@@ -2628,11 +2686,23 @@ $(function () {
                             dhHelpdesk.CaseArticles.ShowAlreadyInvoicedMessage();
                             $(this).val(th.Persons_CellPhone);
                         }
-                    });
+                    });*/
 
                     var region = this.Container.find(publicClassName + ".region");
                     region.change(function () {
-                        var curOrd = dhHelpdesk.CaseArticles.GetCurrentOrder();
+                        var curOrderId = $(this).attr('data-orderid');
+                        var curOrd = dhHelpdesk.CaseArticles.GetOrder(curOrderId);
+                        if (!curOrd.IsOrderInvoiced()) {
+                            $(this).parent().find('input:hidden').val($(this).val());
+                            th.Region_Id = $(this).val();                            
+                            $('#CostCentre_' + curOrderId).val('');
+                            th.CostCentre = '';
+                            dhHelpdesk.CaseArticles.FillOrderDepartment(curOrd, th.Region_Id, true);
+                        }                        
+                        dhHelpdesk.CaseArticles.UpdateOtherReferenceTitle(curOrd.Id);
+                        dhHelpdesk.CaseArticles.UpdateAvailableOrder(th);
+
+                        /*var curOrd = dhHelpdesk.CaseArticles.GetCurrentOrder();
                         if (!curOrd.IsOrderInvoiced()) {
                             $(this).parent().find('input:hidden').val($(this).val());
                             th.Region_Id = $(this).val();
@@ -2644,12 +2714,24 @@ $(function () {
                             dhHelpdesk.CaseArticles.ShowAlreadyInvoicedMessage();
                             $(this).val(curOrd.Region_Id);
                         }
-                        dhHelpdesk.CaseArticles.UpdateOtherReferenceTitle(curOrd.Id);
+                        dhHelpdesk.CaseArticles.UpdateOtherReferenceTitle(curOrd.Id);*/
                     });
 
                     var department = this.Container.find(publicClassName + ".department");
                     department.change(function () {
-                        var curOrd = dhHelpdesk.CaseArticles.GetCurrentOrder();
+                        var curOrderId = $(this).attr('data-orderid');
+                        var curOrd = dhHelpdesk.CaseArticles.GetOrder(curOrderId);
+                        if (!curOrd.IsOrderInvoiced()) {
+                            $(this).parent().find('input:hidden').val($(this).val());
+                            th.Department_Id = $(this).val();                            
+                            $('#CostCentre_' + curOrderId).val('');
+                            th.CostCentre = '';
+                            dhHelpdesk.CaseArticles.FillOrderOU(curOrd, th.Department_Id, true);
+                        }                        
+                        dhHelpdesk.CaseArticles.UpdateOtherReferenceTitle(curOrd.Id);
+                        dhHelpdesk.CaseArticles.UpdateAvailableOrder(th);
+
+                        /*var curOrd = dhHelpdesk.CaseArticles.GetCurrentOrder();
                         if (!curOrd.IsOrderInvoiced()) {
                             $(this).parent().find('input:hidden').val($(this).val());
                             th.Department_Id = $(this).val();
@@ -2661,7 +2743,7 @@ $(function () {
                             dhHelpdesk.CaseArticles.ShowAlreadyInvoicedMessage();
                             $(this).val(curOrd.Department_Id);
                         }
-                        dhHelpdesk.CaseArticles.UpdateOtherReferenceTitle(curOrd.Id);
+                        dhHelpdesk.CaseArticles.UpdateOtherReferenceTitle(curOrd.Id);*/
                     });
 
                     var ou = this.Container.find(publicClassName + ".ou");
@@ -2675,10 +2757,17 @@ $(function () {
                             dhHelpdesk.CaseArticles.ShowAlreadyInvoicedMessage();
                             $(this).val(curOrd.OU_Id);
                         }
+                        dhHelpdesk.CaseArticles.UpdateAvailableOrder(th);
                     });
 
                     var place = this.Container.find(publicClassName + ".place");
-                    place.blur(function () {
+                    place.change(function () {
+                        var curOrderId = $(this).attr('data-orderid');
+                        th.Place = $(this).val();
+                        dhHelpdesk.CaseArticles.UpdateAvailableOrder(th);
+                    });
+
+                    /*place.blur(function () {
                         var curOrd = dhHelpdesk.CaseArticles.GetCurrentOrder();
                         if (!curOrd.IsOrderInvoiced()) {
                             th.Place = $(this).val();
@@ -2687,23 +2776,36 @@ $(function () {
                             dhHelpdesk.CaseArticles.ShowAlreadyInvoicedMessage();
                             $(this).val(curOrd.Place);
                         }
-                    });
+                    });*/
 
                     var costcentre = this.Container.find(publicClassName + ".costcentre");
-                    costcentre.blur(function () {
+                    costcentre.change(function () {
+                        var curOrderId = $(this).attr('data-orderid');
+                        th.CostCentre = $(this).val();                        
+                        dhHelpdesk.CaseArticles.UpdateAvailableOrder(th);
+                        dhHelpdesk.CaseArticles.UpdateOtherReferenceTitle(curOrderId);
+                    });
+
+                    /*costcentre.blur(function () {
                         var curOrd = dhHelpdesk.CaseArticles.GetCurrentOrder();
                         if (!curOrd.IsOrderInvoiced()) {
-                            th.CostCentre = $(this).val();
+                            th.CostCentre = $(this).val();                            
                         }
                         else {
                             dhHelpdesk.CaseArticles.ShowAlreadyInvoicedMessage();
                             $(this).val(curOrd.CostCentre);
                         }
                         dhHelpdesk.CaseArticles.UpdateOtherReferenceTitle(curOrd.Id);
-                    });
+                    });*/
 
                     var usercode = this.Container.find(publicClassName + ".usercode");
-                    usercode.blur(function () {
+                    usercode.change(function () {
+                        var curOrderId = $(this).attr('data-orderid');
+                        th.UserCode = $(this).val();                        
+                        dhHelpdesk.CaseArticles.UpdateAvailableOrder(th);
+                    });
+
+                    /*usercode.blur(function () {
                         var curOrd = dhHelpdesk.CaseArticles.GetCurrentOrder();
                         if (!curOrd.IsOrderInvoiced()) {
                             th.UserCode = $(this).val();
@@ -2713,8 +2815,9 @@ $(function () {
                             $(this).val(curOrd.UserCode);
                         }
                     });
+                    */
                 }
-            },
+            },            
 
             this.UpdateTotal = function () {
                 this.Container.find(".articles-total").text(dhHelpdesk.CaseArticles.DoDelimit(this.GetArticlesTotal().Total));                
