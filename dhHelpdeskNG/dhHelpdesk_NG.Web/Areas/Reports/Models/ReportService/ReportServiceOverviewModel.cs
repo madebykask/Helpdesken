@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Reports.Models.ReportService
+﻿using DH.Helpdesk.Web.Areas.Reports.Models.Options.ReportGenerator;
+
+namespace DH.Helpdesk.Web.Areas.Reports.Models.ReportService
 {
     using System.IO;
     using System.Collections.Generic;
@@ -21,6 +23,8 @@
         public ReportFilterModel ReportFilter { get; set; }
 
         public ReportPresentationModel ReportViewerData { get; set; }
+
+        public ReportGeneratorOptionsModel ReportGeneratorOptions { get; set; }
         
     }
 

@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Reports.Infrastructure.ModelFactories.Concrete
+﻿using DH.Helpdesk.Common.Enums;
+
+namespace DH.Helpdesk.Web.Areas.Reports.Infrastructure.ModelFactories.Concrete
 {
     using System;
     using System.Collections.Generic;
@@ -24,27 +26,21 @@
             var departments = WebMvcHelper.CreateMultiSelectField(options.Departments, filters.DepartmentIds);
             var workingGroups = WebMvcHelper.CreateMultiSelectField(options.WorkingGroups, filters.WorkingGroupIds);
             var caseTypes = options.CaseTypes;
-            var caseTypeId = filters.CaseTypeId;
-            var periodFrom = filters.PeriodFrom.HasValue ? filters.PeriodFrom.Value : DateTime.Today.AddMonths(-1);
+            var caseTypeIds = filters.CaseTypeIds;
+            var periodFrom = filters.PeriodFrom.HasValue ? filters.PeriodFrom.Value : DateTime.Today;
             var periodUntil = filters.PeriodUntil.HasValue ? filters.PeriodUntil.Value : DateTime.Today;
-
-            SortFieldModel sortField = null;
-
-            if (filters.SortField != null)
-            {
-                sortField = new SortFieldModel { Name = filters.SortField.Name, SortBy = filters.SortField.SortBy };
-            }
 
             return new ReportGeneratorOptionsModel(
                                     fields,
                                     departments,
                                     workingGroups,
                                     caseTypes,
-                                    caseTypeId,
+                                    caseTypeIds, 
                                     periodFrom,
                                     periodUntil,
                                     filters.RecordsOnPage,
-                                    sortField);
+                                    filters.SortField == null ? "" : filters.SortField.Name,
+                                    filters.SortField == null ? (SortBy?)null : filters.SortField.SortBy);
         }
 
         public ReportGeneratorModel GetReportGeneratorModel(ReportGeneratorData data, SortField sortField)
@@ -196,7 +192,7 @@
             FieldSettingsHelper.CreateValueIfNeeded(settings.IsAbout_Place, UserFields.IsAbout_Place, fields.IsAbout_Place, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.IsAbout_Department, UserFields.IsAbout_Department, fields.IsAbout_Department, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.IsAbout_OU, UserFields.IsAbout_OU, fields.IsAbout_OU, values);
-            FieldSettingsHelper.CreateValueIfNeeded(settings.IsAbout_Region, UserFields.IsAbout_Region, fields.IsAbout_Region, values); 
+            FieldSettingsHelper.CreateValueIfNeeded(settings.IsAbout_Region, UserFields.IsAbout_Region, fields.IsAbout_Region, values);
         }
 
         private static void CreateComputerValues(ComputerSettings settings, ComputerOverview fields, List<NewGridRowCellValueModel> values)

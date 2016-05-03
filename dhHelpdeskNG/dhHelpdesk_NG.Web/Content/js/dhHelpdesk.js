@@ -13,7 +13,7 @@ $('.nav-tabs li:not(.disabled) a').click(function (e) {
 
 $(".nav-tabs-actions a").unbind("click");
 
-$(".content input:text, .content textarea").eq(0).focus()
+$(".content input:text:not(.chosen-container input:text), .content textarea").eq(0).focus();
 
 
 $('#case__RegLanguage_Id').change(function () {   

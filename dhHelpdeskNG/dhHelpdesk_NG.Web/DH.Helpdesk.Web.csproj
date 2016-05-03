@@ -37,6 +37,8 @@
     <DontImportPostSharp>True</DontImportPostSharp>
     <TargetFrameworkProfile />
     <MvcProjectUpgradeChecked>true</MvcProjectUpgradeChecked>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -940,6 +942,7 @@
     <Compile Include="Areas\Reports\Models\Reports\LeadtimeActiveCasesModel.cs" />
     <Compile Include="Areas\Reports\Models\Reports\LeadtimeFinishedCasesModel.cs" />
     <Compile Include="Areas\Reports\Models\Reports\ReportGenerator\CaseOverviewModel.cs" />
+    <Compile Include="Areas\Reports\Models\Reports\ReportGenerator\ReportGeneratorAggregateModel.cs" />
     <Compile Include="Areas\Reports\Models\Reports\ReportGenerator\ReportGeneratorModel.cs" />
     <Compile Include="Areas\Reports\ReportsAreaRegistration.cs" />
     <Compile Include="Controllers\AboutController.cs" />
@@ -1001,6 +1004,7 @@
     <Compile Include="Infrastructure\ApplicationFacade.cs" />
     <Compile Include="Infrastructure\Attributes\CustomHandleErrorAttribute.cs" />
     <Compile Include="Infrastructure\Attributes\CurrentTabAttribute.cs" />
+    <Compile Include="Infrastructure\Attributes\NoCacheAttribute.cs" />
     <Compile Include="Infrastructure\Attributes\SessionRequiredAttribute.cs" />
     <Compile Include="Infrastructure\Attributes\UserCasePermissionsAttribute.cs" />
     <Compile Include="Infrastructure\Attributes\UserPermissionsAttribute.cs" />
@@ -3177,4 +3181,5 @@ $(ProjectDir)..\..\utils\GenerateAssemblyInfo.bat $(ProjectDir)..\CommonAssembly
 )
 </PreBuildEvent>
   </PropertyGroup>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
 </Project>

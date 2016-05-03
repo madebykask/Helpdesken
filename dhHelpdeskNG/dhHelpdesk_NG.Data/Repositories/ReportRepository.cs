@@ -23,9 +23,23 @@
           int customerId,
           List<int> departmentIds,
           List<int> workingGroupIds,
+          List<int> productAreaIds,
+          List<int> administratorIds,
+          List<int> caseStatusIds,
           List<int> caseTypeId,
           DateTime? periodFrom,
           DateTime? periodUntil);
+
+        Dictionary<DateTime, int> GetCaseAggregation(
+            int customerId,
+            List<int> departmentIds,
+            List<int> workingGroupIds,
+            List<int> productAreaIds,
+            List<int> administratorIds,
+            List<int> caseStatusIds,
+            List<int> caseTypeId,
+            DateTime? periodFrom,
+            DateTime? periodUntil);
 
     }
     public class ReportRepository : RepositoryBase<Report>, IReportRepository
@@ -39,92 +53,261 @@
            int customerId,
            List<int> departmentIds,
            List<int> workingGroupIds,
+           List<int> productAreaIds,
+           List<int> administratorIds,
+           List<int> caseStatusIds,
            List<int> caseTypeId,
            DateTime? periodFrom,
            DateTime? periodUntil)
         {
-            if (periodUntil.HasValue)
-            {
-                periodUntil = periodUntil.Value.AddMonths(1);
-            }
-            else
-            {
-                periodUntil = DateTime.Now;
-            }
+            var query = GetQuery(customerId,
+                departmentIds,
+                workingGroupIds,
+                productAreaIds,
+                administratorIds,
+                caseStatusIds,
+                caseTypeId,
+                periodFrom,
+                periodUntil); 
+
+            return query.ToList();
+        }
+
+        public Dictionary<DateTime, int> GetCaseAggregation(
+           int customerId,
+           List<int> departmentIds,
+           List<int> workingGroupIds,
+           List<int> productAreaIds,
+           List<int> administratorIds,
+           List<int> caseStatusIds,
+           List<int> caseTypeId,
+           DateTime? periodFrom,
+           DateTime? periodUntil)
+        {
+            //var query = GetQuery(customerId,
+            //    departmentIds,
+            //    workingGroupIds,
+            //    productAreaIds,
+            //    administratorIds,
+            //    caseStatusIds,
+            //    caseTypeId,
+            //    periodFrom,
+            //    periodUntil);
 
             if (!periodFrom.HasValue)
             {
                 periodFrom = DateTime.Now;
             }
 
-            #region Fetch Data
+            if (!periodUntil.HasValue)
+            {
+                periodUntil = DateTime.Now;
+            }
+
             var query = from c in this.DataContext.Cases
-                        join cu in this.DataContext.Customers on c.Customer_Id equals cu.Id
+                join cu in this.DataContext.Customers on c.Customer_Id equals cu.Id
 
-                        join isAbout in this.DataContext.CaseIsAbout on c.Id equals (int?)isAbout.Id into isabouts
-                        from _isAbout in isabouts.DefaultIfEmpty()
-                       
-                        join r in this.DataContext.Regions on c.Region_Id equals (int?)r.Id into rs
-                        from _r in rs.DefaultIfEmpty()
+                join isAbout in this.DataContext.CaseIsAbout on c.Id equals (int?) isAbout.Id into isabouts
+                from _isAbout in isabouts.DefaultIfEmpty()
 
-                        join d in this.DataContext.Departments on c.Department_Id equals (int?)d.Id into ds
-                        from _d in ds.DefaultIfEmpty()
+                join r in this.DataContext.Regions on c.Region_Id equals (int?) r.Id into rs
+                from _r in rs.DefaultIfEmpty()
 
-                        join u1 in this.DataContext.Users on c.User_Id equals (int?)u1.Id into u1s
-                        from _u1 in u1s.DefaultIfEmpty()
+                join d in this.DataContext.Departments on c.Department_Id equals (int?) d.Id into ds
+                from _d in ds.DefaultIfEmpty()
 
-                        join s in this.DataContext.Systems on c.System_Id equals (int?)s.Id into ss
-                        from _s in ss.DefaultIfEmpty()
+                join u1 in this.DataContext.Users on c.User_Id equals (int?) u1.Id into u1s
+                from _u1 in u1s.DefaultIfEmpty()
 
-                        join p in this.DataContext.Priorities on c.Priority_Id equals (int?)p.Id into ps
-                        from _p in ps.DefaultIfEmpty()
+                join s in this.DataContext.Systems on c.System_Id equals (int?) s.Id into ss
+                from _s in ss.DefaultIfEmpty()
 
-                        join im in this.DataContext.Impacts on c.Impact_Id equals (int?)im.Id into ims
-                        from _im in ims.DefaultIfEmpty()
+                join p in this.DataContext.Priorities on c.Priority_Id equals (int?) p.Id into ps
+                from _p in ps.DefaultIfEmpty()
 
-                        join cat in this.DataContext.Categories on c.Category_Id equals (int?)cat.Id into cats
-                        from _cat in cats.DefaultIfEmpty()
+                join im in this.DataContext.Impacts on c.Impact_Id equals (int?) im.Id into ims
+                from _im in ims.DefaultIfEmpty()
 
-                        join sup in this.DataContext.Suppliers on c.Supplier_Id equals (int?)sup.Id into sups
-                        from _sup in sups.DefaultIfEmpty()
+                join cat in this.DataContext.Categories on c.Category_Id equals (int?) cat.Id into cats
+                from _cat in cats.DefaultIfEmpty()
 
-                        join regsource in this.DataContext.RegistrationSourceCustomer on c.RegistrationSourceCustomer_Id equals (int?)regsource.Id into regsources
-                        from _regsource in regsources.DefaultIfEmpty()
+                join sup in this.DataContext.Suppliers on c.Supplier_Id equals (int?) sup.Id into sups
+                from _sup in sups.DefaultIfEmpty()
 
-                        join caseStatis in this.DataContext.CaseStatistics on c.Id equals caseStatis.CaseId into casestatiss
-                        from _caseStatis in casestatiss.DefaultIfEmpty()
+                join regsource in this.DataContext.RegistrationSourceCustomer on c.RegistrationSourceCustomer_Id equals
+                    (int?) regsource.Id into regsources
+                from _regsource in regsources.DefaultIfEmpty()
 
-                        join wg in this.DataContext.WorkingGroups on c.WorkingGroup_Id equals (int?)wg.Id into wgs
-                        from _wg in wgs.DefaultIfEmpty()
+                join caseStatis in this.DataContext.CaseStatistics on c.Id equals caseStatis.CaseId into casestatiss
+                from _caseStatis in casestatiss.DefaultIfEmpty()
 
-                        join u2 in this.DataContext.Users on c.CaseResponsibleUser_Id equals (int?)u2.Id into u2s
-                        from _u2 in u2s.DefaultIfEmpty()
+                join wg in this.DataContext.WorkingGroups on c.WorkingGroup_Id equals (int?) wg.Id into wgs
+                from _wg in wgs.DefaultIfEmpty()
 
-                        join st in this.DataContext.Statuses on c.Status_Id equals (int?)st.Id into sts
-                        from _st in sts.DefaultIfEmpty()
+                join u2 in this.DataContext.Users on c.CaseResponsibleUser_Id equals (int?) u2.Id into u2s
+                from _u2 in u2s.DefaultIfEmpty()
 
-                        join sst in this.DataContext.StateSecondaries on c.StateSecondary_Id equals (int?)sst.Id into ssts
-                        from _sst in ssts.DefaultIfEmpty()
+                join st in this.DataContext.Statuses on c.Status_Id equals (int?) st.Id into sts
+                from _st in sts.DefaultIfEmpty()
 
-                        join cp in this.DataContext.CausingParts on c.CausingPartId equals (int?)cp.Id into cps
-                        from _cp in cps.DefaultIfEmpty()
+                join sst in this.DataContext.StateSecondaries on c.StateSecondary_Id equals (int?) sst.Id into ssts
+                from _sst in ssts.DefaultIfEmpty()
 
-                        join ur in this.DataContext.Urgencies on c.Urgency_Id equals (int?)ur.Id into urs
-                        from _ur in urs.DefaultIfEmpty()                        
+                join cp in this.DataContext.CausingParts on c.CausingPartId equals (int?) cp.Id into cps
+                from _cp in cps.DefaultIfEmpty()
 
-                        join user3 in this.DataContext.Users on c.Performer_User_Id equals (int?)user3.Id into user3s
-                        from _user3 in user3s.DefaultIfEmpty()
+                join ur in this.DataContext.Urgencies on c.Urgency_Id equals (int?) ur.Id into urs
+                from _ur in urs.DefaultIfEmpty()
 
-                        //join r1 in this.DataContext.Regions on _isAbout.Region_Id equals (int?)r1.Id into rs1
-                        //from _r1 in rs1.DefaultIfEmpty()
+                join user3 in this.DataContext.Users on c.Performer_User_Id equals (int?) user3.Id into user3s
+                from _user3 in user3s.DefaultIfEmpty()
 
-                        //join d1 in this.DataContext.Departments on _isAbout.Department_Id equals (int?)d1.Id into ds1
-                        //from _d1 in ds1.DefaultIfEmpty()                                              
+                //join r1 in this.DataContext.Regions on _isAbout.Region_Id equals (int?)r1.Id into rs1
+                //from _r1 in rs1.DefaultIfEmpty()
 
-                        where c.Customer_Id == customerId && c.Deleted != 1 && (c.RegTime >= periodFrom && c.RegTime <= periodUntil)
-                              && (caseTypeId.Any()? caseTypeId.Contains(c.CaseType_Id) : true)
-                              && (workingGroupIds.Any() ? c.WorkingGroup_Id.HasValue && workingGroupIds.Contains(c.WorkingGroup_Id.Value) : true)
-                              && (departmentIds.Any() ? c.Department_Id.HasValue && departmentIds.Contains(c.Department_Id.Value) : true)  
+                //join d1 in this.DataContext.Departments on _isAbout.Department_Id equals (int?)d1.Id into ds1
+                //from _d1 in ds1.DefaultIfEmpty()                                              
+
+                where
+                    c.Customer_Id == customerId && c.Deleted != 1 &&
+                    (c.RegTime >= periodFrom && c.RegTime <= periodUntil)
+                    && (caseTypeId.Any() ? caseTypeId.Contains(c.CaseType_Id) : true)
+                    &&
+                    (workingGroupIds.Any()
+                        ? c.WorkingGroup_Id.HasValue && workingGroupIds.Contains(c.WorkingGroup_Id.Value)
+                        : true)
+                    &&
+                    (departmentIds.Any()
+                        ? c.Department_Id.HasValue && departmentIds.Contains(c.Department_Id.Value)
+                        : true)
+                    &&
+                    (productAreaIds.Any()
+                        ? c.ProductArea_Id.HasValue && productAreaIds.Contains(c.ProductArea_Id.Value)
+                        : true)
+                    &&
+                    (administratorIds.Any()
+                        ? c.Performer_User_Id.HasValue && administratorIds.Contains(c.Performer_User_Id.Value)
+                        : true)
+                    && (caseStatusIds.Any() ? c.Status_Id.HasValue && caseStatusIds.Contains(c.Status_Id.Value) : true)
+
+                group c by new {c.RegTime.Month, c.RegTime.Year}
+                into g
+                select new {Date = g.Key, Count = g.Count()};
+
+            return query.ToDictionary(x => new DateTime(x.Date.Year, x.Date.Month, 1), y => y.Count);
+
+            //return query.GroupBy(x => new {x.RegistrationDate.Value.Month, x.RegistrationDate.Value.Year})
+            //    .OrderBy(x => x.Key)
+            //    .ToDictionary(x => new DateTime(x.Key.Year, x.Key.Month, 1), y => y.Count());
+        }
+        
+        #region Private Methods
+
+        private IQueryable<ReportGeneratorFields> GetQuery(int customerId,
+           List<int> departmentIds,
+           List<int> workingGroupIds,
+           List<int> productAreaIds,
+           List<int> administratorIds,
+           List<int> caseStatusIds,
+           List<int> caseTypeId,
+           DateTime? periodFrom,
+           DateTime? periodUntil)
+        {
+            if (!periodFrom.HasValue)
+            {
+                periodFrom = DateTime.Now;
+            }
+
+            if (!periodUntil.HasValue)
+            {
+                periodUntil = DateTime.Now;
+            }
+
+            var query = from c in this.DataContext.Cases
+                join cu in this.DataContext.Customers on c.Customer_Id equals cu.Id
+
+                join isAbout in this.DataContext.CaseIsAbout on c.Id equals (int?) isAbout.Id into isabouts
+                from _isAbout in isabouts.DefaultIfEmpty()
+
+                join r in this.DataContext.Regions on c.Region_Id equals (int?) r.Id into rs
+                from _r in rs.DefaultIfEmpty()
+
+                join d in this.DataContext.Departments on c.Department_Id equals (int?) d.Id into ds
+                from _d in ds.DefaultIfEmpty()
+
+                join u1 in this.DataContext.Users on c.User_Id equals (int?) u1.Id into u1s
+                from _u1 in u1s.DefaultIfEmpty()
+
+                join s in this.DataContext.Systems on c.System_Id equals (int?) s.Id into ss
+                from _s in ss.DefaultIfEmpty()
+
+                join p in this.DataContext.Priorities on c.Priority_Id equals (int?) p.Id into ps
+                from _p in ps.DefaultIfEmpty()
+
+                join im in this.DataContext.Impacts on c.Impact_Id equals (int?) im.Id into ims
+                from _im in ims.DefaultIfEmpty()
+
+                join cat in this.DataContext.Categories on c.Category_Id equals (int?) cat.Id into cats
+                from _cat in cats.DefaultIfEmpty()
+
+                join sup in this.DataContext.Suppliers on c.Supplier_Id equals (int?) sup.Id into sups
+                from _sup in sups.DefaultIfEmpty()
+
+                join regsource in this.DataContext.RegistrationSourceCustomer on c.RegistrationSourceCustomer_Id equals
+                    (int?) regsource.Id into regsources
+                from _regsource in regsources.DefaultIfEmpty()
+
+                join caseStatis in this.DataContext.CaseStatistics on c.Id equals caseStatis.CaseId into casestatiss
+                from _caseStatis in casestatiss.DefaultIfEmpty()
+
+                join wg in this.DataContext.WorkingGroups on c.WorkingGroup_Id equals (int?) wg.Id into wgs
+                from _wg in wgs.DefaultIfEmpty()
+
+                join u2 in this.DataContext.Users on c.CaseResponsibleUser_Id equals (int?) u2.Id into u2s
+                from _u2 in u2s.DefaultIfEmpty()
+
+                join st in this.DataContext.Statuses on c.Status_Id equals (int?) st.Id into sts
+                from _st in sts.DefaultIfEmpty()
+
+                join sst in this.DataContext.StateSecondaries on c.StateSecondary_Id equals (int?) sst.Id into ssts
+                from _sst in ssts.DefaultIfEmpty()
+
+                join cp in this.DataContext.CausingParts on c.CausingPartId equals (int?) cp.Id into cps
+                from _cp in cps.DefaultIfEmpty()
+
+                join ur in this.DataContext.Urgencies on c.Urgency_Id equals (int?) ur.Id into urs
+                from _ur in urs.DefaultIfEmpty()
+
+                join user3 in this.DataContext.Users on c.Performer_User_Id equals (int?) user3.Id into user3s
+                from _user3 in user3s.DefaultIfEmpty()
+
+                //join r1 in this.DataContext.Regions on _isAbout.Region_Id equals (int?)r1.Id into rs1
+                //from _r1 in rs1.DefaultIfEmpty()
+
+                //join d1 in this.DataContext.Departments on _isAbout.Department_Id equals (int?)d1.Id into ds1
+                //from _d1 in ds1.DefaultIfEmpty()                                              
+
+                where
+                    c.Customer_Id == customerId && c.Deleted != 1 &&
+                    (c.RegTime >= periodFrom && c.RegTime <= periodUntil)
+                    && (caseTypeId.Any() ? caseTypeId.Contains(c.CaseType_Id) : true)
+                    &&
+                    (workingGroupIds.Any()
+                        ? c.WorkingGroup_Id.HasValue && workingGroupIds.Contains(c.WorkingGroup_Id.Value)
+                        : true)
+                    &&
+                    (departmentIds.Any()
+                        ? c.Department_Id.HasValue && departmentIds.Contains(c.Department_Id.Value)
+                        : true)
+                    &&
+                    (productAreaIds.Any()
+                        ? c.ProductArea_Id.HasValue && productAreaIds.Contains(c.ProductArea_Id.Value)
+                        : true)
+                    &&
+                    (administratorIds.Any()
+                        ? c.Performer_User_Id.HasValue && administratorIds.Contains(c.Performer_User_Id.Value)
+                        : true)
+                    && (caseStatusIds.Any() ? c.Status_Id.HasValue && caseStatusIds.Contains(c.Status_Id.Value) : true)
 
                         select new ReportGeneratorFields
                         {
@@ -137,7 +320,7 @@
                             Customer = cu.Name,
                             Region = c.Region_Id.HasValue ? _r.Name : "",
                             Department = c.Department_Id.HasValue ? _d.DepartmentName : "",
-                            Unit = c.OU_Id.HasValue ? c.OU_Id.ToString() : "",                             
+                            Unit = c.OU_Id.HasValue ? c.OU_Id.ToString() : "",
                             Place = c.Place,
                             OrdererCode = c.UserCode,
 
@@ -152,7 +335,7 @@
                             IsAbout_Place = _isAbout.Place,
                             IsAbout_UserCode = _isAbout.UserCode,
                             IsAbout_Persons_Email = _isAbout.Person_Email,
-                            
+
                             PcNumber = c.InventoryNumber,
                             ComputerType = c.InventoryType,
                             ComputerPlace = c.InventoryLocation,
@@ -162,7 +345,7 @@
                             ChangeDate = c.ChangeTime,
                             RegistratedBy = c.User_Id.HasValue ? _u1.FirstName + " " + _u1.SurName : "",
                             CaseType = c.CaseType_Id,
-                            ProductArea = c.ProductArea_Id.HasValue? c.ProductArea_Id.ToString() : "",
+                            ProductArea = c.ProductArea_Id.HasValue ? c.ProductArea_Id.ToString() : "",
                             System = c.System_Id.HasValue ? _s.SystemName : "",
                             UrgentDegree = c.Urgency_Id.HasValue ? _ur.Name : "",
                             Impact = c.Impact_Id.HasValue ? _im.Name : "",
@@ -180,7 +363,7 @@
                             Cost = c.Cost,
                             AttachedFile = "",
                             FinishingDate = c.FinishingDate,
-                                           
+
                             RegistrationSource = c.RegistrationSourceCustomer_Id.HasValue ? _regsource.SourceName : "",
                             SolvedInTime = _caseStatis.WasSolvedInTime,
 
@@ -198,17 +381,16 @@
                             CausingPart = c.CausingPartId.HasValue ? _cp.Name : "",
 
                             LogData = (from r in this.DataContext.Logs
-                                       where (r.Case_Id == c.Id)                                    
-                                       orderby r.LogDate descending 
+                                       where (r.Case_Id == c.Id)
+                                       orderby r.LogDate descending
                                        select r).FirstOrDefault()
-                            
+
                         };
 
-            #endregion           
-
-            return query.ToList();
+            return query;
         }
-        
+
+        #endregion Private Methods
     }
 
     #endregion

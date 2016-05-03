@@ -275,7 +275,10 @@
             List<int> fieldIds,
             List<int> departmentIds,
             List<int> workingGroupIds,
-            int? caseTypeId,
+            List<int> productAreaIds,
+            List<int> administratorIds,
+            List<int> caseStatusIds,
+            List<int> caseTypeIds,
             DateTime? periodFrom,
             DateTime? periodUntil,
             string text,
@@ -298,11 +301,17 @@
                             .GetShowable()
                             .MapToCaseSettings(languageId, hasLeadTime);                
 
-                var caseTypeIds = new List<int>();
-                if (caseTypeId.HasValue)
+                var caseTypeChainIds = new List<int>();
+                foreach (var caseTypeId in caseTypeIds)
                 {
-                    LoadCaseTypeChildrenIds(caseTypeId.Value, caseTypeIds, uow);
-                }                                                              
+                    LoadCaseTypeChildrenIds(caseTypeId, caseTypeChainIds, uow);
+                }
+
+                var productAreaChainIds = new List<int>();
+                foreach (var productAreaId in productAreaIds)
+                {
+                    LoadProductAreaChildrenIds(productAreaId, productAreaChainIds, uow);
+                }
 
                 var caseTypes = caseTypeRep.GetAll().GetByCustomer(customerId);
                 var productAreas = productAreaRep.GetAll().GetByCustomer(customerId);
@@ -313,7 +322,10 @@
                                                customerId,
                                                departmentIds,
                                                workingGroupIds,
-                                               caseTypeIds,
+                                               productAreaChainIds,
+                                               administratorIds,
+                                               caseStatusIds,
+                                               caseTypeChainIds,
                                                periodFrom,
                                                periodUntil);
                 
@@ -321,6 +333,51 @@
 
                 var sortedOverviews = Sort(overviews, sort);
                 return new ReportGeneratorData(settings, sortedOverviews);
+            }
+        }
+
+        public Dictionary<DateTime, int> GetReportGeneratorAggregation(
+             int customerId,
+            int languageId,
+            List<int> fieldIds,
+            List<int> departmentIds,
+            List<int> workingGroupIds,
+            List<int> productAreaIds,
+            List<int> administratorIds,
+            List<int> caseStatusIds,
+            List<int> caseTypeIds,
+            DateTime? periodFrom,
+            DateTime? periodUntil,
+            string text,
+            SortField sort,
+            int selectCount)
+        {
+            using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            {
+                var caseTypeChainIds = new List<int>();
+                foreach (var caseTypeId in caseTypeIds)
+                {
+                    LoadCaseTypeChildrenIds(caseTypeId, caseTypeChainIds, uow);
+                }
+
+                var productAreaChainIds = new List<int>();
+                foreach (var productAreaId in productAreaIds)
+                {
+                    LoadProductAreaChildrenIds(productAreaId, productAreaChainIds, uow);
+                }
+
+                var caseData = _reportRepository.GetCaseAggregation(
+                                                customerId,
+                                                departmentIds,
+                                                workingGroupIds,
+                                                productAreaChainIds,
+                                                administratorIds,
+                                                caseStatusIds,
+                                                caseTypeChainIds,
+                                                periodFrom,
+                                                periodUntil);
+
+                return caseData;
             }
         }
 
@@ -1428,7 +1485,7 @@
 
             foreach (var child in children)
             {
-                LoadProductAreaChildrenIds(child.Id, ids, uow);
+                LoadCaseTypeChildrenIds(child.Id, ids, uow);
             }
         }
 

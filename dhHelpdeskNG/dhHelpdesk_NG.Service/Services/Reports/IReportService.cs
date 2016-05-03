@@ -77,12 +77,31 @@
                                     List<int> fieldIds,
                                     List<int> departmentIds,
                                     List<int> workingGroupIds,
-                                    int? caseTypeId,
+                                    List<int> productAreaIds,
+                                    List<int> administratorIds,
+                                    List<int> caseStatusIds,
+                                    List<int> caseTypeIds,
                                     DateTime? periodFrom,
                                     DateTime? periodUntil,
                                     string text,
                                     SortField sort,
                                     int selectCount);
+
+        Dictionary<DateTime, int> GetReportGeneratorAggregation(
+            int customerId,
+            int languageId,
+            List<int> fieldIds,
+            List<int> departmentIds,
+            List<int> workingGroupIds,
+            List<int> productAreaIds,
+            List<int> administratorIds,
+            List<int> caseStatusIds,
+            List<int> caseTypeIds,
+            DateTime? periodFrom,
+            DateTime? periodUntil,
+            string text,
+            SortField sort,
+            int selectCount);
 
         LeadtimeFinishedCasesOptions GetLeadtimeFinishedCasesOptions(int customerId);
 
