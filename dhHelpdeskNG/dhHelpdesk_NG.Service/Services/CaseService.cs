@@ -2334,7 +2334,7 @@ namespace DH.Helpdesk.Services.Services
             List<Field> ret = new List<Field>();
 
             ret.Add(new Field { Key = "[#1]", StringValue = c.CaseNumber.ToString() } );
-            ret.Add(new Field { Key = "[#16]", StringValue = c.RegTime.ToString() } ); 
+            ret.Add(new Field { Key = "[#16]", StringValue = c.RegTime.ToLocalTime().ToString() } ); 
             ret.Add(new Field { Key = "[#22]", StringValue = c.LastChangedByUser != null ? c.LastChangedByUser.FirstName + " " + c.LastChangedByUser.SurName : string.Empty }); 
             ret.Add(new Field { Key = "[#3]", StringValue = c.PersonsName } ); 
             ret.Add(new Field { Key = "[#8]", StringValue = c.PersonsEmail } ); 
