@@ -623,11 +623,13 @@ function CaseInitForm() {
             CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeWorkingGroupFilterUser/', '#Performer_Id', $('#DepartmentFilterFormat').val());
         }
         //set state secondery
-        SelectValueInOtherDropdownOnChange($(this).val(), '/Cases/ChangeWorkingGroupSetStateSecondary/', '#case__StateSecondary_Id')
-    });
+        SelectValueInOtherDropdownOnChange($(this).val(), '/Cases/ChangeWorkingGroupSetStateSecondary/', '#case__StateSecondary_Id');        
+      });
 
     $('#case__StateSecondary_Id').change(function () {
         $('#CaseLog_SendMailAboutCaseToNotifier').removeAttr('disabled');
+        curVal = $('#case__StateSecondary_Id').val();
+        $('#case__StateSecondary_Id option[value=' + curVal + ']').attr('selected', 'selected');
         $.post('/Cases/ChangeStateSecondary', { 'id': $(this).val() }, function (data) {
             // disable send mail checkbox
             if (data.NoMailToNotifier == 1) {

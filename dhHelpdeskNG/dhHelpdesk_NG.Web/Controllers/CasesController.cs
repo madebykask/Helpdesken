@@ -2577,10 +2577,10 @@ namespace DH.Helpdesk.Web.Controllers
                         case_.Priority_Id = oldCase.Priority_Id;
                     }
 
-                    if (cu.StateSecondaryPermission == 0)
-                    {
-                        case_.StateSecondary_Id = oldCase.StateSecondary_Id;
-                    }
+                    //if (cu.StateSecondaryPermission == 0)
+                    //{
+                    //    case_.StateSecondary_Id = oldCase.StateSecondary_Id;
+                    //}
                 }
 
                 if (oldCase.StateSecondary_Id.HasValue)
