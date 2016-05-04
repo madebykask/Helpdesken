@@ -10,7 +10,10 @@
                 <li>@Html.ActionLink(Translation.Get("Spara"), "Edit", new { id = Model.CausingPart.Id }, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
                 <li>@Html.ActionLink(Translation.Get("Ta bort"), "Delete", new { id = Model.CausingPart.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post") })</li>
                 <li>@Html.ActionLink(Translation.Get("Avbryt"), "Index", new { customerId = Model.CausingPart.CustomerId }, new { @class = "btn" })</li>
-                <li>@Html.ActionLink(Translation.Get("Lägg till") + " " + Translation.Get("Rotorsak"), "New", new { parentId = Model.CausingPart.Id, customerId = Model.CausingPart.CustomerId }, new { @class = "btn" })</li>
+                @if (Model.CausingPart.ParentId == null)
+                {
+                    <li>@Html.ActionLink(Translation.Get("Lägg till") + " " + Translation.Get("Rotorsak"), "New", new { parentId = Model.CausingPart.Id, customerId = Model.CausingPart.CustomerId }, new { @class = "btn" })</li>
+                }
             </ul>
         </div>
     </div>
