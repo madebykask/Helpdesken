@@ -24,6 +24,7 @@ var DateFields = ['#CaseRegistrationDateStartFilter', '#CaseRegistrationDateEndF
                   '#CaseClosingDateStartFilter', '#CaseClosingDateEndFilter'
 ];
 
+var listBoxes = ['#lstfilterCaseRemainingTime', '#lstfilterCaseProgress', '#lstMyFavorites'];
 
 /// initial state of search form
 FilterForm.prototype.init = function (opt) {
@@ -181,12 +182,38 @@ FilterForm.prototype.init = function (opt) {
         if (_chosen != undefined) {
             _chosen.container.bind('keydown', function (ev) {
                 if (ev.keyCode == 13) {
-                    ev.preventDefault();
-                    return false;
+                    ev.preventDefault();                    
+                    if (!_chosen.results_showing) {
+                        me.onSearchClick.call(me);                        
+                        return false;
+                    }
+                    else {
+                        return false;                        
+                    }
                 }
             });
         }
-    });    
+    });
+
+    $.each(listBoxes, function (index) {
+        var _list = $(listBoxes[index]);
+        if (_list != undefined) {
+            _list.bind('keydown', function (ev) {
+                if (ev.keyCode == 13) {
+                    ev.preventDefault();
+                    me.onSearchClick.call(me);
+                    return false;
+                    //if (!_chosen.results_showing) {
+                    //    
+                    //    return false;
+                    //}
+                    //else {
+                    //    return false;
+                    //}
+                }
+            });
+        }
+    });
                 
     $('#btnCancelFavorite').on('click', function (ev) {
         me.$favoriteDialog.modal('hide');
