@@ -9,7 +9,8 @@
 
 <script type="text/javascript">
     window.parameters = {
-        currentCaseId: '@Model.case_.Id',        
+        currentCaseId: '@Model.case_.Id',
+        currentCaseNumber: '@Model.case_.CaseNumber',
         customerId: '@Model.case_.Customer_Id',
         parentCaseId: '@(Model.ParentCaseInfo != null ? Model.ParentCaseInfo.ParentId.ToString() : "null")',
         isAnyNotClosedChild: '@Model.IsAnyNotClosedChild().ToString()',

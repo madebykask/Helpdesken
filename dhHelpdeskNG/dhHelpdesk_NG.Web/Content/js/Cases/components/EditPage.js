@@ -589,10 +589,7 @@ EditPage.prototype.init = function (p) {
                 }
         });
     });
-
     
-
-
     $('.date').each(function () {
         var $this = $(this);
         var errorLabel = $this.find('label.error:visible');
@@ -610,6 +607,7 @@ EditPage.prototype.init = function (p) {
         $.get("/Cases/ShowCasePrintPreview/",
                 {
                     caseId: p.currentCaseId,
+                    caseNumber: p.currentCaseNumber,
                     curTime: new Date().getTime()
                 },                
 
@@ -631,13 +629,9 @@ EditPage.prototype.init = function (p) {
                         update_iFrame(_iframe.attr("id"));                        
                     }
                 }
-             );
-
-       
+             );       
     });
-
     
-
     var update_iFrame = function (iframeId) {
         setTimeout(function () {           
             var elm = document.getElementById(iframeId);
@@ -648,10 +642,7 @@ EditPage.prototype.init = function (p) {
         }, 3000);
     }
 
-
     //////// event bind end ///////////
-
-
     /*
         window.parameters.currentCaseId,
         customerId: window.parameters.customerId,

@@ -1965,9 +1965,9 @@ namespace DH.Helpdesk.Web.Controllers
             return Json("Success");
         }
 
-        public PartialViewResult ShowCasePrintPreview(int caseId)
+        public PartialViewResult ShowCasePrintPreview(int caseId, int caseNumber)
         {
-            var model = GetCaseReportViewerData("CaseDetailsList", caseId);
+            var model = GetCaseReportViewerData("CaseDetailsList", caseId, caseNumber);
             model.CanShow = true;
             return PartialView("_CasePrint", model);
         }
@@ -4791,7 +4791,7 @@ namespace DH.Helpdesk.Web.Controllers
             return ret;
         }
 
-        private ReportModel GetCaseReportViewerData(string reportName, int caseId)
+        private ReportModel GetCaseReportViewerData(string reportName, int caseId, int caseNumber)
         {
             var reportSelectedFilter = new ReportSelectedFilter();
             reportSelectedFilter.SelectedCustomers.Add(SessionFacade.CurrentCustomer.Id);
@@ -4819,6 +4819,7 @@ namespace DH.Helpdesk.Web.Controllers
                 reportViewer.SizeToReportContent = true;
                 reportViewer.ShowZoomControl = false;                
                 reportViewer.LocalReport.ReportPath = reportFile;
+                reportViewer.LocalReport.DisplayName = caseNumber.ToString();
 
                 var parameters = new List<ReportParameter>();
                 parameters.Add(new ReportParameter("CaseId", caseId.ToString()));
