@@ -7,6 +7,21 @@
 
         $(document).ready(function () {
             CaseInitForm();
+
+            $("#case-action-save").click(function (e) {
+                e.preventDefault();
+                $('#case__StateSecondary_Id').removeAttr('disabled');
+            });
+
+            $("#case-action-save-and-close").click(function (e) {
+                e.preventDefault();
+                $('#case__StateSecondary_Id').removeAttr('disabled');
+            });
+
+            $("#case-action-save-and-new").click(function (e) {
+                e.preventDefault();
+                $('#case__StateSecondary_Id').removeAttr('disabled');
+            });
         });
 
         $("#case__RegLanguage_Id").change(function () {
@@ -42,14 +57,13 @@
                 <ul class="secnav">
                     @if (Model.templateistrue != 1)
                     {
-                        <li><a class="btn save" href="#">@Translation.Get("Spara")</a></li>
+                        <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), null, null, null, new { @class = "btn save", id = "case-action-save" })</li>
                     }
-
-                    <li><a class="btn save-close" href="#">@Translation.Get("Spara och stäng")</a></li>
+                    <li>@Html.ActionLink(Translation.Get("Spara och stäng", Enums.TranslationSource.TextTranslation), null, null, new { @class = "btn save-close", id = "case-action-save-and-close" })</li>
 
                     @if (Model.templateistrue != 1 && !Model.IsItChildCase())
                     {
-                        <li><a class="btn save-new">@string.Format("{0} / {1}", Translation.Get("Spara"), Translation.Get("Nytt ärende"))</a></li>
+                        <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation), null, null, new { @class = "btn save-new", id = "case-action-save-and-new" })</li>
                     }
                     <li class="secspace"></li>
                     

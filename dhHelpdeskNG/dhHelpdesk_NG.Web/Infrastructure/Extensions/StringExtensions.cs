@@ -338,7 +338,7 @@
 
         public static string HtmlReadOnlyFlag(this int caseId, int permission)
         {
-            return caseId == 0 ? string.Empty : permission != 1 ? "disabled=disabled" : string.Empty;
+            return caseId < 0 ? string.Empty : permission != 1 ? "disabled=disabled" : string.Empty;
         }
 
         /// <summary>
