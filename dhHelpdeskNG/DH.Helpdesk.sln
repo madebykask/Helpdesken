@@ -22,13 +22,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CommonAssembly", "CommonAss
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DH.Helpdesk.SelfService", "dhHelpdesk_NG.Web_SelfService\DH.Helpdesk.SelfService.csproj", "{9DBE7D20-DEE8-427C-9A68-FC338B1108FC}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{0ECA3C7D-BF8B-467B-985C-6ED28E8E9E22}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
