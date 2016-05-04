@@ -55,6 +55,9 @@ function IsWillBeOverwritten(fieldId, val) {
         case 'Department_Id':
             return IsWillBeOverwrittenByValue('#case__Department_Id', '#case__Department_Id', val);
             break;
+        case 'PersonsEmail':
+            return IsWillBeOverwrittenByValue('#case__PersonsEmail', '#case__PersonsEmail', val);
+            break;
         case 'NoMailToNotifier':
             return false;
             break;
@@ -152,6 +155,10 @@ function ApplyTemplate(data, doOverwrite) {
                     el = $('#case__Department_Id');
                     SetValueIfElVisible(el, val, cfg);
                     break;
+                case 'PersonsEmail':
+                    el = $("#case__PersonsEmail");
+                    SetValueIfElVisible(el, val, cfg);
+                    break;
                 case 'NoMailToNotifier':
                     el = $("#CaseMailSetting_DontSendMailToNotifier");
                     SetCheckboxValueIfElVisible(el, val);
@@ -237,6 +244,9 @@ function IsValueApplicableFor(templateFieldId, val) {
             break;
         case 'Department_Id':
             return $('#case__Department_Id');
+            break;
+        case 'PersonsEmail':
+            return $("#case__PersonsEmail").is(':visible');
             break;
         case 'NoMailToNotifier':
             return true;

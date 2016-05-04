@@ -327,7 +327,8 @@ namespace DH.Helpdesk.Web.Controllers
                     caseSolution.FinishingCause_Id,
                     caseSolution.RegistrationSource,
                     caseSolution.Status_Id,
-                    caseSolution.StateSecondary_Id
+                    caseSolution.StateSecondary_Id,
+                    caseSolution.PersonsEmail
                 },
                     JsonRequestBehavior.AllowGet);
         }
