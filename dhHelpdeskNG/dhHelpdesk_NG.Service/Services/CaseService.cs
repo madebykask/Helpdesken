@@ -1175,7 +1175,8 @@ namespace DH.Helpdesk.Services.Services
             }
 
             // get new case information
-            var newCase = _caseRepository.GetDetachedCaseById(caseId);
+            var newCase = _caseRepository.GetDetachedCaseById(caseId);            
+
             var customerSetting = _settingService.GetCustomerSetting(newCase.Customer_Id);
             bool dontSendMailToNotfier = false;
             var isCreatingCase = oldCase == null || oldCase.Id == 0;
@@ -2333,8 +2334,11 @@ namespace DH.Helpdesk.Services.Services
         {
             List<Field> ret = new List<Field>();
 
+            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(c.User.TimeZoneId);
+            var userLocal_RegTime = TimeZoneInfo.ConvertTimeFromUtc(c.RegTime, userTimeZone);
+
             ret.Add(new Field { Key = "[#1]", StringValue = c.CaseNumber.ToString() } );
-            ret.Add(new Field { Key = "[#16]", StringValue = c.RegTime.ToLocalTime().ToString() } ); 
+            ret.Add(new Field { Key = "[#16]", StringValue = userLocal_RegTime.ToString() }); 
             ret.Add(new Field { Key = "[#22]", StringValue = c.LastChangedByUser != null ? c.LastChangedByUser.FirstName + " " + c.LastChangedByUser.SurName : string.Empty }); 
             ret.Add(new Field { Key = "[#3]", StringValue = c.PersonsName } ); 
             ret.Add(new Field { Key = "[#8]", StringValue = c.PersonsEmail } ); 
