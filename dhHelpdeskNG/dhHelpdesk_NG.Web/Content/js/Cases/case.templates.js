@@ -15,6 +15,22 @@ function SetValueIfElVisible(el, val, opt) {
     }
 }
 
+function SetDateValueIfElVisible(el, val, opt, format) {
+    opt = opt || { doOverwrite: false, doNotTriggerEvent: false };
+    if (el && $(el).is(':visible')) {
+        if (el.val() == "" || opt.doOverwrite) {            
+            $(el).datepicker({
+                format: format.toLowerCase(),
+                autoclose: true
+            }).datepicker('setDate', val);
+           
+            if (!opt.doNotTriggerEvent) {
+                $(el).trigger('change');                
+            }            
+        }
+    }
+}
+
 function SetValueToBtnGroup(domContainer, domText, domValue, value, doOverwrite) {
     var $domValue = $(domValue);
     var oldValue = $domValue.val();
@@ -60,6 +76,9 @@ function IsWillBeOverwritten(fieldId, val) {
             break;
         case 'NoMailToNotifier':
             return false;
+            break;
+        case 'WatchDate':
+            return IsWillBeOverwrittenByValue('#case__WatchDate', '#case__WatchDate', val);
             break;
         case 'ProductArea_Id':
             return IsWillBeOverwrittenByValue('#divProductArea', '#case__ProductArea_Id', val);
@@ -133,8 +152,9 @@ var overwriteWarning = {
     }
 };
 
-function ApplyTemplate(data, doOverwrite) {
+var ApplyTemplate = function (data, doOverwrite) {
     var cfg = { doOverwrite: doOverwrite };
+    var dateFormat = data["dateFormat"];
     for (var fieldId in data) {
         var val = data[fieldId];
         var el;
@@ -162,6 +182,10 @@ function ApplyTemplate(data, doOverwrite) {
                 case 'NoMailToNotifier':
                     el = $("#CaseMailSetting_DontSendMailToNotifier");
                     SetCheckboxValueIfElVisible(el, val);
+                    break;
+                case 'WatchDate':
+                    el = $("#case__WatchDate");
+                    SetDateValueIfElVisible(el, val, cfg, dateFormat);
                     break;
                 case 'ProductArea_Id':
                     SetValueToBtnGroup('#divProductArea', "#divBreadcrumbs_ProductArea", "#case__ProductArea_Id", val, doOverwrite);
@@ -251,6 +275,9 @@ function IsValueApplicableFor(templateFieldId, val) {
         case 'NoMailToNotifier':
             return true;
             break;
+        case 'WatchDate':
+            return $("#case__WatchDate").is(':visible');
+            break;          
         case 'ProductArea_Id':
             return $('#divProductArea').is(':visible') && $('#divProductArea').find('a[value="' + val + '"]').length != 0;
             break;
@@ -337,7 +364,7 @@ function GetTemplateData(id) {
 
             if (showOverwriteWarning) {
                 window.overwriteWarning.show(caseTemplate);
-            } else {
+            } else {                
                 window.ApplyTemplate(caseTemplate);
             }
         }

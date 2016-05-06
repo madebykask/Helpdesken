@@ -23,6 +23,7 @@ namespace DH.Helpdesk.Web.Controllers
 
     using Ninject.Infrastructure.Language;
     using DH.Helpdesk.Common.Enums.CaseSolution;
+    using System.Threading;
 
     public class CaseSolutionController : UserInteractionController
     {
@@ -309,6 +310,7 @@ namespace DH.Helpdesk.Web.Controllers
             return this.Json(
                 new
                 {
+                    dateFormat = Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern,
                     caseSolution.CaseType_Id,
                     caseSolution.PerformerUser_Id,
                     caseSolution.Category_Id,
@@ -328,7 +330,8 @@ namespace DH.Helpdesk.Web.Controllers
                     caseSolution.RegistrationSource,
                     caseSolution.Status_Id,
                     caseSolution.StateSecondary_Id,
-                    caseSolution.PersonsEmail
+                    caseSolution.PersonsEmail,
+                    WatchDate = caseSolution.WatchDate.HasValue? caseSolution.WatchDate.Value.ToShortDateString() : string.Empty
                 },
                     JsonRequestBehavior.AllowGet);
         }
