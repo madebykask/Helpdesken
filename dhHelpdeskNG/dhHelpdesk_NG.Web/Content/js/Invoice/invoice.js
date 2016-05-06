@@ -1359,6 +1359,9 @@ $(function () {
                 modal: true,
                 width: 1100,                
                 autoResize: true,
+                resizable: false,
+                height: "auto",
+                width:"90%",
                 overflow:"auto",
                 resize: function (event, ui) {
                     var thisHeight = $(event.target).height(); //todo fix this - if you resize manually, the window wont automatically resize later on
