@@ -633,3 +633,9 @@ $(".chosen-select").chosen({
     'placeholder_text_multiple': placeholder_text_multiple,
     'no_results_text': no_results_text
 });
+
+$(".chosen-single-select").chosen({
+    width: "315px",
+    'placeholder_text_multiple': placeholder_text_multiple,
+    'no_results_text': no_results_text
+});

@@ -565,6 +565,7 @@ namespace DH.Helpdesk.Web.Controllers
                                          SessionFacade.CurrentCustomer.Id,
                                          caseSolution.CaseWorkingGroup_Id).MapToSelectList(cs, true);
             const bool TakeOnlyActive = true;
+                                        
             var model = new CaseSolutionInputViewModel
             {
                 CaseSolution = caseSolution,

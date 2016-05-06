@@ -512,19 +512,19 @@
                                     <h4><a href="#" class="showbtn"><i class="icon-plus-sign"></i></a>
                                         <a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a>
                                          @Translation.Get("Angående") -&nbsp;  @if (Model.case_.IsAbout != null && @Model.case_.IsAbout.ReportedBy != null)
-                                                    { @Model.case_.IsAbout.ReportedBy }&nbsp;
+                                                                               { @Model.case_.IsAbout.ReportedBy }&nbsp;
                                                     @if (Model.case_.IsAbout != null && Model.case_.IsAbout.Person_Name != null)
-                                                     {
+                                                    {
                                                          @Model.case_.IsAbout.Person_Name 
-                                                     } &nbsp;
+                                                    } &nbsp;
                                                     @if (Model.case_.IsAbout != null && Model.case_.IsAbout.Department_Id != null)
-                                                     {
-                                                         var curDep = Model.departments.Where(d => d.Id == Model.case_.IsAbout.Department_Id).SingleOrDefault();
+                                                    {
+                                                        var curDep = Model.departments.Where(d => d.Id == Model.case_.IsAbout.Department_Id).SingleOrDefault();
                                                         @curDep.DepartmentName 
                                                     } &nbsp;
                                                     @if (Model.case_.IsAbout != null && Model.case_.IsAbout.OU_Id != null)
-                                                     {
-                                                         var curOu = Model.isaboutous.Where(w => w.Id == Model.case_.IsAbout.OU_Id).SingleOrDefault();
+                                                    {
+                                                        var curOu = Model.isaboutous.Where(w => w.Id == Model.case_.IsAbout.OU_Id).SingleOrDefault();
                                                         @curOu.Name 
                                                     }
                                     </h4>
@@ -1685,7 +1685,7 @@
                                         </tr>
                                         }
                                     }
-                                    <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.CausingPart, CaseSolutionFields.CausingPart)">
+                                   @* <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.CausingPart, CaseSolutionFields.CausingPart)">
                                         <td>
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.CausingPart, "Rotorsak")
                                         </td>
@@ -1720,6 +1720,51 @@
                                                      @Html.HiddenFor(x => x.case_.CausingPartId)
                                                 }
 
+                                            }
+                                            
+                                        </td>
+                                    </tr>*@
+                                    
+                                    <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.CausingPart, CaseSolutionFields.CausingPart)">
+                                        <td>
+                                            @CaseFieldCaption(GlobalEnums.TranslationCaseFields.CausingPart, "Rotorsak")
+                                        </td>
+                                        <td class="span1" style="float: left;">                                            
+                                            @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.CausingPart, CaseSolutionFields.CausingPart))
+                                            {
+                                               <select id="case__CausingPartId" name="case_.CausingPartId" class='chosen-single-select'>    
+                                                   <option> &nbsp; </option>
+                                                   @foreach(var causingPart in Model.causingParts) 
+                                                   {
+                                                       var curId = int.Parse(causingPart.Value);
+                                                      <option value="@causingPart.Value" @curId.IdIsSelected(Model.case_.CausingPartId.ToString())> @Translation.GetMasterDataTranslation(causingPart.Text) </option>
+                                                   }
+                                               </select>
+                                            }
+                                            else
+                                            {
+                                                var causingpart = Model.case_.CausingPartId.HasValue ? Model.causingParts.SingleOrDefault(x => x.Value == Model.case_.CausingPartId.ToString()) : null;
+
+                                                if (causingpart == null)
+                                                {
+                                                    if (Model.case_.CausingPart != null)
+                                                    {
+                                                        var transName = Translation.GetMasterDataTranslation(Model.case_.CausingPart.Name);
+                                                        @Html.TextBoxFor(m => transName, new { @readonly = true })
+                                                       
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.TextBoxFor(m => m.case_.CausingPart.Name, new { @readonly = true })
+                                                    }
+
+                                                }
+                                                else
+                                                {
+                                                    var transName = Translation.GetMasterDataTranslation(causingpart.Text);
+                                                     @Html.TextBoxFor(m => transName, new { @readonly = true })
+                                                     @Html.HiddenFor(x => x.case_.CausingPartId)
+                                                }
                                             }
                                             
                                         </td>
@@ -1961,12 +2006,12 @@
         </div>
     </div>    
     
-    if(Model.case_.Id > 0 && Model.CasePrintView != null)
-    {
+                if (Model.case_.Id > 0 && Model.CasePrintView != null)
+                {
         <div>
             @Html.Partial("_CasePrint", Model.CasePrintView)
         </div>        
-    }     
+                }
 }
 
 @functions    {

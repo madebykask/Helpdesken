@@ -62,6 +62,7 @@ namespace DH.Helpdesk.Web.Controllers
     using Microsoft.Reporting.WebForms;
     using DH.Helpdesk.BusinessData.Models.ReportService;
     using DH.Helpdesk.Services.Services.Reports;
+    using DH.Helpdesk.BusinessData.Models.Case.Output;
 
     public class CasesController : BaseController
     {        
@@ -3814,7 +3815,21 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CausingPart.ToString()).ShowOnStartPage == 1)
             {
-                m.causingParts = this._causingPartService.GetCausingParts(customerId);
+                var causingParts = this._causingPartService.GetActiveCausingParts(customerId).ToList();
+
+                var parentCausingParts = causingParts.Where(cp => !cp.Children.Any()).ToList();
+                var childrenCausingParts = causingParts.Where(cp => (cp.ParentId.HasValue && !cp.Parent.ParentId.HasValue) || (m.case_.CausingPartId.HasValue && cp.Id == m.case_.CausingPartId.Value)).ToList();
+                var curCausingPart = m.case_.CausingPartId.HasValue?  causingParts.Where(cp => cp.Id == m.case_.CausingPartId.Value).ToList() : new List<CausingPartOverview>();
+                var allCasingParts = parentCausingParts.Union(childrenCausingParts).Union(curCausingPart);
+                var causingPartToShow = new List<SelectListItem>();
+                causingPartToShow = allCasingParts.Select(c => new SelectListItem { 
+                                                                            Text = (c.ParentId.HasValue) ? c.Parent.Name + " - " + c.Name : c.Name, 
+                                                                            Value = c.Id.ToString()})
+                                                  .OrderBy(s => s.Text).ToList();
+
+                m.causingParts = causingPartToShow;
+                //#1
+                //m.causingParts = this._causingPartService.GetCausingParts(customerId);
             }
 
             // "Workging group" field

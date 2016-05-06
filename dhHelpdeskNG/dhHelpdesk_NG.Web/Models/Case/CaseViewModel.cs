@@ -96,7 +96,9 @@
         public IList<Supplier> suppliers { get; set; }
         public IList<Helpdesk.Domain.System> systems { get; set; }
         public IList<Urgency> urgencies { get; set; }
-        public IEnumerable<CausingPartOverview> causingParts { get; set; }
+        //#1
+        //public IEnumerable<CausingPartOverview> causingParts { get; set; }        
+        public IList<SelectListItem> causingParts { get; set; }
         
         /// <summary>
         /// user id for "Administrator" field
