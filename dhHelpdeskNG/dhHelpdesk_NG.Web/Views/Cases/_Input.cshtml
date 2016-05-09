@@ -1728,35 +1728,46 @@
                                     <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.CausingPart, CaseSolutionFields.CausingPart)">
                                         <td>
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.CausingPart, "Rotorsak")
-                                        </td>
+                                        </td>                                        
                                         <td class="span1" style="float: left;">                                            
                                             @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.CausingPart, CaseSolutionFields.CausingPart))
                                             {
-                                               <select id="case__CausingPartId" name="case_.CausingPartId" class='chosen-single-select'>    
-                                                   <option> &nbsp; </option>
-                                                   @foreach (var causingPart in Model.causingParts)
-                                                   {                                                                                                           
-                                                      <option value="@causingPart.Value" @(causingPart.Selected ? "Selected" : "")> @causingPart.Text </option>
-                                                   }                                                   
-                                               </select>
+                                                    
+                                                <select id="case__CausingPartId" name="case_.CausingPartId" class='chosen-single-select'>    
+                                                    <option> &nbsp; </option>
+                                                    @if (Model.causingParts != null)
+                                                    {
+                                                        foreach (var causingPart in Model.causingParts)
+                                                        {                                                                                                           
+                                                            <option value="@causingPart.Value" @(causingPart.Selected ? "Selected" : "")> @causingPart.Text </option>
+                                                        }
+                                                    }
+                                                </select>
                                             }
                                             else
                                             {
-                                                @Html.HiddenFor(model => model.case_.CausingPartId)
-                                                var causingpart = Model.case_.CausingPartId.HasValue ? Model.causingParts.SingleOrDefault(x => x.Value == Model.case_.CausingPartId.ToString()) : null;
-
-                                                if (causingpart == null)
+                                                @Html.HiddenFor(model => Model.case_.CausingPartId)
+                                                if (Model.causingParts.Any())
                                                 {
-                                                    var t = string.Empty;
-                                                    @Html.TextBoxFor(m=> t, new { @readonly = true })                                                    
+                                                    var causingpart = Model.case_.CausingPartId.HasValue ? Model.causingParts.SingleOrDefault(x => x.Value == Model.case_.CausingPartId.ToString()) : null;
+
+                                                    if (causingpart == null)
+                                                    {
+                                                        var t = string.Empty;
+                                                        @Html.TextBoxFor(m => t, new { @readonly = true })                                                    
+                                                    }
+                                                    else
+                                                    {                                                                                                       
+                                                        @Html.TextBoxFor(m => causingpart.Text, new { @readonly = true })                                                     
+                                                    }
                                                 }
                                                 else
-                                                {                                                                                                       
-                                                    @Html.TextBoxFor(m => causingpart.Text, new { @readonly = true })                                                     
+                                                {
+                                                    var t = string.Empty;
+                                                    @Html.TextBoxFor(m => t, new { @readonly = true })
                                                 }
-                                            }
-                                            
-                                        </td>
+                                            }                                            
+                                        </td>                                        
                                     </tr>
                                     @if (Model.changes != null)
                                     {

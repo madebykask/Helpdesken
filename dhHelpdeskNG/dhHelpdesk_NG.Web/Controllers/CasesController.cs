@@ -3941,6 +3941,17 @@ namespace DH.Helpdesk.Web.Controllers
                             m.case_.Category_Id = caseTemplate.Category_Id.Value;
                         }
 
+                        if (caseTemplate.CausingPartId.HasValue)
+                        {
+                            m.case_.CausingPartId = caseTemplate.CausingPartId.Value;
+                            if (m.causingParts != null)
+                            {
+                                var templateCausingPart = m.causingParts.Where(c => c.Value == caseTemplate.CausingPartId.Value.ToString()).SingleOrDefault();
+                                if (templateCausingPart != null)
+                                    templateCausingPart.Selected = true;
+                            }
+                        }
+
                         if (caseTemplate.UpdateNotifierInformation.HasValue)
                         {
                             m.UpdateNotifierInformation = caseTemplate.UpdateNotifierInformation.Value.ToBool();

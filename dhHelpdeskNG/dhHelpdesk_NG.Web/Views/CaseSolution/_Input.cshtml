@@ -730,7 +730,18 @@
                                         @Translation.Get(GlobalEnums.TranslationCaseFields.CausingPart.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                     </td>
                                     <td>
-                                        @Html.DropDownListFor(model => model.CaseSolution.CausingPartId, Model.CausingParts, "", new { id = "CausingPart" })
+                                        <select id="CausingPart" name="CaseSolution.CausingPartId" class='chosen-single-select'>    
+                                            <option> &nbsp; </option>
+                                            @if (Model.CausingParts != null)
+                                            {
+                                                foreach (var causingPart in Model.CausingParts)
+                                                {                                                                                                           
+                                                    <option value="@causingPart.Value" @(causingPart.Selected ? "Selected" : "")> @causingPart.Text </option>
+                                                }    
+                                            }                                               
+                                        </select>
+
+                                        @*@Html.DropDownListFor(model => model.CaseSolution.CausingPartId, Model.CausingParts, "", new { id = "CausingPart" })*@
                                     </td>
                                     <td class="span9">
                                         @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.CausingPart, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.CausingPart)

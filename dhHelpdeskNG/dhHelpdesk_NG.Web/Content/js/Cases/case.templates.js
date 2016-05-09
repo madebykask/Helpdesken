@@ -15,6 +15,14 @@ function SetValueIfElVisible(el, val, opt) {
     }
 }
 
+function SetSingleSelectValueIfElVisible(el, val, opt) {
+    opt = opt || { doOverwrite: false, doNotTriggerEvent: false };   
+        if (el.val() == "" || opt.doOverwrite) {            
+            $(el).val(val);
+            $(el).trigger("chosen:updated");            
+        }    
+}
+
 function SetDateValueIfElVisible(el, val, opt, format) {
     opt = opt || { doOverwrite: false, doNotTriggerEvent: false };
     if (el && $(el).is(':visible')) {
@@ -118,6 +126,9 @@ function IsWillBeOverwritten(fieldId, val) {
             break;
         case 'Status_Id':
             return IsWillBeOverwrittenByValue('#case__Status_Id', '#case__Status_Id', val);
+            break;
+        case 'CausingPartId':
+            return IsWillBeOverwrittenByValue('#case__CausingPartId', '#case__CausingPartId', val);
             break;
         case 'StateSecondary_Id':
             return IsWillBeOverwrittenByValue('#case__StateSecondary_Id', '#case__StateSecondary_Id', val);
@@ -246,6 +257,10 @@ var ApplyTemplate = function (data, doOverwrite) {
                     el = $("#case__Status_Id");
                     SetValueIfElVisible(el, val, cfg);
                     break;
+                case 'CausingPartId':
+                    el = $("#case__CausingPartId").chosen();
+                    SetSingleSelectValueIfElVisible(el, val, cfg);
+                    break;
             }
         }
     }
@@ -319,6 +334,9 @@ function IsValueApplicableFor(templateFieldId, val) {
             break;
         case 'Status_Id':
             return $("#case__Status_Id").is(':visible');
+            break;
+        case 'CausingPartId':
+            return $("#case__CausingPartId").is(':visible');
             break;
     }
     return false;
