@@ -3815,19 +3815,8 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CausingPart.ToString()).ShowOnStartPage == 1)
             {
-                var causingParts = this._causingPartService.GetActiveCausingParts(customerId).ToList();
-
-                var parentCausingParts = causingParts.Where(cp => !cp.Children.Any()).ToList();
-                var childrenCausingParts = causingParts.Where(cp => (cp.ParentId.HasValue && !cp.Parent.ParentId.HasValue) || (m.case_.CausingPartId.HasValue && cp.Id == m.case_.CausingPartId.Value)).ToList();
-                var curCausingPart = m.case_.CausingPartId.HasValue?  causingParts.Where(cp => cp.Id == m.case_.CausingPartId.Value).ToList() : new List<CausingPartOverview>();
-                var allCasingParts = parentCausingParts.Union(childrenCausingParts).Union(curCausingPart);
-                var causingPartToShow = new List<SelectListItem>();
-                causingPartToShow = allCasingParts.Select(c => new SelectListItem { 
-                                                                            Text = (c.ParentId.HasValue) ? c.Parent.Name + " - " + c.Name : c.Name, 
-                                                                            Value = c.Id.ToString()})
-                                                  .OrderBy(s => s.Text).ToList();
-
-                m.causingParts = causingPartToShow;
+                var causingParts = GetCausingPartsModel(customerId, m.case_.CausingPartId);              
+                m.causingParts = causingParts;
                 //#1
                 //m.causingParts = this._causingPartService.GetCausingParts(customerId);
             }
@@ -4852,6 +4841,54 @@ namespace DH.Helpdesk.Web.Controllers
             return model;
         }
 
+        private List<SelectListItem> GetCausingPartsModel(int customerId, int? curCausingPartId)
+        {
+            var allActiveCausinParts = this._causingPartService.GetActiveParentCausingParts(customerId, curCausingPartId);
+            var ret = new List<SelectListItem>();
+
+            var parentRet = new List<SelectListItem>();
+            var childrenRet = new List<SelectListItem>();
+
+            foreach (var causingPart in allActiveCausinParts)
+            {
+                var curName = string.Empty; 
+                if (causingPart.Parent != null && curCausingPartId.HasValue && causingPart.Id == curCausingPartId.Value)
+                {
+                    curName = string.Format("{0} - {1}", Translation.Get(causingPart.Parent.Name, Enums.TranslationSource.TextTranslation, customerId), 
+                                                         Translation.Get(causingPart.Name, Enums.TranslationSource.TextTranslation, customerId));
+                    
+                    childrenRet.Add(new SelectListItem(){ Value = causingPart.Id.ToString(), Text = curName, Selected = true });
+                }
+                else
+                {
+                    if (causingPart.Children.Any())
+                    {
+                        foreach (var child in causingPart.Children)
+                        {
+                            if (child.IsActive)
+                            {
+                                curName = string.Format("{0} - {1}", Translation.Get(causingPart.Name, Enums.TranslationSource.TextTranslation, customerId),
+                                                                     Translation.Get(child.Name, Enums.TranslationSource.TextTranslation, customerId));
+
+                                var isSelected = (child.Id == curCausingPartId);
+                                childrenRet.Add(new SelectListItem() { Value = child.Id.ToString(), Text = curName, Selected = isSelected });
+                            }
+                        }
+                    }
+                    else
+                    {
+                        curName = Translation.Get(causingPart.Name, Enums.TranslationSource.TextTranslation, customerId);
+                        var isSelected = (causingPart.Id == curCausingPartId);
+                        parentRet.Add(new SelectListItem() { Value = causingPart.Id.ToString(), Text = curName, Selected = isSelected });
+                    }
+                }                
+            }
+            
+            ret = parentRet.OrderBy(p => p.Text).Union(childrenRet.OrderBy(c => c.Text)).ToList();
+
+            return ret;
+
+        }
         #endregion
 
         #region --General--

@@ -116,6 +116,19 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                 .FirstOrDefault();
         }
 
+
+        public IEnumerable<CausingPartOverview> GetActiveParentCausingParts(int customerId, int? alternativeId)
+        {            
+            var entities = (alternativeId.HasValue)? 
+                            this.Table.Where(c =>  c.CustomerId == customerId && ((c.Parent == null && c.Status > 0) || (c.Id == alternativeId.Value)))
+                            .ToList() : 
+                            this.Table.Where(c =>  c.CustomerId == customerId && c.Parent == null && c.Status > 0)
+                            .ToList();
+
+            return entities
+                .Select(this.causingPartToBusinessModelMapper.Map);
+        }
+
         /// <summary>
         /// The save causing part.
         /// </summary>

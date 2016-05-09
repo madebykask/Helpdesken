@@ -77,6 +77,11 @@ namespace DH.Helpdesk.Services.Services.Concrete
             return this.causingPartRepository.GetCausingPart(causingPartId);
         }
 
+        public IEnumerable<CausingPartOverview> GetActiveParentCausingParts(int customerId, int? alternativeId)
+        {
+            return this.causingPartRepository.GetActiveParentCausingParts(customerId, alternativeId);
+        }
+
         /// <summary>
         /// The save causing part.
         /// </summary>

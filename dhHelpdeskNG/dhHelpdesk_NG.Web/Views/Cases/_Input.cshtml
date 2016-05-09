@@ -1734,36 +1734,24 @@
                                             {
                                                <select id="case__CausingPartId" name="case_.CausingPartId" class='chosen-single-select'>    
                                                    <option> &nbsp; </option>
-                                                   @foreach(var causingPart in Model.causingParts) 
-                                                   {
-                                                       var curId = int.Parse(causingPart.Value);
-                                                      <option value="@causingPart.Value" @curId.IdIsSelected(Model.case_.CausingPartId.ToString())> @Translation.GetMasterDataTranslation(causingPart.Text) </option>
-                                                   }
+                                                   @foreach (var causingPart in Model.causingParts)
+                                                   {                                                                                                           
+                                                      <option value="@causingPart.Value" @(causingPart.Selected ? "Selected" : "")> @causingPart.Text </option>
+                                                   }                                                   
                                                </select>
                                             }
                                             else
                                             {
+                                                @Html.HiddenFor(model => model.case_.CausingPartId)
                                                 var causingpart = Model.case_.CausingPartId.HasValue ? Model.causingParts.SingleOrDefault(x => x.Value == Model.case_.CausingPartId.ToString()) : null;
 
                                                 if (causingpart == null)
                                                 {
-                                                    if (Model.case_.CausingPart != null)
-                                                    {
-                                                        var transName = Translation.GetMasterDataTranslation(Model.case_.CausingPart.Name);
-                                                        @Html.TextBoxFor(m => transName, new { @readonly = true })
-                                                       
-                                                    }
-                                                    else
-                                                    {
-                                                        @Html.TextBoxFor(m => m.case_.CausingPart.Name, new { @readonly = true })
-                                                    }
-
+                                                    @Html.TextBox("", new { @readonly = true })                                                    
                                                 }
                                                 else
-                                                {
-                                                    var transName = Translation.GetMasterDataTranslation(causingpart.Text);
-                                                     @Html.TextBoxFor(m => transName, new { @readonly = true })
-                                                     @Html.HiddenFor(x => x.case_.CausingPartId)
+                                                {                                                                                                       
+                                                    @Html.TextBoxFor(m => causingpart.Text, new { @readonly = true })                                                     
                                                 }
                                             }
                                             
