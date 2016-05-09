@@ -1747,7 +1747,8 @@
 
                                                 if (causingpart == null)
                                                 {
-                                                    @Html.TextBox("", new { @readonly = true })                                                    
+                                                    var t = string.Empty;
+                                                    @Html.TextBoxFor(m=> t, new { @readonly = true })                                                    
                                                 }
                                                 else
                                                 {                                                                                                       
