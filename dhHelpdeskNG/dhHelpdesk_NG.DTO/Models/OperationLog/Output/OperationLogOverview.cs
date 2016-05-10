@@ -37,5 +37,7 @@ namespace DH.Helpdesk.BusinessData.Models.OperationLog.Output
         /// Gets or sets the category.
         /// </summary>
         public OperationLogCategoryOverview Category { get; set; }
+
+        public OperationLogObjectOverview Object { get; set; }
     }
 }

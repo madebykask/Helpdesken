@@ -49,5 +49,7 @@
         public SelectList ResponsibleUsersAvailable { get; set; }
 
         public Setting CustomerSettings { get; set; }
+
+        public int OperationObjectShow { get; set; }
     }
 }

@@ -15,14 +15,6 @@
         }
         <tr>
             <td class="span3">
-                @Html.LabelFor(m => m.Filter.SearchFor)
-            </td>
-            <td>
-                @Html.TextBoxFor(m => m.Filter.SearchFor)
-            </td>
-        </tr>
-        <tr>
-            <td class="span3">
                 @Html.LabelFor(m => m.Filter.RecordsOnPage)
             </td>
             <td>
@@ -30,10 +22,11 @@
             </td>
         </tr>
         <tr>
-            <td class="span3">&nbsp;
+            <td class="span3">
+                @Html.LabelFor(m => m.Filter.SearchFor)
             </td>
             <td>
-                <input type="submit" value="@Translation.Get("Sök")" class="btn" />
+                @Html.TextBoxFor(m => m.Filter.SearchFor) <input type="submit" value="@Translation.Get("Sök")" class="btn" />
             </td>
         </tr>
     </table>

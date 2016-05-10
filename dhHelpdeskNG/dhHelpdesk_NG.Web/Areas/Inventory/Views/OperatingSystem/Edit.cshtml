@@ -22,10 +22,18 @@
 
 @section Content
 {
+    <h4>@Translation.Get("Allmänt")</h4>
+    <div class="row">
+    <div class="span3">
+        @Translation.Get("Operativsystem")
+    </div>
+    <div class="span9">
     @using (Html.BeginForm("Edit", "OperatingSystem", FormMethod.Post, new { id = "computerModule_edit_form" }))
     {
         @Html.EditorFor(m => m.Name)
         @Html.ValidationMessageFor(m => m.Name)
         @Html.HiddenFor(m => m.Id)
     }
+    </div>
+    </div>
 }

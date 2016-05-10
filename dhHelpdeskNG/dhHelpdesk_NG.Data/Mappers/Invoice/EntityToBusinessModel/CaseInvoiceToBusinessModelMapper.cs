@@ -71,6 +71,7 @@
                                 o.CostCentre,
                                 o.CreditForOrder_Id,
                                 o.Project_Id,
+                                o.OrderState,
                                 o.Articles != null? 
                                     o.Articles.Select(a => new CaseInvoiceArticle(
                                                     a.Id,
@@ -81,7 +82,8 @@
                                                     a.Name,
                                                     a.Amount,
                                                     a.Ppu,
-                                                    a.Position)).ToArray():null,
+                                                    a.Position,
+                                                    a.CreditedForArticle_Id)).ToArray():null,
                                  o.Articles != null ?
                                     o.Files.Select(f => this.filesMapper.Map(f)).OrderBy(f => f.FileName).ToArray() : null
                                  ))

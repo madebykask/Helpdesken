@@ -51,7 +51,7 @@
                                                             else
                                                             {
                                                                 var linkUrlAddress = link.UrlAddress;
-                                                                linkUrlAddress = linkUrlAddress.Replace("[UserId]", SessionFacade.CurrentUser.UserId).Replace("[Language]", SessionFacade.CurrentLanguageCode);
+                                                                linkUrlAddress = linkUrlAddress.Replace("[UserId]", SessionFacade.CurrentUser.UserId).Replace("[Language]", SessionFacade.CurrentLanguageCode).Replace("[ApplicationType]", "5");
 
                                                                 if(link.OpenInNewWindow)
                                                                 {

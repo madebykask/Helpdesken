@@ -23,6 +23,7 @@ namespace DH.Helpdesk.Web.Controllers
 
     using Ninject.Infrastructure.Language;
     using DH.Helpdesk.Common.Enums.CaseSolution;
+    using System.Threading;
 
     public class CaseSolutionController : UserInteractionController
     {
@@ -309,6 +310,7 @@ namespace DH.Helpdesk.Web.Controllers
             return this.Json(
                 new
                 {
+                    dateFormat = Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern,
                     caseSolution.CaseType_Id,
                     caseSolution.PerformerUser_Id,
                     caseSolution.Category_Id,
@@ -327,7 +329,10 @@ namespace DH.Helpdesk.Web.Controllers
                     caseSolution.FinishingCause_Id,
                     caseSolution.RegistrationSource,
                     caseSolution.Status_Id,
-                    caseSolution.StateSecondary_Id
+                    caseSolution.StateSecondary_Id,
+                    caseSolution.PersonsEmail,
+                    WatchDate = caseSolution.WatchDate.HasValue? caseSolution.WatchDate.Value.ToShortDateString() : string.Empty,
+                    caseSolution.CausingPartId
                 },
                     JsonRequestBehavior.AllowGet);
         }
@@ -527,20 +532,21 @@ namespace DH.Helpdesk.Web.Controllers
 
         private CaseSolutionInputViewModel CreateInputViewModel(CaseSolution caseSolution)
         {
-            var cs = this._settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
+            var curCustomerId = SessionFacade.CurrentCustomer.Id;
+            var cs = this._settingService.GetCustomerSetting(curCustomerId);
             
             List<SelectListItem> regions = null;
             List<SelectListItem> departments = null;
             List<SelectListItem> organizationUnits = null;
 
-            regions = this._regionService.GetActiveRegions(SessionFacade.CurrentCustomer.Id)
+            regions = this._regionService.GetActiveRegions(curCustomerId)
                                          .Select(x => new SelectListItem
                                          {
                                              Text = x.Name,
                                              Value = x.Id.ToString()
                                          }).ToList();
 
-            departments = this._departmentService.GetActiveDepartmentsBy(SessionFacade.CurrentCustomer.Id, caseSolution.Region_Id)
+            departments = this._departmentService.GetActiveDepartmentsBy(curCustomerId, caseSolution.Region_Id)
                                          .Select(x => new SelectListItem
                                          {
                                              Text = x.DepartmentName,
@@ -555,51 +561,52 @@ namespace DH.Helpdesk.Web.Controllers
                                          }).ToList();
             var isCreatingNew = caseSolution.Id == 0;
             var performersList = isCreatingNew ?
-                                     this._userService.GetAvailablePerformersOrUserId(SessionFacade.CurrentCustomer.Id)
+                                     this._userService.GetAvailablePerformersOrUserId(curCustomerId)
                                          .MapToSelectList(cs, true)
                                      : this._userService.GetAvailablePerformersForWorkingGroup(
-                                         SessionFacade.CurrentCustomer.Id,
+                                         curCustomerId,
                                          caseSolution.CaseWorkingGroup_Id).MapToSelectList(cs, true);
             const bool TakeOnlyActive = true;
+                                                       
             var model = new CaseSolutionInputViewModel
             {
                 CaseSolution = caseSolution,
-                CaseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id),
-                Countries = this._countryService.GetCountries(SessionFacade.CurrentCustomer.Id),
+                CaseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(curCustomerId),
+                Countries = this._countryService.GetCountries(curCustomerId),
                 currencies = this._currencyService.GetCurrencies(),
-                CsCategories = this._caseSolutionService.GetCaseSolutionCategories(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                CsCategories = this._caseSolutionService.GetCaseSolutionCategories(curCustomerId).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
                 
-                CaseTypes = this._caseTypeService.GetCaseTypes(SessionFacade.CurrentCustomer.Id, TakeOnlyActive),
+                CaseTypes = this._caseTypeService.GetCaseTypes(curCustomerId, TakeOnlyActive),
 
-                CaseWorkingGroups = this._workingGroupService.GetAllWorkingGroupsForCustomer(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                CaseWorkingGroups = this._workingGroupService.GetAllWorkingGroupsForCustomer(curCustomerId).Select(x => new SelectListItem
                 {
                     Text = x.WorkingGroupName,
                     Value = x.Id.ToString()
                 }).ToList(),
 
-                Categories = this._categoryService.GetCategories(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                Categories = this._categoryService.GetCategories(curCustomerId).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
 
-                FinishingCauses = this._finishingCauseService.GetFinishingCauses(SessionFacade.CurrentCustomer.Id),
+                FinishingCauses = this._finishingCauseService.GetFinishingCauses(curCustomerId),
                 
                 PerformerUsers = performersList,
 
-                Priorities = this._priorityService.GetPriorities(SessionFacade.CurrentCustomer.Id).Where(x => x.IsActive == 1).Select(x => new SelectListItem
+                Priorities = this._priorityService.GetPriorities(curCustomerId).Where(x => x.IsActive == 1).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
                 
-                ProductAreas = this._productAreaService.GetTopProductAreasForUser(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser),
+                ProductAreas = this._productAreaService.GetTopProductAreasForUser(curCustomerId, SessionFacade.CurrentUser),
 
-                WorkingGroups = this._workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                WorkingGroups = this._workingGroupService.GetWorkingGroups(curCustomerId).Select(x => new SelectListItem
                 {
                     Text = x.WorkingGroupName,
                     Value = x.Id.ToString()
@@ -611,49 +618,45 @@ namespace DH.Helpdesk.Web.Controllers
                 
                 OUs = organizationUnits,
 
-                Systems = this._systemService.GetSystems(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                Systems = this._systemService.GetSystems(curCustomerId).Select(x => new SelectListItem
                 {
                     Text = x.SystemName,
                     Value = x.Id.ToString()
                 }).ToList(),
 
-                Urgencies = this._urgencyService.GetUrgencies(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                Urgencies = this._urgencyService.GetUrgencies(curCustomerId).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
 
-                Impacts = this._impactService.GetImpacts(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                Impacts = this._impactService.GetImpacts(curCustomerId).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
 
-                Status = this._statusService.GetActiveStatuses(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                Status = this._statusService.GetActiveStatuses(curCustomerId).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
 
-                StateSecondaries = this._stateSecondaryService.GetActiveStateSecondaries(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                StateSecondaries = this._stateSecondaryService.GetActiveStateSecondaries(curCustomerId).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
 
-                Suppliers = this._supplierService.GetActiveSuppliers(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                Suppliers = this._supplierService.GetActiveSuppliers(curCustomerId).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
 
-                CausingParts = this._causingPartService.GetActiveCausingParts(SessionFacade.CurrentCustomer.Id).Where(x => x.ParentId == null).Select(x => new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString()
-                }).ToList(),
-
-                RegistrationSources = this._registrationSourceCustomerService.GetCustomersActiveRegistrationSources(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                CausingParts = GetCausingPartsModel(curCustomerId, caseSolution.CausingPartId),
+             
+                RegistrationSources = this._registrationSourceCustomerService.GetCustomersActiveRegistrationSources(curCustomerId).Select(x => new SelectListItem
                 {
                     Text = Translation.Get(x.SourceName),
                     Value = x.Id.ToString()
@@ -662,7 +665,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (model.CaseSolution.Id == 0)
             {
-                var defaultCat = _caseSolutionService.GetCaseSolutionCategories(SessionFacade.CurrentCustomer.Id).Where(c => c.IsDefault == 1).FirstOrDefault();
+                var defaultCat = _caseSolutionService.GetCaseSolutionCategories(curCustomerId).Where(c => c.IsDefault == 1).FirstOrDefault();
                 if (defaultCat != null)
                     model.CaseSolution.CaseSolutionCategory_Id = defaultCat.Id;
             }
@@ -689,12 +692,12 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 var c = this._productAreaService.GetProductArea(caseSolution.ProductArea_Id.Value);
                 if (c != null)
-                    model.ParantPath_ProductArea = string.Join(" - ", this._productAreaService.GetParentPath(c.Id, SessionFacade.CurrentCustomer.Id));
+                    model.ParantPath_ProductArea = string.Join(" - ", this._productAreaService.GetParentPath(c.Id, curCustomerId));
             }
 
             if (cs.ModuleProject == 1)
             {
-                model.projects = this._projectService.GetCustomerProjects(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                model.projects = this._projectService.GetCustomerProjects(curCustomerId).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
@@ -704,7 +707,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (cs.ModuleProblem == 1)
             {
-                model.problems = this._problemService.GetCustomerProblems(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                model.problems = this._problemService.GetCustomerProblems(curCustomerId).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
@@ -713,7 +716,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (cs.ModuleChangeManagement == 1)
             {
-                model.changes = this._changeService.GetChanges(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                model.changes = this._changeService.GetChanges(curCustomerId).Select(x => new SelectListItem
                 {
                     Text = x.ChangeTitle,
                     Value = x.Id.ToString()
@@ -775,6 +778,54 @@ namespace DH.Helpdesk.Web.Controllers
             return model;
         }
 
+        private List<SelectListItem> GetCausingPartsModel(int customerId, int? curCausingPartId)
+        {
+            var allActiveCausinParts = this._causingPartService.GetActiveParentCausingParts(customerId, curCausingPartId);
+            var ret = new List<SelectListItem>();
+
+            var parentRet = new List<SelectListItem>();
+            var childrenRet = new List<SelectListItem>();
+
+            foreach (var causingPart in allActiveCausinParts)
+            {
+                var curName = string.Empty;
+                if (causingPart.Parent != null && curCausingPartId.HasValue && causingPart.Id == curCausingPartId.Value)
+                {
+                    curName = string.Format("{0} - {1}", Translation.Get(causingPart.Parent.Name, Enums.TranslationSource.TextTranslation, customerId),
+                                                         Translation.Get(causingPart.Name, Enums.TranslationSource.TextTranslation, customerId));
+
+                    childrenRet.Add(new SelectListItem() { Value = causingPart.Id.ToString(), Text = curName, Selected = true });
+                }
+                else
+                {
+                    if (causingPart.Children.Any())
+                    {
+                        foreach (var child in causingPart.Children)
+                        {
+                            if (child.IsActive)
+                            {
+                                curName = string.Format("{0} - {1}", Translation.Get(causingPart.Name, Enums.TranslationSource.TextTranslation, customerId),
+                                                                     Translation.Get(child.Name, Enums.TranslationSource.TextTranslation, customerId));
+
+                                var isSelected = (child.Id == curCausingPartId);
+                                childrenRet.Add(new SelectListItem() { Value = child.Id.ToString(), Text = curName, Selected = isSelected });
+                            }
+                        }
+                    }
+                    else
+                    {
+                        curName = Translation.Get(causingPart.Name, Enums.TranslationSource.TextTranslation, customerId);
+                        var isSelected = (causingPart.Id == curCausingPartId);
+                        parentRet.Add(new SelectListItem() { Value = causingPart.Id.ToString(), Text = curName, Selected = isSelected });
+                    }
+                }
+            }
+
+            ret = parentRet.OrderBy(p => p.Text).Union(childrenRet.OrderBy(c => c.Text)).ToList();
+
+            return ret;
+
+        }
         private CaseSettingsSolutionAggregate CreateCaseSettingsSolutionAggregate(
             int caseSolutionId,
             IEnumerable<CaseSolutionSettingModel> caseSolutionSettingModels)

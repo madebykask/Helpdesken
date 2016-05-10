@@ -12,9 +12,9 @@
                         <th>{{:PpuHeader}} SEK</th>                        
                         {{if IsInvoiced }}
                             <th colspan="2" style="text-align: right;"> {{:TotalHeader}}</th>
-                        {{else}}
-                            <th colspan="1" style="text-align: right;"> {{:TotalHeader}}</th>
-                            <th class="case-invoice-colextranarrow"></th>
+                        {{else}}                            
+                            <th colspan="1" style="text-align: right;"> {{:TotalHeader}} </th>
+                            <th class="case-invoice-colextranarrow"></th>                            
                         {{/if}}
                     </tr>
                     <tbody class='articles-rows'>
@@ -23,20 +23,30 @@
                 </table>
             </td>
             <td style='vertical-align: top;'>
-                <a class="btn btn-small add-blank-article" style="cursor: pointer; display: none;" onclick="dhHelpdesk.CaseArticles.AddBlankArticle('{{:Id}}'); return false;"><i class="icon-plus-sign"></i></a>
+            {{if IsInvoiced }}                
+            {{else}}
+                {{if IsCredited }}
+                {{else}}                    
+                    <a class="btn btn-small add-blank-article" style="cursor: pointer; display: none;" onclick="dhHelpdesk.CaseArticles.AddBlankArticle('{{:Id}}'); return false;"><i class="icon-plus-sign"></i></a>                    
+                {{/if}}
+            {{/if}}
             </td>
         </tr>
     </table>
     <div class='width100 textbold' style='text-align: right;'>
-        {{:TotalLabel}}: <span class='articles-total'>{{:Total}}</span> SEK &nbsp;&nbsp;&nbsp;
+        {{if IsCredited }}
+            {{:TotalLabel}}: -<span class='articles-total'>{{:Total}}</span> SEK &nbsp;&nbsp;&nbsp;
+        {{else}}        
+            {{:TotalLabel}}: <span class='articles-total'>{{:Total}}</span> SEK &nbsp;&nbsp;&nbsp;
+        {{/if}}
     </div>
     
     <div class="row-fluid">
         <div class="span6">
             <h4>                        
-                <i style="display:inline-block" class="icon-plus-sign showRefrence{{:Id}}" onclick="dhHelpdesk.CaseArticles.ShowOtherReference('{{:Id}}')"></i>
-                <i style="display:none"   class="icon-minus-sign hideRefrence{{:Id}}" onclick="dhHelpdesk.CaseArticles.HideOtherReference('{{:Id}}')"></i> 
-                {{:ReferenceTitle}}&nbsp;<span id="initiatorInfo_{{:Id}}">&nbsp;-&nbsp;{{:ReportedBy}}&nbsp;({{:Persons_Name}})</span> 
+                <i style="display:inline-block" class="icon-plus-sign showRefrence{{:Id}}" onclick="dhHelpdesk.CaseArticles.ExpandOtherReference('{{:Id}}')"></i>
+                <i style="display:none"   class="icon-minus-sign hideRefrence{{:Id}}" onclick="dhHelpdesk.CaseArticles.CollapseOtherReference('{{:Id}}')"></i> 
+                {{:ReferenceTitle}}&nbsp;<span id="initiatorInfo_{{:Id}}"></span> 
             </h4>
             <div>
                 <table class="tableform">
@@ -251,11 +261,10 @@
         </div>       
     </div>
     <div class="row-fluid">
-    <div id="orderButtonsArea" class="span12" style="border-top:1px solid #ccc;margin-top:20px; padding-top:20px;">        
-        <button id="doInvoiceButton_{{:Id}}" class="btn orderButtons" onclick="dhHelpdesk.CaseArticles.DoOrderInvoice('{{:Id}}'); return false;" data-orderid="{{:Id}}">{{:doInvoiceTitle}}</button>                                    
-        <button class="btn orderButtons" id="actions-credit-order_{{:Id}}" class="actions-credit-order" onclick="dhHelpdesk.CaseArticles.DoOrderCredit('{{:Id}}'); return false;"> {{:doCreditTitle}}</button>
-    </div>
-    
+        <div id="orderButtonsArea" class="span12" style="border-top:1px solid #ccc;margin-top:20px; padding-top:20px;">        
+            <button id="doInvoiceButton_{{:Id}}" class="btn orderButtons" onclick="dhHelpdesk.CaseArticles.DoOrderInvoice('{{:Id}}'); return false;" data-orderid="{{:Id}}">{{:doInvoiceTitle}}</button>
+            <button class="btn orderButtons" id="actions-credit-order_{{:Id}}" class="actions-credit-order" onclick="dhHelpdesk.CaseArticles.DoOrderCredit('{{:Id}}'); return false;"> {{:doCreditTitle}}</button>            
+        </div>    
     </div>
     <div class="loading-msg save-invoice" style="display:none">        
         <div class="content-wrapper">

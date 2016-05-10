@@ -101,6 +101,7 @@
             this.Property(x => x.PersonsName);
             this.Property(x => x.PersonsPhone);
             this.Property(x => x.PersonsCellPhone);
+            this.Property(x => x.PersonsEmail);
             this.Property(x => x.Region_Id).IsOptional();
             this.Property(x => x.OU_Id).IsOptional();
             this.Property(x => x.Place);

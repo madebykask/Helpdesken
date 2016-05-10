@@ -131,6 +131,27 @@ EditPage.prototype.isFormValid = function() {
     return true;
 };
 
+EditPage.prototype.primaryValidation = function (submitUrl) {
+    var me = this;
+
+    //Check if there is Order which is not invoiced yet
+    if (me.invoiceIsActive && me.CaseWillFinish()) {
+        $.get('/Cases/IsThereNotInvoicedOrder/', { caseId: me.p.currentCaseId, myTime: Date.now }, function (res) {
+            if (res != null && res)
+                dhHelpdesk.cases.utils.showError(me.p.invoicePreventsToCloseCaseMessage);
+            else
+                me.checkAndSave(submitUrl);
+        });
+    }
+    else {
+        me.checkAndSave(submitUrl);
+    }
+}
+
+EditPage.prototype.hasNotInvoicedOrder = function (id, callBack) {
+    
+}
+
 EditPage.prototype.checkAndSave = function (submitUrl) {
     var me = this;
     var action = submitUrl || me.EDIT_CASE_URL;
@@ -298,73 +319,30 @@ EditPage.prototype.CaseWillFinish = function ()
     }
 };
 
-EditPage.prototype.onSaveYes = function () {
-    debugger
+EditPage.prototype.onSaveYes = function () {    
     var me = this;
     var c = me.case;
     var url = me.EDIT_CASE_URL;
     if (c.isNew() && c.isChildCase()) {
         url = me.SAVE_GOTO_PARENT_CASE_URL;
     }
-    return me.checkAndSave(url);
+    return me.primaryValidation(url);
 };
 
 EditPage.prototype.onSaveAndNewYes = function (){
     var me = this;
-    return me.checkAndSave(me.SAVE_ADD_CASE_URL);
+    return me.primaryValidation(me.SAVE_ADD_CASE_URL);
 };
 
 EditPage.prototype.onSaveAndCloseYes = function () {
     var me = this;
-    return me.checkAndSave(me.NEW_CLOSE_CASE_URL);
+    return me.primaryValidation(me.NEW_CLOSE_CASE_URL);
 };
-
 
 
 EditPage.prototype.ReturnFalse = function () {
     return false;
 };
-
-EditPage.prototype.InvoiceRulesForClosing = function (type) {
-    var me = this;
-    if (me.CaseWillFinish()) {
-        if (dhHelpdesk.CaseArticles.HasNotInvoicedArticles()) {
-            var message = dhHelpdesk.CaseArticles.translate("Du får inte avsluta ett ärende med invalda fast ofakturerade artiklar. Var god granska dina ordrar.");
-            ShowToastMessage(message);
-            return false;
-        }
-        else {
-            if ($('#InvoiceModuleBtnOpen').is(':visible')) { //productarea invoicebtn is visible
-                if (!dhHelpdesk.CaseArticles.HasInvoicedArticles() && !dhHelpdesk.CaseArticles.HasNotInvoicedArticles()) {
-                    var message = dhHelpdesk.CaseArticles.translate("Produktområdet har länkade artiklar men inga artiklar är invalda. Vill du verkligen avsluta ärendet?");
-                    debugger
-                    var functionOnYes = "";
-                    if ("save") {
-                        functionOnYes = me.onSaveYes;
-                    }
-                    else if ("savenew") {
-                        functionOnYes = me.onSaveAndNewYes;
-                    }
-                    else if ("saveclose")
-                    {
-                        functionOnYes = me.onSaveAndCloseYes;
-                    }
-                    me.confirmDialog($("<div>" + message + "<div>"), functionOnYes, EditPage.prototype.ReturnFalse);
-                }
-                else {
-                    return true;
-                }
-            }
-            else {
-                return true;
-            }
-        }
-    }
-    else {
-        return true;
-    }
-};
-
 
 EditPage.prototype.onSaveClick = function () {
     var me = this;
@@ -374,17 +352,17 @@ EditPage.prototype.onSaveClick = function () {
         url = me.SAVE_GOTO_PARENT_CASE_URL;
     }
     
-    return me.checkAndSave(url);
+    return me.primaryValidation(url);
 };
 
 EditPage.prototype.onSaveAndCloseClick = function () {
     var me = this;
-    return me.checkAndSave(me.NEW_CLOSE_CASE_URL);    
+    return me.primaryValidation(me.NEW_CLOSE_CASE_URL);
 };
 
 EditPage.prototype.onSaveAndNewClick = function () {
     var me = this;
-    return me.checkAndSave(me.SAVE_ADD_CASE_URL);    
+    return me.primaryValidation(me.SAVE_ADD_CASE_URL);
 };
 
 EditPage.prototype.canDeleteCase = function () {
@@ -563,7 +541,10 @@ EditPage.prototype.init = function (p) {
     me.$btnPrint = $('.btn.print-case');
     me.$printArea = $('#CasePrintArea');
     me.$printDialog = $('#PrintCaseDialog');
-    
+
+    var invoiceElm = $('#CustomerSettings_ModuleCaseInvoice').val();
+    me.invoiceIsActive = invoiceElm != undefined && invoiceElm != null && invoiceElm.toString().toLowerCase() == 'true';
+
     me.$watchDateChangers.on('change', function () {
         var deptId = parseInt(me.$department.val(), 10);
         var SLA = parseInt(me.$SLASelect.find('option:selected').attr('data-sla'), 10);
@@ -608,10 +589,7 @@ EditPage.prototype.init = function (p) {
                 }
         });
     });
-
     
-
-
     $('.date').each(function () {
         var $this = $(this);
         var errorLabel = $this.find('label.error:visible');
@@ -629,6 +607,7 @@ EditPage.prototype.init = function (p) {
         $.get("/Cases/ShowCasePrintPreview/",
                 {
                     caseId: p.currentCaseId,
+                    caseNumber: p.currentCaseNumber,
                     curTime: new Date().getTime()
                 },                
 
@@ -650,13 +629,9 @@ EditPage.prototype.init = function (p) {
                         update_iFrame(_iframe.attr("id"));                        
                     }
                 }
-             );
-
-       
+             );       
     });
-
     
-
     var update_iFrame = function (iframeId) {
         setTimeout(function () {           
             var elm = document.getElementById(iframeId);
@@ -667,10 +642,7 @@ EditPage.prototype.init = function (p) {
         }, 3000);
     }
 
-
     //////// event bind end ///////////
-
-
     /*
         window.parameters.currentCaseId,
         customerId: window.parameters.customerId,

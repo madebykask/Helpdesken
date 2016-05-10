@@ -41,5 +41,7 @@ namespace DH.Helpdesk.Domain
         public virtual ICollection<WorkingGroupEntity> WGs { get; set; }
         public virtual OperationLogCategory Category { get; set; }        
         public virtual ICollection<OperationLogEMailLog> EmailLogs { get; set; }
+
+        public virtual OperationObject Object { get; set; }
     }
 }

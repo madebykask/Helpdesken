@@ -63,7 +63,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
 
         public List<ItemOverview> FindOverviews(int customerId)
         {
-            var anonymus = this.DbSet.Where(x => x.Customer_Id == customerId).Select(c => new { c.Name, c.Id }).ToList();
+            var anonymus = this.DbSet.Where(x => x.Customer_Id == customerId).Select(c => new { c.Name, c.Id }).OrderBy(c => c.Name).ToList();
 
             var overviews =
                 anonymus.Select(c => new ItemOverview(c.Name, c.Id.ToString(CultureInfo.InvariantCulture))).ToList();

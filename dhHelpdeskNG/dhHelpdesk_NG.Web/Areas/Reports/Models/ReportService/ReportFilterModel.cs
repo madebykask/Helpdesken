@@ -27,7 +27,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Models.ReportService
 
         public DateTime? RegisterFrom { get; set; }
 
-        public DateTime? RegisterTo { get; set; }        
+        public DateTime? RegisterTo { get; set; }
+        public string Fields { get; set; }
     }
 
     public static class ReportFilterMapper

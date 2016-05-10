@@ -15,6 +15,30 @@ function SetValueIfElVisible(el, val, opt) {
     }
 }
 
+function SetSingleSelectValueIfElVisible(el, val, opt) {
+    opt = opt || { doOverwrite: false, doNotTriggerEvent: false };   
+        if (el.val() == "" || opt.doOverwrite) {            
+            $(el).val(val);
+            $(el).trigger("chosen:updated");            
+        }    
+}
+
+function SetDateValueIfElVisible(el, val, opt, format) {
+    opt = opt || { doOverwrite: false, doNotTriggerEvent: false };
+    if (el && $(el).is(':visible')) {
+        if (el.val() == "" || opt.doOverwrite) {            
+            $(el).datepicker({
+                format: format.toLowerCase(),
+                autoclose: true
+            }).datepicker('setDate', val);
+           
+            if (!opt.doNotTriggerEvent) {
+                $(el).trigger('change');                
+            }            
+        }
+    }
+}
+
 function SetValueToBtnGroup(domContainer, domText, domValue, value, doOverwrite) {
     var $domValue = $(domValue);
     var oldValue = $domValue.val();
@@ -37,11 +61,9 @@ function SetCheckboxValueIfElVisible(el, val, doNotTriggerEvent) {
     }
 }
 
-
 function IsWillBeOverwrittenByValue(domVisible, domValue, val) {
     return $(domVisible).is(':visible') && $(domValue).val() != '' && $(domValue).val() != val;
 }
-
 
 function IsWillBeOverwritten(fieldId, val) {
     switch (fieldId) {
@@ -57,8 +79,14 @@ function IsWillBeOverwritten(fieldId, val) {
         case 'Department_Id':
             return IsWillBeOverwrittenByValue('#case__Department_Id', '#case__Department_Id', val);
             break;
+        case 'PersonsEmail':
+            return IsWillBeOverwrittenByValue('#case__PersonsEmail', '#case__PersonsEmail', val);
+            break;
         case 'NoMailToNotifier':
             return false;
+            break;
+        case 'WatchDate':
+            return IsWillBeOverwrittenByValue('#case__WatchDate', '#case__WatchDate', val);
             break;
         case 'ProductArea_Id':
             return IsWillBeOverwrittenByValue('#divProductArea', '#case__ProductArea_Id', val);
@@ -99,14 +127,15 @@ function IsWillBeOverwritten(fieldId, val) {
         case 'Status_Id':
             return IsWillBeOverwrittenByValue('#case__Status_Id', '#case__Status_Id', val);
             break;
+        case 'CausingPartId':
+            return IsWillBeOverwrittenByValue('#case__CausingPartId', '#case__CausingPartId', val);
+            break;
         case 'StateSecondary_Id':
             return IsWillBeOverwrittenByValue('#case__StateSecondary_Id', '#case__StateSecondary_Id', val);
             break;
     }
     return false;
 }
-
-
 
 var overwriteWarning = {
     dlg: null,
@@ -134,10 +163,9 @@ var overwriteWarning = {
     }
 };
 
-
-
-function ApplyTemplate(data, doOverwrite) {
+var ApplyTemplate = function (data, doOverwrite) {
     var cfg = { doOverwrite: doOverwrite };
+    var dateFormat = data["dateFormat"];
     for (var fieldId in data) {
         var val = data[fieldId];
         var el;
@@ -158,9 +186,17 @@ function ApplyTemplate(data, doOverwrite) {
                     el = $('#case__Department_Id');
                     SetValueIfElVisible(el, val, cfg);
                     break;
+                case 'PersonsEmail':
+                    el = $("#case__PersonsEmail");
+                    SetValueIfElVisible(el, val, cfg);
+                    break;
                 case 'NoMailToNotifier':
                     el = $("#CaseMailSetting_DontSendMailToNotifier");
                     SetCheckboxValueIfElVisible(el, val);
+                    break;
+                case 'WatchDate':
+                    el = $("#case__WatchDate");
+                    SetDateValueIfElVisible(el, val, cfg, dateFormat);
                     break;
                 case 'ProductArea_Id':
                     SetValueToBtnGroup('#divProductArea', "#divBreadcrumbs_ProductArea", "#case__ProductArea_Id", val, doOverwrite);
@@ -221,6 +257,10 @@ function ApplyTemplate(data, doOverwrite) {
                     el = $("#case__Status_Id");
                     SetValueIfElVisible(el, val, cfg);
                     break;
+                case 'CausingPartId':
+                    el = $("#case__CausingPartId").chosen();
+                    SetSingleSelectValueIfElVisible(el, val, cfg);
+                    break;
             }
         }
     }
@@ -244,9 +284,15 @@ function IsValueApplicableFor(templateFieldId, val) {
         case 'Department_Id':
             return $('#case__Department_Id');
             break;
+        case 'PersonsEmail':
+            return $("#case__PersonsEmail").is(':visible');
+            break;
         case 'NoMailToNotifier':
             return true;
             break;
+        case 'WatchDate':
+            return $("#case__WatchDate").is(':visible');
+            break;          
         case 'ProductArea_Id':
             return $('#divProductArea').is(':visible') && $('#divProductArea').find('a[value="' + val + '"]').length != 0;
             break;
@@ -289,12 +335,35 @@ function IsValueApplicableFor(templateFieldId, val) {
         case 'Status_Id':
             return $("#case__Status_Id").is(':visible');
             break;
+        case 'CausingPartId':
+            return $("#case__CausingPartId").is(':visible');
+            break;
     }
     return false;
 }
 
-
 function LoadTemplate(id) {
+    var caseInvoiceIsActive = false;
+    var curCaseId = $('#case__Id').val();
+    if ($('#CustomerSettings_ModuleCaseInvoice') != undefined)
+        caseInvoiceIsActive = $('#CustomerSettings_ModuleCaseInvoice').val().toLowerCase() == 'true';
+
+    if (caseInvoiceIsActive) {
+        $.get('/Cases/IsThereNotInvoicedOrder/', { caseId: curCaseId, myTime: Date.now }, function (res) {
+            if (res != null && res) {
+                ShowToastMessage('You cannot use case template while you have any order which is not invoiced yet!', 'warning', false);
+            }
+            else {
+                GetTemplateData(id)
+            }
+        });
+    }
+    else {
+        GetTemplateData(id)
+    }
+}
+
+function GetTemplateData(id) {
     $.get('/CaseSolution/GetTemplate',
         { 'id': id, myTime: Date.now },
         function (caseTemplate) {
@@ -304,7 +373,7 @@ function LoadTemplate(id) {
                 return;
             }
 
-            for (var field in caseTemplate) {                
+            for (var field in caseTemplate) {
                 if (window.IsValueApplicableFor(field, caseTemplate[field]) && window.IsWillBeOverwritten(field, caseTemplate[field])) {
                     showOverwriteWarning = true;
                     break;
@@ -313,7 +382,7 @@ function LoadTemplate(id) {
 
             if (showOverwriteWarning) {
                 window.overwriteWarning.show(caseTemplate);
-            } else {
+            } else {                
                 window.ApplyTemplate(caseTemplate);
             }
         }

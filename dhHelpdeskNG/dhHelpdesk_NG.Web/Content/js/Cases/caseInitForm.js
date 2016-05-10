@@ -568,7 +568,7 @@ function CaseInitForm() {
 
     $('#case__Priority_Id').change(function () {
         $.post('/Cases/ChangePriority/', { 'id': $(this).val() }, function (data) {
-            if (data.ExternalLogText != null) {
+            if (data.ExternalLogText != null && data.ExternalLogText != "") {
                 $('#CaseLog_TextExternal').val(data.ExternalLogText);
             }
         }, 'json');
@@ -623,11 +623,13 @@ function CaseInitForm() {
             CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeWorkingGroupFilterUser/', '#Performer_Id', $('#DepartmentFilterFormat').val());
         }
         //set state secondery
-        SelectValueInOtherDropdownOnChange($(this).val(), '/Cases/ChangeWorkingGroupSetStateSecondary/', '#case__StateSecondary_Id')
-    });
+        SelectValueInOtherDropdownOnChange($(this).val(), '/Cases/ChangeWorkingGroupSetStateSecondary/', '#case__StateSecondary_Id');        
+      });
 
     $('#case__StateSecondary_Id').change(function () {
         $('#CaseLog_SendMailAboutCaseToNotifier').removeAttr('disabled');
+        curVal = $('#case__StateSecondary_Id').val();
+        $('#case__StateSecondary_Id option[value=' + curVal + ']').attr('selected', 'selected');
         $.post('/Cases/ChangeStateSecondary', { 'id': $(this).val() }, function (data) {
             // disable send mail checkbox
             if (data.NoMailToNotifier == 1) {
@@ -677,9 +679,28 @@ function CaseInitForm() {
 
     $('#divProductArea ul.dropdown-menu li a').click(function (e) {
         e.preventDefault();
-        var val = $(this).attr('value');
-        $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(this));
-        $("#case__ProductArea_Id").val(val).trigger('change');;
+        var me = this;
+        var val = $(me).attr('value');
+        var curCaseId = $('#case__Id').val();
+        var caseInvoiceIsActive = $('#CustomerSettings_ModuleCaseInvoice').val().toLowerCase() == 'true';
+        /* When invoice is active, user can not change the product area while */
+        if (caseInvoiceIsActive) {
+            $.get('/Cases/IsThereNotInvoicedOrder/', { caseId: curCaseId, myTime:Date.now }, function (res) {
+                if (res != null && res) {
+                    ShowToastMessage('ProductArea cannot be changed while you have any order which is not invoiced yet!', 'warning', false);
+                }
+                else
+                {
+                    $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(me));
+                    $("#case__ProductArea_Id").val(val).trigger('change');
+                }
+            });
+        }
+        else {
+            $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(me));
+            $("#case__ProductArea_Id").val(val).trigger('change');
+        }
+        
     });
 
     $('#AddNotifier').click(function (e) {
@@ -813,7 +834,7 @@ function CaseInitForm() {
                     up.refresh();
 
                     // Raise event about uploaded file
-                    //$(document).trigger("OnUploadCaseFile", [up, file]);
+                    $(document).trigger("OnUploadCaseFile", [up, file]);
                 }
             },
             init: {
@@ -888,7 +909,7 @@ function CaseInitForm() {
                     $(".plupload_upload_status").css("display", "inline");
                     up.refresh();
 
-                    //$(document).trigger("OnUploadLogFile", [up, file]);
+                    $(document).trigger("OnUploadLogFile", [up, file]);
                 }
             },
             init: {

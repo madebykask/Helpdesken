@@ -10,6 +10,7 @@
 
     using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.BusinessData.Models.Invoice;
+    using DH.Helpdesk.Common.Enums;
 
     public sealed class InvoiceHelper : IInvoiceHelper
     {
@@ -53,6 +54,7 @@
                                     o.CostCentre,
                                     o.CreditForOrder_Id,
                                     o.Project_Id,
+                                    (orderIdToXML.HasValue && o.Id == orderIdToXML.Value ? (int)InvoiceOrderStates.Sent : o.OrderState),                                    
                                     o.Articles
                                     .Select(a => new CaseInvoiceArticle(
                                             a.Id,
@@ -63,7 +65,8 @@
                                             a.Name,
                                             a.Amount,
                                             a.Ppu,
-                                            a.Position)).ToArray(),
+                                            a.Position,
+                                            a.CreditedForArticle_Id)).ToArray(),
                                             o.Files.Select(f => new CaseInvoiceOrderFile(HttpUtility.UrlDecode(f.FileName))).ToArray())).ToArray());
             if (caseOverview != null)
             {
@@ -154,6 +157,8 @@
 
             public int? Project_Id { get; set; }
 
+            public int OrderState { get; set; }
+
             public CaseInvoiceArticleData[] Articles { get; set; }
 
             public CaseInvoiceOrderFileData[] Files { get; set; }
@@ -189,6 +194,8 @@
             public decimal? Ppu { get; set; }
 
             public short Position { get; set; }
+
+            public int? CreditedForArticle_Id { get; set; }
             
         }
     }    

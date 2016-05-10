@@ -13,6 +13,7 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.OperationLogs;
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications.OperationLog;
 
     using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
     using DH.Helpdesk.BusinessData.Models.Case;
@@ -112,10 +113,10 @@ namespace DH.Helpdesk.Services.Services
                          select c);
 
             if (!string.IsNullOrEmpty(SearchOperationLogs.Text_Filter))
-                query = query.Where(x => x.OperationLogAction.Contains(SearchOperationLogs.Text_Filter)
-                                      || x.OperationLogDescription.Contains(SearchOperationLogs.Text_Filter)
-                                      || x.OperationLogCategoryName.Contains(SearchOperationLogs.Text_Filter)
-                                      || x.OperationObjectName.Contains(SearchOperationLogs.Text_Filter)
+                query = query.Where(x => x.OperationLogAction.ToLower().Contains(SearchOperationLogs.Text_Filter.ToLower())
+                                      || x.OperationLogDescription.ToLower().Contains(SearchOperationLogs.Text_Filter.ToLower())
+                                      || x.OperationLogCategoryName.ToLower().Contains(SearchOperationLogs.Text_Filter.ToLower())
+                                      || x.OperationObjectName.ToLower().Contains(SearchOperationLogs.Text_Filter.ToLower())
                                    );
 
             if (SearchOperationLogs.OperationObject_Filter != null)
@@ -404,7 +405,13 @@ namespace DH.Helpdesk.Services.Services
             {
                 var operationLogRepository = uow.GetRepository<OperationLog>();
 
-                return operationLogRepository.GetAll()
+                var query = operationLogRepository.GetAll();
+
+                query = query
+                       .GetFromDate()
+                       .GetUntilDate();
+              
+                return query
                         .RestrictByWorkingGroupsAndUsers(this.workContext)
                         .GetForStartPage(customers, count, forStartPage)
                         .MapToOverviews();

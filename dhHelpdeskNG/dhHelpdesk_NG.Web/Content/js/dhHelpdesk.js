@@ -13,7 +13,7 @@ $('.nav-tabs li:not(.disabled) a').click(function (e) {
 
 $(".nav-tabs-actions a").unbind("click");
 
-$(".content input:text, .content textarea").eq(0).focus()
+$(".content input:text:not(.chosen-container input:text), .content textarea").eq(0).focus();
 
 
 $('#case__RegLanguage_Id').change(function () {   
@@ -36,7 +36,7 @@ function ChangeCaseLanguageTo(newLanguageId, updateDropDown) {
     $("#case_.RegLanguage_Id").val(newLanguageId);
 }
 
-function ShowToastMessage(message, msgType, isSticky) {
+function ShowToastMessage(message, msgType, isSticky) {    
     var _Sticky = false;
     if (isSticky)
         _Sticky = true;
@@ -46,7 +46,7 @@ function ShowToastMessage(message, msgType, isSticky) {
         position: 'top-center',
         type: msgType,
         closeText: '',
-        stayTime: 3000,
+        stayTime: 5000,
         inEffectDuration: 1000,
         close: function () {
             //console.log("toast is closed ...");
@@ -630,6 +630,12 @@ $('.switchcheckbox').bootstrapSwitch('onColor', 'success');
 
 $(".chosen-select").chosen({
     width: "300px",
+    'placeholder_text_multiple': placeholder_text_multiple,
+    'no_results_text': no_results_text
+});
+
+$(".chosen-single-select").chosen({
+    width: "315px",
     'placeholder_text_multiple': placeholder_text_multiple,
     'no_results_text': no_results_text
 });

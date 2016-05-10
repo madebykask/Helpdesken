@@ -15,13 +15,20 @@
             this.FieldIds = new List<int>();
             this.DepartmentIds = new List<int>();
             this.WorkingGroupIds = new List<int>();
+            this.ProductAreaIds = new List<int>();
+            this.AdministratorIds = new List<int>();
+            this.CaseStatusIds = new List<int>();
+            this.CaseTypeIds = new List<int>();
         }
 
         public ReportGeneratorFilterModel(
             List<int> fieldIds, 
             List<int> departmentIds, 
-            List<int> workingGroupIds, 
-            int? caseTypeId, 
+            List<int> workingGroupIds,
+            List<int> productAreaIds,
+            List<int> administratorIds,
+            List<int> caseStatusIds,
+            List<int> caseTypeIds, 
             DateTime? periodFrom, 
             DateTime? periodUntil, 
             int recordsOnPage,
@@ -30,8 +37,11 @@
             this.SortField = sortField;
             this.PeriodUntil = periodUntil;
             this.PeriodFrom = periodFrom;
-            this.CaseTypeId = caseTypeId;
+            this.CaseTypeIds = caseTypeIds;
             this.WorkingGroupIds = workingGroupIds;
+            this.ProductAreaIds = productAreaIds;
+            this.AdministratorIds = administratorIds;
+            this.CaseStatusIds = caseStatusIds;
             this.DepartmentIds = departmentIds;
             this.FieldIds = fieldIds;
             this.RecordsOnPage = recordsOnPage;
@@ -46,7 +56,17 @@
         [NotNull]
         public List<int> WorkingGroupIds { get; private set; }
 
-        public int? CaseTypeId { get; private set; }
+        [NotNull]
+        public List<int> ProductAreaIds { get; private set; }
+
+        [NotNull]
+        public List<int> AdministratorIds { get; private set; }
+
+        [NotNull]
+        public List<int> CaseStatusIds { get; private set; }
+
+        [NotNull]
+        public List<int> CaseTypeIds { get; private set; }
 
         public DateTime? PeriodFrom { get; private set; }
 
@@ -63,7 +83,7 @@
                        {
                            SortField = new SortField(CaseInfoFields.Case, SortBy.Ascending),
                            RecordsOnPage = 100,
-                           PeriodFrom = DateTime.Today.AddMonths(-1),
+                           PeriodFrom = DateTime.Today,
                            PeriodUntil = DateTime.Today
                        };
         }

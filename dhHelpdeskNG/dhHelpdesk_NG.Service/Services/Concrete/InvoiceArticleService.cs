@@ -10,7 +10,8 @@
     using DH.Helpdesk.Domain.Invoice;
     using System;
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.Invoice.Xml;   
+    using DH.Helpdesk.BusinessData.Models.Invoice.Xml;
+    using DH.Helpdesk.Common.Enums;   
 
     public class InvoiceArticleService : IInvoiceArticleService
     {
@@ -78,6 +79,11 @@
             var CaseInvoices = this.caseInvoiceArticleRepository.GetCaseInvoices(caseId);
             CaseInvoices = SetInvoicedByUsername(CaseInvoices);
             return CaseInvoices;
+        }
+
+        public CaseInvoiceOrder[] GetInvoiceOrders(int caseId, InvoiceOrderFetchStatus status)
+        {
+            return this.caseInvoiceArticleRepository.GetOrders(caseId, status);
         }
 
         /// <summary>
@@ -240,7 +246,7 @@
         private ProcessResult ExportOrder(CaseInvoiceOrder order, CaseInvoiceSettings caseInvoiceSettings, int caseId, decimal caseNumber)
         {            
             try
-            {                
+            {                    
                 var salesDoc = MapToSalesDoc(order, caseInvoiceSettings, caseId, caseNumber);
                 var xmlData = salesDoc.ConvertToXML();
                 if (xmlData.IsSuccess)
@@ -270,11 +276,21 @@
             }            
         }
 
-        private SalesDoc MapToSalesDoc(CaseInvoiceOrder order, CaseInvoiceSettings settings, int caseId, decimal caseNumber)
+        private SalesDoc MapToSalesDoc(CaseInvoiceOrder order, CaseInvoiceSettings settings,
+                                       int caseId, decimal caseNumber)
         {            
             var salesDoc = new SalesDoc();
 
             #region Invoice data
+
+            var curOrderSeq = GetSequenceNumber(caseId, order); 
+            var originalOrderSeq = 0;
+            if (order.CreditForOrder_Id.HasValue)
+            {
+                var originalOrder = this.caseInvoiceArticleRepository.GetCaseInvoiceOrder(caseId, order.CreditForOrder_Id.Value);
+                if (originalOrder != null)
+                    originalOrderSeq = GetSequenceNumber(caseId, originalOrder);
+            }
 
             var salesHeader = new SalesDocSalesHeader();
             salesHeader.CompanyNo = settings.Issuer;
@@ -285,7 +301,7 @@
             salesHeader.DueDate = order.InvoiceDate.HasValue ? order.InvoiceDate.Value.ToShortDateString() : string.Empty;
             salesHeader.OurReference = settings.OurReference;
             salesHeader.YourReference2 = YourReferenceRow(order.CostCentre, order.Persons_Name);
-            salesHeader.OrderNo = OrderNoRow(settings.OrderNoPrefix, order.Number, caseNumber.ToString());
+            salesHeader.OrderNo = OrderNoRow(caseNumber, settings.OrderNoPrefix, curOrderSeq, originalOrderSeq);
             salesHeader.CurrencyCode = settings.Currency;
             salesHeader.JobNo = order.Project_Id.HasValue? GetJobNo(order.Project_Id.Value) : string.Empty;
 
@@ -353,7 +369,21 @@
 
             return salesDoc;
         }
-       
+
+        private int GetSequenceNumber(int caseId, CaseInvoiceOrder order)
+        {
+            var orders = (order.CreditForOrder_Id.HasValue)?            
+                        this.caseInvoiceArticleRepository.GetOrders(caseId, InvoiceOrderFetchStatus.Credits)
+                        .Where(o=> o.Id < order.Id && o.CreditForOrder_Id ==  order.CreditForOrder_Id) : 
+                        this.caseInvoiceArticleRepository.GetOrders(caseId, InvoiceOrderFetchStatus.Orders)
+                                                         .Where(o=> o.Id < order.Id);            
+
+            if (orders == null)
+                return 1;
+            else
+                return orders.Count() + 1;
+        }
+
         private string YourReferenceRow(string costCentre, string referenceName)
         {
             var reference = costCentre;
@@ -367,9 +397,15 @@
             return reference;
         }
 
-        private string OrderNoRow(string prefix, int orderNumber, string caseNumber)
+        private string OrderNoRow(decimal caseNumber, string prefix, int orderNumber, int originalOrderNumber)
         {
-            return string.Format("{0}{1}-{2}", prefix, orderNumber.ToString(), caseNumber);
+            var ret = string.Empty;
+            if (originalOrderNumber > 0)
+                ret = string.Format("{0}-{1}{2}-{3}", caseNumber, prefix, originalOrderNumber, orderNumber);                
+            else
+                ret = string.Format("{0}-{1}{2}", caseNumber, prefix, orderNumber);
+
+            return ret;
         }
 
         private string OrderXMLHeader()

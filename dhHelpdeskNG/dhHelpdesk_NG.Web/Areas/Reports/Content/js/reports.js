@@ -130,7 +130,7 @@
         var that = {};
 
         var baseReportsUrl = spec.baseReportsUrl || '/Reports/Report/';
-        var reportContent = spec.reportContent || $('#reportContainer');
+        var reportContent = spec.reportContent || $('#generateReportContainer');
         var canPrint = spec.canPrint || false;
         var canExcel = spec.canExcel || false;
 
@@ -383,39 +383,14 @@
         var tabReport = $('#tab_report');
         var btnShowReport = $('#btnShowReport');
         var tabReportViewer = $('#tab_reportViewer');
+        var reportList = $("#lstReports");
+        var reportGeneratorFields = $("#reportGeneratorFields");
+        var otherReportsContainer = $("#otherReportsContainer");
+        var generateReportContainer = $("#generateReportContainer");
+        var fieldsSelect = $("#lstFields");
 
         var manager = dhHelpdesk.reports.reportsManager({
             workingGroupUsersRoute: workingGroupUsersRoute
-        });
-
-        var onGetReportOptions = function () {
-            var report = manager.getCurrentReport(parseInt(reportType.val()));
-
-            if (report.getCanPrint()) {
-                btnPrint.show();
-            } else {
-                btnPrint.hide();
-            }
-
-            if (report.getCanExcel()) {
-                btnExcel.show();
-            } else {
-                btnExcel.hide();
-            }
-
-
-            $("#getReportOptionsForm").submit();
-        }
-
-        reportType.change(function () {
-            onGetReportOptions();
-        });
-
-        onGetReportOptions();
-
-        btnShow.click(function () {
-            var report = manager.getCurrentReport(parseInt(reportType.val()));
-            report.buildReport();
         });
 
         btnPrint.click(function () {
@@ -425,23 +400,29 @@
             }
         });
 
-        btnExcel.click(function () {
-            var report = manager.getCurrentReport(parseInt(reportType.val()));
-            if (report.getCanExcel()) {
-                report.excelReport();
+        reportList.on("change", function(e) {
+            var val = $(this).find('option:selected').data("id");
+            if (val === dhHelpdesk.reports.reportType.ReportGenerator) {
+                btnShow.show();
+                btnExcel.show();
+                btnShowReport.hide();
+                reportGeneratorFields.find('select option').prop('selected', false);
+                fieldsSelect.multiselect('refresh');
+                //reportGeneratorFields
+                //    .find('select option').prop('selected', false).trigger('chosen:updated');
+                reportGeneratorFields.show();
+                otherReportsContainer.hide();
+                generateReportContainer.html("");
+                generateReportContainer.show();
+            } else {
+                btnShow.hide();
+                btnExcel.hide();
+                btnShowReport.show();
+                reportGeneratorFields.hide();
+                $("#reportPresentationArea").html("");
+                otherReportsContainer.show();
+                generateReportContainer.hide();
             }
-        });
-
-        tabReport.click(function () {            
-            btnShow.attr('style', '');            
-            btnExcel.attr('style', '');
-            btnShowReport.attr('style', 'display:none');
-        });
-
-        tabReportViewer.click(function () {            
-            btnShow.attr('style', 'display:none');            
-            btnExcel.attr('style', 'display:none');
-            btnShowReport.attr('style', '');
         });
 
         return that;

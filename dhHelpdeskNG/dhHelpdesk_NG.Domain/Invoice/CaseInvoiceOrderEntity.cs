@@ -42,6 +42,8 @@
 
         public int? Project_Id { get; set; }
 
+        public int OrderState { get; set; }
+
         public virtual CaseInvoiceEntity Invoice { get; set; }
 
         public virtual ICollection<CaseInvoiceArticleEntity> Articles { get; set; } 

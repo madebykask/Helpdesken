@@ -181,7 +181,7 @@
             {*@
                 @if (Model.CaseLog.Id == 0)
                 {                                        
-                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString())">
+                    <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Filename, CaseSolutionFields.LogFileName)">
                         <td>
                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Filename, "Bifogad fil")
                         </td>

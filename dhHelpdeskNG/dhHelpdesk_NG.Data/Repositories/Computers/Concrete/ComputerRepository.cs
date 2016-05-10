@@ -492,7 +492,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                             x.User.UserId,
                             UserDepartmentName = x.User.Department.DepartmentName,
                             UserUnitName = x.User.OU.Name
-                        }).Take(recordsOnPage).ToList();
+                        }).ToList();
 
             var overviewAggregates =
                 anonymus.Select(

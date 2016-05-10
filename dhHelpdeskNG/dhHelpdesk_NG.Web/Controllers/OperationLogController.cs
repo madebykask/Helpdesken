@@ -77,6 +77,7 @@
                 CS.SortBy = "CreatedDate";
                 CS.Ascending = false;
                 SessionFacade.CurrentOperationLogSearch = CS;
+                model.OperationLogList = this._operationLogService.SearchAndGenerateOperationLog(SessionFacade.CurrentCustomer.Id, CS);
             }
             
             return this.View(model);
@@ -95,12 +96,18 @@
             CS.CustomerId = OLSearch_Filter.CustomerId;
             CS.PeriodFrom = OLSearch_Filter.PeriodFrom;
             CS.PeriodTo = OLSearch_Filter.PeriodTo;
+            if (CS.PeriodTo != null)
+                CS.PeriodTo = OLSearch_Filter.PeriodTo.Value.AddDays(1);
             CS.Text_Filter = OLSearch_Filter.Text_Filter;
            
             var c = this._operationLogService.SearchAndGenerateOperationLog(SessionFacade.CurrentCustomer.Id, CS );
-            
+
             if (OLSearch_Filter != null)
+            {
                 SessionFacade.CurrentOperationLogSearch = CS;
+                if (CS.PeriodTo != null)
+                    CS.PeriodTo = CS.PeriodTo.Value.AddDays(-1);
+            }
 
             var model = this.GetIndex();
 
@@ -198,8 +205,7 @@
         public ActionResult Edit(int id)
         {
             var operationlog = this._operationLogService.GetOperationLog(id);
-
-
+            
             if (operationlog == null)
                 return new HttpNotFoundResult("No OperationLog found...");
 
@@ -287,6 +293,17 @@
             }
         }
    
+        [HttpGet]
+        public JsonResult GetOperationObjectAttr(int id)
+        {
+            var res = "";
+            var curObj = this._operationObjectService.GetOperationObject(id);
+            if (curObj != null)            
+                res = curObj.ShowOnStartPage.ToString();            
+
+            return Json(res, JsonRequestBehavior.AllowGet);
+        }
+
         private OperationLogInputViewModel OperationLogInputViewModel(OperationLog operationlog)
         {
             var wgsSelected = operationlog.WGs ?? new List<WorkingGroupEntity>();
@@ -301,6 +318,11 @@
             var systemRespAvailable = new List<System>();
             systemRespAvailable = _systemService.GetSystemResponsibles(customerId).ToList();
             var smsEmailDomain = "";
+            var operationObject = this._operationObjectService.GetOperationObject(operationlog.OperationObject_Id);
+            var operationObjectShow = 0;
+
+            if (operationObject != null)
+                operationObjectShow = operationObject.ShowOnStartPage;
 
             if (cs.SMSEMailDomain != null)
                 smsEmailDomain = cs.SMSEMailDomain;
@@ -316,7 +338,7 @@
                 
                 OperationLog = operationlog ,
 
-                OperationObjects = this._operationObjectService.GetOperationObjects(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                OperationObjects = this._operationObjectService.GetActiveOperationObjects(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
@@ -334,7 +356,7 @@
                     Value = x.Id.ToString()
                 }).ToList(),
 
-                OperationLogCategories = this._operationLogCategoryService.GetOperationLogCategories(customerId).Select(x => new SelectListItem
+                OperationLogCategories = this._operationLogCategoryService.GetActiveOperationLogCategories(customerId).Select(x => new SelectListItem
                 {
                     Text = x.OLCName,
                     Value = x.Id.ToString()
@@ -362,7 +384,9 @@
                     Value = x.ContactPhone + "@" + smsEmailDomain
                 }).ToList(),
 
-                SystemResponsiblesSelected = new List<SelectListItem>()
+                SystemResponsiblesSelected = new List<SelectListItem>(),
+
+                OperationObjectShow = operationObjectShow
             };
 
             
@@ -380,16 +404,15 @@
             return model;
         }
 
-
         private OperationLogIndexViewModel GetIndex()
         {                        
             var model = new OperationLogIndexViewModel
             {
                 OperationLogs = this._operationLogService.GetAllOpertionLogs(),
                 Customers = this._customerService.GetAllCustomers(),
-                OperationObjects = this._operationObjectService.GetOperationObjects(SessionFacade.CurrentCustomer.Id),
+                OperationObjects = this._operationObjectService.GetActiveOperationObjects(SessionFacade.CurrentCustomer.Id),
                 OperationLogList = this._operationLogService.GetListForIndexPage(),
-                OperationLogCategories = this._operationLogCategoryService.GetOperationLogCategories(SessionFacade.CurrentCustomer.Id),
+                OperationLogCategories = this._operationLogCategoryService.GetActiveOperationLogCategories(SessionFacade.CurrentCustomer.Id),
                 OLSearch_Filter = new OperationLogSearch ()
             };
 

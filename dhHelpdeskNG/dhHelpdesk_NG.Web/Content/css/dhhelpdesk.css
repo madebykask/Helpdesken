@@ -1244,6 +1244,10 @@ table th.thpointer {
   padding:3px 8px 0 8px;*/
 }
 
+.tableform.nobm, .tableform.nobm form, .nobm {
+  margin-bottom: 0;
+}
+
 .tableintable {
   width: 100%;
   margin-bottom: 20px;
@@ -2342,7 +2346,14 @@ h4
         .datepicker thead tr:first-child th:hover {
             background: #eeeeee;
         }
-
+.input-append,
+.input-prepend {
+  display: inline-block;
+  margin-bottom: 0px;
+  font-size: 0;
+  white-space: nowrap;
+  vertical-align: middle;
+}
 .input-append.date .add-on i,
 .input-prepend.date .add-on i {
     display: block;

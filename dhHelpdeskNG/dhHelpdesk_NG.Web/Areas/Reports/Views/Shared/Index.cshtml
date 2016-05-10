@@ -9,17 +9,17 @@
     <div class="pull-left">
         <ul class="secnav">
             <li>
-                <a id="showReport" class="btn">@Translation.Get("Visa")</a>  
+                <a id="showReport" class="btn" style="display:none">@Translation.Get("Visa")</a>  
                 <img id="showReportLoader" src="@Url.Content("~/Content/icons/ajax-loader.gif")" style="display: none;" />              
             </li>
             <li>
-                <a id="printReport" class="btn">@Translation.Get("Skriv ut")</a>                
+                <a id="printReport" class="btn" style="display:none">@Translation.Get("Skriv ut")</a>                
             </li>
             <li>
-                <a id="excelReport" class="btn">@Translation.Get("Export to Excel")</a>                
+                <a id="excelReport" class="btn" style="display:none" data-excel="true">@Translation.Get("Export to Excel")</a>                
             </li>
             <li>
-                <a id="btnShowReport" class="btn" style="display:none">@Translation.Get("Visa")</a>                             
+                <a id="btnShowReport" class="btn" >@Translation.Get("Visa")</a>                             
             </li>
         </ul>
     </div>
@@ -28,29 +28,11 @@
     <div class="container">
         <ul class="nav nav-tabs">
             <li class="active">
-                <a id="tab_report" href="#fragment-1">@Translation.Get("Rapportergenerator")</a>
-            </li>
-            <li class="">
                 <a id="tab_reportViewer" href="#fragment-2">@Translation.Get("Rapporter")</a>
             </li>
         </ul>        
-        <div class="tab-content overflow-visible">
-            <div id="fragment-1" class="tab-pane tab-pane-border active">
-                @using (Ajax.BeginForm("GetReportOptions", "Report", null,
-                    new AjaxOptions { UpdateTargetId = "reportContent", OnComplete = "onLoadOptions" }, new { id = "getReportOptionsForm" }))
-                {
-                    <table class="tableform">    
-                        <tr>
-                            <td class="span3">@Translation.Get("Rapport")</td>
-                            <td>@Html.DropDownListFor(m => m.ReportId, Model.Reports)</td>
-                        </tr>        
-                    </table>        
-                }                
-                <div id="reportContent">
-                </div>
-            </div>
-
-            <div id="fragment-2" class="tab-pane tab-pane-border">
+        <div class="tab-content overflow-visible" >
+            <div id="fragment-2" class="tab-pane tab-pane-border active">
                 @Html.Partial("ReportViewer/_Overview", Model.ReportServiceOverview)                  
             </div>
         </div>

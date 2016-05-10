@@ -11,13 +11,16 @@
             <div class="box-body portlet-content">
                 @foreach (var operationLog in Model)
                 {
-                    <div class="box-post">                        
-                        <div class="label green">                            
-                            @operationLog.CustomerName | Skapad @operationLog.CreatedDate.ToFormattedDateTime() Uppdaterad @operationLog.ChangedDate.ToFormattedDateTime()
+                    if (operationLog.Object.Status == 1)
+                    {
+                        <div class="box-post">                        
+                            <div class="label green">                            
+                                @operationLog.CustomerName | Skapad @operationLog.CreatedDate.ToFormattedDateTime() Uppdaterad @operationLog.ChangedDate.ToFormattedDateTime()
+                            </div>
+                            <div class="captionrow">@operationLog.Object.Name</div>
+                            <div class="textrow">@operationLog.LogText</div>
                         </div>
-                        <div class="captionrow">@operationLog.Category.OLCName</div>
-                        <div class="textrow">@operationLog.LogText</div>
-                    </div>
+                    }
                 }            
             </div>
         </div>

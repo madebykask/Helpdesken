@@ -218,6 +218,7 @@
     <Compile Include="BusinessLogic\Specifications\Licenses\LicenseSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Licenses\ProductSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Links\LinkSpecifications.cs" />
+    <Compile Include="BusinessLogic\Specifications\OperationLog\OperationLogSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Orders\OrderEmailLogSpecificatons.cs" />
     <Compile Include="BusinessLogic\Specifications\Orders\OrderFieldSettingsSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Orders\OrderHistorySpecifications.cs" />
@@ -526,6 +527,7 @@
     <Error Condition="!Exists('..\packages\PostSharp.4.0.36\tools\PostSharp.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://www.postsharp.net/links/nuget-restore." />
     <Error Condition="Exists('..\packages\PostSharp.4.0.36\tools\PostSharp.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://www.postsharp.net/links/nuget-restore." />
   </Target>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

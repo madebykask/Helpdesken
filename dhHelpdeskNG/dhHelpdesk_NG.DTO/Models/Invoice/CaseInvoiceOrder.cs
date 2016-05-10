@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Invoice
 {
+    using DH.Helpdesk.Common.Enums;
     using System;
     using System.Collections.Generic;
     using System.Globalization;
@@ -29,7 +30,8 @@
                 string userCode,
                 string costCentre,
                 int? creditForOrder_Id,
-                int? project_Id,                  
+                int? project_Id,   
+                int orderState,   
                 CaseInvoiceArticle[] articles,
                 CaseInvoiceOrderFile[] files)
         {
@@ -54,6 +56,7 @@
             this.CostCentre = costCentre;
             this.CreditForOrder_Id = creditForOrder_Id;
             this.Project_Id = project_Id;
+            this.OrderState = orderState;
             this.Files = files != null ? files : new List<CaseInvoiceOrderFile>().ToArray();            
         }
 
@@ -77,9 +80,10 @@
                 string costCentre,
                 int? creditForOrder_Id,
                 int? project_Id,
+                int orderState, 
                 CaseInvoiceArticle[] articles,
                 CaseInvoiceOrderFile[] files) :
-            this(id, invoiceId, null, number, invoiceDate, invoicedByUserId, date, reportedBy, persons_Name, persons_Email, persons_Phone, persons_Cellphone, region_Id, department_Id, ou_Id, place, userCode, costCentre, creditForOrder_Id, project_Id, articles, files)
+            this(id, invoiceId, null, number, invoiceDate, invoicedByUserId, date, reportedBy, persons_Name, persons_Email, persons_Phone, persons_Cellphone, region_Id, department_Id, ou_Id, place, userCode, costCentre, creditForOrder_Id, project_Id, orderState, articles, files)
         {
         }
 
@@ -129,6 +133,8 @@
 
         public int? Project_Id { get; set; }
 
+        public int OrderState { get; set; }
+
         public CaseInvoiceArticle[] Articles { get; private set; }
 
         public CaseInvoiceOrderFile[] Files { get; private set; }
@@ -138,7 +144,8 @@
         public void DoInvoice(int userId)
         {
             this.InvoicedByUserId = userId;
-            this.InvoiceDate = DateTime.UtcNow;            
+            this.InvoiceDate = DateTime.UtcNow;
+            this.OrderState = (int)InvoiceOrderStates.Sent;
         }               
     }
 }

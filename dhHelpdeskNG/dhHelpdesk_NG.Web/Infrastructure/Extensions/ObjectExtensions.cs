@@ -279,6 +279,10 @@
                      string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Persons_CellPhone, CaseSolutionFields.PersonsCellPhone)))
                 return string.Empty;
 
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Persons_EMail.ToString()).ShowOnStartPage == 1 &&
+                string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Persons_EMail, CaseSolutionFields.PersonsEmail)))
+                return string.Empty;
+
             else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.Region_Id.ToString()).ShowOnStartPage == 1 &&
                      string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Region_Id, CaseSolutionFields.Region)))
                 return string.Empty;
@@ -533,7 +537,8 @@
                string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ClosingReason, CaseSolutionFields.FinishingCause)))
                 return string.Empty;
 
-            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString()).ShowOnStartPage == 1)
+            else if (getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString()).ShowOnStartPage == 1 &&
+               string.IsNullOrEmpty(model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Filename, CaseSolutionFields.LogFileName)))
                 return string.Empty;
 
             return ret;

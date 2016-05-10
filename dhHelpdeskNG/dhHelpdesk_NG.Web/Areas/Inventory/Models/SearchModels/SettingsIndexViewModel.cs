@@ -7,6 +7,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels
 
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Web.Enums.Inventory;
+    using DH.Helpdesk.Web.Infrastructure;
 
     public class SettingsIndexViewModel : IndexModel
     {
@@ -27,13 +28,13 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels
 
         private List<ItemOverview> GetTypes(List<ItemOverview> types)
         {
-            var inventoryTypes = (from Enum d in Enum.GetValues(typeof(CurrentModes))
+            var inventoryTypes = (from CurrentModes d in Enum.GetValues(typeof(CurrentModes))
                                   select
                                       new
                                       {
                                           Value = Convert.ToInt32(d).ToString(CultureInfo.InvariantCulture),
-                                          Name = d.ToString()
-                                      }).ToList();
+                                          Name = Translation.GetCoreTextTranslation(d.GetCaption())
+                                      }).OrderBy(d => d.Name).ToList();
 
             List<ItemOverview> inventoryTypeList =
                 inventoryTypes.Select(x => new ItemOverview(x.Name, x.Value)).ToList();

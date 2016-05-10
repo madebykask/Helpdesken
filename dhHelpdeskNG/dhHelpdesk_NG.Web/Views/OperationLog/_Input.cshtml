@@ -26,7 +26,7 @@
                                         @Translation.Get("Driftsobjekt", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>                                           
-                                        @Html.DropDownListFor(model => model.OperationLog.OperationObject_Id, Model.OperationObjects)
+                                        @Html.DropDownListFor(model => model.OperationLog.OperationObject_Id, Model.OperationObjects, "")
                                     </td>
                                 </tr>
                                 <tr>
@@ -128,7 +128,7 @@
                             <table class="tableform" id="Visa" border="0">
                                <tr>
                                   <td class="span3">
-                                     @Translation.Get("Visa fr.o.m", Enums.TranslationSource.TextTranslation):
+                                     @Translation.Get("Visa fr.o.m", Enums.TranslationSource.TextTranslation)
                                   </td>
                                   <td class="span9">
                                      @Html.EditorFor(model => model.OperationLog.ShowDate, "DatePicker", new { id = "divOperationLog_ShowDate" }) 
@@ -136,7 +136,7 @@
                                </tr>
                                <tr>
                                   <td>
-                                     @Translation.Get("Visa t.o.m", Enums.TranslationSource.TextTranslation):
+                                     @Translation.Get("Visa t.o.m", Enums.TranslationSource.TextTranslation)
                                   </td>
                                   <td>
                                      @Html.EditorFor(model => model.OperationLog.ShowUntilDate, "DatePicker", new { id = "divOperationLog_ShowUntilDate" }) 
@@ -144,16 +144,16 @@
                                </tr>
                                <tr>
                                    <td>
-                                       @Translation.Get("Visa på startsidan", Enums.TranslationSource.TextTranslation):
+                                       @Translation.Get("Visa på startsidan", Enums.TranslationSource.TextTranslation)
                                    </td>
                                    <td class="span9">                                        
-                                       <input type="checkbox" name="OperationLog.ShowOnStartPage" @(Model.OperationLog.ShowOnStartPage == 1 ? "checked=checked" : "") value ="1" />                                        
+                                       <input id="chkShowOnStartPage" type="checkbox" name="OperationLog.ShowOnStartPage" @(Model.OperationLog.ShowOnStartPage == 1 ? "checked=checked" : "") value ="1" @(Model.OperationObjectShow == 0 ? "disabled=disabled" : "")/>                                        
                                        <input type="hidden" name="OperationLog.ShowOnStartPage" value="0" />                                                                                                             
                                    </td>                                    
                                </tr>
                                <tr>
                                    <td> 
-                                       @Translation.Get("Informera handläggarna", Enums.TranslationSource.TextTranslation):
+                                       @Translation.Get("Informera handläggarna", Enums.TranslationSource.TextTranslation)
                                    </td>
                                    <td class="span9">
                                        <input type="checkbox" name="OperationLog.InformUsers" @(Model.OperationLog.InformUsers == 1 ? "checked=checked" : "")  value="1" />                                        
@@ -360,11 +360,31 @@
 
 
     $(function () {
+        $("#OperationLog_OperationObject_Id").focus();
         if ($("#chkSecurity").is(":checked"))
             $("#securityOptions").show();
 
         $("#chkSecurity").click(function () {        
             $("#securityOptions").toggle();
+        });
+
+        $("#OperationLog_OperationObject_Id").on("change", function () {
+            var selectedId = $("#OperationLog_OperationObject_Id option:selected").val();
+            if (selectedId != undefined && selectedId > 0) {
+                $.get("/OperationLog/GetOperationObjectAttr/", { id: selectedId },
+                    function (data) {
+                        if (data != null) {
+                            if (data != "0") {                                
+                                $("#chkShowOnStartPage").removeAttr("disabled");
+                                $("#chkShowOnStartPage").attr("checked","checked");
+                            }
+                            else {
+                                $("#chkShowOnStartPage").removeAttr("checked");
+                                $("#chkShowOnStartPage").attr("disabled", "disabled");
+                            }
+                        }                        
+                });                
+            }
         });
     });
 
@@ -466,6 +486,7 @@
                 form.submit();
             }
         });
-        });
+    });
+
 
 </script>

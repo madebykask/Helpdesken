@@ -51,6 +51,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
         /// </returns>
         CausingPartOverview GetCausingPart(int causingPartId);
 
+        IEnumerable<CausingPartOverview> GetActiveParentCausingParts(int customerId, int? alternativeId);
         /// <summary>
         /// The save causing part.
         /// </summary>

@@ -940,6 +940,7 @@
     <Compile Include="Areas\Reports\Models\Reports\LeadtimeActiveCasesModel.cs" />
     <Compile Include="Areas\Reports\Models\Reports\LeadtimeFinishedCasesModel.cs" />
     <Compile Include="Areas\Reports\Models\Reports\ReportGenerator\CaseOverviewModel.cs" />
+    <Compile Include="Areas\Reports\Models\Reports\ReportGenerator\ReportGeneratorAggregateModel.cs" />
     <Compile Include="Areas\Reports\Models\Reports\ReportGenerator\ReportGeneratorModel.cs" />
     <Compile Include="Areas\Reports\ReportsAreaRegistration.cs" />
     <Compile Include="Controllers\AboutController.cs" />
@@ -1001,6 +1002,7 @@
     <Compile Include="Infrastructure\ApplicationFacade.cs" />
     <Compile Include="Infrastructure\Attributes\CustomHandleErrorAttribute.cs" />
     <Compile Include="Infrastructure\Attributes\CurrentTabAttribute.cs" />
+    <Compile Include="Infrastructure\Attributes\NoCacheAttribute.cs" />
     <Compile Include="Infrastructure\Attributes\SessionRequiredAttribute.cs" />
     <Compile Include="Infrastructure\Attributes\UserCasePermissionsAttribute.cs" />
     <Compile Include="Infrastructure\Attributes\UserPermissionsAttribute.cs" />
@@ -1823,8 +1825,8 @@
     <Content Include="Areas\Inventory\Views\Shared\EditorTemplates\NotReadonlyFields\Number.cshtml" />
     <Content Include="Areas\Inventory\Views\Shared\EditorTemplates\NotReadonlyFields\Text.cshtml" />
     <Content Include="Areas\Inventory\Views\Shared\EditorTemplates\NotReadonlyFields\WideText.cshtml" />
-    <Content Include="Areas\Inventory\Views\Shared\EditorTemplates\ChassisModel.cshtml" />
-    <Content Include="Areas\Inventory\Views\Shared\EditorTemplates\InventoryModel.cshtml" />
+    <Content Include="Areas\Inventory\Views\Shared\EditorTemplates\ChassisFieldsModel.cshtml" />
+    <Content Include="Areas\Inventory\Views\Shared\EditorTemplates\InventoryFieldsModel.cshtml" />
     <Content Include="Areas\Inventory\Views\Shared\EditorTemplates\MemoryFieldsViewModel.cshtml" />
     <Content Include="Areas\Inventory\Views\Shared\EditorTemplates\OperatingSystemFieldsViewModel.cshtml" />
     <Content Include="Areas\Inventory\Views\Shared\EditorTemplates\PlaceFieldsViewModel.cshtml" />
@@ -2280,8 +2282,8 @@
     <Content Include="Views\Changes\EditorTemplates\Fields\DateOutOfTable.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\Fields\TimeOutOfTable.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\YearMonthPicker.cshtml" />
-    <Content Include="Areas\Inventory\Views\Workstation\EditorTemplates\ChassisModel.cshtml" />
-    <Content Include="Areas\Inventory\Views\Workstation\EditorTemplates\InventoryModel.cshtml" />
+    <Content Include="Areas\Inventory\Views\Workstation\EditorTemplates\ChassisFieldsModel.cshtml" />
+    <Content Include="Areas\Inventory\Views\Workstation\EditorTemplates\InventoryFieldsModel.cshtml" />
     <Content Include="Areas\Inventory\Views\Workstation\EditorTemplates\MemoryFieldsViewModel.cshtml" />
     <Content Include="Areas\Inventory\Views\Workstation\EditorTemplates\OperatingSystemFieldsViewModel.cshtml" />
     <Content Include="Areas\Inventory\Views\Workstation\EditorTemplates\ProccesorFieldsViewModel.cshtml" />
@@ -3177,4 +3179,5 @@ $(ProjectDir)..\..\utils\GenerateAssemblyInfo.bat $(ProjectDir)..\CommonAssembly
 )
 </PreBuildEvent>
   </PropertyGroup>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
 </Project>

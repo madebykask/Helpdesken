@@ -356,7 +356,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             List<ItemOverview> departments =
                 this.OrganizationService.GetDepartments(customerId).OrderBy(x => x.Name).ToList();
             List<ItemOverview> domains =
-                this.OrganizationService.GetDepartments(customerId).OrderBy(x => x.Name).ToList();
+                this.OrganizationService.GetDomains(customerId).OrderBy(x => x.Name).ToList();
             List<ItemOverview> ous = this.OrganizationService.GetOrganizationUnits().OrderBy(x => x.Name).ToList();
             List<ItemOverview> buildings = this.PlaceService.GetBuildings(customerId).OrderBy(x => x.Name).ToList();
             List<ItemOverview> floors = this.PlaceService.GetFloors(customerId).OrderBy(x => x.Name).ToList();

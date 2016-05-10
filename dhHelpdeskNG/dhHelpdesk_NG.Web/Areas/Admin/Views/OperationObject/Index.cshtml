@@ -53,7 +53,7 @@
                                     <a href="@Url.Action("edit", "operationobject", new { area = "admin", id = item.Id })">@Html.DisplayFor(modelItem => item.Description)</a>
                                 </td>
                                 <td>
-                                    <a href="@Url.Action("edit", "operationObject", new { area = "admin", id = item.Id })">@Translation.Get(item.ShowOnStartPage.TranslateBit(), Enums.TranslationSource.TextTranslation)</a>
+                                    <a href="@Url.Action("edit", "operationObject", new { area = "admin", id = item.Id })">@Translation.Get(item.ShowOnStartPage.TranslateOperationObjectBit(), Enums.TranslationSource.TextTranslation)</a>
                                 </td>
                                 <td>
                                     <a href="@Url.Action("edit", "operationObject", new { area = "admin", id = item.Id })">@Translation.Get(item.IsActive.TranslateBit(), Enums.TranslationSource.TextTranslation)</a>

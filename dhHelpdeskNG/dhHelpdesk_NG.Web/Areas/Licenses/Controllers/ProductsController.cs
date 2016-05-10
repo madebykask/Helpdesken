@@ -63,7 +63,8 @@
             var products = this.productsService.GetProducts(
                                     this.workContext.Customer.CustomerId,
                                     filters.RegionIds,
-                                    filters.DepartmentIds);
+                                    filters.DepartmentIds,
+                                    filters.ProductIds);
 
             var contentModel = this.productsModelFactory.GetContentModel(products);
             return this.PartialView(contentModel);

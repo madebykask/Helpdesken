@@ -13,6 +13,7 @@
         IDictionary<string, string> Validate(OperationLogCategory operationLogCategoryToValidate);
 
         IList<OperationLogCategory> GetOperationLogCategories(int customerId);
+        IList<OperationLogCategory> GetActiveOperationLogCategories(int customerId);
 
         OperationLogCategory GetOperationLogCategory(int? id, int customerId);
         DeleteMessage DeleteOperationLogCategory(int id);
@@ -48,6 +49,11 @@
         public IList<OperationLogCategory> GetOperationLogCategories(int customerId)
         {
             return this._operationLogCategoryRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.OLCName).ToList();
+        }
+
+        public IList<OperationLogCategory> GetActiveOperationLogCategories(int customerId)
+        {
+            return this._operationLogCategoryRepository.GetMany(x => x.Customer_Id == customerId && x.IsActive == 1).OrderBy(x => x.OLCName).ToList();
         }
 
         public OperationLogCategory GetOperationLogCategory(int? id, int customerId)

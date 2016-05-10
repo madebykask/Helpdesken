@@ -9,7 +9,8 @@
 
 <script type="text/javascript">
     window.parameters = {
-        currentCaseId: '@Model.case_.Id',        
+        currentCaseId: '@Model.case_.Id',
+        currentCaseNumber: '@Model.case_.CaseNumber',
         customerId: '@Model.case_.Customer_Id',
         parentCaseId: '@(Model.ParentCaseInfo != null ? Model.ParentCaseInfo.ParentId.ToString() : "null")',
         isAnyNotClosedChild: '@Model.IsAnyNotClosedChild().ToString()',
@@ -22,6 +23,7 @@
         userCaseLocker: '@Model.CaseLock.UserId',
         extendValue: '@Model.CaseLock.ExtendValue',
         timerInterval: '@Model.CaseLock.TimerInterval',
+        invoicePreventsToCloseCaseMessage: '@Translation.Get("Du kan inte avsluta ärendet eftersom det finns öppna order.")',        
         caseLockChecker: '@Url.Content("~/Cases/IsCaseAvailable/")',
         caseLockExtender: '@Url.Content("~/Cases/ReExtendCaseLock/")',
         caseActiveDataChecker: '@Url.Content("~/Cases/CheckCaseForActiveData/")',
@@ -190,6 +192,7 @@
                         @Html.HiddenFor(model => model.SavedFiles)
                         @Html.HiddenFor(model => model.case_.Unread)
                         @Html.HiddenFor(model => model.ProductAreaHasChild)
+                        @Html.HiddenFor(model => model.CustomerSettings.ModuleCaseInvoice)                        
                         
                         @Html.Hidden("WriteTextToExternalNote", Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString()))
                         @Html.Hidden("Today", DateTime.Now.ToShortDateString())
@@ -269,12 +272,12 @@
                                                 </td>
 
                                             </tr>
-                                            <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Persons_EMail, CaseSolutionFields.Email)">
+                                            <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Persons_EMail, CaseSolutionFields.PersonsEmail)">
                                                 <td class="span3">
                                                     @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Persons_EMail, "E-post")                                                                            
                                                 </td>
                                                 <td class="span4">
-                                                     @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Persons_EMail, CaseSolutionFields.Email))
+                                                     @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Persons_EMail, CaseSolutionFields.PersonsEmail))
                                                      {
                                                          @Html.TextBoxFor(model => model.case_.PersonsEmail, new { maxlength = "100", @readonly = "readonly" })
                                                      }
@@ -508,9 +511,23 @@
                             <div style="@Model.caseFieldSettings.displayAboutUserInfoHtml()"  class='@(Model.case_.Id != 0 ? "regarding-block hideshowregarding" : "regarding-block hideshow")'>
                                     <h4><a href="#" class="showbtn"><i class="icon-plus-sign"></i></a>
                                         <a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a>
-                                         @Translation.Get("Angående")&nbsp;  @if (Model.case_.IsAbout != null)
-                                                                                                                                                                                                          { @Model.case_.IsAbout.ReportedBy } &nbsp; @if (Model.case_.IsAbout != null)
-                                                                                                                                                                                                                                                     { @Model.case_.IsAbout.Person_Name } </h4>
+                                         @Translation.Get("Angående") -&nbsp;  @if (Model.case_.IsAbout != null && @Model.case_.IsAbout.ReportedBy != null)
+                                                                               { @Model.case_.IsAbout.ReportedBy }&nbsp;
+                                                    @if (Model.case_.IsAbout != null && Model.case_.IsAbout.Person_Name != null)
+                                                    {
+                                                         @Model.case_.IsAbout.Person_Name 
+                                                    } &nbsp;
+                                                    @if (Model.case_.IsAbout != null && Model.case_.IsAbout.Department_Id != null)
+                                                    {
+                                                        var curDep = Model.departments.Where(d => d.Id == Model.case_.IsAbout.Department_Id).SingleOrDefault();
+                                                        @curDep.DepartmentName 
+                                                    } &nbsp;
+                                                    @if (Model.case_.IsAbout != null && Model.case_.IsAbout.OU_Id != null)
+                                                    {
+                                                        var curOu = Model.isaboutous.Where(w => w.Id == Model.case_.IsAbout.OU_Id).SingleOrDefault();
+                                                        @curOu.Name 
+                                                    }
+                                    </h4>
                                     <div class="row">
                                         <div class="span12">
                                             <table class="tableform">
@@ -1668,7 +1685,7 @@
                                         </tr>
                                         }
                                     }
-                                    <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.CausingPart, CaseSolutionFields.CausingPart)">
+                                   @* <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.CausingPart, CaseSolutionFields.CausingPart)">
                                         <td>
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.CausingPart, "Rotorsak")
                                         </td>
@@ -1706,6 +1723,51 @@
                                             }
                                             
                                         </td>
+                                    </tr>*@
+                                    
+                                    <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.CausingPart, CaseSolutionFields.CausingPart)">
+                                        <td>
+                                            @CaseFieldCaption(GlobalEnums.TranslationCaseFields.CausingPart, "Rotorsak")
+                                        </td>                                        
+                                        <td class="span1" style="float: left;">                                            
+                                            @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.CausingPart, CaseSolutionFields.CausingPart))
+                                            {
+                                                    
+                                                <select id="case__CausingPartId" name="case_.CausingPartId" class='chosen-single-select'>    
+                                                    <option> &nbsp; </option>
+                                                    @if (Model.causingParts != null)
+                                                    {
+                                                        foreach (var causingPart in Model.causingParts)
+                                                        {                                                                                                           
+                                                            <option value="@causingPart.Value" @(causingPart.Selected ? "Selected" : "")> @causingPart.Text </option>
+                                                        }
+                                                    }
+                                                </select>
+                                            }
+                                            else
+                                            {
+                                                @Html.HiddenFor(model => Model.case_.CausingPartId)
+                                                if (Model.causingParts.Any())
+                                                {
+                                                    var causingpart = Model.case_.CausingPartId.HasValue ? Model.causingParts.SingleOrDefault(x => x.Value == Model.case_.CausingPartId.ToString()) : null;
+
+                                                    if (causingpart == null)
+                                                    {
+                                                        var t = string.Empty;
+                                                        @Html.TextBoxFor(m => t, new { @readonly = true })                                                    
+                                                    }
+                                                    else
+                                                    {                                                                                                       
+                                                        @Html.TextBoxFor(m => causingpart.Text, new { @readonly = true })                                                     
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    var t = string.Empty;
+                                                    @Html.TextBoxFor(m => t, new { @readonly = true })
+                                                }
+                                            }                                            
+                                        </td>                                        
                                     </tr>
                                     @if (Model.changes != null)
                                     {
@@ -1944,12 +2006,12 @@
         </div>
     </div>    
     
-    if(Model.case_.Id > 0 && Model.CasePrintView != null)
-    {
+                if (Model.case_.Id > 0 && Model.CasePrintView != null)
+                {
         <div>
             @Html.Partial("_CasePrint", Model.CasePrintView)
         </div>        
-    }     
+                }
 }
 
 @functions    {

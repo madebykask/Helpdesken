@@ -4364,6 +4364,20 @@ If not exists (select * from tblTextTranslation where Text_Id = 1592 and Languag
             insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1592, 'Show cases that are not assigned on case overview and advanced search', 2)
 GO
 
+If not exists (select * from tblText where Id = 1593)
+            insert into tblText (Id, Textstring) VALUES (1593, 'Norska')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1593 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1593, 'Norwegian', 2)
+GO
+
+If not exists (select * from tblText where Id = 1594)
+            insert into tblText (Id, Textstring) VALUES (1594, 'Du kan inte avsluta ärendet eftersom det finns öppna order.')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1594 and Language_Id=2)
+            insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1594, 'You can''t close the case since it contains open orders.', 2)
+GO
+
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

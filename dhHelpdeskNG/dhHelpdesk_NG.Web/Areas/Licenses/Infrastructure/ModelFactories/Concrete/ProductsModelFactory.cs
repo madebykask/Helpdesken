@@ -12,10 +12,12 @@
         {
             var regions = WebMvcHelper.CreateMultiSelectField(data.Regions, filter.RegionIds);
             var departments = WebMvcHelper.CreateMultiSelectField(data.Departments, filter.DepartmentIds);
+            var products = WebMvcHelper.CreateMultiSelectField(data.Products, filter.ProductIds);
 
             return new ProductsIndexModel(
                                     regions, 
-                                    departments);
+                                    departments,
+                                    products);
         }
 
         public ProductsContentModel GetContentModel(ProductOverview[] products)

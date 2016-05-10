@@ -1,4 +1,5 @@
 ﻿@using System.Web.Optimization
+@using DH.Helpdesk.BusinessData.Models.Shared
 @using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.BusinessData.OldComponents
@@ -7,6 +8,7 @@
     window.Params = {
         SpecificFilterDataUrl: '@Url.Content("~/Reports/Report/GetCustomerSpecificFilter")',
         ShowReportUrl: '@Url.Content("~/Reports/Report/ShowReport")',
+        ShowGeneratedReportUrl: '@Url.Content("~/Reports/Report/GetReportGeneratorReport")',
         ShowReportButton: "#btnShowReport",
         ReportList: "#lstReports",
         StatusList: "#lstStatus",
@@ -39,7 +41,7 @@
                                     @foreach (var r in Model.ReportList.Items)
                                     {
                                         int reportId = int.Parse(r.Id);                
-                                        <option value="@r.Value" @reportId.IdIsSelected(selectedItems)>
+                                        <option value="@r.Value" data-id="@r.Id" @reportId.IdIsSelected(selectedItems)>
                                             @r.Value
                                         </option>
                                     }
@@ -111,6 +113,30 @@
                                  @Html.EditorFor(m => Model.ReportFilter.CaseCreationDate.ToDate, "DatePicker", new { id = "CaseRegistrationToDate" })
                             </td>
                         </tr>   
+                    }
+                    @{
+                        var selectedFields = new SelectedItems(Model.ReportGeneratorOptions.FieldIds).GetSelectedStr();
+                        <tr id="reportGeneratorFields" style="display: none">
+                            <td>
+                                @Translation.Get("Fält")
+                            </td>
+                            <td>
+                                @* <select id="lstFields" name="lstFields" data-field="fields" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                    @foreach (var field in Model.ReportGeneratorOptions.Fields)
+                                    {
+                                        int id = int.Parse(field.Value);
+                                        <option value="@field.Value" @id.IdIsSelected(selectedFields)>
+                                            @field.Text
+                                        </option>
+                                    }
+                                </select>*@
+                                @Html.DropDownListFor(m => m.ReportGeneratorOptions.FieldIds, Model.ReportGeneratorOptions.Fields,
+                                        new { id = "lstFields",
+                                            multiple = "multiple",
+                                            @class = "multiselect multiselect-search"})
+
+                            </td>
+                        </tr>
                     }
                 </table>
             </div>
@@ -229,12 +255,16 @@
             </div>
         </div>
     </div>
-    <div class="container">
+    <div id="otherReportsContainer" class="container">
         <div class="row">
             <div class="">
                 @Html.Partial("ReportViewer/_PresentReport", Model.ReportViewerData)
             </div>
         </div>
+    </div>
+
+    <div id="generateReportContainer" style="display:none">
+        
     </div>
 }
 

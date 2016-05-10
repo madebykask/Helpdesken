@@ -62,6 +62,7 @@ namespace DH.Helpdesk.Web.Controllers
     using Microsoft.Reporting.WebForms;
     using DH.Helpdesk.BusinessData.Models.ReportService;
     using DH.Helpdesk.Services.Services.Reports;
+    using DH.Helpdesk.BusinessData.Models.Case.Output;
 
     public class CasesController : BaseController
     {        
@@ -1965,9 +1966,9 @@ namespace DH.Helpdesk.Web.Controllers
             return Json("Success");
         }
 
-        public PartialViewResult ShowCasePrintPreview(int caseId)
+        public PartialViewResult ShowCasePrintPreview(int caseId, int caseNumber)
         {
-            var model = GetCaseReportViewerData("CaseDetailsList", caseId);
+            var model = GetCaseReportViewerData("CaseDetailsList", caseId, caseNumber);
             model.CanShow = true;
             return PartialView("_CasePrint", model);
         }
@@ -2420,6 +2421,19 @@ namespace DH.Helpdesk.Web.Controllers
                 return Json(new { result = "Error", data = "Unexpected Error:" + ex.Message });                
             }
         }
+
+        [HttpGet]
+        public JsonResult IsThereNotInvoicedOrder(int caseId)
+        {
+            var res = false;
+            
+            var notInvoicedOrders = this.invoiceArticleService.GetInvoiceOrders(caseId, InvoiceOrderFetchStatus.AllNotSent);
+            if (notInvoicedOrders.Any())
+                res = true;
+
+            return Json(res, JsonRequestBehavior.AllowGet);
+        }
+
         #endregion
 
         #region --Ajax--
@@ -2564,10 +2578,10 @@ namespace DH.Helpdesk.Web.Controllers
                         case_.Priority_Id = oldCase.Priority_Id;
                     }
 
-                    if (cu.StateSecondaryPermission == 0)
-                    {
-                        case_.StateSecondary_Id = oldCase.StateSecondary_Id;
-                    }
+                    //if (cu.StateSecondaryPermission == 0)
+                    //{
+                    //    case_.StateSecondary_Id = oldCase.StateSecondary_Id;
+                    //}
                 }
 
                 if (oldCase.StateSecondary_Id.HasValue)
@@ -3801,7 +3815,10 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CausingPart.ToString()).ShowOnStartPage == 1)
             {
-                m.causingParts = this._causingPartService.GetCausingParts(customerId);
+                var causingParts = GetCausingPartsModel(customerId, m.case_.CausingPartId);              
+                m.causingParts = causingParts;
+                //#1
+                //m.causingParts = this._causingPartService.GetCausingParts(customerId);
             }
 
             // "Workging group" field
@@ -3924,6 +3941,17 @@ namespace DH.Helpdesk.Web.Controllers
                             m.case_.Category_Id = caseTemplate.Category_Id.Value;
                         }
 
+                        if (caseTemplate.CausingPartId.HasValue)
+                        {
+                            m.case_.CausingPartId = caseTemplate.CausingPartId.Value;
+                            if (m.causingParts != null)
+                            {
+                                var templateCausingPart = m.causingParts.Where(c => c.Value == caseTemplate.CausingPartId.Value.ToString()).SingleOrDefault();
+                                if (templateCausingPart != null)
+                                    templateCausingPart.Selected = true;
+                            }
+                        }
+
                         if (caseTemplate.UpdateNotifierInformation.HasValue)
                         {
                             m.UpdateNotifierInformation = caseTemplate.UpdateNotifierInformation.Value.ToBool();
@@ -3953,7 +3981,8 @@ namespace DH.Helpdesk.Web.Controllers
                         if (m.CaseLog.FinishingType.HasValue)
                             m.CaseLog.FinishingDate = DateTime.UtcNow;
                         m.case_.PersonsName = caseTemplate.PersonsName;
-                        m.case_.PersonsPhone = caseTemplate.PersonsPhone;
+                        m.case_.PersonsEmail = caseTemplate.PersonsEmail;
+                        m.case_.PersonsPhone = caseTemplate.PersonsPhone;                        
                         m.case_.Region_Id = caseTemplate.Region_Id;
                         m.case_.OU_Id = caseTemplate.OU_Id;
                         m.case_.Place = caseTemplate.Place;
@@ -4160,6 +4189,7 @@ namespace DH.Helpdesk.Web.Controllers
                 m.DynamicCase.FormPath = m.DynamicCase.FormPath
                     .Replace("[CaseId]", m.case_.Id.ToString())
                     .Replace("[UserId]", SessionFacade.CurrentUser.UserId.ToString())
+                    .Replace("[ApplicationType]", "5")
                     .Replace("[Language]", l.LanguageId);
                 m.DynamicCase.FormPath = m.DynamicCase.FormPath.Replace(@"\", @"\\"); //this is because users with backslash in name will have issues with container.js
             }
@@ -4776,7 +4806,7 @@ namespace DH.Helpdesk.Web.Controllers
             return ret;
         }
 
-        private ReportModel GetCaseReportViewerData(string reportName, int caseId)
+        private ReportModel GetCaseReportViewerData(string reportName, int caseId, int caseNumber)
         {
             var reportSelectedFilter = new ReportSelectedFilter();
             reportSelectedFilter.SelectedCustomers.Add(SessionFacade.CurrentCustomer.Id);
@@ -4804,6 +4834,7 @@ namespace DH.Helpdesk.Web.Controllers
                 reportViewer.SizeToReportContent = true;
                 reportViewer.ShowZoomControl = false;                
                 reportViewer.LocalReport.ReportPath = reportFile;
+                reportViewer.LocalReport.DisplayName = caseNumber.ToString();
 
                 var parameters = new List<ReportParameter>();
                 parameters.Add(new ReportParameter("CaseId", caseId.ToString()));
@@ -4821,6 +4852,54 @@ namespace DH.Helpdesk.Web.Controllers
             return model;
         }
 
+        private List<SelectListItem> GetCausingPartsModel(int customerId, int? curCausingPartId)
+        {
+            var allActiveCausinParts = this._causingPartService.GetActiveParentCausingParts(customerId, curCausingPartId);
+            var ret = new List<SelectListItem>();
+
+            var parentRet = new List<SelectListItem>();
+            var childrenRet = new List<SelectListItem>();
+
+            foreach (var causingPart in allActiveCausinParts)
+            {
+                var curName = string.Empty; 
+                if (causingPart.Parent != null && curCausingPartId.HasValue && causingPart.Id == curCausingPartId.Value)
+                {
+                    curName = string.Format("{0} - {1}", Translation.Get(causingPart.Parent.Name, Enums.TranslationSource.TextTranslation, customerId), 
+                                                         Translation.Get(causingPart.Name, Enums.TranslationSource.TextTranslation, customerId));
+                    
+                    childrenRet.Add(new SelectListItem(){ Value = causingPart.Id.ToString(), Text = curName, Selected = true });
+                }
+                else
+                {
+                    if (causingPart.Children.Any())
+                    {
+                        foreach (var child in causingPart.Children)
+                        {
+                            if (child.IsActive)
+                            {
+                                curName = string.Format("{0} - {1}", Translation.Get(causingPart.Name, Enums.TranslationSource.TextTranslation, customerId),
+                                                                     Translation.Get(child.Name, Enums.TranslationSource.TextTranslation, customerId));
+
+                                var isSelected = (child.Id == curCausingPartId);
+                                childrenRet.Add(new SelectListItem() { Value = child.Id.ToString(), Text = curName, Selected = isSelected });
+                            }
+                        }
+                    }
+                    else
+                    {
+                        curName = Translation.Get(causingPart.Name, Enums.TranslationSource.TextTranslation, customerId);
+                        var isSelected = (causingPart.Id == curCausingPartId);
+                        parentRet.Add(new SelectListItem() { Value = causingPart.Id.ToString(), Text = curName, Selected = isSelected });
+                    }
+                }                
+            }
+            
+            ret = parentRet.OrderBy(p => p.Text).Union(childrenRet.OrderBy(c => c.Text)).ToList();
+
+            return ret;
+
+        }
         #endregion
 
         #region --General--
