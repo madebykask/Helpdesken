@@ -227,7 +227,7 @@ function GetComputerUserSearchOptions() {
                 data: { query: query, customerId: $('#case__Customer_Id').val() },
                 dataType: 'json',
                 success: function (result) {
-                    var resultList = jQuery.map(result, function (item) {
+                   var resultList = jQuery.map(result, function (item) {
                         var aItem = {
                             id: item.Id
                                     , num: item.UserId
@@ -266,7 +266,8 @@ function GetComputerUserSearchOptions() {
                 || ~item.name_family.toLowerCase().indexOf(this.query.toLowerCase())
                 || ~item.num.toLowerCase().indexOf(this.query.toLowerCase())
                 || ~item.phone.toLowerCase().indexOf(this.query.toLowerCase())
-                || ~item.email.toLowerCase().indexOf(this.query.toLowerCase());
+                || ~item.email.toLowerCase().indexOf(this.query.toLowerCase())
+                || ~item.usercode.toLowerCase().indexOf(this.query.toLowerCase());
         },
 
         sorter: function (items) {
@@ -287,8 +288,8 @@ function GetComputerUserSearchOptions() {
             if (item.departmentname == null)
                 item.departmentname = ""
             var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
-            var result = item.name + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email + ' - ' + item.departmentname;
-            var resultBy_NameFamily = item.name_family + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email + ' - ' + item.departmentname;
+            var result = item.name + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email + ' - ' + item.departmentname + ' - ' + item.usercode;
+            var resultBy_NameFamily = item.name_family + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email + ' - ' + item.departmentname + ' - ' + item.usercode;
                      
             if (result.toLowerCase().indexOf(orgQuery.toLowerCase()) > -1)               
                 return result.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
@@ -398,7 +399,8 @@ function GetComputerUserSearchOptionsForIsAbout() {
                 || ~item.name_family.toLowerCase().indexOf(this.query.toLowerCase())
                 || ~item.num.toLowerCase().indexOf(this.query.toLowerCase())
                 || ~item.phone.toLowerCase().indexOf(this.query.toLowerCase())
-                || ~item.email.toLowerCase().indexOf(this.query.toLowerCase());
+                || ~item.email.toLowerCase().indexOf(this.query.toLowerCase())
+                || ~item.usercode.toLowerCase().indexOf(this.query.toLowerCase());
         },
 
         sorter: function (items) {
@@ -419,8 +421,8 @@ function GetComputerUserSearchOptionsForIsAbout() {
             if (item.departmentname == null)
                 item.departmentname = ""
             var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
-            var result = item.name + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email + ' - ' + item.departmentname;
-            var resultBy_NameFamily = item.name_family + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email + ' - ' + item.departmentname;
+            var result = item.name + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email + ' - ' + item.departmentname + ' - ' + item.usercode;
+            var resultBy_NameFamily = item.name_family + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email + ' - ' + item.departmentname + ' - ' + item.usercode;
 
             if (result.toLowerCase().indexOf(orgQuery.toLowerCase()) > -1)
                 return result.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
