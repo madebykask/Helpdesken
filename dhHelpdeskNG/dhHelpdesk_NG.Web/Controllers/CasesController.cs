@@ -2500,6 +2500,18 @@ namespace DH.Helpdesk.Web.Controllers
             bool edit = case_.Id != 0;
             var isItChildCase = m.ParentId.HasValue;
             Case parentCase = null;
+
+            
+             if (case_.User == null && case_.User_Id.HasValue)
+                case_.User = _userService.GetUser(case_.User_Id.Value);
+
+            if (case_.User == null)
+                case_.User = _userService.GetUser(SessionFacade.CurrentUser.Id);
+
+            if (string.IsNullOrEmpty(case_.User.TimeZoneId))
+                case_.User.TimeZoneId = SessionFacade.CurrentUser.TimeZoneId;         
+
+
             if (isItChildCase)
             {
                 parentCase = this._caseService.GetCaseById(m.ParentId.Value);
