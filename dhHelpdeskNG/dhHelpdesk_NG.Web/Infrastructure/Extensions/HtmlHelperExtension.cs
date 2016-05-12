@@ -784,7 +784,7 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                         caption = ey;
 
                     sb.Append(tdOpenMarkup); 
-                    sb.Append(caption);
+                    sb.Append(caption.RemoveHTMLTags());
                     sb.Append(tdCloseMarkup);                  
                     sb.Append("</tr>");
                 }
@@ -836,7 +836,7 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                         caption = ey;
 
                     sb.Append(tdOpenMarkup);
-                    sb.Append(caption);
+                    sb.Append(caption.RemoveHTMLTags());
                     sb.Append(tdCloseMarkup);
                     sb.Append("</tr>");
                 }
