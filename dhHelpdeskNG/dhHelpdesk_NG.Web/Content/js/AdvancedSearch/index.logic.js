@@ -184,10 +184,87 @@ var GRID_STATE = {
         currentCustomerTable += out.join(JOINER);
     };
               
-    Page.prototype.formatCell = function (caseId, cellValue) {
-        var out = [strJoin('<td><a href="/Cases/Edit/', caseId, '?backUrl=', '/Cases/AdvancedSearch?', 'doSearchAtBegining=true', '">', cellValue == null ? '&nbsp;' : cellValue.replace(/<[^>]+>/ig, ""), '</a></td>')];
+    Page.prototype.formatCell = function (caseId, cellValue, isExpandable, isBold) {
+        var out = [];
+     
+        var uniqId = Math.floor(Math.random() * (10000 - 1 + 1)) + 1;
+
+        var expandDiv = '<div class="expandable_' + caseId + '" style="height: 16px; overflow: hidden;max-width:500px;">';
+        if (isExpandable && cellValue!= "") {
+            out = [strJoin('<td>',
+                                expandDiv,
+                                    ' <i class="icon-plus-sign expandable_', caseId, '" data-uniqId="iIcon_', uniqId ,'" id="btnExpander_', caseId, '" onclick="toggleRowExpanation(', caseId, ')"></i> ' +
+                                    ' <a data-isbold="', isBold , '" data-uniqId="', uniqId ,'" data-rowId="', caseId, '" class="exp" href="/Cases/Edit/', caseId, '?backUrl=', '/Cases/AdvancedSearch?', 'doSearchAtBegining=true', '">', cellValue == null ? '&nbsp;' : cellValue.replace(/<[^>]+>/ig, ""), '</a>',
+                                '</div>', 
+                           '</td>')];
+        } else {
+            out = [strJoin('<td> <a href="/Cases/Edit/', caseId, '?backUrl=', '/Cases/AdvancedSearch?', 'doSearchAtBegining=true', '">',
+                cellValue == null ? '&nbsp;' : cellValue.replace(/<[^>]+>/ig, ""), '</a></td>')];
+        }
         return out.join(JOINER);
+    };        
+
+    Page.prototype.tableCleanUp = function () {
+        var expandables = $(".exp");
+        var rowsNeedExpandation = [];
+
+        $('a.exp').each(function () {
+            var t = $(this).html();                        
+            var uniqId = $(this).attr("data-uniqId");
+            var caseId = $(this).attr("data-rowId");
+            
+            if (t.length < 60) {
+                doExpanation(caseId, true, true, uniqId);                
+            }           
+        });     
     };
+
+    $.fn.textWidth = function (isBold) {
+        var html_org = $(this).html();
+        var cls = isBold == 'true' ? "textbold" : "";
+        var html_calc = '<span class="' + cls + '">' + html_org + '</span>';
+        $(this).html(html_calc);
+        var width = $(this).find('span:first').width();
+        $(this).html(html_org);
+        return width;
+    };
+
+    toggleRowExpanation = function (caseId) {
+        var curState = $("#btnExpander_" + caseId).attr('class');
+        var expandablePlusIcon = 'icon-plus-sign expandable_' + caseId;
+
+        if (curState == expandablePlusIcon) {
+            doExpanation(caseId, true, false, '');
+        } else {                        
+            doExpanation(caseId, false, false, '');
+        }
+    };
+
+    doExpanation = function (caseId, doExpand, removeExpanation, uniqId) {        
+        var expanableDivs = '.expandable_' + caseId;
+        var expandablePlusIcon = 'icon-plus-sign expandable_' + caseId;
+        var expandableMinusIcon = 'icon-minus-sign expandable_' + caseId;
+
+        var expandablePlusIcons = '.icon-plus-sign.expandable_' + caseId;
+        var expandableMinusIcons = '.icon-minus-sign.expandable_' + caseId;
+
+        if (doExpand) {
+            $(expanableDivs).css("height", "auto");
+            $(expanableDivs).css("overflow", "visible");
+
+            if (removeExpanation) {
+                $(document).find("[data-uniqId='iIcon_" + uniqId + "']").remove();
+            } else {                
+                $(expandablePlusIcons).attr('class', expandableMinusIcon);
+                $(expandableMinusIcons).attr("style", "");
+            }
+        } else {
+            $(expanableDivs).css("height", "16px");
+            $(expanableDivs).css("overflow", "hidden");
+            $(expandableMinusIcons).attr('class', expandablePlusIcon);
+            $(expandablePlusIcons).attr("style", "");
+        }
+    };   
 
     Page.prototype.loadData = function (data, gridSettings) {
         var me = this;
@@ -200,16 +277,17 @@ var GRID_STATE = {
             
         if (data && data.length > 0) {            
             $.each(data, function (idx, record) {
-                var firstCell = strJoin('<td><a href="/Cases/Edit/', record.case_id, '?backUrl=', '/Cases/AdvancedSearch?', 'doSearchAtBegining=true', '"><img title="', record.caseIconTitle, '" alt="', record.caseIconTitle, '" src="', record.caseIconUrl, '" /></a></td>');
-                var rowOut = [strJoin('<tr class="', me.getClsRow(record), '" caseid="', record.case_id, '">'), firstCell];
+                var firstCell = strJoin('<td style="max-width:300px"><a href="/Cases/Edit/', record.case_id, '?backUrl=', '/Cases/AdvancedSearch?', 'doSearchAtBegining=true', '"><img title="', record.caseIconTitle, '" alt="', record.caseIconTitle, '" src="', record.caseIconUrl, '" /></a></td>');
+                var rowClass = me.getClsRow(record);
+                var rowOut = [strJoin('<tr class="', rowClass, '" caseid="', record.case_id, '">'), firstCell];
                 $.each(me.gridSettings.columnDefs, function (idx, columnSettings) {
                     if (!columnSettings.isHidden) {
                         if (record[columnSettings.field] == null) {
-                            rowOut.push(me.formatCell(record.case_id, ''));
+                            rowOut.push(me.formatCell(record.case_id, '', false, false));
                             if (Page.isDebug) 
                                 console.warn('could not find field "' + columnSettings.field + '" in record');
                         } else {
-                            rowOut.push(me.formatCell(record.case_id, record[columnSettings.field]));
+                            rowOut.push(me.formatCell(record.case_id, record[columnSettings.field], columnSettings.isExpandable, (jQuery.inArray('textbold', rowClass) >= 0 )));
                         }
                     }
                 });
@@ -271,6 +349,7 @@ var GRID_STATE = {
 
     Page.prototype.onGetData = function (response) {
         var me = this;
+
         if (response && response.result === 'success' && response.data) {
             if(response.data.length > 0)
                 me.loadData(response.data, response.gridSettings);            
@@ -371,12 +450,13 @@ var GRID_STATE = {
         customerTableId = 0;
         currentCustomerTable = '';
         globalCounter = 0;
+        me.tableCleanUp();
         me.hideMessage();
         if (!hasData)
             me.showMsg(NODATA_MSG_TYPE);
         me.setGridState(window.GRID_STATE.IDLE);       
     };
-
+    
     // DoSearch By Sort
     Page.prototype.setSortField = function (fieldName, $el) {
         var me = this;

@@ -14,6 +14,8 @@
         public string displayName;
 
         public string cls;
+
+        public bool isExpandable;
     }
 
     /// <summary>

@@ -53,14 +53,21 @@
                         GlobalEnums.TranslationCaseFields.Department_Id.ToString(),
                         GlobalEnums.TranslationCaseFields.RegTime.ToString() 
                     };
-                        
+
+            // expandable fields can be add to this array 
+            var expandableFields = new string[] 
+                {
+                    GlobalEnums.TranslationCaseFields.Description.ToString()
+                };
+
             foreach (var fieldName in fieldNames)
             {
                 var curCol = new JsonGridColumnDef 
                                     { 
                                         cls = "colnormal",
                                         displayName = Translation.Get(fieldName, Enums.TranslationSource.CaseTranslation, customerId),
-                                        field = fieldName
+                                        field = fieldName,
+                                        isExpandable = expandableFields.Contains(fieldName)
                                     };            
                 ret.Add(curCol);
             }
