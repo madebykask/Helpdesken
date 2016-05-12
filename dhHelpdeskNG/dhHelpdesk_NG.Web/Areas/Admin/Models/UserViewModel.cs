@@ -136,6 +136,10 @@
         public List<SelectListItem> CaseInfoMailList { get; set; }
 
         public UserInputViewModel() { }
+
+        public string SelectedTimeZone { get; set; }
+
+        public IEnumerable<SelectListItem> AvailvableTimeZones { get; set; }
     }
 
     public class UserSaveViewModel
@@ -153,6 +157,6 @@
         public string[] MenuSetting { get; set; }
 
         public int CopyUserid { get; set; }
-       
+        public string SelectedTimeZone { get; set; }
     }
 }

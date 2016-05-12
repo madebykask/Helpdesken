@@ -728,6 +728,7 @@
             user.PostalAddress = user.PostalAddress ?? string.Empty;
             user.PostalCode = user.PostalCode ?? string.Empty;
             user.RegTime = DateTime.Now;
+            user.TimeZoneId = user.TimeZoneId;
 
             if (string.IsNullOrEmpty(user.UserID))
                 errors.Add("User.UserID", "Du måste ange ett Id");

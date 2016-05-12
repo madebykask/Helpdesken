@@ -67,6 +67,14 @@
         </tr>
         <tr>
             <td>
+                @Translation.Get("Time zone", Enums.TranslationSource.TextTranslation) <span class="mandatorystar">*</span>
+            </td>
+            <td>
+                @Html.DropDownListFor(model => model.SelectedTimeZone, Model.AvailvableTimeZones,  new { style = "width: auto;" })
+            </td>
+        </tr>
+        <tr>
+            <td>
                 @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
