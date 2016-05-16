@@ -18,7 +18,7 @@
 
 @using (Html.BeginForm("Edit", "Server", FormMethod.Post, new { id = "server_edit_form" }))
 {
-    @Html.CheckBoxFor(m => m.ServerViewModel.IsOperationObject) @Translation.Get("Driftobjekt")
+    <label class="checkbox">@Html.CheckBoxFor(m => m.ServerViewModel.IsOperationObject) @Translation.Get("Driftobjekt")</label>
 
     @Html.HiddenFor(m => m.ServerViewModel.Id)
     @Html.EditorFor(m => m.ServerViewModel.GeneralFieldsModel)
