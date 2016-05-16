@@ -16,6 +16,9 @@
         public string cls;
 
         public bool isExpandable;
+
+        // in percent 
+        public string width;
     }
 
     /// <summary>
