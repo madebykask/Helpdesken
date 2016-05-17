@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services.Concrete.Reports
+﻿using DH.Helpdesk.BusinessData.Models.Reports;
+
+namespace DH.Helpdesk.Services.Services.Concrete.Reports
 {
     using System;
     using System.Collections.Generic;
@@ -42,18 +44,21 @@
         private readonly IUnitOfWorkFactory unitOfWorkFactory;        
         private readonly ISurveyService sureyService;
         private readonly IReportRepository _reportRepository;
+        private readonly IReportFavoriteRepository _reportFavoriteRepository;
         private readonly ICaseService _caseService;
 
         public ReportService(
                 IUnitOfWorkFactory unitOfWorkFactory,                 
                 ISurveyService sureyService,
                 ICaseService caseService,
-                IReportRepository reportRepository)
+                IReportRepository reportRepository,
+                IReportFavoriteRepository reportFavoriteRepository)
         {
             this.unitOfWorkFactory = unitOfWorkFactory;
             this.sureyService = sureyService;
             this._reportRepository = reportRepository;
             this._caseService = caseService;
+            this._reportFavoriteRepository = reportFavoriteRepository;
         }
 
         #region Reports
@@ -70,6 +75,62 @@
 
                 return ReportsOptionsMapper.MapToCustomerAvailableReports(customers, reports);
             }
+        }
+
+        #endregion
+
+        #region ReportFavorites
+
+        public List<ReportFavoriteList> GetCustomerReportFavoriteList(int customerId)
+        {
+            var reports = _reportFavoriteRepository.GetCustomerReportFavoriteListForCustomer(customerId);
+
+            return reports.ToList();
+        }
+
+        public ReportFavorite GetCustomerReportFavorite(int reportFavoriteId, int customerId)
+        {
+            var report = _reportFavoriteRepository.GetCustomerReportFavoriteById(reportFavoriteId, customerId);
+
+            return report;
+        }
+
+        public int SaveCustomerReportFavorite(ReportFavorite reportFavorite)
+        {
+            if (!_reportFavoriteRepository.IsCustomerReportFavoriteNameUnique(reportFavorite.Id, reportFavorite.Customer_Id, reportFavorite.Name))
+            {
+                return -2;
+            }
+
+            reportFavorite.UpdateDate = DateTime.UtcNow;
+
+            if (reportFavorite.IsNew())
+            {
+                _reportFavoriteRepository.Add(reportFavorite);
+            }
+            else
+            {
+                var report = _reportFavoriteRepository.GetCustomerReportFavoriteById(reportFavorite.Id, reportFavorite.Customer_Id);
+
+                if (report == null)
+                {
+                    return -1;
+                }
+
+                report.Filters = reportFavorite.Filters;
+                report.Name = reportFavorite.Name;
+                report.Type = reportFavorite.Type;
+            }
+
+            _reportFavoriteRepository.Commit();
+
+            return reportFavorite.Id;
+        }
+
+        public void DeleteCustomerReportFavorite(int reportFavoriteId, int customerId)
+        {
+            _reportFavoriteRepository.DeleteCustomerReportFavoriteById(reportFavoriteId, customerId);
+            _reportFavoriteRepository.Commit();
         }
 
         #endregion

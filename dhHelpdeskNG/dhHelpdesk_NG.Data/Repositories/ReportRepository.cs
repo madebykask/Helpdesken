@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Dal.Repositories
+﻿using DH.Helpdesk.BusinessData.Models.Reports;
+
+namespace DH.Helpdesk.Dal.Repositories
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -429,6 +431,63 @@
         }
 
         
+    }
+
+    #endregion
+
+    #region REPORTFAVORITE
+
+    public interface IReportFavoriteRepository : IRepository<ReportFavorite>
+    {
+        IEnumerable<ReportFavoriteList> GetCustomerReportFavoriteListForCustomer(int id);
+        ReportFavorite GetCustomerReportFavoriteById(int reportFavoriteId, int customerId);
+        bool IsCustomerReportFavoriteNameUnique(int reportFavoriteId, int customerId, string name);
+        void DeleteCustomerReportFavoriteById(int reportFavoriteId, int customerId);
+    }
+
+    public class ReportFavoriteRepository : RepositoryBase<ReportFavorite>, IReportFavoriteRepository
+    {
+        private readonly ITranslator translator;
+
+        public ReportFavoriteRepository(IDatabaseFactory databaseFactory, ITranslator translator)
+            : base(databaseFactory)
+        {
+            this.translator = translator;
+        }
+
+        public IEnumerable<ReportFavoriteList> GetCustomerReportFavoriteListForCustomer(int id)
+        {
+            var query = from rc in this.DataContext.ReportFavorites
+                        join c in this.DataContext.Customers on rc.Customer_Id equals c.Id
+                        where c.Id == id
+                        select new ReportFavoriteList
+                        {
+                            Id = rc.Id,
+                            Type = rc.Type,
+                            Name = rc.Name,
+                        };
+
+            return query;
+        }
+
+        public ReportFavorite GetCustomerReportFavoriteById(int reportFavoriteId, int customerId)
+        {
+            return DataContext.ReportFavorites.FirstOrDefault(x => x.Id == reportFavoriteId && x.Customer_Id == customerId);
+        }
+
+        public bool IsCustomerReportFavoriteNameUnique(int reportFavoriteId, int customerId, string name)
+        {
+            return !DataContext.ReportFavorites.Any(x => x.Id != reportFavoriteId && x.Customer_Id == customerId && x.Name.ToLower() == name.ToLower());
+        }
+
+        public void DeleteCustomerReportFavoriteById(int reportFavoriteId, int customerId)
+        {
+            var report = DataContext.ReportFavorites.FirstOrDefault(x => x.Id == reportFavoriteId && x.Customer_Id == customerId);
+            if (report != null)
+            {
+                Delete(report);
+            }
+        }
     }
 
     #endregion

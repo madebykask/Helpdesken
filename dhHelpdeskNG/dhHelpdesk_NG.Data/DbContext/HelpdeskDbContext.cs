@@ -516,6 +516,8 @@
 
         public DbSet<CaseStatistic> CaseStatistics { get; set; }
 
+        public DbSet<ReportFavorite> ReportFavorites { get; set; }
+
         #endregion
 
         #region Public Methods and Operators
@@ -690,6 +692,7 @@
             modelBuilder.Configurations.Add(new RegionConfiguration());
             modelBuilder.Configurations.Add(new RegistrationSourceCustomerConfiguration());
             modelBuilder.Configurations.Add(new ReportConfiguration());
+            modelBuilder.Configurations.Add(new ReportFavoriteConfiguration());
             modelBuilder.Configurations.Add(new ReportCustomerConfiguration());
             modelBuilder.Configurations.Add(new RoomConfiguration());
             modelBuilder.Configurations.Add(new ServerConfiguration());

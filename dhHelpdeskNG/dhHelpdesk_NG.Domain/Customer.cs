@@ -61,6 +61,7 @@
         public virtual ICollection<CaseFieldSetting> CaseFieldSettings { get; set; }
         public virtual ICollection<ComputerUserFieldSettings> ComputerUserFieldSettings { get; set; }
         public virtual ICollection<ReportCustomer> ReportCustomers { get; set; }
+        public virtual ICollection<ReportFavorite> ReportFavorites { get; set; }
         public virtual ICollection<Document> Documents { get; set; }
         public virtual ICollection<FaqEntity> FAQs { get; set; }
 

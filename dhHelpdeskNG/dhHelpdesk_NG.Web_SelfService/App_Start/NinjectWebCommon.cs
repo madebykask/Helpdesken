@@ -194,6 +194,7 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IProjectLogRepository>().To<ProjectLogRepository>();
             kernel.Bind<IProjectRepository>().To<ProjectRepository>();
             kernel.Bind<IProjectScheduleRepository>().To<ProjectScheduleRepository>();
+            kernel.Bind<IReportFavoriteRepository>().To<ReportFavoriteRepository>();
 
             // Service             
             kernel.Bind<IMasterDataService>().To<MasterDataService>();            

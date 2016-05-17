@@ -1,5 +1,4 @@
-﻿if (window.dhHelpdesk == null)
-    dhHelpdesk = {};
+﻿window.dhHelpdesk = window.dhHelpdesk || {};
 
 $(function () {
 

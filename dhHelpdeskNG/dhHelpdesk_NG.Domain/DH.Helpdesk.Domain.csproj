@@ -127,6 +127,7 @@
     <Compile Include="Grid\GridSettingsEntity.cs" />
     <Compile Include="ParentChildCaseRelation.cs" />
     <Compile Include="RegistrationSourceCustomer.cs" />
+    <Compile Include="ReportFavorite.cs" />
     <Compile Include="TranslationSearch.cs" />
     <Compile Include="Interfaces\IActiveEntity.cs" />
     <Compile Include="Interfaces\ICustomerEntity.cs" />

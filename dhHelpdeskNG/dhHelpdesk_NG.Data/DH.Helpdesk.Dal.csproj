@@ -116,6 +116,7 @@
     <Compile Include="EntityConfigurations\ADFS\SSOLogConfiguration.cs" />
     <Compile Include="EntityConfigurations\ParentChildCaseRelationConfiguration.cs" />
     <Compile Include="EntityConfigurations\RegistrationSourceCustomerConfiguration.cs" />
+    <Compile Include="EntityConfigurations\ReportFavoriteConfiguration.cs" />
     <Compile Include="EntityConfigurations\SurveyConfiguration.cs" />
     <Compile Include="EntityConfigurations\Users\ModuleConfiguration.cs" />
     <Compile Include="EntityConfigurations\Users\UserModuleConfiguration.cs" />

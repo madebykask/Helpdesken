@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Services.Services.Reports
+﻿using DH.Helpdesk.BusinessData.Models.Reports;
+using DH.Helpdesk.Domain;
+
+namespace DH.Helpdesk.Services.Services.Reports
 {
     using System;
     using System.Collections.Generic;
@@ -165,5 +168,10 @@
                                     int? workingGroupId,
                                     int? administratorId,
                                     DateTime period);
+
+        List<ReportFavoriteList> GetCustomerReportFavoriteList(int customerId);
+        ReportFavorite GetCustomerReportFavorite(int reportFavoriteId, int customerId);
+        int SaveCustomerReportFavorite(ReportFavorite reportFavorite);
+        void DeleteCustomerReportFavorite(int reportFavoriteId, int customerId);
     }
 }

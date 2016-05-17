@@ -40,6 +40,11 @@
                 .HasForeignKey(o => o.Customer_Id)
                 .WillCascadeOnDelete(false);
 
+            this.HasMany(o => o.ReportFavorites)
+                .WithRequired(o => o.Customer)
+                .HasForeignKey(o => o.Customer_Id)
+                .WillCascadeOnDelete(false);
+
             this.Property(x => x.Address).IsRequired().HasMaxLength(50);
             this.Property(x => x.CaseStatisticsEmailList).IsRequired().HasMaxLength(500);
             this.Property(x => x.ControlTime).IsRequired();

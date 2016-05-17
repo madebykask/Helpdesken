@@ -942,6 +942,7 @@
     <Compile Include="Areas\Reports\Models\Reports\ReportGenerator\CaseOverviewModel.cs" />
     <Compile Include="Areas\Reports\Models\Reports\ReportGenerator\ReportGeneratorAggregateModel.cs" />
     <Compile Include="Areas\Reports\Models\Reports\ReportGenerator\ReportGeneratorModel.cs" />
+    <Compile Include="Areas\Reports\Models\Reports\SaveReportFavoriteModel.cs" />
     <Compile Include="Areas\Reports\ReportsAreaRegistration.cs" />
     <Compile Include="Controllers\AboutController.cs" />
     <Compile Include="Controllers\AjaxController.cs" />
@@ -1758,6 +1759,7 @@
     <Content Include="Areas\Reports\Views\Report\ReportViewer\_Overview.cshtml" />
     <Content Include="Areas\Admin\Views\BusinessRules\Index.cshtml" />
     <Content Include="Areas\Admin\Views\BusinessRules\Edit.cshtml" />
+    <Content Include="Areas\Reports\Views\Report\Reports\ReportGenerator.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="ReportViewerWebForm.aspx" />
     <Content Include="Scripts\jquery-1.8.3.js" />
@@ -1965,7 +1967,7 @@
     <Content Include="Areas\Reports\Views\Report\Options\SurveySatisfactionOptions.cshtml" />
     <Content Include="Areas\Reports\Views\Report\Reports\CaseSatisfactionReport.cshtml" />
     <Content Include="Areas\Reports\Views\Report\Options\ReportGenerator.cshtml" />
-    <Content Include="Areas\Reports\Views\Report\Reports\ReportGenerator.cshtml" />
+    <Content Include="Areas\Reports\Views\Report\Reports\ReportGeneratorPreview.cshtml" />
     <Content Include="Areas\Reports\Views\Report\Options\LeadtimeFinishedCases.cshtml" />
     <Content Include="Areas\Reports\Views\Report\Reports\LeadtimeFinishedCases.cshtml" />
     <Content Include="Areas\Admin\Views\SelfServiceSetting\Index.cshtml" />

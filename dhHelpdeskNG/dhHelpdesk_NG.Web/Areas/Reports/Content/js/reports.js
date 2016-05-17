@@ -377,17 +377,7 @@
         that.onLoadOptions = onLoadOptions;
 
         var reportType = $("#ReportId");
-        var btnShow = $("#showReport");
         var btnPrint = $('#printReport');
-        var btnExcel = $('#excelReport');
-        var tabReport = $('#tab_report');
-        var btnShowReport = $('#btnShowReport');
-        var tabReportViewer = $('#tab_reportViewer');
-        var reportList = $("#lstReports");
-        var reportGeneratorFields = $("#reportGeneratorFields");
-        var otherReportsContainer = $("#otherReportsContainer");
-        var generateReportContainer = $("#generateReportContainer");
-        var fieldsSelect = $("#lstFields");
 
         var manager = dhHelpdesk.reports.reportsManager({
             workingGroupUsersRoute: workingGroupUsersRoute
@@ -397,31 +387,6 @@
             var report = manager.getCurrentReport(parseInt(reportType.val()));
             if (report.getCanPrint()) {
                 report.printReport();
-            }
-        });
-
-        reportList.on("change", function(e) {
-            var val = $(this).find('option:selected').data("id");
-            if (val === dhHelpdesk.reports.reportType.ReportGenerator) {
-                btnShow.show();
-                btnExcel.show();
-                btnShowReport.hide();
-                reportGeneratorFields.find('select option').prop('selected', false);
-                fieldsSelect.multiselect('refresh');
-                //reportGeneratorFields
-                //    .find('select option').prop('selected', false).trigger('chosen:updated');
-                reportGeneratorFields.show();
-                otherReportsContainer.hide();
-                generateReportContainer.html("");
-                generateReportContainer.show();
-            } else {
-                btnShow.hide();
-                btnExcel.hide();
-                btnShowReport.show();
-                reportGeneratorFields.hide();
-                $("#reportPresentationArea").html("");
-                otherReportsContainer.show();
-                generateReportContainer.hide();
             }
         });
 

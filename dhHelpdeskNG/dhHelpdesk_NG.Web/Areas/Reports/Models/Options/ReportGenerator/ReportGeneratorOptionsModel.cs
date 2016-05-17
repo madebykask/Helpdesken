@@ -91,6 +91,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Models.Options.ReportGenerator
 
         public bool IsExcel { get; set; }
 
+        public bool IsPreview { get; set; }
+
         [LocalizedDisplay("poster per sida")]
         [LocalizedInteger]
         [LocalizedMin(0)]
