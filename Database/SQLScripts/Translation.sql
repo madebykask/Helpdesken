@@ -4394,6 +4394,14 @@ If not exists (select * from tblTextTranslation where text_id = 1596 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1596, 2, 'Save favorite?')
 GO
 
+If not exists (select * from tbltext where id = 1597)
+	insert into tbltext (id, TextString) VALUES (1597, 'Kör')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1597 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1597, 2, 'Run')
+GO
+
 
 
 -- *** Run this last when put translation script above this line **--

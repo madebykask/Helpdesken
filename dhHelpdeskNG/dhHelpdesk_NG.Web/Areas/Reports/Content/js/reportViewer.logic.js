@@ -74,7 +74,7 @@
             ReportGenerator: 18
         };
 
-        dhHelpdesk.reports.applyFilterV1 = function(filters) {
+        dhHelpdesk.reports.applyFilterV1 = function (filters) {
             var applyChosen = function (selector, values) {
                 var $control = $(selector);
                 $control
@@ -135,9 +135,9 @@
                 var filters = $.parseJSON(data.Filters);
                 switch (filters.version) {
                     case "1":
-                    {
-                        dhHelpdesk.reports.applyFilterV1(filters);
-                    }
+                        {
+                            dhHelpdesk.reports.applyFilterV1(filters);
+                        }
                     default:
                         return;
                 }
@@ -181,7 +181,7 @@
                     dataType: "html",
                     success: function (htmlData) {
                         if (isPreview) {
-                            $("#showReport").show();
+                            dhHelpdesk.reports.togglePreviewMode(false);
                         }
                         $("#generateReportContainer").html(htmlData);
                     },
@@ -196,7 +196,7 @@
             var origReportId = $(reportList).find("option:selected").data("origReportId");
             var isSavedFilter = typeof origReportId !== "undefined";
 
-            var reportName = isSavedFilter ? origReportId :  $(reportList + " option:selected").val();
+            var reportName = isSavedFilter ? origReportId : $(reportList + " option:selected").val();
             var customer = "";
             var deps_OUs = "";
             var workingGroup = "";
@@ -269,9 +269,11 @@
             var $generateReportContainer = $("#generateReportContainer");
             var $fieldsSelect = $("#lstFields");
 
+            dhHelpdesk.reports.togglePreviewMode(true);
+
             if (reportId === dhHelpdesk.reports.reportType.ReportGenerator) {
                 $btnPreview.show();
-                //$btnShow.show();
+                $btnShow.show();
                 $btnExcel.show();
                 $btnShowReport.hide();
                 $reportGeneratorFields.find("select option").prop("selected", false);
@@ -313,18 +315,18 @@
             var favoriteId = selected.data("id");
             $("#showReportLoader").show();
             $.ajax({
-                    type: "POST",
-                    data: {
-                        id: favoriteId
-                    },
-                    url: deleteReportFavoriteUrl
+                type: "POST",
+                data: {
+                    id: favoriteId
+                },
+                url: deleteReportFavoriteUrl
             })
-                .done(function(data) {
+                .done(function (data) {
                     $reports.val("");
                     selected.remove();
                     $reports.trigger("change");
                 })
-                .always(function() {
+                .always(function () {
                     $("#showReportLoader").hide();
                 });
         };
@@ -391,6 +393,10 @@
                             if (saveAs) {
                                 var newOption = optionTemplate.replace(/{name}/g, name).replace("{id}", data).replace("{origReportId}", originalReportId);
                                 $reportsControl.append(newOption);
+                                var options = $reportsControl.find("option");
+                                options.prop("selected", false);
+                                options.last().prop("selected", true);
+                                dhHelpdesk.reports.onReportChange.call($reportsControl[0]);
                             }
                             $modal.modal("hide");
                         }
@@ -403,6 +409,11 @@
 
             $modal.modal();
         };
+
+        dhHelpdesk.reports.togglePreviewMode = function (state) {
+            $("#showReport").each(function () { this.disabled = state; });
+            $("#excelReport").each(function () { this.disabled = state; });
+        }
 
         dhHelpdesk.reports.init = function () {
 
@@ -418,6 +429,9 @@
             $("#showReport, #excelReport, #btnPreviewReport").on("click", dhHelpdesk.reports.onGeneratedShow);
             $("#btnSaveFilter").on("click", function (e, d) { return dhHelpdesk.reports.onSave.call(this, e, d, false) });
             $("#btnSaveAsFilter").on("click", function (e, d) { return dhHelpdesk.reports.onSave.call(this, e, d, true) });
+
+            $("#lstStatus, #lstfilterAdministrator, #lstfilterDepartment, #lstfilterWorkingGroup, #lstfilterCaseType, #lstfilterProductArea")
+                .on("change", function (e, d) { return dhHelpdesk.reports.togglePreviewMode(true); });
 
             $(".chosen-select").chosen({
                 width: "300px",
