@@ -430,7 +430,7 @@
             $("#btnSaveFilter").on("click", function (e, d) { return dhHelpdesk.reports.onSave.call(this, e, d, false) });
             $("#btnSaveAsFilter").on("click", function (e, d) { return dhHelpdesk.reports.onSave.call(this, e, d, true) });
 
-            $("#lstStatus, #lstfilterAdministrator, #lstfilterDepartment, #lstfilterWorkingGroup, #lstfilterCaseType, #lstfilterProductArea")
+            $("#lstStatus, #lstfilterAdministrator, #lstfilterDepartment, #lstfilterWorkingGroup, #lstfilterCaseType, #lstfilterProductArea, #CaseRegistrationFromDate, #CaseRegistrationToDate")
                 .on("change", function (e, d) { return dhHelpdesk.reports.togglePreviewMode(true); });
 
             $(".chosen-select").chosen({
