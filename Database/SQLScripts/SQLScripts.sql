@@ -54,6 +54,19 @@ begin
 end
 Go
 
+IF COL_LENGTH('tblCaseInvoiceArticle','Amount') IS NOT NULL
+begin
+    alter table tblCaseInvoiceArticle 
+	alter column Amount decimal(18, 3) null
+end
+GO
+
+IF COL_LENGTH('tblCaseInvoiceArticle','Ppu') IS NOT NULL
+begin
+    alter table tblCaseInvoiceArticle 
+	alter column Ppu decimal(18, 3) null
+end
+Go
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.23'

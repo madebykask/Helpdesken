@@ -17,7 +17,7 @@
                 int? articleId,
                 InvoiceArticle article,
                 string name,
-                int? amount,
+                decimal? amount,
                 decimal? ppu,
                 short position,
                 int? creditedForArticle_Id)
@@ -51,7 +51,7 @@
         [NotNull]
         public string Name { get; private set; }
 
-        public int? Amount { get; private set; }
+        public decimal? Amount { get; private set; }
 
         public decimal? Ppu { get; private set; }
 

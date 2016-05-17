@@ -44,10 +44,10 @@
             <td>{{:NameEng}}</td>
             <td>
                 {{if IsCredited}}
-                -
+                <span>-</span>
                 {{/if}}
                 
-                <input id="article-amount_{{:Id}}" onchange='dhHelpdesk.CaseArticles.UpdateArticle($(this).parent().parent())' type='text' maxlength='5'  class='article-amount input-mini-important' value='{{:Amount}}' />                
+                <input id="article-amount_{{:Id}}" onchange='dhHelpdesk.CaseArticles.UpdateArticle($(this).parent().parent())' type='text' maxlength='9'  class='article-amount input-small-important' value='{{:Amount}}' />                
             </td>
             <td>{{:UnitName}}</td>
 
@@ -58,7 +58,7 @@
                     <td class="article-ppu-fixed">{{:Ppu}}</td>                
                 {{else}}
                 <td>
-                    <input id="ArtPrice_{{:Id}}" onchange='dhHelpdesk.CaseArticles.UpdateArticle($(this).parent().parent())' type='text' maxlength='5' class='article-ppu input-small-important' value='{{:Ppu}}' />
+                    <input id="ArtPrice_{{:Id}}" onchange='dhHelpdesk.CaseArticles.UpdateArticle($(this).parent().parent())' type='text' maxlength='9' class='article-ppu input-small-important' value='{{:Ppu}}' />
                 </td>
                 {{/if}}
             {{/if}}
