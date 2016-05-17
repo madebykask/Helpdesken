@@ -293,20 +293,18 @@
                 $generateReportContainer.hide();
             }
 
-            if (isSavedFilter) {
-                //get filter values
-                dhHelpdesk.reports.loadFilter(selectedId);
-                //set filter values
-                //show/hide proper buttons
-                $btnSaveFilter.show();
-                $btnSaveAsFilter.show();
-                $("#btnDeleteFavorite").show();
-            } else {
-                //show/hide proper buttons
-                $btnSaveFilter.hide();
-                $btnSaveAsFilter.show();
-                $("#btnDeleteFavorite").hide();
-            }
+            //Remove comments to enable favorites support
+            //if (isSavedFilter) {
+            //    dhHelpdesk.reports.loadFilter(selectedId);
+            //    $btnSaveFilter.show();
+            //    $btnSaveAsFilter.show();
+            //    $("#btnDeleteFavorite").show();
+            //} else {
+            //    //show/hide proper buttons
+            //    $btnSaveFilter.hide();
+            //    $btnSaveAsFilter.show();
+            //    $("#btnDeleteFavorite").hide();
+            //}
         };
 
         dhHelpdesk.reports.deleteFavorite = function () {
