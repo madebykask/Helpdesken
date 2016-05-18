@@ -1,13 +1,15 @@
 ﻿if (window.dhHelpdesk == null)
     dhHelpdesk = {};
 
-$(function () {    
+$(function () {  
+    
+
     _INVOICE_IDLE = 0;
     _INVOICE_SAVING = 1;
 
     //Max floating point digits
     _MAX_FLOATING_POINT = 2; 
-    _SKIP_ZERO_FLOATING_POINT = false;
+    _IGNORE_ZERO_FLOATING_POINT = true;
     var regionUrl = '/Organization/GetRegions/';
     var departmentUrl = '/Organization/GetDepartments/';
     var ouUrl = '/Organization/GetOUs/';
@@ -36,6 +38,15 @@ $(function () {
     var creditAlertToShow = "";
     var creditAlert = true;
 
+    /* Extenstions */
+    if (typeof String.prototype.RemoveNonNumerics !== "function") {
+        String.prototype.RemoveNonNumerics = function () {
+            if (this == undefined)
+                return "";
+
+            return this.replace(/\D/g, '');
+        };
+    }
 
     dhHelpdesk.Const = {
         _ASC_SORT : 1,
@@ -53,9 +64,7 @@ $(function () {
     }
 
     dhHelpdesk.Math = {
-
        
-
         IsInteger: function (str) {
             str = str.replace(" ", "");
             return (str + "").match(/^\d+$/);
@@ -89,7 +98,11 @@ $(function () {
             return parseFloat(strVal);
         },
 
-        ConvertDoubleToStr: function (val, skipZeroFloating) {
+        ConvertDoubleToStr: function (val, ignoreZeroFloating) {
+            if (val == undefined) {
+                return '';
+            }
+
             strVal = val.toString();
             if (dhHelpdesk.Common.IsNullOrEmpty(strVal))
                 return '0';
@@ -97,14 +110,14 @@ $(function () {
             var sep = this.GetDecimalSeparator();
             strVal = strVal.replace(".", sep);
             var splitedValues = this.SplitFloating(strVal, sep);
-            if (skipZeroFloating && splitedValues.floatingPoint == '00') {
+            if (ignoreZeroFloating && (splitedValues.floatingPoint == '00' || splitedValues.floatingPoint == '0' || splitedValues.floatingPoint == '')) {
                 return splitedValues.integral;
             } else {
                 return splitedValues.integral + (splitedValues.floatingPoint != '' ? sep + splitedValues.floatingPoint : sep + '00');
             }            
         },
 
-        SplitFloating: function (strVal, seperator) {            
+        SplitFloating: function (strVal, seperator) {
             var newVal = strVal.replace(".", seperator);
             var arrayOfVal = newVal.split(seperator);
 
@@ -253,7 +266,7 @@ $(function () {
                     return;
                 event.preventDefault();
             });
-        },
+        },        
 
         ShowSuccessMessage: function (message) {
             this.ShowMessage(message, 'success');
@@ -296,7 +309,7 @@ $(function () {
         MarkTextValid: function (e) {
             e.css("color", "");
         },
-
+                
         Translate: function (text) {
             return text;
             //var AllTranslationsLength = AllTranslations.length;
@@ -833,7 +846,7 @@ $(function () {
             blankOrder.OU_Id = $('#case__Ou_Id').val();
             blankOrder.Place = $('#case__Place').val();
             blankOrder.UserCode = $('#case__UserCode').val();
-            blankOrder.CostCentre = $('#case__CostCentre').val();
+            blankOrder.CostCentre = $('#case__CostCentre').val().RemoveNonNumerics();
             blankOrder.CreditForOrder_Id = null;
             blankOrder.Project_Id = projectElement.val();
             blankOrder.IsInvoiced = false;
@@ -1022,14 +1035,14 @@ $(function () {
             
             if (article != null) {
                 if (curAmount <= 0) {
-                    obj.val(dhHelpdesk.Math.ConvertDoubleToStr(article.Amount, _SKIP_ZERO_FLOATING_POINT));
+                    obj.val(dhHelpdesk.Math.ConvertDoubleToStr(article.Amount, _IGNORE_ZERO_FLOATING_POINT));
                     dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("Value can't be 0"));
                     return;
                 }
 
                 if (article.Amount != null && article.Order.CreditForOrder_Id != null) {                  
                     var validatedAmount = this.ValidateAmount(article.Order.Id, article.CreditedForArticle_Id, id, curAmount);                    
-                    obj.val(dhHelpdesk.Math.ConvertDoubleToStr(validatedAmount, _SKIP_ZERO_FLOATING_POINT));
+                    obj.val(dhHelpdesk.Math.ConvertDoubleToStr(validatedAmount, _IGNORE_ZERO_FLOATING_POINT));
                 }                
                 article.Update();
             }
@@ -1092,7 +1105,7 @@ $(function () {
                 
                 if (totalOrderAmount - totalCreditUsed > 0) {
                     newAmount = totalOrderAmount - totalCreditUsed;
-                    dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("Maximum amount for this article is") + ": " + newAmount);
+                    dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("Maximum amount for this article is") + ": " + dhHelpdesk.Math.ConvertDoubleToStr(newAmount, _IGNORE_ZERO_FLOATING_POINT));
                 }
                 else {
                     newAmount = 0;                    
@@ -1310,7 +1323,7 @@ $(function () {
 
                     $('#Place_' + OrderId).val(item.place);
                     $('#UserCode_' + OrderId).val(item.usercode);
-                    $('#CostCentre_' + OrderId).val(item.costcentre);
+                    $('#CostCentre_' + OrderId).val(item.costcentre.RemoveNonNumerics()).change();
 
                     dhHelpdesk.CaseArticles.UpdateOtherReferenceTitle(OrderId);
 
@@ -2161,9 +2174,9 @@ $(function () {
                 }
 
                 var totals = this.GetArticlesTotal();
-                model.Total = dhHelpdesk.CaseArticles.DoDelimit(dhHelpdesk.Math.ConvertDoubleToStr(totals.Total, _SKIP_ZERO_FLOATING_POINT));
-                model.TotalInvoiced = dhHelpdesk.CaseArticles.DoDelimit(dhHelpdesk.Math.ConvertDoubleToStr(totals.Invoiced, _SKIP_ZERO_FLOATING_POINT));
-                model.TotalNotInvoiced = dhHelpdesk.CaseArticles.DoDelimit(dhHelpdesk.Math.ConvertDoubleToStr(totals.NotInvoiced, _SKIP_ZERO_FLOATING_POINT));
+                model.Total = dhHelpdesk.CaseArticles.DoDelimit(dhHelpdesk.Math.ConvertDoubleToStr(totals.Total, _IGNORE_ZERO_FLOATING_POINT));
+                model.TotalInvoiced = dhHelpdesk.CaseArticles.DoDelimit(dhHelpdesk.Math.ConvertDoubleToStr(totals.Invoiced, _IGNORE_ZERO_FLOATING_POINT));
+                model.TotalNotInvoiced = dhHelpdesk.CaseArticles.DoDelimit(dhHelpdesk.Math.ConvertDoubleToStr(totals.NotInvoiced, _IGNORE_ZERO_FLOATING_POINT));
 
                 return model;
             },
@@ -2628,7 +2641,7 @@ $(function () {
                 model.Number = this.Number + 1;
 
                 var totalPrices = this.GetArticlesTotal();
-                model.Total = dhHelpdesk.CaseArticles.DoDelimit(dhHelpdesk.Math.ConvertDoubleToStr(totalPrices.Total, _SKIP_ZERO_FLOATING_POINT));
+                model.Total = dhHelpdesk.CaseArticles.DoDelimit(dhHelpdesk.Math.ConvertDoubleToStr(totalPrices.Total, _IGNORE_ZERO_FLOATING_POINT));
                 
                 model.InvoiceDate = this.InvoiceDate != null && this.InvoiceDate != "" ? dhHelpdesk.Common.DateToDisplayDate(this.InvoiceDate) : "";
                 model.InvoiceTime = this.InvoiceDate != null && this.InvoiceDate != "" ? dhHelpdesk.Common.DateToDisplayTime(this.InvoiceDate) : "";
@@ -2636,7 +2649,7 @@ $(function () {
                 model.InvoicedByUserId = this.InvoicedByUserId != null ? this.InvoicedByUserId : "";                
                 model.IsInvoiced = this.IsOrderInvoiced();
                 model.IsCredited = this.CreditForOrder_Id != null;
-
+                model.InvoicedByTitle = dhHelpdesk.Common.Translate("Skickat av");
                 ////////initiator field
                 model.ReportedBy = this.ReportedBy != null ? this.ReportedBy : "";
                 model.ShowReportedBy = dhHelpdesk.CaseArticles.ShowCaseField('ReportedBy')
@@ -2804,7 +2817,14 @@ $(function () {
                         dhHelpdesk.CaseArticles.UpdateAvailableOrder(th);
                     });
 
-                    var costcentre = this.Container.find(publicClassName + ".costcentre");
+                    var costcentre = this.Container.find(publicClassName + ".costcentre");                    
+                    costcentre.on("keypress keyup blur", function (event) {                        
+                        if (event.which == 37 || event.which == 38 || event.which == 39 || event.which == 40 ||
+                            event.which == 9 || (event.shiftKey && event.which == 9) || (event.which >= 48 && event.which <= 57))
+                            return;
+                        event.preventDefault();
+                    });
+
                     costcentre.change(function () {
                         var curOrderId = $(this).attr('data-orderid');
                         th.CostCentre = $(this).val();                        
@@ -2822,7 +2842,7 @@ $(function () {
             },            
 
             this.UpdateTotal = function () {
-                this.Container.find(".articles-total").text(dhHelpdesk.CaseArticles.DoDelimit(dhHelpdesk.Math.ConvertDoubleToStr(this.GetArticlesTotal().Total, _SKIP_ZERO_FLOATING_POINT)));
+                this.Container.find(".articles-total").text(dhHelpdesk.CaseArticles.DoDelimit(dhHelpdesk.Math.ConvertDoubleToStr(this.GetArticlesTotal().Total, _IGNORE_ZERO_FLOATING_POINT)));
                 if (this.Invoice != null) {
                     this.Invoice.UpdateTotal();
                 }
@@ -3061,16 +3081,16 @@ $(function () {
                 model.Description = this.Article != null && this.Article.Description != null ? this.Article.Description : "";
                 model.Id = this.Id;
                 model.Number = this.GetNumber();
-                model.Amount = this.Order.IsInvoiced ? dhHelpdesk.CaseArticles.DoDelimit(dhHelpdesk.Math.ConvertDoubleToStr(this.Amount, _SKIP_ZERO_FLOATING_POINT)) :
-                                                       dhHelpdesk.Math.ConvertDoubleToStr(this.Amount, _SKIP_ZERO_FLOATING_POINT);
+                model.Amount = this.Order.IsInvoiced ? dhHelpdesk.CaseArticles.DoDelimit(dhHelpdesk.Math.ConvertDoubleToStr(this.Amount, _IGNORE_ZERO_FLOATING_POINT)) :
+                                                       dhHelpdesk.Math.ConvertDoubleToStr(this.Amount, _IGNORE_ZERO_FLOATING_POINT);
 
-                model.DisplayAmount = dhHelpdesk.CaseArticles.DoDelimit(dhHelpdesk.Math.ConvertDoubleToStr(this.Amount, _SKIP_ZERO_FLOATING_POINT));
+                model.DisplayAmount = dhHelpdesk.CaseArticles.DoDelimit(dhHelpdesk.Math.ConvertDoubleToStr(this.Amount, _IGNORE_ZERO_FLOATING_POINT));
                 model.UnitName = this.GetUnitName();
-                model.Ppu = this.Order.IsInvoiced ? dhHelpdesk.CaseArticles.DoDelimit(dhHelpdesk.Math.ConvertDoubleToStr(this.GetPpu(), _SKIP_ZERO_FLOATING_POINT)) :
-                                                    dhHelpdesk.Math.ConvertDoubleToStr(this.GetPpu(), _SKIP_ZERO_FLOATING_POINT);
+                model.Ppu = this.Order.IsInvoiced ? dhHelpdesk.CaseArticles.DoDelimit(dhHelpdesk.Math.ConvertDoubleToStr(this.GetPpu(), _IGNORE_ZERO_FLOATING_POINT)) :
+                                                    dhHelpdesk.Math.ConvertDoubleToStr(this.GetPpu(), _IGNORE_ZERO_FLOATING_POINT);
 
-                model.DisplayPpu = dhHelpdesk.CaseArticles.DoDelimit(dhHelpdesk.Math.ConvertDoubleToStr(this.GetPpu(), _SKIP_ZERO_FLOATING_POINT));
-                model.Total = dhHelpdesk.CaseArticles.DoDelimit(dhHelpdesk.Math.ConvertDoubleToStr(this.GetTotal(), _SKIP_ZERO_FLOATING_POINT));
+                model.DisplayPpu = dhHelpdesk.CaseArticles.DoDelimit(dhHelpdesk.Math.ConvertDoubleToStr(this.GetPpu(), _IGNORE_ZERO_FLOATING_POINT));
+                model.Total = dhHelpdesk.CaseArticles.DoDelimit(dhHelpdesk.Math.ConvertDoubleToStr(this.GetTotal(), _IGNORE_ZERO_FLOATING_POINT));
                 model.IsArticlePpuExists = this.IsArticlePpuExists();
                 model.IsCredited = this.Order.CreditForOrder_Id != null;
                 model.IsInvoiced = this.Order.IsInvoiced;
@@ -3136,7 +3156,7 @@ $(function () {
                 if (this.CreditedForArticle_Id != null)
                     minusSign = "-";
 
-                this.Container.find(".article-total").text(minusSign + dhHelpdesk.CaseArticles.DoDelimit(dhHelpdesk.Math.ConvertDoubleToStr(totalPrice,_SKIP_ZERO_FLOATING_POINT)));
+                this.Container.find(".article-total").text(minusSign + dhHelpdesk.CaseArticles.DoDelimit(dhHelpdesk.Math.ConvertDoubleToStr(totalPrice, _IGNORE_ZERO_FLOATING_POINT)));
                 this.Order.UpdateTotal();                
             },
 
@@ -3930,7 +3950,7 @@ $(function () {
                             order.OU_Id = ord.OU_Id;
                             order.Place = ord.Place;
                             order.UserCode = ord.UserCode;
-                            order.CostCentre = ord.CostCentre;
+                            order.CostCentre = ord.CostCentre.RemoveNonNumerics();
                             order.CreditForOrder_Id = ord.CreditForOrder_Id;
                             order.Project_Id = ord.Project_Id;
                             order.OrderState = ord.OrderState;
