@@ -99,6 +99,8 @@ using DH.Helpdesk.BusinessData.Enums.Case.Fields;
 
         public DateTime? FinishingDate { get; set; }
 
+        public string FinishingDescription { get; set; }
+
         //--
 
         public string WorkingGroup { get; set; }

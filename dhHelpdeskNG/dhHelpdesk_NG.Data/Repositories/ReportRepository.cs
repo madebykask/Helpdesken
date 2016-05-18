@@ -365,6 +365,7 @@ namespace DH.Helpdesk.Dal.Repositories
                             Cost = c.Cost,
                             AttachedFile = "",
                             FinishingDate = c.FinishingDate,
+                            FinishingDescription = c.FinishingDescription,
 
                             RegistrationSource = c.RegistrationSourceCustomer_Id.HasValue ? _regsource.SourceName : "",
                             SolvedInTime = _caseStatis.WasSolvedInTime,
