@@ -662,10 +662,10 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             /* TODO: It must change some how find the files from "Reports" path */
             var newWord = Translation.GetCoreTextTranslation("Ny");
             var ret = new CustomSelectList();
-            ret.Items.AddItem("-1", newWord +" CasesPerCasetype");
-            ret.Items.AddItem("-2", newWord + " CasesPerDate");
-            ret.Items.AddItem("-3", newWord + " CasesPerSource");
-            ret.Items.AddItem("-4", newWord + " CasesPerWorkingGroup");
+            ret.Items.AddItem("-1", "CasesPerCasetype");
+            ret.Items.AddItem("-2", "CasesPerDate");
+            ret.Items.AddItem("-3", "CasesPerSource");
+            ret.Items.AddItem("-4", "CasesPerWorkingGroup");
 
             foreach (var customReport in reports)
             {

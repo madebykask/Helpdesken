@@ -2648,7 +2648,7 @@ $(function () {
                 model.InvoicedByUser = this.InvoicedByUser != null ? this.InvoicedByUser : "";
                 model.InvoicedByUserId = this.InvoicedByUserId != null ? this.InvoicedByUserId : "";                
                 model.IsInvoiced = this.IsOrderInvoiced();
-                model.IsCredited = this.CreditForOrder_Id != null;
+                model.IsCredited = this.CreditForOrder_Id != null; 
                 model.InvoicedByTitle = dhHelpdesk.Common.Translate("Skickat av");
                 ////////initiator field
                 model.ReportedBy = this.ReportedBy != null ? this.ReportedBy : "";
