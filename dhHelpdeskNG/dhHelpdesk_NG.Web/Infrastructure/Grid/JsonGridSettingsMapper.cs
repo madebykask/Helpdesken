@@ -41,26 +41,36 @@
 
         private static List<JsonGridColumnDef> GetAdvancedSearchGridCols(int customerId)
         {
-            var ret = new List<JsonGridColumnDef>();            
-            string[] fieldNames = new string[] 
+            var ret = new List<JsonGridColumnDef>();   
+
+            /* Keep 2% for icon */
+            var fields = new Dictionary<string,string>()
                     { 
-                        GlobalEnums.TranslationCaseFields.CaseNumber.ToString(), 
-                        GlobalEnums.TranslationCaseFields.Persons_Name.ToString(),
-                        GlobalEnums.TranslationCaseFields.Caption.ToString(),
-                        GlobalEnums.TranslationCaseFields.Description.ToString(),
-                        GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(),
-                        GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(),
-                        GlobalEnums.TranslationCaseFields.Department_Id.ToString(),
-                        GlobalEnums.TranslationCaseFields.RegTime.ToString() 
+                        { GlobalEnums.TranslationCaseFields.CaseNumber.ToString(), "5%"}, 
+                        { GlobalEnums.TranslationCaseFields.Persons_Name.ToString(),"13%"},
+                        { GlobalEnums.TranslationCaseFields.Caption.ToString(),"20%"},
+                        { GlobalEnums.TranslationCaseFields.Description.ToString(),"25%"},
+                        { GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(),"10%"},
+                        { GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(),"10%"},
+                        { GlobalEnums.TranslationCaseFields.Department_Id.ToString(),"10%"},
+                        { GlobalEnums.TranslationCaseFields.RegTime.ToString(), "5%"}
                     };
-                        
-            foreach (var fieldName in fieldNames)
+
+            // expandable fields can be add to this array 
+            var expandableFields = new string[] 
+                {
+                    GlobalEnums.TranslationCaseFields.Description.ToString()                    
+                };
+
+            foreach (var field in fields)
             {
                 var curCol = new JsonGridColumnDef 
                                     { 
                                         cls = "colnormal",
-                                        displayName = Translation.Get(fieldName, Enums.TranslationSource.CaseTranslation, customerId),
-                                        field = fieldName
+                                        displayName = Translation.Get(field.Key, Enums.TranslationSource.CaseTranslation, customerId),
+                                        field = field.Key,
+                                        isExpandable = expandableFields.Contains(field.Key),
+                                        width = field.Value
                                     };            
                 ret.Add(curCol);
             }

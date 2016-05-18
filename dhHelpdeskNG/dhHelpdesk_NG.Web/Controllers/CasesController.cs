@@ -465,7 +465,9 @@ namespace DH.Helpdesk.Web.Controllers
                                                                         {
                                                                             id = GridColumnsDefinition.GetFieldId(c.field),
                                                                             cls = c.cls,
-                                                                            name = c.field
+                                                                            name = c.field,
+                                                                            isExpandable = c.isExpandable,
+                                                                            width = c.width
                                                                         }).ToList();
 
             var gridSettings =

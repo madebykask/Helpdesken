@@ -45,6 +45,10 @@
         public string name;       
 
         public string cls;
+
+        public bool isExpandable;
+
+        public string width;
     }
 
     /// <summary>

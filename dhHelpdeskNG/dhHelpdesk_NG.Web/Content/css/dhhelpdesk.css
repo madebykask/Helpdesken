@@ -1881,7 +1881,9 @@ table th.thpointer {
 .table-cases th.colnarrow {
     width:5%;
 }
-
+.ico-right {
+    float: right;
+}
 
 .SortableIcon
 {

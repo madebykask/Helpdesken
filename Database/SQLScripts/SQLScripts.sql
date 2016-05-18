@@ -39,6 +39,37 @@ Update tblCaseInvoiceOrder set OrderState = 2
 Where InvoicedByUserId is not null
 Go
 
+if not exists(select * from sysobjects WHERE Name = N'tblReportFavorites')
+begin
+	CREATE TABLE [dbo].[tblReportFavorites] (
+		[Id]				INT				IDENTITY (1, 1) NOT NULL,
+		[Customer_Id]		INT				NOT NULL,
+		[Type]				INT				NOT NULL,
+		[Name]				NVARCHAR (300)	NOT NULL,
+		[Filters]			NVARCHAR (MAX),
+		[UpdateDate]		DATETIME		NOT NULL
+		CONSTRAINT [PK_tblReportFavoritesId] PRIMARY KEY CLUSTERED ([Id] ASC),
+		CONSTRAINT [FK_tblReportFavorites_tblCustomers] FOREIGN KEY ([Customer_Id]) REFERENCES [dbo].[tblCustomer] ([Id]),
+	);
+end
+Go
+
+IF COL_LENGTH('tblCaseInvoiceArticle','Amount') IS NOT NULL
+begin
+    alter table tblCaseInvoiceArticle 
+	alter column Amount decimal(18, 3) null
+end
+GO
+
+IF COL_LENGTH('tblCaseInvoiceArticle','Ppu') IS NOT NULL
+begin
+    alter table tblCaseInvoiceArticle 
+	alter column Ppu decimal(18, 3) null
+end
+Go
+
+update tblUsers set timezoneid = 'W. Europe Standard Time' where timezoneid is null;
+go
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.23'

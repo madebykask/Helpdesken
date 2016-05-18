@@ -261,7 +261,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Infrastructure.ModelFactories.Concrete
             //FieldSettingsHelper.CreateValueIfNeeded(settings.ExternalLogNote, LogFields.ExternalLogNote, externalLogNotes, values);
             //FieldSettingsHelper.CreateValueIfNeeded(settings.Debiting, LogFields.Debiting, debiting, values);
             //FieldSettingsHelper.CreateValueIfNeeded(settings.AttachedFile, LogFields.AttachedFile, attachedFiles, values);
-            //FieldSettingsHelper.CreateValueIfNeeded(settings.FinishingDescription, LogFields.FinishingDescription, finishingDescription, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.FinishingDescription, LogFields.FinishingDescription, fields.FinishingDescription, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.FinishingDate, LogFields.FinishingDate, fields.ClosingDate, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.FinishingCause, LogFields.FinishingCause, fields.FinishingCause, values);
         }

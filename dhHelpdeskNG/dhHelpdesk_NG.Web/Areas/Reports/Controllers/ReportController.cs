@@ -1,4 +1,6 @@
-﻿using DH.Helpdesk.Web.Infrastructure.Attributes;
+﻿using DH.Helpdesk.Domain;
+using DH.Helpdesk.Web.Areas.Reports.Models.Reports;
+using DH.Helpdesk.Web.Infrastructure.Attributes;
 
 namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 {
@@ -16,7 +18,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
     using DH.Helpdesk.BusinessData.Models.Reports.Options;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.ReportGenerator;
     using DH.Helpdesk.BusinessData.Models.Shared.Input;
-    using DH.Helpdesk.BusinessData.Models.ReportService;    
+    using DH.Helpdesk.BusinessData.Models.ReportService;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Reports;
     using DH.Helpdesk.Web.Areas.Reports.Infrastructure;
@@ -31,12 +33,12 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
     using DH.Helpdesk.Web.Infrastructure.ActionFilters;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
     using DH.Helpdesk.Web.Infrastructure.Mvc;
-    using DH.Helpdesk.Web.Infrastructure.Tools;    
-    using DH.Helpdesk.Web.Models.Shared;    
-    
+    using DH.Helpdesk.Web.Infrastructure.Tools;
+    using DH.Helpdesk.Web.Models.Shared;
+
     using Microsoft.Reporting.WebForms;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
-using DH.Helpdesk.BusinessData.Enums.Case;    
+    using DH.Helpdesk.BusinessData.Enums.Case;
 
     public sealed class ReportController : UserInteractionController
     {
@@ -58,19 +60,21 @@ using DH.Helpdesk.BusinessData.Enums.Case;
 
         private const string _reportFolderName = "Reports";
 
+        private readonly Dictionary<string, string> _reportTypeNames;
+
         public ReportController(
             IMasterDataService masterDataService,
             ISettingService customerSettingService,
-            IReportModelFactory reportModelFactory, 
-            IReportService reportService, 
-            IReportsBuilder reportsBuilder, 
-            IPrintBuilder printBuilder, 
-            IExcelBuilder excelBuilder, 
+            IReportModelFactory reportModelFactory,
+            IReportService reportService,
+            IReportsBuilder reportsBuilder,
+            IPrintBuilder printBuilder,
+            IExcelBuilder excelBuilder,
             IReportGeneratorModelFactory reportGeneratorModelFactory,
             IReportServiceService reportServiceService)
             : base(masterDataService)
         {
-            this.reportModelFactory = reportModelFactory;           
+            this.reportModelFactory = reportModelFactory;
             this.reportService = reportService;
             this.reportsBuilder = reportsBuilder;
             this.printBuilder = printBuilder;
@@ -78,6 +82,13 @@ using DH.Helpdesk.BusinessData.Enums.Case;
             this.reportGeneratorModelFactory = reportGeneratorModelFactory;
             this._customerSettingService = customerSettingService;
             this._ReportServiceService = reportServiceService;
+            this._reportTypeNames = new Dictionary<string, string>
+            {
+                {"-1", "CasesPerCasetype"},
+                {"-2", "CasesPerDate"},
+                {"-3", "CasesPerSource"},
+                {"-4", "CasesPerWorkingGroup"}
+            };
         }
 
         [HttpGet]
@@ -97,12 +108,13 @@ using DH.Helpdesk.BusinessData.Enums.Case;
         [HttpGet]
         public PartialViewResult ShowReport(string reportName, ReportFilterJSModel filter)
         {
+            reportName = this._reportTypeNames[reportName];
             if (filter.RegisterTo.HasValue)
                 filter.RegisterTo = filter.RegisterTo.Value.AddDays(1);
 
             var selectedReport = filter.MapToSelectedFilter();
             var model = GetReportViewerData(reportName, selectedReport);
-            
+
             // Save state in session
             if (model != null)
                 SessionFacade.ReportService = new ReportServiceSessionModel()
@@ -112,7 +124,7 @@ using DH.Helpdesk.BusinessData.Enums.Case;
                                                 };
 
             return PartialView("ReportViewer/_PresentReport", model);
-        }        
+        }
 
         [HttpPost]
         [BadRequestOnNotValid]
@@ -149,7 +161,7 @@ using DH.Helpdesk.BusinessData.Enums.Case;
 
                     SessionFacade.SavePageFilters(PageName.ReportsReportGenerator, reportGeneratorFilters);
                     var reportGeneratorOptions = this.reportService.GetReportGeneratorOptions(this.OperationContext.CustomerId, this.OperationContext.LanguageId);
-                    reportGeneratorOptions = TranslateReportFields(reportGeneratorOptions);                    
+                    reportGeneratorOptions = TranslateReportFields(reportGeneratorOptions);
 
                     return this.PartialView(
                                 "Options/ReportGenerator",
@@ -197,9 +209,9 @@ using DH.Helpdesk.BusinessData.Enums.Case;
 
         [HttpGet]
         public UnicodeFileContentResult GetRegistratedCasesDayReport(
-                                    int? department, 
-                                    string caseTypes, 
-                                    int? workingGroup, 
+                                    int? department,
+                                    string caseTypes,
+                                    int? workingGroup,
                                     int? administrator,
                                     DateTime? period)
         {
@@ -297,11 +309,29 @@ using DH.Helpdesk.BusinessData.Enums.Case;
                                         : SessionFacade.FindPageFilters<ReportGeneratorFilterModel>(PageName.ReportsReportGenerator);
 
                 SessionFacade.SavePageFilters(PageName.ReportsReportGenerator, filters);
-                
-                
-                if (options != null && options.IsExcel)
+
+
+                if (options != null && options.IsPreview)
                 {
-                    var data = this.reportService.GetReportGeneratorData(
+                    var previewData = this.reportService.GetReportGeneratorAggregation(this.OperationContext.CustomerId,
+                    this.OperationContext.LanguageId,
+                    filters.FieldIds,
+                    filters.DepartmentIds,
+                    filters.WorkingGroupIds,
+                    filters.ProductAreaIds,
+                    filters.AdministratorIds,
+                    filters.CaseStatusIds,
+                    filters.CaseTypeIds,
+                    filters.PeriodFrom,
+                    filters.PeriodUntil,
+                    string.Empty,
+                    filters.SortField,
+                    filters.RecordsOnPage);
+
+                    return this.PartialView("Reports/ReportGeneratorPreview", new ReportGeneratorAggregateModel(previewData));
+                }
+
+                var data = this.reportService.GetReportGeneratorData(
                                     this.OperationContext.CustomerId,
                                     this.OperationContext.LanguageId,
                                     filters.FieldIds,
@@ -317,34 +347,21 @@ using DH.Helpdesk.BusinessData.Enums.Case;
                                     filters.SortField,
                                     filters.RecordsOnPage);
 
-                    var model = GetReportGeneratorModel(data, filters.SortField);
+                var model = GetReportGeneratorModel(data, filters.SortField);
 
+                if (options != null && options.IsExcel)
+                {
                     var excel = this.excelBuilder.GetReportGeneratorExcel(model);
                     return File(excel, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", this.excelBuilder.GetExcelFileName(ReportType.ReportGenerator));
                 }
 
-                var previewData = this.reportService.GetReportGeneratorAggregation(this.OperationContext.CustomerId,
-                    this.OperationContext.LanguageId,
-                    filters.FieldIds,
-                    filters.DepartmentIds,
-                    filters.WorkingGroupIds,
-                    filters.ProductAreaIds,
-                    filters.AdministratorIds,
-                    filters.CaseStatusIds,
-                    filters.CaseTypeIds,
-                    filters.PeriodFrom,
-                    filters.PeriodUntil,
-                    string.Empty,
-                    filters.SortField,
-                    filters.RecordsOnPage);
-
-                return this.PartialView("Reports/ReportGenerator", new ReportGeneratorAggregateModel(previewData));
+                return this.PartialView("Reports/ReportGenerator", model);
             }
             catch (Exception)
             {
                 SessionFacade.SavePageFilters(PageName.ReportsReportGenerator, ReportGeneratorFilterModel.CreateDefault());
                 throw;
-            }            
+            }
         }
 
         [HttpPost]
@@ -356,7 +373,7 @@ using DH.Helpdesk.BusinessData.Enums.Case;
                                             options.DepartmentIds,
                                             options.CaseTypeId,
                                             options.WorkingGroupIds,
-                                            (CaseRegistrationSource) options.RegistrationSourceId,
+                                            (CaseRegistrationSource)options.RegistrationSourceId,
                                             options.PeriodFrom,
                                             options.PeriodUntil,
                                             options.LeadTimeId,
@@ -379,8 +396,8 @@ using DH.Helpdesk.BusinessData.Enums.Case;
                                             this.OperationContext.CustomerId,
                                             options.DepartmentIds,
                                             options.CaseTypeId,
-                                            HighHours, 
-                                            MediumDays, 
+                                            HighHours,
+                                            MediumDays,
                                             LowDays);
 
             var model = this.reportModelFactory.GetLeadtimeActiveCasesModel(
@@ -433,6 +450,53 @@ using DH.Helpdesk.BusinessData.Enums.Case;
             return this.PartialView("Reports/FinishingCauseCategoryCustomer", model);
         }
 
+        [HttpPost]
+        [BadRequestOnNotValid]
+        public int SaveReportFilters(SaveReportFavoriteModel options)
+        {
+            int customerId = this.OperationContext != null
+                     ? this.OperationContext.CustomerId
+                     : SessionFacade.CurrentCustomer.Id;
+
+            var favorite = new ReportFavorite();
+            favorite.Customer_Id = customerId;
+            favorite.Filters = options.Filters;
+            favorite.Name = options.Name;
+            favorite.Type = options.OriginalReportId;
+            favorite.Id = options.Id.HasValue ? options.Id.Value : 0;
+
+            var id = this.reportService.SaveCustomerReportFavorite(favorite);
+
+            return id;
+        }
+
+        [HttpPost]
+        [BadRequestOnNotValid]
+        public void DeleteReportFavorite(int id)
+        {
+            int customerId = this.OperationContext != null
+                     ? this.OperationContext.CustomerId
+                     : SessionFacade.CurrentCustomer.Id;
+            this.reportService.DeleteCustomerReportFavorite(id, customerId);
+        }
+
+        [HttpGet]
+        public JsonResult GetReportFilterOptions(int id)
+        {
+            int customerId = this.OperationContext != null
+                 ? this.OperationContext.CustomerId
+                 : SessionFacade.CurrentCustomer.Id;
+
+            var favorite = this.reportService.GetCustomerReportFavorite(id, customerId);
+            var model = new ReportFavoriteModel();
+            model.Id = favorite.Id;
+            model.Filters = favorite.Filters;
+            model.Name = favorite.Name;
+            model.OriginalReportId = favorite.Type;
+
+            return Json(model, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpGet]
         public UnicodeFileContentResult GetClosedCasesDayReport(
                                     string departments,
@@ -474,23 +538,23 @@ using DH.Helpdesk.BusinessData.Enums.Case;
         }
 
         public ReportGeneratorOptions TranslateReportFields(ReportGeneratorOptions reportOptions)
-        {                        
+        {
             var translatedFields = new List<ItemOverview>();
-            foreach (ItemOverview f in reportOptions.Fields)                            
+            foreach (ItemOverview f in reportOptions.Fields)
                 translatedFields.Add(new ItemOverview
                                             (
                                                 Translation.Get(f.Name, Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id),
                                                 f.Value
-                                            ));                
-            
+                                            ));
+
 
             var ret = new ReportGeneratorOptions
                             (
-                                translatedFields.OrderBy(f=> f.Name).ToList(), 
-                                reportOptions.Departments, 
-                                reportOptions.WorkingGroups, 
-                                reportOptions.CaseTypes.OrderBy(ct=> ct.Name).ToList()
-                            );            
+                                translatedFields.OrderBy(f => f.Name).ToList(),
+                                reportOptions.Departments,
+                                reportOptions.WorkingGroups,
+                                reportOptions.CaseTypes.OrderBy(ct => ct.Name).ToList()
+                            );
             return ret;
         }
 
@@ -501,8 +565,8 @@ using DH.Helpdesk.BusinessData.Enums.Case;
             var translatedFields = new List<GridColumnHeaderModel>();
             foreach (var h in modelData.Headers)
                 translatedFields.Add(new GridColumnHeaderModel
-                                            (  
-                                                h.FieldName,                                                
+                                            (
+                                                h.FieldName,
                                                 Translation.Get(h.FieldName, Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id)
                                             ));
 
@@ -513,7 +577,17 @@ using DH.Helpdesk.BusinessData.Enums.Case;
                                 modelData.Cases,
                                 modelData.CasesFound,
                                 modelData.SortField
-                            );            
+                            );
+            return ret;
+        }
+
+
+        public CustomSelectList GetCaseStateFilter()
+        {
+            var ret = new CustomSelectList();
+            ret.Items.AddItem(CaseProgressFilter.None, string.Empty);
+            ret.Items.AddItem(CaseProgressFilter.CasesInProgress, Translation.Get("Pågående ärenden", Enums.TranslationSource.TextTranslation));
+            ret.Items.AddItem(CaseProgressFilter.ClosedCases, Translation.Get("Avslutade ärenden", Enums.TranslationSource.TextTranslation));
             return ret;
         }
 
@@ -526,6 +600,7 @@ using DH.Helpdesk.BusinessData.Enums.Case;
             model.CustomerId = SessionFacade.CurrentCustomer.Id;
             model.ReportFilter = GetReportFilterModel(model.CustomerId, lastState);
             model.ReportList = GetReportList(lastState != null ? lastState.ReportName : string.Empty, options.Reports);
+            model.ReportFavorites = GetSavedReportFilters(customerId);
             model.ReportViewerData = new ReportPresentationModel();
             model.ReportGeneratorOptions = GetReportGeneratorOptions(customerId);
             model.ReportGeneratorOptions.FieldIds = new List<int>();
@@ -547,16 +622,16 @@ using DH.Helpdesk.BusinessData.Enums.Case;
         }
 
         private ReportFilterModel GetReportFilterModel(int customerId, ReportServiceSessionModel lastState = null)
-        {            
+        {
             int curUserId = SessionFacade.CurrentUser.Id;
             var customerSettings = this._customerSettingService.GetCustomerSetting(customerId);
 
-            var addOUToDep = (customerSettings != null && customerSettings.ShowOUsOnDepartmentFilter != 0)? true : false;
-            var reportFilter = _ReportServiceService.GetReportFilter(customerId, curUserId, addOUToDep);            
+            var addOUToDep = (customerSettings != null && customerSettings.ShowOUsOnDepartmentFilter != 0) ? true : false;
+            var reportFilter = _ReportServiceService.GetReportFilter(customerId, curUserId, addOUToDep);
 
             var model = new ReportFilterModel()
             {
-                CaseCreationDate = reportFilter.CaseCreationDate,                
+                CaseCreationDate = reportFilter.CaseCreationDate,
                 Administrators = reportFilter.Administrators,
                 Departments = reportFilter.Departments,
                 WorkingGroups = reportFilter.WorkingGroups,
@@ -564,12 +639,12 @@ using DH.Helpdesk.BusinessData.Enums.Case;
                 CaseTypes = reportFilter.CaseTypes,
                 ProductAreas = reportFilter.ProductAreas,
                 Status = GetCaseStateFilter(),
-                UserNameOrientation = customerSettings.IsUserFirstLastNameRepresentation
+                UserNameOrientation = customerSettings != null ? customerSettings.IsUserFirstLastNameRepresentation : 1
             };
-        
+
             if (lastState != null)
             {
-                model.Selected = lastState.SelectedFilter;                                
+                model.Selected = lastState.SelectedFilter;
             }
 
             return model;
@@ -584,32 +659,37 @@ using DH.Helpdesk.BusinessData.Enums.Case;
 
         private CustomSelectList GetReportList(string defaultReportName, SelectList reports)
         {
-            /* TODO: It must change some how find the files from "Reports" path */ 
+            /* TODO: It must change some how find the files from "Reports" path */
+            var newWord = Translation.GetCoreTextTranslation("Ny");
             var ret = new CustomSelectList();
-            ret.Items.AddItem("0", "CasesPerCasetype");
-            ret.Items.AddItem("1", "CasesPerDate");
-            ret.Items.AddItem("2", "CasesPerSource");            
-            ret.Items.AddItem("3", "CasesPerWorkingGroup");
+            ret.Items.AddItem("-1", "CasesPerCasetype");
+            ret.Items.AddItem("-2", "CasesPerDate");
+            ret.Items.AddItem("-3", "CasesPerSource");
+            ret.Items.AddItem("-4", "CasesPerWorkingGroup");
 
             foreach (var customReport in reports)
             {
-                ret.Items.AddItem(customReport.Value, customReport.Text);
+                ret.Items.AddItem(customReport.Value, newWord +" " +customReport.Text);
             }
-        
-            var defaultSelected = ret.Items.Where(i => i.Value.ToLower() == defaultReportName.ToLower()).FirstOrDefault();
+
+            var defaultSelected = ret.Items.FirstOrDefault(i => i.Value.ToLower() == defaultReportName.ToLower());
             if (defaultSelected != null)
                 ret.SelectedItems.AddItem(int.Parse(defaultSelected.Id));
 
             return ret;
         }
 
-        public CustomSelectList GetCaseStateFilter()
+        private List<SavedReportFavoriteItemModel> GetSavedReportFilters(int custometId)
         {
-            var ret = new CustomSelectList();
-            ret.Items.AddItem(CaseProgressFilter.None, string.Empty);
-            ret.Items.AddItem(CaseProgressFilter.CasesInProgress, Translation.Get("Pågående ärenden", Enums.TranslationSource.TextTranslation));
-            ret.Items.AddItem(CaseProgressFilter.ClosedCases, Translation.Get("Avslutade ärenden", Enums.TranslationSource.TextTranslation));
-            return ret;
+            var favorites = this.reportService.GetCustomerReportFavoriteList(custometId);
+            var list = favorites.Select(f => new SavedReportFavoriteItemModel
+            {
+                Id = f.Id,
+                Name = f.Name,
+                OriginalReportId = f.Type.ToString()
+            }).ToList();
+
+            return list;
         }
 
         private ReportPresentationModel GetReportViewerData(string reportName, ReportSelectedFilter reportSelectedFilter)
@@ -630,7 +710,7 @@ using DH.Helpdesk.BusinessData.Enums.Case;
                 var reportFile = Path.Combine(basePath, fileLocation);
                 reportViewer.ProcessingMode = ProcessingMode.Local;
                 reportViewer.SizeToReportContent = true;
-                reportViewer.ShowZoomControl = false;                
+                reportViewer.ShowZoomControl = false;
                 reportViewer.LocalReport.ReportPath = reportFile;
                 foreach (var dataSet in reportData.DataSets)
                     reportViewer.LocalReport.DataSources.Add(new ReportDataSource(dataSet.DataSetName, dataSet.DataSet));

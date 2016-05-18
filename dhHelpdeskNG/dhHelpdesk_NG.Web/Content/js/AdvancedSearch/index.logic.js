@@ -31,6 +31,8 @@ var GRID_STATE = {
     var globalCounter = 0;
     var chkSearchThruFiles = $('#chkSearchThruFiles');
     var txtFreeTextSearch = $('#txtFreeTextSearch');
+    var cellUniqueId = 0;
+
     function strJoin() {
         return Array.prototype.join.call(arguments, JOINER);
     }
@@ -156,7 +158,7 @@ var GRID_STATE = {
         out.push('<table class="table table-striped table-bordered table-hover table-cases customer' + customerTableId + '">');
         out.push('<thead>');                                      
 
-        out.push('<tr><th style="width:18px;" ></th>');
+        out.push('<tr><th style="width:2%;" ></th>');
         if (me.gridSettings.availableColumns == 0) {
             me.showMsg(BADCONFIG_MSG_TYPE);
             me.setGridState(GRID_STATE.BAD_CONFIG);
@@ -184,10 +186,92 @@ var GRID_STATE = {
         currentCustomerTable += out.join(JOINER);
     };
               
-    Page.prototype.formatCell = function (caseId, cellValue) {
-        var out = [strJoin('<td><a href="/Cases/Edit/', caseId, '?backUrl=', '/Cases/AdvancedSearch?', 'doSearchAtBegining=true', '">', cellValue == null ? '&nbsp;' : cellValue.replace(/<[^>]+>/ig, ""), '</a></td>')];
+    Page.prototype.formatCell = function (caseId, cellValue, colSetting, isBold) {
+        var out = [];
+     
+        // Unique id rest after each search
+        var uniqId = cellUniqueId++;
+        
+        if (colSetting.isExpandable) {
+            out = [strJoin('<td style="width:', colSetting.width, '">',
+                                '<div id="divExpand_'+ uniqId +'" class="expandable_' + caseId + '" style="height: 15px; overflow: hidden;">',//max-width:500px;
+                                  '<i class="icon-plus-sign ico-right expandable_', caseId, '" data-uniqId="iIcon_', uniqId, '" id="btnExpander_', caseId, '" onclick="toggleRowExpanation(', caseId, ')"></i> ' +
+                                  '<a style="line-height:15px;" data-isbold="', isBold, '" data-uniqId="', uniqId, '" data-rowId="', caseId, '" class="exp" href="/Cases/Edit/', caseId, '?backUrl=', '/Cases/AdvancedSearch?', 'doSearchAtBegining=true', '">', cellValue == null ? '&nbsp;' : cellValue.replace(/<[^>]+>/ig, ""), '</a>',
+                                '</div>',                                                                  
+                           '</td>')];
+        } else {
+            out = [strJoin('<td style="width:', colSetting.width, '"> <a style="line-height:15px;" href="/Cases/Edit/', caseId, '?backUrl=', '/Cases/AdvancedSearch?', 'doSearchAtBegining=true', '">',
+                cellValue == null ? '&nbsp;' : cellValue.replace(/<[^>]+>/ig, ""), '</a></td>')];
+        }
         return out.join(JOINER);
+    };        
+
+    Page.prototype.tableCleanUp = function () {
+        var expandables = $(".exp");
+        var rowsNeedExpandation = [];
+
+        $('a.exp').each(function () {
+            var t = $(this).html();                        
+            var uniqId = $(this).attr("data-uniqId");
+            var caseId = $(this).attr("data-rowId");
+            var isBold = $(this).attr("data-isbold");            
+
+            var limit = isBold == "true" ? 60 : 75;
+
+            if (t.length < limit) {
+                doExpanation(caseId, true, true, uniqId);                
+            }           
+        });     
     };
+
+    $.fn.textWidth = function (isBold) {
+        var html_org = $(this).html();
+        var cls = isBold == 'true' ? "textbold" : "";
+        var html_calc = '<span class="' + cls + '">' + html_org + '</span>';
+        $(this).html(html_calc);
+        var width = $(this).find('span:first').width();
+        $(this).html(html_org);
+        return width;
+    };
+
+    toggleRowExpanation = function (caseId) {
+        var curState = $("#btnExpander_" + caseId).attr('class');
+        var expandablePlusIcon = 'icon-plus-sign ico-right expandable_' + caseId;
+
+        if (curState == expandablePlusIcon) {
+            doExpanation(caseId, true, false, '');
+        } else {                        
+            doExpanation(caseId, false, false, '');
+        }
+    };
+
+    doExpanation = function (caseId, doExpand, removeExpanation, uniqId) {        
+        var expanableDivs = '.expandable_' + caseId;
+        var expandablePlusIcon = 'icon-plus-sign ico-right expandable_' + caseId;
+        var expandableMinusIcon = 'icon-minus-sign ico-right expandable_' + caseId;
+
+        var expandablePlusIcons = '.icon-plus-sign.ico-right.expandable_' + caseId;
+        var expandableMinusIcons = '.icon-minus-sign.ico-right.expandable_' + caseId;
+
+        if (doExpand) {           
+            if (removeExpanation) {
+                var divToExpand = '#divExpand_' + uniqId;
+                $(divToExpand).css("height", "auto");
+                $(divToExpand).css("overflow", "visible");
+                $(document).find("[data-uniqId='iIcon_" + uniqId + "']").remove();
+            } else {
+                $(expanableDivs).css("height", "auto");
+                $(expanableDivs).css("overflow", "visible");
+                $(expandablePlusIcons).attr('class', expandableMinusIcon);
+                $(expandableMinusIcons).attr("style", "");
+            }
+        } else {
+            $(expanableDivs).css("height", "15px");
+            $(expanableDivs).css("overflow", "hidden");
+            $(expandableMinusIcons).attr('class', expandablePlusIcon);
+            $(expandablePlusIcons).attr("style", "");
+        }
+    };   
 
     Page.prototype.loadData = function (data, gridSettings) {
         var me = this;
@@ -200,16 +284,18 @@ var GRID_STATE = {
             
         if (data && data.length > 0) {            
             $.each(data, function (idx, record) {
-                var firstCell = strJoin('<td><a href="/Cases/Edit/', record.case_id, '?backUrl=', '/Cases/AdvancedSearch?', 'doSearchAtBegining=true', '"><img title="', record.caseIconTitle, '" alt="', record.caseIconTitle, '" src="', record.caseIconUrl, '" /></a></td>');
-                var rowOut = [strJoin('<tr class="', me.getClsRow(record), '" caseid="', record.case_id, '">'), firstCell];
+                var firstCell = strJoin('<td style="width:2%"> <a href="/Cases/Edit/', record.case_id, '?backUrl=', '/Cases/AdvancedSearch?', 'doSearchAtBegining=true', '"><img title="', record.caseIconTitle, '" alt="', record.caseIconTitle, '" src="', record.caseIconUrl, '" /></a></td>');
+                var rowClass = me.getClsRow(record);
+                var rowOut = [strJoin('<tr class="', rowClass, '" caseid="', record.case_id, '">'), firstCell];
                 $.each(me.gridSettings.columnDefs, function (idx, columnSettings) {
                     if (!columnSettings.isHidden) {
                         if (record[columnSettings.field] == null) {
-                            rowOut.push(me.formatCell(record.case_id, ''));
+                            rowOut.push(me.formatCell(record.case_id, columnSettings, false, false));
                             if (Page.isDebug) 
                                 console.warn('could not find field "' + columnSettings.field + '" in record');
                         } else {
-                            rowOut.push(me.formatCell(record.case_id, record[columnSettings.field]));
+                            var isBold = jQuery.inArray('textbold', rowClass) >= 0 || rowClass == 'textbold';
+                            rowOut.push(me.formatCell(record.case_id, record[columnSettings.field], columnSettings, isBold));
                         }
                     }
                 });
@@ -259,7 +345,7 @@ var GRID_STATE = {
             me.showMsg(LOADING_MSG_TYPE);
             me.setGridState(window.GRID_STATE.LOADING);
             showableCustomerCount = selectedCustomer.length;            
-            
+            cellUniqueId = 0;
             $.each(selectedCustomer,function (idx, value) {
                 curCustomerId = value.customerId;
                 curCustomerName = value.customerName;
@@ -271,6 +357,7 @@ var GRID_STATE = {
 
     Page.prototype.onGetData = function (response) {
         var me = this;
+
         if (response && response.result === 'success' && response.data) {
             if(response.data.length > 0)
                 me.loadData(response.data, response.gridSettings);            
@@ -371,12 +458,13 @@ var GRID_STATE = {
         customerTableId = 0;
         currentCustomerTable = '';
         globalCounter = 0;
+        me.tableCleanUp();
         me.hideMessage();
         if (!hasData)
             me.showMsg(NODATA_MSG_TYPE);
         me.setGridState(window.GRID_STATE.IDLE);       
     };
-
+    
     // DoSearch By Sort
     Page.prototype.setSortField = function (fieldName, $el) {
         var me = this;

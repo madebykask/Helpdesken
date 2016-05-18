@@ -13,12 +13,14 @@ namespace DH.Helpdesk.Web.Areas.Reports.Models.ReportService
     {   
         public ReportServiceOverviewModel()
         {
-            
+            ReportFavorites = new List<SavedReportFavoriteItemModel>();
         }
 
         public int CustomerId { get; set; }
 
         public CustomSelectList ReportList { get; set; }
+
+        public List<SavedReportFavoriteItemModel> ReportFavorites { get; set; }
 
         public ReportFilterModel ReportFilter { get; set; }
 
@@ -42,6 +44,13 @@ namespace DH.Helpdesk.Web.Areas.Reports.Models.ReportService
 
         }
         public ReportViewer ReportPage { get; set; }
+    }
+
+    public sealed class SavedReportFavoriteItemModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string OriginalReportId { get; set; }
     }
        
 }

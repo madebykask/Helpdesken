@@ -290,7 +290,8 @@
                 ShowNotAssignedWorkingGroups = 1,
                 StartPage = 1,
                 Customer_Id = 0,
-                UserGroup_Id = 4
+                UserGroup_Id = 4,
+                TimeZoneId = SessionFacade.CurrentUser.TimeZoneId ?? TimeZoneInfo.Local.Id
             });
 
 
@@ -341,6 +342,9 @@
                 userInputViewModel.User.SetPriorityPermission = 0;
                 userInputViewModel.User.ActivateCasePermission = 0;
             }
+
+            //TimezoneId
+            user.TimeZoneId = userInputViewModel.SelectedTimeZone;
 
             // validating available projects
             if (SessionFacade.CurrentUser.UserGroupId != (int)UserGroup.SystemAdministrator)
@@ -429,6 +433,7 @@
 
                 userToSave.OrderPermission = this.returnOrderPermissionForSave(userModel);
                 userToSave.CaseInfoMail = this.returnCaseInfoMailForEditSave(userModel);
+                userToSave.TimeZoneId = userModel.SelectedTimeZone;
 
                 this.TryUpdateModel(userToSave, "user");
                 var allCustomers = _customerService.GetAllCustomers();
@@ -968,6 +973,7 @@
                 CustomerUsers = user.CustomerUsers ?? this._userService.GetCustomerUserForUser(user.Id),
                 Departments = this._userService.GetDepartmentsForUser(user.Id),
                 ListWorkingGroupsForUser = this._userService.GetListToUserWorkingGroup(user.Id),
+                AvailvableTimeZones = TimeZoneInfo.GetSystemTimeZones().Select(it => new SelectListItem() { Value = it.Id, Text = it.DisplayName, Selected = user.TimeZoneId == it.Id }),
                 Customers = this._customerService.GetAllCustomers().Select(x => new SelectListItem
                 {
                     Text = x.Name,

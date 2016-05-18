@@ -42,7 +42,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
         {
             var anonymus =
                 this.DbSet
-                    .Select(c => new { c.Name, c.Id })
+                    .Select(c => new { c.Name, c.Id, c.InventoryType_Id }).Where(c => c.InventoryType_Id == null)
                     .ToList();
 
             var overviews =

@@ -1,15 +1,55 @@
 ﻿@using DH.Helpdesk.Common.Enums
 @using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Web.Infrastructure.Extensions
-@model DH.Helpdesk.Web.Areas.Reports.Models.Reports.ReportGenerator.ReportGeneratorAggregateModel
+@model DH.Helpdesk.Web.Areas.Reports.Models.Reports.ReportGenerator.ReportGeneratorModel
 
 @Translation.Get("Poster i sökresultat"):
 @Model.CasesFound
-<div>
-    @foreach (var item in Model.Aggregation.OrderBy(x => x.Key))
-    {
-        <div>
-            @String.Format("{0}: {1}", item.Key.ToString("yyyy/MM"), item.Value)
-        </div>
-    }
-</div>
+<table id="casesTable" class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            @foreach (var header in Model.Headers)
+            {
+                <th onclick=" sortGrid('@header.FieldName') " class="thpointer">@Translation.Get(header.Caption)
+                    @if (Model.SortField != null && header.FieldName == Model.SortField.Name)
+                    {
+                        switch (Model.SortField.SortBy)
+                        {
+                            case SortBy.Ascending:
+                                <i class="icon-chevron-up"></i>
+                                break;
+                            case SortBy.Descending:
+                                <i class="icon-chevron-down"></i>
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+                    }
+                </th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var c in Model.Cases)
+        {
+            <tr onclick=" window.location.href = '@Url.Action("Edit", "Cases", new RouteValueDictionary { { "id", c.Id }, { "backURL" , "/Reports/Report"}, { "area", String.Empty } })' ">
+                @foreach(var value in c.FieldValues)
+                {
+                    <td class="tdpointer"> @Html.AttributeEncode(value.Value.GetDisplayValue()).ForHtmlView() </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script type="text/javascript">
+    function ResetPaging() {
+        ResetDataTable("casesTable");
+    };
+
+    $(document).ready(function () {
+        var perPageText = '@Translation.Get("Antal per sida")';
+        var perShowingText = '@Translation.Get("Visar sida")';
+        InitDataTable("casesTable", perPageText, perShowingText);
+    });
+</script>

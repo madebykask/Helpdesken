@@ -4378,6 +4378,31 @@ If not exists (select * from tblTextTranslation where Text_Id = 1594 and Languag
             insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1594, 'You can''t close the case since it contains open orders.', 2)
 GO
 
+If not exists (select * from tbltext where id = 1595)
+	insert into tbltext (id, TextString) VALUES (1595, 'Spara som')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1595 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1595, 2, 'Save As')
+GO
+
+If not exists (select * from tbltext where id = 1596)
+	insert into tbltext (id, TextString) VALUES (1596, 'Spara favorit?')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1596 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1596, 2, 'Save favorite?')
+GO
+
+If not exists (select * from tbltext where id = 1597)
+	insert into tbltext (id, TextString) VALUES (1597, 'Kör')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1597 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1597, 2, 'Run')
+GO
+
+
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
