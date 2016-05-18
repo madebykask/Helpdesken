@@ -669,7 +669,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 
             foreach (var customReport in reports)
             {
-                ret.Items.AddItem(customReport.Value, newWord +" " +customReport.Text);
+                ret.Items.AddItem(customReport.Value, customReport.Text);
             }
 
             var defaultSelected = ret.Items.FirstOrDefault(i => i.Value.ToLower() == defaultReportName.ToLower());

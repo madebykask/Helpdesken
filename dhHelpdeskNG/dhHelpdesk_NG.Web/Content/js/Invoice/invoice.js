@@ -2980,8 +2980,8 @@ $(function () {
                         '"ArticleId":"' + (this.Article != null && this.Article.Id > 0 ? this.Article.Id : '') + '", ' +
                         '"Number":"' + this.GetNumber() + '", ' +
                         '"Name":"' + (this.Name != null ? this.Name : '') + '", ' +
-                        '"Amount":"' + (this.Amount != null && !this.IsBlank() ? this.Amount : '') + '", ' +
-                        '"Ppu":"' + (this.Ppu != null ? this.Ppu : '') + '", ' +
+                        '"Amount":"' + (this.Amount != null && this.Amount != undefined && !this.IsBlank() ? dhHelpdesk.Math.ConvertStrToDouble(this.Amount) : '') + '", ' +
+                        '"Ppu":"' + (this.Ppu != null && this.Ppu != undefined ? dhHelpdesk.Math.ConvertStrToDouble(this.Ppu) : '') + '", ' +
                         '"Position":"' + this.Position + '", ' +                        
                         '"CreditedForArticle_Id":"' + (this.CreditedForArticle_Id != null && !this.IsBlank() ? this.CreditedForArticle_Id : '') + '"' +
                     '}';
