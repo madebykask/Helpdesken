@@ -23,7 +23,7 @@
 {
     @using (Html.BeginForm("New", "Server", FormMethod.Post, new { id = "server_edit_form" }))
     {
-        @Html.CheckBoxFor(m => m.IsOperationObject) @Translation.Get("Driftobjekt")
+        <label class="checkbox">@Html.CheckBoxFor(m => m.IsOperationObject) @Translation.Get("Driftobjekt")</label>
 
         @Html.EditorFor(m => m.GeneralFieldsModel)
         @Html.EditorFor(m => m.ChassisFieldsModel)
