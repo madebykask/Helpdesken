@@ -1502,8 +1502,9 @@ $(function () {
                 autoResize: true,
                 resizable: false,
                 height: "auto",
-                width:"90%",
-                overflow:"auto",
+                width: "90%",
+                overflow: "auto",
+                zIndex: 1100,
                 resize: function (event, ui) {
                     var thisHeight = $(event.target).height(); //todo fix this - if you resize manually, the window wont automatically resize later on
                     var tabsheight = $('#case-invoice-orders-tabs').height();
