@@ -1396,7 +1396,7 @@ $(function () {
                 return;
 
             for (var i = 0; i < this.allVailableOrders.length; i++) {
-                if (this.allVailableOrders[i].Id > 0) {
+                if (this.allVailableOrders[i].Id > 0 && this.allVailableOrders[i].OrderState != dhHelpdesk.CaseArticles.OrderStates.Deleted) {
                     var articles = [];
                     if (this.allVailableOrders[i].Articles != undefined)
                         articles = this.allVailableOrders[i].Articles;
@@ -1410,7 +1410,9 @@ $(function () {
                         }
                     }
                     this.allVailableOrders[i].Articles = validArticles;
-                    cleanOrders.push(this.allVailableOrders[i]);                        
+                    cleanOrders.push(this.allVailableOrders[i]);
+                } else {
+                    cleanOrders.push(this.allVailableOrders[i]);
                 }
 
             }
@@ -1419,7 +1421,7 @@ $(function () {
 
         UpdateAvailableArticles: function (orderId, articleId, isAdded, article) {            
             for (var i = 0; i < this.allVailableOrders.length; i++) {
-                if (this.allVailableOrders[i].Id == orderId) {
+                if (this.allVailableOrders[i].Id == orderId && this.allVailableOrders[i].OrderState != dhHelpdesk.CaseArticles.OrderStates.Deleted) {
                     var articles = [];
                     if (this.allVailableOrders[i].Articles != undefined)
                         articles = this.allVailableOrders[i].Articles;
@@ -1559,7 +1561,7 @@ $(function () {
                     dhHelpdesk.CaseArticles.CleanUpAllOrders();
                     dhHelpdesk.System.RaiseEvent("OnChangeOrder", [th.GetCurrentOrder()]);
                     //if (dhHelpdesk.CaseArticles.IsFinishedCase()) {
-                        //TODO: need to enable order tabs and what we need to be active in Finished Case     
+                        //TODO: need to enable order tabs and others that we need to active them in Finished Case
                     //}
                 }
             });
@@ -1567,14 +1569,15 @@ $(function () {
             th._container.parent().addClass("overflow-visible");
             var curOrder = th.GetCurrentOrder();
                         
-            //// set order actions 
+            //// set order actions             
             dhHelpdesk.CaseArticles.OrderActionsInstance = dhHelpdesk.CaseArticles.OrderActions({ actionsContainer: th._container.find("#orderButtonsArea") });
+            
             var orderActionsViewModel = dhHelpdesk.CaseArticles.OrderActionsViewModel({
                 creditOrderEnabled: curOrder.IsOrderInvoiced(),
                 creditOrderTitle: dhHelpdesk.Common.Translate("Kreditera order"),
                 creditOrderId: curOrder.Id
             });
-
+            
             dhHelpdesk.CaseArticles.OrderActionsInstance.get_actionsContainer().prepend($(dhHelpdesk.CaseArticles.CaseInvoiceOrderActionsTemplate.render(orderActionsViewModel)));            
                     
             dhHelpdesk.Common.MakeTextNumeric(".articles-params-units");            
@@ -1685,7 +1688,8 @@ $(function () {
         ValidateOpenInvoiceWindow: function () {
             for (var i = 0; i < this.allVailableOrders.length; i++) {
                 var order = dhHelpdesk.CaseArticles.GetOrder(this.allVailableOrders[i].Id);
-                if (!order.InvoiceValidate())
+                /* Deleted orders will be null */ 
+                if (order != null && !order.InvoiceValidate())
                     return false;
             }            
             return true;
@@ -2059,10 +2063,13 @@ $(function () {
                 var tabs = this.Container.find("#case-invoice-orders-tabs");
                 tabs.tabs("refresh");
                 tabs.find("ul").removeClass("ui-widget-header");
-                tabs.find("li").removeClass("ui-state-default");
+                tabs.find("li").removeClass("ui-state-default");                               
             },
 
             this.AddOrder = function (order) {
+                if (order.OrderState == dhHelpdesk.CaseArticles.OrderStates.Deleted) {
+                    return
+                }
                 order.Invoice = this
                 order.Initialize();
                 var origOrders = dhHelpdesk.CaseArticles.GetOriginalOrders(dhHelpdesk.CaseArticles.allVailableOrders);
@@ -2093,8 +2100,8 @@ $(function () {
                 container.append(order.Container);
                 
                 var tabs = this.Container.find("#case-invoice-orders-tabs");
-                var tabIcon = (order.IsOrderInvoiced() ? "<i class='icon-ok icon-green'></i>&nbsp;&nbsp;" : "");
-                var newTab = $("<li class='case-invoice-order-tab active'><a href='#case-invoice-order" + order.Id + "'>" + tabIcon + order.Caption  + "</a><li>");
+                var tabIcon = (order.IsOrderInvoiced() ? "<i class='icon-ok icon-green'></i>&nbsp;&nbsp;" : "");                
+                var newTab = $("<li class='case-invoice-order-tab active' ><a href='#case-invoice-order" + order.Id + "'>" + tabIcon + order.Caption + "</a><li>");
                 if (this._orders.length == 1) {
                     tabs.find("ul").prepend(newTab);
                 } else {
@@ -2103,7 +2110,7 @@ $(function () {
                 this._refreshTabs();
                 dhHelpdesk.CaseArticles.FillOrderOrganizationData(order);
 
-                newTab.find("a").click();
+                newTab.find("a").click();                
 
                 $('.articles-params-units').focus();
                 $('.articles-params-units').click();                
@@ -3725,14 +3732,19 @@ $(function () {
         },
 
         UpdateInvoiceButtonStatistics: function () {
-            var ordersCount = dhHelpdesk.CaseArticles.allVailableOrders.length;
-            var sentCount = "";
-            var invoicedOrders = dhHelpdesk.CaseArticles.GetInvoicedOrders(dhHelpdesk.CaseArticles.allVailableOrders)
-            if (invoicedOrders != null)
-                sentCount = invoicedOrders.length;
+            var ordersCount = 0;
+            for (i = 0; i < dhHelpdesk.CaseArticles.allVailableOrders.length; i++) {
+                if (dhHelpdesk.CaseArticles.allVailableOrders[i].OrderState != this.OrderStates.Deleted)
+                    ordersCount++;
+            }
 
+            var sentCount = 0;
+            var invoicedOrders = dhHelpdesk.CaseArticles.GetInvoicedOrders(dhHelpdesk.CaseArticles.allVailableOrders)
+            if (invoicedOrders != null)             
+                sentCount = invoicedOrders.length;
+            
             if (ordersCount > 0)
-                $('#InvoiceModuleBtnOpen').val(dhHelpdesk.CaseArticles.invoiceButtonPureCaption + " (" + sentCount + "/" + ordersCount + ")");
+                $('#InvoiceModuleBtnOpen').val(dhHelpdesk.CaseArticles.invoiceButtonPureCaption + " (" + (sentCount) + "/" + (ordersCount) + ")");
         },
 
         CaseFiles: null        
@@ -3900,27 +3912,45 @@ $(function () {
                     var $this = $(this);
                     var data = $.parseJSON($this.attr("data-invoice-case-articles"));
                     
+                    var emptyOrders = false;
+                    var invoice = new dhHelpdesk.CaseArticles.CaseInvoice();
+                    var inv = null;
+
+                    /* TODO: Now there is only one Invoice per case, if needs more we should change this line */
                     if (data == null || data.Invoices.length == 0) {
-                        var blankInvoice = new dhHelpdesk.CaseArticles.CaseInvoice();
-                        blankInvoice.Id = dhHelpdesk.Common.GenerateId();
-                        blankInvoice.Initialize();
-                        dhHelpdesk.CaseArticles.AddInvoice(blankInvoice);
+                        invoice.Id = dhHelpdesk.Common.GenerateId();
+                        invoice.Initialize();
+                        dhHelpdesk.CaseArticles.AddInvoice(invoice);
                         dhHelpdesk.CaseArticles.Initialize($this);
-                        blankInvoice.CaseId = dhHelpdesk.CaseArticles.CaseId;
-                        var blankOrder = new dhHelpdesk.CaseArticles.CreateBlankOrder();
-                        blankInvoice.AddOrder(blankOrder);
-                        dhHelpdesk.CaseArticles.ApplyChanges();
-                        return;
+                        invoice.CaseId = dhHelpdesk.CaseArticles.CaseId;
+                        emptyOrders = true;
+                    } else {
+                        inv = data.Invoices[0];
+                        invoice.Id = inv.Id;
+                        invoice.CaseId = inv.CaseId;
+                        invoice.Initialize();
+                        dhHelpdesk.CaseArticles._invoices = [];
+                        dhHelpdesk.CaseArticles.AddInvoice(invoice);
+                        dhHelpdesk.CaseArticles.Initialize($this);
                     }
 
-                    var inv = data.Invoices[0];
-                    var invoice = new dhHelpdesk.CaseArticles.CaseInvoice();
-                    invoice.Id = inv.Id;
-                    invoice.CaseId = inv.CaseId;
-                    invoice.Initialize();
-                    dhHelpdesk.CaseArticles._invoices = [];
-                    dhHelpdesk.CaseArticles.AddInvoice(invoice);
-                    dhHelpdesk.CaseArticles.Initialize($this);
+                    if (emptyOrders || (data.Invoices.length != 0 && (data.Invoices[0].Orders == null || data.Invoices[0].Orders.length == 0))) {
+                        
+                        dhHelpdesk.CaseArticles.allVailableOrders = [];
+                        var blankOrder = new dhHelpdesk.CaseArticles.CreateBlankOrder();
+                        invoice.AddOrder(blankOrder);
+                        dhHelpdesk.CaseArticles.ApplyChanges();                        
+                        
+                        if (callBack != undefined && callBack != null) {
+                            callBack(obj);
+                        }
+
+                        dhHelpdesk.CaseArticles.ChangeTab(dhHelpdesk.CaseArticles.LastSelectedTab);
+                        dhHelpdesk.CaseArticles.SetInvoiceState(_INVOICE_IDLE);
+
+                        return;
+                    }
+               
                     if (inv.Orders != null) {                        
                         inv.Orders = dhHelpdesk.CaseArticles.SortOrders(inv.Orders);
                         dhHelpdesk.CaseArticles.allVailableOrders = inv.Orders;

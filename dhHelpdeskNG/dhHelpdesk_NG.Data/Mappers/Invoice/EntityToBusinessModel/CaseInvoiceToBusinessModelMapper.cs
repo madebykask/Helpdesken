@@ -49,6 +49,7 @@
                     entity.Id,
                     entity.CaseId,
                     this.caseMapper.Map(entity.Case),
+                    entity.Orders == null? null :
                     entity.Orders
                         .Select(o => new CaseInvoiceOrder(
                                 o.Id, 

@@ -166,71 +166,112 @@
                 }
                 this.Commit();
 
+                /* This can be happening at the first time when there is no order and users has added 2 orders 
+                   Where order1 has no article and order 2 has article
+                 */
+                var isThereAtleastOneArticleInInvoice = false;
                 foreach (var order in invoice.Orders)
                 {
-                    CaseInvoiceOrderEntity orderEntity;
+                    if (order.Articles.Any())
+                    {
+                        isThereAtleastOneArticleInInvoice = true;
+                        break;
+                    }
+                }
+
+                var hasInfoToSave = true;
+                foreach (var order in invoice.Orders)
+                {
+                    hasInfoToSave = true;
+                    var orderEntity = new CaseInvoiceOrderEntity();
                     if (order.Id > 0)
                     {
-                        orderEntity = this.DbContext.CaseInvoiceOrders.Find(order.Id);
-                        if (orderEntity.OrderState == (int)InvoiceOrderStates.Saved)
+                        if (order.OrderState != (int)InvoiceOrderStates.Deleted)
                         {
-                            var articlesForDelete = new List<int>();
-                            articlesForDelete.AddRange(orderEntity.Articles.Where(a => order.Articles.All(ar => ar.Id != a.Id)).Select(a => a.Id));
-                            foreach (var articleForDelete in articlesForDelete)
+                            orderEntity = this.DbContext.CaseInvoiceOrders.Find(order.Id);
+                            if (orderEntity.OrderState == (int)InvoiceOrderStates.Saved)
                             {
-                                var a = this.DbContext.CaseInvoiceArticles.Find(articleForDelete);
-                                this.DbContext.CaseInvoiceArticles.Remove(a);
-                            }
+                                var articlesForDelete = new List<int>();
+                                articlesForDelete.AddRange(orderEntity.Articles.Where(a => order.Articles.All(ar => ar.Id != a.Id)).Select(a => a.Id));
+                                foreach (var articleForDelete in articlesForDelete)
+                                {
+                                    var a = this.DbContext.CaseInvoiceArticles.Find(articleForDelete);
+                                    this.DbContext.CaseInvoiceArticles.Remove(a);
+                                }
 
-                            this.orderMapper.Map(order, orderEntity);
+                                if (!order.Articles.Any())
+                                    order.OrderState = (int)InvoiceOrderStates.Deleted;
+
+                                this.orderMapper.Map(order, orderEntity);
+                            }
+                        }
+                        else
+                        {
+                            hasInfoToSave = false;
                         }
                     }
                     else
                     {
-                        orderEntity = new CaseInvoiceOrderEntity();
-                        order.OrderState = (int)InvoiceOrderStates.Saved;
-                        this.orderMapper.Map(order, orderEntity);
-                        orderEntity.InvoiceId = entity.Id;
-                        this.DbContext.CaseInvoiceOrders.Add(orderEntity);
+                        if (order.Articles.Any())
+                        {
+                            order.OrderState = (int)InvoiceOrderStates.Saved;
+                            this.orderMapper.Map(order, orderEntity);
+                            orderEntity.InvoiceId = entity.Id;
+                            this.DbContext.CaseInvoiceOrders.Add(orderEntity);
+                        }
+                        else 
+                        {
+                            if (!isThereAtleastOneArticleInInvoice)
+                                hasInfoToSave = false;
+                            else
+                            {
+                                order.OrderState = (int)InvoiceOrderStates.Deleted;
+                                this.orderMapper.Map(order, orderEntity);
+                                orderEntity.InvoiceId = entity.Id;
+                                this.DbContext.CaseInvoiceOrders.Add(orderEntity);
+                            }
+                        }
                     }
-
                     this.Commit();
 
-                    var orderFiles = this.DbContext.CaseInvoiceOrderFiles.Where(f => f.OrderId == orderEntity.Id);
-                    foreach (var orderFile in orderFiles)
+                    if (hasInfoToSave)
                     {
-                        this.DbContext.CaseInvoiceOrderFiles.Remove(orderFile);
-                    }
-
-                    if (order.Files != null)
-                    {
-                        foreach (var file in order.Files)
+                        var orderFiles = this.DbContext.CaseInvoiceOrderFiles.Where(f => f.OrderId == orderEntity.Id);
+                        foreach (var orderFile in orderFiles)
                         {
-                            var fileEntity = new CaseInvoiceOrderFileEntity();
-                            this.filesMapper.Map(file, fileEntity);
-                            fileEntity.OrderId = orderEntity.Id;
-                            this.DbContext.CaseInvoiceOrderFiles.Add(fileEntity);
+                            this.DbContext.CaseInvoiceOrderFiles.Remove(orderFile);
                         }
-                    }
 
-                    foreach (var article in order.Articles)
-                    {
-                        CaseInvoiceArticleEntity articleEntity;
-                        if (article.Id > 0)
+                        if (order.Files != null)
                         {
-                            articleEntity = this.DbContext.CaseInvoiceArticles.Find(article.Id);
-                            this.articleMapper.Map(article, articleEntity);         
+                            foreach (var file in order.Files)
+                            {
+                                var fileEntity = new CaseInvoiceOrderFileEntity();
+                                this.filesMapper.Map(file, fileEntity);
+                                fileEntity.OrderId = orderEntity.Id;
+                                this.DbContext.CaseInvoiceOrderFiles.Add(fileEntity);
+                            }
                         }
-                        else
-                        {
-                            articleEntity = new CaseInvoiceArticleEntity();
-                            this.articleMapper.Map(article, articleEntity);
-                            articleEntity.OrderId = orderEntity.Id;
-                            this.DbContext.CaseInvoiceArticles.Add(articleEntity);
-                        }
-                    }
 
-                    this.Commit();
+                        foreach (var article in order.Articles)
+                        {
+                            CaseInvoiceArticleEntity articleEntity;
+                            if (article.Id > 0)
+                            {
+                                articleEntity = this.DbContext.CaseInvoiceArticles.Find(article.Id);
+                                this.articleMapper.Map(article, articleEntity);
+                            }
+                            else
+                            {
+                                articleEntity = new CaseInvoiceArticleEntity();
+                                this.articleMapper.Map(article, articleEntity);
+                                articleEntity.OrderId = orderEntity.Id;
+                                this.DbContext.CaseInvoiceArticles.Add(articleEntity);
+                            }
+                        }
+
+                        this.Commit();
+                    }
                 }
             }
         }        

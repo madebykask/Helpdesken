@@ -122,11 +122,15 @@
             {
                 if (CaseInvoices.FirstOrDefault() != null)
                 {
-                    foreach (var Order in CaseInvoices.FirstOrDefault().Orders)
+                    var orders = CaseInvoices.FirstOrDefault().Orders;
+                    if (orders != null)
                     {
-                        if (Order.InvoiceDate != null)
+                        foreach (var Order in orders)                           
                         {
-                            Order.InvoiceDate = TimeZoneInfo.ConvertTimeFromUtc(Order.InvoiceDate ?? new DateTime(1970, 1, 1), TimeZone);
+                            if (Order.InvoiceDate != null)
+                            {
+                                Order.InvoiceDate = TimeZoneInfo.ConvertTimeFromUtc(Order.InvoiceDate ?? new DateTime(1970, 1, 1), TimeZone);
+                            }
                         }
                     }
                 }
@@ -140,11 +144,15 @@
             {
                 if (CaseInvoices.FirstOrDefault() != null)
                 {
-                    foreach (var Order in CaseInvoices.FirstOrDefault().Orders)
+                    var orders = CaseInvoices.FirstOrDefault().Orders;
+                    if (orders != null)
                     {
-                        if (Order.InvoicedByUserId != null)
+                        foreach (var Order in orders)
                         {
-                            Order.InvoicedByUser = this.userService.GetUser(Order.InvoicedByUserId ?? 0).UserID;
+                            if (Order.InvoicedByUserId != null)
+                            {
+                                Order.InvoicedByUser = this.userService.GetUser(Order.InvoicedByUserId ?? 0).UserID;
+                            }
                         }
                     }
                 }
