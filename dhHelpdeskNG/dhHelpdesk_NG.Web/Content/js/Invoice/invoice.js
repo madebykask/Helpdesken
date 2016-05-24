@@ -821,6 +821,9 @@ $(function () {
                     $(invoiceButtons).addClass("disabled");
                     $(invoiceButtons).css("pointer-events", "none");                    
                     break;
+
+                default:
+                    dhHelpdesk.Common.ShowErrorMessage("State is not implemented!");
             }
         },
 
@@ -2272,14 +2275,9 @@ $(function () {
                             dhHelpdesk.CaseArticles.OrderActionsInstance.get_creditOrderButton(currentOrder.Id).show();
                         else
                             dhHelpdesk.CaseArticles.OrderActionsInstance.get_creditOrderButton(currentOrder.Id).hide();                        
-                        $("#doInvoiceButton_" + currentOrder.Id).hide();
+                        $("#doInvoiceButton_" + currentOrder.Id).hide();                        
+                        addArticleEl.hide();
 
-                        var allInitiatorFields = $(".InitiatorFields_" + currentOrder.Id);
-                        $.each(allInitiatorFields, function (i) {
-                            $(allInitiatorFields[i]).attr("disabled", true);
-                        });
-                        $("#invoiceSelectFile_" + currentOrder.Id).attr("disabled", true);
-                        addArticleEl.hide();                        
                     } else {
                         dhHelpdesk.CaseArticles.OrderActionsInstance.get_creditOrderButton(currentOrder.Id).hide();                        
                         $("#doInvoiceButton_" + currentOrder.Id).show();
@@ -2290,6 +2288,14 @@ $(function () {
                             dhHelpdesk.CaseArticles.ResetAddArticlePlace();
                             addArticleEl.show();
                         }                        
+                    }
+
+                    if (currentOrder.IsOrderInvoiced() || currentOrder.CreditForOrder_Id != null) {
+                        var allInitiatorFields = $(".InitiatorFields_" + currentOrder.Id);
+                        $.each(allInitiatorFields, function (i) {
+                            $(allInitiatorFields[i]).attr("disabled", true);
+                        });
+                        $("#invoiceSelectFile_" + currentOrder.Id).attr("disabled", true);
                     }
 
                     if (currentOrder.Id < 0)
@@ -2894,7 +2900,7 @@ $(function () {
 
             this.InvoiceValidate = function () {
                 var isValid = true;
-                if (dhHelpdesk.Common.IsNullOrEmpty(this.CostCentre)) {
+                if (this._articles != null && this._articles.length > 0 && dhHelpdesk.Common.IsNullOrEmpty(this.CostCentre)) {
                     dhHelpdesk.Common.ShowErrorMessage(dhHelpdesk.Common.Translate("Kostnadställe saknas!") + " " + this.Caption);
                     isValid = false;
                 }
