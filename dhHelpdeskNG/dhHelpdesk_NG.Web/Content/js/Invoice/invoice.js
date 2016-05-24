@@ -616,6 +616,14 @@ $(function () {
             return !(this.CaseId > 0);
         },
 
+        IsProductAreaChanged: function () {
+            var lastProductArea = $('#LastProductAreaId').val();
+            if (this.ProductAreaElement.val() != lastProductArea)
+                return true;
+            else
+                return false;
+        },
+
         IsFinishedCase: function () {
             var isFinished = $('#case__FinishingDate_HasValue').val();
             return isFinished;
@@ -1815,7 +1823,7 @@ $(function () {
                 .addClass("btn");
 
             button.click(function () {
-                if (th.IsNewCase()) {
+                if (th.IsNewCase() || th.IsProductAreaChanged()) {
                     dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("Please save the case and then try again!"));
                     return;
                 }
