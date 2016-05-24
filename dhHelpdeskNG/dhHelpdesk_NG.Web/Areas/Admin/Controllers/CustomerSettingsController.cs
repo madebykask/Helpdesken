@@ -85,6 +85,7 @@
                 vmodel.Setting.DefaultAdministrator = setting.DefaultAdministrator;
                 vmodel.Setting.DefaultAdministratorExternal = setting.DefaultAdministratorExternal;
                 vmodel.Setting.CreateCaseFromOrder = setting.CreateCaseFromOrder;
+                vmodel.Setting.IsUserFirstLastNameRepresentation = setting.IsUserFirstLastNameRepresentation;
             }
 
             vmodel.Setting.Id = setting.Id;

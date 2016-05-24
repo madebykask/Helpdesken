@@ -95,14 +95,28 @@
                     <table>
                         <tr>
                             <td>
-                                @Html.ListBox("UsAvailable", Model.UsAvailable, new { style = "width: 314px; height: 350px" })
+                                <select id="UsAvailable" multiple="multiple" name="UsAvailable" style="width: 314px; height: 350px">
+                                    @foreach (var us in Model.AvUsMultiSelect.Items)
+                                    {
+                                        var classType = us.IsActive ? "" : "style=color:lightgray;";
+                                        <option @classType value="@us.Id" > @us.Value </option>
+                                    }
+                                </select>      
+                               @* @Html.ListBox("UsAvailable", Model.UsAvailable, new { style = "width: 314px; height: 350px" })*@
                             </td>
                             <td>
                                 <input type="button" value="&gt;" class="btn" id="addUs" /><br />
                                 <input type="button" value="&lt;" class="btn" id="removeUs" />
                             </td>
                             <td>
-                                @Html.ListBox("UsSelected", Model.UsSelected, new { style = "width: 314px; height: 350px" })
+                                <select id="UsSelected" multiple="multiple" name="UsSelected" style="width: 314px; height: 350px">
+                                    @foreach (var us in Model.UsMultiSelect.Items)
+                                    {
+                                        var classType = us.IsActive ? "" : "style=color:lightgray;";
+                                        <option @classType value="@us.Id" > @us.Value </option>
+                                    }
+                                </select>                       
+                                @*@Html.ListBox("UsSelected", Model.UsSelected, new { style = "width: 314px; height: 350px" })*@
                             </td>
                         </tr>
                     </table>
@@ -114,7 +128,15 @@
                     @Translation.Get("Användaren är förvald som handläggare på nya externa ärenden", Enums.TranslationSource.TextTranslation)<br />
                 </td>
                 <td>
-                    @Html.DropDownListFor(model => model.Setting.DefaultAdministratorExternal, Model.UsSelected, "", new { })
+                    <select data-val="true" data-val-number="The field DefaultAdministratorExternal must be a number." id="Setting_DefaultAdministratorExternal" name="Setting.DefaultAdministratorExternal">
+                        <option value="" > </option>
+                         @foreach (var us in Model.UsMultiSelect.Items)
+                            {
+                                var classType = us.IsActive ? "" : "style=color:lightgray;";
+                                <option @classType value="@us.Id" @us.Id.ValueIsSelected(Model.Setting.DefaultAdministratorExternal.ToString())> @us.Value </option>
+                            }
+                    </select>
+                    @*@Html.DropDownListFor(model => model.Setting.DefaultAdministratorExternal, Model.UsSelected, "", new { })*@
                 </td>
             </tr>
             <tr>
@@ -122,7 +144,15 @@
                     @Translation.Get("Användaren är förvald som handläggare på nya ärenden", Enums.TranslationSource.TextTranslation)
                 </td>
                 <td>
-                    @Html.DropDownListFor(model => model.Setting.DefaultAdministrator, Model.UsSelected, "", new { })
+                    <select data-val="true" data-val-number="The field DefaultAdministrator must be a number." id="Setting_DefaultAdministrator" name="Setting.DefaultAdministrator">
+                        <option value="" > </option>
+                         @foreach (var us in Model.UsMultiSelect.Items)
+                            {
+                                var classType = us.IsActive ? "" : "style=color:lightgray;";
+                                <option @classType value="@us.Id" @us.Id.ValueIsSelected(Model.Setting.DefaultAdministrator.ToString())> @us.Value </option>
+                            }
+                    </select>
+                    @*@Html.DropDownListFor(model => model.Setting.DefaultAdministrator, Model.UsSelected, "", new { })*@
                 </td>
             </tr>
             <tr>

@@ -14,6 +14,7 @@
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Domain.MailTemplates;
     using DH.Helpdesk.Domain.Computers;
+    using DH.Helpdesk.BusinessData.Models.Shared;
 
     public class CustomerController : BaseController
     {
@@ -398,7 +399,7 @@
 
             if (customer.Id != 0)
             {
-                foreach (var us in this._userService.GetActiveUsers())
+                foreach (var us in this._userService.GetAllUsers())
                 {
                     if (!usSelected.Select(u => u.Id).Contains(us.Id))
                         usAvailable.Add(us);
@@ -528,6 +529,15 @@
             #region Model
 
             var settings = this._settingService.GetCustomerSetting(customer.Id) ?? new Setting();
+            var availableUsers = usAvailable.Select(x => new ListItem(x.Id.ToString(), x.SurName + " " + x.FirstName, Convert.ToBoolean(x.IsActive)))
+                                          .ToList();
+            var availableUsersModel = new CustomSelectList();
+            availableUsersModel.Items.AddItems(availableUsers);
+            var selectedUsers = usSelected.Select(x => new ListItem(x.Id.ToString(), x.SurName + " " + x.FirstName, Convert.ToBoolean(x.IsActive)))
+                                          .ToList();
+            var selectedUsersModel = new CustomSelectList();
+            selectedUsersModel.Items.AddItems(selectedUsers);
+
             var model = new CustomerInputViewModel
             {
                 CustomerCaseSummaryViewModel = new CustomerCaseSummaryViewModel(),
@@ -556,11 +566,16 @@
                     Text = x.SurName + " " + x.FirstName,
                     Value = x.Id.ToString()
                 }).ToList(),
+
                 UsSelected = usSelected.Select(x => new SelectListItem
                 {
                     Text = x.SurName + " " + x.FirstName,
-                    Value = x.Id.ToString()
+                    Value = x.Id.ToString(),
                 }).ToList(),
+
+                AvUsMultiSelect = availableUsersModel,
+                UsMultiSelect = selectedUsersModel,
+
                 UserGroups = this._userService.GetUserGroups().Select(x => new SelectListItem
                 {
                     Text = x.Name,

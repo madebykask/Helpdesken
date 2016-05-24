@@ -153,7 +153,7 @@
         ItemOverview FindActiveOverview(int userId);
 
         List<User> GetActiveUsers();
-
+        List<User> GetAllUsers();
         List<User> GetCustomerActiveUsers(int customerId);
 
         List<CustomerSettings> GetUserCustomersSettings(int userId);
@@ -979,6 +979,20 @@
             }
         }
 
+        public List<User> GetAllUsers()
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var userRep = uow.GetRepository<User>();
+
+                var users = userRep.GetAll()
+                        .GetOrderedByName()
+                        .ToList();
+
+                return users;
+            }
+        }
+
         public List<User> GetCustomerActiveUsers(int customerId)
         {
             using (var uow = this.unitOfWorkFactory.Create())
@@ -989,7 +1003,8 @@
 
                 var customers = customerRep.GetAll().GetById(customerId);
                 var customerUsers = customerUserRep.GetAll();
-                var users = userRep.GetAll().GetActive();
+                var users = userRep.GetAll();
+                //var users = userRep.GetAll().GetActive();
 
                 return UsersMapper.MapToCustomerUsers(customers, users, customerUsers);
             }

@@ -7,6 +7,7 @@
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Web.Enums;
     using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.BusinessData.Models.Shared;
 
     public class CustomerCaseSummaryViewModel
     {
@@ -76,6 +77,8 @@
         public IList<SelectListItem> PasswordHistory { get; set; }
         public IList<SelectListItem> UsAvailable { get; set; } 
         public IList<SelectListItem> UsSelected { get; set; }
+        public CustomSelectList UsMultiSelect { get; set; }
+        public CustomSelectList AvUsMultiSelect { get; set; }
         public IList<SelectListItem> UserGroups { get; set; }
 
         public IList<SelectListItem> CWNSelect { get; set; }
