@@ -7,6 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Linq;
 using DH.Helpdesk.Common.Enums;
 namespace DH.Helpdesk.Common.Extensions.String
 {
@@ -270,6 +271,47 @@ namespace DH.Helpdesk.Common.Extensions.String
         public static string CleanSpaceAndLowStr(this string value)
         {
             return value.Replace(" ", string.Empty).ToLower();
+        }
+
+        public static string RoundDecimal(this string value, string decimalSeparator, int floatingDigitsCount)
+        {            
+            if (!value.Contains(decimalSeparator) || decimalSeparator == string.Empty)
+            {
+                if (!value.Contains("."))
+                    return value;
+                else
+                    decimalSeparator = ".";
+            }
+
+            var splited = value.Split(decimalSeparator);
+            if (splited.Length > 0)
+            {
+                var fixPart = splited[0];
+                var floatingPart = "";
+                if (splited.Length > 1)
+                {
+                    floatingPart = splited[1];
+                    if (floatingPart.Length >= floatingDigitsCount)
+                        floatingPart = floatingPart.Substring(0, floatingDigitsCount);
+                    else
+                        floatingPart = floatingPart.PadRight(floatingDigitsCount, '0');
+                }
+
+                if (!string.IsNullOrEmpty(floatingPart))
+                    return string.Format("{0}{1}{2}", fixPart, decimalSeparator, floatingPart);
+                else
+                    return fixPart;
+            }
+            else
+            {
+                return value;
+            }
+        }
+
+        public static string GetNonNumeric(this string value)
+        {
+            var nonNumericValue = string.Concat(value.Where(c => !char.IsDigit(c)));
+            return nonNumericValue;
         }
     }
 }

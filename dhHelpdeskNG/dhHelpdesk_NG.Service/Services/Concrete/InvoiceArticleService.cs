@@ -11,7 +11,8 @@
     using System;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.BusinessData.Models.Invoice.Xml;
-    using DH.Helpdesk.Common.Enums;   
+    using DH.Helpdesk.Common.Enums;
+    using DH.Helpdesk.Common.Extensions.String;
 
     public class InvoiceArticleService : IInvoiceArticleService
     {
@@ -321,18 +322,26 @@
             int lineNo = 0;
             foreach (var article in order.Articles)
             {
-                lineNo++;
+                lineNo++;                
                 if (article.ArticleId.HasValue)
-                {                    
+                {        
+                    
+                    var amountStr = article.Amount.HasValue? article.Amount.Value.ToString() : string.Empty;
+                    var ppuStr = article.Ppu.HasValue ? article.Ppu.Value.ToString() : string.Empty;
+
+                    var detectedDecimalSep = DetectDecimalSeparator(ppuStr);
+                    if (string.IsNullOrEmpty(detectedDecimalSep))
+                        detectedDecimalSep = DetectDecimalSeparator(amountStr);
+
                     salesLines.Add(new SalesDocSalesHeaderSalesLine()
                     {
                         LineNo = lineNo.ToString(),
                         LineType = InvoiceXMLLineType.Article,
                         Number = article.Article != null ? article.Article.Number : string.Empty,
                         Description = null,
-                        Quantity = article.Amount.HasValue ? article.Amount.ToString() : string.Empty,
+                        Quantity = amountStr.RoundDecimal(detectedDecimalSep, 2),
                         UnitOfMeasureCode = (article.Article != null && article.Article.Unit != null ? article.Article.Unit.Name : string.Empty),
-                        UnitPrice = article.Ppu.HasValue ? article.Ppu.Value.ToString() : string.Empty
+                        UnitPrice = ppuStr.RoundDecimal(detectedDecimalSep, 2)
                     });
                 }
                 else
@@ -376,6 +385,11 @@
             salesDoc.SalesHeader = salesHeader;
 
             return salesDoc;
+        }
+
+        private string DetectDecimalSeparator(string value)
+        {
+            return string.IsNullOrEmpty(value)? string.Empty : value.GetNonNumeric();
         }
 
         private int GetSequenceNumber(int caseId, CaseInvoiceOrder order)

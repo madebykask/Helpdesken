@@ -759,8 +759,10 @@ $(function () {
         },
 
         SaveToDatabase: function (callBack, that, orderIdToXML) {
-            if (this.CaseId == undefined || this.CaseId == null || this.IsNewCase())
+            if (this.CaseId == undefined || this.CaseId == null || this.IsNewCase()) {
+                dhHelpdesk.CaseArticles.SetInvoiceState(_INVOICE_IDLE);
                 return;
+            }
 
             // Keep order id to show order tab after reload
             // If order id be less than 0 we'll try to find it by Tab Caption
@@ -770,7 +772,7 @@ $(function () {
                 dhHelpdesk.CaseArticles.LastSelectedTabCaption = curOrder.Caption;
             }
                        
-            dhHelpdesk.CaseArticles.SetInvoiceState(_INVOICE_SAVING);
+            
             var res = "";
             $.post('/cases/SaveCaseInvoice/', {
                 'caseInvoiceArticle': this.GetSavedInvoices(),
@@ -1518,16 +1520,20 @@ $(function () {
                         text: dhHelpdesk.Common.Translate("Spara"),
                         'data-doInvoiceOrder':'',
                         'class': 'btn save-invoice',
-                        click: function () {                            
+                        click: function () {
+                            dhHelpdesk.CaseArticles.SetInvoiceState(_INVOICE_SAVING);
                             if (!th.Validate()) {
+                                dhHelpdesk.CaseArticles.SetInvoiceState(_INVOICE_IDLE);
                                 return;
                             }
                             var me = $(".btn.save-invoice");
                             var orderIdToXML = me.attr('data-doInvoiceOrder');
                             me.attr('data-doInvoiceOrder', '');
 
-                            if (!dhHelpdesk.CaseArticles.ValidateOpenInvoiceWindow())
+                            if (!dhHelpdesk.CaseArticles.ValidateOpenInvoiceWindow()) {
+                                dhHelpdesk.CaseArticles.SetInvoiceState(_INVOICE_IDLE);
                                 return false;
+                            }
 
                             th.ApplyChanges();                            
                             th.SaveToDatabase(th.CloseReOpenWindow, th, orderIdToXML);
@@ -1537,12 +1543,16 @@ $(function () {
                         text: dhHelpdesk.Common.Translate("Spara och stäng"),
                         'class': 'btn save-close-invoice',
                         click: function () {
+                            dhHelpdesk.CaseArticles.SetInvoiceState(_INVOICE_SAVING);
                             if (!th.Validate()) {
+                                dhHelpdesk.CaseArticles.SetInvoiceState(_INVOICE_IDLE);
                                 return;
                             }
 
-                            if (!dhHelpdesk.CaseArticles.ValidateOpenInvoiceWindow())
+                            if (!dhHelpdesk.CaseArticles.ValidateOpenInvoiceWindow()) {
+                                dhHelpdesk.CaseArticles.SetInvoiceState(_INVOICE_IDLE);
                                 return false;
+                            }
 
                             th.ApplyChanges();
                             th.SaveToDatabase(th.CloseInvoiceWindow, th);
