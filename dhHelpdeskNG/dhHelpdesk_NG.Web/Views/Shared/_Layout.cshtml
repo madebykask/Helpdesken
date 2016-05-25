@@ -181,7 +181,7 @@
                         }
 
                         
-                       @* @if(model.IsSettingsModulesVisible())
+                        @if(model.IsSettingsModulesVisible())
                         {
                             <li class="pink">
                                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">
@@ -190,7 +190,7 @@
                                     <i class="icon-chevron-down icon-white"></i>
                                 </a>
                                 <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
-                                    @if(model.IsOrderVisible())
+                                   @* @if(model.IsOrderVisible())
                                     {    
                                         <li><a href="@Url.Action("Index", "Orders", new { area = "Orders" })">
                                             <img src="@Url.Content("~/Content/icons/order.png")" />
@@ -208,7 +208,7 @@
                                         <li><a href="@Url.Action("index", "checklist", new { area = "" })">
                                             <img src="@Url.Content("~/Content/icons/checklist.png")" />
                                             @Translation.Get("Checklista")</a></li>
-                                    }
+                                    }*@
 
 
                                     @if(model.IsInventoryVisible())
@@ -218,17 +218,17 @@
                                             @Translation.Get("Inventarier")</a></li> 
                                     }
 
-                                    @if(model.IsLicenseVisible())
+                                   @* @if(model.IsLicenseVisible())
                                     {                                    
                                         <li><a href="@Url.Action("Index", "Products", new { area = "Licenses" })">
                                             <img src="@Url.Content("~/Content/icons/Licens.png")" alt="license" />
                                             @Translation.Get("Licenshantering")</a></li>
-                                    }
+                                    }*@
                                     <li></li>
                                 </ul>
                             </li>                            
                         }
-                        *@
+                        
 
                         <li class="light-blue">
                             <a data-toggle="dropdown" href="#" class="dropdown-toggle">

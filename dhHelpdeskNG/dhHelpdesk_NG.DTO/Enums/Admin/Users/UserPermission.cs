@@ -21,6 +21,7 @@
         AdministerOrderPermission,
         CreateSubCasePermission,
         DocumentPermission,
-        BulletinBoardPermission
+        BulletinBoardPermission,
+        InventoryPermission
     }
 }

@@ -132,6 +132,11 @@
                 permissions.Add(UserPermission.DocumentPermission);
             }
 
+            if (user.InventoryPermission.ToBool())
+            {
+                permissions.Add(UserPermission.InventoryPermission);
+            }
+
             return permissions;
         }
 

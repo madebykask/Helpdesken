@@ -67,7 +67,8 @@ $(function () {
         dailyReportPermission: 'dailyReportPermission',
         bulletinBoardPermission: 'bulletinBoardPermission',
         invoicePermission: 'invoicePermission',
-        documentPermission: 'documentPermission'
+        documentPermission: 'documentPermission',
+        inventoryPermission: 'inventoryPermission'
     }
 
     dhHelpdesk.admin.users.object = function (spec, my) {
@@ -155,6 +156,7 @@ $(function () {
         var bulletinBoardPermissions = spec.bulletinBoardPermissions || [];
         var invoicePermissions = spec.invoicePermissions || [];
         var documentPermissions = spec.documentPermissions || [];
+        var inventoryPermissions = spec.inventoryPermissions || [];
 
         /**
         * @param { fn } walk
@@ -170,7 +172,8 @@ $(function () {
                             dailyReportPermissions,
                             bulletinBoardPermissions,
                             invoicePermissions,
-                            documentPermissions];
+                            documentPermissions,
+                            inventoryPermissions];
 
             for (var i = 0; i < allPermissions.length; i++) {
                 var permissions = allPermissions[i];
@@ -315,6 +318,10 @@ $(function () {
             return documentPermissions;
         }
 
+        var getInventoryPermissions = function () {
+            return inventoryPermissions;
+        }
+
         that.getUserGroup = getUserGroup;
         that.setUserGroup = setUserGroup;
         that.getCasePermissions = getCasePermissions;
@@ -327,6 +334,7 @@ $(function () {
         that.getBulletinBoardPermissions = getBulletinBoardPermissions;
         that.getInvoicePermissions = getInvoicePermissions;
         that.getDocumentPermissions = getDocumentPermissions;
+        that.getInventoryPermissions = getInventoryPermissions;
 
         var uge = my.element.find('[data-field="userGroup"]');
         var onChangeUserGroup = function (setPermissions) {
@@ -520,6 +528,9 @@ $(function () {
         var documentPermissions = [];
         documentPermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="documentPermission"]'), type: dhHelpdesk.admin.users.permissionType.documentPermission }));
 
+        var inventoryPermissions = [];
+        inventoryPermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="inventoryPermission"]'), type: dhHelpdesk.admin.users.permissionType.inventoryPermission }));
+
         var security = dhHelpdesk.admin.users.security({
             element: $('[data-user="security"]'),
             casePermissions: casePermissions,
@@ -531,7 +542,8 @@ $(function () {
             dailyReportPermissions: dailyReportPermissions,
             bulletinBoardPermissions: bulletinBoardPermissions,
             invoicePermissions: invoicePermissions,
-            documentPermissions: documentPermissions
+            documentPermissions: documentPermissions,
+            inventoryPermissions: inventoryPermissions
         });
 
         var wGs = [];
