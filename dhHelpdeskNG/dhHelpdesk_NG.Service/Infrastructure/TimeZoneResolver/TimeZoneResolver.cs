@@ -11,13 +11,15 @@
         {
             Jan1TimeZoneOffset = -Jan1TimeZoneOffset;
             Jul1TimeZoneOffset = -Jul1TimeZoneOffset;
-            
+
+            var baseCompareOffset = Jan1TimeZoneOffset < Jul1TimeZoneOffset ? Jan1TimeZoneOffset : Jul1TimeZoneOffset;
+
             if (Jan1TimeZoneOffset == Jul1TimeZoneOffset)
             {
                 /// no daylightsaving
                 detectedTimeZones =
                     TimeZoneInfo.GetSystemTimeZones()
-                        .Where(tz => tz.BaseUtcOffset.TotalMinutes == Jan1TimeZoneOffset)
+                        .Where(tz => tz.BaseUtcOffset.TotalMinutes == baseCompareOffset)
                         .ToArray();
             }
             else
@@ -26,7 +28,7 @@
                     TimeZoneInfo.GetSystemTimeZones()
                         .Where(
                             tz =>
-                            tz.BaseUtcOffset.TotalMinutes == Jan1TimeZoneOffset && tz.SupportsDaylightSavingTime)
+                            tz.BaseUtcOffset.TotalMinutes == baseCompareOffset && tz.SupportsDaylightSavingTime)
                         .ToArray();
             }
 
