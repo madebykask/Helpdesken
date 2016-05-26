@@ -47,6 +47,8 @@
 
         public ComputerFieldsSettingsOverviewForFilter Settings { get; private set; }
 
+        public bool UserHasInventoryAdminPermission { get; set; }
+
         public static WorkstationSearchViewModel BuildViewModel(
             WorkstationsSearchFilter currentFilter,
             List<ItemOverview> regionsItemOverviews,

@@ -7,10 +7,12 @@
 @section Actions
 {
     <ul class="secnav">
-        <li>
-            @Html.ActionLink(Translation.Get("Lägg till"), "NewCustomInventoryType", "InventorySettings", new { }, new { @class = "btn", id = "new_custom_inventory_type_button" })
-        </li>
-
+        @if (Model.UserHasInventoryAdminPermission)
+        {
+            <li>
+                @Html.ActionLink(Translation.Get("Lägg till"), "NewCustomInventoryType", "InventorySettings", new { }, new { @class = "btn", id = "new_custom_inventory_type_button" })
+            </li>
+        }
     </ul>
 }
 

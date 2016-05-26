@@ -28,6 +28,9 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
     using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory;
+    using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Users;
+    using DH.Helpdesk.BusinessData.Enums.Admin.Users;
 
     public class WorkstationController : InventoryBaseController
     {
@@ -41,6 +44,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 
         private readonly IComputerBuilder computerBuilder;
 
+        private readonly IUserPermissionsChecker _userPermissionsChecker;
+
         public WorkstationController(
             IMasterDataService masterDataService,
             IInventoryService inventoryService,
@@ -51,6 +56,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             IComputerViewModelBuilder computerViewModelBuilder,
             IComputerBuilder computerBuilder,
             IExportFileNameFormatter exportFileNameFormatter,
+            IUserPermissionsChecker userPermissionsChecker,
             IExcelFileComposer excelFileComposer)
             : base(masterDataService, exportFileNameFormatter, excelFileComposer, organizationService, placeService)
         {
@@ -59,6 +65,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             this.computerModulesService = computerModulesService;
             this.computerViewModelBuilder = computerViewModelBuilder;
             this.computerBuilder = computerBuilder;
+            this._userPermissionsChecker = userPermissionsChecker;
         }
 
         [HttpGet]
@@ -87,6 +94,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                     SessionFacade.CurrentCustomer.Id,
                     SessionFacade.CurrentLanguageId);
 
+            var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
+
             WorkstationSearchViewModel viewModel = WorkstationSearchViewModel.BuildViewModel(
                 currentFilter,
                 regions,
@@ -95,6 +104,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                 settings,
                 (int)CurrentModes.Workstations,
                 inventoryTypes);
+
+            viewModel.UserHasInventoryAdminPermission = userHasInventoryAdminPermission;
 
             return this.View(viewModel);
         }
@@ -114,6 +125,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         [HttpGet]
         public ViewResult Edit(int id)
         {
+            var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
+
             ComputerForRead model = this.inventoryService.GetWorkstation(id);
             ComputerEditOptions options = this.GetWorkstationEditOptions(SessionFacade.CurrentCustomer.Id);
             ComputerFieldsSettingsForModelEdit settings =
@@ -124,6 +137,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             ComputerViewModel computerEditModel = this.computerViewModelBuilder.BuildViewModel(model, options, settings);
 
             var viewModel = new ComputerEditViewModel(id, computerEditModel);
+
+            viewModel.UserHasInventoryAdminPermission = userHasInventoryAdminPermission;
 
             return this.View(viewModel);
         }
@@ -208,9 +223,12 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         [HttpGet]
         public ViewResult ComputerLogs(int computerId)
         {
+            var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
+
             List<ComputerLogOverview> models = this.inventoryService.GetWorkstationLogOverviews(computerId);
 
             var viewModel = new LogsViewModel(computerId, models);
+            viewModel.UserHasInventoryAdminPermission = userHasInventoryAdminPermission;
 
             return this.View(viewModel);
         }

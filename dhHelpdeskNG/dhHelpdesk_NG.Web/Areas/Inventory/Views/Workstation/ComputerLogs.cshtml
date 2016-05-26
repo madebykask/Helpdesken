@@ -4,10 +4,12 @@
     Layout = "~/Areas/Inventory/Views/Workstation/_EditWorkstationLayout.cshtml";
 }
 
-
-@using (Html.BeginForm("NewComputerLog", "Workstation", FormMethod.Post, new { id = "log_edit_form" }))
+@if (Model.UserHasInventoryAdminPermission)
 {
-    @Html.EditorFor(x => Model.ComputerLogModel)
-    <input type="submit" value="@Translation.Get("Lägg till")" class="btn"/>
+    using (Html.BeginForm("NewComputerLog", "Workstation", FormMethod.Post, new { id = "log_edit_form" }))
+    {
+        @Html.EditorFor(x => Model.ComputerLogModel)
+        <input type="submit" value="@Translation.Get("Lägg till")" class="btn"/>
+    }
 }
 @Html.Partial("LogGrid", Model.ComputerLogs)
