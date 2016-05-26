@@ -86,12 +86,12 @@ namespace DH.Helpdesk.Services.Services
             string defaultUser = "",
             ExtraFieldCaseHistory extraField = null);
 
-        void SendCaseEmail(int caseId, CaseMailSetting cms, int caseHistoryId, string basePath,
+        void SendCaseEmail(int caseId, CaseMailSetting cms, int caseHistoryId, string basePath, TimeZoneInfo userTimeZone,                            
                            Case oldCase = null, CaseLog log = null, List<CaseFileDto> logFiles = null);
         void UpdateFollowUpDate(int caseId, DateTime? time);
         void MarkAsUnread(int caseId);
         void MarkAsRead(int caseId);
-        void SendSelfServiceCaseLogEmail(int caseId, CaseMailSetting cms, int caseHistoryId, CaseLog log, string basePath, List<CaseFileDto> logFiles = null);
+        void SendSelfServiceCaseLogEmail(int caseId, CaseMailSetting cms, int caseHistoryId, CaseLog log, string basePath, TimeZoneInfo userTimeZone, List<CaseFileDto> logFiles = null);
         void Activate(int caseId, int userId, string adUser, out IDictionary<string, string> errors);
         IList<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, UserOverview user);
         void Commit();
@@ -826,14 +826,14 @@ namespace DH.Helpdesk.Services.Services
             SaveCaseHistory(c, userId, adUser, out errors);  
         }
 
-        public void SendSelfServiceCaseLogEmail(int caseId, CaseMailSetting cms, int caseHistoryId, CaseLog log, string basePath, List<CaseFileDto> logFiles = null)
+        public void SendSelfServiceCaseLogEmail(int caseId, CaseMailSetting cms, int caseHistoryId, CaseLog log, string basePath, TimeZoneInfo userTimeZone, List<CaseFileDto> logFiles = null)
         {
             if (_emailService.IsValidEmail(cms.HelpdeskMailFromAdress))
             {
                 // get new case information
-                var newCase = _caseRepository.GetDetachedCaseById(caseId);                
+                var newCase = _caseRepository.GetDetachedCaseById(caseId);
 
-                List<Field> fields = GetCaseFieldsForEmail(newCase, log, cms, string.Empty, 99);
+                List<Field> fields = GetCaseFieldsForEmail(newCase, log, cms, string.Empty, 99, userTimeZone);
 
                 //get sender email adress
                 string helpdeskMailFromAdress = cms.HelpdeskMailFromAdress;
@@ -1156,6 +1156,7 @@ namespace DH.Helpdesk.Services.Services
             CaseMailSetting cms, 
             int caseHistoryId, 
             string basePath, 
+            TimeZoneInfo userTimeZone, 
             Case oldCase = null, 
             CaseLog log = null, 
             List<CaseFileDto> logFiles = null)
@@ -1183,7 +1184,7 @@ namespace DH.Helpdesk.Services.Services
             var isClosingCase = newCase.FinishingDate != null;
 
             // get list of fields to replace [#1] tags in the subjcet and body texts
-            List<Field> fields = GetCaseFieldsForEmail(newCase, log, cms, string.Empty , 0);
+            List<Field> fields = GetCaseFieldsForEmail(newCase, log, cms, string.Empty, 0, userTimeZone);
             
 
             // if logfiles should be attached to the mail 
@@ -1228,7 +1229,7 @@ namespace DH.Helpdesk.Services.Services
                                 if (!string.IsNullOrWhiteSpace(curMail) && _emailService.IsValidEmail(curMail))
                                 {
                                     var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(customEmailSender1));                                    
-                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 1);
+                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 1, userTimeZone);
 
 
                                     string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
@@ -1298,7 +1299,7 @@ namespace DH.Helpdesk.Services.Services
                             for (int i = 0; i < to.Length; i++)
                             {
                                 var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(customEmailSender1));                                
-                                fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 2);
+                                fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 2, userTimeZone);
                                 var e_res = _emailService.SendEmail(customEmailSender1, el.EmailAddress, m.Subject, m.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, files);
                                 el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                                 var now = DateTime.Now;
@@ -1337,7 +1338,7 @@ namespace DH.Helpdesk.Services.Services
                                         if (!string.IsNullOrWhiteSpace(curMail) && _emailService.IsValidEmail(curMail))
                                         {
                                             var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(customEmailSender1));                                            
-                                            fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 1);
+                                            fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 1, userTimeZone);
 
                                             string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
                                             string urlSelfService;
@@ -1447,7 +1448,7 @@ namespace DH.Helpdesk.Services.Services
                                         if (!string.IsNullOrWhiteSpace(curMail) && _emailService.IsValidEmail(curMail))
                                         {
                                             var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(customEmailSender1));                                            
-                                            fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 1);
+                                            fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 1, userTimeZone);
 
                                             string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
                                             string urlSelfService;
@@ -1523,7 +1524,7 @@ namespace DH.Helpdesk.Services.Services
             {
                 if (newCase.Administrator.AllocateCaseMail == 1 && this._emailService.IsValidEmail(newCase.Administrator.Email))
                 {
-                    this.SendTemplateEmail(GlobalEnums.MailTemplates.AssignedCaseToUser, newCase, log, caseHistoryId, cms, newCase.Administrator.Email);
+                    this.SendTemplateEmail(GlobalEnums.MailTemplates.AssignedCaseToUser, newCase, log, caseHistoryId, cms, newCase.Administrator.Email, userTimeZone);
                 }
 
                 // send sms to tblCase.Performer_User_Id 
@@ -1537,7 +1538,7 @@ namespace DH.Helpdesk.Services.Services
                         {
                             var smsTo = GetSmsRecipient(customerSetting, newCase.Administrator.CellPhone);
                             var el = new EmailLog(caseHistoryId, mailTemplateId, smsTo, _emailService.GetMailMessageId(helpdeskMailFromAdress));                            
-                            fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 4);
+                            fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 4, userTimeZone);
 
                             string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
                             string urlSelfService;
@@ -1616,7 +1617,7 @@ namespace DH.Helpdesk.Services.Services
                                 if (!String.IsNullOrEmpty(m.Body) && !String.IsNullOrEmpty(m.Subject))
                                 {
                                     var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.Priority.EMailList, _emailService.GetMailMessageId(helpdeskMailFromAdress));                                    
-                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 5);
+                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 5, userTimeZone);
 
                                     string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
                                     string urlSelfService;
@@ -1706,7 +1707,7 @@ namespace DH.Helpdesk.Services.Services
                                 wgEmails,
                                 _emailService.GetMailMessageId(helpdeskMailFromAdress));
                             
-                            fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 6);
+                            fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 6, userTimeZone);
 
                             string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
                             string urlSelfService;
@@ -1800,7 +1801,7 @@ namespace DH.Helpdesk.Services.Services
                                 if (!String.IsNullOrEmpty(m.Body) && !String.IsNullOrEmpty(m.Subject))
                                 {
                                     var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(helpdeskMailFromAdress));                                    
-                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 7);
+                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 7, userTimeZone);
                                     var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, EmailResponse.GetEmptyEmailResponse(), el.MessageId, false, files);
                                     el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                                     var now = DateTime.Now;
@@ -1843,7 +1844,7 @@ namespace DH.Helpdesk.Services.Services
                                 if (_emailService.IsValidEmail(to[i]))
                                 {
                                     var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(customEmailSender2));                                    
-                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 8);
+                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 8, userTimeZone);
 
                                     string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
                                     string urlSelfService;
@@ -1915,7 +1916,7 @@ namespace DH.Helpdesk.Services.Services
                                 {
 
                                     var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(customEmailSender2));                                    
-                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 9);
+                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 9, userTimeZone);
 
                                     string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
                                     string urlSelfService;
@@ -1989,7 +1990,7 @@ namespace DH.Helpdesk.Services.Services
                                 {
                                     var smsTo = GetSmsRecipient(customerSetting, newCase.PersonsCellphone);
                                     var el = new EmailLog(caseHistoryId, mailTemplateId, smsTo, _emailService.GetMailMessageId(helpdeskMailFromAdress));                                    
-                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 10);
+                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 10, userTimeZone);
 
                                     string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
                                     string urlSelfService;
@@ -2109,7 +2110,8 @@ namespace DH.Helpdesk.Services.Services
             CaseLog log,
             int caseHistoryId,
             CaseMailSetting cms,
-            string recipient)
+            string recipient,
+            TimeZoneInfo userTimeZone)
         {
             var mailTemplateId = (int)mailTemplateEnum;
             var m = this._mailTemplateService.GetMailTemplateForCustomerAndLanguage(case_.Customer_Id, case_.RegLanguage_Id, mailTemplateId);
@@ -2121,7 +2123,7 @@ namespace DH.Helpdesk.Services.Services
                     recipient, 
                     this._emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
                 
-                var fields = this.GetCaseFieldsForEmail(case_, log, cms, el.EmailLogGUID.ToString(), 3);
+                var fields = this.GetCaseFieldsForEmail(case_, log, cms, el.EmailLogGUID.ToString(), 3, userTimeZone);
 
                 string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
                 string urlSelfService;
@@ -2330,11 +2332,10 @@ namespace DH.Helpdesk.Services.Services
 
         
 
-        private List<Field> GetCaseFieldsForEmail(Case c, CaseLog l, CaseMailSetting cms, string emailLogGuid,int stateHelper)
+        private List<Field> GetCaseFieldsForEmail(Case c, CaseLog l, CaseMailSetting cms, string emailLogGuid,int stateHelper, TimeZoneInfo userTimeZone)
         {
             List<Field> ret = new List<Field>();
-
-            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(c.User.TimeZoneId);
+            
             var userLocal_RegTime = TimeZoneInfo.ConvertTimeFromUtc(c.RegTime, userTimeZone);
 
             ret.Add(new Field { Key = "[#1]", StringValue = c.CaseNumber.ToString() } );

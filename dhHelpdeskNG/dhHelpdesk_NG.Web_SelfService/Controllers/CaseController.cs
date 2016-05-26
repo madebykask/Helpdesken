@@ -689,8 +689,8 @@
                 var newLogFiles = temporaryLogFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseLog.Id)).ToList();
                 this._logFileService.AddFiles(newLogFiles);
                 // send emails
-               
-                this._caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, basePath, newLogFiles);
+                var userTimeZone = TimeZoneInfo.Local;
+                this._caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, basePath, userTimeZone, newLogFiles);
                 this._userTemporaryFilesStorage.DeleteFiles(logFileGuid);
             }
             else
@@ -827,7 +827,8 @@
             this._userTemporaryFilesStorage.DeleteFiles(caseFileKey);
             var oldCase = new Case();            
             // send emails
-            this._caseService.SendCaseEmail(newCase.Id, caseMailSetting, caseHistoryId, basePath, oldCase);
+            var userTimeZone = TimeZoneInfo.Local;
+            this._caseService.SendCaseEmail(newCase.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase);
 
             return newCase.Id;
         }

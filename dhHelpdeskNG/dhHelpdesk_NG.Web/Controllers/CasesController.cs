@@ -2502,17 +2502,7 @@ namespace DH.Helpdesk.Web.Controllers
             bool edit = case_.Id != 0;
             var isItChildCase = m.ParentId.HasValue;
             Case parentCase = null;
-
-            
-             if (case_.User == null && case_.User_Id.HasValue)
-                case_.User = _userService.GetUser(case_.User_Id.Value);
-
-            if (case_.User == null)
-                case_.User = _userService.GetUser(SessionFacade.CurrentUser.Id);
-
-            if (string.IsNullOrEmpty(case_.User.TimeZoneId))
-                case_.User.TimeZoneId = SessionFacade.CurrentUser.TimeZoneId;         
-
+            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);          
 
             if (isItChildCase)
             {
@@ -2787,7 +2777,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             caseMailSetting.CustomeMailFromAddress = mailSenders;
             // send emails
-            this._caseService.SendCaseEmail(case_.Id, caseMailSetting, caseHistoryId, basePath, oldCase, caseLog, newLogFiles);
+            this._caseService.SendCaseEmail(case_.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase, caseLog, newLogFiles);
 
             //Unlock Case            
             if (m.caseLock != null && !string.IsNullOrEmpty(m.caseLock.LockGUID))
