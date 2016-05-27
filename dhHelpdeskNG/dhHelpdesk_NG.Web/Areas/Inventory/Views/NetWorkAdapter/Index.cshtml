@@ -7,8 +7,11 @@
 @section Actions
 {
     <ul class="secnav">
-        <li>
-            @Html.ActionLink(Translation.Get("Lägg till Nätverkskort"), "New", "NetWorkAdapter", new { @class = "btn" })
-        </li>
+        @if (Model.UserHasInventoryAdminPermission)
+        {
+            <li>
+                @Html.ActionLink(Translation.Get("Lägg till Nätverkskort"), "New", "NetWorkAdapter", new { @class = "btn" })
+            </li>
+        }
     </ul>
 }

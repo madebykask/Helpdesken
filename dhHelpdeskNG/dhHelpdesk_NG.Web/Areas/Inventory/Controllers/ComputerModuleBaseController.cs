@@ -10,15 +10,25 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Inventory.Models.EditModel;
     using DH.Helpdesk.Web.Controllers;
+    using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
+    using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Users;
+    using DH.Helpdesk.BusinessData.Enums.Admin.Users;
 
     public abstract class ComputerModuleBaseController : UserInteractionController
     {
         protected readonly IComputerModulesService ComputerModulesService;
+        private readonly IUserPermissionsChecker _userPermissionsChecker;
 
-        protected ComputerModuleBaseController(IMasterDataService masterDataService, IComputerModulesService computerModulesService)
+        protected ComputerModuleBaseController(
+                  IMasterDataService masterDataService, 
+                  IComputerModulesService computerModulesService,
+                  IUserPermissionsChecker userPermissionChecker
+            )
             : base(masterDataService)
         {
             this.ComputerModulesService = computerModulesService;
+            this._userPermissionsChecker = userPermissionChecker;
         }
 
         public abstract ModuleTypes ModuleType { get; }
@@ -28,7 +38,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         {
             List<ItemOverview> items = this.Get().OrderBy(x => x.Name).ToList();
 
-            var viewModel = new ComputerModuleGridModel(items, this.ModuleType);
+            var inventoryPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
+            var viewModel = new ComputerModuleGridModel(items, this.ModuleType, inventoryPermission);
 
             return this.View(viewModel);
         }
@@ -36,7 +47,9 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         [HttpGet]
         public ViewResult Edit(int id, string name)
         {
+            var inventoryPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
             var viewModel = new ComputerModuleEditModel(id, name);
+            viewModel.UserHasInventoryAdminPermission = inventoryPermission;
 
             return this.View(viewModel);
         }
