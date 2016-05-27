@@ -30,6 +30,8 @@
 
         public PrinterFieldsSettingsOverviewForFilter Settings { get; private set; }
 
+        public bool UserHasInventoryAdminPermission { get; set; }
+
         public static PrinterSearchViewModel BuildViewModel(
             PrinterSearchFilter currentFilter,
             List<ItemOverview> departments,

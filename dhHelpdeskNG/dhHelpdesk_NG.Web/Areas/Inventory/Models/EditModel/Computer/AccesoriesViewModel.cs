@@ -37,6 +37,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Computer
         [NotNull]
         public List<InventoryGridModel> InventoryGridModels { get; private set; }
 
+        public bool UserHasInventoryAdminPermission { get; set; }
+
         public override WorkstationEditTabs Tab
         {
             get

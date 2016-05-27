@@ -22,6 +22,9 @@
     using DH.Helpdesk.Web.Infrastructure.ActionFilters;
     using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory;
+    using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Users;
+    using DH.Helpdesk.BusinessData.Enums.Admin.Users;
 
     public class CustomInventoryController : InventoryBaseController
     {
@@ -37,6 +40,8 @@
 
         private readonly IInventoryValueBuilder inventoryValueBuilder;
 
+        private readonly IUserPermissionsChecker _userPermissionsChecker;
+
         public CustomInventoryController(
             IMasterDataService masterDataService,
             IExportFileNameFormatter exportFileNameFormatter,
@@ -48,7 +53,8 @@
             IInventoryViewModelBuilder inventoryViewModelBuilder,
             IDynamicsFieldsModelBuilder dynamicsFieldsModelBuilder,
             IInventoryModelBuilder inventoryModelBuilder,
-            IInventoryValueBuilder inventoryValueBuilder)
+            IInventoryValueBuilder inventoryValueBuilder,
+            IUserPermissionsChecker userPermissionsChecker)
             : base(masterDataService, exportFileNameFormatter, excelFileComposer, organizationService, placeService)
         {
             this.inventorySettingsService = inventorySettingsService;
@@ -57,6 +63,7 @@
             this.dynamicsFieldsModelBuilder = dynamicsFieldsModelBuilder;
             this.inventoryModelBuilder = inventoryModelBuilder;
             this.inventoryValueBuilder = inventoryValueBuilder;
+            this._userPermissionsChecker = userPermissionsChecker;
         }
 
         [HttpGet]
@@ -75,6 +82,8 @@
             InventoryFieldsSettingsOverviewForFilter settings =
                 this.inventorySettingsService.GetInventoryFieldSettingsOverviewForFilter(inventoryTypeId);
 
+            var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
+
             InventorySearchViewModel viewModel = InventorySearchViewModel.BuildViewModel(
                 currentFilter,
                 departments,
@@ -82,6 +91,8 @@
                 inventoryTypeId,
                 inventoryTypeId,
                 inventoryTypes);
+
+            viewModel.UserHasInventoryAdminPermission = userHasInventoryAdminPermission;
 
             return this.View(viewModel);
         }
@@ -182,7 +193,10 @@
                 id);
             inventoryViewModel.Name = model.Inventory.InventoryTypeName;
 
+            var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
+
             var viewModel = new InventoryEditViewModel(inventoryViewModel, dynamicFieldsModel, typeGroupModels);
+            viewModel.UserHasInventoryAdminPermission = userHasInventoryAdminPermission;
 
             return this.View(viewModel);
         }

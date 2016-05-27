@@ -22,6 +22,9 @@
     using DH.Helpdesk.Web.Infrastructure.ActionFilters;
     using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory;
+    using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Users;
+    using DH.Helpdesk.BusinessData.Enums.Admin.Users;
 
     public class PrinterController : InventoryBaseController
     {
@@ -33,6 +36,8 @@
 
         private readonly IInventorySettingsService inventorySettingsService;
 
+        private readonly IUserPermissionsChecker _userPermissionsChecker;
+
         public PrinterController(
             IMasterDataService masterDataService,
             IExportFileNameFormatter exportFileNameFormatter,
@@ -42,6 +47,7 @@
             IInventoryService inventoryService,
             IPrinterViewModelBuilder printerViewModelBuilder,
             IPrinterBuilder printerBuilder,
+            IUserPermissionsChecker userPermissionsChecker,
             IInventorySettingsService inventorySettingsService)
             : base(masterDataService, exportFileNameFormatter, excelFileComposer, organizationService, placeService)
         {
@@ -49,6 +55,7 @@
             this.printerViewModelBuilder = printerViewModelBuilder;
             this.printerBuilder = printerBuilder;
             this.inventorySettingsService = inventorySettingsService;
+            this._userPermissionsChecker = userPermissionsChecker;
         }
 
         [HttpGet]
@@ -69,12 +76,16 @@
                     SessionFacade.CurrentCustomer.Id,
                     SessionFacade.CurrentLanguageId);
 
+            var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
+
             PrinterSearchViewModel viewModel = PrinterSearchViewModel.BuildViewModel(
                 currentFilter,
                 departments,
                 settings,
                 (int)CurrentModes.Printers,
                 inventoryTypes);
+
+            viewModel.UserHasInventoryAdminPermission = userHasInventoryAdminPermission;
 
             return this.PartialView(viewModel);
         }
@@ -101,7 +112,11 @@
                     SessionFacade.CurrentCustomer.Id,
                     SessionFacade.CurrentLanguageId);
 
+            var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
+
             PrinterViewModel printerEditModel = this.printerViewModelBuilder.BuildViewModel(model, options, settings);
+            printerEditModel.UserHasInventoryAdminPermission = userHasInventoryAdminPermission;
+
 
             return this.View("Edit", printerEditModel);
         }

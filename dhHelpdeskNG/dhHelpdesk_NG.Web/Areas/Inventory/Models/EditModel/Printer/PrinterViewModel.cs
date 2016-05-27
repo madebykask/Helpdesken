@@ -59,5 +59,7 @@
 
         [NotNull]
         public StateFieldsModel StateFieldsModel { get; set; }
+
+        public bool UserHasInventoryAdminPermission { get; set; }
     }
 }

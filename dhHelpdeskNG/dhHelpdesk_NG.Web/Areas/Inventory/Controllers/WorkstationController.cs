@@ -270,12 +270,16 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                                                      computerId)
                                                  : new List<ItemOverview>();
 
+            var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
+
             AccesoriesViewModel viewModel = AccesoriesViewModel.BuildViewModel(
                 computerId,
                 selected,
                 inventoryTypes,
                 inventories,
                 inventoryGridModels);
+
+            viewModel.UserHasInventoryAdminPermission = userHasInventoryAdminPermission;
 
             return this.View(viewModel);
         }

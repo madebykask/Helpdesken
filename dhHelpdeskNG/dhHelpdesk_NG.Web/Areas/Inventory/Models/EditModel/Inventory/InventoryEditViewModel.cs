@@ -29,5 +29,7 @@
 
         [NotNull]
         public List<TypeGroupModel> TypeGroupModels { get; set; }
+
+        public bool UserHasInventoryAdminPermission { get; set; }
     }
 }

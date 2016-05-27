@@ -11,6 +11,7 @@
         }
 
         public ServerViewModel ServerViewModel { get; set; }
+        public bool UserHasInventoryAdminPermission { get; set; }
 
         public override ServerEditTabs Tab
         {

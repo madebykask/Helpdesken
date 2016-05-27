@@ -15,5 +15,7 @@
         }
     </ul>
 }
-
-@Html.Partial("InventoryTypesGrid", Model.InventoryTypes)
+@{ var extraData = new ViewDataDictionary();
+   extraData.Add(new KeyValuePair<string,object>("InventoryAdminPermission", Model.UserHasInventoryAdminPermission));  
+ }
+@Html.Partial("InventoryTypesGrid", Model.InventoryTypes, extraData)

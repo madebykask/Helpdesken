@@ -7,10 +7,14 @@
 @section Actions
 {
     <ul class="secnav">
-        <li id="menu1">
-            <input type="submit" value="@Translation.Get("Spara")" class="btn" onclick=" $('#inventory_edit_form').submit(); "/>
-        </li>
-        <li id="menu3">@Html.ActionLink(Translation.Get("Ta bort"), "Delete", new { inventoryTypeId = Model.InventoryViewModel.InventoryTypeId, id = Model.InventoryViewModel.Id }, new { @class = "btn" })</li>
+        @if (Model.UserHasInventoryAdminPermission)
+        {
+            <li id="menu1">
+                <input type="submit" value="@Translation.Get("Spara")" class="btn" onclick=" $('#inventory_edit_form').submit(); "/>
+            </li>
+            <li id="menu3">@Html.ActionLink(Translation.Get("Ta bort"), "Delete", new { inventoryTypeId = Model.InventoryViewModel.InventoryTypeId, id = Model.InventoryViewModel.Id }, new { @class = "btn" })</li>
+        }
+        
         <li id="menu2">@Html.ActionLink(Translation.Get("Avbryt"), "Index", new { inventoryTypeId = Model.InventoryViewModel.InventoryTypeId }, new { @class = "btn" })</li>
     </ul>
 }
