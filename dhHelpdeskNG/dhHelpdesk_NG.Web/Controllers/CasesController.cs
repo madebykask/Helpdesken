@@ -4207,7 +4207,7 @@ namespace DH.Helpdesk.Web.Controllers
             m.CaseTemplateTreeButton = this.GetCaseTemplateTreeModel(customerId, userId);
 
             m.CasePrintView = new ReportModel(false);
-            m.ChangeTime = case_.ChangeTime;
+           
             return m;
         }
 
