@@ -71,5 +71,12 @@ Go
 update tblUsers set timezoneid = 'W. Europe Standard Time' where timezoneid is null;
 go
 
+
+insert into tblCustomerUser(user_id, customer_id)
+
+Select id, customer_id from tblUsers
+Where status = 0 and id not in (select user_id from tblCustomerUser)
+order by id
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.23'
