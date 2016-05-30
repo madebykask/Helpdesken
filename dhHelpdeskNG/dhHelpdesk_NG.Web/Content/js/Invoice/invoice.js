@@ -1508,9 +1508,15 @@ $(function () {
             var caseNumber = $("#case__CaseNumber").val();
 
             th._container.dialog({
+<<<<<<< HEAD
                 title: dhHelpdesk.Common.Translate("Artiklar att skickat") + "  (" +
                        dhHelpdesk.Common.Translate("Ärende") + " " + caseNumber + " - " +
                        dhHelpdesk.Common.Translate("Projekt") + " " + projectCode + ")",
+=======
+                title: dhHelpdesk.Common.Translate("Order") + "  (" +
+                       dhHelpdesk.Common.Translate("Ärende") + " "+ caseNumber +  " / " + 
+                       dhHelpdesk.Common.Translate("Projekt") + " "+ projectCode + ")",
+>>>>>>> [UPD] total invoice
                 modal: true,
                 width: 1100,
                 autoResize: true,
@@ -3326,10 +3332,17 @@ $(function () {
             this.AddButtonLabel = dhHelpdesk.Common.Translate("Lägg till");
             this.OrderTitle = dhHelpdesk.Common.Translate("Order");
             this.SummaryTitle = dhHelpdesk.Common.Translate("Översikt");
+<<<<<<< HEAD
             this.TotalLabel = dhHelpdesk.Common.Translate("Total");
             this.TotalAllLabel = dhHelpdesk.Common.Translate("Totalt alla");
             this.TotalInvoicedLabel = dhHelpdesk.Common.Translate("Totalt skickat");
             this.TotalNotInvoicedLabel = dhHelpdesk.Common.Translate("Totalt ej skickat");
+=======
+            this.TotalLabel = dhHelpdesk.Common.Translate("Total");            
+            this.TotalAllLabel = dhHelpdesk.Common.Translate("Alla Totalt");
+            this.TotalInvoicedLabel = dhHelpdesk.Common.Translate("Skickat Totalt");
+            this.TotalNotInvoicedLabel = dhHelpdesk.Common.Translate("Ej skickat Totalt");
+>>>>>>> [UPD] total invoice
             this.Total = null;
             this.TotalInvoiced = null;
             this.TotalNotInvoiced = null;
