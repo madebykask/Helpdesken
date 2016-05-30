@@ -876,12 +876,20 @@
                                             </td>
                                             <td></td>
                                         </tr>                                        
-                                        <tr class="displaytr">
+                                        <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.RegTime.ToString())">
                                             <td>
                                                 @Translation.Get("Registreringsdatum")
                                             </td>
                                             <td colspan="2">
                                                 @Html.DisplayFor(m => m.RegTime, "DateAndTime")
+                                            </td>
+                                        </tr>
+                                        <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.ChangeTime.ToString())">
+                                            <td>
+                                                @Translation.Get("Ändringsdatum")
+                                            </td>
+                                            <td colspan="2">
+                                                @Html.DisplayFor(m => m.ChangeTime, "DateAndTime")
                                             </td>
                                         </tr>                                             
                                         <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.User_Id.ToString())">
