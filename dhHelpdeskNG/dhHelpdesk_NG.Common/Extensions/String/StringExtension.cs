@@ -273,7 +273,7 @@ namespace DH.Helpdesk.Common.Extensions.String
             return value.Replace(" ", string.Empty).ToLower();
         }
 
-        public static string RoundDecimal(this string value, string decimalSeparator, int floatingDigitsCount)
+        public static string RoundDecimal(this string value, string decimalSeparator, int floatingDigitsCount, string outputDecimalSeperator)
         {            
             if (!value.Contains(decimalSeparator) || decimalSeparator == string.Empty)
             {
@@ -282,6 +282,9 @@ namespace DH.Helpdesk.Common.Extensions.String
                 else
                     decimalSeparator = ".";
             }
+
+            if (string.IsNullOrEmpty(outputDecimalSeperator))
+                outputDecimalSeperator = decimalSeparator;
 
             var splited = value.Split(decimalSeparator);
             if (splited.Length > 0)
@@ -298,7 +301,7 @@ namespace DH.Helpdesk.Common.Extensions.String
                 }
 
                 if (!string.IsNullOrEmpty(floatingPart))
-                    return string.Format("{0}{1}{2}", fixPart, decimalSeparator, floatingPart);
+                    return string.Format("{0}{1}{2}", fixPart, outputDecimalSeperator, floatingPart);
                 else
                     return fixPart;
             }

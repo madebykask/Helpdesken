@@ -836,7 +836,7 @@ function CaseInitForm() {
                     up.refresh();
 
                     // Raise event about uploaded file
-                    //$(document).trigger("OnUploadCaseFile", [up, file]);
+                    $(document).trigger("OnUploadCaseFile", [up, file]);
                 }
             },
             init: {
@@ -911,7 +911,7 @@ function CaseInitForm() {
                     $(".plupload_upload_status").css("display", "inline");
                     up.refresh();
 
-                    //$(document).trigger("OnUploadLogFile", [up, file]);
+                    $(document).trigger("OnUploadLogFile", [up, file]);
                 }
             },
             init: {

@@ -339,9 +339,9 @@
                         LineType = InvoiceXMLLineType.Article,
                         Number = article.Article != null ? article.Article.Number : string.Empty,
                         Description = null,
-                        Quantity = amountStr.RoundDecimal(detectedDecimalSep, 2),
+                        Quantity = amountStr.RoundDecimal(detectedDecimalSep, 2, "."),
                         UnitOfMeasureCode = (article.Article != null && article.Article.Unit != null ? article.Article.Unit.Name : string.Empty),
-                        UnitPrice = ppuStr.RoundDecimal(detectedDecimalSep, 2)
+                        UnitPrice = ppuStr.RoundDecimal(detectedDecimalSep, 2, ".")
                     });
                 }
                 else
