@@ -1493,30 +1493,28 @@ $(function () {
                 markInvoiceButton = true;
             }
 
-            var projectCode = "";
+            var projectCode = "-";
             if ($('#case__Project_Id') != undefined && $('#case__Project_Id') != null) {
                 var projectName = $('#case__Project_Id option:selected').text();
-                if (projectName != undefined && !dhHelpdesk.Common.IsNullOrEmpty(projectName)) {
-                    var splited = projectName.split(' ');
-                    if (splited.length > 0)
-                        projectCode = splited[0];
-                    else
-                        projectCode = projectName;
-                }
-            }
-
+                if (projectName != " ")
+                    if (projectName != undefined && !dhHelpdesk.Common.IsNullOrEmpty(projectName)) {
+                        var splited = projectName.split(' ');
+                        if (splited.length > 0)
+                            projectCode = splited[0];
+                        else
+                            projectCode = projectName;
+                    }
+            }           
+                
             var caseNumber = $("#case__CaseNumber").val();
 
             th._container.dialog({
-<<<<<<< HEAD
-                title: dhHelpdesk.Common.Translate("Artiklar att skickat") + "  (" +
-                       dhHelpdesk.Common.Translate("Ärende") + " " + caseNumber + " - " +
-                       dhHelpdesk.Common.Translate("Projekt") + " " + projectCode + ")",
-=======
+       
+                       dhHelpdesk.Common.Translate("Projekt") + " " + projectCode + " )",
+
                 title: dhHelpdesk.Common.Translate("Order") + "  (" +
                        dhHelpdesk.Common.Translate("Ärende") + " "+ caseNumber +  " / " + 
                        dhHelpdesk.Common.Translate("Projekt") + " "+ projectCode + ")",
->>>>>>> [UPD] total invoice
                 modal: true,
                 width: 1100,
                 autoResize: true,
@@ -3332,17 +3330,10 @@ $(function () {
             this.AddButtonLabel = dhHelpdesk.Common.Translate("Lägg till");
             this.OrderTitle = dhHelpdesk.Common.Translate("Order");
             this.SummaryTitle = dhHelpdesk.Common.Translate("Översikt");
-<<<<<<< HEAD
-            this.TotalLabel = dhHelpdesk.Common.Translate("Total");
-            this.TotalAllLabel = dhHelpdesk.Common.Translate("Totalt alla");
-            this.TotalInvoicedLabel = dhHelpdesk.Common.Translate("Totalt skickat");
-            this.TotalNotInvoicedLabel = dhHelpdesk.Common.Translate("Totalt ej skickat");
-=======
-            this.TotalLabel = dhHelpdesk.Common.Translate("Total");            
+	    this.TotalLabel = dhHelpdesk.Common.Translate("Total");            
             this.TotalAllLabel = dhHelpdesk.Common.Translate("Alla Totalt");
             this.TotalInvoicedLabel = dhHelpdesk.Common.Translate("Skickat Totalt");
             this.TotalNotInvoicedLabel = dhHelpdesk.Common.Translate("Ej skickat Totalt");
->>>>>>> [UPD] total invoice
             this.Total = null;
             this.TotalInvoiced = null;
             this.TotalNotInvoiced = null;
@@ -3778,8 +3769,13 @@ $(function () {
             if (invoicedOrders != null)
                 sentCount = invoicedOrders.length;
 
-            if (ordersCount > 0)
+            if (ordersCount > 0) {
                 $('#InvoiceModuleBtnOpen').val(dhHelpdesk.CaseArticles.invoiceButtonPureCaption + " (" + (sentCount) + "/" + (ordersCount) + ")");
+                var buttonHint = dhHelpdesk.Common.Translate("Skickat") + " " + sentCount + "\n" +
+                                 dhHelpdesk.Common.Translate("Order") + "   " + ordersCount;
+
+                $('#InvoiceModuleBtnOpen').attr("title", buttonHint);
+            }
         },
 
         CaseFiles: null
