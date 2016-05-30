@@ -1508,10 +1508,7 @@ $(function () {
                 
             var caseNumber = $("#case__CaseNumber").val();
 
-            th._container.dialog({
-       
-                       dhHelpdesk.Common.Translate("Projekt") + " " + projectCode + " )",
-
+            th._container.dialog({       
                 title: dhHelpdesk.Common.Translate("Order") + "  (" +
                        dhHelpdesk.Common.Translate("Ärende") + " "+ caseNumber +  " / " + 
                        dhHelpdesk.Common.Translate("Projekt") + " "+ projectCode + ")",
@@ -3330,7 +3327,7 @@ $(function () {
             this.AddButtonLabel = dhHelpdesk.Common.Translate("Lägg till");
             this.OrderTitle = dhHelpdesk.Common.Translate("Order");
             this.SummaryTitle = dhHelpdesk.Common.Translate("Översikt");
-	    this.TotalLabel = dhHelpdesk.Common.Translate("Total");            
+	        this.TotalLabel = dhHelpdesk.Common.Translate("Total");            
             this.TotalAllLabel = dhHelpdesk.Common.Translate("Alla Totalt");
             this.TotalInvoicedLabel = dhHelpdesk.Common.Translate("Skickat Totalt");
             this.TotalNotInvoicedLabel = dhHelpdesk.Common.Translate("Ej skickat Totalt");
