@@ -13,7 +13,7 @@
 
         CaseInvoiceOrder[] GetOrders(int caseId, InvoiceOrderFetchStatus status);        
 
-        void SaveCaseInvoices(IEnumerable<CaseInvoice> invoices, int caseId);
+        int SaveCaseInvoices(IEnumerable<CaseInvoice> invoices, int caseId);
 
         void CancelInvoiced(int caseId, int InvoiceOrderId);
     }

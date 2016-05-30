@@ -38,8 +38,8 @@
                                     o.Id,
                                     o.InvoiceId,
                                     o.Number,
-                                    (orderIdToXML.HasValue && o.Id == orderIdToXML.Value ? now : o.InvoiceDate),
-                                    (orderIdToXML.HasValue && o.Id == orderIdToXML.Value ? curUserId : o.InvoicedByUserId),
+                                    (orderIdToXML.HasValue && (o.Id == orderIdToXML.Value || o.Id == 0 && orderIdToXML.Value < 0) ? now : o.InvoiceDate),
+                                    (orderIdToXML.HasValue && (o.Id == orderIdToXML.Value || o.Id == 0 && orderIdToXML.Value < 0) ? curUserId : o.InvoicedByUserId),
                                     now,
                                     o.ReportedBy,
                                     o.Persons_Name,
@@ -54,7 +54,7 @@
                                     o.CostCentre,
                                     o.CreditForOrder_Id,
                                     o.Project_Id,
-                                    (orderIdToXML.HasValue && o.Id == orderIdToXML.Value ? (int)InvoiceOrderStates.Sent : o.OrderState),                                    
+                                    (orderIdToXML.HasValue && (o.Id == orderIdToXML.Value || o.Id == 0 && orderIdToXML.Value < 0) ? (int)InvoiceOrderStates.Sent : o.OrderState),                                    
                                     o.Articles
                                     .Select(a => new CaseInvoiceArticle(
                                             a.Id,

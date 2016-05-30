@@ -873,9 +873,29 @@ $(function () {
             if (this.IsFinishedCase()) {
                 return
             }
+
             var invoice = this.GetInvoice(invoiceId);
-            if (invoice != null) {
+            if (invoice != null && this.CanAddNewOrder()) {                
                 invoice.AddOrder(this.CreateBlankOrder());
+                $('#btnAdOrder').css("display", "none");
+            }
+        },
+
+        CanAddNewOrder: function () {
+            if (this._invoices != null && this._invoices != undefined && this._invoices.length > 0) {
+                var curInvoice = this._invoices[0];
+                if (curInvoice._orders != null && curInvoice._orders.length > 0) {
+                    for (i = 0; i < curInvoice._orders.length; i++)
+                        if (curInvoice._orders[i].Id < 0) {
+                            dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("New order already added") + " - " + curInvoice._orders[i].Caption);
+                            return false;
+                        }
+                }
+                return true;
+            }
+            else {
+                dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate("Invoice is not available"));
+                return false;
             }
         },
 
@@ -968,12 +988,14 @@ $(function () {
                 dhHelpdesk.Common.ShowWarningMessage(dhHelpdesk.Common.Translate('First save the order.'));
             }
             else {
-                var curOrd = dhHelpdesk.CaseArticles.GetOrder(orderId);
-                var newCredit = curOrd.GetCreditedOrder();
-                if (newCredit._articles.length > 0) {
-                    dhHelpdesk.CaseArticles.GetInvoice(curOrd.Invoice.Id).AddOrder(newCredit);
-                    dhHelpdesk.Common.MakeTextNumeric(".article-ppu");
-                    dhHelpdesk.Common.MakeTextNumeric(".article-amount");
+                if (this.CanAddNewOrder()) {
+                    var curOrd = dhHelpdesk.CaseArticles.GetOrder(orderId);
+                    var newCredit = curOrd.GetCreditedOrder();
+                    if (newCredit._articles.length > 0) {
+                        dhHelpdesk.CaseArticles.GetInvoice(curOrd.Invoice.Id).AddOrder(newCredit);
+                        dhHelpdesk.Common.MakeTextNumeric(".article-ppu");
+                        dhHelpdesk.Common.MakeTextNumeric(".article-amount");
+                    }
                 }
             }
         },
@@ -2297,9 +2319,6 @@ $(function () {
                         });
                         $("#invoiceSelectFile_" + currentOrder.Id).attr("disabled", true);
                     }
-
-                    if (currentOrder.Id < 0)
-                        $("#doInvoiceButton_" + currentOrder.Id).hide();
 
                     dhHelpdesk.CaseArticles.UpdateOtherReferenceTitle(currentOrder.Id);
                 });

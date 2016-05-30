@@ -161,9 +161,9 @@
             return CaseInvoices;
         }
 
-        public void SaveCaseInvoices(IEnumerable<CaseInvoice> invoices, int caseId)
+        public int SaveCaseInvoices(IEnumerable<CaseInvoice> invoices, int caseId)
         {
-            this.caseInvoiceArticleRepository.SaveCaseInvoices(invoices, caseId);
+            return this.caseInvoiceArticleRepository.SaveCaseInvoices(invoices, caseId);
         }
 
         public void DeleteCaseInvoices(int caseId)
@@ -227,10 +227,14 @@
         public ProcessResult DoInvoiceWork(CaseInvoice[] caseInvoiceData, int caseId, decimal caseNumber, int customerId, int? orderIdToXML)
         {            
 
-            this.SaveCaseInvoices(caseInvoiceData, caseId);
+            var newOrderId = this.SaveCaseInvoices(caseInvoiceData, caseId);
             
             if (orderIdToXML.HasValue)
-            {               
+            {   
+                // It means user has pressed Send button directly before save the order
+                if (orderIdToXML <= 0)
+                    orderIdToXML = newOrderId;
+
                 var orderToExport = this.caseInvoiceArticleRepository.GetCaseInvoiceOrder(caseId, orderIdToXML.Value);
                 if (orderToExport != null)
                 {

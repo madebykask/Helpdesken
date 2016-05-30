@@ -147,8 +147,9 @@
             }                                          
         }
 
-        public void SaveCaseInvoices(IEnumerable<CaseInvoice> invoices, int caseId)
+        public int SaveCaseInvoices(IEnumerable<CaseInvoice> invoices, int caseId)
         {
+            var newOrderId = 0;
             foreach (var invoice in invoices)
             {
                 invoice.CaseId = caseId;
@@ -168,21 +169,15 @@
 
                 /* This can be happening at the first time when there is no order and users has added 2 orders 
                    Where order1 has no article and order 2 has article
-                 */
-                var isThereAtleastOneArticleInInvoice = false;
-                foreach (var order in invoice.Orders)
-                {
-                    if (order.Articles.Any())
-                    {
-                        isThereAtleastOneArticleInInvoice = true;
-                        break;
-                    }
-                }
+                 */                
 
                 var hasInfoToSave = true;
+                var isNewOrder = false;
                 foreach (var order in invoice.Orders)
                 {
                     hasInfoToSave = true;
+                    isNewOrder = false;
+
                     var orderEntity = new CaseInvoiceOrderEntity();
                     if (order.Id > 0)
                     {
@@ -214,26 +209,23 @@
                     {
                         if (order.Articles.Any())
                         {
-                            order.OrderState = (int)InvoiceOrderStates.Saved;
+                            if (order.OrderState != (int)InvoiceOrderStates.Sent)
+                                order.OrderState = (int)InvoiceOrderStates.Saved;
                             this.orderMapper.Map(order, orderEntity);
                             orderEntity.InvoiceId = entity.Id;
-                            this.DbContext.CaseInvoiceOrders.Add(orderEntity);
+                            this.DbContext.CaseInvoiceOrders.Add(orderEntity);                            
+                            isNewOrder = true;
                         }
                         else 
                         {
-                            if (!isThereAtleastOneArticleInInvoice)
-                                hasInfoToSave = false;
-                            else
-                            {
-                                order.OrderState = (int)InvoiceOrderStates.Deleted;
-                                this.orderMapper.Map(order, orderEntity);
-                                orderEntity.InvoiceId = entity.Id;
-                                this.DbContext.CaseInvoiceOrders.Add(orderEntity);
-                            }
+                            hasInfoToSave = false;                            
                         }
                     }
                     this.Commit();
 
+                    if (isNewOrder)
+                        newOrderId = orderEntity.Id;
+                    
                     if (hasInfoToSave)
                     {
                         var orderFiles = this.DbContext.CaseInvoiceOrderFiles.Where(f => f.OrderId == orderEntity.Id);
@@ -274,6 +266,8 @@
                     }
                 }
             }
+
+            return newOrderId;
         }        
     }
 }
