@@ -3636,6 +3636,8 @@ namespace DH.Helpdesk.Web.Controllers
 
                 customerId = customerId == 0 ? m.case_.Customer_Id : customerId;
                 //SessionFacade.CurrentCaseLanguageId = m.case_.RegLanguage_Id;
+
+                m.ChangeTime = m.case_.ChangeTime;
             }
 
             var customerUserSetting = this._customerUserService.GetCustomerSettings(customerId, userId);

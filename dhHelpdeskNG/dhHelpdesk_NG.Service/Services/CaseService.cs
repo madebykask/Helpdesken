@@ -1244,12 +1244,12 @@ namespace DH.Helpdesk.Services.Services
                                         int Pos2 = m.Body.IndexOf(str2);
                                         LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
 
-                                        urlSelfService = "<br><a href='" + siteSelfService + "'>" + LinkText + "</a>";
+                                        urlSelfService = "<a href='" + siteSelfService + "'>" + LinkText + "</a>";
 
                                     }
                                     else
                                     {
-                                        urlSelfService = "<br><a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
+                                        urlSelfService = "<a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
                                     }
 
                                     foreach (var field in fields)
@@ -1269,12 +1269,12 @@ namespace DH.Helpdesk.Services.Services
                                         int Pos2 = m.Body.IndexOf(str2);
                                         LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
 
-                                        urlHelpdesk = "<br><a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
+                                        urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
                
                                     }
                                     else
                                     {
-                                        urlHelpdesk = "<br><a href='" + siteHelpdesk + "'>" + siteHelpdesk + "</a>";
+                                        urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + siteHelpdesk + "</a>";
                                     }
 
                                     foreach (var field in fields)
@@ -1352,12 +1352,12 @@ namespace DH.Helpdesk.Services.Services
                                                 int Pos2 = mm.Body.IndexOf(str2);
                                                 LinkText = mm.Body.Substring(Pos1, Pos2 - Pos1);
 
-                                                urlSelfService = "<br><a href='" + siteSelfService + "'>" + LinkText + "</a>";
+                                                urlSelfService = "<a href='" + siteSelfService + "'>" + LinkText + "</a>";
                                             
                                             }
                                             else
                                             {
-                                                urlSelfService = "<br><a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
+                                                urlSelfService = "<a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
                                             }
 
                                             foreach (var field in fields)
@@ -1377,12 +1377,12 @@ namespace DH.Helpdesk.Services.Services
                                                 int Pos2 = mm.Body.IndexOf(str2);
                                                 LinkText = mm.Body.Substring(Pos1, Pos2 - Pos1);
 
-                                                urlHelpdesk = "<br><a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
+                                                urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
                              
                                             }
                                             else
                                             {
-                                                urlHelpdesk = "<br><a href='" + siteHelpdesk + "'>" + siteHelpdesk + "</a>";
+                                                urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + siteHelpdesk + "</a>";
                                             }
 
                                             foreach (var field in fields)
@@ -1462,12 +1462,12 @@ namespace DH.Helpdesk.Services.Services
                                                 int Pos2 = m.Body.IndexOf(str2);
                                                 LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
 
-                                                urlSelfService = "<br><a href='" + siteSelfService + "'>" + LinkText + "</a>";
+                                                urlSelfService = "<a href='" + siteSelfService + "'>" + LinkText + "</a>";
                                        
                                             }
                                             else
                                             {
-                                                urlSelfService = "<br><a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
+                                                urlSelfService = "<a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
                                             }
 
                                             foreach (var field in fields)
@@ -1487,12 +1487,12 @@ namespace DH.Helpdesk.Services.Services
                                                 int Pos2 = m.Body.IndexOf(str2);
                                                 LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
 
-                                                urlHelpdesk = "<br><a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
+                                                urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
                                         
                                             }
                                             else
                                             {
-                                                urlHelpdesk = "<br><a href='" + siteHelpdesk + "'>" + siteHelpdesk + "</a>";
+                                                urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + siteHelpdesk + "</a>";
                                             }
 
                                             foreach (var field in fields)
@@ -1552,12 +1552,12 @@ namespace DH.Helpdesk.Services.Services
                                 int Pos2 = m.Body.IndexOf(str2);
                                 LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
 
-                                urlSelfService = "<br><a href='" + siteSelfService + "'>" + LinkText + "</a>";
+                                urlSelfService = "<a href='" + siteSelfService + "'>" + LinkText + "</a>";
                       
                             }
                             else
                             {
-                                urlSelfService = "<br><a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
+                                urlSelfService = "<a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
                             }
 
                             foreach (var field in fields)
@@ -1577,12 +1577,12 @@ namespace DH.Helpdesk.Services.Services
                                 int Pos2 = m.Body.IndexOf(str2);
                                 LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
 
-                                urlHelpdesk = "<br><a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
+                                urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
                             
                             }
                             else
                             {
-                                urlHelpdesk = "<br><a href='" + siteHelpdesk + "'>" + siteHelpdesk + "</a>";
+                                urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + siteHelpdesk + "</a>";
                             }
 
                             foreach (var field in fields)
@@ -1631,12 +1631,12 @@ namespace DH.Helpdesk.Services.Services
                                         int Pos2 = m.Body.IndexOf(str2);
                                         LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
 
-                                        urlSelfService = "<br><a href='" + siteSelfService + "'>" + LinkText + "</a>";
+                                        urlSelfService = "<a href='" + siteSelfService + "'>" + LinkText + "</a>";
                          
                                     }
                                     else
                                     {
-                                        urlSelfService = "<br><a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
+                                        urlSelfService = "<a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
                                     }
 
                                     foreach (var field in fields)
@@ -1656,11 +1656,11 @@ namespace DH.Helpdesk.Services.Services
                                         int Pos2 = m.Body.IndexOf(str2);
                                         LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
 
-                                        urlHelpdesk = "<br><a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
+                                        urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
                                     }
                                     else
                                     {
-                                        urlHelpdesk = "<br><a href='" + siteHelpdesk + "'>" + siteHelpdesk + "</a>";
+                                        urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + siteHelpdesk + "</a>";
                                     }
 
                                     foreach (var field in fields)
@@ -1721,11 +1721,11 @@ namespace DH.Helpdesk.Services.Services
                                 int Pos2 = m.Body.IndexOf(str2);
                                 LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
 
-                                urlSelfService = "<br><a href='" + siteSelfService + "'>" + LinkText + "</a>";
+                                urlSelfService = "<a href='" + siteSelfService + "'>" + LinkText + "</a>";
                             }
                             else
                             {
-                                urlSelfService = "<br><a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
+                                urlSelfService = "<a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
                             }
 
                             foreach (var field in fields)
@@ -1745,11 +1745,11 @@ namespace DH.Helpdesk.Services.Services
                                 int Pos2 = m.Body.IndexOf(str2);
                                 LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
 
-                                urlHelpdesk = "<br><a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
+                                urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
                             }
                             else
                             {
-                                urlHelpdesk = "<br><a href='" + siteHelpdesk + "'>" + siteHelpdesk + "</a>";
+                                urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + siteHelpdesk + "</a>";
                             }
 
                             foreach (var field in fields)
@@ -1858,12 +1858,12 @@ namespace DH.Helpdesk.Services.Services
                                         int Pos2 = m.Body.IndexOf(str2);
                                         LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
 
-                                        urlSelfService = "<br><a href='" + siteSelfService + "'>" + LinkText + "</a>";
+                                        urlSelfService = "<a href='" + siteSelfService + "'>" + LinkText + "</a>";
                                  
                                     }
                                     else
                                     {
-                                        urlSelfService = "<br><a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
+                                        urlSelfService = "<a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
                                     }
 
                                     foreach (var field in fields)
@@ -1883,12 +1883,12 @@ namespace DH.Helpdesk.Services.Services
                                         int Pos2 = m.Body.IndexOf(str2);
                                         LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
 
-                                        urlHelpdesk = "<br><a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
+                                        urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
                                      
                                     }
                                     else
                                     {
-                                        urlHelpdesk = "<br><a href='" + siteHelpdesk + "'>" + siteHelpdesk + "</a>";
+                                        urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + siteHelpdesk + "</a>";
                                     }
 
                                     foreach (var field in fields)
@@ -1930,12 +1930,12 @@ namespace DH.Helpdesk.Services.Services
                                         int Pos2 = m.Body.IndexOf(str2);
                                         LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
 
-                                        urlSelfService = "<br><a href='" + siteSelfService + "'>" + LinkText + "</a>";
+                                        urlSelfService = "<a href='" + siteSelfService + "'>" + LinkText + "</a>";
                                
                                     }
                                     else
                                     {
-                                        urlSelfService = "<br><a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
+                                        urlSelfService = "<a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
                                     }
 
                                     foreach (var field in fields)
@@ -1955,12 +1955,12 @@ namespace DH.Helpdesk.Services.Services
                                         int Pos2 = m.Body.IndexOf(str2);
                                         LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
 
-                                        urlHelpdesk = "<br><a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
+                                        urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
                                    
                                     }
                                     else
                                     {
-                                        urlHelpdesk = "<br><a href='" + siteHelpdesk + "'>" + siteHelpdesk + "</a>";
+                                        urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + siteHelpdesk + "</a>";
                                     }
 
                                     foreach (var field in fields)
@@ -2004,12 +2004,12 @@ namespace DH.Helpdesk.Services.Services
                                         int Pos2 = m.Body.IndexOf(str2);
                                         LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
 
-                                        urlSelfService = "<br><a href='" + siteSelfService + "'>" + LinkText + "</a>";
+                                        urlSelfService = "<a href='" + siteSelfService + "'>" + LinkText + "</a>";
               
                                     }
                                     else
                                     {
-                                        urlSelfService = "<br><a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
+                                        urlSelfService = "<a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
                                     }
 
                                     foreach (var field in fields)
@@ -2029,12 +2029,12 @@ namespace DH.Helpdesk.Services.Services
                                         int Pos2 = m.Body.IndexOf(str2);
                                         LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
 
-                                        urlHelpdesk = "<br><a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
+                                        urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
                       
                                     }
                                     else
                                     {
-                                        urlHelpdesk = "<br><a href='" + siteHelpdesk + "'>" + siteHelpdesk + "</a>";
+                                        urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + siteHelpdesk + "</a>";
                                     }
 
                                     foreach (var field in fields)
@@ -2137,12 +2137,12 @@ namespace DH.Helpdesk.Services.Services
                     int Pos2 = m.Body.IndexOf(str2);
                     LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
 
-                    urlSelfService = "<br><a href='" + siteSelfService + "'>" + LinkText + "</a>";
+                    urlSelfService = "<a href='" + siteSelfService + "'>" + LinkText + "</a>";
 
                 }
                 else
                 {
-                    urlSelfService = "<br><a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
+                    urlSelfService = "<a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
                 }
 
                 foreach (var field in fields)
@@ -2162,12 +2162,12 @@ namespace DH.Helpdesk.Services.Services
                     int Pos2 = m.Body.IndexOf(str2);
                     LinkText = m.Body.Substring(Pos1, Pos2 - Pos1);
 
-                    urlHelpdesk = "<br><a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
+                    urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
 
                 }
                 else
                 {
-                    urlHelpdesk = "<br><a href='" + siteHelpdesk + "'>" + siteHelpdesk + "</a>";
+                    urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + siteHelpdesk + "</a>";
                 }
 
                 foreach (var field in fields)

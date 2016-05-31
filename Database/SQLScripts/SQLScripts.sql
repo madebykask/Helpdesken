@@ -126,7 +126,7 @@ WHERE UserGroup_Id = 4
 
 -- New field in tblCaseFieldSettings
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Mail2TicketIdentifier' and sysobjects.name = N'tblCaseFieldSettings')
-	ALTER TABLE tblCaseFieldSettings ADD Mail2TicketIdentifier nvarchar(10) NULL
+	ALTER TABLE tblCaseFieldSettings ADD Mail2TicketIdentifier nvarchar(50) NULL
 GO
 
 -- Last Line to update database version
